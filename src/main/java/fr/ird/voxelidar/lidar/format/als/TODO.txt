@@ -1,0 +1,8 @@
+/**********\
+|11/12/2014|
+\**********/
+
+voir spécification : http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html
+
+-Lecture des formats de points (point data format) 4 et 5 ->depuis format las 1.3
+-Lecture de fichier *.las compressés (*.laz)
