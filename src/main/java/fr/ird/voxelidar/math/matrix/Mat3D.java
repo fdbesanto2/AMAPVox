@@ -5,6 +5,9 @@
  */
 package fr.ird.voxelidar.math.matrix;
 
+import fr.ird.voxelidar.math.vector.Vec3D;
+import fr.ird.voxelidar.math.vector.Vec4D;
+
 /**
  *
  * @author Julien
@@ -57,5 +60,24 @@ public class Mat3D {
         mat[9] = source.mat[9];
     }
     
+    public static Vec3D multiply(Mat3D mat3D, Vec3D vec3D){
+        
+        Vec3D dest = new Vec3D();
+        double[] mat = mat3D.mat;
+        
+        double a00 = mat[0], a01 = mat[1], a02 = mat[2];
+        double a10 = mat[3], a11 = mat[4], a12 = mat[5];
+        double a20 = mat[6], a21 = mat[7], a22 = mat[8];
+        
+        double v00 = vec3D.x;
+        double v10 = vec3D.y;
+        double v20 = vec3D.z;
+        
+        dest.x = a00 * v00 + a01 * v10 + a02 * v20;
+        dest.y = a10 * v00 + a11 * v10 + a12 * v20;
+        dest.z = a20 * v00 + a21 * v10 + a22 * v20;
+        
+        return dest;
+    }
     
 }

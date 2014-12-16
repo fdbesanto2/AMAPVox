@@ -5,11 +5,13 @@
  */
 package fr.ird.voxelidar.math.vector;
 
+import fr.ird.voxelidar.math.point.Point2D;
+
 /**
  *
  * @author Julien
  */
-public class Vec2D {
+public class Vec2D extends Point2D{
     
     public double x;
     public double y;
@@ -21,7 +23,6 @@ public class Vec2D {
     }
     
     public Vec2D(double x, double y){
-        
         this.x = x;
         this.y = y;
     }

@@ -1157,7 +1157,8 @@ public class JFrameTools extends javax.swing.JFrame {
                 }
             });
             
-            joglContext.getScene().getVoxelSpace().loadFromFile(joglContext.getScene().getVoxelSpace().file, joglContext.getSettings().mapAttributs, joglContext.getTerrain(), true);
+            joglContext.getScene().getVoxelSpace().updateValue(joglContext.getSettings().attribut);
+            //joglContext.getScene().getVoxelSpace().loadFromFile(joglContext.getScene().getVoxelSpace().file, joglContext.getSettings().mapAttributs, joglContext.getTerrain(), true);
             joglContext.getScene().updateColorScale();
         }
         
@@ -1177,7 +1178,8 @@ public class JFrameTools extends javax.swing.JFrame {
         }
         
         //recalculate voxel color with the new gradient
-        joglContext.getScene().getVoxelSpace().setGradientColor(gradientColor);
+        joglContext.getScene().getVoxelSpace().updateColorValue(gradientColor);
+        //joglContext.getScene().getVoxelSpace().setGradientColor(gradientColor);
         
         //update instance color buffer to gpu
         joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();

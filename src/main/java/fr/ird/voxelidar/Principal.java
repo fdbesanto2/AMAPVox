@@ -1,6 +1,8 @@
 package fr.ird.voxelidar;
 
 import fr.ird.voxelidar.frame.JFrameSettingUp;
+import java.io.File;
+import java.io.IOException;
 import org.apache.log4j.Logger;
 
 
@@ -19,7 +21,7 @@ public class Principal {
     
     final static Logger logger = Logger.getLogger(Principal.class);
     
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
         //Las read = LasReader.read("F:\\Las files\\1.3\\LAS-1.3-waveform-terrapoint.las");
         //LasToTxt.writeTxt(read, "F:\\Las files\\1.1\\LAS-1.3-waveform-terrapoint.txt", "xyzirndeca");
         /*

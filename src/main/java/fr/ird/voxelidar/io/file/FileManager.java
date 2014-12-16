@@ -169,7 +169,13 @@ public class FileManager {
         
         return lines;
     }
-
+    
+    public static String getExtension(File file){
+        
+        String extension = file.getName().substring(file.getName().lastIndexOf("."), file.getName().length());
+        
+        return extension;
+    }
     
     
     

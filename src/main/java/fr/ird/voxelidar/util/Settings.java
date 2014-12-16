@@ -21,6 +21,7 @@ public class Settings {
     public boolean drawNullVoxel;
     public boolean drawAxis;
     public String attributeToVisualize;
+    public Attribut attribut;
     public Map<String, Attribut> mapAttributs;
     public File voxelSpaceFile;
     
@@ -30,14 +31,18 @@ public class Settings {
         drawNullVoxel = jframeSettingUp.getjCheckBoxDrawNullVoxel().isSelected();
         drawVoxelUnderground = jframeSettingUp.getjCheckBoxDrawUndergroundVoxel().isSelected();
         drawTerrain = jframeSettingUp.getjCheckBoxDrawTerrain().isSelected();
+         
         try{
             attributeToVisualize = jframeSettingUp.getjComboBoxAttributeToVisualize().getSelectedItem().toString();
             mapAttributs = jframeSettingUp.getMapAttributs();
+            attribut = mapAttributs.get(attributeToVisualize);
         }catch(Exception e){
             attributeToVisualize = null;
             mapAttributs = null;
                     
         }
+        
+        
         
         
         voxelSpaceFile = new File(jframeSettingUp.getjListOutputFiles().getSelectedValue().toString());

@@ -6,7 +6,6 @@
 package fr.ird.voxelidar.graphics3d.object.voxelspace;
 
 import com.jogamp.common.nio.Buffers;
-import fr.ird.voxelidar.frame.JFrameSettingUp;
 import fr.ird.voxelidar.graphics2d.image.ScaleGradient;
 import fr.ird.voxelidar.graphics3d.mesh.Attribut;
 import fr.ird.voxelidar.graphics3d.mesh.Grid;
@@ -15,6 +14,7 @@ import fr.ird.voxelidar.graphics3d.mesh.MeshFactory;
 import fr.ird.voxelidar.graphics3d.object.terrain.Terrain;
 import fr.ird.voxelidar.graphics3d.shader.Shader;
 import fr.ird.voxelidar.io.file.FileManager;
+import fr.ird.voxelidar.math.point.Point2F;
 import fr.ird.voxelidar.math.vector.Vec3F;
 import fr.ird.voxelidar.util.ColorGradient;
 import fr.ird.voxelidar.util.Settings;
@@ -31,6 +31,8 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.logging.Level;
 import javax.media.opengl.GL3;
 import javax.swing.SwingWorker;
 import javax.swing.event.EventListenerList;
@@ -48,6 +50,18 @@ public class VoxelSpace {
     public static final int FLOAT_SIZE = Buffers.SIZEOF_FLOAT;
     public static final int INT_SIZE = Buffers.SIZEOF_INT;
     public static final int SHORT_SIZE = Buffers.SIZEOF_SHORT;
+    
+    public static final int VOXELSPACE_FORMAT1 = 1;
+    public static final int VOXELSPACE_FORMAT2 = 2;
+    
+    public enum VoxelFormat{
+        VOXELSPACE_FORMAT1(1), VOXELSPACE_FORMAT2(2);
+        
+        private final int format;
+        VoxelFormat(int format){
+            this.format = format;
+        }
+    }
     
     private ArrayList<Voxel> voxelList;
     public Mesh cube;
@@ -83,12 +97,15 @@ public class VoxelSpace {
     private Attribut attribut;
     
     private Color[] gradient = ColorGradient.GRADIENT_HEAT;
+    private ColorGradient colorGradient;
     
     private final int shaderId;
     private boolean gradientUpdated = false;
     private boolean cubeSizeUpdated;
     
     private int readFileProgress; 
+    
+    private VoxelSpaceFormat voxelSpaceFormat;
     
     private final EventListenerList listeners;
 
@@ -214,110 +231,318 @@ public class VoxelSpace {
         }
     }
     
-    private boolean isVoxelSpaceFile(File f){
+    
+    
+    private void readVoxelFormat1(File f){
         
         String header = FileManager.readHeader(f.getAbsolutePath());
         
-        return header.equals("VOXEL SPACE");
-    }
-    
-    public void loadFromFile(File f) throws Exception{
-        
-        if(isVoxelSpaceFile(f)){
+        if(header.equals("VOXEL SPACE")){
             
-            setFileLoaded(false);
-        
-            this.file =f;
+            VoxelSpaceFormat1 voxelSpace = new VoxelSpaceFormat1();
+            
+            int count = FileManager.getLineNumber(file.getAbsolutePath());
 
-            //final JProgressLoadingFile progress = new JProgressLoadingFile(parent);
-            //progress.setVisible(true);
-            SwingWorker sw = new SwingWorker() {
+            /******read file*****/
 
+            BufferedReader reader;
+            try {
+                reader = new BufferedReader(new FileReader(file));
+                
+                //VOXEL SPACE
+                reader.readLine();
+                
+                Map<String, Point2F> minMax = new HashMap<>();
+                
+                //min corner
+                String minCornerLine = reader.readLine();
+                String[] minCornerLineSplit = minCornerLine.substring(minCornerLine.indexOf("(")+1, minCornerLine.indexOf(")")).split(",");
+                voxelSpace.xMinCorner = Double.valueOf(minCornerLineSplit[0].trim());
+                voxelSpace.yMinCorner = Double.valueOf(minCornerLineSplit[1].trim());
+                voxelSpace.zMinCorner = Double.valueOf(minCornerLineSplit[2].trim());
+                
+                //max corner
+                String maxCornerLine = reader.readLine();
+                String[] maxCornerLineSplit = maxCornerLine.substring(maxCornerLine.indexOf("(")+1, maxCornerLine.indexOf(")")).split(",");
+                voxelSpace.xMaxCorner = Double.valueOf(maxCornerLineSplit[0].trim());
+                voxelSpace.yMaxCorner = Double.valueOf(maxCornerLineSplit[1].trim());
+                voxelSpace.zMaxCorner = Double.valueOf(maxCornerLineSplit[2].trim());
+                
+                //splitting
+                String splittingLine = reader.readLine();
+                String[] splittingLineSplit = splittingLine.substring(splittingLine.indexOf("(")+1, splittingLine.indexOf(")")).split(",");
+                voxelSpace.xSplit = Integer.valueOf(splittingLineSplit[0].trim());
+                voxelSpace.ySplit = Integer.valueOf(splittingLineSplit[1].trim());
+                voxelSpace.zSplit = Integer.valueOf(splittingLineSplit[2].trim());
+                
+                
+                String[] columnsNames = reader.readLine().split("\t");
+                
+                for(int i=0;i<columnsNames.length;i++){
+                    columnsNames[i] = columnsNames[i].replaceAll(" ", "");
+                    columnsNames[i] = columnsNames[i].replaceAll("#", "");
+                }
+                
+                int lineNumber = 0;
+                String line;                
+                
+                //start reading voxels
+                while ((line = reader.readLine())!= null) {
 
-                @Override
-                protected Object doInBackground() {
+                    String[] voxel = line.split("\t");
+                    
+                    int indiceX = Integer.valueOf(voxel[0]);
+                    int indiceZ = Integer.valueOf(voxel[1]);
+                    int indiceY = Integer.valueOf(voxel[2]);
 
-                    try {
+                    Map<String,Float> mapAttributs = new HashMap<>();
 
-                        int count = FileManager.getLineNumber(file.getAbsolutePath());
-
-                        /******read file*****/
-
-                        BufferedReader reader = new BufferedReader(new FileReader(file));
-                        String parameters[] = reader.readLine().split(" ");
-
-                        //metadata
-                        setMetadata(reader.readLine());
-
-                        //first values line
-                        String line = reader.readLine();
-
-                        int lineNumber = 0;
-
-                        while (line != null) {
-
-                            String[] attributs = line.split(" ");
-
-                            //create voxel
-                            if(!updateValue){
-
-                                int indiceX = Integer.valueOf(attributs[0]);
-                                int indiceZ = Integer.valueOf(attributs[1]);
-                                int indiceY = Integer.valueOf(attributs[2]);
-
-                                Map<String,Float> mapAttributs = new HashMap<>();
-
-                                for (int i=0;i<attributs.length;i++) {
-                                    mapAttributs.put(parameters[i], Float.valueOf(attributs[i]));
-                                }
-
-                                float posX = indiceX+startPointX-(resolution/2.0f);
-                                float posY = indiceY+startPointY-(resolution/2.0f);
-                                float posZ = indiceZ+startPointZ-(resolution/2.0f);
-
-                                voxelList.add(new Voxel(indiceX, indiceY, indiceZ, posX, posY, posZ, mapAttributs, 1.0f));
-
+                    for (int i=0;i<voxel.length;i++) {
+                        
+                        float value = Float.valueOf(voxel[i]);
+                        
+                        mapAttributs.put(columnsNames[i], value);
+                        
+                        Point2F minMaxPoint;
+                        
+                        if((minMaxPoint = minMax.get(columnsNames[i]))!=null){
+                            
+                            float min = minMaxPoint.x;
+                            float max = minMaxPoint.y;
+                            
+                            if(value < min){
+                                min = value;
                             }
-
-                            line = reader.readLine();
-
-                            lineNumber++;
-
-                            setReadFileProgress((lineNumber * 100) / count);
+                            
+                            if(value > max){
+                                max = value;
+                            }
+                            
+                            minMaxPoint = new Point2F(min, max);
+                            minMax.put(columnsNames[i], minMaxPoint);
+                            
+                        }else{
+                            minMax.put(columnsNames[i], new Point2F(value, value));
                         }
-
-                        reader.close();
-
-                        setFileLoaded(true);
-
-                        setCenter();
-                        setWidth();
-
-                    } catch (FileNotFoundException ex) {
-                        logger.error("cannot load voxel space from file", ex);
-                    } catch (IOException ex) {
-                        logger.error("cannot load voxel space from file", ex);
                     }
 
-                    return null;
+                    float posX = indiceX+startPointX-(resolution/2.0f);
+                    float posY = indiceY+startPointY-(resolution/2.0f);
+                    float posZ = indiceZ+startPointZ-(resolution/2.0f);
 
+                    voxelList.add(new Voxel(indiceX, indiceY, indiceZ, posX, posY, posZ, mapAttributs, 1.0f));
+
+
+                    lineNumber++;
+
+                    setReadFileProgress((lineNumber * 100) / count);
                 }
-            };
+                
+                voxelSpace.setMinMax(minMax);
 
-            sw.execute();
-        }else{
-            throw new Exception("Not a voxel space file (header must be VOXEL");
-        }     
+                reader.close();
+
+            } catch (FileNotFoundException ex) {
+                logger.error(null, ex);
+            } catch (IOException ex) {
+                logger.error(null, ex);
+            }
+            
+        }
     }
     
-    public void loadFromFile(File f, Map<String,Attribut> mapAttributs, Terrain ground,boolean update){
+    private void readVoxelFormat2(File f){
+        
+        String header = FileManager.readHeader(f.getAbsolutePath());
+        
+        if(header.split(" ").length == 10){
+            
+            VoxelSpaceFormat2 voxelSpace = new VoxelSpaceFormat2();
+            
+            int count = FileManager.getLineNumber(file.getAbsolutePath());
+
+            /******read file*****/
+
+            BufferedReader reader;
+            try {
+                reader = new BufferedReader(new FileReader(file));
+                
+                Map<String, Point2F> minMax = new HashMap<>();
+                
+                String[] columnsNames = reader.readLine().split(" ");
+                
+                String[] infos = reader.readLine().split(" ");
+                voxelSpace.xNumberVox = Integer.valueOf(infos[0]);
+                voxelSpace.yNumberVox = Integer.valueOf(infos[1]);
+                voxelSpace.zNumberVox = Integer.valueOf(infos[2]);
+                voxelSpace.voxelSize = Integer.valueOf(infos[3]);
+                
+                int lineNumber = 0;
+                String line;                
+                
+                //start reading voxels
+                while ((line = reader.readLine())!= null) {
+
+                    String[] voxel = line.split(" ");
+                    
+                    int indiceX = Integer.valueOf(voxel[0]);
+                    int indiceZ = Integer.valueOf(voxel[1]);
+                    int indiceY = Integer.valueOf(voxel[2]);
+
+                    Map<String,Float> mapAttributs = new HashMap<>();
+
+                    for (int i=0;i<voxel.length;i++) {
+                        
+                        float value = Float.valueOf(voxel[i]);
+                        
+                        mapAttributs.put(columnsNames[i], value);
+                        
+                        Point2F minMaxPoint;
+                        
+                        if((minMaxPoint = minMax.get(columnsNames[i]))!=null){
+                            
+                            float min = minMaxPoint.x;
+                            float max = minMaxPoint.y;
+                            
+                            if(value < min){
+                                min = value;
+                            }
+                            
+                            if(value > max){
+                                max = value;
+                            }
+                            
+                            minMaxPoint = new Point2F(min, max);
+                            minMax.put(columnsNames[i], minMaxPoint);
+                            
+                        }else{
+                            minMax.put(columnsNames[i], new Point2F(value, value));
+                        }
+                    }
+
+                    float posX = indiceX+startPointX-(resolution/2.0f);
+                    float posY = indiceY+startPointY-(resolution/2.0f);
+                    float posZ = indiceZ+startPointZ-(resolution/2.0f);
+
+                    voxelList.add(new Voxel(indiceX, indiceY, indiceZ, posX, posY, posZ, mapAttributs, 1.0f));
+
+                    lineNumber++;
+
+                    setReadFileProgress((lineNumber * 100) / count);
+                }
+                
+                voxelSpace.setMinMax(minMax);
+                
+                reader.close();
+
+            } catch (FileNotFoundException ex) {
+                logger.error(null, ex);
+            } catch (IOException ex) {
+                logger.error(null, ex);
+            }
+            
+        }
+    }
+    
+    public void loadFromFile(File f, final VoxelFormat format){
+        
+            
+        setFileLoaded(false);
+
+        this.file =f;
+
+        //final JProgressLoadingFile progress = new JProgressLoadingFile(parent);
+        //progress.setVisible(true);
+        SwingWorker sw = new SwingWorker() {
+
+
+            @Override
+            protected Object doInBackground() {
+
+                switch(format){
+                    case VOXELSPACE_FORMAT1:
+                        readVoxelFormat1(file);
+                        break;
+                    case VOXELSPACE_FORMAT2:
+                        readVoxelFormat2(file);
+                        break;
+                }
+
+                setFileLoaded(true);
+
+                setCenter();
+                setWidth();
+
+                return null;
+
+            }
+        };
+
+        sw.execute();   
+    }
+    
+    
+    public void updateValue(Attribut attribut){
+        
+        for(Voxel voxel:voxelList){
+                    
+            float attributValue;
+            
+            Map<String, Float> attributs = voxel.getAttributs();
+            
+            for(Entry entry : attributs.entrySet()){
+                
+                String name = (String)entry.getKey();
+                double value = (Float)entry.getValue();
+                attribut.getExpression().setVariable(name, value);
+            }
+
+             try{
+                attributValue = (float) attribut.getExpression().evaluate();
+            }catch(Exception e){
+                attributValue = NaN;
+            }
+
+            voxel.attributValue = attributValue;
+            voxel.color = getColorFromValue(attributValue);
+
+            //initialize minimum and maximum attributs values
+            if(voxel ==  voxelList.get(0)){
+
+                attributValueMax = attributValue;
+                attributValueMin = attributValue;
+            }
+
+            //set maximum attribut value
+            if(attributValue>attributValueMax){
+
+                attributValueMax = attributValue;
+            }
+
+            //set minimum attribut value
+            if(attributValue < attributValueMin){
+
+                attributValueMin = attributValue;
+            }
+        }
+
+        setGradientColor(gradient, attributValueMin, attributValueMax);
+        
+        gradientUpdated = false;
+    }
+    
+    public void updateColorValue(Color[] gradient){
+        setGradientColor(gradient, attributValueMin, attributValueMax);
+    }
+    
+    
+    public void loadFromFile(File f, final VoxelFormat format, Map<String,Attribut> mapAttributs){
         
         setFileLoaded(false);
         
-        this.updateValue= update;
+        //attribut is a custom equation defined by user
         
         attribut = mapAttributs.get(attributToVisualize);
-        final Terrain terrain = ground;
         
         this.file =f;
         
@@ -326,157 +551,27 @@ public class VoxelSpace {
             
             @Override
             protected Object doInBackground() {
-
-                /******count line number*****/
-                int compteur = 0;
-                MultiKeyMap mapTerrainXY = null;
                 
-                if(terrain !=null){
-                    
-                    mapTerrainXY = terrain.getXYStructure();
+                switch(format){
+                    case VOXELSPACE_FORMAT1:
+                        readVoxelFormat1(file);
+                        break;
+                    case VOXELSPACE_FORMAT2:
+                        readVoxelFormat2(file);
+                        break;
                 }
                 
                 
-                try {
-                    
-                    /****count line number****/
-                    int count = FileManager.getLineNumber(file.getAbsolutePath());
-
-                    /******read file*****/
-                    BufferedReader reader = new BufferedReader(new FileReader(file));
-                    String parametersLine[] = reader.readLine().split(" ");
-                    
-                    
-                    //metadata
-                    setMetadata(reader.readLine());
-                    
-                    //first values line
-                    String line = reader.readLine();
-                    
-                    int lineNumber = 0;
-                    
-                    boolean valMinMaxInit = false;
-
-                    while (line != null) {
-                        
-                        String[] attributs = line.split(" ");
-                        
-                        for(int i=0;i<parametersLine.length;i++){
-                            attribut.getExpression().setVariable(parametersLine[i], Float.valueOf(attributs[i]));
-                        }
-                        
-                        float attributValue =0;
-                        
-                        try{
-                            attributValue = (float) attribut.getExpression().evaluate();
-                        }catch(Exception e){
-                            attributValue = NaN;
-                        }
-                        
-                        
-                        //initialize minimum and maximum attributs values
-                        if(lineNumber >= 0 && !valMinMaxInit && attributValue != 0){
-
-                            attributValueMax = attributValue;
-                            attributValueMin = attributValue;
-
-                            valMinMaxInit = true;
-                        }
-                        
-                        //edit voxel value
-                        if(updateValue && voxelList.size() > 0){
-                            voxelList.get(compteur).attributValue = attributValue;
-                            
-                        }
-                        
-                        //set maximum attribut value
-                        if(attributValue>attributValueMax){
-
-                            attributValueMax = attributValue;
-                        }
-
-                        //set minimum attribut value
-                        if(attributValue < attributValueMin){
-
-                            attributValueMin = attributValue;
-                        }
-                        
-                        Voxel voxel;
-                                
-                        //create voxel
-                        if(!updateValue){
-                            
-                            int indiceX = Integer.valueOf(attributs[0]);
-                            int indiceZ = Integer.valueOf(attributs[1]);
-                            int indiceY = Integer.valueOf(attributs[2]);
-                            
-                            float posX = indiceX+startPointX-(resolution/2.0f);
-                            float posY = indiceY+startPointZ-(resolution/2.0f);
-                            float posZ = indiceZ+startPointY-(resolution/2.0f);
-                            
-                            voxel = new Voxel(indiceX, indiceY, indiceZ, posX, posY, posZ, attributValue);
-                        }else{
-                            voxel = voxelList.get(compteur);
-                        }
-                        
-                        boolean drawVoxel;
-
-                        drawVoxel = !(Float.isNaN(voxel.attributValue) || voxel.attributValue == -1.0f || (!settings.drawNullVoxel && voxel.attributValue == 0));
-
-                        //if a terrain was loaded
-                        if(mapTerrainXY != null){
-
-                            float hauteurTerrain = 0;
-                            try{
-                                hauteurTerrain = (float) mapTerrainXY.get(voxel.x, voxel.z);
-                            }catch(Exception e){
-                                logger.error(null, e);
-                            }
-
-                            if((voxel.y<hauteurTerrain) && !settings.drawVoxelUnderground ){
-                                drawVoxel = false;
-                            }
-                        }
-
-                        if(drawVoxel){
-                            voxel.alpha = 1.0f;
-                        }else{
-                            voxel.alpha = 0.0f;
-                        }
-                        
-                        if(!updateValue){
-                            voxelList.add(voxel);
-                        }else{
-                            compteur++;
-                        }
-
-                        line = reader.readLine();
-                        
-                        lineNumber++;
-                        
-                        setReadFileProgress((lineNumber * 100) / count);
-                    }
-                    
-                    reader.close();
-                    
-                    setGradientColor(gradient);
-                    
-                    if(updateValue){
-                        
-                        updateInstanceColorBuffer();
-                    }
-                    
-                    setCenter();
-                    setWidth();
-                    
-                    setFileLoaded(true);
-
-                } catch (FileNotFoundException ex) {
-                    logger.error(null, ex);
-                } catch (IOException ex) {
-                    logger.error(null, ex);
-                }
-
+                colorGradient = new ColorGradient(attributValueMin, attributValueMax);
+                updateValue(settings.attribut);
+                
+                //initBuffer(null, simpleShader);
+                
+                setCenter();
+                setWidth();
+                
+                setFileLoaded(true);
+                
                 return null;
 
             }
@@ -485,6 +580,288 @@ public class VoxelSpace {
         sw.execute();
     }
     
+    /*
+    private boolean isVoxelSpaceFile(File f){
+        
+        String header = FileManager.readHeader(f.getAbsolutePath());
+        
+        return true;
+        //return header.equals("VOXEL SPACE");
+    }
+    */
+    
+//    public void loadFromFile(File f) throws Exception{
+//        
+//        if(isVoxelSpaceFile(f)){
+//            
+//            setFileLoaded(false);
+//        
+//            this.file =f;
+//
+//            //final JProgressLoadingFile progress = new JProgressLoadingFile(parent);
+//            //progress.setVisible(true);
+//            SwingWorker sw = new SwingWorker() {
+//
+//
+//                @Override
+//                protected Object doInBackground() {
+//
+//                    try {
+//
+//                        int count = FileManager.getLineNumber(file.getAbsolutePath());
+//
+//                        /******read file*****/
+//
+//                        BufferedReader reader = new BufferedReader(new FileReader(file));
+//                        String parameters[] = reader.readLine().split(" ");
+//
+//                        //metadata
+//                        setMetadata(reader.readLine());
+//
+//                        //first values line
+//                        String line = reader.readLine();
+//
+//                        int lineNumber = 0;
+//
+//                        while (line != null) {
+//
+//                            String[] attributs = line.split(" ");
+//
+//                            //create voxel
+//                            if(!updateValue){
+//
+//                                int indiceX = Integer.valueOf(attributs[0]);
+//                                int indiceZ = Integer.valueOf(attributs[1]);
+//                                int indiceY = Integer.valueOf(attributs[2]);
+//
+//                                Map<String,Float> mapAttributs = new HashMap<>();
+//
+//                                for (int i=0;i<attributs.length;i++) {
+//                                    mapAttributs.put(parameters[i], Float.valueOf(attributs[i]));
+//                                }
+//
+//                                float posX = indiceX+startPointX-(resolution/2.0f);
+//                                float posY = indiceY+startPointY-(resolution/2.0f);
+//                                float posZ = indiceZ+startPointZ-(resolution/2.0f);
+//
+//                                voxelList.add(new Voxel(indiceX, indiceY, indiceZ, posX, posY, posZ, mapAttributs, 1.0f));
+//
+//                            }
+//
+//                            line = reader.readLine();
+//
+//                            lineNumber++;
+//
+//                            setReadFileProgress((lineNumber * 100) / count);
+//                        }
+//
+//                        reader.close();
+//
+//                        setFileLoaded(true);
+//
+//                        setCenter();
+//                        setWidth();
+//
+//                    } catch (FileNotFoundException ex) {
+//                        logger.error("cannot load voxel space from file", ex);
+//                    } catch (IOException ex) {
+//                        logger.error("cannot load voxel space from file", ex);
+//                    }
+//
+//                    return null;
+//
+//                }
+//            };
+//
+//            sw.execute();
+//        }else{
+//            throw new Exception("Not a voxel space file (header must be VOXEL");
+//        }     
+//    }
+    
+
+//    public void loadFromFile(File f, Map<String,Attribut> mapAttributs, Terrain ground,boolean update){
+//        
+//        setFileLoaded(false);
+//        
+//        this.updateValue= update;
+//        
+//        attribut = mapAttributs.get(attributToVisualize);
+//        final Terrain terrain = ground;
+//        
+//        this.file =f;
+//        
+//        SwingWorker sw = new SwingWorker() {
+//            
+//            
+//            @Override
+//            protected Object doInBackground() {
+//
+//                /******count line number*****/
+//                int compteur = 0;
+//                MultiKeyMap mapTerrainXY = null;
+//                
+//                if(terrain !=null){
+//                    
+//                    mapTerrainXY = terrain.getXYStructure();
+//                }
+//                
+//                
+//                try {
+//                    
+//                    /****count line number****/
+//                    int count = FileManager.getLineNumber(file.getAbsolutePath());
+//
+//                    /******read file*****/
+//                    BufferedReader reader = new BufferedReader(new FileReader(file));
+//                    String parametersLine[] = reader.readLine().split(" ");
+//                    
+//                    
+//                    //metadata
+//                    setMetadata(reader.readLine());
+//                    
+//                    //first values line
+//                    String line = reader.readLine();
+//                    
+//                    int lineNumber = 0;
+//                    
+//                    boolean valMinMaxInit = false;
+//
+//                    while (line != null) {
+//                        
+//                        String[] attributs = line.split(" ");
+//                        
+//                        for(int i=0;i<parametersLine.length;i++){
+//                            attribut.getExpression().setVariable(parametersLine[i], Float.valueOf(attributs[i]));
+//                        }
+//                        
+//                        float attributValue =0;
+//                        
+//                        try{
+//                            attributValue = (float) attribut.getExpression().evaluate();
+//                        }catch(Exception e){
+//                            attributValue = NaN;
+//                        }
+//                        
+//                        
+//                        //initialize minimum and maximum attributs values
+//                        if(lineNumber >= 0 && !valMinMaxInit && attributValue != 0){
+//
+//                            attributValueMax = attributValue;
+//                            attributValueMin = attributValue;
+//
+//                            valMinMaxInit = true;
+//                        }
+//                        
+//                        //edit voxel value
+//                        if(updateValue && voxelList.size() > 0){
+//                            voxelList.get(compteur).attributValue = attributValue;
+//                            
+//                        }
+//                        
+//                        //set maximum attribut value
+//                        if(attributValue>attributValueMax){
+//
+//                            attributValueMax = attributValue;
+//                        }
+//
+//                        //set minimum attribut value
+//                        if(attributValue < attributValueMin){
+//
+//                            attributValueMin = attributValue;
+//                        }
+//                        
+//                        Voxel voxel;
+//                                
+//                        //create voxel
+//                        if(!updateValue){
+//                            
+//                            int indiceX = Integer.valueOf(attributs[0]);
+//                            int indiceZ = Integer.valueOf(attributs[1]);
+//                            int indiceY = Integer.valueOf(attributs[2]);
+//                            
+//                            float posX = indiceX+startPointX-(resolution/2.0f);
+//                            float posY = indiceY+startPointZ-(resolution/2.0f);
+//                            float posZ = indiceZ+startPointY-(resolution/2.0f);
+//                            
+//                            voxel = new Voxel(indiceX, indiceY, indiceZ, posX, posY, posZ, attributValue);
+//                        }else{
+//                            voxel = voxelList.get(compteur);
+//                        }
+//                        
+//                        boolean drawVoxel;
+//
+//                        drawVoxel = !(Float.isNaN(voxel.attributValue) || voxel.attributValue == -1.0f || (!settings.drawNullVoxel && voxel.attributValue == 0));
+//
+//                        //if a terrain was loaded
+//                        if(mapTerrainXY != null){
+//
+//                            float hauteurTerrain = 0;
+//                            try{
+//                                hauteurTerrain = (float) mapTerrainXY.get(voxel.x, voxel.z);
+//                            }catch(Exception e){
+//                                logger.error(null, e);
+//                            }
+//
+//                            if((voxel.y<hauteurTerrain) && !settings.drawVoxelUnderground ){
+//                                drawVoxel = false;
+//                            }
+//                        }
+//
+//                        if(drawVoxel){
+//                            voxel.alpha = 1.0f;
+//                        }else{
+//                            voxel.alpha = 0.0f;
+//                        }
+//                        
+//                        if(!updateValue){
+//                            voxelList.add(voxel);
+//                        }else{
+//                            compteur++;
+//                        }
+//
+//                        line = reader.readLine();
+//                        
+//                        lineNumber++;
+//                        
+//                        setReadFileProgress((lineNumber * 100) / count);
+//                    }
+//                    
+//                    reader.close();
+//                    
+//                    setGradientColor(gradient);
+//                    
+//                    if(updateValue){
+//                        
+//                        updateInstanceColorBuffer();
+//                    }
+//                    
+//                    setCenter();
+//                    setWidth();
+//                    
+//                    setFileLoaded(true);
+//
+//                } catch (FileNotFoundException ex) {
+//                    logger.error(null, ex);
+//                } catch (IOException ex) {
+//                    logger.error(null, ex);
+//                }
+//
+//                return null;
+//
+//            }
+//        };
+//
+//        sw.execute();
+//    }
+    
+    public Vec3F getColorFromValue(float value){
+        
+        Color c = colorGradient.getColor(value);
+        
+        return new Vec3F(c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+    }
+    /*
     public void setGradientColor(Color[] gradientColor){
         
         this.gradient = gradientColor;
@@ -492,22 +869,44 @@ public class VoxelSpace {
         ColorGradient color = new ColorGradient(attributValueMin, attributValueMax);
         color.setGradientColor(gradientColor);
 
-        for (int i=0;i<voxelList.size();i++){
-
-            Color colorGenerated = color.getColor(voxelList.get(i).attributValue);
-
-            if(voxelList.get(i).alpha == 0){
-                voxelList.get(i).color = new Vec3F(colorGenerated.getRed()/255.0f, colorGenerated.getGreen()/255.0f, colorGenerated.getBlue()/255.0f);
-            }else{
-                voxelList.get(i).color = new Vec3F(colorGenerated.getRed()/255.0f, colorGenerated.getGreen()/255.0f, colorGenerated.getBlue()/255.0f);
+        for (Voxel voxel : voxelList) {
+            
+            Color colorGenerated = color.getColor(voxel.attributValue);
+            if (voxel.alpha == 0) {
+                voxel.color = new Vec3F(colorGenerated.getRed()/255.0f, colorGenerated.getGreen()/255.0f, colorGenerated.getBlue()/255.0f);
+            } else {
+                voxel.color = new Vec3F(colorGenerated.getRed()/255.0f, colorGenerated.getGreen()/255.0f, colorGenerated.getBlue()/255.0f);
             }
         }
-        
         //voxelList = ImageEqualisation.scaleHistogramm(voxelList);
         //voxelList = ImageEqualisation.voxelSpaceEqualisation(voxelList);
         
         
     }
+    */
+    
+    public void setGradientColor(Color[] gradientColor, float valMin, float valMax){
+        
+        this.gradient = gradientColor;
+        
+        ColorGradient color = new ColorGradient(valMin, valMax);
+        color.setGradientColor(gradientColor);
+
+        for (Voxel voxel : voxelList) {
+            
+            Color colorGenerated = color.getColor(voxel.attributValue);
+            if (voxel.alpha == 0) {
+                voxel.color = new Vec3F(colorGenerated.getRed()/255.0f, colorGenerated.getGreen()/255.0f, colorGenerated.getBlue()/255.0f);
+            } else {
+                voxel.color = new Vec3F(colorGenerated.getRed()/255.0f, colorGenerated.getGreen()/255.0f, colorGenerated.getBlue()/255.0f);
+            }
+        }
+        //voxelList = ImageEqualisation.scaleHistogramm(voxelList);
+        //voxelList = ImageEqualisation.voxelSpaceEqualisation(voxelList);
+        
+        
+    }
+    
     
     public void updateInstanceColorBuffer(){
         

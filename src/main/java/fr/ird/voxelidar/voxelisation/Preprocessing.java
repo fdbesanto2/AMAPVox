@@ -5,6 +5,7 @@
  */
 package fr.ird.voxelidar.voxelisation;
 
+import java.io.File;
 import javax.swing.event.EventListenerList;
 
 /**
@@ -54,6 +55,5 @@ public abstract class Preprocessing {
         listeners.add(PreprocessingListener.class, listener);
     }
     
-    public abstract void writeEchosFile(String fileName);
-    public abstract void generateEchosFile();
+    public abstract File preprocess();
 }

@@ -14,7 +14,9 @@ import fr.ird.voxelidar.graphics3d.mesh.EventManager;
 import fr.ird.voxelidar.graphics3d.object.terrain.Terrain;
 import fr.ird.voxelidar.graphics3d.object.terrain.TerrainLoader;
 import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace;
+import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace.VoxelFormat;
 import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpaceAdapter;
+import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpaceFormat;
 import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.lidar.format.als.Las;
 import fr.ird.voxelidar.lidar.format.als.LasReader;
@@ -27,14 +29,10 @@ import fr.ird.voxelidar.listener.InputKeyListener;
 import fr.ird.voxelidar.listener.InputMouseListener;
 import fr.ird.voxelidar.math.matrix.Mat4D;
 import fr.ird.voxelidar.math.vector.Vec3D;
-import fr.ird.voxelidar.math.vector.Vec3F;
 import fr.ird.voxelidar.util.ColorGradient;
 import fr.ird.voxelidar.util.Misc;
 import fr.ird.voxelidar.util.Settings;
-import fr.ird.voxelidar.util.VoxelPreprocessing;
-import fr.ird.voxelidar.util.VoxelPreprocessingAdapter;
-import fr.ird.voxelidar.util.Voxelisation;
-import fr.ird.voxelidar.util.VoxelisationAdapter;
+import fr.ird.voxelidar.voxelisation.VoxelisationParameters;
 import fr.ird.voxelidar.voxelisation.VoxelisationTool;
 import java.awt.Component;
 import java.awt.Container;
@@ -57,7 +55,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.InvalidPreferencesFormatException;
 import java.util.prefs.Preferences;
@@ -78,6 +75,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.log4j.Logger;
@@ -179,6 +178,120 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         
         vopMatrix = Mat4D.identity();
         rsp = new Rsp();
+        
+        DocumentListener customDocumentListener = new DocumentListener(){
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                
+                try{
+                    
+                    int minPointX = Integer.valueOf(jTextFieldMinPointX.getText());
+                    int minPointY = Integer.valueOf(jTextFieldMinPointY.getText());
+                    int minPointZ = Integer.valueOf(jTextFieldMinPointZ.getText());
+
+                    int maxPointX = Integer.valueOf(jTextFieldMaxPointX.getText());
+                    int maxPointY = Integer.valueOf(jTextFieldMaxPointY.getText());
+                    int maxPointZ = Integer.valueOf(jTextFieldMaxPointZ.getText());
+
+                    int voxelNumberX = (maxPointX - minPointX);
+                    int voxelNumberY = (maxPointY - minPointY);
+                    int voxelNumberZ = (maxPointZ - minPointZ);
+
+                    jTextFieldVoxelNumberX.setText(String.valueOf(voxelNumberX));
+                    jTextFieldVoxelNumberY.setText(String.valueOf(voxelNumberY));
+                    jTextFieldVoxelNumberZ.setText(String.valueOf(voxelNumberZ));
+
+                
+                    float resolution = Float.valueOf(jTextFieldVoxelNumberRes.getText());
+
+                    voxelNumberX = (int) ((maxPointX - minPointX)/resolution);
+                    voxelNumberY = (int) ((maxPointY - minPointY)/resolution);
+                    voxelNumberZ = (int) ((maxPointZ - minPointZ)/resolution);
+
+                    jTextFieldVoxelNumberX.setText(String.valueOf(voxelNumberX));
+                    jTextFieldVoxelNumberY.setText(String.valueOf(voxelNumberY));
+                    jTextFieldVoxelNumberZ.setText(String.valueOf(voxelNumberZ));
+                }catch(Exception ex){
+
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                
+            }
+        };
+        
+        jTextFieldVoxelNumberRes.getDocument().addDocumentListener(customDocumentListener);
+        jTextFieldMinPointX.getDocument().addDocumentListener(customDocumentListener);
+        jTextFieldMinPointY.getDocument().addDocumentListener(customDocumentListener);
+        jTextFieldMinPointZ.getDocument().addDocumentListener(customDocumentListener);
+        jTextFieldMaxPointX.getDocument().addDocumentListener(customDocumentListener);
+        jTextFieldMaxPointY.getDocument().addDocumentListener(customDocumentListener);
+        jTextFieldMaxPointZ.getDocument().addDocumentListener(customDocumentListener);
+        
+        DocumentListener customDocumentListener2 = new DocumentListener(){
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                
+                try{
+                    
+                    int minPointX = Integer.valueOf(jTextFieldMinPointX2.getText());
+                    int minPointY = Integer.valueOf(jTextFieldMinPointY2.getText());
+                    int minPointZ = Integer.valueOf(jTextFieldMinPointZ2.getText());
+
+                    int maxPointX = Integer.valueOf(jTextFieldMaxPointX2.getText());
+                    int maxPointY = Integer.valueOf(jTextFieldMaxPointY2.getText());
+                    int maxPointZ = Integer.valueOf(jTextFieldMaxPointZ2.getText());
+
+                    int voxelNumberX = (maxPointX - minPointX);
+                    int voxelNumberY = (maxPointY - minPointY);
+                    int voxelNumberZ = (maxPointZ - minPointZ);
+
+                    jTextFieldVoxelNumberX1.setText(String.valueOf(voxelNumberX));
+                    jTextFieldVoxelNumberY1.setText(String.valueOf(voxelNumberY));
+                    jTextFieldVoxelNumberZ1.setText(String.valueOf(voxelNumberZ));
+
+                
+                    float resolution = Float.valueOf(jTextFieldVoxelNumberRes1.getText());
+
+                    voxelNumberX = (int) ((maxPointX - minPointX)/resolution);
+                    voxelNumberY = (int) ((maxPointY - minPointY)/resolution);
+                    voxelNumberZ = (int) ((maxPointZ - minPointZ)/resolution);
+
+                    jTextFieldVoxelNumberX1.setText(String.valueOf(voxelNumberX));
+                    jTextFieldVoxelNumberY1.setText(String.valueOf(voxelNumberY));
+                    jTextFieldVoxelNumberZ1.setText(String.valueOf(voxelNumberZ));
+                }catch(Exception ex){
+
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                
+            }
+        };
+        
+        jTextFieldVoxelNumberRes1.getDocument().addDocumentListener(customDocumentListener2);
+        jTextFieldMinPointX2.getDocument().addDocumentListener(customDocumentListener2);
+        jTextFieldMinPointY2.getDocument().addDocumentListener(customDocumentListener2);
+        jTextFieldMinPointZ2.getDocument().addDocumentListener(customDocumentListener2);
+        jTextFieldMaxPointX2.getDocument().addDocumentListener(customDocumentListener2);
+        jTextFieldMaxPointY2.getDocument().addDocumentListener(customDocumentListener2);
+        jTextFieldMaxPointZ2.getDocument().addDocumentListener(customDocumentListener2);
     }
     
     private void setAppearance(String value){
@@ -197,6 +310,37 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             logger.error("cannot set look and feel: "+value, ex);
         }
+    }
+    
+    private void updateVoxelParameters(){
+        
+        int minPointX = Integer.valueOf(jTextFieldMinPointX.getText());
+        int minPointY = Integer.valueOf(jTextFieldMinPointY.getText());
+        int minPointZ = Integer.valueOf(jTextFieldMinPointZ.getText());
+        
+        int maxPointX = Integer.valueOf(jTextFieldMaxPointX.getText());
+        int maxPointY = Integer.valueOf(jTextFieldMaxPointY.getText());
+        int maxPointZ = Integer.valueOf(jTextFieldMaxPointZ.getText());
+        
+        int voxelNumberX = Integer.valueOf(jTextFieldVoxelNumberX.getText());
+        int voxelNumberY = Integer.valueOf(jTextFieldVoxelNumberY.getText());
+        int voxelNumberZ = Integer.valueOf(jTextFieldVoxelNumberZ.getText());
+        
+        float resolution = Float.valueOf(jTextFieldVoxelNumberRes.getText());
+        
+        voxelNumberX = (int) ((maxPointX - minPointX)/resolution);
+        voxelNumberY = (int) ((maxPointY - minPointY)/resolution);
+        voxelNumberZ = (int) ((maxPointZ - minPointZ)/resolution);
+        
+        
+        
+    }
+    
+    public Mat4D getVopMatrix(){
+        
+        Vec3D point1 = new Vec3D(Double.valueOf(jTextFieldReferencePoint1X.getText()), Double.valueOf(jTextFieldReferencePoint1Y.getText()), Double.valueOf(jTextFieldReferencePoint1Z.getText()));
+        Vec3D point2 = new Vec3D(Double.valueOf(jTextFieldReferencePoint2X.getText()), Double.valueOf(jTextFieldReferencePoint2Y.getText()), Double.valueOf(jTextFieldReferencePoint2Z.getText()));
+        return VoxelisationTool.getMatrixTransformation(point1, point2);
     }
     
     private void setDefaultAppeareance(){
@@ -395,15 +539,26 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         
         if(jListOutputFiles.getModel().getSize()>0){
             
-            String[] parameters = FileManager.readHeader(jListOutputFiles.getSelectedValue().toString()).split(" ");
+            String[] parameters = VoxelSpaceFormat.readAttributs(new File(jListOutputFiles.getSelectedValue().toString()));
             
-            if(parameters.length == 10){
+            for(int i=0 ; i< parameters.length ;i++){
+                    
+                parameters[i] = parameters[i].replaceAll(" ", "");
+                parameters[i] = parameters[i].replaceAll("#", "");
+            }
+            
+            //String[] parameters = FileManager.readHeader(jListOutputFiles.getSelectedValue().toString()).split(" ");
+            
+            if(parameters.length > 5){
                 
                 setParameters.addAll(Arrays.asList(parameters));
+               
 
                 for(int i=0 ; i< parameters.length ;i++){
-
-                    mapAttributs.put(parameters[i], new Attribut(parameters[i], parameters[i], setParameters));
+                    
+                    
+                    Attribut attribut = new Attribut(parameters[i], parameters[i], setParameters);
+                    mapAttributs.put(parameters[i], attribut);
                     //attributsList.add(new Attribut(parameters[i], parameters[i], setParameters));
                 }
 
@@ -528,9 +683,40 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelOutputParametersTab = new javax.swing.JPanel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
+        jTabbedPane5 = new javax.swing.JTabbedPane();
+        jPanel35 = new javax.swing.JPanel();
+        jPanel36 = new javax.swing.JPanel();
+        jButtonExecuteVox1 = new javax.swing.JButton();
+        jPanel39 = new javax.swing.JPanel();
+        jLabelName6 = new javax.swing.JLabel();
+        jLabelPath6 = new javax.swing.JLabel();
+        jTextFieldFilePathRsp = new javax.swing.JTextField();
+        jTextFieldFileNameRsp = new javax.swing.JTextField();
+        jButtonOpenRspFile = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox();
+        jRadioButtonLightFile = new javax.swing.JRadioButton();
+        jRadioButtonComplexFile = new javax.swing.JRadioButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jListRspScans = new javax.swing.JList();
+        jButtonSopMatrix = new javax.swing.JButton();
+        jButtonPopMatrix = new javax.swing.JButton();
+        jButtonVopMatrix = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jPanel40 = new javax.swing.JPanel();
+        jTextFieldMinPointX2 = new javax.swing.JTextField();
+        jTextFieldMinPointY2 = new javax.swing.JTextField();
+        jTextFieldMinPointZ2 = new javax.swing.JTextField();
+        jPanel41 = new javax.swing.JPanel();
+        jTextFieldMaxPointX2 = new javax.swing.JTextField();
+        jTextFieldMaxPointY2 = new javax.swing.JTextField();
+        jTextFieldMaxPointZ2 = new javax.swing.JTextField();
+        jPanel42 = new javax.swing.JPanel();
+        jTextFieldVoxelNumberX1 = new javax.swing.JTextField();
+        jTextFieldVoxelNumberY1 = new javax.swing.JTextField();
+        jTextFieldVoxelNumberZ1 = new javax.swing.JTextField();
+        jTextFieldVoxelNumberRes1 = new javax.swing.JTextField();
         jTabbedPane3 = new javax.swing.JTabbedPane();
         jPanel33 = new javax.swing.JPanel();
-        jPanel12 = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
         jLabelName3 = new javax.swing.JLabel();
         jLabelPath3 = new javax.swing.JLabel();
@@ -545,23 +731,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jTextFieldFilePathTrajVox = new javax.swing.JTextField();
         jTextFieldFileNameTrajVox = new javax.swing.JTextField();
         jButtonOpenTrajectoryFile = new javax.swing.JButton();
-        jPanel19 = new javax.swing.JPanel();
-        jTextFieldMat11 = new javax.swing.JTextField();
-        jTextFieldMat13 = new javax.swing.JTextField();
-        jTextFieldMat14 = new javax.swing.JTextField();
-        jTextFieldMat12 = new javax.swing.JTextField();
-        jTextFieldMat24 = new javax.swing.JTextField();
-        jTextFieldMat23 = new javax.swing.JTextField();
-        jTextFieldMat22 = new javax.swing.JTextField();
-        jTextFieldMat21 = new javax.swing.JTextField();
-        jTextFieldMat34 = new javax.swing.JTextField();
-        jTextFieldMat33 = new javax.swing.JTextField();
-        jTextFieldMat32 = new javax.swing.JTextField();
-        jTextFieldMat31 = new javax.swing.JTextField();
-        jTextFieldMat44 = new javax.swing.JTextField();
-        jTextFieldMat43 = new javax.swing.JTextField();
-        jTextFieldMat42 = new javax.swing.JTextField();
-        jTextFieldMat41 = new javax.swing.JTextField();
         jPanel17 = new javax.swing.JPanel();
         jLabelName4 = new javax.swing.JLabel();
         jLabelPath4 = new javax.swing.JLabel();
@@ -569,9 +738,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jTextFieldFileNameSaveVox = new javax.swing.JTextField();
         jButtonChooseOutputDirectoryVox = new javax.swing.JButton();
         jPanel25 = new javax.swing.JPanel();
-        jTextFieldPointNumberX = new javax.swing.JTextField();
-        jTextFieldPointNumberY = new javax.swing.JTextField();
-        jTextFieldPointNumberZ = new javax.swing.JTextField();
+        jTextFieldVoxelNumberX = new javax.swing.JTextField();
+        jTextFieldVoxelNumberY = new javax.swing.JTextField();
+        jTextFieldVoxelNumberZ = new javax.swing.JTextField();
+        jTextFieldVoxelNumberRes = new javax.swing.JTextField();
         jPanel26 = new javax.swing.JPanel();
         jTextFieldMaxPointX = new javax.swing.JTextField();
         jTextFieldMaxPointY = new javax.swing.JTextField();
@@ -590,7 +760,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jTextFieldReferencePoint2X = new javax.swing.JTextField();
         jTextFieldReferencePoint2Y = new javax.swing.JTextField();
         jTextFieldReferencePoint2Z = new javax.swing.JTextField();
-        jButtonApplyReferencePoints = new javax.swing.JButton();
+        jButtonPopMatrix1 = new javax.swing.JButton();
         jPanel31 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
@@ -650,37 +820,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jTextFieldFilePathSaveLocal = new javax.swing.JTextField();
         jTextFieldFileNameSaveLocal = new javax.swing.JTextField();
         jButtonChooseOutputDirectoryVox1 = new javax.swing.JButton();
-        jTabbedPane5 = new javax.swing.JTabbedPane();
-        jPanel35 = new javax.swing.JPanel();
-        jPanel36 = new javax.swing.JPanel();
-        jButtonExecuteVox1 = new javax.swing.JButton();
-        jPanel32 = new javax.swing.JPanel();
-        jTextFieldMinPointX1 = new javax.swing.JTextField();
-        jTextFieldMinPointY1 = new javax.swing.JTextField();
-        jTextFieldMinPointZ1 = new javax.swing.JTextField();
-        jPanel37 = new javax.swing.JPanel();
-        jTextFieldMaxPointX1 = new javax.swing.JTextField();
-        jTextFieldMaxPointY1 = new javax.swing.JTextField();
-        jTextFieldMaxPointZ1 = new javax.swing.JTextField();
-        jPanel38 = new javax.swing.JPanel();
-        jTextFieldPointNumberX1 = new javax.swing.JTextField();
-        jTextFieldPointNumberY1 = new javax.swing.JTextField();
-        jTextFieldPointNumberZ1 = new javax.swing.JTextField();
-        jPanel39 = new javax.swing.JPanel();
-        jLabelName6 = new javax.swing.JLabel();
-        jLabelPath6 = new javax.swing.JLabel();
-        jTextFieldFilePathRsp = new javax.swing.JTextField();
-        jTextFieldFileNameRsp = new javax.swing.JTextField();
-        jButtonOpenRspFile = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox();
-        jRadioButtonLightFile = new javax.swing.JRadioButton();
-        jRadioButtonComplexFile = new javax.swing.JRadioButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jListRspScans = new javax.swing.JList();
-        jButtonSopMatrix = new javax.swing.JButton();
-        jButtonPopMatrix = new javax.swing.JButton();
-        jButtonVopMatrix = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         jPanelDisplayParametersTab = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -798,6 +937,371 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         jTabbedPane2.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
+        jButtonExecuteVox1.setText("Execute");
+        jButtonExecuteVox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExecuteVox1ActionPerformed(evt);
+            }
+        });
+
+        jPanel39.setBorder(javax.swing.BorderFactory.createTitledBorder("Input file"));
+
+        jLabelName6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabelName6.setText("Name");
+        jLabelName6.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        jLabelPath6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabelPath6.setText("Path");
+
+        jTextFieldFilePathRsp.setEditable(false);
+        jTextFieldFilePathRsp.setColumns(38);
+        jTextFieldFilePathRsp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldFilePathRspActionPerformed(evt);
+            }
+        });
+
+        jTextFieldFileNameRsp.setEditable(false);
+        jTextFieldFileNameRsp.setColumns(50);
+        jTextFieldFileNameRsp.setToolTipText("");
+        jTextFieldFileNameRsp.setMinimumSize(new java.awt.Dimension(0, 20));
+        jTextFieldFileNameRsp.setName(""); // NOI18N
+
+        jButtonOpenRspFile.setText("Open");
+        jButtonOpenRspFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOpenRspFileActionPerformed(evt);
+            }
+        });
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Riscan project (*.rsp)", "Riegl file, txt file (*.rxp, *.txt)" }));
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel39Layout = new javax.swing.GroupLayout(jPanel39);
+        jPanel39.setLayout(jPanel39Layout);
+        jPanel39Layout.setHorizontalGroup(
+            jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel39Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel39Layout.createSequentialGroup()
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel39Layout.createSequentialGroup()
+                        .addGroup(jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonOpenRspFile)
+                            .addGroup(jPanel39Layout.createSequentialGroup()
+                                .addGroup(jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelName6)
+                                    .addComponent(jLabelPath6))
+                                .addGap(48, 48, 48)
+                                .addGroup(jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextFieldFileNameRsp, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldFilePathRsp, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))))
+                        .addGap(34, 34, 34))))
+        );
+        jPanel39Layout.setVerticalGroup(
+            jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel39Layout.createSequentialGroup()
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldFileNameRsp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelName6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldFilePathRsp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelPath6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonOpenRspFile))
+        );
+
+        buttonGroup1.add(jRadioButtonLightFile);
+        jRadioButtonLightFile.setSelected(true);
+        jRadioButtonLightFile.setText("Light file");
+        jRadioButtonLightFile.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jRadioButtonLightFileStateChanged(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButtonComplexFile);
+        jRadioButtonComplexFile.setText("Complex file");
+        jRadioButtonComplexFile.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jRadioButtonComplexFileStateChanged(evt);
+            }
+        });
+
+        jScrollPane1.setViewportView(jListRspScans);
+
+        jButtonSopMatrix.setText("SOP matrix");
+        jButtonSopMatrix.setEnabled(false);
+
+        jButtonPopMatrix.setText("POP matrix");
+        jButtonPopMatrix.setToolTipText("Project orientation and position");
+        jButtonPopMatrix.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPopMatrixActionPerformed(evt);
+            }
+        });
+
+        jButtonVopMatrix.setText("VOP matrix");
+        jButtonVopMatrix.setToolTipText("Voxel orientation and position");
+        jButtonVopMatrix.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVopMatrixActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("POP %*% VOP");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jPanel40.setBorder(javax.swing.BorderFactory.createTitledBorder("Min point"));
+        jPanel40.setToolTipText("");
+
+        jTextFieldMinPointX2.setText("-10");
+        jTextFieldMinPointX2.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
+        jTextFieldMinPointX2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldMinPointX2KeyTyped(evt);
+            }
+        });
+
+        jTextFieldMinPointY2.setText("50");
+        jTextFieldMinPointY2.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
+        jTextFieldMinPointY2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldMinPointY2KeyTyped(evt);
+            }
+        });
+
+        jTextFieldMinPointZ2.setText("0");
+        jTextFieldMinPointZ2.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
+        jTextFieldMinPointZ2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldMinPointZ2KeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel40Layout = new javax.swing.GroupLayout(jPanel40);
+        jPanel40.setLayout(jPanel40Layout);
+        jPanel40Layout.setHorizontalGroup(
+            jPanel40Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel40Layout.createSequentialGroup()
+                .addComponent(jTextFieldMinPointX2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldMinPointY2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldMinPointZ2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel40Layout.setVerticalGroup(
+            jPanel40Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel40Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jTextFieldMinPointX2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldMinPointY2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldMinPointZ2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanel41.setBorder(javax.swing.BorderFactory.createTitledBorder("Max point"));
+        jPanel41.setToolTipText("");
+
+        jTextFieldMaxPointX2.setText("10");
+        jTextFieldMaxPointX2.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
+        jTextFieldMaxPointX2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldMaxPointX2KeyTyped(evt);
+            }
+        });
+
+        jTextFieldMaxPointY2.setText("150");
+        jTextFieldMaxPointY2.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
+        jTextFieldMaxPointY2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldMaxPointY2KeyTyped(evt);
+            }
+        });
+
+        jTextFieldMaxPointZ2.setText("70");
+        jTextFieldMaxPointZ2.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
+        jTextFieldMaxPointZ2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldMaxPointZ2KeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel41Layout = new javax.swing.GroupLayout(jPanel41);
+        jPanel41.setLayout(jPanel41Layout);
+        jPanel41Layout.setHorizontalGroup(
+            jPanel41Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel41Layout.createSequentialGroup()
+                .addComponent(jTextFieldMaxPointX2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldMaxPointY2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldMaxPointZ2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel41Layout.setVerticalGroup(
+            jPanel41Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel41Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jTextFieldMaxPointX2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldMaxPointY2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldMaxPointZ2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanel42.setBorder(javax.swing.BorderFactory.createTitledBorder("Voxel Number"));
+        jPanel42.setToolTipText("");
+
+        jTextFieldVoxelNumberX1.setText("20");
+        jTextFieldVoxelNumberX1.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
+        jTextFieldVoxelNumberX1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldVoxelNumberX1KeyTyped(evt);
+            }
+        });
+
+        jTextFieldVoxelNumberY1.setText("100");
+        jTextFieldVoxelNumberY1.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
+        jTextFieldVoxelNumberY1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldVoxelNumberY1KeyTyped(evt);
+            }
+        });
+
+        jTextFieldVoxelNumberZ1.setText("70");
+        jTextFieldVoxelNumberZ1.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
+        jTextFieldVoxelNumberZ1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldVoxelNumberZ1KeyTyped(evt);
+            }
+        });
+
+        jTextFieldVoxelNumberRes1.setText("1");
+        jTextFieldVoxelNumberRes1.setBorder(javax.swing.BorderFactory.createTitledBorder("Resolution"));
+        jTextFieldVoxelNumberRes1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldVoxelNumberRes1KeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel42Layout = new javax.swing.GroupLayout(jPanel42);
+        jPanel42.setLayout(jPanel42Layout);
+        jPanel42Layout.setHorizontalGroup(
+            jPanel42Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel42Layout.createSequentialGroup()
+                .addComponent(jTextFieldVoxelNumberX1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldVoxelNumberY1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldVoxelNumberZ1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTextFieldVoxelNumberRes1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel42Layout.setVerticalGroup(
+            jPanel42Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel42Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jTextFieldVoxelNumberX1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldVoxelNumberY1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldVoxelNumberZ1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldVoxelNumberRes1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        javax.swing.GroupLayout jPanel36Layout = new javax.swing.GroupLayout(jPanel36);
+        jPanel36.setLayout(jPanel36Layout);
+        jPanel36Layout.setHorizontalGroup(
+            jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel36Layout.createSequentialGroup()
+                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel39, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel36Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jRadioButtonLightFile)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jRadioButtonComplexFile)
+                        .addGap(167, 167, 167))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel36Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonExecuteVox1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonSopMatrix)
+                    .addGroup(jPanel36Layout.createSequentialGroup()
+                        .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonPopMatrix)
+                            .addComponent(jButtonVopMatrix))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1))
+                    .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jPanel42, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel36Layout.createSequentialGroup()
+                            .addComponent(jPanel40, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jPanel41, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(21, 21, 21))
+        );
+        jPanel36Layout.setVerticalGroup(
+            jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel36Layout.createSequentialGroup()
+                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel36Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButtonSopMatrix)
+                        .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel36Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonPopMatrix)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonVopMatrix))
+                            .addGroup(jPanel36Layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(jButton1)))))
+                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel36Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel40, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel41, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel42, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonExecuteVox1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(jPanel36Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)))
+                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButtonLightFile)
+                    .addComponent(jRadioButtonComplexFile))
+                .addGap(20, 20, 20))
+        );
+
+        javax.swing.GroupLayout jPanel35Layout = new javax.swing.GroupLayout(jPanel35);
+        jPanel35.setLayout(jPanel35Layout);
+        jPanel35Layout.setHorizontalGroup(
+            jPanel35Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel35Layout.setVerticalGroup(
+            jPanel35Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        jTabbedPane5.addTab("TLS => VOXELS ", jPanel35);
+
+        jTabbedPane2.addTab("TLS", jTabbedPane5);
+
         jPanel16.setBorder(javax.swing.BorderFactory.createTitledBorder("Input file (*.laz, *.las, *.txt)"));
 
         jLabelName3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -853,7 +1357,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldFileNameInputVox, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)
                             .addComponent(jTextFieldFilePathInputVox, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                            .addComponent(jLabelFileSizeInputVox, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))))
+                            .addComponent(jLabelFileSizeInputVox, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE))))
                 .addGap(34, 34, 34))
         );
         jPanel16Layout.setVerticalGroup(
@@ -938,74 +1442,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addContainerGap())
         );
 
-        jPanel19.setBorder(javax.swing.BorderFactory.createTitledBorder("Matrix transformation"));
-
-        javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
-        jPanel19.setLayout(jPanel19Layout);
-        jPanel19Layout.setHorizontalGroup(
-            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel19Layout.createSequentialGroup()
-                .addComponent(jTextFieldMat11, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldMat12, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextFieldMat13, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldMat14, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel19Layout.createSequentialGroup()
-                .addComponent(jTextFieldMat21, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldMat22, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextFieldMat23, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldMat24, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel19Layout.createSequentialGroup()
-                .addComponent(jTextFieldMat31, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldMat32, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextFieldMat33, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldMat34, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel19Layout.createSequentialGroup()
-                .addComponent(jTextFieldMat41, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldMat42, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextFieldMat43, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldMat44, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel19Layout.setVerticalGroup(
-            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel19Layout.createSequentialGroup()
-                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldMat11, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldMat13, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldMat14, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldMat12, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldMat21, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldMat23, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldMat24, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldMat22, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldMat31, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldMat33, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldMat34, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldMat32, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldMat41, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldMat43, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldMat44, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldMat42, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 9, Short.MAX_VALUE))
-        );
-
         jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Output file (*.vox)"));
 
         jLabelName4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -1072,40 +1508,82 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanel25.setBorder(javax.swing.BorderFactory.createTitledBorder("Voxel Number"));
         jPanel25.setToolTipText("");
 
-        jTextFieldPointNumberX.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
+        jTextFieldVoxelNumberX.setText("20");
+        jTextFieldVoxelNumberX.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
+        jTextFieldVoxelNumberX.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldVoxelNumberXKeyTyped(evt);
+            }
+        });
 
-        jTextFieldPointNumberY.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
+        jTextFieldVoxelNumberY.setText("100");
+        jTextFieldVoxelNumberY.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
+        jTextFieldVoxelNumberY.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldVoxelNumberYKeyTyped(evt);
+            }
+        });
 
-        jTextFieldPointNumberZ.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
+        jTextFieldVoxelNumberZ.setText("70");
+        jTextFieldVoxelNumberZ.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
+        jTextFieldVoxelNumberZ.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldVoxelNumberZKeyTyped(evt);
+            }
+        });
+
+        jTextFieldVoxelNumberRes.setText("1");
+        jTextFieldVoxelNumberRes.setBorder(javax.swing.BorderFactory.createTitledBorder("Resolution"));
 
         javax.swing.GroupLayout jPanel25Layout = new javax.swing.GroupLayout(jPanel25);
         jPanel25.setLayout(jPanel25Layout);
         jPanel25Layout.setHorizontalGroup(
             jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel25Layout.createSequentialGroup()
-                .addComponent(jTextFieldPointNumberX, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldVoxelNumberX, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldPointNumberY, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldVoxelNumberY, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldPointNumberZ, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(jTextFieldVoxelNumberZ, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTextFieldVoxelNumberRes, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel25Layout.setVerticalGroup(
             jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jTextFieldPointNumberX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jTextFieldPointNumberY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jTextFieldPointNumberZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jTextFieldVoxelNumberX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldVoxelNumberY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldVoxelNumberZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldVoxelNumberRes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanel26.setBorder(javax.swing.BorderFactory.createTitledBorder("Max point"));
         jPanel26.setToolTipText("");
 
+        jTextFieldMaxPointX.setText("10");
         jTextFieldMaxPointX.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
+        jTextFieldMaxPointX.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldMaxPointXKeyTyped(evt);
+            }
+        });
 
+        jTextFieldMaxPointY.setText("150");
         jTextFieldMaxPointY.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
+        jTextFieldMaxPointY.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldMaxPointYKeyTyped(evt);
+            }
+        });
 
+        jTextFieldMaxPointZ.setText("70");
         jTextFieldMaxPointZ.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
+        jTextFieldMaxPointZ.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldMaxPointZKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel26Layout = new javax.swing.GroupLayout(jPanel26);
         jPanel26.setLayout(jPanel26Layout);
@@ -1129,11 +1607,29 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanel27.setBorder(javax.swing.BorderFactory.createTitledBorder("Min point"));
         jPanel27.setToolTipText("");
 
+        jTextFieldMinPointX.setText("-10");
         jTextFieldMinPointX.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
+        jTextFieldMinPointX.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldMinPointXKeyTyped(evt);
+            }
+        });
 
+        jTextFieldMinPointY.setText("50");
         jTextFieldMinPointY.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
+        jTextFieldMinPointY.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldMinPointYKeyTyped(evt);
+            }
+        });
 
+        jTextFieldMinPointZ.setText("0");
         jTextFieldMinPointZ.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
+        jTextFieldMinPointZ.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldMinPointZKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel27Layout = new javax.swing.GroupLayout(jPanel27);
         jPanel27.setLayout(jPanel27Layout);
@@ -1182,7 +1678,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jTextFieldReferencePoint1Y, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldReferencePoint1Z, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 7, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel29Layout.setVerticalGroup(
             jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1210,8 +1706,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldReferencePoint2Y, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldReferencePoint2Z, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(jTextFieldReferencePoint2Z, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel30Layout.setVerticalGroup(
             jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1221,10 +1716,11 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jTextFieldReferencePoint2Z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jButtonApplyReferencePoints.setText("Apply");
-        jButtonApplyReferencePoints.addActionListener(new java.awt.event.ActionListener() {
+        jButtonPopMatrix1.setText("VOP matrix");
+        jButtonPopMatrix1.setToolTipText("Project orientation and position");
+        jButtonPopMatrix1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonApplyReferencePointsActionPerformed(evt);
+                jButtonPopMatrix1ActionPerformed(evt);
             }
         });
 
@@ -1232,70 +1728,25 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanel28.setLayout(jPanel28Layout);
         jPanel28Layout.setHorizontalGroup(
             jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel30, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel28Layout.createSequentialGroup()
-                .addComponent(jButtonApplyReferencePoints)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel30, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(37, 37, 37)
+                .addComponent(jButtonPopMatrix1)
+                .addGap(29, 29, 29))
         );
         jPanel28Layout.setVerticalGroup(
             jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel28Layout.createSequentialGroup()
-                .addComponent(jPanel29, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel30, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonApplyReferencePoints))
-        );
-
-        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
-        jPanel12.setLayout(jPanel12Layout);
-        jPanel12Layout.setHorizontalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel12Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel28Layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addComponent(jButtonPopMatrix1))
+                    .addGroup(jPanel28Layout.createSequentialGroup()
+                        .addComponent(jPanel29, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel28, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jPanel25, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel27, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonExecuteVox, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel12Layout.setVerticalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel12Layout.createSequentialGroup()
-                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE))
-                    .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel28, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonExecuteVox))))
+                        .addComponent(jPanel30, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1303,24 +1754,48 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanel33.setLayout(jPanel33Layout);
         jPanel33Layout.setHorizontalGroup(
             jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 785, Short.MAX_VALUE)
-            .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel33Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(jPanel33Layout.createSequentialGroup()
+                .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jButtonExecuteVox, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jPanel25, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel33Layout.createSequentialGroup()
+                                .addComponent(jPanel27, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jPanel28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(67, 67, 67))
         );
         jPanel33Layout.setVerticalGroup(
             jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 360, Short.MAX_VALUE)
-            .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel33Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(jPanel33Layout.createSequentialGroup()
+                .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel33Layout.createSequentialGroup()
+                        .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, 94, Short.MAX_VALUE))
+                    .addGroup(jPanel33Layout.createSequentialGroup()
+                        .addComponent(jPanel28, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                        .addComponent(jButtonExecuteVox)))
+                .addContainerGap())
         );
 
-        jTabbedPane3.addTab("LAS => VOXELS ", jPanel33);
+        jTabbedPane3.addTab("Voxelisation", jPanel33);
 
         jPanel6.setMaximumSize(new java.awt.Dimension(100, 32767));
         jPanel6.setPreferredSize(new java.awt.Dimension(100, 273));
@@ -1720,7 +2195,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     .addComponent(jCheckBoxWriteV))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(86, Short.MAX_VALUE))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel31Layout = new javax.swing.GroupLayout(jPanel31);
@@ -1733,9 +2208,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         );
         jPanel31Layout.setVerticalGroup(
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 360, Short.MAX_VALUE)
+            .addGap(0, 356, Short.MAX_VALUE)
             .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("LAS => TXT", jPanel31);
@@ -1966,7 +2441,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         .addComponent(jPanel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addComponent(jPanel23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(65, Short.MAX_VALUE))
+                        .addContainerGap(69, Short.MAX_VALUE))
                     .addGroup(jPanel20Layout.createSequentialGroup()
                         .addComponent(jPanel22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
@@ -1982,317 +2457,16 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         );
         jPanel34Layout.setVerticalGroup(
             jPanel34Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 360, Short.MAX_VALUE)
+            .addGap(0, 356, Short.MAX_VALUE)
             .addGroup(jPanel34Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel34Layout.createSequentialGroup()
                     .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 31, Short.MAX_VALUE)))
+                    .addGap(0, 23, Short.MAX_VALUE)))
         );
 
         jTabbedPane3.addTab("LAS => local LAS", jPanel34);
 
         jTabbedPane2.addTab("ALS", jTabbedPane3);
-
-        jButtonExecuteVox1.setText("Execute");
-        jButtonExecuteVox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonExecuteVox1ActionPerformed(evt);
-            }
-        });
-
-        jPanel32.setBorder(javax.swing.BorderFactory.createTitledBorder("Min point"));
-        jPanel32.setToolTipText("");
-
-        jTextFieldMinPointX1.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
-
-        jTextFieldMinPointY1.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
-
-        jTextFieldMinPointZ1.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
-
-        javax.swing.GroupLayout jPanel32Layout = new javax.swing.GroupLayout(jPanel32);
-        jPanel32.setLayout(jPanel32Layout);
-        jPanel32Layout.setHorizontalGroup(
-            jPanel32Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel32Layout.createSequentialGroup()
-                .addComponent(jTextFieldMinPointX1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldMinPointY1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldMinPointZ1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel32Layout.setVerticalGroup(
-            jPanel32Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel32Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jTextFieldMinPointX1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jTextFieldMinPointY1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jTextFieldMinPointZ1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        jPanel37.setBorder(javax.swing.BorderFactory.createTitledBorder("Max point"));
-        jPanel37.setToolTipText("");
-
-        jTextFieldMaxPointX1.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
-
-        jTextFieldMaxPointY1.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
-
-        jTextFieldMaxPointZ1.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
-
-        javax.swing.GroupLayout jPanel37Layout = new javax.swing.GroupLayout(jPanel37);
-        jPanel37.setLayout(jPanel37Layout);
-        jPanel37Layout.setHorizontalGroup(
-            jPanel37Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel37Layout.createSequentialGroup()
-                .addComponent(jTextFieldMaxPointX1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldMaxPointY1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldMaxPointZ1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel37Layout.setVerticalGroup(
-            jPanel37Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel37Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jTextFieldMaxPointX1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jTextFieldMaxPointY1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jTextFieldMaxPointZ1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        jPanel38.setBorder(javax.swing.BorderFactory.createTitledBorder("Voxel Number"));
-        jPanel38.setToolTipText("");
-
-        jTextFieldPointNumberX1.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
-
-        jTextFieldPointNumberY1.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
-
-        jTextFieldPointNumberZ1.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
-
-        javax.swing.GroupLayout jPanel38Layout = new javax.swing.GroupLayout(jPanel38);
-        jPanel38.setLayout(jPanel38Layout);
-        jPanel38Layout.setHorizontalGroup(
-            jPanel38Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel38Layout.createSequentialGroup()
-                .addComponent(jTextFieldPointNumberX1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldPointNumberY1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldPointNumberZ1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanel38Layout.setVerticalGroup(
-            jPanel38Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel38Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jTextFieldPointNumberX1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jTextFieldPointNumberY1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jTextFieldPointNumberZ1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        jPanel39.setBorder(javax.swing.BorderFactory.createTitledBorder("Input file"));
-
-        jLabelName6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabelName6.setText("Name");
-        jLabelName6.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-        jLabelPath6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabelPath6.setText("Path");
-
-        jTextFieldFilePathRsp.setEditable(false);
-        jTextFieldFilePathRsp.setColumns(38);
-        jTextFieldFilePathRsp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldFilePathRspActionPerformed(evt);
-            }
-        });
-
-        jTextFieldFileNameRsp.setEditable(false);
-        jTextFieldFileNameRsp.setColumns(50);
-        jTextFieldFileNameRsp.setToolTipText("");
-        jTextFieldFileNameRsp.setMinimumSize(new java.awt.Dimension(0, 20));
-        jTextFieldFileNameRsp.setName(""); // NOI18N
-
-        jButtonOpenRspFile.setText("Open");
-        jButtonOpenRspFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonOpenRspFileActionPerformed(evt);
-            }
-        });
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Riscan project (*.rsp)", "Riegl file, txt file (*.rxp, *.txt)" }));
-        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jComboBox1ItemStateChanged(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel39Layout = new javax.swing.GroupLayout(jPanel39);
-        jPanel39.setLayout(jPanel39Layout);
-        jPanel39Layout.setHorizontalGroup(
-            jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel39Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel39Layout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel39Layout.createSequentialGroup()
-                        .addGroup(jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonOpenRspFile)
-                            .addGroup(jPanel39Layout.createSequentialGroup()
-                                .addGroup(jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabelName6)
-                                    .addComponent(jLabelPath6))
-                                .addGap(48, 48, 48)
-                                .addGroup(jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextFieldFileNameRsp, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)
-                                    .addComponent(jTextFieldFilePathRsp, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))))
-                        .addGap(34, 34, 34))))
-        );
-        jPanel39Layout.setVerticalGroup(
-            jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel39Layout.createSequentialGroup()
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldFileNameRsp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelName6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldFilePathRsp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelPath6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonOpenRspFile))
-        );
-
-        buttonGroup1.add(jRadioButtonLightFile);
-        jRadioButtonLightFile.setSelected(true);
-        jRadioButtonLightFile.setText("Light file");
-        jRadioButtonLightFile.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jRadioButtonLightFileStateChanged(evt);
-            }
-        });
-
-        buttonGroup1.add(jRadioButtonComplexFile);
-        jRadioButtonComplexFile.setText("Complex file");
-        jRadioButtonComplexFile.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jRadioButtonComplexFileStateChanged(evt);
-            }
-        });
-
-        jScrollPane1.setViewportView(jListRspScans);
-
-        jButtonSopMatrix.setText("SOP matrix");
-        jButtonSopMatrix.setEnabled(false);
-
-        jButtonPopMatrix.setText("POP matrix");
-        jButtonPopMatrix.setToolTipText("Project orientation and position");
-        jButtonPopMatrix.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonPopMatrixActionPerformed(evt);
-            }
-        });
-
-        jButtonVopMatrix.setText("VOP matrix");
-        jButtonVopMatrix.setToolTipText("Voxel orientation and position");
-        jButtonVopMatrix.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonVopMatrixActionPerformed(evt);
-            }
-        });
-
-        jButton1.setText("POP %*% VOP");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel36Layout = new javax.swing.GroupLayout(jPanel36);
-        jPanel36.setLayout(jPanel36Layout);
-        jPanel36Layout.setHorizontalGroup(
-            jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel36Layout.createSequentialGroup()
-                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel39, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel36Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jRadioButtonLightFile)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButtonComplexFile)
-                        .addGap(167, 167, 167))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel36Layout.createSequentialGroup()
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jButtonExecuteVox1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jPanel38, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel36Layout.createSequentialGroup()
-                            .addComponent(jPanel32, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jPanel37, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jButtonSopMatrix)
-                    .addGroup(jPanel36Layout.createSequentialGroup()
-                        .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonPopMatrix)
-                            .addComponent(jButtonVopMatrix))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
-                .addGap(21, 21, 21))
-        );
-        jPanel36Layout.setVerticalGroup(
-            jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel36Layout.createSequentialGroup()
-                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel36Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButtonSopMatrix)
-                        .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel36Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonPopMatrix)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonVopMatrix))
-                            .addGroup(jPanel36Layout.createSequentialGroup()
-                                .addGap(20, 20, 20)
-                                .addComponent(jButton1)))))
-                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel36Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-                        .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel32, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel37, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel38, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonExecuteVox1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(jPanel36Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButtonLightFile)
-                    .addComponent(jRadioButtonComplexFile))
-                .addGap(20, 20, 20))
-        );
-
-        javax.swing.GroupLayout jPanel35Layout = new javax.swing.GroupLayout(jPanel35);
-        jPanel35.setLayout(jPanel35Layout);
-        jPanel35Layout.setHorizontalGroup(
-            jPanel35Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel35Layout.setVerticalGroup(
-            jPanel35Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        jTabbedPane5.addTab("TLS => VOXELS ", jPanel35);
-
-        jTabbedPane2.addTab("TLS", jTabbedPane5);
 
         javax.swing.GroupLayout jPanelOutputParametersTabLayout = new javax.swing.GroupLayout(jPanelOutputParametersTab);
         jPanelOutputParametersTab.setLayout(jPanelOutputParametersTabLayout);
@@ -3043,7 +3217,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             });
 
             try {
-                voxelSpace.loadFromFile(new File(jListOutputFiles.getSelectedValue().toString()));
+                voxelSpace.loadFromFile(new File(jListOutputFiles.getSelectedValue().toString()), VoxelFormat.VOXELSPACE_FORMAT1);
+                //voxelSpace.loadFromFile(new File(jListOutputFiles.getSelectedValue().toString()));
             } catch (Exception ex) {
                 logger.error(null, ex);
             }
@@ -3063,16 +3238,14 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         
         if (jFileChooser2.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             
-            if(isVoxelFile(jFileChooser2.getSelectedFile().getAbsolutePath())){
+            //if(isVoxelFile(jFileChooser2.getSelectedFile().getAbsolutePath())){
                 
                 model.addElement(jFileChooser2.getSelectedFile().getAbsolutePath());
                 jListOutputFiles.setSelectedIndex(0);
-
                 
-                
-            }else{
-                JOptionPane.showMessageDialog(this, "File isn't a voxel file");
-            }
+            //}else{
+                //JOptionPane.showMessageDialog(this, "File isn't a voxel file");
+            //}
         }
     }//GEN-LAST:event_jButtonAddFileActionPerformed
 
@@ -3214,6 +3387,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             
             if(filePath.endsWith(".las")){
                 
+                /*
                 String coordinatesFilePath ="";
                 String trajectoryFilePath ="";
                 
@@ -3256,7 +3430,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         }
                     }
                 });
-
+                */
                 //preprocessVox.generateEchosFile(coordinatesFilePath, filePath, trajectoryFilePath);
                 
             }else if(filePath.endsWith(".laz")){
@@ -3470,35 +3644,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldFilePathInputTxtActionPerformed
 
-    private void jButtonApplyReferencePointsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonApplyReferencePointsActionPerformed
-
-        Vec3D point1 = new Vec3D(Double.valueOf(jTextFieldReferencePoint1X.getText()), Double.valueOf(jTextFieldReferencePoint1Y.getText()), Double.valueOf(jTextFieldReferencePoint1Z.getText()));
-        Vec3D point2 = new Vec3D(Double.valueOf(jTextFieldReferencePoint2X.getText()), Double.valueOf(jTextFieldReferencePoint2Y.getText()), Double.valueOf(jTextFieldReferencePoint2Z.getText()));
-        Mat4D matrixTransformation = VoxelPreprocessing.getMatrixTransformation(point1, point2);
-
-        double mat4x4[] = matrixTransformation.mat;
-
-        jTextFieldMat11.setText(String.valueOf(mat4x4[0]));
-        jTextFieldMat12.setText(String.valueOf(mat4x4[1]));
-        jTextFieldMat13.setText(String.valueOf(mat4x4[2]));
-        jTextFieldMat14.setText(String.valueOf(mat4x4[3]));
-        jTextFieldMat21.setText(String.valueOf(mat4x4[4]));
-        jTextFieldMat22.setText(String.valueOf(mat4x4[5]));
-        jTextFieldMat23.setText(String.valueOf(mat4x4[6]));
-        jTextFieldMat24.setText(String.valueOf(mat4x4[7]));
-        jTextFieldMat31.setText(String.valueOf(mat4x4[8]));
-        jTextFieldMat32.setText(String.valueOf(mat4x4[9]));
-        jTextFieldMat33.setText(String.valueOf(mat4x4[10]));
-        jTextFieldMat34.setText(String.valueOf(mat4x4[11]));
-        jTextFieldMat41.setText(String.valueOf(mat4x4[12]));
-        jTextFieldMat42.setText(String.valueOf(mat4x4[13]));
-        jTextFieldMat43.setText(String.valueOf(mat4x4[14]));
-        jTextFieldMat44.setText(String.valueOf(mat4x4[15]));
-    }//GEN-LAST:event_jButtonApplyReferencePointsActionPerformed
-
     private void jButtonExecuteVoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExecuteVoxActionPerformed
 
         final Mat4D mat4x4 = new Mat4D();
+        /*
         mat4x4.mat = new double[]{
 
             Double.valueOf(jTextFieldMat11.getText()),
@@ -3518,9 +3667,60 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             Double.valueOf(jTextFieldMat43.getText()),
             Double.valueOf(jTextFieldMat44.getText())
         };
-
+        */
+        
+        Mat4D vopMatrix = getVopMatrix();
+        
         final String inputVoxPath = jTextFieldFilePathInputVox.getText();
-        final String inputTrajectoryPath = jTextFieldFilePathTrajVox.getText();
+        final File trajectoryFile = new File(jTextFieldFilePathTrajVox.getText());
+        
+        File inputFile = new File(jTextFieldFilePathInputVox.getText());
+        String extension = FileManager.getExtension(inputFile);
+        
+        VoxelisationParameters parameters = new VoxelisationParameters(
+                Double.valueOf(jTextFieldMinPointX.getText()), 
+                Double.valueOf(jTextFieldMinPointY.getText()),
+                Double.valueOf(jTextFieldMinPointZ.getText()),
+                Double.valueOf(jTextFieldMaxPointX.getText()),
+                Double.valueOf(jTextFieldMaxPointY.getText()),
+                Double.valueOf(jTextFieldMaxPointZ.getText()),
+                Integer.valueOf(jTextFieldVoxelNumberX.getText()),
+                Integer.valueOf(jTextFieldVoxelNumberY.getText()),
+                Integer.valueOf(jTextFieldVoxelNumberZ.getText()));
+        
+        File outputFile = new File(jTextFieldFilePathSaveVox.getText());
+        
+        final JProgressLoadingFile progressBar = new JProgressLoadingFile(this);
+        progressBar.setVisible(true);
+
+        final JFrameSettingUp parent = this;
+        
+        switch(extension){
+            case ".laz":
+                
+                //decompress file
+                
+                break;
+                
+            case ".las":
+                
+                //generate shoot file
+                //call voxelisation program
+                VoxelisationTool voxTool = new VoxelisationTool();
+                voxTool.generateVoxelFromLas(LasReader.read(inputVoxPath), trajectoryFile, outputFile, vopMatrix, parameters);
+                break;
+                
+            case ".txt":
+                
+                //?? is it a text shoot file or a text .las file??
+                
+                //if shoot file
+                    //call voxelisation program
+                
+                //if text .las file
+                    //generate shoot file
+                    //call voxelisation program
+        }
 
         //final VoxelPreprocessing preprocessVox = new VoxelPreprocessing();
 
@@ -3545,16 +3745,12 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
         */
-        final JProgressLoadingFile progressBar = new JProgressLoadingFile(this);
-        progressBar.setVisible(true);
-
-        final JFrameSettingUp parent = this;
-
+        /*
         Vec3F bottomCorner = new Vec3F(Float.valueOf(jTextFieldMinPointX.getText()), Float.valueOf(jTextFieldMinPointY.getText()), Float.valueOf(jTextFieldMinPointZ.getText()));
         Vec3F topCorner = new Vec3F(Float.valueOf(jTextFieldMaxPointX.getText()), Float.valueOf(jTextFieldMaxPointY.getText()), Float.valueOf(jTextFieldMaxPointZ.getText()));
-        int numberX = Integer.valueOf(jTextFieldPointNumberX.getText());
-        int numberY = Integer.valueOf(jTextFieldPointNumberY.getText());
-        int numberZ = Integer.valueOf(jTextFieldPointNumberZ.getText());
+        int numberX = Integer.valueOf(jTextFieldVoxelNumberX.getText());
+        int numberY = Integer.valueOf(jTextFieldVoxelNumberY.getText());
+        int numberZ = Integer.valueOf(jTextFieldVoxelNumberZ.getText());
 
         Voxelisation vox = new Voxelisation();
 
@@ -3579,7 +3775,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
 
         vox.voxelise(mat4x4, inputVoxPath, inputTrajectoryPath, bottomCorner, topCorner, numberX, numberY, numberZ);
-
+        */
         /*
         als.generateEchosFile("C:\\Users\\Julien\\Desktop\\Test Als preprocess\\CoordonnéesP15.csv",
             "C:\\Users\\Julien\\Desktop\\Test Als preprocess\\ALSbuf_xyzirncapt.txt",
@@ -3675,6 +3871,17 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         final Rxp rxp = filteredRxpList.get(0);
         final ArrayList<File> filesList = new ArrayList<>();
         
+        final VoxelisationParameters parameters = new VoxelisationParameters(
+                Double.valueOf(jTextFieldMinPointX2.getText()), 
+                Double.valueOf(jTextFieldMinPointY2.getText()),
+                Double.valueOf(jTextFieldMinPointZ2.getText()),
+                Double.valueOf(jTextFieldMaxPointX2.getText()),
+                Double.valueOf(jTextFieldMaxPointY2.getText()),
+                Double.valueOf(jTextFieldMaxPointZ2.getText()),
+                Integer.valueOf(jTextFieldVoxelNumberX1.getText()),
+                Integer.valueOf(jTextFieldVoxelNumberY1.getText()),
+                Integer.valueOf(jTextFieldVoxelNumberZ1.getText()));
+        
         SwingWorker sw = new SwingWorker() {
 
             @Override
@@ -3687,8 +3894,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         VoxelisationTool voxTool = new VoxelisationTool();
                         
                         progressBar.setText("Voxelisation in progress, file "+compteur+"/"+filteredRxpList.size()+" : "+rxp.getRxpLiteFile().getName());
-                        
-                        File f = voxTool.generateVoxelFile(rxp, vopPopMatrix, -10, -10, -2, 10, 10, 6, 20, 20, 8);
+                        File outputFile = new File(rxp.getRxpLiteFile().getName()+".vox");
+                        File f = voxTool.generateVoxelFromRxp(rxp, outputFile, vopPopMatrix, parameters);
                         filesList.add(f);
                         
                         compteur++;
@@ -3860,6 +4067,96 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jTextFieldVoxelNumberXKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldVoxelNumberXKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldVoxelNumberXKeyTyped
+
+    private void jTextFieldVoxelNumberYKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldVoxelNumberYKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldVoxelNumberYKeyTyped
+
+    private void jTextFieldVoxelNumberZKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldVoxelNumberZKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldVoxelNumberZKeyTyped
+
+    private void jButtonPopMatrix1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPopMatrix1ActionPerformed
+        
+        final JFrameMatrix jFrameMatrix = new JFrameMatrix(getVopMatrix());
+        jFrameMatrix.setVisible(true);
+        
+        jFrameMatrix.addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                //vopMatrix = jFrameMatrix.getMatrix();
+            }
+        });
+    }//GEN-LAST:event_jButtonPopMatrix1ActionPerformed
+
+    private void jTextFieldMinPointXKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMinPointXKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldMinPointXKeyTyped
+
+    private void jTextFieldMinPointYKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMinPointYKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldMinPointYKeyTyped
+
+    private void jTextFieldMinPointZKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMinPointZKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldMinPointZKeyTyped
+
+    private void jTextFieldMaxPointXKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMaxPointXKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldMaxPointXKeyTyped
+
+    private void jTextFieldMaxPointYKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMaxPointYKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldMaxPointYKeyTyped
+
+    private void jTextFieldMaxPointZKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMaxPointZKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldMaxPointZKeyTyped
+
+    private void jTextFieldMinPointX2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMinPointX2KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldMinPointX2KeyTyped
+
+    private void jTextFieldMinPointY2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMinPointY2KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldMinPointY2KeyTyped
+
+    private void jTextFieldMinPointZ2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMinPointZ2KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldMinPointZ2KeyTyped
+
+    private void jTextFieldMaxPointX2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMaxPointX2KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldMaxPointX2KeyTyped
+
+    private void jTextFieldMaxPointY2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMaxPointY2KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldMaxPointY2KeyTyped
+
+    private void jTextFieldMaxPointZ2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMaxPointZ2KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldMaxPointZ2KeyTyped
+
+    private void jTextFieldVoxelNumberX1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldVoxelNumberX1KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldVoxelNumberX1KeyTyped
+
+    private void jTextFieldVoxelNumberY1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldVoxelNumberY1KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldVoxelNumberY1KeyTyped
+
+    private void jTextFieldVoxelNumberZ1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldVoxelNumberZ1KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldVoxelNumberZ1KeyTyped
+
+    private void jTextFieldVoxelNumberRes1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldVoxelNumberRes1KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldVoxelNumberRes1KeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -3867,7 +4164,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.ButtonGroup buttonGroup3DView;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAddFile;
-    private javax.swing.JButton jButtonApplyReferencePoints;
     private javax.swing.JButton jButtonChooseDirectory;
     private javax.swing.JButton jButtonChooseOutputDirectoryVox;
     private javax.swing.JButton jButtonChooseOutputDirectoryVox1;
@@ -3886,6 +4182,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JButton jButtonOpenRspFile;
     private javax.swing.JButton jButtonOpenTrajectoryFile;
     private javax.swing.JButton jButtonPopMatrix;
+    private javax.swing.JButton jButtonPopMatrix1;
     private javax.swing.JButton jButtonRemoveFile;
     private javax.swing.JButton jButtonSopMatrix;
     private javax.swing.JButton jButtonVopMatrix;
@@ -3971,14 +4268,12 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
-    private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
@@ -3993,16 +4288,16 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel30;
     private javax.swing.JPanel jPanel31;
-    private javax.swing.JPanel jPanel32;
     private javax.swing.JPanel jPanel33;
     private javax.swing.JPanel jPanel34;
     private javax.swing.JPanel jPanel35;
     private javax.swing.JPanel jPanel36;
-    private javax.swing.JPanel jPanel37;
-    private javax.swing.JPanel jPanel38;
     private javax.swing.JPanel jPanel39;
     private javax.swing.JPanel jPanel3DViewDensity;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel40;
+    private javax.swing.JPanel jPanel41;
+    private javax.swing.JPanel jPanel42;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
@@ -4055,46 +4350,32 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JTextField jTextFieldFilePathSaveLocal;
     private javax.swing.JTextField jTextFieldFilePathSaveVox;
     private javax.swing.JTextField jTextFieldFilePathTrajVox;
-    private javax.swing.JTextField jTextFieldMat11;
-    private javax.swing.JTextField jTextFieldMat12;
-    private javax.swing.JTextField jTextFieldMat13;
-    private javax.swing.JTextField jTextFieldMat14;
-    private javax.swing.JTextField jTextFieldMat21;
-    private javax.swing.JTextField jTextFieldMat22;
-    private javax.swing.JTextField jTextFieldMat23;
-    private javax.swing.JTextField jTextFieldMat24;
-    private javax.swing.JTextField jTextFieldMat31;
-    private javax.swing.JTextField jTextFieldMat32;
-    private javax.swing.JTextField jTextFieldMat33;
-    private javax.swing.JTextField jTextFieldMat34;
-    private javax.swing.JTextField jTextFieldMat41;
-    private javax.swing.JTextField jTextFieldMat42;
-    private javax.swing.JTextField jTextFieldMat43;
-    private javax.swing.JTextField jTextFieldMat44;
     private javax.swing.JTextField jTextFieldMaxPointX;
-    private javax.swing.JTextField jTextFieldMaxPointX1;
+    private javax.swing.JTextField jTextFieldMaxPointX2;
     private javax.swing.JTextField jTextFieldMaxPointY;
-    private javax.swing.JTextField jTextFieldMaxPointY1;
+    private javax.swing.JTextField jTextFieldMaxPointY2;
     private javax.swing.JTextField jTextFieldMaxPointZ;
-    private javax.swing.JTextField jTextFieldMaxPointZ1;
+    private javax.swing.JTextField jTextFieldMaxPointZ2;
     private javax.swing.JTextField jTextFieldMinPointX;
-    private javax.swing.JTextField jTextFieldMinPointX1;
+    private javax.swing.JTextField jTextFieldMinPointX2;
     private javax.swing.JTextField jTextFieldMinPointY;
-    private javax.swing.JTextField jTextFieldMinPointY1;
+    private javax.swing.JTextField jTextFieldMinPointY2;
     private javax.swing.JTextField jTextFieldMinPointZ;
-    private javax.swing.JTextField jTextFieldMinPointZ1;
-    private javax.swing.JTextField jTextFieldPointNumberX;
-    private javax.swing.JTextField jTextFieldPointNumberX1;
-    private javax.swing.JTextField jTextFieldPointNumberY;
-    private javax.swing.JTextField jTextFieldPointNumberY1;
-    private javax.swing.JTextField jTextFieldPointNumberZ;
-    private javax.swing.JTextField jTextFieldPointNumberZ1;
+    private javax.swing.JTextField jTextFieldMinPointZ2;
     private javax.swing.JTextField jTextFieldReferencePoint1X;
     private javax.swing.JTextField jTextFieldReferencePoint1Y;
     private javax.swing.JTextField jTextFieldReferencePoint1Z;
     private javax.swing.JTextField jTextFieldReferencePoint2X;
     private javax.swing.JTextField jTextFieldReferencePoint2Y;
     private javax.swing.JTextField jTextFieldReferencePoint2Z;
+    private javax.swing.JTextField jTextFieldVoxelNumberRes;
+    private javax.swing.JTextField jTextFieldVoxelNumberRes1;
+    private javax.swing.JTextField jTextFieldVoxelNumberX;
+    private javax.swing.JTextField jTextFieldVoxelNumberX1;
+    private javax.swing.JTextField jTextFieldVoxelNumberY;
+    private javax.swing.JTextField jTextFieldVoxelNumberY1;
+    private javax.swing.JTextField jTextFieldVoxelNumberZ;
+    private javax.swing.JTextField jTextFieldVoxelNumberZ1;
     // End of variables declaration//GEN-END:variables
 
     

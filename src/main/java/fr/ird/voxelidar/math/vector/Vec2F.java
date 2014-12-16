@@ -5,14 +5,13 @@
  */
 package fr.ird.voxelidar.math.vector;
 
+import fr.ird.voxelidar.math.point.Point2F;
+
 /**
  *
  * @author Julien
  */
-public class Vec2F {
-    
-    public float x;
-    public float y;
+public class Vec2F extends Point2F{
     
     public Vec2F(){
         
@@ -21,7 +20,6 @@ public class Vec2F {
     }
     
     public Vec2F(float x, float y){
-        
         this.x = x;
         this.y = y;
     }
