@@ -5,6 +5,7 @@
  */
 package fr.ird.voxelidar.voxelisation;
 
+import com.google.common.io.Files;
 import fr.ird.voxelidar.Constants;
 import fr.ird.voxelidar.lidar.format.als.Las;
 import fr.ird.voxelidar.lidar.format.tls.Rxp;
@@ -125,8 +126,15 @@ public class VoxelisationTool{
             file is into the same physical disk
             */
             File oldFile = new File("./densite/densite3D");
-            oldFile.renameTo(outputFile);
+            /*
+            //add header
+            Files.copy(oldFile, oldFile);
             
+            BufferedWriter writer = new BufferedWriter(new FileWriter(oldFile));
+            
+            oldFile.renameTo(outputFile);
+            //Files.
+            */
             return outputFile;
         }
 

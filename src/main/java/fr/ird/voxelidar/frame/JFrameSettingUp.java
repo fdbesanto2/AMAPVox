@@ -679,6 +679,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jFileChooserSave1 = new javax.swing.JFileChooser();
         jFileChooser9 = new javax.swing.JFileChooser();
         buttonGroup1 = new javax.swing.ButtonGroup();
+        jFileChooser10 = new javax.swing.JFileChooser();
         jSplitPane1 = new javax.swing.JSplitPane();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelOutputParametersTab = new javax.swing.JPanel();
@@ -686,7 +687,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jTabbedPane5 = new javax.swing.JTabbedPane();
         jPanel35 = new javax.swing.JPanel();
         jPanel36 = new javax.swing.JPanel();
-        jButtonExecuteVox1 = new javax.swing.JButton();
         jPanel39 = new javax.swing.JPanel();
         jLabelName6 = new javax.swing.JLabel();
         jLabelPath6 = new javax.swing.JLabel();
@@ -715,6 +715,11 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jTextFieldVoxelNumberY1 = new javax.swing.JTextField();
         jTextFieldVoxelNumberZ1 = new javax.swing.JTextField();
         jTextFieldVoxelNumberRes1 = new javax.swing.JTextField();
+        jPanel19 = new javax.swing.JPanel();
+        jLabelPath10 = new javax.swing.JLabel();
+        jTextFieldFileOutputPathTlsVox = new javax.swing.JTextField();
+        jButtonChooseOutputDirectoryTlsVox = new javax.swing.JButton();
+        jButtonExecuteVox1 = new javax.swing.JButton();
         jTabbedPane3 = new javax.swing.JTabbedPane();
         jPanel33 = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
@@ -918,6 +923,11 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jFileChooser9.setDialogTitle("");
         jFileChooser9.setFileFilter(null);
 
+        jFileChooser10.setCurrentDirectory(null);
+        jFileChooser10.setDialogTitle("");
+        jFileChooser10.setFileFilter(null);
+        jFileChooser10.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(560, 450));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -936,13 +946,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jTabbedPane1.setMinimumSize(new java.awt.Dimension(0, 0));
 
         jTabbedPane2.setTabPlacement(javax.swing.JTabbedPane.LEFT);
-
-        jButtonExecuteVox1.setText("Execute");
-        jButtonExecuteVox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonExecuteVox1ActionPerformed(evt);
-            }
-        });
 
         jPanel39.setBorder(javax.swing.BorderFactory.createTitledBorder("Input file"));
 
@@ -990,7 +993,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addGroup(jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel39Layout.createSequentialGroup()
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(158, Short.MAX_VALUE))
                     .addGroup(jPanel39Layout.createSequentialGroup()
                         .addGroup(jPanel39Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButtonOpenRspFile)
@@ -1215,45 +1218,92 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jTextFieldVoxelNumberRes1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jPanel19.setBorder(javax.swing.BorderFactory.createTitledBorder("Output path"));
+
+        jLabelPath10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabelPath10.setText("Path");
+
+        jTextFieldFileOutputPathTlsVox.setEditable(false);
+        jTextFieldFileOutputPathTlsVox.setColumns(38);
+        jTextFieldFileOutputPathTlsVox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldFileOutputPathTlsVoxActionPerformed(evt);
+            }
+        });
+
+        jButtonChooseOutputDirectoryTlsVox.setText("Choose directory");
+        jButtonChooseOutputDirectoryTlsVox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonChooseOutputDirectoryTlsVoxActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
+        jPanel19.setLayout(jPanel19Layout);
+        jPanel19Layout.setHorizontalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel19Layout.createSequentialGroup()
+                .addComponent(jLabelPath10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldFileOutputPathTlsVox, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButtonChooseOutputDirectoryTlsVox))
+        );
+        jPanel19Layout.setVerticalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel19Layout.createSequentialGroup()
+                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldFileOutputPathTlsVox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelPath10))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonChooseOutputDirectoryTlsVox)
+                .addContainerGap())
+        );
+
+        jButtonExecuteVox1.setText("Execute");
+        jButtonExecuteVox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExecuteVox1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel36Layout = new javax.swing.GroupLayout(jPanel36);
         jPanel36.setLayout(jPanel36Layout);
         jPanel36Layout.setHorizontalGroup(
             jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel36Layout.createSequentialGroup()
-                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel39, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel36Layout.createSequentialGroup()
+                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel36Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jRadioButtonLightFile)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButtonComplexFile)
-                        .addGap(167, 167, 167))
+                        .addComponent(jRadioButtonComplexFile))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel36Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButtonExecuteVox1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButtonSopMatrix)
-                    .addGroup(jPanel36Layout.createSequentialGroup()
-                        .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonPopMatrix)
-                            .addComponent(jButtonVopMatrix))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1))
-                    .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jPanel42, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel36Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jButtonSopMatrix)
+                        .addGroup(jPanel36Layout.createSequentialGroup()
+                            .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jButtonPopMatrix)
+                                .addComponent(jButtonVopMatrix))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jButton1))
+                        .addComponent(jPanel42, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel36Layout.createSequentialGroup()
                             .addComponent(jPanel40, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jPanel41, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jPanel41, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButtonExecuteVox1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21))
         );
         jPanel36Layout.setVerticalGroup(
             jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel36Layout.createSequentialGroup()
                 .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel36Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jButtonSopMatrix)
@@ -1265,26 +1315,26 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                                 .addComponent(jButtonVopMatrix))
                             .addGroup(jPanel36Layout.createSequentialGroup()
                                 .addGap(20, 20, 20)
-                                .addComponent(jButton1)))))
-                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel36Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton1)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jPanel40, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel41, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel42, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonExecuteVox1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(jPanel36Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonExecuteVox1))
+                    .addGroup(jPanel36Layout.createSequentialGroup()
+                        .addComponent(jPanel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)))
-                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButtonLightFile)
-                    .addComponent(jRadioButtonComplexFile))
-                .addGap(20, 20, 20))
+                        .addGap(14, 14, 14)
+                        .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jRadioButtonLightFile)
+                            .addComponent(jRadioButtonComplexFile))))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel35Layout = new javax.swing.GroupLayout(jPanel35);
@@ -1781,7 +1831,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, 94, Short.MAX_VALUE))
+                        .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE))
                     .addGroup(jPanel33Layout.createSequentialGroup()
                         .addComponent(jPanel28, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
@@ -1790,7 +1840,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                             .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                         .addComponent(jButtonExecuteVox)))
                 .addContainerGap())
         );
@@ -2195,7 +2245,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     .addComponent(jCheckBoxWriteV))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(82, Short.MAX_VALUE))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel31Layout = new javax.swing.GroupLayout(jPanel31);
@@ -2208,9 +2258,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         );
         jPanel31Layout.setVerticalGroup(
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 356, Short.MAX_VALUE)
+            .addGap(0, 358, Short.MAX_VALUE)
             .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("LAS => TXT", jPanel31);
@@ -2441,7 +2491,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         .addComponent(jPanel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addComponent(jPanel23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(69, Short.MAX_VALUE))
+                        .addContainerGap(71, Short.MAX_VALUE))
                     .addGroup(jPanel20Layout.createSequentialGroup()
                         .addComponent(jPanel22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))))
@@ -2457,7 +2507,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         );
         jPanel34Layout.setVerticalGroup(
             jPanel34Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 356, Short.MAX_VALUE)
+            .addGap(0, 358, Short.MAX_VALUE)
             .addGroup(jPanel34Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel34Layout.createSequentialGroup()
                     .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3882,6 +3932,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 Integer.valueOf(jTextFieldVoxelNumberY1.getText()),
                 Integer.valueOf(jTextFieldVoxelNumberZ1.getText()));
         
+        final String outputPath = jTextFieldFileOutputPathTlsVox.getText();
+        
         SwingWorker sw = new SwingWorker() {
 
             @Override
@@ -3894,7 +3946,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         VoxelisationTool voxTool = new VoxelisationTool();
                         
                         progressBar.setText("Voxelisation in progress, file "+compteur+"/"+filteredRxpList.size()+" : "+rxp.getRxpLiteFile().getName());
-                        File outputFile = new File(rxp.getRxpLiteFile().getName()+".vox");
+                        File outputFile = new File(outputPath+"/"+rxp.getRxpLiteFile().getName()+".vox");
                         File f = voxTool.generateVoxelFromRxp(rxp, outputFile, vopPopMatrix, parameters);
                         filesList.add(f);
                         
@@ -4157,6 +4209,18 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldVoxelNumberRes1KeyTyped
 
+    private void jTextFieldFileOutputPathTlsVoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldFileOutputPathTlsVoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldFileOutputPathTlsVoxActionPerformed
+
+    private void jButtonChooseOutputDirectoryTlsVoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChooseOutputDirectoryTlsVoxActionPerformed
+        
+        if (jFileChooser10.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            
+            jTextFieldFileOutputPathTlsVox.setText(jFileChooser10.getSelectedFile().getAbsolutePath());
+        }
+    }//GEN-LAST:event_jButtonChooseOutputDirectoryTlsVoxActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -4165,6 +4229,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAddFile;
     private javax.swing.JButton jButtonChooseDirectory;
+    private javax.swing.JButton jButtonChooseOutputDirectoryTlsVox;
     private javax.swing.JButton jButtonChooseOutputDirectoryVox;
     private javax.swing.JButton jButtonChooseOutputDirectoryVox1;
     private javax.swing.JButton jButtonCreateAttribut;
@@ -4214,6 +4279,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JComboBox jComboBoxDefaultY;
     private javax.swing.JComboBox jComboBoxDefaultZ;
     private javax.swing.JFileChooser jFileChooser1;
+    private javax.swing.JFileChooser jFileChooser10;
     private javax.swing.JFileChooser jFileChooser2;
     private javax.swing.JFileChooser jFileChooser3;
     private javax.swing.JFileChooser jFileChooser4;
@@ -4242,6 +4308,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JLabel jLabelName9;
     private javax.swing.JLabel jLabelPath;
     private javax.swing.JLabel jLabelPath1;
+    private javax.swing.JLabel jLabelPath10;
     private javax.swing.JLabel jLabelPath2;
     private javax.swing.JLabel jLabelPath3;
     private javax.swing.JLabel jLabelPath4;
@@ -4274,6 +4341,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
+    private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
@@ -4340,6 +4408,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JTextField jTextFieldFileNameSaveLocal;
     private javax.swing.JTextField jTextFieldFileNameSaveVox;
     private javax.swing.JTextField jTextFieldFileNameTrajVox;
+    private javax.swing.JTextField jTextFieldFileOutputPathTlsVox;
     private javax.swing.JTextField jTextFieldFilePathCoordLocal;
     private javax.swing.JTextField jTextFieldFilePathInputLocal;
     private javax.swing.JTextField jTextFieldFilePathInputTxt;

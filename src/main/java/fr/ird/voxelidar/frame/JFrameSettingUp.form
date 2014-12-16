@@ -72,6 +72,16 @@
     </Component>
     <Component class="javax.swing.ButtonGroup" name="buttonGroup1">
     </Component>
+    <Component class="javax.swing.JFileChooser" name="jFileChooser10">
+      <Properties>
+        <Property name="currentDirectory" type="java.io.File" value="null"/>
+        <Property name="dialogTitle" type="java.lang.String" value=""/>
+        <Property name="fileFilter" type="javax.swing.filechooser.FileFilter" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="null"/>
+        </Property>
+        <Property name="fileSelectionMode" type="int" value="1"/>
+      </Properties>
+    </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="jMenu1">
@@ -273,40 +283,37 @@
                                 <DimensionLayout dim="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
-                                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                              <Component id="jPanel39" alignment="0" max="32767" attributes="0"/>
-                                              <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="jPanel39" min="-2" max="-2" attributes="0"/>
+                                              <Group type="102" attributes="0">
                                                   <EmptySpace max="-2" attributes="0"/>
                                                   <Component id="jRadioButtonLightFile" min="-2" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
                                                   <Component id="jRadioButtonComplexFile" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace min="-2" pref="167" max="-2" attributes="0"/>
                                               </Group>
-                                              <Component id="jScrollPane1" alignment="1" min="-2" pref="380" max="-2" attributes="0"/>
+                                              <Component id="jScrollPane1" min="-2" pref="380" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace pref="40" max="32767" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <EmptySpace pref="175" max="-2" attributes="0"/>
-                                                  <Component id="jButtonExecuteVox1" min="-2" pref="92" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Component id="jButtonSopMatrix" min="-2" max="-2" attributes="0"/>
-                                              <Group type="102" attributes="0">
-                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="jButtonPopMatrix" alignment="0" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="jButtonVopMatrix" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
+                                                  <Component id="jButtonSopMatrix" min="-2" max="-2" attributes="0"/>
+                                                  <Group type="102" attributes="0">
+                                                      <Group type="103" groupAlignment="0" attributes="0">
+                                                          <Component id="jButtonPopMatrix" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                          <Component id="jButtonVopMatrix" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                      </Group>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                                                   </Group>
-                                                  <EmptySpace max="-2" attributes="0"/>
-                                                  <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                                   <Component id="jPanel42" alignment="0" max="32767" attributes="0"/>
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <Component id="jPanel40" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Component id="jPanel41" min="-2" max="-2" attributes="0"/>
                                                   </Group>
+                                                  <Component id="jPanel19" alignment="0" max="32767" attributes="0"/>
                                               </Group>
+                                              <Component id="jButtonExecuteVox1" alignment="1" min="-2" pref="92" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                                       </Group>
@@ -316,8 +323,7 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="jPanel39" min="-2" max="-2" attributes="0"/>
-                                              <Group type="102" attributes="0">
+                                              <Group type="102" alignment="0" attributes="0">
                                                   <EmptySpace max="-2" attributes="0"/>
                                                   <Component id="jButtonSopMatrix" min="-2" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -332,45 +338,35 @@
                                                           <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                                                       </Group>
                                                   </Group>
-                                              </Group>
-                                          </Group>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" alignment="1" attributes="0">
-                                                  <EmptySpace max="32767" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                                       <Component id="jPanel40" alignment="0" max="32767" attributes="0"/>
                                                       <Component id="jPanel41" alignment="0" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                                   <EmptySpace max="-2" attributes="0"/>
                                                   <Component id="jPanel42" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                  <Component id="jButtonExecuteVox1" min="-2" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="jPanel19" min="-2" pref="72" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="jButtonExecuteVox1" min="-2" max="-2" attributes="0"/>
                                               </Group>
                                               <Group type="102" alignment="0" attributes="0">
-                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="jPanel39" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                                   <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace pref="44" max="32767" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="3" attributes="0">
+                                                      <Component id="jRadioButtonLightFile" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jRadioButtonComplexFile" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
                                               </Group>
                                           </Group>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="jRadioButtonLightFile" alignment="3" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jRadioButtonComplexFile" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                                          <EmptySpace pref="14" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                 </DimensionLayout>
                               </Layout>
                               <SubComponents>
-                                <Component class="javax.swing.JButton" name="jButtonExecuteVox1">
-                                  <Properties>
-                                    <Property name="text" type="java.lang.String" value="Execute"/>
-                                  </Properties>
-                                  <Events>
-                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonExecuteVox1ActionPerformed"/>
-                                  </Events>
-                                </Component>
                                 <Container class="javax.swing.JPanel" name="jPanel39">
                                   <Properties>
                                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -388,7 +384,7 @@
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" attributes="0">
                                                       <Component id="jComboBox1" min="-2" pref="200" max="-2" attributes="0"/>
-                                                      <EmptySpace max="32767" attributes="0"/>
+                                                      <EmptySpace pref="158" max="32767" attributes="0"/>
                                                   </Group>
                                                   <Group type="102" attributes="0">
                                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -804,6 +800,79 @@
                                     </Component>
                                   </SubComponents>
                                 </Container>
+                                <Container class="javax.swing.JPanel" name="jPanel19">
+                                  <Properties>
+                                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                                      <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                        <TitledBorder title="Output path"/>
+                                      </Border>
+                                    </Property>
+                                  </Properties>
+
+                                  <Layout>
+                                    <DimensionLayout dim="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <Component id="jLabelPath10" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="jTextFieldFileOutputPathTlsVox" pref="0" max="32767" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                              <Component id="jButtonChooseOutputDirectoryTlsVox" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                    </DimensionLayout>
+                                    <DimensionLayout dim="1">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Group type="103" groupAlignment="3" attributes="0">
+                                                  <Component id="jTextFieldFileOutputPathTlsVox" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="jLabelPath10" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="jButtonChooseOutputDirectoryTlsVox" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                    </DimensionLayout>
+                                  </Layout>
+                                  <SubComponents>
+                                    <Component class="javax.swing.JLabel" name="jLabelPath10">
+                                      <Properties>
+                                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                          <Font name="Tahoma" size="11" style="1"/>
+                                        </Property>
+                                        <Property name="text" type="java.lang.String" value="Path"/>
+                                      </Properties>
+                                    </Component>
+                                    <Component class="javax.swing.JTextField" name="jTextFieldFileOutputPathTlsVox">
+                                      <Properties>
+                                        <Property name="editable" type="boolean" value="false"/>
+                                        <Property name="columns" type="int" value="38"/>
+                                      </Properties>
+                                      <Events>
+                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldFileOutputPathTlsVoxActionPerformed"/>
+                                      </Events>
+                                    </Component>
+                                    <Component class="javax.swing.JButton" name="jButtonChooseOutputDirectoryTlsVox">
+                                      <Properties>
+                                        <Property name="text" type="java.lang.String" value="Choose directory"/>
+                                      </Properties>
+                                      <Events>
+                                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonChooseOutputDirectoryTlsVoxActionPerformed"/>
+                                      </Events>
+                                    </Component>
+                                  </SubComponents>
+                                </Container>
+                                <Component class="javax.swing.JButton" name="jButtonExecuteVox1">
+                                  <Properties>
+                                    <Property name="text" type="java.lang.String" value="Execute"/>
+                                  </Properties>
+                                  <Events>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonExecuteVox1ActionPerformed"/>
+                                  </Events>
+                                </Component>
                               </SubComponents>
                             </Container>
                           </SubComponents>
@@ -867,7 +936,7 @@
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jPanel18" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jPanel17" pref="94" max="32767" attributes="0"/>
+                                              <Component id="jPanel17" pref="96" max="32767" attributes="0"/>
                                           </Group>
                                           <Group type="102" attributes="0">
                                               <Component id="jPanel28" min="-2" pref="152" max="-2" attributes="0"/>
@@ -878,7 +947,7 @@
                                               </Group>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jPanel25" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace pref="38" max="32767" attributes="0"/>
+                                              <EmptySpace pref="40" max="32767" attributes="0"/>
                                               <Component id="jButtonExecuteVox" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
@@ -1667,9 +1736,9 @@
                             </DimensionLayout>
                             <DimensionLayout dim="1">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <EmptySpace min="0" pref="356" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="358" max="32767" attributes="0"/>
                                   <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                                      <Component id="jPanel6" alignment="0" pref="356" max="32767" attributes="0"/>
+                                      <Component id="jPanel6" alignment="0" pref="358" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -1783,7 +1852,7 @@
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="jPanel24" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace pref="82" max="32767" attributes="0"/>
+                                          <EmptySpace pref="84" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                 </DimensionLayout>
@@ -2259,7 +2328,7 @@
                             </DimensionLayout>
                             <DimensionLayout dim="1">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <EmptySpace min="0" pref="356" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="358" max="32767" attributes="0"/>
                                   <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jPanel20" min="-2" max="-2" attributes="0"/>
@@ -2298,7 +2367,7 @@
                                                   <Component id="jPanel21" min="-2" max="-2" attributes="0"/>
                                                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                                                   <Component id="jPanel23" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace pref="69" max="32767" attributes="0"/>
+                                                  <EmptySpace pref="71" max="32767" attributes="0"/>
                                               </Group>
                                               <Group type="102" attributes="0">
                                                   <Component id="jPanel22" min="-2" max="-2" attributes="0"/>
