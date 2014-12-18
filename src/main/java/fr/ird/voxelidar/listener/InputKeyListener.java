@@ -7,7 +7,6 @@ package fr.ird.voxelidar.listener;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
-import fr.ird.voxelidar.graphics3d.mesh.EventManager;
 
 
 /**

@@ -8,7 +8,6 @@ package fr.ird.voxelidar.listener;
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
 import com.jogamp.opengl.util.FPSAnimator;
-import fr.ird.voxelidar.graphics3d.mesh.EventManager;
 
 /**
  *

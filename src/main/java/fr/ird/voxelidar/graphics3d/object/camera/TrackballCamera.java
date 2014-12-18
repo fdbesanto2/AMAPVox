@@ -345,7 +345,12 @@ public class TrackballCamera extends Camera{
         
         for(CameraListener listener :listeners.getListeners(CameraListener.class)){
             
-            listener.projMatrixChanged(projMatrix);
+            try{
+                listener.projMatrixChanged(projMatrix);
+            }catch(RuntimeException  e){
+                listeners.remove(CameraListener.class, listener);
+            }
+            
         }
     }
     

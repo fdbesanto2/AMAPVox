@@ -7,12 +7,14 @@ package fr.ird.voxelidar.graphics3d.object.camera;
 import fr.ird.voxelidar.math.matrix.Mat4F;
 import fr.ird.voxelidar.math.vector.Vec3F;
 import java.util.EventListener;
+import javax.media.opengl.GL3;
+import static jogamp.opengl.ThreadingImpl.invokeOnOpenGLThread;
 
 /**
  *
  * @author Julien
  */
-public interface CameraListener extends EventListener{
+public interface CameraListener extends EventListener {
     
     void locationChanged(Vec3F location);
     void targetChanged(Vec3F target);

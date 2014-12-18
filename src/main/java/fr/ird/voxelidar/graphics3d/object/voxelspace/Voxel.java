@@ -25,7 +25,7 @@ public class Voxel {
     
 
     public Map<String, Float> getAttributs() {
-        return Collections.unmodifiableMap(attributs);
+        return attributs;
     }
     
     public Voxel(int indiceX, int indiceY, int indiceZ, float x, float y, float z, float attributValue){

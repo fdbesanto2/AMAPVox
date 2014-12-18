@@ -51,7 +51,7 @@ public class Scene {
     }
 
     public Map<Integer, Shader> getShadersList() {
-        return Collections.unmodifiableMap(shadersList);
+        return shadersList;
     }
 
     public void setVoxelSpace(VoxelSpace voxelSpace) {
@@ -100,7 +100,7 @@ public class Scene {
             
             if(!voxelSpace.arrayLoaded){
                 
-                Texture texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(ColorGradient.GRADIENT_HEAT, voxelSpace.attributValueMin, voxelSpace.attributValueMax, 50, 200), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
+                Texture texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(ColorGradient.GRADIENT_HEAT, voxelSpace.attributValueMin, voxelSpace.attributValueMax, 64, 256), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
                 scalePlane = SceneObjectFactory.createTexturedPlane(texture, getShaderByName("textureShader"));
                 scalePlane.setDrawType(GL3.GL_TRIANGLES);
                 this.addObject(scalePlane, gl);
@@ -126,7 +126,7 @@ public class Scene {
             
             if(!voxelSpace.isGradientUpdated()){
                 
-                Texture texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMin, voxelSpace.attributValueMax, 50, 200), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
+                Texture texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.min, voxelSpace.max, 50, 200), voxelSpace.min, voxelSpace.max);
                 changeObjectTexture(scalePlane.getId(), texture);
             }
             

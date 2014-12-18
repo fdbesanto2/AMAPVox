@@ -6,13 +6,14 @@ package fr.ird.voxelidar.graphics3d.object.camera;
 
 import fr.ird.voxelidar.math.matrix.Mat4F;
 import fr.ird.voxelidar.math.vector.Vec3F;
+import javax.media.opengl.GL3;
 
 /**
  *
  * @author Julien
  */
 public abstract class CameraAdapter implements CameraListener{
-    
+        
     @Override
     public void locationChanged(Vec3F location){}
     

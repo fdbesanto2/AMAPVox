@@ -12,5 +12,5 @@ package fr.ird.voxelidar.graphics3d.object.voxelspace;
 public class VoxelSpaceFormat2 extends VoxelSpaceFormat{
  
     int xNumberVox, yNumberVox, zNumberVox;
-    float voxelSize;
+    float resolution;
 }

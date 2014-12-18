@@ -28,7 +28,7 @@ public class Rsp {
     final static Logger logger = Logger.getLogger(Rsp.class);
     
     private String projectName;
-    private ArrayList<Rxp> rxpList;
+    private ArrayList<Scans> rxpList;
     private Mat4D popMatrix;
     
     private Document document;
@@ -49,11 +49,11 @@ public class Rsp {
         return projectName;
     }
 
-    public ArrayList<Rxp> getRxpList() {
+    public ArrayList<Scans> getRxpList() {
         return rxpList;
     }
     
-    public ArrayList<Rxp> getFilteredRxpList() {
+    public ArrayList<Scans> getFilteredRxpList() {
         return rxpList;
     }
     
@@ -99,20 +99,25 @@ public class Rsp {
             int scanCount = 0;
             
             for(Element child:childrens){
-                Rxp rxp = new Rxp();
+                Scans rxp = new Scans();
                 
                 rxp.setName(child.getAttributeValue("name"));
                 rxp.setFold(child.getAttributeValue("fold"));
                 
                 Element singlescans = child.getChild("singlescans");
                 String singlescansFold = singlescans.getAttributeValue("fold");
-                Map<Integer, Scan> scanList = new HashMap<>();
+                Map<Integer, RxpScan> scanList = new HashMap<>();
                 
                 List<Element> scans = singlescans.getChildren("scan");
                 
+                Element sop = child.getChild("sop");
+                Mat4D sopMatrix = extractMat4D(sop.getChildText("matrix"));
+                rxp.setSopMatrix(sopMatrix);
+                
+                int compteur = 0;
                 for(Element sc:scans){
                                         
-                    Scan scan = new Scan();
+                    RxpScan scan = new RxpScan();
                     scan.setName(sc.getAttributeValue("name"));
                     scan.setFileName(sc.getChildText("file"));
                     String rspFilePathOnly = rspFile.getAbsolutePath().substring(0,rspFile.getAbsolutePath().lastIndexOf(File.separator));
@@ -121,15 +126,20 @@ public class Rsp {
                     
                     if(scan.getName().contains(".mon")){
                         rxp.setRxpLiteFile(new File(scan.getAbsolutePath()));
+                        rxp.setScanLite(scan);
+                    }else{
+                        rxp.setScanFull(scan);
                     }
+                    scan.setFile(new File(scan.getAbsolutePath()));
+                    scan.setSopMatrix(sopMatrix);
                     
+                    
+                    compteur++;
                     scanCount++;
                 }
                 
                 rxp.setScanList(scanList);
-                Element sop = child.getChild("sop");
                 
-                rxp.setSopMatrix(extractMat4D(sop.getChildText("matrix")));
                 rxpList.add(rxp);
             }
             

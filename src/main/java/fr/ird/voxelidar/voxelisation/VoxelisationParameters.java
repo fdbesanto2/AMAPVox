@@ -14,8 +14,9 @@ public class VoxelisationParameters {
     private double lowerCornerX, lowerCornerY, lowerCornerZ;
     private double topCornerX, topCornerY, topCornerZ;
     private int splitX, splitY, splitZ;
+    private float resolution;
 
-    public VoxelisationParameters(double lowerCornerX, double lowerCornerY, double lowerCornerZ, double topCornerX, double topCornerY, double topCornerZ, int splitX, int splitY, int splitZ) {
+    public VoxelisationParameters(double lowerCornerX, double lowerCornerY, double lowerCornerZ, double topCornerX, double topCornerY, double topCornerZ, int splitX, int splitY, int splitZ, float resolution) {
         this.lowerCornerX = lowerCornerX;
         this.lowerCornerY = lowerCornerY;
         this.lowerCornerZ = lowerCornerZ;
@@ -25,8 +26,18 @@ public class VoxelisationParameters {
         this.splitX = splitX;
         this.splitY = splitY;
         this.splitZ = splitZ;
+        this.resolution = resolution;
     }
 
+    public float getResolution() {
+        return resolution;
+    }
+
+    public void setResolution(float resolution) {
+        this.resolution = resolution;
+    }
+
+    
     public double getLowerCornerX() {
         return lowerCornerX;
     }

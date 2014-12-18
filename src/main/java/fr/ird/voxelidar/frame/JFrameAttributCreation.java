@@ -31,7 +31,7 @@ public class JFrameAttributCreation extends javax.swing.JFrame {
     
     public Map<String, Attribut> getMapAttributs(){
         
-        return Collections.unmodifiableMap(mapAttributs);
+        return mapAttributs;
     }
 
     /**

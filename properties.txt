@@ -1,11 +1,11 @@
 zoneUtilisateurOuZoneScan:1
 dossierOutput:./
 typeExecution:5
-fichierXYZ:C:\Users\Julien\Documents\NetBeansProjects\VoxeLidar\.\fichier_echos\130403_115631.mon.rxp.ech
+fichierXYZ:C:\Users\Julien\Documents\NetBeansProjects\VoxeLidar\.\fichier_echos\130403_091135.mon.rxp.ech
 pointMailleMin.x:-10.0
 pointMailleMin.y:50.0
 pointMailleMin.z:0.0
 pointMailleMax.x:10.0
 pointMailleMax.y:150.0
 pointMailleMax.z:70.0
-resolution:1
+resolution:1.0

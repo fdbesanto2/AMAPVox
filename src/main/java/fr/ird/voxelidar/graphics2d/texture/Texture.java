@@ -59,7 +59,7 @@ public class Texture {
         format.setMinimumFractionDigits(2);
         format.setMaximumFractionDigits(2);
         
-        BufferedImage imageWithTextcaption = new BufferedImage(image.getWidth()+50, image.getHeight(), image.getType());
+        BufferedImage imageWithTextcaption = new BufferedImage(image.getWidth()+64, image.getHeight(), image.getType());
         Graphics2D graphics = (Graphics2D)imageWithTextcaption.createGraphics();
         
         graphics.drawImage(image, 0, 0, null);
@@ -90,7 +90,7 @@ public class Texture {
         
         Texture texture = new Texture(gl, image);
         
-        BufferedImage imageWithTextcaption = new BufferedImage(image.getWidth()+50, image.getHeight(), image.getType());
+        BufferedImage imageWithTextcaption = new BufferedImage(image.getWidth()+64, image.getHeight(), image.getType());
         Graphics2D graphics = (Graphics2D)imageWithTextcaption.createGraphics();
         
         graphics.drawImage(image, 0, 0, null);
@@ -118,6 +118,8 @@ public class Texture {
         
         gl.glBindTexture(GL3.GL_TEXTURE_2D, texture.id);
         
+        gl.glTexParameteri(GL3.GL_TEXTURE_2D, GL3.GL_TEXTURE_WRAP_S, GL3.GL_CLAMP_TO_BORDER);
+        gl.glTexParameteri(GL3.GL_TEXTURE_2D, GL3.GL_TEXTURE_WRAP_T, GL3.GL_CLAMP_TO_BORDER);
         gl.glTexParameteri(GL3.GL_TEXTURE_2D, GL3.GL_TEXTURE_MIN_FILTER, GL3.GL_LINEAR);
 
         int internalFormat = textureData.getInternalFormat();

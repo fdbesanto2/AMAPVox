@@ -18,6 +18,7 @@ import fr.ird.voxelidar.math.point.Point2F;
 import fr.ird.voxelidar.math.vector.Vec3F;
 import fr.ird.voxelidar.util.ColorGradient;
 import fr.ird.voxelidar.util.Settings;
+import fr.ird.voxelidar.util.StandardDeviation;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -75,10 +76,13 @@ public class VoxelSpace {
     private boolean fileLoaded;
     public float attributValueMax;
     public float attributValueMin;
+    public float min;
+    public float max;
     private float instancePositions[];
     private float instanceColors[];
     public boolean arrayLoaded = false;
     private Settings settings;
+    private Map<String,Attribut> mapAttributs;
     
     private FloatBuffer instancePositionsBuffer;
     private FloatBuffer instanceColorsBuffer;   
@@ -375,7 +379,7 @@ public class VoxelSpace {
                 voxelSpace.xNumberVox = Integer.valueOf(infos[0]);
                 voxelSpace.yNumberVox = Integer.valueOf(infos[1]);
                 voxelSpace.zNumberVox = Integer.valueOf(infos[2]);
-                voxelSpace.voxelSize = Integer.valueOf(infos[3]);
+                voxelSpace.resolution = Float.valueOf(infos[3]);
                 
                 int lineNumber = 0;
                 String line;                
@@ -482,8 +486,15 @@ public class VoxelSpace {
     }
     
     
-    public void updateValue(Attribut attribut){
+    public void updateValue(Attribut att){
         
+        Attribut attribut = mapAttributs.get(attributToVisualize);
+        
+        this.updateValue= true;
+        
+        float[] values = new float[voxelList.size()];
+        
+        int count = 0;
         for(Voxel voxel:voxelList){
                     
             float attributValue;
@@ -500,11 +511,11 @@ public class VoxelSpace {
              try{
                 attributValue = (float) attribut.getExpression().evaluate();
             }catch(Exception e){
-                attributValue = NaN;
+                attributValue = 0;
             }
 
             voxel.attributValue = attributValue;
-            voxel.color = getColorFromValue(attributValue);
+            //voxel.color = getColorFromValue(attributValue);
 
             //initialize minimum and maximum attributs values
             if(voxel ==  voxelList.get(0)){
@@ -524,15 +535,44 @@ public class VoxelSpace {
 
                 attributValueMin = attributValue;
             }
-        }
 
-        setGradientColor(gradient, attributValueMin, attributValueMax);
+            boolean drawVoxel = !(Float.isNaN(voxel.attributValue) || voxel.attributValue == -1.0f || (!settings.drawNullVoxel && voxel.attributValue == 0));
+            
+            if(!drawVoxel){
+                voxel.alpha = 0;
+            }else{
+                voxel.alpha = 1;
+            }
+            
+            values[count] = voxel.attributValue;
+            count++;
+            
+            
+            
+        }
         
+        //calculate standard deviation
+        StandardDeviation sd = new StandardDeviation();
+        float sdValue = sd.getFromFloatArray(values);
+        float average = sd.getAverage();
+        
+        min = average - (2*sdValue);
+        max = average + (2*sdValue);
+        
+        //colorGradient = new ColorGradient(min, max);
+        setGradientColor(gradient, min, max);
+        
+        /*
+        colorGradient = new ColorGradient(attributValueMin, attributValueMax);
+        setGradientColor(gradient, attributValueMin, attributValueMax);
+        */
         gradientUpdated = false;
+        
+        setFileLoaded(true);
     }
     
     public void updateColorValue(Color[] gradient){
-        setGradientColor(gradient, attributValueMin, attributValueMax);
+        setGradientColor(gradient, min, max);
     }
     
     
@@ -541,6 +581,7 @@ public class VoxelSpace {
         setFileLoaded(false);
         
         //attribut is a custom equation defined by user
+        this.mapAttributs = mapAttributs;
         
         attribut = mapAttributs.get(attributToVisualize);
         
@@ -562,15 +603,10 @@ public class VoxelSpace {
                 }
                 
                 
-                colorGradient = new ColorGradient(attributValueMin, attributValueMax);
                 updateValue(settings.attribut);
-                
-                //initBuffer(null, simpleShader);
                 
                 setCenter();
                 setWidth();
-                
-                setFileLoaded(true);
                 
                 return null;
 

@@ -8,15 +8,18 @@ package fr.ird.voxelidar.voxelisation;
 import com.google.common.io.Files;
 import fr.ird.voxelidar.Constants;
 import fr.ird.voxelidar.lidar.format.als.Las;
-import fr.ird.voxelidar.lidar.format.tls.Rxp;
+import fr.ird.voxelidar.lidar.format.tls.RxpScan;
+import fr.ird.voxelidar.lidar.format.tls.Scans;
 import fr.ird.voxelidar.math.matrix.Mat4D;
 import fr.ird.voxelidar.math.vector.Vec2D;
 import fr.ird.voxelidar.math.vector.Vec3D;
 import fr.ird.voxelidar.util.CsvLine;
 import fr.ird.voxelidar.voxelisation.als.PreprocessingLas;
 import fr.ird.voxelidar.voxelisation.tls.PreprocessingRxp;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -32,7 +35,7 @@ public class VoxelisationTool{
     
     private VoxelisationParameters parameters;
 
-    public File generateVoxelFromRxp(Rxp rxp, File outputFile, Mat4D transfMatrix, VoxelisationParameters parameters) {
+    public File generateVoxelFromRxp(RxpScan rxp, File outputFile, Mat4D transfMatrix, VoxelisationParameters parameters) {
         
         this.parameters = parameters;
         
@@ -99,7 +102,7 @@ public class VoxelisationTool{
                 writer.write("pointMailleMax.y:"+parameters.getTopCornerY()+"\n");
                 writer.write("pointMailleMax.z:"+parameters.getTopCornerZ()+"\n");
                 
-                writer.write("resolution:1");
+                writer.write("resolution:"+parameters.getResolution());
                 
                 writer.close();
                 
@@ -126,15 +129,32 @@ public class VoxelisationTool{
             file is into the same physical disk
             */
             File oldFile = new File("./densite/densite3D");
-            /*
-            //add header
-            Files.copy(oldFile, oldFile);
             
-            BufferedWriter writer = new BufferedWriter(new FileWriter(oldFile));
+            try {
+                //add header
+
+                BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+                writer.write("i j k lg_traversant lg_interception n_interceptes n_apres surface distance_scanner densite\n");
+                
+                BufferedReader reader = new BufferedReader(new FileReader(oldFile));
+                
+                String line;
+                while((line = reader.readLine()) != null){
+                    writer.write(line+"\n");
+                }
+                
+                writer.close();
+                reader.close();
+                
+                //Files.move(oldFile, outputFile);
+                oldFile.delete();
+                
+            } catch (IOException ex) {
+                java.util.logging.Logger.getLogger(VoxelisationTool.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
-            oldFile.renameTo(outputFile);
-            //Files.
-            */
+            //oldFile.renameTo(outputFile);
+            
             return outputFile;
         }
 

@@ -31,14 +31,17 @@ public class GLRenderWindowListener implements WindowListener {
         this.caller = caller;
         this.animator = animator;
         this.isToolBoxFocused = false;
+        
     }
     
     @Override
     public void windowResized(WindowEvent we) {
         
+        //String name = Thread.currentThread().getName();
         if(!animator.isPaused()){
             animator.pause();
         }
+        
     }
 
     @Override
@@ -47,6 +50,7 @@ public class GLRenderWindowListener implements WindowListener {
         if(!animator.isPaused() || !animator.isStarted()){
             animator.pause();
         }
+        
         Point locationOnScreen = caller.getLocationOnScreen(null);
         toolsJFrame.setLocation(new java.awt.Point(locationOnScreen.getX()-275, locationOnScreen.getY()-20));
         
@@ -67,6 +71,8 @@ public class GLRenderWindowListener implements WindowListener {
     @Override
     public void windowGainedFocus(WindowEvent we) {
         
+        System.out.println("glrenderwindow gained focus");
+        
         if(!isToolBoxFocused && animator.isPaused()){
             animator.resume();
         }
@@ -76,7 +82,9 @@ public class GLRenderWindowListener implements WindowListener {
 
     @Override
     public void windowLostFocus(WindowEvent we) {
-                
+        
+        System.out.println("glrenderwindow losted focus");
+        
         if(!isToolBoxFocused){
             animator.pause();
         }        

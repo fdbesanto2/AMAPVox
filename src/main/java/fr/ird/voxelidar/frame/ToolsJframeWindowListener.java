@@ -46,13 +46,16 @@ public class ToolsJframeWindowListener implements WindowListener{
 
     @Override
     public void windowActivated(WindowEvent e) {
-        //renderWindowListener.isToolBoxFocused = true;
+        System.out.println("tools jframe gained focus");
+        renderWindowListener.isToolBoxFocused = true;
         
     }
 
     @Override
     public void windowDeactivated(WindowEvent e) {
+        System.out.println("tools jframe losted focus");
         renderWindowListener.isToolBoxFocused = false;
     }
+    
     
 }

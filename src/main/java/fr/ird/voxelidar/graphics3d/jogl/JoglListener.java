@@ -6,10 +6,11 @@
 package fr.ird.voxelidar.graphics3d.jogl;
 
 import com.jogamp.common.nio.Buffers;
+import com.jogamp.opengl.util.FPSAnimator;
 import fr.ird.voxelidar.frame.JFrameSettingUp;
 import fr.ird.voxelidar.frame.JFrameTools;
 import fr.ird.voxelidar.frame.JProgressLoadingFile;
-import fr.ird.voxelidar.graphics3d.mesh.EventManager;
+import fr.ird.voxelidar.listener.EventManager;
 import fr.ird.voxelidar.graphics3d.mesh.MeshFactory;
 import fr.ird.voxelidar.graphics3d.object.camera.CameraAdapter;
 import fr.ird.voxelidar.graphics3d.object.camera.TrackballCamera;
@@ -25,10 +26,15 @@ import fr.ird.voxelidar.math.vector.Vec3F;
 import fr.ird.voxelidar.util.Settings;
 import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
+import java.util.Map;
 import java.util.Map.Entry;
 import javax.media.opengl.GL3;
 import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLContext;
+import javax.media.opengl.GLDrawable;
 import javax.media.opengl.GLEventListener;
+import javax.media.opengl.Threading;
+import javax.swing.SwingUtilities;
 import org.apache.log4j.Logger;
 
 /**
@@ -37,7 +43,6 @@ import org.apache.log4j.Logger;
  */
 public class JoglListener implements GLEventListener {
     
-    private GL3 gl;
     private Shader simpleShader;
     private Mat4F modelViewMatrix;
     private Mat4F projectionMatrix;
@@ -52,6 +57,7 @@ public class JoglListener implements GLEventListener {
     public JFrameTools toolBox;
     private Terrain terrain;
     private Settings settings;
+    private boolean isFpsInit = false;
     final static Logger logger = Logger.getLogger(JoglListener.class);
 
     public Settings getSettings() {
@@ -62,12 +68,6 @@ public class JoglListener implements GLEventListener {
         return terrain;
     }
     
-    
-
-    public GL3 getGl() {
-        return gl;
-    }
-
     public Scene getScene() {
         return scene;
     }
@@ -103,10 +103,15 @@ public class JoglListener implements GLEventListener {
     }
     
     @Override
-    public void init(GLAutoDrawable glad) {
+    public void init(GLAutoDrawable drawable) {
         
-        gl = glad.getGL().getGL3();
+        GL3 gl = drawable.getGL().getGL3();
         
+        //calculate fps every 61 frames (wait render speed to stabilize)
+        drawable.getAnimator().setUpdateFPSFrames(61, null);
+        
+        //this.width = drawable.getWidth();
+        //this.height = drawable.getHeight();
         
         Vec3F eye = new Vec3F(22.75f+45.5f, 72.25f, 195.25f-390.5f);
         Vec3F target = new Vec3F(22.75f, 72.25f, 195.25f);
@@ -117,9 +122,9 @@ public class JoglListener implements GLEventListener {
         camera = new TrackballCamera();
         camera.init(eye, target, up);
         
-        initScene();
+        initScene(gl);
         
-        camera.setPerspective(60.0f, (1.0f*glad.getWidth())/glad.getHeight(), 0.1f, 1000.0f);
+        //camera.setPerspective(60.0f, (1.0f*drawable.getWidth())/drawable.getHeight(), 0.1f, 1000.0f);
         
         
         
@@ -144,24 +149,21 @@ public class JoglListener implements GLEventListener {
         gl.glHint(GL3.GL_POLYGON_SMOOTH_HINT, GL3.GL_NICEST);
         gl.glHint(GL3.GL_FRAGMENT_SHADER_DERIVATIVE_HINT, GL3.GL_NICEST);
         
-        glad.setAutoSwapBufferMode(true);
+        //drawable.setAutoSwapBufferMode(true);
         
-        
+    }
+
+    @Override
+    public void dispose(GLAutoDrawable drawable) {
         
         
     }
 
     @Override
-    public void dispose(GLAutoDrawable glad) {
-        
-        
-    }
-
-    @Override
-    public void display(GLAutoDrawable glad) {
+    public void display(GLAutoDrawable drawable) {
         
         update();
-        render(glad);
+        render(drawable);
     }
     
     private void update() {
@@ -169,18 +171,23 @@ public class JoglListener implements GLEventListener {
     }
 
     @Override
-    public void reshape(GLAutoDrawable glad, int x, int y, int width, int height) {
+    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
         
-        gl=glad.getGL().getGL3();
-        gl.glViewport(0, 0, glad.getWidth(), glad.getHeight());
-        this.width = glad.getWidth();
-        this.height = glad.getHeight();
-        //camera.initPerspectiveCamera(70.0f, (1.0f*glad.getWidth())/glad.getHeight(), 1.0f, 10000.0f);
+        GL3 gl=drawable.getGL().getGL3();
+        gl.glViewport(0, 0, width, height);
+        this.width = width;
+        this.height = height;
+        //his.width = drawable.getWidth();
+        //this.height = drawable.getHeight();
+        camera.setPerspective(60.0f, (1.0f*width)/height, 0.1f, 1000.0f);
     }
     
     private void render(GLAutoDrawable drawable) {
         
-        gl.glViewport(0, 0, drawable.getWidth(), drawable.getHeight());
+        
+        
+        GL3 gl=drawable.getGL().getGL3();
+        gl.glViewport(0, 0, width, height);
         gl.glClear(GL3.GL_DEPTH_BUFFER_BIT|GL3.GL_COLOR_BUFFER_BIT);
         gl.glClearColor(worldColor.x, worldColor.y, worldColor.z, 1.0f);
         
@@ -190,9 +197,28 @@ public class JoglListener implements GLEventListener {
         
         scene.draw(gl, camera);
         
+        /*optimize interaction by reducing fps
+        cause: the fps animator use all cpu to render the scene 
+        involving that the window event thread is not quickly called
+        WARNING: this optimization is not proper and cause bad render performance
+        */
+        
+        if(!isFpsInit && (int)drawable.getAnimator().getLastFPS()>0){
+            
+            //keep performance for events
+            int offset = 8;
+            
+            drawable.getAnimator().stop();
+            ((FPSAnimator)drawable.getAnimator()).setFPS((int)((FPSAnimator)drawable.getAnimator()).getLastFPS()-offset);
+            isFpsInit = true;
+            drawable.getAnimator().start();
+        }
+           
+        //System.out.println((int)((FPSAnimator)drawable.getAnimator()).getLastFPS());
+        //System.out.println((int)((FPSAnimator)drawable.getAnimator()).getFPS());
     }
     
-    private void initScene(){
+    private void initScene(final GL3 gl){
         
         scene = new Scene();
         
@@ -240,27 +266,29 @@ public class JoglListener implements GLEventListener {
             }
             
             camera.addCameraListener(new CameraAdapter() {
-
+                
+                
                 @Override
-                public void locationChanged(Vec3F location) {
-
+                public void locationChanged(final Vec3F location) {
+                    
                     toolBox.jTextFieldXCameraPosition.setText(String.valueOf(location.x));
                     toolBox.jTextFieldYCameraPosition.setText(String.valueOf(location.y));
                     toolBox.jTextFieldZCameraPosition.setText(String.valueOf(location.z));
                 }
 
                 @Override
-                public void targetChanged(Vec3F target) {
+                public void targetChanged(final Vec3F target) {
                     toolBox.jTextFieldXCameraTarget.setText(String.valueOf(target.x));
                     toolBox.jTextFieldYCameraTarget.setText(String.valueOf(target.y));
                     toolBox.jTextFieldZCameraTarget.setText(String.valueOf(target.z));
+                    
                 }
 
                 @Override
                 public void viewMatrixChanged(Mat4F viewMatrix) {
 
                     FloatBuffer viewMatrixBuffer = Buffers.newDirectFloatBuffer(viewMatrix.mat);
-
+                    
                     for(Entry<Integer, Shader> shader : scene.getShadersList().entrySet()) {
 
                         if(!shader.getValue().isOrtho){
@@ -272,21 +300,23 @@ public class JoglListener implements GLEventListener {
                 }
 
                 @Override
-                public void projMatrixChanged(Mat4F projMatrix) {
-                    
-                    FloatBuffer projMatrixBuffer = Buffers.newDirectFloatBuffer(projMatrix.mat);
+                public void projMatrixChanged(final Mat4F projMatrix) {
+                        
+                        
+                        FloatBuffer projMatrixBuffer = Buffers.newDirectFloatBuffer(projMatrix.mat);
 
-                    for(Entry<Integer, Shader> shader : scene.getShadersList().entrySet()) {
-
-                        if(!shader.getValue().isOrtho){
-                            gl.glUseProgram(shader.getKey());
-                                gl.glUniformMatrix4fv(shader.getValue().uniformMap.get("projMatrix"), 1, false, projMatrixBuffer);
-                            gl.glUseProgram(0);
+                        for(Entry<Integer, Shader> shader : scene.getShadersList().entrySet()) {
+                            
+                            if(!shader.getValue().isOrtho){
+                                String threadName = Thread.currentThread().getName();
+                                gl.glUseProgram(shader.getKey());
+                                    gl.glUniformMatrix4fv(shader.getValue().uniformMap.get("projMatrix"), 1, false, projMatrixBuffer);
+                                gl.glUseProgram(0);
+                            }
                         }
-                    }
                 }
             });
-
+            
             voxelSpace = new VoxelSpace(gl, instanceShader.getProgramId(), settings);
             voxelSpace.setAttributToVisualize(settings.attributeToVisualize);
 
@@ -301,7 +331,7 @@ public class JoglListener implements GLEventListener {
                     progress.jProgressBar1.setValue(progression);
                 }
 
-                @Override
+                
                 public void voxelSpaceCreationFinished(){
                     progress.dispose();
 
@@ -310,7 +340,7 @@ public class JoglListener implements GLEventListener {
             });
             
             try{
-                voxelSpace.loadFromFile(settings.voxelSpaceFile, VoxelFormat.VOXELSPACE_FORMAT1, settings.mapAttributs);
+                voxelSpace.loadFromFile(settings.voxelSpaceFile, VoxelFormat.VOXELSPACE_FORMAT2, settings.mapAttributs);
                 //voxelSpace.loadFromFile(settings.voxelSpaceFile, settings.mapAttributs, terrain, false);
             }catch(Exception e){
                 logger.error("cannot load voxel space from file", e);

@@ -6,7 +6,8 @@
 package fr.ird.voxelidar.voxelisation.tls;
 
 import fr.ird.voxelidar.Constants;
-import fr.ird.voxelidar.lidar.format.tls.Rxp;
+import fr.ird.voxelidar.lidar.format.tls.RxpScan;
+import fr.ird.voxelidar.lidar.format.tls.Scans;
 import fr.ird.voxelidar.math.matrix.Mat3D;
 import fr.ird.voxelidar.math.matrix.Mat4D;
 import fr.ird.voxelidar.math.vector.Vec3D;
@@ -29,11 +30,11 @@ import org.apache.log4j.Logger;
 public class PreprocessingRxp extends Preprocessing{
     
     private static final Logger logger = Logger.getLogger(PreprocessingRxp.class);
-    private Rxp rxp;
+    private RxpScan rxp;
     private Mat4D popMatrix;
     private File outputFile;
     
-    public PreprocessingRxp(Rxp rxp, Mat4D popMatrix){
+    public PreprocessingRxp(RxpScan rxp, Mat4D popMatrix){
         
         this.rxp = rxp;
         this.popMatrix = popMatrix;
@@ -52,7 +53,7 @@ public class PreprocessingRxp extends Preprocessing{
 
         Mat4D transfMatrix = Mat4D.multiply(popMatrix, sopMatrix);
 
-        doExec(rxp.getRxpLiteFile(), transfMatrix);
+        doExec(rxp.getFile(), transfMatrix);
         
         return outputFile;
     }

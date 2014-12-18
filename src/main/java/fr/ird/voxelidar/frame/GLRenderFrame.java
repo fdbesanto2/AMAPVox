@@ -11,6 +11,7 @@ import com.jogamp.newt.opengl.GLWindow;
 import java.awt.GraphicsEnvironment;
 import javax.media.nativewindow.WindowClosingProtocol;
 import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLDrawable;
 
 /**
  *
@@ -35,8 +36,6 @@ public class GLRenderFrame extends GLWindow{
         viewer.setSize(width, height);
         viewer.width = width;
         viewer.height = height;
-        
-        
         viewer.setPosition((GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getWidth()/2)-320,
                            (GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getHeight()/2)-240);
         viewer.setAlwaysOnTop(true); 
