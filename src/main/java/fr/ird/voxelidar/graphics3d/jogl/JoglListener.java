@@ -177,8 +177,7 @@ public class JoglListener implements GLEventListener {
         gl.glViewport(0, 0, width, height);
         this.width = width;
         this.height = height;
-        //his.width = drawable.getWidth();
-        //this.height = drawable.getHeight();
+        
         camera.setPerspective(60.0f, (1.0f*width)/height, 0.1f, 1000.0f);
     }
     

@@ -725,6 +725,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jTextFieldFileOutputPathTlsVox = new javax.swing.JTextField();
         jButtonChooseOutputDirectoryTlsVox = new javax.swing.JButton();
         jButtonExecuteVox1 = new javax.swing.JButton();
+        jCheckBoxMergeOutputFiles = new javax.swing.JCheckBox();
         jTabbedPane3 = new javax.swing.JTabbedPane();
         jPanel33 = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
@@ -1238,6 +1239,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxMergeOutputFiles.setText("Merge output files");
+
         javax.swing.GroupLayout jPanel36Layout = new javax.swing.GroupLayout(jPanel36);
         jPanel36.setLayout(jPanel36Layout);
         jPanel36Layout.setHorizontalGroup(
@@ -1249,7 +1252,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         .addContainerGap()
                         .addComponent(jRadioButtonLightFile)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRadioButtonComplexFile))
+                        .addComponent(jRadioButtonComplexFile)
+                        .addGap(32, 32, 32)
+                        .addComponent(jCheckBoxMergeOutputFiles))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1303,7 +1308,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         .addGap(14, 14, 14)
                         .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jRadioButtonLightFile)
-                            .addComponent(jRadioButtonComplexFile))))
+                            .addComponent(jRadioButtonComplexFile)
+                            .addComponent(jCheckBoxMergeOutputFiles))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -3514,6 +3520,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         preprocessRxp.execute();
         */
         final boolean isLight = jRadioButtonLightFile.isSelected();
+        final boolean mergeOutput = jCheckBoxMergeOutputFiles.isSelected();
         
         ArrayList<Scans> filteredRxpList = null;
         Scans scans = new Scans();
@@ -3602,13 +3609,20 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             @Override
             protected void done(){
                 progressBar.dispose();
-
-                for(File file :filesList){
-                    model.addElement(file.getAbsolutePath());
+                
+                if(!mergeOutput){
+                    
+                    for(File file :filesList){
+                        model.addElement(file.getAbsolutePath());
+                    }
+                    
+                }else{
+                    //merge
+                    File outputFile = VoxelisationTool.mergeVoxelsFile(filesList, new File("test.vox"));
+                    model.addElement(outputFile.getAbsolutePath());
                 }
-
+                
                 jListOutputFiles.setModel(model);
-
             }
         };
 
@@ -3837,6 +3851,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JCheckBox jCheckBoxDrawNullVoxel;
     private javax.swing.JCheckBox jCheckBoxDrawTerrain;
     private javax.swing.JCheckBox jCheckBoxDrawUndergroundVoxel;
+    private javax.swing.JCheckBox jCheckBoxMergeOutputFiles;
     private javax.swing.JCheckBox jCheckBoxWriteA;
     private javax.swing.JCheckBox jCheckBoxWriteC;
     private javax.swing.JCheckBox jCheckBoxWriteD;

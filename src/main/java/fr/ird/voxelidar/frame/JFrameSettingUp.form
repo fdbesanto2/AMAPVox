@@ -290,6 +290,8 @@
                                                   <Component id="jRadioButtonLightFile" min="-2" max="-2" attributes="0"/>
                                                   <EmptySpace max="-2" attributes="0"/>
                                                   <Component id="jRadioButtonComplexFile" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                                                  <Component id="jCheckBoxMergeOutputFiles" min="-2" max="-2" attributes="0"/>
                                               </Group>
                                               <Component id="jScrollPane1" min="-2" pref="380" max="-2" attributes="0"/>
                                           </Group>
@@ -358,6 +360,7 @@
                                                   <Group type="103" groupAlignment="3" attributes="0">
                                                       <Component id="jRadioButtonLightFile" alignment="3" min="-2" max="-2" attributes="0"/>
                                                       <Component id="jRadioButtonComplexFile" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jCheckBoxMergeOutputFiles" alignment="3" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
                                           </Group>
@@ -872,6 +875,11 @@
                                   <Events>
                                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonExecuteVox1ActionPerformed"/>
                                   </Events>
+                                </Component>
+                                <Component class="javax.swing.JCheckBox" name="jCheckBoxMergeOutputFiles">
+                                  <Properties>
+                                    <Property name="text" type="java.lang.String" value="Merge output files"/>
+                                  </Properties>
                                 </Component>
                               </SubComponents>
                             </Container>

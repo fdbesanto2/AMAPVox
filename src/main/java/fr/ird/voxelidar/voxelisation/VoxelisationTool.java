@@ -19,9 +19,11 @@ import fr.ird.voxelidar.voxelisation.tls.PreprocessingRxp;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
@@ -66,6 +68,125 @@ public class VoxelisationTool{
         
     }
     
+    public static File mergeVoxelsFile(ArrayList<File> filesList, File output) throws NullPointerException{
+        
+        if(filesList != null && filesList.size()>0){
+            
+            
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(filesList.get(0)));
+                
+                String line;
+                
+                String attributs = reader.readLine();
+                int columnsNumber = attributs.split(" ").length;
+                
+                String metadata = reader.readLine();
+                
+                ArrayList<float[]> voxelsList = new ArrayList<>();
+                
+                while((line = reader.readLine()) != null){
+                    
+                    String[] voxel = line.split(" ");
+                    float[] voxelAttributs = new float[voxel.length];
+                    
+                    for(int i=0;i<voxel.length;i++){
+                        
+                        voxelAttributs[i] = Float.valueOf(voxel[i]);
+                    }
+                    
+                    voxelsList.add(voxelAttributs);
+                }
+                
+                reader.close();
+                
+                for(int i=1;i<filesList.size();i++){
+                    
+                    reader = new BufferedReader(new FileReader(filesList.get(i)));
+                    
+                    int columnsNumber2 = reader.readLine().split(" ").length;
+                    
+                    if(columnsNumber2 != columnsNumber){
+                        return null;
+                    }
+                
+                    //skip metadata
+                    reader.readLine();
+                    
+                    int count = 0;
+                    while((line = reader.readLine()) != null){
+
+                        String[] voxel = line.split(" ");
+                        float[] voxelAttributs = new float[voxel.length];                        
+
+                        for(int j=0;j<voxel.length;j++){
+
+                            voxelAttributs[i] = Float.valueOf(voxel[i]);
+                        }
+                        
+                        float[] array = voxelsList.get(count);
+                        float[] newArray = new float[array.length];
+                        
+                        for(int j=0;j<array.length;j++){
+                            
+                            if(j<3){
+                                //array[j] = array[j];
+                            }else{
+                                array[j] = array[j]+voxelAttributs[j];
+                            }
+                        }
+                        
+                        voxelsList.set(count, array);
+                        
+                        count++;
+                    }
+                    
+                    reader.close();
+                }
+                
+                BufferedWriter writer = new BufferedWriter(new FileWriter(output));
+                
+                writer.write(attributs+"\n");
+                writer.write(metadata+"\n");
+                
+                for(int i=0;i<voxelsList.size();i++){
+                    
+                    line = "";
+                    
+                    float[] voxel = voxelsList.get(i);
+                    
+                    for(int j=0;j<voxel.length;j++){
+                        
+                        String value ="";
+                        
+                        if(j<3){
+                            value = String.valueOf((int)voxel[j]);
+                        }else{
+                            value = String.valueOf(voxel[j]);
+                        }
+                        
+                        line+=value+" ";
+                    }
+                    writer.write(line.trim()+"\n");
+                }
+                
+                writer.close();
+                
+            } catch (FileNotFoundException ex) {
+                java.util.logging.Logger.getLogger(VoxelisationTool.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                java.util.logging.Logger.getLogger(VoxelisationTool.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+        }
+        
+        
+        
+        
+        return output;
+    }
+    
     private class Voxelisation{
         
         
@@ -91,6 +212,8 @@ public class VoxelisationTool{
                 
                 writer.write("zoneUtilisateurOuZoneScan:1"+"\n");
                 writer.write("dossierOutput:./"+"\n");
+                writer.write("methodePonderationEchos:1"+"\n");
+                
                 writer.write("typeExecution:5"+"\n"); //extraire densité fichier texte als
                 writer.write("fichierXYZ:"+inputFile.getAbsolutePath()+"\n");
                 
