@@ -2624,7 +2624,7 @@
                         </Component>
                         <Component class="javax.swing.JCheckBox" name="jCheckBoxDrawNullVoxel">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="Draw voxel when value is null"/>
+                            <Property name="text" type="java.lang.String" value="Draw voxel when null value"/>
                           </Properties>
                           <Events>
                             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jCheckBoxDrawNullVoxelStateChanged"/>
@@ -2659,11 +2659,10 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jRadioButtonTransmittanceMap" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jRadioButtonVegetationLayer" min="-2" max="-2" attributes="0"/>
                                       <Component id="jRadioButtonPAI" min="-2" max="-2" attributes="0"/>
                                       <Component id="jButtonGenerateMap" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="522" max="32767" attributes="0"/>
+                                  <EmptySpace pref="527" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -2674,9 +2673,7 @@
                                   <Component id="jRadioButtonPAI" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                                   <Component id="jRadioButtonTransmittanceMap" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jRadioButtonVegetationLayer" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="197" max="32767" attributes="0"/>
+                                  <EmptySpace pref="235" max="32767" attributes="0"/>
                                   <Component id="jButtonGenerateMap" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                               </Group>
@@ -2703,14 +2700,6 @@
                             </Property>
                             <Property name="selected" type="boolean" value="true"/>
                             <Property name="text" type="java.lang.String" value="PAI map (plant area index)"/>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JRadioButton" name="jRadioButtonVegetationLayer">
-                          <Properties>
-                            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                              <ComponentRef name="buttonGroup2DProjection"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" value="Vegetation layer"/>
                           </Properties>
                         </Component>
                         <Component class="javax.swing.JRadioButton" name="jRadioButtonTransmittanceMap">

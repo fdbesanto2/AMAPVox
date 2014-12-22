@@ -11,7 +11,6 @@ import fr.ird.voxelidar.graphics3d.mesh.Attribut;
 import fr.ird.voxelidar.graphics3d.mesh.Grid;
 import fr.ird.voxelidar.graphics3d.mesh.Mesh;
 import fr.ird.voxelidar.graphics3d.mesh.MeshFactory;
-import fr.ird.voxelidar.graphics3d.object.terrain.Terrain;
 import fr.ird.voxelidar.graphics3d.shader.Shader;
 import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.math.point.Point2F;
@@ -26,18 +25,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import static java.lang.Float.NaN;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 import javax.media.opengl.GL3;
 import javax.swing.SwingWorker;
 import javax.swing.event.EventListenerList;
-import org.apache.commons.collections.map.MultiKeyMap;
 import org.apache.log4j.Logger;
 
 /**
@@ -377,8 +373,11 @@ public class VoxelSpace {
                 
                 String[] infos = reader.readLine().split(" ");
                 voxelSpace.xNumberVox = Integer.valueOf(infos[0]);
+                this.nX = voxelSpace.xNumberVox;
                 voxelSpace.yNumberVox = Integer.valueOf(infos[1]);
+                this.nY = voxelSpace.yNumberVox;
                 voxelSpace.zNumberVox = Integer.valueOf(infos[2]);
+                this.nZ = voxelSpace.zNumberVox;
                 voxelSpace.resolution = Float.valueOf(infos[3]);
                 
                 int lineNumber = 0;

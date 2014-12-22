@@ -7,11 +7,9 @@ package fr.ird.voxelidar.voxelisation.als;
 
 import fr.ird.voxelidar.lidar.format.als.Las;
 import fr.ird.voxelidar.lidar.format.als.LasHeader;
-import fr.ird.voxelidar.lidar.format.als.LasReader;
 import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
 import fr.ird.voxelidar.math.matrix.Mat;
 import fr.ird.voxelidar.math.matrix.Mat4D;
-import fr.ird.voxelidar.math.vector.Vec2D;
 import fr.ird.voxelidar.math.vector.Vec3D;
 import fr.ird.voxelidar.voxelisation.Shoot;
 import fr.ird.voxelidar.voxelisation.Las2;

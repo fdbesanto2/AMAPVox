@@ -7,7 +7,6 @@ package fr.ird.voxelidar.lidar.format.tls;
 
 import fr.ird.voxelidar.math.matrix.Mat4D;
 import java.io.File;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;

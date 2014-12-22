@@ -1,7 +1,6 @@
 package fr.ird.voxelidar;
 
 import fr.ird.voxelidar.frame.JFrameSettingUp;
-import java.io.File;
 import java.io.IOException;
 import org.apache.log4j.Logger;
 

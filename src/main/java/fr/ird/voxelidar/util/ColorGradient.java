@@ -119,8 +119,8 @@ public class ColorGradient {
     
     
     public void setGradientColor(Color[] gradientColor) {
-		this.gradientColor = gradientColor;
-	}
+        this.gradientColor = gradientColor;
+    }
     
     
     

@@ -11,7 +11,6 @@ import com.jogamp.newt.opengl.GLWindow;
 import java.awt.GraphicsEnvironment;
 import javax.media.nativewindow.WindowClosingProtocol;
 import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLDrawable;
 
 /**
  *

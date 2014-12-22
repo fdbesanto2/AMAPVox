@@ -6,7 +6,6 @@
 package fr.ird.voxelidar.graphics3d.object.voxelspace;
 
 import fr.ird.voxelidar.math.vector.Vec3F;
-import java.util.Collections;
 import java.util.Map;
 
 /**

@@ -5,15 +5,12 @@
  */
 package fr.ird.voxelidar.voxelisation;
 
-import com.google.common.io.Files;
 import fr.ird.voxelidar.Constants;
 import fr.ird.voxelidar.lidar.format.als.Las;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
-import fr.ird.voxelidar.lidar.format.tls.Scans;
 import fr.ird.voxelidar.math.matrix.Mat4D;
 import fr.ird.voxelidar.math.vector.Vec2D;
 import fr.ird.voxelidar.math.vector.Vec3D;
-import fr.ird.voxelidar.util.CsvLine;
 import fr.ird.voxelidar.voxelisation.als.PreprocessingLas;
 import fr.ird.voxelidar.voxelisation.tls.PreprocessingRxp;
 import java.io.BufferedReader;
@@ -23,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import org.apache.log4j.Logger;
@@ -121,11 +119,10 @@ public class VoxelisationTool{
 
                         for(int j=0;j<voxel.length;j++){
 
-                            voxelAttributs[i] = Float.valueOf(voxel[i]);
+                            voxelAttributs[j] = Float.valueOf(voxel[j]);
                         }
                         
                         float[] array = voxelsList.get(count);
-                        float[] newArray = new float[array.length];
                         
                         for(int j=0;j<array.length;j++){
                             
@@ -255,7 +252,6 @@ public class VoxelisationTool{
             
             try {
                 //add header
-
                 BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
                 writer.write("i j k lg_traversant lg_interception n_interceptes n_apres surface distance_scanner densite\n");
                 
@@ -269,7 +265,6 @@ public class VoxelisationTool{
                 writer.close();
                 reader.close();
                 
-                //Files.move(oldFile, outputFile);
                 oldFile.delete();
                 
             } catch (IOException ex) {

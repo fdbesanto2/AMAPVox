@@ -40,7 +40,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -49,7 +48,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -832,7 +830,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanel4 = new javax.swing.JPanel();
         jButtonGenerateMap = new javax.swing.JButton();
         jRadioButtonPAI = new javax.swing.JRadioButton();
-        jRadioButtonVegetationLayer = new javax.swing.JRadioButton();
         jRadioButtonTransmittanceMap = new javax.swing.JRadioButton();
         jPanel5 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
@@ -2384,7 +2381,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         jCheckBoxDrawAxis.setText("Draw axis");
 
-        jCheckBoxDrawNullVoxel.setText("Draw voxel when value is null");
+        jCheckBoxDrawNullVoxel.setText("Draw voxel when null value");
         jCheckBoxDrawNullVoxel.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jCheckBoxDrawNullVoxelStateChanged(evt);
@@ -2462,9 +2459,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jRadioButtonPAI.setSelected(true);
         jRadioButtonPAI.setText("PAI map (plant area index)");
 
-        buttonGroup2DProjection.add(jRadioButtonVegetationLayer);
-        jRadioButtonVegetationLayer.setText("Vegetation layer");
-
         buttonGroup2DProjection.add(jRadioButtonTransmittanceMap);
         jRadioButtonTransmittanceMap.setText("Transmittance map");
 
@@ -2476,10 +2470,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jRadioButtonTransmittanceMap)
-                    .addComponent(jRadioButtonVegetationLayer)
                     .addComponent(jRadioButtonPAI)
                     .addComponent(jButtonGenerateMap))
-                .addContainerGap(522, Short.MAX_VALUE))
+                .addContainerGap(527, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2488,9 +2481,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jRadioButtonPAI)
                 .addGap(15, 15, 15)
                 .addComponent(jRadioButtonTransmittanceMap)
-                .addGap(18, 18, 18)
-                .addComponent(jRadioButtonVegetationLayer)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 197, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 235, Short.MAX_VALUE)
                 .addComponent(jButtonGenerateMap)
                 .addGap(42, 42, 42))
         );
@@ -2925,55 +2916,51 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         if(terrain == null){
             readTerrain();
         }
+        
 
-        if(terrain != null){
+        //chargement de l'espace voxel
+        final VoxelSpace voxelSpace = new VoxelSpace(new Settings(this));
+        final JProgressLoadingFile progress = new JProgressLoadingFile(this);
+        progress.setVisible(true);
 
-            //chargement de l'espace voxel
-            final VoxelSpace voxelSpace = new VoxelSpace(new Settings(this));
-            final JProgressLoadingFile progress = new JProgressLoadingFile(this);
-            progress.setVisible(true);
+        voxelSpace.addVoxelSpaceListener(new VoxelSpaceAdapter() {
 
-            voxelSpace.addVoxelSpaceListener(new VoxelSpaceAdapter() {
+            @Override
+            public void voxelSpaceCreationProgress(int progression){
 
-                @Override
-                public void voxelSpaceCreationProgress(int progression){
-
-                    progress.jProgressBar1.setValue(progression);
-                }
-
-                @Override
-                public void voxelSpaceCreationFinished(){
-                    progress.dispose();
-                    Projection projection = new Projection(voxelSpace, terrain);
-                    BufferedImage img = null;
-
-                    if(jRadioButtonPAI.isSelected()){
-
-                        img= projection.generateMap(Projection.PAI);
-
-                    }else if(jRadioButtonVegetationLayer.isSelected()){
-
-                    }else if(jRadioButtonTransmittanceMap.isSelected()){
-
-                        img= projection.generateMap(Projection.TRANSMITTANCE);
-                    }
-
-                    BufferedImage colorScale = ScaleGradient.generateScale(ColorGradient.GRADIENT_HEAT, projection.getMinValue(), projection.getMaxValue(), 50, 200);
-
-                    JFrameImageViewer imageViewer = new JFrameImageViewer(img, colorScale);
-                    imageViewer.setJLabelMinValue(String.valueOf(projection.getMinValue()+0.0));
-                    imageViewer.setJLabelMaxValue(String.valueOf(projection.getMaxValue()+0.0));
-                    imageViewer.setVisible(true);
-
-                }
-            });
-
-            try {
-                voxelSpace.loadFromFile(new File(jListOutputFiles.getSelectedValue().toString()), VoxelFormat.VOXELSPACE_FORMAT1);
-                //voxelSpace.loadFromFile(new File(jListOutputFiles.getSelectedValue().toString()));
-            } catch (Exception ex) {
-                logger.error(null, ex);
+                progress.jProgressBar1.setValue(progression);
             }
+
+            @Override
+            public void voxelSpaceCreationFinished(){
+                progress.dispose();
+                Projection projection = new Projection(voxelSpace, terrain);
+                BufferedImage img = null;
+
+                if(jRadioButtonPAI.isSelected()){
+
+                    img= projection.generateMap(Projection.PAI);
+
+                }else if(jRadioButtonTransmittanceMap.isSelected()){
+
+                    img= projection.generateMap(Projection.TRANSMITTANCE);
+                }
+
+                BufferedImage colorScale = ScaleGradient.generateScale(ColorGradient.GRADIENT_HEAT, projection.getMinValue(), projection.getMaxValue(), 50, 200);
+
+                JFrameImageViewer imageViewer = new JFrameImageViewer(img, colorScale);
+                imageViewer.setJLabelMinValue(String.valueOf(projection.getMinValue()+0.0));
+                imageViewer.setJLabelMaxValue(String.valueOf(projection.getMaxValue()+0.0));
+                imageViewer.setVisible(true);
+
+            }
+        });
+
+        try {
+            voxelSpace.loadFromFile(new File(jListOutputFiles.getSelectedValue().toString()), VoxelFormat.VOXELSPACE_FORMAT2);
+            //voxelSpace.loadFromFile(new File(jListOutputFiles.getSelectedValue().toString()));
+        } catch (Exception ex) {
+            logger.error(null, ex);
         }
     }//GEN-LAST:event_jButtonGenerateMapActionPerformed
 
@@ -3957,7 +3944,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JRadioButton jRadioButtonLightFile;
     private javax.swing.JRadioButton jRadioButtonPAI;
     private javax.swing.JRadioButton jRadioButtonTransmittanceMap;
-    private javax.swing.JRadioButton jRadioButtonVegetationLayer;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;

@@ -7,15 +7,16 @@ package fr.ird.voxelidar.voxelisation.tls;
 
 import fr.ird.voxelidar.Constants;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
-import fr.ird.voxelidar.lidar.format.tls.Scans;
 import fr.ird.voxelidar.math.matrix.Mat3D;
 import fr.ird.voxelidar.math.matrix.Mat4D;
 import fr.ird.voxelidar.math.vector.Vec3D;
 import fr.ird.voxelidar.math.vector.Vec4D;
 import fr.ird.voxelidar.util.CsvLine;
 import fr.ird.voxelidar.voxelisation.Preprocessing;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -64,6 +65,7 @@ public class PreprocessingRxp extends Preprocessing{
         try {
             String command = Constants.PROGRAM_RXP_READER + " -0 " + "\"" + file.getAbsolutePath() + "\"";
             p = Runtime.getRuntime().exec(command);
+            logger.debug(command);
 
             Transformation fluxSortie = new Transformation(p.getInputStream(), file.getAbsolutePath() + ".ech", transfMatrix);
             new Thread(fluxSortie).start();
@@ -81,10 +83,6 @@ public class PreprocessingRxp extends Preprocessing{
             private final String outputFullPath;
             private final Mat4D transfMatrix;
 
-            private BufferedReader getBufferedReader(InputStream is) {
-                return new BufferedReader(new InputStreamReader(is));
-            }
-
             public Transformation(InputStream inputStream, String outputFullPath, Mat4D transMatrix) {
 
                 this.inputStream = inputStream;
@@ -94,13 +92,11 @@ public class PreprocessingRxp extends Preprocessing{
 
             @Override
             public void run() {
-
-                BufferedReader br = getBufferedReader(inputStream);
+                
+                BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
                 File file = new File(outputFullPath);
                 String name = file.getName();
                 String ligne;
-
-                String get = (String) System.getProperties().get("user.dir");
                 
                 Mat3D rotation = new Mat3D();
                 rotation.mat = new double[]{

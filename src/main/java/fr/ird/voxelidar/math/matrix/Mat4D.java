@@ -6,7 +6,6 @@
 package fr.ird.voxelidar.math.matrix;
 
 import fr.ird.voxelidar.math.vector.Vec3D;
-import fr.ird.voxelidar.math.vector.Vec3D;
 import fr.ird.voxelidar.math.vector.Vec4D;
 import static java.lang.Double.NaN;
 

@@ -6,7 +6,6 @@
 package fr.ird.voxelidar.frame;
 
 import fr.ird.voxelidar.graphics3d.mesh.Attribut;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

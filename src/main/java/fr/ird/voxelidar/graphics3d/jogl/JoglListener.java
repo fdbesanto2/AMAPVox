@@ -26,15 +26,10 @@ import fr.ird.voxelidar.math.vector.Vec3F;
 import fr.ird.voxelidar.util.Settings;
 import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
-import java.util.Map;
 import java.util.Map.Entry;
 import javax.media.opengl.GL3;
 import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLContext;
-import javax.media.opengl.GLDrawable;
 import javax.media.opengl.GLEventListener;
-import javax.media.opengl.Threading;
-import javax.swing.SwingUtilities;
 import org.apache.log4j.Logger;
 
 /**

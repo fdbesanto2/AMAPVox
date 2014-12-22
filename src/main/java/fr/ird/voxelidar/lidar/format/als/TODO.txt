@@ -4,5 +4,9 @@
 
 voir spécification : http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html
 
--Lecture des formats de points (point data format) 4 et 5 ->depuis format las 1.3
+-Lecture des formats de points (point data format) 
+4, 5 ->depuis format las 1.3 
+et 6, 7, 8, 9, 10 -> depuis format 1.4$
+
 -Lecture de fichier *.las compressés (*.laz)
+-lecture des extra bytes des fichiers *.las

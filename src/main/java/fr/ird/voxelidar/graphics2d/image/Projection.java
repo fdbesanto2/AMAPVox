@@ -50,42 +50,76 @@ public class Projection {
     
     public BufferedImage generateMap(int type){
         
-        MultiKeyMap mapTerrainXY = terrain.getXYStructure();
-        
-        
-        ArrayList<Voxel> voxelList = voxelSpace.getVoxelList();
         MultiKeyMap map = new MultiKeyMap();
         
-        for(Voxel voxel : voxelList){
+        if(terrain != null){
             
-            float value = 0;
-            switch(type){
-                case Projection.PAI:
-                    value = generatePAI(voxel.getAttributs());
-                    break;
-                case Projection.TRANSMITTANCE:
-                    value = generateTransmittanceMap(voxel.getAttributs());
-                    break;
-            }
+            MultiKeyMap mapTerrainXY = terrain.getXYStructure();
+        
+            ArrayList<Voxel> voxelList = voxelSpace.getVoxelList();
             
-            int x = voxel.indiceX;
-            int y = voxel.indiceZ;
-            
-            if(Float.isNaN(value)){
-                value = 0;
-            }
 
-            
-            //float z = terrain.getZFromXY(voxel.x, voxel.z);
-            float hauteurTerrainXY = 0;
-            try{
-                hauteurTerrainXY = (float) mapTerrainXY.get(voxel.x, voxel.z);
-            }catch(Exception e){
-                logger.error("voxelisation failed", e);
+            for(Voxel voxel : voxelList){
+
+                float value = 0;
+                switch(type){
+                    case Projection.PAI:
+                        value = generatePAI(voxel.getAttributs());
+                        break;
+                    case Projection.TRANSMITTANCE:
+                        value = generateTransmittanceMap(voxel.getAttributs());
+                        break;
+                }
+
+                int x = voxel.indiceX;
+                int y = voxel.indiceZ;
+
+                if(Float.isNaN(value)){
+                    value = 0;
+                }
+
+                float hauteurTerrainXY = 0;
+                try{
+                    hauteurTerrainXY = (float) mapTerrainXY.get(voxel.x, voxel.z);
+                }catch(Exception e){
+                    logger.error("voxelisation failed", e);
+                }
+
+                if(voxel.y > hauteurTerrainXY){
+
+                    if(map.containsKey(x, y)){
+
+                        map.put(x, y, (float)map.get(x, y)+value);
+                    }else{
+                        map.put(x, y, value);
+                    }
+                }
             }
+        
+        }else{
+        
+            ArrayList<Voxel> voxelList = voxelSpace.getVoxelList();
             
-            if(voxel.y > hauteurTerrainXY){
-                
+
+            for(Voxel voxel : voxelList){
+
+                float value = 0;
+                switch(type){
+                    case Projection.PAI:
+                        value = generatePAI(voxel.getAttributs());
+                        break;
+                    case Projection.TRANSMITTANCE:
+                        value = generateTransmittanceMap(voxel.getAttributs());
+                        break;
+                }
+
+                int x = voxel.indiceX;
+                int y = voxel.indiceZ;
+
+                if(Float.isNaN(value)){
+                    value = 0;
+                }
+
                 if(map.containsKey(x, y)){
 
                     map.put(x, y, (float)map.get(x, y)+value);
@@ -94,6 +128,7 @@ public class Projection {
                 }
             }
         }
+        
         
         
         int index = 0;
@@ -160,13 +195,10 @@ public class Projection {
         
         Float nInterceptes = attributs.get("n_interceptes");
         Float nApres = attributs.get("n_apres");
-        //Float lgInterception = voxel.getAttributs().get("lg_interception");
-        //Float lgTraversant = voxel.getAttributs().get("lg_traversant");
 
 
         float densitePn = nInterceptes/(nApres+nInterceptes);
         float transmittance = 1 - densitePn;
-        //float l = (lgInterception + lgTraversant)/(nApres+nInterceptes);
 
         float pad = (float) ((Math.log(transmittance)*(-2))/1);
         if(Float.isNaN(pad) || Float.isInfinite(pad)){
@@ -182,8 +214,6 @@ public class Projection {
         
         Float nInterceptes = attributs.get("n_interceptes");
         Float nApres = attributs.get("n_apres");
-        //Float lgInterception = voxel.getAttributs().get("lg_interception");
-        //Float lgTraversant = voxel.getAttributs().get("lg_traversant");
 
 
         float densitePn = nInterceptes/(nApres+nInterceptes);

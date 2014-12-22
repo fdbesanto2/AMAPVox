@@ -16,7 +16,6 @@ import fr.ird.voxelidar.math.vector.Vec3F;
 import fr.ird.voxelidar.util.ColorGradient;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
