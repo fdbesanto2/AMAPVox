@@ -14,14 +14,18 @@ import fr.ird.voxelidar.listener.EventManager;
 import fr.ird.voxelidar.graphics3d.object.terrain.Terrain;
 import fr.ird.voxelidar.graphics3d.object.terrain.TerrainLoader;
 import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace;
-import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace.VoxelFormat;
+import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace.Format;
 import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpaceAdapter;
-import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpaceFormat;
+import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpaceListener;
+import fr.ird.voxelidar.lidar.format.voxelspace.VoxelSpaceFormat;
 import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.lidar.format.als.Las;
+import fr.ird.voxelidar.lidar.format.als.LasHeader;
 import fr.ird.voxelidar.lidar.format.als.LasReader;
 import fr.ird.voxelidar.lidar.format.als.LasToTxt;
 import fr.ird.voxelidar.lidar.format.als.LasToTxtAdapter;
+import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
+import fr.ird.voxelidar.lidar.format.dart.DartWriter;
 import fr.ird.voxelidar.lidar.format.tls.Rsp;
 import fr.ird.voxelidar.lidar.format.tls.Scans;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
@@ -29,6 +33,7 @@ import fr.ird.voxelidar.listener.InputKeyListener;
 import fr.ird.voxelidar.listener.InputMouseListener;
 import fr.ird.voxelidar.math.matrix.Mat4D;
 import fr.ird.voxelidar.math.vector.Vec3D;
+import fr.ird.voxelidar.math.vector.Vec4D;
 import fr.ird.voxelidar.util.ColorGradient;
 import fr.ird.voxelidar.util.Misc;
 import fr.ird.voxelidar.util.Settings;
@@ -48,6 +53,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -189,17 +196,17 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 
                 try{
                     
-                    int minPointX = Integer.valueOf(jTextFieldMinPointX.getText());
-                    int minPointY = Integer.valueOf(jTextFieldMinPointY.getText());
-                    int minPointZ = Integer.valueOf(jTextFieldMinPointZ.getText());
+                    double minPointX = Double.valueOf(jTextFieldMinPointX.getText());
+                    double minPointY = Double.valueOf(jTextFieldMinPointY.getText());
+                    double minPointZ = Double.valueOf(jTextFieldMinPointZ.getText());
 
-                    int maxPointX = Integer.valueOf(jTextFieldMaxPointX.getText());
-                    int maxPointY = Integer.valueOf(jTextFieldMaxPointY.getText());
-                    int maxPointZ = Integer.valueOf(jTextFieldMaxPointZ.getText());
+                    double maxPointX = Double.valueOf(jTextFieldMaxPointX.getText());
+                    double maxPointY = Double.valueOf(jTextFieldMaxPointY.getText());
+                    double maxPointZ = Double.valueOf(jTextFieldMaxPointZ.getText());
 
-                    int voxelNumberX = (maxPointX - minPointX);
-                    int voxelNumberY = (maxPointY - minPointY);
-                    int voxelNumberZ = (maxPointZ - minPointZ);
+                    int voxelNumberX = (int)(maxPointX - minPointX);
+                    int voxelNumberY = (int)(maxPointY - minPointY);
+                    int voxelNumberZ = (int)(maxPointZ - minPointZ);
 
                     jTextFieldVoxelNumberX.setText(String.valueOf(voxelNumberX));
                     jTextFieldVoxelNumberY.setText(String.valueOf(voxelNumberY));
@@ -683,6 +690,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jFileChooser9 = new javax.swing.JFileChooser();
         buttonGroup1 = new javax.swing.ButtonGroup();
         jFileChooser10 = new javax.swing.JFileChooser();
+        jFileChooserSave2 = new javax.swing.JFileChooser();
         jSplitPane1 = new javax.swing.JSplitPane();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelOutputParametersTab = new javax.swing.JPanel();
@@ -770,6 +778,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jTextFieldReferencePoint2Y = new javax.swing.JTextField();
         jTextFieldReferencePoint2Z = new javax.swing.JTextField();
         jButtonPopMatrix1 = new javax.swing.JButton();
+        jButtonCalculateBoundingBox = new javax.swing.JButton();
         jPanel31 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
@@ -840,6 +849,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jScrollPane2 = new javax.swing.JScrollPane();
         jListOutputFiles = new javax.swing.JList();
         jButtonLoadSelectedFile = new javax.swing.JButton();
+        jButtonExportSelection = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         jButtonOpenInputFile1 = new javax.swing.JButton();
         jTextFieldFileNameMnt = new javax.swing.JTextField();
@@ -895,6 +905,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jFileChooser10.setDialogTitle("");
         jFileChooser10.setFileFilter(null);
         jFileChooser10.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+
+        jFileChooserSave2.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+        jFileChooserSave2.setCurrentDirectory(new java.io.File("C:\\Program Files\\NetBeans 8.0.1"));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(560, 450));
@@ -1685,10 +1698,13 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanel29.setBorder(javax.swing.BorderFactory.createTitledBorder("Point 1"));
         jPanel29.setToolTipText("");
 
+        jTextFieldReferencePoint1X.setText("0");
         jTextFieldReferencePoint1X.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
 
+        jTextFieldReferencePoint1Y.setText("0");
         jTextFieldReferencePoint1Y.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
 
+        jTextFieldReferencePoint1Z.setText("0");
         jTextFieldReferencePoint1Z.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
 
         javax.swing.GroupLayout jPanel29Layout = new javax.swing.GroupLayout(jPanel29);
@@ -1714,10 +1730,13 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanel30.setBorder(javax.swing.BorderFactory.createTitledBorder("Point 2"));
         jPanel30.setToolTipText("");
 
+        jTextFieldReferencePoint2X.setText("0");
         jTextFieldReferencePoint2X.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
 
+        jTextFieldReferencePoint2Y.setText("0");
         jTextFieldReferencePoint2Y.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
 
+        jTextFieldReferencePoint2Z.setText("0");
         jTextFieldReferencePoint2Z.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
 
         javax.swing.GroupLayout jPanel30Layout = new javax.swing.GroupLayout(jPanel30);
@@ -1773,6 +1792,13 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jButtonCalculateBoundingBox.setText("Auto bounding box");
+        jButtonCalculateBoundingBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCalculateBoundingBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel33Layout = new javax.swing.GroupLayout(jPanel33);
         jPanel33.setLayout(jPanel33Layout);
         jPanel33Layout.setHorizontalGroup(
@@ -1786,12 +1812,14 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jButtonExecuteVox, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jPanel25, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel33Layout.createSequentialGroup()
-                                .addComponent(jPanel27, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonCalculateBoundingBox)
+                            .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jPanel25, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel33Layout.createSequentialGroup()
+                                    .addComponent(jPanel27, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addComponent(jPanel28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(67, 67, 67))
         );
@@ -1813,7 +1841,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                             .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonCalculateBoundingBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonExecuteVox)))
                 .addContainerGap())
         );
@@ -2218,7 +2248,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     .addComponent(jCheckBoxWriteV))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(86, Short.MAX_VALUE))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel31Layout = new javax.swing.GroupLayout(jPanel31);
@@ -2231,7 +2261,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         );
         jPanel31Layout.setVerticalGroup(
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 360, Short.MAX_VALUE)
+            .addGap(0, 361, Short.MAX_VALUE)
             .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE))
         );
@@ -2560,7 +2590,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
         jScrollPane2.setViewportView(jListOutputFiles);
 
-        jButtonLoadSelectedFile.setText("Load selected file");
+        jButtonLoadSelectedFile.setText("Load selection");
         jButtonLoadSelectedFile.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButtonLoadSelectedFileMouseClicked(evt);
@@ -2572,30 +2602,42 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jButtonExportSelection.setText("Export selection");
+        jButtonExportSelection.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonExportSelectionMouseClicked(evt);
+            }
+        });
+        jButtonExportSelection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExportSelectionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonLoadSelectedFile, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jButtonAddFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButtonRemoveFile, javax.swing.GroupLayout.Alignment.LEADING)))
+                    .addComponent(jButtonRemoveFile)
+                    .addComponent(jButtonAddFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonExportSelection, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jButtonAddFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonRemoveFile)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonLoadSelectedFile)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addComponent(jButtonExportSelection))
             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
@@ -2934,7 +2976,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             @Override
             public void voxelSpaceCreationFinished(){
                 progress.dispose();
-                Projection projection = new Projection(voxelSpace, terrain);
+                Projection projection = new Projection(voxelSpace.voxelSpaceFormat, terrain);
                 BufferedImage img = null;
 
                 if(jRadioButtonPAI.isSelected()){
@@ -2957,7 +2999,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
 
         try {
-            voxelSpace.loadFromFile(new File(jListOutputFiles.getSelectedValue().toString()), VoxelFormat.VOXELSPACE_FORMAT2);
+            voxelSpace.loadFromFile(new File(jListOutputFiles.getSelectedValue().toString()), Format.VOXELSPACE_FORMAT2);
             //voxelSpace.loadFromFile(new File(jListOutputFiles.getSelectedValue().toString()));
         } catch (Exception ex) {
             logger.error(null, ex);
@@ -3117,7 +3159,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             });
 
             progressBar.setVisible(true);
-            lasToTxt.writeTxt(las, outputFilePath, arguments, jCheckBoxWriteHeader.isSelected());
+            lasToTxt.writeTxt(getVopMatrix(), las, outputFilePath, arguments, jCheckBoxWriteHeader.isSelected());
         }
     }//GEN-LAST:event_jButtonLoadActionPerformed
 
@@ -3230,6 +3272,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             jTextFieldFilePathInputTxt.setToolTipText(jFileChooser1.getSelectedFile().getAbsolutePath());
 
             jLabelFileSize.setText(String.valueOf(jFileChooser1.getSelectedFile().length()));
+            
+            //LasReader.
 
         }
     }//GEN-LAST:event_jButtonOpenInputFileActionPerformed
@@ -3481,6 +3525,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             String filePath = file.getAbsolutePath();
 
             if(fileName.endsWith(".las") || fileName.endsWith(".laz") || fileName.endsWith(".txt")){
+                
                 jTextFieldFileNameInputVox.setText(fileName);
                 jTextFieldFileNameInputVox.setToolTipText(fileName);
 
@@ -3488,6 +3533,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 jTextFieldFilePathInputVox.setToolTipText(filePath);
 
                 jLabelFileSizeInputVox.setText(String.valueOf(file.getTotalSpace()));
+                
+                
 
             }else{
                 JOptionPane.showMessageDialog(this, "File isn't a *.laz or *.las file");
@@ -3807,6 +3854,120 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldFilePathRspActionPerformed
 
+    private void jButtonCalculateBoundingBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalculateBoundingBoxActionPerformed
+        
+        
+        SwingWorker sw = new SwingWorker() {
+
+            @Override
+            protected Object doInBackground() throws Exception {
+                
+                Las read = LasReader.read(jTextFieldFilePathInputVox.getText());
+                ArrayList<? extends PointDataRecordFormat0> pointDataRecords = read.getPointDataRecords();
+                LasHeader header = read.getHeader();
+
+                int count =0;
+                double xMin=0, yMin=0, zMin=0;
+                double xMax=0, yMax=0, zMax=0;
+
+                Mat4D mat = getVopMatrix();
+
+                for(PointDataRecordFormat0 point:pointDataRecords){
+
+                    Vec4D pt = new Vec4D(((point.getX()*header.getxScaleFactor())+header.getxOffset()),
+                                (point.getY()*header.getyScaleFactor())+header.getyOffset(),
+                                (point.getZ()*header.getzScaleFactor())+header.getzOffset(),
+                                1);
+
+
+                    pt = Mat4D.multiply(mat, pt);
+
+                    if(count != 0){
+
+                        if(pt.x < xMin){
+                            xMin = pt.x;
+                        }else if(pt.x > xMax){
+                            xMax = pt.x;
+                        }
+
+                        if(pt.y < yMin){
+                            yMin = pt.y;
+                        }else if(pt.y > yMax){
+                            yMax = pt.y;
+                        }
+
+                        if(pt.z < zMin){
+                            zMin = pt.z;
+                        }else if(pt.z > zMax){
+                            zMax = pt.z;
+                        }
+
+                    }else{
+
+                        xMin = pt.x;
+                        yMin = pt.y;
+                        zMin = pt.z;
+
+                        xMax = pt.x;
+                        yMax = pt.y;
+                        zMax = pt.z;
+
+                        count++;
+                    }
+
+                }
+                
+                jTextFieldMinPointX.setText(String.valueOf(xMin));
+                jTextFieldMinPointX.setCaretPosition(0);
+                jTextFieldMinPointY.setText(String.valueOf(yMin));
+                jTextFieldMinPointY.setCaretPosition(0);
+                jTextFieldMinPointZ.setText(String.valueOf(zMin));
+                jTextFieldMinPointZ.setCaretPosition(0);
+
+                jTextFieldMaxPointX.setText(String.valueOf(xMax));
+                jTextFieldMaxPointX.setCaretPosition(0);
+                jTextFieldMaxPointY.setText(String.valueOf(yMax));
+                jTextFieldMaxPointY.setCaretPosition(0);
+                jTextFieldMaxPointZ.setText(String.valueOf(zMax));
+                jTextFieldMaxPointZ.setCaretPosition(0);
+                
+                return null;
+            }
+        };
+        
+        sw.execute();
+        
+        
+    }//GEN-LAST:event_jButtonCalculateBoundingBoxActionPerformed
+
+    private void jButtonExportSelectionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonExportSelectionMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonExportSelectionMouseClicked
+
+    private void jButtonExportSelectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExportSelectionActionPerformed
+        
+        String filePath = jListOutputFiles.getSelectedValue().toString();
+        
+        if(jFileChooserSave2.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                                
+            final File outputFile = jFileChooserSave2.getSelectedFile();
+            
+            final VoxelSpace voxelSpace = new VoxelSpace(settings);
+            
+            voxelSpace.addVoxelSpaceListener(new VoxelSpaceAdapter() {
+
+                @Override
+                public void voxelSpaceCreationFinished() {
+                    DartWriter.writeFromVoxelSpace(voxelSpace.voxelSpaceFormat, outputFile);
+                }
+            });
+            
+            voxelSpace.loadFromFile(new File(filePath), Format.VOXELSPACE_FORMAT2);
+            
+        }
+        
+    }//GEN-LAST:event_jButtonExportSelectionActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -3814,12 +3975,14 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.ButtonGroup buttonGroup3DView;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAddFile;
+    private javax.swing.JButton jButtonCalculateBoundingBox;
     private javax.swing.JButton jButtonChooseDirectory;
     private javax.swing.JButton jButtonChooseOutputDirectoryTlsVox;
     private javax.swing.JButton jButtonChooseOutputDirectoryVox;
     private javax.swing.JButton jButtonCreateAttribut;
     private javax.swing.JButton jButtonExecuteVox;
     private javax.swing.JButton jButtonExecuteVox1;
+    private javax.swing.JButton jButtonExportSelection;
     private javax.swing.JButton jButtonGenerateMap;
     private javax.swing.JButton jButtonLoad;
     private javax.swing.JButton jButtonLoadSelectedFile;
@@ -3874,6 +4037,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JFileChooser jFileChooser9;
     private javax.swing.JFileChooser jFileChooserSave;
     private javax.swing.JFileChooser jFileChooserSave1;
+    private javax.swing.JFileChooser jFileChooserSave2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

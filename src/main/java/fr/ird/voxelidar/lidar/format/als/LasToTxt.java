@@ -4,6 +4,8 @@
  */
 package fr.ird.voxelidar.lidar.format.als;
 
+import fr.ird.voxelidar.math.matrix.Mat4D;
+import fr.ird.voxelidar.math.vector.Vec4D;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -86,7 +88,7 @@ public class LasToTxt {
         return scaleFormatS;
     }
     
-    public void writeTxt(final Las las, final String path, final String parameters, final boolean writeHeader){
+    public void writeTxt(final Mat4D mat, final Las las, final String path, final String parameters, final boolean writeHeader){
         
         SwingWorker sw = new SwingWorker() {
 
@@ -151,7 +153,7 @@ public class LasToTxt {
                         short isScanDirectionFlag = (short)(point.isScanDirectionFlag()? 1 : 0);
 
                         StringBuilder sb = new StringBuilder();
-
+                        
                         if(ArrayUtils.contains(params, 'x')){
                             sb.append(dfX.format((point.getX()*header.getxScaleFactor())+header.getxOffset())).append(" ");
                         }

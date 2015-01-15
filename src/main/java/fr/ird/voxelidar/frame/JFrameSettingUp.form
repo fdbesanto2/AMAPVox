@@ -82,6 +82,14 @@
         <Property name="fileSelectionMode" type="int" value="1"/>
       </Properties>
     </Component>
+    <Component class="javax.swing.JFileChooser" name="jFileChooserSave2">
+      <Properties>
+        <Property name="dialogType" type="int" value="1"/>
+        <Property name="currentDirectory" type="java.io.File" editor="org.netbeans.beaninfo.editors.FileEditor">
+          <SerializedValue value="-84,-19,0,5,115,114,0,12,106,97,118,97,46,105,111,46,70,105,108,101,4,45,-92,69,14,13,-28,-1,3,0,1,76,0,4,112,97,116,104,116,0,18,76,106,97,118,97,47,108,97,110,103,47,83,116,114,105,110,103,59,120,112,116,0,0,119,2,0,92,120"/>
+        </Property>
+      </Properties>
+    </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="jMenu1">
@@ -920,12 +928,15 @@
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                           <Group type="103" groupAlignment="1" attributes="0">
                                               <Component id="jButtonExecuteVox" min="-2" pref="92" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                                  <Component id="jPanel25" alignment="0" max="32767" attributes="0"/>
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="jPanel27" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jPanel26" min="-2" max="-2" attributes="0"/>
+                                              <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                                                  <Component id="jButtonCalculateBoundingBox" min="-2" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                                      <Component id="jPanel25" alignment="0" max="32767" attributes="0"/>
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <Component id="jPanel27" min="-2" max="-2" attributes="0"/>
+                                                          <EmptySpace max="-2" attributes="0"/>
+                                                          <Component id="jPanel26" min="-2" max="-2" attributes="0"/>
+                                                      </Group>
                                                   </Group>
                                               </Group>
                                           </Group>
@@ -955,7 +966,9 @@
                                               </Group>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jPanel25" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace pref="42" max="32767" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="jButtonCalculateBoundingBox" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
                                               <Component id="jButtonExecuteVox" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
@@ -1622,6 +1635,7 @@
                                   <SubComponents>
                                     <Component class="javax.swing.JTextField" name="jTextFieldReferencePoint1X">
                                       <Properties>
+                                        <Property name="text" type="java.lang.String" value="0"/>
                                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                                           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                                             <TitledBorder title="X"/>
@@ -1631,6 +1645,7 @@
                                     </Component>
                                     <Component class="javax.swing.JTextField" name="jTextFieldReferencePoint1Y">
                                       <Properties>
+                                        <Property name="text" type="java.lang.String" value="0"/>
                                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                                           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                                             <TitledBorder title="Y"/>
@@ -1640,6 +1655,7 @@
                                     </Component>
                                     <Component class="javax.swing.JTextField" name="jTextFieldReferencePoint1Z">
                                       <Properties>
+                                        <Property name="text" type="java.lang.String" value="0"/>
                                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                                           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                                             <TitledBorder title="Z"/>
@@ -1684,6 +1700,7 @@
                                   <SubComponents>
                                     <Component class="javax.swing.JTextField" name="jTextFieldReferencePoint2X">
                                       <Properties>
+                                        <Property name="text" type="java.lang.String" value="0"/>
                                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                                           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                                             <TitledBorder title="X"/>
@@ -1693,6 +1710,7 @@
                                     </Component>
                                     <Component class="javax.swing.JTextField" name="jTextFieldReferencePoint2Y">
                                       <Properties>
+                                        <Property name="text" type="java.lang.String" value="0"/>
                                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                                           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                                             <TitledBorder title="Y"/>
@@ -1702,6 +1720,7 @@
                                     </Component>
                                     <Component class="javax.swing.JTextField" name="jTextFieldReferencePoint2Z">
                                       <Properties>
+                                        <Property name="text" type="java.lang.String" value="0"/>
                                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                                           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                                             <TitledBorder title="Z"/>
@@ -1722,6 +1741,14 @@
                                 </Component>
                               </SubComponents>
                             </Container>
+                            <Component class="javax.swing.JButton" name="jButtonCalculateBoundingBox">
+                              <Properties>
+                                <Property name="text" type="java.lang.String" value="Auto bounding box"/>
+                              </Properties>
+                              <Events>
+                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonCalculateBoundingBoxActionPerformed"/>
+                              </Events>
+                            </Component>
                           </SubComponents>
                         </Container>
                         <Container class="javax.swing.JPanel" name="jPanel31">
@@ -1744,7 +1771,7 @@
                             </DimensionLayout>
                             <DimensionLayout dim="1">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <EmptySpace min="0" pref="360" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="361" max="32767" attributes="0"/>
                                   <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                                       <Component id="jPanel6" alignment="0" pref="360" max="32767" attributes="0"/>
                                   </Group>
@@ -1860,7 +1887,7 @@
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="jPanel24" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace pref="86" max="32767" attributes="0"/>
+                                          <EmptySpace pref="84" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                 </DimensionLayout>
@@ -2797,14 +2824,13 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="jScrollPane2" pref="281" max="32767" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="jScrollPane2" pref="287" max="32767" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jButtonLoadSelectedFile" min="-2" pref="134" max="-2" attributes="0"/>
-                              <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                                  <Component id="jButtonAddFile" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButtonRemoveFile" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jButtonRemoveFile" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jButtonAddFile" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jButtonExportSelection" alignment="1" min="-2" pref="134" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -2813,15 +2839,15 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="jButtonAddFile" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jButtonRemoveFile" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jButtonLoadSelectedFile" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="18" max="32767" attributes="0"/>
+                          <EmptySpace pref="7" max="32767" attributes="0"/>
+                          <Component id="jButtonExportSelection" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="jScrollPane2" alignment="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -2872,11 +2898,20 @@
                 </Container>
                 <Component class="javax.swing.JButton" name="jButtonLoadSelectedFile">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Load selected file"/>
+                    <Property name="text" type="java.lang.String" value="Load selection"/>
                   </Properties>
                   <Events>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButtonLoadSelectedFileMouseClicked"/>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonLoadSelectedFileActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="jButtonExportSelection">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Export selection"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButtonExportSelectionMouseClicked"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonExportSelectionActionPerformed"/>
                   </Events>
                 </Component>
               </SubComponents>

@@ -11,6 +11,6 @@ package fr.ird.voxelidar.lidar.format.als;
  */
 public class PointDataRecordFormat1 extends PointDataRecordFormat0{
     
-    
+    public static final short LENGTH = 28;
     
 }

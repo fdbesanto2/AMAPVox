@@ -445,7 +445,7 @@ public class LasHeader {
      * 
      * @return The size, in bytes, of the Point Data Record. 
      */
-    public int getPointDataRecordLength() {
+    public short getPointDataRecordLength() {
         return pointDataRecordLength;
     }
 

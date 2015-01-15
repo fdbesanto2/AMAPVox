@@ -11,6 +11,8 @@ package fr.ird.voxelidar.lidar.format.als;
  */
 public class PointDataRecordFormat3 extends PointDataRecordFormat2{
     
+    public static final short LENGTH = 34;
+    
     private double gpsTime;
 
     public void setGpsTime(double gpsTime) {

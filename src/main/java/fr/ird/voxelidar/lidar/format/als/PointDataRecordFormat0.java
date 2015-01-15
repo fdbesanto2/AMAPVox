@@ -11,21 +11,61 @@ package fr.ird.voxelidar.lidar.format.als;
  */
 public class PointDataRecordFormat0 {
     
+    public static final short LENGTH = 20;
+            
     private int x;
     private int y;
     private int z;
     private int intensity;
+   
     
     private short returnNumber;
     private short numberOfReturns;
     private boolean scanDirectionFlag;
     private boolean edgeOfFlightLine;
-    private int classification;
+    private short classification;
     private int scanAngleRank;
     private int userData;
     private int pointSourceID;
     private double gpsTime;
+    private boolean synthetic;
+    private boolean keyPoint;
+    private boolean withheld;
+    
+    private byte[] extrabytes;
 
+    public byte[] getExtrabytes() {
+        return extrabytes;
+    }
+
+    public void setExtrabytes(byte[] extrabytes) {
+        this.extrabytes = extrabytes;
+    }
+
+    public boolean isSynthetic() {
+        return synthetic;
+    }
+
+    public void setSynthetic(boolean synthetic) {
+        this.synthetic = synthetic;
+    }
+
+    public boolean isKeyPoint() {
+        return keyPoint;
+    }
+
+    public void setKeyPoint(boolean keyPoint) {
+        this.keyPoint = keyPoint;
+    }
+
+    public boolean isWithheld() {
+        return withheld;
+    }
+
+    public void setWithheld(boolean withheld) {
+        this.withheld = withheld;
+    }
+    
     public void setGpsTime(double gpsTime) {
         this.gpsTime = gpsTime;
     }
@@ -66,8 +106,8 @@ public class PointDataRecordFormat0 {
         this.edgeOfFlightLine = edgeOfFlightLine;
     }
 
-    public void setClassification(int classification) {
-        this.classification = (int)classification;
+    public void setClassification(short classification) {
+        this.classification = classification;
     }
 
     public void setScanAngleRank(int scanAngleRank) {
@@ -82,7 +122,7 @@ public class PointDataRecordFormat0 {
         this.pointSourceID = pointSourceID;
     }
 
-    public int getClassification() {
+    public short getClassification() {
         return classification;
     }
 

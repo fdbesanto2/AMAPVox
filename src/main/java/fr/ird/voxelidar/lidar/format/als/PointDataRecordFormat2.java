@@ -11,6 +11,8 @@ package fr.ird.voxelidar.lidar.format.als;
  */
 public class PointDataRecordFormat2 extends PointDataRecordFormat0{
     
+    public static final short LENGTH = 26;
+    
     private int red;
     private int green;
     private int blue;

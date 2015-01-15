@@ -18,7 +18,7 @@ import fr.ird.voxelidar.graphics3d.object.scene.Scene;
 import fr.ird.voxelidar.graphics3d.object.scene.SceneObject;
 import fr.ird.voxelidar.graphics3d.object.terrain.Terrain;
 import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace;
-import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace.VoxelFormat;
+import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace.Format;
 import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpaceAdapter;
 import fr.ird.voxelidar.graphics3d.shader.Shader;
 import fr.ird.voxelidar.math.matrix.Mat4F;
@@ -334,7 +334,7 @@ public class JoglListener implements GLEventListener {
             });
             
             try{
-                voxelSpace.loadFromFile(settings.voxelSpaceFile, VoxelFormat.VOXELSPACE_FORMAT2, settings.mapAttributs);
+                voxelSpace.loadFromFile(settings.voxelSpaceFile, Format.VOXELSPACE_FORMAT2, settings.mapAttributs);
                 //voxelSpace.loadFromFile(settings.voxelSpaceFile, settings.mapAttributs, terrain, false);
             }catch(Exception e){
                 logger.error("cannot load voxel space from file", e);

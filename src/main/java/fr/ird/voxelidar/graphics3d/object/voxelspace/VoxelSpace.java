@@ -5,6 +5,8 @@
  */
 package fr.ird.voxelidar.graphics3d.object.voxelspace;
 
+import fr.ird.voxelidar.lidar.format.voxelspace.Voxel;
+import fr.ird.voxelidar.lidar.format.voxelspace.VoxelSpaceFormat;
 import com.jogamp.common.nio.Buffers;
 import fr.ird.voxelidar.graphics2d.image.ScaleGradient;
 import fr.ird.voxelidar.graphics3d.mesh.Attribut;
@@ -13,6 +15,7 @@ import fr.ird.voxelidar.graphics3d.mesh.Mesh;
 import fr.ird.voxelidar.graphics3d.mesh.MeshFactory;
 import fr.ird.voxelidar.graphics3d.shader.Shader;
 import fr.ird.voxelidar.io.file.FileManager;
+import fr.ird.voxelidar.lidar.format.dart.DartWriter;
 import fr.ird.voxelidar.math.point.Point2F;
 import fr.ird.voxelidar.math.vector.Vec3F;
 import fr.ird.voxelidar.util.ColorGradient;
@@ -51,16 +54,15 @@ public class VoxelSpace {
     public static final int VOXELSPACE_FORMAT1 = 1;
     public static final int VOXELSPACE_FORMAT2 = 2;
     
-    public enum VoxelFormat{
-        VOXELSPACE_FORMAT1(1), VOXELSPACE_FORMAT2(2);
+    public enum Format{
+        VOXELSPACE_FORMAT2(2);
         
         private final int format;
-        VoxelFormat(int format){
+        Format(int format){
             this.format = format;
         }
     }
     
-    private ArrayList<Voxel> voxelList;
     public Mesh cube;
     private float cubeSize;
     private Shader simpleShader;
@@ -105,7 +107,7 @@ public class VoxelSpace {
     
     private int readFileProgress; 
     
-    private VoxelSpaceFormat voxelSpaceFormat;
+    public VoxelSpaceFormat voxelSpaceFormat;
     
     private final EventListenerList listeners;
 
@@ -168,10 +170,6 @@ public class VoxelSpace {
         return centerZ;
     }
 
-    public ArrayList<Voxel> getVoxelList() {
-        return voxelList;
-    }
-
     public boolean isGradientUpdated() {
         return gradientUpdated;
     }
@@ -182,7 +180,7 @@ public class VoxelSpace {
     
     public VoxelSpace(Settings settings){
         
-        voxelList = new ArrayList<>();
+        voxelSpaceFormat = new VoxelSpaceFormat();
         listeners = new EventListenerList();
         fileLoaded = false;
         this.shaderId = 0;
@@ -190,7 +188,7 @@ public class VoxelSpace {
     
     public VoxelSpace(GL3 gl, int shaderId, Settings settings){
         
-        voxelList = new ArrayList<>();
+        voxelSpaceFormat = new VoxelSpaceFormat();
         listeners = new EventListenerList();
         fileLoaded = false;
         this.shaderId = shaderId;
@@ -213,141 +211,21 @@ public class VoxelSpace {
     
     private void setWidth(){
         
-        if(voxelList.size() > 0){
+        if(voxelSpaceFormat.voxels.size() > 0){
             
-            widthX = (voxelList.get(voxelList.size()-1).x) - (voxelList.get(0).x);
-            widthY = (voxelList.get(voxelList.size()-1).y) - (voxelList.get(0).y);
-            widthZ = (voxelList.get(voxelList.size()-1).z) - (voxelList.get(0).z);
+            widthX = (voxelSpaceFormat.voxels.get(voxelSpaceFormat.voxels.size()-1).x) - (voxelSpaceFormat.voxels.get(0).x);
+            widthY = (voxelSpaceFormat.voxels.get(voxelSpaceFormat.voxels.size()-1).y) - (voxelSpaceFormat.voxels.get(0).y);
+            widthZ = (voxelSpaceFormat.voxels.get(voxelSpaceFormat.voxels.size()-1).z) - (voxelSpaceFormat.voxels.get(0).z);
         }
     }
     
     private void setCenter(){
         
-        if(voxelList.size() > 0){
+        if(voxelSpaceFormat.voxels.size() > 0){
             
-            centerX = ((voxelList.get(voxelList.size()-1).x) - (voxelList.get(0).x))/2.0f;
-            centerY = ((voxelList.get(voxelList.size()-1).y) - (voxelList.get(0).y))/2.0f;
-            centerZ = ((voxelList.get(voxelList.size()-1).z) - (voxelList.get(0).z))/2.0f;
-        }
-    }
-    
-    
-    
-    private void readVoxelFormat1(File f){
-        
-        String header = FileManager.readHeader(f.getAbsolutePath());
-        
-        if(header.equals("VOXEL SPACE")){
-            
-            VoxelSpaceFormat1 voxelSpace = new VoxelSpaceFormat1();
-            
-            int count = FileManager.getLineNumber(file.getAbsolutePath());
-
-            /******read file*****/
-
-            BufferedReader reader;
-            try {
-                reader = new BufferedReader(new FileReader(file));
-                
-                //VOXEL SPACE
-                reader.readLine();
-                
-                Map<String, Point2F> minMax = new HashMap<>();
-                
-                //min corner
-                String minCornerLine = reader.readLine();
-                String[] minCornerLineSplit = minCornerLine.substring(minCornerLine.indexOf("(")+1, minCornerLine.indexOf(")")).split(",");
-                voxelSpace.xMinCorner = Double.valueOf(minCornerLineSplit[0].trim());
-                voxelSpace.yMinCorner = Double.valueOf(minCornerLineSplit[1].trim());
-                voxelSpace.zMinCorner = Double.valueOf(minCornerLineSplit[2].trim());
-                
-                //max corner
-                String maxCornerLine = reader.readLine();
-                String[] maxCornerLineSplit = maxCornerLine.substring(maxCornerLine.indexOf("(")+1, maxCornerLine.indexOf(")")).split(",");
-                voxelSpace.xMaxCorner = Double.valueOf(maxCornerLineSplit[0].trim());
-                voxelSpace.yMaxCorner = Double.valueOf(maxCornerLineSplit[1].trim());
-                voxelSpace.zMaxCorner = Double.valueOf(maxCornerLineSplit[2].trim());
-                
-                //splitting
-                String splittingLine = reader.readLine();
-                String[] splittingLineSplit = splittingLine.substring(splittingLine.indexOf("(")+1, splittingLine.indexOf(")")).split(",");
-                voxelSpace.xSplit = Integer.valueOf(splittingLineSplit[0].trim());
-                voxelSpace.ySplit = Integer.valueOf(splittingLineSplit[1].trim());
-                voxelSpace.zSplit = Integer.valueOf(splittingLineSplit[2].trim());
-                
-                
-                String[] columnsNames = reader.readLine().split("\t");
-                
-                for(int i=0;i<columnsNames.length;i++){
-                    columnsNames[i] = columnsNames[i].replaceAll(" ", "");
-                    columnsNames[i] = columnsNames[i].replaceAll("#", "");
-                }
-                
-                int lineNumber = 0;
-                String line;                
-                
-                //start reading voxels
-                while ((line = reader.readLine())!= null) {
-
-                    String[] voxel = line.split("\t");
-                    
-                    int indiceX = Integer.valueOf(voxel[0]);
-                    int indiceZ = Integer.valueOf(voxel[1]);
-                    int indiceY = Integer.valueOf(voxel[2]);
-
-                    Map<String,Float> mapAttributs = new HashMap<>();
-
-                    for (int i=0;i<voxel.length;i++) {
-                        
-                        float value = Float.valueOf(voxel[i]);
-                        
-                        mapAttributs.put(columnsNames[i], value);
-                        
-                        Point2F minMaxPoint;
-                        
-                        if((minMaxPoint = minMax.get(columnsNames[i]))!=null){
-                            
-                            float min = minMaxPoint.x;
-                            float max = minMaxPoint.y;
-                            
-                            if(value < min){
-                                min = value;
-                            }
-                            
-                            if(value > max){
-                                max = value;
-                            }
-                            
-                            minMaxPoint = new Point2F(min, max);
-                            minMax.put(columnsNames[i], minMaxPoint);
-                            
-                        }else{
-                            minMax.put(columnsNames[i], new Point2F(value, value));
-                        }
-                    }
-
-                    float posX = indiceX+startPointX-(resolution/2.0f);
-                    float posY = indiceY+startPointY-(resolution/2.0f);
-                    float posZ = indiceZ+startPointZ-(resolution/2.0f);
-
-                    voxelList.add(new Voxel(indiceX, indiceY, indiceZ, posX, posY, posZ, mapAttributs, 1.0f));
-
-
-                    lineNumber++;
-
-                    setReadFileProgress((lineNumber * 100) / count);
-                }
-                
-                voxelSpace.setMinMax(minMax);
-
-                reader.close();
-
-            } catch (FileNotFoundException ex) {
-                logger.error(null, ex);
-            } catch (IOException ex) {
-                logger.error(null, ex);
-            }
-            
+            centerX = ((voxelSpaceFormat.voxels.get(voxelSpaceFormat.voxels.size()-1).x) - (voxelSpaceFormat.voxels.get(0).x))/2.0f;
+            centerY = ((voxelSpaceFormat.voxels.get(voxelSpaceFormat.voxels.size()-1).y) - (voxelSpaceFormat.voxels.get(0).y))/2.0f;
+            centerZ = ((voxelSpaceFormat.voxels.get(voxelSpaceFormat.voxels.size()-1).z) - (voxelSpaceFormat.voxels.get(0).z))/2.0f;
         }
     }
     
@@ -357,7 +235,7 @@ public class VoxelSpace {
         
         if(header.split(" ").length == 10){
             
-            VoxelSpaceFormat2 voxelSpace = new VoxelSpaceFormat2();
+            voxelSpaceFormat = new VoxelSpaceFormat();
             
             int count = FileManager.getLineNumber(file.getAbsolutePath());
 
@@ -372,13 +250,13 @@ public class VoxelSpace {
                 String[] columnsNames = reader.readLine().split(" ");
                 
                 String[] infos = reader.readLine().split(" ");
-                voxelSpace.xNumberVox = Integer.valueOf(infos[0]);
-                this.nX = voxelSpace.xNumberVox;
-                voxelSpace.yNumberVox = Integer.valueOf(infos[1]);
-                this.nY = voxelSpace.yNumberVox;
-                voxelSpace.zNumberVox = Integer.valueOf(infos[2]);
-                this.nZ = voxelSpace.zNumberVox;
-                voxelSpace.resolution = Float.valueOf(infos[3]);
+                voxelSpaceFormat.xNumberVox = Integer.valueOf(infos[0]);
+                this.nX = voxelSpaceFormat.xNumberVox;
+                voxelSpaceFormat.yNumberVox = Integer.valueOf(infos[1]);
+                this.nY = voxelSpaceFormat.yNumberVox;
+                voxelSpaceFormat.zNumberVox = Integer.valueOf(infos[2]);
+                this.nZ = voxelSpaceFormat.zNumberVox;
+                voxelSpaceFormat.resolution = Float.valueOf(infos[3]);
                 
                 int lineNumber = 0;
                 String line;                
@@ -427,14 +305,14 @@ public class VoxelSpace {
                     float posY = indiceY+startPointY-(resolution/2.0f);
                     float posZ = indiceZ+startPointZ-(resolution/2.0f);
 
-                    voxelList.add(new Voxel(indiceX, indiceY, indiceZ, posX, posY, posZ, mapAttributs, 1.0f));
+                    voxelSpaceFormat.voxels.add(new Voxel(indiceX, indiceY, indiceZ, posX, posY, posZ, mapAttributs, 1.0f));
 
                     lineNumber++;
 
                     setReadFileProgress((lineNumber * 100) / count);
                 }
                 
-                voxelSpace.setMinMax(minMax);
+                voxelSpaceFormat.setMinMax(minMax);
                 
                 reader.close();
 
@@ -447,7 +325,7 @@ public class VoxelSpace {
         }
     }
     
-    public void loadFromFile(File f, final VoxelFormat format){
+    public void loadFromFile(File f, final Format format){
         
             
         setFileLoaded(false);
@@ -463,9 +341,6 @@ public class VoxelSpace {
             protected Object doInBackground() {
 
                 switch(format){
-                    case VOXELSPACE_FORMAT1:
-                        readVoxelFormat1(file);
-                        break;
                     case VOXELSPACE_FORMAT2:
                         readVoxelFormat2(file);
                         break;
@@ -491,10 +366,10 @@ public class VoxelSpace {
         
         this.updateValue= true;
         
-        float[] values = new float[voxelList.size()];
+        float[] values = new float[voxelSpaceFormat.voxels.size()];
         
         int count = 0;
-        for(Voxel voxel:voxelList){
+        for(Voxel voxel:voxelSpaceFormat.voxels){
                     
             float attributValue;
             
@@ -517,7 +392,7 @@ public class VoxelSpace {
             //voxel.color = getColorFromValue(attributValue);
 
             //initialize minimum and maximum attributs values
-            if(voxel ==  voxelList.get(0)){
+            if(voxel ==  voxelSpaceFormat.voxels.get(0)){
 
                 attributValueMax = attributValue;
                 attributValueMin = attributValue;
@@ -575,7 +450,7 @@ public class VoxelSpace {
     }
     
     
-    public void loadFromFile(File f, final VoxelFormat format, Map<String,Attribut> mapAttributs){
+    public void loadFromFile(File f, final Format format, Map<String,Attribut> mapAttributs){
         
         setFileLoaded(false);
         
@@ -593,9 +468,6 @@ public class VoxelSpace {
             protected Object doInBackground() {
                 
                 switch(format){
-                    case VOXELSPACE_FORMAT1:
-                        readVoxelFormat1(file);
-                        break;
                     case VOXELSPACE_FORMAT2:
                         readVoxelFormat2(file);
                         break;
@@ -914,7 +786,7 @@ public class VoxelSpace {
             }
         }
         //voxelList = ImageEqualisation.scaleHistogramm(voxelList);
-        //voxelList = ImageEqualisation.voxelSpaceEqualisation(voxelList);
+        //voxelList = ImageEqualisation.voxelSpaceFormatEqualisation(voxelList);
         
         
     }
@@ -927,7 +799,7 @@ public class VoxelSpace {
         ColorGradient color = new ColorGradient(valMin, valMax);
         color.setGradientColor(gradientColor);
 
-        for (Voxel voxel : voxelList) {
+        for (Voxel voxel : voxelSpaceFormat.voxels) {
             
             Color colorGenerated = color.getColor(voxel.attributValue);
             if (voxel.alpha == 0) {
@@ -937,7 +809,7 @@ public class VoxelSpace {
             }
         }
         //voxelList = ImageEqualisation.scaleHistogramm(voxelList);
-        //voxelList = ImageEqualisation.voxelSpaceEqualisation(voxelList);
+        //voxelList = ImageEqualisation.voxelSpaceFormatEqualisation(voxelList);
         
         
     }
@@ -965,19 +837,19 @@ public class VoxelSpace {
         cubeSize = 0.5f;
         cube = MeshFactory.createCube(cubeSize);
         
-        instancePositions = new float[voxelList.size()*3];
-        instanceColors = new float[voxelList.size()*4];
+        instancePositions = new float[voxelSpaceFormat.voxels.size()*3];
+        instanceColors = new float[voxelSpaceFormat.voxels.size()*4];
 
-        for (int i=0, j=0, k=0;i<voxelList.size();i++, j+=3 ,k+=4) {
+        for (int i=0, j=0, k=0;i<voxelSpaceFormat.voxels.size();i++, j+=3 ,k+=4) {
 
-            instancePositions[j] = voxelList.get(i).x;
-            instancePositions[j+1] = voxelList.get(i).y;
-            instancePositions[j+2] = voxelList.get(i).z;
+            instancePositions[j] = voxelSpaceFormat.voxels.get(i).x;
+            instancePositions[j+1] = voxelSpaceFormat.voxels.get(i).y;
+            instancePositions[j+2] = voxelSpaceFormat.voxels.get(i).z;
 
-            instanceColors[k] = voxelList.get(i).color.x;
-            instanceColors[k+1] = voxelList.get(i).color.y;
-            instanceColors[k+2] = voxelList.get(i).color.z;
-            instanceColors[k+3] = voxelList.get(i).alpha;
+            instanceColors[k] = voxelSpaceFormat.voxels.get(i).color.x;
+            instanceColors[k+1] = voxelSpaceFormat.voxels.get(i).color.y;
+            instanceColors[k+2] = voxelSpaceFormat.voxels.get(i).color.z;
+            instanceColors[k+3] = voxelSpaceFormat.voxels.get(i).alpha;
         }
         
         instancePositionsBuffer = Buffers.newDirectFloatBuffer(instancePositions);
@@ -1048,19 +920,19 @@ public class VoxelSpace {
 
         //draw voxels
         gl.glBindVertexArray(vaoId);
-            gl.glDrawElementsInstanced(GL3.GL_TRIANGLES, cube.vertexCount, GL3.GL_UNSIGNED_SHORT, 0, voxelList.size());
+            gl.glDrawElementsInstanced(GL3.GL_TRIANGLES, cube.vertexCount, GL3.GL_UNSIGNED_SHORT, 0, voxelSpaceFormat.voxels.size());
         gl.glBindVertexArray(0);
         
         if(!gradientUpdated){
             
-            instanceColors = new float[voxelList.size()*4];
+            instanceColors = new float[voxelSpaceFormat.voxels.size()*4];
 
-            for (int i=0, j=0;i<voxelList.size();i++, j+=4) {
+            for (int i=0, j=0;i<voxelSpaceFormat.voxels.size();i++, j+=4) {
 
-                instanceColors[j] = voxelList.get(i).color.x;
-                instanceColors[j+1] = voxelList.get(i).color.y;
-                instanceColors[j+2] = voxelList.get(i).color.z;
-                instanceColors[j+3] = voxelList.get(i).alpha;
+                instanceColors[j] = voxelSpaceFormat.voxels.get(i).color.x;
+                instanceColors[j+1] = voxelSpaceFormat.voxels.get(i).color.y;
+                instanceColors[j+2] = voxelSpaceFormat.voxels.get(i).color.z;
+                instanceColors[j+3] = voxelSpaceFormat.voxels.get(i).alpha;
             }
 
             instanceColorsBuffer = Buffers.newDirectFloatBuffer(instanceColors);

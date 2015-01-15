@@ -5,7 +5,7 @@
  */
 package fr.ird.voxelidar.graphics2d.image;
 
-import fr.ird.voxelidar.graphics3d.object.voxelspace.Voxel;
+import fr.ird.voxelidar.lidar.format.voxelspace.Voxel;
 import fr.ird.voxelidar.math.vector.Vec3F;
 import java.awt.Color;
 import java.awt.image.BufferedImage;

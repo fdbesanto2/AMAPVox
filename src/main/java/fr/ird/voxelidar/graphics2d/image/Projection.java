@@ -6,8 +6,9 @@
 package fr.ird.voxelidar.graphics2d.image;
 
 import fr.ird.voxelidar.graphics3d.object.terrain.Terrain;
-import fr.ird.voxelidar.graphics3d.object.voxelspace.Voxel;
+import fr.ird.voxelidar.lidar.format.voxelspace.Voxel;
 import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace;
+import fr.ird.voxelidar.lidar.format.voxelspace.VoxelSpaceFormat;
 import fr.ird.voxelidar.util.ColorGradient;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -26,7 +27,7 @@ public class Projection {
     
     final static Logger logger = Logger.getLogger(Projection.class);
     
-    private final VoxelSpace voxelSpace;
+    private final VoxelSpaceFormat voxelSpace;
     private final Terrain terrain;
     private float minValue;
     private float maxValue;
@@ -42,7 +43,7 @@ public class Projection {
         return maxValue;
     }
     
-    public Projection(VoxelSpace voxelSpace, Terrain terrain){
+    public Projection(VoxelSpaceFormat voxelSpace, Terrain terrain){
         
         this.voxelSpace = voxelSpace;
         this.terrain = terrain;
@@ -55,11 +56,9 @@ public class Projection {
         if(terrain != null){
             
             MultiKeyMap mapTerrainXY = terrain.getXYStructure();
-        
-            ArrayList<Voxel> voxelList = voxelSpace.getVoxelList();
-            
+                   
 
-            for(Voxel voxel : voxelList){
+            for(Voxel voxel : voxelSpace.voxels){
 
                 float value = 0;
                 switch(type){
@@ -98,10 +97,7 @@ public class Projection {
         
         }else{
         
-            ArrayList<Voxel> voxelList = voxelSpace.getVoxelList();
-            
-
-            for(Voxel voxel : voxelList){
+            for(Voxel voxel : voxelSpace.voxels){
 
                 float value = 0;
                 switch(type){
@@ -161,7 +157,7 @@ public class Projection {
         
         ColorGradient gradient = new ColorGradient(minValue, maxValue);
         gradient.setGradientColor(ColorGradient.GRADIENT_HEAT);
-        Color[][] texture = new Color[voxelSpace.nX][voxelSpace.nY];
+        Color[][] texture = new Color[voxelSpace.xNumberVox][voxelSpace.yNumberVox];
         
         it = map.mapIterator();
 
@@ -179,10 +175,10 @@ public class Projection {
         
         
         
-        BufferedImage bi = new BufferedImage(voxelSpace.nX, voxelSpace.nY, BufferedImage.TYPE_INT_RGB);
+        BufferedImage bi = new BufferedImage(voxelSpace.xNumberVox, voxelSpace.yNumberVox, BufferedImage.TYPE_INT_RGB);
         
-        for (int i = 0; i < voxelSpace.nX; i++) {
-            for (int j = 0; j < voxelSpace.nY; j++) {
+        for (int i = 0; i < voxelSpace.xNumberVox; i++) {
+            for (int j = 0; j < voxelSpace.yNumberVox; j++) {
 
                 bi.setRGB(i, j, texture[i][j].getRGB());
             }

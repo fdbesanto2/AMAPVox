@@ -598,7 +598,7 @@ public class LasReader {
         return header;
     }
     
-    private LasHeader readHeader(String path) {
+    public LasHeader readHeader(String path) {
 
         
         try (DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(path)))) {
@@ -708,7 +708,7 @@ public class LasReader {
         return variableLengthRecords;
     }
     
-    public static ArrayList<PointDataRecordFormat0> readPointDataRecords(String path, long start, long offset, long pointNumber, int pointFormatID) {
+    public static ArrayList<PointDataRecordFormat0> readPointDataRecords(String path, long start, short offset, long pointNumber, int pointFormatID) {
         
         ArrayList<PointDataRecordFormat0> pointDataRecords = new ArrayList<>();
         
@@ -778,9 +778,45 @@ public class LasReader {
                 }else{
                     pdr.setEdgeOfFlightLine(true);
                 }
-
-                int classification = dis.readUnsignedByte();                
+                
+                
+                b = dis.readByte(); 
+                
+                /*classification bits*/
+                bit0 = (b >> 0)&1;
+                bit1 = (b >> 1)&1;
+                bit2 = (b >> 2)&1;
+                bit3 = (b >> 3)&1;
+                bit4 = (b >> 4)&1;
+                
+                /*synthetic*/
+                bit5 = (b >> 5)&1;
+                
+                /*key-point*/
+                bit6 = (b >> 6)&1;
+                
+                /*Withheld*/
+                bit7 = (b >> 7)&1;
+                
+                short classification = (short)Integer.parseInt(
+                                        String.valueOf(bit4)+
+                                        String.valueOf(bit3)+
+                                        String.valueOf(bit2)+
+                                        String.valueOf(bit1)+
+                                        String.valueOf(bit0), 2);
+                
+                
                 pdr.setClassification(classification);
+                
+                
+                boolean synthetic = (bit5 != 0);
+                pdr.setSynthetic(synthetic);
+                
+                boolean keyPoint = (bit6 != 0);
+                pdr.setKeyPoint(keyPoint);
+                
+                boolean withheld = (bit7 != 0);
+                pdr.setWithheld(withheld);
 
                 int sar = dis.readByte();
                 pdr.setScanAngleRank(sar);
@@ -795,12 +831,18 @@ public class LasReader {
                 double gpsTime;
                 int red, green, blue;
                 
+                short length=0;
+                short difference =0;
+                
                 switch(pointFormatID){
                     
                     case 1:
                         gpsTime = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                                                dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
                         ((PointDataRecordFormat1)pdr).setGpsTime(gpsTime);
+                        
+                        length = PointDataRecordFormat1.LENGTH;
+                        
                         break;
                         
                     case 2:
@@ -810,6 +852,9 @@ public class LasReader {
                         ((PointDataRecordFormat2)pdr).setGreen(green);
                         blue = dis.readByte()+dis.readByte();
                         ((PointDataRecordFormat2)pdr).setBlue(blue);
+                        
+                        length = PointDataRecordFormat2.LENGTH;
+                        
                         break;
                     case 3:
                         gpsTime = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
@@ -821,7 +866,24 @@ public class LasReader {
                         ((PointDataRecordFormat3)pdr).setGreen(green);
                         blue = dis.readByte()+dis.readByte();
                         ((PointDataRecordFormat3)pdr).setBlue(blue);
+                        
+                        length = PointDataRecordFormat3.LENGTH;
+                        
                         break;
+                }
+                
+                difference = (short) (offset - length);
+                
+                if(difference != 0){
+                    
+                    byte[] bytes = new byte[difference];
+                    
+                    for(short j = 0;j<difference;j++){
+                        
+                        bytes[j] = dis.readByte();
+                    }
+                    
+                    pdr.setExtrabytes(bytes);
                 }
                 
                 
