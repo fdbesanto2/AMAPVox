@@ -37,6 +37,7 @@ import java.util.Map.Entry;
 import javax.media.opengl.GL3;
 import javax.swing.SwingWorker;
 import javax.swing.event.EventListenerList;
+import javax.vecmath.Point3i;
 import org.apache.log4j.Logger;
 
 /**
@@ -226,6 +227,117 @@ public class VoxelSpace {
             centerX = ((voxelSpaceFormat.voxels.get(voxelSpaceFormat.voxels.size()-1).x) - (voxelSpaceFormat.voxels.get(0).x))/2.0f;
             centerY = ((voxelSpaceFormat.voxels.get(voxelSpaceFormat.voxels.size()-1).y) - (voxelSpaceFormat.voxels.get(0).y))/2.0f;
             centerZ = ((voxelSpaceFormat.voxels.get(voxelSpaceFormat.voxels.size()-1).z) - (voxelSpaceFormat.voxels.get(0).z))/2.0f;
+        }
+    }
+    
+    private void readVoxelFormat1(File f){
+        
+        String header = FileManager.readHeader(f.getAbsolutePath());
+        
+        if(header.equals("VOXEL SPACE")){
+            
+            voxelSpaceFormat = new VoxelSpaceFormat();
+            
+            int count = FileManager.getLineNumber(file.getAbsolutePath());
+
+            /******read file*****/
+
+            BufferedReader reader;
+            try {
+                reader = new BufferedReader(new FileReader(file));
+                
+                Map<String, Point2F> minMax = new HashMap<>();
+                
+                //header
+                reader.readLine();
+                
+                
+                String[] minC = reader.readLine().split(" ");
+                Vec3F minCorner = new Vec3F(Float.valueOf(minC[1]), Float.valueOf(minC[2]),Float.valueOf(minC[3]));
+                
+                String[] maxC = reader.readLine().split(" ");
+                Vec3F maxCorner = new Vec3F(Float.valueOf(maxC[1]), Float.valueOf(maxC[2]),Float.valueOf(maxC[3]));
+                
+                String[] split = reader.readLine().split(" ");
+                
+                voxelSpaceFormat.xNumberVox = Integer.valueOf(split[1]);
+                this.nX = voxelSpaceFormat.xNumberVox;
+                voxelSpaceFormat.yNumberVox = Integer.valueOf(split[2]);
+                this.nY = voxelSpaceFormat.yNumberVox;
+                voxelSpaceFormat.zNumberVox = Integer.valueOf(split[3]);
+                this.nZ = voxelSpaceFormat.zNumberVox;
+                    
+                resolution = (maxCorner.x - minCorner.x) / nX;
+                
+                //offset
+                reader.readLine();
+                
+                String[] columnsNames = reader.readLine().split(" ");
+                
+                int lineNumber = 0;
+                String line;                
+                
+                //start reading voxels
+                while ((line = reader.readLine())!= null) {
+
+                    String[] voxel = line.split(" ");
+                    
+                    int indiceX = Integer.valueOf(voxel[0]);
+                    int indiceZ = Integer.valueOf(voxel[1]);
+                    int indiceY = Integer.valueOf(voxel[2]);
+
+                    Map<String,Float> mapAttributs = new HashMap<>();
+
+                    for (int i=0;i<voxel.length;i++) {
+                        
+                        float value = Float.valueOf(voxel[i]);
+                        
+                        mapAttributs.put(columnsNames[i], value);
+                        
+                        Point2F minMaxPoint;
+                        
+                        if((minMaxPoint = minMax.get(columnsNames[i]))!=null){
+                            
+                            float min = minMaxPoint.x;
+                            float max = minMaxPoint.y;
+                            
+                            if(value < min){
+                                min = value;
+                            }
+                            
+                            if(value > max){
+                                max = value;
+                            }
+                            
+                            minMaxPoint = new Point2F(min, max);
+                            minMax.put(columnsNames[i], minMaxPoint);
+                            
+                        }else{
+                            minMax.put(columnsNames[i], new Point2F(value, value));
+                        }
+                    }
+
+                    float posX = indiceX+startPointX-(resolution/2.0f);
+                    float posY = indiceY+startPointY-(resolution/2.0f);
+                    float posZ = indiceZ+startPointZ-(resolution/2.0f);
+
+                    voxelSpaceFormat.voxels.add(new Voxel(indiceX, indiceY, indiceZ, posX, posY, posZ, mapAttributs, 1.0f));
+
+                    lineNumber++;
+
+                    setReadFileProgress((lineNumber * 100) / count);
+                }
+                
+                voxelSpaceFormat.setMinMax(minMax);
+                
+                reader.close();
+
+            } catch (FileNotFoundException ex) {
+                logger.error(null, ex);
+            } catch (IOException ex) {
+                logger.error(null, ex);
+            }
+            
         }
     }
     
@@ -469,7 +581,7 @@ public class VoxelSpace {
                 
                 switch(format){
                     case VOXELSPACE_FORMAT2:
-                        readVoxelFormat2(file);
+                        readVoxelFormat1(file);
                         break;
                 }
                 

@@ -5,14 +5,17 @@
  */
 package fr.ird.voxelidar.voxelisation;
 
+import fr.ird.voxelidar.voxelisation.als.LasVoxelisation;
+import fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation;
+import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.Shot;
+import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelAnalysis;
+import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelParameters;
 import fr.ird.voxelidar.Constants;
 import fr.ird.voxelidar.lidar.format.als.Las;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.math.matrix.Mat4D;
 import fr.ird.voxelidar.math.vector.Vec2D;
 import fr.ird.voxelidar.math.vector.Vec3D;
-import fr.ird.voxelidar.voxelisation.als.PreprocessingLas;
-import fr.ird.voxelidar.voxelisation.tls.PreprocessingRxp;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,9 +23,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.logging.Level;
+import javax.vecmath.Point3f;
+import javax.vecmath.Point3i;
 import org.apache.log4j.Logger;
 
 /**
@@ -33,36 +37,27 @@ public class VoxelisationTool{
     
     final static Logger logger = Logger.getLogger(VoxelisationTool.class);
     
-    private VoxelisationParameters parameters;
+    private VoxelParameters parameters;
 
-    public File generateVoxelFromRxp(RxpScan rxp, File outputFile, Mat4D transfMatrix, VoxelisationParameters parameters) {
+    public File generateVoxelFromRxp(RxpScan rxp, File outputFile, Mat4D transfMatrix, VoxelParameters parameters) {
         
         this.parameters = parameters;
         
-        PreprocessingRxp preprocessRxp = new PreprocessingRxp(rxp, transfMatrix);
-        File preprocessedFile = preprocessRxp.preprocess();
+        RxpVoxelisation voxelisation = new RxpVoxelisation(rxp, outputFile, transfMatrix, parameters);
+        voxelisation.process();
         
-        Voxelisation voxelisation = new Voxelisation(preprocessedFile, outputFile);
-        
-        File outputFileGenerated = voxelisation.voxelise();
-        
-        return outputFileGenerated;
+        return null;
         
     }
     
-    public File generateVoxelFromLas(Las las, File trajectoryFile, File outputFile, Mat4D transfMatrix, VoxelisationParameters parameters) {
+    public File generateVoxelFromLas(Las las, File trajectoryFile, File outputFile, Mat4D transfMatrix, VoxelParameters parameters) {
         
         this.parameters = parameters;
         
-        PreprocessingLas preprocessLas = new PreprocessingLas(las, transfMatrix, trajectoryFile);
-        File preprocessedFile = preprocessLas.preprocess();
+        LasVoxelisation voxelisation = new LasVoxelisation(las, outputFile, transfMatrix, trajectoryFile, parameters);
+        voxelisation.process();
         
-        Voxelisation voxelisation = new Voxelisation(preprocessedFile, outputFile);
-        
-        //must be the same as outputFile
-        File outputFileGenerated = voxelisation.voxelise();
-        
-        return outputFileGenerated;
+        return null;
         
     }
     
@@ -174,11 +169,7 @@ public class VoxelisationTool{
             } catch (IOException ex) {
                 java.util.logging.Logger.getLogger(VoxelisationTool.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            
         }
-        
-        
         
         
         return output;
@@ -187,100 +178,125 @@ public class VoxelisationTool{
     private class Voxelisation{
         
         
-        private final File inputFile;
+        private File inputFile;
         private File outputFile;
+        private VoxelAnalysis voxelAnalysis;
         
         public Voxelisation(File inputFile, File outputFile){
             this.inputFile = inputFile;
             this.outputFile = outputFile;
         }
         
+        public Voxelisation(VoxelisationParameters parameters, File outputFile){
+            
+            voxelAnalysis = new VoxelAnalysis();
+            voxelAnalysis.init(new VoxelParameters(
+                    new Point3f((float)parameters.getLowerCornerX(), (float)parameters.getLowerCornerY(), (float)parameters.getLowerCornerZ()),
+                    new Point3f((float)parameters.getTopCornerX(), (float)parameters.getTopCornerY(), (float)parameters.getTopCornerZ()),
+                    new Point3i(parameters.getSplitX(), parameters.getSplitY(), parameters.getSplitZ())));
+            
+            this.outputFile = outputFile;
+        }
+        
+        //new version
+        public void voxelise2(Shot shot){
+            
+            
+            voxelAnalysis.voxelise(shot);
+            
+        }
         
         /**eloï version (take properties file)**/
-        public File voxelise(){
-            
-            /**generate parameters file (eloï program only)**/
-            
-            File propertiesFile = new File("properties.txt");
-            
-            try {
-                
-                BufferedWriter writer = new BufferedWriter(new FileWriter(propertiesFile));
-                
-                writer.write("zoneUtilisateurOuZoneScan:1"+"\n");
-                writer.write("dossierOutput:./"+"\n");
-                writer.write("methodePonderationEchos:1"+"\n");
-                
-                writer.write("typeExecution:5"+"\n"); //extraire densité fichier texte als
-                writer.write("fichierXYZ:"+inputFile.getAbsolutePath()+"\n");
-                
-                writer.write("pointMailleMin.x:"+parameters.getLowerCornerX()+"\n");
-                writer.write("pointMailleMin.y:"+parameters.getLowerCornerY()+"\n");
-                writer.write("pointMailleMin.z:"+parameters.getLowerCornerZ()+"\n");
-                
-                writer.write("pointMailleMax.x:"+parameters.getTopCornerX()+"\n");
-                writer.write("pointMailleMax.y:"+parameters.getTopCornerY()+"\n");
-                writer.write("pointMailleMax.z:"+parameters.getTopCornerZ()+"\n");
-                
-                writer.write("resolution:"+parameters.getResolution());
-                
-                writer.close();
-                
-            } catch (IOException ex) {
-                java.util.logging.Logger.getLogger(VoxelisationTool.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            String commande = Constants.PROGRAM_VOX_ELOI +" -i "+ propertiesFile.getAbsolutePath();
-        
-            Process p;
-            try {
-                p = Runtime.getRuntime().exec(commande);
-
-                p.waitFor();
-
-            } catch (IOException | InterruptedException ex) {
-                logger.error(null, ex);
-            }
-            
-            /*eloï program generate a directory named "densite" and 
-            the voxel file named "densite3D", so we just rename and 
-            move the file to the user choice directory
-            WARNING: the renameTo method only work if the destination 
-            file is into the same physical disk
-            */
-            File oldFile = new File("./densite/densite3D");
-            
-            try {
-                //add header
-                BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
-                writer.write("i j k lg_traversant lg_interception n_interceptes n_apres surface distance_scanner densite\n");
-                
-                BufferedReader reader = new BufferedReader(new FileReader(oldFile));
-                
-                String line;
-                while((line = reader.readLine()) != null){
-                    writer.write(line+"\n");
-                }
-                
-                writer.close();
-                reader.close();
-                
-                oldFile.delete();
-                
-            } catch (IOException ex) {
-                java.util.logging.Logger.getLogger(VoxelisationTool.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            //oldFile.renameTo(outputFile);
-            
-            return outputFile;
-        }
+//        
+//        public File voxelise(){
+//            
+//            
+//            /**generate parameters file (eloï program only)**/
+//            
+//            File propertiesFile = new File("properties.txt");
+//            
+//            try {
+//                
+//                BufferedWriter writer = new BufferedWriter(new FileWriter(propertiesFile));
+//                
+//                writer.write("zoneUtilisateurOuZoneScan:1"+"\n");
+//                writer.write("dossierOutput:./"+"\n");
+//                writer.write("methodePonderationEchos:1"+"\n");
+//                
+//                writer.write("typeExecution:5"+"\n"); //extraire densité fichier texte als
+//                writer.write("fichierXYZ:"+inputFile.getAbsolutePath()+"\n");
+//                
+//                writer.write("pointMailleMin.x:"+parameters.getLowerCornerX()+"\n");
+//                writer.write("pointMailleMin.y:"+parameters.getLowerCornerY()+"\n");
+//                writer.write("pointMailleMin.z:"+parameters.getLowerCornerZ()+"\n");
+//                
+//                writer.write("pointMailleMax.x:"+parameters.getTopCornerX()+"\n");
+//                writer.write("pointMailleMax.y:"+parameters.getTopCornerY()+"\n");
+//                writer.write("pointMailleMax.z:"+parameters.getTopCornerZ()+"\n");
+//                
+//                writer.write("resolution:"+parameters.getResolution());
+//                
+//                writer.close();
+//                
+//            } catch (IOException ex) {
+//                java.util.logging.Logger.getLogger(VoxelisationTool.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            
+//            String commande = Constants.PROGRAM_VOX_ELOI +" -i "+ propertiesFile.getAbsolutePath();
+//        
+//            Process p;
+//            try {
+//                p = Runtime.getRuntime().exec(commande);
+//
+//                p.waitFor();
+//
+//            } catch (IOException | InterruptedException ex) {
+//                logger.error(null, ex);
+//            }
+//            
+//            /*eloï program generate a directory named "densite" and 
+//            the voxel file named "densite3D", so we just rename and 
+//            move the file to the user choice directory
+//            WARNING: the renameTo method only work if the destination 
+//            file is into the same physical disk
+//            */
+//            File oldFile = new File("./densite/densite3D");
+//            
+//            try {
+//                //add header
+//                BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+//                writer.write("i j k lg_traversant lg_interception n_interceptes n_apres surface distance_scanner densite\n");
+//                
+//                BufferedReader reader = new BufferedReader(new FileReader(oldFile));
+//                
+//                String line;
+//                while((line = reader.readLine()) != null){
+//                    writer.write(line+"\n");
+//                }
+//                
+//                writer.close();
+//                reader.close();
+//                
+//                oldFile.delete();
+//                
+//            } catch (IOException ex) {
+//                java.util.logging.Logger.getLogger(VoxelisationTool.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            
+//            //oldFile.renameTo(outputFile);
+//            
+//            return outputFile;
+//        }
 
         
     }
     
     public static Mat4D getMatrixTransformation(Vec3D point1, Vec3D point2){
         
+        
+        if((point1.x == point2.x) && (point1.y == point2.y) && (point1.z == point2.z)){
+            return Mat4D.identity();
+        }
         Vec2D v = new Vec2D(point1.x - point2.x, point1.y - point2.y);
         double rho = (double) Math.atan(v.x / v.y);
 

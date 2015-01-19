@@ -6,6 +6,7 @@
 package fr.ird.voxelidar.frame;
 
 import com.jogamp.opengl.util.FPSAnimator;
+import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelParameters;
 import fr.ird.voxelidar.graphics2d.image.Projection;
 import fr.ird.voxelidar.graphics2d.image.ScaleGradient;
 import fr.ird.voxelidar.graphics3d.jogl.JoglListener;
@@ -85,6 +86,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.vecmath.Point3f;
+import javax.vecmath.Point3i;
 import org.apache.log4j.Logger;
 /**
  *
@@ -113,6 +116,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private Mat4D popMatrix;
     private Mat4D vopPopMatrix;
     private GLRenderFrame renderFrame;
+    private VoxelParameters voxelisationParameters;
 
     public GLRenderFrame getRenderFrame() {
         return renderFrame;
@@ -159,6 +163,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         
         mapAttributs = new LinkedHashMap<>();
         model = new DefaultListModel();
+        voxelisationParameters = new VoxelParameters();
         
         initComponents();
         
@@ -549,7 +554,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         
         if(jListOutputFiles.getModel().getSize()>0){
             
-            String[] parameters = VoxelSpaceFormat.readAttributs(new File(jListOutputFiles.getSelectedValue().toString()));
+            String[] parameters = VoxelSpaceFormat.readAttributs2(new File(jListOutputFiles.getSelectedValue().toString()));
             
             for(int i=0 ; i< parameters.length ;i++){
                     
@@ -691,6 +696,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         buttonGroup1 = new javax.swing.ButtonGroup();
         jFileChooser10 = new javax.swing.JFileChooser();
         jFileChooserSave2 = new javax.swing.JFileChooser();
+        jFileChooser11 = new javax.swing.JFileChooser();
         jSplitPane1 = new javax.swing.JSplitPane();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelOutputParametersTab = new javax.swing.JPanel();
@@ -730,8 +736,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jLabelPath10 = new javax.swing.JLabel();
         jTextFieldFileOutputPathTlsVox = new javax.swing.JTextField();
         jButtonChooseOutputDirectoryTlsVox = new javax.swing.JButton();
-        jButtonExecuteVox1 = new javax.swing.JButton();
+        jButtonExecuteVoxTls = new javax.swing.JButton();
         jCheckBoxMergeOutputFiles = new javax.swing.JCheckBox();
+        jTextFieldOutputMergedFile = new javax.swing.JTextField();
         jTabbedPane3 = new javax.swing.JTabbedPane();
         jPanel33 = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
@@ -754,20 +761,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jTextFieldFilePathSaveVox = new javax.swing.JTextField();
         jTextFieldFileNameSaveVox = new javax.swing.JTextField();
         jButtonChooseOutputDirectoryVox = new javax.swing.JButton();
-        jPanel25 = new javax.swing.JPanel();
-        jTextFieldVoxelNumberX = new javax.swing.JTextField();
-        jTextFieldVoxelNumberY = new javax.swing.JTextField();
-        jTextFieldVoxelNumberZ = new javax.swing.JTextField();
-        jTextFieldVoxelNumberRes = new javax.swing.JTextField();
-        jPanel26 = new javax.swing.JPanel();
-        jTextFieldMaxPointX = new javax.swing.JTextField();
-        jTextFieldMaxPointY = new javax.swing.JTextField();
-        jTextFieldMaxPointZ = new javax.swing.JTextField();
-        jPanel27 = new javax.swing.JPanel();
-        jTextFieldMinPointX = new javax.swing.JTextField();
-        jTextFieldMinPointY = new javax.swing.JTextField();
-        jTextFieldMinPointZ = new javax.swing.JTextField();
-        jButtonExecuteVox = new javax.swing.JButton();
+        jButtonExecuteVoxAls = new javax.swing.JButton();
         jPanel28 = new javax.swing.JPanel();
         jPanel29 = new javax.swing.JPanel();
         jTextFieldReferencePoint1X = new javax.swing.JTextField();
@@ -778,6 +772,23 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jTextFieldReferencePoint2Y = new javax.swing.JTextField();
         jTextFieldReferencePoint2Z = new javax.swing.JTextField();
         jButtonPopMatrix1 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jComboBoxWeighting = new javax.swing.JComboBox();
+        jButtonOpenWeightingFile = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel26 = new javax.swing.JPanel();
+        jTextFieldMaxPointX = new javax.swing.JTextField();
+        jTextFieldMaxPointY = new javax.swing.JTextField();
+        jTextFieldMaxPointZ = new javax.swing.JTextField();
+        jPanel27 = new javax.swing.JPanel();
+        jTextFieldMinPointX = new javax.swing.JTextField();
+        jTextFieldMinPointY = new javax.swing.JTextField();
+        jTextFieldMinPointZ = new javax.swing.JTextField();
+        jPanel25 = new javax.swing.JPanel();
+        jTextFieldVoxelNumberX = new javax.swing.JTextField();
+        jTextFieldVoxelNumberY = new javax.swing.JTextField();
+        jTextFieldVoxelNumberZ = new javax.swing.JTextField();
+        jTextFieldVoxelNumberRes = new javax.swing.JTextField();
         jButtonCalculateBoundingBox = new javax.swing.JButton();
         jPanel31 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
@@ -908,6 +919,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         jFileChooserSave2.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
         jFileChooserSave2.setCurrentDirectory(new java.io.File("C:\\Program Files\\NetBeans 8.0.1"));
+
+        jFileChooser11.setCurrentDirectory(null);
+        jFileChooser11.setDialogTitle("");
+        jFileChooser11.setFileFilter(null);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(560, 450));
@@ -1242,10 +1257,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addContainerGap())
         );
 
-        jButtonExecuteVox1.setText("Execute");
-        jButtonExecuteVox1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonExecuteVoxTls.setText("Execute");
+        jButtonExecuteVoxTls.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonExecuteVox1ActionPerformed(evt);
+                jButtonExecuteVoxTlsActionPerformed(evt);
             }
         });
 
@@ -1258,14 +1273,18 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             .addGroup(jPanel36Layout.createSequentialGroup()
                 .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel36Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jRadioButtonLightFile)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jRadioButtonComplexFile)
                         .addGap(32, 32, 32)
-                        .addComponent(jCheckBoxMergeOutputFiles))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel36Layout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addComponent(jTextFieldOutputMergedFile))
+                            .addComponent(jCheckBoxMergeOutputFiles))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -1282,7 +1301,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jPanel41, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jButtonExecuteVox1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonExecuteVoxTls, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21))
         );
         jPanel36Layout.setVerticalGroup(
@@ -1310,7 +1329,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonExecuteVox1))
+                        .addComponent(jButtonExecuteVoxTls))
                     .addGroup(jPanel36Layout.createSequentialGroup()
                         .addComponent(jPanel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1319,7 +1338,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jRadioButtonLightFile)
                             .addComponent(jRadioButtonComplexFile)
-                            .addComponent(jCheckBoxMergeOutputFiles))))
+                            .addComponent(jCheckBoxMergeOutputFiles))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldOutputMergedFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1383,7 +1404,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             .addGroup(jPanel16Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonOpenInputFileVoxelisation)
+                    .addGroup(jPanel16Layout.createSequentialGroup()
+                        .addComponent(jButtonOpenInputFileVoxelisation)
+                        .addGap(34, 34, 34))
                     .addGroup(jPanel16Layout.createSequentialGroup()
                         .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelName3)
@@ -1391,10 +1414,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                             .addComponent(jLabelSize1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldFileNameInputVox, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)
                             .addComponent(jTextFieldFilePathInputVox, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                            .addComponent(jLabelFileSizeInputVox, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE))))
-                .addGap(34, 34, 34))
+                            .addComponent(jLabelFileSizeInputVox, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                            .addComponent(jTextFieldFileNameInputVox, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)))))
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1452,16 +1474,17 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             .addGroup(jPanel18Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonOpenTrajectoryFile)
+                    .addGroup(jPanel18Layout.createSequentialGroup()
+                        .addComponent(jButtonOpenTrajectoryFile)
+                        .addGap(34, 34, 34))
                     .addGroup(jPanel18Layout.createSequentialGroup()
                         .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelName5)
                             .addComponent(jLabelPath5))
                         .addGap(40, 40, 40)
                         .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldFileNameTrajVox, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)
-                            .addComponent(jTextFieldFilePathTrajVox, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))))
-                .addGap(34, 34, 34))
+                            .addComponent(jTextFieldFilePathTrajVox, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(jTextFieldFileNameTrajVox, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)))))
         );
         jPanel18Layout.setVerticalGroup(
             jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1515,16 +1538,17 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             .addGroup(jPanel17Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonChooseOutputDirectoryVox)
+                    .addGroup(jPanel17Layout.createSequentialGroup()
+                        .addComponent(jButtonChooseOutputDirectoryVox)
+                        .addGap(37, 37, 37))
                     .addGroup(jPanel17Layout.createSequentialGroup()
                         .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabelName4)
                             .addComponent(jLabelPath4))
                         .addGap(39, 39, 39)
                         .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldFileNameSaveVox, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)
-                            .addComponent(jTextFieldFilePathSaveVox, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))))
-                .addGap(37, 37, 37))
+                            .addComponent(jTextFieldFilePathSaveVox, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(jTextFieldFileNameSaveVox, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)))))
         );
         jPanel17Layout.setVerticalGroup(
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1541,58 +1565,148 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addContainerGap())
         );
 
-        jPanel25.setBorder(javax.swing.BorderFactory.createTitledBorder("Voxel Number"));
-        jPanel25.setToolTipText("");
-
-        jTextFieldVoxelNumberX.setText("20");
-        jTextFieldVoxelNumberX.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
-        jTextFieldVoxelNumberX.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextFieldVoxelNumberXKeyTyped(evt);
+        jButtonExecuteVoxAls.setText("Execute");
+        jButtonExecuteVoxAls.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExecuteVoxAlsActionPerformed(evt);
             }
         });
 
-        jTextFieldVoxelNumberY.setText("100");
-        jTextFieldVoxelNumberY.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
-        jTextFieldVoxelNumberY.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextFieldVoxelNumberYKeyTyped(evt);
-            }
-        });
+        jPanel28.setBorder(javax.swing.BorderFactory.createTitledBorder("Reference points"));
 
-        jTextFieldVoxelNumberZ.setText("70");
-        jTextFieldVoxelNumberZ.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
-        jTextFieldVoxelNumberZ.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextFieldVoxelNumberZKeyTyped(evt);
-            }
-        });
+        jPanel29.setBorder(javax.swing.BorderFactory.createTitledBorder("Point 1"));
+        jPanel29.setToolTipText("");
 
-        jTextFieldVoxelNumberRes.setText("1");
-        jTextFieldVoxelNumberRes.setBorder(javax.swing.BorderFactory.createTitledBorder("Resolution"));
+        jTextFieldReferencePoint1X.setText("0");
+        jTextFieldReferencePoint1X.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
 
-        javax.swing.GroupLayout jPanel25Layout = new javax.swing.GroupLayout(jPanel25);
-        jPanel25.setLayout(jPanel25Layout);
-        jPanel25Layout.setHorizontalGroup(
-            jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel25Layout.createSequentialGroup()
-                .addComponent(jTextFieldVoxelNumberX, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jTextFieldReferencePoint1Y.setText("0");
+        jTextFieldReferencePoint1Y.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
+
+        jTextFieldReferencePoint1Z.setText("0");
+        jTextFieldReferencePoint1Z.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
+
+        javax.swing.GroupLayout jPanel29Layout = new javax.swing.GroupLayout(jPanel29);
+        jPanel29.setLayout(jPanel29Layout);
+        jPanel29Layout.setHorizontalGroup(
+            jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel29Layout.createSequentialGroup()
+                .addComponent(jTextFieldReferencePoint1X, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldVoxelNumberY, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldReferencePoint1Y, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldVoxelNumberZ, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextFieldVoxelNumberRes, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldReferencePoint1Z, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel29Layout.setVerticalGroup(
+            jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jTextFieldReferencePoint1X, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldReferencePoint1Y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldReferencePoint1Z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanel30.setBorder(javax.swing.BorderFactory.createTitledBorder("Point 2"));
+        jPanel30.setToolTipText("");
+
+        jTextFieldReferencePoint2X.setText("0");
+        jTextFieldReferencePoint2X.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
+
+        jTextFieldReferencePoint2Y.setText("0");
+        jTextFieldReferencePoint2Y.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
+
+        jTextFieldReferencePoint2Z.setText("0");
+        jTextFieldReferencePoint2Z.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
+
+        javax.swing.GroupLayout jPanel30Layout = new javax.swing.GroupLayout(jPanel30);
+        jPanel30.setLayout(jPanel30Layout);
+        jPanel30Layout.setHorizontalGroup(
+            jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel30Layout.createSequentialGroup()
+                .addComponent(jTextFieldReferencePoint2X, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldReferencePoint2Y, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldReferencePoint2Z, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel30Layout.setVerticalGroup(
+            jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jTextFieldReferencePoint2X, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldReferencePoint2Y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldReferencePoint2Z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jButtonPopMatrix1.setText("VOP matrix");
+        jButtonPopMatrix1.setToolTipText("Project orientation and position");
+        jButtonPopMatrix1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPopMatrix1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel28Layout = new javax.swing.GroupLayout(jPanel28);
+        jPanel28.setLayout(jPanel28Layout);
+        jPanel28Layout.setHorizontalGroup(
+            jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel28Layout.createSequentialGroup()
+                .addGroup(jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel30, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButtonPopMatrix1)
                 .addContainerGap())
         );
-        jPanel25Layout.setVerticalGroup(
-            jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jTextFieldVoxelNumberX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jTextFieldVoxelNumberY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jTextFieldVoxelNumberZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jTextFieldVoxelNumberRes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        jPanel28Layout.setVerticalGroup(
+            jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel28Layout.createSequentialGroup()
+                .addGroup(jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel28Layout.createSequentialGroup()
+                        .addComponent(jPanel29, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel30, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel28Layout.createSequentialGroup()
+                        .addGap(51, 51, 51)
+                        .addComponent(jButtonPopMatrix1)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Weighting"));
+
+        jComboBoxWeighting.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "No weighting", "From the echo number", "From a parameter file" }));
+        jComboBoxWeighting.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxWeightingItemStateChanged(evt);
+            }
+        });
+
+        jButtonOpenWeightingFile.setText("Open file");
+        jButtonOpenWeightingFile.setEnabled(false);
+        jButtonOpenWeightingFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOpenWeightingFileActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jComboBoxWeighting, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonOpenWeightingFile)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBoxWeighting, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonOpenWeightingFile))
+                .addGap(0, 2, Short.MAX_VALUE))
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Bounding box"));
 
         jPanel26.setBorder(javax.swing.BorderFactory.createTitledBorder("Max point"));
         jPanel26.setToolTipText("");
@@ -1686,142 +1800,114 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jTextFieldMinPointZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jButtonExecuteVox.setText("Execute");
-        jButtonExecuteVox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonExecuteVoxActionPerformed(evt);
+        jPanel25.setBorder(javax.swing.BorderFactory.createTitledBorder("Voxel Number"));
+        jPanel25.setToolTipText("");
+
+        jTextFieldVoxelNumberX.setText("20");
+        jTextFieldVoxelNumberX.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
+        jTextFieldVoxelNumberX.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldVoxelNumberXKeyTyped(evt);
             }
         });
 
-        jPanel28.setBorder(javax.swing.BorderFactory.createTitledBorder("Reference points"));
-
-        jPanel29.setBorder(javax.swing.BorderFactory.createTitledBorder("Point 1"));
-        jPanel29.setToolTipText("");
-
-        jTextFieldReferencePoint1X.setText("0");
-        jTextFieldReferencePoint1X.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
-
-        jTextFieldReferencePoint1Y.setText("0");
-        jTextFieldReferencePoint1Y.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
-
-        jTextFieldReferencePoint1Z.setText("0");
-        jTextFieldReferencePoint1Z.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
-
-        javax.swing.GroupLayout jPanel29Layout = new javax.swing.GroupLayout(jPanel29);
-        jPanel29.setLayout(jPanel29Layout);
-        jPanel29Layout.setHorizontalGroup(
-            jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel29Layout.createSequentialGroup()
-                .addComponent(jTextFieldReferencePoint1X, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldReferencePoint1Y, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldReferencePoint1Z, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanel29Layout.setVerticalGroup(
-            jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jTextFieldReferencePoint1X, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jTextFieldReferencePoint1Y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jTextFieldReferencePoint1Z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        jPanel30.setBorder(javax.swing.BorderFactory.createTitledBorder("Point 2"));
-        jPanel30.setToolTipText("");
-
-        jTextFieldReferencePoint2X.setText("0");
-        jTextFieldReferencePoint2X.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
-
-        jTextFieldReferencePoint2Y.setText("0");
-        jTextFieldReferencePoint2Y.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
-
-        jTextFieldReferencePoint2Z.setText("0");
-        jTextFieldReferencePoint2Z.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
-
-        javax.swing.GroupLayout jPanel30Layout = new javax.swing.GroupLayout(jPanel30);
-        jPanel30.setLayout(jPanel30Layout);
-        jPanel30Layout.setHorizontalGroup(
-            jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel30Layout.createSequentialGroup()
-                .addComponent(jTextFieldReferencePoint2X, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldReferencePoint2Y, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldReferencePoint2Z, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel30Layout.setVerticalGroup(
-            jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel30Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jTextFieldReferencePoint2X, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jTextFieldReferencePoint2Y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jTextFieldReferencePoint2Z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        jButtonPopMatrix1.setText("VOP matrix");
-        jButtonPopMatrix1.setToolTipText("Project orientation and position");
-        jButtonPopMatrix1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonPopMatrix1ActionPerformed(evt);
+        jTextFieldVoxelNumberY.setText("100");
+        jTextFieldVoxelNumberY.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
+        jTextFieldVoxelNumberY.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldVoxelNumberYKeyTyped(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel28Layout = new javax.swing.GroupLayout(jPanel28);
-        jPanel28.setLayout(jPanel28Layout);
-        jPanel28Layout.setHorizontalGroup(
-            jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel28Layout.createSequentialGroup()
-                .addGroup(jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel30, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(37, 37, 37)
-                .addComponent(jButtonPopMatrix1)
-                .addGap(29, 29, 29))
+        jTextFieldVoxelNumberZ.setText("70");
+        jTextFieldVoxelNumberZ.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
+        jTextFieldVoxelNumberZ.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextFieldVoxelNumberZKeyTyped(evt);
+            }
+        });
+
+        jTextFieldVoxelNumberRes.setText("1");
+        jTextFieldVoxelNumberRes.setBorder(javax.swing.BorderFactory.createTitledBorder("Resolution"));
+
+        javax.swing.GroupLayout jPanel25Layout = new javax.swing.GroupLayout(jPanel25);
+        jPanel25.setLayout(jPanel25Layout);
+        jPanel25Layout.setHorizontalGroup(
+            jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel25Layout.createSequentialGroup()
+                .addComponent(jTextFieldVoxelNumberX, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldVoxelNumberY, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldVoxelNumberZ, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldVoxelNumberRes))
         );
-        jPanel28Layout.setVerticalGroup(
-            jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel28Layout.createSequentialGroup()
-                .addGroup(jPanel28Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel28Layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addComponent(jButtonPopMatrix1))
-                    .addGroup(jPanel28Layout.createSequentialGroup()
-                        .addComponent(jPanel29, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel30, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        jPanel25Layout.setVerticalGroup(
+            jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jTextFieldVoxelNumberX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldVoxelNumberY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldVoxelNumberZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldVoxelNumberRes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jButtonCalculateBoundingBox.setText("Auto bounding box");
+        jButtonCalculateBoundingBox.setText("Automatic");
         jButtonCalculateBoundingBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCalculateBoundingBoxActionPerformed(evt);
             }
         });
 
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jPanel27, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jPanel25, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonCalculateBoundingBox)
+                        .addGap(3, 3, 3)))
+                .addGap(72, 72, 72))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel27, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButtonCalculateBoundingBox)
+                        .addContainerGap())))
+        );
+
         javax.swing.GroupLayout jPanel33Layout = new javax.swing.GroupLayout(jPanel33);
         jPanel33.setLayout(jPanel33Layout);
         jPanel33Layout.setHorizontalGroup(
             jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel33Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel33Layout.createSequentialGroup()
                 .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jButtonExecuteVox, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButtonCalculateBoundingBox)
-                            .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jPanel25, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel33Layout.createSequentialGroup()
-                                    .addComponent(jPanel27, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(39, 39, 39)
+                .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel33Layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonExecuteVoxAls, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(67, 67, 67))
+                .addContainerGap())
         );
         jPanel33Layout.setVerticalGroup(
             jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1832,19 +1918,16 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, 98, Short.MAX_VALUE))
+                        .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel33Layout.createSequentialGroup()
                         .addComponent(jPanel28, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
-                        .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonCalculateBoundingBox)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonExecuteVox)))
+                        .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonExecuteVoxAls))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -2248,7 +2331,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     .addComponent(jCheckBoxWriteV))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(84, Short.MAX_VALUE))
+                .addContainerGap(102, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel31Layout = new javax.swing.GroupLayout(jPanel31);
@@ -2261,9 +2344,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         );
         jPanel31Layout.setVerticalGroup(
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 361, Short.MAX_VALUE)
+            .addGap(0, 376, Short.MAX_VALUE)
             .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("LAS => TXT", jPanel31);
@@ -3296,52 +3379,39 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
     }//GEN-LAST:event_jButtonPopMatrix1ActionPerformed
 
-    private void jButtonExecuteVoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExecuteVoxActionPerformed
+    private void jButtonExecuteVoxAlsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExecuteVoxAlsActionPerformed
 
-        final Mat4D mat4x4 = new Mat4D();
-        /*
-        mat4x4.mat = new double[]{
-
-            Double.valueOf(jTextFieldMat11.getText()),
-            Double.valueOf(jTextFieldMat12.getText()),
-            Double.valueOf(jTextFieldMat13.getText()),
-            Double.valueOf(jTextFieldMat14.getText()),
-            Double.valueOf(jTextFieldMat21.getText()),
-            Double.valueOf(jTextFieldMat22.getText()),
-            Double.valueOf(jTextFieldMat23.getText()),
-            Double.valueOf(jTextFieldMat24.getText()),
-            Double.valueOf(jTextFieldMat31.getText()),
-            Double.valueOf(jTextFieldMat32.getText()),
-            Double.valueOf(jTextFieldMat33.getText()),
-            Double.valueOf(jTextFieldMat34.getText()),
-            Double.valueOf(jTextFieldMat41.getText()),
-            Double.valueOf(jTextFieldMat42.getText()),
-            Double.valueOf(jTextFieldMat43.getText()),
-            Double.valueOf(jTextFieldMat44.getText())
-        };
-        */
-
-        Mat4D vopMatrix = getVopMatrix();
+        
+        vopMatrix = getVopMatrix();
 
         final String inputVoxPath = jTextFieldFilePathInputVox.getText();
         final File trajectoryFile = new File(jTextFieldFilePathTrajVox.getText());
 
         File inputFile = new File(jTextFieldFilePathInputVox.getText());
         String extension = FileManager.getExtension(inputFile);
-
-        VoxelisationParameters parameters = new VoxelisationParameters(
-            Double.valueOf(jTextFieldMinPointX.getText()),
-            Double.valueOf(jTextFieldMinPointY.getText()),
-            Double.valueOf(jTextFieldMinPointZ.getText()),
-            Double.valueOf(jTextFieldMaxPointX.getText()),
-            Double.valueOf(jTextFieldMaxPointY.getText()),
-            Double.valueOf(jTextFieldMaxPointZ.getText()),
-            Integer.valueOf(jTextFieldVoxelNumberX.getText()),
-            Integer.valueOf(jTextFieldVoxelNumberY.getText()),
-            Integer.valueOf(jTextFieldVoxelNumberZ.getText()),
-            Float.valueOf(jTextFieldVoxelNumberRes1.getText()));
-
-        File outputFile = new File(jTextFieldFilePathSaveVox.getText());
+        
+        voxelisationParameters.setBottomCorner(new Point3f(
+                            Float.valueOf(jTextFieldMinPointX.getText()), 
+                            Float.valueOf(jTextFieldMinPointY.getText()), 
+                            Float.valueOf(jTextFieldMinPointZ.getText())));
+        
+        voxelisationParameters.setTopCorner(new Point3f(
+                            Float.valueOf(jTextFieldMaxPointX.getText()), 
+                            Float.valueOf(jTextFieldMaxPointY.getText()), 
+                            Float.valueOf(jTextFieldMaxPointZ.getText())));
+        
+        voxelisationParameters.setSplit(new Point3i(
+                            Integer.valueOf(jTextFieldVoxelNumberX.getText()), 
+                            Integer.valueOf(jTextFieldVoxelNumberY.getText()), 
+                            Integer.valueOf(jTextFieldVoxelNumberZ.getText())));
+        
+        voxelisationParameters.setResolution(Float.valueOf(jTextFieldVoxelNumberRes.getText()));
+        voxelisationParameters.setWeighting(jComboBoxWeighting.getSelectedIndex());
+        
+        final VoxelParameters parameters = voxelisationParameters;
+        
+        
+        final File outputFile = new File(jTextFieldFilePathSaveVox.getText());
 
         final JProgressLoadingFile progressBar = new JProgressLoadingFile(this);
         progressBar.setVisible(true);
@@ -3356,88 +3426,39 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             break;
 
             case ".las":
+            
+                SwingWorker sw = new SwingWorker() {
 
-            //generate shoot file
-            //call voxelisation program
-            VoxelisationTool voxTool = new VoxelisationTool();
-            voxTool.generateVoxelFromLas(LasReader.read(inputVoxPath), trajectoryFile, outputFile, vopMatrix, parameters);
+                @Override
+                protected Void doInBackground() throws Exception {
+
+                    VoxelisationTool voxTool = new VoxelisationTool();
+                    voxTool.generateVoxelFromLas(LasReader.read(inputVoxPath), trajectoryFile, outputFile, vopMatrix, parameters);
+            
+                    return null;
+                }
+
+                @Override
+                protected void done(){
+                    
+                    progressBar.dispose();
+
+                    model.addElement(outputFile.getAbsolutePath());
+
+                    jListOutputFiles.setModel(model);
+                    jListOutputFiles.setSelectedIndex(0);
+                }
+            };
+
+            sw.execute();
+            
             break;
 
             case ".txt":
-
-            //?? is it a text shoot file or a text .las file??
-
-            //if shoot file
-            //call voxelisation program
-
-            //if text .las file
-            //generate shoot file
-            //call voxelisation program
         }
 
-        //final VoxelPreprocessing preprocessVox = new VoxelPreprocessing();
-
-        /*
-        preprocessVox.addVoxelPreprocessingListener(new VoxelPreprocessingAdapter() {
-
-            @Override
-            public void alsPreprocessingStepProgress(String progress, int ratio){
-                progressBar.jLabelProgressStatus.setText(progress);
-                progressBar.jProgressBar1.setValue(ratio);
-            }
-
-            @Override
-            public void alsPreprocessingFinished(){
-                progressBar.dispose();
-
-                int result = JOptionPane.showConfirmDialog(parent, "Do you want to add the voxel file to the voxel filel list?");
-                if(result == JOptionPane.OK_OPTION){
-                    model.addElement("C:/mon_fichier_voxel.vox");
-                    jListOutputFiles.setSelectedValue("C:/mon_fichier_voxel.vox", true);
-                }
-            }
-        });
-        */
-        /*
-        Vec3F bottomCorner = new Vec3F(Float.valueOf(jTextFieldMinPointX.getText()), Float.valueOf(jTextFieldMinPointY.getText()), Float.valueOf(jTextFieldMinPointZ.getText()));
-        Vec3F topCorner = new Vec3F(Float.valueOf(jTextFieldMaxPointX.getText()), Float.valueOf(jTextFieldMaxPointY.getText()), Float.valueOf(jTextFieldMaxPointZ.getText()));
-        int numberX = Integer.valueOf(jTextFieldVoxelNumberX.getText());
-        int numberY = Integer.valueOf(jTextFieldVoxelNumberY.getText());
-        int numberZ = Integer.valueOf(jTextFieldVoxelNumberZ.getText());
-
-        Voxelisation vox = new Voxelisation();
-
-        vox.addVoxelisationListener(new VoxelisationAdapter() {
-
-            @Override
-            public void voxelisationStepProgress(String progress, int ratio){
-                progressBar.setText(progress);
-                progressBar.jProgressBar1.setValue(ratio);
-            }
-
-            @Override
-            public void voxelisationFinished(){
-                progressBar.dispose();
-
-                int result = JOptionPane.showConfirmDialog(parent, "Do you want to add the voxel file to the voxel filel list?");
-                if(result == JOptionPane.OK_OPTION){
-                    model.addElement("C:/mon_fichier_voxel.vox");
-                    jListOutputFiles.setSelectedValue("C:/mon_fichier_voxel.vox", true);
-                }
-            }
-        });
-
-        vox.voxelise(mat4x4, inputVoxPath, inputTrajectoryPath, bottomCorner, topCorner, numberX, numberY, numberZ);
-        */
-        /*
-        als.generateEchosFile("C:\\Users\\Julien\\Desktop\\Test Als preprocess\\CoordonnéesP15.csv",
-            "C:\\Users\\Julien\\Desktop\\Test Als preprocess\\ALSbuf_xyzirncapt.txt",
-            "C:\\Users\\Julien\\Desktop\\Test Als preprocess\\sbet_250913_01.txt");
-
-        */
-        //als.generateEchosFile(jTextFieldVaryingFilePathCoordVox.getText(),
-            //jTextFieldVaryingFilePathInputVox.getText(), jTextFieldVaryingFilePathTrajVox.getText());
-    }//GEN-LAST:event_jButtonExecuteVoxActionPerformed
+        
+    }//GEN-LAST:event_jButtonExecuteVoxAlsActionPerformed
 
     private void jTextFieldMinPointZKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMinPointZKeyTyped
         // TODO add your handling code here:
@@ -3546,7 +3567,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldFilePathInputVoxActionPerformed
 
-    private void jButtonExecuteVox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExecuteVox1ActionPerformed
+    private void jButtonExecuteVoxTlsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExecuteVoxTlsActionPerformed
 
         /*
         VoxelPreprocessingRxp preprocessRxp =
@@ -3593,18 +3614,26 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         progressBar.setVisible(true);
 
         final ArrayList<File> filesList = new ArrayList<>();
-
-        final VoxelisationParameters parameters = new VoxelisationParameters(
-            Double.valueOf(jTextFieldMinPointX2.getText()),
-            Double.valueOf(jTextFieldMinPointY2.getText()),
-            Double.valueOf(jTextFieldMinPointZ2.getText()),
-            Double.valueOf(jTextFieldMaxPointX2.getText()),
-            Double.valueOf(jTextFieldMaxPointY2.getText()),
-            Double.valueOf(jTextFieldMaxPointZ2.getText()),
-            Integer.valueOf(jTextFieldVoxelNumberX1.getText()),
-            Integer.valueOf(jTextFieldVoxelNumberY1.getText()),
-            Integer.valueOf(jTextFieldVoxelNumberZ1.getText()),
-            Float.valueOf(jTextFieldVoxelNumberRes1.getText()));
+        
+        voxelisationParameters.setBottomCorner(new Point3f(
+                            Float.valueOf(jTextFieldMinPointX2.getText()), 
+                            Float.valueOf(jTextFieldMinPointY2.getText()), 
+                            Float.valueOf(jTextFieldMinPointZ2.getText())));
+        
+        voxelisationParameters.setTopCorner(new Point3f(
+                            Float.valueOf(jTextFieldMaxPointX2.getText()), 
+                            Float.valueOf(jTextFieldMaxPointY2.getText()), 
+                            Float.valueOf(jTextFieldMaxPointZ2.getText())));
+        
+        voxelisationParameters.setSplit(new Point3i(
+                            Integer.valueOf(jTextFieldVoxelNumberX1.getText()), 
+                            Integer.valueOf(jTextFieldVoxelNumberY1.getText()), 
+                            Integer.valueOf(jTextFieldVoxelNumberZ1.getText())));
+        
+        voxelisationParameters.setResolution(Float.valueOf(jTextFieldVoxelNumberRes1.getText()));
+        voxelisationParameters.setWeighting(jComboBoxWeighting.getSelectedIndex());
+        
+        final VoxelParameters parameters = voxelisationParameters;
 
         final String outputPath = jTextFieldFileOutputPathTlsVox.getText();
         
@@ -3627,8 +3656,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         }
                         progressBar.setText("Voxelisation in progress, file "+compteur+"/"+scanList.size()+" : "+scan.getFile().getName());
                         File outputFile = new File(outputPath+"/"+scan.getFile().getName()+".vox");
-                        File f = voxTool.generateVoxelFromRxp(scan, outputFile, vopPopMatrix, parameters);
-                        filesList.add(f);
+                        voxTool.generateVoxelFromRxp(scan, outputFile, vopPopMatrix, parameters);
+                        filesList.add(outputFile);
 
                         compteur++;
 
@@ -3657,6 +3686,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 }
                 
                 jListOutputFiles.setModel(model);
+                jListOutputFiles.setSelectedIndex(0);
             }
         };
 
@@ -3673,7 +3703,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         }
         */
 
-    }//GEN-LAST:event_jButtonExecuteVox1ActionPerformed
+    }//GEN-LAST:event_jButtonExecuteVoxTlsActionPerformed
 
     private void jButtonChooseOutputDirectoryTlsVoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonChooseOutputDirectoryTlsVoxActionPerformed
 
@@ -3856,8 +3886,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
     private void jButtonCalculateBoundingBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalculateBoundingBoxActionPerformed
         
-        
-        SwingWorker sw = new SwingWorker() {
+        if(!jTextFieldFilePathInputVox.getText().equals( "")){
+            
+            SwingWorker sw = new SwingWorker() {
 
             @Override
             protected Object doInBackground() throws Exception {
@@ -3936,7 +3967,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         };
         
         sw.execute();
-        
+        }        
         
     }//GEN-LAST:event_jButtonCalculateBoundingBoxActionPerformed
 
@@ -3968,6 +3999,23 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         
     }//GEN-LAST:event_jButtonExportSelectionActionPerformed
 
+    private void jComboBoxWeightingItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxWeightingItemStateChanged
+        
+        if(jComboBoxWeighting.getSelectedIndex() == 2){
+            jButtonOpenWeightingFile.setEnabled(true);
+        }else{
+            jButtonOpenWeightingFile.setEnabled(false);
+        }
+    }//GEN-LAST:event_jComboBoxWeightingItemStateChanged
+
+    private void jButtonOpenWeightingFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenWeightingFileActionPerformed
+        
+        if (jFileChooser11.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            
+            this.voxelisationParameters.setWeightingFile(jFileChooser11.getSelectedFile());
+        }
+    }//GEN-LAST:event_jButtonOpenWeightingFileActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -3980,8 +4028,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JButton jButtonChooseOutputDirectoryTlsVox;
     private javax.swing.JButton jButtonChooseOutputDirectoryVox;
     private javax.swing.JButton jButtonCreateAttribut;
-    private javax.swing.JButton jButtonExecuteVox;
-    private javax.swing.JButton jButtonExecuteVox1;
+    private javax.swing.JButton jButtonExecuteVoxAls;
+    private javax.swing.JButton jButtonExecuteVoxTls;
     private javax.swing.JButton jButtonExportSelection;
     private javax.swing.JButton jButtonGenerateMap;
     private javax.swing.JButton jButtonLoad;
@@ -3992,6 +4040,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JButton jButtonOpenInputFileVoxelisation;
     private javax.swing.JButton jButtonOpenRspFile;
     private javax.swing.JButton jButtonOpenTrajectoryFile;
+    private javax.swing.JButton jButtonOpenWeightingFile;
     private javax.swing.JButton jButtonPopMatrix;
     private javax.swing.JButton jButtonPopMatrix1;
     private javax.swing.JButton jButtonRemoveFile;
@@ -4025,8 +4074,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JComboBox jComboBoxDefaultX;
     private javax.swing.JComboBox jComboBoxDefaultY;
     private javax.swing.JComboBox jComboBoxDefaultZ;
+    private javax.swing.JComboBox jComboBoxWeighting;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JFileChooser jFileChooser10;
+    private javax.swing.JFileChooser jFileChooser11;
     private javax.swing.JFileChooser jFileChooser2;
     private javax.swing.JFileChooser jFileChooser3;
     private javax.swing.JFileChooser jFileChooser4;
@@ -4072,6 +4123,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JMenuItem jMenuItemSave;
     private javax.swing.JMenuItem jMenuItemSaveAs;
     private javax.swing.JMenu jMenuSettings;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel13;
@@ -4081,6 +4133,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel24;
     private javax.swing.JPanel jPanel25;
     private javax.swing.JPanel jPanel26;
@@ -4146,6 +4199,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JTextField jTextFieldMinPointY2;
     private javax.swing.JTextField jTextFieldMinPointZ;
     private javax.swing.JTextField jTextFieldMinPointZ2;
+    private javax.swing.JTextField jTextFieldOutputMergedFile;
     private javax.swing.JTextField jTextFieldReferencePoint1X;
     private javax.swing.JTextField jTextFieldReferencePoint1Y;
     private javax.swing.JTextField jTextFieldReferencePoint1Z;

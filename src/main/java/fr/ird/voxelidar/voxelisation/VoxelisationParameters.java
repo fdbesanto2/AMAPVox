@@ -5,18 +5,28 @@
  */
 package fr.ird.voxelidar.voxelisation;
 
+import java.io.File;
+
 /**
  *
  * @author Julien
  */
 public class VoxelisationParameters {
     
+    
+    
     private double lowerCornerX, lowerCornerY, lowerCornerZ;
     private double topCornerX, topCornerY, topCornerZ;
     private int splitX, splitY, splitZ;
     private float resolution;
-
-    public VoxelisationParameters(double lowerCornerX, double lowerCornerY, double lowerCornerZ, double topCornerX, double topCornerY, double topCornerZ, int splitX, int splitY, int splitZ, float resolution) {
+    private int weighting;
+    private File weightingFile;
+    
+    public VoxelisationParameters(){
+        
+    }
+    
+    public VoxelisationParameters(double lowerCornerX, double lowerCornerY, double lowerCornerZ, double topCornerX, double topCornerY, double topCornerZ, int splitX, int splitY, int splitZ, float resolution, int weighting) {
         this.lowerCornerX = lowerCornerX;
         this.lowerCornerY = lowerCornerY;
         this.lowerCornerZ = lowerCornerZ;
@@ -27,7 +37,16 @@ public class VoxelisationParameters {
         this.splitY = splitY;
         this.splitZ = splitZ;
         this.resolution = resolution;
+        this.weighting = weighting;
     }
+
+    public File getWeightingFile() {
+        return weightingFile;
+    }
+
+    public void setWeightingFile(File weightingFile) {
+        this.weightingFile = weightingFile;
+    }    
 
     public float getResolution() {
         return resolution;
@@ -109,8 +128,13 @@ public class VoxelisationParameters {
     public void setSplitZ(int splitZ) {
         this.splitZ = splitZ;
     }
-    
-    
-    
+
+    public int getWeighting() {
+        return weighting;
+    }
+
+    public void setWeighting(int weighting) {
+        this.weighting = weighting;
+    }
     
 }

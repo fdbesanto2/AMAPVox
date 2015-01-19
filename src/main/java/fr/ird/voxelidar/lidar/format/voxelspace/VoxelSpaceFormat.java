@@ -7,9 +7,15 @@ package fr.ird.voxelidar.lidar.format.voxelspace;
 
 import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.math.point.Point2F;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -46,6 +52,30 @@ public class VoxelSpaceFormat {
         }
         
         return null;
+        
+    }
+    
+    public static String[] readAttributs2(File f){
+        
+        String[] header = null;
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(f));
+            reader.readLine();
+            reader.readLine();
+            reader.readLine();
+            reader.readLine();
+            reader.readLine();
+            header = reader.readLine().split(" ");
+            
+            
+            reader.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(VoxelSpaceFormat.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(VoxelSpaceFormat.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return header;
         
     }
 

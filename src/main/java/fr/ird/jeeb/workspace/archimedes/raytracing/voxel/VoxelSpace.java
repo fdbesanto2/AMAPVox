@@ -97,6 +97,7 @@ public class VoxelSpace {
 	}
 	
 	/**
+     * @param point
 	 * @return the x, y and z indices of the voxel including the point under the Point3i format
 	 * or null if the point is outside the voxel space except if the voxel space is toric.
 	 * In such case the returned index is modulo the number of splitting along each coordinate 
@@ -107,8 +108,9 @@ public class VoxelSpace {
 		Point3f pt =new Point3f (point);
 		pt.sub (boundingBox.getMin ());
 		
-		if ((pt.z < 0) || (pt.z >= boundingBoxSize.z))
-			return null;
+		if ((pt.z < 0) || (pt.z >= boundingBoxSize.z)){
+                    return null;
+                }
 
 		if (toric==false) {
 			if ((pt.x < 0) || (pt.x >= boundingBoxSize.x))	return null;

@@ -35,8 +35,7 @@ public class Test{
         
         VoxelAnalysis voxelAnalysis = new VoxelAnalysis();
         voxelAnalysis.init(
-                new VoxelParameters(new File("C:\\Users\\Julien\\Documents\\Jean process vox\\TLS_format_Fred.txt"),
-                    new Point3f(-10, -10, -2), new Point3f(10, 10, 6), new Point3i(20, 20, 8)));
+                new VoxelParameters(new Point3f(-10, -10, -2), new Point3f(10, 10, 6), new Point3i(20, 20, 8)));
         
         try {
             BufferedReader reader = new BufferedReader(new FileReader(new File("test_echos")));

@@ -19,6 +19,8 @@ public class VoxelAnalysis {
     private BoundingBox3f bbox = new BoundingBox3f();
     private Point3f origin = new Point3f();
     
+    float[][] weighting;
+    
     private VoxelParameters parameters;
 
     public class TLSVoxel {
@@ -27,7 +29,10 @@ public class VoxelAnalysis {
         float sampledVolume = 0;		// 
         float interceptions = 0;
         float hiddenVolume = 0;
+        float lgTraversant = 0;
+        float lgInterception = 0;
         float pathLength = 0;			// total path length of rays in voxel
+        float PAD = 0;
     }
     
     public VoxelAnalysis(){
@@ -37,7 +42,42 @@ public class VoxelAnalysis {
     public void init(VoxelParameters parameters){
         
         this.parameters = parameters;
+        
+        switch(parameters.getWeighting()){
+            
+            case VoxelParameters.WEIGHTING_ECHOS_NUMBER:
                 
+                weighting = new float[][]{{1.00f,0.00f,0.00f,0.00f,0.00f,0.00f,0.00f},
+                                        {0.62f,0.38f,0.00f,0.00f,0.00f,0.00f,0.00f},
+                                        {0.40f,0.35f,0.25f,0.00f,0.00f,0.00f,0.00f},
+                                        {0.28f,0.29f,0.24f,0.19f,0.00f,0.00f,0.00f},
+                                        {0.21f,0.24f,0.21f,0.19f,0.15f,0.00f,0.00f},
+                                        {0.16f,0.21f,0.19f,0.18f,0.14f,0.12f,0.00f},
+                                        {0.15f,0.17f,0.15f,0.16f,0.12f,0.19f,0.06f}};
+                
+                break;
+                
+            case VoxelParameters.WEIGHTING_NONE:
+                
+                weighting = new float[][]{{1.00f,1.00f,1.00f,1.00f,1.00f,1.00f,1.00f},
+                                        {1.00f,1.00f,1.00f,1.00f,1.00f,1.00f,1.00f},
+                                        {1.00f,1.00f,1.00f,1.00f,1.00f,1.00f,1.00f},
+                                        {1.00f,1.00f,1.00f,1.00f,1.00f,1.00f,1.00f},
+                                        {1.00f,1.00f,1.00f,1.00f,1.00f,1.00f,1.00f},
+                                        {1.00f,1.00f,1.00f,1.00f,1.00f,1.00f,1.00f},
+                                        {1.00f,1.00f,1.00f,1.00f,1.00f,1.00f,1.00f}};
+                
+                break;
+                
+            case VoxelParameters.WEIGHTING_FILE:
+                
+                //read file
+                File weightingFile = parameters.getWeightingFile();
+                
+                break;
+            
+        }
+        
         createVoxelSpace();
         
     }
@@ -47,6 +87,9 @@ public class VoxelAnalysis {
         shot.direction.normalize();
         origin = new Point3f(shot.origin);
         
+        if(parameters.getWeighting() == VoxelParameters.WEIGHTING_ECHOS_NUMBER){
+            
+        }
         
         if (shot.nbEchos == 0) {
             
@@ -76,7 +119,7 @@ public class VoxelAnalysis {
         }
     }
     
-    public void propagate(Point3f origin, Point3f shot) {
+    private void propagate(Point3f origin, Point3f shot) {
 
         LineElement lineElement = new LineSegment(origin, shot);
 
@@ -97,26 +140,72 @@ public class VoxelAnalysis {
             // voxel sampled without hit
             if (d2 < distanceToHit) {
                 
-                vox.pathLength += d2 - d1;
+                vox.lgTraversant += (d2 - d1);
+                vox.pathLength += (d2 - d1);
                 vox.nbSampling++;
                 
             }else if (d1>distanceToHit) {
-                
+                //no comprende
             }else {
+                
+                /*si plusieurs échos issus du même tir dans le voxel, 
+                on incrémente et le nombre de tirs entrants (nbsampling) 
+                et le nombre d'interception (interceptions) 
+                et la longueur parcourue(lgInterception)*/
                 
                 vox.nbSampling++;
                 vox.pathLength += distanceToHit - d1;
-                vox.interceptions += 1;
+                vox.interceptions ++;
+                
+                vox.lgInterception += distanceToHit - d1;
+                //vox.pathLength += distanceToHit - d1;
                 
                 Point3f echo = new Point3f(lineElement.getDirection());
                 echo.scale(distanceToHit);
+                       
             }
+            
+            
         }
+    }
+    
+    public void calculatePAD(float threshold){
+        
+        for (int x = 0; x < parameters.split.x; x++) {
+                for (int y = 0; y < parameters.split.y; y++) {
+                    for (int z = 0; z < parameters.split.z; z++) {
+                        
+                        TLSVoxel vox = voxels[x][y][z];
+                        
+                        float PAD;
+                        
+                        if(vox.nbSampling <= threshold){
+                            
+                            PAD = -1;
+                            
+                        }else if(vox.interceptions >= vox.nbSampling){
+                            
+                            PAD = 10;
+                            
+                        }else{
+                            PAD = (float) ((Math.log((vox.nbSampling - vox.interceptions)/vox.nbSampling))/(-0.5*vox.lgTraversant/(vox.nbSampling-vox.interceptions)));
+                            
+                            if(PAD > 10){
+                                PAD = 10;
+                            }
+                        }
+                        
+                        
+                        vox.PAD = PAD+0.0f;
+                    }
+                }
+        }
+        
     }
     
     private void createVoxelSpace() {
 
-        voxSpace = new VoxelSpace(new BoundingBox3f(parameters.bottomCorner, parameters.topCorner), parameters.split, 0);
+        voxSpace = new VoxelSpace(new BoundingBox3f(parameters.bottomCorner, parameters.topCorner), parameters.split, VoxelManagerSettings.NON_TORIC_FINITE_BOX_TOPOLOGY);
 
         // allocate voxels
         System.out.println("allocate!!!!!!!!");
@@ -157,7 +246,8 @@ public class VoxelAnalysis {
             Point3f offset = new Point3f();
             writer.write("#offset: "+offset.x+" "+offset.y+" "+offset.z+"\n");
             
-            writer.write("i j k shots path_length BFintercepted BFentering BSintercepted BSentering PAD"+"\n");
+            //writer.write("i j k shots path_length BFintercepted BFentering BSintercepted BSentering PAD"+"\n");
+            writer.write("i j k nbSampling interceptions path_length lgTraversant lgInterception PAD"+"\n");
             
             for (int x = 0; x < parameters.split.x; x++) {
                 for (int y = 0; y < parameters.split.y; y++) {
@@ -171,7 +261,9 @@ public class VoxelAnalysis {
                         float BSentering = 0.0f;
                         float PAD = 0.0f;
                         
-                        writer.write(x+" "+y+" "+z+" "+vox.nbSampling+" "+vox.pathLength+" "+BFIntercepted+" "+BFentering+" "+BSintercepted+" "+BSentering+" "+PAD+"\n");
+                        //writer.write(x+" "+y+" "+z+" "+vox.nbSampling+" "+vox.pathLength+" "+BFIntercepted+" "+BFentering+" "+BSintercepted+" "+BSentering+" "+PAD+"\n");
+                        writer.write(x+" "+y+" "+z+" "+vox.nbSampling+" "+vox.interceptions+" "+vox.pathLength+" "+vox.lgTraversant+" "+vox.lgInterception+" "+vox.PAD+"\n");
+                        
                     }
                 }
             }

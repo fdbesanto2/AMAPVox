@@ -32,7 +32,8 @@ import fr.ird.jeeb.workspace.archimedes.util.ArtLog;
  */
 public class VoxelManager {
 
-	private static final float 				BBOX_SCENE_MARGIN	= 0.01f;
+	//private static final float 				BBOX_SCENE_MARGIN	= 0.01f;
+        private static final float 				BBOX_SCENE_MARGIN	= 0.0f;
 
 	private VoxelSpace						voxelSpace;
 	private ArrayList<ArtNodeVoxelID>[][][]	artNodeIndexList;
