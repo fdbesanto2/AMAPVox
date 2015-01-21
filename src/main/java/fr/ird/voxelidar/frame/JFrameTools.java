@@ -33,6 +33,7 @@ public class JFrameTools extends javax.swing.JFrame {
     private ArrayList<String> gradientColorNames;
     private ArrayList<Color[]> gradientColors;
     private JFrameSettingUp jFrameSettingUp;
+    public boolean isFocused;
     
     /**
      * Creates new form JFrameTools
@@ -45,6 +46,7 @@ public class JFrameTools extends javax.swing.JFrame {
         this.jFrameSettingUp = jFrameSettingUp;
         this.joglContext = joglContext;
         
+        isFocused = false;
         temp = false;
         jComboBoxAttributeToVisualize.setModel(new DefaultComboBoxModel(joglContext.getSettings().mapAttributs.keySet().toArray()));
         jComboBoxAttributeToVisualize.setSelectedItem(joglContext.getSettings().attributeToVisualize);
@@ -91,6 +93,7 @@ public class JFrameTools extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
@@ -139,6 +142,15 @@ public class JFrameTools extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jPanel21 = new javax.swing.JPanel();
+        jButton4 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jButton7 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         jButtonCreateAttribut = new javax.swing.JButton();
         jPanel11 = new javax.swing.JPanel();
@@ -163,6 +175,14 @@ public class JFrameTools extends javax.swing.JFrame {
         setAlwaysOnTop(true);
         setResizable(false);
         setType(java.awt.Window.Type.UTILITY);
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+                formWindowGainedFocus(evt);
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+                formWindowLostFocus(evt);
+            }
+        });
 
         jPanelPerspective.setBorder(javax.swing.BorderFactory.createTitledBorder("Perspective"));
         jPanelPerspective.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -760,6 +780,76 @@ public class JFrameTools extends javax.swing.JFrame {
 
         jTabbedPane2.addTab("World", jPanel18);
 
+        jPanel21.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jButton4.setText("Front");
+        buttonGroup2.add(jButton4);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jPanel21.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, -1, -1));
+
+        jButton6.setText("Right");
+        buttonGroup2.add(jButton6);
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        jPanel21.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, -1, -1));
+
+        jButton8.setText("Top");
+        buttonGroup2.add(jButton8);
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+        jPanel21.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, -1, -1));
+
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/cube1.gif"))); // NOI18N
+        jPanel21.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
+
+        jButton7.setText("Left");
+        buttonGroup2.add(jButton7);
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+        jPanel21.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, -1, -1));
+
+        jButton9.setText("Bottom");
+        buttonGroup2.add(jButton9);
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+        jPanel21.add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 130, -1, -1));
+
+        jButton10.setText("Isometric");
+        buttonGroup2.add(jButton10);
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+        jPanel21.add(jButton10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, -1, -1));
+
+        jButton5.setText("Back");
+        buttonGroup2.add(jButton5);
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jPanel21.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, -1, -1));
+
+        jTabbedPane2.addTab("View", jPanel21);
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -829,7 +919,7 @@ public class JFrameTools extends javax.swing.JFrame {
                 .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonCreateAttribut)
-                .addContainerGap(379, Short.MAX_VALUE))
+                .addContainerGap(350, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Attributs", jPanel10);
@@ -1140,28 +1230,8 @@ public class JFrameTools extends javax.swing.JFrame {
             
             joglContext.getScene().getVoxelSpace().setAttributToVisualize(jComboBoxAttributeToVisualize.getSelectedItem().toString());
             
-            final JProgressLoadingFile progress = new JProgressLoadingFile(joglContext.parent);
-            progress.setVisible(true);
-
-            joglContext.getScene().getVoxelSpace().addVoxelSpaceListener(new VoxelSpaceAdapter() {
-
-                @Override
-                public void voxelSpaceCreationProgress(int progression){
-
-                    progress.jProgressBar1.setValue(progression);
-                }
-
-                @Override
-                public void voxelSpaceCreationFinished(){
-                    progress.dispose();
-                    BufferedImage image = joglContext.getScene().getVoxelSpace().createScaleImage(50, 200);
-                }
-            });
             
             joglContext.getScene().getVoxelSpace().updateValue(joglContext.getSettings().attribut);
-            joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
-            //joglContext.getScene().getVoxelSpace().loadFromFile(joglContext.getScene().getVoxelSpace().file, joglContext.getSettings().mapAttributs, joglContext.getTerrain(), true);
-            //joglContext.getScene().updateColorScale();
         }
         
     }//GEN-LAST:event_jComboBoxAttributeToVisualizeItemStateChanged
@@ -1190,9 +1260,7 @@ public class JFrameTools extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
-        joglContext.parent.animator.stop();
-        //jFrameSettingUp.getRenderFrame().setFullscreen(true);
-        joglContext.parent.animator.start();
+        
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -1203,15 +1271,61 @@ public class JFrameTools extends javax.swing.JFrame {
         joglContext.getScene().getVoxelSpace().updateCubeSize(null, voxelSize);
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
+        System.out.println("tools jframe lose focus");
+        isFocused = false;
+    }//GEN-LAST:event_formWindowLostFocus
+
+    private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
+        System.out.println("tools jframe gained focus");
+        isFocused = true;
+    }//GEN-LAST:event_formWindowGainedFocus
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        joglContext.getCamera().projectFront();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        joglContext.getCamera().projectBack();
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        joglContext.getCamera().projectRight();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        joglContext.getCamera().projectLeft();
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        joglContext.getCamera().projectBottom();
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        joglContext.getCamera().projectTop();
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        joglContext.getCamera().projectIsometric();;
+    }//GEN-LAST:event_jButton10ActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JButton jButtonCreateAttribut;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JCheckBox jCheckBox4;
@@ -1223,6 +1337,7 @@ public class JFrameTools extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     public javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -1235,6 +1350,7 @@ public class JFrameTools extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
+    private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel22;
     private javax.swing.JPanel jPanel23;
     private javax.swing.JPanel jPanel24;

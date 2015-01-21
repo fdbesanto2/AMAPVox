@@ -5,6 +5,7 @@
  */
 package fr.ird.voxelidar.frame;
 
+import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.event.WindowListener;
 import com.jogamp.newt.event.WindowUpdateEvent;
@@ -17,15 +18,15 @@ import javax.swing.JFrame;
  *
  * @author Julien
  */
-public class GLRenderWindowListener implements WindowListener {
+public class GLRenderWindowListener extends WindowAdapter{
 
-    private final JFrame toolsJFrame;
+    private final JFrameTools toolsJFrame;
     private final GLWindow caller;
     private final FPSAnimator animator;
     
     public boolean isToolBoxFocused;
     
-    public GLRenderWindowListener(GLWindow caller, JFrame toolsJFrame, FPSAnimator animator){
+    public GLRenderWindowListener(GLWindow caller, JFrameTools toolsJFrame, FPSAnimator animator){
         
         this.toolsJFrame = toolsJFrame;
         this.caller = caller;
@@ -38,8 +39,8 @@ public class GLRenderWindowListener implements WindowListener {
     public void windowResized(WindowEvent we) {
         
         //String name = Thread.currentThread().getName();
-        if(!animator.isPaused()){
-            animator.pause();
+        if(animator.isPaused()){
+            animator.resume();
         }
         
     }
@@ -48,19 +49,14 @@ public class GLRenderWindowListener implements WindowListener {
     public void windowMoved(WindowEvent we) {
         
         if(!animator.isPaused() || !animator.isStarted()){
-            animator.pause();
+            //animator.pause();
         }
         
         Point locationOnScreen = caller.getLocationOnScreen(null);
         toolsJFrame.setLocation(new java.awt.Point(locationOnScreen.getX()-275, locationOnScreen.getY()-20));
         
     }
-
-    @Override
-    public void windowDestroyNotify(WindowEvent we) {
-        
-    }
-
+    
     @Override
     public void windowDestroyed(WindowEvent we) {
         
@@ -73,11 +69,11 @@ public class GLRenderWindowListener implements WindowListener {
         
         System.out.println("glrenderwindow gained focus");
         
-        if(!isToolBoxFocused && animator.isPaused()){
+        if(!toolsJFrame.isFocused && animator.isPaused()){
             animator.resume();
         }
         
-        caller.requestFocus();
+        caller.requestFocus(false);
     }
 
     @Override
@@ -85,14 +81,8 @@ public class GLRenderWindowListener implements WindowListener {
         
         System.out.println("glrenderwindow losted focus");
         
-        if(!isToolBoxFocused){
+        if(!toolsJFrame.isFocused){
             animator.pause();
         }        
-    }
-
-    @Override
-    public void windowRepaint(WindowUpdateEvent wue) {
-        
-    }
-    
+    }    
 }

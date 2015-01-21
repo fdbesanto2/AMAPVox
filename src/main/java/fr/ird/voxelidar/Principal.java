@@ -2,6 +2,8 @@ package fr.ird.voxelidar;
 
 import fr.ird.voxelidar.frame.JFrameSettingUp;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import org.apache.log4j.Logger;
 
 
@@ -20,6 +22,8 @@ public class Principal {
     
     final static Logger logger = Logger.getLogger(Principal.class);
     
+    
+    
     public static void main(String args[]) throws IOException {
         //Las read = LasReader.read("F:\\Las files\\1.3\\LAS-1.3-waveform-terrapoint.las");
         //LasToTxt.writeTxt(read, "F:\\Las files\\1.1\\LAS-1.3-waveform-terrapoint.txt", "xyzirndeca");
@@ -32,7 +36,6 @@ public class Principal {
         //float det = Vec2.determinant(new Vec2(0.0f,0.0f), new Vec2(3.0f,6.0f));
         
         
-        
         JFrameSettingUp mainJFrame = new JFrameSettingUp();
         mainJFrame.setVisible(true);
         
@@ -40,4 +43,6 @@ public class Principal {
         
         
     }
+    
+    
 }

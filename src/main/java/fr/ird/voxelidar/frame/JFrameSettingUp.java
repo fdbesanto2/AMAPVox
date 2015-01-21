@@ -31,7 +31,7 @@ import fr.ird.voxelidar.lidar.format.tls.Rsp;
 import fr.ird.voxelidar.lidar.format.tls.Scans;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.listener.InputKeyListener;
-import fr.ird.voxelidar.listener.InputMouseListener;
+import fr.ird.voxelidar.listener.InputMouseAdapter;
 import fr.ird.voxelidar.math.matrix.Mat4D;
 import fr.ird.voxelidar.math.vector.Vec3D;
 import fr.ird.voxelidar.math.vector.Vec4D;
@@ -44,8 +44,11 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -78,6 +81,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
@@ -105,7 +109,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private static Set<String> setParameters = new HashSet<>();
     private ArrayList<Attribut> attributsList;
     private Map<String, Attribut> mapAttributs;
-    public FPSAnimator animator;
     private Terrain terrain;
     private boolean drawVoxelWhenValueIsNull;
     private Settings settings;
@@ -115,12 +118,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private Mat4D vopMatrix;
     private Mat4D popMatrix;
     private Mat4D vopPopMatrix;
-    private GLRenderFrame renderFrame;
     private VoxelParameters voxelisationParameters;
 
-    public GLRenderFrame getRenderFrame() {
-        return renderFrame;
-    }
     
     public JCheckBox getjCheckBoxDrawAxis() {
         return jCheckBoxDrawAxis;
@@ -351,11 +350,16 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         
     }
     
-    public Mat4D getVopMatrix(){
+    public Mat4D getVopMatrixALS(){
         
         Vec3D point1 = new Vec3D(Double.valueOf(jTextFieldReferencePoint1X.getText()), Double.valueOf(jTextFieldReferencePoint1Y.getText()), Double.valueOf(jTextFieldReferencePoint1Z.getText()));
         Vec3D point2 = new Vec3D(Double.valueOf(jTextFieldReferencePoint2X.getText()), Double.valueOf(jTextFieldReferencePoint2Y.getText()), Double.valueOf(jTextFieldReferencePoint2Z.getText()));
         return VoxelisationTool.getMatrixTransformation(point1, point2);
+    }
+    
+    public Mat4D getVopMatrixTLS(){
+        
+        return Mat4D.identity();
     }
     
     private void setDefaultAppeareance(){
@@ -387,10 +391,32 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     ((JTextField)compList.get(i)).setText(value);
 
                 }else if(compList.get(i) instanceof JRadioButton){
+                    
                     ((JRadioButton)compList.get(i)).setSelected(prefs.getBoolean(String.valueOf(i), true));
+                    
                 }else if(compList.get(i) instanceof JCheckBox){
+                    
                     ((JCheckBox)compList.get(i)).setSelected(prefs.getBoolean(String.valueOf(i)+"_selected", true));
                     ((JCheckBox)compList.get(i)).setEnabled(prefs.getBoolean(String.valueOf(i)+"_enabled", true));
+                    
+                }else if(compList.get(i) instanceof JComboBox){
+                    
+                    ((JComboBox)compList.get(i)).setSelectedIndex(prefs.getInt(String.valueOf(i), 0));
+                    
+                }else if(compList.get(i) instanceof JList){
+                    
+                    String allItems = prefs.get(String.valueOf(i), "");
+                    
+                    if(!allItems.equals("")){
+                        String[] items = allItems.split("\n");
+                        DefaultListModel model = new DefaultListModel();
+
+                        for(int j=0;j<items.length;j++){
+                            model.addElement(items[j]);
+                        }
+
+                        ((JList)compList.get(i)).setModel(model);
+                    }
                 }
             }
             
@@ -417,9 +443,12 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         Component[] comps = c.getComponents();
         List<Component> compList = new ArrayList<Component>();
         for (Component comp : comps) {
-          if(comp instanceof JRadioButton || comp instanceof JCheckBox || comp instanceof JTextField){
+          if(comp instanceof JRadioButton || comp instanceof JCheckBox || comp instanceof JTextField || comp instanceof JComboBox){
               compList.add(comp);
-          }else{
+          }else if(comp instanceof JList){
+            
+            compList.add(comp);
+        }else{
               
             if (comp instanceof Container) {
               compList.addAll(getAllComponents((Container) comp));
@@ -450,11 +479,28 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
                     String value = ((JTextField)compList.get(i)).getText();
                     prefs.put(String.valueOf(i), value);
+                    
                 }else if(compList.get(i) instanceof JRadioButton){
+                    
                     prefs.putBoolean(String.valueOf(i), ((JRadioButton)compList.get(i)).isSelected());
+                    
                 }else if(compList.get(i) instanceof JCheckBox){
+                    
                     prefs.putBoolean(String.valueOf(i)+"_enabled", ((JCheckBox)compList.get(i)).isEnabled());
                     prefs.putBoolean(String.valueOf(i)+"_selected", ((JCheckBox)compList.get(i)).isSelected());
+                    
+                }else if(compList.get(i) instanceof JComboBox){
+                    
+                    prefs.putInt(String.valueOf(i), ((JComboBox)compList.get(i)).getSelectedIndex());
+                    
+                }else if(compList.get(i) instanceof JList){
+                    ListModel model = ((JList)compList.get(i)).getModel();
+                    String allItems = "";
+                    for(int j=0;j<model.getSize();j++){
+                        allItems += (String)model.getElementAt(j)+"\n";
+                    }
+                    
+                    prefs.put(String.valueOf(i), allItems);
                 }
             }
 
@@ -2346,7 +2392,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 376, Short.MAX_VALUE)
             .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("LAS => TXT", jPanel31);
@@ -2646,7 +2692,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jSplitPane2.setContinuousLayout(true);
         jSplitPane2.setDoubleBuffered(true);
 
-        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Working files (*.vox, *.las, *.laz, *.txt)"));
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Voxel files"));
         jPanel8.setPreferredSize(new java.awt.Dimension(200, 138));
 
         jButtonAddFile.setText("Add");
@@ -3142,9 +3188,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         GLCapabilities caps = new GLCapabilities(glp);
         caps.setDoubleBuffered(true);
 
-        renderFrame = GLRenderFrame.create(caps, 640, 480);
+        GLRenderFrame renderFrame = GLRenderFrame.create(caps, 640, 480);
 
-        animator = new FPSAnimator(renderFrame, 60);
+        FPSAnimator animator = new FPSAnimator(renderFrame, 60);
         
         settings = new Settings(this);
 
@@ -3155,8 +3201,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         joglContext.attachEventListener(eventListener);
         
         renderFrame.addGLEventListener(joglContext);
-        renderFrame.addKeyListener(new InputKeyListener(eventListener));
-        renderFrame.addMouseListener(new InputMouseListener(eventListener, animator));
+        renderFrame.addKeyListener(new InputKeyListener(eventListener, animator));
+        renderFrame.addMouseListener(new InputMouseAdapter(eventListener, animator));
 
         //renderFrame.setPointerVisible(false);
 
@@ -3184,23 +3230,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         GLRenderWindowListener renderWindowListener = new GLRenderWindowListener(renderFrame, toolsJframe, animator);
         renderFrame.addWindowListener(renderWindowListener);
         
-        toolsJframe.addWindowListener(new ToolsJframeWindowListener(renderWindowListener));
-        /*
-        toolsJframe.addWindowFocusListener(new WindowFocusListener() {
-
-            @Override
-            public void windowGainedFocus(WindowEvent e) {
-                System.out.println("tools jframe gained focus");
-                renderWindowListener.isToolBoxFocused = true;
-            }
-
-            @Override
-            public void windowLostFocus(WindowEvent e) {
-                System.out.println("tools jframe losted focus");
-                renderWindowListener.isToolBoxFocused = false;
-            }
-        });
-        */
         toolsJframe.setVisible(true);
 
         animator.start();
@@ -3242,7 +3271,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             });
 
             progressBar.setVisible(true);
-            lasToTxt.writeTxt(getVopMatrix(), las, outputFilePath, arguments, jCheckBoxWriteHeader.isSelected());
+            lasToTxt.writeTxt(getVopMatrixALS(), las, outputFilePath, arguments, jCheckBoxWriteHeader.isSelected());
         }
     }//GEN-LAST:event_jButtonLoadActionPerformed
 
@@ -3367,7 +3396,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
     private void jButtonPopMatrix1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPopMatrix1ActionPerformed
 
-        final JFrameMatrix jFrameMatrix = new JFrameMatrix(getVopMatrix());
+        final JFrameMatrix jFrameMatrix = new JFrameMatrix(getVopMatrixALS());
         jFrameMatrix.setVisible(true);
 
         jFrameMatrix.addWindowListener(new WindowAdapter() {
@@ -3382,7 +3411,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private void jButtonExecuteVoxAlsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExecuteVoxAlsActionPerformed
 
         
-        vopMatrix = getVopMatrix();
+        vopMatrix = getVopMatrixALS();
 
         final String inputVoxPath = jTextFieldFilePathInputVox.getText();
         final File trajectoryFile = new File(jTextFieldFilePathTrajVox.getText());
@@ -3414,7 +3443,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         final File outputFile = new File(jTextFieldFilePathSaveVox.getText());
 
         final JProgressLoadingFile progressBar = new JProgressLoadingFile(this);
-        progressBar.setVisible(true);
+        
 
         final JFrameSettingUp parent = this;
 
@@ -3426,7 +3455,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             break;
 
             case ".las":
-            
+                
+                progressBar.setVisible(true);
+                
                 SwingWorker sw = new SwingWorker() {
 
                 @Override
@@ -3599,7 +3630,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
                 filteredRxpList = new ArrayList<>();
                 
-                vopPopMatrix = vopMatrix;
+                vopPopMatrix = getVopMatrixTLS();
 
                 break;
         }
@@ -3823,7 +3854,11 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     private void jButtonOpenRspFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenRspFileActionPerformed
-
+        
+        if(!jTextFieldFilePathRsp.getText().equals("")){
+            jFileChooser9.setCurrentDirectory(new File(jTextFieldFilePathRsp.getText()));
+        }
+        
         if (jFileChooser9.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 
             File file = jFileChooser9.getSelectedFile();
@@ -3901,7 +3936,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 double xMin=0, yMin=0, zMin=0;
                 double xMax=0, yMax=0, zMax=0;
 
-                Mat4D mat = getVopMatrix();
+                Mat4D mat = getVopMatrixALS();
 
                 for(PointDataRecordFormat0 point:pointDataRecords){
 

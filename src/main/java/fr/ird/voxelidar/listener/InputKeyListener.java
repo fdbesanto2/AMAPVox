@@ -7,6 +7,7 @@ package fr.ird.voxelidar.listener;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
+import com.jogamp.opengl.util.FPSAnimator;
 
 
 /**
@@ -16,15 +17,21 @@ import com.jogamp.newt.event.KeyListener;
 public class InputKeyListener implements KeyListener{
     
     private final EventManager listener;
+    private final FPSAnimator animator;
     
-    public InputKeyListener(EventManager listener){
+    public InputKeyListener(EventManager listener, FPSAnimator animator){
         
         this.listener = listener;
-         
+        this.animator = animator;
     }
     
     @Override
     public void keyPressed(KeyEvent ke) {
+        
+        if(animator.isPaused()){
+            animator.resume();
+            System.out.println("animator resumed");
+        }
         
         switch(ke.getKeyCode()){
             
@@ -54,7 +61,12 @@ public class InputKeyListener implements KeyListener{
         
         if(  ke.isAutoRepeat() ) {
             return;
-        }  
+        }
+        
+        if(!animator.isPaused()){
+            //animator.pause();
+            //System.out.println("animator paused");
+        }
         
         switch(ke.getKeyCode()){
             

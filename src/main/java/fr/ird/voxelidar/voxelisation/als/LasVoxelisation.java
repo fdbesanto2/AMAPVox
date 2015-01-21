@@ -36,6 +36,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.vecmath.Point3f;
@@ -65,7 +66,8 @@ public class LasVoxelisation extends Processing {
 
     @Override
     public File process() {
-
+        
+        
         ArrayList<LasPoint> lasPointList = readLas(las);
         ArrayList<LasMixTrajectory> ALL = transformPoints(popMatrix, lasPointList, trajectoryFile);
         
@@ -202,7 +204,7 @@ public class LasVoxelisation extends Processing {
     */
     private ArrayList<LasMixTrajectory> transformPoints(Mat4D transfMatrix, ArrayList<LasPoint> lasPointList, File trajectoryFile) {
 
-        Map<Double, Trajectory> trajectoryList = new HashMap<>();
+        Map<Double, Trajectory> trajectoryList = new TreeMap<>();
         ArrayList<LasMixTrajectory> ALL = new ArrayList<>();
 
         ArrayList<Double> X = new ArrayList<>();
@@ -226,6 +228,9 @@ public class LasVoxelisation extends Processing {
                 }
             }
         });
+        
+        double minTime = lasPointList.get(0).t;
+        double maxTime = lasPointList.get(lasPointList.size()-1).t;
 
         try {
 
@@ -241,9 +246,10 @@ public class LasVoxelisation extends Processing {
                 String[] lineSplit = line.split(",");
                 Trajectory traj = new Trajectory(Double.valueOf(lineSplit[0]), Double.valueOf(lineSplit[1]),
                         Double.valueOf(lineSplit[2]), Double.valueOf(lineSplit[3]));
-
-                trajectoryList.put(Double.valueOf(lineSplit[3]), traj);
-
+                
+                //if(traj.T >= minTime && traj.T <= maxTime){
+                    trajectoryList.put(Double.valueOf(lineSplit[3]), traj);
+                //}
             }
 
         } catch (FileNotFoundException ex) {
@@ -291,8 +297,8 @@ public class LasVoxelisation extends Processing {
         });
         ArrayList<Vec3D> trajectoryInterpolate = new ArrayList<>();
         
-        for (int i = 0; i < fusion.size(); i++) {
-            if (!fusion.get(i).isGpsTime) {
+        /*for (int i = 0; i < fusion.size(); i++) {
+            if (!fusion.get(i).isGpsTime) { //point lidar
                 for (int min = i - 1; min >= 0; min--) {
                     if (fusion.get(min).isGpsTime) {
 
@@ -316,8 +322,39 @@ public class LasVoxelisation extends Processing {
                     }
                 }
             }
+        }*/
+        ArrayList<Double> tgps = new ArrayList<>();
+        
+        for (Map.Entry<Double, Trajectory> entry : trajectoryList.entrySet()) {
+            tgps.add(entry.getKey());
         }
+        
+        Collections.sort(tgps);
+        
+        int index = 0;
+        
+        //vérifier que le nouvel algorithme de recherche de min et max 
+        //donne le même résulat que l'ancien
+        
+        for(int i=0;i<TLIDAR.size();i++){
+            double targetTime = TLIDAR.get(i).x;
 
+            index = searchNearestMax(targetTime, tgps, index);
+            double max = tgps.get(index);
+            double min = tgps.get(index-1);
+
+            double ratio = (TLIDAR.get(i).x - min) / (max - min);
+
+            //formule interpolation
+            double xValue = trajectoryList.get(min).x + ((trajectoryList.get(max).x - trajectoryList.get(min).x) * ratio);
+            double yValue = trajectoryList.get(min).y + ((trajectoryList.get(max).y - trajectoryList.get(min).y) * ratio);
+            double zValue = trajectoryList.get(min).z + ((trajectoryList.get(max).z - trajectoryList.get(min).z) * ratio);
+
+            trajectoryInterpolate.add(new Vec3D(xValue, yValue, zValue));
+            //System.out.println("test");
+            //double max = searchNearestMax(targetTime, tgps);
+        }
+        
         int compteur = 0;
         for (LasPoint lasPoint : lasPointList) {
 
@@ -389,6 +426,100 @@ public class LasVoxelisation extends Processing {
 
         return ALL;
     }
+    
+    private int searchNearestMax(double value, ArrayList<Double> list, int start){
+        
+        int result = 0;
+        /*
+        value = 10;
+        list = new ArrayList<>();
+        list.add(0.0);
+        list.add(9.0);
+        list.add(11.0);
+        list.add(14.0);
+        list.add(18.0);
+        list.add(32.0);
+        list.add(66.0);
+        list.add(98.0);
+        list.add(104.0);
+        
+        Collections.sort(list);
+        */
+        int index = list.size()/2;
+        
+        int indexMin = start;
+        int indexMax = list.size() - 1;
+        
+        boolean found = false;
+                
+        while(!found){
+            
+            if(list.get(index) < value){
+                
+                indexMin = index;
+                index = (indexMax + (index))/2;
+
+            }else if(list.get(index) > value){
+                
+                indexMax = index;
+                index = (indexMin + (index))/2;
+                
+            }else{
+                result = index;
+                found = true;
+            }
+            
+            if(indexMin == indexMax-1){
+                
+                result = index+1;
+                found = true;
+            }
+        }
+        
+        
+        
+        return result;
+    }
+    
+    private int searchNearestMin(double value, ArrayList<Double> list){
+        
+        int result = 0;
+        
+        int index = list.size()/2;
+        int indexMin = 0;
+        int indexMax = list.size() - 1;
+        
+        boolean found = false;
+                
+        while(!found){
+            
+            if(list.get(index) < value){
+                
+                indexMin = index;
+                index = (indexMax + (index))/2;
+
+            }else if(list.get(index) > value){
+                
+                indexMax = index;
+                index = (indexMin + (index))/2;
+                
+            }else{
+                result = index;
+                found = true;
+            }
+            
+            if(indexMin == indexMax-1){
+                
+                result = index;
+                found = true;
+            }
+        }
+        
+        return result;
+    }
+    
+    
+    
     
     public void voxelise(Map<String, Shoot> shoots){
         

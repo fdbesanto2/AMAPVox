@@ -5,15 +5,15 @@
  */
 package fr.ird.voxelidar.listener;
 
+import com.jogamp.newt.event.MouseAdapter;
 import com.jogamp.newt.event.MouseEvent;
-import com.jogamp.newt.event.MouseListener;
 import com.jogamp.opengl.util.FPSAnimator;
 
 /**
  *
  * @author Julien
  */
-public class InputMouseListener implements MouseListener{
+public class InputMouseAdapter extends MouseAdapter{
     
     private final EventManager listener;
     private final FPSAnimator animator;
@@ -21,7 +21,7 @@ public class InputMouseListener implements MouseListener{
     private int lastPositionX, lastPositionY;
     
     
-    public InputMouseListener(EventManager listener , FPSAnimator animator){
+    public InputMouseAdapter(EventManager listener , FPSAnimator animator){
         
         this.listener = listener;
         this.animator = animator;
@@ -32,6 +32,7 @@ public class InputMouseListener implements MouseListener{
         
         if(animator.isPaused()){
             animator.resume();
+            System.out.println("animator resumed");
         }
         
         if(me.getButton() == MouseEvent.BUTTON2){
@@ -46,17 +47,12 @@ public class InputMouseListener implements MouseListener{
     }
 
     @Override
-    public void mouseEntered(com.jogamp.newt.event.MouseEvent me) {
-        
-    }
-
-    @Override
-    public void mouseExited(com.jogamp.newt.event.MouseEvent me) {
-        
-    }
-
-    @Override
     public void mousePressed(com.jogamp.newt.event.MouseEvent me) {
+        
+        if(animator.isPaused()){
+            animator.resume();
+            System.out.println("animator resumed");
+        }
         
         if(me.getButton() == MouseEvent.BUTTON1){
             
@@ -66,6 +62,11 @@ public class InputMouseListener implements MouseListener{
 
     @Override
     public void mouseReleased(com.jogamp.newt.event.MouseEvent me) {
+        
+        if(!animator.isPaused()){
+            animator.pause();
+            System.out.println("animator paused");
+        }
         
         if(  me.isAutoRepeat() ) {
             return;
@@ -88,6 +89,11 @@ public class InputMouseListener implements MouseListener{
 
     @Override
     public void mouseDragged(com.jogamp.newt.event.MouseEvent me) {
+        
+        if(animator.isPaused()){
+            animator.resume();
+            System.out.println("animator resumed");
+        }
         
         switch(me.getButton()){
             
@@ -148,6 +154,11 @@ public class InputMouseListener implements MouseListener{
 
     @Override
     public void mouseWheelMoved(com.jogamp.newt.event.MouseEvent me) {
+        
+        if(animator.isPaused()){
+            animator.resume();
+            System.out.println("animator resumed");
+        }
         
         float[] rotation = me.getRotation();
         float verticalRotation = rotation[1];

@@ -595,13 +595,19 @@ public class VoxelManager {
 
 		Point3i intersectionPointVoxelIndices = voxelSpace.getVoxelIndices (intersectionPoint);
 		if (intersectionPointVoxelIndices==null) {
-			if (intersectionForDebug)
-				ArtLog.println ("The given line element does intersect the scene canvas "+intersectionPoint+", but unable to get its voxel indices");
-			else
-				ArtLog.println ("The given line element belongs the scene canvas "+intersectionPoint+", but unable to get its voxel indices");
-			ArtLog.println ("Voxel space informations are:");
-			ArtLog.println ("\tCorner Inf\t:\t" + voxelSpace.getBoundingBox ().getMin ());
-			ArtLog.println ("\tCorner Sup\t:\t" + voxelSpace.getBoundingBox ().getMax ());
+			if (intersectionForDebug){
+                            //ArtLog.println ("The given line element does intersect the scene canvas "+intersectionPoint+", but unable to get its voxel indices");
+                        }
+				
+                        else{
+                            ArtLog.println ("The given line element belongs the scene canvas "+intersectionPoint+", but unable to get its voxel indices");
+                            
+                            ArtLog.println ("Voxel space informations are:");
+                            ArtLog.println ("\tCorner Inf\t:\t" + voxelSpace.getBoundingBox ().getMin ());
+                            ArtLog.println ("\tCorner Sup\t:\t" + voxelSpace.getBoundingBox ().getMax ());
+                        }
+				
+			
 			return null;
 		}
 

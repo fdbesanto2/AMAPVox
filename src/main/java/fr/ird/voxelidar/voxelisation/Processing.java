@@ -37,7 +37,7 @@ public abstract class Processing {
     
     public void fireProgress(String progress, int ratio){
         
-        for(PreprocessingListener listener :listeners.getListeners(PreprocessingListener.class)){
+        for(ProcessingListener listener :listeners.getListeners(ProcessingListener.class)){
             
             listener.preprocessingStepProgress(progress, ratio);
         }
@@ -45,14 +45,14 @@ public abstract class Processing {
     
     public void fireFinished(){
         
-        for(PreprocessingListener listener :listeners.getListeners(PreprocessingListener.class)){
+        for(ProcessingListener listener :listeners.getListeners(ProcessingListener.class)){
             
             listener.preprocessingFinished();
         }
     }
     
-    public void addVoxelPreprocessingListener(PreprocessingListener listener){
-        listeners.add(PreprocessingListener.class, listener);
+    public void addVoxelPreprocessingListener(ProcessingListener listener){
+        listeners.add(ProcessingListener.class, listener);
     }
     
     public abstract File process();

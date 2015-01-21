@@ -189,8 +189,10 @@ public class Projection {
     
     private float generatePAI(Map<String, Float> attributs){
         
-        Float nInterceptes = attributs.get("n_interceptes");
-        Float nApres = attributs.get("n_apres");
+        Float nInterceptes = attributs.get("interceptions");
+        Float nApres = attributs.get("nbSampling")+attributs.get("interceptions");
+        //Float nInterceptes = attributs.get("n_interceptes");
+        //Float nApres = attributs.get("n_apres");
 
 
         float densitePn = nInterceptes/(nApres+nInterceptes);
@@ -208,8 +210,11 @@ public class Projection {
 
     private float generateTransmittanceMap(Map<String, Float> attributs){
         
-        Float nInterceptes = attributs.get("n_interceptes");
-        Float nApres = attributs.get("n_apres");
+        Float nInterceptes = attributs.get("interceptions");
+        Float nApres = attributs.get("nbSampling")+attributs.get("interceptions");
+        
+        //Float nInterceptes = attributs.get("n_interceptes");
+        //Float nApres = attributs.get("n_apres");
 
 
         float densitePn = nInterceptes/(nApres+nInterceptes);

@@ -24,4 +24,6 @@ public abstract class CameraAdapter implements CameraListener{
     
     @Override
     public void projMatrixChanged(Mat4F projMatrix){}
+    
+    
 }

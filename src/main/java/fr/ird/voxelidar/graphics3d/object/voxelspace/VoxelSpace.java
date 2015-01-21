@@ -112,6 +112,11 @@ public class VoxelSpace {
     
     private final EventListenerList listeners;
 
+    public void setGradientUpdated(boolean gradientUpdated) {
+        this.gradientUpdated = gradientUpdated;
+    }
+    
+    
     public void setReadFileProgress(int progress) {
         this.readFileProgress = progress;
         fireReadFileProgress(progress);
@@ -444,8 +449,6 @@ public class VoxelSpace {
 
         this.file =f;
 
-        //final JProgressLoadingFile progress = new JProgressLoadingFile(parent);
-        //progress.setVisible(true);
         SwingWorker sw = new SwingWorker() {
 
 
@@ -454,7 +457,7 @@ public class VoxelSpace {
 
                 switch(format){
                     case VOXELSPACE_FORMAT2:
-                        readVoxelFormat2(file);
+                        readVoxelFormat1(file);
                         break;
                 }
 
@@ -1055,7 +1058,7 @@ public class VoxelSpace {
 
             gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, 0);
             
-            gradientUpdated = true;
+            //gradientUpdated = true;
         }
         
         if(!cubeSizeUpdated){

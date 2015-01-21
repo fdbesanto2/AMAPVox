@@ -38,6 +38,7 @@ public abstract class Camera {
     protected float angleY = 0.0f;
     protected float angleZ = 0.0f;
     protected EventListenerList listeners;
+    public boolean isInit = false;
     
     //set lookat matrix (position, lookat)
     public abstract void init(Vec3F location, Vec3F target, Vec3F up);
@@ -52,6 +53,42 @@ public abstract class Camera {
     public abstract void fireProjectionMatrixChanged(Mat4F projMatrix);
     public abstract void setTarget(Vec3F target);
     public abstract void setLocation(Vec3F location);
+    
+    public void project(Vec3F location, Vec3F target){
+        
+        this.location.x = location.x;
+        this.location.y = location.y;
+        this.location.z = location.z;
+        
+        this.target.x = target.x;
+        this.target.y = target.y;
+        this.target.z = target.z;
+        
+        updateViewMatrix();
+    }
+    
+    public void projectTop(){
+        
+    }
+    public void projectBottom(){
+        
+    }
+    public void projectLeft(){
+        project(new Vec3F(location.x, location.y, location.z), new Vec3F(-1, 0, 0));
+    }
+    public void projectRight(){
+        project(new Vec3F(location.x, location.y, location.z), new Vec3F(1, 0, 0));
+    }
+    public void projectFront(){
+        
+        project(new Vec3F(0, 0, location.z), new Vec3F(0, 0, 0));
+    }
+    public void projectBack(){
+        
+    }
+    public void projectIsometric(){
+        
+    }
     
     /**
      *

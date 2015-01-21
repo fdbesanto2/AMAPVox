@@ -33,7 +33,7 @@ import org.apache.log4j.Logger;
  *
  * @author Julien
  */
-public class VoxelisationTool{
+public class VoxelisationTool extends Processing{
     
     final static Logger logger = Logger.getLogger(VoxelisationTool.class);
     
@@ -173,6 +173,11 @@ public class VoxelisationTool{
         
         
         return output;
+    }
+
+    @Override
+    public File process() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     private class Voxelisation{

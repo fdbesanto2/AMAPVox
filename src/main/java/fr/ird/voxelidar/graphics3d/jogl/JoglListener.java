@@ -6,7 +6,6 @@
 package fr.ird.voxelidar.graphics3d.jogl;
 
 import com.jogamp.common.nio.Buffers;
-import com.jogamp.opengl.util.FPSAnimator;
 import fr.ird.voxelidar.frame.JFrameSettingUp;
 import fr.ird.voxelidar.frame.JFrameTools;
 import fr.ird.voxelidar.frame.JProgressLoadingFile;
@@ -103,7 +102,7 @@ public class JoglListener implements GLEventListener {
         GL3 gl = drawable.getGL().getGL3();
         
         //calculate fps every 61 frames (wait render speed to stabilize)
-        drawable.getAnimator().setUpdateFPSFrames(61, null);
+        //drawable.getAnimator().setUpdateFPSFrames(61, null);
         
         //this.width = drawable.getWidth();
         //this.height = drawable.getHeight();
@@ -196,7 +195,7 @@ public class JoglListener implements GLEventListener {
         involving that the window event thread is not quickly called
         WARNING: this optimization is not proper and cause bad render performance
         */
-        
+        /*
         if(!isFpsInit && (int)drawable.getAnimator().getLastFPS()>0){
             
             //keep performance for events
@@ -207,7 +206,7 @@ public class JoglListener implements GLEventListener {
             isFpsInit = true;
             drawable.getAnimator().start();
         }
-           
+           */
         //System.out.println((int)((FPSAnimator)drawable.getAnimator()).getLastFPS());
         //System.out.println((int)((FPSAnimator)drawable.getAnimator()).getFPS());
     }

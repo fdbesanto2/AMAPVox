@@ -49,7 +49,7 @@ public class EventManager {
     public int yOffset;
     
     private int i=0;
-    private int mouseSpeed = 2;
+    private final float mouseSpeed = 0.5f;
     
     public boolean leftMouseWasReleased;
     public boolean isMouseLocationUpdated;
@@ -106,9 +106,12 @@ public class EventManager {
     public void updateEvents(GLEventListener context){
         
         if(escapeKeyPressed){
+            joglContext.getCamera().projectFront();
+            /*
             animator.stop();
             renderFrame.setFullscreen(false);
             animator.start();
+            */
         }
         
         if(leftMousePressed){
@@ -199,7 +202,10 @@ public class EventManager {
             */
         }
         
-        
+        if(!animator.isPaused()){
+            animator.pause();
+            System.out.println("animator paused");
+        }
         
         mouseWheelRotateUp = false;
         mouseWheelRotateDown = false;

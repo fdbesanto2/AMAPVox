@@ -11,7 +11,7 @@ import java.util.EventListener;
  *
  * @author Julien
  */
-public interface PreprocessingListener extends EventListener{
+public interface ProcessingListener extends EventListener{
     
     void preprocessingStepProgress(String progress, int ratio);
     void preprocessingFinished();
