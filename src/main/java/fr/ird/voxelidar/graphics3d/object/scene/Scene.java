@@ -130,7 +130,6 @@ public class Scene {
                 //voxelSpace.setGradientUpdated(true);
             }
             
-            
             /***draw voxel space***/
             gl.glUseProgram(voxelSpace.getShaderId());
                 voxelSpace.render(gl);
