@@ -579,35 +579,35 @@ public class VoxelManager {
                 
 		Point3f intersectionPoint = new Point3f(0f,0f,0f);
 		if (intersection!=null) {
-			// If the intersection exists, get the intersection point
-                        LineElement e = new LineSegment(lineElement.getOrigin (), lineElement.getDirection (), intersection.distance);
-                        intersectionPoint = e.getEnd();
-                        
-                        if(lineElement.getLength()>300){
-                            
-                        }
-                        /*
-                        float offsetX = (float) Math.abs(intersectionPoint.x-(int)intersectionPoint.x);
-                        if(offsetX<0.0001f && offsetX !=0){
-                            intersectionPoint.x = (float)(int)(intersectionPoint.x);
-                        }                
+                    // If the intersection exists, get the intersection point
+                    LineElement e = new LineSegment(lineElement.getOrigin (), lineElement.getDirection (), intersection.distance);
+                    intersectionPoint = e.getEnd();
 
-                        float offsetY = (float) Math.abs(intersectionPoint.y-(int)(intersectionPoint.y));
-                        if(offsetY<0.0001f && offsetY !=0){
-                            intersectionPoint.y = (float) (int)(intersectionPoint.y);
-                        }
+                    if(lineElement.getLength()>300){
 
-                        float offsetZ = (float) Math.abs(intersectionPoint.z-(int)(intersectionPoint.z));
-                        if(offsetZ<0.0001f && offsetZ !=0){
-                            intersectionPoint.z = (float) (int)(intersectionPoint.z);
-                        }
-                        */
-                        Point3f offset = new Point3f(lineElement.getDirection ());
-                        offset.scale(0.00053f);
-                        System.out.println("intersectionPoint: "+intersectionPoint);
-                        intersectionPoint.add(offset);
-                        
-			intersectionForDebug = true;
+                    }
+                    /*
+                    float offsetX = (float) Math.abs(intersectionPoint.x-(int)intersectionPoint.x);
+                    if(offsetX<0.0001f && offsetX !=0){
+                        intersectionPoint.x = (float)(int)(intersectionPoint.x);
+                    }                
+
+                    float offsetY = (float) Math.abs(intersectionPoint.y-(int)(intersectionPoint.y));
+                    if(offsetY<0.0001f && offsetY !=0){
+                        intersectionPoint.y = (float) (int)(intersectionPoint.y);
+                    }
+
+                    float offsetZ = (float) Math.abs(intersectionPoint.z-(int)(intersectionPoint.z));
+                    if(offsetZ<0.0001f && offsetZ !=0){
+                        intersectionPoint.z = (float) (int)(intersectionPoint.z);
+                    }
+                    */
+                    Point3f offset = new Point3f(lineElement.getDirection ());
+                    offset.scale(0.00053f);
+                    //System.out.println("intersectionPoint: "+intersectionPoint);
+                    intersectionPoint.add(offset);
+
+                    intersectionForDebug = true;
 		}
 		else if (sceneCanvas.contains (lineElement.getOrigin ())) {
 			// If the line origin is already in the scene canvas, just get its origin point

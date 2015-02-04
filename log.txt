@@ -2107,3 +2107,9 @@ Caused by: org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; Conten
 2015-02-04 11:05:01 INFO  - file writed ( 1.0 s )
 2015-02-04 11:06:05 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
 2015-02-04 11:06:06 INFO  - file writed ( 1.0 s )
+2015-02-04 11:36:29 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 11:36:30 INFO  - file writed ( 1.0 s )
+2015-02-04 11:39:12 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 11:39:13 INFO  - file writed ( 1.0 s )
+2015-02-04 11:39:24 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 11:39:25 INFO  - file writed ( 1.0 s )

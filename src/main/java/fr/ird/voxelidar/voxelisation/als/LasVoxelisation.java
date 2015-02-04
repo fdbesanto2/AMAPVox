@@ -234,7 +234,14 @@ public class LasVoxelisation extends Processing {
         
         double minTime = lasPointList.get(0).t;
         double maxTime = lasPointList.get(lasPointList.size()-1).t;
-
+        
+        //Vecteur des temps LIDAR
+        //ArrayList<TimeVector> TLIDAR = new ArrayList<>();
+        /*
+        for (LasPoint lasPoint : lasPointList) {
+            TLIDAR.add(new TimeVector(lasPoint.t, false, TLIDAR.size()));
+        }
+        */
         try {
 
             BufferedReader reader = new BufferedReader(new FileReader(trajectoryFile));
@@ -251,7 +258,12 @@ public class LasVoxelisation extends Processing {
                         Double.valueOf(lineSplit[2]), Double.valueOf(lineSplit[3]));
                 
                 //if(traj.T >= minTime && traj.T <= maxTime){
-                    trajectoryList.put(Double.valueOf(lineSplit[3]), traj);
+                    Double time = Double.valueOf(lineSplit[3]);
+                    
+                    if(time >= minTime-0.01 && time <= maxTime+0.01){
+                        trajectoryList.put(time, traj);
+                    }
+                    
                 //}
             }
 
@@ -265,19 +277,15 @@ public class LasVoxelisation extends Processing {
          # MERGE ECHOES and TRAJECTORY #
          ##############################*/
         //Vecteur des temps GPS
+        /*
         ArrayList<TimeVector> TGPS = new ArrayList<>();
 
         for (Map.Entry<Double, Trajectory> entry : trajectoryList.entrySet()) {
             TGPS.add(new TimeVector(entry.getKey(), true, TGPS.size()));
         }
-
-        //Vecteur des temps LIDAR
-        ArrayList<TimeVector> TLIDAR = new ArrayList<>();
-
-        for (LasPoint lasPoint : lasPointList) {
-            TLIDAR.add(new TimeVector(lasPoint.t, false, TLIDAR.size()));
-        }
-
+        */
+        
+        /*
         ArrayList<TimeVector> fusion = new ArrayList<>();
         fusion.addAll(TGPS);
         fusion.addAll(TLIDAR);
@@ -296,7 +304,7 @@ public class LasVoxelisation extends Processing {
                 }
             }
         });
-        
+        */
         ArrayList<Vec3D> trajectoryInterpolate = new ArrayList<>();
         
         //ancien algo
@@ -346,15 +354,15 @@ public class LasVoxelisation extends Processing {
         
         //long start_time = System.currentTimeMillis();
         //nouvel algo
-        for(int i=0;i<TLIDAR.size();i++){
-            double targetTime = TLIDAR.get(i).x;
+        for(int i=0;i<lasPointList.size();i++){
+            double targetTime = lasPointList.get(i).t;
             
             index = searchNearestMax(targetTime, tgps, index);
             
             double max = tgps.get(index);
             double min = tgps.get(index-1);
 
-            double ratio = (TLIDAR.get(i).x - min) / (max - min);
+            double ratio = (lasPointList.get(i).t - min) / (max - min);
 
             //formule interpolation
             double xValue = trajectoryList.get(min).x + ((trajectoryList.get(max).x - trajectoryList.get(min).x) * ratio);
@@ -441,22 +449,6 @@ public class LasVoxelisation extends Processing {
     
     private int searchNearestMax(double value, ArrayList<Double> list, int start){
         
-        /*
-        value = 10;
-        list = new ArrayList<>();
-        list.add(0.0);
-        list.add(9.0);
-        list.add(11.0);
-        list.add(14.0);
-        list.add(18.0);
-        list.add(32.0);
-        list.add(66.0);
-        list.add(98.0);
-        list.add(104.0);
-        
-        Collections.sort(list);
-        */
-        //int index = list.size()/2;
         
         int indexMin = start;
         int indexMax = list.size() - 1;
@@ -496,44 +488,6 @@ public class LasVoxelisation extends Processing {
         return index;
     }
     
-    private int searchNearestMin(double value, ArrayList<Double> list){
-        
-        int result = 0;
-        
-        int index = list.size()/2;
-        int indexMin = 0;
-        int indexMax = list.size() - 1;
-        
-        boolean found = false;
-                
-        while(!found){
-            
-            if(list.get(index) < value){
-                
-                indexMin = index;
-                index = (indexMax + (index))/2;
-
-            }else if(list.get(index) > value){
-                
-                indexMax = index;
-                index = (indexMin + (index))/2;
-                
-            }else{
-                result = index;
-                found = true;
-            }
-            
-            if(indexMin == indexMax-1){
-                
-                result = index;
-                found = true;
-            }
-        }
-        
-        return result;
-    }
-    
-    
     
     
     public void voxelise(Map<String, Shot> shots){
@@ -545,122 +499,12 @@ public class LasVoxelisation extends Processing {
             
             Shot shot = (Shot) entry.getValue();
             
-            /*
-            float[] rangesTemp = new float[7];
-            rangesTemp[0] = (float) shoot.r1;
-            rangesTemp[1] = (float) shoot.r2;
-            rangesTemp[2] = (float) shoot.r3;
-            rangesTemp[3] = (float) shoot.r4;
-            rangesTemp[4] = (float) shoot.r5;
-            rangesTemp[5] = (float) shoot.r6;
-            rangesTemp[6] = (float) shoot.r7;
-            
-            float[] ranges = new float[shoot.n];
-            
-            System.arraycopy(rangesTemp, 0, ranges, 0, shoot.n);
-            
-            Shot shot = new Shot(shoot.n, 
-                    new Point3f((float)shoot.xloc_s, (float)shoot.yloc_s, (float)shoot.zloc_s), 
-                    new Vector3f((float)shoot.x_u, (float)shoot.y_u, (float)shoot.z_u),
-                    ranges);
-            */
             voxelAnalysis.voxelise(shot);
             
         }
         
         voxelAnalysis.calculatePADAndWrite(0);
-        //voxelAnalysis.writeOutput();
     }
-
-    /*
-    public void writeShootsFile(Map<String, Shoot> shoots) {
-
-        if (shoots != null) {
-
-            try {
-                
-                outputFile = new File("shoots_file");
-                BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
-
-                writer.write("\"n\" \"xloc_s\" \"yloc_s\" \"zloc_s\" \"x_u\" \"y_u\" \"z_u\" \"r1\" \"r2\" \"r3\" \"r4\" \"r5\" \"r6\" \"r7\"\n");
-
-                for (Map.Entry<String, Shoot> entry : shoots.entrySet()) {
-
-                    DecimalFormat df = new DecimalFormat("#0.00");
-                    DecimalFormat df2 = new DecimalFormat("#0.00000");
-
-                    String r1 = String.valueOf(entry.getValue().r1);
-                    String r2 = String.valueOf(entry.getValue().r2);
-                    String r3 = String.valueOf(entry.getValue().r3);
-                    String r4 = String.valueOf(entry.getValue().r4);
-                    String r5 = String.valueOf(entry.getValue().r5);
-                    String r6 = String.valueOf(entry.getValue().r6);
-                    String r7 = String.valueOf(entry.getValue().r7);
-
-                    if (Double.isNaN(entry.getValue().r1)) {
-                        r1 = r1.replace("NaN", "");
-                    } else {
-                        r1 = df.format(entry.getValue().r1);
-                    }
-                    if (Double.isNaN(entry.getValue().r2)) {
-                        r2 = r2.replace("NaN", "");
-                    } else {
-                        r2 = df.format(entry.getValue().r2);
-                    }
-                    if (Double.isNaN(entry.getValue().r3)) {
-                        r3 = r3.replace("NaN", "");
-                    } else {
-                        r3 = df.format(entry.getValue().r3);
-                    }
-                    if (Double.isNaN(entry.getValue().r4)) {
-                        r4 = r4.replace("NaN", "");
-                    } else {
-                        r4 = df.format(entry.getValue().r4);
-                    }
-                    if (Double.isNaN(entry.getValue().r5)) {
-                        r5 = r5.replace("NaN", "");
-                    } else {
-                        r5 = df.format(entry.getValue().r5);
-                    }
-                    if (Double.isNaN(entry.getValue().r6)) {
-                        r6 = r6.replace("NaN", "");
-                    } else {
-                        r6 = df.format(entry.getValue().r6);
-                    }
-                    if (Double.isNaN(entry.getValue().r7)) {
-                        r7 = r7.replace("NaN", "");
-                    } else {
-                        r7 = df.format(entry.getValue().r7);
-                    }
-
-                    String line = entry.getValue().n + " "
-                            + df.format(entry.getValue().xloc_s) + " "
-                            + df.format(entry.getValue().yloc_s) + " "
-                            + df.format(entry.getValue().zloc_s) + " "
-                            + df2.format(entry.getValue().x_u) + " "
-                            + df2.format(entry.getValue().y_u) + " "
-                            + df2.format(entry.getValue().z_u) + " "
-                            + r1 + " "
-                            + r2 + " "
-                            + r3 + " "
-                            + r4 + " "
-                            + r5 + " "
-                            + r6 + " "
-                            + r7 + " " + "\n";
-
-                    line = line.replace(",", ".");
-                    writer.write(line);
-                }
-
-                writer.close();
-
-            } catch (IOException ex) {
-                Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-    }
-    */
 
     public Map<String,Shot> buildEchos(ArrayList<LasMixTrajectory> ALL) {
 
@@ -752,9 +596,9 @@ public class LasVoxelisation extends Processing {
             oldN = all.lasPoint.n;
 
         }
-        
+        /*
         try {
-            /***TEST : write shots file****/
+        
             BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\Julien\\Desktop\\test.txt"));
             //writer.write("\"key\" \"n\" \"xloc_s\" \"yloc_s\" \"zloc_s\" \"x_u\" \"y_u\" \"z_u\" \"r1\" \"r2\" \"r3\" \"r4\" \"r5\" \"r6\" \"r7\"\n");
             writer.write("\"n\" \"xloc_s\" \"yloc_s\" \"zloc_s\" \"x_u\" \"y_u\" \"z_u\" \"r1\" \"r2\" \"r3\" \"r4\" \"r5\" \"r6\" \"r7\"\n");
@@ -776,7 +620,7 @@ public class LasVoxelisation extends Processing {
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        */
         return shoots;
     }
 
