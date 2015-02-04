@@ -7,10 +7,10 @@ package fr.ird.voxelidar.voxelisation;
 
 import fr.ird.voxelidar.voxelisation.als.LasVoxelisation;
 import fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation;
-import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.Shot;
 import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelAnalysis;
 import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelParameters;
 import fr.ird.voxelidar.Constants;
+import fr.ird.voxelidar.extraction.Shot;
 import fr.ird.voxelidar.lidar.format.als.Las;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.math.matrix.Mat4D;
@@ -38,14 +38,24 @@ public class VoxelisationTool extends Processing{
     final static Logger logger = Logger.getLogger(VoxelisationTool.class);
     
     private VoxelParameters parameters;
+    private int nbTask;
+    
+    public VoxelisationTool(){
+        nbTask = 1;
+    }
+    
+    public VoxelisationTool(int nbTask){
+        this.nbTask = nbTask;
+    }
 
     public File generateVoxelFromRxp(RxpScan rxp, File outputFile, Mat4D transfMatrix, VoxelParameters parameters) {
         
         this.parameters = parameters;
         
-        RxpVoxelisation voxelisation = new RxpVoxelisation(rxp, outputFile, transfMatrix, parameters);
-        voxelisation.process();
-        
+        RxpVoxelisation voxelisation = new RxpVoxelisation(rxp, nbTask, outputFile, transfMatrix, parameters);
+        voxelisation.voxelise();
+        //System.out.println(nbTask);
+        nbTask ++ ;
         return null;
         
     }
@@ -194,16 +204,19 @@ public class VoxelisationTool extends Processing{
         
         public Voxelisation(VoxelisationParameters parameters, File outputFile){
             
+            /*
             voxelAnalysis = new VoxelAnalysis();
             voxelAnalysis.init(new VoxelParameters(
                     new Point3f((float)parameters.getLowerCornerX(), (float)parameters.getLowerCornerY(), (float)parameters.getLowerCornerZ()),
                     new Point3f((float)parameters.getTopCornerX(), (float)parameters.getTopCornerY(), (float)parameters.getTopCornerZ()),
-                    new Point3i(parameters.getSplitX(), parameters.getSplitY(), parameters.getSplitZ())));
+                    new Point3i(parameters.getSplitX(), parameters.getSplitY(), parameters.getSplitZ())), outputFile);
             
             this.outputFile = outputFile;
+            */
         }
         
         //new version
+        
         public void voxelise2(Shot shot){
             
             
@@ -211,12 +224,12 @@ public class VoxelisationTool extends Processing{
             
         }
         
-        /**eloï version (take properties file)**/
+        /**eloÃ¯ version (take properties file)**/
 //        
 //        public File voxelise(){
 //            
 //            
-//            /**generate parameters file (eloï program only)**/
+//            /**generate parameters file (eloÃ¯ program only)**/
 //            
 //            File propertiesFile = new File("properties.txt");
 //            
@@ -228,7 +241,7 @@ public class VoxelisationTool extends Processing{
 //                writer.write("dossierOutput:./"+"\n");
 //                writer.write("methodePonderationEchos:1"+"\n");
 //                
-//                writer.write("typeExecution:5"+"\n"); //extraire densité fichier texte als
+//                writer.write("typeExecution:5"+"\n"); //extraire densitÃ© fichier texte als
 //                writer.write("fichierXYZ:"+inputFile.getAbsolutePath()+"\n");
 //                
 //                writer.write("pointMailleMin.x:"+parameters.getLowerCornerX()+"\n");
@@ -259,7 +272,7 @@ public class VoxelisationTool extends Processing{
 //                logger.error(null, ex);
 //            }
 //            
-//            /*eloï program generate a directory named "densite" and 
+//            /*eloÃ¯ program generate a directory named "densite" and 
 //            the voxel file named "densite3D", so we just rename and 
 //            move the file to the user choice directory
 //            WARNING: the renameTo method only work if the destination 

@@ -24,7 +24,7 @@ public class FilterDefaultListModel extends DefaultListModel<String>{
     
     public void doFilter(String containedString){
         
-        if(fullList.size() == 0){
+        if(fullList.isEmpty()){
             
             for(int i=0;i<size();i++){
                 fullList.add(get(i));

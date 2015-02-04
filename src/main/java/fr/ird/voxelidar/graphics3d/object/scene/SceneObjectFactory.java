@@ -7,6 +7,7 @@ package fr.ird.voxelidar.graphics3d.object.scene;
 
 import fr.ird.voxelidar.graphics2d.texture.Texture;
 import fr.ird.voxelidar.graphics3d.mesh.MeshFactory;
+import fr.ird.voxelidar.math.vector.Vec3F;
 
 /**
  *
@@ -14,9 +15,9 @@ import fr.ird.voxelidar.graphics3d.mesh.MeshFactory;
  */
 public class SceneObjectFactory {
     
-    public static SceneObject createTexturedPlane(Texture texture, int shaderId){
+    public static SceneObject createTexturedPlane(Vec3F startPoint, int width, int height, Texture texture, int shaderId){
         
-        SceneObject sceneObject = new SceneObject(MeshFactory.createMeshFromTexture(texture), shaderId, true);
+        SceneObject sceneObject = new SceneObject(MeshFactory.createPlaneFromTexture(startPoint, texture, width, height), shaderId, true);
         
         sceneObject.attachTexture(texture);
         

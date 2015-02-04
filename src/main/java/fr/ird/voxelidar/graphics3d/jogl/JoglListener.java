@@ -6,9 +6,11 @@
 package fr.ird.voxelidar.graphics3d.jogl;
 
 import com.jogamp.common.nio.Buffers;
+import com.jogamp.opengl.util.FPSAnimator;
 import fr.ird.voxelidar.frame.JFrameSettingUp;
 import fr.ird.voxelidar.frame.JFrameTools;
 import fr.ird.voxelidar.frame.JProgressLoadingFile;
+import fr.ird.voxelidar.graphics3d.mesh.Mesh;
 import fr.ird.voxelidar.listener.EventManager;
 import fr.ird.voxelidar.graphics3d.mesh.MeshFactory;
 import fr.ird.voxelidar.graphics3d.object.camera.CameraAdapter;
@@ -23,6 +25,7 @@ import fr.ird.voxelidar.graphics3d.shader.Shader;
 import fr.ird.voxelidar.math.matrix.Mat4F;
 import fr.ird.voxelidar.math.vector.Vec3F;
 import fr.ird.voxelidar.util.Settings;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
 import java.util.Map.Entry;
@@ -53,7 +56,12 @@ public class JoglListener implements GLEventListener {
     private Settings settings;
     private boolean isFpsInit = false;
     final static Logger logger = Logger.getLogger(JoglListener.class);
+    private boolean justOnce = false;
+    private FPSAnimator animator;
+    private boolean viewMatrixChanged = false;
+    private boolean projectionMatrixChanged = false;
 
+    
     public Settings getSettings() {
         return settings;
     }
@@ -83,12 +91,13 @@ public class JoglListener implements GLEventListener {
         this.toolBox = toolbox;
     }
     
-    public JoglListener(JFrameSettingUp parent, Terrain terrain, Settings settings){
+    public JoglListener(JFrameSettingUp parent, Terrain terrain, Settings settings, FPSAnimator animator){
         
         this.terrain = terrain;
         this.settings = settings;
         this.parent = parent;
         worldColor = new Vec3F(200.0f/255.0f, 200.0f/255.0f, 200.0f/255.0f);
+        this.animator = animator;
     }
     
     public void attachEventListener(EventManager eventListener){
@@ -127,10 +136,10 @@ public class JoglListener implements GLEventListener {
         
         
         gl.glBlendFunc(GL3.GL_SRC_ALPHA, GL3.GL_ONE_MINUS_SRC_ALPHA );
-        
-        gl.glDepthFunc(GL3.GL_LEQUAL);
-        
+                
         gl.glEnable(GL3.GL_DEPTH_TEST);
+        gl.glDepthFunc(GL3.GL_LEQUAL);
+        gl.glClearDepthf(1.0f);
         
         gl.glEnable(GL3.GL_LINE_SMOOTH);
         gl.glEnable(GL3.GL_POLYGON_SMOOTH);
@@ -163,6 +172,11 @@ public class JoglListener implements GLEventListener {
     private void update() {
         
     }
+    
+    public void drawNextFrame(){
+        justOnce = true;
+        animator.resume();
+    }
 
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -172,14 +186,16 @@ public class JoglListener implements GLEventListener {
         this.width = width;
         this.height = height;
         
+        scene.setWidth(width);
+        scene.setHeight(height);
+        
         camera.setPerspective(60.0f, (1.0f*width)/height, 0.1f, 1000.0f);
     }
     
     private void render(GLAutoDrawable drawable) {
         
+        GL3 gl = drawable.getGL().getGL3();
         
-        
-        GL3 gl=drawable.getGL().getGL3();
         gl.glViewport(0, 0, width, height);
         gl.glClear(GL3.GL_DEPTH_BUFFER_BIT|GL3.GL_COLOR_BUFFER_BIT);
         gl.glClearColor(worldColor.x, worldColor.y, worldColor.z, 1.0f);
@@ -188,32 +204,55 @@ public class JoglListener implements GLEventListener {
         
         eventListener.updateEvents(this); 
         
+        if(viewMatrixChanged){
+            
+            FloatBuffer viewMatrixBuffer = Buffers.newDirectFloatBuffer(camera.getViewMatrix().mat);
+                    
+            for(Entry<Integer, Shader> shader : scene.getShadersList().entrySet()) {
+
+                if(!shader.getValue().isOrtho){
+                    gl.glUseProgram(shader.getKey());
+                        gl.glUniformMatrix4fv(shader.getValue().uniformMap.get("viewMatrix"), 1, false, viewMatrixBuffer);
+                    gl.glUseProgram(0);
+                }
+            }
+            
+            viewMatrixChanged = false;
+        }
+        
+        if(projectionMatrixChanged){
+            
+            FloatBuffer projMatrixBuffer = Buffers.newDirectFloatBuffer(camera.getProjectionMatrix().mat);
+
+            for(Entry<Integer, Shader> shader : scene.getShadersList().entrySet()) {
+
+                if(!shader.getValue().isOrtho){
+                    String threadName = Thread.currentThread().getName();
+                    gl.glUseProgram(shader.getKey());
+                        gl.glUniformMatrix4fv(shader.getValue().uniformMap.get("projMatrix"), 1, false, projMatrixBuffer);
+                    gl.glUseProgram(0);
+                }
+            }
+            
+            projectionMatrixChanged = false;
+        }
+        
         scene.draw(gl, camera);
         
-        /*optimize interaction by reducing fps
-        cause: the fps animator use all cpu to render the scene 
-        involving that the window event thread is not quickly called
-        WARNING: this optimization is not proper and cause bad render performance
-        */
-        /*
-        if(!isFpsInit && (int)drawable.getAnimator().getLastFPS()>0){
-            
-            //keep performance for events
-            int offset = 8;
-            
-            drawable.getAnimator().stop();
-            ((FPSAnimator)drawable.getAnimator()).setFPS((int)((FPSAnimator)drawable.getAnimator()).getLastFPS()-offset);
-            isFpsInit = true;
-            drawable.getAnimator().start();
+        if(justOnce){
+            animator.pause();
+            justOnce = false;
         }
-           */
-        //System.out.println((int)((FPSAnimator)drawable.getAnimator()).getLastFPS());
-        //System.out.println((int)((FPSAnimator)drawable.getAnimator()).getFPS());
+        
+        
+        
+        
     }
     
     private void initScene(final GL3 gl){
         
         scene = new Scene();
+        
         
         try{
             //set shaders
@@ -224,7 +263,24 @@ public class JoglListener implements GLEventListener {
             basicShader.setAttributeLocations(new String[]{"position","color"});
             
             logger.debug("shader compiled: "+basicShader.name);
-
+            /*
+            InputStreamReader aoVertexShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/AOVertexShader.txt"));
+            InputStreamReader aoFragmentShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/AOFragmentShader.txt"));
+            Shader aoShader = new Shader(gl, aoFragmentShader, aoVertexShader, "aoShader");
+            aoShader.setUniformLocations(new String[]{"viewMatrix","projMatrix"});
+            aoShader.setAttributeLocations(new String[]{"position", "instance_position", "instance_color","ambient_occlusion"});
+            
+            logger.debug("shader compiled: "+basicShader.name);
+                */
+            
+            InputStreamReader noTranslationVertexShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/NoTranslationVertexShader.txt"));
+            InputStreamReader noTranslationFragmentShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/NoTranslationFragmentShader.txt"));
+            Shader noTranslationShader = new Shader(gl, noTranslationFragmentShader, noTranslationVertexShader, "noTranslationShader");
+            noTranslationShader.setUniformLocations(new String[]{"viewMatrix","projMatrix"});
+            noTranslationShader.setAttributeLocations(new String[]{"position","color"});
+            
+            logger.debug("shader compiled: "+noTranslationShader.name);
+            
             InputStreamReader instanceVertexShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/InstanceVertexShader.txt"));
             InputStreamReader instanceFragmentShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/InstanceFragmentShader.txt"));
             Shader instanceShader = new Shader(gl, instanceFragmentShader, instanceVertexShader, "instanceShader");
@@ -241,10 +297,20 @@ public class JoglListener implements GLEventListener {
             orthoShader.isOrtho = true;
 
             logger.debug("shader compiled: "+orthoShader.name);
-
+            
+            //scene.addShader(aoShader);
+            scene.addShader(noTranslationShader);
             scene.addShader(instanceShader);
             scene.addShader(basicShader);
             scene.addShader(orthoShader);
+            
+            Mesh axisMesh = MeshFactory.createMeshFromObj(
+                    new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("mesh/axis.obj")), 
+                    new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("mesh/axis.mtl")));
+            
+            SceneObject axis = new SceneObject(axisMesh, noTranslationShader.getProgramId(), false);
+            axis.setDrawType(GL3.GL_TRIANGLES);
+            scene.addObject(axis, gl);
             
             if(settings.drawAxis){
                 SceneObject sceneObject = new SceneObject(MeshFactory.createLandmark(-1000, 1000), basicShader.getProgramId(), false);
@@ -279,38 +345,19 @@ public class JoglListener implements GLEventListener {
 
                 @Override
                 public void viewMatrixChanged(Mat4F viewMatrix) {
-
-                    FloatBuffer viewMatrixBuffer = Buffers.newDirectFloatBuffer(viewMatrix.mat);
-                    
-                    for(Entry<Integer, Shader> shader : scene.getShadersList().entrySet()) {
-
-                        if(!shader.getValue().isOrtho){
-                            gl.glUseProgram(shader.getKey());
-                                gl.glUniformMatrix4fv(shader.getValue().uniformMap.get("viewMatrix"), 1, false, viewMatrixBuffer);
-                            gl.glUseProgram(0);
-                        }
-                    }
+                    //must be updated inside the thread loop
+                    viewMatrixChanged = true;
                 }
 
                 @Override
                 public void projMatrixChanged(final Mat4F projMatrix) {
-                        
-                        
-                        FloatBuffer projMatrixBuffer = Buffers.newDirectFloatBuffer(projMatrix.mat);
-
-                        for(Entry<Integer, Shader> shader : scene.getShadersList().entrySet()) {
-                            
-                            if(!shader.getValue().isOrtho){
-                                String threadName = Thread.currentThread().getName();
-                                gl.glUseProgram(shader.getKey());
-                                    gl.glUniformMatrix4fv(shader.getValue().uniformMap.get("projMatrix"), 1, false, projMatrixBuffer);
-                                gl.glUseProgram(0);
-                            }
-                        }
+                    //must be updated inside the thread loop
+                    projectionMatrixChanged = true;
                 }
             });
             
             voxelSpace = new VoxelSpace(gl, instanceShader.getProgramId(), settings);
+            //voxelSpace = new VoxelSpace(gl, aoShader.getProgramId(), settings);
             voxelSpace.setAttributToVisualize(settings.attributeToVisualize);
 
             final JProgressLoadingFile progress = new JProgressLoadingFile(parent);

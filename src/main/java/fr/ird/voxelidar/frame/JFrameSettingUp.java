@@ -40,6 +40,7 @@ import fr.ird.voxelidar.util.Misc;
 import fr.ird.voxelidar.util.Settings;
 import fr.ird.voxelidar.voxelisation.VoxelisationParameters;
 import fr.ird.voxelidar.voxelisation.VoxelisationTool;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
@@ -65,6 +66,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.InvalidPreferencesFormatException;
 import java.util.prefs.Preferences;
@@ -86,10 +91,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.BorderUIResource;
 import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
 import org.apache.log4j.Logger;
@@ -119,6 +127,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private Mat4D popMatrix;
     private Mat4D vopPopMatrix;
     private VoxelParameters voxelisationParameters;
+    private Border customBorder;
 
     
     public JCheckBox getjCheckBoxDrawAxis() {
@@ -163,7 +172,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         mapAttributs = new LinkedHashMap<>();
         model = new DefaultListModel();
         voxelisationParameters = new VoxelParameters();
-        
+        customBorder = new BorderUIResource.LineBorderUIResource(new Color(57, 57, 57));
         initComponents();
         
         setDefaultAppeareance();
@@ -189,6 +198,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 }
             });
         }
+        
+        
         
         vopMatrix = Mat4D.identity();
         rsp = new Rsp();
@@ -318,6 +329,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             
             UIManager.setLookAndFeel(value);
             currentLookAndFeel = value; 
+            UIManager.put("TabbedPane.selected", new Color(114, 114, 114));
+            UIManager.put("TabbedPane.contentAreaColor", new Color(114, 114, 114));
+            UIManager.put("InternalFrame.background", new Color(114, 114, 114));
+            
             SwingUtilities.updateComponentTreeUI(this);
             this.pack();
             
@@ -363,7 +378,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     }
     
     private void setDefaultAppeareance(){
-        setAppearance(UIManager.getSystemLookAndFeelClassName());
+        setAppearance(UIManager.getCrossPlatformLookAndFeelClassName());
     }
     
     public void openJFrameStateFile(String path){
@@ -600,7 +615,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         
         if(jListOutputFiles.getModel().getSize()>0){
             
-            String[] parameters = VoxelSpaceFormat.readAttributs2(new File(jListOutputFiles.getSelectedValue().toString()));
+            String[] parameters = VoxelSpaceFormat.readAttributs(new File(jListOutputFiles.getSelectedValue().toString()));
             
             for(int i=0 ; i< parameters.length ;i++){
                     
@@ -743,7 +758,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jFileChooser10 = new javax.swing.JFileChooser();
         jFileChooserSave2 = new javax.swing.JFileChooser();
         jFileChooser11 = new javax.swing.JFileChooser();
-        jSplitPane1 = new javax.swing.JSplitPane();
+        jPanel7 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelOutputParametersTab = new javax.swing.JPanel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
@@ -971,6 +986,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jFileChooser11.setFileFilter(null);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(114, 114, 114));
         setMinimumSize(new java.awt.Dimension(560, 450));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
@@ -978,18 +994,25 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
-        jSplitPane1.setDividerLocation(420);
-        jSplitPane1.setDividerSize(0);
-        jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-        jSplitPane1.setResizeWeight(0.33);
-        jSplitPane1.setContinuousLayout(true);
-        jSplitPane1.setPreferredSize(new java.awt.Dimension(848, 533));
+        jPanel7.setBackground(new java.awt.Color(114, 114, 114));
+        jPanel7.setLayout(new javax.swing.BoxLayout(jPanel7, javax.swing.BoxLayout.Y_AXIS));
 
+        jTabbedPane1.setBackground(new java.awt.Color(83, 83, 83));
         jTabbedPane1.setMinimumSize(new java.awt.Dimension(0, 0));
 
+        jPanelOutputParametersTab.setBackground(new java.awt.Color(114, 114, 114));
+
+        jTabbedPane2.setBackground(new java.awt.Color(83, 83, 83));
         jTabbedPane2.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
-        jPanel39.setBorder(javax.swing.BorderFactory.createTitledBorder("Input file"));
+        jTabbedPane5.setBackground(new java.awt.Color(114, 114, 114));
+
+        jPanel35.setBackground(new java.awt.Color(114, 114, 114));
+
+        jPanel36.setBackground(new java.awt.Color(114, 114, 114));
+
+        jPanel39.setBackground(new java.awt.Color(114, 114, 114));
+        jPanel39.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input file", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, java.awt.Color.black));
 
         jLabelName6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabelName6.setText("Name");
@@ -999,6 +1022,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jLabelPath6.setText("Path");
 
         jTextFieldFilePathRsp.setEditable(false);
+        jTextFieldFilePathRsp.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldFilePathRsp.setColumns(38);
         jTextFieldFilePathRsp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1007,11 +1031,14 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
 
         jTextFieldFileNameRsp.setEditable(false);
+        jTextFieldFileNameRsp.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldFileNameRsp.setColumns(50);
         jTextFieldFileNameRsp.setToolTipText("");
         jTextFieldFileNameRsp.setMinimumSize(new java.awt.Dimension(0, 20));
         jTextFieldFileNameRsp.setName(""); // NOI18N
 
+        jButtonOpenRspFile.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonOpenRspFile.setForeground(new java.awt.Color(255, 255, 255));
         jButtonOpenRspFile.setText("Open");
         jButtonOpenRspFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1019,6 +1046,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jComboBox1.setBackground(new java.awt.Color(180, 180, 180));
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Riscan project (*.rsp)", "Riegl file, txt file (*.rxp, *.txt)" }));
         jComboBox1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -1065,6 +1093,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jButtonOpenRspFile))
         );
 
+        jRadioButtonLightFile.setBackground(new java.awt.Color(114, 114, 114));
         buttonGroup1.add(jRadioButtonLightFile);
         jRadioButtonLightFile.setSelected(true);
         jRadioButtonLightFile.setText("Light file");
@@ -1074,6 +1103,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jRadioButtonComplexFile.setBackground(new java.awt.Color(114, 114, 114));
         buttonGroup1.add(jRadioButtonComplexFile);
         jRadioButtonComplexFile.setText("Complex file");
         jRadioButtonComplexFile.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -1082,11 +1112,16 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jListRspScans.setBackground(new java.awt.Color(180, 180, 180));
         jScrollPane1.setViewportView(jListRspScans);
 
+        jButtonSopMatrix.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonSopMatrix.setForeground(new java.awt.Color(255, 255, 255));
         jButtonSopMatrix.setText("SOP matrix");
         jButtonSopMatrix.setEnabled(false);
 
+        jButtonPopMatrix.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonPopMatrix.setForeground(new java.awt.Color(255, 255, 255));
         jButtonPopMatrix.setText("POP matrix");
         jButtonPopMatrix.setToolTipText("Project orientation and position");
         jButtonPopMatrix.addActionListener(new java.awt.event.ActionListener() {
@@ -1095,6 +1130,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jButtonVopMatrix.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonVopMatrix.setForeground(new java.awt.Color(255, 255, 255));
         jButtonVopMatrix.setText("VOP matrix");
         jButtonVopMatrix.setToolTipText("Voxel orientation and position");
         jButtonVopMatrix.addActionListener(new java.awt.event.ActionListener() {
@@ -1103,6 +1140,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jButton1.setBackground(new java.awt.Color(85, 85, 85));
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("POP %*% VOP");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1110,9 +1149,11 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
-        jPanel40.setBorder(javax.swing.BorderFactory.createTitledBorder("Min point"));
+        jPanel40.setBackground(new java.awt.Color(114, 114, 114));
+        jPanel40.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Min point", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(39, 39, 39)));
         jPanel40.setToolTipText("");
 
+        jTextFieldMinPointX2.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldMinPointX2.setText("-10");
         jTextFieldMinPointX2.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
         jTextFieldMinPointX2.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1121,6 +1162,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jTextFieldMinPointY2.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldMinPointY2.setText("50");
         jTextFieldMinPointY2.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
         jTextFieldMinPointY2.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1129,6 +1171,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jTextFieldMinPointZ2.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldMinPointZ2.setText("0");
         jTextFieldMinPointZ2.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
         jTextFieldMinPointZ2.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1156,9 +1199,11 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jTextFieldMinPointZ2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jPanel41.setBackground(new java.awt.Color(114, 114, 114));
         jPanel41.setBorder(javax.swing.BorderFactory.createTitledBorder("Max point"));
         jPanel41.setToolTipText("");
 
+        jTextFieldMaxPointX2.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldMaxPointX2.setText("10");
         jTextFieldMaxPointX2.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
         jTextFieldMaxPointX2.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1167,6 +1212,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jTextFieldMaxPointY2.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldMaxPointY2.setText("150");
         jTextFieldMaxPointY2.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
         jTextFieldMaxPointY2.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1175,6 +1221,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jTextFieldMaxPointZ2.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldMaxPointZ2.setText("70");
         jTextFieldMaxPointZ2.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
         jTextFieldMaxPointZ2.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1202,9 +1249,11 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jTextFieldMaxPointZ2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jPanel42.setBackground(new java.awt.Color(114, 114, 114));
         jPanel42.setBorder(javax.swing.BorderFactory.createTitledBorder("Voxel Number"));
         jPanel42.setToolTipText("");
 
+        jTextFieldVoxelNumberX1.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldVoxelNumberX1.setText("20");
         jTextFieldVoxelNumberX1.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
         jTextFieldVoxelNumberX1.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1213,6 +1262,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jTextFieldVoxelNumberY1.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldVoxelNumberY1.setText("100");
         jTextFieldVoxelNumberY1.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
         jTextFieldVoxelNumberY1.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1221,6 +1271,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jTextFieldVoxelNumberZ1.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldVoxelNumberZ1.setText("70");
         jTextFieldVoxelNumberZ1.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
         jTextFieldVoxelNumberZ1.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1229,6 +1280,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jTextFieldVoxelNumberRes1.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldVoxelNumberRes1.setText("1");
         jTextFieldVoxelNumberRes1.setBorder(javax.swing.BorderFactory.createTitledBorder("Resolution"));
         jTextFieldVoxelNumberRes1.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1260,12 +1312,14 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jTextFieldVoxelNumberRes1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jPanel19.setBackground(new java.awt.Color(114, 114, 114));
         jPanel19.setBorder(javax.swing.BorderFactory.createTitledBorder("Output path"));
 
         jLabelPath10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabelPath10.setText("Path");
 
         jTextFieldFileOutputPathTlsVox.setEditable(false);
+        jTextFieldFileOutputPathTlsVox.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldFileOutputPathTlsVox.setColumns(38);
         jTextFieldFileOutputPathTlsVox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1273,6 +1327,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jButtonChooseOutputDirectoryTlsVox.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonChooseOutputDirectoryTlsVox.setForeground(new java.awt.Color(255, 255, 255));
         jButtonChooseOutputDirectoryTlsVox.setText("Choose directory");
         jButtonChooseOutputDirectoryTlsVox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1303,6 +1359,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addContainerGap())
         );
 
+        jButtonExecuteVoxTls.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonExecuteVoxTls.setForeground(new java.awt.Color(255, 255, 255));
         jButtonExecuteVoxTls.setText("Execute");
         jButtonExecuteVoxTls.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1310,7 +1368,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxMergeOutputFiles.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxMergeOutputFiles.setText("Merge output files");
+
+        jTextFieldOutputMergedFile.setBackground(new java.awt.Color(180, 180, 180));
 
         javax.swing.GroupLayout jPanel36Layout = new javax.swing.GroupLayout(jPanel36);
         jPanel36.setLayout(jPanel36Layout);
@@ -1331,7 +1392,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                                 .addGap(21, 21, 21)
                                 .addComponent(jTextFieldOutputMergedFile))
                             .addComponent(jCheckBoxMergeOutputFiles))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jButtonSopMatrix)
@@ -1405,6 +1466,11 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         jTabbedPane2.addTab("TLS", jTabbedPane5);
 
+        jTabbedPane3.setBackground(new java.awt.Color(114, 114, 114));
+
+        jPanel33.setBackground(new java.awt.Color(114, 114, 114));
+
+        jPanel16.setBackground(new java.awt.Color(114, 114, 114));
         jPanel16.setBorder(javax.swing.BorderFactory.createTitledBorder("Input file (*.laz, *.las, *.txt)"));
 
         jLabelName3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -1417,12 +1483,14 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jLabelSize1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabelSize1.setText("Size (bytes)");
 
+        jLabelFileSizeInputVox.setBackground(new java.awt.Color(180, 180, 180));
         jLabelFileSizeInputVox.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jLabelFileSizeInputVox.setMaximumSize(new java.awt.Dimension(40000, 40000));
         jLabelFileSizeInputVox.setName(""); // NOI18N
         jLabelFileSizeInputVox.setPreferredSize(new java.awt.Dimension(150, 20));
 
         jTextFieldFilePathInputVox.setEditable(false);
+        jTextFieldFilePathInputVox.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldFilePathInputVox.setColumns(38);
         jTextFieldFilePathInputVox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1431,11 +1499,14 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
 
         jTextFieldFileNameInputVox.setEditable(false);
+        jTextFieldFileNameInputVox.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldFileNameInputVox.setColumns(50);
         jTextFieldFileNameInputVox.setToolTipText("");
         jTextFieldFileNameInputVox.setMinimumSize(new java.awt.Dimension(0, 20));
         jTextFieldFileNameInputVox.setName(""); // NOI18N
 
+        jButtonOpenInputFileVoxelisation.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonOpenInputFileVoxelisation.setForeground(new java.awt.Color(255, 255, 255));
         jButtonOpenInputFileVoxelisation.setText("Open");
         jButtonOpenInputFileVoxelisation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1461,7 +1532,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldFilePathInputVox, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                            .addComponent(jLabelFileSizeInputVox, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                            .addComponent(jLabelFileSizeInputVox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jTextFieldFileNameInputVox, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)))))
         );
         jPanel16Layout.setVerticalGroup(
@@ -1483,6 +1554,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addContainerGap())
         );
 
+        jPanel18.setBackground(new java.awt.Color(114, 114, 114));
         jPanel18.setBorder(javax.swing.BorderFactory.createTitledBorder("Trajectory file"));
 
         jLabelName5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -1493,6 +1565,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jLabelPath5.setText("Path");
 
         jTextFieldFilePathTrajVox.setEditable(false);
+        jTextFieldFilePathTrajVox.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldFilePathTrajVox.setColumns(38);
         jTextFieldFilePathTrajVox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1501,11 +1574,14 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
 
         jTextFieldFileNameTrajVox.setEditable(false);
+        jTextFieldFileNameTrajVox.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldFileNameTrajVox.setColumns(50);
         jTextFieldFileNameTrajVox.setToolTipText("");
         jTextFieldFileNameTrajVox.setMinimumSize(new java.awt.Dimension(0, 20));
         jTextFieldFileNameTrajVox.setName(""); // NOI18N
 
+        jButtonOpenTrajectoryFile.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonOpenTrajectoryFile.setForeground(new java.awt.Color(255, 255, 255));
         jButtonOpenTrajectoryFile.setText("Open");
         jButtonOpenTrajectoryFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1547,6 +1623,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addContainerGap())
         );
 
+        jPanel17.setBackground(new java.awt.Color(114, 114, 114));
         jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Output file (*.vox)"));
 
         jLabelName4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -1557,6 +1634,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jLabelPath4.setText("Path");
 
         jTextFieldFilePathSaveVox.setEditable(false);
+        jTextFieldFilePathSaveVox.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldFilePathSaveVox.setColumns(38);
         jTextFieldFilePathSaveVox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1565,11 +1643,14 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
 
         jTextFieldFileNameSaveVox.setEditable(false);
+        jTextFieldFileNameSaveVox.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldFileNameSaveVox.setColumns(50);
         jTextFieldFileNameSaveVox.setToolTipText("");
         jTextFieldFileNameSaveVox.setMinimumSize(new java.awt.Dimension(0, 20));
         jTextFieldFileNameSaveVox.setName(""); // NOI18N
 
+        jButtonChooseOutputDirectoryVox.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonChooseOutputDirectoryVox.setForeground(new java.awt.Color(255, 255, 255));
         jButtonChooseOutputDirectoryVox.setText("Choose directory");
         jButtonChooseOutputDirectoryVox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1593,7 +1674,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                             .addComponent(jLabelPath4))
                         .addGap(39, 39, 39)
                         .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldFilePathSaveVox, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                            .addComponent(jTextFieldFilePathSaveVox, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                             .addComponent(jTextFieldFileNameSaveVox, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)))))
         );
         jPanel17Layout.setVerticalGroup(
@@ -1611,6 +1692,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addContainerGap())
         );
 
+        jButtonExecuteVoxAls.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonExecuteVoxAls.setForeground(new java.awt.Color(255, 255, 255));
         jButtonExecuteVoxAls.setText("Execute");
         jButtonExecuteVoxAls.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1618,17 +1701,22 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jPanel28.setBackground(new java.awt.Color(114, 114, 114));
         jPanel28.setBorder(javax.swing.BorderFactory.createTitledBorder("Reference points"));
 
+        jPanel29.setBackground(new java.awt.Color(114, 114, 114));
         jPanel29.setBorder(javax.swing.BorderFactory.createTitledBorder("Point 1"));
         jPanel29.setToolTipText("");
 
+        jTextFieldReferencePoint1X.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldReferencePoint1X.setText("0");
         jTextFieldReferencePoint1X.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
 
+        jTextFieldReferencePoint1Y.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldReferencePoint1Y.setText("0");
         jTextFieldReferencePoint1Y.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
 
+        jTextFieldReferencePoint1Z.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldReferencePoint1Z.setText("0");
         jTextFieldReferencePoint1Z.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
 
@@ -1651,15 +1739,19 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jTextFieldReferencePoint1Z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jPanel30.setBackground(new java.awt.Color(114, 114, 114));
         jPanel30.setBorder(javax.swing.BorderFactory.createTitledBorder("Point 2"));
         jPanel30.setToolTipText("");
 
+        jTextFieldReferencePoint2X.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldReferencePoint2X.setText("0");
         jTextFieldReferencePoint2X.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
 
+        jTextFieldReferencePoint2Y.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldReferencePoint2Y.setText("0");
         jTextFieldReferencePoint2Y.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
 
+        jTextFieldReferencePoint2Z.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldReferencePoint2Z.setText("0");
         jTextFieldReferencePoint2Z.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
 
@@ -1682,6 +1774,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jTextFieldReferencePoint2Z, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jButtonPopMatrix1.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonPopMatrix1.setForeground(new java.awt.Color(255, 255, 255));
         jButtonPopMatrix1.setText("VOP matrix");
         jButtonPopMatrix1.setToolTipText("Project orientation and position");
         jButtonPopMatrix1.addActionListener(new java.awt.event.ActionListener() {
@@ -1716,8 +1810,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jPanel1.setBackground(new java.awt.Color(114, 114, 114));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Weighting"));
 
+        jComboBoxWeighting.setBackground(new java.awt.Color(180, 180, 180));
         jComboBoxWeighting.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "No weighting", "From the echo number", "From a parameter file" }));
         jComboBoxWeighting.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -1725,6 +1821,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jButtonOpenWeightingFile.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonOpenWeightingFile.setForeground(new java.awt.Color(255, 255, 255));
         jButtonOpenWeightingFile.setText("Open file");
         jButtonOpenWeightingFile.setEnabled(false);
         jButtonOpenWeightingFile.addActionListener(new java.awt.event.ActionListener() {
@@ -1749,14 +1847,17 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxWeighting, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonOpenWeightingFile))
-                .addGap(0, 2, Short.MAX_VALUE))
+                .addGap(0, 12, Short.MAX_VALUE))
         );
 
+        jPanel2.setBackground(new java.awt.Color(114, 114, 114));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Bounding box"));
 
+        jPanel26.setBackground(new java.awt.Color(114, 114, 114));
         jPanel26.setBorder(javax.swing.BorderFactory.createTitledBorder("Max point"));
         jPanel26.setToolTipText("");
 
+        jTextFieldMaxPointX.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldMaxPointX.setText("10");
         jTextFieldMaxPointX.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
         jTextFieldMaxPointX.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1765,6 +1866,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jTextFieldMaxPointY.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldMaxPointY.setText("150");
         jTextFieldMaxPointY.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
         jTextFieldMaxPointY.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1773,6 +1875,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jTextFieldMaxPointZ.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldMaxPointZ.setText("70");
         jTextFieldMaxPointZ.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
         jTextFieldMaxPointZ.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1800,9 +1903,11 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jTextFieldMaxPointZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jPanel27.setBackground(new java.awt.Color(114, 114, 114));
         jPanel27.setBorder(javax.swing.BorderFactory.createTitledBorder("Min point"));
         jPanel27.setToolTipText("");
 
+        jTextFieldMinPointX.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldMinPointX.setText("-10");
         jTextFieldMinPointX.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
         jTextFieldMinPointX.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1811,6 +1916,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jTextFieldMinPointY.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldMinPointY.setText("50");
         jTextFieldMinPointY.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
         jTextFieldMinPointY.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1819,6 +1925,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jTextFieldMinPointZ.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldMinPointZ.setText("0");
         jTextFieldMinPointZ.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
         jTextFieldMinPointZ.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1846,9 +1953,11 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jTextFieldMinPointZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jPanel25.setBackground(new java.awt.Color(114, 114, 114));
         jPanel25.setBorder(javax.swing.BorderFactory.createTitledBorder("Voxel Number"));
         jPanel25.setToolTipText("");
 
+        jTextFieldVoxelNumberX.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldVoxelNumberX.setText("20");
         jTextFieldVoxelNumberX.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
         jTextFieldVoxelNumberX.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1857,6 +1966,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jTextFieldVoxelNumberY.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldVoxelNumberY.setText("100");
         jTextFieldVoxelNumberY.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
         jTextFieldVoxelNumberY.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1865,6 +1975,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jTextFieldVoxelNumberZ.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldVoxelNumberZ.setText("70");
         jTextFieldVoxelNumberZ.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
         jTextFieldVoxelNumberZ.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -1873,6 +1984,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jTextFieldVoxelNumberRes.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldVoxelNumberRes.setText("1");
         jTextFieldVoxelNumberRes.setBorder(javax.swing.BorderFactory.createTitledBorder("Resolution"));
 
@@ -1887,7 +1999,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldVoxelNumberZ, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldVoxelNumberRes))
+                .addComponent(jTextFieldVoxelNumberRes, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE))
         );
         jPanel25Layout.setVerticalGroup(
             jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1898,6 +2010,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jTextFieldVoxelNumberRes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jButtonCalculateBoundingBox.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonCalculateBoundingBox.setForeground(new java.awt.Color(255, 255, 255));
         jButtonCalculateBoundingBox.setText("Automatic");
         jButtonCalculateBoundingBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1945,7 +2059,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(39, 39, 39)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel33Layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1965,23 +2079,30 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel33Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel33Layout.createSequentialGroup()
                         .addComponent(jPanel28, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonExecuteVoxAls))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel33Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel33Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jButtonExecuteVoxAls)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
 
         jTabbedPane3.addTab("Voxelisation", jPanel33);
 
+        jPanel31.setBackground(new java.awt.Color(114, 114, 114));
+
+        jPanel6.setBackground(new java.awt.Color(114, 114, 114));
         jPanel6.setMaximumSize(new java.awt.Dimension(100, 32767));
         jPanel6.setPreferredSize(new java.awt.Dimension(100, 273));
 
+        jPanel13.setBackground(new java.awt.Color(114, 114, 114));
         jPanel13.setBorder(javax.swing.BorderFactory.createTitledBorder("Input file (*.laz, *.las)"));
 
         jLabelName.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -1994,12 +2115,14 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jLabelSize.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabelSize.setText("Size (bytes)");
 
+        jLabelFileSize.setBackground(new java.awt.Color(180, 180, 180));
         jLabelFileSize.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jLabelFileSize.setMaximumSize(new java.awt.Dimension(40000, 40000));
         jLabelFileSize.setName(""); // NOI18N
         jLabelFileSize.setPreferredSize(new java.awt.Dimension(150, 20));
 
         jTextFieldFilePathInputTxt.setEditable(false);
+        jTextFieldFilePathInputTxt.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldFilePathInputTxt.setColumns(38);
         jTextFieldFilePathInputTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2008,11 +2131,14 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
 
         jTextFieldFileNameInputTxt.setEditable(false);
+        jTextFieldFileNameInputTxt.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldFileNameInputTxt.setColumns(50);
         jTextFieldFileNameInputTxt.setToolTipText("");
         jTextFieldFileNameInputTxt.setMinimumSize(new java.awt.Dimension(0, 20));
         jTextFieldFileNameInputTxt.setName(""); // NOI18N
 
+        jButtonOpenInputFile.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonOpenInputFile.setForeground(new java.awt.Color(255, 255, 255));
         jButtonOpenInputFile.setText("Open");
         jButtonOpenInputFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2058,6 +2184,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jButtonOpenInputFile))
         );
 
+        jPanel15.setBackground(new java.awt.Color(114, 114, 114));
         jPanel15.setBorder(javax.swing.BorderFactory.createTitledBorder("Output file (*.txt)"));
 
         jLabelName2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -2068,6 +2195,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jLabelPath2.setText("Path");
 
         jTextFieldFilePathOutputTxt.setEditable(false);
+        jTextFieldFilePathOutputTxt.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldFilePathOutputTxt.setColumns(38);
         jTextFieldFilePathOutputTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2076,11 +2204,14 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
 
         jTextFieldFileNameOutputTxt.setEditable(false);
+        jTextFieldFileNameOutputTxt.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldFileNameOutputTxt.setColumns(50);
         jTextFieldFileNameOutputTxt.setToolTipText("");
         jTextFieldFileNameOutputTxt.setMinimumSize(new java.awt.Dimension(0, 20));
         jTextFieldFileNameOutputTxt.setName(""); // NOI18N
 
+        jButtonChooseDirectory.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonChooseDirectory.setForeground(new java.awt.Color(255, 255, 255));
         jButtonChooseDirectory.setText("Choose directory");
         jButtonChooseDirectory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2122,6 +2253,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jButtonChooseDirectory))
         );
 
+        jCheckBoxWriteX.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWriteX.setSelected(true);
         jCheckBoxWriteX.setText("(x)");
         jCheckBoxWriteX.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -2130,6 +2262,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxWriteY.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWriteY.setSelected(true);
         jCheckBoxWriteY.setText("(y)");
         jCheckBoxWriteY.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -2138,6 +2271,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxWriteZ.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWriteZ.setSelected(true);
         jCheckBoxWriteZ.setText("(z)");
         jCheckBoxWriteZ.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -2146,6 +2280,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxWriteI.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWriteI.setSelected(true);
         jCheckBoxWriteI.setText("(i)ntensity");
         jCheckBoxWriteI.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -2154,6 +2289,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxWriteR.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWriteR.setSelected(true);
         jCheckBoxWriteR.setText("(r)eturn number");
         jCheckBoxWriteR.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -2162,6 +2298,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxWriteN.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWriteN.setSelected(true);
         jCheckBoxWriteN.setText("(n)umber of returns");
         jCheckBoxWriteN.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -2170,6 +2307,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxWriteD.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWriteD.setText("scan (d)irection");
         jCheckBoxWriteD.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -2177,6 +2315,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxWriteE.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWriteE.setText("(e)dge of flight line");
         jCheckBoxWriteE.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -2184,6 +2323,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxWriteC.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWriteC.setSelected(true);
         jCheckBoxWriteC.setText("(c)lassification");
         jCheckBoxWriteC.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -2192,6 +2332,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxWriteA.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWriteA.setSelected(true);
         jCheckBoxWriteA.setText("scan (a)ngle");
         jCheckBoxWriteA.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -2200,6 +2341,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxWriteU.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWriteU.setText("(u)ser data");
         jCheckBoxWriteU.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -2207,6 +2349,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxWriteP.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWriteP.setSelected(true);
         jCheckBoxWriteP.setText("(p)oint source ID");
         jCheckBoxWriteP.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -2215,6 +2358,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxWriteT.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWriteT.setSelected(true);
         jCheckBoxWriteT.setText("GPS (t)ime ");
         jCheckBoxWriteT.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -2223,6 +2367,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxWriteRGB.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWriteRGB.setText("(RGB)color");
         jCheckBoxWriteRGB.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -2230,6 +2375,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxWritew.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWritew.setText("(w)ave packet index");
         jCheckBoxWritew.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -2237,6 +2383,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxWriteW.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWriteW.setText("(W)ave packet");
         jCheckBoxWriteW.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -2244,6 +2391,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxWriteV.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWriteV.setText("wa(V)e form");
         jCheckBoxWriteV.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -2251,6 +2399,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jPanel24.setBackground(new java.awt.Color(114, 114, 114));
+
+        jButtonLoad.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonLoad.setForeground(new java.awt.Color(255, 255, 255));
         jButtonLoad.setText("Execute");
         jButtonLoad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2258,10 +2410,11 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxWriteHeader.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxWriteHeader.setSelected(true);
         jCheckBoxWriteHeader.setText("write header");
 
-        jTextFieldArguments.setBackground(new java.awt.Color(238, 238, 238));
+        jTextFieldArguments.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldArguments.setBorder(javax.swing.BorderFactory.createTitledBorder("Arguments"));
 
         javax.swing.GroupLayout jPanel24Layout = new javax.swing.GroupLayout(jPanel24);
@@ -2377,22 +2530,22 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     .addComponent(jCheckBoxWriteV))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(102, Short.MAX_VALUE))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel31Layout = new javax.swing.GroupLayout(jPanel31);
         jPanel31.setLayout(jPanel31Layout);
         jPanel31Layout.setHorizontalGroup(
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 785, Short.MAX_VALUE)
+            .addGap(0, 745, Short.MAX_VALUE)
             .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 785, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 745, Short.MAX_VALUE))
         );
         jPanel31Layout.setVerticalGroup(
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 376, Short.MAX_VALUE)
+            .addGap(0, 380, Short.MAX_VALUE)
             .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("LAS => TXT", jPanel31);
@@ -2403,7 +2556,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanelOutputParametersTab.setLayout(jPanelOutputParametersTabLayout);
         jPanelOutputParametersTabLayout.setHorizontalGroup(
             jPanelOutputParametersTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2)
+            .addGroup(jPanelOutputParametersTabLayout.createSequentialGroup()
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 801, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanelOutputParametersTabLayout.setVerticalGroup(
             jPanelOutputParametersTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2412,8 +2567,15 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         jTabbedPane1.addTab("File conversion", jPanelOutputParametersTab);
 
+        jPanelVisualizeTab.setBackground(new java.awt.Color(114, 114, 114));
+
+        jTabbedPane4.setBackground(new java.awt.Color(83, 83, 83));
         jTabbedPane4.setTabPlacement(javax.swing.JTabbedPane.LEFT);
 
+        jPanel3.setBackground(new java.awt.Color(114, 114, 114));
+
+        jButtonOpen3DDisplay.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonOpen3DDisplay.setForeground(new java.awt.Color(255, 255, 255));
         jButtonOpen3DDisplay.setText("Open display window");
         jButtonOpen3DDisplay.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButtonOpen3DDisplay.setEnabled(false);
@@ -2423,10 +2585,13 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
-        jPanel3DViewDensity.setBorder(javax.swing.BorderFactory.createTitledBorder("Voxel"));
+        jPanel3DViewDensity.setBackground(new java.awt.Color(114, 114, 114));
+        jPanel3DViewDensity.setBorder(javax.swing.BorderFactory.createTitledBorder(customBorder, "Input file", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, java.awt.Color.black));
 
+        jPanel14.setBackground(new java.awt.Color(114, 114, 114));
         jPanel14.setBorder(javax.swing.BorderFactory.createTitledBorder("Attribute to visualize"));
 
+        jComboBoxAttributeToVisualize.setBackground(new java.awt.Color(180, 180, 180));
         jComboBoxAttributeToVisualize.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBoxAttributeToVisualizeItemStateChanged(evt);
@@ -2455,6 +2620,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addContainerGap())
         );
 
+        jButtonCreateAttribut.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonCreateAttribut.setForeground(new java.awt.Color(255, 255, 255));
         jButtonCreateAttribut.setText("Create attribut");
         jButtonCreateAttribut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2464,11 +2631,19 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         jLabel1.setText("X = ");
 
+        jComboBoxDefaultX.setBackground(new java.awt.Color(180, 180, 180));
+
         jLabel3.setText("Y = ");
+
+        jComboBoxDefaultY.setBackground(new java.awt.Color(180, 180, 180));
 
         jLabel4.setText("Z = ");
 
+        jComboBoxDefaultZ.setBackground(new java.awt.Color(180, 180, 180));
+
         jLabel5.setText("Expression");
+
+        jTextFieldAttributExpression.setBackground(new java.awt.Color(180, 180, 180));
 
         javax.swing.GroupLayout jPanel3DViewDensityLayout = new javax.swing.GroupLayout(jPanel3DViewDensity);
         jPanel3DViewDensity.setLayout(jPanel3DViewDensityLayout);
@@ -2535,11 +2710,14 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addContainerGap())
         );
 
+        jCheckBoxDrawTerrain.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxDrawTerrain.setText("Draw DTM");
         jCheckBoxDrawTerrain.setEnabled(false);
 
+        jCheckBoxDrawAxis.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxDrawAxis.setText("Draw axis");
 
+        jCheckBoxDrawNullVoxel.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxDrawNullVoxel.setText("Draw voxel when null value");
         jCheckBoxDrawNullVoxel.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -2552,6 +2730,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jCheckBoxDrawUndergroundVoxel.setBackground(new java.awt.Color(114, 114, 114));
         jCheckBoxDrawUndergroundVoxel.setText("Draw voxel under dtm ground");
         jCheckBoxDrawUndergroundVoxel.setEnabled(false);
         jCheckBoxDrawUndergroundVoxel.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -2582,7 +2761,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                             .addComponent(jCheckBoxDrawUndergroundVoxel)
                             .addComponent(jCheckBoxDrawAxis)
                             .addComponent(jCheckBoxDrawTerrain))))
-                .addContainerGap(131, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2605,6 +2784,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         jTabbedPane4.addTab("3D view", jPanel3);
 
+        jPanel4.setBackground(new java.awt.Color(114, 114, 114));
+
+        jButtonGenerateMap.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonGenerateMap.setForeground(new java.awt.Color(255, 255, 255));
         jButtonGenerateMap.setText("Generate map");
         jButtonGenerateMap.setToolTipText("Load a terrain first");
         jButtonGenerateMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -2614,10 +2797,12 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jRadioButtonPAI.setBackground(new java.awt.Color(114, 114, 114));
         buttonGroup2DProjection.add(jRadioButtonPAI);
         jRadioButtonPAI.setSelected(true);
         jRadioButtonPAI.setText("PAI map (plant area index)");
 
+        jRadioButtonTransmittanceMap.setBackground(new java.awt.Color(114, 114, 114));
         buttonGroup2DProjection.add(jRadioButtonTransmittanceMap);
         jRadioButtonTransmittanceMap.setText("Transmittance map");
 
@@ -2631,7 +2816,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     .addComponent(jRadioButtonTransmittanceMap)
                     .addComponent(jRadioButtonPAI)
                     .addComponent(jButtonGenerateMap))
-                .addContainerGap(527, Short.MAX_VALUE))
+                .addContainerGap(499, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2640,18 +2825,20 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jRadioButtonPAI)
                 .addGap(15, 15, 15)
                 .addComponent(jRadioButtonTransmittanceMap)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 235, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 259, Short.MAX_VALUE)
                 .addComponent(jButtonGenerateMap)
                 .addGap(42, 42, 42))
         );
 
         jTabbedPane4.addTab("2D projection", jPanel4);
 
+        jPanel5.setBackground(new java.awt.Color(114, 114, 114));
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 685, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2660,15 +2847,17 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         jTabbedPane4.addTab("Histogram", jPanel5);
 
+        jPanel11.setBackground(new java.awt.Color(114, 114, 114));
+
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 687, Short.MAX_VALUE)
+            .addGap(0, 685, Short.MAX_VALUE)
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 388, Short.MAX_VALUE)
+            .addGap(0, 408, Short.MAX_VALUE)
         );
 
         jTabbedPane4.addTab("Vegetation profile", jPanel11);
@@ -2686,15 +2875,19 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         jTabbedPane1.addTab("Visualize", jPanelVisualizeTab);
 
-        jSplitPane1.setTopComponent(jTabbedPane1);
+        jPanel7.add(jTabbedPane1);
 
-        jSplitPane2.setDividerLocation(380);
+        jSplitPane2.setBackground(new java.awt.Color(114, 114, 114));
+        jSplitPane2.setDividerLocation(340);
         jSplitPane2.setContinuousLayout(true);
         jSplitPane2.setDoubleBuffered(true);
 
+        jPanel8.setBackground(new java.awt.Color(114, 114, 114));
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Voxel files"));
         jPanel8.setPreferredSize(new java.awt.Dimension(200, 138));
 
+        jButtonAddFile.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonAddFile.setForeground(new java.awt.Color(255, 255, 255));
         jButtonAddFile.setText("Add");
         jButtonAddFile.setPreferredSize(new java.awt.Dimension(77, 26));
         jButtonAddFile.addActionListener(new java.awt.event.ActionListener() {
@@ -2703,6 +2896,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jButtonRemoveFile.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonRemoveFile.setForeground(new java.awt.Color(255, 255, 255));
         jButtonRemoveFile.setText("remove");
         jButtonRemoveFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2710,6 +2905,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jListOutputFiles.setBackground(new java.awt.Color(180, 180, 180));
         jListOutputFiles.setBorder(javax.swing.BorderFactory.createTitledBorder("Select a file"));
         jListOutputFiles.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jListOutputFiles.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -2719,6 +2915,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
         jScrollPane2.setViewportView(jListOutputFiles);
 
+        jButtonLoadSelectedFile.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonLoadSelectedFile.setForeground(new java.awt.Color(255, 255, 255));
         jButtonLoadSelectedFile.setText("Load selection");
         jButtonLoadSelectedFile.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -2731,6 +2929,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jButtonExportSelection.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonExportSelection.setForeground(new java.awt.Color(255, 255, 255));
         jButtonExportSelection.setText("Export selection");
         jButtonExportSelection.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -2748,33 +2948,44 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonLoadSelectedFile, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonRemoveFile)
-                    .addComponent(jButtonAddFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonExportSelection, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(jButtonExportSelection)
+                    .addComponent(jButtonLoadSelectedFile)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(jButtonAddFile, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonRemoveFile)))
+                .addGap(5, 5, 5))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addComponent(jButtonAddFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonRemoveFile)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonLoadSelectedFile)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                .addComponent(jButtonExportSelection))
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonAddFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButtonRemoveFile))
+                        .addGap(26, 26, 26)
+                        .addComponent(jButtonLoadSelectedFile)
+                        .addGap(8, 8, 8)
+                        .addComponent(jButtonExportSelection)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         jSplitPane2.setRightComponent(jPanel8);
 
+        jPanel10.setBackground(new java.awt.Color(114, 114, 114));
         jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder("DTM"));
         jPanel10.setPreferredSize(new java.awt.Dimension(200, 138));
 
+        jButtonOpenInputFile1.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonOpenInputFile1.setForeground(new java.awt.Color(255, 255, 255));
         jButtonOpenInputFile1.setText("Open");
         jButtonOpenInputFile1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jButtonOpenInputFile1.addActionListener(new java.awt.event.ActionListener() {
@@ -2784,6 +2995,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
 
         jTextFieldFileNameMnt.setEditable(false);
+        jTextFieldFileNameMnt.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldFileNameMnt.setColumns(50);
         jTextFieldFileNameMnt.setToolTipText("");
         jTextFieldFileNameMnt.setMinimumSize(new java.awt.Dimension(0, 20));
@@ -2797,6 +3009,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jLabelPath1.setText("Path");
 
         jTextFieldFilePathMnt.setEditable(false);
+        jTextFieldFilePathMnt.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldFilePathMnt.setColumns(38);
         jTextFieldFilePathMnt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2817,7 +3030,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                             .addComponent(jLabelPath1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldFilePathMnt, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
+                            .addComponent(jTextFieldFilePathMnt, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
                             .addComponent(jTextFieldFileNameMnt, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -2841,7 +3054,11 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         jSplitPane2.setLeftComponent(jPanel10);
 
-        jSplitPane1.setBottomComponent(jSplitPane2);
+        jPanel7.add(jSplitPane2);
+
+        getContentPane().add(jPanel7, java.awt.BorderLayout.CENTER);
+
+        jMenuBar1.setBackground(new java.awt.Color(114, 114, 114));
 
         jMenu1.setText("File");
 
@@ -2885,23 +3102,12 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         setJMenuBar(jMenuBar1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
 
-        jSplitPane1.setDividerLocation(this.getHeight() - 200);
+        
     }//GEN-LAST:event_formComponentResized
 
     private void jMenuItemLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLoadActionPerformed
@@ -3066,6 +3272,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 
                 initComboBox();
                 jButtonOpen3DDisplay.setEnabled(true);
+                jTabbedPane1.setSelectedIndex(1);
+                jTabbedPane4.setSelectedIndex(0);
             }
             
         }else{
@@ -3117,7 +3325,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     img= projection.generateMap(Projection.TRANSMITTANCE);
                 }
 
-                BufferedImage colorScale = ScaleGradient.generateScale(ColorGradient.GRADIENT_HEAT, projection.getMinValue(), projection.getMaxValue(), 50, 200);
+                BufferedImage colorScale = ScaleGradient.generateScale(ColorGradient.GRADIENT_HEAT, projection.getMinValue(), projection.getMaxValue(), 50, 200, ScaleGradient.VERTICAL);
 
                 JFrameImageViewer imageViewer = new JFrameImageViewer(img, colorScale);
                 imageViewer.setJLabelMinValue(String.valueOf(projection.getMinValue()+0.0));
@@ -3196,7 +3404,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         readTerrain();
 
-        JoglListener joglContext = new JoglListener(this, terrain, settings);
+        JoglListener joglContext = new JoglListener(this, terrain, settings, animator);
         EventManager eventListener = new EventManager(animator, renderFrame, joglContext);
         joglContext.attachEventListener(eventListener);
         
@@ -3609,7 +3817,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         final boolean mergeOutput = jCheckBoxMergeOutputFiles.isSelected();
         
         ArrayList<Scans> filteredRxpList = null;
-        Scans scans = new Scans();
+        
 
         switch(jComboBox1.getSelectedIndex()){
             case 0:
@@ -3618,6 +3826,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 break;
             case 1:
 
+                Scans scans = new Scans();
                 
                 RxpScan scan = new RxpScan();
                 scan.setFile(new File(jListRspScans.getSelectedValue().toString()));
@@ -3630,12 +3839,13 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
                 filteredRxpList = new ArrayList<>();
                 
+                filteredRxpList.add(scans);
+                
                 vopPopMatrix = getVopMatrixTLS();
 
                 break;
         }
         
-        filteredRxpList.add(scans);
 
         final ArrayList<Scans> scanList = filteredRxpList;
 
@@ -3667,7 +3877,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         final VoxelParameters parameters = voxelisationParameters;
 
         final String outputPath = jTextFieldFileOutputPathTlsVox.getText();
-        
+                
+        final VoxelisationTool voxTool = new VoxelisationTool();
 
         SwingWorker sw = new SwingWorker() {
 
@@ -3677,26 +3888,42 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 try{
 
                     int compteur = 1;
+                    
+                    
                     for(Scans rxp:scanList){
-                        VoxelisationTool voxTool = new VoxelisationTool();
-                        RxpScan scan = null;
+                        
+                        final RxpScan scan;
+                        
                         if(isLight){
                             scan = rxp.getScanLite();
                         }else{
                             scan = rxp.getScanFull();
                         }
                         progressBar.setText("Voxelisation in progress, file "+compteur+"/"+scanList.size()+" : "+scan.getFile().getName());
-                        File outputFile = new File(outputPath+"/"+scan.getFile().getName()+".vox");
+                        progressBar.pack();
+                        
+                        final File outputFile = new File(outputPath+"/"+scan.getFile().getName()+".vox");
+                        
+                        long start_time = System.nanoTime();
+                        
                         voxTool.generateVoxelFromRxp(scan, outputFile, vopPopMatrix, parameters);
+ 
+                        
+                        long end_time = System.nanoTime();
+                        double difference = (end_time - start_time)*(Math.pow(10, -9));
+                        System.out.println("time: "+Math.round(difference*100)/100);
+                        
                         filesList.add(outputFile);
-
+                        //System.out.println(compteur);
                         compteur++;
 
                     }
+                    
                 }catch(Exception e){
                     logger.error("voxelisation failed", e);
                 }
-
+                //this.get();
+                
                 return null;
             }
 
@@ -3720,7 +3947,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 jListOutputFiles.setSelectedIndex(0);
             }
         };
-
+        
         sw.execute();
 
         /*
@@ -4189,6 +4416,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JPanel jPanel42;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanelOutputParametersTab;
     private javax.swing.JPanel jPanelVisualizeTab;
@@ -4198,7 +4426,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JRadioButton jRadioButtonTransmittanceMap;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;

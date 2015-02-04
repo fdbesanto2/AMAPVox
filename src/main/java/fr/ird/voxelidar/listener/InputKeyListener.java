@@ -30,7 +30,7 @@ public class InputKeyListener implements KeyListener{
         
         if(animator.isPaused()){
             animator.resume();
-            System.out.println("animator resumed");
+            //System.out.println("animator resumed");
         }
         
         switch(ke.getKeyCode()){

@@ -32,7 +32,7 @@ public class InputMouseAdapter extends MouseAdapter{
         
         if(animator.isPaused()){
             animator.resume();
-            System.out.println("animator resumed");
+            //System.out.println("animator resumed");
         }
         
         if(me.getButton() == MouseEvent.BUTTON2){
@@ -51,7 +51,7 @@ public class InputMouseAdapter extends MouseAdapter{
         
         if(animator.isPaused()){
             animator.resume();
-            System.out.println("animator resumed");
+            //System.out.println("animator resumed");
         }
         
         if(me.getButton() == MouseEvent.BUTTON1){
@@ -65,7 +65,7 @@ public class InputMouseAdapter extends MouseAdapter{
         
         if(!animator.isPaused()){
             animator.pause();
-            System.out.println("animator paused");
+            //System.out.println("animator paused");
         }
         
         if(  me.isAutoRepeat() ) {
@@ -92,7 +92,7 @@ public class InputMouseAdapter extends MouseAdapter{
         
         if(animator.isPaused()){
             animator.resume();
-            System.out.println("animator resumed");
+            //System.out.println("animator resumed");
         }
         
         switch(me.getButton()){
@@ -157,7 +157,7 @@ public class InputMouseAdapter extends MouseAdapter{
         
         if(animator.isPaused()){
             animator.resume();
-            System.out.println("animator resumed");
+            //System.out.println("animator resumed");
         }
         
         float[] rotation = me.getRotation();

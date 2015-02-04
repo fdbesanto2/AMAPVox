@@ -94,6 +94,7 @@ public class JFrameTools extends javax.swing.JFrame {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
+        jPanel12 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
         jTabbedPane2 = new javax.swing.JTabbedPane();
@@ -158,15 +159,7 @@ public class JFrameTools extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel28 = new javax.swing.JPanel();
         jComboBoxGradient = new javax.swing.JComboBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
-        jPanel29 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jTextFieldVoxelSize = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
@@ -184,6 +177,17 @@ public class JFrameTools extends javax.swing.JFrame {
             }
         });
 
+        jPanel12.setBackground(new java.awt.Color(114, 114, 114));
+
+        jTabbedPane1.setBackground(new java.awt.Color(83, 83, 83));
+
+        jPanel4.setBackground(new java.awt.Color(114, 114, 114));
+
+        jTabbedPane2.setBackground(new java.awt.Color(83, 83, 83));
+
+        jPanel17.setBackground(new java.awt.Color(114, 114, 114));
+
+        jPanelPerspective.setBackground(new java.awt.Color(114, 114, 114));
         jPanelPerspective.setBorder(javax.swing.BorderFactory.createTitledBorder("Perspective"));
         jPanelPerspective.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -191,14 +195,11 @@ public class JFrameTools extends javax.swing.JFrame {
             }
         });
 
+        jPanel13.setBackground(new java.awt.Color(114, 114, 114));
         jPanel13.setBorder(javax.swing.BorderFactory.createTitledBorder("Near"));
         jPanel13.setToolTipText("Near");
 
-        jTextFieldNearPerspectiveCamera.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldNearPerspectiveCameraActionPerformed(evt);
-            }
-        });
+        jTextFieldNearPerspectiveCamera.setBackground(new java.awt.Color(180, 180, 180));
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -211,14 +212,11 @@ public class JFrameTools extends javax.swing.JFrame {
             .addComponent(jTextFieldNearPerspectiveCamera, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        jPanel14.setBackground(new java.awt.Color(114, 114, 114));
         jPanel14.setBorder(javax.swing.BorderFactory.createTitledBorder("Far"));
         jPanel14.setToolTipText("Far");
 
-        jTextFieldFarPerspectiveCamera.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldFarPerspectiveCameraActionPerformed(evt);
-            }
-        });
+        jTextFieldFarPerspectiveCamera.setBackground(new java.awt.Color(180, 180, 180));
 
         javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
         jPanel14.setLayout(jPanel14Layout);
@@ -231,14 +229,11 @@ public class JFrameTools extends javax.swing.JFrame {
             .addComponent(jTextFieldFarPerspectiveCamera, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        jPanel16.setBackground(new java.awt.Color(114, 114, 114));
         jPanel16.setBorder(javax.swing.BorderFactory.createTitledBorder("Field of view"));
         jPanel16.setToolTipText("Field of view");
 
-        jTextFieldFovPerspectiveCamera.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldFovPerspectiveCameraActionPerformed(evt);
-            }
-        });
+        jTextFieldFovPerspectiveCamera.setBackground(new java.awt.Color(180, 180, 180));
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
@@ -251,14 +246,11 @@ public class JFrameTools extends javax.swing.JFrame {
             .addComponent(jTextFieldFovPerspectiveCamera, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        jPanel15.setBackground(new java.awt.Color(114, 114, 114));
         jPanel15.setBorder(javax.swing.BorderFactory.createTitledBorder("Aspect"));
         jPanel15.setToolTipText("Aspect");
 
-        jTextFieldAspectPerspectiveCamera.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldAspectPerspectiveCameraActionPerformed(evt);
-            }
-        });
+        jTextFieldAspectPerspectiveCamera.setBackground(new java.awt.Color(180, 180, 180));
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
@@ -303,16 +295,14 @@ public class JFrameTools extends javax.swing.JFrame {
                 .addGap(7, 7, 7))
         );
 
+        jPanel19.setBackground(new java.awt.Color(114, 114, 114));
         jPanel19.setBorder(javax.swing.BorderFactory.createTitledBorder("Position"));
 
+        jPanel3.setBackground(new java.awt.Color(114, 114, 114));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
         jPanel3.setToolTipText("");
 
-        jTextFieldXCameraPosition.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldXCameraPositionActionPerformed(evt);
-            }
-        });
+        jTextFieldXCameraPosition.setBackground(new java.awt.Color(180, 180, 180));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -325,9 +315,11 @@ public class JFrameTools extends javax.swing.JFrame {
             .addComponent(jTextFieldXCameraPosition, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        jPanel5.setBackground(new java.awt.Color(114, 114, 114));
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
         jPanel5.setToolTipText("");
 
+        jTextFieldYCameraPosition.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldYCameraPosition.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldYCameraPositionActionPerformed(evt);
@@ -344,17 +336,14 @@ public class JFrameTools extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jTextFieldYCameraPosition, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 3, Short.MAX_VALUE))
         );
 
+        jPanel6.setBackground(new java.awt.Color(114, 114, 114));
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
         jPanel6.setToolTipText("");
 
-        jTextFieldZCameraPosition.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldZCameraPositionActionPerformed(evt);
-            }
-        });
+        jTextFieldZCameraPosition.setBackground(new java.awt.Color(180, 180, 180));
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -366,7 +355,7 @@ public class JFrameTools extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addComponent(jTextFieldZCameraPosition, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 3, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
@@ -390,16 +379,14 @@ public class JFrameTools extends javax.swing.JFrame {
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jPanel20.setBackground(new java.awt.Color(114, 114, 114));
         jPanel20.setBorder(javax.swing.BorderFactory.createTitledBorder("Target"));
 
+        jPanel7.setBackground(new java.awt.Color(114, 114, 114));
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("X"));
         jPanel7.setToolTipText("");
 
-        jTextFieldXCameraTarget.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldXCameraTargetActionPerformed(evt);
-            }
-        });
+        jTextFieldXCameraTarget.setBackground(new java.awt.Color(180, 180, 180));
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -411,17 +398,14 @@ public class JFrameTools extends javax.swing.JFrame {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jTextFieldXCameraTarget, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 3, Short.MAX_VALUE))
         );
 
+        jPanel8.setBackground(new java.awt.Color(114, 114, 114));
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Y"));
         jPanel8.setToolTipText("");
 
-        jTextFieldYCameraTarget.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldYCameraTargetActionPerformed(evt);
-            }
-        });
+        jTextFieldYCameraTarget.setBackground(new java.awt.Color(180, 180, 180));
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -433,17 +417,14 @@ public class JFrameTools extends javax.swing.JFrame {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addComponent(jTextFieldYCameraTarget, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 3, Short.MAX_VALUE))
         );
 
+        jPanel9.setBackground(new java.awt.Color(114, 114, 114));
         jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Z"));
         jPanel9.setToolTipText("");
 
-        jTextFieldZCameraTarget.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldZCameraTargetActionPerformed(evt);
-            }
-        });
+        jTextFieldZCameraTarget.setBackground(new java.awt.Color(180, 180, 180));
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -455,7 +436,7 @@ public class JFrameTools extends javax.swing.JFrame {
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addComponent(jTextFieldZCameraTarget, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 3, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
@@ -476,6 +457,7 @@ public class JFrameTools extends javax.swing.JFrame {
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jPanelOrthographic.setBackground(new java.awt.Color(114, 114, 114));
         jPanelOrthographic.setBorder(javax.swing.BorderFactory.createTitledBorder("Orthographic"));
         jPanelOrthographic.setEnabled(false);
         jPanelOrthographic.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -484,16 +466,13 @@ public class JFrameTools extends javax.swing.JFrame {
             }
         });
 
+        jPanel22.setBackground(new java.awt.Color(114, 114, 114));
         jPanel22.setBorder(javax.swing.BorderFactory.createTitledBorder("Near"));
         jPanel22.setToolTipText("Near");
         jPanel22.setEnabled(false);
         jPanel22.setPreferredSize(new java.awt.Dimension(56, 43));
 
-        jTextFieldNearOrthoCamera.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldNearOrthoCameraActionPerformed(evt);
-            }
-        });
+        jTextFieldNearOrthoCamera.setBackground(new java.awt.Color(180, 180, 180));
 
         javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
         jPanel22.setLayout(jPanel22Layout);
@@ -506,15 +485,12 @@ public class JFrameTools extends javax.swing.JFrame {
             .addComponent(jTextFieldNearOrthoCamera, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        jPanel23.setBackground(new java.awt.Color(114, 114, 114));
         jPanel23.setBorder(javax.swing.BorderFactory.createTitledBorder("Far"));
         jPanel23.setToolTipText("Far");
         jPanel23.setEnabled(false);
 
-        jTextFieldFarOrthoCamera.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldFarOrthoCameraActionPerformed(evt);
-            }
-        });
+        jTextFieldFarOrthoCamera.setBackground(new java.awt.Color(180, 180, 180));
 
         javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
         jPanel23.setLayout(jPanel23Layout);
@@ -527,16 +503,13 @@ public class JFrameTools extends javax.swing.JFrame {
             .addComponent(jTextFieldFarOrthoCamera, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        jPanel24.setBackground(new java.awt.Color(114, 114, 114));
         jPanel24.setBorder(javax.swing.BorderFactory.createTitledBorder("Left"));
         jPanel24.setToolTipText("Left");
         jPanel24.setEnabled(false);
         jPanel24.setPreferredSize(new java.awt.Dimension(56, 43));
 
-        jTextFieldLeftOrthoCamera.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldLeftOrthoCameraActionPerformed(evt);
-            }
-        });
+        jTextFieldLeftOrthoCamera.setBackground(new java.awt.Color(180, 180, 180));
 
         javax.swing.GroupLayout jPanel24Layout = new javax.swing.GroupLayout(jPanel24);
         jPanel24.setLayout(jPanel24Layout);
@@ -549,15 +522,12 @@ public class JFrameTools extends javax.swing.JFrame {
             .addComponent(jTextFieldLeftOrthoCamera, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        jPanel25.setBackground(new java.awt.Color(114, 114, 114));
         jPanel25.setBorder(javax.swing.BorderFactory.createTitledBorder("Right"));
         jPanel25.setToolTipText("Right");
         jPanel25.setEnabled(false);
 
-        jTextFieldRightOrthoCamera.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldRightOrthoCameraActionPerformed(evt);
-            }
-        });
+        jTextFieldRightOrthoCamera.setBackground(new java.awt.Color(180, 180, 180));
 
         javax.swing.GroupLayout jPanel25Layout = new javax.swing.GroupLayout(jPanel25);
         jPanel25.setLayout(jPanel25Layout);
@@ -570,15 +540,12 @@ public class JFrameTools extends javax.swing.JFrame {
             .addComponent(jTextFieldRightOrthoCamera, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        jPanel26.setBackground(new java.awt.Color(114, 114, 114));
         jPanel26.setBorder(javax.swing.BorderFactory.createTitledBorder("Top"));
         jPanel26.setToolTipText("Top");
         jPanel26.setEnabled(false);
 
-        jTextFieldTopOrthoCamera.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldTopOrthoCameraActionPerformed(evt);
-            }
-        });
+        jTextFieldTopOrthoCamera.setBackground(new java.awt.Color(180, 180, 180));
 
         javax.swing.GroupLayout jPanel26Layout = new javax.swing.GroupLayout(jPanel26);
         jPanel26.setLayout(jPanel26Layout);
@@ -591,15 +558,12 @@ public class JFrameTools extends javax.swing.JFrame {
             .addComponent(jTextFieldTopOrthoCamera, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        jPanel27.setBackground(new java.awt.Color(114, 114, 114));
         jPanel27.setBorder(javax.swing.BorderFactory.createTitledBorder("Bottom"));
         jPanel27.setToolTipText("Bottom");
         jPanel27.setEnabled(false);
 
-        jTextFieldBottomOrthoCamera.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldBottomOrthoCameraActionPerformed(evt);
-            }
-        });
+        jTextFieldBottomOrthoCamera.setBackground(new java.awt.Color(180, 180, 180));
 
         javax.swing.GroupLayout jPanel27Layout = new javax.swing.GroupLayout(jPanel27);
         jPanel27.setLayout(jPanel27Layout);
@@ -665,7 +629,7 @@ public class JFrameTools extends javax.swing.JFrame {
                         .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanelOrthographic, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanelPerspective, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         jPanel17Layout.setVerticalGroup(
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -683,9 +647,13 @@ public class JFrameTools extends javax.swing.JFrame {
 
         jTabbedPane2.addTab("Camera", jPanel17);
 
+        jPanel18.setBackground(new java.awt.Color(114, 114, 114));
+
+        jPanel1.setBackground(new java.awt.Color(114, 114, 114));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("World color"));
         jPanel1.setPreferredSize(new java.awt.Dimension(219, 224));
 
+        jSlider1.setBackground(new java.awt.Color(114, 114, 114));
         jSlider1.setMaximum(255);
         jSlider1.setPaintLabels(true);
         jSlider1.setToolTipText(String.valueOf(jSlider1.getValue()));
@@ -696,6 +664,7 @@ public class JFrameTools extends javax.swing.JFrame {
             }
         });
 
+        jSlider2.setBackground(new java.awt.Color(114, 114, 114));
         jSlider2.setMaximum(255);
         jSlider2.setPaintLabels(true);
         jSlider2.setToolTipText(String.valueOf(jSlider2.getValue()));
@@ -706,6 +675,7 @@ public class JFrameTools extends javax.swing.JFrame {
             }
         });
 
+        jSlider3.setBackground(new java.awt.Color(114, 114, 114));
         jSlider3.setMaximum(255);
         jSlider3.setPaintLabels(true);
         jSlider3.setToolTipText(String.valueOf(jSlider3.getValue()));
@@ -767,21 +737,24 @@ public class JFrameTools extends javax.swing.JFrame {
             jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel18Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel18Layout.setVerticalGroup(
             jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel18Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(321, Short.MAX_VALUE))
+                .addContainerGap(320, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("World", jPanel18);
 
+        jPanel21.setBackground(new java.awt.Color(114, 114, 114));
         jPanel21.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jButton4.setBackground(new java.awt.Color(85, 85, 85));
+        jButton4.setForeground(new java.awt.Color(255, 255, 255));
         jButton4.setText("Front");
         buttonGroup2.add(jButton4);
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -791,6 +764,8 @@ public class JFrameTools extends javax.swing.JFrame {
         });
         jPanel21.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, -1, -1));
 
+        jButton6.setBackground(new java.awt.Color(85, 85, 85));
+        jButton6.setForeground(new java.awt.Color(255, 255, 255));
         jButton6.setText("Right");
         buttonGroup2.add(jButton6);
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -800,6 +775,8 @@ public class JFrameTools extends javax.swing.JFrame {
         });
         jPanel21.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, -1, -1));
 
+        jButton8.setBackground(new java.awt.Color(85, 85, 85));
+        jButton8.setForeground(new java.awt.Color(255, 255, 255));
         jButton8.setText("Top");
         buttonGroup2.add(jButton8);
         jButton8.addActionListener(new java.awt.event.ActionListener() {
@@ -812,6 +789,8 @@ public class JFrameTools extends javax.swing.JFrame {
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/cube1.gif"))); // NOI18N
         jPanel21.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
 
+        jButton7.setBackground(new java.awt.Color(85, 85, 85));
+        jButton7.setForeground(new java.awt.Color(255, 255, 255));
         jButton7.setText("Left");
         buttonGroup2.add(jButton7);
         jButton7.addActionListener(new java.awt.event.ActionListener() {
@@ -821,6 +800,8 @@ public class JFrameTools extends javax.swing.JFrame {
         });
         jPanel21.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, -1, -1));
 
+        jButton9.setBackground(new java.awt.Color(85, 85, 85));
+        jButton9.setForeground(new java.awt.Color(255, 255, 255));
         jButton9.setText("Bottom");
         buttonGroup2.add(jButton9);
         jButton9.addActionListener(new java.awt.event.ActionListener() {
@@ -830,6 +811,8 @@ public class JFrameTools extends javax.swing.JFrame {
         });
         jPanel21.add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 130, -1, -1));
 
+        jButton10.setBackground(new java.awt.Color(85, 85, 85));
+        jButton10.setForeground(new java.awt.Color(255, 255, 255));
         jButton10.setText("Isometric");
         buttonGroup2.add(jButton10);
         jButton10.addActionListener(new java.awt.event.ActionListener() {
@@ -839,6 +822,8 @@ public class JFrameTools extends javax.swing.JFrame {
         });
         jPanel21.add(jButton10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, -1, -1));
 
+        jButton5.setBackground(new java.awt.Color(85, 85, 85));
+        jButton5.setForeground(new java.awt.Color(255, 255, 255));
         jButton5.setText("Back");
         buttonGroup2.add(jButton5);
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -854,7 +839,7 @@ public class JFrameTools extends javax.swing.JFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 205, Short.MAX_VALUE)
+            .addComponent(jTabbedPane2)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -867,6 +852,10 @@ public class JFrameTools extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Scene", jPanel4);
 
+        jPanel10.setBackground(new java.awt.Color(114, 114, 114));
+
+        jButtonCreateAttribut.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonCreateAttribut.setForeground(new java.awt.Color(255, 255, 255));
         jButtonCreateAttribut.setText("Create new attribut");
         jButtonCreateAttribut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -874,8 +863,10 @@ public class JFrameTools extends javax.swing.JFrame {
             }
         });
 
+        jPanel11.setBackground(new java.awt.Color(114, 114, 114));
         jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder("Attribute to visualize"));
 
+        jComboBoxAttributeToVisualize.setBackground(new java.awt.Color(180, 180, 180));
         jComboBoxAttributeToVisualize.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBoxAttributeToVisualizeItemStateChanged(evt);
@@ -888,8 +879,8 @@ public class JFrameTools extends javax.swing.JFrame {
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jComboBoxAttributeToVisualize, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addComponent(jComboBoxAttributeToVisualize, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -909,7 +900,7 @@ public class JFrameTools extends javax.swing.JFrame {
                     .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addComponent(jButtonCreateAttribut)
-                        .addGap(0, 38, Short.MAX_VALUE)))
+                        .addGap(0, 57, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel10Layout.setVerticalGroup(
@@ -919,13 +910,17 @@ public class JFrameTools extends javax.swing.JFrame {
                 .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonCreateAttribut)
-                .addContainerGap(350, Short.MAX_VALUE))
+                .addContainerGap(370, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Attributs", jPanel10);
 
+        jPanel2.setBackground(new java.awt.Color(114, 114, 114));
+
+        jPanel28.setBackground(new java.awt.Color(114, 114, 114));
         jPanel28.setBorder(javax.swing.BorderFactory.createTitledBorder("Gradient"));
 
+        jComboBoxGradient.setBackground(new java.awt.Color(180, 180, 180));
         jComboBoxGradient.setToolTipText("");
         jComboBoxGradient.setMaximumSize(new java.awt.Dimension(173, 32767));
         jComboBoxGradient.setMinimumSize(new java.awt.Dimension(173, 20));
@@ -950,65 +945,22 @@ public class JFrameTools extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jCheckBox3.setText("Double buffering");
-
-        jCheckBox4.setText("Anti aliasing");
-
-        jButton1.setText("Set fullscreen (Esc to cancel)");
+        jButton1.setBackground(new java.awt.Color(85, 85, 85));
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Set fullscreen (Esc to exit)");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jPanel29.setBorder(javax.swing.BorderFactory.createTitledBorder("Window size"));
-
-        jButton2.setText("Apply");
-
-        jLabel1.setText("Width");
-
-        jLabel5.setText("Height");
-
-        javax.swing.GroupLayout jPanel29Layout = new javax.swing.GroupLayout(jPanel29);
-        jPanel29.setLayout(jPanel29Layout);
-        jPanel29Layout.setHorizontalGroup(
-            jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel29Layout.createSequentialGroup()
-                .addGap(7, 7, 7)
-                .addGroup(jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel29Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel29Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(52, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel29Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addContainerGap())
-        );
-        jPanel29Layout.setVerticalGroup(
-            jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel29Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2))
-        );
-
         jLabel6.setText("Voxel size");
 
+        jTextFieldVoxelSize.setBackground(new java.awt.Color(180, 180, 180));
         jTextFieldVoxelSize.setText("0.5");
 
+        jButton3.setBackground(new java.awt.Color(85, 85, 85));
+        jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Apply");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1025,58 +977,46 @@ public class JFrameTools extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox4)
-                            .addComponent(jCheckBox3)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextFieldVoxelSize, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton3))
-                            .addComponent(jPanel29, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextFieldVoxelSize, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)
+                        .addGap(0, 4, Short.MAX_VALUE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jButton1)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addComponent(jPanel28, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jCheckBox3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jCheckBox4)
-                .addGap(18, 18, 18)
+                .addGap(127, 127, 127)
                 .addComponent(jButton1)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel29, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                .addGap(104, 104, 104)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(jTextFieldVoxelSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3))
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addContainerGap(122, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Parameters", jPanel2);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
+
+        getContentPane().add(jPanel12, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1086,6 +1026,7 @@ public class JFrameTools extends javax.swing.JFrame {
         Vec3F worldColor = joglContext.getWorldColor();
         joglContext.setWorldColor(new Vec3F(worldColor.x,jSlider3.getValue()/255.0f,worldColor.z));
         jSlider3.setToolTipText(String.valueOf(jSlider3.getValue()));
+        joglContext.drawNextFrame();
     }//GEN-LAST:event_jSlider3StateChanged
 
     private void jSlider2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider2StateChanged
@@ -1093,6 +1034,7 @@ public class JFrameTools extends javax.swing.JFrame {
         Vec3F worldColor = joglContext.getWorldColor();
         joglContext.setWorldColor(new Vec3F(worldColor.x,worldColor.y,jSlider2.getValue()/255.0f));
         jSlider2.setToolTipText(String.valueOf(jSlider2.getValue()));
+        joglContext.drawNextFrame();
     }//GEN-LAST:event_jSlider2StateChanged
 
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
@@ -1100,31 +1042,12 @@ public class JFrameTools extends javax.swing.JFrame {
         Vec3F worldColor = joglContext.getWorldColor();
         joglContext.setWorldColor(new Vec3F(jSlider1.getValue()/255.0f,worldColor.y, worldColor.z));
         jSlider1.setToolTipText(String.valueOf(jSlider1.getValue()));
+        joglContext.drawNextFrame();
     }//GEN-LAST:event_jSlider1StateChanged
-
-    private void jTextFieldXCameraPositionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldXCameraPositionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldXCameraPositionActionPerformed
 
     private void jTextFieldYCameraPositionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldYCameraPositionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldYCameraPositionActionPerformed
-
-    private void jTextFieldZCameraPositionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldZCameraPositionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldZCameraPositionActionPerformed
-
-    private void jTextFieldXCameraTargetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldXCameraTargetActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldXCameraTargetActionPerformed
-
-    private void jTextFieldYCameraTargetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldYCameraTargetActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldYCameraTargetActionPerformed
-
-    private void jTextFieldZCameraTargetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldZCameraTargetActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldZCameraTargetActionPerformed
 
     private void jButtonCreateAttributActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreateAttributActionPerformed
                 
@@ -1145,46 +1068,6 @@ public class JFrameTools extends javax.swing.JFrame {
         //new JFrameAttributCreation(attributsArray).setVisible(true);
     }//GEN-LAST:event_jButtonCreateAttributActionPerformed
 
-    private void jTextFieldNearPerspectiveCameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNearPerspectiveCameraActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldNearPerspectiveCameraActionPerformed
-
-    private void jTextFieldFarPerspectiveCameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldFarPerspectiveCameraActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldFarPerspectiveCameraActionPerformed
-
-    private void jTextFieldAspectPerspectiveCameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldAspectPerspectiveCameraActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldAspectPerspectiveCameraActionPerformed
-
-    private void jTextFieldFovPerspectiveCameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldFovPerspectiveCameraActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldFovPerspectiveCameraActionPerformed
-
-    private void jTextFieldNearOrthoCameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNearOrthoCameraActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldNearOrthoCameraActionPerformed
-
-    private void jTextFieldFarOrthoCameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldFarOrthoCameraActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldFarOrthoCameraActionPerformed
-
-    private void jTextFieldLeftOrthoCameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldLeftOrthoCameraActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldLeftOrthoCameraActionPerformed
-
-    private void jTextFieldRightOrthoCameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldRightOrthoCameraActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldRightOrthoCameraActionPerformed
-
-    private void jTextFieldTopOrthoCameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTopOrthoCameraActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldTopOrthoCameraActionPerformed
-
-    private void jTextFieldBottomOrthoCameraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldBottomOrthoCameraActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldBottomOrthoCameraActionPerformed
-
     private void jPanelPerspectiveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelPerspectiveMouseClicked
         
         if(!jPanelPerspective.isEnabled()){
@@ -1200,6 +1083,7 @@ public class JFrameTools extends javax.swing.JFrame {
             float far = Float.valueOf(jTextFieldFarPerspectiveCamera.getText());
             
             joglContext.getCamera().setPerspective(fovy, aspect, near, far);
+            joglContext.drawNextFrame();
         }
         
     }//GEN-LAST:event_jPanelPerspectiveMouseClicked
@@ -1221,6 +1105,7 @@ public class JFrameTools extends javax.swing.JFrame {
             float far = Float.valueOf(jTextFieldFarOrthoCamera.getText());
             
             joglContext.getCamera().setOrthographic(left, right, top, bottom, near, far);
+            joglContext.drawNextFrame();
         }
     }//GEN-LAST:event_jPanelOrthographicMouseClicked
 
@@ -1232,6 +1117,7 @@ public class JFrameTools extends javax.swing.JFrame {
             
             
             joglContext.getScene().getVoxelSpace().updateValue(joglContext.getSettings().attribut);
+            joglContext.drawNextFrame();
         }
         
     }//GEN-LAST:event_jComboBoxAttributeToVisualizeItemStateChanged
@@ -1256,6 +1142,9 @@ public class JFrameTools extends javax.swing.JFrame {
         //update instance color buffer to gpu
         joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
         joglContext.getScene().getVoxelSpace().createScaleImage(50, 200);
+        
+        joglContext.drawNextFrame();
+        
     }//GEN-LAST:event_jComboBoxGradientItemStateChanged
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -1269,6 +1158,7 @@ public class JFrameTools extends javax.swing.JFrame {
         Float voxelSize = Float.valueOf(jTextFieldVoxelSize.getText());
         
         joglContext.getScene().getVoxelSpace().updateCubeSize(null, voxelSize);
+        joglContext.drawNextFrame();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
@@ -1283,30 +1173,37 @@ public class JFrameTools extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         joglContext.getCamera().projectFront();
+        joglContext.drawNextFrame();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         joglContext.getCamera().projectBack();
+        joglContext.drawNextFrame();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         joglContext.getCamera().projectRight();
+        joglContext.drawNextFrame();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         joglContext.getCamera().projectLeft();
+        joglContext.drawNextFrame();
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         joglContext.getCamera().projectBottom();
+        joglContext.drawNextFrame();
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         joglContext.getCamera().projectTop();
+        joglContext.drawNextFrame();
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        joglContext.getCamera().projectIsometric();;
+        joglContext.getCamera().projectIsometric();
+        joglContext.drawNextFrame();
     }//GEN-LAST:event_jButton10ActionPerformed
 
     /**
@@ -1318,7 +1215,6 @@ public class JFrameTools extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
@@ -1327,20 +1223,17 @@ public class JFrameTools extends javax.swing.JFrame {
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JButton jButtonCreateAttribut;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JComboBox jComboBoxAttributeToVisualize;
     private javax.swing.JComboBox jComboBoxGradient;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     public javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
@@ -1358,7 +1251,6 @@ public class JFrameTools extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel26;
     private javax.swing.JPanel jPanel27;
     private javax.swing.JPanel jPanel28;
-    private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
     public javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -1373,8 +1265,6 @@ public class JFrameTools extends javax.swing.JFrame {
     private javax.swing.JSlider jSlider3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     public javax.swing.JTextField jTextFieldAspectPerspectiveCamera;
     public javax.swing.JTextField jTextFieldBottomOrthoCamera;
     public javax.swing.JTextField jTextFieldFarOrthoCamera;

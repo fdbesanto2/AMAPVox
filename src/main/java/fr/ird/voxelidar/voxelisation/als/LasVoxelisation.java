@@ -5,15 +5,16 @@
  */
 package fr.ird.voxelidar.voxelisation.als;
 
-import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.Shot;
 import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelAnalysis;
 import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelParameters;
+import fr.ird.voxelidar.extraction.Shot;
 import fr.ird.voxelidar.lidar.format.als.Las;
 import fr.ird.voxelidar.lidar.format.als.LasHeader;
 import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
 import fr.ird.voxelidar.math.matrix.Mat;
 import fr.ird.voxelidar.math.matrix.Mat4D;
 import fr.ird.voxelidar.math.vector.Vec3D;
+import fr.ird.voxelidar.util.TimeCounter;
 import fr.ird.voxelidar.voxelisation.Las2;
 import fr.ird.voxelidar.voxelisation.LasMixTrajectory;
 import fr.ird.voxelidar.voxelisation.LasPoint;
@@ -38,17 +39,19 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
 import javax.vecmath.Vector3f;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author Julien
  */
 public class LasVoxelisation extends Processing {
-
+    
+    private final Logger logger = Logger.getLogger(LasVoxelisation.class);
+    
     private Las las;
     private Mat4D popMatrix;
     private File trajectoryFile;
@@ -71,7 +74,7 @@ public class LasVoxelisation extends Processing {
         ArrayList<LasPoint> lasPointList = readLas(las);
         ArrayList<LasMixTrajectory> ALL = transformPoints(popMatrix, lasPointList, trajectoryFile);
         
-        Map<String, Shoot> shoots = buildEchos(ALL);
+        Map<String, Shot> shoots = buildEchos(ALL);
         voxelise(shoots);
         //writeShootsFile(shoots);
         
@@ -110,9 +113,9 @@ public class LasVoxelisation extends Processing {
             }
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         } catch (IOException ex) {
-            Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
 
         return lasList;
@@ -167,7 +170,7 @@ public class LasVoxelisation extends Processing {
             writer.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
     }
 
@@ -253,11 +256,9 @@ public class LasVoxelisation extends Processing {
             }
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(LasVoxelisation.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         } catch (IOException ex) {
-            Logger.getLogger(LasVoxelisation.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
 
         /*##############################
@@ -295,9 +296,14 @@ public class LasVoxelisation extends Processing {
                 }
             }
         });
+        
         ArrayList<Vec3D> trajectoryInterpolate = new ArrayList<>();
         
-        /*for (int i = 0; i < fusion.size(); i++) {
+        //ancien algo
+        /*
+        long start_time = System.currentTimeMillis();
+        
+        for (int i = 0; i < fusion.size(); i++) {
             if (!fusion.get(i).isGpsTime) { //point lidar
                 for (int min = i - 1; min >= 0; min--) {
                     if (fusion.get(min).isGpsTime) {
@@ -322,7 +328,9 @@ public class LasVoxelisation extends Processing {
                     }
                 }
             }
-        }*/
+        }
+        logger.info("time ( "+TimeCounter.getElapsedTimeInSeconds(start_time)+" )");
+        */
         ArrayList<Double> tgps = new ArrayList<>();
         
         for (Map.Entry<Double, Trajectory> entry : trajectoryList.entrySet()) {
@@ -336,10 +344,13 @@ public class LasVoxelisation extends Processing {
         //vérifier que le nouvel algorithme de recherche de min et max 
         //donne le même résulat que l'ancien
         
+        //long start_time = System.currentTimeMillis();
+        //nouvel algo
         for(int i=0;i<TLIDAR.size();i++){
             double targetTime = TLIDAR.get(i).x;
-
+            
             index = searchNearestMax(targetTime, tgps, index);
+            
             double max = tgps.get(index);
             double min = tgps.get(index-1);
 
@@ -354,6 +365,8 @@ public class LasVoxelisation extends Processing {
             //System.out.println("test");
             //double max = searchNearestMax(targetTime, tgps);
         }
+        
+        //logger.info("time ( "+TimeCounter.getElapsedTimeInSeconds(start_time)+" )");
         
         int compteur = 0;
         for (LasPoint lasPoint : lasPointList) {
@@ -423,13 +436,11 @@ public class LasVoxelisation extends Processing {
             all.y_u = (all.yloc - all.yloc_s) / all.range;
             all.z_u = (all.zloc - all.zloc_s) / all.range;
         }
-
         return ALL;
     }
     
     private int searchNearestMax(double value, ArrayList<Double> list, int start){
         
-        int result = 0;
         /*
         value = 10;
         list = new ArrayList<>();
@@ -445,40 +456,44 @@ public class LasVoxelisation extends Processing {
         
         Collections.sort(list);
         */
-        int index = list.size()/2;
+        //int index = list.size()/2;
         
         int indexMin = start;
         int indexMax = list.size() - 1;
         
+        int index = ((indexMax - indexMin)/2) + indexMin;
+        
         boolean found = false;
                 
         while(!found){
+            
+            double currentValue = list.get(index);
             
             if(list.get(index) < value){
                 
                 indexMin = index;
                 index = (indexMax + (index))/2;
 
-            }else if(list.get(index) > value){
+            }else if(list.get(index) > value && list.get(index-1) > value){
                 
                 indexMax = index;
                 index = (indexMin + (index))/2;
                 
             }else{
-                result = index;
                 found = true;
             }
             
             if(indexMin == indexMax-1){
                 
-                result = index+1;
+                index = indexMax-1;
+                found = true;
+            }else if(indexMin == indexMax){
+                index = indexMin;
                 found = true;
             }
         }
         
-        
-        
-        return result;
+        return index;
     }
     
     private int searchNearestMin(double value, ArrayList<Double> list){
@@ -521,15 +536,16 @@ public class LasVoxelisation extends Processing {
     
     
     
-    public void voxelise(Map<String, Shoot> shoots){
+    public void voxelise(Map<String, Shot> shots){
         
-        VoxelAnalysis voxelAnalysis = new VoxelAnalysis();
-                voxelAnalysis.init(parameters);
-                
-        for(Entry entry:shoots.entrySet()){
+        VoxelAnalysis voxelAnalysis = new VoxelAnalysis(null);
+        voxelAnalysis.init(parameters, outputFile);
+        
+        for(Entry entry:shots.entrySet()){
             
-            Shoot shoot = (Shoot) entry.getValue();
+            Shot shot = (Shot) entry.getValue();
             
+            /*
             float[] rangesTemp = new float[7];
             rangesTemp[0] = (float) shoot.r1;
             rangesTemp[1] = (float) shoot.r2;
@@ -547,12 +563,13 @@ public class LasVoxelisation extends Processing {
                     new Point3f((float)shoot.xloc_s, (float)shoot.yloc_s, (float)shoot.zloc_s), 
                     new Vector3f((float)shoot.x_u, (float)shoot.y_u, (float)shoot.z_u),
                     ranges);
-            
+            */
             voxelAnalysis.voxelise(shot);
+            
         }
         
-        voxelAnalysis.calculatePAD(0);
-        voxelAnalysis.writeOutput(outputFile);
+        voxelAnalysis.calculatePADAndWrite(0);
+        //voxelAnalysis.writeOutput();
     }
 
     /*
@@ -645,16 +662,16 @@ public class LasVoxelisation extends Processing {
     }
     */
 
-    public Map<String,Shoot> buildEchos(ArrayList<LasMixTrajectory> ALL) {
+    public Map<String,Shot> buildEchos(ArrayList<LasMixTrajectory> ALL) {
 
         double oldTime = -1;
         int oldN = -1;
 
         int compteur = 0;
         
-        Map<String,Shoot> shoots = new HashMap<>();
+        Map<String,Shot> shoots = new TreeMap<>();
         
-        Shoot e = null;
+        Shot e = null;
         boolean isNewExp = false;
 
         for (LasMixTrajectory all : ALL) {
@@ -682,39 +699,49 @@ public class LasVoxelisation extends Processing {
             if (time == oldTime || (!isNewExp && time != oldTime)) {
 
                 if (!isNewExp && time != oldTime) {
-
-                    e = new Shoot(all.lasPoint.n, all.xloc_s, all.yloc_s, all.zloc_s, all.x_u, all.y_u, all.z_u);
+                    
+                    e= new Shot(all.lasPoint.n, new Point3f((float)all.xloc_s, (float)all.yloc_s, (float)all.zloc_s), 
+                                                new Vector3f((float)all.x_u, (float)all.y_u, (float)all.z_u), 
+                                                new float[all.lasPoint.n]);
+                    //e = new Shot(all.lasPoint.n, all.xloc_s, all.yloc_s, all.zloc_s, all.x_u, all.y_u, all.z_u);
                     isNewExp = true;
                 }
 
                 switch (all.lasPoint.r) {
 
                     case 1:
-                        e.r1 = all.range;
+                        e.ranges[0] = (float)all.range;
+                        //e.r1 = all.range;
                         compteur++;
                         break;
                     case 2:
-                        e.r2 = all.range;
+                        e.ranges[1] = (float)all.range;
+                        //e.r2 = all.range;
                         compteur++;
                         break;
                     case 3:
-                        e.r3 = all.range;
+                        e.ranges[2] = (float)all.range;
+                        //e.r3 = all.range;
                         compteur++;
                         break;
                     case 4:
-                        e.r4 = all.range;
+                        e.ranges[3] = (float)all.range;
+                        //e.r4 = all.range;
                         compteur++;
                         break;
                     case 5:
-                        e.r5 = all.range;
+                        e.ranges[4] = (float)all.range;
+                        //e.r5 = all.range;
                         compteur++;
                         break;
                     case 6:
-                        e.r6 = all.range;
+                        e.ranges[5] = (float)all.range;
+                        //e.r6 = all.range;
                         compteur++;
                         break;
                     case 7:
-                        e.r7 = all.range;
+                        e.ranges[6] = (float)all.range;
+                        //e.r7 = all.range;
                         compteur++;
                         break;
                 }
@@ -726,43 +753,33 @@ public class LasVoxelisation extends Processing {
 
         }
         
+        try {
+            /***TEST : write shots file****/
+            BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\Julien\\Desktop\\test.txt"));
+            //writer.write("\"key\" \"n\" \"xloc_s\" \"yloc_s\" \"zloc_s\" \"x_u\" \"y_u\" \"z_u\" \"r1\" \"r2\" \"r3\" \"r4\" \"r5\" \"r6\" \"r7\"\n");
+            writer.write("\"n\" \"xloc_s\" \"yloc_s\" \"zloc_s\" \"x_u\" \"y_u\" \"z_u\" \"r1\" \"r2\" \"r3\" \"r4\" \"r5\" \"r6\" \"r7\"\n");
+            
+            for (Entry entry : shoots.entrySet()) {
+                
+                String time = (String) entry.getKey();
+                Shot shot = (Shot) entry.getValue();
+                //String line = "\""+time+"\""+" "+shot.nbEchos+" "+shot.origin.x+" "+shot.origin.y+" "+shot.origin.z+" "+shot.direction.x+" "+shot.direction.y+" "+shot.direction.z;
+                String line = shot.nbEchos+" "+shot.origin.x+" "+shot.origin.y+" "+shot.origin.z+" "+shot.direction.x+" "+shot.direction.y+" "+shot.direction.z;
+                for(int i=0;i<shot.ranges.length;i++){
+                    line+=" " + shot.ranges[i];
+                }
+                
+                writer.write(line+"\n");
+            }
+            
+            writer.close();
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         return shoots;
     }
 
-    /*
-    public Map<String, Shoot> generateEchosFile(final Mat4D transfMatrix, final String pointsFile, final String trajectoryFile) {
-
-        setFinished(false);
-
-        ArrayList<Las2> lasList = null;
-
-        if (pointsFile.endsWith(".las")) {
-
-            lasList = readLas(LasReader.read(pointsFile));
-
-        } else if (pointsFile.endsWith(".txt")) {
-
-            lasList = readTxt();
-
-        } else if (pointsFile.endsWith(".rxp")) {
-
-            System.err.println("rxp extension not supported yet");
-
-        } else {
-            System.err.println("extension file is not known");
-
-            return null;
-        }
-
-        ArrayList<LasMixTrajectory> ALL = transformPoints(transfMatrix, lasList, trajectoryFile);
-        buildEchos(ALL);
-
-        File f = new File(pointsFile);
-        writeEchosFile(f.getName() + "_echos");
-
-        setFinished(true);
-
-        return Collections.unmodifiableMap(echos);
-    }
-    */
+    
+    
 }

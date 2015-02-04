@@ -8,8 +8,21 @@ package fr.ird.voxelidar.graphics3d.mesh;
 import com.jogamp.common.nio.Buffers;
 import fr.ird.voxelidar.graphics2d.texture.Texture;
 import fr.ird.voxelidar.math.vector.Vec3F;
+import fr.ird.voxelidar.math.vector.Vec3i;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -29,7 +42,17 @@ public class MeshFactory {
         size/2.0f, size/2.0f, size/2.0f,
         -size/2.0f, size/2.0f, size/2.0f,
         -size/2.0f, size/2.0f, -size/2.0f};
-        
+        /*
+        float aoData[] = new float[]
+            {1, 0, 0, 0,
+            1, -0.649359f, 0.680704f,0.339080f,
+            1, -0.384346f,-0.401203f,-0.831453f,
+            0.750000f,-0.888967f,0.025329f,0.457271f,
+            0.500000f,0.016968f,0.453997f,-0.890842f,
+            0.500000f,0.605377f,-0.568562f,-0.557006f,
+            0.400000f,0.999899f,-0.009149f,0.010885f,
+            0.750000f, 0.602468f, -0.559680f, 0.569026f };
+        */
         short indexData[] = new short[]
         {0, 1, 2,
         7, 6, 5,
@@ -45,6 +68,7 @@ public class MeshFactory {
         7, 4, 3};
         
         Mesh cube = new Mesh();
+        //cube.aoBuffer =  Buffers.newDirectFloatBuffer(aoData);
         cube.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
         cube.indexBuffer = Buffers.newDirectShortBuffer(indexData);
         cube.vertexCount = indexData.length;
@@ -52,13 +76,15 @@ public class MeshFactory {
         return cube;
     }
     
-    public static Mesh createPlane(int width , int height){
+    public static Mesh createPlane(Vec3F startPoint, int width , int height){
+        
+        
         
         float vertexData[] = new float[]
-        {0, 0, 0,
-         width, 0, 0,
-         0, height, 0,
-         width, height, 0};
+        {startPoint.x, startPoint.y, startPoint.z,
+         startPoint.x+width, startPoint.y, 0,
+         startPoint.x, startPoint.y+height, 0,
+         startPoint.x+width, startPoint.y+height, 0};
         
         float textCoordData[] = new float[]
         {0, 1,
@@ -210,14 +236,106 @@ public class MeshFactory {
         return mesh;
     }
     
-    public static Mesh createMeshFromImage(BufferedImage image){
+    public static Mesh createPlaneFromTexture(Vec3F startPoint, Texture texture){
                 
-        return MeshFactory.createPlane(image.getWidth(), image.getHeight());
+        return MeshFactory.createPlane(startPoint, texture.getWidth(), texture.getHeight());
     }
     
-    public static Mesh createMeshFromTexture(Texture texture){
+    public static Mesh createPlaneFromTexture(Vec3F startPoint, Texture texture, int width, int height){
                 
-        return MeshFactory.createPlane(texture.getWidth(), texture.getHeight());
+        return MeshFactory.createPlane(startPoint, width, height);
+    }
+    
+    public static Mesh createMeshFromObj(InputStreamReader objFile, InputStreamReader objMaterial){
+        
+        Mesh mesh = new Mesh();
+        
+        ArrayList<Vec3F> vertices = new ArrayList<>();
+        Map<Integer, Vec3F> colors = new HashMap<>();
+        ArrayList<Short> faces = new ArrayList<>();
+        Map<String, Vec3F> materials = new HashMap<>();
+        
+        try {
+            BufferedReader reader = new BufferedReader(objMaterial);
+            
+            String line;
+            String currentMaterial="";
+            
+            while((line = reader.readLine()) != null){
+                
+                if(line.startsWith("newmtl ")){
+                    
+                    String[] material = line.split(" ");
+                    currentMaterial = material[1];
+                    
+                }else if(line.startsWith("Kd ")){
+                    String[] diffuse = line.split(" ");
+                    materials.put(currentMaterial, new Vec3F(Float.valueOf(diffuse[1]), Float.valueOf(diffuse[2]), Float.valueOf(diffuse[3])));
+                }
+            }
+            
+            reader.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MeshFactory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MeshFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            BufferedReader reader = new BufferedReader(objFile);
+                        
+            String line;
+            
+            Vec3F currentColor = new Vec3F();
+            
+            while((line = reader.readLine()) != null){
+                
+                if(line.startsWith("v ")){
+                    
+                    String[] vertex = line.split(" ");
+                    vertices.add(new Vec3F(Float.valueOf(vertex[1]), Float.valueOf(vertex[2]), Float.valueOf(vertex[3])));
+                    
+                }else if(line.startsWith("f ")){
+                    
+                    String[] faceSplit = line.split(" ");
+                    Vec3i face = new Vec3i(Integer.valueOf(faceSplit[1]), Integer.valueOf(faceSplit[2]), Integer.valueOf(faceSplit[3]));
+                    
+                    colors.put(face.x-1, currentColor);
+                    colors.put(face.y-1, currentColor);
+                    colors.put(face.z-1, currentColor);
+                    
+                    faces.add((short)(face.x-1));
+                    faces.add((short)(face.y-1));
+                    faces.add((short)(face.z-1));
+                    
+                }else if(line.startsWith("usemtl ")){
+                    currentColor = materials.get(line.split(" ")[1]);
+                }
+            }
+            
+            reader.close();
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MeshFactory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MeshFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        mesh = MeshFactory.createMesh(vertices, faces);
+        
+        float colorData[] = new float[vertices.size()*3];
+        for(int i=0, j=0;i<vertices.size();i++,j+=3){
+            
+            colorData[j] = colors.get(i).x;
+            colorData[j+1] = colors.get(i).y;
+            colorData[j+2] = colors.get(i).z;
+            
+        }
+        
+        mesh.colorBuffer = Buffers.newDirectFloatBuffer(colorData);
+        
+        return mesh;
     }
     
     public static Mesh createMesh(ArrayList<Vec3F> points, ArrayList<Short> faces){
@@ -226,14 +344,20 @@ public class MeshFactory {
         
         
         float[] vertexData = new float[points.size()*3];
-        
+        for(int i=0,j=0 ; i<points.size(); i++, j+=3){
+            
+            vertexData[j] = points.get(i).x;
+            vertexData[j+1] = points.get(i).y;
+            vertexData[j+2] = points.get(i).z;
+        }
+        /*
         for(int i=0 ; i<points.size()-3 ; i += 3){
             
             vertexData[i] = points.get(i).x;
             vertexData[i+1] = points.get(i).y;
             vertexData[i+2] = points.get(i).z;
         }
-        
+        */
         short indexData[] = new short[faces.size()];
         
         for(int i=0 ; i<faces.size() ; i ++){

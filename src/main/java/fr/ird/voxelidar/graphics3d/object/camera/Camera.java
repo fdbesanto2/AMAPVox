@@ -66,12 +66,20 @@ public abstract class Camera {
         
         updateViewMatrix();
     }
+
+    public Mat4F getProjectionMatrix() {
+        return projectionMatrix;
+    }
+
+    public Mat4F getViewMatrix() {
+        return viewMatrix;
+    }
     
     public void projectTop(){
-        
+        project(new Vec3F(location.x, location.y, location.z), new Vec3F(location.x, location.y-1, location.z));
     }
     public void projectBottom(){
-        
+        project(new Vec3F(location.x, location.y, location.z), new Vec3F(location.x, location.y+1, location.z));
     }
     public void projectLeft(){
         project(new Vec3F(location.x, location.y, location.z), new Vec3F(-1, 0, 0));
@@ -81,10 +89,10 @@ public abstract class Camera {
     }
     public void projectFront(){
         
-        project(new Vec3F(0, 0, location.z), new Vec3F(0, 0, 0));
+        project(new Vec3F(location.x, location.y, location.z), new Vec3F(location.x, location.y, location.z-1));
     }
     public void projectBack(){
-        
+        project(new Vec3F(location.x, location.y, location.z), new Vec3F(location.x, location.y, location.z+1));
     }
     public void projectIsometric(){
         

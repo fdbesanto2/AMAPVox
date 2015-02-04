@@ -67,7 +67,7 @@ public class GLRenderWindowListener extends WindowAdapter{
     @Override
     public void windowGainedFocus(WindowEvent we) {
         
-        System.out.println("glrenderwindow gained focus");
+        //System.out.println("glrenderwindow gained focus");
         
         if(!toolsJFrame.isFocused && animator.isPaused()){
             animator.resume();
@@ -79,7 +79,7 @@ public class GLRenderWindowListener extends WindowAdapter{
     @Override
     public void windowLostFocus(WindowEvent we) {
         
-        System.out.println("glrenderwindow losted focus");
+        //System.out.println("glrenderwindow losted focus");
         
         if(!toolsJFrame.isFocused){
             animator.pause();

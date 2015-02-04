@@ -78,6 +78,7 @@ public class VoxelSpace {
     public float min;
     public float max;
     private float instancePositions[];
+    private float ambient_occlusion_term[];
     private float instanceColors[];
     public boolean arrayLoaded = false;
     private Settings settings;
@@ -232,6 +233,20 @@ public class VoxelSpace {
             centerX = ((voxelSpaceFormat.voxels.get(voxelSpaceFormat.voxels.size()-1).x) - (voxelSpaceFormat.voxels.get(0).x))/2.0f;
             centerY = ((voxelSpaceFormat.voxels.get(voxelSpaceFormat.voxels.size()-1).y) - (voxelSpaceFormat.voxels.get(0).y))/2.0f;
             centerZ = ((voxelSpaceFormat.voxels.get(voxelSpaceFormat.voxels.size()-1).z) - (voxelSpaceFormat.voxels.get(0).z))/2.0f;
+        }
+    }
+    
+    private void readVoxelFormat(File f){
+        
+        String header = FileManager.readHeader(f.getAbsolutePath());
+        
+        if(header.equals("VOXEL SPACE")){
+            
+            readVoxelFormat1(f);
+            
+        }else if(header.split(" ").length == 10){
+            
+            readVoxelFormat2(f);
         }
     }
     
@@ -457,7 +472,7 @@ public class VoxelSpace {
 
                 switch(format){
                     case VOXELSPACE_FORMAT2:
-                        readVoxelFormat1(file);
+                        readVoxelFormat(file);
                         break;
                 }
 
@@ -541,10 +556,12 @@ public class VoxelSpace {
         }
         
         //calculate standard deviation
+        
         StandardDeviation sd = new StandardDeviation();
         float sdValue = sd.getFromFloatArray(values);
         float average = sd.getAverage();
         
+        //min = 0;
         min = average - (2*sdValue);
         max = average + (2*sdValue);
         
@@ -584,7 +601,7 @@ public class VoxelSpace {
                 
                 switch(format){
                     case VOXELSPACE_FORMAT2:
-                        readVoxelFormat1(file);
+                        readVoxelFormat(file);
                         break;
                 }
                 
@@ -938,7 +955,7 @@ public class VoxelSpace {
     
     public BufferedImage createScaleImage(int width, int height){
         
-        return ScaleGradient.generateScale(gradient, attributValueMin, attributValueMax, width, height);
+        return ScaleGradient.generateScale(gradient, attributValueMin, attributValueMax, width, height, ScaleGradient.HORIZONTAL);
     }
     
     public void updateCubeSize(GL3 gl, float size){
@@ -995,6 +1012,9 @@ public class VoxelSpace {
             //set instances colors buffer
             gl.glBufferSubData(GL3.GL_ARRAY_BUFFER, (cube.vertexBuffer.capacity()+instancePositionsBuffer.capacity())*FLOAT_SIZE, instanceColorsBuffer.capacity()*FLOAT_SIZE, instanceColorsBuffer);
             
+            //set ao buffer
+            //gl.glBufferSubData(GL3.GL_ARRAY_BUFFER, (cube.vertexBuffer.capacity()+instancePositionsBuffer.capacity()+instanceColorsBuffer.capacity())*FLOAT_SIZE, cube.aoBuffer.capacity()*FLOAT_SIZE, cube.aoBuffer);
+            
             gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, iboId);
                 gl.glBufferData(GL3.GL_ELEMENT_ARRAY_BUFFER, cube.indexBuffer.capacity()*SHORT_SIZE, cube.indexBuffer, GL3.GL_STATIC_DRAW);
             gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -1020,6 +1040,9 @@ public class VoxelSpace {
                 gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_color"));
                 gl.glVertexAttribPointer(shader.attributeMap.get("instance_color"), 4, GL3.GL_FLOAT, false, 0, (cube.vertexBuffer.capacity()+instancePositionsBuffer.capacity())*FLOAT_SIZE);
                 gl.glVertexAttribDivisor(shader.attributeMap.get("instance_color"), 1);
+                
+                //gl.glEnableVertexAttribArray(shader.attributeMap.get("ambient_occlusion"));
+                //gl.glVertexAttribPointer(shader.attributeMap.get("ambient_occlusion"), 4, GL3.GL_FLOAT, false, 0, 0);
                  
             gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, iboId);
             
@@ -1031,12 +1054,6 @@ public class VoxelSpace {
     }
     
     public void render(GL3 gl){
-        
-
-        //draw voxels
-        gl.glBindVertexArray(vaoId);
-            gl.glDrawElementsInstanced(GL3.GL_TRIANGLES, cube.vertexCount, GL3.GL_UNSIGNED_SHORT, 0, voxelSpaceFormat.voxels.size());
-        gl.glBindVertexArray(0);
         
         if(!gradientUpdated){
             
@@ -1072,6 +1089,15 @@ public class VoxelSpace {
             gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, 0);
             
             cubeSizeUpdated = true;
-        }               
+        }
+
+        //draw voxels
+        gl.glBindVertexArray(vaoId);
+            gl.glDrawElementsInstanced(GL3.GL_TRIANGLES, cube.vertexCount, GL3.GL_UNSIGNED_SHORT, 0, voxelSpaceFormat.voxels.size());
+        gl.glBindVertexArray(0);
+        
+        
+        
+                       
     }
 }

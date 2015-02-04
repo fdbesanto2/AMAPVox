@@ -2,8 +2,6 @@ package fr.ird.voxelidar;
 
 import fr.ird.voxelidar.frame.JFrameSettingUp;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import org.apache.log4j.Logger;
 
 
@@ -18,29 +16,49 @@ import org.apache.log4j.Logger;
  *
  * @author Julien
  */
+
+
 public class Principal {
     
     final static Logger logger = Logger.getLogger(Principal.class);
     
     
-    
     public static void main(String args[]) throws IOException {
-        //Las read = LasReader.read("F:\\Las files\\1.3\\LAS-1.3-waveform-terrapoint.las");
-        //LasToTxt.writeTxt(read, "F:\\Las files\\1.1\\LAS-1.3-waveform-terrapoint.txt", "xyzirndeca");
+        
+        //new TestJNI1().afficherBonjour();
+        
+        //SimpleDLL sdll = INSTANCE;
+        //SimpleDLL sdll = SimpleDLL.INSTANCE;
+        
+        //String res = sdll.simpleCall("test");
+        
+        //ShotResultCallBack call = new ShotResultCallBack();
+        
+        //sdll.registerCallback(call);
         /*
-        AlsPreprocessing als = new AlsPreprocessing();
-        als.preprocessAlsForVoxelisation("C:\\Users\\Julien\\Desktop\\Test Als preprocess\\CoordonnéesP15.csv",
-        "C:\\Users\\Julien\\Desktop\\Test Als preprocess\\ALSbuf_xyzirncapt.txt",
-        "C:\\Users\\Julien\\Desktop\\Test Als preprocess\\sbet_250913_01.txt");
-         */
-        //float det = Vec2.determinant(new Vec2(0.0f,0.0f), new Vec2(3.0f,6.0f));
+        ShotExtractor shotExtractor = new ShotExtractor();
+        
+        final ArrayList<Shot> shots = new ArrayList<>();
+        
+        shotExtractor.extractFromRxp(new File("\\\\forestview01\\BDLidar\\TLS\\Puechabon2013\\PuechabonAvril\\PuechabonAvril2013.RiSCAN\\SCANS\\ScanPos001\\SINGLESCANS\\130403_091135.rxp"), 1000000, new AbstractCallback() {
+
+            @Override
+            public void callback(String param1, int size, Shot s) {
+                
+                System.out.println(param1 +" " + size);
+                
+                //Structure[] str = (Structure[])Array.newInstance(s.getClass(), size);
+                
+                shots.addAll(Arrays.asList((Shot[])s.toArray(size)));
+            }
+        });
+        */
+        //sdll.simpleConnection("C:\\Users\\Julien\\Documents\\Visual Studio 2012\\Projects\\TLSRivLib\\testmtd.rxp", 10000);        
+        //sdll.simpleConnection("C:\\Users\\Julien\\Documents\\Visual Studio 2012\\Projects\\TLSRivLib\\testmtd.rxp", 100000);
         
         
         JFrameSettingUp mainJFrame = new JFrameSettingUp();
         mainJFrame.setVisible(true);
-        
-        
-        
         
     }
     

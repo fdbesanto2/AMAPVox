@@ -49,7 +49,7 @@ public class EventManager {
     public int yOffset;
     
     private int i=0;
-    private final float mouseSpeed = 0.5f;
+    private final float mouseSpeed = 2f;
     
     public boolean leftMouseWasReleased;
     public boolean isMouseLocationUpdated;
@@ -202,9 +202,9 @@ public class EventManager {
             */
         }
         
-        if(!animator.isPaused()){
+        if(!animator.isPaused() && !leftMousePressed){
             animator.pause();
-            System.out.println("animator paused");
+            //System.out.println("animator paused");
         }
         
         mouseWheelRotateUp = false;

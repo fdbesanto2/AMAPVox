@@ -11,6 +11,7 @@ import javax.vecmath.Vector3f;
 import fr.ird.jeeb.lib.structure.geometry.util.BoundingBox3f;
 import fr.ird.jeeb.workspace.archimedes.geometry.Intersection;
 import fr.ird.jeeb.workspace.archimedes.geometry.LineElement;
+import fr.ird.jeeb.workspace.archimedes.geometry.LineSegment;
 import fr.ird.jeeb.workspace.archimedes.geometry.Transformations;
 import fr.ird.jeeb.workspace.archimedes.geometry.shapes.BoundingShapeComputing;
 import fr.ird.jeeb.workspace.archimedes.geometry.shapes.Plane;
@@ -38,7 +39,7 @@ public class VoxelManager {
 	private VoxelSpace						voxelSpace;
 	private ArrayList<ArtNodeVoxelID>[][][]	artNodeIndexList;
 	private VolumicShape					sceneCanvas;
-
+        int count = 0;
 	/**
 	 * Used for returning voxel crossing context
 	 * 	-Estimation of the line segment length to set, during the current voxel crossing ("length")
@@ -572,15 +573,40 @@ public class VoxelManager {
 	public VoxelCrossingContext getFirstVoxel(LineElement lineElement) {
 
 		boolean intersectionForDebug = false;
-		
+                        
 		// Computes intersection with the scene canvas
 		Intersection intersection = sceneCanvas.getNearestIntersection (lineElement);
+                
 		Point3f intersectionPoint = new Point3f(0f,0f,0f);
 		if (intersection!=null) {
 			// If the intersection exists, get the intersection point
-			intersectionPoint.add (lineElement.getDirection ());
-			intersectionPoint.scale (intersection.distance);
-			intersectionPoint.add (lineElement.getOrigin ());
+                        LineElement e = new LineSegment(lineElement.getOrigin (), lineElement.getDirection (), intersection.distance);
+                        intersectionPoint = e.getEnd();
+                        
+                        if(lineElement.getLength()>300){
+                            
+                        }
+                        /*
+                        float offsetX = (float) Math.abs(intersectionPoint.x-(int)intersectionPoint.x);
+                        if(offsetX<0.0001f && offsetX !=0){
+                            intersectionPoint.x = (float)(int)(intersectionPoint.x);
+                        }                
+
+                        float offsetY = (float) Math.abs(intersectionPoint.y-(int)(intersectionPoint.y));
+                        if(offsetY<0.0001f && offsetY !=0){
+                            intersectionPoint.y = (float) (int)(intersectionPoint.y);
+                        }
+
+                        float offsetZ = (float) Math.abs(intersectionPoint.z-(int)(intersectionPoint.z));
+                        if(offsetZ<0.0001f && offsetZ !=0){
+                            intersectionPoint.z = (float) (int)(intersectionPoint.z);
+                        }
+                        */
+                        Point3f offset = new Point3f(lineElement.getDirection ());
+                        offset.scale(0.00053f);
+                        System.out.println("intersectionPoint: "+intersectionPoint);
+                        intersectionPoint.add(offset);
+                        
 			intersectionForDebug = true;
 		}
 		else if (sceneCanvas.contains (lineElement.getOrigin ())) {
@@ -589,26 +615,40 @@ public class VoxelManager {
 			intersectionForDebug = false;
 		}
 		else {
+                        //System.out.println("lineElementEnd: "+lineElement.getEnd());
 			// Else (no intersection & no inside), bye bye.
 			return null;
 		}
+                /*
+                float offsetX = (float) Math.abs(intersectionPoint.x-(int)intersectionPoint.x);
+                if(offsetX<0.0001f && offsetX !=0){
+                    intersectionPoint.x = (float)(int)(intersectionPoint.x);
+                }                
+
+                float offsetY = (float) Math.abs(intersectionPoint.y-(int)(intersectionPoint.y));
+                if(offsetY<0.0001f && offsetY !=0){
+                    intersectionPoint.y = (float) (int)(intersectionPoint.y);
+                }
+                */
+                
+                
 
 		Point3i intersectionPointVoxelIndices = voxelSpace.getVoxelIndices (intersectionPoint);
 		if (intersectionPointVoxelIndices==null) {
-			if (intersectionForDebug){
-                            //ArtLog.println ("The given line element does intersect the scene canvas "+intersectionPoint+", but unable to get its voxel indices");
-                        }
-				
-                        else{
-                            ArtLog.println ("The given line element belongs the scene canvas "+intersectionPoint+", but unable to get its voxel indices");
-                            
-                            ArtLog.println ("Voxel space informations are:");
-                            ArtLog.println ("\tCorner Inf\t:\t" + voxelSpace.getBoundingBox ().getMin ());
-                            ArtLog.println ("\tCorner Sup\t:\t" + voxelSpace.getBoundingBox ().getMax ());
-                        }
-				
-			
-			return null;
+                    if (intersectionForDebug){
+                        ArtLog.println ("The given line element does intersect the scene canvas "+intersectionPoint+", but unable to get its voxel indices");
+                    }
+
+                    else{
+                        ArtLog.println ("The given line element belongs the scene canvas "+intersectionPoint+", but unable to get its voxel indices");
+
+                        ArtLog.println ("Voxel space informations are:");
+                        ArtLog.println ("\tCorner Inf\t:\t" + voxelSpace.getBoundingBox ().getMin ());
+                        ArtLog.println ("\tCorner Sup\t:\t" + voxelSpace.getBoundingBox ().getMax ());
+                    }
+
+
+                    return null;
 		}
 
 		// Computes the 1st translation (from line origin, to intersection point with the scene canvas)
@@ -617,7 +657,7 @@ public class VoxelManager {
 		
 		// Computes the 2nd translation (from the intersection point with the scene canvas, to the point of the "real" scene)
 		Point3i intersectionPointSceneIndices = voxelSpace.getSceneIndices (intersectionPoint);
-		Vector3f secondTranslation = new Vector3f (	intersectionPointSceneIndices.x*voxelSpace.getBoundingBoxSize ().x,
+		Vector3f secondTranslation = new Vector3f (intersectionPointSceneIndices.x*voxelSpace.getBoundingBoxSize ().x,
 													intersectionPointSceneIndices.y*voxelSpace.getBoundingBoxSize ().y,
 													intersectionPointSceneIndices.z*voxelSpace.getBoundingBoxSize ().z);
 		

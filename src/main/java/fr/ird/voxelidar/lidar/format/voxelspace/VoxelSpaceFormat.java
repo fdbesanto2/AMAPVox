@@ -48,6 +48,20 @@ public class VoxelSpaceFormat {
         
         if(header.split(" ").length == 10){
             
+            return readAttributs1(f);
+            
+        }else{
+            return readAttributs2(f);
+        }
+        
+    }
+    
+    public static String[] readAttributs1(File f){
+        
+        String header = FileManager.readHeader(f.getAbsolutePath());
+        
+        if(header.split(" ").length == 10){
+            
             return FileManager.readHeader(f.getAbsolutePath()).split(" ");
         }
         

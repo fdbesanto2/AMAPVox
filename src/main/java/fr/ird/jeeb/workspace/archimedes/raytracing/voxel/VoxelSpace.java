@@ -109,12 +109,26 @@ public class VoxelSpace {
 		pt.sub (boundingBox.getMin ());
 		
 		if ((pt.z < 0) || (pt.z >= boundingBoxSize.z)){
+                    
                     return null;
+                    
+                    //System.out.println("deltaZ:"+Math.abs(pt.z-boundingBoxSize.z));
+                    
                 }
 
 		if (toric==false) {
-			if ((pt.x < 0) || (pt.x >= boundingBoxSize.x))	return null;
-			if ((pt.y < 0) || (pt.y >= boundingBoxSize.y))	return null;
+                    if ((pt.x < 0) || (pt.x >= boundingBoxSize.x)){
+
+                        return null;
+                        //System.out.println("deltaC:"+Math.abs(pt.x-boundingBoxSize.x));
+
+                    }
+                    if ((pt.y < 0) || (pt.y >= boundingBoxSize.y)){
+
+                        return null;
+                        //System.out.println("deltaY:"+Math.abs(pt.y-boundingBoxSize.y));
+
+                    }
 		}
 		pt.x /= voxelSize.x;
 		pt.y /= voxelSize.y;
