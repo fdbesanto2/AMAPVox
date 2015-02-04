@@ -2163,3 +2163,76 @@ Caused by: org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; Conten
 2015-02-04 12:18:43 INFO  - file writed ( 1.0 s )
 2015-02-04 12:19:02 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las2.vox
 2015-02-04 12:19:03 INFO  - file writed ( 1.0 s )
+2015-02-04 14:25:23 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 14:25:24 INFO  - file writed ( 1.0 s )
+2015-02-04 14:47:50 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 14:47:51 INFO  - file writed ( 0.0 s )
+2015-02-04 14:50:24 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 14:50:25 INFO  - file writed ( 0.0 s )
+2015-02-04 14:52:40 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 14:52:41 INFO  - file writed ( 1.0 s )
+2015-02-04 14:58:59 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 14:59:00 INFO  - file writed ( 0.0 s )
+2015-02-04 15:04:03 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 15:04:05 INFO  - file writed ( 1.0 s )
+2015-02-04 15:12:24 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 15:12:25 INFO  - file writed ( 1.0 s )
+2015-02-04 15:22:48 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 15:22:49 INFO  - file writed ( 1.0 s )
+2015-02-04 15:24:03 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 15:24:04 INFO  - file writed ( 1.0 s )
+2015-02-04 15:25:56 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 15:25:58 INFO  - file writed ( 1.0 s )
+2015-02-04 15:30:44 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 15:30:45 INFO  - file writed ( 1.0 s )
+2015-02-04 15:37:34 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 15:37:35 INFO  - file writed ( 1.0 s )
+2015-02-04 15:42:13 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 15:42:15 INFO  - file writed ( 1.0 s )
+2015-02-04 15:42:15 INFO  - las extraction is finished ( 78.0 s )
+2015-02-04 15:48:47 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 15:48:50 INFO  - file writed ( 3.0 s )
+2015-02-04 15:48:50 INFO  - las extraction is finished ( 57.0 s )
+2015-02-04 15:52:19 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 15:52:20 INFO  - file writed ( 1.0 s )
+2015-02-04 15:52:20 INFO  - las extraction is finished ( 70.0 s )
+2015-02-04 16:10:40 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 16:10:41 INFO  - file writed ( 1.0 s )
+2015-02-04 16:10:41 INFO  - las extraction is finished ( 80.0 s )
+2015-02-04 16:11:11 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 16:11:12 INFO  - file writed ( 1.0 s )
+2015-02-04 16:11:12 INFO  - las extraction is finished ( 5.0 s )
+2015-02-04 16:28:47 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 16:28:48 INFO  - file writed ( 0.0 s )
+2015-02-04 16:28:48 INFO  - las extraction is finished ( 6.0 s )
+2015-02-04 16:35:41 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 16:35:42 INFO  - file writed ( 0.0 s )
+2015-02-04 16:35:42 INFO  - las extraction is finished ( 6.0 s )
+2015-02-04 16:35:43 INFO  - rxp extraction is finished ( 7.0 s )
+2015-02-04 16:35:43 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 16:35:44 INFO  - file writed ( 1.0 s )
+2015-02-04 16:39:00 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 16:39:08 INFO  - file writed ( 7.0 s )
+2015-02-04 16:39:08 INFO  - las extraction is finished ( 73.0 s )
+2015-02-04 16:39:32 INFO  - voxelisation is finished ( 97.0 s )
+2015-02-04 16:39:32 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 16:39:33 INFO  - file writed ( 1.0 s )
+2015-02-04 16:41:17 INFO  - las extraction is finished ( 61.0 s )
+2015-02-04 16:41:43 INFO  - voxelisation is finished ( 87.0 s )
+2015-02-04 16:41:43 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 16:41:44 INFO  - file writed ( 1.0 s )
+2015-02-04 17:10:08 INFO  - voxelisation is finished ( 6.0 s )
+2015-02-04 17:10:08 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 17:10:09 INFO  - file writed ( 1.0 s )
+2015-02-04 17:13:30 INFO  - las voxelisation finished in 5.0 s
+2015-02-04 17:13:32 INFO  - voxelisation is finished ( 6.0 s )
+2015-02-04 17:13:32 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 17:13:33 INFO  - file writed ( 1.0 s )
+2015-02-04 17:14:45 INFO  - las voxelisation finished in 63.0 s
+2015-02-04 17:15:10 INFO  - voxelisation is finished ( 89.0 s )
+2015-02-04 17:15:10 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 17:15:12 INFO  - file writed ( 1.0 s )
+2015-02-04 17:19:44 INFO  - voxelisation is finished ( 82.0 s )
+2015-02-04 17:19:44 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 17:19:45 INFO  - file writed ( 1.0 s )
+2015-02-04 17:19:45 INFO  - las voxelisation finished in 84.0 s

@@ -5,9 +5,6 @@
  */
 package fr.ird.voxelidar.voxelisation.als;
 
-import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelAnalysis;
-import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelParameters;
-import fr.ird.voxelidar.extraction.RxpExtractionListener;
 import fr.ird.voxelidar.extraction.Shot;
 import fr.ird.voxelidar.lidar.format.als.Las;
 import fr.ird.voxelidar.lidar.format.als.LasHeader;
@@ -16,19 +13,14 @@ import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
 import fr.ird.voxelidar.math.matrix.Mat;
 import fr.ird.voxelidar.math.matrix.Mat4D;
 import fr.ird.voxelidar.math.vector.Vec3D;
-import fr.ird.voxelidar.util.TimeCounter;
-import fr.ird.voxelidar.voxelisation.Las2;
 import fr.ird.voxelidar.voxelisation.LasMixTrajectory;
 import fr.ird.voxelidar.voxelisation.LasPoint;
 import fr.ird.voxelidar.voxelisation.Processing;
-import fr.ird.voxelidar.voxelisation.ProcessingListener;
 import fr.ird.voxelidar.voxelisation.Trajectory;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,8 +28,8 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
+import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 import org.apache.log4j.Logger;
@@ -46,244 +38,22 @@ import org.apache.log4j.Logger;
  *
  * @author Julien
  */
-public class LasVoxelisation extends Processing implements Runnable{
+public class LasConversion extends Processing implements Runnable{
     
-    private final Logger logger = Logger.getLogger(LasVoxelisation.class);
+    private final Logger logger = Logger.getLogger(LasConversion.class);
     
+    private final BlockingQueue<Shot> queue;
     private Las las;
     private final File lasFile;
-    private final Mat4D popMatrix;
     private final File trajectoryFile;
-    private final File outputFile;
-    private final VoxelParameters parameters;
-    private VoxelAnalysis voxelAnalysis;
-    private BlockingQueue<Shot> queue;
-
-    public LasVoxelisation(File lasFile, File outputFile, Mat4D popMatrix, File trajectoryFile, VoxelParameters parameters) {
-
-        this.lasFile = lasFile;
-        this.outputFile = outputFile;
-        this.popMatrix = popMatrix;
+    private final Mat4D popMatrix;
+    
+    public LasConversion(BlockingQueue<Shot> queue, File trajectoryFile, File lasFile, Mat4D popMatrix){
+        this.queue = queue;
         this.trajectoryFile = trajectoryFile;
-        this.parameters = parameters;
-        
-        queue = new LinkedBlockingQueue<>();
-        voxelAnalysis = new VoxelAnalysis(queue);
+        this.popMatrix = popMatrix;
+        this.lasFile = lasFile;
     }
-
-    @Override
-    public File process() {
-        
-        
-        final long start_time = System.currentTimeMillis();
-        
-        voxelAnalysis.init(parameters, outputFile);
-        LasConversion conversion = new LasConversion(queue, trajectoryFile, lasFile, popMatrix);
-        
-        try {
-            
-            conversion.addProcessingListener(new ProcessingListener() {
-
-                @Override
-                public void processingFinished() {
-                    
-                    voxelAnalysis.setIsFinished(true);
-                }
-
-                @Override
-                public void processingStepProgress(String progress, int ratio) {
-                    fireProgress(progress, ratio);
-                }
-            });
-            
-            new Thread(conversion).start();
-            
-            Thread t = new Thread(voxelAnalysis);
-            t.start();
-            
-            //wait until extraction is finished
-            t.join();
-            
-            logger.info("las voxelisation finished in "+TimeCounter.getElapsedTimeInSeconds(start_time));
-            
-            return outputFile;
-            
-        } catch (InterruptedException ex) {
-            logger.error(ex.getMessage());
-        }
-        
-        return null;
-    }
-
-    private double dfdist(double x_s, double y_s, double z_s, double x, double y, double z) {
-
-        double result = Math.sqrt(Math.pow(x_s - x, 2) + Math.pow((y_s - y), 2) + Math.pow((z_s - z), 2));
-
-        return result;
-    }
-
-    private ArrayList<Las2> readTxt() {
-        ArrayList<Las2> lasList = new ArrayList<>();
-
-        try {
-
-            BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Julien\\Desktop\\Test Als preprocess\\ALSbuf_xyzirncapt.txt"), ' ');
-
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-
-                if (line.charAt(0) != '#') {
-                    String[] lineSplit = line.split(" ");
-                    Las2 las = new Las2(new Vec3D(Double.valueOf(lineSplit[0]), Double.valueOf(lineSplit[1]),
-                            Double.valueOf(lineSplit[2])), Integer.valueOf(lineSplit[3]),
-                            Integer.valueOf(lineSplit[4]), Integer.valueOf(lineSplit[5]),
-                            Integer.valueOf(lineSplit[6]), Integer.valueOf(lineSplit[7]),
-                            Integer.valueOf(lineSplit[8]), Double.valueOf(lineSplit[9]));
-
-                    lasList.add(las);
-                }
-
-            }
-
-        } catch (FileNotFoundException ex) {
-            logger.error(ex);
-        } catch (IOException ex) {
-            logger.error(ex);
-        }
-
-        return lasList;
-    }
-    
-    private ArrayList<LasPoint> readLas(Las lasFile) {
-        
-        ArrayList<LasPoint> lasPointList = new ArrayList<>();
-
-        ArrayList<? extends PointDataRecordFormat0> pointDataRecords = lasFile.getPointDataRecords();
-        LasHeader header = lasFile.getHeader();
-        for (PointDataRecordFormat0 p : pointDataRecords) {
-
-            Vec3D location = new Vec3D((p.getX() * header.getxScaleFactor()) + header.getxOffset(), (p.getY() * header.getyScaleFactor()) + header.getyOffset(), (p.getZ() * header.getzScaleFactor()) + header.getzOffset());
-            LasPoint point = new LasPoint(location, p.getReturnNumber(), p.getNumberOfReturns(), p.getGpsTime());
-            
-            lasPointList.add(point);
-        }
-
-        return lasPointList;
-    }
-    
-    /*
-    private ArrayList<Las2> readLas(Las lasFile) {
-        ArrayList<Las2> lasList = new ArrayList<>();
-
-        ArrayList<? extends PointDataRecordFormat0> pointDataRecords = lasFile.getPointDataRecords();
-        LasHeader header = lasFile.getHeader();
-        for (PointDataRecordFormat0 p : pointDataRecords) {
-
-            Vec3D location = new Vec3D((p.getX() * header.getxScaleFactor()) + header.getxOffset(), (p.getY() * header.getyScaleFactor()) + header.getyOffset(), (p.getZ() * header.getzScaleFactor()) + header.getzOffset());
-            Las2 las = new Las2(location, p.getIntensity(),
-                    p.getReturnNumber(), p.getNumberOfReturns(), p.getClassification(), p.getScanAngleRank(), p.getPointSourceID(), p.getGpsTime());
-            lasList.add(las);
-        }
-
-        return lasList;
-    }
-    */
-    public void writeLocalAls(String outputFilePath, ArrayList<Vec3D> localCoordinates, ArrayList<Las2> lasList) {
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputFilePath)))) {
-
-            for (int i = 0; i < lasList.size(); i++) {
-
-                writer.write(localCoordinates.get(i).x + " " + localCoordinates.get(i).y + " " + localCoordinates.get(i).z + " "
-                        + lasList.get(i).i + " " + lasList.get(i).r + " "
-                        + lasList.get(i).n + " " + lasList.get(i).c + " "
-                        + lasList.get(i).a + " " + lasList.get(i).p + "\n");
-            }
-
-            writer.close();
-
-        } catch (IOException ex) {
-            logger.error(ex);
-        }
-    }
-
-    /*
-    public static Mat4D getMatrixTransformation(Vec3D point1, Vec3D point2) {
-
-        Vec2D v = new Vec2D(point1.x - point2.x, point1.y - point2.y);
-        double rho = (double) Math.atan(v.x / v.y);
-
-        Vec3D trans = new Vec3D(-point2.x, -point2.y, -point2.z);
-        trans.z = 0; //no vertical translation
-
-        Mat4D mat4x4Rotation = new Mat4D();
-        Mat4D mat4x4Translation = new Mat4D();
-
-        mat4x4Rotation.mat = new double[]{
-            (double) Math.cos(rho), (double) -Math.sin(rho), 0, 0,
-            (double) Math.sin(rho), (double) Math.cos(rho), 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1
-        };
-
-        mat4x4Translation.mat = new double[]{
-            1, 0, 0, trans.x,
-            0, 1, 0, trans.y,
-            0, 0, 1, trans.z,
-            0, 0, 0, 1
-        };
-
-        Mat4D mat4x4 = Mat4D.multiply(mat4x4Translation, mat4x4Rotation);
-
-        return mat4x4;
-    }
-    */
-    private int searchNearestMax(double value, ArrayList<Double> list, int start){
-        
-        
-        int indexMin = start;
-        int indexMax = list.size() - 1;
-        
-        int index = ((indexMax - indexMin)/2) + indexMin;
-        
-        boolean found = false;
-                
-        while(!found){
-            
-            double currentValue = list.get(index);
-            
-            if(list.get(index) < value){
-                
-                indexMin = index;
-                index = (indexMax + (index))/2;
-
-            }else if(list.get(index) > value && list.get(index-1) > value){
-                
-                indexMax = index;
-                index = (indexMin + (index))/2;
-                
-            }else{
-                found = true;
-            }
-            
-            if(indexMin == indexMax-1){
-                
-                index = indexMax-1;
-                found = true;
-            }else if(indexMin == indexMax){
-                index = indexMin;
-                found = true;
-            }
-        }
-        
-        return index;
-    }
-    
-    public void voxeliseOne(Shot shot){
-        
-        voxelAnalysis.voxelise(shot);
-    }    
 
     @Override
     public void run() {
@@ -414,8 +184,6 @@ public class LasVoxelisation extends Processing implements Runnable{
         Shot e = null;
         boolean isNewExp = false;
         
-        
-        voxelAnalysis.init(parameters, outputFile);
 
         for (int i = 0; i < loc_coord_offsetTraj.columnNumber; i++) {
             
@@ -526,12 +294,78 @@ public class LasVoxelisation extends Processing implements Runnable{
         
         fireFinished();
         
-        //ArrayList<LasMixTrajectory> ALL = transformPoints(popMatrix, lasPointList, trajectoryFile);
+        //fireProgress("Writing file", getProgression());
+        //voxelAnalysis.calculatePADAndWrite(0);
         
-        //fireProgress("Building echos", 50);
-        //Map<String, Shot> shoots = buildEchos(ALL);
+    }
+    
+    private ArrayList<LasPoint> readLas(Las lasFile) {
         
-        //fireProgress("Voxelisation", 75);
-        //voxelise(shoots);
+        ArrayList<LasPoint> lasPointList = new ArrayList<>();
+
+        ArrayList<? extends PointDataRecordFormat0> pointDataRecords = lasFile.getPointDataRecords();
+        LasHeader header = lasFile.getHeader();
+        for (PointDataRecordFormat0 p : pointDataRecords) {
+
+            Vec3D location = new Vec3D((p.getX() * header.getxScaleFactor()) + header.getxOffset(), (p.getY() * header.getyScaleFactor()) + header.getyOffset(), (p.getZ() * header.getzScaleFactor()) + header.getzOffset());
+            LasPoint point = new LasPoint(location, p.getReturnNumber(), p.getNumberOfReturns(), p.getGpsTime());
+            
+            lasPointList.add(point);
+        }
+
+        return lasPointList;
+    }
+    
+    private double dfdist(double x_s, double y_s, double z_s, double x, double y, double z) {
+
+        double result = Math.sqrt(Math.pow(x_s - x, 2) + Math.pow((y_s - y), 2) + Math.pow((z_s - z), 2));
+
+        return result;
+    }
+    
+    private int searchNearestMax(double value, ArrayList<Double> list, int start){
+        
+        
+        int indexMin = start;
+        int indexMax = list.size() - 1;
+        
+        int index = ((indexMax - indexMin)/2) + indexMin;
+        
+        boolean found = false;
+                
+        while(!found){
+            
+            double currentValue = list.get(index);
+            
+            if(list.get(index) < value){
+                
+                indexMin = index;
+                index = (indexMax + (index))/2;
+
+            }else if(list.get(index) > value && list.get(index-1) > value){
+                
+                indexMax = index;
+                index = (indexMin + (index))/2;
+                
+            }else{
+                found = true;
+            }
+            
+            if(indexMin == indexMax-1){
+                
+                index = indexMax-1;
+                found = true;
+            }else if(indexMin == indexMax){
+                index = indexMin;
+                found = true;
+            }
+        }
+        
+        return index;
+    }
+
+    @Override
+    public File process() {
+        return null;
     }
 }

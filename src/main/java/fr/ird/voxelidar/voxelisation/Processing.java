@@ -17,7 +17,13 @@ public abstract class Processing {
     private final EventListenerList listeners= new EventListenerList();
     private String progress;
     private boolean finished;
-    
+    private int stepNumber = 0;
+    private int currentStep = 0;
+
+    public void setStepNumber(int stepNumber) {
+        currentStep = 0;
+        this.stepNumber = stepNumber;
+    }
     
     public Processing(){
     }
@@ -35,11 +41,16 @@ public abstract class Processing {
         }
     }
     
+    protected int getProgression(){
+        return (currentStep*100)/stepNumber;
+    }
+    
     public void fireProgress(String progress, int ratio){
         
+        currentStep ++;
         for(ProcessingListener listener :listeners.getListeners(ProcessingListener.class)){
             
-            listener.preprocessingStepProgress(progress, ratio);
+            listener.processingStepProgress(progress, ratio);
         }
     }
     
@@ -47,11 +58,11 @@ public abstract class Processing {
         
         for(ProcessingListener listener :listeners.getListeners(ProcessingListener.class)){
             
-            listener.preprocessingFinished();
+            listener.processingFinished();
         }
     }
     
-    public void addVoxelPreprocessingListener(ProcessingListener listener){
+    public void addProcessingListener(ProcessingListener listener){
         listeners.add(ProcessingListener.class, listener);
     }
     

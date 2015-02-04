@@ -60,11 +60,25 @@ public class VoxelisationTool extends Processing{
         
     }
     
-    public File generateVoxelFromLas(Las las, File trajectoryFile, File outputFile, Mat4D transfMatrix, VoxelParameters parameters) {
+    public File generateVoxelFromLas(File lasFile, File trajectoryFile, File outputFile, Mat4D transfMatrix, VoxelParameters parameters) {
         
         this.parameters = parameters;
         
-        LasVoxelisation voxelisation = new LasVoxelisation(las, outputFile, transfMatrix, trajectoryFile, parameters);
+        LasVoxelisation voxelisation = new LasVoxelisation(lasFile, outputFile, transfMatrix, trajectoryFile, parameters);
+        
+        voxelisation.addProcessingListener(new ProcessingListener() {
+
+            @Override
+            public void processingStepProgress(String progress, int ratio) {
+                fireProgress(progress, ratio);
+            }
+
+            @Override
+            public void processingFinished() {
+                fireFinished();
+            }
+        });
+        
         voxelisation.process();
         
         return null;

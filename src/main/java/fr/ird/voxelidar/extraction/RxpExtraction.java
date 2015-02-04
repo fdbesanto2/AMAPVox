@@ -1,6 +1,10 @@
 package fr.ird.voxelidar.extraction;
 
 
+import fr.ird.voxelidar.math.matrix.Mat3D;
+import fr.ird.voxelidar.math.matrix.Mat4D;
+import fr.ird.voxelidar.math.vector.Vec3D;
+import fr.ird.voxelidar.math.vector.Vec4D;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,6 +12,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector3f;
 import org.apache.log4j.Logger;
 
 
@@ -33,15 +39,19 @@ public class RxpExtraction implements Runnable{
     
     private final BlockingQueue<Shot> arrayBlockingQueue;
     private final File rxpFile;
+    private final Mat4D transfMatrix;
+    private final Mat3D rotation;
     
     public native void afficherBonjour();
     private native boolean simpleExtraction(String file, Shots shots);
     
     
-    public RxpExtraction(File rxpFile, BlockingQueue<Shot> arrayBlockingQueue){
+    public RxpExtraction(File rxpFile, BlockingQueue<Shot> arrayBlockingQueue, Mat4D transfMatrix, Mat3D rotation){
         
         listeners = new EventListenerList();
         
+        this.transfMatrix = transfMatrix;
+        this.rotation = rotation;
         this.arrayBlockingQueue = arrayBlockingQueue;
         this.rxpFile = rxpFile;
     }
@@ -124,6 +134,13 @@ public class RxpExtraction implements Runnable{
             @Override
             public void shotExtracted(Shot shot) {
                 try {
+                    
+                    Vec4D locVector = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
+                    Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
+
+                    shot.origin = new Point3f((float)locVector.x, (float)locVector.y, (float)locVector.z);
+                    shot.direction = new Vector3f((float)uVector.x, (float)uVector.y, (float)uVector.z);
+
                     arrayBlockingQueue.put(shot);
                     
                 } catch (InterruptedException ex) {

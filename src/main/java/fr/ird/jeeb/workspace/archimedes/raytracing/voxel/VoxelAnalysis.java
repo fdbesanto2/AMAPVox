@@ -44,13 +44,14 @@ public class VoxelAnalysis implements Runnable{
     private VoxelParameters parameters;
     private BlockingQueue<Shot> arrayBlockingQueue;
     
-    private Mat4D transfMatrix;
-    private Mat3D rotation;
+    //private Mat4D transfMatrix;
+    //private Mat3D rotation;
     
     private boolean isFinished;
     
     private final EventListenerList listeners;
-
+    
+    /*
     public void setTransfMatrix(Mat4D transfMatrix) {
         this.transfMatrix = transfMatrix;
     }
@@ -58,7 +59,7 @@ public class VoxelAnalysis implements Runnable{
     public void setRotation(Mat3D rotation) {
         this.rotation = rotation;
     }
-
+    */
     public void setIsFinished(boolean isFinished) {
         this.isFinished = isFinished;
     }
@@ -155,11 +156,11 @@ public class VoxelAnalysis implements Runnable{
         
         long start_time = System.currentTimeMillis();
         
-        try {
+        //try {
             /***TEST : write shots file****/
-            BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\Julien\\Desktop\\test_rxp.txt"));
+            //BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\Julien\\Desktop\\test_rxp.txt"));
             //writer.write("\"key\" \"n\" \"xloc_s\" \"yloc_s\" \"zloc_s\" \"x_u\" \"y_u\" \"z_u\" \"r1\" \"r2\" \"r3\" \"r4\" \"r5\" \"r6\" \"r7\"\n");
-            writer.write("\"n\" \"xloc_s\" \"yloc_s\" \"zloc_s\" \"x_u\" \"y_u\" \"z_u\" \"r1\" \"r2\" \"r3\" \"r4\" \"r5\" \"r6\" \"r7\"\n");            
+            //writer.write("\"n\" \"xloc_s\" \"yloc_s\" \"zloc_s\" \"x_u\" \"y_u\" \"z_u\" \"r1\" \"r2\" \"r3\" \"r4\" \"r5\" \"r6\" \"r7\"\n");            
         
         
         while(!isFinished || !arrayBlockingQueue.isEmpty()) {
@@ -169,11 +170,11 @@ public class VoxelAnalysis implements Runnable{
                 
                 
 
-                Vec4D locVector = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
-                Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
+                //Vec4D locVector = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
+                //Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
 
-                shot.origin = new Point3f((float)locVector.x, (float)locVector.y, (float)locVector.z);
-                shot.direction = new Vector3f((float)uVector.x, (float)uVector.y, (float)uVector.z);
+                //shot.origin = new Point3f((float)locVector.x, (float)locVector.y, (float)locVector.z);
+                //shot.direction = new Vector3f((float)uVector.x, (float)uVector.y, (float)uVector.z);
                 
                 //String line = "\""+time+"\""+" "+shot.nbEchos+" "+shot.origin.x+" "+shot.origin.y+" "+shot.origin.z+" "+shot.direction.x+" "+shot.direction.y+" "+shot.direction.z;
                 String line = shot.nbEchos+" "+shot.origin.x+" "+shot.origin.y+" "+shot.origin.z+" "+shot.direction.x+" "+shot.direction.y+" "+shot.direction.z;
@@ -181,7 +182,7 @@ public class VoxelAnalysis implements Runnable{
                     line+=" " + shot.ranges[i];
                 }
 
-                writer.write(line+"\n");
+                //writer.write(line+"\n");
                 
                 if(nbShotsTreated % 1000000 == 0){
                     System.out.println("Shots treated: "+nbShotsTreated);
@@ -230,13 +231,13 @@ public class VoxelAnalysis implements Runnable{
             }
         }
         
-        writer.close();
+        //writer.close();
         
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        //} catch (IOException ex) {
+          //  java.util.logging.Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
+        //}
         
-        logger.info("rxp extraction is finished ( "+TimeCounter.getElapsedTimeInSeconds(start_time)+" )");
+        logger.info("voxelisation is finished ( "+TimeCounter.getElapsedTimeInSeconds(start_time)+" )");
                     
         
         calculatePADAndWrite(0);

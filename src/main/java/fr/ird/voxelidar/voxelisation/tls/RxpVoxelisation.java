@@ -6,7 +6,6 @@
 package fr.ird.voxelidar.voxelisation.tls;
 
 import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelAnalysis;
-import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelAnalysisListener;
 import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelParameters;
 import fr.ird.voxelidar.extraction.RxpExtraction;
 import fr.ird.voxelidar.extraction.RxpExtractionListener;
@@ -14,12 +13,8 @@ import fr.ird.voxelidar.extraction.Shot;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.math.matrix.Mat3D;
 import fr.ird.voxelidar.math.matrix.Mat4D;
-import fr.ird.voxelidar.util.TimeCounter;
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import org.apache.log4j.Logger;
@@ -84,14 +79,14 @@ public class RxpVoxelisation {
             transfMatrix.mat[8],transfMatrix.mat[9],transfMatrix.mat[10]
         };
         
-        voxelAnalysis.setTransfMatrix(transfMatrix);
-        voxelAnalysis.setRotation(rotation);
+        //voxelAnalysis.setTransfMatrix(transfMatrix);
+        //voxelAnalysis.setRotation(rotation);
         
         try {
             
             logger.info("rxp extraction is started");
             
-            RxpExtraction extraction = new RxpExtraction(rxp.getFile(), queue);
+            RxpExtraction extraction = new RxpExtraction(rxp.getFile(), queue, transfMatrix, rotation);
             
             extraction.addRxpExtractionListener(new RxpExtractionListener() {
 

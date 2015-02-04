@@ -19,7 +19,7 @@ public class Mat {
     /**
      *
      */
-    public Double mat[][];
+    public double mat[][];
 
     /**
      *
@@ -40,7 +40,7 @@ public class Mat {
         
         this.lineNumber = lineNumber;
         this.columnNumber = columnNumber;
-        mat = new Double[lineNumber][columnNumber];
+        mat = new double[lineNumber][columnNumber];
     }
     
     /**
@@ -48,7 +48,7 @@ public class Mat {
      * @param index matrix index line
      * @param data array to set the line
      */
-    public void setLine(int index, Double[] data){
+    public void setLine(int index, double[] data){
         
         try{
             System.arraycopy(data, 0, mat[index], 0, columnNumber);
@@ -63,7 +63,7 @@ public class Mat {
      * @param index matrix index column
      * @param data array to set the column
      */
-    public void setColumn(int index, Double[] data){
+    public void setColumn(int index, double[] data){
         
         try{
             for(int i=0;i<lineNumber;i++){

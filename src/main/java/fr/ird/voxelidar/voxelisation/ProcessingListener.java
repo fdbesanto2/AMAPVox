@@ -13,7 +13,7 @@ import java.util.EventListener;
  */
 public interface ProcessingListener extends EventListener{
     
-    void preprocessingStepProgress(String progress, int ratio);
-    void preprocessingFinished();
+    void processingStepProgress(String progress, int ratio);
+    void processingFinished();
 }
 

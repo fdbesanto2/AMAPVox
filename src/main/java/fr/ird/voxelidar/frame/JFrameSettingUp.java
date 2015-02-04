@@ -38,6 +38,8 @@ import fr.ird.voxelidar.math.vector.Vec4D;
 import fr.ird.voxelidar.util.ColorGradient;
 import fr.ird.voxelidar.util.Misc;
 import fr.ird.voxelidar.util.Settings;
+import fr.ird.voxelidar.util.TimeCounter;
+import fr.ird.voxelidar.voxelisation.ProcessingListener;
 import fr.ird.voxelidar.voxelisation.VoxelisationParameters;
 import fr.ird.voxelidar.voxelisation.VoxelisationTool;
 import java.awt.Color;
@@ -3465,7 +3467,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         }else{
 
-            Las las = LasReader.read(inputFilePath);
+            Las las = LasReader.read(new File(inputFilePath));
 
             LasToTxt lasToTxt = new LasToTxt();
             final JProgressLoadingFile progressBar = new JProgressLoadingFile(this);
@@ -3657,8 +3659,25 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         final JProgressLoadingFile progressBar = new JProgressLoadingFile(this);
         
+        final VoxelisationTool voxTool = new VoxelisationTool();
+        final long start_time = System.currentTimeMillis();
+        
+        voxTool.addProcessingListener(new ProcessingListener() {
 
-        final JFrameSettingUp parent = this;
+            @Override
+            public void processingStepProgress(String progress, int ratio) {
+                progressBar.setText(progress);
+                progressBar.jProgressBar1.setValue(ratio);
+            }
+
+            @Override
+            public void processingFinished() {
+                progressBar.dispose();
+                
+                logger.info("las extraction is finished ( "+TimeCounter.getElapsedTimeInSeconds(start_time)+" )");
+            }
+        });
+        
 
         switch(extension){
             case ".laz":
@@ -3676,8 +3695,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 @Override
                 protected Void doInBackground() throws Exception {
 
-                    VoxelisationTool voxTool = new VoxelisationTool();
-                    voxTool.generateVoxelFromLas(LasReader.read(inputVoxPath), trajectoryFile, outputFile, vopMatrix, parameters);
+                    voxTool.generateVoxelFromLas(new File(inputVoxPath), trajectoryFile, outputFile, vopMatrix, parameters);
             
                     return null;
                 }
@@ -4160,7 +4178,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             @Override
             protected Object doInBackground() throws Exception {
                 
-                Las read = LasReader.read(jTextFieldFilePathInputVox.getText());
+                Las read = LasReader.read(new File(jTextFieldFilePathInputVox.getText()));
                 ArrayList<? extends PointDataRecordFormat0> pointDataRecords = read.getPointDataRecords();
                 LasHeader header = read.getHeader();
 

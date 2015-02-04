@@ -7,6 +7,7 @@ package fr.ird.voxelidar.lidar.format.als;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -598,10 +599,10 @@ public class LasReader {
         return header;
     }
     
-    public LasHeader readHeader(String path) {
+    public LasHeader readHeader(File file) {
 
         
-        try (DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(path)))) {
+        try (DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(file)))) {
             
             
             /***read the file version at first***/
@@ -649,13 +650,13 @@ public class LasReader {
        
     }
     
-    public static ArrayList<VariableLengthRecord> readVariableLengthRecords(String path, int start, long end, long variableNumber) {
+    public static ArrayList<VariableLengthRecord> readVariableLengthRecords(File file, int start, long end, long variableNumber) {
         
         ArrayList<VariableLengthRecord> variableLengthRecords = new ArrayList<>();
         
         if(variableNumber>0){
             
-            try (DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(path)))) {
+            try (DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(file)))) {
 
                 dis.skipBytes(start);
 
@@ -708,13 +709,13 @@ public class LasReader {
         return variableLengthRecords;
     }
     
-    public static ArrayList<PointDataRecordFormat0> readPointDataRecords(String path, long start, short offset, long pointNumber, int pointFormatID) {
+    public static ArrayList<PointDataRecordFormat0> readPointDataRecords(File file, long start, short offset, long pointNumber, int pointFormatID) {
         
         ArrayList<PointDataRecordFormat0> pointDataRecords = new ArrayList<>();
         
         try {
             
-            DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(path)));
+            DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
             PointDataRecordFormat0 pdr = null;
             
             dis.skip(start);
@@ -908,12 +909,12 @@ public class LasReader {
         
     }
 
-    public static Las read(String path) {
+    public static Las read(File file) {
 
         LasReader reader = new LasReader();
-        LasHeader header = reader.readHeader(path);
-        ArrayList<VariableLengthRecord> variableLengthRecords = LasReader.readVariableLengthRecords(path, header.getHeaderSize(), header.getOffsetToPointData(), header.getNumberOfVariableLengthRecords());
-        ArrayList<PointDataRecordFormat0> pointDataRecords = LasReader.readPointDataRecords(path, header.getOffsetToPointData(), header.getPointDataRecordLength(), header.getNumberOfPointrecords(), header.getPointDataFormatID());
+        LasHeader header = reader.readHeader(file);
+        ArrayList<VariableLengthRecord> variableLengthRecords = LasReader.readVariableLengthRecords(file, header.getHeaderSize(), header.getOffsetToPointData(), header.getNumberOfVariableLengthRecords());
+        ArrayList<PointDataRecordFormat0> pointDataRecords = LasReader.readPointDataRecords(file, header.getOffsetToPointData(), header.getPointDataRecordLength(), header.getNumberOfPointrecords(), header.getPointDataFormatID());
         
         Las las = new Las(header, variableLengthRecords, pointDataRecords);
         
