@@ -166,6 +166,16 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         return mapAttributs;
     }
     
+    private void addElementToVoxList(String element){
+        
+        if (!model.contains(element)) {
+            model.addElement(element);
+        }
+        
+        jListOutputFiles.setSelectedValue(element, true);
+        
+    }
+    
     
     public JFrameSettingUp() {
         
@@ -443,7 +453,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             model = new DefaultListModel();
             
             for (String modelArray1 : modelArray) {
-                model.addElement(modelArray1);
+                if(!modelArray1.isEmpty()){
+                    addElementToVoxList(modelArray1);
+                }
             }
             
             jListOutputFiles.setModel(model);
@@ -2083,12 +2095,12 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         .addComponent(jPanel28, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel33Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel33Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
                                 .addComponent(jButtonExecuteVoxAls)
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
@@ -2545,7 +2557,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 380, Short.MAX_VALUE)
             .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("LAS => TXT", jPanel31);
@@ -2908,6 +2920,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jListOutputFiles.setBackground(new java.awt.Color(180, 180, 180));
         jListOutputFiles.setBorder(javax.swing.BorderFactory.createTitledBorder("Select a file"));
         jListOutputFiles.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jListOutputFiles.setSelectedIndex(0);
         jListOutputFiles.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 jListOutputFilesValueChanged(evt);
@@ -3122,15 +3135,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private void jButtonAddFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddFileActionPerformed
         
         if (jFileChooser2.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            
-            //if(isVoxelFile(jFileChooser2.getSelectedFile().getAbsolutePath())){
-                
-                model.addElement(jFileChooser2.getSelectedFile().getAbsolutePath());
-                jListOutputFiles.setSelectedIndex(0);
-                
-            //}else{
-                //JOptionPane.showMessageDialog(this, "File isn't a voxel file");
-            //}
+            addElementToVoxList(jFileChooser2.getSelectedFile().getAbsolutePath());
         }
     }//GEN-LAST:event_jButtonAddFileActionPerformed
 
@@ -3681,8 +3686,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 protected void done(){
                     
                     progressBar.dispose();
-
-                    model.addElement(outputFile.getAbsolutePath());
+                    
+                    addElementToVoxList(outputFile.getAbsolutePath());
 
                     jListOutputFiles.setModel(model);
                     jListOutputFiles.setSelectedIndex(0);
@@ -3934,13 +3939,13 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 if(!mergeOutput){
                     
                     for(File file :filesList){
-                        model.addElement(file.getAbsolutePath());
+                        addElementToVoxList(file.getAbsolutePath());
                     }
                     
                 }else{
                     //merge
                     File outputFile = VoxelisationTool.mergeVoxelsFile(filesList, new File("test.vox"));
-                    model.addElement(outputFile.getAbsolutePath());
+                    addElementToVoxList(outputFile.getAbsolutePath());
                 }
                 
                 jListOutputFiles.setModel(model);

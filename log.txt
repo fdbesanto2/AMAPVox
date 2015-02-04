@@ -2113,3 +2113,53 @@ Caused by: org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; Conten
 2015-02-04 11:39:13 INFO  - file writed ( 1.0 s )
 2015-02-04 11:39:24 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
 2015-02-04 11:39:25 INFO  - file writed ( 1.0 s )
+2015-02-04 11:53:18 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 11:53:19 INFO  - file writed ( 1.0 s )
+2015-02-04 11:53:48 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las2.vox
+2015-02-04 11:53:49 INFO  - file writed ( 0.0 s )
+2015-02-04 11:55:01 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 11:55:02 INFO  - file writed ( 1.0 s )
+2015-02-04 11:56:15 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 11:56:17 INFO  - file writed ( 1.0 s )
+2015-02-04 11:56:26 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 11:56:27 INFO  - file writed ( 0.0 s )
+2015-02-04 11:57:04 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 11:57:06 INFO  - file writed ( 1.0 s )
+2015-02-04 11:57:22 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 11:57:23 INFO  - file writed ( 1.0 s )
+2015-02-04 11:58:34 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 11:58:35 INFO  - file writed ( 1.0 s )
+2015-02-04 11:59:19 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 11:59:20 INFO  - file writed ( 1.0 s )
+2015-02-04 11:59:29 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 11:59:30 INFO  - file writed ( 1.0 s )
+2015-02-04 12:00:03 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 12:00:04 INFO  - file writed ( 1.0 s )
+2015-02-04 12:00:13 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 12:00:15 INFO  - file writed ( 1.0 s )
+2015-02-04 12:01:16 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 12:01:17 INFO  - file writed ( 1.0 s )
+2015-02-04 12:01:25 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 12:01:26 INFO  - file writed ( 1.0 s )
+2015-02-04 12:01:35 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 12:01:36 INFO  - file writed ( 1.0 s )
+2015-02-04 12:04:41 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 12:04:42 INFO  - file writed ( 1.0 s )
+2015-02-04 12:04:53 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 12:04:54 INFO  - file writed ( 1.0 s )
+2015-02-04 12:06:06 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 12:06:08 INFO  - file writed ( 1.0 s )
+2015-02-04 12:06:16 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 12:06:17 INFO  - file writed ( 1.0 s )
+2015-02-04 12:07:11 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 12:07:12 INFO  - file writed ( 1.0 s )
+2015-02-04 12:07:19 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 12:07:20 INFO  - file writed ( 1.0 s )
+2015-02-04 12:08:05 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 12:08:06 INFO  - file writed ( 1.0 s )
+2015-02-04 12:11:10 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 12:11:11 INFO  - file writed ( 1.0 s )
+2015-02-04 12:18:42 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las.vox
+2015-02-04 12:18:43 INFO  - file writed ( 1.0 s )
+2015-02-04 12:19:02 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las2.vox
+2015-02-04 12:19:03 INFO  - file writed ( 1.0 s )
