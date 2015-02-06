@@ -13,10 +13,8 @@ import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
 import fr.ird.voxelidar.math.matrix.Mat;
 import fr.ird.voxelidar.math.matrix.Mat4D;
 import fr.ird.voxelidar.math.vector.Vec3D;
-import fr.ird.voxelidar.voxelisation.LasMixTrajectory;
-import fr.ird.voxelidar.voxelisation.LasPoint;
+import fr.ird.voxelidar.math.vector.Vec4D;
 import fr.ird.voxelidar.voxelisation.Processing;
-import fr.ird.voxelidar.voxelisation.Trajectory;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,7 +28,9 @@ import java.util.TreeMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
+import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
+import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 import org.apache.log4j.Logger;
 
@@ -42,30 +42,55 @@ public class LasConversion extends Processing implements Runnable{
     
     private final Logger logger = Logger.getLogger(LasConversion.class);
     
-    private final BlockingQueue<Shot> queue;
     private Las las;
     private final File lasFile;
     private final File trajectoryFile;
     private final Mat4D popMatrix;
+    private final BlockingQueue<Shot> queue;
+    private final BlockingQueue<fr.ird.voxelidar.extraction.LasPoint> arrayBlockingQueue;
+    private boolean isFinished;
+
+    public void setIsFinished(boolean isFinished) {
+        this.isFinished = isFinished;
+    }
     
-    public LasConversion(BlockingQueue<Shot> queue, File trajectoryFile, File lasFile, Mat4D popMatrix){
-        this.queue = queue;
+    public LasConversion(BlockingQueue<fr.ird.voxelidar.extraction.LasPoint> arrayBlockingQueue, BlockingQueue<Shot> queue,File trajectoryFile, File lasFile, Mat4D popMatrix){
+
         this.trajectoryFile = trajectoryFile;
         this.popMatrix = popMatrix;
         this.lasFile = lasFile;
+        this.arrayBlockingQueue = arrayBlockingQueue;
+        this.queue = queue;
+        isFinished = false;
     }
 
     @Override
     public void run() {
         
-        setStepNumber(5);
+        setStepNumber(3);
         
         fireProgress("Reading *.las", getProgression());
+        /*
+        ArrayList<LasPoint> lasPointList = new ArrayList<>();
+        
+        
+        
+        while(!isFinished || !arrayBlockingQueue.isEmpty()) {
+
+            try {
+                fr.ird.voxelidar.extraction.LasPoint point = arrayBlockingQueue.take();
+                lasPointList.add(new LasPoint(new Vec3D(point.x, point.y, point.z), point.returnNumber, point.numberOfReturns, point.gpsTime));
+            }catch(Exception e){
+                logger.error(e.getMessage());
+            }
+        }
+        */
+        
+        
         las = LasReader.read(lasFile);
         ArrayList<LasPoint> lasPointList = readLas(las);
         
-        Map<Double, Trajectory> trajectoryList = new TreeMap<>();
-        ArrayList<LasMixTrajectory> ALL = new ArrayList<>();
+        Map<Double, Trajectory> trajectoryMap = new TreeMap<>();
         
         Collections.sort(lasPointList, new Comparator<LasPoint>() {
 
@@ -99,16 +124,14 @@ public class LasConversion extends Processing implements Runnable{
 
                 String[] lineSplit = line.split(",");
                 Trajectory traj = new Trajectory(Double.valueOf(lineSplit[0]), Double.valueOf(lineSplit[1]),
-                        Double.valueOf(lineSplit[2]), Double.valueOf(lineSplit[3]));
+                        Double.valueOf(lineSplit[2]));
                 
-                //if(traj.T >= minTime && traj.T <= maxTime){
-                    Double time = Double.valueOf(lineSplit[3]);
-                    
-                    if(time >= minTime-0.01 && time <= maxTime+0.01){
-                        trajectoryList.put(time, traj);
-                    }
-                    
-                //}
+                Double time = Double.valueOf(lineSplit[3]);
+
+                //troncate unused values
+                if(time >= minTime-0.01 && time <= maxTime+0.01){
+                    trajectoryMap.put(time, traj);
+                }
             }
 
         } catch (FileNotFoundException ex) {
@@ -117,19 +140,20 @@ public class LasConversion extends Processing implements Runnable{
             logger.error(ex);
         }
         
-        fireProgress("Merging (interpolation)", getProgression());
-        
-        ArrayList<Vec3D> trajectoryInterpolate = new ArrayList<>();
-        
         ArrayList<Double> tgps = new ArrayList<>();
         
-        for (Map.Entry<Double, Trajectory> entry : trajectoryList.entrySet()) {
+        for (Map.Entry<Double, Trajectory> entry : trajectoryMap.entrySet()) {
             tgps.add(entry.getKey());
         }
         
-        Collections.sort(tgps);
-        
+        double oldTime = -1;
+        int oldN = -1;
         int index = 0;
+        
+        Shot e = null;
+        boolean isNewExp = false;
+        
+        int count = 0;
         
         for (LasPoint lasPoint : lasPointList) {
             
@@ -140,74 +164,40 @@ public class LasConversion extends Processing implements Runnable{
             double ratio = (lasPoint.t - min) / (max - min);
             
             //formule interpolation
-            double xValue = trajectoryList.get(min).x + ((trajectoryList.get(max).x - trajectoryList.get(min).x) * ratio);
-            double yValue = trajectoryList.get(min).y + ((trajectoryList.get(max).y - trajectoryList.get(min).y) * ratio);
-            double zValue = trajectoryList.get(min).z + ((trajectoryList.get(max).z - trajectoryList.get(min).z) * ratio);
+            double xValue = trajectoryMap.get(min).x + ((trajectoryMap.get(max).x - trajectoryMap.get(min).x) * ratio);
+            double yValue = trajectoryMap.get(min).y + ((trajectoryMap.get(max).y - trajectoryMap.get(min).y) * ratio);
+            double zValue = trajectoryMap.get(min).z + ((trajectoryMap.get(max).z - trajectoryMap.get(min).z) * ratio);
             
-            trajectoryInterpolate.add(new Vec3D(xValue, yValue, zValue));
-        }
-        
-        
-        Mat loc_coord_offsetTraj = new Mat(4, lasPointList.size());
-        Mat loc_coord_offsetLas = new Mat(4, lasPointList.size());
-        
-        int compteur = 0;
-        for (LasPoint lasPoint : lasPointList) {
+            //trajectoryInterpolate.add(new Vec3D(xValue, yValue, zValue));
+            
+            LasShot mix = new LasShot(lasPoint, 0, 0, 0);
+            
+            Vec4D trajTransform = Mat4D.multiply(popMatrix, 
+                    new Vec4D(xValue, 
+                            yValue, 
+                            zValue, 1));
+            
+            Vec4D lasTransform = Mat4D.multiply(popMatrix, 
+                    new Vec4D(lasPoint.location.x, 
+                            lasPoint.location.y, 
+                            lasPoint.location.z, 1));
+            
+            mix.xloc_s = trajTransform.x;
+            mix.yloc_s = trajTransform.y;
+            mix.zloc_s = trajTransform.z;
+            
+            mix.xloc = lasTransform.x;
+            mix.yloc = lasTransform.y;
+            mix.zloc = lasTransform.z;
+            
+            mix.range = dfdist(mix.xloc_s, mix.yloc_s, mix.zloc_s, mix.xloc, mix.yloc, mix.zloc);
 
-            LasMixTrajectory mix = new LasMixTrajectory(lasPoint, 0, 0, 0);
+            mix.x_u = (mix.xloc - mix.xloc_s) / mix.range;
+            mix.y_u = (mix.yloc - mix.yloc_s) / mix.range;
+            mix.z_u = (mix.zloc - mix.zloc_s) / mix.range;
             
-            loc_coord_offsetTraj.mat[0][compteur] = trajectoryInterpolate.get(compteur).x;
-            loc_coord_offsetTraj.mat[1][compteur] = trajectoryInterpolate.get(compteur).y;
-            loc_coord_offsetTraj.mat[2][compteur] = trajectoryInterpolate.get(compteur).z;
-            loc_coord_offsetTraj.mat[3][compteur] = 1;
             
-            loc_coord_offsetLas.mat[0][compteur] = lasPoint.location.x;
-            loc_coord_offsetLas.mat[1][compteur] = lasPoint.location.y;
-            loc_coord_offsetLas.mat[2][compteur] = lasPoint.location.z;
-            loc_coord_offsetLas.mat[3][compteur] = 1;
-
-            ALL.add(mix);
-
-            compteur++;
-        }
-        
-        fireProgress("Voxelisation", getProgression());
-        
-        loc_coord_offsetTraj = Mat.multiply(popMatrix.toMat(), loc_coord_offsetTraj);
-        loc_coord_offsetLas = Mat.multiply(popMatrix.toMat(), loc_coord_offsetLas);
-        
-        double oldTime = -1;
-        int oldN = -1;
-
-        compteur = 0;
-        
-        Shot e = null;
-        boolean isNewExp = false;
-        
-
-        for (int i = 0; i < loc_coord_offsetTraj.columnNumber; i++) {
-            
-            LasMixTrajectory all = ALL.get(i);
-            
-            /*#################################
-            #reproject source points in LOCS#
-            #################################*/
-            
-            all.xloc_s = loc_coord_offsetTraj.mat[0][i];
-            all.yloc_s = loc_coord_offsetTraj.mat[1][i];
-            all.zloc_s = loc_coord_offsetTraj.mat[2][i];
-            
-            all.xloc = loc_coord_offsetLas.mat[0][i];
-            all.yloc = loc_coord_offsetLas.mat[1][i];
-            all.zloc = loc_coord_offsetLas.mat[2][i];
-            
-            all.range = dfdist(all.xloc_s, all.yloc_s, all.zloc_s, all.xloc, all.yloc, all.zloc);
-
-            all.x_u = (all.xloc - all.xloc_s) / all.range;
-            all.y_u = (all.yloc - all.yloc_s) / all.range;
-            all.z_u = (all.zloc - all.zloc_s) / all.range;
-            
-            double time = all.lasPoint.t;
+            double time = mix.lasPoint.t;
 
             if (isNewExp && time != oldTime) {
 
@@ -219,7 +209,7 @@ public class LasConversion extends Processing implements Runnable{
                  * veut pas nettoyer
                  *
                  */
-                if (oldN == compteur) {
+                if (oldN == count) {
                     try {
                         queue.put(e);
                         //voxeliseOne(e);
@@ -228,7 +218,7 @@ public class LasConversion extends Processing implements Runnable{
                         java.util.logging.Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                compteur = 0;
+                count = 0;
                 isNewExp = false;
 
             }
@@ -237,60 +227,51 @@ public class LasConversion extends Processing implements Runnable{
 
                 if (!isNewExp && time != oldTime) {
                     
-                    e= new Shot(all.lasPoint.n, new Point3f((float)all.xloc_s, (float)all.yloc_s, (float)all.zloc_s), 
-                                                new Vector3f((float)all.x_u, (float)all.y_u, (float)all.z_u), 
-                                                new float[all.lasPoint.n]);
+                    e= new Shot(mix.lasPoint.n, new Point3d(mix.xloc_s, mix.yloc_s, mix.zloc_s), 
+                                                new Vector3d(mix.x_u, mix.y_u, mix.z_u), 
+                                                new double[mix.lasPoint.n]);
                     //e = new Shot(all.lasPoint.n, all.xloc_s, all.yloc_s, all.zloc_s, all.x_u, all.y_u, all.z_u);
                     isNewExp = true;
                 }
 
-                switch (all.lasPoint.r) {
+                switch (mix.lasPoint.r) {
 
                     case 1:
-                        e.ranges[0] = (float)all.range;
-                        //e.r1 = all.range;
-                        compteur++;
+                        e.ranges[0] = (double)mix.range;
+                        count++;
                         break;
                     case 2:
-                        e.ranges[1] = (float)all.range;
-                        //e.r2 = all.range;
-                        compteur++;
+                        e.ranges[1] = (double)mix.range;
+                        count++;
                         break;
                     case 3:
-                        e.ranges[2] = (float)all.range;
-                        //e.r3 = all.range;
-                        compteur++;
+                        e.ranges[2] = (double)mix.range;
+                        count++;
                         break;
                     case 4:
-                        e.ranges[3] = (float)all.range;
-                        //e.r4 = all.range;
-                        compteur++;
+                        e.ranges[3] = (double)mix.range;
+                        count++;
                         break;
                     case 5:
-                        e.ranges[4] = (float)all.range;
-                        //e.r5 = all.range;
-                        compteur++;
+                        e.ranges[4] = (double)mix.range;
+                        count++;
                         break;
                     case 6:
-                        e.ranges[5] = (float)all.range;
-                        //e.r6 = all.range;
-                        compteur++;
+                        e.ranges[5] = (double)mix.range;
+                        count++;
                         break;
                     case 7:
-                        e.ranges[6] = (float)all.range;
-                        //e.r7 = all.range;
-                        compteur++;
+                        e.ranges[6] = (double)mix.range;
+                        count++;
                         break;
                 }
 
             }
 
             oldTime = time;
-            oldN = all.lasPoint.n;
+            oldN = mix.lasPoint.n;
         }
         
-        //fireProgress("Writing file", getProgression());
-        //voxelAnalysis.calculatePADAndWrite(0);
         
         fireFinished();
         

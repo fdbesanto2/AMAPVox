@@ -12,7 +12,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
+import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
+import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 import org.apache.log4j.Logger;
 
@@ -138,8 +140,8 @@ public class RxpExtraction implements Runnable{
                     Vec4D locVector = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
                     Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
 
-                    shot.origin = new Point3f((float)locVector.x, (float)locVector.y, (float)locVector.z);
-                    shot.direction = new Vector3f((float)uVector.x, (float)uVector.y, (float)uVector.z);
+                    shot.origin = new Point3d(locVector.x, locVector.y, locVector.z);
+                    shot.direction = new Vector3d(uVector.x, uVector.y, uVector.z);
 
                     arrayBlockingQueue.put(shot);
                     

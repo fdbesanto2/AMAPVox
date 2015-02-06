@@ -5,8 +5,10 @@
  */
 package fr.ird.voxelidar.voxelisation.als;
 
-import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelAnalysis;
-import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelParameters;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelParameters;
+import fr.ird.voxelidar.extraction.LasExtraction;
+import fr.ird.voxelidar.extraction.LasExtractionListener;
 import fr.ird.voxelidar.extraction.RxpExtractionListener;
 import fr.ird.voxelidar.extraction.Shot;
 import fr.ird.voxelidar.lidar.format.als.Las;
@@ -17,12 +19,8 @@ import fr.ird.voxelidar.math.matrix.Mat;
 import fr.ird.voxelidar.math.matrix.Mat4D;
 import fr.ird.voxelidar.math.vector.Vec3D;
 import fr.ird.voxelidar.util.TimeCounter;
-import fr.ird.voxelidar.voxelisation.Las2;
-import fr.ird.voxelidar.voxelisation.LasMixTrajectory;
-import fr.ird.voxelidar.voxelisation.LasPoint;
 import fr.ird.voxelidar.voxelisation.Processing;
 import fr.ird.voxelidar.voxelisation.ProcessingListener;
-import fr.ird.voxelidar.voxelisation.Trajectory;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -38,7 +36,9 @@ import java.util.TreeMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
+import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
+import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 import org.apache.log4j.Logger;
 
@@ -76,9 +76,10 @@ public class LasVoxelisation extends Processing implements Runnable{
         
         
         final long start_time = System.currentTimeMillis();
+        BlockingQueue<fr.ird.voxelidar.extraction.LasPoint> arrayBlockingQueue = new LinkedBlockingQueue<>();
         
         voxelAnalysis.init(parameters, outputFile);
-        LasConversion conversion = new LasConversion(queue, trajectoryFile, lasFile, popMatrix);
+        final LasConversion conversion = new LasConversion(arrayBlockingQueue, queue, trajectoryFile, lasFile, popMatrix);
         
         try {
             
@@ -95,13 +96,32 @@ public class LasVoxelisation extends Processing implements Runnable{
                     fireProgress(progress, ratio);
                 }
             });
+            /*
+            LasExtraction extraction = new LasExtraction(arrayBlockingQueue, lasFile.getAbsolutePath());
             
-            new Thread(conversion).start();
+            extraction.addLasExtractionListener(new LasExtractionListener() {
+
+                @Override
+                public void isFinished() {
+                    conversion.setIsFinished(true);
+                }
+            });
+            */
+
+            //runnable to do the extraction
+            //Thread t1 = new Thread(extraction);
+            //t1.start();
+            //t1.join();
+            
+            Thread t2 = new Thread(conversion);
+            
+            t2.start();
+            //t2.join();
             
             Thread t = new Thread(voxelAnalysis);
             t.start();
             
-            //wait until extraction is finished
+            //wait until voxelisation finished
             t.join();
             
             logger.info("las voxelisation finished in "+TimeCounter.getElapsedTimeInSeconds(start_time));
@@ -278,11 +298,6 @@ public class LasVoxelisation extends Processing implements Runnable{
         }
         
         return index;
-    }
-    
-    public void voxeliseOne(Shot shot){
-        
-        voxelAnalysis.voxelise(shot);
     }    
 
     @Override
@@ -295,7 +310,7 @@ public class LasVoxelisation extends Processing implements Runnable{
         ArrayList<LasPoint> lasPointList = readLas(las);
         
         Map<Double, Trajectory> trajectoryList = new TreeMap<>();
-        ArrayList<LasMixTrajectory> ALL = new ArrayList<>();
+        ArrayList<LasShot> ALL = new ArrayList<>();
         
         Collections.sort(lasPointList, new Comparator<LasPoint>() {
 
@@ -329,7 +344,7 @@ public class LasVoxelisation extends Processing implements Runnable{
 
                 String[] lineSplit = line.split(",");
                 Trajectory traj = new Trajectory(Double.valueOf(lineSplit[0]), Double.valueOf(lineSplit[1]),
-                        Double.valueOf(lineSplit[2]), Double.valueOf(lineSplit[3]));
+                        Double.valueOf(lineSplit[2]));
                 
                 //if(traj.T >= minTime && traj.T <= maxTime){
                     Double time = Double.valueOf(lineSplit[3]);
@@ -384,7 +399,7 @@ public class LasVoxelisation extends Processing implements Runnable{
         int compteur = 0;
         for (LasPoint lasPoint : lasPointList) {
 
-            LasMixTrajectory mix = new LasMixTrajectory(lasPoint, 0, 0, 0);
+            LasShot mix = new LasShot(lasPoint, 0, 0, 0);
             
             loc_coord_offsetTraj.mat[0][compteur] = trajectoryInterpolate.get(compteur).x;
             loc_coord_offsetTraj.mat[1][compteur] = trajectoryInterpolate.get(compteur).y;
@@ -419,7 +434,7 @@ public class LasVoxelisation extends Processing implements Runnable{
 
         for (int i = 0; i < loc_coord_offsetTraj.columnNumber; i++) {
             
-            LasMixTrajectory all = ALL.get(i);
+            LasShot all = ALL.get(i);
             
             /*#################################
             #reproject source points in LOCS#
@@ -469,9 +484,9 @@ public class LasVoxelisation extends Processing implements Runnable{
 
                 if (!isNewExp && time != oldTime) {
                     
-                    e= new Shot(all.lasPoint.n, new Point3f((float)all.xloc_s, (float)all.yloc_s, (float)all.zloc_s), 
-                                                new Vector3f((float)all.x_u, (float)all.y_u, (float)all.z_u), 
-                                                new float[all.lasPoint.n]);
+                    e= new Shot(all.lasPoint.n, new Point3d(all.xloc_s, all.yloc_s, all.zloc_s), 
+                                                new Vector3d(all.x_u, all.y_u, all.z_u), 
+                                                new double[all.lasPoint.n]);
                     //e = new Shot(all.lasPoint.n, all.xloc_s, all.yloc_s, all.zloc_s, all.x_u, all.y_u, all.z_u);
                     isNewExp = true;
                 }
@@ -479,37 +494,37 @@ public class LasVoxelisation extends Processing implements Runnable{
                 switch (all.lasPoint.r) {
 
                     case 1:
-                        e.ranges[0] = (float)all.range;
+                        e.ranges[0] = all.range;
                         //e.r1 = all.range;
                         compteur++;
                         break;
                     case 2:
-                        e.ranges[1] = (float)all.range;
+                        e.ranges[1] = all.range;
                         //e.r2 = all.range;
                         compteur++;
                         break;
                     case 3:
-                        e.ranges[2] = (float)all.range;
+                        e.ranges[2] = all.range;
                         //e.r3 = all.range;
                         compteur++;
                         break;
                     case 4:
-                        e.ranges[3] = (float)all.range;
+                        e.ranges[3] = all.range;
                         //e.r4 = all.range;
                         compteur++;
                         break;
                     case 5:
-                        e.ranges[4] = (float)all.range;
+                        e.ranges[4] = all.range;
                         //e.r5 = all.range;
                         compteur++;
                         break;
                     case 6:
-                        e.ranges[5] = (float)all.range;
+                        e.ranges[5] = all.range;
                         //e.r6 = all.range;
                         compteur++;
                         break;
                     case 7:
-                        e.ranges[6] = (float)all.range;
+                        e.ranges[6] = all.range;
                         //e.r7 = all.range;
                         compteur++;
                         break;

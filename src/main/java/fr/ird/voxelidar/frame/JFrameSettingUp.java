@@ -6,7 +6,7 @@
 package fr.ird.voxelidar.frame;
 
 import com.jogamp.opengl.util.FPSAnimator;
-import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelParameters;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelParameters;
 import fr.ird.voxelidar.graphics2d.image.Projection;
 import fr.ird.voxelidar.graphics2d.image.ScaleGradient;
 import fr.ird.voxelidar.graphics3d.jogl.JoglListener;
@@ -100,7 +100,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.BorderUIResource;
-import javax.vecmath.Point3f;
+import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
 import org.apache.log4j.Logger;
 /**
@@ -3634,22 +3634,22 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         File inputFile = new File(jTextFieldFilePathInputVox.getText());
         String extension = FileManager.getExtension(inputFile);
         
-        voxelisationParameters.setBottomCorner(new Point3f(
-                            Float.valueOf(jTextFieldMinPointX.getText()), 
-                            Float.valueOf(jTextFieldMinPointY.getText()), 
-                            Float.valueOf(jTextFieldMinPointZ.getText())));
+        voxelisationParameters.setBottomCorner(new Point3d(
+                            Double.valueOf(jTextFieldMinPointX.getText()), 
+                            Double.valueOf(jTextFieldMinPointY.getText()), 
+                            Double.valueOf(jTextFieldMinPointZ.getText())));
         
-        voxelisationParameters.setTopCorner(new Point3f(
-                            Float.valueOf(jTextFieldMaxPointX.getText()), 
-                            Float.valueOf(jTextFieldMaxPointY.getText()), 
-                            Float.valueOf(jTextFieldMaxPointZ.getText())));
+        voxelisationParameters.setTopCorner(new Point3d(
+                            Double.valueOf(jTextFieldMaxPointX.getText()), 
+                            Double.valueOf(jTextFieldMaxPointY.getText()), 
+                            Double.valueOf(jTextFieldMaxPointZ.getText())));
         
         voxelisationParameters.setSplit(new Point3i(
                             Integer.valueOf(jTextFieldVoxelNumberX.getText()), 
                             Integer.valueOf(jTextFieldVoxelNumberY.getText()), 
                             Integer.valueOf(jTextFieldVoxelNumberZ.getText())));
         
-        voxelisationParameters.setResolution(Float.valueOf(jTextFieldVoxelNumberRes.getText()));
+        voxelisationParameters.setResolution(Double.valueOf(jTextFieldVoxelNumberRes.getText()));
         voxelisationParameters.setWeighting(jComboBoxWeighting.getSelectedIndex());
         
         final VoxelParameters parameters = voxelisationParameters;
@@ -3879,12 +3879,12 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         final ArrayList<File> filesList = new ArrayList<>();
         
-        voxelisationParameters.setBottomCorner(new Point3f(
+        voxelisationParameters.setBottomCorner(new Point3d(
                             Float.valueOf(jTextFieldMinPointX2.getText()), 
                             Float.valueOf(jTextFieldMinPointY2.getText()), 
                             Float.valueOf(jTextFieldMinPointZ2.getText())));
         
-        voxelisationParameters.setTopCorner(new Point3f(
+        voxelisationParameters.setTopCorner(new Point3d(
                             Float.valueOf(jTextFieldMaxPointX2.getText()), 
                             Float.valueOf(jTextFieldMaxPointY2.getText()), 
                             Float.valueOf(jTextFieldMaxPointZ2.getText())));

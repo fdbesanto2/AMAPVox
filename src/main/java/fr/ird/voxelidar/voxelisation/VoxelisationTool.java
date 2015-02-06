@@ -7,8 +7,8 @@ package fr.ird.voxelidar.voxelisation;
 
 import fr.ird.voxelidar.voxelisation.als.LasVoxelisation;
 import fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation;
-import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelAnalysis;
-import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelParameters;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelParameters;
 import fr.ird.voxelidar.Constants;
 import fr.ird.voxelidar.extraction.Shot;
 import fr.ird.voxelidar.lidar.format.als.Las;
@@ -234,7 +234,7 @@ public class VoxelisationTool extends Processing{
         public void voxelise2(Shot shot){
             
             
-            voxelAnalysis.voxelise(shot);
+            //voxelAnalysis.voxelise(shot);
             
         }
         

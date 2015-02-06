@@ -1,7 +1,16 @@
 package fr.ird.voxelidar;
 
+import fr.ird.voxelidar.extraction.LasExtraction;
+import fr.ird.voxelidar.extraction.LasExtractionListener;
+import fr.ird.voxelidar.extraction.LasPoint;
+import fr.ird.voxelidar.extraction.RxpExtraction;
+import fr.ird.voxelidar.extraction.RxpExtractionListener;
+import fr.ird.voxelidar.extraction.Shot;
 import fr.ird.voxelidar.frame.JFrameSettingUp;
 import java.io.IOException;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.log4j.Logger;
 
 
@@ -55,7 +64,22 @@ public class Principal {
         */
         //sdll.simpleConnection("C:\\Users\\Julien\\Documents\\Visual Studio 2012\\Projects\\TLSRivLib\\testmtd.rxp", 10000);        
         //sdll.simpleConnection("C:\\Users\\Julien\\Documents\\Visual Studio 2012\\Projects\\TLSRivLib\\testmtd.rxp", 100000);
+        /*
+        final BlockingQueue<LasPoint> queue = new LinkedBlockingQueue<>();
+        LasExtraction extraction = new LasExtraction(queue, "\\\\forestview01\\BDLidar\\ALS\\Paracou\\2013\\Dalles_semis_points\\Paracou000005.las");
+            
+        extraction.addLasExtractionListener(new LasExtractionListener() {
+
+            @Override
+            public void isFinished() {
+                System.out.println("test");
+            }
+        });
         
+
+        //runnable to do the extraction
+        new Thread(extraction).start();
+        */
         
         JFrameSettingUp mainJFrame = new JFrameSettingUp();
         mainJFrame.setVisible(true);

@@ -1,7 +1,7 @@
 package fr.ird.voxelidar.extraction;
 
-import javax.vecmath.Point3f;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -17,15 +17,15 @@ public class Shot{
     
     public int nbEchos;
     
-    public Point3f origin;
-    public Vector3f direction;
-    public float ranges[];
+    public Point3d origin;
+    public Vector3d direction;
+    public double ranges[];
     
     public Shot() {
         
     }
 
-    public Shot(int nbEchos, Point3f origin, Vector3f direction, float[] ranges) {
+    public Shot(int nbEchos, Point3d origin, Vector3d direction, double[] ranges) {
         
         this.origin = origin;
         this.nbEchos = nbEchos;
@@ -36,13 +36,13 @@ public class Shot{
     public Shot(int nbShots, double beam_origin_x, double beam_origin_y, double beam_origin_z, double beam_direction_x, double beam_direction_y, double beam_direction_z, double[] echos) {
         
         this.nbEchos = nbShots;
-        this.origin = new Point3f((float)beam_origin_x, (float)beam_origin_y, (float)beam_origin_z);
-        this.direction = new Vector3f((float)beam_direction_x, (float)beam_direction_y, (float)beam_direction_z);
+        this.origin = new Point3d((double)beam_origin_x, (double)beam_origin_y, (double)beam_origin_z);
+        this.direction = new Vector3d((double)beam_direction_x, (double)beam_direction_y, (double)beam_direction_z);
         
-        this.ranges = new float[echos.length];
+        this.ranges = new double[echos.length];
         
         for(int i=0;i<echos.length;i++){
-            this.ranges[i] = (float)echos[i];
+            this.ranges[i] = (double)echos[i];
         }
     }
     

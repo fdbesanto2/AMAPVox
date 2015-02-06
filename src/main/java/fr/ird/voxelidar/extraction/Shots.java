@@ -2,7 +2,9 @@ package fr.ird.voxelidar.extraction;
 
 import java.util.ArrayList;
 import javax.swing.event.EventListenerList;
+import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
+import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
 /*
@@ -17,7 +19,6 @@ import javax.vecmath.Vector3f;
  */
 public class Shots {
     
-    public ArrayList<Shot> shotList;
     public final String addShotMethodSignature = "(IDDDDDD[D)V";
     private final EventListenerList listeners;
     
@@ -27,7 +28,6 @@ public class Shots {
     }
     
     public void initialize(){
-        shotList = new ArrayList<>();
     }
     
     public void addShotsListener(ShotsListener listener){
@@ -48,15 +48,15 @@ public class Shots {
         Shot shot = new Shot();
         
         shot.nbEchos = nbShots;
-        shot.origin = new Point3f((float)beam_origin_x, (float)beam_origin_y, (float)beam_origin_z);
-        shot.direction = new Vector3f((float)beam_direction_x, (float)beam_direction_y, (float)beam_direction_z);
+        shot.origin = new Point3d(beam_origin_x, beam_origin_y, beam_origin_z);
+        shot.direction = new Vector3d(beam_direction_x, beam_direction_y, beam_direction_z);
         
-        shot.ranges = new float[echos.length];
-        
+        shot.ranges = new double[echos.length];
+        /*
         for(int i=0;i<echos.length;i++){
             shot.ranges[i] = (float)echos[i];
         }
-        
+        */
         fireShotAdded(shot);
         
         //shotList.add(shot);

@@ -5,8 +5,8 @@
  */
 package fr.ird.voxelidar.voxelisation.tls;
 
-import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelAnalysis;
-import fr.ird.jeeb.workspace.archimedes.raytracing.voxel.VoxelParameters;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelParameters;
 import fr.ird.voxelidar.extraction.RxpExtraction;
 import fr.ird.voxelidar.extraction.RxpExtractionListener;
 import fr.ird.voxelidar.extraction.Shot;

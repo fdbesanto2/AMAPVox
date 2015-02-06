@@ -17,7 +17,7 @@ public abstract class Processing {
     private final EventListenerList listeners= new EventListenerList();
     private String progress;
     private boolean finished;
-    private int stepNumber = 0;
+    private int stepNumber = 1;
     private int currentStep = 0;
 
     public void setStepNumber(int stepNumber) {
