@@ -18,6 +18,7 @@ public class VoxelParameters {
     public static final int WEIGHTING_NONE = 0;
     public static final int WEIGHTING_ECHOS_NUMBER = 1;
     public static final int WEIGHTING_FILE = 2;
+    public static final int WEIGHTING_FRACTIONING = 3;
     
     Point3d bottomCorner;
     Point3d topCorner;

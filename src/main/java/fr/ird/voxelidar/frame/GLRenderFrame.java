@@ -21,16 +21,16 @@ public class GLRenderFrame extends GLWindow{
     public int width;
     public int height;
     
-    public GLRenderFrame(Window w){
+    private GLRenderFrame(Window w){
         
         super(w);
     }
     
-    public static GLRenderFrame create(GLCapabilities caps, int width, int height){
+    public static GLRenderFrame create(GLCapabilities caps, int width, int height, String title){
         
                 
         GLRenderFrame viewer = new GLRenderFrame(NewtFactory.createWindow(caps)); 
-        viewer.setTitle("3D viewer");
+        viewer.setTitle("3D viewer - "+title);
         viewer.setVisible(true); 
         viewer.setSize(width, height);
         viewer.width = width;

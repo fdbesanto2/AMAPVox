@@ -5,7 +5,7 @@
  */
 package fr.ird.voxelidar.graphics2d.image;
 
-import fr.ird.voxelidar.graphics3d.object.terrain.Terrain;
+import fr.ird.voxelidar.graphics3d.object.terrain.Dtm;
 import fr.ird.voxelidar.lidar.format.voxelspace.Voxel;
 import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace;
 import fr.ird.voxelidar.lidar.format.voxelspace.VoxelSpaceFormat;
@@ -28,7 +28,7 @@ public class Projection {
     final static Logger logger = Logger.getLogger(Projection.class);
     
     private final VoxelSpaceFormat voxelSpace;
-    private final Terrain terrain;
+    private final Dtm terrain;
     private float minValue;
     private float maxValue;
     
@@ -43,7 +43,7 @@ public class Projection {
         return maxValue;
     }
     
-    public Projection(VoxelSpaceFormat voxelSpace, Terrain terrain){
+    public Projection(VoxelSpaceFormat voxelSpace, Dtm terrain){
         
         this.voxelSpace = voxelSpace;
         this.terrain = terrain;

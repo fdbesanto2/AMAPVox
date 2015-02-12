@@ -20,6 +20,8 @@ public class Shot{
     public Point3d origin;
     public Vector3d direction;
     public double ranges[];
+    public int intensities[];
+    public short classifications[];
     
     public Shot() {
         
@@ -33,17 +35,14 @@ public class Shot{
         this.ranges = ranges;
     }
     
-    public Shot(int nbShots, double beam_origin_x, double beam_origin_y, double beam_origin_z, double beam_direction_x, double beam_direction_y, double beam_direction_z, double[] echos) {
+    public Shot(int nbEchos, Point3d origin, Vector3d direction, double[] ranges, short[] classifications, int[] intensities) {
         
-        this.nbEchos = nbShots;
-        this.origin = new Point3d((double)beam_origin_x, (double)beam_origin_y, (double)beam_origin_z);
-        this.direction = new Vector3d((double)beam_direction_x, (double)beam_direction_y, (double)beam_direction_z);
-        
-        this.ranges = new double[echos.length];
-        
-        for(int i=0;i<echos.length;i++){
-            this.ranges[i] = (double)echos[i];
-        }
+        this.origin = origin;
+        this.nbEchos = nbEchos;
+        this.direction = direction;
+        this.ranges = ranges;
+        this.classifications = classifications;
+        this.intensities = intensities;
     }
     
 }

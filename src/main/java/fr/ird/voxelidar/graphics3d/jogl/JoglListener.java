@@ -17,7 +17,7 @@ import fr.ird.voxelidar.graphics3d.object.camera.CameraAdapter;
 import fr.ird.voxelidar.graphics3d.object.camera.TrackballCamera;
 import fr.ird.voxelidar.graphics3d.object.scene.Scene;
 import fr.ird.voxelidar.graphics3d.object.scene.SceneObject;
-import fr.ird.voxelidar.graphics3d.object.terrain.Terrain;
+import fr.ird.voxelidar.graphics3d.object.terrain.Dtm;
 import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace;
 import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace.Format;
 import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpaceAdapter;
@@ -52,7 +52,7 @@ public class JoglListener implements GLEventListener {
     public int width;
     public int height;
     public JFrameTools toolBox;
-    private Terrain terrain;
+    private Dtm terrain;
     private Settings settings;
     private boolean isFpsInit = false;
     final static Logger logger = Logger.getLogger(JoglListener.class);
@@ -66,7 +66,7 @@ public class JoglListener implements GLEventListener {
         return settings;
     }
 
-    public Terrain getTerrain() {
+    public Dtm getTerrain() {
         return terrain;
     }
     
@@ -91,7 +91,7 @@ public class JoglListener implements GLEventListener {
         this.toolBox = toolbox;
     }
     
-    public JoglListener(JFrameSettingUp parent, Terrain terrain, Settings settings, FPSAnimator animator){
+    public JoglListener(JFrameSettingUp parent, Dtm terrain, Settings settings, FPSAnimator animator){
         
         this.terrain = terrain;
         this.settings = settings;
@@ -144,6 +144,8 @@ public class JoglListener implements GLEventListener {
         gl.glEnable(GL3.GL_LINE_SMOOTH);
         gl.glEnable(GL3.GL_POLYGON_SMOOTH);
         
+        //gl.glPolygonMode(GL3.GL_FRONT, GL3.GL_LINE);
+        //gl.glPolygonMode(GL3.GL_BACK, GL3.GL_LINE);
         //gl.glPolygonMode(GL3.GL_FRONT_AND_BACK, GL3.GL_LINE);
         //gl.glDisable(GL3.GL_CULL_FACE);
         
@@ -380,7 +382,7 @@ public class JoglListener implements GLEventListener {
             });
             
             try{
-                voxelSpace.loadFromFile(settings.voxelSpaceFile, Format.VOXELSPACE_FORMAT2, settings.mapAttributs);
+                voxelSpace.loadFromFile(settings.voxelSpaceFile, settings.mapAttributs);
                 //voxelSpace.loadFromFile(settings.voxelSpaceFile, settings.mapAttributs, terrain, false);
             }catch(Exception e){
                 logger.error("cannot load voxel space from file", e);

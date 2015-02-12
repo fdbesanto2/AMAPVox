@@ -10,7 +10,7 @@ import fr.ird.voxelidar.lidar.format.als.Las;
 import fr.ird.voxelidar.lidar.format.als.LasHeader;
 import fr.ird.voxelidar.lidar.format.als.LasReader;
 import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
-import fr.ird.voxelidar.math.matrix.Mat;
+import fr.ird.voxelidar.lidar.format.als.QLineExtrabytes;
 import fr.ird.voxelidar.math.matrix.Mat4D;
 import fr.ird.voxelidar.math.vector.Vec3D;
 import fr.ird.voxelidar.math.vector.Vec4D;
@@ -26,12 +26,8 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.BlockingQueue;
-import java.util.logging.Level;
-import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3d;
-import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
-import javax.vecmath.Vector3f;
 import org.apache.log4j.Logger;
 
 /**
@@ -41,6 +37,8 @@ import org.apache.log4j.Logger;
 public class LasConversion extends Processing implements Runnable{
     
     private final Logger logger = Logger.getLogger(LasConversion.class);
+    
+    private final float RATIO_REFLECTANCE_VEGETATION_SOL = 0.4f;
     
     private Las las;
     private final File lasFile;
@@ -88,7 +86,9 @@ public class LasConversion extends Processing implements Runnable{
         
         
         las = LasReader.read(lasFile);
+        
         ArrayList<LasPoint> lasPointList = readLas(las);
+        
         
         Map<Double, Trajectory> trajectoryMap = new TreeMap<>();
         
@@ -196,7 +196,6 @@ public class LasConversion extends Processing implements Runnable{
             mix.y_u = (mix.yloc - mix.yloc_s) / mix.range;
             mix.z_u = (mix.zloc - mix.zloc_s) / mix.range;
             
-            
             double time = mix.lasPoint.t;
 
             if (isNewExp && time != oldTime) {
@@ -212,10 +211,8 @@ public class LasConversion extends Processing implements Runnable{
                 if (oldN == count) {
                     try {
                         queue.put(e);
-                        //voxeliseOne(e);
-                        //shoots.put(String.valueOf(oldTime), e);
                     } catch (InterruptedException ex) {
-                        java.util.logging.Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
+                        logger.error(ex.getMessage(), ex);
                     }
                 }
                 count = 0;
@@ -229,54 +226,33 @@ public class LasConversion extends Processing implements Runnable{
                     
                     e= new Shot(mix.lasPoint.n, new Point3d(mix.xloc_s, mix.yloc_s, mix.zloc_s), 
                                                 new Vector3d(mix.x_u, mix.y_u, mix.z_u), 
-                                                new double[mix.lasPoint.n]);
-                    //e = new Shot(all.lasPoint.n, all.xloc_s, all.yloc_s, all.zloc_s, all.x_u, all.y_u, all.z_u);
+                                                new double[mix.lasPoint.n], new short[mix.lasPoint.n], new int[mix.lasPoint.n]);
                     isNewExp = true;
                 }
-
-                switch (mix.lasPoint.r) {
-
-                    case 1:
-                        e.ranges[0] = (double)mix.range;
-                        count++;
-                        break;
-                    case 2:
-                        e.ranges[1] = (double)mix.range;
-                        count++;
-                        break;
-                    case 3:
-                        e.ranges[2] = (double)mix.range;
-                        count++;
-                        break;
-                    case 4:
-                        e.ranges[3] = (double)mix.range;
-                        count++;
-                        break;
-                    case 5:
-                        e.ranges[4] = (double)mix.range;
-                        count++;
-                        break;
-                    case 6:
-                        e.ranges[5] = (double)mix.range;
-                        count++;
-                        break;
-                    case 7:
-                        e.ranges[6] = (double)mix.range;
-                        count++;
-                        break;
+                
+                if(mix.lasPoint.r <= mix.lasPoint.n){
+                    
+                    int currentEchoIndex = mix.lasPoint.r-1;
+                    
+                    e.ranges[currentEchoIndex] = mix.range;
+                    e.classifications[currentEchoIndex] = mix.lasPoint.classification;
+                    
+                    if(e.classifications[currentEchoIndex] == LasPoint.CLASSIFICATION_GROUND){
+                        e.intensities[currentEchoIndex] = (int) (mix.lasPoint.i * RATIO_REFLECTANCE_VEGETATION_SOL);
+                    }else{
+                        e.intensities[currentEchoIndex] = mix.lasPoint.i;
+                    }
+                    count++;
                 }
-
             }
 
             oldTime = time;
             oldN = mix.lasPoint.n;
+            
+            
         }
         
-        
         fireFinished();
-        
-        //fireProgress("Writing file", getProgression());
-        //voxelAnalysis.calculatePADAndWrite(0);
         
     }
     
@@ -286,10 +262,17 @@ public class LasConversion extends Processing implements Runnable{
 
         ArrayList<? extends PointDataRecordFormat0> pointDataRecords = lasFile.getPointDataRecords();
         LasHeader header = lasFile.getHeader();
+        
+        
+        
         for (PointDataRecordFormat0 p : pointDataRecords) {
-
+            
+            if(p.isHasQLineExtrabytes()){
+                QLineExtrabytes qLineExtrabytes = p.getQLineExtrabytes();
+                logger.info("QLineExtrabytes" + qLineExtrabytes.getAmplitude()+" "+qLineExtrabytes.getPulseWidth());
+            }
             Vec3D location = new Vec3D((p.getX() * header.getxScaleFactor()) + header.getxOffset(), (p.getY() * header.getyScaleFactor()) + header.getyOffset(), (p.getZ() * header.getzScaleFactor()) + header.getzOffset());
-            LasPoint point = new LasPoint(location, p.getReturnNumber(), p.getNumberOfReturns(), p.getGpsTime());
+            LasPoint point = new LasPoint(location, p.getReturnNumber(), p.getNumberOfReturns(), p.getIntensity(), p.getClassification(), p.getGpsTime());
             
             lasPointList.add(point);
         }

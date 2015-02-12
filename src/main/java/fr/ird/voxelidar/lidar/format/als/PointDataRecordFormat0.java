@@ -32,15 +32,42 @@ public class PointDataRecordFormat0 {
     private boolean keyPoint;
     private boolean withheld;
     
-    private byte[] extrabytes;
+    private boolean hasVLineExtrabytes = false;
+    private boolean hasQLineExtrabytes = false;
+    
+    private Extrabytes extrabytes;
 
-    public byte[] getExtrabytes() {
-        return extrabytes;
-    }
-
-    public void setExtrabytes(byte[] extrabytes) {
+    public void setExtrabytes(Extrabytes extrabytes) {
+        if(extrabytes instanceof VLineExtrabytes){
+            hasVLineExtrabytes = true;
+        }else if(extrabytes instanceof QLineExtrabytes){
+            hasQLineExtrabytes = false;
+        }
         this.extrabytes = extrabytes;
     }
+
+    public QLineExtrabytes getQLineExtrabytes() {
+        if(!hasQLineExtrabytes){
+            return null;
+        }
+        return (QLineExtrabytes)extrabytes;
+    }
+    
+    public VLineExtrabytes getVLineExtrabytes() {
+        if(!hasVLineExtrabytes){
+            return null;
+        }
+        return (VLineExtrabytes)extrabytes;
+    }
+
+    public boolean isHasVLineExtrabytes() {
+        return hasVLineExtrabytes;
+    }
+
+    public boolean isHasQLineExtrabytes() {
+        return hasQLineExtrabytes;
+    }
+    
 
     public boolean isSynthetic() {
         return synthetic;
@@ -73,6 +100,7 @@ public class PointDataRecordFormat0 {
     public double getGpsTime() {
         return gpsTime;
     }
+    
     
     public void setX(int x) {
         this.x = x;
@@ -121,7 +149,8 @@ public class PointDataRecordFormat0 {
     public void setPointSourceID(int pointSourceID) {
         this.pointSourceID = pointSourceID;
     }
-
+    
+    
     public short getClassification() {
         return classification;
     }

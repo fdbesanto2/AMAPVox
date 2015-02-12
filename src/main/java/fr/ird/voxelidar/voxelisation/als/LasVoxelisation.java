@@ -11,6 +11,8 @@ import fr.ird.voxelidar.extraction.LasExtraction;
 import fr.ird.voxelidar.extraction.LasExtractionListener;
 import fr.ird.voxelidar.extraction.RxpExtractionListener;
 import fr.ird.voxelidar.extraction.Shot;
+import fr.ird.voxelidar.graphics3d.object.terrain.Dtm;
+import fr.ird.voxelidar.graphics3d.object.terrain.DtmLoader;
 import fr.ird.voxelidar.lidar.format.als.Las;
 import fr.ird.voxelidar.lidar.format.als.LasHeader;
 import fr.ird.voxelidar.lidar.format.als.LasReader;
@@ -58,8 +60,9 @@ public class LasVoxelisation extends Processing implements Runnable{
     private final VoxelParameters parameters;
     private VoxelAnalysis voxelAnalysis;
     private BlockingQueue<Shot> queue;
+    private File dtmFile;
 
-    public LasVoxelisation(File lasFile, File outputFile, Mat4D popMatrix, File trajectoryFile, VoxelParameters parameters) {
+    public LasVoxelisation(File lasFile, File outputFile, Mat4D popMatrix, File trajectoryFile, VoxelParameters parameters, File dtmFile) {
 
         this.lasFile = lasFile;
         this.outputFile = outputFile;
@@ -68,12 +71,31 @@ public class LasVoxelisation extends Processing implements Runnable{
         this.parameters = parameters;
         
         queue = new LinkedBlockingQueue<>();
-        voxelAnalysis = new VoxelAnalysis(queue);
+        
+        Dtm terrain = null;
+        try {
+            terrain = DtmLoader.readFromAscFile(dtmFile);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        voxelAnalysis = new VoxelAnalysis(queue, terrain);
+        this.dtmFile = dtmFile;
     }
 
     @Override
     public File process() {
         
+        Dtm terrain = null;
+        
+        if(dtmFile != null){
+            try {
+                terrain = DtmLoader.readFromAscFile(dtmFile);
+                terrain.exportObj(new File("c:\\Users\\Julien\\Desktop\\test.obj"));
+            } catch (Exception ex) {
+                java.util.logging.Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         
         final long start_time = System.currentTimeMillis();
         BlockingQueue<fr.ird.voxelidar.extraction.LasPoint> arrayBlockingQueue = new LinkedBlockingQueue<>();
@@ -182,9 +204,9 @@ public class LasVoxelisation extends Processing implements Runnable{
         ArrayList<? extends PointDataRecordFormat0> pointDataRecords = lasFile.getPointDataRecords();
         LasHeader header = lasFile.getHeader();
         for (PointDataRecordFormat0 p : pointDataRecords) {
-
+            
             Vec3D location = new Vec3D((p.getX() * header.getxScaleFactor()) + header.getxOffset(), (p.getY() * header.getyScaleFactor()) + header.getyOffset(), (p.getZ() * header.getzScaleFactor()) + header.getzOffset());
-            LasPoint point = new LasPoint(location, p.getReturnNumber(), p.getNumberOfReturns(), p.getGpsTime());
+            LasPoint point = new LasPoint(location, p.getReturnNumber(), p.getNumberOfReturns(), p.getIntensity(), p.getClassification(), p.getGpsTime());
             
             lasPointList.add(point);
         }

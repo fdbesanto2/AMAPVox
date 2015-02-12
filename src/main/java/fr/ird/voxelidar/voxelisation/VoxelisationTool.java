@@ -48,7 +48,7 @@ public class VoxelisationTool extends Processing{
         this.nbTask = nbTask;
     }
 
-    public File generateVoxelFromRxp(RxpScan rxp, File outputFile, Mat4D transfMatrix, VoxelParameters parameters) {
+    public File generateVoxelSpaceFromRxp(RxpScan rxp, File outputFile, Mat4D transfMatrix, VoxelParameters parameters) {
         
         this.parameters = parameters;
         
@@ -60,11 +60,11 @@ public class VoxelisationTool extends Processing{
         
     }
     
-    public File generateVoxelFromLas(File lasFile, File trajectoryFile, File outputFile, Mat4D transfMatrix, VoxelParameters parameters) {
+    public File generateVoxelSpaceFromLas(File lasFile, File trajectoryFile, File outputFile, Mat4D transfMatrix, VoxelParameters parameters, File dtmFile) {
         
         this.parameters = parameters;
         
-        LasVoxelisation voxelisation = new LasVoxelisation(lasFile, outputFile, transfMatrix, trajectoryFile, parameters);
+        LasVoxelisation voxelisation = new LasVoxelisation(lasFile, outputFile, transfMatrix, trajectoryFile, parameters, dtmFile);
         
         voxelisation.addProcessingListener(new ProcessingListener() {
 

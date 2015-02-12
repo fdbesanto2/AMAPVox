@@ -883,10 +883,15 @@ public class LasReader {
                         
                         bytes[j] = dis.readByte();
                     }
-                    
-                    pdr.setExtrabytes(bytes);
+                    switch(difference){
+                        case 2:
+                            pdr.setExtrabytes((Extrabytes)new QLineExtrabytes(bytes));
+                            break;
+                        case 3:
+                            pdr.setExtrabytes((Extrabytes)new VLineExtrabytes(bytes));
+                            break;
+                    }
                 }
-                
                 
                 pointDataRecords.add(pdr);
             }

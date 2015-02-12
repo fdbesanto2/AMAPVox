@@ -1162,12 +1162,12 @@ public class JFrameTools extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
-        System.out.println("tools jframe lose focus");
+
         isFocused = false;
     }//GEN-LAST:event_formWindowLostFocus
 
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
-        System.out.println("tools jframe gained focus");
+
         isFocused = true;
     }//GEN-LAST:event_formWindowGainedFocus
 

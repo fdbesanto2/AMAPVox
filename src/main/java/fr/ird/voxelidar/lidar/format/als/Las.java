@@ -35,6 +35,27 @@ public class Las {
         return variableLengthRecords;
     }
     
+    public double getTransformedX(int index){
+        
+        double transformedX = (pointDataRecords.get(index).getX() * header.getxScaleFactor()) + header.getxOffset();
+        
+        return transformedX;
+    }
+    
+    public double getTransformedY(int index){
+        
+        double transformedY = (pointDataRecords.get(index).getY() * header.getyScaleFactor()) + header.getyOffset();
+        
+        return transformedY;
+    }
+    
+    public double getTransformedZ(int index){
+        
+        double transformedZ = (pointDataRecords.get(index).getZ() * header.getzScaleFactor()) + header.getzOffset();
+        
+        return transformedZ;
+    }
+    
     
     
 }

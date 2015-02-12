@@ -290,7 +290,8 @@ public class VoxelSpace {
                 resolution = (maxCorner.x - minCorner.x) / nX;
                 
                 //offset
-                reader.readLine();
+                String[] offsetString = reader.readLine().split(" ");
+                Vec3F offset = new Vec3F(Float.valueOf(offsetString[1]), Float.valueOf(offsetString[2]),Float.valueOf(offsetString[3]));
                 
                 String[] columnsNames = reader.readLine().split(" ");
                 
@@ -336,10 +337,10 @@ public class VoxelSpace {
                             minMax.put(columnsNames[i], new Point2F(value, value));
                         }
                     }
-
-                    float posX = indiceX+startPointX-(resolution/2.0f);
-                    float posY = indiceY+startPointY-(resolution/2.0f);
-                    float posZ = indiceZ+startPointZ-(resolution/2.0f);
+                    
+                    float posX = offset.x+(indiceX*(resolution));
+                    float posY = offset.z+(indiceY*(resolution));
+                    float posZ = offset.y+(indiceZ*(resolution));
 
                     voxelSpaceFormat.voxels.add(new Voxel(indiceX, indiceY, indiceZ, posX, posY, posZ, mapAttributs, 1.0f));
 
@@ -432,10 +433,18 @@ public class VoxelSpace {
                             minMax.put(columnsNames[i], new Point2F(value, value));
                         }
                     }
-
-                    float posX = indiceX+startPointX-(resolution/2.0f);
-                    float posY = indiceY+startPointY-(resolution/2.0f);
-                    float posZ = indiceZ+startPointZ-(resolution/2.0f);
+                    /*
+                    float offsetX = -12;
+                    float offsetY = -2;
+                    float offsetZ = 8;
+                    */
+                    float offsetX = 0;
+                    float offsetY = 0;
+                    float offsetZ = 0;
+                    
+                    float posX = offsetX+(indiceX+startPointX)*(resolution);
+                    float posY = offsetZ+(indiceY+startPointY)*(resolution);
+                    float posZ = offsetY+(indiceZ+startPointZ)*(resolution);
 
                     voxelSpaceFormat.voxels.add(new Voxel(indiceX, indiceY, indiceZ, posX, posY, posZ, mapAttributs, 1.0f));
 
@@ -457,7 +466,7 @@ public class VoxelSpace {
         }
     }
     
-    public void loadFromFile(File f, final Format format){
+    public void loadFromFile(File f){
         
             
         setFileLoaded(false);
@@ -470,11 +479,7 @@ public class VoxelSpace {
             @Override
             protected Object doInBackground() {
 
-                switch(format){
-                    case VOXELSPACE_FORMAT2:
-                        readVoxelFormat(file);
-                        break;
-                }
+                readVoxelFormat(file);
 
                 setFileLoaded(true);
 
@@ -539,8 +544,10 @@ public class VoxelSpace {
 
                 attributValueMin = attributValue;
             }
-
-            boolean drawVoxel = !(Float.isNaN(voxel.attributValue) || voxel.attributValue == -1.0f || (!settings.drawNullVoxel && voxel.attributValue == 0));
+            //if(voxel.attributValue == -1){
+                //voxel.attributValue = -1;
+            //}
+            boolean drawVoxel = !(Float.isNaN(voxel.attributValue) || voxel.attributValue < 0/*|| voxel.attributValue == -1.0f */|| (!settings.drawNullVoxel && voxel.attributValue == 0));
             
             if(!drawVoxel){
                 voxel.alpha = 0;
@@ -582,7 +589,7 @@ public class VoxelSpace {
     }
     
     
-    public void loadFromFile(File f, final Format format, Map<String,Attribut> mapAttributs){
+    public void loadFromFile(File f, Map<String,Attribut> mapAttributs){
         
         setFileLoaded(false);
         
@@ -599,11 +606,7 @@ public class VoxelSpace {
             @Override
             protected Object doInBackground() {
                 
-                switch(format){
-                    case VOXELSPACE_FORMAT2:
-                        readVoxelFormat(file);
-                        break;
-                }
+                readVoxelFormat(file);
                 
                 
                 updateValue(settings.attribut);
@@ -966,7 +969,7 @@ public class VoxelSpace {
     
     public void initBuffer(GL3 gl, Shader shader){
         
-        cubeSize = 0.5f;
+        cubeSize = resolution/2.0f;
         cube = MeshFactory.createCube(cubeSize);
         
         instancePositions = new float[voxelSpaceFormat.voxels.size()*3];

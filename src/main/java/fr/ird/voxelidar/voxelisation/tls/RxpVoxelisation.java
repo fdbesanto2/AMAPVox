@@ -59,7 +59,7 @@ public class RxpVoxelisation {
         
         queue = new LinkedBlockingQueue<>();
         
-        final VoxelAnalysis voxelAnalysis = new VoxelAnalysis(queue);
+        final VoxelAnalysis voxelAnalysis = new VoxelAnalysis(queue, null);
         
         voxelAnalysis.init(parameters, outputFile);
         

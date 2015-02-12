@@ -102,7 +102,16 @@ public class DartWriter {
         for (Voxel voxel : voxelSpaceFormat.voxels) {
             
             Map<String, Float> attributs = voxel.getAttributs();
-            Float densite = attributs.get("densite");
+            
+            Float densite = attributs.get("PAD2");
+            
+            if(densite == null){ //format eloi
+                densite = attributs.get("densite");
+                
+                if(densite == null){ //format eloi
+                    densite = attributs.get("PAD");
+                }
+            }
             
             int indiceX = voxel.indiceX;
             int indiceY = voxel.indiceY;

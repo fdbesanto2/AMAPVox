@@ -12,8 +12,8 @@ import fr.ird.voxelidar.graphics2d.image.ScaleGradient;
 import fr.ird.voxelidar.graphics3d.jogl.JoglListener;
 import fr.ird.voxelidar.graphics3d.mesh.Attribut;
 import fr.ird.voxelidar.listener.EventManager;
-import fr.ird.voxelidar.graphics3d.object.terrain.Terrain;
-import fr.ird.voxelidar.graphics3d.object.terrain.TerrainLoader;
+import fr.ird.voxelidar.graphics3d.object.terrain.Dtm;
+import fr.ird.voxelidar.graphics3d.object.terrain.DtmLoader;
 import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace;
 import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace.Format;
 import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpaceAdapter;
@@ -119,7 +119,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private static Set<String> setParameters = new HashSet<>();
     private ArrayList<Attribut> attributsList;
     private Map<String, Attribut> mapAttributs;
-    private Terrain terrain;
+    private Dtm terrain;
     private boolean drawVoxelWhenValueIsNull;
     private Settings settings;
     public UIManager.LookAndFeelInfo[] installedLookAndFeels;
@@ -582,29 +582,38 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         return true;
     }
     
-    private boolean isTerrainFile(String path) {
+    private boolean isTerrainFile(File file) {
         
-        try{
+        String path = file.getAbsolutePath();
+        
+        if(path.endsWith(".asc")){
             
-            String[] headerAttributes = FileManager.readHeader(path).split(" ");
+            return true;
             
-            if(headerAttributes.length != 3){
+        }else if(path.endsWith(".txt")){
+            
+            try{
+            
+                String[] headerAttributes = FileManager.readHeader(path).split(" ");
+
+                if(headerAttributes.length != 3){
+                    return false;
+                }
+                String[] firstPoint = FileManager.readSpecificLine(path, 2).split(" ");
+
+                if(firstPoint.length != 3){
+                    return false;
+                }
+
+                for (String point : firstPoint) {
+                    Float.valueOf(point);
+                }
+
+
+            }catch(Exception e){
+
                 return false;
             }
-            String[] firstPoint = FileManager.readSpecificLine(path, 2).split(" ");
-
-            if(firstPoint.length != 3){
-                return false;
-            }
-            
-            for (String point : firstPoint) {
-                Float.valueOf(point);
-            }
-            
-        
-        }catch(Exception e){
-
-            return false;
         }
         
         return true;
@@ -614,7 +623,12 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         
         try{
             if(terrain == null || !terrain.getPath().equals(jTextFieldFilePathMnt.getText())){
-                terrain = TerrainLoader.readFromFile(jTextFieldFilePathMnt.getText());
+                if(jTextFieldFilePathMnt.getText().endsWith(".asc")){
+                    terrain = DtmLoader.readFromAscFile(new File(jTextFieldFilePathMnt.getText()));
+                }else if(jTextFieldFilePathMnt.getText().endsWith(".txt")){
+                    terrain = DtmLoader.readFromFile(jTextFieldFilePathMnt.getText());
+                }
+                
             }
             
             jButtonGenerateMap.setEnabled(true);
@@ -865,6 +879,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jTextFieldVoxelNumberZ = new javax.swing.JTextField();
         jTextFieldVoxelNumberRes = new javax.swing.JTextField();
         jButtonCalculateBoundingBox = new javax.swing.JButton();
+        jCheckBox1 = new javax.swing.JCheckBox();
         jPanel31 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
@@ -1828,7 +1843,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Weighting"));
 
         jComboBoxWeighting.setBackground(new java.awt.Color(180, 180, 180));
-        jComboBoxWeighting.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "No weighting", "From the echo number", "From a parameter file" }));
+        jComboBoxWeighting.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "No weighting", "From the echo number", "From a parameter file", "Local recalculation " }));
         jComboBoxWeighting.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBoxWeightingItemStateChanged(evt);
@@ -1861,7 +1876,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxWeighting, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonOpenWeightingFile))
-                .addGap(0, 12, Short.MAX_VALUE))
+                .addGap(0, 13, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(114, 114, 114));
@@ -2064,6 +2079,11 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         .addContainerGap())))
         );
 
+        jCheckBox1.setBackground(new java.awt.Color(85, 85, 85));
+        jCheckBox1.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBox1.setSelected(true);
+        jCheckBox1.setText("Use DTM");
+
         javax.swing.GroupLayout jPanel33Layout = new javax.swing.GroupLayout(jPanel33);
         jPanel33.setLayout(jPanel33Layout);
         jPanel33Layout.setHorizontalGroup(
@@ -2077,6 +2097,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel33Layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCheckBox1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonExecuteVoxAls, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2097,14 +2119,20 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         .addComponent(jPanel28, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
                         .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel33Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel33Layout.createSequentialGroup()
-                                .addComponent(jButtonExecuteVoxAls)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel33Layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel33Layout.createSequentialGroup()
+                                        .addComponent(jButtonExecuteVoxAls)
+                                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel33Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jCheckBox1)
+                                .addGap(19, 19, 19)))))
                 .addContainerGap())
         );
 
@@ -2544,7 +2572,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     .addComponent(jCheckBoxWriteV))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(106, Short.MAX_VALUE))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel31Layout = new javax.swing.GroupLayout(jPanel31);
@@ -2557,9 +2585,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         );
         jPanel31Layout.setVerticalGroup(
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 380, Short.MAX_VALUE)
+            .addGap(0, 394, Short.MAX_VALUE)
             .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("LAS => TXT", jPanel31);
@@ -3175,7 +3203,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         if (jFileChooser1.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             
             
-            if(isTerrainFile(jFileChooser1.getSelectedFile().getAbsolutePath())){
+            if(isTerrainFile(jFileChooser1.getSelectedFile())){
                 jTextFieldFileNameMnt.setText(jFileChooser1.getSelectedFile().getName());
                 jTextFieldFileNameMnt.setToolTipText(jFileChooser1.getSelectedFile().getName());
 
@@ -3343,7 +3371,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
 
         try {
-            voxelSpace.loadFromFile(new File(jListOutputFiles.getSelectedValue().toString()), Format.VOXELSPACE_FORMAT2);
+            voxelSpace.loadFromFile(new File(jListOutputFiles.getSelectedValue().toString()));
             //voxelSpace.loadFromFile(new File(jListOutputFiles.getSelectedValue().toString()));
         } catch (Exception ex) {
             logger.error(null, ex);
@@ -3403,7 +3431,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         GLCapabilities caps = new GLCapabilities(glp);
         caps.setDoubleBuffered(true);
 
-        GLRenderFrame renderFrame = GLRenderFrame.create(caps, 640, 480);
+        GLRenderFrame renderFrame = GLRenderFrame.create(caps, 640, 480, jListOutputFiles.getSelectedValue().toString());
 
         FPSAnimator animator = new FPSAnimator(renderFrame, 60);
         
@@ -3633,6 +3661,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         File inputFile = new File(jTextFieldFilePathInputVox.getText());
         String extension = FileManager.getExtension(inputFile);
+        final File dtmFile = new File(jTextFieldFilePathMnt.getText());
         
         voxelisationParameters.setBottomCorner(new Point3d(
                             Double.valueOf(jTextFieldMinPointX.getText()), 
@@ -3695,7 +3724,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 @Override
                 protected Void doInBackground() throws Exception {
 
-                    voxTool.generateVoxelFromLas(new File(inputVoxPath), trajectoryFile, outputFile, vopMatrix, parameters);
+                    voxTool.generateVoxelSpaceFromLas(new File(inputVoxPath), trajectoryFile, outputFile, vopMatrix, parameters, dtmFile);
             
                     return null;
                 }
@@ -3929,7 +3958,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         
                         long start_time = System.nanoTime();
                         
-                        voxTool.generateVoxelFromRxp(scan, outputFile, vopPopMatrix, parameters);
+                        voxTool.generateVoxelSpaceFromRxp(scan, outputFile, vopPopMatrix, parameters);
  
                         
                         long end_time = System.nanoTime();
@@ -4278,7 +4307,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 }
             });
             
-            voxelSpace.loadFromFile(new File(filePath), Format.VOXELSPACE_FORMAT2);
+            voxelSpace.loadFromFile(new File(filePath));
             
         }
         
@@ -4331,6 +4360,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JButton jButtonRemoveFile;
     private javax.swing.JButton jButtonSopMatrix;
     private javax.swing.JButton jButtonVopMatrix;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBoxDrawAxis;
     private javax.swing.JCheckBox jCheckBoxDrawNullVoxel;
     private javax.swing.JCheckBox jCheckBoxDrawTerrain;

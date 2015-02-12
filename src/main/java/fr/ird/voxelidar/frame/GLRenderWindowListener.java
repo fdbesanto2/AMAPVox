@@ -7,12 +7,9 @@ package fr.ird.voxelidar.frame;
 
 import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
-import com.jogamp.newt.event.WindowListener;
-import com.jogamp.newt.event.WindowUpdateEvent;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.util.FPSAnimator;
 import javax.media.nativewindow.util.Point;
-import javax.swing.JFrame;
 
 /**
  *

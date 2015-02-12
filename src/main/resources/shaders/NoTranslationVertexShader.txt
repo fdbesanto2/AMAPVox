@@ -9,7 +9,11 @@ out vec3 Color;
  
 void main()
 {
+    
     Color = color;
+    Color.r = mix(0, 1, (position.x*position.y*position.z*color.r)*20);
+    Color.g = mix(0, 1, (position.x*position.y*position.z*color.g)*20);
+    Color.b = mix(0, 1, (position.x*position.y*position.z*color.b)*20);
 
     mat4 translation = mat4(vec4(1,0,0,0.8),
                         vec4(0,1,0,0.8),

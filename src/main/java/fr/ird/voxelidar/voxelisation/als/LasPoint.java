@@ -13,15 +13,21 @@ import fr.ird.voxelidar.math.vector.Vec3D;
  */
 public class LasPoint {
     
+    public final static int CLASSIFICATION_GROUND = 2;
+    
     public Vec3D location;
     public int r;
     public int n;
     public double t;
-
-    public LasPoint(Vec3D location, int r, int n, double t) {
+    public int i;
+    public short classification;
+    
+    public LasPoint(Vec3D location, int r, int n, int i, short classification, double t) {
         this.location = location;
         this.r = r;
         this.n = n;
+        this.classification = classification;
+        this.i = i;
         this.t = t;
     }    
 }
