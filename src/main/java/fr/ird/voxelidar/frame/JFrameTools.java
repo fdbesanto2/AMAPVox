@@ -39,7 +39,7 @@ public class JFrameTools extends javax.swing.JFrame {
      * Creates new form JFrameTools
      * @param joglContext
      */
-    public JFrameTools(JFrameSettingUp jFrameSettingUp, JoglListener joglContext) {
+    public JFrameTools(JFrameSettingUp jFrameSettingUp, JoglListener joglContext, ListAdapterComboboxModel model) {
         
         initComponents();
         
@@ -48,8 +48,9 @@ public class JFrameTools extends javax.swing.JFrame {
         
         isFocused = false;
         temp = false;
-        jComboBoxAttributeToVisualize.setModel(new DefaultComboBoxModel(joglContext.getSettings().mapAttributs.keySet().toArray()));
-        jComboBoxAttributeToVisualize.setSelectedItem(joglContext.getSettings().attributeToVisualize);
+        jComboBoxAttributeToVisualize.setModel(model);
+        model.setSelectedItem(joglContext.getSettings().attributeToVisualize);
+        
         temp=true;
         
         Class c = ColorGradient.class;

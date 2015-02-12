@@ -16604,3 +16604,27 @@
 2015-02-12 09:00:23 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las4.vox
 2015-02-12 09:00:23 INFO  - file writed ( 0.0 s )
 2015-02-12 09:00:23 INFO  - las voxelisation finished in 5.0 s
+2015-02-12 09:12:35 INFO  - allocate!!!!!!!!
+2015-02-12 09:12:35 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 5.0)
+			Corner Sup	:	(15.0, 250.0, 75.0)
+			Dimensions	:	(15, 130, 35)
+			Toricity 	:	false
+
+2015-02-12 09:12:41 INFO  - Shots treated: 141106
+2015-02-12 09:12:41 INFO  - voxelisation is finished ( 5.0 s )
+2015-02-12 09:12:41 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las4.vox
+2015-02-12 09:12:41 INFO  - file writed ( 0.0 s )
+2015-02-12 09:12:41 INFO  - las voxelisation finished in 6.0 s
+2015-02-12 09:12:57 INFO  - allocate!!!!!!!!
+2015-02-12 09:12:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 5.0)
+			Corner Sup	:	(15.0, 250.0, 75.0)
+			Dimensions	:	(15, 130, 35)
+			Toricity 	:	false
+
+2015-02-12 09:13:02 INFO  - Shots treated: 141106
+2015-02-12 09:13:02 INFO  - voxelisation is finished ( 4.0 s )
+2015-02-12 09:13:02 INFO  - writing file: C:\Users\Julien\Desktop\Sortie voxels\las4.vox
+2015-02-12 09:13:02 INFO  - file writed ( 0.0 s )
+2015-02-12 09:13:02 INFO  - las voxelisation finished in 5.0 s

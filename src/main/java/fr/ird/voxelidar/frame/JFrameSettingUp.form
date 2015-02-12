@@ -99,6 +99,8 @@
         </Property>
       </Properties>
     </Component>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroup2">
+    </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -197,7 +199,7 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,94,0,0,3,50"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,113,0,0,3,53"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
@@ -248,7 +250,7 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="jTabbedPane2" pref="801" max="32767" attributes="0"/>
+                          <Component id="jTabbedPane2" pref="804" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1102,7 +1104,7 @@
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jCheckBoxUseDTM" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="32767" attributes="0"/>
                                               <Component id="jButtonExecuteVoxAls" min="-2" pref="92" max="-2" attributes="0"/>
                                           </Group>
@@ -1144,7 +1146,7 @@
                                                   </Group>
                                                   <Group type="102" alignment="1" attributes="0">
                                                       <EmptySpace max="32767" attributes="0"/>
-                                                      <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jCheckBoxUseDTM" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -1455,7 +1457,7 @@
                                                   </Group>
                                                   <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="jTextFieldFilePathSaveVox" pref="200" max="32767" attributes="0"/>
+                                                      <Component id="jTextFieldFilePathSaveVox" pref="202" max="32767" attributes="0"/>
                                                       <Component id="jTextFieldFileNameSaveVox" pref="0" max="32767" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -2094,7 +2096,7 @@
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="jTextFieldVoxelNumberZ" min="-2" pref="49" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jTextFieldVoxelNumberRes" pref="76" max="32767" attributes="0"/>
+                                              <Component id="jTextFieldVoxelNumberRes" pref="77" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
                                     </DimensionLayout>
@@ -2189,7 +2191,7 @@
                                 </Component>
                               </SubComponents>
                             </Container>
-                            <Component class="javax.swing.JCheckBox" name="jCheckBox1">
+                            <Component class="javax.swing.JCheckBox" name="jCheckBoxUseDTM">
                               <Properties>
                                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                                   <Color blue="55" green="55" red="55" type="rgb"/>
@@ -2220,9 +2222,9 @@
                           <Layout>
                             <DimensionLayout dim="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <EmptySpace min="0" pref="745" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="748" max="32767" attributes="0"/>
                                   <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                                      <Component id="jPanel6" alignment="0" pref="745" max="32767" attributes="0"/>
+                                      <Component id="jPanel6" alignment="0" pref="748" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -2230,7 +2232,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <EmptySpace min="0" pref="394" max="32767" attributes="0"/>
                                   <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-                                      <Component id="jPanel6" alignment="0" pref="394" max="32767" attributes="0"/>
+                                      <Component id="jPanel6" alignment="0" pref="399" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -3310,7 +3312,7 @@
                                       <Component id="jRadioButtonPAI" min="-2" max="-2" attributes="0"/>
                                       <Component id="jButtonGenerateMap" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="499" max="32767" attributes="0"/>
+                                  <EmptySpace pref="502" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -3321,7 +3323,7 @@
                                   <Component id="jRadioButtonPAI" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                                   <Component id="jRadioButtonTransmittanceMap" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="259" max="32767" attributes="0"/>
+                                  <EmptySpace pref="278" max="32767" attributes="0"/>
                                   <Component id="jButtonGenerateMap" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                               </Group>
@@ -3389,7 +3391,7 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="685" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="688" max="32767" attributes="0"/>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
@@ -3399,7 +3401,7 @@
                         </DimensionLayout>
                       </Layout>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="jPanel11">
+                    <Container class="javax.swing.JPanel" name="jPanelVegetationProfile">
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="72" green="72" red="72" type="rgb"/>
@@ -3416,15 +3418,333 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="685" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="127" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jButtonGenerateProfile" min="-2" max="-2" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <Component id="jRadioButton1" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Component id="jRadioButton2" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace pref="408" max="32767" attributes="0"/>
+                              </Group>
                           </Group>
                         </DimensionLayout>
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <EmptySpace min="0" pref="408" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jRadioButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jRadioButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="jButtonGenerateProfile" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace pref="310" max="32767" attributes="0"/>
+                              </Group>
                           </Group>
                         </DimensionLayout>
                       </Layout>
+                      <SubComponents>
+                        <Component class="javax.swing.JRadioButton" name="jRadioButton1">
+                          <Properties>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="72" green="72" red="72" type="rgb"/>
+                            </Property>
+                            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                              <ComponentRef name="buttonGroup2"/>
+                            </Property>
+                            <Property name="text" type="java.lang.String" value="X, Height"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JRadioButton" name="jRadioButton2">
+                          <Properties>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="72" green="72" red="72" type="rgb"/>
+                            </Property>
+                            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                              <ComponentRef name="buttonGroup2"/>
+                            </Property>
+                            <Property name="text" type="java.lang.String" value="Y, Height"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="jButtonGenerateProfile">
+                          <Properties>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="55" green="55" red="55" type="rgb"/>
+                            </Property>
+                            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                            </Property>
+                            <Property name="text" type="java.lang.String" value="Generate profile"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonGenerateProfileActionPerformed"/>
+                          </Events>
+                        </Component>
+                      </SubComponents>
+                    </Container>
+                    <Container class="javax.swing.JPanel" name="jPanel9">
+                      <Properties>
+                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="72" green="72" red="72" type="rgb"/>
+                        </Property>
+                      </Properties>
+                      <Constraints>
+                        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+                          <JTabbedPaneConstraints tabName="Chart">
+                            <Property name="tabTitle" type="java.lang.String" value="Chart"/>
+                          </JTabbedPaneConstraints>
+                        </Constraint>
+                      </Constraints>
+
+                      <Layout>
+                        <DimensionLayout dim="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jButtonDrawChart" min="-2" pref="97" max="-2" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="jPanel20" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jPanel11" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="jPanel12" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="jButtonRemoveFilter" max="32767" attributes="0"/>
+                                              <Component id="jButtonAddFilter" max="32767" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace pref="150" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                        </DimensionLayout>
+                        <DimensionLayout dim="1">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="jPanel12" max="32767" attributes="0"/>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="jPanel11" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="jPanel20" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                                          <Component id="jButtonAddFilter" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="jButtonRemoveFilter" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
+                                  <Component id="jButtonDrawChart" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace pref="232" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                        </DimensionLayout>
+                      </Layout>
+                      <SubComponents>
+                        <Container class="javax.swing.JPanel" name="jPanel11">
+                          <Properties>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="72" green="72" red="72" type="rgb"/>
+                            </Property>
+                            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                <TitledBorder title="Horizontal axis"/>
+                              </Border>
+                            </Property>
+                          </Properties>
+
+                          <Layout>
+                            <DimensionLayout dim="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jComboBoxHorizontalAxisValue" min="-2" pref="165" max="-2" attributes="0"/>
+                              </Group>
+                            </DimensionLayout>
+                            <DimensionLayout dim="1">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jComboBoxHorizontalAxisValue" max="32767" attributes="0"/>
+                              </Group>
+                            </DimensionLayout>
+                          </Layout>
+                          <SubComponents>
+                            <Component class="javax.swing.JComboBox" name="jComboBoxHorizontalAxisValue">
+                              <Properties>
+                                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                                  <Color blue="b4" green="b4" red="b4" type="rgb"/>
+                                </Property>
+                                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                                  <StringArray count="0"/>
+                                </Property>
+                                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                    <TitledBorder/>
+                                  </Border>
+                                </Property>
+                              </Properties>
+                              <Events>
+                                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jComboBoxHorizontalAxisValueItemStateChanged"/>
+                                <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="jComboBoxHorizontalAxisValuePropertyChange"/>
+                              </Events>
+                            </Component>
+                          </SubComponents>
+                        </Container>
+                        <Container class="javax.swing.JPanel" name="jPanel20">
+                          <Properties>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="72" green="72" red="72" type="rgb"/>
+                            </Property>
+                            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                <TitledBorder title="Vertical axis"/>
+                              </Border>
+                            </Property>
+                          </Properties>
+
+                          <Layout>
+                            <DimensionLayout dim="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jComboBoxverticalAxisValue" alignment="0" min="-2" pref="165" max="-2" attributes="0"/>
+                              </Group>
+                            </DimensionLayout>
+                            <DimensionLayout dim="1">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jComboBoxverticalAxisValue" max="32767" attributes="0"/>
+                                      <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                            </DimensionLayout>
+                          </Layout>
+                          <SubComponents>
+                            <Component class="javax.swing.JComboBox" name="jComboBoxverticalAxisValue">
+                              <Properties>
+                                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                                  <Color blue="b4" green="b4" red="b4" type="rgb"/>
+                                </Property>
+                                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                                  <StringArray count="0"/>
+                                </Property>
+                                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                                  <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                    <TitledBorder/>
+                                  </Border>
+                                </Property>
+                              </Properties>
+                              <Events>
+                                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jComboBoxverticalAxisValueItemStateChanged"/>
+                                <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="jComboBoxverticalAxisValuePropertyChange"/>
+                              </Events>
+                            </Component>
+                          </SubComponents>
+                        </Container>
+                        <Container class="javax.swing.JPanel" name="jPanel12">
+                          <Properties>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="72" green="72" red="72" type="rgb"/>
+                            </Property>
+                            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                              <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+                                <TitledBorder title="Filters"/>
+                              </Border>
+                            </Property>
+                          </Properties>
+
+                          <Layout>
+                            <DimensionLayout dim="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jScrollPane3" alignment="1" pref="240" max="32767" attributes="0"/>
+                              </Group>
+                            </DimensionLayout>
+                            <DimensionLayout dim="1">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jScrollPane3" alignment="0" pref="0" max="32767" attributes="0"/>
+                              </Group>
+                            </DimensionLayout>
+                          </Layout>
+                          <SubComponents>
+                            <Container class="javax.swing.JScrollPane" name="jScrollPane3">
+                              <AuxValues>
+                                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                              </AuxValues>
+
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                              <SubComponents>
+                                <Component class="javax.swing.JList" name="jListFilters">
+                                  <Properties>
+                                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                                      <Color blue="b4" green="b4" red="b4" type="rgb"/>
+                                    </Property>
+                                    <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
+                                      <StringArray count="0"/>
+                                    </Property>
+                                  </Properties>
+                                </Component>
+                              </SubComponents>
+                            </Container>
+                          </SubComponents>
+                        </Container>
+                        <Component class="javax.swing.JButton" name="jButtonAddFilter">
+                          <Properties>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="55" green="55" red="55" type="rgb"/>
+                            </Property>
+                            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                            </Property>
+                            <Property name="text" type="java.lang.String" value="Add"/>
+                            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                              <Dimension value="[77, 26]"/>
+                            </Property>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonAddFilterActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="jButtonRemoveFilter">
+                          <Properties>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="55" green="55" red="55" type="rgb"/>
+                            </Property>
+                            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                            </Property>
+                            <Property name="text" type="java.lang.String" value="remove"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRemoveFilterActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="jButtonDrawChart">
+                          <Properties>
+                            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="55" green="55" red="55" type="rgb"/>
+                            </Property>
+                            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                            </Property>
+                            <Property name="text" type="java.lang.String" value="Draw chart"/>
+                            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                              <Dimension value="[77, 26]"/>
+                            </Property>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonDrawChartActionPerformed"/>
+                          </Events>
+                        </Component>
+                      </SubComponents>
                     </Container>
                   </SubComponents>
                 </Container>
@@ -3468,7 +3788,7 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="jScrollPane2" pref="299" max="32767" attributes="0"/>
+                          <Component id="jScrollPane2" pref="302" max="32767" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jButtonExportSelection" alignment="0" min="-2" max="-2" attributes="0"/>

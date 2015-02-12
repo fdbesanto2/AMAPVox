@@ -15,7 +15,6 @@ import fr.ird.voxelidar.graphics3d.mesh.Mesh;
 import fr.ird.voxelidar.graphics3d.mesh.MeshFactory;
 import fr.ird.voxelidar.graphics3d.shader.Shader;
 import fr.ird.voxelidar.io.file.FileManager;
-import fr.ird.voxelidar.lidar.format.dart.DartWriter;
 import fr.ird.voxelidar.math.point.Point2F;
 import fr.ird.voxelidar.math.vector.Vec3F;
 import fr.ird.voxelidar.util.ColorGradient;
@@ -30,14 +29,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.media.opengl.GL3;
 import javax.swing.SwingWorker;
 import javax.swing.event.EventListenerList;
-import javax.vecmath.Point3i;
 import org.apache.log4j.Logger;
 
 /**
@@ -202,20 +199,6 @@ public class VoxelSpace {
         this.settings = settings;
     }
     
-    private void setMetadata(String metadataLine){
-        
-        String[] metadata = metadataLine.split(" ");
-
-        nX = Integer.valueOf(metadata[0]);
-        nY = Integer.valueOf(metadata[1]);
-        nZ = Integer.valueOf(metadata[2]);
-        resolution = Float.valueOf(metadata[3]);
-
-        startPointX = Float.valueOf(metadata[4]);
-        startPointY = Float.valueOf(metadata[5]);
-        startPointZ = Float.valueOf(metadata[6]);
-    }
-    
     private void setWidth(){
         
         if(voxelSpaceFormat.voxels.size() > 0){
@@ -301,17 +284,17 @@ public class VoxelSpace {
                 //start reading voxels
                 while ((line = reader.readLine())!= null) {
 
-                    String[] voxel = line.split(" ");
+                    String[] voxelLine = line.split(" ");
                     
-                    int indiceX = Integer.valueOf(voxel[0]);
-                    int indiceZ = Integer.valueOf(voxel[1]);
-                    int indiceY = Integer.valueOf(voxel[2]);
+                    int indiceX = Integer.valueOf(voxelLine[0]);
+                    int indiceZ = Integer.valueOf(voxelLine[1]);
+                    int indiceY = Integer.valueOf(voxelLine[2]);
 
                     Map<String,Float> mapAttributs = new HashMap<>();
 
-                    for (int i=0;i<voxel.length;i++) {
+                    for (int i=0;i<voxelLine.length;i++) {
                         
-                        float value = Float.valueOf(voxel[i]);
+                        float value = Float.valueOf(voxelLine[i]);
                         
                         mapAttributs.put(columnsNames[i], value);
                         
@@ -338,10 +321,24 @@ public class VoxelSpace {
                         }
                     }
                     
+                    
                     float posX = offset.x+(indiceX*(resolution));
                     float posY = offset.z+(indiceY*(resolution));
                     float posZ = offset.y+(indiceZ*(resolution));
+                    
+                    if(lineNumber == 0){
+                        voxelSpaceFormat.minY = posY;
+                        voxelSpaceFormat.maxY = posY;
+                    }else{
+                        if(voxelSpaceFormat.minY > posY){
+                            voxelSpaceFormat.minY = posY;
+                        }
 
+                        if(voxelSpaceFormat.maxY < posY){
+                            voxelSpaceFormat.maxY = posY;
+                        }
+                    }                    
+                    
                     voxelSpaceFormat.voxels.add(new Voxel(indiceX, indiceY, indiceZ, posX, posY, posZ, mapAttributs, 1.0f));
 
                     lineNumber++;
@@ -442,9 +439,9 @@ public class VoxelSpace {
                     float offsetY = 0;
                     float offsetZ = 0;
                     
-                    float posX = offsetX+(indiceX+startPointX)*(resolution);
-                    float posY = offsetZ+(indiceY+startPointY)*(resolution);
-                    float posZ = offsetY+(indiceZ+startPointZ)*(resolution);
+                    float posX = offsetX+(indiceX)*(resolution);
+                    float posY = offsetZ+(indiceY)*(resolution);
+                    float posZ = offsetY+(indiceZ)*(resolution);
 
                     voxelSpaceFormat.voxels.add(new Voxel(indiceX, indiceY, indiceZ, posX, posY, posZ, mapAttributs, 1.0f));
 

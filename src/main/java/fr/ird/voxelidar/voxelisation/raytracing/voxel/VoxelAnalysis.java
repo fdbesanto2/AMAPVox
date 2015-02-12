@@ -86,7 +86,7 @@ public class VoxelAnalysis implements Runnable{
             
             Point3d position = getPosition(new Point3i(i, j, k), parameters.split, parameters.bottomCorner, parameters.topCorner);
             
-            if(terrain != null){
+            if(terrain != null && parameters.useDTMCorrection()){
                 
                 dist = (float) (position.z - terrain.getHeight((float)position.x, (float)position.y));
             }else{

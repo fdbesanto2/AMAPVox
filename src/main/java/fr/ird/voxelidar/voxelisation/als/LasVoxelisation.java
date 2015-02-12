@@ -73,11 +73,16 @@ public class LasVoxelisation extends Processing implements Runnable{
         queue = new LinkedBlockingQueue<>();
         
         Dtm terrain = null;
-        try {
-            terrain = DtmLoader.readFromAscFile(dtmFile);
-        } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
+        
+        if(parameters.useDTMCorrection() ){
+            
+            try {
+                terrain = DtmLoader.readFromAscFile(dtmFile);
+            } catch (Exception ex) {
+                java.util.logging.Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+        
         
         voxelAnalysis = new VoxelAnalysis(queue, terrain);
         this.dtmFile = dtmFile;

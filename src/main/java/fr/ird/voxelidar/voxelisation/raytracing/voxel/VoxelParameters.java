@@ -27,10 +27,19 @@ public class VoxelParameters {
     
     private int weighting;
     private File weightingFile;
+    private boolean useDTMCorrection;
     
     
     public VoxelParameters() {
-        
+        useDTMCorrection = false;
+    }
+
+    public void setUseDTMCorrection(boolean useDTMCorrection) {
+        this.useDTMCorrection = useDTMCorrection;
+    }
+
+    public boolean useDTMCorrection() {
+        return useDTMCorrection;
     }
     
     public VoxelParameters(Point3d bottomCorner, Point3d topCorner, Point3i split) {

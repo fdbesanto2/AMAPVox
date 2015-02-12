@@ -6,6 +6,8 @@
 package fr.ird.voxelidar.frame;
 
 import com.jogamp.opengl.util.FPSAnimator;
+import fr.ird.voxelidar.graphics2d.ChartFactory;
+import fr.ird.voxelidar.graphics2d.VegetationProfile;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelParameters;
 import fr.ird.voxelidar.graphics2d.image.Projection;
 import fr.ird.voxelidar.graphics2d.image.ScaleGradient;
@@ -15,9 +17,7 @@ import fr.ird.voxelidar.listener.EventManager;
 import fr.ird.voxelidar.graphics3d.object.terrain.Dtm;
 import fr.ird.voxelidar.graphics3d.object.terrain.DtmLoader;
 import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace;
-import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace.Format;
 import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpaceAdapter;
-import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpaceListener;
 import fr.ird.voxelidar.lidar.format.voxelspace.VoxelSpaceFormat;
 import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.lidar.format.als.Las;
@@ -36,22 +36,20 @@ import fr.ird.voxelidar.math.matrix.Mat4D;
 import fr.ird.voxelidar.math.vector.Vec3D;
 import fr.ird.voxelidar.math.vector.Vec4D;
 import fr.ird.voxelidar.util.ColorGradient;
+import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.Misc;
 import fr.ird.voxelidar.util.Settings;
 import fr.ird.voxelidar.util.TimeCounter;
+import fr.ird.voxelidar.util.VoxelFilter;
 import fr.ird.voxelidar.voxelisation.ProcessingListener;
-import fr.ird.voxelidar.voxelisation.VoxelisationParameters;
 import fr.ird.voxelidar.voxelisation.VoxelisationTool;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -60,18 +58,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.InvalidPreferencesFormatException;
 import java.util.prefs.Preferences;
@@ -94,7 +86,6 @@ import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
@@ -103,6 +94,7 @@ import javax.swing.plaf.BorderUIResource;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
 import org.apache.log4j.Logger;
+import org.jfree.data.xy.XYSeries;
 /**
  *
  * @author Julien
@@ -116,6 +108,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     
     private FilterDefaultListModel rspScansListModel;
     private DefaultListModel<String> model;
+    private DefaultListModel<String> filterModel;
+    private DefaultComboBoxModel<String> attributeModel;
+    
+    
     private static Set<String> setParameters = new HashSet<>();
     private ArrayList<Attribut> attributsList;
     private Map<String, Attribut> mapAttributs;
@@ -128,8 +124,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private Mat4D vopMatrix;
     private Mat4D popMatrix;
     private Mat4D vopPopMatrix;
-    private VoxelParameters voxelisationParameters;
-    private Border customBorder;
+    private final VoxelParameters voxelisationParameters;
+    private final Border customBorder;
 
     
     public JCheckBox getjCheckBoxDrawAxis() {
@@ -178,18 +174,34 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         
     }
     
+    private void addElementToList(DefaultListModel model, JList list, String element){
+        
+        if (!model.contains(element)) {
+            model.addElement(element);
+        }
+        
+        list.setSelectedValue(element, true);
+        
+    }
+    
     
     public JFrameSettingUp() {
         
         mapAttributs = new LinkedHashMap<>();
         model = new DefaultListModel();
+        filterModel = new DefaultListModel();
+        attributeModel = new DefaultComboBoxModel();
+        
         voxelisationParameters = new VoxelParameters();
         customBorder = new BorderUIResource.LineBorderUIResource(new Color(57, 57, 57));
         initComponents();
-        
+        initComboBox();
         setDefaultAppeareance();
         
+        jListFilters.setModel(filterModel);
         jListOutputFiles.setModel(model);
+        
+        
         
         attributsList = new ArrayList<>();
         currentLookAndFeel = UIManager.getLookAndFeel().getClass().getName();
@@ -428,7 +440,11 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     
                 }else if(compList.get(i) instanceof JComboBox){
                     
-                    ((JComboBox)compList.get(i)).setSelectedIndex(prefs.getInt(String.valueOf(i), 0));
+                    try{
+                        ((JComboBox)compList.get(i)).setSelectedIndex(prefs.getInt(String.valueOf(i), 0));
+                    }catch(Exception e){
+                        
+                    }
                     
                 }else if(compList.get(i) instanceof JList){
                     
@@ -461,6 +477,20 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
             
             jListOutputFiles.setModel(model);
+            
+            modelList = prefs.get("filterModel", "");
+            modelArray = modelList.split(";");
+            
+            filterModel = new DefaultListModel<>();
+            
+            for (String modelArray1 : modelArray) {
+                if(!modelArray1.isEmpty()){
+                    addElementToList(filterModel, jListFilters, modelArray1);
+                }
+            }
+            
+            jListFilters.setModel(filterModel);
+            
             if(modelArray.length>0)jListOutputFiles.setSelectedIndex(0);
         }
         
@@ -539,6 +569,12 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 modelList+=model.getElementAt(i)+";";
             }
             prefs.put("model", modelList);
+            
+            String modelFilterList = "";
+            for(int i=0;i<filterModel.getSize();i++){
+                modelFilterList+=filterModel.getElementAt(i)+";";
+            }
+            prefs.put("filterModel", modelFilterList);
             
             prefs.put("lookandfeel", currentLookAndFeel);
             prefs.putInt("COMPONENTS_NUMBERS", compList.size());
@@ -639,7 +675,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         }
     }
     
-    public void initComboBox(){
+    @SuppressWarnings("unchecked")
+    private void initComboBox(){
         
         if(jListOutputFiles.getModel().getSize()>0){
             
@@ -665,18 +702,32 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     mapAttributs.put(parameters[i], attribut);
                     //attributsList.add(new Attribut(parameters[i], parameters[i], setParameters));
                 }
+                
+                attributeModel = new DefaultComboBoxModel<>(parameters);
+                
+                ListAdapterComboboxModel attributeModelAdapterXAxis = new ListAdapterComboboxModel(attributeModel);
+                jComboBoxHorizontalAxisValue.setModel(attributeModelAdapterXAxis);
+                attributeModelAdapterXAxis.setSelectedItem(attributeModelAdapterXAxis.getElementAt(3));
 
-                jComboBoxAttributeToVisualize.setModel(new DefaultComboBoxModel(parameters));
-                jComboBoxAttributeToVisualize.setSelectedIndex(3);
+                ListAdapterComboboxModel attributeModelAdapterYAxis = new ListAdapterComboboxModel(attributeModel);
+                jComboBoxverticalAxisValue.setModel(attributeModelAdapterYAxis);
+                attributeModelAdapterYAxis.setSelectedItem(attributeModelAdapterYAxis.getElementAt(3));
 
-                jComboBoxDefaultX.setModel(new DefaultComboBoxModel(parameters));
-                jComboBoxDefaultX.setSelectedIndex(0);
-
-                jComboBoxDefaultY.setModel(new DefaultComboBoxModel(parameters));
-                jComboBoxDefaultY.setSelectedIndex(1);
-
-                jComboBoxDefaultZ.setModel(new DefaultComboBoxModel(parameters));
-                jComboBoxDefaultZ.setSelectedIndex(2);
+                ListAdapterComboboxModel attributeModelAdapter1 = new ListAdapterComboboxModel(attributeModel);
+                jComboBoxAttributeToVisualize.setModel(attributeModelAdapter1);
+                attributeModelAdapter1.setSelectedItem(attributeModelAdapter1.getElementAt(3));
+                
+                ListAdapterComboboxModel attributeModelAdapterX = new ListAdapterComboboxModel(attributeModel);
+                jComboBoxDefaultX.setModel(attributeModelAdapterX);
+                attributeModelAdapterX.setSelectedItem(attributeModelAdapterX.getElementAt(0));
+                
+                ListAdapterComboboxModel attributeModelAdapterY = new ListAdapterComboboxModel(attributeModel);
+                jComboBoxDefaultY.setModel(attributeModelAdapterY);
+                attributeModelAdapterY.setSelectedItem(attributeModelAdapterY.getElementAt(1));
+                
+                ListAdapterComboboxModel attributeModelAdapterZ = new ListAdapterComboboxModel(attributeModel);
+                jComboBoxDefaultZ.setModel(attributeModelAdapterZ);
+                attributeModelAdapterZ.setSelectedItem(attributeModelAdapterZ.getElementAt(2));
             }
 
             
@@ -786,6 +837,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jFileChooser10 = new javax.swing.JFileChooser();
         jFileChooserSave2 = new javax.swing.JFileChooser();
         jFileChooser11 = new javax.swing.JFileChooser();
+        buttonGroup2 = new javax.swing.ButtonGroup();
         jPanel7 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelOutputParametersTab = new javax.swing.JPanel();
@@ -879,7 +931,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jTextFieldVoxelNumberZ = new javax.swing.JTextField();
         jTextFieldVoxelNumberRes = new javax.swing.JTextField();
         jButtonCalculateBoundingBox = new javax.swing.JButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckBoxUseDTM = new javax.swing.JCheckBox();
         jPanel31 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
@@ -942,7 +994,21 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jRadioButtonPAI = new javax.swing.JRadioButton();
         jRadioButtonTransmittanceMap = new javax.swing.JRadioButton();
         jPanel5 = new javax.swing.JPanel();
+        jPanelVegetationProfile = new javax.swing.JPanel();
+        jRadioButton1 = new javax.swing.JRadioButton();
+        jRadioButton2 = new javax.swing.JRadioButton();
+        jButtonGenerateProfile = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
+        jComboBoxHorizontalAxisValue = new javax.swing.JComboBox();
+        jPanel20 = new javax.swing.JPanel();
+        jComboBoxverticalAxisValue = new javax.swing.JComboBox();
+        jPanel12 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jListFilters = new javax.swing.JList();
+        jButtonAddFilter = new javax.swing.JButton();
+        jButtonRemoveFilter = new javax.swing.JButton();
+        jButtonDrawChart = new javax.swing.JButton();
         jSplitPane2 = new javax.swing.JSplitPane();
         jPanel8 = new javax.swing.JPanel();
         jButtonAddFile = new javax.swing.JButton();
@@ -1041,7 +1107,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanel36.setBackground(new java.awt.Color(114, 114, 114));
 
         jPanel39.setBackground(new java.awt.Color(114, 114, 114));
-        jPanel39.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input file", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, java.awt.Color.black));
+        jPanel39.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input file", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), java.awt.Color.black)); // NOI18N
 
         jLabelName6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabelName6.setText("Name");
@@ -1179,7 +1245,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
 
         jPanel40.setBackground(new java.awt.Color(114, 114, 114));
-        jPanel40.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Min point", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(39, 39, 39)));
+        jPanel40.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Min point", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(39, 39, 39))); // NOI18N
         jPanel40.setToolTipText("");
 
         jTextFieldMinPointX2.setBackground(new java.awt.Color(180, 180, 180));
@@ -1703,7 +1769,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                             .addComponent(jLabelPath4))
                         .addGap(39, 39, 39)
                         .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldFilePathSaveVox, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                            .addComponent(jTextFieldFilePathSaveVox, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
                             .addComponent(jTextFieldFileNameSaveVox, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)))))
         );
         jPanel17Layout.setVerticalGroup(
@@ -2028,7 +2094,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldVoxelNumberZ, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldVoxelNumberRes, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE))
+                .addComponent(jTextFieldVoxelNumberRes, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE))
         );
         jPanel25Layout.setVerticalGroup(
             jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2079,10 +2145,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         .addContainerGap())))
         );
 
-        jCheckBox1.setBackground(new java.awt.Color(85, 85, 85));
-        jCheckBox1.setForeground(new java.awt.Color(255, 255, 255));
-        jCheckBox1.setSelected(true);
-        jCheckBox1.setText("Use DTM");
+        jCheckBoxUseDTM.setBackground(new java.awt.Color(85, 85, 85));
+        jCheckBoxUseDTM.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBoxUseDTM.setSelected(true);
+        jCheckBoxUseDTM.setText("Use DTM");
 
         javax.swing.GroupLayout jPanel33Layout = new javax.swing.GroupLayout(jPanel33);
         jPanel33.setLayout(jPanel33Layout);
@@ -2098,7 +2164,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     .addGroup(jPanel33Layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCheckBox1)
+                        .addComponent(jCheckBoxUseDTM)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonExecuteVoxAls, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2131,7 +2197,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                                         .addGap(0, 0, Short.MAX_VALUE))))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel33Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jCheckBox1)
+                                .addComponent(jCheckBoxUseDTM)
                                 .addGap(19, 19, 19)))))
                 .addContainerGap())
         );
@@ -2579,15 +2645,15 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanel31.setLayout(jPanel31Layout);
         jPanel31Layout.setHorizontalGroup(
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 745, Short.MAX_VALUE)
+            .addGap(0, 748, Short.MAX_VALUE)
             .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 745, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 748, Short.MAX_VALUE))
         );
         jPanel31Layout.setVerticalGroup(
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 394, Short.MAX_VALUE)
             .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("LAS => TXT", jPanel31);
@@ -2599,7 +2665,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanelOutputParametersTabLayout.setHorizontalGroup(
             jPanelOutputParametersTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelOutputParametersTabLayout.createSequentialGroup()
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 801, Short.MAX_VALUE)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 804, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanelOutputParametersTabLayout.setVerticalGroup(
@@ -2858,7 +2924,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     .addComponent(jRadioButtonTransmittanceMap)
                     .addComponent(jRadioButtonPAI)
                     .addComponent(jButtonGenerateMap))
-                .addContainerGap(499, Short.MAX_VALUE))
+                .addContainerGap(502, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2867,7 +2933,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 .addComponent(jRadioButtonPAI)
                 .addGap(15, 15, 15)
                 .addComponent(jRadioButtonTransmittanceMap)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 259, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 278, Short.MAX_VALUE)
                 .addComponent(jButtonGenerateMap)
                 .addGap(42, 42, 42))
         );
@@ -2880,7 +2946,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 685, Short.MAX_VALUE)
+            .addGap(0, 688, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2889,20 +2955,200 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         jTabbedPane4.addTab("Histogram", jPanel5);
 
+        jPanelVegetationProfile.setBackground(new java.awt.Color(114, 114, 114));
+
+        jRadioButton1.setBackground(new java.awt.Color(114, 114, 114));
+        buttonGroup2.add(jRadioButton1);
+        jRadioButton1.setText("X, Height");
+
+        jRadioButton2.setBackground(new java.awt.Color(114, 114, 114));
+        buttonGroup2.add(jRadioButton2);
+        jRadioButton2.setText("Y, Height");
+
+        jButtonGenerateProfile.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonGenerateProfile.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonGenerateProfile.setText("Generate profile");
+        jButtonGenerateProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonGenerateProfileActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanelVegetationProfileLayout = new javax.swing.GroupLayout(jPanelVegetationProfile);
+        jPanelVegetationProfile.setLayout(jPanelVegetationProfileLayout);
+        jPanelVegetationProfileLayout.setHorizontalGroup(
+            jPanelVegetationProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelVegetationProfileLayout.createSequentialGroup()
+                .addGap(127, 127, 127)
+                .addGroup(jPanelVegetationProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonGenerateProfile)
+                    .addGroup(jPanelVegetationProfileLayout.createSequentialGroup()
+                        .addComponent(jRadioButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jRadioButton2)))
+                .addContainerGap(408, Short.MAX_VALUE))
+        );
+        jPanelVegetationProfileLayout.setVerticalGroup(
+            jPanelVegetationProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelVegetationProfileLayout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addGroup(jPanelVegetationProfileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButton1)
+                    .addComponent(jRadioButton2))
+                .addGap(18, 18, 18)
+                .addComponent(jButtonGenerateProfile)
+                .addContainerGap(310, Short.MAX_VALUE))
+        );
+
+        jTabbedPane4.addTab("Vegetation profile", jPanelVegetationProfile);
+
+        jPanel9.setBackground(new java.awt.Color(114, 114, 114));
+
         jPanel11.setBackground(new java.awt.Color(114, 114, 114));
+        jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder("Horizontal axis"));
+
+        jComboBoxHorizontalAxisValue.setBackground(new java.awt.Color(180, 180, 180));
+        jComboBoxHorizontalAxisValue.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jComboBoxHorizontalAxisValue.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxHorizontalAxisValueItemStateChanged(evt);
+            }
+        });
+        jComboBoxHorizontalAxisValue.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jComboBoxHorizontalAxisValuePropertyChange(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 685, Short.MAX_VALUE)
+            .addComponent(jComboBoxHorizontalAxisValue, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 408, Short.MAX_VALUE)
+            .addComponent(jComboBoxHorizontalAxisValue)
         );
 
-        jTabbedPane4.addTab("Vegetation profile", jPanel11);
+        jPanel20.setBackground(new java.awt.Color(114, 114, 114));
+        jPanel20.setBorder(javax.swing.BorderFactory.createTitledBorder("Vertical axis"));
+
+        jComboBoxverticalAxisValue.setBackground(new java.awt.Color(180, 180, 180));
+        jComboBoxverticalAxisValue.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jComboBoxverticalAxisValue.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxverticalAxisValueItemStateChanged(evt);
+            }
+        });
+        jComboBoxverticalAxisValue.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jComboBoxverticalAxisValuePropertyChange(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
+        jPanel20.setLayout(jPanel20Layout);
+        jPanel20Layout.setHorizontalGroup(
+            jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jComboBoxverticalAxisValue, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        jPanel20Layout.setVerticalGroup(
+            jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel20Layout.createSequentialGroup()
+                .addComponent(jComboBoxverticalAxisValue)
+                .addGap(0, 0, 0))
+        );
+
+        jPanel12.setBackground(new java.awt.Color(114, 114, 114));
+        jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder("Filters"));
+
+        jListFilters.setBackground(new java.awt.Color(180, 180, 180));
+        jScrollPane3.setViewportView(jListFilters);
+
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+        );
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+        );
+
+        jButtonAddFilter.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonAddFilter.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonAddFilter.setText("Add");
+        jButtonAddFilter.setPreferredSize(new java.awt.Dimension(77, 26));
+        jButtonAddFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddFilterActionPerformed(evt);
+            }
+        });
+
+        jButtonRemoveFilter.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonRemoveFilter.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonRemoveFilter.setText("remove");
+        jButtonRemoveFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRemoveFilterActionPerformed(evt);
+            }
+        });
+
+        jButtonDrawChart.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonDrawChart.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonDrawChart.setText("Draw chart");
+        jButtonDrawChart.setPreferredSize(new java.awt.Dimension(77, 26));
+        jButtonDrawChart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDrawChartActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonDrawChart, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButtonRemoveFilter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButtonAddFilter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(150, Short.MAX_VALUE))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jButtonAddFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonRemoveFilter)))
+                .addGap(51, 51, 51)
+                .addComponent(jButtonDrawChart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(232, Short.MAX_VALUE))
+        );
+
+        jTabbedPane4.addTab("Chart", jPanel9);
 
         javax.swing.GroupLayout jPanelVisualizeTabLayout = new javax.swing.GroupLayout(jPanelVisualizeTab);
         jPanelVisualizeTab.setLayout(jPanelVisualizeTabLayout);
@@ -2991,7 +3237,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonExportSelection)
@@ -3448,8 +3694,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         renderFrame.addMouseListener(new InputMouseAdapter(eventListener, animator));
 
         //renderFrame.setPointerVisible(false);
-
-        JFrameTools toolsJframe = new JFrameTools(this,joglContext);
+        
+        ListAdapterComboboxModel attributeModelAdapterTools = new ListAdapterComboboxModel(attributeModel);
+        JFrameTools toolsJframe = new JFrameTools(this, joglContext, attributeModelAdapterTools);
         joglContext.attachToolBox(toolsJframe);
 
         toolsJframe.setTitle("Toolbox");
@@ -3680,6 +3927,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         
         voxelisationParameters.setResolution(Double.valueOf(jTextFieldVoxelNumberRes.getText()));
         voxelisationParameters.setWeighting(jComboBoxWeighting.getSelectedIndex());
+        voxelisationParameters.setUseDTMCorrection(jCheckBoxUseDTM.isSelected());
         
         final VoxelParameters parameters = voxelisationParameters;
         
@@ -4330,22 +4578,173 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         }
     }//GEN-LAST:event_jButtonOpenWeightingFileActionPerformed
 
+    private void jButtonGenerateProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGenerateProfileActionPerformed
+        
+        if(terrain == null){
+            readTerrain();
+        }
+
+        //chargement de l'espace voxel
+        final VoxelSpace voxelSpace = new VoxelSpace(new Settings(this));
+        final JProgressLoadingFile progress = new JProgressLoadingFile(this);
+        progress.setVisible(true);
+
+        voxelSpace.addVoxelSpaceListener(new VoxelSpaceAdapter() {
+
+            @Override
+            public void voxelSpaceCreationProgress(int progression){
+
+                progress.jProgressBar1.setValue(progression);
+            }
+
+            @Override
+            public void voxelSpaceCreationFinished(){
+                
+                
+                VoxelFilter voxelFilter = new VoxelFilter();
+
+                for(int i=0;i<filterModel.getSize();i++){
+                    Filter filter = Filter.getFilterFromString(filterModel.getElementAt(i));
+
+                    if(filter != null){
+                        voxelFilter.addFilter(filter);
+                    }
+                }
+                
+                //progress.jProgressBar1.setIndeterminate(true);
+                XYSeries data = VegetationProfile.getData(voxelSpace.widthZ, voxelFilter, voxelSpace.voxelSpaceFormat);
+                ChartJFrame chartJFrame = new ChartJFrame(data, "Vegetation profile","PAD", "height");
+                
+                progress.dispose();
+                
+                chartJFrame.setVisible(true);
+
+            }
+        });
+
+        try {
+            voxelSpace.loadFromFile(new File(jListOutputFiles.getSelectedValue().toString()));
+            //voxelSpace.loadFromFile(new File(jListOutputFiles.getSelectedValue().toString()));
+        } catch (Exception ex) {
+            logger.error(null, ex);
+        }
+    }//GEN-LAST:event_jButtonGenerateProfileActionPerformed
+
+    private void jComboBoxHorizontalAxisValueItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxHorizontalAxisValueItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxHorizontalAxisValueItemStateChanged
+
+    private void jComboBoxHorizontalAxisValuePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jComboBoxHorizontalAxisValuePropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxHorizontalAxisValuePropertyChange
+
+    private void jComboBoxverticalAxisValueItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxverticalAxisValueItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxverticalAxisValueItemStateChanged
+
+    private void jComboBoxverticalAxisValuePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jComboBoxverticalAxisValuePropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBoxverticalAxisValuePropertyChange
+
+    private void jButtonAddFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddFilterActionPerformed
+        
+        ListAdapterComboboxModel attributeModelAdapter = new ListAdapterComboboxModel(attributeModel);
+        final FilterJFrame filterJFrame = new FilterJFrame(attributeModelAdapter);
+        filterJFrame.addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                Filter filter = filterJFrame.getFilter();
+                if(filter != null){
+                    filterModel.addElement(filter.getVariable()+" "+filter.getConditionString()+" "+filter.getValue());
+                }
+            }
+        });
+        
+        filterJFrame.setVisible(true);
+    }//GEN-LAST:event_jButtonAddFilterActionPerformed
+
+    private void jButtonRemoveFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveFilterActionPerformed
+        
+        if(jListFilters.getSelectedIndex()>=0){
+            filterModel.removeElement(jListFilters.getSelectedValue().toString());
+            jListFilters.setModel(filterModel);
+        }
+    }//GEN-LAST:event_jButtonRemoveFilterActionPerformed
+
+    private void jButtonDrawChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDrawChartActionPerformed
+        
+        if(terrain == null){
+            readTerrain();
+        }
+
+        //chargement de l'espace voxel
+        final VoxelSpace voxelSpace = new VoxelSpace(new Settings(this));
+        final JProgressLoadingFile progress = new JProgressLoadingFile(this);
+        progress.setVisible(true);
+
+        voxelSpace.addVoxelSpaceListener(new VoxelSpaceAdapter() {
+
+            @Override
+            public void voxelSpaceCreationProgress(int progression){
+
+                progress.jProgressBar1.setValue(progression);
+            }
+
+            @Override
+            public void voxelSpaceCreationFinished(){
+                progress.dispose();
+                
+                String horizontal = jComboBoxHorizontalAxisValue.getSelectedItem().toString();
+                String vertical = jComboBoxverticalAxisValue.getSelectedItem().toString();
+
+                VoxelFilter voxelFilter = new VoxelFilter();
+
+                for(int i=0;i<filterModel.getSize();i++){
+                    Filter filter = Filter.getFilterFromString(filterModel.getElementAt(i));
+
+                    if(filter != null){
+                        voxelFilter.addFilter(filter);
+                    }
+                }
+                XYSeries series = ChartFactory.generateChartWithFilters(voxelSpace.voxelSpaceFormat, horizontal, vertical, voxelFilter);
+
+                ChartJFrame chartJFrame = new ChartJFrame(series, horizontal+"~"+vertical, horizontal, vertical);
+                chartJFrame.setVisible(true);
+
+            }
+        });
+
+        try {
+            voxelSpace.loadFromFile(new File(jListOutputFiles.getSelectedValue().toString()));
+            //voxelSpace.loadFromFile(new File(jListOutputFiles.getSelectedValue().toString()));
+        } catch (Exception ex) {
+            logger.error(null, ex);
+        }
+        
+        
+    }//GEN-LAST:event_jButtonDrawChartActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup2DProjection;
     private javax.swing.ButtonGroup buttonGroup3DView;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAddFile;
+    private javax.swing.JButton jButtonAddFilter;
     private javax.swing.JButton jButtonCalculateBoundingBox;
     private javax.swing.JButton jButtonChooseDirectory;
     private javax.swing.JButton jButtonChooseOutputDirectoryTlsVox;
     private javax.swing.JButton jButtonChooseOutputDirectoryVox;
     private javax.swing.JButton jButtonCreateAttribut;
+    private javax.swing.JButton jButtonDrawChart;
     private javax.swing.JButton jButtonExecuteVoxAls;
     private javax.swing.JButton jButtonExecuteVoxTls;
     private javax.swing.JButton jButtonExportSelection;
     private javax.swing.JButton jButtonGenerateMap;
+    private javax.swing.JButton jButtonGenerateProfile;
     private javax.swing.JButton jButtonLoad;
     private javax.swing.JButton jButtonLoadSelectedFile;
     private javax.swing.JButton jButtonOpen3DDisplay;
@@ -4358,14 +4757,15 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JButton jButtonPopMatrix;
     private javax.swing.JButton jButtonPopMatrix1;
     private javax.swing.JButton jButtonRemoveFile;
+    private javax.swing.JButton jButtonRemoveFilter;
     private javax.swing.JButton jButtonSopMatrix;
     private javax.swing.JButton jButtonVopMatrix;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBoxDrawAxis;
     private javax.swing.JCheckBox jCheckBoxDrawNullVoxel;
     private javax.swing.JCheckBox jCheckBoxDrawTerrain;
     private javax.swing.JCheckBox jCheckBoxDrawUndergroundVoxel;
     private javax.swing.JCheckBox jCheckBoxMergeOutputFiles;
+    private javax.swing.JCheckBox jCheckBoxUseDTM;
     private javax.swing.JCheckBox jCheckBoxWriteA;
     private javax.swing.JCheckBox jCheckBoxWriteC;
     private javax.swing.JCheckBox jCheckBoxWriteD;
@@ -4389,7 +4789,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JComboBox jComboBoxDefaultX;
     private javax.swing.JComboBox jComboBoxDefaultY;
     private javax.swing.JComboBox jComboBoxDefaultZ;
+    private javax.swing.JComboBox jComboBoxHorizontalAxisValue;
     private javax.swing.JComboBox jComboBoxWeighting;
+    private javax.swing.JComboBox jComboBoxverticalAxisValue;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JFileChooser jFileChooser10;
     private javax.swing.JFileChooser jFileChooser11;
@@ -4427,6 +4829,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JLabel jLabelPath6;
     private javax.swing.JLabel jLabelSize;
     private javax.swing.JLabel jLabelSize1;
+    private javax.swing.JList jListFilters;
     private javax.swing.JList jListOutputFiles;
     private javax.swing.JList jListRspScans;
     private javax.swing.JMenu jMenu1;
@@ -4441,6 +4844,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
@@ -4449,6 +4853,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel24;
     private javax.swing.JPanel jPanel25;
     private javax.swing.JPanel jPanel26;
@@ -4471,14 +4876,19 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JPanel jPanelOutputParametersTab;
+    private javax.swing.JPanel jPanelVegetationProfile;
     private javax.swing.JPanel jPanelVisualizeTab;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButtonComplexFile;
     private javax.swing.JRadioButton jRadioButtonLightFile;
     private javax.swing.JRadioButton jRadioButtonPAI;
     private javax.swing.JRadioButton jRadioButtonTransmittanceMap;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;

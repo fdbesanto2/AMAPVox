@@ -25,6 +25,7 @@ public class VoxelSpaceFormat {
     
     private Map<String, Point2F> minMax;
     private Map<String, Integer> attributs;
+    public float minY, maxY;
     public int xNumberVox, yNumberVox, zNumberVox;
     public float resolution;
     
