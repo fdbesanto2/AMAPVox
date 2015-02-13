@@ -6,6 +6,7 @@
 package fr.ird.voxelidar.frame;
 
 import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ListModel;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.ListDataEvent;
@@ -17,14 +18,26 @@ import javax.swing.event.ListDataListener;
  */
 public class ListAdapterComboboxModel implements ComboBoxModel {
 
-    private ListModel dataModel;
+    private final DefaultComboBoxModel dataModel;
+    private final DefaultComboBoxModel valueModel;
     private Object selectedObject;
-    private DataModelListDataListenerAdapter listDataListenerAdapter;
+    private final DataModelListDataListenerAdapter listDataListenerAdapter;
 
-    public ListAdapterComboboxModel(ListModel ListModel) {
-        dataModel = ListModel;
+    public ListAdapterComboboxModel(DefaultComboBoxModel dataModel, DefaultComboBoxModel valueModel) {
+        
+        this.dataModel = dataModel;
+        this.valueModel = valueModel;
         this.listDataListenerAdapter = new DataModelListDataListenerAdapter();
         dataModel.addListDataListener(listDataListenerAdapter);
+    }
+    
+    public void addItemToModel(String data, String value){
+        dataModel.addElement(data);
+        valueModel.addElement(value);
+    }
+    
+    public String getValue(int index){
+        return valueModel.getElementAt(index).toString();
     }
 
     @Override

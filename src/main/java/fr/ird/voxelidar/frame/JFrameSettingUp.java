@@ -110,13 +110,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private DefaultListModel<String> model;
     private DefaultListModel<String> filterModel;
     private DefaultComboBoxModel<String> attributeModel;
+    private DefaultComboBoxModel<String> valueModel;
+    private ListAdapterComboboxModel mainAttributeModelAdapter;
     
-    
-    private static Set<String> setParameters = new HashSet<>();
-    private ArrayList<Attribut> attributsList;
-    private Map<String, Attribut> mapAttributs;
     private Dtm terrain;
-    private boolean drawVoxelWhenValueIsNull;
     private Settings settings;
     public UIManager.LookAndFeelInfo[] installedLookAndFeels;
     private String currentLookAndFeel;
@@ -126,6 +123,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private Mat4D vopPopMatrix;
     private final VoxelParameters voxelisationParameters;
     private final Border customBorder;
+
+    public ListAdapterComboboxModel getMainAttributeModelAdapter() {
+        return mainAttributeModelAdapter;
+    }
 
     
     public JCheckBox getjCheckBoxDrawAxis() {
@@ -152,18 +153,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         return jListOutputFiles;
     }
     
-    
-
-    public void setMapAttributs(Map<String, Attribut> mapAttributs) {
-        this.mapAttributs = mapAttributs;
-        
-        fillComboBox();
-    }
-
-    public Map<String, Attribut> getMapAttributs() {
-        return mapAttributs;
-    }
-    
     private void addElementToVoxList(String element){
         
         if (!model.contains(element)) {
@@ -187,7 +176,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     
     public JFrameSettingUp() {
         
-        mapAttributs = new LinkedHashMap<>();
         model = new DefaultListModel();
         filterModel = new DefaultListModel();
         attributeModel = new DefaultComboBoxModel();
@@ -201,9 +189,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jListFilters.setModel(filterModel);
         jListOutputFiles.setModel(model);
         
-        
-        
-        attributsList = new ArrayList<>();
         currentLookAndFeel = UIManager.getLookAndFeel().getClass().getName();
         installedLookAndFeels = UIManager.getInstalledLookAndFeels();
         
@@ -692,40 +677,30 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             
             if(parameters.length > 5){
                 
-                setParameters.addAll(Arrays.asList(parameters));
-               
-
-                for(int i=0 ; i< parameters.length ;i++){
-                    
-                    
-                    Attribut attribut = new Attribut(parameters[i], parameters[i], setParameters);
-                    mapAttributs.put(parameters[i], attribut);
-                    //attributsList.add(new Attribut(parameters[i], parameters[i], setParameters));
-                }
-                
                 attributeModel = new DefaultComboBoxModel<>(parameters);
+                valueModel = new DefaultComboBoxModel<>(parameters);
                 
-                ListAdapterComboboxModel attributeModelAdapterXAxis = new ListAdapterComboboxModel(attributeModel);
+                ListAdapterComboboxModel attributeModelAdapterXAxis = new ListAdapterComboboxModel(attributeModel, valueModel);
                 jComboBoxHorizontalAxisValue.setModel(attributeModelAdapterXAxis);
                 attributeModelAdapterXAxis.setSelectedItem(attributeModelAdapterXAxis.getElementAt(3));
 
-                ListAdapterComboboxModel attributeModelAdapterYAxis = new ListAdapterComboboxModel(attributeModel);
+                ListAdapterComboboxModel attributeModelAdapterYAxis = new ListAdapterComboboxModel(attributeModel, valueModel);
                 jComboBoxverticalAxisValue.setModel(attributeModelAdapterYAxis);
                 attributeModelAdapterYAxis.setSelectedItem(attributeModelAdapterYAxis.getElementAt(3));
 
-                ListAdapterComboboxModel attributeModelAdapter1 = new ListAdapterComboboxModel(attributeModel);
-                jComboBoxAttributeToVisualize.setModel(attributeModelAdapter1);
-                attributeModelAdapter1.setSelectedItem(attributeModelAdapter1.getElementAt(3));
+                mainAttributeModelAdapter = new ListAdapterComboboxModel(attributeModel, valueModel);
+                jComboBoxAttributeToVisualize.setModel(mainAttributeModelAdapter);
+                mainAttributeModelAdapter.setSelectedItem(mainAttributeModelAdapter.getElementAt(3));
                 
-                ListAdapterComboboxModel attributeModelAdapterX = new ListAdapterComboboxModel(attributeModel);
+                ListAdapterComboboxModel attributeModelAdapterX = new ListAdapterComboboxModel(attributeModel, valueModel);
                 jComboBoxDefaultX.setModel(attributeModelAdapterX);
                 attributeModelAdapterX.setSelectedItem(attributeModelAdapterX.getElementAt(0));
                 
-                ListAdapterComboboxModel attributeModelAdapterY = new ListAdapterComboboxModel(attributeModel);
+                ListAdapterComboboxModel attributeModelAdapterY = new ListAdapterComboboxModel(attributeModel, valueModel);
                 jComboBoxDefaultY.setModel(attributeModelAdapterY);
                 attributeModelAdapterY.setSelectedItem(attributeModelAdapterY.getElementAt(1));
                 
-                ListAdapterComboboxModel attributeModelAdapterZ = new ListAdapterComboboxModel(attributeModel);
+                ListAdapterComboboxModel attributeModelAdapterZ = new ListAdapterComboboxModel(attributeModel, valueModel);
                 jComboBoxDefaultZ.setModel(attributeModelAdapterZ);
                 attributeModelAdapterZ.setSelectedItem(attributeModelAdapterZ.getElementAt(2));
             }
@@ -793,21 +768,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         
         jTextFieldArguments.setText(attributs);
         
-    }
-    
-    public void fillComboBox(){
-        
-        jComboBoxAttributeToVisualize.setModel(new DefaultComboBoxModel(mapAttributs.keySet().toArray()));
-        jComboBoxAttributeToVisualize.setSelectedIndex(3);
-
-        jComboBoxDefaultX.setModel(new DefaultComboBoxModel(mapAttributs.keySet().toArray()));
-        jComboBoxDefaultX.setSelectedIndex(0);
-
-        jComboBoxDefaultY.setModel(new DefaultComboBoxModel(mapAttributs.keySet().toArray()));
-        jComboBoxDefaultY.setSelectedIndex(1);
-
-        jComboBoxDefaultZ.setModel(new DefaultComboBoxModel(mapAttributs.keySet().toArray()));
-        jComboBoxDefaultZ.setSelectedIndex(2);
     }
     
 
@@ -3638,17 +3598,14 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
     private void jCheckBoxDrawNullVoxelStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxDrawNullVoxelStateChanged
 
-        if(jCheckBoxDrawNullVoxel.isSelected()){
-            drawVoxelWhenValueIsNull = true;
-        }else{
-            drawVoxelWhenValueIsNull = false;
-        }
+        
 
     }//GEN-LAST:event_jCheckBoxDrawNullVoxelStateChanged
 
     private void jButtonCreateAttributActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreateAttributActionPerformed
-
-        final JFrameAttributCreation jframeAttribut = new JFrameAttributCreation(mapAttributs);
+        
+        ListAdapterComboboxModel attributeModelAdapter = new ListAdapterComboboxModel(attributeModel, valueModel);
+        final JFrameAttributCreation jframeAttribut = new JFrameAttributCreation(attributeModelAdapter);
         final JFrameSettingUp parent = this;
 
         jframeAttribut.setVisible(true);
@@ -3656,7 +3613,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
             @Override
             public void windowClosed(java.awt.event.WindowEvent evt) {
-                parent.setMapAttributs(jframeAttribut.getMapAttributs());
+                //parent.setMapAttributs(jframeAttribut.getMapAttributs());
             }
         });
 
@@ -3667,8 +3624,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     }//GEN-LAST:event_jComboBoxAttributeToVisualizePropertyChange
 
     private void jComboBoxAttributeToVisualizeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxAttributeToVisualizeItemStateChanged
-
-        jTextFieldAttributExpression.setText(mapAttributs.get(jComboBoxAttributeToVisualize.getSelectedItem().toString()).getExpressionString());
+        
+        jTextFieldAttributExpression.setText(((ListAdapterComboboxModel)jComboBoxAttributeToVisualize.getModel()).getValue(jComboBoxAttributeToVisualize.getSelectedIndex()));
+        
+        //jTextFieldAttributExpression.setText(mapAttributs.get(jComboBoxAttributeToVisualize.getSelectedItem().toString()).getExpressionString());
     }//GEN-LAST:event_jComboBoxAttributeToVisualizeItemStateChanged
 
     private void jButtonOpen3DDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpen3DDisplayActionPerformed
@@ -3695,7 +3654,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         //renderFrame.setPointerVisible(false);
         
-        ListAdapterComboboxModel attributeModelAdapterTools = new ListAdapterComboboxModel(attributeModel);
+        ListAdapterComboboxModel attributeModelAdapterTools = new ListAdapterComboboxModel(attributeModel, valueModel);
         JFrameTools toolsJframe = new JFrameTools(this, joglContext, attributeModelAdapterTools);
         joglContext.attachToolBox(toolsJframe);
 
@@ -4648,7 +4607,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
     private void jButtonAddFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddFilterActionPerformed
         
-        ListAdapterComboboxModel attributeModelAdapter = new ListAdapterComboboxModel(attributeModel);
+        ListAdapterComboboxModel attributeModelAdapter = new ListAdapterComboboxModel(attributeModel, valueModel);
         final FilterJFrame filterJFrame = new FilterJFrame(attributeModelAdapter);
         filterJFrame.addWindowListener(new WindowAdapter() {
 

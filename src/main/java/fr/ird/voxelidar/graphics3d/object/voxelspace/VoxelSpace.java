@@ -113,7 +113,17 @@ public class VoxelSpace {
     public void setGradientUpdated(boolean gradientUpdated) {
         this.gradientUpdated = gradientUpdated;
     }
+
+    public Map<String, Attribut> getMapAttributs() {
+        return mapAttributs;
+    }    
     
+    public void addAttribut(Attribut a){
+        
+        if(!mapAttributs.containsKey(a.getName())){
+            mapAttributs.put(a.getName(), a);
+        }
+    }
     
     public void setReadFileProgress(int progress) {
         this.readFileProgress = progress;
@@ -492,7 +502,7 @@ public class VoxelSpace {
     }
     
     
-    public void updateValue(Attribut att){
+    public void updateValue(){
         
         Attribut attribut = mapAttributs.get(attributToVisualize);
         
@@ -606,7 +616,7 @@ public class VoxelSpace {
                 readVoxelFormat(file);
                 
                 
-                updateValue(settings.attribut);
+                updateValue();
                 
                 setCenter();
                 setWidth();

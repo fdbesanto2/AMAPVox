@@ -6,9 +6,13 @@
 package fr.ird.voxelidar.util;
 
 import fr.ird.voxelidar.frame.JFrameSettingUp;
+import fr.ird.voxelidar.frame.ListAdapterComboboxModel;
 import fr.ird.voxelidar.graphics3d.mesh.Attribut;
 import java.io.File;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -34,8 +38,23 @@ public class Settings {
          
         try{
             attributeToVisualize = jframeSettingUp.getjComboBoxAttributeToVisualize().getSelectedItem().toString();
-            mapAttributs = jframeSettingUp.getMapAttributs();
+            mapAttributs = new HashMap<>();
+            ListAdapterComboboxModel mainAttributeModelAdapter = jframeSettingUp.getMainAttributeModelAdapter();
+            
+            Set<String> variablesNames = new HashSet<>();
+            for(int i=0;i<mainAttributeModelAdapter.getSize();i++){
+                
+                variablesNames.add(mainAttributeModelAdapter.getElementAt(i).toString());
+            }
+            
+            for(int i=0;i<mainAttributeModelAdapter.getSize();i++){
+                
+                Attribut a = new Attribut(mainAttributeModelAdapter.getElementAt(i).toString(), mainAttributeModelAdapter.getValue(i), variablesNames);
+                mapAttributs.put(mainAttributeModelAdapter.getElementAt(i).toString(), a);
+            }            
+            
             attribut = mapAttributs.get(attributeToVisualize);
+            
         }catch(Exception e){
             attributeToVisualize = null;
             mapAttributs = null;

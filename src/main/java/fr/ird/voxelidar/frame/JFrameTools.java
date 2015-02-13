@@ -17,7 +17,9 @@ import java.awt.event.ItemEvent;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
@@ -34,6 +36,7 @@ public class JFrameTools extends javax.swing.JFrame {
     private ArrayList<Color[]> gradientColors;
     private JFrameSettingUp jFrameSettingUp;
     public boolean isFocused;
+    private ListAdapterComboboxModel model;
     
     /**
      * Creates new form JFrameTools
@@ -45,6 +48,7 @@ public class JFrameTools extends javax.swing.JFrame {
         
         this.jFrameSettingUp = jFrameSettingUp;
         this.joglContext = joglContext;
+        this.model = model;
         
         isFocused = false;
         temp = false;
@@ -1052,7 +1056,7 @@ public class JFrameTools extends javax.swing.JFrame {
 
     private void jButtonCreateAttributActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreateAttributActionPerformed
                 
-        final JFrameAttributCreation jframeAttribut = new JFrameAttributCreation(joglContext.getSettings().mapAttributs);
+        final JFrameAttributCreation jframeAttribut = new JFrameAttributCreation(model);
         final JFrameSettingUp mainJFrame = jFrameSettingUp;
         final JFrameTools toolsJFrame = this;
         
@@ -1061,8 +1065,23 @@ public class JFrameTools extends javax.swing.JFrame {
             
             @Override
             public void windowClosed(java.awt.event.WindowEvent evt) {
-                mainJFrame.setMapAttributs(jframeAttribut.getMapAttributs());
-                toolsJFrame.setMapAttributs(jframeAttribut.getMapAttributs());
+                
+                ListAdapterComboboxModel model = jframeAttribut.getModel();
+                
+                Set<String> variablesNames = new HashSet<>();
+                for(int i=0;i<model.getSize();i++){
+
+                    variablesNames.add(model.getElementAt(i).toString());
+                }
+
+                for(int i=0;i<model.getSize();i++){
+
+                    Attribut a = new Attribut(model.getElementAt(i).toString(), model.getValue(i), variablesNames);
+                    joglContext.getScene().getVoxelSpace().addAttribut(a);
+                }
+                
+                //mainJFrame.setMapAttributs(jframeAttribut.getMapAttributs());
+                //toolsJFrame.setMapAttributs(jframeAttribut.getMapAttributs());
             }
         });
         
@@ -1116,8 +1135,7 @@ public class JFrameTools extends javax.swing.JFrame {
             
             joglContext.getScene().getVoxelSpace().setAttributToVisualize(jComboBoxAttributeToVisualize.getSelectedItem().toString());
             
-            
-            joglContext.getScene().getVoxelSpace().updateValue(joglContext.getSettings().attribut);
+            joglContext.getScene().getVoxelSpace().updateValue();
             joglContext.drawNextFrame();
         }
         
