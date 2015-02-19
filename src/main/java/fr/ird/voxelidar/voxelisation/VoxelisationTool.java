@@ -5,17 +5,19 @@
  */
 package fr.ird.voxelidar.voxelisation;
 
+import fr.ird.voxelidar.util.ProcessingListener;
+import fr.ird.voxelidar.util.Processing;
 import fr.ird.voxelidar.voxelisation.als.LasVoxelisation;
 import fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis;
-import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelParameters;
 import fr.ird.voxelidar.Constants;
-import fr.ird.voxelidar.extraction.Shot;
+import fr.ird.voxelidar.voxelisation.extraction.Shot;
 import fr.ird.voxelidar.lidar.format.als.Las;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
-import fr.ird.voxelidar.math.matrix.Mat4D;
-import fr.ird.voxelidar.math.vector.Vec2D;
-import fr.ird.voxelidar.math.vector.Vec3D;
+import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
+import fr.ird.voxelidar.engine3d.math.vector.Vec2D;
+import fr.ird.voxelidar.lidar.format.tls.Rsp;
+import fr.ird.voxelidar.lidar.format.tls.Scans;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,9 +26,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
-import javax.vecmath.Point3f;
-import javax.vecmath.Point3i;
+import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
 
 /**
@@ -38,33 +41,80 @@ public class VoxelisationTool extends Processing{
     final static Logger logger = Logger.getLogger(VoxelisationTool.class);
     
     private VoxelParameters parameters;
-    private int nbTask;
     
     public VoxelisationTool(){
-        nbTask = 1;
     }
     
-    public VoxelisationTool(int nbTask){
-        this.nbTask = nbTask;
+    public void generateVoxelsFromRsp(File output, File input , VoxelParameters parameters, Mat4D vop, boolean mon) {
+        
+        
+        this.parameters = parameters;
+        this.parameters.setIsTLS(true);
+        
+        Rsp rsp = new Rsp();
+        rsp.read(input);
+
+        ArrayList<Scans> rxpList = rsp.getRxpList();
+        
+        
+        
+        int count = 1;
+        for(Scans rxp :rxpList){
+            
+            Map<Integer, RxpScan> scanList = rxp.getScanList();
+
+            for(Entry entry:scanList.entrySet()){
+                
+                RxpScan scan = (RxpScan) entry.getValue();
+                RxpVoxelisation voxelisation;
+                
+                if(mon && scan.getName().contains(".mon")){
+                    File outputFile = new File(output.getAbsolutePath()+"/"+scan.getFile().getName()+".vox");
+                    fireProgress(outputFile.getAbsolutePath(), count);
+                    voxelisation = new RxpVoxelisation(scan, outputFile, vop, this.parameters);
+                    voxelisation.voxelise();
+                    count++;
+                    
+                    
+                }else if(!mon && !scan.getName().contains(".mon")){
+                    File outputFile = new File(output.getAbsolutePath()+"/"+scan.getFile().getName()+".vox");
+                    fireProgress(outputFile.getAbsolutePath(), count);
+                    voxelisation = new RxpVoxelisation(scan, outputFile, vop, this.parameters);
+                    voxelisation.voxelise();
+                    count++;
+                }
+            }
+        }
+        
+        fireFinished();
+        
     }
 
-    public File generateVoxelSpaceFromRxp(RxpScan rxp, File outputFile, Mat4D transfMatrix, VoxelParameters parameters) {
+    public void generateVoxelsFromRxp(File output, File input , VoxelParameters parameters, Mat4D vop) {
         
         this.parameters = parameters;
+        this.parameters.setIsTLS(true);
         
-        RxpVoxelisation voxelisation = new RxpVoxelisation(rxp, nbTask, outputFile, transfMatrix, parameters);
+        RxpScan scan = new RxpScan();
+        scan.setFile(input);
+        
+        File outputFile = new File(output.getAbsolutePath()+"/"+scan.getFile().getName()+".vox");
+        
+        fireProgress(outputFile.getAbsolutePath(), 1);
+        
+        RxpVoxelisation voxelisation = new RxpVoxelisation(scan, outputFile, vop, parameters);
         voxelisation.voxelise();
-        //System.out.println(nbTask);
-        nbTask ++ ;
-        return null;
+        
+        fireFinished();
         
     }
     
-    public File generateVoxelSpaceFromLas(File lasFile, File trajectoryFile, File outputFile, Mat4D transfMatrix, VoxelParameters parameters, File dtmFile) {
+    public File generateVoxelsFromLas(File output, File input, File trajectoryFile, File dtmFile, VoxelParameters parameters, Mat4D vop) {
         
         this.parameters = parameters;
+        this.parameters.setIsTLS(false);
         
-        LasVoxelisation voxelisation = new LasVoxelisation(lasFile, outputFile, transfMatrix, trajectoryFile, parameters, dtmFile);
+        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, trajectoryFile, parameters, dtmFile);
         
         voxelisation.addProcessingListener(new ProcessingListener() {
 
@@ -216,18 +266,6 @@ public class VoxelisationTool extends Processing{
             this.outputFile = outputFile;
         }
         
-        public Voxelisation(VoxelisationParameters parameters, File outputFile){
-            
-            /*
-            voxelAnalysis = new VoxelAnalysis();
-            voxelAnalysis.init(new VoxelParameters(
-                    new Point3f((float)parameters.getLowerCornerX(), (float)parameters.getLowerCornerY(), (float)parameters.getLowerCornerZ()),
-                    new Point3f((float)parameters.getTopCornerX(), (float)parameters.getTopCornerY(), (float)parameters.getTopCornerZ()),
-                    new Point3i(parameters.getSplitX(), parameters.getSplitY(), parameters.getSplitZ())), outputFile);
-            
-            this.outputFile = outputFile;
-            */
-        }
         
         //new version
         
@@ -323,7 +361,7 @@ public class VoxelisationTool extends Processing{
         
     }
     
-    public static Mat4D getMatrixTransformation(Vec3D point1, Vec3D point2){
+    public static Mat4D getMatrixTransformation(Vector3d point1, Vector3d point2){
         
         
         if((point1.x == point2.x) && (point1.y == point2.y) && (point1.z == point2.z)){
@@ -332,7 +370,7 @@ public class VoxelisationTool extends Processing{
         Vec2D v = new Vec2D(point1.x - point2.x, point1.y - point2.y);
         double rho = (double) Math.atan(v.x / v.y);
 
-        Vec3D trans = new Vec3D(-point2.x, -point2.y, -point2.z);
+        Vector3d trans = new Vector3d(-point2.x, -point2.y, -point2.z);
         trans.z = 0; //no vertical translation
         
         Mat4D mat4x4Rotation = new Mat4D();

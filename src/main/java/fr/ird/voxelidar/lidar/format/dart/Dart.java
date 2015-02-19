@@ -5,8 +5,8 @@
  */
 package fr.ird.voxelidar.lidar.format.dart;
 
-import fr.ird.voxelidar.math.point.Point3F;
-import fr.ird.voxelidar.math.point.Point3I;
+import fr.ird.voxelidar.engine3d.math.point.Point3F;
+import fr.ird.voxelidar.engine3d.math.point.Point3I;
 
 /**
  *

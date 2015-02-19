@@ -5,16 +5,16 @@
  */
 package fr.ird.voxelidar.voxelisation.als;
 
-import fr.ird.voxelidar.extraction.Shot;
+import fr.ird.voxelidar.voxelisation.extraction.Shot;
+import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.lidar.format.als.Las;
 import fr.ird.voxelidar.lidar.format.als.LasHeader;
 import fr.ird.voxelidar.lidar.format.als.LasReader;
 import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
 import fr.ird.voxelidar.lidar.format.als.QLineExtrabytes;
-import fr.ird.voxelidar.math.matrix.Mat4D;
-import fr.ird.voxelidar.math.vector.Vec3D;
-import fr.ird.voxelidar.math.vector.Vec4D;
-import fr.ird.voxelidar.voxelisation.Processing;
+import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
+import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
+import fr.ird.voxelidar.util.Processing;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,8 +23,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.concurrent.BlockingQueue;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
@@ -45,14 +49,14 @@ public class LasConversion extends Processing implements Runnable{
     private final File trajectoryFile;
     private final Mat4D popMatrix;
     private final BlockingQueue<Shot> queue;
-    private final BlockingQueue<fr.ird.voxelidar.extraction.LasPoint> arrayBlockingQueue;
+    private final BlockingQueue<fr.ird.voxelidar.voxelisation.extraction.LasPoint> arrayBlockingQueue;
     private boolean isFinished;
 
     public void setIsFinished(boolean isFinished) {
         this.isFinished = isFinished;
     }
     
-    public LasConversion(BlockingQueue<fr.ird.voxelidar.extraction.LasPoint> arrayBlockingQueue, BlockingQueue<Shot> queue,File trajectoryFile, File lasFile, Mat4D popMatrix){
+    public LasConversion(BlockingQueue<fr.ird.voxelidar.voxelisation.extraction.LasPoint> arrayBlockingQueue, BlockingQueue<Shot> queue,File trajectoryFile, File lasFile, Mat4D popMatrix){
 
         this.trajectoryFile = trajectoryFile;
         this.popMatrix = popMatrix;
@@ -67,7 +71,7 @@ public class LasConversion extends Processing implements Runnable{
         
         setStepNumber(3);
         
-        fireProgress("Reading *.las", getProgression());
+        fireProgress("Reading *.las", 0);
         /*
         ArrayList<LasPoint> lasPointList = new ArrayList<>();
         
@@ -83,15 +87,39 @@ public class LasConversion extends Processing implements Runnable{
             }
         }
         */
+        int iterations = 0;
+        long maxIterations;
+        int step;
         
+        /***reading las***/
+        ArrayList<LasPoint> lasPointList = new ArrayList<>();
         
-        las = LasReader.read(lasFile);
+        LasReader lasReader = new LasReader();
         
-        ArrayList<LasPoint> lasPointList = readLas(las);
+        lasReader.open(this.lasFile);
+        LasHeader header = lasReader.getHeader();
         
+        maxIterations = header.getNumberOfPointrecords();
+        step = (int) (maxIterations/10);
         
-        Map<Double, Trajectory> trajectoryMap = new TreeMap<>();
+        for (PointDataRecordFormat0 p : lasReader) {
+            
+            if(iterations % step == 0){
+                fireProgress("Reading *.las", (int) ((iterations*100)/(float)maxIterations));
+            }
+            
+            if(p.isHasQLineExtrabytes()){
+                QLineExtrabytes qLineExtrabytes = p.getQLineExtrabytes();
+                logger.info("QLineExtrabytes" + qLineExtrabytes.getAmplitude()+" "+qLineExtrabytes.getPulseWidth());
+            }
+            Vector3d location = new Vector3d((p.getX() * header.getxScaleFactor()) + header.getxOffset(), (p.getY() * header.getyScaleFactor()) + header.getyOffset(), (p.getZ() * header.getzScaleFactor()) + header.getzOffset());
+            LasPoint point = new LasPoint(location, p.getReturnNumber(), p.getNumberOfReturns(), p.getIntensity(), p.getClassification(), p.getGpsTime());
+            lasPointList.add(point);
+            
+            iterations++;
+        }
         
+        /***sort las by time***/
         Collections.sort(lasPointList, new Comparator<LasPoint>() {
 
             @Override
@@ -109,10 +137,18 @@ public class LasConversion extends Processing implements Runnable{
         double minTime = lasPointList.get(0).t;
         double maxTime = lasPointList.get(lasPointList.size()-1).t;
         
-        fireProgress("Reading trajectory file", getProgression());
+        
+        /***reading trajectory file***/
+        
+        fireProgress("Reading trajectory file", 0);
+        
+        Map<Double, Trajectory> trajectoryMap = new TreeMap<>();
         
         try {
-
+            maxIterations = FileManager.getLineNumber(trajectoryFile.getAbsolutePath());
+            step = (int) (maxIterations/10);
+            iterations = 0;
+            
             BufferedReader reader = new BufferedReader(new FileReader(trajectoryFile));
 
             String line;
@@ -121,7 +157,11 @@ public class LasConversion extends Processing implements Runnable{
             reader.readLine();
 
             while ((line = reader.readLine()) != null) {
-
+                
+                if(iterations % step == 0){
+                    fireProgress("Reading trajectory file", (int) ((iterations*100)/(float)maxIterations));
+                }
+                
                 String[] lineSplit = line.split(",");
                 Trajectory traj = new Trajectory(Double.valueOf(lineSplit[0]), Double.valueOf(lineSplit[1]),
                         Double.valueOf(lineSplit[2]));
@@ -132,6 +172,8 @@ public class LasConversion extends Processing implements Runnable{
                 if(time >= minTime-0.01 && time <= maxTime+0.01){
                     trajectoryMap.put(time, traj);
                 }
+                
+                iterations++;
             }
 
         } catch (FileNotFoundException ex) {
@@ -154,8 +196,18 @@ public class LasConversion extends Processing implements Runnable{
         boolean isNewExp = false;
         
         int count = 0;
+        iterations = 0;
+        maxIterations = lasPointList.size();
+        step = (int) (maxIterations/10);
+        
+        fireProgress("Voxelisation", getProgression());
         
         for (LasPoint lasPoint : lasPointList) {
+            
+            
+            if(iterations % step == 0){
+                fireProgress("Voxelisation", (int) ((iterations*100)/(float)maxIterations));
+            }
             
             double targetTime = lasPoint.t;
             index = searchNearestMax(targetTime, tgps, index);
@@ -249,36 +301,13 @@ public class LasConversion extends Processing implements Runnable{
             oldTime = time;
             oldN = mix.lasPoint.n;
             
-            
+            iterations++;
         }
         
         fireFinished();
         
     }
     
-    private ArrayList<LasPoint> readLas(Las lasFile) {
-        
-        ArrayList<LasPoint> lasPointList = new ArrayList<>();
-
-        ArrayList<? extends PointDataRecordFormat0> pointDataRecords = lasFile.getPointDataRecords();
-        LasHeader header = lasFile.getHeader();
-        
-        
-        
-        for (PointDataRecordFormat0 p : pointDataRecords) {
-            
-            if(p.isHasQLineExtrabytes()){
-                QLineExtrabytes qLineExtrabytes = p.getQLineExtrabytes();
-                logger.info("QLineExtrabytes" + qLineExtrabytes.getAmplitude()+" "+qLineExtrabytes.getPulseWidth());
-            }
-            Vec3D location = new Vec3D((p.getX() * header.getxScaleFactor()) + header.getxOffset(), (p.getY() * header.getyScaleFactor()) + header.getyOffset(), (p.getZ() * header.getzScaleFactor()) + header.getzOffset());
-            LasPoint point = new LasPoint(location, p.getReturnNumber(), p.getNumberOfReturns(), p.getIntensity(), p.getClassification(), p.getGpsTime());
-            
-            lasPointList.add(point);
-        }
-
-        return lasPointList;
-    }
     
     private double dfdist(double x_s, double y_s, double z_s, double x, double y, double z) {
 

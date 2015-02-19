@@ -5,15 +5,16 @@
  */
 package fr.ird.voxelidar.lidar.format.dart;
 
-import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace;
-import fr.ird.voxelidar.lidar.format.voxelspace.Voxel;
-import fr.ird.voxelidar.lidar.format.voxelspace.VoxelSpaceFormat;
-import fr.ird.voxelidar.math.point.Point3F;
-import fr.ird.voxelidar.math.point.Point3I;
+import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
+import fr.ird.voxelidar.engine3d.object.scene.Voxel;
+import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData;
+import fr.ird.voxelidar.engine3d.math.point.Point3F;
+import fr.ird.voxelidar.engine3d.math.point.Point3I;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
@@ -92,30 +93,32 @@ public class DartWriter {
         DartWriter.writeFromDart(null, outputFile);
     }
     
-    public static void writeFromVoxelSpace(VoxelSpaceFormat voxelSpaceFormat, File outputFile){
+    public static void writeFromVoxelSpace(VoxelSpaceData data, File outputFile){
         
         Dart dart = new Dart(
-                new Point3I(voxelSpaceFormat.xNumberVox,voxelSpaceFormat.yNumberVox,voxelSpaceFormat.zNumberVox),
-                new Point3F(voxelSpaceFormat.resolution, voxelSpaceFormat.resolution, voxelSpaceFormat.resolution),
-                voxelSpaceFormat.xNumberVox*voxelSpaceFormat.yNumberVox);
+                new Point3I(data.split.x,data.split.y,data.split.z),
+                new Point3F((float)data.resolution.x, (float)data.resolution.y, (float)data.resolution.z),
+                data.split.x*data.split.y);
         
-        for (Voxel voxel : voxelSpaceFormat.voxels) {
+        ArrayList<String> attributsNames = data.attributsNames;
+        
+        for (Voxel voxel : data.voxels) {
             
-            Map<String, Float> attributs = voxel.getAttributs();
+            Float[] attributs = voxel.getAttributs();
             
-            Float densite = attributs.get("PAD2");
+            Float densite = attributs[attributsNames.indexOf("PAD2")];
             
             if(densite == null){ //format eloi
-                densite = attributs.get("densite");
+                densite = attributs[attributsNames.indexOf("densite")];
                 
                 if(densite == null){ //format eloi
-                    densite = attributs.get("PAD");
+                    densite = attributs[attributsNames.indexOf("PAD")];
                 }
             }
             
-            int indiceX = voxel.indiceX;
-            int indiceY = voxel.indiceY;
-            int indiceZ = voxel.indiceZ;
+            int indiceX = voxel.indice.x;
+            int indiceY = voxel.indice.x;
+            int indiceZ = voxel.indice.x;
             
             dart.cells[indiceX][indiceZ][indiceY] = new DartCell();
             

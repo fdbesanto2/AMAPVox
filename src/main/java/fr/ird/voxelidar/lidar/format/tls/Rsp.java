@@ -5,7 +5,7 @@
  */
 package fr.ird.voxelidar.lidar.format.tls;
 
-import fr.ird.voxelidar.math.matrix.Mat4D;
+import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

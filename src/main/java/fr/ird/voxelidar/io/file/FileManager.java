@@ -5,7 +5,7 @@
  */
 package fr.ird.voxelidar.io.file;
 
-import fr.ird.voxelidar.frame.JFrameSettingUp;
+import fr.ird.voxelidar.swing.JFrameSettingUp;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;

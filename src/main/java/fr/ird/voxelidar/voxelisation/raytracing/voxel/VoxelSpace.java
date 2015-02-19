@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 import javax.vecmath.Point3i;
 
-import fr.ird.voxelidar.voxelisation.util.BoundingBox3f;
-import fr.ird.voxelidar.voxelisation.geometry.shapes.Shape;
-import fr.ird.voxelidar.voxelisation.geometry.shapes.ShapeUtils;
+import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
+import fr.ird.voxelidar.voxelisation.raytracing.geometry.shapes.Shape;
+import fr.ird.voxelidar.voxelisation.raytracing.geometry.shapes.ShapeUtils;
 import javax.vecmath.Point3d;
 
 
@@ -20,7 +20,7 @@ import javax.vecmath.Point3d;
  */
 public class VoxelSpace {
 	
-	private BoundingBox3f	boundingBox;
+	private BoundingBox3d	boundingBox;
 	private Point3d			boundingBoxSize;
 	private Point3d			voxelSize;
 	private Point3i			splitting;
@@ -28,7 +28,7 @@ public class VoxelSpace {
 	private boolean			finite	= false;
 	private int				topology;
 	
-	public VoxelSpace (BoundingBox3f bb, Point3i splitting, int topology) {
+	public VoxelSpace (BoundingBox3d bb, Point3i splitting, int topology) {
 		
 		this.boundingBox		= bb;
 		this.boundingBoxSize	= new Point3d (bb.max); this.boundingBoxSize.sub (bb.min);
@@ -40,7 +40,7 @@ public class VoxelSpace {
 		setTopology(topology);
 	}
 
-	public VoxelSpace (BoundingBox3f bb, int numberOfVoxels, int topology) {
+	public VoxelSpace (BoundingBox3d bb, int numberOfVoxels, int topology) {
 		
 		this.boundingBox		= bb;
 		this.boundingBoxSize	= new Point3d (bb.max);	this.boundingBoxSize.sub (bb.min);
@@ -168,7 +168,7 @@ public class VoxelSpace {
 	 * @param bbox 			bounding box
 	 * @return the x, y and z indices of voxels occupied by the given bounding box
 	 */
-	public Point3i[] getVoxelIndices (BoundingBox3f bbox) {
+	public Point3i[] getVoxelIndices (BoundingBox3d bbox) {
 		
 		ArrayList<Point3i> indexList = new ArrayList<Point3i>();
 		
@@ -219,7 +219,7 @@ public class VoxelSpace {
 	 * Get the bounding box of the voxel space
 	 * @return bounding box of the voxel space
 	 */
-	public BoundingBox3f getBoundingBox () {
+	public BoundingBox3d getBoundingBox () {
 		return boundingBox;
 	}
 

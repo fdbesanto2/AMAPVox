@@ -5,10 +5,10 @@
  */
 package fr.ird.voxelidar.graphics2d.image;
 
-import fr.ird.voxelidar.graphics3d.object.terrain.Dtm;
-import fr.ird.voxelidar.lidar.format.voxelspace.Voxel;
-import fr.ird.voxelidar.graphics3d.object.voxelspace.VoxelSpace;
-import fr.ird.voxelidar.lidar.format.voxelspace.VoxelSpaceFormat;
+import fr.ird.voxelidar.engine3d.object.scene.Dtm;
+import fr.ird.voxelidar.engine3d.object.scene.Voxel;
+import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
+import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData;
 import fr.ird.voxelidar.util.ColorGradient;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -27,7 +27,7 @@ public class Projection {
     
     final static Logger logger = Logger.getLogger(Projection.class);
     
-    private final VoxelSpaceFormat voxelSpace;
+    private final VoxelSpaceData data;
     private final Dtm terrain;
     private float minValue;
     private float maxValue;
@@ -43,9 +43,9 @@ public class Projection {
         return maxValue;
     }
     
-    public Projection(VoxelSpaceFormat voxelSpace, Dtm terrain){
+    public Projection(VoxelSpaceData voxelSpace, Dtm terrain){
         
-        this.voxelSpace = voxelSpace;
+        this.data = voxelSpace;
         this.terrain = terrain;
     }
     
@@ -58,20 +58,22 @@ public class Projection {
             MultiKeyMap mapTerrainXY = terrain.getXYStructure();
                    
 
-            for(Voxel voxel : voxelSpace.voxels){
+            for(Voxel voxel : data.voxels){
 
                 float value = 0;
+                Float[] attributs = voxel.getAttributs();
+                
                 switch(type){
                     case Projection.PAI:
-                        value = generatePAI(voxel.getAttributs());
+                        value = generatePAI(attributs[data.attributsNames.indexOf("interceptions")], attributs[data.attributsNames.indexOf("nbSampling")]);
                         break;
                     case Projection.TRANSMITTANCE:
-                        value = generateTransmittanceMap(voxel.getAttributs());
+                        value = generateTransmittanceMap(attributs[data.attributsNames.indexOf("interceptions")], attributs[data.attributsNames.indexOf("nbSampling")]);
                         break;
                 }
 
-                int x = voxel.indiceX;
-                int y = voxel.indiceZ;
+                int x = voxel.indice.x;
+                int y = voxel.indice.z;
 
                 if(Float.isNaN(value)){
                     value = 0;
@@ -79,12 +81,12 @@ public class Projection {
 
                 float hauteurTerrainXY = 0;
                 try{
-                    hauteurTerrainXY = (float) mapTerrainXY.get(voxel.x, voxel.z);
+                    hauteurTerrainXY = (float) mapTerrainXY.get(voxel.position.x, voxel.position.z);
                 }catch(Exception e){
                     logger.error("voxelisation failed", e);
                 }
 
-                if(voxel.y > hauteurTerrainXY){
+                if(voxel.position.y > hauteurTerrainXY){
 
                     if(map.containsKey(x, y)){
 
@@ -97,20 +99,22 @@ public class Projection {
         
         }else{
         
-            for(Voxel voxel : voxelSpace.voxels){
+            int count = 0;
+            for(Voxel voxel : data.voxels){
 
                 float value = 0;
+                
                 switch(type){
                     case Projection.PAI:
-                        value = generatePAI(voxel.getAttributs());
+                        value = generatePAI(data.getVoxelValue("interceptions", count), data.getVoxelValue("nbSampling", count));
                         break;
                     case Projection.TRANSMITTANCE:
-                        value = generateTransmittanceMap(voxel.getAttributs());
+                        value = generateTransmittanceMap(data.getVoxelValue("interceptions", count), data.getVoxelValue("nbSampling", count));
                         break;
                 }
 
-                int x = voxel.indiceX;
-                int y = voxel.indiceZ;
+                int x = voxel.indice.x;
+                int y = voxel.indice.z;
 
                 if(Float.isNaN(value)){
                     value = 0;
@@ -122,6 +126,8 @@ public class Projection {
                 }else{
                     map.put(x, y, value);
                 }
+                
+                count++;
             }
         }
         
@@ -157,7 +163,7 @@ public class Projection {
         
         ColorGradient gradient = new ColorGradient(minValue, maxValue);
         gradient.setGradientColor(ColorGradient.GRADIENT_HEAT);
-        Color[][] texture = new Color[voxelSpace.xNumberVox][voxelSpace.yNumberVox];
+        Color[][] texture = new Color[data.split.x][data.split.y];
         
         it = map.mapIterator();
 
@@ -175,10 +181,10 @@ public class Projection {
         
         
         
-        BufferedImage bi = new BufferedImage(voxelSpace.xNumberVox, voxelSpace.yNumberVox, BufferedImage.TYPE_INT_RGB);
+        BufferedImage bi = new BufferedImage(data.split.x, data.split.y, BufferedImage.TYPE_INT_RGB);
         
-        for (int i = 0; i < voxelSpace.xNumberVox; i++) {
-            for (int j = 0; j < voxelSpace.yNumberVox; j++) {
+        for (int i = 0; i < data.split.x; i++) {
+            for (int j = 0; j < data.split.y; j++) {
 
                 bi.setRGB(i, j, texture[i][j].getRGB());
             }
@@ -187,15 +193,10 @@ public class Projection {
         return bi;
     }
     
-    private float generatePAI(Map<String, Float> attributs){
+    
+    private float generatePAI(float interceptions, float nbSampling){
         
-        Float nInterceptes = attributs.get("interceptions");
-        Float nApres = attributs.get("nbSampling")+attributs.get("interceptions");
-        //Float nInterceptes = attributs.get("n_interceptes");
-        //Float nApres = attributs.get("n_apres");
-
-
-        float densitePn = nInterceptes/(nApres+nInterceptes);
+        float densitePn = interceptions/(nbSampling+interceptions);
         float transmittance = 1 - densitePn;
 
         float pad = (float) ((Math.log(transmittance)*(-2))/1);
@@ -208,16 +209,9 @@ public class Projection {
     
     
 
-    private float generateTransmittanceMap(Map<String, Float> attributs){
+    private float generateTransmittanceMap(float interceptions, float nbSampling){
         
-        Float nInterceptes = attributs.get("interceptions");
-        Float nApres = attributs.get("nbSampling")+attributs.get("interceptions");
-        
-        //Float nInterceptes = attributs.get("n_interceptes");
-        //Float nApres = attributs.get("n_apres");
-
-
-        float densitePn = nInterceptes/(nApres+nInterceptes);
+        float densitePn = interceptions/(nbSampling+interceptions);
         
         float transmittance = 1 - densitePn;
         

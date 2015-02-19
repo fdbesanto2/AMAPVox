@@ -4,12 +4,12 @@ package fr.ird.voxelidar.voxelisation.raytracing.voxel;
 import javax.vecmath.Point3i;
 import javax.vecmath.Vector3d;
 
-import fr.ird.voxelidar.voxelisation.util.BoundingBox3f;
-import fr.ird.voxelidar.voxelisation.geometry.Intersection;
-import fr.ird.voxelidar.voxelisation.geometry.LineElement;
-import fr.ird.voxelidar.voxelisation.geometry.LineSegment;
-import fr.ird.voxelidar.voxelisation.geometry.shapes.ShapeUtils;
-import fr.ird.voxelidar.voxelisation.geometry.shapes.VolumicShape;
+import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
+import fr.ird.voxelidar.voxelisation.raytracing.geometry.Intersection;
+import fr.ird.voxelidar.voxelisation.raytracing.geometry.LineElement;
+import fr.ird.voxelidar.voxelisation.raytracing.geometry.LineSegment;
+import fr.ird.voxelidar.voxelisation.raytracing.geometry.shapes.ShapeUtils;
+import fr.ird.voxelidar.voxelisation.raytracing.geometry.shapes.VolumicShape;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
 
@@ -72,7 +72,7 @@ public class VoxelManager {
 
 		
                 // Find the bounding box of the ArrayList of mesh
-                BoundingBox3f bbox = scene.getBoundingBox();
+                BoundingBox3d bbox = scene.getBoundingBox();
 
                 // Add margins to the bounding box
                 bbox = ShapeUtils.getPaddedBoundingBox(bbox, BBOX_SCENE_MARGIN);
@@ -94,7 +94,7 @@ public class VoxelManager {
 	private void buildSceneCanvas () {
 
 		// Scene bounding box
-		BoundingBox3f sceneBoundingBox = voxelSpace.getBoundingBox ();
+		BoundingBox3d sceneBoundingBox = voxelSpace.getBoundingBox ();
                 // Scene boundaries are a box (the bounding box of the scene, plus a margin)
                 sceneCanvas = ShapeUtils.createRectangleBox (sceneBoundingBox, BBOX_SCENE_MARGIN, true);
 	}
@@ -135,10 +135,7 @@ public class VoxelManager {
 	 * @return Voxel crossing context of the current voxel (Indices, Length, Translation).
 	 */
 	public VoxelCrossingContext CrossVoxel(Point3d startPoint, Vector3d direction, Point3i currentVoxel) {
-		
-		// Distances to current voxel walls
-                LineElement e = new LineSegment(startPoint, direction, 100);
-                    
+		                    
 		Point3d infCorner = voxelSpace.getVoxelInfCorner (currentVoxel);
 		double x, y , z;
 
@@ -237,10 +234,10 @@ public class VoxelManager {
                     LineElement e = new LineSegment(lineElement.getOrigin (), lineElement.getDirection (), intersection.distance);
                     intersectionPoint = e.getEnd();
 
-                    Point3d offset = new Point3d(lineElement.getDirection ());
-                    offset.scale(0.0000053d);
+                    //Point3d offset = new Point3d(lineElement.getDirection ());
+                    //offset.scale(0.0000053d);
                     //System.out.println("intersectionPoint: "+intersectionPoint);
-                    intersectionPoint.add(offset);
+                    //intersectionPoint.add(offset);
 
                     intersectionForDebug = true;
 		}

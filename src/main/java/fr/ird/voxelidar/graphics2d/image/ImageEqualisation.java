@@ -5,8 +5,8 @@
  */
 package fr.ird.voxelidar.graphics2d.image;
 
-import fr.ird.voxelidar.lidar.format.voxelspace.Voxel;
-import fr.ird.voxelidar.math.vector.Vec3F;
+import fr.ird.voxelidar.engine3d.object.scene.Voxel;
+import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.vecmath.Vector3f;
 
 /**
  *
@@ -112,7 +113,7 @@ public class ImageEqualisation {
         int[] histogramBlue = new int[256];
         
         for (Voxel voxel : voxelList) {
-            Vec3F colorVector = voxel.color;
+            Vector3f colorVector = voxel.color;
             Color color = new Color(colorVector.x, colorVector.y, colorVector.z);
             int red = color.getRed();
             int green = color.getGreen();
@@ -142,7 +143,7 @@ public class ImageEqualisation {
             float factorGreen = (cumulateHistogrammGreen[green]);
             float factorBlue = (cumulateHistogrammBlue[blue]);
             
-            voxel.color = new Vec3F(factorRed, factorGreen, factorBlue);
+            voxel.color = new Vector3f(factorRed, factorGreen, factorBlue);
             //System.out.println("test");
         }
         
@@ -159,7 +160,7 @@ public class ImageEqualisation {
         int[] histogramBlue = new int[256];
         
         for (Voxel voxel : voxelList) {
-            Vec3F colorVector = voxel.color;
+            Vector3f colorVector = voxel.color;
             Color color = new Color(colorVector.x, colorVector.y, colorVector.z);
             int red = color.getRed();
             int green = color.getGreen();
@@ -219,7 +220,7 @@ public class ImageEqualisation {
             double factorGreen = (histogramCGreen[green])/255.0f;
             double factorBlue = (histogramCBlue[blue])/255.0f;
             
-            voxel.color = new Vec3F((float)factorRed, (float)factorGreen, (float)factorBlue);
+            voxel.color = new Vector3f((float)factorRed, (float)factorGreen, (float)factorBlue);
             //System.out.println("test");
         }
         /*

@@ -2,6 +2,10 @@ package fr.ird.voxelidar.util;
 
 import java.awt.Color;
 
+/**
+ * This class can be used to generate gradient from a color to another or to simulate a color ramp
+ * @author took from jeeb\\lib\\util
+ */
 public class ColorGradient {
 
     /**
@@ -86,24 +90,38 @@ public class ColorGradient {
     private float maxValue = Float.MAX_VALUE;
     private Color[] gradientColor;
     
-    
+    /**
+     *
+     * @param min
+     * @param max
+     */
     public ColorGradient (float min, float max) {
     	minValue = min;
     	maxValue = max;
     	gradientColor = GRADIENT_RAINBOW;
     }
     
-    
-    
-	public void setMinValue (float minValue) {
+    /**
+     *
+     * @param minValue
+     */
+    public void setMinValue (float minValue) {
 		this.minValue = minValue;
 	}
 	
-	
-	public void setMaxValue (float maxValue) {
+    /**
+     *
+     * @param maxValue
+     */
+    public void setMaxValue (float maxValue) {
 		this.maxValue = maxValue;
 	}
     
+    /**
+     *
+     * @param value
+     * @return
+     */
     public Color getColor(float value) {
     	
     	float colorIdx = ((value - minValue) / (maxValue-minValue));  
@@ -117,7 +135,10 @@ public class ColorGradient {
     	return gradientColor[index];
     }
     
-    
+    /**
+     *
+     * @param gradientColor
+     */
     public void setGradientColor(Color[] gradientColor) {
         this.gradientColor = gradientColor;
     }
@@ -135,6 +156,7 @@ public class ColorGradient {
      *            Color used for the top of the gradient
      * @param numSteps
      *            The number of steps in the gradient. 250 is a good number.
+     * @return 
      */
     public static Color[] createGradient(Color one, Color two, int numSteps) {
             int r1 = one.getRed();
@@ -172,6 +194,7 @@ public class ColorGradient {
      *            index 0 will be the lowest color.
      * @param numSteps
      *            The number of steps in the gradient. 250 is a good number.
+     * @return 
      */
     public static Color[] createMultiGradient(Color[] colors, int numSteps) {
             // we assume a linear gradient, with equal spacing between colors

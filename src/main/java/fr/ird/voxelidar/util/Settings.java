@@ -5,14 +5,15 @@
  */
 package fr.ird.voxelidar.util;
 
-import fr.ird.voxelidar.frame.JFrameSettingUp;
-import fr.ird.voxelidar.frame.ListAdapterComboboxModel;
-import fr.ird.voxelidar.graphics3d.mesh.Attribut;
+import fr.ird.voxelidar.swing.JFrameSettingUp;
+import fr.ird.voxelidar.swing.ListAdapterComboboxModel;
+import fr.ird.voxelidar.engine3d.object.mesh.Attribut;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  *
@@ -26,8 +27,21 @@ public class Settings {
     public boolean drawAxis;
     public String attributeToVisualize;
     public Attribut attribut;
-    public Map<String, Attribut> mapAttributs;
+    public Map<String, Attribut> extendedMapAttributs;
     public File voxelSpaceFile;
+    
+    public Settings(){
+        
+        drawAxis = false;
+        drawNullVoxel = false;
+        drawVoxelUnderground = false;
+        drawTerrain = false;
+        extendedMapAttributs = new TreeMap<>();
+    }
+    
+    public void addAttribut(Attribut attribut){
+        extendedMapAttributs.put(attribut.getName(), attribut);
+    }
     
     public Settings(JFrameSettingUp jframeSettingUp){
         
@@ -35,35 +49,15 @@ public class Settings {
         drawNullVoxel = jframeSettingUp.getjCheckBoxDrawNullVoxel().isSelected();
         drawVoxelUnderground = jframeSettingUp.getjCheckBoxDrawUndergroundVoxel().isSelected();
         drawTerrain = jframeSettingUp.getjCheckBoxDrawTerrain().isSelected();
-         
-        try{
-            attributeToVisualize = jframeSettingUp.getjComboBoxAttributeToVisualize().getSelectedItem().toString();
-            mapAttributs = new HashMap<>();
-            ListAdapterComboboxModel mainAttributeModelAdapter = jframeSettingUp.getMainAttributeModelAdapter();
-            
-            Set<String> variablesNames = new HashSet<>();
-            for(int i=0;i<mainAttributeModelAdapter.getSize();i++){
-                
-                variablesNames.add(mainAttributeModelAdapter.getElementAt(i).toString());
-            }
-            
-            for(int i=0;i<mainAttributeModelAdapter.getSize();i++){
-                
-                Attribut a = new Attribut(mainAttributeModelAdapter.getElementAt(i).toString(), mainAttributeModelAdapter.getValue(i), variablesNames);
-                mapAttributs.put(mainAttributeModelAdapter.getElementAt(i).toString(), a);
-            }            
-            
-            attribut = mapAttributs.get(attributeToVisualize);
-            
-        }catch(Exception e){
-            attributeToVisualize = null;
-            mapAttributs = null;
-                    
-        }
         
         
         
         
-        voxelSpaceFile = new File(jframeSettingUp.getjListOutputFiles().getSelectedValue().toString());
+        //voxelSpaceFile = new File(jframeSettingUp.getjListOutputFiles().getSelectedValue().toString());
+        
+        
+        
+        
+        //voxelSpaceFile = new File(jframeSettingUp.getjListOutputFiles().getSelectedValue().toString());
     }
 }

@@ -1,6 +1,6 @@
 package fr.ird.voxelidar.voxelisation.raytracing.voxel;
 
-import fr.ird.voxelidar.voxelisation.util.BoundingBox3f;
+import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
 
 /**
  * Scene class
@@ -13,19 +13,19 @@ import fr.ird.voxelidar.voxelisation.util.BoundingBox3f;
 public class Scene {
 	
 	//TODO added Dauzat Feb 2013
-	private BoundingBox3f bbox = null;
+	private BoundingBox3d bbox = null;
 	
 	/**
 	 * Computes the global bounding box of artNodes
 	 */
-	public BoundingBox3f getBoundingBox() {
+	public BoundingBox3d getBoundingBox() {
 		// added Dauzat Feb. 2013
                 return bbox;
 	}
 	
 	// added Dauzat, Feb. 2013
-	public void setBoundingBox(BoundingBox3f boundingBox) {
-		bbox = new BoundingBox3f(boundingBox.getMin(), boundingBox.getMax());
+	public void setBoundingBox(BoundingBox3d boundingBox) {
+		bbox = new BoundingBox3d(boundingBox.getMin(), boundingBox.getMax());
 	}
 
 }

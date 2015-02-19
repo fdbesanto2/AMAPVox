@@ -6,7 +6,7 @@
 package fr.ird.voxelidar.util;
 
 /**
- *
+ * Class used to add line with separator
  * @author Julien
  */
 public class CsvLine {

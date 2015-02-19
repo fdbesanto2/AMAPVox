@@ -1,16 +1,11 @@
 package fr.ird.voxelidar;
 
-import fr.ird.voxelidar.extraction.LasExtraction;
-import fr.ird.voxelidar.extraction.LasExtractionListener;
-import fr.ird.voxelidar.extraction.LasPoint;
-import fr.ird.voxelidar.extraction.RxpExtraction;
-import fr.ird.voxelidar.extraction.RxpExtractionListener;
-import fr.ird.voxelidar.extraction.Shot;
-import fr.ird.voxelidar.frame.JFrameSettingUp;
+import fr.ird.voxelidar.engine3d.JOGLWindow;
+import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
+import fr.ird.voxelidar.swing.JFrameSettingUp;
+import fr.ird.voxelidar.util.Settings;
+import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.log4j.Logger;
 
 
@@ -80,7 +75,16 @@ public class Principal {
         //runnable to do the extraction
         new Thread(extraction).start();
         */
+        /*
+        JFrameSettingUp mainJFrame = new JFrameSettingUp();
+        Settings settings = new Settings(mainJFrame);
         
+        VoxelSpace voxelSpace = new VoxelSpace(new File("C:\\Users\\Julien\\Desktop\\Sortie voxels\\las5.vox"));
+        JOGLWindow window = new JOGLWindow(640, 480, "test", voxelSpace, settings);
+        window.show();
+        
+        window.getJoglContext().getScene().getVoxelSpace().setAttributToVisualize("interceptions");
+        */
         JFrameSettingUp mainJFrame = new JFrameSettingUp();
         mainJFrame.setVisible(true);
         

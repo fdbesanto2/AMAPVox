@@ -5,7 +5,7 @@
  */
 package fr.ird.voxelidar.voxelisation.als;
 
-import fr.ird.voxelidar.math.vector.Vec3D;
+import javax.vecmath.Vector3d;
 
 /**
  *
@@ -13,16 +13,57 @@ import fr.ird.voxelidar.math.vector.Vec3D;
  */
 public class LasPoint {
     
+    public final static int CLASSIFICATION_CREATED_NEVER_CLASSIFIED = 0;
+    public final static int CLASSIFICATION_UNCLASSIFIED = 1;
     public final static int CLASSIFICATION_GROUND = 2;
+    public final static int CLASSIFICATION_LOW_VEGETATION = 3;
+    public final static int CLASSIFICATION_MEDIUM_VEGETATION = 4;
+    public final static int CLASSIFICATION_HIGH_VEGETATION = 5;
+    public final static int CLASSIFICATION_BUILDING = 6;
+    public final static int CLASSIFICATION_LOW_POINT = 7;
+    public final static int CLASSIFICATION_MODEL_KEY_POINT = 8;
+    public final static int CLASSIFICATION_WATER = 9;
     
-    public Vec3D location;
+    /**
+     * las point location
+     */
+    public Vector3d location;
+
+    /**
+     * echo range
+     */
     public int r;
+
+    /**
+     * echo number
+     */
     public int n;
+
+    /**
+     * recorded time
+     */
     public double t;
+
+    /**
+     * intensity
+     */
     public int i;
+
+    /**
+     * classification (ground = 2, unclassified = 1)
+     */
     public short classification;
     
-    public LasPoint(Vec3D location, int r, int n, int i, short classification, double t) {
+    /**
+     *
+     * @param location
+     * @param r
+     * @param n
+     * @param i
+     * @param classification
+     * @param t
+     */
+    public LasPoint(Vector3d location, int r, int n, int i, short classification, double t) {
         this.location = location;
         this.r = r;
         this.n = n;

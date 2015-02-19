@@ -4,8 +4,8 @@
  */
 package fr.ird.voxelidar.lidar.format.als;
 
-import fr.ird.voxelidar.math.matrix.Mat4D;
-import fr.ird.voxelidar.math.vector.Vec4D;
+import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
+import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

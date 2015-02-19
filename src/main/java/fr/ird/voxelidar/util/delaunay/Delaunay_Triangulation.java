@@ -1,6 +1,6 @@
 package fr.ird.voxelidar.util.delaunay;
 
-import fr.ird.voxelidar.math.vector.Vec3F;
+import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;

@@ -6,13 +6,13 @@
 package fr.ird.voxelidar.voxelisation.tls;
 
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis;
-import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelParameters;
-import fr.ird.voxelidar.extraction.RxpExtraction;
-import fr.ird.voxelidar.extraction.RxpExtractionListener;
-import fr.ird.voxelidar.extraction.Shot;
+import fr.ird.voxelidar.voxelisation.VoxelParameters;
+import fr.ird.voxelidar.voxelisation.extraction.RxpExtraction;
+import fr.ird.voxelidar.voxelisation.extraction.RxpExtractionListener;
+import fr.ird.voxelidar.voxelisation.extraction.Shot;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
-import fr.ird.voxelidar.math.matrix.Mat3D;
-import fr.ird.voxelidar.math.matrix.Mat4D;
+import fr.ird.voxelidar.engine3d.math.matrix.Mat3D;
+import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
  *
  * @author Julien
  */
-public class RxpVoxelisation {
+public class RxpVoxelisation{
     
     private static final Logger logger = Logger.getLogger(RxpVoxelisation.class);
     private RxpScan rxp;
@@ -32,7 +32,6 @@ public class RxpVoxelisation {
     //private VoxelAnalysis voxelAnalysis;
     private BlockingQueue<Shot> queue;
     private int nbVoxelisationFinished;
-    private int nbTask;
     private File outputFile;
 
     public int getNbVoxelisationFinished() {
@@ -43,7 +42,7 @@ public class RxpVoxelisation {
         this.nbVoxelisationFinished = nbVoxelisationFinished;
     }    
     
-    public RxpVoxelisation(RxpScan rxp, int nbTask, File outputFile, Mat4D popMatrix, VoxelParameters parameters){
+    public RxpVoxelisation(RxpScan rxp, File outputFile, Mat4D popMatrix, VoxelParameters parameters){
         
         this.rxp = rxp;
         this.popMatrix = popMatrix;
@@ -51,10 +50,7 @@ public class RxpVoxelisation {
         
         nbVoxelisationFinished = 0;
         this.outputFile = outputFile;
-        
-        this.nbTask = nbTask;
     }
-    
     public void voxelise(){
         
         queue = new LinkedBlockingQueue<>();
@@ -289,4 +285,6 @@ public class RxpVoxelisation {
 
         }
     */
+
+    
 }

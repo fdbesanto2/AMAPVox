@@ -6,23 +6,23 @@
 package fr.ird.voxelidar.voxelisation.als;
 
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis;
-import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelParameters;
-import fr.ird.voxelidar.extraction.LasExtraction;
-import fr.ird.voxelidar.extraction.LasExtractionListener;
-import fr.ird.voxelidar.extraction.RxpExtractionListener;
-import fr.ird.voxelidar.extraction.Shot;
-import fr.ird.voxelidar.graphics3d.object.terrain.Dtm;
-import fr.ird.voxelidar.graphics3d.object.terrain.DtmLoader;
+import fr.ird.voxelidar.voxelisation.VoxelParameters;
+import fr.ird.voxelidar.voxelisation.extraction.LasExtraction;
+import fr.ird.voxelidar.voxelisation.extraction.LasExtractionListener;
+import fr.ird.voxelidar.voxelisation.extraction.RxpExtractionListener;
+import fr.ird.voxelidar.voxelisation.extraction.Shot;
+import fr.ird.voxelidar.engine3d.object.scene.Dtm;
+import fr.ird.voxelidar.engine3d.object.scene.DtmLoader;
 import fr.ird.voxelidar.lidar.format.als.Las;
 import fr.ird.voxelidar.lidar.format.als.LasHeader;
 import fr.ird.voxelidar.lidar.format.als.LasReader;
 import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
-import fr.ird.voxelidar.math.matrix.Mat;
-import fr.ird.voxelidar.math.matrix.Mat4D;
-import fr.ird.voxelidar.math.vector.Vec3D;
+import fr.ird.voxelidar.engine3d.math.matrix.Mat;
+import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
+import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.util.TimeCounter;
-import fr.ird.voxelidar.voxelisation.Processing;
-import fr.ird.voxelidar.voxelisation.ProcessingListener;
+import fr.ird.voxelidar.util.Processing;
+import fr.ird.voxelidar.util.ProcessingListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -77,7 +77,8 @@ public class LasVoxelisation extends Processing implements Runnable{
         if(parameters.useDTMCorrection() ){
             
             try {
-                terrain = DtmLoader.readFromAscFile(dtmFile);
+                terrain = DtmLoader.readFromAscFile(dtmFile, popMatrix);
+                
             } catch (Exception ex) {
                 java.util.logging.Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -93,9 +94,10 @@ public class LasVoxelisation extends Processing implements Runnable{
         
         Dtm terrain = null;
         
-        if(dtmFile != null){
+        if(dtmFile != null && parameters.useDTMCorrection()){
             try {
-                terrain = DtmLoader.readFromAscFile(dtmFile);
+                terrain = DtmLoader.readFromAscFile(dtmFile, popMatrix);
+                
                 terrain.exportObj(new File("c:\\Users\\Julien\\Desktop\\test.obj"));
             } catch (Exception ex) {
                 java.util.logging.Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
@@ -103,7 +105,7 @@ public class LasVoxelisation extends Processing implements Runnable{
         }
         
         final long start_time = System.currentTimeMillis();
-        BlockingQueue<fr.ird.voxelidar.extraction.LasPoint> arrayBlockingQueue = new LinkedBlockingQueue<>();
+        BlockingQueue<fr.ird.voxelidar.voxelisation.extraction.LasPoint> arrayBlockingQueue = new LinkedBlockingQueue<>();
         
         voxelAnalysis.init(parameters, outputFile);
         final LasConversion conversion = new LasConversion(arrayBlockingQueue, queue, trajectoryFile, lasFile, popMatrix);
@@ -168,39 +170,6 @@ public class LasVoxelisation extends Processing implements Runnable{
 
         return result;
     }
-
-    private ArrayList<Las2> readTxt() {
-        ArrayList<Las2> lasList = new ArrayList<>();
-
-        try {
-
-            BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Julien\\Desktop\\Test Als preprocess\\ALSbuf_xyzirncapt.txt"), ' ');
-
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-
-                if (line.charAt(0) != '#') {
-                    String[] lineSplit = line.split(" ");
-                    Las2 las = new Las2(new Vec3D(Double.valueOf(lineSplit[0]), Double.valueOf(lineSplit[1]),
-                            Double.valueOf(lineSplit[2])), Integer.valueOf(lineSplit[3]),
-                            Integer.valueOf(lineSplit[4]), Integer.valueOf(lineSplit[5]),
-                            Integer.valueOf(lineSplit[6]), Integer.valueOf(lineSplit[7]),
-                            Integer.valueOf(lineSplit[8]), Double.valueOf(lineSplit[9]));
-
-                    lasList.add(las);
-                }
-
-            }
-
-        } catch (FileNotFoundException ex) {
-            logger.error(ex);
-        } catch (IOException ex) {
-            logger.error(ex);
-        }
-
-        return lasList;
-    }
     
     private ArrayList<LasPoint> readLas(Las lasFile) {
         
@@ -210,7 +179,7 @@ public class LasVoxelisation extends Processing implements Runnable{
         LasHeader header = lasFile.getHeader();
         for (PointDataRecordFormat0 p : pointDataRecords) {
             
-            Vec3D location = new Vec3D((p.getX() * header.getxScaleFactor()) + header.getxOffset(), (p.getY() * header.getyScaleFactor()) + header.getyOffset(), (p.getZ() * header.getzScaleFactor()) + header.getzOffset());
+            Vector3d location = new Vector3d((p.getX() * header.getxScaleFactor()) + header.getxOffset(), (p.getY() * header.getyScaleFactor()) + header.getyOffset(), (p.getZ() * header.getzScaleFactor()) + header.getzOffset());
             LasPoint point = new LasPoint(location, p.getReturnNumber(), p.getNumberOfReturns(), p.getIntensity(), p.getClassification(), p.getGpsTime());
             
             lasPointList.add(point);
@@ -236,7 +205,7 @@ public class LasVoxelisation extends Processing implements Runnable{
         return lasList;
     }
     */
-    public void writeLocalAls(String outputFilePath, ArrayList<Vec3D> localCoordinates, ArrayList<Las2> lasList) {
+    public void writeLocalAls(String outputFilePath, ArrayList<Vector3d> localCoordinates, ArrayList<LasTxtFormat> lasList) {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputFilePath)))) {
 
@@ -391,7 +360,7 @@ public class LasVoxelisation extends Processing implements Runnable{
         
         fireProgress("Merging (interpolation)", getProgression());
         
-        ArrayList<Vec3D> trajectoryInterpolate = new ArrayList<>();
+        ArrayList<Vector3d> trajectoryInterpolate = new ArrayList<>();
         
         ArrayList<Double> tgps = new ArrayList<>();
         
@@ -416,7 +385,7 @@ public class LasVoxelisation extends Processing implements Runnable{
             double yValue = trajectoryList.get(min).y + ((trajectoryList.get(max).y - trajectoryList.get(min).y) * ratio);
             double zValue = trajectoryList.get(min).z + ((trajectoryList.get(max).z - trajectoryList.get(min).z) * ratio);
             
-            trajectoryInterpolate.add(new Vec3D(xValue, yValue, zValue));
+            trajectoryInterpolate.add(new Vector3d(xValue, yValue, zValue));
         }
         
         
