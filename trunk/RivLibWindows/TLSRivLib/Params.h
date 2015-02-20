@@ -1,0 +1,12 @@
+#ifndef PARAMS
+#define PARAMS
+
+enum Params {
+	VERTICAL,
+	VERTICALMULTIPLE,
+	HORIZONTAL,
+	HORIZONTALMULTIPLE,
+	NOFILTER
+};
+
+#endif

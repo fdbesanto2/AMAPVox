@@ -1,0 +1,5 @@
+LIBRARY
+
+EXPORTS
+Java_fr_ird_voxelidar_extraction_RxpExtraction_afficherBonjour
+Java_fr_ird_voxelidar_extraction_RxpExtraction_simpleExtraction
