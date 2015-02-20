@@ -60,6 +60,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.logging.Level;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.InvalidPreferencesFormatException;
 import java.util.prefs.Preferences;
@@ -348,26 +349,33 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jTextFieldMaxPointZ2.getDocument().addDocumentListener(customDocumentListener2);
     }
     
-    private void setAppearance(String value){
+    private void setAppearance(final String value){
         
         if(value.isEmpty()){
             setDefaultAppeareance();
             return;
         }
-        try {
+        final JFrameSettingUp parent = this;
+
+        SwingUtilities.invokeLater(new Runnable() {
             
-            UIManager.setLookAndFeel(value);
-            currentLookAndFeel = value; 
-            UIManager.put("TabbedPane.selected", new Color(114, 114, 114));
-            UIManager.put("TabbedPane.contentAreaColor", new Color(114, 114, 114));
-            UIManager.put("InternalFrame.background", new Color(114, 114, 114));
-            
-            SwingUtilities.updateComponentTreeUI(this);
-            this.pack();
-            
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            logger.error("cannot set look and feel: "+value, ex);
-        }
+            @Override
+            public void run() {
+                
+                try {
+                    UIManager.setLookAndFeel(value);
+                    currentLookAndFeel = value;
+                    UIManager.put("TabbedPane.selected", new Color(114, 114, 114));
+                    UIManager.put("TabbedPane.contentAreaColor", new Color(114, 114, 114));
+                    UIManager.put("InternalFrame.background", new Color(114, 114, 114));
+                    
+                    SwingUtilities.updateComponentTreeUI(parent);
+                    parent.pack();
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+                    java.util.logging.Logger.getLogger(JFrameSettingUp.class.getName()).log(Level.SEVERE, null, ex);
+                }
+             }
+       });
     }
     
     private void updateVoxelParameters(){
@@ -4723,7 +4731,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         SwingWorker sw = new SwingWorker() {
 
             @Override
-            protected Void doInBackground() {
+            protected Void doInBackground(){
 
                 try{
                     if(singleScan){

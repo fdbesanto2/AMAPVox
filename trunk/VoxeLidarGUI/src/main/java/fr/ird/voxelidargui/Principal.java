@@ -16,6 +16,9 @@ import fr.ird.voxelidargui.swing.JFrameSettingUp;
 public class Principal {
     
     public static void main(String args[]){
+        
+        String tmpDirName = System.getProperty("java.io.tmpdir");
+        
         JFrameSettingUp settingUp = new JFrameSettingUp();
         settingUp.setVisible(true);
         
