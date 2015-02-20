@@ -59,7 +59,7 @@ public class LasVoxelisation extends Processing implements Runnable{
     private final File outputFile;
     private final VoxelParameters parameters;
     private VoxelAnalysis voxelAnalysis;
-    private BlockingQueue<Shot> queue;
+    private LinkedBlockingQueue<Shot> queue;
     private File dtmFile;
 
     public LasVoxelisation(File lasFile, File outputFile, Mat4D popMatrix, File trajectoryFile, VoxelParameters parameters, File dtmFile) {

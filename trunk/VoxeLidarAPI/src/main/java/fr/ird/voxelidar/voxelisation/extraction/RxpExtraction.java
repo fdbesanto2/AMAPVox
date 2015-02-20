@@ -6,10 +6,15 @@ import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3D;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3d;
@@ -39,7 +44,7 @@ public class RxpExtraction implements Runnable{
     public final static Logger logger = Logger.getLogger(RxpExtraction.class);
     private final EventListenerList listeners;
     
-    private final BlockingQueue<Shot> arrayBlockingQueue;
+    private final LinkedBlockingQueue<Shot> arrayBlockingQueue;
     private final File rxpFile;
     private final Mat4D transfMatrix;
     private final Mat3D rotation;
@@ -48,7 +53,7 @@ public class RxpExtraction implements Runnable{
     private native boolean simpleExtraction(String file, Shots shots);
     
     
-    public RxpExtraction(File rxpFile, BlockingQueue<Shot> arrayBlockingQueue, Mat4D transfMatrix, Mat3D rotation){
+    public RxpExtraction(File rxpFile, LinkedBlockingQueue<Shot> arrayBlockingQueue, Mat4D transfMatrix, Mat3D rotation){
         
         listeners = new EventListenerList();
         
@@ -59,7 +64,10 @@ public class RxpExtraction implements Runnable{
     }
     
     static {
-        System.loadLibrary("RivLibJNI");
+        
+        NativeLoader loader = new NativeLoader();
+        loader.loadLibrary("RivLibJNI");
+        
     }
     
     public void addRxpExtractionListener(RxpExtractionListener listener){

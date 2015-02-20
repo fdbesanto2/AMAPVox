@@ -16,6 +16,7 @@ import fr.ird.voxelidar.engine3d.object.scene.Dtm;
 import fr.ird.voxelidar.util.TimeCounter;
 import java.io.FileNotFoundException;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
@@ -44,7 +45,7 @@ public class VoxelAnalysis implements Runnable{
     int nbEchosSol = 0;
     private VoxelParameters parameters;
     private boolean isTLS = true;
-    private BlockingQueue<Shot> arrayBlockingQueue;
+    private LinkedBlockingQueue<Shot> arrayBlockingQueue;
     
     //private Mat4D transfMatrix;
     //private Mat3D rotation;
@@ -100,7 +101,7 @@ public class VoxelAnalysis implements Runnable{
         }
     }
     
-    public VoxelAnalysis(BlockingQueue<Shot> arrayBlockingQueue, Dtm terrain){
+    public VoxelAnalysis(LinkedBlockingQueue<Shot> arrayBlockingQueue, Dtm terrain){
         bbox = new BoundingBox3d();
         nbShotsTreated = 0;
         isFinished = false;

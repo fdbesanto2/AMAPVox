@@ -59,7 +59,7 @@ public class VoxelisationTool{
     
     public void generateVoxelsFromRsp(File output, File input , VoxelParameters parameters, Mat4D vop, boolean mon) {
         
-        startTime = 0;
+        startTime = System.currentTimeMillis();
         
         this.parameters = parameters;
         this.parameters.setIsTLS(true);
@@ -105,7 +105,7 @@ public class VoxelisationTool{
 
     public void generateVoxelsFromRxp(File output, File input , VoxelParameters parameters, Mat4D vop) {
         
-        startTime = 0;
+        startTime = System.currentTimeMillis();
         
         this.parameters = parameters;
         this.parameters.setIsTLS(true);
@@ -126,7 +126,7 @@ public class VoxelisationTool{
     
     public void generateVoxelsFromLas(File output, File input, File trajectoryFile, File dtmFile, VoxelParameters parameters, Mat4D vop) {
         
-        startTime = 0;
+        startTime = System.currentTimeMillis();
         
         this.parameters = parameters;
         this.parameters.setIsTLS(false);
@@ -154,7 +154,7 @@ public class VoxelisationTool{
     
     public void mergeVoxelsFile(ArrayList<File> filesList, File output) throws NullPointerException{
         
-        startTime = 0;
+        startTime = System.currentTimeMillis();
         boolean[] toMerge = null;
         Map<String, Float[]> map1, map2, result = null;
         
