@@ -5,6 +5,7 @@
  */
 package fr.ird.voxelidar.engine3d.object.scene;
 
+import java.awt.Color;
 import java.util.Map;
 import javax.vecmath.Point2f;
 import javax.vecmath.Point3f;
@@ -22,8 +23,8 @@ public class Voxel extends RawVoxel{
     public int type;
     
     public float attributValue;
-    public Vector3f color;
-    public float alpha;
+    
+    private Color color;
     public Map<String, Point2f> minMax;
 
     public Float[] getAttributs() {
@@ -35,8 +36,7 @@ public class Voxel extends RawVoxel{
         this.indice = indice;
         
         this.position = position;
-        
-        this.alpha = 1.0f;
+        this.color = new Color(0, 0, 0, 1.0f);
         
         this.attributValue = attributValue;
         
@@ -49,10 +49,34 @@ public class Voxel extends RawVoxel{
         
         this.position = position;
         
-        this.alpha = alpha;
+        this.color = new Color(0, 0, 0, 1.0f);
         this.attributs = attributs;
         
         this.type = 6;
+    }
+    
+    public void setAlpha(int alpha){
+        
+        color = new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+    }
+    
+    public void setColor(int red, int green, int blue){
+        this.color = new Color(red, green, blue, color.getAlpha());
+    }
+    
+    public float getAlpha(){
+        return color.getAlpha()/255.0f;
+    }
+    
+    public float getRed(){
+        return color.getRed()/255.0f;
+    }
+    public float getGreen(){
+        return color.getGreen()/255.0f;
+    }
+    
+    public float getBlue(){
+        return color.getBlue()/255.0f;
     }
     
 }

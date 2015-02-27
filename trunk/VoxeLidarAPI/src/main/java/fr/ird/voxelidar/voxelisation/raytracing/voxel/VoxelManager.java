@@ -27,6 +27,7 @@ public class VoxelManager {
         private final Logger logger = Logger.getLogger(VoxelManager.class);
 	//private static final double 				BBOX_SCENE_MARGIN	= 0.01f;
         private static final double 				BBOX_SCENE_MARGIN	= 0.0f;
+        private static final double 				MARGIN	= 0.0000000001;
         
 	private final VoxelSpace						voxelSpace;
 	private VolumicShape					sceneCanvas;
@@ -213,6 +214,38 @@ public class VoxelManager {
 		return new VoxelCrossingContext(new Point3i(vx,vy,vz),sc,t);
 		
 	}
+        
+        private Point3d recalculateIntersection(LineElement lineElement, Intersection intersection){
+            
+            Point3d end = lineElement.getEnd();
+            Vector3d normal = intersection.getNormal();
+            BoundingBox3d boundingBox = voxelSpace.getBoundingBox();
+            
+            //avoid -0.0
+            normal.x += 0.0;
+            normal.y += 0.0;
+            normal.z += 0.0;
+            
+            if(normal.x == -1.0){
+                end.x = boundingBox.min.x+MARGIN;
+            }else if(normal.x == 1.0){
+                end.x = boundingBox.max.x-MARGIN;
+            }
+            
+            if(normal.y == -1.0){
+                end.y = boundingBox.min.y+MARGIN;
+            }else if(normal.y == 1.0){
+                end.y = boundingBox.max.y-MARGIN;
+            }
+            
+            if(normal.z == -1.0){
+                end.z = boundingBox.min.z+MARGIN;
+            }else if(normal.z == 1.0){
+                end.z = boundingBox.max.z-MARGIN;
+            }
+            
+            return end;
+        }
 
 	/**
 	 *  Returns the voxel context of the first entry in the scene canvas
@@ -222,41 +255,45 @@ public class VoxelManager {
 	 */
 	public VoxelCrossingContext getFirstVoxel(LineElement lineElement) {
 
-		boolean intersectionForDebug = false;
-                        
-		// Computes intersection with the scene canvas
-		Intersection intersection = sceneCanvas.getNearestIntersection (lineElement);
+		boolean intersectionForDebug ;
                 
+                Point3d intersectionPoint = new Point3d();
                 
-		Point3d intersectionPoint = new Point3d(0,0,0);
-		if (intersection!=null) {
-                    // If the intersection exists, get the intersection point
-                    LineElement e = new LineSegment(lineElement.getOrigin (), lineElement.getDirection (), intersection.distance);
-                    intersectionPoint = e.getEnd();
-
-                    //Point3d offset = new Point3d(lineElement.getDirection ());
-                    //offset.scale(0.0000053d);
-                    //System.out.println("intersectionPoint: "+intersectionPoint);
-                    //intersectionPoint.add(offset);
-
-                    intersectionForDebug = true;
-		}
-		else if (sceneCanvas.contains (lineElement.getOrigin ())) {
+                if (sceneCanvas.contains (lineElement.getOrigin ())) {
 			// If the line origin is already in the scene canvas, just get its origin point
 			intersectionPoint.add (lineElement.getOrigin ());
 			intersectionForDebug = false;
-		}
-		else {
-			// Else (no intersection & no inside), bye bye.
-			return null;
-		}
-                
+                        //System.out.println(count);
+                        //count++;
+		}else{
+                    // Computes intersection with the scene canvas
+                    Intersection intersection = sceneCanvas.getNearestIntersection (lineElement);
+		
+                    if (intersection!=null) {
+                        
+                        // If the intersection exists, get the intersection point
+                        LineElement e = new LineSegment(lineElement.getOrigin (), lineElement.getDirection (), intersection.distance);
+                        //intersectionPoint = e.getEnd();
+                        intersectionPoint = recalculateIntersection(e, intersection);
+
+                        //Point3d offset = new Point3d(lineElement.getDirection ());
+                        //offset.scale(0.0000053d);
+                        //System.out.println("intersectionPoint: "+intersectionPoint);
+                        //intersectionPoint.add(offset);
+
+                        intersectionForDebug = true;
+                    }else {
+                        // Else (no intersection & no inside), bye bye.
+                        return null;
+                    }
+                }
                 
 
 		Point3i intersectionPointVoxelIndices = voxelSpace.getVoxelIndices (intersectionPoint);
 		if (intersectionPointVoxelIndices==null) {
                     if (intersectionForDebug){
-                        logger.debug("The given line element does intersect the scene canvas "+intersectionPoint+", but unable to get its voxel indices");
+                        logger.error("The given line element does intersect the scene canvas "+intersectionPoint+", but unable to get its voxel indices");
+                        
                     }
 
                     else{
@@ -275,17 +312,23 @@ public class VoxelManager {
 		Vector3d translation = new Vector3d (intersectionPoint);
 		translation.sub (lineElement.getOrigin ());
 		
-		// Computes the 2nd translation (from the intersection point with the scene canvas, to the point of the "real" scene)
-		Point3i intersectionPointSceneIndices = voxelSpace.getSceneIndices (intersectionPoint);
-		Vector3d secondTranslation = new Vector3d (intersectionPointSceneIndices.x*voxelSpace.getBoundingBoxSize ().x,
-													intersectionPointSceneIndices.y*voxelSpace.getBoundingBoxSize ().y,
-													intersectionPointSceneIndices.z*voxelSpace.getBoundingBoxSize ().z);
 		
+                
+                /*
+                // Computes the 2nd translation (from the intersection point with the scene canvas, to the point of the "real" scene)
+		Point3i intersectionPointSceneIndices = voxelSpace.getSceneIndices (intersectionPoint);
+                
+                if(intersectionPointSceneIndices.x != 0 || intersectionPointSceneIndices.y != 0 || intersectionPointSceneIndices.z != 0){
+                    System.out.println("test");
+                }
+                
+		Vector3d secondTranslation = new Vector3d (intersectionPointSceneIndices.x*voxelSpace.getBoundingBoxSize ().x,intersectionPointSceneIndices.y*voxelSpace.getBoundingBoxSize ().y,intersectionPointSceneIndices.z*voxelSpace.getBoundingBoxSize ().z);
+		*/
 		// Careful: Length is the length of the 1st translation !
 		double l = translation.length ();
 		
 		// Computes the total translation (1st translation + 2nd translation)
-		translation.sub (secondTranslation);
+		//translation.sub (secondTranslation);
 		
 		// Return the voxel indices, the line length, and the translation
 		return new VoxelCrossingContext(intersectionPointVoxelIndices,l,translation);

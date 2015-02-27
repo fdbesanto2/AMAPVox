@@ -64,13 +64,41 @@ public class ChartFactory extends Processing{
         Map<String, Point2f> minMax = voxelSpace.data.getMinMax();
         Point2f get = minMax.get("dist");
         
+        int distIndex = voxelSpace.data.attributsNames.indexOf("dist");
+        int nbSamplingIndex = voxelSpace.data.attributsNames.indexOf("BFEntering");
+        
+        float minDist = 0, maxDist=0;
+        boolean isRangesInit = false;
+        
+        for (Voxel voxel : voxelSpace.data.voxels) {
+            
+            Float[] attributs = voxel.getAttributs();
+
+            float dist = attributs[distIndex];
+            
+            float nbSampling = attributs[nbSamplingIndex];
+
+            if(nbSampling > 0){
+                
+                if(!isRangesInit){
+                    minDist = dist;
+                    maxDist = dist;
+                    isRangesInit = true;
+                }
+                
+                if(minDist>dist){
+                    minDist = dist;
+                }
+                if(maxDist<dist){
+                    maxDist = dist;
+                }
+            }
+        }
+        
         float minHeight = 0;
         float maxHeight;
-        if(get == null){
-            maxHeight = voxelSpace.data.maxY;
-        }else{
-            maxHeight = get.y;
-        }
+        
+        maxHeight = maxDist;
         
         XYSeries data = new XYSeries("ALS");
         
@@ -78,15 +106,20 @@ public class ChartFactory extends Processing{
         //float minHeight = format.minY;
         //float maxHeight = format.maxY;
         
-        float heightIntervall = (maxHeight - minHeight)/100.0f;
+        float heightIntervall = (maxHeight - minHeight)/20.0f;
         
         //compute heights
-        float[] heights = new float[100];
+        float[] heights = new float[20];
         
         float temp = minHeight;
         for(int i=0;i<heights.length;i++){
             
-            heights[i] = temp + heightIntervall;
+            if(i == 0){
+                heights[i] = temp;
+            }else{
+                heights[i] = temp + heightIntervall;
+            }
+            
             temp = heights[i];
         }
         
@@ -115,12 +148,12 @@ public class ChartFactory extends Processing{
                     //dist = voxel.position.y;
                 }
                 
-                if(dist >= 0 && dist >= heights[i] && dist < heights[i+1] && filter.doFilter(attributsNames, attributs)){
+                if(belongToRange(heights[i], heights[i+1], dist) && filter.doFilter(attributsNames, attributs)){
                     
                     float pad = attributs[attributsNames.indexOf("PAD")];
+                    float nbsampling = attributs[attributsNames.indexOf("BFEntering")];
                     
-                    
-                    if(dist>=0 && pad>=0){
+                    if(nbsampling > 0 && !Float.isNaN(pad)){
                         averagePAD += pad;
                         count++;
                     }
@@ -138,6 +171,11 @@ public class ChartFactory extends Processing{
         
         return data;
         
+    }
+    
+    private boolean belongToRange(float min, float max, float value){
+        
+        return value >= min && value < max; 
     }
 
     @Override

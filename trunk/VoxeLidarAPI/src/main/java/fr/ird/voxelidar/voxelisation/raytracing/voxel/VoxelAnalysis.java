@@ -4,7 +4,6 @@ import fr.ird.voxelidar.voxelisation.VoxelParameters;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
 
 import fr.ird.voxelidar.voxelisation.raytracing.geometry.LineElement;
@@ -15,11 +14,10 @@ import fr.ird.voxelidar.voxelisation.extraction.Shot;
 import fr.ird.voxelidar.engine3d.object.scene.Dtm;
 import fr.ird.voxelidar.util.TimeCounter;
 import java.io.FileNotFoundException;
-import java.util.concurrent.BlockingQueue;
+import java.io.Serializable;
 import java.util.concurrent.LinkedBlockingQueue;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3d;
-import javax.vecmath.Point3f;
 import org.apache.log4j.Logger;
 
 public class VoxelAnalysis implements Runnable{
@@ -29,7 +27,6 @@ public class VoxelAnalysis implements Runnable{
     private VoxelSpace voxSpace;
     private Voxel voxels[][][];
     private VoxelManager voxelManager;
-    private final BoundingBox3d bbox;
     
     private final double laserBeamDivergence = 0.0005f;
     private static final float MAX_PAD = 3;
@@ -39,12 +36,13 @@ public class VoxelAnalysis implements Runnable{
     private static int compteur = 1;
     private Point3d offset;
     
-    private double[][] weighting;
+    private float[][] weighting;
+    int count1 = 0;
     int count2 = 0;
     int count3 = 0;
     int nbEchosSol = 0;
     private VoxelParameters parameters;
-    private boolean isTLS = true;
+    private boolean isTLS;
     private LinkedBlockingQueue<Shot> arrayBlockingQueue;
     
     //private Mat4D transfMatrix;
@@ -55,6 +53,9 @@ public class VoxelAnalysis implements Runnable{
     private final EventListenerList listeners;
     private Dtm terrain;
     
+    Point3i lastIndices = new Point3i();
+    int lastShot = 0;
+    boolean shotChanged = false;
     /*
     public void setTransfMatrix(Mat4D transfMatrix) {
         this.transfMatrix = transfMatrix;
@@ -70,39 +71,83 @@ public class VoxelAnalysis implements Runnable{
     
     int nbSamplingTotal = 0;
 
-    public class Voxel {
-
-        int nbSampling = 0;			// number of rays crossing the voxel
-        float sampledVolume = 0;		// 
-        float interceptions = 0;
-        float hiddenVolume = 0;
+    public class Voxel implements Serializable{
+        
+        int i;
+        int j;
+        int k;
+        int nbSampling = 0;
+        int interceptions = 0;
         float lgTraversant = 0;
-        float lgInterception = 0;
-        float pathLength = 0;			// total path length of rays in voxel
+        float pathLength = 0;
         float PAD = 0;
         float PAD2 = 0;
         float bfEntering=0;
-        float bfEnteringTemp=0;
         float bfIntercepted=0;
         float bsEntering = 0;
         float bsIntercepted = 0;
         float dist = 10;
+        Point3d position;
         
         public Voxel(int i, int j, int k){
             
-            Point3d position = getPosition(new Point3i(i, j, k), parameters.split, parameters.bottomCorner, parameters.topCorner);
+            this.i = i;
+            this.j = j;
+            this.k = k;
+            
+            position = getPosition(new Point3i(i, j, k), parameters.split, parameters.bottomCorner, parameters.topCorner);
             
             if(terrain != null && parameters.useDTMCorrection()){
-                
-                dist = (float) (position.z - terrain.getHeight((float)position.x, (float)position.y));
+                dist = (float) (position.z - terrain.getSimpleHeight((float)position.x, (float)position.y));
             }else{
                 dist = (float) (position.z);
             }
         }
+        
+        @Override
+        public String toString() {
+            
+            StringBuilder sb =  new StringBuilder() ;
+            
+            return sb.append(i).append(" ").
+                    append(j).append(" ").
+                    append(k).append(" ").
+                    append(bfEntering).append(" ").
+                    append(bfIntercepted).append(" ").
+                    append(bsEntering).append(" ").
+                    append(bsIntercepted).append(" ").
+                    append(pathLength).append(" ").
+                    append(lgTraversant).append(" ").
+                    append(PAD).append(" ").
+                    append(PAD2).append(" ").
+                    append(dist).append(" ").toString();
+            
+        }
+    }
+    
+    private float getGroundDistance(float x, float y, float z){
+        
+        float distance = 0;
+        
+        //test
+        /*
+        float test = terrain.getSimpleHeight(-12.0f, 260.0f);
+        float test2 = terrain.getSimpleHeight(-12.5f, 260.5f);
+        float test3 = terrain.getSimpleHeight(-11.5f, 260.5f);
+        float test4 = terrain.getSimpleHeight(-12.5f, 259.5f);
+        float test5 = terrain.getSimpleHeight(-11.5f, 259.5f);
+        float test6 = terrain.getSimpleHeight(-12.6f, 260.49f);
+        */
+        if(terrain != null && parameters.useDTMCorrection()){
+            distance = z - (float) (terrain.getSimpleHeight(x, y));
+            //System.out.println(distance);
+        }
+        
+        return distance;
     }
     
     public VoxelAnalysis(LinkedBlockingQueue<Shot> arrayBlockingQueue, Dtm terrain){
-        bbox = new BoundingBox3d();
+        // = new BoundingBox3d();
         nbShotsTreated = 0;
         isFinished = false;
         this.arrayBlockingQueue = arrayBlockingQueue;
@@ -112,14 +157,16 @@ public class VoxelAnalysis implements Runnable{
     
     public Point3d getPosition(Point3i indices, Point3i splitting, Point3d minCorner, Point3d maxCorner){
         
-        Point3f resolution = new Point3f();
-        resolution.x = (float) ((maxCorner.x - minCorner.x) / splitting.x);
-        resolution.y = (float) ((maxCorner.y - minCorner.y) / splitting.y);
-        resolution.z = (float) ((maxCorner.z - minCorner.z) / splitting.z);
+        Point3d resolution = new Point3d();
+        resolution.x = (maxCorner.x - minCorner.x) / splitting.x;
+        resolution.y = (maxCorner.y - minCorner.y) / splitting.y;
+        resolution.z = (maxCorner.z - minCorner.z) / splitting.z;
 
-        double posX = offset.x+(indices.x*(resolution.x));
-        double posY = offset.y+(indices.y*(resolution.y));
-        double posZ = offset.z+(indices.z*(resolution.z));
+        double posX = offset.x+(resolution.x/2.0d)+(indices.x*resolution.x);
+        double posY = offset.y+(resolution.y/2.0d)+(indices.y*resolution.y);
+        double posZ = offset.z+(resolution.z/2.0d)+(indices.z*resolution.z);
+        
+        //System.out.println(posZ);
         
         return new Point3d(posX, posY, posZ);
     }
@@ -134,19 +181,19 @@ public class VoxelAnalysis implements Runnable{
             
             case VoxelParameters.WEIGHTING_ECHOS_NUMBER:
                 
-                weighting = new double[][]{{1.00f,0.00f,0.00f,0.00f,0.00f,0.00f,0.00f},
-                                        {0.62f,0.38f,0.00f,0.00f,0.00f,0.00f,0.00f},
-                                        {0.40f,0.35f,0.25f,0.00f,0.00f,0.00f,0.00f},
-                                        {0.28f,0.29f,0.24f,0.19f,0.00f,0.00f,0.00f},
-                                        {0.21f,0.24f,0.21f,0.19f,0.15f,0.00f,0.00f},
-                                        {0.16f,0.21f,0.19f,0.18f,0.14f,0.12f,0.00f},
+                weighting = new float[][]{{1.00f,Float.NaN,Float.NaN,Float.NaN,Float.NaN,Float.NaN,Float.NaN},
+                                        {0.62f,0.38f,Float.NaN,Float.NaN,Float.NaN,Float.NaN,Float.NaN},
+                                        {0.40f,0.35f,0.25f,Float.NaN,Float.NaN,Float.NaN,Float.NaN},
+                                        {0.28f,0.29f,0.24f,0.19f,Float.NaN,Float.NaN,Float.NaN},
+                                        {0.21f,0.24f,0.21f,0.19f,0.15f,Float.NaN,Float.NaN},
+                                        {0.16f,0.21f,0.19f,0.18f,0.14f,0.12f,Float.NaN},
                                         {0.15f,0.17f,0.15f,0.16f,0.12f,0.19f,0.06f}};
                 
                 break;
                 
             case VoxelParameters.WEIGHTING_NONE:
                 
-                weighting = new double[][]{{1.00f,1.00f,1.00f,1.00f,1.00f,1.00f,1.00f},
+                weighting = new float[][]{{1.00f,1.00f,1.00f,1.00f,1.00f,1.00f,1.00f},
                                         {1.00f,1.00f,1.00f,1.00f,1.00f,1.00f,1.00f},
                                         {1.00f,1.00f,1.00f,1.00f,1.00f,1.00f,1.00f},
                                         {1.00f,1.00f,1.00f,1.00f,1.00f,1.00f,1.00f},
@@ -171,6 +218,7 @@ public class VoxelAnalysis implements Runnable{
         }
         
         offset = new Point3d(parameters.bottomCorner);
+        isTLS = parameters.isTLS();
         
         createVoxelSpace();
         
@@ -220,7 +268,7 @@ public class VoxelAnalysis implements Runnable{
                     LineSegment seg = new LineSegment(shot.origin, shot.direction, 999999);
 
                     Point3d echo = seg.getEnd();
-                    propagate(origin, echo, (short)0, 0, shot.origin);
+                    propagate(origin, echo, (short)0, 0, shot.origin, false);
 
                 } else {
 
@@ -235,6 +283,8 @@ public class VoxelAnalysis implements Runnable{
                     
                     double bfIntercepted = 1;
                     
+                    shotChanged = true;
+                    
                     for (int i = 0; i < shot.nbEchos; i++) {
                         
                         
@@ -244,7 +294,7 @@ public class VoxelAnalysis implements Runnable{
                                 if(shot.nbEchos == 1){
                                     bfIntercepted = 1;
                                 }else{
-                                    //bfIntercepted = (shot.intensities[i])/(double)sumIntensities; 
+                                    bfIntercepted = (shot.intensities[i])/(double)sumIntensities; 
                                 }
                                 
                                 break;
@@ -265,27 +315,42 @@ public class VoxelAnalysis implements Runnable{
 
                         Point3d echo = seg.getEnd();
 
-                        bbox.update(echo);
+                        //bbox.update(echo);
                         
                         //calcul de la fraction de section de faisceau intercepté
                         if(parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE){
-                            beamFraction = beamFraction - bfIntercepted;
-                        }
-
-                        // propagate
-                        if(isTLS){
-                            propagate(origin, echo, (short)0, beamFraction, shot.origin);
-                        }else{
-                            propagate(origin, echo, shot.classifications[i], beamFraction, shot.origin);
+                            beamFraction = bfIntercepted;
                         }
                         
-
+                        boolean lastEcho;
+                        if(i == shot.nbEchos -1){
+                            lastEcho = true;
+                        }else{
+                            lastEcho = false;
+                        }
+                        // propagate
+                        if(isTLS){
+                            propagate(origin, echo, (short)0, beamFraction, shot.origin, lastEcho);
+                        }else{
+                            propagate(origin, echo, shot.classifications[i], beamFraction, shot.origin, lastEcho);
+                        }
+                        /*
+                        double distance = lastEcho.distance(echo);
+                        if(distance<Math.sqrt(3) && !shotChanged){
+                            System.out.println(distance);
+                            //count1++;
+                        }
+                        */
+                        //lastEcho = new Point3d(echo);
+                        //lastShot = nbShotsTreated;
+                        //shotChanged = false;
 
                         origin = new Point3d(echo);
                     }
                 }
-
+                
                 nbShotsTreated++;
+                
             } catch (InterruptedException e) {
                 logger.error(e.getMessage());
             }
@@ -374,7 +439,7 @@ public class VoxelAnalysis implements Runnable{
      * @param beamFraction 
      * @param source shot origin
      */
-    private void propagate(Point3d origin, Point3d echo, short classification, double beamFraction, Point3d source) {
+    private void propagate(Point3d origin, Point3d echo, short classification, double beamFraction, Point3d source, boolean lastEcho) {
                 
         //get shot line
         LineElement lineElement = new LineSegment(origin, echo);
@@ -384,6 +449,12 @@ public class VoxelAnalysis implements Runnable{
         
         double distanceToHit = lineElement.getLength();
         
+        //calculate ground distance
+        float echoDistance = 0;
+        
+        //if(lastEcho){
+            echoDistance = getGroundDistance((float)echo.x, (float)echo.y, (float)echo.z);
+        //}
         
         //double distanceToHit = echo.distance(origin); //must be the same as "lineElement.getLength();"
         
@@ -394,7 +465,7 @@ public class VoxelAnalysis implements Runnable{
         //double surface = Math.pow(Math.tan(laserBeamDivergence/2)* distance, 2)  * Math.PI;
         
         while ((context != null) && (context.indices != null)) {
-                        
+             
             
             //distance from the last origin to the point in which the ray enter the voxel
             double d1 = context.length;
@@ -402,46 +473,65 @@ public class VoxelAnalysis implements Runnable{
             //current voxel
             Point3i indices = context.indices;
             
-            context = voxelManager.CrossVoxel(lineElement, context.indices);
+            /*
+            if(lastIntercepted && !shotChanged && lastIndices.x == indices.x && lastIndices.y == indices.y && lastIndices.z == indices.z){
+                
+                double distance = lastEcho.distance(echo);
+                //System.out.println(lastIndices.x+" "+lastIndices.y+" "+lastIndices.z+" "+distance);
+                count1++;
+            }
+            */
             
+            
+            context = voxelManager.CrossVoxel(lineElement, context.indices);
+            /*
+            //même voxel
+            if(context != null && context.indices != null){
+                
+                if(context.indices.x == indices.x && context.indices.y == indices.y && context.indices.z == indices.z){
+
+                    System.out.println("test");
+                }
+            }
+            */
             //distance from the last origin to the point in which the ray exit the voxel
             double d2 = context.length;
             
-            
-            
             Voxel vox = voxels[indices.x][indices.y][indices.z];
             //indices = context.indices;
-            Point3d voxelPosition = getPosition(indices, parameters.split, parameters.bottomCorner, parameters.topCorner);
+            //Point3d voxelPosition = getPosition(indices, parameters.split, parameters.bottomCorner, parameters.topCorner);
             
             //distance de l'écho à la source
-            double distance = voxelPosition.distance(source);
+            double distance = vox.position.distance(source);
 
             //surface de la section du faisceau à la distance de la source
             double surface = Math.pow(Math.tan(laserBeamDivergence/2)* distance, 2)  * Math.PI;
-            /*
-            if(indices.x == 0 && indices.y == 207 && indices.z == 34){
-                System.out.println("test");
-            }
-            */
+            
             // voxel sampled without hit
-            if (d2 < distanceToHit) {
+            
+            /*Si un écho est positionné sur une face du voxel alors il est considéré
+            comme étant à l'extérieur du dernier voxel traversé*/
+            if (d2 <= distanceToHit) {
                 /*
                 if(indices.x == 0 && indices.y == 208 && indices.z == 35){
                     System.out.println("test");
                 }
                 */
                 vox.lgTraversant += (d2 - d1);
-                
                 vox.pathLength += (d2 - d1);
+                
                 vox.nbSampling++;
                 nbSamplingTotal++;
                 
                 vox.bfEntering += beamFraction;
                 vox.bsEntering += (surface*beamFraction);
+                //lastIntercepted = false;
                 
             }else if (d1>distanceToHit) {
                 
                 //no comprende
+                //lastIntercepted = false;
+                
             }else {
                 
                 /*si plusieurs échos issus du même tir dans le voxel, 
@@ -449,24 +539,30 @@ public class VoxelAnalysis implements Runnable{
                 et le nombre d'interception (interceptions) 
                 et la longueur parcourue(lgInterception)*/
                 
-                vox.lgTraversant += (distanceToHit - d1);
-                
-                vox.nbSampling++;
-                nbSamplingTotal++;
-                
-                vox.pathLength += (distanceToHit - d1);
-                vox.interceptions ++;
-                
-                vox.lgInterception += (distanceToHit - d1);
+                //vox.lgTraversant += (distanceToHit - d1);
                 
                 
-                if((classification != 2 || vox.dist <= 0) || isTLS){ // if not ground
-                    vox.bfIntercepted += beamFraction;
-                    vox.bsIntercepted += (surface*beamFraction);
+                //lastIntercepted = true;
+                //lastIndices = indices;
+                //lastShot = nbShotsTreated;
+                
+                if((classification != 2 && !isTLS) || isTLS){ // if not ground
+                    if((echoDistance >= 2 && parameters.useDTMCorrection()) || !parameters.useDTMCorrection()){
+                        
+                        vox.nbSampling++;
+                
+                        nbSamplingTotal++;
+
+                        vox.pathLength +=  (distanceToHit - d1);
+                        vox.interceptions ++;
+
+                        vox.bfIntercepted += beamFraction;
+                        vox.bsIntercepted += (surface*beamFraction);
+                        
+                        vox.bfEntering += beamFraction;
+                        vox.bsEntering += (surface*beamFraction);
+                    }
                 }
-                
-                vox.bfEntering += beamFraction;
-                vox.bsEntering += (surface*beamFraction);
                        
             }
         }
@@ -489,21 +585,74 @@ public class VoxelAnalysis implements Runnable{
             writer.write("#offset: "+(float)offset.x+" "+(float)offset.y+" "+(float)offset.z+"\n");
 
             //writer.write("i j k shots path_length BFintercepted BFentering BSintercepted BSentering PAD"+"\n");
-            writer.write("i j k nbSampling interceptions path_length lgTraversant lgInterception PAD PAD2 BFIntercepted BFEntering BSIntercepted BSEntering dist"+"\n");
+            //writer.write("i j k nbSampling interceptions path_length lgTraversant lgInterception PAD PAD2 BFIntercepted BFEntering BSIntercepted BSEntering dist"+"\n");
+            writer.write("i j k BFEntering BFIntercepted BSEntering BSIntercepted path_length lgTraversant PAD PAD2 dist"+"\n");
+            
+            for (int i = 0; i < parameters.split.x; i++) {
+                for (int j = 0; j < parameters.split.y; j++) {
+                    for (int k = 0; k < parameters.split.z; k++) {
 
-            for (int x = 0; x < parameters.split.x; x++) {
-                for (int y = 0; y < parameters.split.y; y++) {
-                    for (int z = 0; z < parameters.split.z; z++) {
-
-                        Voxel vox = voxels[x][y][z];
+                        Voxel vox = voxels[i][j][k];
                         
+                        float PAD, PAD2;
+                        
+                        if(vox.bfEntering <= threshold){
+                            
+                            PAD = Float.NaN;
+                            
+                        }else if(vox.bfIntercepted >= vox.bfEntering){
+                            
+                            PAD = MAX_PAD;
+                            
+                        }else{
+                            
+                            double transmittance = (vox.bfEntering - vox.bfIntercepted)/vox.bfEntering;
+                            double l = vox.lgTraversant/(vox.nbSampling-vox.interceptions);
+                            
+                            PAD = (float) (Math.log(transmittance)/(-0.5*l));
+                            
+                            if(Float.isNaN(PAD)){
+                                PAD = Float.NaN;
+                            }else if(PAD > MAX_PAD || Float.isInfinite(PAD)){
+                                PAD = MAX_PAD;
+                            }
+                        }
+                        
+                        
+                        vox.PAD = PAD+0.0f; //set +0.0f to avoid -0.0f
+                        
+                        if(vox.bsEntering <= threshold){
+                            
+                            PAD2 = Float.NaN;
+                            
+                        }else if(vox.bsIntercepted >= vox.bsEntering){
+                            
+                            PAD2 = MAX_PAD;
+                            
+                        }else{
+                            
+                            double transmittance = (vox.bsEntering - vox.bsIntercepted)/vox.bsEntering;
+                            double l = vox.lgTraversant/(vox.nbSampling-vox.interceptions);
+                            
+                            PAD2 = (float) (Math.log(transmittance)/(-0.5*l));
+                            
+                            if(Float.isNaN(PAD2)){
+                                PAD2 = Float.NaN;
+                            }else if(PAD2 > MAX_PAD || Float.isInfinite(PAD2)){
+                                PAD2 = MAX_PAD;
+                            }
+                        }
+                        
+                        
+                        vox.PAD2 = PAD2+0.0f; //set +0.0f to avoid -0.0f
+                        
+                        /*
                         float PAD;
                         float PAD2;
-                        
                         if(vox.nbSampling <= threshold){
                             
-                            PAD = -1;
-                            PAD2 = -1;
+                            PAD = Float.NaN;
+                            PAD2 = Float.NaN;
                             
                         }else if(vox.bfIntercepted >= vox.bfEntering){
                             
@@ -520,7 +669,7 @@ public class VoxelAnalysis implements Runnable{
                             if(PAD > MAX_PAD){
                                 PAD = MAX_PAD;
                             }else if(Float.isNaN(PAD) || Float.isInfinite(PAD)){
-                                PAD = -1;
+                                PAD = Float.NaN;
                             }
                             
                             //PAD 2
@@ -529,7 +678,7 @@ public class VoxelAnalysis implements Runnable{
                             PAD2 = (float) (Math.log(transmittance)/(-0.5*l));
                             
                             if(Float.isNaN(PAD2) || Float.isInfinite(PAD2)){
-                                PAD2 = -1;
+                                PAD2 = Float.NaN;
                             }else if(PAD2 > MAX_PAD){
                                 PAD2 = MAX_PAD;
                             }
@@ -537,10 +686,10 @@ public class VoxelAnalysis implements Runnable{
                         
                         vox.PAD = PAD+0.0f; //set +0.0f to avoid -0.0f
                         vox.PAD2 = PAD2+0.0f;
+                        */
+                        //String voxLine = concatene(i, j, k, vox);
                         
-                        String voxLine = concatene(x, y, z, vox);
-                        
-                        writer.write(voxLine);
+                        writer.write(vox.toString()+"\n");
 
                     }
                 }
@@ -559,8 +708,9 @@ public class VoxelAnalysis implements Runnable{
     }
     
     private String concatene(int x, int y, int z, Voxel vox){
-        String voxLine = x+" "+y+" "+z+" "+vox.nbSampling+" "+vox.interceptions+" "+vox.pathLength+" "+vox.lgTraversant+" "+vox.lgInterception+" "+vox.PAD+" "+vox.PAD2+" "+vox.bfIntercepted+" "+vox.bfEntering+" "+vox.bsIntercepted+" "+vox.bsEntering+" "+vox.dist+"\n";
         
+        //String voxLine = x+" "+y+" "+z+" "+vox.nbSampling+" "+vox.interceptions+" "+vox.pathLength+" "+vox.lgTraversant+" "+vox.lgInterception+" "+vox.PAD+" "+vox.PAD2+" "+vox.bfIntercepted+" "+vox.bfEntering+" "+vox.bsIntercepted+" "+vox.bsEntering+" "+vox.dist+"\n";
+        String voxLine = x+" "+y+" "+z+" "+vox.bfEntering+" "+vox.bfIntercepted+" "+vox.bsEntering+" "+vox.bsIntercepted+" "+vox.pathLength+" "+vox.lgTraversant+" "+vox.PAD+" "+vox.dist+"\n";
         return voxLine;
     }
     
@@ -589,45 +739,4 @@ public class VoxelAnalysis implements Runnable{
 
         voxelManager.showInformations();
     }
-
-    public void writeOutput() {
-
-        //Point3d dimVox = voxSpace.getVoxelSize();
-        //double voxelVolume = (dimVox.x * dimVox.y * dimVox.z);
-        System.out.println("write file: "+outputFile.getAbsolutePath());
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
-
-            writer.write("VOXEL SPACE"+"\n");
-            writer.write("#min_corner: "+voxSpace.getBoundingBox().min.x+" "+voxSpace.getBoundingBox().min.y+" "+voxSpace.getBoundingBox().min.z+"\n");
-            writer.write("#max_corner: "+voxSpace.getBoundingBox().max.x+" "+voxSpace.getBoundingBox().max.y+" "+voxSpace.getBoundingBox().max.z+"\n");
-            writer.write("#split: "+voxSpace.getSplitting().x+" "+voxSpace.getSplitting().y+" "+voxSpace.getSplitting().z+"\n");
-
-            Point3d offset = new Point3d();
-            writer.write("#offset: "+offset.x+" "+offset.y+" "+offset.z+"\n");
-
-            //writer.write("i j k shots path_length BFintercepted BFentering BSintercepted BSentering PAD"+"\n");
-            writer.write("i j k nbSampling interceptions path_length lgTraversant lgInterception PAD PAD2 BFIntercepted BFEntering BSIntercepted BSEntering dist"+"\n");
-
-            for (int z = 0; z < parameters.split.z; z++) {
-                for (int y = 0; y < parameters.split.y; y++) {
-                    for (int x = 0; x < parameters.split.x; x++) {
-
-                        Voxel vox = voxels[x][y][z];
-                        
-                        //writer.write(x+" "+y+" "+z+" "+vox.nbSampling+" "+vox.pathLength+" "+BFIntercepted+" "+BFentering+" "+BSintercepted+" "+BSentering+" "+PAD+"\n");
-                        writer.write(x+" "+y+" "+z+" "+vox.nbSampling+" "+vox.interceptions+" "+vox.pathLength+" "+vox.lgTraversant+" "+vox.lgInterception+" "+vox.PAD+" "+vox.PAD2+" "+vox.bfIntercepted+" "+vox.bfEntering+" "+vox.bsIntercepted+" "+vox.bsEntering+" "+vox.dist+"\n");
-
-                    }
-                }
-            }
-            
-            writer.close();
-            
-        } catch (Exception e) {	//Catch exception if any
-            System.err.println("Error: " + e.getMessage());
-        }
-
-    }
-
 }

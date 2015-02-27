@@ -31,10 +31,17 @@ import org.apache.log4j.Logger;
 public class Dtm {
     
     private final Logger logger = Logger.getLogger(Dtm.class);
-    private final ArrayList<Vec3F> points;
-    private final ArrayList<Face> faces;
+    private ArrayList<Vec3F> points;
+    private ArrayList<Face> faces;
     private String path;
     private MultiKeyMap map;
+    
+    private float[][] zArray;
+    float xLeftLowerCorner;
+    float yLeftLowerCorner;
+    float cellSize;
+    int rowNumber;
+    
     private Map m;
     
     private Point2d minCorner = new Point2d();
@@ -84,6 +91,17 @@ public class Dtm {
         this.path = path;
     }
     
+    public Dtm(String path, float[][] zArray, float xLeftLowerCorner, float yLeftLowerCorner, float cellSize){
+        
+        this.path = path;
+        this.zArray = zArray;
+        this.xLeftLowerCorner = xLeftLowerCorner;
+        this.yLeftLowerCorner = yLeftLowerCorner;
+        this.cellSize = cellSize;
+        this.rowNumber = zArray[0].length;
+    }
+    
+    
     public MultiKeyMap getXYStructure(){
         
         
@@ -131,12 +149,39 @@ public class Dtm {
         return map;
     }
     
-    public float getHeight(float posX, float posY){
+    public void constructZArray(){
+        
+        for (Vec3F point : points) {
+            
+            
+        }
+    }
+    
+    public float getSimpleHeight(float posX, float posY){
+        
+        float z;
+        
+        int indiceX = (int)((posX-xLeftLowerCorner)/cellSize);
+        int indiceY = (int)(rowNumber-(posY-yLeftLowerCorner)/cellSize);
+        
+        if(indiceX < 0 || indiceY < 0 || indiceY >= rowNumber){
+            return 0;
+        }
+        
+        z = zArray[indiceX][indiceY];
+        
+        if(z == -9999.0f){
+            return 0;
+        }
+        
+        return z;
+    }
+    
+    public float getInterpolatedHeight(float posX, float posY){
         
         if(map == null){
             map = getXYStructure();
         }
-        
         
         int x1 = (int)posX;
         int x2 = ((int)posX)+1;
@@ -166,7 +211,7 @@ public class Dtm {
         float mu = (y1-posY) / (y2 -y1);
         
         float z = (1-lambda)*((1-mu)*z1+mu*z3)+lambda*((1-mu)*z2+(mu*z4));
-        
+             
         return z;
     }
     /*

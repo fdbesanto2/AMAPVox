@@ -530,7 +530,7 @@ public class VoxelSpace extends SceneObject{
         readVoxelFormat(file);
 
 
-        updateValue();
+        //updateValue();
 
         setCenter();
         setWidth();
@@ -579,6 +579,10 @@ public class VoxelSpace extends SceneObject{
         float[] values = new float[data.voxels.size()];
         
         int count = 0;
+        boolean minMaxInit = false;
+        
+        StandardDeviation sd = new StandardDeviation();
+        
         for(Voxel voxel:data.voxels){
                     
             float attributValue;
@@ -601,53 +605,54 @@ public class VoxelSpace extends SceneObject{
             voxel.attributValue = attributValue;
             //voxel.color = getColorFromValue(attributValue);
 
-            //initialize minimum and maximum attributs values
-            if(voxel ==  data.voxels.get(0)){
+            if (!Float.isNaN(attributValue)){
+                
+                if(!minMaxInit){
 
-                attributValueMax = attributValue;
-                attributValueMin = attributValue;
+                    attributValueMax = attributValue;
+                    attributValueMin = attributValue;
+
+                    minMaxInit = true;
+                }else{
+
+                    //set maximum attribut value
+                    if(attributValue>attributValueMax){
+
+                        attributValueMax = attributValue;
+                    }
+
+                    //set minimum attribut value
+                    if(attributValue < attributValueMin){
+
+                        attributValueMin = attributValue;
+                    }
+                }
             }
+            
 
-            //set maximum attribut value
-            if(attributValue>attributValueMax){
-
-                attributValueMax = attributValue;
-            }
-
-            //set minimum attribut value
-            if(attributValue < attributValueMin){
-
-                attributValueMin = attributValue;
-            }
-            //if(voxel.attributValue == -1){
-                //voxel.attributValue = -1;
-            //}
             boolean drawVoxel = !(Float.isNaN(voxel.attributValue) || voxel.attributValue < 0/*|| voxel.attributValue == -1.0f */|| (/*!settings.drawNullVoxel &&*/ voxel.attributValue == 0));
             
             if(!drawVoxel){
-                voxel.alpha = 0;
+                voxel.setAlpha(0);
             }else{
-                voxel.alpha = 1;
+                voxel.setAlpha(255);
             }
             
             values[count] = voxel.attributValue;
+            sd.addValue(voxel.attributValue);
             count++;
-            
-            
             
         }
         
         //calculate standard deviation
         
-        StandardDeviation sd = new StandardDeviation();
-        float sdValue = sd.getFromFloatArray(values);
+        
+        float sdValue = sd.getStandardDeviation();
         float average = sd.getAverage();
         
-        //min = 0;
         min = average - (2*sdValue);
         max = average + (2*sdValue);
         
-        //colorGradient = new ColorGradient(min, max);
         setGradientColor(gradient, min, max);
         
         /*
@@ -681,11 +686,7 @@ public class VoxelSpace extends SceneObject{
         for (Voxel voxel : data.voxels) {
             
             Color colorGenerated = color.getColor(voxel.attributValue);
-            if (voxel.alpha == 0) {
-                voxel.color = new Vector3f(colorGenerated.getRed()/255.0f, colorGenerated.getGreen()/255.0f, colorGenerated.getBlue()/255.0f);
-            } else {
-                voxel.color = new Vector3f(colorGenerated.getRed()/255.0f, colorGenerated.getGreen()/255.0f, colorGenerated.getBlue()/255.0f);
-            }
+            voxel.setColor(colorGenerated.getRed(), colorGenerated.getGreen(), colorGenerated.getBlue());
         }
         //voxelList = ImageEqualisation.scaleHistogramm(voxelList);
         //voxelList = ImageEqualisation.voxelSpaceFormatEqualisation(voxelList);
@@ -764,10 +765,10 @@ public class VoxelSpace extends SceneObject{
             instancePositions[j+1] = data.voxels.get(i).position.y;
             instancePositions[j+2] = data.voxels.get(i).position.z;
 
-            instanceColors[k] = data.voxels.get(i).color.x;
-            instanceColors[k+1] = data.voxels.get(i).color.y;
-            instanceColors[k+2] = data.voxels.get(i).color.z;
-            instanceColors[k+3] = data.voxels.get(i).alpha;
+            instanceColors[k] = data.voxels.get(i).getRed();
+            instanceColors[k+1] = data.voxels.get(i).getGreen();
+            instanceColors[k+2] = data.voxels.get(i).getBlue();
+            instanceColors[k+3] = data.voxels.get(i).getAlpha();
         }
         
         ((InstancedMesh)mesh).instancePositionsBuffer = Buffers.newDirectFloatBuffer(instancePositions);
@@ -811,10 +812,10 @@ public class VoxelSpace extends SceneObject{
 
             for (int i=0, j=0;i<data.voxels.size();i++, j+=4) {
 
-                instanceColors[j] = data.voxels.get(i).color.x;
-                instanceColors[j+1] = data.voxels.get(i).color.y;
-                instanceColors[j+2] = data.voxels.get(i).color.z;
-                instanceColors[j+3] = data.voxels.get(i).alpha;
+                instanceColors[j] = data.voxels.get(i).getRed();
+                instanceColors[j+1] = data.voxels.get(i).getGreen();
+                instanceColors[j+2] = data.voxels.get(i).getBlue();
+                instanceColors[j+3] = data.voxels.get(i).getAlpha();
             }
 
             ((InstancedMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(instanceColors);

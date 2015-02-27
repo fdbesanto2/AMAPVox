@@ -83,7 +83,6 @@ public class RxpVoxelisation{
             
             extraction.addRxpExtractionListener(new RxpExtractionListener() {
 
-
                 @Override
                 public void isFinished() {
                     
@@ -96,6 +95,7 @@ public class RxpVoxelisation{
             
             //runnable to get the extracted shots
             Thread t = new Thread(voxelAnalysis);
+            t.setPriority(Thread.MAX_PRIORITY);
             t.start();
             
         try {

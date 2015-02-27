@@ -28,16 +28,12 @@ public class VoxelParameters {
     private int weighting;
     private File weightingFile;
     private boolean useDTMCorrection;
-    private boolean isTLS;
+    private boolean TLS;
     
     
     public VoxelParameters() {
         useDTMCorrection = false;
-        isTLS = false;
-    }
-
-    public void setIsTLS(boolean isTLS) {
-        this.isTLS = isTLS;
+        TLS = false;
     }
 
     public void setUseDTMCorrection(boolean useDTMCorrection) {
@@ -102,4 +98,13 @@ public class VoxelParameters {
     public void setResolution(double resolution) {
         this.resolution = resolution;
     }
+
+    public boolean isTLS() {
+        return TLS;
+    }
+
+    public void setTLS(boolean TLS) {
+        this.TLS = TLS;
+    }
+    
 }

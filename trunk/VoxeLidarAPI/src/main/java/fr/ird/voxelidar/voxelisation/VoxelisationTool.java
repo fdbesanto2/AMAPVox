@@ -62,7 +62,7 @@ public class VoxelisationTool{
         startTime = System.currentTimeMillis();
         
         this.parameters = parameters;
-        this.parameters.setIsTLS(true);
+        this.parameters.setTLS(true);
         
         Rsp rsp = new Rsp();
         rsp.read(input);
@@ -108,7 +108,7 @@ public class VoxelisationTool{
         startTime = System.currentTimeMillis();
         
         this.parameters = parameters;
-        this.parameters.setIsTLS(true);
+        this.parameters.setTLS(true);
         
         RxpScan scan = new RxpScan();
         scan.setFile(input);
@@ -129,7 +129,7 @@ public class VoxelisationTool{
         startTime = System.currentTimeMillis();
         
         this.parameters = parameters;
-        this.parameters.setIsTLS(false);
+        this.parameters.setTLS(false);
         
         LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, trajectoryFile, parameters, dtmFile);
         

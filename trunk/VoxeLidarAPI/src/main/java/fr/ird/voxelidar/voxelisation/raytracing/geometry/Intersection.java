@@ -11,7 +11,7 @@ import javax.vecmath.Vector3d;
  */
 public class Intersection implements java.lang.Comparable{
 
-	private Vector3d	normal;
+	private final Vector3d	normal;
 	public	double		distance;
 
 	public Intersection (double distance, Vector3d normal){

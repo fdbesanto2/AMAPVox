@@ -6,6 +6,7 @@
 package fr.ird.voxelidar.chart;
 
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -17,17 +18,24 @@ import javax.swing.JComponent;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.StandardXYToolTipGenerator;
+import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.panel.AbstractOverlay;
 import org.jfree.chart.plot.CombinedRangeXYPlot;
 import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.PlotRenderingInfo;
 import org.jfree.chart.plot.PlotState;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYDotRenderer;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.DefaultXYDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.util.ShapeUtilities;
 
 /**
  *
@@ -51,8 +59,17 @@ public class ChartJFrame extends javax.swing.JFrame {
         
         dataset.addSeries(data);
         
-        JFreeChart lineChart = ChartFactory.createXYLineChart(title, vertical, horizontal, dataset, PlotOrientation.HORIZONTAL, rootPaneCheckingEnabled, rootPaneCheckingEnabled, rootPaneCheckingEnabled);
+        JFreeChart lineChart = ChartFactory.createXYLineChart(title, vertical, horizontal, dataset, PlotOrientation.HORIZONTAL, true, true, false);
                 //Chart("test", "x", "height", dataset, PlotOrientation.VERTICAL, true, true, false);
+        
+        
+        
+        final XYPlot plot = lineChart.getXYPlot();
+        XYLineAndShapeRenderer  renderer = new XYLineAndShapeRenderer(true, true);
+        renderer.setBaseToolTipGenerator(new StandardXYToolTipGenerator());
+        
+        plot.setRenderer(renderer);
+        
         final ChartPanel panel = new ChartPanel(lineChart);
         panel.setMouseZoomable(false);
         

@@ -16,9 +16,11 @@ import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import fr.ird.voxelidar.util.Processing;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +32,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.BlockingQueue;
+import java.util.logging.Level;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
@@ -68,6 +71,10 @@ public class LasConversion extends Processing implements Runnable{
 
     @Override
     public void run() {
+        
+        //try {
+            //BufferedWriter writer = new BufferedWriter(new FileWriter("c:\\Users\\Julien\\Desktop\\tirs.txt"));
+        
         
         setStepNumber(3);
         
@@ -191,6 +198,7 @@ public class LasConversion extends Processing implements Runnable{
         double oldTime = -1;
         int oldN = -1;
         int index = 0;
+        int shotId = 0;
         
         Shot e = null;
         boolean isNewExp = false;
@@ -262,7 +270,17 @@ public class LasConversion extends Processing implements Runnable{
                  */
                 if (oldN == count) {
                     try {
+                        String rangesString = "";
+                        for(int i=0;i<e.ranges.length;i++){
+                            rangesString += e.ranges[i]+" ";
+                        }
+                        rangesString = rangesString.trim();
+                        
+                        //writer.write(shotId+" "+e.nbEchos+" "+e.origin.x+" "+e.origin.y+" "+e.origin.z+" "+e.direction.x+" "+e.direction.y+" "+e.direction.z+" "+rangesString+"\n");
                         queue.put(e);
+                        
+                        shotId ++;
+                        
                     } catch (InterruptedException ex) {
                         logger.error(ex.getMessage(), ex);
                     }
@@ -279,6 +297,8 @@ public class LasConversion extends Processing implements Runnable{
                     e= new Shot(mix.lasPoint.n, new Point3d(mix.xloc_s, mix.yloc_s, mix.zloc_s), 
                                                 new Vector3d(mix.x_u, mix.y_u, mix.z_u), 
                                                 new double[mix.lasPoint.n], new short[mix.lasPoint.n], new int[mix.lasPoint.n]);
+                    
+                    
                     isNewExp = true;
                 }
                 
@@ -303,6 +323,10 @@ public class LasConversion extends Processing implements Runnable{
             
             iterations++;
         }
+        //writer.close();
+        //} catch (IOException ex) {
+         //   java.util.logging.Logger.getLogger(LasConversion.class.getName()).log(Level.SEVERE, null, ex);
+        //}
         
         fireFinished();
         

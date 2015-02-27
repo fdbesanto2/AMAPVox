@@ -1,5 +1,6 @@
 package fr.ird.voxelidar;
 
+import fr.ird.voxelidar.gui.JFrameSettingUp;
 import java.io.IOException;
 import java.util.logging.Level;
 
@@ -77,8 +78,8 @@ public class Principal {
         
         window.getJoglContext().getScene().getVoxelSpace().setAttributToVisualize("interceptions");
         */
-        //JFrameSettingUp mainJFrame = new JFrameSettingUp();
-        //mainJFrame.setVisible(true);
+        JFrameSettingUp mainJFrame = new JFrameSettingUp();
+        mainJFrame.setVisible(true);
         
     }
     

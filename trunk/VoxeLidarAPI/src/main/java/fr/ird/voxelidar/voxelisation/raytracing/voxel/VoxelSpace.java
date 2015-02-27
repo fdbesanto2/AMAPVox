@@ -138,13 +138,6 @@ public class VoxelSpace {
 		return indices;
 
 	}
-	
-	public Point3i getVoxelIndices (Point3d point, boolean recover) {
-		if (recover)
-			return getVoxelIndices (recoverPoint (point));
-		else
-			return getVoxelIndices (point);
-	}
 
 	private Point3d recoverPoint(Point3d point) {
 		Point3d recovered = new Point3d(point);
@@ -162,27 +155,6 @@ public class VoxelSpace {
 		recovered.add (boundingBox.getMin ());
 
 		return recovered;
-	}
-	
-	/**
-	 * @param bbox 			bounding box
-	 * @return the x, y and z indices of voxels occupied by the given bounding box
-	 */
-	public Point3i[] getVoxelIndices (BoundingBox3d bbox) {
-		
-		ArrayList<Point3i> indexList = new ArrayList<Point3i>();
-		
-		// Find inf. & sup. corners
-		Point3i min = getVoxelIndices(recoverPoint(bbox.getMin ()));
-		Point3i max = getVoxelIndices(recoverPoint(bbox.getMax ()));
-		
-		// Computes occupied indices
-		for (int X = min.x ; X <= max.x ; X++)
-			for (int Y = min.y ; Y <= max.y ; Y++)
-				for (int Z = min.z ; Z <= max.z ; Z++)
-					indexList.add (new Point3i(X,Y,Z));
-		
-		return indexList.toArray (new Point3i[indexList.size ()]);
 	}
 
 	/**

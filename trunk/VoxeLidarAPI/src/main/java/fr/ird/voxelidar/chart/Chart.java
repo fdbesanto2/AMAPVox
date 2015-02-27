@@ -8,6 +8,7 @@ package fr.ird.voxelidar.chart;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceAdapter;
 import fr.ird.voxelidar.util.ProcessingListener;
+import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 import org.jfree.data.xy.XYSeries;
 
@@ -20,13 +21,30 @@ public class Chart {
     private final EventListenerList listeners;
     
     private VoxelFilter filter;
+    private final ChartFactory chartFactory;
+    private VoxelSpace voxelSpace;
     
     /**
      * 
      */
     public Chart(){
+        
         listeners = new EventListenerList();
         filter = new VoxelFilter();
+        chartFactory = new ChartFactory();
+        
+        chartFactory.addProcessingListener(new ProcessingListener() {
+
+            @Override
+            public void processingStepProgress(String progress, int ratio) {
+                fireChartCreationProgress("Computing data", ratio);
+            }
+
+            @Override
+            public void processingFinished() {
+                
+            }
+        });
     }
     
     /**
@@ -70,30 +88,20 @@ public class Chart {
      * @param voxelSpace
      * @return
      */
-    public ChartJFrame generateVegetationProfile(VoxelSpace voxelSpace){
+    public final ChartJFrame generateVegetationProfile(VoxelSpace voxelSpace){
+        
+        this.voxelSpace = voxelSpace;
         
         final ChartJFrame chartJFrame;
         
-        readVoxelSpace(voxelSpace);
+        readVoxelSpace();
         
         fireChartCreationProgress("Computing data", 0);
-        ChartFactory chartFactory = new ChartFactory();
-        
-        chartFactory.addProcessingListener(new ProcessingListener() {
-
-            @Override
-            public void processingStepProgress(String progress, int ratio) {
-                fireChartCreationProgress("Computing data", ratio);
-            }
-
-            @Override
-            public void processingFinished() {
-                
-            }
-        });
         
         XYSeries data = chartFactory.generateVegetationProfile(filter, voxelSpace);
-        chartJFrame = new ChartJFrame(data, "Vegetation profile","PAD", "height");
+        
+        
+        chartJFrame = new ChartJFrame(data, "Vegetation profile","PAD", "Height above ground");
         
         fireChartCreationFinished();
         
@@ -101,13 +109,16 @@ public class Chart {
         
     }
     
-    private void readVoxelSpace(VoxelSpace voxelSpace){
+    private void readVoxelSpace(){
+        
         
         voxelSpace.addVoxelSpaceListener(new VoxelSpaceAdapter() {
 
             @Override
             public void voxelSpaceCreationProgress(int progress) {
+                
                 fireChartCreationProgress("Reading voxel space file", progress);
+                
             }
         });
         
@@ -125,26 +136,13 @@ public class Chart {
      */
     public ChartJFrame generateXYChart(VoxelSpace voxelSpace, VoxelFilter filter, String title, String horizontalAxis, String verticalAxis){
         
+        this.voxelSpace = voxelSpace;
+        
         final ChartJFrame chartJFrame;
         
-        readVoxelSpace(voxelSpace);
+        readVoxelSpace();
         
-        fireChartCreationProgress("Computing data", 0);
-        ChartFactory chartFactory = new ChartFactory();
-        
-        chartFactory.addProcessingListener(new ProcessingListener() {
-
-            @Override
-            public void processingStepProgress(String progress, int ratio) {
-                fireChartCreationProgress("Computing data", ratio);
-            }
-
-            @Override
-            public void processingFinished() {
-                
-            }
-        });
-        
+        fireChartCreationProgress("Computing data", 0);        
         
         XYSeries data = chartFactory.generateChartWithFilters(voxelSpace, horizontalAxis, verticalAxis, filter);
         

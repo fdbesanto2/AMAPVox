@@ -52,15 +52,67 @@ public class DtmLoader {
             float noDataValue = Float.valueOf(reader.readLine().split(" ", 2)[1].trim());
             
             
+            //ArrayList<Vec3F> points = new ArrayList<>();
+            float[][] zArray = new float[nbCols][nbRows];
+            
+            float z;
+            
+            int yIndex = 0;
+            
+            while((line = reader.readLine()) != null){
+                                
+                String[] values = line.split(" ");
+                if(values.length != nbCols){
+                    throw new Exception("nb columns different from ncols header value");
+                }
+                for(int xIndex=0;xIndex<values.length;xIndex++){
+                    
+                    z = Float.valueOf(values[xIndex]);
+                    zArray[xIndex][yIndex] = z;
+                    
+                }
+                
+                yIndex++;
+            }
+            
+            Dtm terrain = new Dtm(pathFile, zArray, xLeftCorner, yLeftCorner, step);
+        
+            return terrain;
+            
+        } catch (IOException ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        
+        return null;
+    }
+    /*
+    public static Dtm readFromAscFile(File ascFile, Mat4D transfMatrix) throws Exception{
+        
+        final String pathFile = ascFile.getAbsolutePath();
+        
+        
+        String line;
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(ascFile))) {
+            
+            int nbCols = Integer.valueOf(reader.readLine().split(" ", 2)[1].trim());
+            int nbRows = Integer.valueOf(reader.readLine().split(" ", 2)[1].trim());
+            float xLeftCorner = Float.valueOf(reader.readLine().split(" ", 2)[1].trim());
+            float yLeftCorner = Float.valueOf(reader.readLine().split(" ", 2)[1].trim());
+            float step = Float.valueOf(reader.readLine().split(" ", 2)[1].trim());
+            float noDataValue = Float.valueOf(reader.readLine().split(" ", 2)[1].trim());
+            
+            
             ArrayList<Vec3F> points = new ArrayList<>();
             
             float x, y, z;
             
             int yIndex = 0;
+            float maxY = (nbRows-1)*step + yLeftCorner+ step/2.0f;
             
             while((line = reader.readLine()) != null){
                 
-                y = (yIndex + yLeftCorner)*step;
+                y = maxY - (yIndex-1)*step + yLeftCorner + step/2.0f;
                 
                 String[] values = line.split(" ");
                 if(values.length != nbCols){
@@ -68,14 +120,14 @@ public class DtmLoader {
                 }
                 for(int xIndex=0;xIndex<values.length;xIndex++){
                     
-                    x = (xIndex + xLeftCorner)*step;
+                    x = (xIndex*step) + xLeftCorner+ step/2.0f;
                     z = Float.valueOf(values[xIndex]);
                     
                     if(z != noDataValue){
                         //Vec4D vec = new Vec4D(x, y, z, 1);
                         //Vec4D multiply = Mat4D.multiply(transfMatrix, vec);
                         
-                        points.add(new Vec3F(-x, z, y));
+                        points.add(new Vec3F(x, z, y));
                         //points.add(new Vec3F((float)multiply.x, (float)multiply.y, (float)multiply.z));
                     }
                     
@@ -96,7 +148,7 @@ public class DtmLoader {
         
         return null;
     }
-    
+    */
     public static ArrayList<Face> delaunaytriangulate(ArrayList<Vec3F> points){
         
         ArrayList<Face> faces = new ArrayList<>();

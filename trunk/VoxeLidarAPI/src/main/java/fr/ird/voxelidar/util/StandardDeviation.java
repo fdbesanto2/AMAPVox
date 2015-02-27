@@ -5,6 +5,8 @@
  */
 package fr.ird.voxelidar.util;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Julien
@@ -12,32 +14,72 @@ package fr.ird.voxelidar.util;
 public class StandardDeviation {
     
     private float average;
+    private float sum1, sum2;
+    private float count;
+    private final ArrayList<Float> valuesList;
+    
+    public StandardDeviation(){
+        average = 0;
+        sum1 = 0;
+        count = 0;
+        valuesList= new ArrayList<>();
+    }
 
     public float getAverage() {
         return average;
     }
     
+    public void addValue(float value){
+        
+        if(!Float.isNaN(value)){
+            sum1+=value;
+            valuesList.add(value);
+            count++;
+        }
+    }
+    
+    public float getStandardDeviation(){
+        
+        average = sum1/(float)count;
+        sum2 = 0;
+        
+        for (Float value : valuesList) {
+            
+            sum2 += Math.pow(value - average, 2);
+        }
+        
+        return (float)(Math.sqrt((1/(float)count)* sum2));
+    }
+    
     public float getFromFloatArray(float[] values){
         
         //average
-        float sum = 0;
+        sum1 = 0;
+        count = 0;
+        
         for(int i=0;i<values.length;i++){
             
-            sum+=values[i];
+            if(!Float.isNaN(values[i])){
+                sum1+=values[i];
+                count++;
+            }
         }
         
-        average = sum/(float)values.length;
+        average = sum1/(float)count;
         
+        sum2 = 0;
+        count = 0;
         
-        
-        float sum2 = 0;
         for(int i=0;i<values.length;i++){
             
-            sum2+=Math.pow(values[i]-average, 2);
+            float val = (float) Math.pow(values[i]-average, 2);
+            if(!Float.isNaN(val)){
+                sum2+=Math.pow(values[i]-average, 2);
+                count++;
+            }
+            
         }
         
-        
-        
-        return (float)(Math.sqrt((1/(float)values.length)* sum2));
+        return (float)(Math.sqrt((1/(float)count)* sum2));
     }
 }

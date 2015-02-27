@@ -98,7 +98,7 @@ public class LasVoxelisation extends Processing implements Runnable{
             try {
                 terrain = DtmLoader.readFromAscFile(dtmFile, popMatrix);
                 
-                terrain.exportObj(new File("c:\\Users\\Julien\\Desktop\\test.obj"));
+                //terrain.exportObj(new File("c:\\Users\\Julien\\Desktop\\test.obj"));
             } catch (Exception ex) {
                 java.util.logging.Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -152,8 +152,6 @@ public class LasVoxelisation extends Processing implements Runnable{
             
             //wait until voxelisation finished
             t.join();
-            
-            logger.info("las voxelisation finished in "+TimeCounter.getElapsedStringTimeInSeconds(start_time));
             
             return outputFile;
             
