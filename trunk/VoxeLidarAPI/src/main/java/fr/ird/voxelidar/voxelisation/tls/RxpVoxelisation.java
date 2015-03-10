@@ -15,6 +15,7 @@ import fr.ird.voxelidar.engine3d.math.matrix.Mat3D;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import org.apache.log4j.Logger;
@@ -23,16 +24,21 @@ import org.apache.log4j.Logger;
  *
  * @author Julien
  */
-public class RxpVoxelisation{
+public class RxpVoxelisation implements Callable{
     
-    private static final Logger logger = Logger.getLogger(RxpVoxelisation.class);
+    private final static Logger logger = Logger.getLogger(RxpVoxelisation.class);
     private RxpScan rxp;
-    private Mat4D popMatrix;
+    private Mat4D vopPop;
     private VoxelParameters parameters;
+    private static int compteur = 1;
     //private VoxelAnalysis voxelAnalysis;
     private LinkedBlockingQueue<Shot> queue;
     private int nbVoxelisationFinished;
     private File outputFile;
+    private final VoxelAnalysis voxelAnalysis;
+    private RxpExtraction extraction;
+    private Thread extractionThread;
+    private Thread voxelAnalysisThread;
 
     public int getNbVoxelisationFinished() {
         return nbVoxelisationFinished;
@@ -42,31 +48,31 @@ public class RxpVoxelisation{
         this.nbVoxelisationFinished = nbVoxelisationFinished;
     }    
     
-    public RxpVoxelisation(RxpScan rxp, File outputFile, Mat4D popMatrix, VoxelParameters parameters){
+    public RxpVoxelisation(RxpScan rxp, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, VoxelParameters parameters){
         
         this.rxp = rxp;
-        this.popMatrix = popMatrix;
+        //this.vopPop = vopPop;
         this.parameters = parameters;
         
         nbVoxelisationFinished = 0;
         this.outputFile = outputFile;
-    }
-    public void voxelise(){
         
         queue = new LinkedBlockingQueue<>();
-        
-        final VoxelAnalysis voxelAnalysis = new VoxelAnalysis(queue, null);
-        
+        voxelAnalysis = new VoxelAnalysis(queue, null);
         voxelAnalysis.init(parameters, outputFile);
         
         Mat4D sopMatrix;
-            
+
         sopMatrix = rxp.getSopMatrix();
 
-        if (popMatrix == null) {
-            popMatrix = Mat4D.identity();
+        if (vopPop == null) {
+            vopPop = Mat4D.identity();
         }
-        final Mat4D transfMatrix = Mat4D.multiply(popMatrix, sopMatrix);
+        
+        //final Mat4D transfMatrix = Mat4D.multiply(Mat4D.multiply(popMatrix, sopMatrix), vopMatrix);
+        //final Mat4D transfMatrix = Mat4D.identity();
+        Mat4D popVop = Mat4D.multiply(popMatrix, vopMatrix);
+        final Mat4D transfMatrix = Mat4D.multiply(sopMatrix, popVop);
         
         final Mat3D rotation = new Mat3D();
         rotation.mat = new double[]{
@@ -74,36 +80,45 @@ public class RxpVoxelisation{
             transfMatrix.mat[4],transfMatrix.mat[5],transfMatrix.mat[6],
             transfMatrix.mat[8],transfMatrix.mat[9],transfMatrix.mat[10]
         };
+            
+        extraction = new RxpExtraction(rxp.getFile(), queue, transfMatrix, rotation);
+        extractionThread = new Thread(extraction);
+        voxelAnalysisThread = new Thread(voxelAnalysis);
         
-        //voxelAnalysis.setTransfMatrix(transfMatrix);
-        //voxelAnalysis.setRotation(rotation);
+        extraction.addRxpExtractionListener(new RxpExtractionListener() {
+
+            @Override
+            public void isFinished() {
+
+                voxelAnalysis.setIsFinished(true);
+            }
+        });
+    }
+
+    @Override
+    public Object call() {
+        
+        try {
+            
+
+            //voxelAnalysis.setTransfMatrix(transfMatrix);
+            //voxelAnalysis.setRotation(rotation);
             logger.info("rxp extraction is started");
             
-            RxpExtraction extraction = new RxpExtraction(rxp.getFile(), queue, transfMatrix, rotation);
+            extractionThread.start();
             
-            extraction.addRxpExtractionListener(new RxpExtractionListener() {
-
-                @Override
-                public void isFinished() {
-                    
-                    voxelAnalysis.setIsFinished(true);
-                }
-            });
             
-            //runnable to do the extraction
-            new Thread(extraction).start();
-            
-            //runnable to get the extracted shots
-            Thread t = new Thread(voxelAnalysis);
-            t.setPriority(Thread.MAX_PRIORITY);
-            t.start();
-            
-        try {
+            voxelAnalysisThread.start();
             //wait until extraction is finished
-            t.join();
+            voxelAnalysisThread.join();
             
-        } catch (InterruptedException ex) {
-            java.util.logging.Logger.getLogger(RxpVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }catch (InterruptedException ex) {
+            logger.error(ex.getMessage());
+        }catch(Exception e){
+            logger.error(e.getMessage());
         }
+        
+        return null;
     }
 }

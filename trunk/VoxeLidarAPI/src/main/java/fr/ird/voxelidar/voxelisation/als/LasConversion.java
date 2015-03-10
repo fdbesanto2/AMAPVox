@@ -22,6 +22,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -120,6 +122,9 @@ public class LasConversion extends Processing implements Runnable{
                 logger.info("QLineExtrabytes" + qLineExtrabytes.getAmplitude()+" "+qLineExtrabytes.getPulseWidth());
             }
             Vector3d location = new Vector3d((p.getX() * header.getxScaleFactor()) + header.getxOffset(), (p.getY() * header.getyScaleFactor()) + header.getyOffset(), (p.getZ() * header.getzScaleFactor()) + header.getzOffset());
+            
+            float test = (float) (p.getZ()*header.getzScaleFactor());
+            
             LasPoint point = new LasPoint(location, p.getReturnNumber(), p.getNumberOfReturns(), p.getIntensity(), p.getClassification(), p.getGpsTime());
             lasPointList.add(point);
             
@@ -270,12 +275,13 @@ public class LasConversion extends Processing implements Runnable{
                  */
                 if (oldN == count) {
                     try {
+                        /*
                         String rangesString = "";
                         for(int i=0;i<e.ranges.length;i++){
                             rangesString += e.ranges[i]+" ";
                         }
                         rangesString = rangesString.trim();
-                        
+                        */
                         //writer.write(shotId+" "+e.nbEchos+" "+e.origin.x+" "+e.origin.y+" "+e.origin.z+" "+e.direction.x+" "+e.direction.y+" "+e.direction.z+" "+rangesString+"\n");
                         queue.put(e);
                         

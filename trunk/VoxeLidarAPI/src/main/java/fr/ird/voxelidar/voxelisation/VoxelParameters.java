@@ -28,6 +28,7 @@ public class VoxelParameters {
     private int weighting;
     private File weightingFile;
     private boolean useDTMCorrection;
+    public int minDTMDistance = 1;
     private boolean TLS;
     
     

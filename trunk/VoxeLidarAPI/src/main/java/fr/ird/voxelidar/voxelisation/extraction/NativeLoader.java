@@ -10,11 +10,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import static jdk.nashorn.internal.codegen.Compiler.LOG;
 import org.apache.log4j.Logger;
 
 /**
- *
+ * This class can be used to load dynamic library(.so, .dll).
+ * This get the library from a stream, usually into the .jar archive, 
+ * extract it in a temp folder (can change according to the os) and load it.
  * @author Julien
  */
 public class NativeLoader {
@@ -53,13 +54,13 @@ public class NativeLoader {
             }
         } else if (osName.startsWith("linux")) {
             if (osArch.equalsIgnoreCase("amd64")) {
-                name = "lib" + library + ".so";
+                name = library + ".so";
                 path = "linux-x86_64/";
             } else if (osArch.equalsIgnoreCase("ia64")) {
-                name = "lib" + library + ".so";
+                name = library + ".so";
                 path = "linux-ia64/";
             } else if (osArch.equalsIgnoreCase("i386")) {
-                name = "lib" + library + ".so";
+                name = library + ".so";
                 path = "linux-x86/";
             } else {
                 throw new UnsupportedOperationException("Platform " + osName + ":" + osArch + " not supported");

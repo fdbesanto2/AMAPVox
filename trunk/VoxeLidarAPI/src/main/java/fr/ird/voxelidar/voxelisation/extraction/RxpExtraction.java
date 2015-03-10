@@ -49,6 +49,8 @@ public class RxpExtraction implements Runnable{
     private final Mat4D transfMatrix;
     private final Mat3D rotation;
     
+    private final Shots shots;
+    
     public native void afficherBonjour();
     private native boolean simpleExtraction(String file, Shots shots);
     
@@ -61,6 +63,34 @@ public class RxpExtraction implements Runnable{
         this.rotation = rotation;
         this.arrayBlockingQueue = arrayBlockingQueue;
         this.rxpFile = rxpFile;
+        shots = new Shots();
+        
+        final RxpExtraction parent = this;
+        
+        shots.addShotsListener(new ShotsListener() {
+
+            @Override
+            public void shotExtracted(Shot shot) {
+                try {
+                    
+                    Vec4D locVector = Mat4D.multiply(parent.transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
+                    
+                    Vec3D uVector = Mat3D.multiply(parent.rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
+
+                    shot.origin = new Point3d(locVector.x, locVector.y, locVector.z);
+                    //System.out.println(shot.origin.x + " "+shot.origin.y+" "+shot.origin.z+"\n");
+                    
+                    shot.direction = new Vector3d(uVector.x, uVector.y, uVector.z);
+
+                    parent.arrayBlockingQueue.put(shot);
+                    
+                }catch (InterruptedException ex) {
+                    logger.error(ex);
+                }catch(Exception e){
+                    logger.error(e.getMessage());
+                }
+            }
+        });
     }
     
     static {
@@ -91,27 +121,7 @@ public class RxpExtraction implements Runnable{
         }
     }
     
-    public void extract(File rxpFile) throws Exception{
-        
-        
-        Shots shots = new Shots();
-        /*
-        shots.addShotsListener(new ShotsListener() {
-
-            @Override
-            public void shotExtracted(Shot shot) {
-                fireShotAdded(shot);
-            }
-        });
-        */
-        boolean success = simpleExtraction(rxpFile.getAbsolutePath(), shots);
-        
-        
-        if(!success){
-            throw new Exception("Extraction failed");
-        }       
-        
-    }
+    
     /*
     public static void main(String[] args) {
         RxpExtraction test = new RxpExtraction();
@@ -135,37 +145,20 @@ public class RxpExtraction implements Runnable{
     */
 
     @Override
-    public void run() {
+    public synchronized void run() {
         
-        Shots shots = new Shots();
+        try{
+            boolean success = simpleExtraction(rxpFile.getAbsolutePath(), shots);
         
-        shots.addShotsListener(new ShotsListener() {
+            fireIsFinished();
 
-            @Override
-            public void shotExtracted(Shot shot) {
-                try {
-                    
-                    Vec4D locVector = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
-                    Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
-
-                    shot.origin = new Point3d(locVector.x, locVector.y, locVector.z);
-                    shot.direction = new Vector3d(uVector.x, uVector.y, uVector.z);
-
-                    arrayBlockingQueue.put(shot);
-                    
-                } catch (InterruptedException ex) {
-                    logger.error(ex);
-                }
-            }
-        });
-        
-        boolean success = simpleExtraction(rxpFile.getAbsolutePath(), shots);
-        
-        fireIsFinished();
-        
-        if(!success){
-            logger.error("extraction failed");
-        }  
+            if(!success){
+                logger.error("extraction failed");
+            } 
+            
+        }catch(Exception e){
+            e.getMessage();
+        }
     }
     
 }

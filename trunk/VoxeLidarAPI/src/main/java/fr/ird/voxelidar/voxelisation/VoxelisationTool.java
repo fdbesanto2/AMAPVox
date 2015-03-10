@@ -18,8 +18,16 @@ import fr.ird.voxelidar.util.DataSet;
 import fr.ird.voxelidar.util.TimeCounter;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
@@ -57,7 +65,7 @@ public class VoxelisationTool{
         }
     }
     
-    public void generateVoxelsFromRsp(File output, File input , VoxelParameters parameters, Mat4D vop, boolean mon) {
+    public ArrayList<File> generateVoxelsFromRsp(File output, File input , VoxelParameters parameters, Mat4D vop, Mat4D pop, boolean mon) {
         
         startTime = System.currentTimeMillis();
         
@@ -68,8 +76,10 @@ public class VoxelisationTool{
         rsp.read(input);
 
         ArrayList<Scans> rxpList = rsp.getRxpList();
+        ArrayList<File> files = new ArrayList<>();
         
-        
+        ExecutorService exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        ArrayList<Callable<RxpVoxelisation>> tasks = new ArrayList<>();
         
         int count = 1;
         for(Scans rxp :rxpList){
@@ -79,31 +89,47 @@ public class VoxelisationTool{
             for(Entry entry:scanList.entrySet()){
                 
                 RxpScan scan = (RxpScan) entry.getValue();
-                RxpVoxelisation voxelisation;
+                //RxpVoxelisation voxelisation;
                 
                 if(mon && scan.getName().contains(".mon")){
                     File outputFile = new File(output.getAbsolutePath()+"/"+scan.getFile().getName()+".vox");
-                    fireProgress(outputFile.getAbsolutePath(), count);
-                    voxelisation = new RxpVoxelisation(scan, outputFile, vop, this.parameters);
-                    voxelisation.voxelise();
+                    //fireProgress(outputFile.getAbsolutePath(), count);
+                    //voxelisation = new RxpVoxelisation(scan, outputFile, vop, this.parameters);
+                    tasks.add(new RxpVoxelisation(scan, outputFile, vop, pop, this.parameters));
+                    files.add(outputFile);
+                    //voxelisation.voxelise();
                     count++;
                     
                     
                 }else if(!mon && !scan.getName().contains(".mon")){
                     File outputFile = new File(output.getAbsolutePath()+"/"+scan.getFile().getName()+".vox");
-                    fireProgress(outputFile.getAbsolutePath(), count);
-                    voxelisation = new RxpVoxelisation(scan, outputFile, vop, this.parameters);
-                    voxelisation.voxelise();
+                    //fireProgress(outputFile.getAbsolutePath(), count);
+                    tasks.add(new RxpVoxelisation(scan, outputFile, vop, pop, this.parameters));
+                    files.add(outputFile);
+                    //voxelisation = new RxpVoxelisation(scan, outputFile, vop, this.parameters);
+                    //voxelisation.voxelise();
                     count++;
                 }
             }
         }
         
+        
+        try {
+            List<Future> results = (List) exec.invokeAll(tasks);
+            exec.shutdown();
+            for(Future f : results) {
+                f.get();
+            }
+        } catch (InterruptedException | RejectedExecutionException | NullPointerException |ExecutionException ex ) {
+            logger.error(ex.getMessage());
+        }
+        
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
         
+        return files;
     }
 
-    public void generateVoxelsFromRxp(File output, File input , VoxelParameters parameters, Mat4D vop) {
+    public void generateVoxelsFromRxp(File output, File input , VoxelParameters parameters, Mat4D vop, Mat4D pop) {
         
         startTime = System.currentTimeMillis();
         
@@ -117,8 +143,8 @@ public class VoxelisationTool{
         
         fireProgress(outputFile.getAbsolutePath(), 1);
         
-        RxpVoxelisation voxelisation = new RxpVoxelisation(scan, outputFile, vop, parameters);
-        voxelisation.voxelise();
+        RxpVoxelisation voxelisation = new RxpVoxelisation(scan, outputFile, vop, pop, parameters);
+        voxelisation.call();
         
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
         

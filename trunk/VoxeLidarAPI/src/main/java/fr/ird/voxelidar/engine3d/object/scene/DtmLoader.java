@@ -286,9 +286,9 @@ public class DtmLoader {
         return faces;
     }
     
-    public static Dtm readFromFile(String path){
+    public static Dtm readFromFile(File file){
         
-        final String pathFile = path;
+        final String pathFile = file.getAbsolutePath();
         
         FileManager m = new FileManager();
         
@@ -300,7 +300,7 @@ public class DtmLoader {
         });
         
 
-        ArrayList<String> lines = m.readAllLines(pathFile);
+        ArrayList<String> lines = m.readAllLines(file);
 
         //create points list
         ArrayList<Vec3F> points = new ArrayList<>();
@@ -333,7 +333,7 @@ public class DtmLoader {
         }
         */
         ArrayList<Face> faces = DtmLoader.triangulate(points);
-        Dtm terrain = new Dtm(path, points, faces);
+        Dtm terrain = new Dtm(pathFile, points, faces);
         
         //terrain.exportObj();
 

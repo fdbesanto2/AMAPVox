@@ -14,14 +14,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
+import org.apache.log4j.Logger;
 
 
 
 public class FileManager {
     
+    private final static Logger logger = Logger.getLogger(FileManager.class);
     private String path;
     private File file;
     private boolean fileRead;
@@ -86,9 +86,9 @@ public class FileManager {
             return count;
             
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         } catch (IOException ex) {
-            Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
 
         return -1;
@@ -103,9 +103,9 @@ public class FileManager {
             return reader.readLine();
             
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         } catch (IOException ex) {
-            Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         
         return null;
@@ -129,41 +129,35 @@ public class FileManager {
             return line;
             
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         } catch (IOException ex) {
-            Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         
         return null;
     }
     
-    public ArrayList<String> readAllLines(String path){
+    public ArrayList<String> readAllLines(File file){
         
         ArrayList<String> lines = new ArrayList<>();
         
-        File file = new File(path);
-        
         try {
 
-            /******read file*****/
-
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String line = reader.readLine();
-
-            while (line != null) {
-
-                line = reader.readLine();
-                lines.add(line);
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                
+                String line;
+                
+                while ((line = reader.readLine()) != null) {
+                    lines.add(line);
+                }
             }
-
-            reader.close();
             
             setFileRead(true);
             
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         } catch (IOException ex) {
-            Logger.getLogger(FileManager.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         
         return lines;

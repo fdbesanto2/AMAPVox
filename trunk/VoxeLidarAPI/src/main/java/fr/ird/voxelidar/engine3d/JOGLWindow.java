@@ -16,7 +16,9 @@ import fr.ird.voxelidar.engine3d.renderer.JoglListener;
 import fr.ird.voxelidar.util.Settings;
 import java.awt.Point;
 import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLException;
 import javax.media.opengl.GLProfile;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -24,31 +26,37 @@ import javax.media.opengl.GLProfile;
  */
 public class JOGLWindow{
         
+    private final Logger logger = Logger.getLogger(JOGLWindow.class);
     private final GLRenderFrame renderFrame;
     private final JoglListener joglContext;
     private final FPSAnimator animator;    
     
     public JOGLWindow(int width, int height, String title, VoxelSpace voxelSpace, Settings settings){
         
-        
-        GLProfile glp = GLProfile.getMaxFixedFunc(true);
-        GLCapabilities caps = new GLCapabilities(glp);
-        caps.setDoubleBuffered(true);
-        
-        renderFrame = GLRenderFrame.create(caps, width, height, title);
-        
+        try{
+            GLProfile glp = GLProfile.getGL2GL3();
+            GLCapabilities caps = new GLCapabilities(glp);
+            caps.setDoubleBuffered(true);
 
-        animator = new FPSAnimator(renderFrame, 60);
-        
-        joglContext = new JoglListener(voxelSpace, settings, animator);
-        BasicEvent eventListener = new BasicEvent(animator, joglContext);
-        joglContext.attachEventListener(eventListener);
-        
-        renderFrame.addGLEventListener(joglContext);
-        renderFrame.addKeyListener(new InputKeyListener(eventListener, animator));
-        renderFrame.addMouseListener(new InputMouseAdapter(eventListener, animator));
+            renderFrame = GLRenderFrame.create(caps, width, height, title);
 
-        animator.start();
+
+            animator = new FPSAnimator(renderFrame, 60);
+
+            joglContext = new JoglListener(voxelSpace, settings, animator);
+            BasicEvent eventListener = new BasicEvent(animator, joglContext);
+            joglContext.attachEventListener(eventListener);
+
+            renderFrame.addGLEventListener(joglContext);
+            renderFrame.addKeyListener(new InputKeyListener(eventListener, animator));
+            renderFrame.addMouseListener(new InputMouseAdapter(eventListener, animator));
+
+            animator.start();
+        }catch(GLException e){
+            throw e;
+        }catch(Exception e){
+            throw e;
+        }
     }
     
     public void addWindowListener(WindowListener listener){

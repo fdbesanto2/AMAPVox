@@ -38,6 +38,8 @@ import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceAdapter;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceListener;
+import fr.ird.voxelidar.util.MatrixConverter;
+import fr.ird.voxelidar.util.MatrixFileParser;
 import fr.ird.voxelidar.voxelisation.VoxelisationTool;
 import fr.ird.voxelidar.voxelisation.VoxelisationToolListener;
 import java.awt.Color;
@@ -85,6 +87,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.plaf.BorderUIResource;
+import javax.vecmath.Matrix4d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
 import javax.vecmath.Vector3d;
@@ -115,7 +118,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private Rsp rsp;
     private Mat4D vopMatrix;
     private Mat4D popMatrix;
-    private Mat4D vopPopMatrix;
     private final Border customBorder;
 
     public ListAdapterComboboxModel getMainAttributeModelAdapter() {
@@ -201,9 +203,11 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         settings = new Settings();
         
         customBorder = new BorderUIResource.LineBorderUIResource(new Color(57, 57, 57));
+        
+        setDefaultAppeareance();
         initComponents();
         initComboBox();
-        setDefaultAppeareance();
+        
         
         jListFilters.setModel(filterModel);
         jListOutputFiles.setModel(model);
@@ -230,6 +234,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         
         
         vopMatrix = Mat4D.identity();
+        popMatrix = Mat4D.identity();
         rsp = new Rsp();
         
         DocumentListener customDocumentListener = new DocumentListener(){
@@ -355,27 +360,19 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             setDefaultAppeareance();
             return;
         }
-        final JFrameSettingUp parent = this;
+        
+        try {
+            UIManager.setLookAndFeel(value);
+            currentLookAndFeel = value;
+            UIManager.put("TabbedPane.selected", new Color(114, 114, 114));
+            UIManager.put("TabbedPane.contentAreaColor", new Color(114, 114, 114));
+            UIManager.put("InternalFrame.background", new Color(114, 114, 114));
 
-        SwingUtilities.invokeLater(new Runnable() {
-            
-            @Override
-            public void run() {
-                
-                try {
-                    UIManager.setLookAndFeel(value);
-                    currentLookAndFeel = value;
-                    UIManager.put("TabbedPane.selected", new Color(114, 114, 114));
-                    UIManager.put("TabbedPane.contentAreaColor", new Color(114, 114, 114));
-                    UIManager.put("InternalFrame.background", new Color(114, 114, 114));
-                    
-                    SwingUtilities.updateComponentTreeUI(parent);
-                    parent.pack();
-                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-                    java.util.logging.Logger.getLogger(JFrameSettingUp.class.getName()).log(Level.SEVERE, null, ex);
-                }
-             }
-       });
+            SwingUtilities.updateComponentTreeUI(this);
+            this.pack();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(JFrameSettingUp.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void updateVoxelParameters(){
@@ -680,7 +677,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 if(jTextFieldFilePathMnt.getText().endsWith(".asc")){
                     terrain = DtmLoader.readFromAscFile(new File(jTextFieldFilePathMnt.getText()), popMatrix);
                 }else if(jTextFieldFilePathMnt.getText().endsWith(".txt")){
-                    terrain = DtmLoader.readFromFile(jTextFieldFilePathMnt.getText());
+                    terrain = DtmLoader.readFromFile(new File(jTextFieldFilePathMnt.getText()));
                 }
                 
             }
@@ -831,6 +828,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jFileChooserSave2 = new javax.swing.JFileChooser();
         jFileChooser11 = new javax.swing.JFileChooser();
         buttonGroup2 = new javax.swing.ButtonGroup();
+        jFileChooser12 = new javax.swing.JFileChooser();
         jPanel7 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelOutputParametersTab = new javax.swing.JPanel();
@@ -873,6 +871,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jButtonExecuteVoxTls = new javax.swing.JButton();
         jCheckBoxMergeOutputFiles = new javax.swing.JCheckBox();
         jTextFieldOutputMergedFile = new javax.swing.JTextField();
+        jPanel45 = new javax.swing.JPanel();
+        jTextFieldMatrixFilePath = new javax.swing.JTextField();
+        jButtonOpenMatrixFile = new javax.swing.JButton();
         jTabbedPane3 = new javax.swing.JTabbedPane();
         jPanel33 = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
@@ -1108,6 +1109,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jFileChooser11.setCurrentDirectory(null);
         jFileChooser11.setDialogTitle("");
         jFileChooser11.setFileFilter(null);
+
+        jFileChooser12.setCurrentDirectory(null);
+        jFileChooser12.setDialogTitle("");
+        jFileChooser12.setFileFilter(null);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(114, 114, 114));
@@ -1484,8 +1489,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     .addComponent(jTextFieldFileOutputPathTlsVox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelPath10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonChooseOutputDirectoryTlsVox)
-                .addContainerGap())
+                .addComponent(jButtonChooseOutputDirectoryTlsVox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jButtonExecuteVoxTls.setBackground(new java.awt.Color(85, 85, 85));
@@ -1501,6 +1505,44 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jCheckBoxMergeOutputFiles.setText("Merge output files");
 
         jTextFieldOutputMergedFile.setBackground(new java.awt.Color(180, 180, 180));
+
+        jPanel45.setBackground(new java.awt.Color(114, 114, 114));
+        jPanel45.setBorder(javax.swing.BorderFactory.createTitledBorder("Matrix file"));
+
+        jTextFieldMatrixFilePath.setEditable(false);
+        jTextFieldMatrixFilePath.setBackground(new java.awt.Color(180, 180, 180));
+        jTextFieldMatrixFilePath.setColumns(50);
+        jTextFieldMatrixFilePath.setToolTipText("");
+        jTextFieldMatrixFilePath.setMinimumSize(new java.awt.Dimension(0, 20));
+        jTextFieldMatrixFilePath.setName(""); // NOI18N
+
+        jButtonOpenMatrixFile.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonOpenMatrixFile.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonOpenMatrixFile.setText("Open");
+        jButtonOpenMatrixFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOpenMatrixFileActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel45Layout = new javax.swing.GroupLayout(jPanel45);
+        jPanel45.setLayout(jPanel45Layout);
+        jPanel45Layout.setHorizontalGroup(
+            jPanel45Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel45Layout.createSequentialGroup()
+                .addComponent(jTextFieldMatrixFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonOpenMatrixFile)
+                .addGap(0, 7, Short.MAX_VALUE))
+        );
+        jPanel45Layout.setVerticalGroup(
+            jPanel45Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel45Layout.createSequentialGroup()
+                .addGroup(jPanel45Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextFieldMatrixFilePath, javax.swing.GroupLayout.PREFERRED_SIZE, 18, Short.MAX_VALUE)
+                    .addComponent(jButtonOpenMatrixFile, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanel36Layout = new javax.swing.GroupLayout(jPanel36);
         jPanel36.setLayout(jPanel36Layout);
@@ -1521,9 +1563,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                                 .addGap(21, 21, 21)
                                 .addComponent(jTextFieldOutputMergedFile))
                             .addComponent(jCheckBoxMergeOutputFiles))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jButtonSopMatrix)
                         .addGroup(jPanel36Layout.createSequentialGroup()
                             .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1536,9 +1578,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                             .addComponent(jPanel40, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jPanel41, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButtonExecuteVoxTls, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jButtonExecuteVoxTls, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21))
+                    .addComponent(jPanel45, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         jPanel36Layout.setVerticalGroup(
             jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1547,24 +1590,23 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     .addGroup(jPanel36Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jButtonSopMatrix)
-                        .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel36Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonPopMatrix)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButtonVopMatrix))
-                            .addGroup(jPanel36Layout.createSequentialGroup()
-                                .addGap(20, 20, 20)
-                                .addComponent(jButton1)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonPopMatrix)
+                            .addComponent(jButton1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonVopMatrix)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel45, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jPanel40, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel41, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel42, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)
                         .addComponent(jButtonExecuteVoxTls))
                     .addGroup(jPanel36Layout.createSequentialGroup()
                         .addComponent(jPanel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3650,6 +3692,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jListOutputFiles.setBackground(new java.awt.Color(180, 180, 180));
         jListOutputFiles.setBorder(javax.swing.BorderFactory.createTitledBorder("Select a file"));
         jListOutputFiles.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jListOutputFiles.setDropMode(javax.swing.DropMode.INSERT);
         jListOutputFiles.setSelectedIndex(0);
         jListOutputFiles.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
@@ -4702,7 +4745,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 
                 filteredRxpList.add(scans);
                 
-                vopPopMatrix = getVopMatrixTLS();
+                //vopPopMatrix = getVopMatrixTLS();
                 singleScan = true;
                 break;
                 
@@ -4713,32 +4756,34 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         
         final int taskNumber = filteredRxpList.size();
         final long start_time = System.currentTimeMillis();
-        final VoxelisationTool voxTool = new VoxelisationTool();
-        voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
-
-            @Override
-            public void voxelisationProgress(String progress, int ratio) {
-                progressBar.setText("Voxelisation in progress, file "+ratio+"/"+taskNumber+"\n"+progress);
-                filesList.add(new File(progress));
-            }
-
-            @Override
-            public void voxelisationFinished(float duration) {
-
-                logger.info("Voxelisation finished in "+TimeCounter.getElapsedStringTimeInSeconds(start_time));
-            }
-        });
         
         SwingWorker sw = new SwingWorker() {
 
             @Override
             protected Void doInBackground(){
+                
+                VoxelisationTool voxTool = new VoxelisationTool();
+                voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
 
+                    @Override
+                    public void voxelisationProgress(String progress, int ratio) {
+                        progressBar.setText("Voxelisation in progress, file "+ratio+"/"+taskNumber+"\n"+progress);
+                        filesList.add(new File(progress));
+                    }
+
+                    @Override
+                    public void voxelisationFinished(float duration) {
+
+                        logger.info("Voxelisation finished in "+TimeCounter.getElapsedStringTimeInSeconds(start_time));
+                    }
+                });
+        
                 try{
                     if(singleScan){
-                        voxTool.generateVoxelsFromRxp(outputPath, singleScanFile, parameters, vopMatrix);
+                        voxTool.generateVoxelsFromRxp(outputPath, singleScanFile, parameters, vopMatrix, popMatrix);
                     }else{
-                        voxTool.generateVoxelsFromRsp(outputPath, inputRsp, parameters, vopMatrix, isLight);
+                        ArrayList<File> files = voxTool.generateVoxelsFromRsp(outputPath, inputRsp, parameters, vopMatrix, popMatrix, isLight);
+                        filesList.addAll(files);
                     }
                     
                 }catch(Exception e){
@@ -4840,21 +4885,21 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        final JFrameMatrix jFrameMatrix = new JFrameMatrix(vopPopMatrix);
+        final JFrameMatrix jFrameMatrix = new JFrameMatrix(Mat4D.multiply(vopMatrix, popMatrix));
         jFrameMatrix.setVisible(true);
 
         jFrameMatrix.addWindowListener(new WindowAdapter() {
 
             @Override
             public void windowClosed(WindowEvent e) {
-                vopPopMatrix = jFrameMatrix.getMatrix();
+                //vopPopMatrix = jFrameMatrix.getMatrix();
             }
         });
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButtonVopMatrixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVopMatrixActionPerformed
 
-        final JFrameMatrix jFrameMatrix = new JFrameMatrix(Mat4D.identity());
+        final JFrameMatrix jFrameMatrix = new JFrameMatrix(vopMatrix);
         jFrameMatrix.setVisible(true);
 
         jFrameMatrix.addWindowListener(new WindowAdapter() {
@@ -4956,7 +5001,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     jListRspScans.setModel(rspScansListModel);
 
                     popMatrix = rsp.getPopMatrix();
-                    vopPopMatrix = Mat4D.multiply(vopMatrix, popMatrix);
+                    //vopPopMatrix = Mat4D.multiply(vopMatrix, popMatrix);
                 }
 
             }else{
@@ -5237,6 +5282,23 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldMinPointX2ActionPerformed
 
+    private void jButtonOpenMatrixFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenMatrixFileActionPerformed
+        
+        if(!jTextFieldMatrixFilePath.getText().equals("")){
+            jFileChooser12.setCurrentDirectory(new File(jTextFieldMatrixFilePath.getText()));
+        }
+        
+        if (jFileChooser12.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            
+            File matrixFile = jFileChooser12.getSelectedFile();
+            jTextFieldMatrixFilePath.setText(matrixFile.getAbsolutePath());
+            
+            Matrix4d matrix4d = MatrixFileParser.getMatrixFromFile(matrixFile);
+            vopMatrix = MatrixConverter.convertMatrix4dToMat4D(matrix4d);
+            //vopPopMatrix = Mat4D.multiply(vopMatrix, popMatrix);
+        }
+    }//GEN-LAST:event_jButtonOpenMatrixFileActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -5263,6 +5325,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JButton jButtonOpenInputFile;
     private javax.swing.JButton jButtonOpenInputFile1;
     private javax.swing.JButton jButtonOpenInputFileVoxelisation;
+    private javax.swing.JButton jButtonOpenMatrixFile;
     private javax.swing.JButton jButtonOpenRspFile;
     private javax.swing.JButton jButtonOpenTrajectoryFile;
     private javax.swing.JButton jButtonOpenWeightingFile;
@@ -5307,6 +5370,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JFileChooser jFileChooser10;
     private javax.swing.JFileChooser jFileChooser11;
+    private javax.swing.JFileChooser jFileChooser12;
     private javax.swing.JFileChooser jFileChooser2;
     private javax.swing.JFileChooser jFileChooser3;
     private javax.swing.JFileChooser jFileChooser4;
@@ -5393,6 +5457,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JPanel jPanel42;
     private javax.swing.JPanel jPanel43;
     private javax.swing.JPanel jPanel44;
+    private javax.swing.JPanel jPanel45;
     private javax.swing.JPanel jPanel47;
     private javax.swing.JPanel jPanel48;
     private javax.swing.JPanel jPanel49;
@@ -5460,6 +5525,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JTextField jTextFieldFilePathRsp;
     private javax.swing.JTextField jTextFieldFilePathSaveVox;
     private javax.swing.JTextField jTextFieldFilePathTrajVox;
+    private javax.swing.JTextField jTextFieldMatrixFilePath;
     private javax.swing.JTextField jTextFieldMaxPointX;
     private javax.swing.JTextField jTextFieldMaxPointX2;
     private javax.swing.JTextField jTextFieldMaxPointY;

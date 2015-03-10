@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 import javax.vecmath.Point2f;
+import org.apache.log4j.Logger;
 import org.jfree.data.xy.XYSeries;
 
 /**
@@ -20,6 +21,8 @@ import org.jfree.data.xy.XYSeries;
  * @author Julien
  */
 public class ChartFactory extends Processing{
+    
+    private final Logger logger = Logger.getLogger(ChartFactory.class);
     
     public XYSeries generateChartWithFilters(VoxelSpace voxelSpace, String horizontalAxis, String verticalAxis, VoxelFilter filter){
         
@@ -126,6 +129,8 @@ public class ChartFactory extends Processing{
         int iterationsNumber = heights.length;
         int step = iterationsNumber/10;
         
+        float lai = 0;
+        
         for(int i=0;i<heights.length-1;i++){
             
             if(i % step == 0){
@@ -164,8 +169,11 @@ public class ChartFactory extends Processing{
             
             if(!Float.isNaN(averagePAD)){
                 data.add(heights[i], averagePAD);
+                lai += averagePAD;
             }
         }
+        
+        logger.info("LAI = "+lai);
         
         fireFinished();
         

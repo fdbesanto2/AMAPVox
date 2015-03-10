@@ -139,7 +139,7 @@ public class VoxelManager {
 		                    
 		Point3d infCorner = voxelSpace.getVoxelInfCorner (currentVoxel);
 		double x, y , z;
-
+                
 		if (direction.x < 0)
 			x = hypothenuse (startPoint.x, infCorner.x, direction.x);
 		else

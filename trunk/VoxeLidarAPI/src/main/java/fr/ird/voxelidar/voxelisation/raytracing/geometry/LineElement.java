@@ -2,9 +2,6 @@ package fr.ird.voxelidar.voxelisation.raytracing.geometry;
 
 import java.util.ArrayList;
 
-import javax.vecmath.Point3f;
-import javax.vecmath.Vector3f;
-
 import fr.ird.voxelidar.voxelisation.raytracing.geometry.shapes.Shape;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;

@@ -13,7 +13,7 @@ import javax.vecmath.Vector3d;
  * Oriented line segment defined by 2 points: origin and end
  * @author Dauzat/Cresson; August 2012
  */
-public class LineSegment implements Cloneable, LineElement {
+public class LineSegment implements LineElement {
 	
 	private Point3d		origin;
 	private Point3d		end;
@@ -41,11 +41,14 @@ public class LineSegment implements Cloneable, LineElement {
 	 * @param length	length of the line segment
 	 */
 	public LineSegment (Point3d origin, Vector3d direction, double length) {
-		end = new Point3d (0f,0f,0f);
-		end.scaleAdd (length, direction, origin);
+		
 		this.direction 	= new Vector3d (direction);
 		this.origin		= new Point3d(origin);
 		this.length		= length;
+                
+                end = new Point3d();
+                end.scaleAdd(this.length, this.direction, this.origin);
+                
 	}
 	
 	//---------------------- Intersections ----------------------//
@@ -98,22 +101,6 @@ public class LineSegment implements Cloneable, LineElement {
 	public void translate (Vector3d translation) {
 		origin.add (translation);
 		end.add (translation);
-	}
-	
-	public Object clone() {
-	    LineSegment l = null;
-	    try {
-	    	l = (LineSegment) super.clone();
-	    } catch(CloneNotSupportedException cnse) {
-	      	System.err.println (System.err+"/"+cnse.getMessage ());
-	    }
-	    
-	    l.direction = new Vector3d(direction);
-	    l.end		= new Point3d(end);
-	    l.length	= length;
-	    l.origin	= new Point3d(origin);
-	    
-	    return l;
 	}
 
 }
