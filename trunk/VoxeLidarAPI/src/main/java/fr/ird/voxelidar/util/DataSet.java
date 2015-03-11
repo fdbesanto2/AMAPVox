@@ -63,8 +63,19 @@ public class DataSet {
                 
                 for(int i=0;i<maxSize;i++){
                     
+                    
                     if(i < values1.length && i < values2.length){
+                        
+                        if(Float.isNaN(values1[i] ) && Float.isNaN(values2[i] )){
+                            //keep NaN
+                        }else if(Float.isNaN(values1[i] )){
+                            values1[i] = 0f;
+                        }else if(Float.isNaN(values2[i] )){
+                            values2[i] = 0f;
+                        }
+                        
                         resultValues[i] = values1[i] + values2[i];
+                        
                     }else if(i >= values1.length){
                         resultValues[i] = values2[i];
                     }else{

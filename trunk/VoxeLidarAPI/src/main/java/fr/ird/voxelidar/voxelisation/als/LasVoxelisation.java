@@ -74,7 +74,7 @@ public class LasVoxelisation extends Processing implements Runnable{
         
         Dtm terrain = null;
         
-        if(parameters.useDTMCorrection() ){
+        if(dtmFile != null && parameters.useDTMCorrection() ){
             
             try {
                 terrain = DtmLoader.readFromAscFile(dtmFile, popMatrix);
@@ -92,18 +92,7 @@ public class LasVoxelisation extends Processing implements Runnable{
     @Override
     public File process() {
         
-        Dtm terrain = null;
-        
-        if(dtmFile != null && parameters.useDTMCorrection()){
-            try {
-                terrain = DtmLoader.readFromAscFile(dtmFile, popMatrix);
                 
-                //terrain.exportObj(new File("c:\\Users\\Julien\\Desktop\\test.obj"));
-            } catch (Exception ex) {
-                java.util.logging.Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
         final long start_time = System.currentTimeMillis();
         BlockingQueue<fr.ird.voxelidar.voxelisation.extraction.LasPoint> arrayBlockingQueue = new LinkedBlockingQueue<>();
         

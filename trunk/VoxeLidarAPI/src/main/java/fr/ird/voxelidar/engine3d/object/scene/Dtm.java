@@ -168,11 +168,15 @@ public class Dtm {
             return 0;
         }
         
-        z = zArray[indiceX][indiceY];
-        
-        if(z == -9999.0f){
+        if(indiceX<zArray.length && indiceY<zArray[0].length){
+            z = zArray[indiceX][indiceY];
+            
+            if(z == -9999.0f){
+                return 0;
+            }
+        }else{
             return 0;
-        }
+        }        
         
         return z;
     }

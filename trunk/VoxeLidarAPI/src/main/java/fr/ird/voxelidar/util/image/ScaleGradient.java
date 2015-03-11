@@ -40,7 +40,8 @@ public class ScaleGradient {
                 
                 for (int i = 0; i < height; i++) {
                     for (int j = 0; j < width; j++) {
-                        float value = (((max-min)*j)/width);
+                        //float value = (((max-min)*j)/width);
+                        float value = (j/(float)width)*(max-min)+min;
                         Color color = gradient.getColor(value);
                         bi.setRGB(j, i, color.getRGB());
                     }

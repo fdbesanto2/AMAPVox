@@ -108,7 +108,7 @@ public class Scene {
             
             if(!voxelSpace.arrayLoaded){
                 
-                Texture texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMin, voxelSpace.attributValueMax, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
+                Texture texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.min, voxelSpace.max, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.min, voxelSpace.max);
                 scalePlane = SceneObjectFactory.createTexturedPlane(new Vec3F(40, 20, 0), width-80, (int)(height/20), texture, getShaderByName("textureShader"));
                 scalePlane.setDrawType(GL3.GL_TRIANGLES);
                 
@@ -136,7 +136,7 @@ public class Scene {
             
             if(!voxelSpace.isGradientUpdated()){
                 
-                Texture texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMin, voxelSpace.attributValueMax, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
+                Texture texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.min, voxelSpace.max, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.min, voxelSpace.max);
                 changeObjectTexture(scalePlane.getId(), texture);
             }
             

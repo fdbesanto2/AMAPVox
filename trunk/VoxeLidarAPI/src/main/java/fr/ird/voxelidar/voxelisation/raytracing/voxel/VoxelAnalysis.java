@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
 
 public class VoxelAnalysis implements Runnable {
@@ -194,6 +195,9 @@ public class VoxelAnalysis implements Runnable {
          */
         public double lMean = 0;
         public double lMeanOld = 0;
+        
+        public double angleMean = 0;
+        
 
         /**
          *
@@ -235,8 +239,9 @@ public class VoxelAnalysis implements Runnable {
                     append(dist).append(" ").
                     append(nbSampling).append(" ").
                     append(nbEchos).append(" ").
+                    append(nbOutgoing).append(" ").
                     append(lMean).append(" ").
-                    append(lMeanOld).append(" ").toString();
+                    append(angleMean).append(" ").toString();
 
         }
     }
@@ -369,13 +374,16 @@ public class VoxelAnalysis implements Runnable {
 
                         shot.direction.normalize();
                         Point3d origin = new Point3d(shot.origin);
-
+                        
+                        double angle = Math.toDegrees(Math.acos(Math.abs(shot.direction.z)));
+                        
+                        //System.out.println((float)Math.toDegrees(angle));
                         if (shot.nbEchos == 0) {
                             logger.info("test");
                             LineSegment seg = new LineSegment(shot.origin, shot.direction, 999999);
 
                             Point3d echo = seg.getEnd();
-                            propagate(origin, echo, (short) 0, 0, 1, shot.origin, false);
+                            propagate(origin, echo, (short) 0, 0, 1, shot.origin, false, angle);
 
                         } else {
 
@@ -444,9 +452,9 @@ public class VoxelAnalysis implements Runnable {
         
                                 // propagate
                                 if (isTLS) {
-                                    propagate(origin, echo, (short) 0, beamFraction, residualEnergy, shot.origin, lastEcho);
+                                    propagate(origin, echo, (short) 0, beamFraction, residualEnergy, shot.origin, lastEcho, angle);
                                 } else {
-                                    propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho);
+                                    propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho, angle);
                                 }
 
                                 if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
@@ -563,7 +571,7 @@ public class VoxelAnalysis implements Runnable {
      * @param beamFraction
      * @param source shot origin
      */
-    private void propagate(Point3d origin, Point3d echo, short classification, double beamFraction, double residualEnergy, Point3d source, boolean lastEcho) {
+    private void propagate(Point3d origin, Point3d echo, short classification, double beamFraction, double residualEnergy, Point3d source, boolean lastEcho, double angle) {
 
         //get shot line
         LineElement lineElement = new LineSegment(origin, echo);
@@ -639,6 +647,7 @@ public class VoxelAnalysis implements Runnable {
                     vox.bfEntering += residualEnergy;
                     vox.bsEntering += (surface * residualEnergy);
                     
+                    vox.angleMean += angle;
                     /*
                     Si l'écho est sur la face sortante du voxel, 
                     on n'incrémente pas le compteur d'échos
@@ -689,12 +698,13 @@ public class VoxelAnalysis implements Runnable {
                             nbSamplingTotal++;
                             
                             if(!lastEcho){
-                                vox.pathLength += (distanceToHit - d1);
+                                vox.pathLength += (d2 - d1);
                                 vox.nbOutgoing ++;
                             }
                             
                             vox.nbEchos++;
-
+                            vox.angleMean += angle;
+                            
                             vox.bfIntercepted += beamFraction;
                             vox.bsIntercepted += (surface * beamFraction);
 
@@ -755,7 +765,7 @@ public class VoxelAnalysis implements Runnable {
 
             //writer.write("i j k shots path_length BFintercepted BFentering BSintercepted BSentering PAD"+"\n");
             //writer.write("i j k nbSampling interceptions path_length lgTraversant lgInterception PAD PAD2 BFIntercepted BFEntering BSIntercepted BSEntering dist"+"\n");
-            writer.write("i j k BFEntering BFIntercepted BSEntering BSIntercepted path_length lgTraversant PadBF PadBS dist nbSampling nbEchos lMean lMeanOld" + "\n");
+            writer.write("i j k BFEntering BFIntercepted BSEntering BSIntercepted path_length lgTraversant PadBF PadBS dist nbSampling nbEchos nbOutgoing lMean angleMean" + "\n");
 
             for (int i = 0; i < parameters.split.x; i++) {
                 for (int j = 0; j < parameters.split.y; j++) {
@@ -764,6 +774,8 @@ public class VoxelAnalysis implements Runnable {
                         Voxel vox = voxels[i][j][k];
 
                         float PAD, PAD2;
+                        
+                        vox.angleMean = vox.angleMean/vox.nbSampling;
                         
                         if(parameters.isTLS()){
                             
@@ -793,13 +805,19 @@ public class VoxelAnalysis implements Runnable {
 
                             double transmittance = (vox.bfEntering - vox.bfIntercepted) / vox.bfEntering;
                             //double l = vox.lgTraversant/(vox.nbSampling-vox.interceptions);
-                             
-                            if(vox.lMean == 0 && transmittance == 0){
-                                PAD = Float.NaN;
+                            /*
+                            if(!parameters.isTLS()){
+                                logger.error("Voxel : "+vox.i+" "+vox.j+" "+vox.k+" -> transmittance et lMean nuls, NaN assigné");
+                            }
+                            */
+                            
+                            if(vox.nbSampling>1 && transmittance == 0 && vox.nbSampling == vox.nbEchos){
                                 
-                                if(!parameters.isTLS()){
-                                    logger.error("Voxel : "+vox.i+" "+vox.j+" "+vox.k+" -> transmittance et lMean nuls, NaN assigné");
-                                }
+                                PAD = MAX_PAD;
+                                
+                            }else if(vox.nbSampling<=2 && transmittance == 0 && vox.nbSampling == vox.nbEchos){
+                                
+                                PAD = Float.NaN;
                                 
                             }else{
                                 

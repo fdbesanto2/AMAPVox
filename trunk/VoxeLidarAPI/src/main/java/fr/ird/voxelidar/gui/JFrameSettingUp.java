@@ -4705,7 +4705,11 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         
         parameters.setResolution(Float.valueOf(jTextFieldVoxelNumberRes1.getText()));
         parameters.setWeighting(jComboBoxWeighting.getSelectedIndex());
-
+        parameters.setUseDTMCorrection(true);
+        
+        final File dtmFile = new File(jTextFieldFilePathMnt.getText());
+        
+        
         final File outputPath = new File(jTextFieldFileOutputPathTlsVox.getText());
         final File inputRsp = new File(jTextFieldFilePathRsp.getText());
                 
@@ -4780,9 +4784,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         
                 try{
                     if(singleScan){
-                        voxTool.generateVoxelsFromRxp(outputPath, singleScanFile, parameters, vopMatrix, popMatrix);
+                        voxTool.generateVoxelsFromRxp(outputPath, singleScanFile, dtmFile, parameters, vopMatrix, popMatrix);
                     }else{
-                        ArrayList<File> files = voxTool.generateVoxelsFromRsp(outputPath, inputRsp, parameters, vopMatrix, popMatrix, isLight);
+                        ArrayList<File> files = voxTool.generateVoxelsFromRsp(outputPath, inputRsp, dtmFile, parameters, vopMatrix, popMatrix, isLight);
                         filesList.addAll(files);
                     }
                     
