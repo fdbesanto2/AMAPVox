@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3d;
@@ -49,7 +50,7 @@ public class RxpExtraction implements Runnable{
     private final Mat4D transfMatrix;
     private final Mat3D rotation;
     
-    private final Shots shots;
+    private Shots shots;
     
     public native void afficherBonjour();
     private native boolean simpleExtraction(String file, Shots shots);
@@ -70,7 +71,7 @@ public class RxpExtraction implements Runnable{
         shots.addShotsListener(new ShotsListener() {
 
             @Override
-            public void shotExtracted(Shot shot) {
+            public void shotExtracted(final Shot shot) {
                 try {
                     
                     Vec4D locVector = Mat4D.multiply(parent.transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
@@ -83,6 +84,10 @@ public class RxpExtraction implements Runnable{
                     shot.direction = new Vector3d(uVector.x, uVector.y, uVector.z);
 
                     parent.arrayBlockingQueue.put(shot);
+                    
+                    while(parent.arrayBlockingQueue.size() >5000000){
+                        Thread.sleep(3000);
+                    }
                     
                 }catch (InterruptedException ex) {
                     logger.error(ex);
@@ -145,13 +150,13 @@ public class RxpExtraction implements Runnable{
     */
 
     @Override
-    public synchronized void run() {
+    public void run() {
         
         try{
             boolean success = simpleExtraction(rxpFile.getAbsolutePath(), shots);
-        
+                    
             fireIsFinished();
-
+            
             if(!success){
                 logger.error("extraction failed");
             } 

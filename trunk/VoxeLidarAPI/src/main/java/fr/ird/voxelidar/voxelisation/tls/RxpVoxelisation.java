@@ -28,18 +28,18 @@ import org.apache.log4j.Logger;
 public class RxpVoxelisation implements Callable{
     
     private final static Logger logger = Logger.getLogger(RxpVoxelisation.class);
-    private RxpScan rxp;
+    private final RxpScan rxp;
     private Mat4D vopPop;
-    private VoxelParameters parameters;
-    private static int compteur = 1;
+    private final VoxelParameters parameters;
+    private static final int compteur = 1;
     //private VoxelAnalysis voxelAnalysis;
-    private LinkedBlockingQueue<Shot> queue;
+    private final LinkedBlockingQueue<Shot> queue;
     private int nbVoxelisationFinished;
-    private File outputFile;
+    private final File outputFile;
     private final VoxelAnalysis voxelAnalysis;
-    private RxpExtraction extraction;
-    private Thread extractionThread;
-    private Thread voxelAnalysisThread;
+    private final RxpExtraction extraction;
+    private final Thread extractionThread;
+    private final Thread voxelAnalysisThread;
 
     public int getNbVoxelisationFinished() {
         return nbVoxelisationFinished;
@@ -107,7 +107,7 @@ public class RxpVoxelisation implements Callable{
             logger.info("rxp extraction is started");
             
             extractionThread.start();
-            
+            //extractionThread.setPriority(Thread.MIN_PRIORITY);
             
             voxelAnalysisThread.start();
             //wait until extraction is finished
