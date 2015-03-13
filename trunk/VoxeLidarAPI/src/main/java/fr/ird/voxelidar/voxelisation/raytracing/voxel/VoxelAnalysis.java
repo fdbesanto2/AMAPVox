@@ -15,14 +15,10 @@ import fr.ird.voxelidar.engine3d.object.scene.Dtm;
 import fr.ird.voxelidar.util.SimpleFilter;
 import fr.ird.voxelidar.util.TimeCounter;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.Serializable;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3d;
-import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
 
 public class VoxelAnalysis implements Runnable {
@@ -351,7 +347,7 @@ public class VoxelAnalysis implements Runnable {
 
         //writer.close();
             //} catch (IOException ex) {
-            //  java.util.logging.Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
+            //  logger.error(ex);
             //}
             logger.info("Shots treated: " + nbShotsTreated);
             logger.info("voxelisation is finished ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
@@ -600,7 +596,7 @@ public class VoxelAnalysis implements Runnable {
             
             writerTemp.close();
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(VoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         */
         

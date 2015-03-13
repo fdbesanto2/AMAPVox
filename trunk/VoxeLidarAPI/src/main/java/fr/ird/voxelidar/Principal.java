@@ -1,11 +1,7 @@
 package fr.ird.voxelidar;
 
 import fr.ird.voxelidar.gui.JFrameSettingUp;
-import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 
 /*

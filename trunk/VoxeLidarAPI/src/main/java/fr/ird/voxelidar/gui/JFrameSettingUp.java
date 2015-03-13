@@ -20,7 +20,6 @@ import fr.ird.voxelidar.lidar.format.als.LasReader;
 import fr.ird.voxelidar.lidar.format.als.LasToTxt;
 import fr.ird.voxelidar.lidar.format.als.LasToTxtAdapter;
 import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
-import fr.ird.voxelidar.lidar.format.dart.DartWriter;
 import fr.ird.voxelidar.lidar.format.tls.Rsp;
 import fr.ird.voxelidar.lidar.format.tls.Scans;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
@@ -62,7 +61,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.logging.Level;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.InvalidPreferencesFormatException;
 import java.util.prefs.Preferences;
@@ -386,7 +384,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             SwingUtilities.updateComponentTreeUI(this);
             this.pack();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JFrameSettingUp.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
     }
     
@@ -471,7 +469,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         
                     }
                     
-                }else if(compList.get(i) instanceof JList){
+                }/*else if(compList.get(i) instanceof JList){
                     
                     String allItems = prefs.get(String.valueOf(i), "");
                     
@@ -485,7 +483,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
                         ((JList)compList.get(i)).setModel(model);
                     }
-                }
+                }*/
             }
             
             setAppearance(prefs.get("lookandfeel", ""));
@@ -1058,7 +1056,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jScrollPane5 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel57 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
+        jButtonMergeSelectedFiles = new javax.swing.JButton();
         jSplitPane2 = new javax.swing.JSplitPane();
         jPanel8 = new javax.swing.JPanel();
         jButtonAddFile = new javax.swing.JButton();
@@ -1097,7 +1095,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jFileChooser2.setMultiSelectionEnabled(true);
 
         jFileChooserSave.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
-        jFileChooserSave.setCurrentDirectory(new java.io.File("C:\\Program Files\\NetBeans 8.0.1"));
+        jFileChooserSave.setCurrentDirectory(new java.io.File("/home/calcul/Bureau"));
 
         jFileChooser6.setApproveButtonToolTipText("");
         jFileChooser6.setDialogTitle("");
@@ -1113,7 +1111,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
 
         jFileChooserSave1.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
-        jFileChooserSave1.setCurrentDirectory(new java.io.File("C:\\Program Files\\NetBeans 8.0.1"));
+        jFileChooserSave1.setCurrentDirectory(new java.io.File("/home/calcul/Bureau"));
 
         jFileChooser9.setCurrentDirectory(null);
         jFileChooser9.setDialogTitle("");
@@ -1125,7 +1123,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jFileChooser10.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
         jFileChooserSave2.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
-        jFileChooserSave2.setCurrentDirectory(new java.io.File("C:\\Program Files\\NetBeans 8.0.1"));
+        jFileChooserSave2.setCurrentDirectory(new java.io.File("/home/calcul/Bureau"));
 
         jFileChooser11.setCurrentDirectory(null);
         jFileChooser11.setDialogTitle("");
@@ -1173,7 +1171,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanel36.setBackground(new java.awt.Color(114, 114, 114));
 
         jPanel39.setBackground(new java.awt.Color(114, 114, 114));
-        jPanel39.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input file", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), java.awt.Color.black)); // NOI18N
+        jPanel39.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input file", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, java.awt.Color.black));
 
         jLabelName6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabelName6.setText("Name");
@@ -1311,7 +1309,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
 
         jPanel40.setBackground(new java.awt.Color(114, 114, 114));
-        jPanel40.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Min point", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(39, 39, 39))); // NOI18N
+        jPanel40.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Min point", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(39, 39, 39)));
         jPanel40.setToolTipText("");
 
         jTextFieldMinPointX2.setBackground(new java.awt.Color(180, 180, 180));
@@ -1618,38 +1616,39 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanel36Layout.setVerticalGroup(
             jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel36Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButtonSopMatrix)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonPopMatrix)
-                    .addComponent(jButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonVopMatrix)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel45, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel40, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel41, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel42, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
-                .addComponent(jButtonExecuteVoxTls)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel36Layout.createSequentialGroup()
-                .addComponent(jPanel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14)
-                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButtonLightFile)
-                    .addComponent(jRadioButtonComplexFile)
-                    .addComponent(jCheckBoxMergeOutputFiles))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldOutputMergedFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel36Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButtonSopMatrix)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonPopMatrix)
+                            .addComponent(jButton1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonVopMatrix)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel45, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel40, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel41, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel42, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)
+                        .addComponent(jButtonExecuteVoxTls))
+                    .addGroup(jPanel36Layout.createSequentialGroup()
+                        .addComponent(jPanel39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14)
+                        .addGroup(jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jRadioButtonLightFile)
+                            .addComponent(jRadioButtonComplexFile)
+                            .addComponent(jCheckBoxMergeOutputFiles))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldOutputMergedFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -2754,13 +2753,13 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 773, Short.MAX_VALUE)
             .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 773, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 794, Short.MAX_VALUE))
         );
         jPanel31Layout.setVerticalGroup(
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 417, Short.MAX_VALUE)
             .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("LAS => TXT", jPanel31);
@@ -3664,12 +3663,12 @@ public class JFrameSettingUp extends javax.swing.JFrame{
 
         jPanel57.setBackground(new java.awt.Color(114, 114, 114));
 
-        jButton2.setBackground(new java.awt.Color(85, 85, 85));
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Merge selected files");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonMergeSelectedFiles.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonMergeSelectedFiles.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonMergeSelectedFiles.setText("Merge selected files");
+        jButtonMergeSelectedFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonMergeSelectedFilesActionPerformed(evt);
             }
         });
 
@@ -3679,14 +3678,14 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             jPanel57Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel57Layout.createSequentialGroup()
                 .addGap(36, 36, 36)
-                .addComponent(jButton2)
+                .addComponent(jButtonMergeSelectedFiles)
                 .addContainerGap(544, Short.MAX_VALUE))
         );
         jPanel57Layout.setVerticalGroup(
             jPanel57Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel57Layout.createSequentialGroup()
                 .addGap(70, 70, 70)
-                .addComponent(jButton2)
+                .addComponent(jButtonMergeSelectedFiles)
                 .addContainerGap(349, Short.MAX_VALUE))
         );
 
@@ -5297,7 +5296,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         }
     }//GEN-LAST:event_jButtonOpenMatrixFileActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButtonMergeSelectedFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMergeSelectedFilesActionPerformed
         
         if(jFileChooser13.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                                 
@@ -5322,9 +5321,8 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     
                     VoxelisationTool voxTool = new VoxelisationTool();
                     voxTool.mergeVoxelsFile(files, outputFile);
+                    
                     addElementToVoxList(outputFile.getAbsolutePath());
-
-                    model.addElement(outputFile.getAbsolutePath());
             
                     progressBar.setVisible(false);
 
@@ -5338,7 +5336,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         }
         
         
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButtonMergeSelectedFilesActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -5347,7 +5345,6 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.ButtonGroup buttonGroup2DProjection;
     private javax.swing.ButtonGroup buttonGroup3DView;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButtonAddFile;
     private javax.swing.JButton jButtonAddFilter;
     private javax.swing.JButton jButtonCalculateBoundingBox;
@@ -5362,6 +5359,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JButton jButtonGenerateProfile;
     private javax.swing.JButton jButtonLoad;
     private javax.swing.JButton jButtonLoadSelectedFile;
+    private javax.swing.JButton jButtonMergeSelectedFiles;
     private javax.swing.JButton jButtonOpen3DDisplay;
     private javax.swing.JButton jButtonOpenInputFile;
     private javax.swing.JButton jButtonOpenInputFile1;

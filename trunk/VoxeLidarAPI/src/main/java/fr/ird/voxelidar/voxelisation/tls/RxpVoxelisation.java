@@ -81,7 +81,7 @@ public class RxpVoxelisation implements Callable{
             transfMatrix.mat[4],transfMatrix.mat[5],transfMatrix.mat[6],
             transfMatrix.mat[8],transfMatrix.mat[9],transfMatrix.mat[10]
         };
-            
+        
         extraction = new RxpExtraction(rxp.getFile(), queue, transfMatrix, rotation);
         extractionThread = new Thread(extraction);
         voxelAnalysisThread = new Thread(voxelAnalysis);

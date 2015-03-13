@@ -12,20 +12,14 @@ import fr.ird.voxelidar.engine3d.object.mesh.Mesh;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3i;
 import fr.ird.voxelidar.engine3d.object.mesh.TexturedMesh;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -33,7 +27,8 @@ import java.util.logging.Logger;
  */
 public class MeshFactory {
     
-    
+    private final static Logger logger = Logger.getLogger(MeshFactory.class);
+            
     public static Mesh createCube(float size){
         
         float vertexData[] = new float[]
@@ -279,9 +274,9 @@ public class MeshFactory {
             
             reader.close();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(MeshFactory.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         } catch (IOException ex) {
-            Logger.getLogger(MeshFactory.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         
         try {
@@ -319,9 +314,9 @@ public class MeshFactory {
             reader.close();
             
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(MeshFactory.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         } catch (IOException ex) {
-            Logger.getLogger(MeshFactory.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         
         

@@ -7,28 +7,25 @@ package fr.ird.voxelidar.gui;
 
 import fr.ird.voxelidar.engine3d.renderer.JoglListener;
 import fr.ird.voxelidar.engine3d.object.mesh.Attribut;
-import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceAdapter;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.util.ColorGradient;
 import fr.ird.voxelidar.util.Misc;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.event.ItemEvent;
-import java.awt.image.BufferedImage;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author Julien
  */
 public class JFrameTools extends javax.swing.JFrame {
+    
+    private final static Logger logger = Logger.getLogger(JFrameTools.class);
     
     private final JoglListener joglContext;
     private boolean temp;
@@ -75,7 +72,7 @@ public class JFrameTools extends javax.swing.JFrame {
             jComboBoxGradient.setModel(new DefaultComboBoxModel(gradientColorNames.toArray()));
             
         } catch (IllegalArgumentException | IllegalAccessException ex) {
-            Logger.getLogger(JFrameTools.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         
         

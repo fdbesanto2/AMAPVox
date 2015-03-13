@@ -3,9 +3,8 @@ package fr.ird.voxelidar.util.image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import org.apache.log4j.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -17,6 +16,8 @@ import javax.imageio.ImageIO;
  * @author Julien
  */
 public class ImageUtility {
+    
+    private final static Logger logger = Logger.getLogger(ImageUtility.class);
     
     public enum Format{
         JPG("jpg"), PNG("png"), GIF("gif");
@@ -35,7 +36,7 @@ public class ImageUtility {
             }
             ImageIO.write(image, extension.value, new File(outputPath));
         } catch (IOException ex) {
-            Logger.getLogger(ImageUtility.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
     }
 }

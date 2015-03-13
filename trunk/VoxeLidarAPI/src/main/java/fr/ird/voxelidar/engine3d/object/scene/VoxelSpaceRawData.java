@@ -14,22 +14,22 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author Julien
  */
 public class VoxelSpaceRawData {
-            
+    
+    private final static Logger logger = Logger.getLogger(VoxelSpaceRawData.class);
+    
     public Point3i split;
     public Point3d resolution;
     public Point3d bottomCorner;
@@ -146,10 +146,10 @@ public class VoxelSpaceRawData {
             
             writer.close();
             
-        } catch (FileNotFoundException e) {
-            
-        }catch (Exception e) {
-            
+        }catch (FileNotFoundException ex) {
+            logger.error(ex);
+        }catch (Exception ex) {
+            logger.error(ex);
         }
     }
     
@@ -195,9 +195,9 @@ public class VoxelSpaceRawData {
             
             reader.close();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(VoxelSpaceData.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         } catch (IOException ex) {
-            Logger.getLogger(VoxelSpaceData.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         
         return header;

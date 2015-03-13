@@ -7,9 +7,6 @@ package fr.ird.voxelidar.voxelisation.als;
 
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis;
 import fr.ird.voxelidar.voxelisation.VoxelParameters;
-import fr.ird.voxelidar.voxelisation.extraction.LasExtraction;
-import fr.ird.voxelidar.voxelisation.extraction.LasExtractionListener;
-import fr.ird.voxelidar.voxelisation.extraction.RxpExtractionListener;
 import fr.ird.voxelidar.voxelisation.extraction.Shot;
 import fr.ird.voxelidar.engine3d.object.scene.Dtm;
 import fr.ird.voxelidar.engine3d.object.scene.DtmLoader;
@@ -19,8 +16,6 @@ import fr.ird.voxelidar.lidar.format.als.LasReader;
 import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
-import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
-import fr.ird.voxelidar.util.TimeCounter;
 import fr.ird.voxelidar.util.Processing;
 import fr.ird.voxelidar.util.ProcessingListener;
 import java.io.BufferedReader;
@@ -37,11 +32,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.logging.Level;
 import javax.vecmath.Point3d;
-import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
-import javax.vecmath.Vector3f;
 import org.apache.log4j.Logger;
 
 /**
@@ -80,7 +72,7 @@ public class LasVoxelisation extends Processing implements Runnable{
                 terrain = DtmLoader.readFromAscFile(dtmFile, popMatrix);
                 
             } catch (Exception ex) {
-                java.util.logging.Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
+                logger.error(ex);
             }
         }
         
@@ -455,7 +447,7 @@ public class LasVoxelisation extends Processing implements Runnable{
                         //voxeliseOne(e);
                         //shoots.put(String.valueOf(oldTime), e);
                     } catch (InterruptedException ex) {
-                        java.util.logging.Logger.getLogger(LasVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
+                        logger.error(ex);
                     }
                 }
                 compteur = 0;

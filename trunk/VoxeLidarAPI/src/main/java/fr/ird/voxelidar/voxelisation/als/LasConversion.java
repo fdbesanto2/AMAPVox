@@ -16,25 +16,16 @@ import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import fr.ird.voxelidar.util.Processing;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.concurrent.BlockingQueue;
-import java.util.logging.Level;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
@@ -331,7 +322,7 @@ public class LasConversion extends Processing implements Runnable{
         }
         //writer.close();
         //} catch (IOException ex) {
-         //   java.util.logging.Logger.getLogger(LasConversion.class.getName()).log(Level.SEVERE, null, ex);
+         //   logger.error(ex);
         //}
         
         fireFinished();

@@ -5,7 +5,6 @@
  */
 package fr.ird.voxelidar.lidar.format.dart;
 
-import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.Voxel;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData;
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
@@ -15,17 +14,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author Julien
  */
 public class DartWriter {
+    
+    private final static Logger logger = Logger.getLogger(DartWriter.class);
     
     public static void writeFromDart(Dart dart, File outputFile){
         
@@ -84,7 +81,7 @@ public class DartWriter {
             writer.close();
             
         } catch (IOException ex) {
-            Logger.getLogger(DartWriter.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
     }
     
@@ -106,15 +103,8 @@ public class DartWriter {
             
             float[] attributs = voxel.getAttributs();
             
-            Float densite = attributs[attributsNames.indexOf("PAD2")];
+            Float densite = attributs[attributsNames.indexOf("PadBF")];
             
-            if(densite == null){ //format eloi
-                densite = attributs[attributsNames.indexOf("densite")];
-                
-                if(densite == null){ //format eloi
-                    densite = attributs[attributsNames.indexOf("PAD")];
-                }
-            }
             
             int indiceX = voxel.indice.x;
             int indiceY = voxel.indice.x;

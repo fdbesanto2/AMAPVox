@@ -16,7 +16,6 @@ import fr.ird.voxelidar.engine3d.object.scene.Scene;
 import fr.ird.voxelidar.engine3d.object.scene.SceneObject;
 import fr.ird.voxelidar.engine3d.object.scene.Dtm;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
-import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceAdapter;
 import fr.ird.voxelidar.engine3d.loading.shader.Shader;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
@@ -269,9 +268,9 @@ public class JoglListener implements GLEventListener {
             }
             
         } catch (FileNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JoglListener.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         } catch (JDOMException | IOException ex) {
-            java.util.logging.Logger.getLogger(JoglListener.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(ex);
         }
         
     }
