@@ -12,6 +12,7 @@ import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelManager.VoxelCrossingContext;
 import fr.ird.voxelidar.voxelisation.extraction.Shot;
 import fr.ird.voxelidar.engine3d.object.scene.Dtm;
+import fr.ird.voxelidar.util.SimpleFilter;
 import fr.ird.voxelidar.util.TimeCounter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,6 +29,7 @@ public class VoxelAnalysis implements Runnable {
 
     private final static Logger logger = Logger.getLogger(VoxelAnalysis.class);
 
+    private SimpleFilter filter;
     private VoxelSpace voxSpace;
     private Voxel voxels[][][];
     private VoxelManager voxelManager;
@@ -41,7 +43,7 @@ public class VoxelAnalysis implements Runnable {
     private static int compteur2 = 1;
     private Point3d offset;
 
-    private float[][] weighting;
+    private static float[][] weighting;
     //private GroundEnergy[][] groundEnergy;
     
     int count1 = 0;
@@ -207,133 +209,140 @@ public class VoxelAnalysis implements Runnable {
                     Shot shot = arrayBlockingQueue.poll();
 
                     if (shot != null) {
-
-                        //Vec4D locVector = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
-                        //Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
-                        //shot.origin = new Point3d((double)locVector.x, (double)locVector.y, (double)locVector.z);
-                        //shot.direction = new Vector3f((double)uVector.x, (double)uVector.y, (double)uVector.z);
-                        //String line = "\""+time+"\""+" "+shot.nbEchos+" "+shot.origin.x+" "+shot.origin.y+" "+shot.origin.z+" "+shot.direction.x+" "+shot.direction.y+" "+shot.direction.z;
-                        //String line = shot.nbEchos+" "+shot.origin.x+" "+shot.origin.y+" "+shot.origin.z+" "+shot.direction.x+" "+shot.direction.y+" "+shot.direction.z;
-                        //for(int i=0;i<shot.ranges.length;i++){
-                        //    line+=" " + shot.ranges[i];
-                        //}
-                        //writer.write(line+"\n");
-                        if (nbShotsTreated % 1000000 == 0 && nbShotsTreated != 0) {
-                            logger.info("Shots treated: " + nbShotsTreated);
-                        }
-
-                        shot.direction.normalize();
-                        Point3d origin = new Point3d(shot.origin);
                         
-                        double angle = Math.toDegrees(Math.acos(Math.abs(shot.direction.z)));
                         
-                        //System.out.println((float)Math.toDegrees(angle));
-                        if (shot.nbEchos == 0) {
-                            logger.info("test");
-                            LineSegment seg = new LineSegment(shot.origin, shot.direction, 999999);
-
-                            Point3d echo = seg.getEnd();
-                            propagate(origin, echo, (short) 0, 0, 1, shot.origin, false, angle);
-
-                        } else {
-
-                            double beamFraction = 1;
-                            int sumIntensities = 0;
-
-                            if (!isTLS) {
-                                for (int i = 0; i < shot.nbEchos; i++) {
-                                    sumIntensities += shot.intensities[i];
-                                }
+                        
+                        //if(angle > 9.564216){
+                            
+                            //Vec4D locVector = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
+                            //Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
+                            //shot.origin = new Point3d((double)locVector.x, (double)locVector.y, (double)locVector.z);
+                            //shot.direction = new Vector3f((double)uVector.x, (double)uVector.y, (double)uVector.z);
+                            //String line = "\""+time+"\""+" "+shot.nbEchos+" "+shot.origin.x+" "+shot.origin.y+" "+shot.origin.z+" "+shot.direction.x+" "+shot.direction.y+" "+shot.direction.z;
+                            //String line = shot.nbEchos+" "+shot.origin.x+" "+shot.origin.y+" "+shot.origin.z+" "+shot.direction.x+" "+shot.direction.y+" "+shot.direction.z;
+                            //for(int i=0;i<shot.ranges.length;i++){
+                            //    line+=" " + shot.ranges[i];
+                            //}
+                            //writer.write(line+"\n");
+                            if (nbShotsTreated % 1000000 == 0 && nbShotsTreated != 0) {
+                                logger.info("Shots treated: " + nbShotsTreated);
                             }
 
-                            double bfIntercepted = 1;
+                            shot.direction.normalize();
+                            Point3d origin = new Point3d(shot.origin);
 
-                            shotChanged = true;
-                            double residualEnergy = 1;
 
-                            for (int i = 0; i < shot.nbEchos; i++) {
 
-                                switch (parameters.getWeighting()) {
 
-                                    case VoxelParameters.WEIGHTING_FRACTIONING:
-                                        if (shot.nbEchos == 1) {
-                                            bfIntercepted = 1;
-                                        } else {
-                                            bfIntercepted = (shot.intensities[i]) / (double) sumIntensities;
-                                        }
-
-                                        break;
-
-                                    case VoxelParameters.WEIGHTING_ECHOS_NUMBER:
-                                    case VoxelParameters.WEIGHTING_FILE:
-
-                                        bfIntercepted = weighting[shot.nbEchos - 1][i];
-
-                                        break;
-
-                                    default:
-                                        bfIntercepted = 1;
-                                        break;
-
-                                }
-                                /*
-                                count2++;
-        
-                                if(count2==1254){
-                                    System.out.println("test");
-                                }
-                                */
-                                LineSegment seg = new LineSegment(shot.origin, shot.direction, shot.ranges[i]);
+                            //System.out.println((float)Math.toDegrees(angle));
+                            if (shot.nbEchos == 0) {
+                                //logger.info("test");
+                                LineSegment seg = new LineSegment(shot.origin, shot.direction, 999999);
 
                                 Point3d echo = seg.getEnd();
+                                propagate(origin, echo, (short) 0, 0, 1, shot.origin, false, shot.angle);
 
-                        //this.voxSpace.getBoundingBox().update(echo);
-                                //calcul de la fraction de section de faisceau intercepté
-                                if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
-                                    beamFraction = bfIntercepted;
+                            } else {
+
+                                double beamFraction = 1;
+                                int sumIntensities = 0;
+
+                                if (!isTLS) {
+                                    for (int i = 0; i < shot.nbEchos; i++) {
+                                        sumIntensities += shot.intensities[i];
+                                    }
                                 }
 
-                                boolean lastEcho;
+                                double bfIntercepted = 1;
 
-                                
-                                lastEcho = i == shot.nbEchos - 1;
-                                
-                                
-        
-                                // propagate
-                                if (isTLS) {
-                                    propagate(origin, echo, (short) 0, beamFraction, residualEnergy, shot.origin, lastEcho, angle);
-                                } else {
-                                    propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho, angle);
+                                shotChanged = true;
+                                double residualEnergy = 1;
+
+                                for (int i = 0; i < shot.nbEchos; i++) {
+
+                                    switch (parameters.getWeighting()) {
+
+                                        case VoxelParameters.WEIGHTING_FRACTIONING:
+                                            if (shot.nbEchos == 1) {
+                                                bfIntercepted = 1;
+                                            } else {
+                                                bfIntercepted = (shot.intensities[i]) / (double) sumIntensities;
+                                            }
+
+                                            break;
+
+                                        case VoxelParameters.WEIGHTING_ECHOS_NUMBER:
+                                        case VoxelParameters.WEIGHTING_FILE:
+
+                                            bfIntercepted = weighting[shot.nbEchos - 1][i];
+
+                                            break;
+
+                                        default:
+                                            bfIntercepted = 1;
+                                            break;
+
+                                    }
+                                    /*
+                                    count2++;
+
+                                    if(count2==1254){
+                                        System.out.println("test");
+                                    }
+                                    */
+                                    LineSegment seg = new LineSegment(shot.origin, shot.direction, shot.ranges[i]);
+
+                                    Point3d echo = seg.getEnd();
+
+                            //this.voxSpace.getBoundingBox().update(echo);
+                                    //calcul de la fraction de section de faisceau intercepté
+                                    if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
+                                        beamFraction = bfIntercepted;
+                                    }
+
+                                    boolean lastEcho;
+
+
+                                    lastEcho = i == shot.nbEchos - 1;
+
+
+
+                                    // propagate
+                                    if (isTLS) {
+                                        propagate(origin, echo, (short) 0, beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle);
+                                    } else {
+                                        propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle);
+                                    }
+
+                                    if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
+
+                                        residualEnergy -= bfIntercepted;
+                                    }
+
+                                    /*
+                                     double distance = lastEcho.distance(echo);
+                                     if(distance<Math.sqrt(3) && !shotChanged){
+                                     System.out.println(distance);
+                                     //count1++;
+                                     }
+                                     */
+                            //lastEcho = new Point3d(echo);
+                                    //lastShot = nbShotsTreated;
+                                    //shotChanged = false;
+                                    origin = new Point3d(echo);
                                 }
-
-                                if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
-
-                                    residualEnergy -= bfIntercepted;
-                                }
-
-                                /*
-                                 double distance = lastEcho.distance(echo);
-                                 if(distance<Math.sqrt(3) && !shotChanged){
-                                 System.out.println(distance);
-                                 //count1++;
-                                 }
-                                 */
-                        //lastEcho = new Point3d(echo);
-                                //lastShot = nbShotsTreated;
-                                //shotChanged = false;
-                                origin = new Point3d(echo);
                             }
-                        }
 
-                        if (first) {
-                            logger.info(compteur2);
-                            compteur2++;
-                            first = false;
-                        }
+                            if (first) {
+                                logger.info(compteur2);
+                                compteur2++;
+                                first = false;
+                            }
 
-                        nbShotsTreated++;
-                    }
+                            nbShotsTreated++;
+                        }
+                        
+                    //}
 
                 } catch (Exception e) {
                     logger.error(e.getMessage());
@@ -428,13 +437,6 @@ public class VoxelAnalysis implements Runnable {
 
         //get the first voxel cross by the line
         VoxelCrossingContext context = voxelManager.getFirstVoxel(lineElement);
-        
-        count3++;
-        
-        if(count3 == 1326){
-            System.out.println("test");
-        }
-        
         
         double distanceToHit = lineElement.getLength();
 
@@ -637,7 +639,7 @@ public class VoxelAnalysis implements Runnable {
                             }
                             
                         }else{
-                            vox.LMean_NoInterception = vox.Lg_Exiting / (vox.nbSampling);
+                            vox.LMean_NoInterception = vox.Lg_NoInterception / (vox.nbOutgoing);
                             vox.LMean_Exiting = vox.Lg_Exiting / (vox.nbOutgoing);
                         }
                         //double l;

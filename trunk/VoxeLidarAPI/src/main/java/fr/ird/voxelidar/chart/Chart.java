@@ -5,6 +5,7 @@
  */
 package fr.ird.voxelidar.chart;
 
+import fr.ird.voxelidar.util.VoxelFilter;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceAdapter;
 import fr.ird.voxelidar.util.ProcessingListener;

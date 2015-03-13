@@ -58,7 +58,7 @@ public class Projection {
             for(Voxel voxel : data.voxels){
 
                 float value = 0;
-                Float[] attributs = voxel.getAttributs();
+                float[] attributs = voxel.getAttributs();
                 
                 switch(type){
                     case Projection.PAI:

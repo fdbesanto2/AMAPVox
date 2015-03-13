@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -100,7 +101,7 @@ public class VoxelSpace extends SceneObject{
     public VoxelSpace(){
         
         data = new VoxelSpaceData();
-        mapAttributs = new HashMap<>();
+        mapAttributs = new LinkedHashMap<>();
         variables = new TreeSet<>();
         listeners = new EventListenerList();
         fileLoaded = false;
@@ -109,7 +110,7 @@ public class VoxelSpace extends SceneObject{
     public VoxelSpace(File voxelSpace){
         
         data = new VoxelSpaceData();
-        mapAttributs = new HashMap<>();
+        mapAttributs = new LinkedHashMap<>();
         variables = new TreeSet<>();
         listeners = new EventListenerList();
         fileLoaded = false;
@@ -120,7 +121,7 @@ public class VoxelSpace extends SceneObject{
     public VoxelSpace(File voxelSpace, String attributToVisualize){
         
         data = new VoxelSpaceData();
-        mapAttributs = new HashMap<>();
+        mapAttributs = new LinkedHashMap<>();
         variables = new TreeSet<>();
         listeners = new EventListenerList();
         fileLoaded = false;
@@ -351,7 +352,7 @@ public class VoxelSpace extends SceneObject{
                             Integer.valueOf(voxelLine[2]),
                             Integer.valueOf(voxelLine[1]));
 
-                    Float[] mapAttrs = new Float[data.attributsNames.size()];
+                    float[] mapAttrs = new float[data.attributsNames.size()];
 
                     for (int i=0;i<voxelLine.length;i++) {
                         
@@ -587,7 +588,7 @@ public class VoxelSpace extends SceneObject{
                     
             float attributValue;
             
-            Float[] attributs = voxel.getAttributs();
+            float[] attributs = voxel.getAttributs();
             
             for(int i=0; i< attributs.length;i++){
                 

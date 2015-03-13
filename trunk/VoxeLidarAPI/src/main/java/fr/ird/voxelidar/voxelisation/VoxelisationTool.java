@@ -11,12 +11,14 @@ import fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.vector.Vec2D;
+import fr.ird.voxelidar.engine3d.object.mesh.Attribut;
 import fr.ird.voxelidar.engine3d.object.scene.Dtm;
 import fr.ird.voxelidar.engine3d.object.scene.DtmLoader;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.lidar.format.tls.Rsp;
 import fr.ird.voxelidar.lidar.format.tls.Scans;
 import fr.ird.voxelidar.util.DataSet;
+import fr.ird.voxelidar.util.DataSet.Mode;
 import fr.ird.voxelidar.util.TimeCounter;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -41,92 +44,91 @@ import org.apache.log4j.Logger;
  *
  * @author Julien
  */
-public class VoxelisationTool{
-    
+public class VoxelisationTool {
+
     final static Logger logger = Logger.getLogger(VoxelisationTool.class);
-    
+
     private VoxelParameters parameters;
     private final EventListenerList listeners;
     private long startTime;
-    
-    public VoxelisationTool(){
+
+    public VoxelisationTool() {
         listeners = new EventListenerList();
     }
-    
-    public void addVoxelisationToolListener(VoxelisationToolListener listener){
+
+    public void addVoxelisationToolListener(VoxelisationToolListener listener) {
         listeners.add(VoxelisationToolListener.class, listener);
     }
-    
-    public void fireProgress(String progress, int ratio){
-        for(VoxelisationToolListener voxelisationToolListener: listeners.getListeners(VoxelisationToolListener.class)){
+
+    public void fireProgress(String progress, int ratio) {
+        for (VoxelisationToolListener voxelisationToolListener : listeners.getListeners(VoxelisationToolListener.class)) {
             voxelisationToolListener.voxelisationProgress(progress, ratio);
         }
     }
-    
-    public void fireFinished(float duration){
-        
-        for(VoxelisationToolListener voxelisationToolListener: listeners.getListeners(VoxelisationToolListener.class)){
+
+    public void fireFinished(float duration) {
+
+        for (VoxelisationToolListener voxelisationToolListener : listeners.getListeners(VoxelisationToolListener.class)) {
             voxelisationToolListener.voxelisationFinished(duration);
         }
     }
-    
-    private Dtm loadDTM(File dtmFile){
-        
+
+    private Dtm loadDTM(File dtmFile) {
+
         Dtm terrain = null;
-        
-        if(dtmFile != null && parameters.useDTMCorrection() ){
-            
+
+        if (dtmFile != null && parameters.useDTMCorrection()) {
+
             try {
                 terrain = DtmLoader.readFromAscFile(dtmFile, null);
-                
+
             } catch (Exception ex) {
                 logger.error(ex);
             }
         }
-        
+
         return terrain;
     }
-    
-    public ArrayList<File> generateVoxelsFromRsp(File output, File input , File dtmFile, VoxelParameters parameters, Mat4D vop, Mat4D pop, boolean mon) {
-        
+
+    public ArrayList<File> generateVoxelsFromRsp(File output, File input, File dtmFile, VoxelParameters parameters, Mat4D vop, Mat4D pop, boolean mon) {
+
         startTime = System.currentTimeMillis();
-        
+
         this.parameters = parameters;
         this.parameters.setTLS(true);
-        
+
         Rsp rsp = new Rsp();
         rsp.read(input);
 
         ArrayList<Scans> rxpList = rsp.getRxpList();
         ArrayList<File> files = new ArrayList<>();
-        
+
         ExecutorService exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         ArrayList<Callable<RxpVoxelisation>> tasks = new ArrayList<>();
-        
+
         Dtm terrain = loadDTM(dtmFile);
-        
+
         int count = 1;
-        for(Scans rxp :rxpList){
-            
+        for (Scans rxp : rxpList) {
+
             Map<Integer, RxpScan> scanList = rxp.getScanList();
 
-            for(Entry entry:scanList.entrySet()){
-                
+            for (Entry entry : scanList.entrySet()) {
+
                 RxpScan scan = (RxpScan) entry.getValue();
                 //RxpVoxelisation voxelisation;
-                
-                if(mon && scan.getName().contains(".mon")){
-                    File outputFile = new File(output.getAbsolutePath()+"/"+scan.getFile().getName()+".vox");
+
+                if (mon && scan.getName().contains(".mon")) {
+                    File outputFile = new File(output.getAbsolutePath() + "/" + scan.getFile().getName() + ".vox");
                     //fireProgress(outputFile.getAbsolutePath(), count);
                     //voxelisation = new RxpVoxelisation(scan, outputFile, vop, this.parameters);
                     tasks.add(new RxpVoxelisation(scan, outputFile, vop, pop, this.parameters, terrain));
                     files.add(outputFile);
                     //voxelisation.voxelise();
                     count++;
-                    
-                    
-                }else if(!mon && !scan.getName().contains(".mon")){
-                    File outputFile = new File(output.getAbsolutePath()+"/"+scan.getFile().getName()+".vox");
+
+                } else if (!mon && !scan.getName().contains(".mon")) {
+                    File outputFile = new File(output.getAbsolutePath() + "/" + scan.getFile().getName() + ".vox");
                     //fireProgress(outputFile.getAbsolutePath(), count);
                     tasks.add(new RxpVoxelisation(scan, outputFile, vop, pop, this.parameters, terrain));
                     files.add(outputFile);
@@ -136,55 +138,54 @@ public class VoxelisationTool{
                 }
             }
         }
-        
-        
+
         try {
             List<Future> results = (List) exec.invokeAll(tasks);
             exec.shutdown();
-            for(Future f : results) {
+            for (Future f : results) {
                 f.get();
             }
-        } catch (InterruptedException | RejectedExecutionException | NullPointerException |ExecutionException ex ) {
+        } catch (InterruptedException | RejectedExecutionException | NullPointerException | ExecutionException ex) {
             logger.error(ex.getMessage());
         }
-        
+
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
-        
+
         return files;
     }
 
-    public void generateVoxelsFromRxp(File output, File input , File dtmFile, VoxelParameters parameters, Mat4D vop, Mat4D pop) {
-        
+    public void generateVoxelsFromRxp(File output, File input, File dtmFile, VoxelParameters parameters, Mat4D vop, Mat4D pop) {
+
         startTime = System.currentTimeMillis();
-        
+
         this.parameters = parameters;
         this.parameters.setTLS(true);
-        
+
         RxpScan scan = new RxpScan();
         scan.setFile(input);
-        
-        File outputFile = new File(output.getAbsolutePath()+"/"+scan.getFile().getName()+".vox");
-        
+
+        File outputFile = new File(output.getAbsolutePath() + "/" + scan.getFile().getName() + ".vox");
+
         fireProgress(outputFile.getAbsolutePath(), 1);
-        
+
         Dtm terrain = loadDTM(dtmFile);
-        
+
         RxpVoxelisation voxelisation = new RxpVoxelisation(scan, outputFile, vop, pop, parameters, terrain);
         voxelisation.call();
-        
+
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
-        
+
     }
-    
+
     public void generateVoxelsFromLas(File output, File input, File trajectoryFile, File dtmFile, VoxelParameters parameters, Mat4D vop) {
-        
+
         startTime = System.currentTimeMillis();
-        
+
         this.parameters = parameters;
         this.parameters.setTLS(false);
-        
+
         LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, trajectoryFile, parameters, dtmFile);
-        
+
         voxelisation.addProcessingListener(new ProcessingListener() {
 
             @Override
@@ -194,130 +195,257 @@ public class VoxelisationTool{
 
             @Override
             public void processingFinished() {
-                
+
             }
         });
-        
+
         voxelisation.process();
-        
+
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
-        
+
     }
-    
-    public void mergeVoxelsFile(ArrayList<File> filesList, File output) throws NullPointerException{
-        
+
+    public void mergeVoxelsFile(ArrayList<File> filesList, File output) throws NullPointerException {
+
         startTime = System.currentTimeMillis();
-        boolean[] toMerge = null;
+        Mode[] toMerge = null;
         Map<String, Float[]> map1, map2, result = null;
         int size = 0;
         double bottomCornerX = 0, bottomCornerY = 0, bottomCornerZ = 0;
         double topCornerX = 0, topCornerY = 0, topCornerZ = 0;
         int splitX = 0, splitY = 0, splitZ = 0;
         
-        
-        for(int i=0;i<filesList.size();i++){
-            
-            logger.info("Merging in progress, file "+(i+1)+" : "+filesList.size());
-            
+        float[][] nbOutMultiplyAngleMean = null;
+
+        for (int i = 0; i < filesList.size(); i++) {
+
+            logger.info("Merging in progress, file " + (i + 1) + " : " + filesList.size());
+
             VoxelSpace voxelSpace1 = new VoxelSpace(filesList.get(i));
             voxelSpace1.load();
             size = voxelSpace1.data.split.x * voxelSpace1.data.split.y * voxelSpace1.data.split.z;
             map1 = voxelSpace1.data.getVoxelMap();
             
+            
+
             bottomCornerX = voxelSpace1.data.bottomCorner.x;
             bottomCornerY = voxelSpace1.data.bottomCorner.y;
             bottomCornerZ = voxelSpace1.data.bottomCorner.z;
-            
+
             topCornerX = voxelSpace1.data.topCorner.x;
             topCornerY = voxelSpace1.data.topCorner.y;
             topCornerZ = voxelSpace1.data.topCorner.z;
-            
+
             splitX = voxelSpace1.data.split.x;
             splitY = voxelSpace1.data.split.y;
             splitZ = voxelSpace1.data.split.z;
-            
-            if(i == 0){
-                /*
-                toMerge = new boolean[voxelSpace1.getMapAttributs().size()];
-                
-                for(int j=0;j<toMerge.length;j++){
-                    
-                    toMerge[j] = j>2;
+
+            if (i == 0) {
+                Map<String, Attribut> mapAttributs = voxelSpace1.getMapAttributs();
+                toMerge = new Mode[mapAttributs.size()];
+
+                int count = 0;
+                for (Entry entry : mapAttributs.entrySet()) {
+
+                    String key = entry.getKey().toString();
+                    Mode m;
+
+                    switch (key) {
+
+                        case "i":
+                        case "j":
+                        case "k":
+                        case "ground_distance":
+
+                        //discard but recalculate after
+                        case "PadBF":
+                        case "angleMean":
+                        case "LMean_Exiting":
+                        case "LMean_NoInterception":
+
+                            m = Mode.DISCARD;
+                            break;
+
+                        case "nbSampling":
+                        case "nbOutgoing":
+                        case "nbEchos":
+                        case "Lg_NoInterception":
+                        case "Lg_Exiting":
+                        case "bfEntering":
+                        case "bfIntercepted":
+
+                            m = Mode.SUM;
+                            break;
+
+                        case "bsEntering":
+                        case "bsIntercepted":
+                        case "PadBS":
+
+                            m = Mode.REMOVE;
+                            break;
+
+                        default:
+                            m = Mode.DISCARD;
+                    }
+
+                    toMerge[count] = m;
+
+                    count++;
                 }
-                */
-                toMerge = new boolean[]{false, false, false, true, true, true, true, true, true, true, true, false, true, true, true, true, true};
-                
+
                 VoxelSpace voxelSpace2 = new VoxelSpace(filesList.get(i));
                 voxelSpace2.load();
                 map2 = voxelSpace2.data.getVoxelMap();
                 
-            }else{
+                nbOutMultiplyAngleMean = new float[filesList.size()][size];
+
+            } else {
                 map2 = result;
             }
             
-            result = DataSet.mergeTwoDataSet(map1, map2, toMerge);
+            Float[] nbTemp1 = map1.get("nbOutgoing");
+            Float[] nbTemp2 = map1.get("angleMean");
             
+            for(int j=0;j<nbTemp1.length;j++){
+                nbOutMultiplyAngleMean[i][j] = nbTemp1[j] * nbTemp2[j];
+            }
+            
+            result = DataSet.mergeTwoDataSet(map1, map2, toMerge);
+
         }
         
         
-        
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
+        logger.info("Recalculate PadBF, angleMean, LMean_Exiting, LMean_NoInterception");
+        /*recalculate PadBF, angleMean, LMean_Exiting, LMean_NoInterception*/
+        if (result != null) {
             
-            writer.write("VOXEL SPACE" + "\n");
-            writer.write("#min_corner: " + (float)bottomCornerX + " " + (float)bottomCornerY + " " + (float)bottomCornerZ + "\n");
-            writer.write("#max_corner: " + (float)topCornerX + " " + (float)topCornerY + " " + (float)topCornerZ + "\n");
-            writer.write("#split: " + splitX + " " + splitY + " " + splitZ + "\n");
-
-            writer.write("#offset: " + (float) bottomCornerX + " " + (float) bottomCornerY + " " + (float) bottomCornerZ + "\n");
-
+            //remove unused variables
+            result.remove("bsEntering");
+            result.remove("bsIntercepted");
+            result.remove("PadBS");
             
-            String header = "";
+            /*recalculate LMean_Exiting, LMean_NoInterception*/
+            Float[] Lg_NoInterceptionArray  = result.get("Lg_NoInterception");
+            Float[] Lg_ExitingArray = result.get("Lg_Exiting");
+            Float[] nbOutgoingArray = result.get("nbOutgoing");
+            Float[] LMean_ExitingArray = result.get("LMean_Exiting");
+            Float[] LMean_NoInterceptionArray = result.get("LMean_NoInterception");
             
-            for(Entry entry:result.entrySet()){
-                String columnName = (String) entry.getKey();
-                header += columnName+" ";
+            for (int i = 0; i < LMean_ExitingArray.length; i++) {
+                
+                LMean_ExitingArray[i] = Lg_ExitingArray[i] / nbOutgoingArray[i];
+                LMean_NoInterceptionArray[i] = Lg_NoInterceptionArray[i] / nbOutgoingArray[i];
+                
             }
-            header = header.trim();
-            writer.write(header+"\n");
+            
+            /*recalculate PadBF*/
+            Float[] padBFArray = result.get("PadBF");
+            Float[] nbSamplingArray = result.get("nbSampling");
+            Float[] nbEchosArray = result.get("nbEchos");
+
+            if (padBFArray != null && nbSamplingArray != null && nbEchosArray != null && LMean_NoInterceptionArray != null) {
+
+                for (int i = 0; i < padBFArray.length; i++) {
+
+                    float transmittance = (nbSamplingArray[i] - nbEchosArray[i]) / nbSamplingArray[i];
+                    float pad;
+
+                    if (nbSamplingArray[i] > 1 && transmittance == 0 && Objects.equals(nbSamplingArray[i], nbEchosArray[i])) {
+
+                        pad = 3;
+
+                    } else if (nbSamplingArray[i] <= 2 && transmittance == 0 && Objects.equals(nbSamplingArray[i], nbEchosArray[i])) {
+
+                        pad = Float.NaN;
+
+                    } else {
+
+                        pad = (float) (Math.log(transmittance) / (-0.5 * LMean_ExitingArray[i]));
+
+                        if (Float.isNaN(pad)) {
+                            pad = Float.NaN;
+                        } else if (pad > 3 || Float.isInfinite(pad)) {
+                            pad = 3;
+                        }
+                    }
+
+                    padBFArray[i] = pad;
+                }
+            }
+            
+            /*recalculate angleMean*/
+            Float[] angleMeanArray = result.get("angleMean");
             
             for(int i=0;i<size;i++){
                 
-                String voxel = "";
-                
-                int count = 0;
-                for(Entry entry:result.entrySet()){
+                float sum = 0;
+                for(int j=0;j<filesList.size();j++){
                     
-                    Float[] values = (Float[]) entry.getValue();
-                    
-                    if(count<3){
-                        
-                        voxel += values[i].intValue() + " ";
-                    }else{
-                        voxel += values[i]+" ";
+                    if(!Float.isNaN(nbOutMultiplyAngleMean[j][i])){
+                        sum += nbOutMultiplyAngleMean[j][i];
                     }
                     
-                    
-                    count++;
                 }
                 
-                voxel = voxel.trim();
-                
-                writer.write(voxel+"\n");
-                
+                angleMeanArray[i] = sum/nbOutgoingArray[i];
             }
             
+            logger.info("writing output file: "+output.getAbsolutePath());
             
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(VoxelisationTool.class.getName()).log(Level.SEVERE, null, ex);
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
+
+                writer.write("VOXEL SPACE" + "\n");
+                writer.write("#min_corner: " + (float) bottomCornerX + " " + (float) bottomCornerY + " " + (float) bottomCornerZ + "\n");
+                writer.write("#max_corner: " + (float) topCornerX + " " + (float) topCornerY + " " + (float) topCornerZ + "\n");
+                writer.write("#split: " + splitX + " " + splitY + " " + splitZ + "\n");
+
+                writer.write("#offset: " + (float) bottomCornerX + " " + (float) bottomCornerY + " " + (float) bottomCornerZ + "\n");
+
+                String header = "";
+
+                for (Entry entry : result.entrySet()) {
+                    String columnName = (String) entry.getKey();
+                    header += columnName + " ";
+                }
+                header = header.trim();
+                writer.write(header + "\n");
+
+                for (int i = 0; i < size; i++) {
+
+                    String voxel = "";
+
+                    int count = 0;
+                    for (Entry entry : result.entrySet()) {
+
+                        Float[] values = (Float[]) entry.getValue();
+
+                        if (count < 3) {
+
+                            voxel += values[i].intValue() + " ";
+                        } else {
+                            voxel += values[i] + " ";
+                        }
+
+                        count++;
+                    }
+
+                    voxel = voxel.trim();
+
+                    writer.write(voxel + "\n");
+
+                }
+
+            } catch (IOException ex) {
+                logger.error(ex);
+            }
         }
-        
+
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
     }
-    
-    public static Mat4D getMatrixTransformation(Vector3d point1, Vector3d point2){
-        
-        
-        if((point1.x == point2.x) && (point1.y == point2.y) && (point1.z == point2.z)){
+
+    public static Mat4D getMatrixTransformation(Vector3d point1, Vector3d point2) {
+
+        if ((point1.x == point2.x) && (point1.y == point2.y) && (point1.z == point2.z)) {
             return Mat4D.identity();
         }
         Vec2D v = new Vec2D(point1.x - point2.x, point1.y - point2.y);
@@ -325,7 +453,7 @@ public class VoxelisationTool{
 
         Vector3d trans = new Vector3d(-point2.x, -point2.y, -point2.z);
         trans.z = 0; //no vertical translation
-        
+
         Mat4D mat4x4Rotation = new Mat4D();
         Mat4D mat4x4Translation = new Mat4D();
 
@@ -335,16 +463,16 @@ public class VoxelisationTool{
             0, 0, 1, 0,
             0, 0, 0, 1
         };
-        
+
         mat4x4Translation.mat = new double[]{
             1, 0, 0, trans.x,
             0, 1, 0, trans.y,
             0, 0, 1, trans.z,
             0, 0, 0, 1
         };
-        
+
         Mat4D mat4x4 = Mat4D.multiply(mat4x4Translation, mat4x4Rotation);
-        
+
         return mat4x4;
     }
 
@@ -352,5 +480,4 @@ public class VoxelisationTool{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
 }

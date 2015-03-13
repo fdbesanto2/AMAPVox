@@ -27,7 +27,7 @@ public class Voxel extends RawVoxel{
     private Color color;
     public Map<String, Point2f> minMax;
 
-    public Float[] getAttributs() {
+    public float[] getAttributs() {
         return attributs;
     }
     
@@ -43,7 +43,7 @@ public class Voxel extends RawVoxel{
         this.type = 6;
     }
     
-    public Voxel(Point3i indice, Point3f position, Float[] attributs, float alpha){
+    public Voxel(Point3i indice, Point3f position, float[] attributs, float alpha){
         
         this.indice = indice;
         

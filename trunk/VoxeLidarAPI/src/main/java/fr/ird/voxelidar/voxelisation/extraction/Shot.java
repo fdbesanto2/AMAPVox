@@ -1,5 +1,8 @@
 package fr.ird.voxelidar.voxelisation.extraction;
 
+import fr.ird.voxelidar.util.Filter;
+import fr.ird.voxelidar.util.FilterInterface;
+import java.util.ArrayList;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
@@ -22,6 +25,8 @@ public class Shot{
     public double ranges[];
     public int intensities[];
     public short classifications[];
+    
+    public double angle;
     
     public Shot() {
         
@@ -54,6 +59,14 @@ public class Shot{
         this.ranges = ranges;
         this.classifications = classifications;
         this.intensities = intensities;
+    }
+    
+    public void setOriginAndDirection(Point3d origin, Vector3d direction){
+        
+        this.origin = new Point3d(origin);
+        this.direction = new Vector3d(direction);
+        this.angle = Math.toDegrees(Math.acos(Math.abs(direction.z)));
+        
     }
     
 }

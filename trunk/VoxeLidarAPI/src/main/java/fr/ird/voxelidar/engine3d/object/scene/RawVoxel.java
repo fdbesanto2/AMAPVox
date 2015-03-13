@@ -14,5 +14,5 @@ import javax.vecmath.Point3i;
 public class RawVoxel {
     
     public Point3i indice;
-    public Float[] attributs;
+    public float[] attributs;
 }

@@ -61,7 +61,7 @@ public class VoxelSpaceData extends VoxelSpaceRawData{
         
         for (int j=0;j<voxels.size();j++) {
             
-            Float[] attributsValues = voxels.get(j).attributs;
+            float[] attributsValues = voxels.get(j).attributs;
             
             for(int i=0;i<attributsValues.length;i++){
                 voxelMap.get(attributsNames.get(i))[j] = attributsValues[i];
@@ -102,7 +102,7 @@ public class VoxelSpaceData extends VoxelSpaceRawData{
                     
                     if(i<3){
                         
-                        attributsLine += voxel.attributs[i].intValue() + " ";
+                        attributsLine += (int)voxel.attributs[i] + " ";
                     }else{
                         attributsLine += voxel.attributs[i] + " ";
                     }

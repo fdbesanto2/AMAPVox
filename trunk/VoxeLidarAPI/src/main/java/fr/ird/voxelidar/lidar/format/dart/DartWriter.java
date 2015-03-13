@@ -104,7 +104,7 @@ public class DartWriter {
         
         for (Voxel voxel : data.voxels) {
             
-            Float[] attributs = voxel.getAttributs();
+            float[] attributs = voxel.getAttributs();
             
             Float densite = attributs[attributsNames.indexOf("PAD2")];
             

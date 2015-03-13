@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -121,7 +122,8 @@ public class Rsp {
                     scan.setName(sc.getAttributeValue("name"));
                     scan.setFileName(sc.getChildText("file"));
                     String rspFilePathOnly = rspFile.getAbsolutePath().substring(0,rspFile.getAbsolutePath().lastIndexOf(File.separator));
-                    scan.setAbsolutePath(rspFilePathOnly+"\\"+folderScanPositions+"\\"+rxp.getFold()+"\\"+singlescansFold+"\\"+scan.getFileName());
+                    
+                    scan.setAbsolutePath(FilenameUtils.separatorsToSystem(rspFilePathOnly+"\\"+folderScanPositions+"\\"+rxp.getFold()+"\\"+singlescansFold+"\\")+scan.getFileName());
                     scanList.put(scanCount, scan);
                     
                     if(scan.getName().contains(".mon")){

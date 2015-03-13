@@ -6,22 +6,10 @@ import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3D;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3d;
-import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
-import javax.vecmath.Vector3f;
 import org.apache.log4j.Logger;
 
 
@@ -43,6 +31,7 @@ import org.apache.log4j.Logger;
 public class RxpExtraction implements Runnable{
     
     public final static Logger logger = Logger.getLogger(RxpExtraction.class);
+    private final static String NATIVE_LIBRARY_NAME = "RivLibJNI";
     private final EventListenerList listeners;
     
     private final LinkedBlockingQueue<Shot> arrayBlockingQueue;
@@ -50,7 +39,7 @@ public class RxpExtraction implements Runnable{
     private final Mat4D transfMatrix;
     private final Mat3D rotation;
     
-    private Shots shots;
+    private final Shots shots;
     
     public native void afficherBonjour();
     private native boolean simpleExtraction(String file, Shots shots);
@@ -77,18 +66,21 @@ public class RxpExtraction implements Runnable{
                     Vec4D locVector = Mat4D.multiply(parent.transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
                     
                     Vec3D uVector = Mat3D.multiply(parent.rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
-
-                    shot.origin = new Point3d(locVector.x, locVector.y, locVector.z);
+                    
+                    shot.setOriginAndDirection(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z));
+                    //shot.origin = new Point3d(locVector.x, locVector.y, locVector.z);
                     //System.out.println(shot.origin.x + " "+shot.origin.y+" "+shot.origin.z+"\n");
                     
-                    shot.direction = new Vector3d(uVector.x, uVector.y, uVector.z);
-
-                    parent.arrayBlockingQueue.put(shot);
+                    //shot.direction = new Vector3d(uVector.x, uVector.y, uVector.z);
                     
+                    
+                    
+                    parent.arrayBlockingQueue.put(shot);
+                    /*
                     while(parent.arrayBlockingQueue.size() >5000000){
                         Thread.sleep(3000);
                     }
-                    
+                    */
                 }catch (InterruptedException ex) {
                     logger.error(ex);
                 }catch(Exception e){
@@ -101,7 +93,7 @@ public class RxpExtraction implements Runnable{
     static {
         
         NativeLoader loader = new NativeLoader();
-        loader.loadLibrary("RivLibJNI");
+        loader.loadLibrary(NATIVE_LIBRARY_NAME);
         
     }
     

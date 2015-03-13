@@ -7,9 +7,8 @@ package fr.ird.voxelidar.voxelisation.raytracing.voxel;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.vecmath.Point3d;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -125,6 +124,7 @@ public class Voxel implements Serializable {
         public double angleMean = 0;
         
         private static final Field[] _fields = Voxel.getFields();
+        private final static Logger _logger = Logger.getLogger(Voxel.class);
         
 
         /**
@@ -168,8 +168,8 @@ public class Voxel implements Serializable {
                    
             Field[] fields = Voxel.class.getFields();
             
-            for(int f=0;f<fields.length;f++){
-                fields[f].setAccessible(true);
+            for (Field field : fields) {
+                field.setAccessible(true);
             }
             
             return fields;
@@ -181,14 +181,17 @@ public class Voxel implements Serializable {
             String voxelString = "";
 
             // compare values now
-            for (int v = 0; v < _fields.length; v++) {
-                String fieldName = _fields[v].getName();
+            for (Field _field : _fields) {
+                
+                String fieldName = _field.getName();
+                
                 if (!fieldName.startsWith("_")) {
+                    
                     try {
-                        Object newObj = _fields[v].get(this);
+                        Object newObj = _field.get(this);
                         voxelString += newObj + " ";
-                    } catch (IllegalArgumentException | IllegalAccessException ex) {
-                        Logger.getLogger(Voxel.class.getName()).log(Level.SEVERE, null, ex);
+                    }catch (IllegalArgumentException | IllegalAccessException ex) {
+                        _logger.error(ex);
                     }
                 }
             }

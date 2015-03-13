@@ -72,7 +72,7 @@ public class VoxelSpaceRawData {
         
         for (int j=0;j<voxels.size();j++) {
             
-            Float[] attributsValues = voxels.get(j).attributs;
+            float[] attributsValues = voxels.get(j).attributs;
             
             for(int i=0;i<attributsValues.length;i++){
                 voxelMap.get(attributsNames.get(i))[j] = attributsValues[i];
@@ -96,7 +96,7 @@ public class VoxelSpaceRawData {
             for(int i=0;i<attributs.length;i++){
                 
                 if(count == 0){
-                    voxels.add(new Voxel(null, null, new Float[voxelsMap.size()], 1.0f));
+                    voxels.add(new Voxel(null, null, new float[voxelsMap.size()], 1.0f));
                 }
                 
                 voxels.get(i).attributs[count] = attributs[i];
@@ -136,7 +136,7 @@ public class VoxelSpaceRawData {
                     
                     if(i<3){
                         
-                        attributsLine += voxel.attributs[i].intValue() + " ";
+                        attributsLine += (int)voxel.attributs[i] + " ";
                     }else{
                         attributsLine += voxel.attributs[i] + " ";
                     }
