@@ -294,7 +294,7 @@ public class LasConversion extends Processing implements Runnable{
                     e= new Shot(mix.lasPoint.n, new Point3d(mix.xloc_s, mix.yloc_s, mix.zloc_s), 
                                                 new Vector3d(mix.x_u, mix.y_u, mix.z_u), 
                                                 new double[mix.lasPoint.n], new short[mix.lasPoint.n], new int[mix.lasPoint.n]);
-                    
+                    e.calculateAngle();
                     
                     isNewExp = true;
                 }

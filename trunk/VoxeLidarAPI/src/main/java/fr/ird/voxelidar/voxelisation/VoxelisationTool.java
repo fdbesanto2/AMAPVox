@@ -215,7 +215,7 @@ public class VoxelisationTool {
         double topCornerX = 0, topCornerY = 0, topCornerZ = 0;
         int splitX = 0, splitY = 0, splitZ = 0;
         
-        float[][] nbOutMultiplyAngleMean = null;
+        float[][] nbSamplingMultiplyAngleMean = null;
 
         for (int i = 0; i < filesList.size(); i++) {
 
@@ -258,28 +258,37 @@ public class VoxelisationTool {
                         case "ground_distance":
 
                         //discard but recalculate after
-                        case "PadBF":
+                        //case "PadBVOutgoing":
+                        //case "PadBVNoInterceptions":
+                        case "PadBVTotal":
                         case "angleMean":
-                        case "LMean_Exiting":
-                        case "LMean_NoInterception":
+                        //case "lMeanOutgoing":
+                        case "lMeanTotal":
+                        case "transmittance":
+                        //case "LMean_NoInterception":
 
                             m = Mode.DISCARD;
                             break;
 
                         case "nbSampling":
-                        case "nbOutgoing":
+                        //case "nbOutgoing":
                         case "nbEchos":
-                        case "Lg_NoInterception":
-                        case "Lg_Exiting":
-                        case "bfEntering":
-                        case "bfIntercepted":
+                        //case "lgNoInterception":
+                        //case "lgOutgoing":
+                        case "lgTotal":
+                        //case "bvOutgoing":
+                        case "bvEntering":
+                        case "bvIntercepted":
+                        case "bflEntering":
+                        case "bflIntercepted":
 
                             m = Mode.SUM;
                             break;
-
+                        
+                        case "bfEntering":
+                        case "bfIntercepted":
                         case "bsEntering":
                         case "bsIntercepted":
-                        case "PadBS":
 
                             m = Mode.REMOVE;
                             break;
@@ -297,17 +306,17 @@ public class VoxelisationTool {
                 voxelSpace2.load();
                 map2 = voxelSpace2.data.getVoxelMap();
                 
-                nbOutMultiplyAngleMean = new float[filesList.size()][size];
+                nbSamplingMultiplyAngleMean = new float[filesList.size()][size];
 
             } else {
                 map2 = result;
             }
             
-            Float[] nbTemp1 = map1.get("nbOutgoing");
+            Float[] nbTemp1 = map1.get("nbSampling");
             Float[] nbTemp2 = map1.get("angleMean");
             
             for(int j=0;j<nbTemp1.length;j++){
-                nbOutMultiplyAngleMean[i][j] = nbTemp1[j] * nbTemp2[j];
+                nbSamplingMultiplyAngleMean[i][j] = nbTemp1[j] * nbTemp2[j];
             }
             
             result = DataSet.mergeTwoDataSet(map1, map2, toMerge);
@@ -315,63 +324,148 @@ public class VoxelisationTool {
         }
         
         
-        logger.info("Recalculate PadBF, angleMean, LMean_Exiting, LMean_NoInterception");
+        logger.info("Recalculate PadBVOutgoing, angleMean, lMeanOutgoing, LMean_NoInterception");
         /*recalculate PadBF, angleMean, LMean_Exiting, LMean_NoInterception*/
         if (result != null) {
             
             //remove unused variables
-            result.remove("bsEntering");
-            result.remove("bsIntercepted");
-            result.remove("PadBS");
+            //result.remove("bfEntering");
+            //result.remove("bfIntercepted");
+            //result.remove("bsEntering");
+            //result.remove("bsIntercepted");
+            //result.remove("transmittance");
             
-            /*recalculate LMean_Exiting, LMean_NoInterception*/
-            Float[] Lg_NoInterceptionArray  = result.get("Lg_NoInterception");
-            Float[] Lg_ExitingArray = result.get("Lg_Exiting");
-            Float[] nbOutgoingArray = result.get("nbOutgoing");
-            Float[] LMean_ExitingArray = result.get("LMean_Exiting");
-            Float[] LMean_NoInterceptionArray = result.get("LMean_NoInterception");
             
-            for (int i = 0; i < LMean_ExitingArray.length; i++) {
-                
-                LMean_ExitingArray[i] = Lg_ExitingArray[i] / nbOutgoingArray[i];
-                LMean_NoInterceptionArray[i] = Lg_NoInterceptionArray[i] / nbOutgoingArray[i];
-                
-            }
-            
-            /*recalculate PadBF*/
-            Float[] padBFArray = result.get("PadBF");
+            /*recalculate lMeanOutgoing, LMean_NoInterception*/
             Float[] nbSamplingArray = result.get("nbSampling");
             Float[] nbEchosArray = result.get("nbEchos");
+            //Float[] lgOutgoingArray = result.get("lgOutgoing");
+            Float[] lgTotalArray = result.get("lgTotal");
+            //Float[] nbOutgoingArray = result.get("nbOutgoing");
+            //Float[] LMean_OutgoingArray = result.get("lMeanOutgoing");
+            Float[] lMeanTotalArray = result.get("lMeanTotal");
+            //Float[] lMeanNoInterceptionArray = result.get("LMean_NoInterception");
+            //Float[] Lg_NoInterceptionArray  = result.get("lgNoInterception");
+            
+            for (int i = 0; i < lMeanTotalArray.length; i++) {
+                
+                //lMeanNoInterceptionArray[i] = Lg_NoInterceptionArray[i] / (nbSamplingArray[i]-nbEchosArray[i]);
+                //LMean_OutgoingArray[i] = lgOutgoingArray[i] / nbOutgoingArray[i];
+                lMeanTotalArray[i] = lgTotalArray[i] / nbSamplingArray[i];
+                
+            }
+            
+            /*recalculate Pad*/
+            //Float[] padBVOutgoingArray = result.get("PadBVOutgoing");
+            //Float[] PadBVNoInterceptionsArray = result.get("PadBVNoInterceptions");
+            Float[] PadBVTotalArray = result.get("PadBVTotal");
+            Float[] transmittanceArray = result.get("transmittance");
+            
+            if(PadBVTotalArray == null){
+                
+                Float[] PadBflTotalArray = result.get("PadBflTotal");
+                Float[] bflEnteringArray = result.get("bflEntering");
+                Float[] bflInterceptedArray = result.get("bflIntercepted");
+                
+                if (nbSamplingArray != null && nbEchosArray != null) {
 
-            if (padBFArray != null && nbSamplingArray != null && nbEchosArray != null && LMean_NoInterceptionArray != null) {
+                    for (int i = 0; i < PadBflTotalArray.length; i++) {
+                        transmittanceArray[i] = (bflEnteringArray[i] - bflInterceptedArray[i]) / bflEnteringArray[i];
+                        float pad3;
 
-                for (int i = 0; i < padBFArray.length; i++) {
+                        if (bflEnteringArray[i] <= 0) {
 
-                    float transmittance = (nbSamplingArray[i] - nbEchosArray[i]) / nbSamplingArray[i];
-                    float pad;
+                            pad3 = Float.NaN;
 
-                    if (nbSamplingArray[i] > 1 && transmittance == 0 && Objects.equals(nbSamplingArray[i], nbEchosArray[i])) {
+                        } else if (bflInterceptedArray[i] > bflEnteringArray[i]) {
 
-                        pad = 3;
+                            logger.error("BFInterceptes > BFEntering, NaN assigné");
+                            pad3 = Float.NaN;
 
-                    } else if (nbSamplingArray[i] <= 2 && transmittance == 0 && Objects.equals(nbSamplingArray[i], nbEchosArray[i])) {
+                        } else {
 
-                        pad = Float.NaN;
+                            if (nbSamplingArray[i] > 1 && transmittanceArray[i] == 0 && Objects.equals(nbSamplingArray[i], nbEchosArray[i])) {
 
-                    } else {
+                                pad3 = 3;
 
-                        pad = (float) (Math.log(transmittance) / (-0.5 * LMean_ExitingArray[i]));
+                            } else if (nbSamplingArray[i] <= 2 && transmittanceArray[i] == 0 && Objects.equals(nbSamplingArray[i], nbEchosArray[i])) {
 
-                        if (Float.isNaN(pad)) {
-                            pad = Float.NaN;
-                        } else if (pad > 3 || Float.isInfinite(pad)) {
-                            pad = 3;
+                                pad3 = Float.NaN;
+
+                            } else {
+
+                                //pad1 = (float) (Math.log(transmittance) / (-0.5 * LMean_OutgoingArray[i]));
+                                //pad2 = (float) (Math.log(transmittance) / (-0.5 * lMeanNoInterceptionArray[i]));
+                                pad3 = (float) (Math.log(transmittanceArray[i]) / (-0.5 * lMeanTotalArray[i]));
+
+                                if (Float.isNaN(pad3)) {
+                                    pad3 = Float.NaN;
+                                } else if (pad3 > 3 || Float.isInfinite(pad3)) {
+                                    pad3 = 3;
+                                }
+                            }
                         }
-                    }
 
-                    padBFArray[i] = pad;
+
+                        //padBVOutgoingArray[i] = pad1;
+                        //PadBVNoInterceptionsArray[i] = pad2;
+                        PadBflTotalArray[i] = pad3;
+                    }
+                }
+                
+            }else{
+                
+                Float[] bvEnteringArray = result.get("bvEntering");
+                Float[] bvInterceptedArray = result.get("bvIntercepted");
+            
+                if (nbSamplingArray != null && nbEchosArray != null) {
+
+                    for (int i = 0; i < PadBVTotalArray.length; i++) {
+                        transmittanceArray[i] = (bvEnteringArray[i] - bvInterceptedArray[i]) / bvEnteringArray[i];
+                        float pad3;
+
+                        if (bvEnteringArray[i] <= 0) {
+
+                            pad3 = Float.NaN;
+
+                        } else if (bvInterceptedArray[i] > bvEnteringArray[i]) {
+
+                            logger.error("BFInterceptes > BFEntering, NaN assigné");
+                            pad3 = Float.NaN;
+
+                        } else {
+
+                            if (nbSamplingArray[i] > 1 && transmittanceArray[i] == 0 && Objects.equals(nbSamplingArray[i], nbEchosArray[i])) {
+
+                                pad3 = 3;
+
+                            } else if (nbSamplingArray[i] <= 2 && transmittanceArray[i] == 0 && Objects.equals(nbSamplingArray[i], nbEchosArray[i])) {
+
+                                pad3 = Float.NaN;
+
+                            } else {
+
+                                //pad1 = (float) (Math.log(transmittance) / (-0.5 * LMean_OutgoingArray[i]));
+                                //pad2 = (float) (Math.log(transmittance) / (-0.5 * lMeanNoInterceptionArray[i]));
+                                pad3 = (float) (Math.log(transmittanceArray[i]) / (-0.5 * lMeanTotalArray[i]));
+
+                                if (Float.isNaN(pad3)) {
+                                    pad3 = Float.NaN;
+                                } else if (pad3 > 3 || Float.isInfinite(pad3)) {
+                                    pad3 = 3;
+                                }
+                            }
+                        }
+
+
+                        //padBVOutgoingArray[i] = pad1;
+                        //PadBVNoInterceptionsArray[i] = pad2;
+                        PadBVTotalArray[i] = pad3;
+                    }
                 }
             }
+            
+            
             
             /*recalculate angleMean*/
             Float[] angleMeanArray = result.get("angleMean");
@@ -381,13 +475,13 @@ public class VoxelisationTool {
                 float sum = 0;
                 for(int j=0;j<filesList.size();j++){
                     
-                    if(!Float.isNaN(nbOutMultiplyAngleMean[j][i])){
-                        sum += nbOutMultiplyAngleMean[j][i];
+                    if(!Float.isNaN(nbSamplingMultiplyAngleMean[j][i])){
+                        sum += nbSamplingMultiplyAngleMean[j][i];
                     }
                     
                 }
                 
-                angleMeanArray[i] = sum/nbOutgoingArray[i];
+                angleMeanArray[i] = sum/nbSamplingArray[i];
             }
             
             logger.info("writing output file: "+output.getAbsolutePath());

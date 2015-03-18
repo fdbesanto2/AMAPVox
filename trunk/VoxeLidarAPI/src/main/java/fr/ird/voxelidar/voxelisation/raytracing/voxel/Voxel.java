@@ -7,6 +7,10 @@ package fr.ird.voxelidar.voxelisation.raytracing.voxel;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
 
@@ -19,17 +23,17 @@ public class Voxel implements Serializable {
         /**
          * indice du voxel, position en x
          */
-        public int i;
+        public int $i;
 
         /**
          * indice du voxel, position en y
          */
-        public int j;
+        public int $j;
 
         /**
          * indice du voxel, position en z
          */
-        public int k;
+        public int $k;
         
         /**
          * Nombre de fois où un rayon à échantillonné le voxel
@@ -39,7 +43,7 @@ public class Voxel implements Serializable {
         /**
          * Nombre de fois où un rayon à échantillonné le voxel
          */
-        public int nbOutgoing = 0;
+        //public int nbOutgoing = 0;
 
         /**
          * Nombre d'échos dans le voxel
@@ -50,14 +54,16 @@ public class Voxel implements Serializable {
          * Longueurs cumulées des trajets optiques dans le voxel dans le cas 
          * où il n'y a pas eu d'interceptions dans le voxel
          */
-        public double Lg_NoInterception = 0;
+        //public double lgNoInterception = 0;
 
         /**
          * Longueurs cumulées des trajets optiques dans le voxel
          * Lorqu'il y a interception dans le voxel vaut: distance du point d'entrée au point d'interception
          * Lorsqu'il y n'y a pas d'interception dans le voxel vaut: distance du point d'entré au point de sortie
          */
-        public double Lg_Exiting = 0;
+        //public double lgOutgoing = 0;
+        
+        public double lgTotal = 0;
 
         /**
          * PAD beam fraction, calcul du PAD selon la formule:
@@ -65,7 +71,7 @@ public class Voxel implements Serializable {
          * PAD = log(transmittance) / (-0.5 * lMean2);
          * 
          */
-        public double PadBF = 0;
+        //public double PadBF = 0;
 
         /**
          * PAD beam section, calcul du PAD selon la formule:
@@ -73,20 +79,20 @@ public class Voxel implements Serializable {
          * PAD = log(transmittance) / (-0.5 * lMean2);
          * 
          */
-        public double PadBS = 0;
+        
 
         /**
          * Beam fraction Entering, fraction de faisceau entrante
          * Nombre de fois où un rayon a échantillonné le voxel,
          * contrairement à nbSampling, peut etre pondéré
          */
-        public double bfEntering = 0;
+        //public double bfEntering = 0;
 
         /**
          * Beam fraction Intercepted, fraction de faisceau interceptée
          * Nombre d'échos dans le voxel, contrairement à nbEchos peut être pondéré
          */
-        public double bfIntercepted = 0;
+        //public double bfIntercepted = 0;
 
         /**
          * Beam Section Entering, section de faisceau entrant,
@@ -94,12 +100,12 @@ public class Voxel implements Serializable {
          * tan(laserBeamDivergence / 2) * distance * Math.PI;
          * 
          */
-        public float bsEntering = 0;
+        //public float bsEntering = 0;
 
         /**
          * Beam Section Intercepted, section de faisceau intercepté 
          */
-        public float bsIntercepted = 0;
+        //public float bsIntercepted = 0;
 
         /**
          * Distance du voxel par rapport au sol
@@ -112,19 +118,27 @@ public class Voxel implements Serializable {
          * signifie que l'attribut ne doit pas être exporté
          */
         public Point3d _position;
+        
+        public double _sum_li;
+        //public double bvOutgoing = 0;
+        //public double bvEntering = 0;
+        //public double bvIntercepted = 0;
 
         /**
          * Longueur moyenne du trajet optique dans le voxel
          * En ALS est égal à: pathLength / (nbSampling)
          * En TLS est égal à: lgTraversant / (nbSampling - nbEchos)
          */
-        public double LMean_Exiting = 0;
-        public double LMean_NoInterception = 0;
+        //public double lMeanOutgoing = 0;
+        public double lMeanTotal = 0;
+        //public double LMean_NoInterception = 0;
         
+        public double transmittance = 0;
         public double angleMean = 0;
         
-        private static final Field[] _fields = Voxel.getFields();
-        private final static Logger _logger = Logger.getLogger(Voxel.class);
+        protected static final Set<String> fieldsNames = new TreeSet<>();
+        private static final Set<Field> _fields = Voxel.getFields(Voxel.class);
+        protected final static Logger _logger = Logger.getLogger(Voxel.class);
         
 
         /**
@@ -135,9 +149,9 @@ public class Voxel implements Serializable {
          */
         public Voxel(int i, int j, int k) {
 
-            this.i = i;
-            this.j = j;
-            this.k = k;
+            this.$i = i;
+            this.$j = j;
+            this.$k = k;
         }
         
         public void setPosition(Point3d position){
@@ -148,31 +162,27 @@ public class Voxel implements Serializable {
             this.ground_distance = dist;
         }
         
-        public static String getHeader(){
-            
-            String header = "";
-            
-            for (Field field : _fields) {
-                String fieldName = field.getName();
-                if(!fieldName.startsWith("_")){
-                    header += fieldName+" ";
-                }
-            }
-            
-            header = header.trim();
-            
-            return header;
-        }
         
-        private static Field[] getFields(){
+        protected static Set<Field> getFields(Class c){
                    
-            Field[] fields = Voxel.class.getFields();
+            Field[] fields = c.getFields();
+            
+            Set<Field> fieldsSet = new TreeSet<>(new Comparator<Field>() {
+
+                @Override
+                public int compare(Field o1, Field o2) {
+                    
+                    return o1.getName().compareTo(o2.getName());
+                }
+            });
             
             for (Field field : fields) {
                 field.setAccessible(true);
+                fieldsSet.add(field);
+                fieldsNames.add(field.getName());
             }
             
-            return fields;
+            return fieldsSet;
         }
 
         @Override

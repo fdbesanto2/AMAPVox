@@ -65,8 +65,12 @@ public class Shot{
         
         this.origin = new Point3d(origin);
         this.direction = new Vector3d(direction);
-        this.angle = Math.toDegrees(Math.acos(Math.abs(direction.z)));
         
+        calculateAngle();
+    }
+    
+    public void calculateAngle(){
+        this.angle = Math.toDegrees(Math.acos(Math.abs(direction.z)));
     }
     
 }
