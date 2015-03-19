@@ -32,7 +32,7 @@ public class VoxelAnalysis implements Runnable {
     private VoxelManager voxelManager;
 
     private final double laserBeamDivergence = 0.0005f;
-    private static final float MAX_PAD = 3;
+    private static final float MAX_PAD = 3.0f;
 
     private int nbShotsTreated;
     private File outputFile;
@@ -71,6 +71,7 @@ public class VoxelAnalysis implements Runnable {
     private int nbEchosInsideVoxel = 1;
     private double lastEntering;
     private int lastShotID;
+    private double lastSurface = 0;
 
     private ArrayList<Integer> indicesEchosTemp = new ArrayList<>();
     private double meanLongTemp = 0;
@@ -407,6 +408,8 @@ public class VoxelAnalysis implements Runnable {
                 vox.nbSampling++;
                 //vox.nbOutgoing++;
                 nbSamplingTotal++;
+                
+                
 
                 //vox.bfEntering += residualEnergy;
                 //vox.bsEntering += (surface * residualEnergy);
@@ -456,22 +459,35 @@ public class VoxelAnalysis implements Runnable {
                 if ((echoDistance >= parameters.minDTMDistance && parameters.useDTMCorrection()) || !parameters.useDTMCorrection()) {
                     if ((classification != 2 && !parameters.isTLS()) || parameters.isTLS()) { // if not ground
 
-                        /*test pour savoir si l'écho précédent du tir était dans cette maille*/
+                        /*test pour savoir si l'écho précédent du tir était dans cette maille
+                        cette condition est vérifiée si l'écho précédent du même tir était dans ce voxel*/
                         if (lastIndices.equals(indices) && lastShotID == shotID) {
                             
                             indicesEchosTemp.add(indiceEcho);
+                            
+                            
+                            lastDistanceToHit = distanceToHit;
+                            lastD1 = d1;
+                            lastD2 = d2;
+                            
+                            //on incrémente les fractions de faisceau 
+                            
+                            //cas où il y a déjà un écho dans le voxel
                             if(nbEchosInsideVoxel == 1){
                                 sumBeamFraction += lastBeamFraction;
                             }
                             
                             sumBeamFraction += beamFraction;
                             
+                            
                             wasEqual = true;
 
                             nbEchosInsideVoxel++;
+                            
+                            lastSurface = surface;
 
                         } /* cas où précédemment plusieurs échos étaient dans le même voxel
-                        
+                        Attention: le contexte a changé, nous ne sommes plus dans le même voxel
                          étape 1: on doit décrémenter les valeurs attribuées lors du premier écho 
                          (on ne savait pas alors que les échos suivants seraient dans le même voxel)
                         
@@ -479,7 +495,10 @@ public class VoxelAnalysis implements Runnable {
                          on incrémente donc les valeurs dans le voxel comme si un seul écho 
                          avait été à l'intérieur*/ 
                         else if (wasEqual) {
-
+                            
+                            count2++;
+                            
+                            
                             //sumBeamFraction += lastBeamFraction;
                             //assert sumBeamFraction <= 1.0 : "sumBeamFraction cannot be greater than 1, value: "+sumBeamFraction;
                             
@@ -494,26 +513,45 @@ public class VoxelAnalysis implements Runnable {
                             assert Math.abs(sumBeamFraction - testTemp)<0.01 : "error add sum beam fraction";
                             */
                             Voxel lastVox = voxels[lastIndices.x][lastIndices.y][lastIndices.z];
-
+                            
                             //lastVox.lgOutgoing -= lastLongueur;
                             double longueur;
+                            
+                            longueur = (lastD2 - lastD1);
+                            
+                            //if(parameters.isTLS()){
+                                
+                            if(!lastEcho){
+                                    
+                            }else{
+                                longueur = (lastDistanceToHit - lastD1);
+                            }
+                                
+                            //}
 
                             //if(!lastEcho){
-                            longueur = (lastD2 - lastD1);
+                            
                                 //lastVox.lgOutgoing += longueur;
                             //lastVox.nbOutgoing ++; // ?? vraiment sortant, je ne crois pas
                             /*}else{
                              longueur = (lastDistanceToHit - lastD1);
                              //lastVox.Lg_Exiting += longueur;
                              }*/
+                            lastVox.lgTotal -= lastLongueur;
+                            lastVox.lgTotal += longueur;
 
                             if (parameters.isTLS()) {
                                 //ne rien faire, a déjà été incrémenté une fois
+                                ((TLSVoxel) lastVox).bflEntering -= lastEntering;
+                                ((TLSVoxel) lastVox).bflEntering += (lastBeamFraction * longueur);
+                                ((TLSVoxel) lastVox).bflIntercepted -= lastEntering;
+                                ((TLSVoxel) lastVox).bflIntercepted += (lastBeamFraction * longueur);
+                                
                             } else {
                                 ((ALSVoxel) lastVox).bvEntering -= lastEntering;
-                                ((ALSVoxel) lastVox).bvEntering += (surface * sumBeamFraction * longueur);
+                                ((ALSVoxel) lastVox).bvEntering += (lastSurface * sumBeamFraction * longueur);
                                 ((ALSVoxel) lastVox).bvIntercepted -= lastEntering;
-                                ((ALSVoxel) lastVox).bvIntercepted += (surface * sumBeamFraction * longueur);
+                                ((ALSVoxel) lastVox).bvIntercepted += (lastSurface * sumBeamFraction * longueur);
                             }
 
                             //on réinitialise les variables temporaires
@@ -535,27 +573,35 @@ public class VoxelAnalysis implements Runnable {
                             nbSamplingTotal++;
 
                             double longueur;
-
-                            if(!lastEcho){
-                                longueur = (d2 - d1);
+                            longueur = (d2 - d1);
+                            
+                            
+                            //if(parameters.isTLS()){
+                                
+                                if(!lastEcho){
+                                
                                 //vox.lgOutgoing += longueur;
                                 /*
-                             if(!parameters.isTLS()){
-                             ((ALSVoxel)vox).bvOutgoing += (surface * residualEnergy * longueur);
-                             }else{
-                             ((TLSVoxel)vox).bflOutgoing += (residualEnergy * longueur);
-                             }
+                                if(!parameters.isTLS()){
+                                ((ALSVoxel)vox).bvOutgoing += (surface * residualEnergy * longueur);
+                                }else{
+                                ((TLSVoxel)vox).bflOutgoing += (residualEnergy * longueur);
+                                }
+
+                                vox.nbOutgoing ++;
+                                */
+                               }else{
+                                   longueur = (distanceToHit - d1);
+                               }
                                 
-                             vox.nbOutgoing ++;
-                             */
-                            }else{
-                                longueur = (distanceToHit - d1);
+                            //}
+                            
+
+                            if(indices.x == 0 && indices.y == 33 && indices.z == 5){
+                                System.out.println("test");
                             }
-
-                            lastD1 = d1;
-                            lastD2 = d2;
-                            lastDistanceToHit = distanceToHit;
-
+                            
+                            //lastSurface = surface;
                             lastLongueur = longueur;
 
                             vox.lgTotal += longueur;
@@ -584,7 +630,6 @@ public class VoxelAnalysis implements Runnable {
                             }
 
                             lastEntering = entering;
-                        //} 
                             lastIndice = indiceEcho;
                             lastBeamFraction = beamFraction;
                             lastNbEchos = nbEchos;
@@ -659,7 +704,7 @@ public class VoxelAnalysis implements Runnable {
                         
                         vox.angleMean = vox.angleMean / vox.nbSampling;
 
-                        if (vox.nbSampling > vox.nbEchos) {
+                        if (vox.nbSampling >= vox.nbEchos) {
 
                             //vox.lMeanOutgoing = vox.lgOutgoing / (vox.nbOutgoing);
                             //vox.LMean_NoInterception = vox.lgNoInterception / (vox.nbSampling - vox.nbEchos);
@@ -764,7 +809,8 @@ public class VoxelAnalysis implements Runnable {
 
                                     //pad1 = MAX_PAD;
                                     //pad2 = MAX_PAD;
-                                    pad3 = MAX_PAD;
+                                    //pad3 = MAX_PAD;
+                                    pad3 = Float.NaN;
 
                                 } else if (alsVox.nbSampling <= 2 && alsVox.transmittance == 0 && alsVox.nbSampling == alsVox.nbEchos) {
 

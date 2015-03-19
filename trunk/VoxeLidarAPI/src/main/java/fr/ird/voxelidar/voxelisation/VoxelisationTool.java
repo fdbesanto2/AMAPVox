@@ -409,7 +409,7 @@ public class VoxelisationTool {
 
                         //padBVOutgoingArray[i] = pad1;
                         //PadBVNoInterceptionsArray[i] = pad2;
-                        PadBflTotalArray[i] = pad3;
+                        PadBflTotalArray[i] = pad3+0.0f;
                     }
                 }
                 
@@ -460,7 +460,7 @@ public class VoxelisationTool {
 
                         //padBVOutgoingArray[i] = pad1;
                         //PadBVNoInterceptionsArray[i] = pad2;
-                        PadBVTotalArray[i] = pad3;
+                        PadBVTotalArray[i] = pad3 + 0.0f;
                     }
                 }
             }
