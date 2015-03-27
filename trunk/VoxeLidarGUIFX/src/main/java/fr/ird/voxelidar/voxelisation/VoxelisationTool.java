@@ -567,11 +567,8 @@ public class VoxelisationTool {
             0, 0, 0, 1
         });
 
-        Matrix4d mat4x4 = new Matrix4d();
-        mat4x4.setIdentity();
-        mat4x4Translation.mul(mat4x4Rotation);
-        mat4x4.mul(mat4x4Translation);
-        return mat4x4;
+        mat4x4Rotation.mul(mat4x4Translation);
+        return mat4x4Rotation;
     }
 
     public void addVoxelisationToolListener(ProcessingListener processingListener) {

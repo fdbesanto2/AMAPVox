@@ -10,15 +10,18 @@ import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceAdapter;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceListener;
+import fr.ird.voxelidar.util.MatrixConverter;
 import fr.ird.voxelidar.util.MatrixFileParser;
 import fr.ird.voxelidar.util.Settings;
+import fr.ird.voxelidar.util.TimeCounter;
+import fr.ird.voxelidar.voxelisation.VoxelParameters;
+import fr.ird.voxelidar.voxelisation.VoxelisationTool;
+import fr.ird.voxelidar.voxelisation.VoxelisationToolListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -49,6 +52,9 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.vecmath.Matrix4d;
+import javax.vecmath.Point3d;
+import javax.vecmath.Point3i;
+import org.apache.log4j.Logger;
 import org.controlsfx.dialog.ProgressDialog;
 
 /**
@@ -58,7 +64,12 @@ import org.controlsfx.dialog.ProgressDialog;
  */
 public class MainFrameController implements Initializable {
     
+    private final static Logger logger = Logger.getLogger(MainFrameController.class);
     private Stage stage;
+    
+    private CalculateMatrixFrameController calculateMatrixFrameController;
+    private Stage calculateMatrixFrame;
+    
     private FileChooser fileChooserOpenInputFileALS;
     private FileChooser fileChooserOpenTrajectoryFileALS;
     private FileChooser fileChooserOpenOutputFileALS;
@@ -196,6 +207,12 @@ public class MainFrameController implements Initializable {
     private Button buttonOpenVopMatrixFile;
     @FXML
     private Button buttonEnterReferencePointsVop;
+    @FXML
+    private MenuItem menuitemALSActionExecute;
+    @FXML
+    private MenuItem menuitemALSActionAddTask;
+    @FXML
+    private ComboBox<?> comboboxWeighting;
     
     
     /**
@@ -283,6 +300,22 @@ public class MainFrameController implements Initializable {
         vopMatrix.setIdentity();
         resultMatrix = new Matrix4d();
         resultMatrix.setIdentity();
+        
+        calculateMatrixFrame = new Stage();
+        
+        
+        Parent root;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CalculateMatrixFrame.fxml"));
+            root = loader.load();
+            calculateMatrixFrameController = loader.getController();
+            calculateMatrixFrameController.setStage(calculateMatrixFrame);
+            Scene scene = new Scene(root);
+            calculateMatrixFrame.setScene(scene);  
+        } catch (IOException ex) {
+            logger.error(ex);
+        }
+        
     }
     
     public void setStage(Stage stage){
@@ -368,22 +401,6 @@ public class MainFrameController implements Initializable {
         ProgressDialog d = new ProgressDialog(service);
         
         d.show();
-        
-        /*
-        final VoxelSpace voxelSpace = new VoxelSpace(listViewVoxelsFiles.getSelectionModel().getSelectedItem());
-        
-        Settings settings = new Settings(false, true, true, true, comboboxAttributeToView.getSelectionModel().getSelectedItem());
-        
-        voxelSpace.setSettings(settings);
-        voxelSpace.setCurrentAttribut(settings.attributeToVisualize);
-        
-        voxelSpace.load();
-        voxelSpace.updateValue();
-                
-        JOGLWindow joglWindow = new JOGLWindow(640, 480, listViewVoxelsFiles.getSelectionModel().getSelectedItem().toString(), voxelSpace, settings);
-        
-        joglWindow.show();
-                */
     }
 
     @FXML
@@ -551,38 +568,98 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonEnterReferencePointsVop(ActionEvent event) {
         
-        Parent root;
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CalculateMatrixFrame.fxml"));
-            root = loader.load();
-            
-            CalculateMatrixFrameController controller = loader.getController();
-            
-            
-            Stage calculateMatrixFrame = new Stage();
-            controller.setStage(calculateMatrixFrame);
-            
-            Scene scene = new Scene(root);
-            
-            calculateMatrixFrame.setScene(scene);  
-            calculateMatrixFrame.show();
-            
-            calculateMatrixFrame.setOnHidden(new EventHandler<WindowEvent>() {
+        
+        calculateMatrixFrame.show();
 
-                @Override
-                public void handle(WindowEvent event) {
-                    vopMatrix = controller.getMatrix();
+        calculateMatrixFrame.setOnHidden(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+
+                if(calculateMatrixFrameController.getMatrix() != null){
+                    vopMatrix = calculateMatrixFrameController.getMatrix();
                     updateResultMatrix();
                 }
-            });
-            
-            
-            
-            
-        } catch (IOException ex) {
-            
-        }
+            }
+        });
         
+    }
+
+    @FXML
+    private void onActionMenuitemALSActionExecute(ActionEvent event) {
+        
+        final String inputVoxPath = textFieldInputFileALS.getText();
+        
+        final File trajectoryFile = new File(textFieldTrajectoryFileALS.getText());
+        
+        final File dtmFile = new File(textfieldDTMPath.getText());
+        
+        final VoxelParameters parameters = new VoxelParameters();
+        parameters.setBottomCorner(new Point3d(
+                            Double.valueOf(textFieldEnterXMin.getText()), 
+                            Double.valueOf(textFieldEnterYMin.getText()), 
+                            Double.valueOf(textFieldEnterZMin.getText())));
+        
+        parameters.setTopCorner(new Point3d(
+                            Double.valueOf(textFieldEnterXMax.getText()), 
+                            Double.valueOf(textFieldEnterYMax.getText()), 
+                            Double.valueOf(textFieldEnterZMax.getText())));
+        
+        parameters.setSplit(new Point3i(
+                            Integer.valueOf(textFieldXNumber.getText()), 
+                            Integer.valueOf(textFieldYNumber.getText()), 
+                            Integer.valueOf(textFieldZNumber.getText())));
+        
+        parameters.setResolution(Double.valueOf(textFieldResolution.getText()));
+        parameters.setWeighting(comboboxWeighting.getSelectionModel().getSelectedIndex());
+        parameters.setUseDTMCorrection(checkboxUseDTMFilter.isSelected());
+        
+        
+        final File outputFile = new File(textFieldOutputFileALS.getText());
+        
+        final VoxelisationTool voxTool = new VoxelisationTool();
+        final long start_time = System.currentTimeMillis();
+        
+           
+        Service<Void> service = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws InterruptedException {
+
+                        voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
+
+                            @Override
+                            public void voxelisationProgress(String progress, int ratio) {
+                                updateMessage(progress);
+                            }
+
+                            @Override
+                            public void voxelisationFinished(float duration) {
+
+                                logger.info("las voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
+                            }
+                        });
+                        
+                        voxTool.generateVoxelsFromLas(outputFile, new File(inputVoxPath), trajectoryFile, dtmFile, parameters, MatrixConverter.convertMatrix4dToMat4D(resultMatrix));
+                        listViewVoxelsFiles.getItems().add(outputFile);
+
+                        listViewVoxelsFiles.getSelectionModel().select(outputFile);
+                        
+                        return null;
+                    }
+                };
+            }
+        };
+
+        ProgressDialog d = new ProgressDialog(service);
+        
+        d.show();
+    }
+
+    @FXML
+    private void onActionMenuitemALSActionAddTask(ActionEvent event) {
     }
     
 }
