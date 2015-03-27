@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import fr.ird.voxelidar.*?>
+
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="659.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ird.voxelidar.MainFrameController">
+   <children>
+      <MenuBar maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="25.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <Menu mnemonicParsing="false" text="Parameters">
+                    <items>
+                        <MenuItem fx:id="menuItemLoad" mnemonicParsing="false" onAction="#onActionMenuItemLoad" text="Load" />
+                        <MenuItem fx:id="menuItemSave" mnemonicParsing="false" onAction="#onActionMenuItemSave" text="Save" />
+                      <MenuItem fx:id="menuItemSaveAs" mnemonicParsing="false" onAction="#onActionMenuItemSaveAs" text="Save as..." />
+                    </items>
+                  </Menu>
+               </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <SplitPane dividerPositions="0.7175843694493783" layoutY="29.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" prefHeight="565.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <TabPane prefHeight="400.0" prefWidth="798.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <tabs>
+                      <Tab text="Voxelisation">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <SplitPane dividerPositions="0.4296482412060301" layoutX="63.0" layoutY="52.0" prefHeight="367.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <items>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                             <children>
+                                                <TabPane layoutX="76.0" layoutY="42.0" prefHeight="365.0" prefWidth="495.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                  <tabs>
+                                                    <Tab text="ALS">
+                                                      <content>
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <Button fx:id="buttonOpenInputFileALS" layoutX="14.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileALS" text="Open" AnchorPane.leftAnchor="14.0" />
+                                                                  <ComboBox fx:id="comboboxModeALS" layoutX="14.0" layoutY="14.0" prefWidth="150.0" promptText="Choose mode..." />
+                                                                  <Label layoutX="14.0" layoutY="58.0" text="Input file" />
+                                                                  <TextField fx:id="textFieldInputFileALS" editable="false" layoutX="14.0" layoutY="73.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                                  <TextField fx:id="textFieldTrajectoryFileALS" editable="false" layoutX="14.0" layoutY="172.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                                  <Label layoutX="14.0" layoutY="155.0" text="Trajectory file" />
+                                                                  <Button fx:id="buttonOpenTrajectoryFileALS" layoutX="14.0" layoutY="197.0" mnemonicParsing="false" onAction="#onActionButtonOpenTrajectoryFileALS" text="Open" AnchorPane.leftAnchor="14.0" />
+                                                                  <TextField fx:id="textFieldOutputFileALS" editable="false" layoutX="14.0" layoutY="250.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                                  <Label layoutX="14.0" layoutY="235.0" text="Output file" />
+                                                                  <Button fx:id="buttonOpenOutputFileALS" layoutX="14.0" layoutY="275.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileALS" text="Open" AnchorPane.leftAnchor="14.0" />
+                                                                  <MenuButton layoutX="237.0" layoutY="300.0" mnemonicParsing="false" text="Action" AnchorPane.rightAnchor="24.0">
+                                                                     <items>
+                                                                        <MenuItem mnemonicParsing="false" text="Execute">
+                                                                           <graphic>
+                                                                              <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@icons/gnome-run.png" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                           </graphic>
+                                                                        </MenuItem>
+                                                                        <MenuItem mnemonicParsing="false" text="Add to task list">
+                                                                           <graphic>
+                                                                              <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@icons/gnome_list_add.png" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                           </graphic>
+                                                                        </MenuItem>
+                                                                     </items>
+                                                                  </MenuButton>
+                                                               </children></AnchorPane>
+                                                      </content>
+                                                    </Tab>
+                                                    <Tab text="TLS">
+                                                      <content>
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <Button fx:id="buttonOpenOutputPathTLS" layoutX="14.0" layoutY="275.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputPathTLS" text="Open" />
+                                                                  <Label layoutX="14.0" layoutY="235.0" text="Output path" />
+                                                                  <TextField fx:id="textFieldOutputPathTLS" editable="false" layoutX="14.0" layoutY="250.0" prefHeight="25.0" prefWidth="300.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                                  <ComboBox fx:id="comboboxModeTLS" layoutX="14.0" layoutY="14.0" prefWidth="150.0" promptText="Choose mode..." />
+                                                                  <TextField fx:id="textFieldInputFileTLS" editable="false" layoutX="14.0" layoutY="73.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                                  <Label layoutX="14.0" layoutY="58.0" text="Input file" />
+                                                                  <Button fx:id="buttonOpenInputFileTLS" layoutX="14.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileTLS" text="Open" />
+                                                                  <MenuButton layoutX="247.0" layoutY="300.0" mnemonicParsing="false" text="Action" AnchorPane.rightAnchor="24.0">
+                                                                     <items>
+                                                                        <MenuItem mnemonicParsing="false" text="Execute">
+                                                                           <graphic>
+                                                                              <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@icons/gnome-run.png" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                           </graphic>
+                                                                        </MenuItem>
+                                                                        <MenuItem mnemonicParsing="false" text="Add to task list">
+                                                                           <graphic>
+                                                                              <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@icons/gnome_list_add.png" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                           </graphic>
+                                                                        </MenuItem>
+                                                                     </items>
+                                                                  </MenuButton>
+                                                                  <ListView layoutX="14.0" layoutY="130.0" maxWidth="1.7976931348623157E308" prefHeight="90.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                               </children></AnchorPane>
+                                                      </content>
+                                                    </Tab>
+                                                      <Tab text="Multi-resolutions">
+                                                         <content>
+                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                         </content>
+                                                      </Tab>
+                                                      <Tab text="Merging">
+                                                         <content>
+                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                         </content>
+                                                      </Tab>
+                                                  </tabs>
+                                                </TabPane>
+                                             </children>
+                                          </AnchorPane>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                             <children>
+                                                <TabPane prefHeight="365.0" prefWidth="451.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                  <tabs>
+                                                    <Tab text="Voxel space">
+                                                      <content>
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <TextField fx:id="textFieldEnterXMax" layoutX="202.0" layoutY="8.0" prefHeight="3.0" prefWidth="67.0" promptText="enter X" />
+                                                                  <Label layoutX="16.0" layoutY="13.0" text="X min" />
+                                                                  <Label layoutX="17.0" layoutY="46.0" text="Y min" />
+                                                                  <TextField fx:id="textFieldEnterYMin" layoutX="65.0" layoutY="41.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Y" />
+                                                                  <TextField fx:id="textFieldEnterZMin" layoutX="65.0" layoutY="72.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Z" />
+                                                                  <Label layoutX="16.0" layoutY="77.0" text="Z min" />
+                                                                  <Label layoutX="152.0" layoutY="77.0" text="Z max" />
+                                                                  <TextField fx:id="textFieldEnterZMax" layoutX="202.0" layoutY="72.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Z" />
+                                                                  <TextField fx:id="textFieldEnterYMax" layoutX="202.0" layoutY="41.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Y" />
+                                                                  <Label layoutX="153.0" layoutY="46.0" text="Y max" />
+                                                                  <Label layoutX="152.0" layoutY="13.0" text="X max" />
+                                                                  <TextField fx:id="textFieldEnterXMin" layoutX="65.0" layoutY="8.0" prefHeight="3.0" prefWidth="67.0" promptText="enter X" />
+                                                                  <TextField fx:id="textFieldXNumber" editable="false" layoutX="358.0" layoutY="8.0" prefHeight="3.0" prefWidth="70.0" />
+                                                                  <Label layoutX="285.0" layoutY="13.0" text="X number" />
+                                                                  <Label layoutX="286.0" layoutY="46.0" text="Y number" />
+                                                                  <TextField fx:id="textFieldYNumber" editable="false" layoutX="358.0" layoutY="41.0" prefHeight="3.0" prefWidth="70.0" />
+                                                                  <Label layoutX="285.0" layoutY="77.0" text="Z number" />
+                                                                  <TextField fx:id="textFieldZNumber" editable="false" layoutX="358.0" layoutY="72.0" prefHeight="3.0" prefWidth="70.0" />
+                                                                  <TextField fx:id="textFieldResolution" layoutX="358.0" layoutY="106.0" prefHeight="25.0" prefWidth="70.0" />
+                                                                  <Label layoutX="254.0" layoutY="111.0" text="Resolution (m)" />
+                                                               </children>
+                                                            </AnchorPane>
+                                                      </content>
+                                                    </Tab>
+                                                    <Tab text="Transformation">
+                                                      <content>
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <GridPane hgap="5.0" layoutX="14.0" layoutY="14.0">
+                                                                     <columnConstraints>
+                                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="170.0" />
+                                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="20.0" />
+                                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                     </columnConstraints>
+                                                                     <rowConstraints>
+                                                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                     </rowConstraints>
+                                                                     <children>
+                                                                        <Button fx:id="buttonOpenSopMatrixFile" disable="true" mnemonicParsing="false" onAction="#onActionButtonOpenSopMatrixFile" text="Open file" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                                                        <Button fx:id="buttonOpenPopMatrixFile" disable="true" mnemonicParsing="false" onAction="#onActionButtonOpenPopMatrixFile" text="Open file" GridPane.columnIndex="3" />
+                                                                        <CheckBox fx:id="checkboxUsePopMatrix" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onActionCheckboxUsePopMatrix" selected="true" text="Use POP matrix" />
+                                                                        <CheckBox fx:id="checkboxUseSopMatrix" mnemonicParsing="false" onAction="#onActionCheckboxUseSopMatrix" prefHeight="24.0" prefWidth="126.0" selected="true" text="Use SOP matrix" GridPane.rowIndex="1" />
+                                                                        <CheckBox fx:id="checkboxUseVopMatrix" mnemonicParsing="false" onAction="#onActionCheckboxUseVopMatrix" prefHeight="24.0" prefWidth="126.0" text="Use VOP matrix" GridPane.rowIndex="2" />
+                                                                        <Button fx:id="buttonEnterReferencePointsVop" disable="true" mnemonicParsing="false" onAction="#onActionButtonEnterReferencePointsVop" prefHeight="22.0" prefWidth="164.0" text="Enter reference points" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                                        <Label alignment="BOTTOM_CENTER" prefHeight="18.0" prefWidth="16.0" text="or" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                                                        <Label alignment="BOTTOM_CENTER" prefHeight="18.0" prefWidth="16.0" text="or" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                                        <CheckBox mnemonicParsing="false" prefHeight="24.0" prefWidth="103.0" selected="true" text="Use default" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                                        <CheckBox mnemonicParsing="false" prefHeight="24.0" prefWidth="103.0" selected="true" text="Use default" GridPane.columnIndex="1" />
+                                                                        <Button fx:id="buttonOpenVopMatrixFile" disable="true" mnemonicParsing="false" onAction="#onActionButtonOpenVopMatrixFile" text="Open file" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                                                        <Label alignment="BOTTOM_CENTER" prefHeight="18.0" prefWidth="16.0" text="or" GridPane.columnIndex="2" />
+                                                                     </children>
+                                                                  </GridPane>
+                                                                  <HBox layoutX="14.0" layoutY="171.0" prefHeight="101.0" prefWidth="314.0">
+                                                                     <children>
+                                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                                           <children>
+                                                                              <TextField fx:id="labelM00" prefHeight="25.0" prefWidth="94.0" promptText="m00" />
+                                                                              <TextField fx:id="labelM10" promptText="m10" />
+                                                                              <TextField fx:id="labelM20" promptText="m20" />
+                                                                              <TextField fx:id="labelM30" promptText="m30" />
+                                                                           </children>
+                                                                        </VBox>
+                                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                                           <children>
+                                                                              <TextField fx:id="labelM01" promptText="m01" />
+                                                                              <TextField fx:id="labelM11" promptText="m11" />
+                                                                              <TextField fx:id="labelM21" promptText="m21" />
+                                                                              <TextField fx:id="labelM31" promptText="m31" />
+                                                                           </children>
+                                                                        </VBox>
+                                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                                           <children>
+                                                                              <TextField fx:id="labelM02" promptText="m02" />
+                                                                              <TextField fx:id="labelM12" promptText="m12" />
+                                                                              <TextField fx:id="labelM22" promptText="m22" />
+                                                                              <TextField fx:id="labelM32" promptText="m32" />
+                                                                           </children>
+                                                                        </VBox>
+                                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                                           <children>
+                                                                              <TextField fx:id="labelM03" promptText="m03" />
+                                                                              <TextField fx:id="labelM13" promptText="m13" />
+                                                                              <TextField fx:id="labelM23" promptText="m23" />
+                                                                              <TextField fx:id="labelM33" promptText="m33" />
+                                                                           </children>
+                                                                        </VBox>
+                                                                     </children>
+                                                                  </HBox>
+                                                               </children>
+                                                            </AnchorPane>
+                                                      </content>
+                                                    </Tab>
+                                                      <Tab text="Filters">
+                                                         <content>
+                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="332.0" prefWidth="420.0">
+                                                               <children>
+                                                                  <CheckBox fx:id="checkboxUseDTMFilter" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="DTM filter" />
+                                                                  <TextField fx:id="textfieldDTMPath" disable="true" layoutX="150.0" layoutY="48.0" prefHeight="25.0" prefWidth="227.0" />
+                                                                  <Label disable="true" layoutX="39.0" layoutY="53.0" text="DTM path (.asc)" />
+                                                                  <Button fx:id="buttonOpenDTMFile" disable="true" layoutX="383.0" layoutY="48.0" mnemonicParsing="false" text="Open" />
+                                                                  <Label disable="true" layoutX="40.0" layoutY="88.0" text="Value" />
+                                                                  <TextField fx:id="textfieldDTMValue" disable="true" layoutX="150.0" layoutY="83.0" prefHeight="25.0" prefWidth="55.0" />
+                                                               </children>
+                                                            </AnchorPane>
+                                                         </content>
+                                                      </Tab>
+                                                      <Tab text="Weighting">
+                                                         <content>
+                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <ComboBox layoutX="14.0" layoutY="55.0" prefWidth="150.0" promptText="Mode" />
+                                                                  <CheckBox layoutX="14.0" layoutY="25.0" mnemonicParsing="false" text="Enable weighting" />
+                                                               </children></AnchorPane>
+                                                         </content>
+                                                      </Tab>
+                                                  </tabs>
+                                                </TabPane>
+                                             </children>
+                                          </AnchorPane>
+                                      </items>
+                                    </SplitPane>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab text="Miscellaneous">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </Tab>
+                        <Tab text="Vizualisation">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TabPane layoutX="56.0" layoutY="42.0" prefHeight="414.0" prefWidth="798.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <tabs>
+                                        <Tab text="3D view">
+                                          <content>
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Button fx:id="buttonOpen3DView" disable="true" layoutX="594.0" layoutY="375.0" mnemonicParsing="false" onAction="#onActionButtonVizualize" text="Open display window" AnchorPane.rightAnchor="14.0" />
+                                                      <ComboBox fx:id="comboboxAttributeToView" layoutX="203.0" layoutY="45.0" prefWidth="150.0" />
+                                                      <Label layoutX="82.0" layoutY="50.0" text="Attribute to view" />
+                                                      <Button fx:id="buttonCreateAttribut" layoutX="82.0" layoutY="88.0" mnemonicParsing="false" text="Create attribut" />
+                                                   </children>
+                                                </AnchorPane>
+                                          </content>
+                                        </Tab>
+                                        <Tab text="2D projection">
+                                          <content>
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                          </content>
+                                        </Tab>
+                                          <Tab text="Histogram">
+                                             <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                             </content>
+                                          </Tab>
+                                          <Tab text="Chart">
+                                             <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                             </content>
+                                          </Tab>
+                                          <Tab text="Vegetation's profile">
+                                             <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                             </content>
+                                          </Tab>
+                                      </tabs>
+                                    </TabPane>
+                                 </children></AnchorPane>
+                           </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="798.0">
+               <children>
+                  <SplitPane dividerPositions="0.5201005025125628" prefHeight="155.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <items>
+                        <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" minWidth="325.0" pickOnBounds="false" text="Tasks">
+                           <content>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <ListView layoutX="32.4" layoutY="30.4" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <MenuButton layoutX="5.0" layoutY="93.0" mnemonicParsing="false" text="Selection" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+                                      <items>
+                                        <MenuItem mnemonicParsing="false" text="Action 1" />
+                                        <MenuItem mnemonicParsing="false" text="Action 2" />
+                                      </items>
+                                    </MenuButton>
+                                    <Button layoutX="125.0" layoutY="92.0" mnemonicParsing="false" text="Remove" AnchorPane.bottomAnchor="0.0">
+                                       <graphic>
+                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@icons/gnome_list_remove.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <Button layoutX="286.0" layoutY="92.0" mnemonicParsing="false" text="Execute" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                       <graphic>
+                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@icons/gnome-run.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>
+                        <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" minWidth="380.0" text="Voxels files">
+                           <content>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <ListView fx:id="listViewVoxelsFiles" layoutX="32.4" layoutY="30.4" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Button fx:id="buttonLoadSelectedVoxelFile" disable="true" layoutX="316.0" layoutY="88.0" mnemonicParsing="false" onAction="#onActionButtonLoadSelectedVoxelFile" text="Load" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                                    <Button fx:id="buttonRemoveVoxelFileFromListView" layoutX="212.0" layoutY="94.0" mnemonicParsing="false" onAction="#onActionButtonRemoveVoxelFileFromListView" text="Remove" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0">
+                                       <graphic>
+                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@icons/gnome_list_remove.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <MenuButton layoutX="5.0" layoutY="93.0" mnemonicParsing="false" text="Selection" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+                                       <items>
+                                          <MenuItem fx:id="menuItemSelectionAll" mnemonicParsing="false" onAction="#onActionMenuItemSelectionAll" text="All" />
+                                          <MenuItem fx:id="menuItemSelectionNone" mnemonicParsing="false" onAction="#onActionMenuItemSelectionNone" text="None" />
+                                       </items>
+                                    </MenuButton>
+                                    <Button fx:id="buttonAddVoxelFileToListView" layoutX="138.0" layoutY="92.0" mnemonicParsing="false" onAction="#onActionButtonAddVoxelFileToListView" text="Add" AnchorPane.bottomAnchor="0.0">
+                                       <graphic>
+                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@icons/gnome_list_add.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>
+                     </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
