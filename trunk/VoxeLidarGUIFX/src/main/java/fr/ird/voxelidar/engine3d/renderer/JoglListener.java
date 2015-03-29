@@ -393,7 +393,7 @@ public class JoglListener implements GLEventListener {
             voxelSpace.setShaderId(instanceShader.getProgramId());
             
             
-            voxelSpace.attachTexture(Texture.createFromFile(gl, new File("/home/calcul/Documents/Julien/Blends/uv_texture.png")));
+            //voxelSpace.attachTexture(Texture.createFromFile(gl, new File("/home/calcul/Documents/Julien/Blends/uv_texture.png")));
             
             //voxelSpace = new VoxelSpace(gl, aoShader.getProgramId(), settings);
             //voxelSpace.setAttributToVisualize(settings.attributeToVisualize);

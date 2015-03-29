@@ -178,14 +178,14 @@ public class VoxelisationTool {
 
     }
 
-    public void generateVoxelsFromLas(File output, File input, File trajectoryFile, File dtmFile, VoxelParameters parameters, Mat4D vop) {
+    public void generateVoxelsFromLas(File output, File input, File trajectoryFile, VoxelParameters parameters, Mat4D vop) {
 
         startTime = System.currentTimeMillis();
 
         this.parameters = parameters;
         this.parameters.setTLS(false);
 
-        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, trajectoryFile, parameters, dtmFile);
+        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, trajectoryFile, parameters);
 
         voxelisation.addProcessingListener(new ProcessingListener() {
 

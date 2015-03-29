@@ -5,6 +5,8 @@
  */
 package fr.ird.voxelidar;
 
+import fr.ird.voxelidar.Configuration.InputType;
+import fr.ird.voxelidar.Configuration.ProcessMode;
 import fr.ird.voxelidar.engine3d.JOGLWindow;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceAdapter;
@@ -20,10 +22,16 @@ import fr.ird.voxelidar.voxelisation.VoxelisationToolListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableListBase;
 import javafx.concurrent.Service;
@@ -41,6 +49,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
@@ -70,6 +80,8 @@ public class MainFrameController implements Initializable {
     private CalculateMatrixFrameController calculateMatrixFrameController;
     private Stage calculateMatrixFrame;
     
+    private FileChooser fileChooserOpenConfiguration;
+    private FileChooser fileChooserSaveConfiguration;
     private FileChooser fileChooserOpenInputFileALS;
     private FileChooser fileChooserOpenTrajectoryFileALS;
     private FileChooser fileChooserOpenOutputFileALS;
@@ -78,6 +90,7 @@ public class MainFrameController implements Initializable {
     private FileChooser fileChooserOpenPopMatrixFile;
     private FileChooser fileChooserOpenSopMatrixFile;
     private FileChooser fileChooserOpenVopMatrixFile;
+    private FileChooser fileChooserOpenDTMFile;
     private DirectoryChooser directoryChooserOpenOutputPathTLS;
     
     private Matrix4d popMatrix;
@@ -208,11 +221,19 @@ public class MainFrameController implements Initializable {
     @FXML
     private Button buttonEnterReferencePointsVop;
     @FXML
-    private MenuItem menuitemALSActionExecute;
+    private ComboBox<String> comboboxWeighting;
     @FXML
-    private MenuItem menuitemALSActionAddTask;
+    private ListView<File> listViewTaskList;
     @FXML
-    private ComboBox<?> comboboxWeighting;
+    private Label labelDTMPath;
+    @FXML
+    private Label labelDTMValue;
+    @FXML
+    private Button buttonALSAddToTaskList;
+    @FXML
+    private Button buttonExecute;
+    @FXML
+    private Button buttonTLSAddToTaskList;
     
     
     /**
@@ -220,6 +241,12 @@ public class MainFrameController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        fileChooserOpenConfiguration  = new FileChooser();
+        fileChooserOpenConfiguration.setTitle("Choose configuration file");
+        
+        fileChooserSaveConfiguration = new FileChooser();
+        fileChooserSaveConfiguration.setTitle("Choose output file");
         
         fileChooserOpenInputFileALS = new FileChooser();
         fileChooserOpenInputFileALS.setTitle("Open input file");
@@ -273,8 +300,15 @@ public class MainFrameController implements Initializable {
                                     new ExtensionFilter("All Files", "*.*"),
                                     new ExtensionFilter("Text Files", "*.txt"));
         
+        fileChooserOpenDTMFile = new FileChooser();
+        fileChooserOpenDTMFile.setTitle("Choose DTM file");
+        fileChooserOpenDTMFile.getExtensionFilters().addAll(
+                                    new ExtensionFilter("All Files", "*.*"),
+                                    new ExtensionFilter("DTM Files", "*.asc"));
+        
         comboboxModeALS.getItems().addAll("Las file", "Laz file", "Points file", "Shots file");
         comboboxModeTLS.getItems().addAll("Rxp scan", "Rsp project", "Points file", "Shots file");
+        comboboxWeighting.getItems().addAll("From the echo number", "From a matrix file", "Local recalculation");
         
         listViewVoxelsFiles.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         
@@ -291,6 +325,7 @@ public class MainFrameController implements Initializable {
                 }
             }
         });
+        
         
         popMatrix = new Matrix4d();
         popMatrix.setIdentity();
@@ -315,6 +350,76 @@ public class MainFrameController implements Initializable {
         } catch (IOException ex) {
             logger.error(ex);
         }
+        
+        ChangeListener cl = new ChangeListener<Object>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
+                
+                try{
+                    
+                    float resolution = Float.valueOf(textFieldResolution.getText());
+                    
+                    double minPointX = Double.valueOf(textFieldEnterXMin.getText());
+                    double maxPointX = Double.valueOf(textFieldEnterXMax.getText());
+                    int voxelNumberX = (int)(maxPointX - minPointX);
+                    textFieldXNumber.setText(String.valueOf(voxelNumberX));
+                    voxelNumberX = (int) ((maxPointX - minPointX)/resolution);
+                    textFieldXNumber.setText(String.valueOf(voxelNumberX));
+                    
+                    double minPointY = Double.valueOf(textFieldEnterYMin.getText());
+                    double maxPointY = Double.valueOf(textFieldEnterYMax.getText());
+                    int voxelNumberY = (int)(maxPointY - minPointY);
+                    textFieldYNumber.setText(String.valueOf(voxelNumberY));
+                    voxelNumberY = (int) ((maxPointY - minPointY)/resolution);
+                    textFieldYNumber.setText(String.valueOf(voxelNumberY));
+                    
+                    
+                    double minPointZ = Double.valueOf(textFieldEnterZMin.getText());
+                    double maxPointZ = Double.valueOf(textFieldEnterZMax.getText());
+                    int voxelNumberZ = (int)(maxPointZ - minPointZ);
+                    textFieldZNumber.setText(String.valueOf(voxelNumberZ));
+                    voxelNumberZ = (int) ((maxPointZ - minPointZ)/resolution);
+                    textFieldZNumber.setText(String.valueOf(voxelNumberZ));
+                    
+                    
+                }catch(Exception e){
+                    
+                }
+                
+            }
+        };
+        
+        textFieldEnterXMin.textProperty().addListener(cl);
+        textFieldEnterYMin.textProperty().addListener(cl);
+        textFieldEnterZMin.textProperty().addListener(cl);
+        
+        textFieldEnterXMax.textProperty().addListener(cl);
+        textFieldEnterYMax.textProperty().addListener(cl);
+        textFieldEnterZMax.textProperty().addListener(cl);
+        
+        textFieldResolution.textProperty().addListener(cl);
+        
+        checkboxUseDTMFilter.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                
+                if(checkboxUseDTMFilter.isSelected()){
+                    buttonOpenDTMFile.setDisable(false);
+                    textfieldDTMPath.setDisable(false);
+                    textfieldDTMValue.setDisable(false);
+                    labelDTMValue.setDisable(false);
+                    labelDTMPath.setDisable(false);
+                }else{
+                    buttonOpenDTMFile.setDisable(true);
+                    textfieldDTMPath.setDisable(true);
+                    textfieldDTMValue.setDisable(true);
+                    labelDTMValue.setDisable(true);
+                    labelDTMPath.setDisable(true);
+                }
+            }
+        });
         
     }
     
@@ -399,8 +504,8 @@ public class MainFrameController implements Initializable {
         };
         
         ProgressDialog d = new ProgressDialog(service);
-        
         d.show();
+        service.start();
     }
 
     @FXML
@@ -425,7 +530,7 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonOpenOutputFileALS(ActionEvent event) {
         
-        File selectedFile = fileChooserOpenOutputFileALS.showOpenDialog(stage);
+        File selectedFile = fileChooserOpenOutputFileALS.showSaveDialog(stage);
         if (selectedFile != null) {
            textFieldOutputFileALS.setText(selectedFile.getAbsolutePath());
         }
@@ -460,6 +565,7 @@ public class MainFrameController implements Initializable {
             parameters[i] = parameters[i].replaceAll("#", "");
         }
         
+        comboboxAttributeToView.getItems().clear();
         comboboxAttributeToView.getItems().addAll(parameters);
         
         if(parameters.length>3){
@@ -485,7 +591,7 @@ public class MainFrameController implements Initializable {
         List<File> selectedFiles = fileChooserOpenInputFileTLS.showOpenMultipleDialog(stage);
         if (selectedFiles != null) {
             for(File file : selectedFiles){
-                listViewVoxelsFiles.getItems().add(file);
+                addFileToVoxelList(file);
             }
         }
     }
@@ -503,6 +609,59 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionMenuItemLoad(ActionEvent event) {
         
+        File selectedFile = fileChooserOpenConfiguration.showOpenDialog(stage);
+        if (selectedFile != null) {
+           
+            Configuration cfg = new Configuration();
+            cfg.readConfiguration(selectedFile);
+           
+            VoxelParameters voxelParameters = cfg.getVoxelParameters();
+            textFieldEnterXMin.setText(String.valueOf(voxelParameters.bottomCorner.x));
+            textFieldEnterYMin.setText(String.valueOf(voxelParameters.bottomCorner.y));
+            textFieldEnterZMin.setText(String.valueOf(voxelParameters.bottomCorner.z));
+            
+            textFieldEnterXMax.setText(String.valueOf(voxelParameters.topCorner.x));
+            textFieldEnterYMax.setText(String.valueOf(voxelParameters.topCorner.y));
+            textFieldEnterZMax.setText(String.valueOf(voxelParameters.topCorner.z));
+            
+            textFieldXNumber.setText(String.valueOf(voxelParameters.split.x));
+            textFieldYNumber.setText(String.valueOf(voxelParameters.split.y));
+            textFieldZNumber.setText(String.valueOf(voxelParameters.split.z));
+            
+            checkboxUseDTMFilter.setSelected(voxelParameters.useDTMCorrection());
+            textfieldDTMPath.setText(voxelParameters.getDtmFile().getAbsolutePath());
+            textfieldDTMValue.setText(String.valueOf(voxelParameters.minDTMDistance));
+            
+            checkboxUsePopMatrix.setSelected(cfg.isUsePopMatrix());
+            checkboxUseSopMatrix.setSelected(cfg.isUseSopMatrix());
+            checkboxUseVopMatrix.setSelected(cfg.isUseVopMatrix());
+            
+            popMatrix = cfg.getPopMatrix();
+            sopMatrix = cfg.getSopMatrix();
+            vopMatrix = cfg.getVopMatrix();
+            
+            updateResultMatrix();
+            
+            
+            
+            switch(cfg.getProcessMode().mode){
+                case 0:
+                    textFieldInputFileALS.setText(cfg.getInputFile().getAbsolutePath());
+                    textFieldTrajectoryFileALS.setText(cfg.getTrajectoryFile().getAbsolutePath());
+                    textFieldOutputFileALS.setText(cfg.getOutputFile().getAbsolutePath());
+                    comboboxModeALS.getSelectionModel().select(cfg.getInputType().type);
+                    break;
+                    
+            }
+           
+            ProcessMode processMode = cfg.getProcessMode();
+
+            switch(processMode.mode){
+                case 0:
+
+                    break;
+            }
+        }
     }
 
     @FXML
@@ -512,6 +671,7 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionMenuItemSaveAs(ActionEvent event) {
+        
         
     }
 
@@ -585,81 +745,178 @@ public class MainFrameController implements Initializable {
         
     }
 
+
     @FXML
-    private void onActionMenuitemALSActionExecute(ActionEvent event) {
+    private void onActionCheckboxUseDTMFilter(ActionEvent event) {
+                
+    }
+
+    @FXML
+    private void onActionButtonOpenDTMFile(ActionEvent event) {
         
-        final String inputVoxPath = textFieldInputFileALS.getText();
+        File selectedFile = fileChooserOpenDTMFile.showOpenDialog(stage);
+        if (selectedFile != null) {
+           textfieldDTMPath.setText(selectedFile.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    private void onActionButtonALSAddToTaskList(ActionEvent event) {
         
-        final File trajectoryFile = new File(textFieldTrajectoryFileALS.getText());
-        
-        final File dtmFile = new File(textfieldDTMPath.getText());
-        
-        final VoxelParameters parameters = new VoxelParameters();
-        parameters.setBottomCorner(new Point3d(
+        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
+        if (selectedFile != null) {
+            
+            
+            VoxelParameters voxelParameters = new VoxelParameters();
+            voxelParameters.setBottomCorner(new Point3d(
                             Double.valueOf(textFieldEnterXMin.getText()), 
                             Double.valueOf(textFieldEnterYMin.getText()), 
                             Double.valueOf(textFieldEnterZMin.getText())));
         
-        parameters.setTopCorner(new Point3d(
-                            Double.valueOf(textFieldEnterXMax.getText()), 
-                            Double.valueOf(textFieldEnterYMax.getText()), 
-                            Double.valueOf(textFieldEnterZMax.getText())));
+            voxelParameters.setTopCorner(new Point3d(
+                                Double.valueOf(textFieldEnterXMax.getText()), 
+                                Double.valueOf(textFieldEnterYMax.getText()), 
+                                Double.valueOf(textFieldEnterZMax.getText())));
+
+            voxelParameters.setSplit(new Point3i(
+                                Integer.valueOf(textFieldXNumber.getText()), 
+                                Integer.valueOf(textFieldYNumber.getText()), 
+                                Integer.valueOf(textFieldZNumber.getText())));
+            
+            voxelParameters.setWeighting(comboboxWeighting.getSelectionModel().getSelectedIndex()+1);
+            voxelParameters.setWeightingData(VoxelParameters.DEFAULT_ALS_WEIGHTING);
+            voxelParameters.setUseDTMCorrection(checkboxUseDTMFilter.isSelected());
+            voxelParameters.setDtmFile(new File(textfieldDTMPath.getText()));
+            
+            InputType it;
+            
+            switch(comboboxModeALS.getSelectionModel().getSelectedIndex()){
+                case 0:
+                    it = InputType.LAS_FILE;
+                    break;
+                case 1:
+                    it = InputType.LAZ_FILE;
+                    break;
+                case 2:
+                    it = InputType.POINTS_FILE;
+                    break;
+                case 3:
+                    it = InputType.SHOTS_FILE;
+                    break;
+                default: it = InputType.LAS_FILE;
+            }
+            
+            Configuration cfg = new Configuration(ProcessMode.VOXELISATION_ALS, it, 
+                    new File(textFieldInputFileALS.getText()),
+                    new File(textFieldTrajectoryFileALS.getText()),
+                    new File(textFieldOutputFileALS.getText()),
+                    voxelParameters, 
+                    checkboxUsePopMatrix.isSelected(),popMatrix,
+                    checkboxUseSopMatrix.isSelected(),sopMatrix, 
+                    checkboxUseVopMatrix.isSelected(), vopMatrix);
+            
+            cfg.writeConfiguration(selectedFile);
+            
+            addFileToTaskList(selectedFile);
+        }
+    }
+    
+    private void addFileToTaskList(File file){
         
-        parameters.setSplit(new Point3i(
-                            Integer.valueOf(textFieldXNumber.getText()), 
-                            Integer.valueOf(textFieldYNumber.getText()), 
-                            Integer.valueOf(textFieldZNumber.getText())));
+        if(!listViewTaskList.getItems().contains(file)){
+            listViewTaskList.getItems().add(file);
+        }
+    }
+    
+    private void addFileToVoxelList(File file){
         
-        parameters.setResolution(Double.valueOf(textFieldResolution.getText()));
-        parameters.setWeighting(comboboxWeighting.getSelectionModel().getSelectedIndex());
-        parameters.setUseDTMCorrection(checkboxUseDTMFilter.isSelected());
+        if(!listViewVoxelsFiles.getItems().contains(file)){
+            listViewVoxelsFiles.getItems().add(file);
+            listViewVoxelsFiles.getSelectionModel().select(file);
+        }
+    }
+    
+    
+
+    @FXML
+    private void onActionButtonExecute(ActionEvent event) {
         
+        List<File> items = listViewTaskList.getItems();
+        for(File file : items){
+            
+            executeProcess(file);
+            //chargement du fichier de configuration
+            //exécution de la tâche
+        }
+    }
+    
+    private void check(){
         
-        final File outputFile = new File(textFieldOutputFileALS.getText());
+    }
+    
+    private void executeProcess(File file) {
+
+        final Configuration cfg = new Configuration();
+        cfg.readConfiguration(file);
         
-        final VoxelisationTool voxTool = new VoxelisationTool();
         final long start_time = System.currentTimeMillis();
-        
-           
-        Service<Void> service = new Service<Void>() {
-            @Override
-            protected Task<Void> createTask() {
-                return new Task<Void>() {
+
+        ProcessMode processMode = cfg.getProcessMode();
+        switch (processMode) {
+            
+            case VOXELISATION_ALS:
+
+                final VoxelisationTool voxTool = new VoxelisationTool();
+                
+
+                Service<Void> service = new Service<Void>() {
                     @Override
-                    protected Void call() throws InterruptedException {
-
-                        voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
-
+                    protected Task<Void> createTask() {
+                        return new Task<Void>() {
                             @Override
-                            public void voxelisationProgress(String progress, int ratio) {
-                                updateMessage(progress);
+                            protected Void call() throws InterruptedException {
+
+                                voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
+
+                                    @Override
+                                    public void voxelisationProgress(String progress, int ratio) {
+                                        updateMessage(progress);
+                                    }
+
+                                    @Override
+                                    public void voxelisationFinished(float duration) {
+
+                                        logger.info("las voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
+                                    }
+                                });
+
+                                voxTool.generateVoxelsFromLas(cfg.getOutputFile(), cfg.getInputFile(), cfg.getTrajectoryFile(), cfg.getVoxelParameters(), MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()));
+
+                                Platform.runLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        addFileToVoxelList(cfg.getOutputFile());
+                                    }
+                                });
+
+                                return null;
                             }
-
-                            @Override
-                            public void voxelisationFinished(float duration) {
-
-                                logger.info("las voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
-                            }
-                        });
-                        
-                        voxTool.generateVoxelsFromLas(outputFile, new File(inputVoxPath), trajectoryFile, dtmFile, parameters, MatrixConverter.convertMatrix4dToMat4D(resultMatrix));
-                        listViewVoxelsFiles.getItems().add(outputFile);
-
-                        listViewVoxelsFiles.getSelectionModel().select(outputFile);
-                        
-                        return null;
+                        };
                     }
                 };
-            }
-        };
 
-        ProgressDialog d = new ProgressDialog(service);
-        
-        d.show();
+                ProgressDialog d = new ProgressDialog(service);
+                d.show();
+
+                service.start();
+
+                break;
+        }
     }
 
     @FXML
-    private void onActionMenuitemALSActionAddTask(ActionEvent event) {
+    private void onActionButtonTLSAddToTaskList(ActionEvent event) {
     }
-    
+
 }

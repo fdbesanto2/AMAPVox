@@ -1101,7 +1101,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jFileChooser2.setMultiSelectionEnabled(true);
 
         jFileChooserSave.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
-        jFileChooserSave.setCurrentDirectory(new java.io.File("/home/calcul/Bureau"));
+        jFileChooserSave.setCurrentDirectory(new java.io.File("D:\\Programmes\\NetBeans 8.0.2"));
 
         jFileChooser6.setApproveButtonToolTipText("");
         jFileChooser6.setDialogTitle("");
@@ -1117,7 +1117,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
 
         jFileChooserSave1.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
-        jFileChooserSave1.setCurrentDirectory(new java.io.File("/home/calcul/Bureau"));
+        jFileChooserSave1.setCurrentDirectory(new java.io.File("D:\\Programmes\\NetBeans 8.0.2"));
 
         jFileChooser9.setCurrentDirectory(null);
         jFileChooser9.setDialogTitle("");
@@ -1129,7 +1129,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jFileChooser10.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
         jFileChooserSave2.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
-        jFileChooserSave2.setCurrentDirectory(new java.io.File("/home/calcul/Bureau"));
+        jFileChooserSave2.setCurrentDirectory(new java.io.File("D:\\Programmes\\NetBeans 8.0.2"));
 
         jFileChooser11.setCurrentDirectory(null);
         jFileChooser11.setDialogTitle("");
@@ -1177,7 +1177,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanel36.setBackground(new java.awt.Color(114, 114, 114));
 
         jPanel39.setBackground(new java.awt.Color(114, 114, 114));
-        jPanel39.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input file", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, java.awt.Color.black));
+        jPanel39.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input file", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), java.awt.Color.black)); // NOI18N
 
         jLabelName6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabelName6.setText("Name");
@@ -1315,7 +1315,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         });
 
         jPanel40.setBackground(new java.awt.Color(114, 114, 114));
-        jPanel40.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Min point", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(39, 39, 39)));
+        jPanel40.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Min point", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(39, 39, 39))); // NOI18N
         jPanel40.setToolTipText("");
 
         jTextFieldMinPointX2.setBackground(new java.awt.Color(180, 180, 180));
@@ -2021,7 +2021,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Weighting"));
 
         jComboBoxWeighting.setBackground(new java.awt.Color(180, 180, 180));
-        jComboBoxWeighting.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "No weighting", "From the echo number", "From a parameter file", "Local recalculation " }));
+        jComboBoxWeighting.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "No weighting", "From the echo number", "From a parameter file", "Local recalculation" }));
         jComboBoxWeighting.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBoxWeightingItemStateChanged(evt);
@@ -2759,13 +2759,13 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 773, Short.MAX_VALUE)
             .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 794, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 773, Short.MAX_VALUE))
         );
         jPanel31Layout.setVerticalGroup(
             jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 417, Short.MAX_VALUE)
             .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE))
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE))
         );
 
         jTabbedPane3.addTab("LAS => TXT", jPanel31);
@@ -4587,7 +4587,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 @Override
                 protected Void doInBackground() throws Exception {
 
-                    voxTool.generateVoxelsFromLas(outputFile, new File(inputVoxPath), trajectoryFile, dtmFile, parameters, vopMatrix);
+                    //voxTool.generateVoxelsFromLas(outputFile, new File(inputVoxPath), trajectoryFile, dtmFile, parameters, vopMatrix);
             
                     return null;
                 }

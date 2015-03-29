@@ -52,13 +52,12 @@ public class LasVoxelisation extends Processing implements Runnable{
     private final VoxelParameters parameters;
     private VoxelAnalysis voxelAnalysis;
     private LinkedBlockingQueue<Shot> queue;
-    private File dtmFile;
 
-    public LasVoxelisation(File lasFile, File outputFile, Mat4D popMatrix, File trajectoryFile, VoxelParameters parameters, File dtmFile) {
+    public LasVoxelisation(File lasFile, File outputFile, Mat4D transfMatrix, File trajectoryFile, VoxelParameters parameters) {
 
         this.lasFile = lasFile;
         this.outputFile = outputFile;
-        this.popMatrix = popMatrix;
+        this.popMatrix = transfMatrix;
         this.trajectoryFile = trajectoryFile;
         this.parameters = parameters;
         
@@ -66,10 +65,10 @@ public class LasVoxelisation extends Processing implements Runnable{
         
         Dtm terrain = null;
         
-        if(dtmFile != null && parameters.useDTMCorrection() ){
+        if(parameters.getDtmFile() != null && parameters.useDTMCorrection() ){
             
             try {
-                terrain = DtmLoader.readFromAscFile(dtmFile, popMatrix);
+                terrain = DtmLoader.readFromAscFile(parameters.getDtmFile(), transfMatrix);
                 
             } catch (Exception ex) {
                 logger.error(ex);
@@ -78,7 +77,6 @@ public class LasVoxelisation extends Processing implements Runnable{
         
         
         voxelAnalysis = new VoxelAnalysis(queue, terrain);
-        this.dtmFile = dtmFile;
     }
 
     @Override

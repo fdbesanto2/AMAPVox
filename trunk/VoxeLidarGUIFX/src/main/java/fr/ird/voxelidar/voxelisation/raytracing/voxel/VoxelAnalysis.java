@@ -169,23 +169,9 @@ public class VoxelAnalysis implements Runnable {
             case VoxelParameters.WEIGHTING_ECHOS_NUMBER:
 
                 if (parameters.isTLS()) {
-                    weighting = new float[][]{
-                        {1.00f, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
-                        {0.50f, 0.50f, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
-                        {0.33f, 0.33f, 0.33f, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
-                        {0.25f, 0.25f, 0.25f, 0.25f, Float.NaN, Float.NaN, Float.NaN},
-                        {0.20f, 0.20f, 0.20f, 0.20f, 0.20f, Float.NaN, Float.NaN},
-                        {0.16f, 0.16f, 0.16f, 0.16f, 0.16f, 0.16f, Float.NaN},
-                        {0.142857143f, 0.142857143f, 0.142857143f, 0.142857143f, 0.142857143f, 0.142857143f, 0.142857143f}};
+                    weighting = VoxelParameters.DEFAULT_TLS_WEIGHTING;
                 } else {
-                    weighting = new float[][]{
-                        {1.00f, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
-                        {0.62f, 0.38f, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
-                        {0.40f, 0.35f, 0.25f, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
-                        {0.28f, 0.29f, 0.24f, 0.19f, Float.NaN, Float.NaN, Float.NaN},
-                        {0.21f, 0.24f, 0.21f, 0.19f, 0.15f, Float.NaN, Float.NaN},
-                        {0.16f, 0.21f, 0.19f, 0.18f, 0.14f, 0.12f, Float.NaN},
-                        {0.15f, 0.17f, 0.15f, 0.16f, 0.12f, 0.19f, 0.06f}};
+                    weighting = VoxelParameters.DEFAULT_ALS_WEIGHTING;
                 }
 
                 break;
