@@ -5,7 +5,11 @@
  */
 package fr.ird.voxelidar.engine3d;
 
+import com.jogamp.nativewindow.util.Point;
 import com.jogamp.newt.event.WindowListener;
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLException;
+import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.FPSAnimator;
 import fr.ird.voxelidar.engine3d.event.BasicEvent;
 import fr.ird.voxelidar.engine3d.input.InputKeyListener;
@@ -14,10 +18,6 @@ import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.renderer.GLRenderFrame;
 import fr.ird.voxelidar.engine3d.renderer.JoglListener;
 import fr.ird.voxelidar.util.Settings;
-import java.awt.Point;
-import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLException;
-import javax.media.opengl.GLProfile;
 import org.apache.log4j.Logger;
 
 /**
@@ -65,7 +65,7 @@ public class JOGLWindow{
     
     
     public Point getPosition(){
-        javax.media.nativewindow.util.Point locationOnScreen = renderFrame.getLocationOnScreen(null);
+        Point locationOnScreen = renderFrame.getLocationOnScreen(null);
         return new Point(locationOnScreen.getX(), locationOnScreen.getY());
     }
     

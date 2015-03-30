@@ -28,7 +28,22 @@ import org.apache.log4j.Logger;
 public class MeshFactory {
     
     private final static Logger logger = Logger.getLogger(MeshFactory.class);
-            
+    
+    public static TexturedMesh createTexturedCube(float size){
+        
+        Mesh mesh = createCube(size);
+        TexturedMesh texturedMesh = new TexturedMesh(mesh);
+        
+        float textCoordData[] = new float[]
+        {0, 1,
+         1, 1,
+         0, 0,
+         1, 0};
+        
+        texturedMesh.textureCoordinatesBuffer = Buffers.newDirectFloatBuffer(textCoordData);
+        
+        return texturedMesh;
+    }
     public static Mesh createCube(float size){
         
         float vertexData[] = new float[]
@@ -70,6 +85,7 @@ public class MeshFactory {
         cube.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
         cube.indexBuffer = Buffers.newDirectShortBuffer(indexData);
         cube.vertexCount = indexData.length;
+        
         
         return cube;
     }

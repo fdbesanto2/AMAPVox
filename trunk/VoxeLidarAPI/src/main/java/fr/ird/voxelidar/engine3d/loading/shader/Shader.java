@@ -5,12 +5,12 @@
  */
 package fr.ird.voxelidar.engine3d.loading.shader;
 
+import com.jogamp.opengl.GL3;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import javax.media.opengl.GL3;
 import org.apache.log4j.Logger;
 
 /**
@@ -31,24 +31,40 @@ public class Shader {
         return programId;
     }
     
-    private final InputStreamReader fragmentShaderFilename;
-    private final InputStreamReader vertexShaderFileName;
     public Map<String,Integer> attributeMap;
     public Map<String,Integer> uniformMap;
     
     private final GL3 gl;
     
-    public Shader(GL3 m_gl, InputStreamReader fragmentShaderFilename, InputStreamReader vertexShaderFileName, String name){
+    public Shader(GL3 m_gl, InputStreamReader fragmentShaderStream, InputStreamReader vertexShaderStream, String name){
         
         this.name = name;
         vertexShaderId=0;
         fragmentShaderId=0;
         isOrtho = false;
         this.gl=m_gl;
-        this.fragmentShaderFilename = fragmentShaderFilename;
-        this.vertexShaderFileName = vertexShaderFileName;
         
-        if(this.load()){
+        String[] vertexShaderCode = readFromInputStreamReader(vertexShaderStream);
+        String[] fragmenthaderCode = readFromInputStreamReader(fragmentShaderStream);
+        
+        linkProgram(vertexShaderCode, fragmenthaderCode);
+        
+    }
+    
+    public Shader(GL3 m_gl, String[] vertexShaderCode, String[] fragmentShaderCode, String name){
+        
+        this.name = name;
+        vertexShaderId=0;
+        fragmentShaderId=0;
+        isOrtho = false;
+        this.gl=m_gl;
+        
+        linkProgram(vertexShaderCode, fragmentShaderCode);
+    }
+    
+    private void linkProgram(String[] vertexShaderCode, String[] fragmentShaderCode){
+        
+        if(this.compile(vertexShaderCode, fragmentShaderCode)){
             
             programId = gl.glCreateProgram();
             gl.glAttachShader(programId, vertexShaderId);
@@ -65,12 +81,32 @@ public class Shader {
         }else{
             logger.error("Fail reading shaders files");
         }
-        
     }
     
+    private String[] readFromInputStreamReader(InputStreamReader stream){
+        
+        BufferedReader reader;
+        String line;
+        String[] shaderCode = new String[1];
+        shaderCode[0]="";
+        try {
+            
+            reader = new BufferedReader(stream);
+            
+        
+            while((line = reader.readLine()) != null){
+                
+                shaderCode[0] += line+"\n";
+            }
+            
+        } catch (IOException ex) {
+            logger.error("vertex shader reading error not found", ex);
+        }
+        
+        return shaderCode;
+    }
     
-    
-    private boolean load(){
+    private boolean compile(String[] vertexShaderCode, String[] fragmentShaderCode){
         
         /*****vertex shader*****/
         
@@ -81,25 +117,6 @@ public class Shader {
             return false;
         }
         
-        BufferedReader reader;
-        String line;
-        String[] vertexShaderCode = new String[1];
-        vertexShaderCode[0]="";
-        try {
-            
-            reader = new BufferedReader(vertexShaderFileName);
-            
-        
-            while((line = reader.readLine()) != null){
-                
-                vertexShaderCode[0] += line+"\n";
-            }
-            
-        } catch (IOException ex) {
-            logger.error("vertex shader "+vertexShaderFileName+" not found", ex);
-            
-            return false;
-        }
         
         gl.glShaderSource(vertexShaderId, 1, vertexShaderCode, null);
         
@@ -127,26 +144,6 @@ public class Shader {
         
         if(fragmentShaderId == 0)
         {   
-            return false;
-        }
-        
-
-        String[] fragmentShaderCode = new String[1];
-        fragmentShaderCode[0]="";
-        
-        try {
-            
-            reader = new BufferedReader(fragmentShaderFilename);
-            
-        
-            while((line = reader.readLine()) != null){
-                
-                fragmentShaderCode[0] += line+"\n";
-            }
-            
-        } catch (IOException ex) {
-            logger.error("fragment shader "+fragmentShaderFilename+" not found", ex);
-            
             return false;
         }
         

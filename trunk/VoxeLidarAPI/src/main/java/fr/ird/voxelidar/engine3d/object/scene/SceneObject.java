@@ -5,17 +5,12 @@
  */
 package fr.ird.voxelidar.engine3d.object.scene;
 
+import com.jogamp.opengl.GL3;
 import fr.ird.voxelidar.engine3d.buffer.MeshBuffer;
 import fr.ird.voxelidar.engine3d.loading.texture.Texture;
 import fr.ird.voxelidar.engine3d.object.mesh.Mesh;
-import static fr.ird.voxelidar.engine3d.object.scene.VoxelSpace.FLOAT_SIZE;
 import fr.ird.voxelidar.engine3d.loading.shader.Shader;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
-import fr.ird.voxelidar.engine3d.object.mesh.InstancedMesh;
-import fr.ird.voxelidar.engine3d.object.mesh.TexturedMesh;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import javax.media.opengl.GL3;
 
 /**
  *

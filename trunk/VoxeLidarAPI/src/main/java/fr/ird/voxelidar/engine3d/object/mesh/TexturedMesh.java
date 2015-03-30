@@ -14,4 +14,15 @@ import java.nio.FloatBuffer;
 public class TexturedMesh extends Mesh{
     
     public FloatBuffer textureCoordinatesBuffer;
+    
+    
+    public TexturedMesh(){
+    }
+    
+    public TexturedMesh(Mesh mesh){
+        this.colorBuffer = mesh.colorBuffer;
+        this.indexBuffer = mesh.indexBuffer;
+        this.vertexBuffer = mesh.vertexBuffer;
+        this.vertexCount = mesh.vertexCount;
+    }
 }

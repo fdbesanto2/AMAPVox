@@ -5,12 +5,12 @@
  */
 package fr.ird.voxelidar.engine3d.renderer;
 
+import com.jogamp.nativewindow.WindowClosingProtocol;
 import com.jogamp.newt.NewtFactory;
 import com.jogamp.newt.Window;
 import com.jogamp.newt.opengl.GLWindow;
+import com.jogamp.opengl.GLCapabilities;
 import java.awt.GraphicsEnvironment;
-import javax.media.nativewindow.WindowClosingProtocol;
-import javax.media.opengl.GLCapabilities;
 
 /**
  *

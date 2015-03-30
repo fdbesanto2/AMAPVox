@@ -9,7 +9,7 @@ import com.jogamp.newt.Window;
 import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.opengl.util.FPSAnimator;
-import javax.media.nativewindow.util.Point;
+import java.awt.Point;
 
 /**
  *
@@ -47,7 +47,7 @@ public class GLRenderWindowListener extends WindowAdapter{
         Window window = (Window)we.getSource();
         
         Point locationOnScreen = new Point(window.getX(), window.getY());
-        toolsJFrame.setLocation(new java.awt.Point(locationOnScreen.getX()-275, locationOnScreen.getY()-20));
+        toolsJFrame.setLocation(new java.awt.Point((int)locationOnScreen.getX()-275, (int)locationOnScreen.getY()-20));
         
         
     }

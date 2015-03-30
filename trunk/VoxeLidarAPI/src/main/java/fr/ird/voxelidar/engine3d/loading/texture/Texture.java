@@ -5,6 +5,7 @@
  */
 package fr.ird.voxelidar.engine3d.loading.texture;
 
+import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 import java.awt.Color;
@@ -12,10 +13,12 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.nio.Buffer;
 import java.nio.IntBuffer;
 import java.text.DecimalFormat;
-import javax.media.opengl.GL3;
+import javax.imageio.ImageIO;
 import org.apache.log4j.Logger;
 
 /**
@@ -159,14 +162,14 @@ public class Texture {
         format.setMinimumFractionDigits(2);
         format.setMaximumFractionDigits(2);
         
-        Texture texture = new Texture(gl, image);
+        Texture texture = new Texture();
         
-        BufferedImage imageWithTextcaption = new BufferedImage(image.getWidth()+40, image.getHeight()+20, image.getType());
+        BufferedImage imageWithTextcaption = new BufferedImage(image.getWidth()+40, image.getHeight()+30, image.getType());
         Graphics2D graphics = (Graphics2D)imageWithTextcaption.createGraphics();
         
         graphics.drawImage(image, 20, 0, null);
         graphics.setPaint(Color.red);
-        graphics.setFont(new Font("Serif",Font.PLAIN,20));
+        graphics.setFont(new Font("Comic Sans MS",Font.PLAIN,30));
         
         
         String maxText = format.format(max);
@@ -224,7 +227,63 @@ public class Texture {
         return texture;
     }
     
-    public Texture(GL3 gl, BufferedImage image){
+    public static Texture createFromFile(GL3 gl, File file){
+        
+        try {
+            BufferedImage image = ImageIO.read(file);
+            
+            Texture texture = new Texture();
+            
+            IntBuffer tmp = IntBuffer.allocate(1);
+            gl.glGenTextures(1, tmp);
+            texture.id = tmp.get(0);
+            TextureData textureData = AWTTextureIO.newTextureData(gl.getGLProfile(), image, false);
+            gl.glEnable(GL3.GL_TEXTURE_2D);
+
+            gl.glBindTexture(GL3.GL_TEXTURE_2D, texture.id);
+
+            gl.glTexParameteri(GL3.GL_TEXTURE_2D, GL3.GL_TEXTURE_WRAP_S, GL3.GL_CLAMP_TO_BORDER);
+            gl.glTexParameteri(GL3.GL_TEXTURE_2D, GL3.GL_TEXTURE_WRAP_T, GL3.GL_CLAMP_TO_BORDER);
+            gl.glTexParameteri(GL3.GL_TEXTURE_2D, GL3.GL_TEXTURE_MIN_FILTER, GL3.GL_LINEAR);
+
+            int internalFormat = textureData.getInternalFormat();
+            int width = textureData.getWidth();
+            int height = textureData.getHeight();
+            int border = textureData.getBorder();
+            int pixelFormat = textureData.getPixelFormat();
+            int pixelType = textureData.getPixelType();
+            Buffer buffer = textureData.getBuffer();
+
+
+            try{
+                gl.glTexImage2D(GL3.GL_TEXTURE_2D,         // target
+                0,// level, 0 = base, no minimap,
+                internalFormat, // internalformat
+                width,// width
+                height,    // height
+                border,// border, always 0 in OpenGL ES
+                pixelFormat,// format
+                pixelType,// type
+                buffer);
+            }catch(Exception e){
+                logger.error("cannot create texture from image", e);
+            }
+
+            gl.glBindTexture(GL3.GL_TEXTURE_2D, 0);
+
+            texture.setWidth(width);
+            texture.setHeight(height);
+
+            return texture;
+            
+        } catch (IOException ex) {
+            logger.error("cannot create texture from image", ex);
+        }
+        
+        return null;
+    }
+    
+    public Texture(){
         
         
     }

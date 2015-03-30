@@ -6,10 +6,10 @@
 package fr.ird.voxelidar.engine3d.object.scene;
 
 import com.jogamp.common.nio.Buffers;
+import com.jogamp.opengl.GL3;
 import fr.ird.voxelidar.util.image.ScaleGradient;
 import fr.ird.voxelidar.engine3d.loading.texture.Texture;
 import fr.ird.voxelidar.engine3d.object.camera.Camera;
-import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.loading.shader.Shader;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import javax.media.opengl.GL3;
 
 /**
  *

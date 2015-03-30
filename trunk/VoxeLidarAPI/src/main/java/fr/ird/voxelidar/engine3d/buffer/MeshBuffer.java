@@ -6,11 +6,11 @@
 package fr.ird.voxelidar.engine3d.buffer;
 
 import com.jogamp.common.nio.Buffers;
+import com.jogamp.opengl.GL3;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
-import javax.media.opengl.GL3;
 
 /**
  *

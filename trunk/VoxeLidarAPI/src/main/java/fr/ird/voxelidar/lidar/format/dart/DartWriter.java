@@ -103,19 +103,30 @@ public class DartWriter {
             
             float[] attributs = voxel.getAttributs();
             
-            Float densite = attributs[attributsNames.indexOf("PadBF")];
+            float densite;
+            try{
+                densite = attributs[attributsNames.indexOf("PadBflTotal")];
+            }catch(Exception e){ 
             
+                try{
+                    densite = attributs[attributsNames.indexOf("PadBVTotal")];
+                }catch(Exception e2){ 
+                    logger.error("could not find attribut PadBflTotal or PadBVTotal");
+                    return;
+                }
+            }
+                        
             
             int indiceX = voxel.indice.x;
-            int indiceY = voxel.indice.x;
-            int indiceZ = voxel.indice.x;
+            int indiceY = voxel.indice.y;
+            int indiceZ = voxel.indice.z;
             
             dart.cells[indiceX][indiceZ][indiceY] = new DartCell();
             
             dart.cells[indiceX][indiceZ][indiceY].setNbFigures(0);
             dart.cells[indiceX][indiceZ][indiceY].setNbTurbids(1);
             
-            if(densite == -1 || densite == 0){
+            if(Float.isNaN(densite) || densite == 0){
                 dart.cells[indiceX][indiceZ][indiceY].setType(DartCell.CELL_TYPE_EMPTY);
                 densite = 0f;
             }else{

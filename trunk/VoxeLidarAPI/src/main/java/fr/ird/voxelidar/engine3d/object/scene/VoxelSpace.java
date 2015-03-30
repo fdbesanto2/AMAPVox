@@ -6,6 +6,7 @@
 package fr.ird.voxelidar.engine3d.object.scene;
 
 import com.jogamp.common.nio.Buffers;
+import com.jogamp.opengl.GL3;
 import fr.ird.voxelidar.engine3d.buffer.MeshBuffer;
 import fr.ird.voxelidar.util.image.ScaleGradient;
 import fr.ird.voxelidar.engine3d.object.mesh.Attribut;
@@ -26,20 +27,18 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
-import javax.media.opengl.GL3;
-import javax.swing.SwingWorker;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
-import javax.vecmath.Vector3f;
-import net.objecthunter.exp4j.ExpressionBuilder;
 import org.apache.log4j.Logger;
 
 /**
@@ -332,7 +331,7 @@ public class VoxelSpace extends SceneObject{
                 
                 //offset
                 String[] offsetString = reader.readLine().split(" ");
-                Vec3F offset = new Vec3F(Float.valueOf(offsetString[1]), Float.valueOf(offsetString[2]),Float.valueOf(offsetString[3]));
+                //Vec3F offset = new Vec3F(Float.valueOf(offsetString[1]), Float.valueOf(offsetString[2]),Float.valueOf(offsetString[3]));
                 
                 String[] columnsNames = reader.readLine().split(" ");
                 initAttributs(columnsNames);
@@ -631,7 +630,7 @@ public class VoxelSpace extends SceneObject{
             }
             
 
-            boolean drawVoxel = !(Float.isNaN(voxel.attributValue) || voxel.attributValue < 0/*|| voxel.attributValue == -1.0f */|| (/*!settings.drawNullVoxel &&*/ voxel.attributValue == 0));
+            boolean drawVoxel = !(Float.isNaN(voxel.attributValue) || voxel.attributValue < 0/*|| voxel.attributValue == -1.0f *//*|| (!settings.drawNullVoxel && voxel.attributValue == 0)*/);
             
             if(!drawVoxel){
                 voxel.setAlpha(0);
@@ -685,8 +684,10 @@ public class VoxelSpace extends SceneObject{
         color.setGradientColor(gradientColor);
 
         for (Voxel voxel : data.voxels) {
-            
-            Color colorGenerated = color.getColor(voxel.attributValue);
+            float ratio = voxel.attributValue/(attributValueMax-attributValueMin);
+            float value = valMin+ratio*(valMax-valMin);
+            Color colorGenerated = color.getColor(value);
+            //Color colorGenerated = color.getColor(voxel.attributValue);
             voxel.setColor(colorGenerated.getRed(), colorGenerated.getGreen(), colorGenerated.getBlue());
         }
         //voxelList = ImageEqualisation.scaleHistogramm(voxelList);
@@ -755,7 +756,9 @@ public class VoxelSpace extends SceneObject{
         
         int instanceNumber = data.voxels.size();
         
-        mesh = new InstancedMesh(MeshFactory.createCube(cubeSize), instanceNumber);
+        List l = new ArrayList();
+        
+        mesh = new InstancedMesh(MeshFactory.createTexturedCube(cubeSize), instanceNumber);
         
         float instancePositions[] = new float[instanceNumber*3];
         float instanceColors[] = new float[instanceNumber*4];

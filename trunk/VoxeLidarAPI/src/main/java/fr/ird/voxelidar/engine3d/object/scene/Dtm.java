@@ -165,17 +165,17 @@ public class Dtm {
         int indiceY = (int)(rowNumber-(posY-yLeftLowerCorner)/cellSize);
         
         if(indiceX < 0 || indiceY < 0 || indiceY >= rowNumber){
-            return 0;
+            return Float.NaN;
         }
         
         if(indiceX<zArray.length && indiceY<zArray[0].length){
             z = zArray[indiceX][indiceY];
             
             if(z == -9999.0f){
-                return 0;
+                return Float.NaN;
             }
         }else{
-            return 0;
+            return Float.NaN;
         }        
         
         return z;

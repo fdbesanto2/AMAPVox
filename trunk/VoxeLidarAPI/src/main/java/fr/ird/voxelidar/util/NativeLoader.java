@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.ird.voxelidar.voxelisation.extraction;
+package fr.ird.voxelidar.util;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -55,7 +55,7 @@ public class NativeLoader {
         } else if (osName.startsWith("linux")) {
             if (osArch.equalsIgnoreCase("amd64")) {
                 name = library + ".so";
-                path = "linux-x86_64/";
+                path = "linux_x86_64/";
             } else if (osArch.equalsIgnoreCase("ia64")) {
                 name = library + ".so";
                 path = "linux-ia64/";

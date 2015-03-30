@@ -1,6 +1,7 @@
 package fr.ird.voxelidar.voxelisation.extraction;
 
 
+import fr.ird.voxelidar.util.NativeLoader;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat3D;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3D;

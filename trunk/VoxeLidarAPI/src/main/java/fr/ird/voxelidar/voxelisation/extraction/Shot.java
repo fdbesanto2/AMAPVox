@@ -1,8 +1,5 @@
 package fr.ird.voxelidar.voxelisation.extraction;
 
-import fr.ird.voxelidar.util.Filter;
-import fr.ird.voxelidar.util.FilterInterface;
-import java.util.ArrayList;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 

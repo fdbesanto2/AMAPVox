@@ -37,6 +37,7 @@ import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceAdapter;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceListener;
+import fr.ird.voxelidar.lidar.format.dart.DartWriter;
 import fr.ird.voxelidar.util.MatrixConverter;
 import fr.ird.voxelidar.util.MatrixFileParser;
 import fr.ird.voxelidar.voxelisation.VoxelisationTool;
@@ -359,8 +360,10 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             public void valueChanged(ListSelectionEvent e) {
                 if(jListOutputFiles.getSelectedIndices().length>1){
                     jButtonLoadSelectedFile.setEnabled(false);
+                    jButtonExportSelection.setEnabled(false);
                 }else{
                     jButtonLoadSelectedFile.setEnabled(true);
+                    jButtonExportSelection.setEnabled(true);
                 }
             }
         });
@@ -1064,6 +1067,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jScrollPane2 = new javax.swing.JScrollPane();
         jListOutputFiles = new javax.swing.JList();
         jButtonLoadSelectedFile = new javax.swing.JButton();
+        jButtonExportSelection = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         jButtonOpenInputFile1 = new javax.swing.JButton();
         jTextFieldFileNameMnt = new javax.swing.JTextField();
@@ -3743,6 +3747,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         jButtonLoadSelectedFile.setBackground(new java.awt.Color(85, 85, 85));
         jButtonLoadSelectedFile.setForeground(new java.awt.Color(255, 255, 255));
         jButtonLoadSelectedFile.setText("Load selection");
+        jButtonLoadSelectedFile.setEnabled(false);
         jButtonLoadSelectedFile.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButtonLoadSelectedFileMouseClicked(evt);
@@ -3754,19 +3759,31 @@ public class JFrameSettingUp extends javax.swing.JFrame{
             }
         });
 
+        jButtonExportSelection.setBackground(new java.awt.Color(85, 85, 85));
+        jButtonExportSelection.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonExportSelection.setText("Export selection");
+        jButtonExportSelection.setEnabled(false);
+        jButtonExportSelection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExportSelectionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonLoadSelectedFile)
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(jButtonAddFile, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButtonRemoveFile)))
+                        .addComponent(jButtonRemoveFile))
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jButtonExportSelection, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonLoadSelectedFile, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(5, 5, 5))
         );
         jPanel8Layout.setVerticalGroup(
@@ -3782,7 +3799,9 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                             .addComponent(jButtonRemoveFile))
                         .addGap(26, 26, 26)
                         .addComponent(jButtonLoadSelectedFile)
-                        .addGap(0, 25, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonExportSelection)
+                        .addGap(1, 1, 1)))
                 .addContainerGap())
         );
 
@@ -4215,7 +4234,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 ListAdapterComboboxModel attributeModelAdapterTools = new ListAdapterComboboxModel(attributeModel, valueModel);
                 final JFrameTools toolsJframe = new JFrameTools(joglWindow.getJoglContext(), attributeModelAdapterTools);
                 toolsJframe.setTitle("Toolbox");
-                toolsJframe.setLocation(joglWindow.getPosition().x - 275, joglWindow.getPosition().y - 20);
+                toolsJframe.setLocation(joglWindow.getPosition().getX() - 275, joglWindow.getPosition().getY() - 20);
                 toolsJframe.setVisible(true);
 
 
@@ -5338,6 +5357,25 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         
     }//GEN-LAST:event_jButtonMergeSelectedFilesActionPerformed
 
+    private void jButtonExportSelectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExportSelectionActionPerformed
+        
+        String filePath = jListOutputFiles.getSelectedValue().toString();
+        
+        if(jFileChooserSave2.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            
+            final File outputFile = jFileChooserSave2.getSelectedFile();
+            final VoxelSpace voxelSpace = new VoxelSpace();
+            voxelSpace.addVoxelSpaceListener(new VoxelSpaceAdapter() {
+                @Override
+                public void voxelSpaceCreationFinished() {
+                    DartWriter.writeFromVoxelSpace(voxelSpace.data, outputFile);
+                }
+            });
+            
+            voxelSpace.loadFromFile(new File(filePath));
+        }
+    }//GEN-LAST:event_jButtonExportSelectionActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
@@ -5355,6 +5393,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
     private javax.swing.JButton jButtonDrawChart;
     private javax.swing.JButton jButtonExecuteVoxAls;
     private javax.swing.JButton jButtonExecuteVoxTls;
+    private javax.swing.JButton jButtonExportSelection;
     private javax.swing.JButton jButtonGenerateMap;
     private javax.swing.JButton jButtonGenerateProfile;
     private javax.swing.JButton jButtonLoad;

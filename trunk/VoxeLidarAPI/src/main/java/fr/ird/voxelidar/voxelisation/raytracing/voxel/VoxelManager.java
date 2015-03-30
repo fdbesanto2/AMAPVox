@@ -334,6 +334,10 @@ public class VoxelManager {
 		return new VoxelCrossingContext(intersectionPointVoxelIndices,l,translation);
  
 	}
+        
+        public Point3i getVoxelIndicesFromPoint(Point3d point){
+            return voxelSpace.getVoxelIndices(point);
+        }
 	
 	/**
 	 * Display voxel space properties

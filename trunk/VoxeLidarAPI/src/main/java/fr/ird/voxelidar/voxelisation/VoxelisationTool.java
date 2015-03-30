@@ -384,11 +384,11 @@ public class VoxelisationTool {
 
                         } else {
 
-                            if (nbSamplingArray[i] > 1 && transmittanceArray[i] == 0 && Objects.equals(nbSamplingArray[i], nbEchosArray[i])) {
+                            if (nbSamplingArray[i] > 1 && transmittanceArray[i] == 0 ) {
 
                                 pad3 = 3;
 
-                            } else if (nbSamplingArray[i] <= 2 && transmittanceArray[i] == 0 && Objects.equals(nbSamplingArray[i], nbEchosArray[i])) {
+                            } else if (nbSamplingArray[i] <= 2 && transmittanceArray[i] == 0 ) {
 
                                 pad3 = Float.NaN;
 
