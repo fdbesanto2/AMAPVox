@@ -16,14 +16,10 @@ import fr.ird.voxelidar.util.SimpleFilter;
 import fr.ird.voxelidar.util.TimeCounter;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3d;
-import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
 
 public class VoxelAnalysis implements Runnable {
@@ -36,7 +32,7 @@ public class VoxelAnalysis implements Runnable {
     private VoxelManager voxelManager;
 
     private final double laserBeamDivergence = 0.0005f;
-    private static final float MAX_PAD = 3.0f;
+    private float MAX_PAD = 3;
 
     private int nbShotsTreated;
     private File outputFile;
@@ -192,6 +188,8 @@ public class VoxelAnalysis implements Runnable {
                 break;
 
         }
+        
+        MAX_PAD = parameters.getMaxPAD();
 
         offset = new Point3d(parameters.bottomCorner);
         //groundEnergy = new GroundEnergy[parameters.split.x][parameters.split.y];

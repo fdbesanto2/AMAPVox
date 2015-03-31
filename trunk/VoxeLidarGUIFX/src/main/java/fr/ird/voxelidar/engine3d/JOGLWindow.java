@@ -76,6 +76,7 @@ public class JOGLWindow{
     
     public void setOnTop(){
         renderFrame.setAlwaysOnTop(true);
+        renderFrame.setAlwaysOnTop(false);
     }
 
     public JoglListener getJoglContext() {

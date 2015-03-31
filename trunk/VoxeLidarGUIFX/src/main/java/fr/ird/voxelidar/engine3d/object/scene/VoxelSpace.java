@@ -93,13 +93,22 @@ public class VoxelSpace extends SceneObject{
     private boolean gradientUpdated = false;
     private boolean cubeSizeUpdated;
     
+    private boolean stretched = false;
+    
     public VoxelSpaceData data;
     
+    private Set<Float> filteredValues;
+    
     private final EventListenerList listeners;
+    float sdValue;
+    float average;
     
     public VoxelSpace(){
         
         data = new VoxelSpaceData();
+        filteredValues = new TreeSet<>();
+        filteredValues.add(Float.NaN);
+        filteredValues.add(0.0f);
         mapAttributs = new LinkedHashMap<>();
         variables = new TreeSet<>();
         listeners = new EventListenerList();
@@ -109,6 +118,9 @@ public class VoxelSpace extends SceneObject{
     public VoxelSpace(File voxelSpace){
         
         data = new VoxelSpaceData();
+        filteredValues = new TreeSet<>();
+        filteredValues.add(Float.NaN);
+        filteredValues.add(0.0f);
         mapAttributs = new LinkedHashMap<>();
         variables = new TreeSet<>();
         listeners = new EventListenerList();
@@ -120,6 +132,9 @@ public class VoxelSpace extends SceneObject{
     public VoxelSpace(File voxelSpace, String attributToVisualize){
         
         data = new VoxelSpaceData();
+        filteredValues = new TreeSet<>();
+        filteredValues.add(Float.NaN);
+        filteredValues.add(0.0f);
         mapAttributs = new LinkedHashMap<>();
         variables = new TreeSet<>();
         listeners = new EventListenerList();
@@ -153,10 +168,6 @@ public class VoxelSpace extends SceneObject{
         
     }
 
-    public void setGradientUpdated(boolean gradientUpdated) {
-        this.gradientUpdated = gradientUpdated;
-    }
-
     public Map<String, Attribut> getMapAttributs() {
         return mapAttributs;
     }    
@@ -187,6 +198,10 @@ public class VoxelSpace extends SceneObject{
         if(fileLoaded){
             firefileLoaded();
         }
+    }
+    
+    public void setStretched(boolean stretched){
+        this.stretched = stretched;
     }
 
     public boolean isFileLoaded() {
@@ -238,6 +253,9 @@ public class VoxelSpace extends SceneObject{
         updateValue();
     }
     
+    public void setFilterValues(Set<Float> values){
+        filteredValues = values;
+    }
     
     private void setWidth(){
         
@@ -630,13 +648,8 @@ public class VoxelSpace extends SceneObject{
             }
             
 
-            boolean drawVoxel = !(Float.isNaN(voxel.attributValue) || voxel.attributValue < 0/*|| voxel.attributValue == -1.0f *//*|| (!settings.drawNullVoxel && voxel.attributValue == 0)*/);
             
-            if(!drawVoxel){
-                voxel.setAlpha(0);
-            }else{
-                voxel.setAlpha(255);
-            }
+            voxel.setAlpha(255);
             
             values[count] = voxel.attributValue;
             sd.addValue(voxel.attributValue);
@@ -646,23 +659,35 @@ public class VoxelSpace extends SceneObject{
         
         //calculate standard deviation
         
+        if(stretched){
+            sdValue = sd.getStandardDeviation();
+            average = sd.getAverage();
+            
+            min = attributValueMin-average/sdValue;
+            max = attributValueMax-average/sdValue;
+            
+            //min = average - (2*sdValue);
+            //max = average + (2*sdValue);
+
+            setGradientColor(gradient, min, max);
+            
+        }else{
+            setGradientColor(gradient, attributValueMin, attributValueMax);
+        }
         
-        float sdValue = sd.getStandardDeviation();
-        float average = sd.getAverage();
-        
-        min = average - (2*sdValue);
-        max = average + (2*sdValue);
-        
-        setGradientColor(gradient, min, max);
         
         /*
         colorGradient = new ColorGradient(attributValueMin, attributValueMax);
         setGradientColor(gradient, attributValueMin, attributValueMax);
         */
-        gradientUpdated = false;
         
         
     }
+
+    public boolean isStretched() {
+        return stretched;
+    }
+    
     
     public void updateColorValue(Color[] gradient){
         setGradientColor(gradient, min, max);
@@ -682,14 +707,28 @@ public class VoxelSpace extends SceneObject{
         
         ColorGradient color = new ColorGradient(valMin, valMax);
         color.setGradientColor(gradientColor);
-
+        //ArrayList<Float> values = new ArrayList<>();
         for (Voxel voxel : data.voxels) {
-            float ratio = voxel.attributValue/(attributValueMax-attributValueMin);
-            float value = valMin+ratio*(valMax-valMin);
-            Color colorGenerated = color.getColor(value);
-            //Color colorGenerated = color.getColor(voxel.attributValue);
+            //float ratio = voxel.attributValue/(attributValueMax-attributValueMin);
+            //float value = valMin+ratio*(valMax-valMin);
+            //Color colorGenerated = color.getColor(value);
+            Color colorGenerated;
+            if(stretched){
+                colorGenerated = color.getColor(voxel.attributValue, sdValue, average, attributValueMin, attributValueMax);
+            }else{
+                colorGenerated = color.getColor(voxel.attributValue);
+            }
+            
             voxel.setColor(colorGenerated.getRed(), colorGenerated.getGreen(), colorGenerated.getBlue());
+            //values.add(voxel.attributValue);
+            if(filteredValues.contains(voxel.attributValue)){
+                voxel.setAlpha(0);
+            }else{
+                voxel.setAlpha(1);
+            }
+            
         }
+        //System.out.println("test");
         //voxelList = ImageEqualisation.scaleHistogramm(voxelList);
         //voxelList = ImageEqualisation.voxelSpaceFormatEqualisation(voxelList);
         
@@ -705,7 +744,12 @@ public class VoxelSpace extends SceneObject{
     
     public BufferedImage createScaleImage(int width, int height){
         
-        return ScaleGradient.generateScale(gradient, attributValueMin, attributValueMax, width, height, ScaleGradient.HORIZONTAL);
+        if(stretched){
+            return ScaleGradient.generateScale(gradient, min, max, width, height, ScaleGradient.HORIZONTAL);
+        }else{
+            return ScaleGradient.generateScale(gradient, attributValueMin, attributValueMax, width, height, ScaleGradient.HORIZONTAL);
+        }
+        
     }
     
     public void updateCubeSize(GL3 gl, float size){
@@ -825,6 +869,8 @@ public class VoxelSpace extends SceneObject{
             ((InstancedMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(instanceColors);
             
             buffer.updateBuffer(gl, 2, ((InstancedMesh)mesh).instanceColorsBuffer);
+            
+            gradientUpdated = true;
         }
         
         if(!cubeSizeUpdated){

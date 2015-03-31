@@ -5,12 +5,14 @@
  */
 package fr.ird.voxelidar.util;
 
+import java.io.Serializable;
+
 /**
  * This class represent a filter and can is compound of a variable,
  * a condition and a value
  * @author Julien
  */
-public class Filter {
+public class Filter implements Serializable{
     
     public final static int NOT_EQUAL = 0;
 
@@ -135,5 +137,9 @@ public class Filter {
         return filter;
     }
     
+    @Override
+    public String toString(){
+        return variable+"\t"+getConditionString()+"\t"+value;
+    }
     
 }

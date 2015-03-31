@@ -31,4 +31,9 @@ public class MatrixConverter {
                
         return matrix;
     }
+    
+    public static Matrix4d convertMat4DToMatrix4d(Mat4D inputMatrix){
+        
+        return new Matrix4d(inputMatrix.mat);
+    }
 }

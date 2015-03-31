@@ -4240,7 +4240,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 toolsJframe.setVisible(true);
 
 
-                joglWindow.addWindowListener(new GLRenderWindowListener(toolsJframe, joglWindow.getAnimator()));
+                //joglWindow.addWindowListener(new GLRenderWindowListener(toolsJframe, joglWindow.getAnimator()));
                 
                 /*
                 joglWindow.getJoglContext().getCamera().addCameraListener(new CameraAdapter() {
@@ -4823,7 +4823,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                         logger.info("Voxelisation finished in "+TimeCounter.getElapsedStringTimeInSeconds(start_time));
                     }
                 });
-        
+                /*
                 try{
                     if(singleScan){
                         voxTool.generateVoxelsFromRxp(outputPath, singleScanFile, dtmFile, parameters, vopMatrix, popMatrix);
@@ -4835,7 +4835,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 }catch(Exception e){
                     logger.error("voxelisation failed", e);
                 }
-                
+                */
                 return null;
             }
 

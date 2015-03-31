@@ -10,6 +10,8 @@ import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.opengl.util.FPSAnimator;
 import java.awt.Point;
+import javafx.application.Platform;
+import javafx.stage.Stage;
 
 /**
  *
@@ -17,14 +19,14 @@ import java.awt.Point;
  */
 public class GLRenderWindowListener extends WindowAdapter{
 
-    private final JFrameTools toolsJFrame;
+    private final Stage stage;
     private final FPSAnimator animator;
     
     public boolean isToolBoxFocused;
     
-    public GLRenderWindowListener(JFrameTools toolsJFrame, FPSAnimator animator){
+    public GLRenderWindowListener(Stage stage, FPSAnimator animator){
         
-        this.toolsJFrame = toolsJFrame;
+        this.stage = stage;
         
         this.animator = animator;
         this.isToolBoxFocused = false;
@@ -47,8 +49,15 @@ public class GLRenderWindowListener extends WindowAdapter{
         Window window = (Window)we.getSource();
         
         Point locationOnScreen = new Point(window.getX(), window.getY());
-        toolsJFrame.setLocation(new java.awt.Point((int)locationOnScreen.getX()-275, (int)locationOnScreen.getY()-20));
         
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+                stage.setX((int)locationOnScreen.getX()-stage.getWidth());
+                stage.setY((int)locationOnScreen.getY());
+            }
+        });
         
     }
     
@@ -56,6 +65,19 @@ public class GLRenderWindowListener extends WindowAdapter{
     public void windowDestroyed(WindowEvent we) {
         
         animator.stop();
-        toolsJFrame.dispose();
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+                stage.close();
+            }
+        });
+        
     }  
+    
+    @Override
+    public void windowGainedFocus(WindowEvent we) {
+        
+        
+    }
 }

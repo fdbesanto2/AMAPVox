@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="541.0" prefWidth="219.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ird.voxelidar.ToolBarFrameController">
+    <stylesheets>
+        <URL value="@/styles/toolbarframe.css" />
+    </stylesheets>
+   <children>
+      <TabPane layoutX="-12.0" layoutY="23.0" prefHeight="541.0" prefWidth="219.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <tabs>
+          <Tab text="Parameters">
+               <content>
+                  <Accordion>
+                    <panes>
+                      <TitledPane text="Voxels">
+                           <content>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <ComboBox fx:id="comboBoxAttributeToShow" layoutX="14.0" layoutY="53.0" prefHeight="25.0" prefWidth="176.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                                    <Label layoutX="20.0" layoutY="30.0" text="Attribute to show" />
+                                    <Label layoutX="20.0" layoutY="92.0" text="Gradient" />
+                                    <ComboBox fx:id="comboboxGradient" layoutX="22.0" layoutY="114.0" prefHeight="25.0" prefWidth="176.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                                    <Label layoutX="21.0" layoutY="167.0" text="Size" />
+                                    <TextField fx:id="textFieldVoxelSize" layoutX="57.0" layoutY="162.0" prefHeight="25.0" prefWidth="54.0" />
+                                    <Button fx:id="buttonApplyVoxelSize" layoutX="123.0" layoutY="162.0" mnemonicParsing="false" onAction="#onActionButtonApplyVoxelSize" text="Apply" />
+                                    <Label layoutX="17.0" layoutY="229.0" text="Min value" AnchorPane.leftAnchor="10.0" />
+                                    <Label layoutX="17.0" layoutY="256.0" text="Max value" AnchorPane.leftAnchor="10.0" />
+                                    <TextField fx:id="textFieldMinValue" layoutX="96.0" layoutY="224.0" prefHeight="25.0" prefWidth="82.0" />
+                                    <TextField fx:id="textFieldMaxValue" layoutX="96.0" layoutY="251.0" prefHeight="25.0" prefWidth="82.0" />
+                                    <Button fx:id="buttonResetMinMax" layoutX="20.0" layoutY="289.0" mnemonicParsing="false" onAction="#onActionButtonResetMinMax" text="Reset" AnchorPane.leftAnchor="10.0" />
+                                    <Label layoutX="17.0" layoutY="338.0" text="Don't display those values" AnchorPane.leftAnchor="10.0" />
+                                    <TextField fx:id="textFieldFilterValues" layoutX="7.0" layoutY="363.0" prefHeight="25.0" prefWidth="183.0" promptText="Example: NaN, 0, -1" text="NaN, 0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                                    <CheckBox fx:id="checkboxStretched" layoutX="89.0" layoutY="91.0" mnemonicParsing="false" text="Stretched" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>
+                      <TitledPane expanded="false" text="Objects" />
+                    </panes>
+                  </Accordion>
+               </content>
+            </Tab>
+          <Tab text="Scene">
+               <content>
+                  <Accordion>
+                    <panes>
+                      <TitledPane text="World">
+                           <content>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Slider fx:id="sliderColorRed" layoutX="59.4" layoutY="29.0" majorTickUnit="15.0" max="255.0" minorTickCount="0" prefHeight="16.0" prefWidth="148.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="200.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="0.0" />
+                                    <Label layoutX="14.0" layoutY="30.0" text="Red" />
+                                    <Label layoutX="14.0" layoutY="62.0" text="Green" />
+                                    <Slider fx:id="sliderColorGreen" layoutX="59.0" layoutY="61.0" majorTickUnit="15.0" max="255.0" minorTickCount="0" prefHeight="16.0" prefWidth="148.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="200.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="0.0" />
+                                    <Label layoutX="13.0" layoutY="99.0" text="Blue" />
+                                    <Slider fx:id="sliderColorBlue" layoutX="58.0" layoutY="98.0" majorTickUnit="15.0" max="255.0" minorTickCount="0" prefHeight="16.0" prefWidth="148.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="200.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>
+                      <TitledPane text="View" />
+                        <TitledPane prefHeight="200.0" prefWidth="200.0" text="Camera" />
+                    </panes>
+                  </Accordion>
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

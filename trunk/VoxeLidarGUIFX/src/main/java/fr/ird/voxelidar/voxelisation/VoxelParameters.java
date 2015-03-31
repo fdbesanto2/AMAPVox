@@ -33,6 +33,9 @@ public class VoxelParameters {
     private File dtmFile;
     public float minDTMDistance = 1;
     private boolean TLS;
+    private float maxPAD;
+    private boolean mergingAfter = false;
+    private File mergedFile;
     
     public static float[][] DEFAULT_ALS_WEIGHTING = new float[][]{
                         {1.00f, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
@@ -144,5 +147,28 @@ public class VoxelParameters {
     public void setTLS(boolean TLS) {
         this.TLS = TLS;
     }
-    
+
+    public float getMaxPAD() {
+        return maxPAD;
+    }
+
+    public void setMaxPAD(float maxPAD) {
+        this.maxPAD = maxPAD;
+    }
+
+    public boolean isMergingAfter() {
+        return mergingAfter;
+    }
+
+    public void setMergingAfter(boolean mergingAfter) {
+        this.mergingAfter = mergingAfter;
+    }
+
+    public File getMergedFile() {
+        return mergedFile;
+    }
+
+    public void setMergedFile(File mergedFile) {
+        this.mergedFile = mergedFile;
+    }
 }
