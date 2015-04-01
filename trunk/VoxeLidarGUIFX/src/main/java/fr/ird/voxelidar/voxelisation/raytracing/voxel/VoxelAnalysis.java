@@ -12,10 +12,12 @@ import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelManager.VoxelCrossingContext;
 import fr.ird.voxelidar.voxelisation.extraction.Shot;
 import fr.ird.voxelidar.engine3d.object.scene.Dtm;
+import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.SimpleFilter;
 import fr.ird.voxelidar.util.TimeCounter;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.event.EventListenerList;
@@ -131,13 +133,14 @@ public class VoxelAnalysis implements Runnable {
         return distance;
     }
 
-    public VoxelAnalysis(LinkedBlockingQueue<Shot> arrayBlockingQueue, Dtm terrain) {
+    public VoxelAnalysis(LinkedBlockingQueue<Shot> arrayBlockingQueue, Dtm terrain, List<Filter> filters) {
         // = new BoundingBox3d();
         nbShotsTreated = 0;
         isFinished = new AtomicBoolean(false);
         this.arrayBlockingQueue = arrayBlockingQueue;
         listeners = new EventListenerList();
         this.terrain = terrain;
+        Shot.setFilters(filters);
     }
 
     public Point3d getPosition(Point3i indices, Point3i splitting, Point3d minCorner, Point3d maxCorner) {
@@ -159,7 +162,8 @@ public class VoxelAnalysis implements Runnable {
 
         this.parameters = parameters;
         this.outputFile = outputFile;
-
+        weighting = parameters.getWeightingData();
+        /*
         switch (parameters.getWeighting()) {
 
             case VoxelParameters.WEIGHTING_ECHOS_NUMBER:
@@ -188,7 +192,7 @@ public class VoxelAnalysis implements Runnable {
                 break;
 
         }
-        
+        */
         MAX_PAD = parameters.getMaxPAD();
 
         offset = new Point3d(parameters.bottomCorner);
@@ -219,7 +223,7 @@ public class VoxelAnalysis implements Runnable {
 
                     Shot shot = arrayBlockingQueue.poll();
 
-                    if (shot != null) {
+                    if (shot != null && shot.doFilter()) {
 
                         shotID = nbShotsTreated;
 

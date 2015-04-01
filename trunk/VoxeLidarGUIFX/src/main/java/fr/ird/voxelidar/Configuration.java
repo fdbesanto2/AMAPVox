@@ -5,6 +5,7 @@
  */
 package fr.ird.voxelidar;
 
+import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.voxelisation.VoxelParameters;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -80,6 +81,7 @@ public class Configuration {
     private Matrix4d vopMatrix;
     private List<File> files;
     private List<MatrixAndFile> matricesAndFiles;
+    private List<Filter> filters;
     
     public Configuration(){
         
@@ -148,22 +150,27 @@ public class Configuration {
             voxelSpaceElement.setAttribute("splitY", String.valueOf(voxelParameters.split.y));
             voxelSpaceElement.setAttribute("splitZ", String.valueOf(voxelParameters.split.z));
             processElement.addContent(voxelSpaceElement);
-
+            
+            /***PONDERATION***/
             Element ponderationElement = new Element("ponderation");
             ponderationElement.setAttribute(new Attribute("mode",String.valueOf(voxelParameters.getWeighting())));
-
-            StringBuilder weightingDataString = new StringBuilder();
-            float[][] weightingData = voxelParameters.getWeightingData();
-            for(int i=0;i<weightingData.length;i++){
-                for(int j=0;j<weightingData[0].length;j++){
-                    weightingDataString.append(weightingData[i][j]).append(" ");
+            
+            if(voxelParameters.getWeighting() > 0){
+                StringBuilder weightingDataString = new StringBuilder();
+                float[][] weightingData = voxelParameters.getWeightingData();
+                for(int i=0;i<weightingData.length;i++){
+                    for(int j=0;j<weightingData[0].length;j++){
+                        weightingDataString.append(weightingData[i][j]).append(" ");
+                    }
                 }
+                Element matrixElement = createMatrixElement("ponderation", weightingDataString.toString().trim());
+                ponderationElement.addContent(matrixElement);
             }
-
-            Element matrixElement = createMatrixElement("ponderation", weightingDataString.toString().trim());
-            ponderationElement.addContent(matrixElement);
+            
             processElement.addContent(ponderationElement);
-
+            
+            /***DEM FILTER***/
+            
             Element dtmFilterElement = new Element("dtm-filter");
             dtmFilterElement.setAttribute(new Attribute("enabled",String.valueOf(voxelParameters.useDTMCorrection())));
             if(voxelParameters.useDTMCorrection()){
@@ -172,7 +179,9 @@ public class Configuration {
             }
 
             processElement.addContent(dtmFilterElement);
-
+            
+            /***TRANSFORMATION***/
+            
             Element transformationElement = new Element("transformation");
 
 
@@ -195,8 +204,9 @@ public class Configuration {
                 transformationElement.addContent(matrixVopElement);
             }
 
-
             processElement.addContent(transformationElement);
+            
+            /***LIMITS***/
             
             Element limitsElement = new Element("limits");
             Element limitElement = new Element("limit");
@@ -206,12 +216,34 @@ public class Configuration {
             limitsElement.addContent(limitElement);
             processElement.addContent(limitsElement);
             
+            if(filters != null){
+                Element filtersElement = new Element("filters");
+                
+                for(Filter f : filters){
+                    Element filterElement = new Element("filter");
+                    filterElement.setAttribute("variable", f.getVariable());
+                    filterElement.setAttribute("inequality", f.getConditionString());
+                    filterElement.setAttribute("value", String.valueOf(f.getValue()));
+                    filtersElement.addContent(filterElement);
+                }
+                
+                processElement.addContent(filtersElement);
+            }
+            
+            
             if(processMode == ProcessMode.VOXELISATION_TLS && inputType == InputType.RSP_PROJECT){
+                
+                /***MERGING***/
                 
                 Element mergingElement = new Element("merging");
                 mergingElement.setAttribute("enabled", String.valueOf(voxelParameters.isMergingAfter()));
-                mergingElement.setAttribute("src", voxelParameters.getMergedFile().getAbsolutePath());
+                if(voxelParameters.isMergingAfter()){
+                    mergingElement.setAttribute("src", voxelParameters.getMergedFile().getAbsolutePath());
+                }
+                
                 processElement.addContent(mergingElement);
+                
+                /***FILE LIST TO PROCESS***/
                 
                 Element filesElement = new Element("files");
                 if(matricesAndFiles != null){
@@ -229,14 +261,10 @@ public class Configuration {
             
             processElement.setAttribute(new Attribute("mode","multi-resolutions"));
             processElement.setAttribute(new Attribute("type","ALS"));
+                        
+            /***FILE LIST TO PROCESS***/
             
-            Element filesElement = new Element("files");
-            
-            for(File f : files){
-                filesElement.addContent(new Element("file").setAttribute("src", f.getAbsolutePath()));
-            }
-            
-            processElement.addContent(filesElement);
+            processElement.addContent(createFilesElement(files));
             
             Element outputFileElement = new Element("output_file");
             outputFileElement.setAttribute(new Attribute("src",outputFile.getAbsolutePath()));
@@ -250,13 +278,7 @@ public class Configuration {
             outputFileElement.setAttribute(new Attribute("src",outputFile.getAbsolutePath()));
             processElement.addContent(outputFileElement);
             
-            Element filesElement = new Element("files");
-            
-            for(File f : files){
-                filesElement.addContent(new Element("file").setAttribute("src", f.getAbsolutePath()));
-            }
-            
-            processElement.addContent(filesElement);
+            processElement.addContent(createFilesElement(files));
         }
         
         
@@ -266,6 +288,17 @@ public class Configuration {
         } catch (IOException ex) {
             logger.error(ex);
         }
+    }
+    
+    private Element createFilesElement(List<File> files){
+        
+        Element filesElement = new Element("files");
+            
+        for(File f : files){
+            filesElement.addContent(new Element("file").setAttribute("src", f.getAbsolutePath()));
+        }
+        
+        return filesElement;
     }
     
     public void readConfiguration(File inputParametersFile){
@@ -286,7 +319,30 @@ public class Configuration {
             switch(mode){
                 case "voxelisation":
                     Element inputFileElement = processElement.getChild("input_file");
-                    inputType.type = Integer.valueOf(inputFileElement.getAttributeValue("type"));
+                    
+                    int inputTypeInteger = Integer.valueOf(inputFileElement.getAttributeValue("type"));
+                    
+                    switch(inputTypeInteger){
+                        case 0:
+                            inputType = InputType.LAS_FILE;
+                            break;
+                        case 1:
+                            inputType = InputType.LAZ_FILE;
+                            break;
+                        case 2:
+                            inputType = InputType.POINTS_FILE;
+                            break;
+                        case 3:
+                            inputType = InputType.LAS_FILE;
+                            break;
+                        case 4:
+                            inputType = InputType.RXP_SCAN;
+                            break;
+                        case 5:
+                            inputType = InputType.RSP_PROJECT;
+                            break;
+                    }
+                    
                     inputFile = new File(inputFileElement.getAttributeValue("src"));
                     
                     switch(type){
@@ -294,6 +350,7 @@ public class Configuration {
                             processMode = ProcessMode.VOXELISATION_ALS;
                             Element trajectoryFileElement = processElement.getChild("trajectory");
                             trajectoryFile = new File(trajectoryFileElement.getAttributeValue("src"));
+                            
                             break;
                         case "TLS":
                             processMode = ProcessMode.VOXELISATION_TLS;
@@ -327,22 +384,26 @@ public class Configuration {
                         
                         voxelParameters.setWeighting(Integer.valueOf(ponderationElement.getAttributeValue("mode")));
                         
-                        Element matrixElement = ponderationElement.getChild("matrix");
-                        int rowNumber = 7;
-                        int colNumber = 7;
-                        String data = matrixElement.getText();
-                        String[] datas = data.split(" ");
-                        float[][] weightingData = new float[rowNumber][colNumber];
-                        
-                        int count = 0;
-                        for(int i=0;i<weightingData.length;i++){
-                            for(int j=0;j<weightingData[0].length;j++){
-                                weightingData[i][j] = Float.valueOf(datas[count]);
-                                count++;
+                        if(voxelParameters.getWeighting() > 0){
+                            Element matrixElement = ponderationElement.getChild("matrix");
+                            int rowNumber = 7;
+                            int colNumber = 7;
+                            String data = matrixElement.getText();
+                            String[] datas = data.split(" ");
+                            float[][] weightingData = new float[rowNumber][colNumber];
+
+                            int count = 0;
+                            for(int i=0;i<weightingData.length;i++){
+                                for(int j=0;j<weightingData[0].length;j++){
+                                    weightingData[i][j] = Float.valueOf(datas[count]);
+                                    count++;
+                                }
                             }
+                            
+                            voxelParameters.setWeightingData(weightingData);
                         }
                         
-                        voxelParameters.setWeightingData(weightingData);
+                        
                     }
                     
                     Element dtmFilterElement = processElement.getChild("dtm-filter");
@@ -391,25 +452,55 @@ public class Configuration {
                         voxelParameters.setMaxPAD(Float.valueOf(limitElement.getAttributeValue("max")));
                     }
                     
+                    
+                    Element filtersElement = processElement.getChild("filters");
+                    if(filtersElement != null){
+                        
+                        List<Element> childrensFilter = filtersElement.getChildren("filter");
+                        
+                        
+                        if(childrensFilter != null){
+                            
+                            filters = new ArrayList<>();
+                            
+                            for(Element e : childrensFilter){
+
+                                String variable = e.getAttributeValue("variable");
+                                String inequality = e.getAttributeValue("inequality");
+                                String value = e.getAttributeValue("value");
+                                
+                                filters.add(new Filter(variable, Double.valueOf(value), Filter.getConditionFromString(inequality)));
+                            }
+                        }
+                    }
+                    
+                    
                     switch(type){
                         case "TLS":
-                            filesElement = processElement.getChild("files");
-                            List<Element> childrens = filesElement.getChildren("file");
-                            matricesAndFiles = new ArrayList<>();
                             
-                            for(Element e : childrens){
+                            if(inputType == InputType.RSP_PROJECT){
                                 
-                                Matrix4d mat = getMatrixFromData(e.getChildText("matrix"));
-                                File f = new File(e.getAttributeValue("src"));
-                                
-                                matricesAndFiles.add(new MatrixAndFile(f, mat));
+                                filesElement = processElement.getChild("files");
+                                List<Element> childrens = filesElement.getChildren("file");
+                                matricesAndFiles = new ArrayList<>();
+
+                                for(Element e : childrens){
+
+                                    Matrix4d mat = getMatrixFromData(e.getChildText("matrix"));
+                                    File f = new File(e.getAttributeValue("src"));
+
+                                    matricesAndFiles.add(new MatrixAndFile(f, mat));
+                                }
+
+                                Element mergingElement = processElement.getChild("merging");
+                                if(mergingElement != null){
+                                    voxelParameters.setMergingAfter(Boolean.valueOf(mergingElement.getAttributeValue("enabled")));
+                                    if(voxelParameters.isMergingAfter()){
+                                        voxelParameters.setMergedFile(new File(mergingElement.getAttributeValue("src")));
+                                    }
+                                }
                             }
                             
-                            Element mergingElement = processElement.getChild("merging");
-                            if(mergingElement != null){
-                                voxelParameters.setMergingAfter(Boolean.valueOf(mergingElement.getAttributeValue("enabled")));
-                                voxelParameters.setMergedFile(new File(mergingElement.getAttributeValue("src")));
-                            }
                             
                             break;
                     }
@@ -614,6 +705,14 @@ public class Configuration {
 
     public void setMatricesAndFiles(List<MatrixAndFile> matricesAndFiles) {
         this.matricesAndFiles = matricesAndFiles;
+    }
+
+    public List<Filter> getFilters() {
+        return filters;
+    }
+
+    public void setFilters(List<Filter> filters) {
+        this.filters = filters;
     }
     
 }

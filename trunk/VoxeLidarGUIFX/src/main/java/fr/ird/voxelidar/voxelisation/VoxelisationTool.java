@@ -20,6 +20,7 @@ import fr.ird.voxelidar.lidar.format.tls.Rsp;
 import fr.ird.voxelidar.lidar.format.tls.Scans;
 import fr.ird.voxelidar.util.DataSet;
 import fr.ird.voxelidar.util.DataSet.Mode;
+import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.MatrixConverter;
 import fr.ird.voxelidar.util.TimeCounter;
 import java.io.BufferedWriter;
@@ -94,7 +95,7 @@ public class VoxelisationTool {
         return terrain;
     }
 
-    public ArrayList<File> generateVoxelsFromRsp(File output, File input, VoxelParameters parameters, Mat4D vop, Mat4D pop, List<MatrixAndFile> matricesAndFiles) {
+    public ArrayList<File> generateVoxelsFromRsp(File output, File input, VoxelParameters parameters, Mat4D vop, Mat4D pop, List<MatrixAndFile> matricesAndFiles, List<Filter> filters) {
 
         startTime = System.currentTimeMillis();
 
@@ -115,7 +116,7 @@ public class VoxelisationTool {
         for (MatrixAndFile file : matricesAndFiles) {
 
             File outputFile = new File(output.getAbsolutePath() + "/" + file.file.getName() + ".vox");
-            tasks.add(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixConverter.convertMatrix4dToMat4D(file.matrix), this.parameters, dtm));
+            tasks.add(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixConverter.convertMatrix4dToMat4D(file.matrix), this.parameters, dtm, filters));
             files.add(outputFile);
             count++;
         }
@@ -135,7 +136,7 @@ public class VoxelisationTool {
         return files;
     }
 
-    public void generateVoxelsFromRxp(File output, File input, File dtmFile, VoxelParameters parameters, Mat4D vop, Mat4D pop, Mat4D sop) {
+    public void generateVoxelsFromRxp(File output, File input, File dtmFile, VoxelParameters parameters, Mat4D vop, Mat4D pop, Mat4D sop, List<Filter> filters) {
 
         startTime = System.currentTimeMillis();
 
@@ -145,30 +146,28 @@ public class VoxelisationTool {
         RxpScan scan = new RxpScan();
         scan.setFile(input);
 
-        File outputFile = new File(output.getAbsolutePath() + "/" + scan.getFile().getName() + ".vox");
-
-        fireProgress(outputFile.getAbsolutePath(), 1);
+        fireProgress(output.getAbsolutePath(), 1);
         
-        if(dtm == null){
+        if(dtm == null && dtmFile != null){
             dtm = loadDTM(dtmFile);
         }
         
 
-        RxpVoxelisation voxelisation = new RxpVoxelisation(input, outputFile, vop, pop, sop, parameters, dtm);
+        RxpVoxelisation voxelisation = new RxpVoxelisation(input, output, vop, pop, sop, parameters, dtm, filters);
         voxelisation.call();
 
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
 
     }
 
-    public void generateVoxelsFromLas(File output, File input, File trajectoryFile, VoxelParameters parameters, Mat4D vop) {
+    public void generateVoxelsFromLas(File output, File input, File trajectoryFile, VoxelParameters parameters, Mat4D vop, List<Filter> filters) {
 
         startTime = System.currentTimeMillis();
 
         this.parameters = parameters;
         this.parameters.setTLS(false);
 
-        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, trajectoryFile, parameters);
+        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, trajectoryFile, parameters, filters);
 
         voxelisation.addProcessingListener(new ProcessingListener() {
 
@@ -202,8 +201,10 @@ public class VoxelisationTool {
         float[][] nbSamplingMultiplyAngleMean = null;
 
         for (int i = 0; i < filesList.size(); i++) {
-
-            logger.info("Merging in progress, file " + (i + 1) + " : " + filesList.size());
+            
+            String msg = "Merging in progress, file " + (i + 1) + " : " + filesList.size();
+            logger.info(msg);
+            fireProgress(msg, i);
 
             VoxelSpace voxelSpace1 = new VoxelSpace(filesList.get(i));
             voxelSpace1.load();

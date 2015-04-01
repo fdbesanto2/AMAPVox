@@ -54,6 +54,7 @@ public class GLRenderWindowListener extends WindowAdapter{
 
             @Override
             public void run() {
+                //stage.toFront();
                 stage.setX((int)locationOnScreen.getX()-stage.getWidth());
                 stage.setY((int)locationOnScreen.getY());
             }
@@ -78,6 +79,14 @@ public class GLRenderWindowListener extends WindowAdapter{
     @Override
     public void windowGainedFocus(WindowEvent we) {
         
-        
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+                if(!stage.isShowing()){
+                    stage.toFront();
+                }
+            }
+        });
     }
 }

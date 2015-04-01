@@ -663,8 +663,16 @@ public class VoxelSpace extends SceneObject{
             sdValue = sd.getStandardDeviation();
             average = sd.getAverage();
             
-            min = attributValueMin-average/sdValue;
-            max = attributValueMax-average/sdValue;
+            min = average-(2*sdValue);
+            max = average+(2*sdValue);
+            
+            if(min < attributValueMin){
+                min = attributValueMin;
+            }
+            
+            if(max > attributValueMax){
+                max = attributValueMax;
+            }
             
             //min = average - (2*sdValue);
             //max = average + (2*sdValue);
@@ -690,7 +698,12 @@ public class VoxelSpace extends SceneObject{
     
     
     public void updateColorValue(Color[] gradient){
-        setGradientColor(gradient, min, max);
+        if(stretched){
+            setGradientColor(gradient, min, max);
+        }else{
+            setGradientColor(gradient, attributValueMin, attributValueMax);
+        }
+        
     }
     
     public Vec3F getColorFromValue(float value){
@@ -712,12 +725,7 @@ public class VoxelSpace extends SceneObject{
             //float ratio = voxel.attributValue/(attributValueMax-attributValueMin);
             //float value = valMin+ratio*(valMax-valMin);
             //Color colorGenerated = color.getColor(value);
-            Color colorGenerated;
-            if(stretched){
-                colorGenerated = color.getColor(voxel.attributValue, sdValue, average, attributValueMin, attributValueMax);
-            }else{
-                colorGenerated = color.getColor(voxel.attributValue);
-            }
+            Color colorGenerated = color.getColor(voxel.attributValue);
             
             voxel.setColor(colorGenerated.getRed(), colorGenerated.getGreen(), colorGenerated.getBlue());
             //values.add(voxel.attributValue);

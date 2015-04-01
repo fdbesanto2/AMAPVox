@@ -5,6 +5,7 @@
  */
 package fr.ird.voxelidar;
 
+import de.matthiasmann.twlthemeeditor.gui.MessageDialog;
 import fr.ird.voxelidar.Configuration.InputType;
 import fr.ird.voxelidar.Configuration.ProcessMode;
 import fr.ird.voxelidar.engine3d.JOGLWindow;
@@ -51,6 +52,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -59,6 +62,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
@@ -110,6 +114,7 @@ public class MainFrameController implements Initializable {
     private File lastFCAddTask;
     private File lastFCSaveDartFile;
     private File lastFCSaveMergingFile;
+    private File lastFCOpenPonderationFile;
 
     private FileChooser fileChooserOpenConfiguration;
     private FileChooser fileChooserSaveConfiguration;
@@ -121,12 +126,14 @@ public class MainFrameController implements Initializable {
     private FileChooser fileChooserOpenPopMatrixFile;
     private FileChooser fileChooserOpenSopMatrixFile;
     private FileChooser fileChooserOpenVopMatrixFile;
+    private FileChooser fileChooserOpenPonderationFile;
     private FileChooser fileChooserOpenDTMFile;
     private FileChooser fileChooserOpenMultiResVoxelFile;
     private FileChooser fileChooserAddTask;
     private FileChooser fileChooserOpenOutputFileMultiRes;
     private FileChooser fileChooserOpenOutputFileMerging;
     private FileChooser fileChooserSaveDartFile;
+    private FileChooser fileChooserSaveOutputFileTLS;
     private DirectoryChooser directoryChooserOpenOutputPathTLS;
 
     private Matrix4d popMatrix;
@@ -138,6 +145,8 @@ public class MainFrameController implements Initializable {
     private boolean filterScan;
     private List<MatrixAndFile> items;
     private Rsp rsp;
+    
+    private final static String MATRIX_FORMAT_ERROR_MSG = "Matrix file has to look like this: \n\n\t1.0 0.0 0.0 0.0\n\t0.0 1.0 0.0 0.0\n\t0.0 0.0 1.0 0.0\n\t0.0 0.0 0.0 1.0\n";
     
     private RangeSlider rangeSliderFilterValue;
     @FXML
@@ -249,8 +258,6 @@ public class MainFrameController implements Initializable {
     @FXML
     private Button buttonCreateAttribut;
     @FXML
-    private Button buttonOpenSopMatrixFile;
-    @FXML
     private Button buttonOpenPopMatrixFile;
     @FXML
     private Button buttonOpenVopMatrixFile;
@@ -335,6 +342,10 @@ public class MainFrameController implements Initializable {
     private Button buttonAddFilter;
     @FXML
     private Button buttonRemoveFilter;
+    @FXML
+    private Label labelTLSOutputPath;
+    @FXML
+    private Button buttonOpenPonderationFile;
 
     /**
      * Initializes the controller class.
@@ -351,14 +362,14 @@ public class MainFrameController implements Initializable {
         fileChooserOpenInputFileALS = new FileChooser();
         fileChooserOpenInputFileALS.setTitle("Open input file");
         fileChooserOpenInputFileALS.getExtensionFilters().addAll(
-                new ExtensionFilter("All Files", "*.*"),
+                new ExtensionFilter("All Files", "*"),
                 new ExtensionFilter("Text Files", "*.txt"),
                 new ExtensionFilter("Las Files", "*.las", "*.laz"));
 
         fileChooserOpenTrajectoryFileALS = new FileChooser();
         fileChooserOpenTrajectoryFileALS.setTitle("Open trajectory file");
         fileChooserOpenTrajectoryFileALS.getExtensionFilters().addAll(
-                new ExtensionFilter("All Files", "*.*"),
+                new ExtensionFilter("All Files", "*"),
                 new ExtensionFilter("Text Files", "*.txt"));
 
         fileChooserOpenOutputFileALS = new FileChooser();
@@ -367,48 +378,57 @@ public class MainFrameController implements Initializable {
         fileChooserOpenInputFileTLS = new FileChooser();
         fileChooserOpenInputFileTLS.setTitle("Open input file");
         fileChooserOpenInputFileTLS.getExtensionFilters().addAll(
-                new ExtensionFilter("All Files", "*.*"),
+                new ExtensionFilter("All Files", "*"),
                 new ExtensionFilter("Text Files", "*.txt"),
                 new ExtensionFilter("Rxp Files", "*.rxp"),
                 new ExtensionFilter("Project Rsp Files", "*.rsp"));
 
         directoryChooserOpenOutputPathTLS = new DirectoryChooser();
         directoryChooserOpenOutputPathTLS.setTitle("Choose output path");
+        
+        fileChooserSaveOutputFileTLS = new FileChooser();
+        fileChooserSaveOutputFileTLS.setTitle("Save voxel file");
 
         fileChooserOpenVoxelFile = new FileChooser();
         fileChooserOpenVoxelFile.setTitle("Open voxel file");
         fileChooserOpenVoxelFile.getExtensionFilters().addAll(
-                new ExtensionFilter("All Files", "*.*"),
+                new ExtensionFilter("All Files", "*"),
                 new ExtensionFilter("Voxel Files", "*.vox"));
 
         fileChooserOpenPopMatrixFile = new FileChooser();
         fileChooserOpenPopMatrixFile.setTitle("Choose matrix file");
         fileChooserOpenPopMatrixFile.getExtensionFilters().addAll(
-                new ExtensionFilter("All Files", "*.*"),
+                new ExtensionFilter("All Files", "*"),
                 new ExtensionFilter("Text Files", "*.txt"));
 
         fileChooserOpenSopMatrixFile = new FileChooser();
         fileChooserOpenSopMatrixFile.setTitle("Choose matrix file");
         fileChooserOpenSopMatrixFile.getExtensionFilters().addAll(
-                new ExtensionFilter("All Files", "*.*"),
+                new ExtensionFilter("All Files", "*"),
                 new ExtensionFilter("Text Files", "*.txt"));
 
         fileChooserOpenVopMatrixFile = new FileChooser();
         fileChooserOpenVopMatrixFile.setTitle("Choose matrix file");
         fileChooserOpenVopMatrixFile.getExtensionFilters().addAll(
-                new ExtensionFilter("All Files", "*.*"),
+                new ExtensionFilter("All Files", "*"),
+                new ExtensionFilter("Text Files", "*.txt"));
+        
+        fileChooserOpenPonderationFile = new FileChooser();
+        fileChooserOpenPonderationFile.setTitle("Choose ponderation file");
+        fileChooserOpenPonderationFile.getExtensionFilters().addAll(
+                new ExtensionFilter("All Files", "*"),
                 new ExtensionFilter("Text Files", "*.txt"));
 
         fileChooserOpenDTMFile = new FileChooser();
         fileChooserOpenDTMFile.setTitle("Choose DTM file");
         fileChooserOpenDTMFile.getExtensionFilters().addAll(
-                new ExtensionFilter("All Files", "*.*"),
+                new ExtensionFilter("All Files", "*"),
                 new ExtensionFilter("DTM Files", "*.asc"));
 
         fileChooserOpenMultiResVoxelFile = new FileChooser();
         fileChooserOpenMultiResVoxelFile.setTitle("Choose voxel file");
         fileChooserOpenMultiResVoxelFile.getExtensionFilters().addAll(
-                new ExtensionFilter("All Files", "*.*"),
+                new ExtensionFilter("All Files", "*"),
                 new ExtensionFilter("Voxel Files", "*.vox"));
 
         fileChooserOpenOutputFileMultiRes = new FileChooser();
@@ -417,24 +437,24 @@ public class MainFrameController implements Initializable {
         fileChooserAddTask = new FileChooser();
         fileChooserAddTask.setTitle("Choose parameter file");
         fileChooserAddTask.getExtensionFilters().addAll(
-                new ExtensionFilter("All Files", "*.*"),
+                new ExtensionFilter("All Files", "*"),
                 new ExtensionFilter("XML Files", "*.xml"));
         
         fileChooserSaveDartFile  = new FileChooser();
         fileChooserSaveDartFile.setTitle("Save dart file (.maket)");
         fileChooserSaveDartFile.getExtensionFilters().addAll(
-                new ExtensionFilter("All Files", "*.*"),
+                new ExtensionFilter("All Files", "*"),
                 new ExtensionFilter("Maket File", "*.maket"));
         
         fileChooserOpenOutputFileMerging  = new FileChooser();
         fileChooserOpenOutputFileMerging.setTitle("Choose voxel file");
         fileChooserOpenOutputFileMerging.getExtensionFilters().addAll(
-                new ExtensionFilter("All Files", "*.*"),
+                new ExtensionFilter("All Files", "*"),
                 new ExtensionFilter("Voxel Files", "*.vox"));
 
-        comboboxModeALS.getItems().addAll("Las file", "Laz file", "Points file", "Shots file");
-        comboboxModeTLS.getItems().addAll("Rxp scan", "Rsp project", "Points file", "Shots file");
-        comboboxWeighting.getItems().addAll("From the echo number", "From a matrix file", "Local recalculation");
+        comboboxModeALS.getItems().addAll("Las file", "Laz file", "Points file (unavailable)", "Shots file (unavailable)");
+        comboboxModeTLS.getItems().addAll("Rxp scan", "Rsp project", "Points file (unavailable)", "Shots file (unavailable)");
+        comboboxWeighting.getItems().addAll("From the echo number", "From a matrix file", "Local recalculation (unavailable)");
 
         listViewVoxelsFiles.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -574,14 +594,30 @@ public class MainFrameController implements Initializable {
             }
         });
         
+        checkboxUseVopMatrix.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    buttonOpenVopMatrixFile.setDisable(false);
+                    buttonEnterReferencePointsVop.setDisable(false);
+                }else{
+                    buttonOpenVopMatrixFile.setDisable(true);
+                    buttonEnterReferencePointsVop.setDisable(true);
+                }
+            }
+        });
+        
         checkboxUsePopMatrix.selectedProperty().addListener(new ChangeListener<Boolean>() {
 
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if(newValue){
                     checkBoxUseDefaultPopMatrix.setDisable(false);
+                    buttonOpenPopMatrixFile.setDisable(false);
                 }else{
                     checkBoxUseDefaultPopMatrix.setDisable(true);
+                    buttonOpenPopMatrixFile.setDisable(true);
                 }
             }
         });
@@ -611,6 +647,8 @@ public class MainFrameController implements Initializable {
             }
         });
         
+        comboboxWeighting.disableProperty().bind(checkboxEnableWeighting.selectedProperty().not());
+        
         textFieldTLSFilter.textProperty().addListener(new ChangeListener<String>() {
 
             @Override
@@ -627,11 +665,100 @@ public class MainFrameController implements Initializable {
                 updateResultMatrix();
             }
         });
+        
+        comboboxModeTLS.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                
+                switch(newValue.intValue()){
+                    
+                    case 1:
+                        checkboxFilter.setDisable(false);
+                        listviewRxpScans.setDisable(false);
+                        textFieldTLSFilter.setDisable(false);
+                        checkboxMergeAfter.setDisable(false);
+                        textFieldMergedFileName.setDisable(false);
+                        disableSopMatrixChoice(false);
+                        labelTLSOutputPath.setText("Output path");
+                        break;
+                        
+                    default:
+                        checkboxFilter.setDisable(true);
+                        listviewRxpScans.setDisable(true);
+                        textFieldTLSFilter.setDisable(true);
+                        checkboxMergeAfter.setDisable(true);
+                        textFieldMergedFileName.setDisable(true);
+                        disableSopMatrixChoice(true);
+                        labelTLSOutputPath.setText("Output file");
+                }
+            }
+        });
+        
+        tabPaneVoxelisation.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                
+                switch(newValue.intValue()){
+                    
+                    case 1:
+                        disableSopMatrixChoice(false);
+                        disablePopMatrixChoice(false);
+                        break;
+                        
+                    default:
+                        disableSopMatrixChoice(true);
+                        disablePopMatrixChoice(true);
+                }
+            }
+        });
+        
+        comboboxWeighting.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                
+                switch(newValue.intValue()){
+                    
+                    case 1:
+                        buttonOpenPonderationFile.setVisible(true);
+                        break;
+                        
+                    default:
+                        buttonOpenPonderationFile.setVisible(false);
+                }
+            }
+        });
 
     }
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+    
+    private void disableSopMatrixChoice(boolean value){
+        
+        if(value){
+            checkboxUseSopMatrix.setDisable(true);
+            checkBoxUseDefaultSopMatrix.setDisable(true);
+        }else{
+            checkboxUseSopMatrix.setDisable(false);
+            checkBoxUseDefaultSopMatrix.setDisable(false);
+        }
+    }
+    
+    private void disablePopMatrixChoice(boolean value){
+        
+        if(value){
+            checkboxUsePopMatrix.setDisable(true);
+            checkBoxUseDefaultPopMatrix.setDisable(true);
+            buttonOpenPopMatrixFile.setDisable(true);
+        }else{
+            checkboxUsePopMatrix.setDisable(false);
+            checkBoxUseDefaultPopMatrix.setDisable(false);
+            buttonOpenPopMatrixFile.setDisable(false);
+        }
     }
 
     private void updateResultMatrix() {
@@ -734,7 +861,6 @@ public class MainFrameController implements Initializable {
 
 
                                 joglWindow.setOnTop();
-                                //joglWindow.setOnTop();
                                 
                             }
                         });
@@ -755,7 +881,7 @@ public class MainFrameController implements Initializable {
                 
                 if(newValue){
                     joglWindow.setOnTop();
-                    toolBarFrameStage.toFront();
+                    toolBarFrameStage.setAlwaysOnTop(true);
                     stage.focusedProperty().removeListener(this);
                 }
                 
@@ -811,11 +937,23 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionButtonOpenOutputPathTLS(ActionEvent event) {
-
-        File selectedFile = directoryChooserOpenOutputPathTLS.showDialog(stage);
+        
+        File selectedFile;
+        
+        switch(comboboxModeTLS.getSelectionModel().getSelectedIndex()){
+            
+            case 1:
+                selectedFile = directoryChooserOpenOutputPathTLS.showDialog(stage);                
+                break;
+                
+            default:
+                selectedFile = fileChooserSaveOutputFileTLS.showSaveDialog(stage);
+        }
+        
         if (selectedFile != null) {
             textFieldOutputPathTLS.setText(selectedFile.getAbsolutePath());
         }
+        
     }
     
     private void doFilterOnScanListView(){
@@ -1011,7 +1149,6 @@ public class MainFrameController implements Initializable {
     }
 
 
-    @FXML
     private void onActionButtonOpenSopMatrixFile(ActionEvent event) {
 
         if (lastFCOpenSopMatrixFile != null) {
@@ -1038,14 +1175,44 @@ public class MainFrameController implements Initializable {
 
         File selectedFile = fileChooserOpenPopMatrixFile.showOpenDialog(stage);
         if (selectedFile != null) {
-
-            popMatrix = MatrixFileParser.getMatrixFromFile(selectedFile);
+            
+            String extension = FileManager.getExtension(selectedFile);
+            Matrix4d mat;
+            
+            switch(extension){
+                case ".rsp":
+                    
+                    Rsp tempRsp = new Rsp();
+                    tempRsp.read(selectedFile);
+                    mat = MatrixConverter.convertMat4DToMatrix4d(tempRsp.getPopMatrix());
+                    
+                    break;
+                default:
+                    mat = MatrixFileParser.getMatrixFromFile(selectedFile);
+                    
+            }
+            
+            if(mat != null){
+                popMatrix = mat;
+            }else{
+                showMatrixFormatErrorDialog();
+            }
+             
             updateResultMatrix();
 
             lastFCOpenPopMatrixFile = selectedFile;
         }
     }
+    
+    private void showMatrixFormatErrorDialog(){
+        
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Impossible to parse matrix file");
+        alert.setContentText(MATRIX_FORMAT_ERROR_MSG);
 
+        alert.showAndWait();
+    }
     @FXML
     private void onActionButtonOpenVopMatrixFile(ActionEvent event) {
 
@@ -1055,9 +1222,14 @@ public class MainFrameController implements Initializable {
 
         File selectedFile = fileChooserOpenVopMatrixFile.showOpenDialog(stage);
         if (selectedFile != null) {
-
-            vopMatrix = MatrixFileParser.getMatrixFromFile(selectedFile);
-            updateResultMatrix();
+            
+            Matrix4d mat = MatrixFileParser.getMatrixFromFile(selectedFile);
+            if(mat != null){
+                vopMatrix = MatrixFileParser.getMatrixFromFile(selectedFile);
+                updateResultMatrix();
+            }else{
+                showMatrixFormatErrorDialog();
+            }
 
             lastFCOpenVopMatrixFile = selectedFile;
         }
@@ -1075,7 +1247,6 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionCheckboxUseVopMatrix(ActionEvent event) {
-        buttonEnterReferencePointsVop.setDisable(false);
         updateResultMatrix();
     }
 
@@ -1179,7 +1350,10 @@ public class MainFrameController implements Initializable {
                     checkboxUsePopMatrix.isSelected(), popMatrix,
                     checkboxUseSopMatrix.isSelected(), sopMatrix,
                     checkboxUseVopMatrix.isSelected(), vopMatrix);
-
+            
+            
+            cfg.setFilters(listviewFilters.getItems());
+            
             cfg.writeConfiguration(selectedFile);
 
             addFileToTaskList(selectedFile);
@@ -1270,7 +1444,7 @@ public class MainFrameController implements Initializable {
                                     }
                                 });
 
-                                voxTool.generateVoxelsFromLas(cfg.getOutputFile(), cfg.getInputFile(), cfg.getTrajectoryFile(), cfg.getVoxelParameters(), MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()));
+                                voxTool.generateVoxelsFromLas(cfg.getOutputFile(), cfg.getInputFile(), cfg.getTrajectoryFile(), cfg.getVoxelParameters(), MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()), cfg.getFilters());
 
                                 Platform.runLater(new Runnable() {
 
@@ -1306,21 +1480,80 @@ public class MainFrameController implements Initializable {
                                         logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
                                     }
                                 });
-
-                                ArrayList<File> outputFiles = voxTool.generateVoxelsFromRsp(cfg.getOutputFile(), cfg.getInputFile(), cfg.getVoxelParameters(),
+                                
+                                switch(cfg.getInputType()){
+                                    
+                                    case RSP_PROJECT:
+                                        
+                                        ArrayList<File> outputFiles = voxTool.generateVoxelsFromRsp(cfg.getOutputFile(), cfg.getInputFile(), cfg.getVoxelParameters(),
                                         MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()),
-                                        MatrixConverter.convertMatrix4dToMat4D(cfg.getPopMatrix()), cfg.getMatricesAndFiles());
+                                        MatrixConverter.convertMatrix4dToMat4D(cfg.getPopMatrix()), cfg.getMatricesAndFiles(), cfg.getFilters());
+                                
+                                        if(cfg.getVoxelParameters().isMergingAfter()){
+                                            voxTool = new VoxelisationTool();
 
-                                Platform.runLater(new Runnable() {
+                                            voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
 
-                                    @Override
-                                    public void run() {
+                                                @Override
+                                                public void voxelisationProgress(String progress, int ratio) {
+                                                    Platform.runLater(new Runnable() {
 
-                                        for (File file : outputFiles) {
-                                            addFileToVoxelList(file);
+                                                        @Override
+                                                        public void run() {
+
+                                                            updateMessage(msgTask+"\n"+progress);
+                                                        }
+                                                    });
+                                                }
+
+                                                @Override
+                                                public void voxelisationFinished(float duration) {
+
+                                                    logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
+                                                }
+                                            });
+
+                                            voxTool.mergeVoxelsFile(outputFiles, cfg.getVoxelParameters().getMergedFile());
                                         }
-                                    }
-                                });
+
+                                        Platform.runLater(new Runnable() {
+
+                                            @Override
+                                            public void run() {
+
+                                                for (File file : outputFiles) {
+                                                    addFileToVoxelList(file);
+                                                }
+                                                if(cfg.getVoxelParameters().isMergingAfter()){
+                                                    addFileToVoxelList(cfg.getVoxelParameters().getMergedFile());
+                                                }
+                                            }
+                                        });
+                                
+                                        break;
+                                        
+                                    case RXP_SCAN:
+                                        
+                                        voxTool.generateVoxelsFromRxp(cfg.getOutputFile(), cfg.getInputFile(), 
+                                                cfg.getVoxelParameters().getDtmFile(),
+                                                cfg.getVoxelParameters(),
+                                                MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()),
+                                                MatrixConverter.convertMatrix4dToMat4D(cfg.getPopMatrix()),
+                                                MatrixConverter.convertMatrix4dToMat4D(cfg.getSopMatrix()), 
+                                                cfg.getFilters());
+                                        
+                                        Platform.runLater(new Runnable() {
+
+                                            @Override
+                                            public void run() {
+                                                
+                                                addFileToVoxelList(cfg.getOutputFile());
+                                            }
+                                        });
+                                        
+                                        break;
+                                }
+                                
 
                                 break;
 
@@ -1363,6 +1596,7 @@ public class MainFrameController implements Initializable {
         };
 
         d = new ProgressDialog(service);
+        d.setResizable(true);
         d.show();
         
         service.stateProperty().addListener(new ChangeListener<Worker.State>() {
@@ -1419,12 +1653,20 @@ public class MainFrameController implements Initializable {
                     Integer.valueOf(textFieldXNumber.getText()),
                     Integer.valueOf(textFieldYNumber.getText()),
                     Integer.valueOf(textFieldZNumber.getText())));
-
-            voxelParameters.setWeighting(comboboxWeighting.getSelectionModel().getSelectedIndex() + 1);
-            voxelParameters.setWeightingData(VoxelParameters.DEFAULT_TLS_WEIGHTING);
+            
+            if(checkboxEnableWeighting.isSelected()){
+                voxelParameters.setWeighting(comboboxWeighting.getSelectionModel().getSelectedIndex() + 1);
+                voxelParameters.setWeightingData(VoxelParameters.DEFAULT_TLS_WEIGHTING);
+            }else{
+                voxelParameters.setWeighting(0);
+            }
+            
             voxelParameters.setUseDTMCorrection(checkboxUseDTMFilter.isSelected());
-            voxelParameters.minDTMDistance = Float.valueOf(textfieldDTMValue.getText());
-            voxelParameters.setDtmFile(new File(textfieldDTMPath.getText()));
+            if(checkboxUseDTMFilter.isSelected()){
+                voxelParameters.minDTMDistance = Float.valueOf(textfieldDTMValue.getText());
+                voxelParameters.setDtmFile(new File(textfieldDTMPath.getText()));
+            }
+            
             voxelParameters.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
             
             voxelParameters.setMergingAfter(checkboxMergeAfter.isSelected());
@@ -1432,12 +1674,12 @@ public class MainFrameController implements Initializable {
 
             InputType it;
 
-            switch (comboboxModeALS.getSelectionModel().getSelectedIndex()) {
-                case 0:
+            switch (comboboxModeTLS.getSelectionModel().getSelectedIndex()) {
+                case 1:
                     it = InputType.RSP_PROJECT;
                     
                     break;
-                case 1:
+                case 0:
                     it = InputType.RXP_SCAN;
                     break;
                 case 2:
@@ -1464,6 +1706,8 @@ public class MainFrameController implements Initializable {
                 
                 cfg.setMatricesAndFiles(items);
             }
+            
+            cfg.setFilters(listviewFilters.getItems());
 
             cfg.writeConfiguration(selectedFile);
 
@@ -1590,8 +1834,11 @@ public class MainFrameController implements Initializable {
                     textFieldZNumber.setText(String.valueOf(voxelParameters.split.z));
 
                     checkboxUseDTMFilter.setSelected(voxelParameters.useDTMCorrection());
-                    textfieldDTMPath.setText(voxelParameters.getDtmFile().getAbsolutePath());
-                    textfieldDTMValue.setText(String.valueOf(voxelParameters.minDTMDistance));
+                    File tmpFile = voxelParameters.getDtmFile();
+                    if(tmpFile != null){
+                        textfieldDTMPath.setText(tmpFile.getAbsolutePath());
+                        textfieldDTMValue.setText(String.valueOf(voxelParameters.minDTMDistance));
+                    }
 
                     checkboxUsePopMatrix.setSelected(cfg.isUsePopMatrix());
                     checkboxUseSopMatrix.setSelected(cfg.isUseSopMatrix());
@@ -1602,6 +1849,12 @@ public class MainFrameController implements Initializable {
                     vopMatrix = cfg.getVopMatrix();
 
                     updateResultMatrix();
+                    
+                    List<Filter> filters = cfg.getFilters();
+                    if(filters != null){
+                        listviewFilters.getItems().clear();
+                        listviewFilters.getItems().addAll(filters);
+                    }
                     
                     switch (cfg.getProcessMode()) {
                         
@@ -1804,6 +2057,25 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionButtonRemoveFilter(ActionEvent event) {
+        ObservableList<Filter> selectedItems = listviewFilters.getSelectionModel().getSelectedItems();
+        listviewFilters.getItems().removeAll(selectedItems);
+    }
+
+    @FXML
+    private void onActionButtonOpenPonderationFile(ActionEvent event) {
+        
+        if(lastFCOpenPonderationFile != null){
+            fileChooserOpenPonderationFile.setInitialDirectory(lastFCOpenPonderationFile.getParentFile());
+        }
+        
+        File selectedFile = fileChooserOpenPonderationFile.showOpenDialog(stage);
+        
+        if(selectedFile != null){
+            lastFCOpenPonderationFile = selectedFile;
+            
+            float[][] ponderationMatrix = MatrixFileParser.getPonderationMatrixFromFile(selectedFile);
+            System.out.println("test");
+        }
     }
 
 }

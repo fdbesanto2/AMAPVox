@@ -299,7 +299,9 @@ public class LasConversion extends Processing implements Runnable{
                     isNewExp = true;
                 }
                 
-                if(mix.lasPoint.r <= mix.lasPoint.n){
+                if(mix.lasPoint.r - 1 < 0){
+                    
+                }else if(mix.lasPoint.r <= mix.lasPoint.n){
                     
                     int currentEchoIndex = mix.lasPoint.r-1;
                     
