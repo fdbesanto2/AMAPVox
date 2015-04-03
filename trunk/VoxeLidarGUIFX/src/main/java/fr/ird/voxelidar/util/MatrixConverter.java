@@ -16,6 +16,10 @@ public class MatrixConverter {
     
     public static Mat4D convertMatrix4dToMat4D(Matrix4d inputMatrix){
         
+        if(inputMatrix == null){
+            return null;
+        }
+        
         double[] outputMatrix = new double[16];
         
         int count = 0;

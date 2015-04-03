@@ -21,14 +21,15 @@ import javax.vecmath.Point3i;
 public class ProcessingMultiRes {
     
     private float maxPAD;
+    private int transmittanceMode = 0;
     
     public ProcessingMultiRes(){
         
     }
     
-    public void process(File outputFile, List<File> elements) {
+    public void process(File outputFile, List<File> elements, int transmittanceMode) {
 
-
+        this.transmittanceMode = transmittanceMode;
         final Map<Double, VoxelSpace> voxelSpaces = new TreeMap<>();
 
         int count = 0;
@@ -294,7 +295,15 @@ public class ProcessingMultiRes {
                 alsVox.transmittance = Float.NaN;
 
             } else {
-
+                
+                switch(transmittanceMode){
+                    case 0:
+                        alsVox.transmittance = (alsVox.bvEntering - alsVox.bvIntercepted) / alsVox.bvEntering;
+                        break;
+                    case 1:
+                        alsVox.transmittance = ((alsVox.bvEntering - alsVox.bvIntercepted) / alsVox.bvEntering) / alsVox.sumSurfaceMultiplyLength ;
+                        break;
+                }
                 alsVox.transmittance = (alsVox.bvEntering - alsVox.bvIntercepted) / alsVox.bvEntering;
 
                 if (alsVox.nbSampling > 1 && alsVox.transmittance == 0) {

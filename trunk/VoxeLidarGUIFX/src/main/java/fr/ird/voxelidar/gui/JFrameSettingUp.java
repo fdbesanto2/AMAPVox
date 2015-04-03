@@ -693,7 +693,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
         try{
             if((terrain == null || !terrain.getPath().equals(jTextFieldFilePathMnt.getText()))&& jCheckBoxDrawTerrain.isSelected()){
                 if(jTextFieldFilePathMnt.getText().endsWith(".asc")){
-                    terrain = DtmLoader.readFromAscFile(new File(jTextFieldFilePathMnt.getText()), popMatrix);
+                    //terrain = DtmLoader.readFromAscFile(new File(jTextFieldFilePathMnt.getText()), popMatrix);
                 }else if(jTextFieldFilePathMnt.getText().endsWith(".txt")){
                     terrain = DtmLoader.readFromFile(new File(jTextFieldFilePathMnt.getText()));
                 }
@@ -4853,7 +4853,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                     //merge
                     VoxelisationTool voxTool = new VoxelisationTool();
                     File outputFile = new File("test.vox");
-                    voxTool.mergeVoxelsFile(filesList, outputFile);
+                    //voxTool.mergeVoxelsFile(filesList, outputFile);
                     addElementToVoxList(outputFile.getAbsolutePath());
                 }
                 
@@ -5341,7 +5341,7 @@ public class JFrameSettingUp extends javax.swing.JFrame{
                 protected Object doInBackground() throws Exception {
                     
                     VoxelisationTool voxTool = new VoxelisationTool();
-                    voxTool.mergeVoxelsFile(files, outputFile);
+                    //voxTool.mergeVoxelsFile(files, outputFile);
                     
                     addElementToVoxList(outputFile.getAbsolutePath());
             

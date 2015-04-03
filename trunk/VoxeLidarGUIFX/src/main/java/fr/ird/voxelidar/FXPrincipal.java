@@ -30,6 +30,7 @@ public class FXPrincipal extends Application {
         MainFrameController controller = loader.getController();
         
         Scene scene = new Scene(root);
+        
         scene.getStylesheets().add("/styles/Styles.css");
         
         stage.setTitle("VoxeLidar");

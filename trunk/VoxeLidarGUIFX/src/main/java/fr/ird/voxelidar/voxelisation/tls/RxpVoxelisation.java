@@ -14,7 +14,9 @@ import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat3D;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.object.scene.Dtm;
+import fr.ird.voxelidar.util.Filter;
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -48,7 +50,7 @@ public class RxpVoxelisation implements Callable{
         this.nbVoxelisationFinished = nbVoxelisationFinished;
     }    
     
-    public RxpVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, Dtm terrain){
+    public RxpVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, Dtm terrain, List<Filter> filters){
         
         //this.vopPop = vopPop;
         this.parameters = parameters;
@@ -57,7 +59,7 @@ public class RxpVoxelisation implements Callable{
         this.outputFile = outputFile;
         
         queue = new LinkedBlockingQueue<>();
-        voxelAnalysis = new VoxelAnalysis(queue, terrain);
+        voxelAnalysis = new VoxelAnalysis(queue, terrain, filters);
         voxelAnalysis.init(parameters, outputFile);
         
 

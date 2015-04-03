@@ -1,5 +1,7 @@
 package fr.ird.voxelidar.voxelisation.extraction;
 
+import fr.ird.voxelidar.util.Filter;
+import java.util.List;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
@@ -24,10 +26,15 @@ public class Shot{
     public short classifications[];
     
     public double angle;
+    private static List<Filter> filters;
     
     public Shot() {
         
     }
+
+    public static void setFilters(List<Filter> filters) {
+        Shot.filters = filters;
+    }    
     
     public Shot(int nbEchos, 
             double originX, double originY, double originZ, 
@@ -68,6 +75,40 @@ public class Shot{
     
     public void calculateAngle(){
         this.angle = Math.toDegrees(Math.acos(Math.abs(direction.z)));
+    }
+    
+    public boolean doFilter(){
+        
+        for(Filter f : filters){
+            
+            switch(f.getVariable()){
+                case "Angle Mean":
+                    switch(f.getCondition()){
+                        case Filter.EQUAL:
+                            if(angle != f.getValue())return false;
+                            break;
+                        case Filter.GREATER_THAN:
+                            if(angle <= f.getValue())return false;
+                            break;
+                        case Filter.GREATER_THAN_OR_EQUAL:
+                            if(angle < f.getValue())return false;
+                            break;
+                        case Filter.LESS_THAN:
+                            if(angle >= f.getValue())return false;
+                            break;
+                        case Filter.LESS_THAN_OR_EQUAL:
+                            if(angle > f.getValue())return false;
+                            break;
+                        case Filter.NOT_EQUAL:
+                            if(angle == f.getValue())return false;
+                            break;
+                    }
+                    
+                    break;
+            }
+        }
+        
+        return true;
     }
     
 }

@@ -16,6 +16,7 @@ import fr.ird.voxelidar.lidar.format.als.LasReader;
 import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
+import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.Processing;
 import fr.ird.voxelidar.util.ProcessingListener;
 import java.io.BufferedReader;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.BlockingQueue;
@@ -53,7 +55,7 @@ public class LasVoxelisation extends Processing implements Runnable{
     private VoxelAnalysis voxelAnalysis;
     private LinkedBlockingQueue<Shot> queue;
 
-    public LasVoxelisation(File lasFile, File outputFile, Mat4D transfMatrix, File trajectoryFile, VoxelParameters parameters) {
+    public LasVoxelisation(File lasFile, File outputFile, Mat4D transfMatrix, File trajectoryFile, VoxelParameters parameters, List<Filter> filters) {
 
         this.lasFile = lasFile;
         this.outputFile = outputFile;
@@ -68,15 +70,15 @@ public class LasVoxelisation extends Processing implements Runnable{
         if(parameters.getDtmFile() != null && parameters.useDTMCorrection() ){
             
             try {
-                terrain = DtmLoader.readFromAscFile(parameters.getDtmFile(), transfMatrix);
-                
+                terrain = DtmLoader.readFromAscFile(parameters.getDtmFile());
+                terrain.setTransformationMatrix(transfMatrix);
             } catch (Exception ex) {
                 logger.error(ex);
             }
         }
         
         
-        voxelAnalysis = new VoxelAnalysis(queue, terrain);
+        voxelAnalysis = new VoxelAnalysis(queue, terrain, filters);
     }
 
     @Override

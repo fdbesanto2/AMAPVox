@@ -35,7 +35,7 @@ public class DtmLoader {
 
     final static Logger logger = Logger.getLogger(DtmLoader.class);
     
-    public static Dtm readFromAscFile(File ascFile, Mat4D transfMatrix) throws Exception{
+    public static Dtm readFromAscFile(File ascFile) throws Exception{
         
         final String pathFile = ascFile.getAbsolutePath();
         

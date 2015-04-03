@@ -1109,6 +1109,7 @@ public class LasReader implements Iterable<PointDataRecordFormat0> {
     public static void writeTxt(Las las) {
 
     }
+    
 
     public static Las read(File file) {
 

@@ -292,7 +292,7 @@ public class VoxelManager {
 		Point3i intersectionPointVoxelIndices = voxelSpace.getVoxelIndices (intersectionPoint);
 		if (intersectionPointVoxelIndices==null) {
                     if (intersectionForDebug){
-                        logger.error("The given line element does intersect the scene canvas "+intersectionPoint+", but unable to get its voxel indices");
+                        //logger.error("The given line element does intersect the scene canvas "+intersectionPoint+", but unable to get its voxel indices");
                         
                     }
 
