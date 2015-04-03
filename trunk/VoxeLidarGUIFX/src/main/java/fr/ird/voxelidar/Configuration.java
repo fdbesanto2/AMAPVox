@@ -149,6 +149,7 @@ public class Configuration {
             voxelSpaceElement.setAttribute("splitX", String.valueOf(voxelParameters.split.x));
             voxelSpaceElement.setAttribute("splitY", String.valueOf(voxelParameters.split.y));
             voxelSpaceElement.setAttribute("splitZ", String.valueOf(voxelParameters.split.z));
+            voxelSpaceElement.setAttribute("resolution", String.valueOf(voxelParameters.resolution));
             processElement.addContent(voxelSpaceElement);
             
             /***PONDERATION***/
@@ -278,8 +279,21 @@ public class Configuration {
             outputFileElement.setAttribute(new Attribute("src",outputFile.getAbsolutePath()));
             processElement.addContent(outputFileElement);
             
+            Element limitsElement = new Element("limits");
+            Element limitElement = new Element("limit");
+            limitElement.setAttribute("name", "PAD");
+            limitElement.setAttribute("min", "");
+            limitElement.setAttribute("max", String.valueOf(voxelParameters.getMaxPAD()));
+            limitsElement.addContent(limitElement);
+            processElement.addContent(limitsElement);
+            
             processElement.addContent(createFilesElement(files));
         }
+        
+        //Element transmittanceFormula = new Element("transmittance");
+        //transmittanceFormula.setAttribute("mode", String.valueOf(voxelParameters.getTransmittanceMode()));
+        
+        //processElement.addContent(new Element("formula").addContent(transmittanceFormula));
         
         
         XMLOutputter output = new XMLOutputter(Format.getPrettyFormat());
@@ -377,6 +391,11 @@ public class Configuration {
                                         Integer.valueOf(voxelSpaceElement.getAttributeValue("splitX")), 
                                         Integer.valueOf(voxelSpaceElement.getAttributeValue("splitY")), 
                                         Integer.valueOf(voxelSpaceElement.getAttributeValue("splitZ"))));
+                    
+                    try{
+                        voxelParameters.setResolution(Double.valueOf(voxelSpaceElement.getAttributeValue("resolution")));
+                    }catch(Exception e){}
+                    
                     
                     Element ponderationElement = processElement.getChild("ponderation");
                     
@@ -554,6 +573,15 @@ public class Configuration {
                     outputFile = new File(processElement.getChild("output_file").getAttributeValue("src"));
                     
                     break;
+            }
+            
+            Element formulaElement = processElement.getChild("formula");
+                    
+            if(formulaElement != null){
+                Element transmittanceElement = formulaElement.getChild("transmittance");
+                if(transmittanceElement != null){
+                    voxelParameters.setTransmittanceMode(Integer.valueOf(transmittanceElement.getAttributeValue("mode")));
+                }
             }
             
         } catch (JDOMException | IOException ex) {

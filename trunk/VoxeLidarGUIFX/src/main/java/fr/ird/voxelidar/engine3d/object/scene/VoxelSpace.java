@@ -278,6 +278,7 @@ public class VoxelSpace extends SceneObject{
             centerY = (firstVoxel.position.y + lastVoxel.position.y)/2.0f;
             centerZ = (firstVoxel.position.z + lastVoxel.position.z)/2.0f;
         }
+        
     }
     
     private void readVoxelFormat(File f){

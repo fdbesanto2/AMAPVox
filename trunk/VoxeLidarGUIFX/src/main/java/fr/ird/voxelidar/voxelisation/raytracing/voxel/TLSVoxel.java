@@ -17,8 +17,8 @@ public class TLSVoxel extends Voxel{
     //public double bflOutgoing = 0;
     public double bflEntering = 0;
     public double bflIntercepted = 0;
-    
     public double PadBflTotal = 0;
+    public double PadBflTotal_V2 = 0;
     
     private static final Set<Field> _fields = Voxel.getFields(TLSVoxel.class);
     

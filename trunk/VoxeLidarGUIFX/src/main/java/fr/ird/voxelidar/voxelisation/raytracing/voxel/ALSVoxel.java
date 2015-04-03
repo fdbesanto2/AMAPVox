@@ -17,8 +17,9 @@ public class ALSVoxel extends Voxel{
     //public double bvOutgoing = 0;
     public double bvEntering = 0;
     public double bvIntercepted = 0;
-    
+    public double sumSurfaceMultiplyLength = 0;
     public double PadBVTotal = 0;
+    public double PadBVTotal_V2 = 0;
     
     private static final Set<Field> _fields = Voxel.getFields(ALSVoxel.class);
         

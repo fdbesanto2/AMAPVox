@@ -5,9 +5,11 @@
  */
 package fr.ird.voxelidar.engine3d.object.scene;
 
+import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.object.mesh.Face;
 import fr.ird.voxelidar.engine3d.math.vector.Vec2F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
+import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -47,6 +49,7 @@ public class Dtm {
     private Point2d maxCorner = new Point2d();
     private Point2d resolution;
     private float splitting;
+    private Mat4D transformationMatrix;
     
     public Point3d getNearest(Point3d position){
         
@@ -85,12 +88,16 @@ public class Dtm {
         
     public Dtm(String path, ArrayList<Vec3F> points, ArrayList<Face> faces){
         
+        this.transformationMatrix = Mat4D.identity();
+        
         this.points = points;
         this.faces = faces;
         this.path = path;
     }
     
     public Dtm(String path, float[][] zArray, float xLeftLowerCorner, float yLeftLowerCorner, float cellSize){
+        
+        this.transformationMatrix = Mat4D.identity();
         
         this.path = path;
         this.zArray = zArray;
@@ -148,15 +155,11 @@ public class Dtm {
         return map;
     }
     
-    public void constructZArray(){
-        
-        for (Vec3F point : points) {
-            
-            
-        }
-    }
-    
     public float getSimpleHeight(float posX, float posY){
+        
+        Vec4D multiply = Mat4D.multiply(Mat4D.inverse(transformationMatrix), new Vec4D(posX, posY, 1, 1));
+        posX = (float) multiply.x;
+        posY = (float) multiply.y;
         
         float z;
         
@@ -217,32 +220,7 @@ public class Dtm {
              
         return z;
     }
-    /*
-    public float getHeight(float posX, float posY){
-        
-        if(map == null){
-            map = getXYStructure();
-        }
-        float height = 10;
-        
-        Point3d nearest = getNearest(new Point3d(posX, posY, 0));
-        
-        try{
-            height = (float) map.get(posX, posY);
-        }catch(Exception e){
-            try{
-                height = (float) map.get((int)posX, (int)posY);
-            }catch(Exception e2){
-                
-                //logger.error("unable to get z distance from x,y coordinates: X= "+posX+" Y= "+posY);
-            }
-            
-        }
-        
-        
-        return height;
-    }
-    */
+    
     public void exportObj(File outputFile){
         
         BufferedWriter writer;
@@ -300,29 +278,13 @@ public class Dtm {
         
         return null;
     }
-    
-    public float getZFromXY(float x, float y){
-        
-        //détermination des 3 points formant la face qui contient x,y
-        Face triangle = getFaceContainingPoint(x, y);
-        
-        Vec3F pointA = points.get(triangle.getPoint1());
-        Vec3F pointB = points.get(triangle.getPoint2());
-        Vec3F pointC = points.get(triangle.getPoint3());
-        
-        //calcul de l'équation du plan
-        Vec3F vecAB = Vec3F.createVec3FromPoints(pointA, pointB);
-        Vec3F vecAC = Vec3F.createVec3FromPoints(pointA, pointC);
-        
-        Vec3F vecNorm = Vec3F.cross(vecAB, vecAC);
-        float a = vecNorm.x;
-        float b = vecNorm.y;
-        float c = vecNorm.z;
-        float d = (-pointA.x * vecNorm.x) + (-pointA.y * vecNorm.y) + (-pointA.z * vecNorm.z);
-        
-        //on remplace dans l'équation pour trouver z
-        //float z = ((a*x) + (b*y) + d)/(-c);
-        float z = ((-a*x) - (c*y) - d)/(b);
-        return z;
+
+    public void setTransformationMatrix(Mat4D transformationMatrix) {
+        this.transformationMatrix = transformationMatrix;
     }
+
+    public Mat4D getTransformationMatrix() {
+        return transformationMatrix;
+    }
+    
 }

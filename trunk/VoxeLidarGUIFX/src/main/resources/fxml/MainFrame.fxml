@@ -52,7 +52,7 @@
                                                                   <TextField fx:id="textFieldOutputFileALS" editable="false" layoutX="14.0" layoutY="250.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
                                                                   <Label layoutX="14.0" layoutY="235.0" text="Output file" />
                                                                   <Button fx:id="buttonOpenOutputFileALS" layoutX="14.0" layoutY="275.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileALS" text="Open" AnchorPane.leftAnchor="14.0" />
-                                                                  <Button fx:id="buttonALSAddToTaskList" layoutX="210.0" layoutY="349.0" mnemonicParsing="false" onAction="#onActionButtonALSAddToTaskList" text="Add to task list" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                                  <Button fx:id="buttonALSAddToTaskList" layoutX="210.0" layoutY="349.0" mnemonicParsing="false" onAction="#onActionButtonALSAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
                                                                      <graphic>
                                                                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                                            <image>
@@ -77,7 +77,7 @@
                                                                   <Label layoutX="14.0" layoutY="58.0" text="Input file" />
                                                                   <Button fx:id="buttonOpenInputFileTLS" layoutX="14.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileTLS" text="Open" />
                                                                   <ListView fx:id="listviewRxpScans" layoutX="14.0" layoutY="129.0" maxWidth="1.7976931348623157E308" prefHeight="91.0" prefWidth="300.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
-                                                                  <Button fx:id="buttonTLSAddToTaskList" layoutX="210.0" layoutY="349.0" mnemonicParsing="false" onAction="#onActionButtonTLSAddToTaskList" text="Add to task list" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                                  <Button fx:id="buttonTLSAddToTaskList" layoutX="210.0" layoutY="349.0" mnemonicParsing="false" onAction="#onActionButtonTLSAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
                                                                      <graphic>
                                                                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                                            <image>
@@ -121,7 +121,7 @@
                                                                         </ImageView>
                                                                      </graphic>
                                                                   </Button>
-                                                                  <Button fx:id="buttonMultiResAddToTaskList" layoutX="191.0" layoutY="340.0" mnemonicParsing="false" onAction="#onActionButtonMultiResAddToTaskList" text="Add to task list" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                                  <Button fx:id="buttonMultiResAddToTaskList" layoutX="191.0" layoutY="340.0" mnemonicParsing="false" onAction="#onActionButtonMultiResAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
                                                                      <graphic>
                                                                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                                            <image>
@@ -140,7 +140,7 @@
                                                          <content>
                                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                <children>
-                                                                  <Button fx:id="buttonMergingAddToTaskList" layoutX="189.0" layoutY="340.0" mnemonicParsing="false" onAction="#onActionButtonMergingAddToTaskList" text="Add to task list" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                                  <Button fx:id="buttonMergingAddToTaskList" layoutX="189.0" layoutY="340.0" mnemonicParsing="false" onAction="#onActionButtonMergingAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
                                                                      <graphic>
                                                                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                                            <image>
@@ -167,26 +167,27 @@
                                                       <content>
                                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                <children>
+                                                                  <TextField fx:id="textFieldEnterXMin" layoutX="65.0" layoutY="8.0" prefHeight="3.0" prefWidth="67.0" promptText="enter X" />
                                                                   <TextField fx:id="textFieldEnterXMax" layoutX="202.0" layoutY="8.0" prefHeight="3.0" prefWidth="67.0" promptText="enter X" />
                                                                   <Label layoutX="16.0" layoutY="13.0" text="X min" />
                                                                   <Label layoutX="17.0" layoutY="46.0" text="Y min" />
                                                                   <TextField fx:id="textFieldEnterYMin" layoutX="65.0" layoutY="41.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Y" />
+                                                                  <TextField fx:id="textFieldEnterYMax" layoutX="202.0" layoutY="41.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Y" />
                                                                   <TextField fx:id="textFieldEnterZMin" layoutX="65.0" layoutY="72.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Z" />
                                                                   <Label layoutX="16.0" layoutY="77.0" text="Z min" />
                                                                   <Label layoutX="152.0" layoutY="77.0" text="Z max" />
                                                                   <TextField fx:id="textFieldEnterZMax" layoutX="202.0" layoutY="72.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Z" />
-                                                                  <TextField fx:id="textFieldEnterYMax" layoutX="202.0" layoutY="41.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Y" />
+                                                                  <TextField fx:id="textFieldResolution" layoutX="358.0" layoutY="106.0" prefHeight="25.0" prefWidth="70.0" text="1" />
                                                                   <Label layoutX="153.0" layoutY="46.0" text="Y max" />
                                                                   <Label layoutX="152.0" layoutY="13.0" text="X max" />
-                                                                  <TextField fx:id="textFieldEnterXMin" layoutX="65.0" layoutY="8.0" prefHeight="3.0" prefWidth="67.0" promptText="enter X" />
                                                                   <TextField fx:id="textFieldXNumber" editable="false" layoutX="358.0" layoutY="8.0" prefHeight="3.0" prefWidth="70.0" />
                                                                   <Label layoutX="285.0" layoutY="13.0" text="X number" />
                                                                   <Label layoutX="286.0" layoutY="46.0" text="Y number" />
                                                                   <TextField fx:id="textFieldYNumber" editable="false" layoutX="358.0" layoutY="41.0" prefHeight="3.0" prefWidth="70.0" />
                                                                   <Label layoutX="285.0" layoutY="77.0" text="Z number" />
                                                                   <TextField fx:id="textFieldZNumber" editable="false" layoutX="358.0" layoutY="72.0" prefHeight="3.0" prefWidth="70.0" />
-                                                                  <TextField fx:id="textFieldResolution" layoutX="358.0" layoutY="106.0" prefHeight="25.0" prefWidth="70.0" text="1" />
                                                                   <Label layoutX="254.0" layoutY="111.0" text="Resolution (m)" />
+                                                                  <Button fx:id="buttonAutomatic" layoutX="16.0" layoutY="106.0" mnemonicParsing="false" onAction="#onActionButtonAutomatic" text="Automatic" />
                                                                </children>
                                                             </AnchorPane>
                                                       </content>
@@ -256,6 +257,7 @@
                                                                         </VBox>
                                                                      </children>
                                                                   </HBox>
+                                                                  <Button fx:id="buttonResetToIdentity" layoutX="14.0" layoutY="272.0" mnemonicParsing="false" onAction="#onActionButtonResetToIdentity" text="Reset to identity" />
                                                                </children>
                                                             </AnchorPane>
                                                       </content>
@@ -311,6 +313,16 @@
                                                                </children>
                                                             </AnchorPane>
                                                         </content>
+                                                      </Tab>
+                                                      <Tab text="Formula">
+                                                         <content>
+                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <Label layoutX="14.0" layoutY="14.0" text="Transmittance" />
+                                                                  <ComboBox fx:id="comboboxFormulaTransmittance" layoutX="128.0" layoutY="9.0" prefHeight="25.0" prefWidth="281.0" />
+                                                               </children>
+                                                            </AnchorPane>
+                                                         </content>
                                                       </Tab>
                                                   </tabs>
                                                 </TabPane>

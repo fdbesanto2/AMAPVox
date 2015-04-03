@@ -33,9 +33,11 @@ public class VoxelParameters {
     private File dtmFile;
     public float minDTMDistance = 1;
     private boolean TLS;
-    private float maxPAD;
+    private float maxPAD = 3;
     private boolean mergingAfter = false;
     private File mergedFile;
+    
+    private int transmittanceMode = 0;
     
     public static float[][] DEFAULT_ALS_WEIGHTING = new float[][]{
                         {1.00f, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
@@ -170,5 +172,13 @@ public class VoxelParameters {
 
     public void setMergedFile(File mergedFile) {
         this.mergedFile = mergedFile;
+    }
+
+    public int getTransmittanceMode() {
+        return transmittanceMode;
+    }
+
+    public void setTransmittanceMode(int transmittanceMode) {
+        this.transmittanceMode = transmittanceMode;
     }
 }

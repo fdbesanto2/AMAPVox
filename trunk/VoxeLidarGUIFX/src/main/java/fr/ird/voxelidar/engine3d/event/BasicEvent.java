@@ -100,6 +100,7 @@ public class BasicEvent extends EventManager{
     public void updateEvents(){
         
         if(escapeKeyPressed){
+            joglContext.getCamera().setLocation(new Vec3F(0, 0, 0));
         }
         
         if(leftMousePressed){

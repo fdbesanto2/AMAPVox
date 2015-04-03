@@ -70,8 +70,8 @@ public class LasVoxelisation extends Processing implements Runnable{
         if(parameters.getDtmFile() != null && parameters.useDTMCorrection() ){
             
             try {
-                terrain = DtmLoader.readFromAscFile(parameters.getDtmFile(), transfMatrix);
-                
+                terrain = DtmLoader.readFromAscFile(parameters.getDtmFile());
+                terrain.setTransformationMatrix(transfMatrix);
             } catch (Exception ex) {
                 logger.error(ex);
             }

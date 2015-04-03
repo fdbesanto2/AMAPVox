@@ -132,8 +132,9 @@ public class Voxel implements Serializable {
         //public double lMeanOutgoing = 0;
         public double lMeanTotal = 0;
         //public double LMean_NoInterception = 0;
-        
-        public double transmittance = 0;
+        public double _transBeforeNorm = 0;
+        public double transmittance_v1 = 0;
+        public double transmittance_v2 = 0;
         public double angleMean = 0;
         
         protected static final Set<String> fieldsNames = new TreeSet<>();
