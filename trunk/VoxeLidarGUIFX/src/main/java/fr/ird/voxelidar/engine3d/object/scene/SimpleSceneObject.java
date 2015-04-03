@@ -47,7 +47,7 @@ public class SimpleSceneObject extends SceneObject{
         }else if(mesh.colorBuffer != null){
             
             buffer.initBuffers(gl, mesh.indexBuffer, new FloatBuffer[]{mesh.vertexBuffer, 
-                                                                    mesh.colorBuffer});
+                                                                    mesh.colorBuffer, mesh.normalBuffer});
         }else{
              buffer.initBuffers(gl, mesh.indexBuffer, new FloatBuffer[]{mesh.vertexBuffer});
         }
@@ -76,6 +76,9 @@ public class SimpleSceneObject extends SceneObject{
                 if(mesh.colorBuffer != null){
                     gl.glEnableVertexAttribArray(shader.attributeMap.get("color"));
                     gl.glVertexAttribPointer(shader.attributeMap.get("color"), 3, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE);
+                    
+                    gl.glEnableVertexAttribArray(shader.attributeMap.get("normal"));
+                    gl.glVertexAttribPointer(shader.attributeMap.get("normal"), 3, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE+mesh.normalBuffer.capacity()*FLOAT_SIZE);
                 }else if(mesh instanceof TexturedMesh){
                     gl.glEnableVertexAttribArray(shader.attributeMap.get("textureCoordinates"));
                     gl.glVertexAttribPointer(shader.attributeMap.get("textureCoordinates"), 2, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE);

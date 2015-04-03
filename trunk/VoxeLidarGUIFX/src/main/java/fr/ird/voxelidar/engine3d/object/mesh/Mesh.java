@@ -15,6 +15,7 @@ import java.nio.ShortBuffer;
 public class Mesh {
     
     public FloatBuffer vertexBuffer;
+    public FloatBuffer normalBuffer;
     //public FloatBuffer aoBuffer;
     public ShortBuffer indexBuffer;
     public FloatBuffer colorBuffer;

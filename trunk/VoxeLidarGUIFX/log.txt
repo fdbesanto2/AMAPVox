@@ -23379,3 +23379,115 @@ java.io.FileNotFoundException: /media/calcul/Stockage/Data Julien/Documents/dtm/
 2015-03-31 17:50:39 INFO  - Merging in progress, file 3 : 98
 2015-03-31 17:50:40 INFO  - Merging in progress, file 4 : 98
 2015-03-31 17:50:41 INFO  - Merging in progress, file 5 : 98
+2015-03-31 22:42:56 ERROR - Fail link program
+2015-03-31 22:44:48 ERROR - Fail link program
+2015-03-31 23:54:31 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.buffer.MeshBuffer.initBuffers(MeshBuffer.java:70)
+	at fr.ird.voxelidar.engine3d.object.scene.SimpleSceneObject.initBuffers(SimpleSceneObject.java:49)
+	at fr.ird.voxelidar.engine3d.object.scene.Scene.addObject(Scene.java:70)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:355)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:137)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-03-31 23:56:29 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.buffer.MeshBuffer.initBuffers(MeshBuffer.java:70)
+	at fr.ird.voxelidar.engine3d.object.scene.SimpleSceneObject.initBuffers(SimpleSceneObject.java:49)
+	at fr.ird.voxelidar.engine3d.object.scene.Scene.addObject(Scene.java:70)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:355)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:137)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-04-01 00:04:23 ERROR - Failed compile vertex shader: 0(14) : error C1067: too little data in type constructor
+0(23) : error C1101: ambiguous overloaded function reference "mul(mat4, vec3)"
+    (0) : gp5 superp mat3x4 mul(superp mat3x1, superp mat1x4)
+    (0) : gp5 superp mat3 mul(superp mat3x1, superp mat1x3)
+    (0) : gp5 superp mat3x2 mul(superp mat3x1, superp mat1x2)
+    (0) : gp5 superp mat3x1 mul(superp mat3x1, superp mat1)
+    (0) : gp5 superp mat2x4 mul(superp mat2x1, superp mat1x4)
+    (0) : gp5 superp mat2x3 mul(superp mat2x1, superp mat1x3)
+    (0) : gp5 superp mat2 mul(superp mat2x1, superp mat1x2)
+    (0) : gp5 superp mat2x1 mul(superp mat2x1, superp mat1)
+    (0) : gp5 superp mat1x4 mul(superp mat1x3, superp mat3x4)
+    (0) : gp5 superp mat1x3 mul(superp mat1x3, superp mat3)
+    (0) : gp5 superp mat1x2 mul(superp mat1x3, superp mat3x2)
+    (0) : gp5 superp mat1 mul(superp mat1x3, superp mat3x1)
+    (0) : gp5 superp mat1x4 mul(superp mat1x2, superp mat2x4)
+    (0) : gp5 superp mat1x3 mul(superp mat1x2, superp mat2x3)
+    (0) : gp5 superp mat1x2 mul 
+2015-04-01 00:04:23 ERROR - Fail reading shaders files
+2015-04-01 00:05:44 ERROR - Failed compile vertex shader: 0(14) : error C1067: too little data in type constructor
+0(23) : error C1101: ambiguous overloaded function reference "mul(mat4, vec3)"
+    (0) : gp5 superp mat3x4 mul(superp mat3x1, superp mat1x4)
+    (0) : gp5 superp mat3 mul(superp mat3x1, superp mat1x3)
+    (0) : gp5 superp mat3x2 mul(superp mat3x1, superp mat1x2)
+    (0) : gp5 superp mat3x1 mul(superp mat3x1, superp mat1)
+    (0) : gp5 superp mat2x4 mul(superp mat2x1, superp mat1x4)
+    (0) : gp5 superp mat2x3 mul(superp mat2x1, superp mat1x3)
+    (0) : gp5 superp mat2 mul(superp mat2x1, superp mat1x2)
+    (0) : gp5 superp mat2x1 mul(superp mat2x1, superp mat1)
+    (0) : gp5 superp mat1x4 mul(superp mat1x3, superp mat3x4)
+    (0) : gp5 superp mat1x3 mul(superp mat1x3, superp mat3)
+    (0) : gp5 superp mat1x2 mul(superp mat1x3, superp mat3x2)
+    (0) : gp5 superp mat1 mul(superp mat1x3, superp mat3x1)
+    (0) : gp5 superp mat1x4 mul(superp mat1x2, superp mat2x4)
+    (0) : gp5 superp mat1x3 mul(superp mat1x2, superp mat2x3)
+    (0) : gp5 superp mat1x2 mul 
+2015-04-01 00:05:44 ERROR - Fail reading shaders files
+2015-04-01 00:07:07 ERROR - Failed compile vertex shader: 0(14) : error C1067: too little data in type constructor
+0(23) : error C1101: ambiguous overloaded function reference "mul(mat4, vec3)"
+    (0) : gp5 superp mat3x4 mul(superp mat3x1, superp mat1x4)
+    (0) : gp5 superp mat3 mul(superp mat3x1, superp mat1x3)
+    (0) : gp5 superp mat3x2 mul(superp mat3x1, superp mat1x2)
+    (0) : gp5 superp mat3x1 mul(superp mat3x1, superp mat1)
+    (0) : gp5 superp mat2x4 mul(superp mat2x1, superp mat1x4)
+    (0) : gp5 superp mat2x3 mul(superp mat2x1, superp mat1x3)
+    (0) : gp5 superp mat2 mul(superp mat2x1, superp mat1x2)
+    (0) : gp5 superp mat2x1 mul(superp mat2x1, superp mat1)
+    (0) : gp5 superp mat1x4 mul(superp mat1x3, superp mat3x4)
+    (0) : gp5 superp mat1x3 mul(superp mat1x3, superp mat3)
+    (0) : gp5 superp mat1x2 mul(superp mat1x3, superp mat3x2)
+    (0) : gp5 superp mat1 mul(superp mat1x3, superp mat3x1)
+    (0) : gp5 superp mat1x4 mul(superp mat1x2, superp mat2x4)
+    (0) : gp5 superp mat1x3 mul(superp mat1x2, superp mat2x3)
+    (0) : gp5 superp mat1x2 mul 
+2015-04-01 00:07:07 ERROR - Fail reading shaders files
+2015-04-01 00:11:06 ERROR - Failed compile vertex shader: 0(14) : error C1067: too little data in type constructor
+0(37) : error C7565: assignment to varying 'color'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+2015-04-01 00:11:06 ERROR - Fail reading shaders files
+2015-04-01 00:11:56 ERROR - Failed compile vertex shader: 0(37) : error C7565: assignment to varying 'color'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+2015-04-01 00:11:56 ERROR - Fail reading shaders files
+2015-04-01 00:12:29 ERROR - Failed compile vertex shader: 0(37) : error C7565: assignment to varying 'color'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+2015-04-01 00:12:29 ERROR - Fail reading shaders files
+2015-04-01 00:13:10 ERROR - Failed compile vertex shader: 0(37) : error C7565: assignment to varying 'color'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+2015-04-01 00:13:10 ERROR - Fail reading shaders files
+2015-04-01 00:13:47 ERROR - Failed compile vertex shader: 0(34) : error C1008: undefined variable "shininess"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+2015-04-01 00:13:47 ERROR - Fail reading shaders files
+2015-04-01 00:36:19 ERROR - Failed compile vertex shader: 0(31) : error C1060: incompatible types in initialization
+0(31) : error C1056: invalid initialization
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+2015-04-01 00:36:19 ERROR - Fail reading shaders files

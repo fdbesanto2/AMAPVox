@@ -265,6 +265,7 @@ public class MeshFactory {
         Mesh mesh = new Mesh();
         
         ArrayList<Vec3F> vertices = new ArrayList<>();
+        ArrayList<Vec3F> normales = new ArrayList<>();
         Map<Integer, Vec3F> colors = new HashMap<>();
         ArrayList<Short> faces = new ArrayList<>();
         Map<String, Vec3F> materials = new HashMap<>();
@@ -309,10 +310,15 @@ public class MeshFactory {
                     String[] vertex = line.split(" ");
                     vertices.add(new Vec3F(Float.valueOf(vertex[1]), Float.valueOf(vertex[2]), Float.valueOf(vertex[3])));
                     
+                }else if(line.startsWith("vn ")){
+                    
+                    String[] normale = line.split(" ");
+                    normales.add(new Vec3F(Float.valueOf(normale[1]), Float.valueOf(normale[2]), Float.valueOf(normale[3])));
+                    
                 }else if(line.startsWith("f ")){
                     
                     String[] faceSplit = line.split(" ");
-                    Vec3i face = new Vec3i(Integer.valueOf(faceSplit[1]), Integer.valueOf(faceSplit[2]), Integer.valueOf(faceSplit[3]));
+                    Vec3i face = new Vec3i(Integer.valueOf(faceSplit[1].split("/")[0]), Integer.valueOf(faceSplit[2].split("/")[0]), Integer.valueOf(faceSplit[3].split("/")[0]));
                     
                     colors.put(face.x-1, currentColor);
                     colors.put(face.y-1, currentColor);
@@ -336,7 +342,7 @@ public class MeshFactory {
         }
         
         
-        mesh = MeshFactory.createMesh(vertices, faces);
+        mesh = MeshFactory.createMeshWithNormales(vertices, normales, faces);
         
         float colorData[] = new float[vertices.size()*3];
         for(int i=0, j=0;i<vertices.size();i++,j+=3){
@@ -382,6 +388,42 @@ public class MeshFactory {
         mesh.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
         mesh.indexBuffer = Buffers.newDirectShortBuffer(indexData);
         
+        mesh.vertexCount = indexData.length;
+        
+        return mesh;
+    }
+    
+    public static Mesh createMeshWithNormales(ArrayList<Vec3F> points, ArrayList<Vec3F> normales, ArrayList<Short> faces){
+        
+        Mesh mesh = new Mesh();
+        
+        
+        float[] vertexData = new float[points.size()*3];
+        for(int i=0,j=0 ; i<points.size(); i++, j+=3){
+            
+            vertexData[j] = points.get(i).x;
+            vertexData[j+1] = points.get(i).y;
+            vertexData[j+2] = points.get(i).z;
+        }
+        
+        float[] normalData = new float[normales.size()*3];
+        for(int i=0,j=0 ; i<normales.size(); i++, j+=3){
+            
+            normalData[j] = normales.get(i).x;
+            normalData[j+1] = normales.get(i).y;
+            normalData[j+2] = normales.get(i).z;
+        }
+        
+        short indexData[] = new short[faces.size()];
+        
+        for(int i=0 ; i<faces.size() ; i ++){
+            
+            indexData[i] = faces.get(i);
+        }
+        
+        mesh.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
+        mesh.indexBuffer = Buffers.newDirectShortBuffer(indexData);
+        mesh.normalBuffer = Buffers.newDirectFloatBuffer(normalData);
         mesh.vertexCount = indexData.length;
         
         return mesh;

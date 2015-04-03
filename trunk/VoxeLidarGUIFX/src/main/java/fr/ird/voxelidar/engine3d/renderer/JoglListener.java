@@ -207,6 +207,15 @@ public class JoglListener implements GLEventListener {
         
         eventListener.updateEvents(); 
         
+        Mat4F normalMatrix = Mat4F.transpose(camera.getViewMatrix());
+        FloatBuffer normalMatrixBuffer = Buffers.newDirectFloatBuffer(normalMatrix.mat);
+        int id = scene.getShaderByName("noTranslationShader");
+        Shader s = scene.getShadersList().get(id);
+        gl.glUseProgram(id);
+            gl.glUniformMatrix4fv(s.uniformMap.get("normalMatrix"), 1, false, normalMatrixBuffer);
+        gl.glUseProgram(0);
+        
+        
         if(viewMatrixChanged || isInit){
             
             FloatBuffer viewMatrixBuffer = Buffers.newDirectFloatBuffer(camera.getViewMatrix().mat);
@@ -307,8 +316,8 @@ public class JoglListener implements GLEventListener {
             InputStreamReader noTranslationVertexShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/NoTranslationVertexShader.txt"));
             InputStreamReader noTranslationFragmentShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/NoTranslationFragmentShader.txt"));
             Shader noTranslationShader = new Shader(gl, noTranslationFragmentShader, noTranslationVertexShader, "noTranslationShader");
-            noTranslationShader.setUniformLocations(new String[]{"viewMatrix","projMatrix"});
-            noTranslationShader.setAttributeLocations(new String[]{"position","color"});
+            noTranslationShader.setUniformLocations(new String[]{"viewMatrix","projMatrix", "normalMatrix", "Material", "Light"});
+            noTranslationShader.setAttributeLocations(new String[]{"position","color", "normal"});
             
             logger.debug("shader compiled: "+noTranslationShader.name);
             
@@ -346,15 +355,15 @@ public class JoglListener implements GLEventListener {
             scene.addObject(axis, gl);
             
             if(settings.drawAxis){
-                SceneObject sceneObject = new SimpleSceneObject(MeshFactory.createLandmark(-1000, 1000), basicShader.getProgramId(), false);
-                sceneObject.setDrawType(GL3.GL_LINES);
-                scene.addObject(sceneObject, gl);
+                //SceneObject sceneObject = new SimpleSceneObject(MeshFactory.createLandmark(-1000, 1000), basicShader.getProgramId(), false);
+                //sceneObject.setDrawType(GL3.GL_LINES);
+                //scene.addObject(sceneObject, gl);
             }
             
             if(settings.drawDtm){
-                SceneObject terrainSceneObject = new SimpleSceneObject(MeshFactory.createMesh(terrain.getPoints(), terrain.getIndices()), basicShader.getProgramId(), true);
-                terrainSceneObject.setDrawType(GL3.GL_TRIANGLES);
-                scene.addObject(terrainSceneObject, gl);
+                //SceneObject terrainSceneObject = new SimpleSceneObject(MeshFactory.createMesh(terrain.getPoints(), terrain.getIndices()), basicShader.getProgramId(), true);
+                //terrainSceneObject.setDrawType(GL3.GL_TRIANGLES);
+                //scene.addObject(terrainSceneObject, gl);
             }
             
             camera.addCameraListener(new CameraAdapter() {
