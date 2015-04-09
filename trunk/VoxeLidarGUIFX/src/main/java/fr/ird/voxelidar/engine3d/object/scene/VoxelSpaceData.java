@@ -5,40 +5,70 @@
  */
 package fr.ird.voxelidar.engine3d.object.scene;
 
-import java.io.BufferedWriter;
+import fr.ird.voxelidar.engine3d.object.mesh.Attribut;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.vecmath.Point2f;
+import javax.vecmath.Point3d;
+import javax.vecmath.Point3i;
+import org.apache.log4j.Logger;
 
 
 /**
  *
  * @author Julien
  */
-public class VoxelSpaceData extends VoxelSpaceRawData{
+public class VoxelSpaceData{
     
     private Map<String, Point2f> minMax;
     
     public float minY, maxY;
     
     public ArrayList<Voxel> voxels;
+    public Type type;
+    
+    private final static Logger logger = Logger.getLogger(VoxelSpaceData.class);
+    
+    public Point3i split;
+    public Point3d resolution;
+    public Point3d bottomCorner;
+    public Point3d topCorner;
+    
+    public ArrayList<String> attributsNames;
+    
+   
+    
+    public enum Type{
+        ALS(1),
+        TLS(2);
+        
+        private final int type;
+        Type(int type){
+            this.type = type;
+        }
+    }
     
     public VoxelSpaceData(){
         
-        super();
+        voxels = new ArrayList<>();
+        attributsNames = new ArrayList<>();
+        
+        split = new Point3i();
+        resolution = new Point3d();
+        bottomCorner = new Point3d();
+        topCorner = new Point3d();
         
         voxels = new ArrayList<>();
         minMax = new HashMap<>();
-    } 
-    
-    public float getVoxelValue(String attributName, int index){
         
-        return voxels.get(index).attributs[attributsNames.indexOf(attributName)];
     }
 
     public Map<String, Point2f> getMinMax() {
@@ -49,7 +79,6 @@ public class VoxelSpaceData extends VoxelSpaceRawData{
         this.minMax = minMax;
     }
     
-    @Override
     public Map<String, Float[]> getVoxelMap() {
         
         Map<String, Float[]> voxelMap = new LinkedHashMap<>();
@@ -61,7 +90,7 @@ public class VoxelSpaceData extends VoxelSpaceRawData{
         
         for (int j=0;j<voxels.size();j++) {
             
-            float[] attributsValues = voxels.get(j).attributs;
+            float[] attributsValues = ((VoxelObject)voxels.get(j)).attributs;
             
             for(int i=0;i<attributsValues.length;i++){
                 voxelMap.get(attributsNames.get(i))[j] = attributsValues[i];
@@ -71,52 +100,66 @@ public class VoxelSpaceData extends VoxelSpaceRawData{
         return voxelMap;
     }
     
-    @Override
-    public void write(File outputFile){
+    public Voxel getVoxel(int indice){
+        return voxels.get(indice);
+    }
+    
+    public Voxel getVoxel(int i, int j, int k){
         
+        int index = get1DFrom3D(i, j, k);
         
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
-
-            writer.write("VOXEL SPACE"+"\n");
-            writer.write("#min_corner: "+bottomCorner.x+" "+bottomCorner.y+" "+bottomCorner.z+"\n");
-            writer.write("#max_corner: "+topCorner.x+" "+topCorner.y+" "+topCorner.z+"\n");
-            writer.write("#split: "+split.x+" "+split.y+" "+split.z+"\n");
-
-            writer.write("#offset: "+(float)bottomCorner.x+" "+(float)bottomCorner.y+" "+(float)bottomCorner.z+"\n");
-            
-            String header = "";
-            for (String attributsName : attributsNames) {
-                header += attributsName + " ";
-            }
-            header = header.trim();
-            
-            writer.write(header+"\n");
-            
-            for (RawVoxel voxel : voxels) {
-                
-                //writer.write(voxel.indice.x + " " + voxel.indice.y + " " + voxel.indice.z);
-                
-                String attributsLine = "";
-                
-                for (int i=0;i<voxel.attributs.length;i++) {
-                    
-                    if(i<3){
-                        
-                        attributsLine += (int)voxel.attributs[i] + " ";
-                    }else{
-                        attributsLine += voxel.attributs[i] + " ";
-                    }
-                }
-                writer.write(attributsLine.trim()+"\n");
-            }
-            
-            writer.close();
-            
-        } catch (FileNotFoundException e) {
-            
-        }catch (Exception e) {
-            
+        if(index>voxels.size()-1){
+            return null;
         }
+        
+        return voxels.get(index);
+    }
+    
+    private int get1DFrom3D(int i, int j, int k){
+        return (i*split.y*split.z) + (j*split.z) +  k;
+    }
+    
+    public Voxel getLastVoxel(){
+        
+        if(voxels != null && !voxels.isEmpty()){
+            return voxels.get(voxels.size()-1);
+        }
+        
+        return null;
+    }
+    
+    public Voxel getFirstVoxel(){
+        
+        if(voxels != null && !voxels.isEmpty()){
+            return voxels.get(0);
+        }
+        
+        return null;
+    }
+
+    
+    public static String[] readAttributs(File f){
+        
+        String[] header = null;
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(f));
+            reader.readLine();
+            reader.readLine();
+            reader.readLine();
+            reader.readLine();
+            reader.readLine();
+            header = reader.readLine().split(" ");
+            
+            
+            reader.close();
+        } catch (FileNotFoundException ex) {
+            logger.error(ex);
+        } catch (IOException ex) {
+            logger.error(ex);
+        }
+        
+        return header;
+        
     }
     
     public void calculateAttributsLimits(){
@@ -127,21 +170,21 @@ public class VoxelSpaceData extends VoxelSpaceRawData{
             float min, max;
             
             if(!voxels.isEmpty()){
-                min = voxels.get(0).attributs[i];
-                max = voxels.get(0).attributs[i];
+                min = ((VoxelObject)voxels.get(0)).attributs[i];
+                max = ((VoxelObject)voxels.get(0)).attributs[i];
             }else{
                 return;
             }
             
             for(int j=1;j<voxels.size();j++){
                 
-                if(min > voxels.get(j).attributs[i]){
-                    min = voxels.get(j).attributs[i];
+                if(min > ((VoxelObject)voxels.get(j)).attributs[i]){
+                    min = ((VoxelObject)voxels.get(j)).attributs[i];
                 }
                 
                 
-                if(max < voxels.get(j).attributs[i]){
-                    max = voxels.get(j).attributs[i];
+                if(max < ((VoxelObject)voxels.get(j)).attributs[i]){
+                    max = ((VoxelObject)voxels.get(j)).attributs[i];
                 }
 
             }

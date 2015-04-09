@@ -15,7 +15,6 @@ import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceAdapter;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData;
 import fr.ird.voxelidar.gui.GLRenderWindowListener;
 import fr.ird.voxelidar.io.file.FileManager;
-import fr.ird.voxelidar.lidar.format.als.Las;
 import fr.ird.voxelidar.lidar.format.als.LasHeader;
 import fr.ird.voxelidar.lidar.format.als.LasReader;
 import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
@@ -32,10 +31,11 @@ import fr.ird.voxelidar.util.TimeCounter;
 import fr.ird.voxelidar.voxelisation.VoxelParameters;
 import fr.ird.voxelidar.voxelisation.VoxelisationTool;
 import fr.ird.voxelidar.voxelisation.VoxelisationToolListener;
+import fr.ird.voxelidar.voxelisation.als.LasPoint;
+import fr.ird.voxelidar.voxelisation.extraction.als.LazExtraction;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
@@ -47,7 +47,6 @@ import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -76,7 +75,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -87,9 +85,9 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javax.vecmath.Matrix4d;
-import javax.vecmath.Point2d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.controlsfx.control.RangeSlider;
 import org.controlsfx.dialog.ProgressDialog;
@@ -374,6 +372,24 @@ public class MainFrameController implements Initializable {
     private Button buttonAutomatic;
     @FXML
     private Button buttonResetToIdentity;
+    @FXML
+    private TextField textFieldPadMax1m;
+    @FXML
+    private TextField textFieldPadMax2m;
+    @FXML
+    private TextField textFieldPadMax4m;
+    @FXML
+    private TextField textFieldPadMax3m;
+    @FXML
+    private Label labelPadMax1m;
+    @FXML
+    private Label labelPadMax2m;
+    @FXML
+    private Label labelPadMax4m;
+    @FXML
+    private Label labelPadMax3m;
+    @FXML
+    private Button buttonResetPadLimitsToDefault;
 
     /**
      * Initializes the controller class.
@@ -799,6 +815,31 @@ public class MainFrameController implements Initializable {
                         
                     default:
                 }
+                
+                switch(newValue.intValue()){
+                    
+                    case 2:
+                        textFieldPadMax1m.setVisible(true);
+                        textFieldPadMax2m.setVisible(true);
+                        textFieldPadMax3m.setVisible(true);
+                        textFieldPadMax4m.setVisible(true);
+                        labelPadMax1m.setVisible(true);
+                        labelPadMax2m.setVisible(true);
+                        labelPadMax3m.setVisible(true);
+                        labelPadMax4m.setVisible(true);
+                        textFieldPADMax.setDisable(true);
+                        break;
+                    default:
+                        textFieldPadMax1m.setVisible(false);
+                        textFieldPadMax2m.setVisible(false);
+                        textFieldPadMax3m.setVisible(false);
+                        textFieldPadMax4m.setVisible(false);
+                        labelPadMax1m.setVisible(false);
+                        labelPadMax2m.setVisible(false);
+                        labelPadMax3m.setVisible(false);
+                        labelPadMax4m.setVisible(false);
+                        textFieldPADMax.setDisable(false);
+                }
             }
         });
         
@@ -818,12 +859,77 @@ public class MainFrameController implements Initializable {
                 }
             }
         });
+        
+        resetPadLimits();
 
     }
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+    
+    private boolean checkEntryAsNumber(TextField textField){
+        
+        if(!NumberUtils.isNumber(textField.getText())){
+            textField.getStyleClass().add("invalidEntry");
+            return false;
+        }
+        
+        textField.getStyleClass().removeAll("invalidEntry");
+        
+        return true;
+    }
+    
+    private boolean checkEntryAsFile(TextField textField){
+        
+        boolean valid = true;
+        
+        if(textField.getText().isEmpty()){
+            valid = false;
+        }else{
+            
+            File f = new File(textField.getText());
+            
+            if(!Files.exists(f.toPath())){
+                valid = false;
+            }
+        }
+        
+        if(valid){
+            textField.getStyleClass().removeAll("invalidEntry");
+        }else{
+            textField.getStyleClass().add("invalidEntry");
+        }
+        
+        return true;
+    }
+    
+    private boolean checkEntriesAsNumber(TextField... textFields){
+        
+        boolean valid = true;
+        
+        for(TextField tf : textFields){
+            if(!checkEntryAsNumber(tf)){
+                valid = false;
+            }
+        }
+        
+        return valid;
+    }
+    
+    private boolean checkEntriesAsFile(TextField... textFields){
+        
+        boolean valid = true;
+        
+        for(TextField tf : textFields){
+            if(!checkEntryAsFile(tf)){
+                valid = false;
+            }
+        }
+        
+        return valid;
+    }
+    
     
     private void resetMatrices(){
         
@@ -835,6 +941,14 @@ public class MainFrameController implements Initializable {
         vopMatrix.setIdentity();
         resultMatrix = new Matrix4d();
         resultMatrix.setIdentity();
+    }
+    
+    private void resetPadLimits(){
+        textFieldPADMax.setText(String.valueOf(5));
+        textFieldPadMax1m.setText(String.valueOf(ProcessingMultiRes.DEFAULT_MAX_PAD_1M));
+        textFieldPadMax2m.setText(String.valueOf(ProcessingMultiRes.DEFAULT_MAX_PAD_2M));
+        textFieldPadMax3m.setText(String.valueOf(ProcessingMultiRes.DEFAULT_MAX_PAD_3M));
+        textFieldPadMax4m.setText(String.valueOf(ProcessingMultiRes.DEFAULT_MAX_PAD_4M));
     }
     
     private void disableSopMatrixChoice(boolean value){
@@ -904,7 +1018,7 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionButtonVizualize(ActionEvent event) {
-
+        
         final VoxelSpace voxelSpace = new VoxelSpace(listViewVoxelsFiles.getSelectionModel().getSelectedItem());
 
         Settings settings = new Settings(false, true, true, true, comboboxAttributeToView.getSelectionModel().getSelectedItem());
@@ -942,7 +1056,7 @@ public class MainFrameController implements Initializable {
                                 updateProgress(progress, 100);
                             }
                         });
-
+                        
                         voxelSpace.load();
                         voxelSpace.updateValue();
                         
@@ -1161,7 +1275,10 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionButtonAddVoxelFileToListView(ActionEvent event) {
-
+        
+        
+        textFieldInputFileALS.getStyleClass().remove("invalidEntry");
+        
         if (lastFCOpenVoxelFile != null) {
             fileChooserOpenVoxelFile.setInitialDirectory(lastFCOpenVoxelFile.getParentFile());
         }
@@ -1399,7 +1516,29 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionButtonALSAddToTaskList(ActionEvent event) {
+        
+        boolean check1 = checkEntriesAsNumber(textFieldEnterXMin,
+                textFieldEnterYMin,
+                textFieldEnterZMin,
+                textFieldEnterXMax,
+                textFieldEnterYMax,
+                textFieldEnterZMax,
+                textFieldResolution);
+        
+        boolean check2 = checkEntriesAsFile(textFieldInputFileALS, textFieldTrajectoryFileALS, textFieldOutputFileALS);
+        
+        if(!check1 || !check2){
+            
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Check entries");
+            alert.setContentText("Some parameters are not set up, please fill the missing arguments");
 
+            alert.showAndWait();
+            
+            return;
+        }
+        
         if (lastFCSaveConfiguration != null) {
             fileChooserSaveConfiguration.setInitialDirectory(lastFCSaveConfiguration.getParentFile());
         }
@@ -1473,6 +1612,7 @@ public class MainFrameController implements Initializable {
         queue = new ArrayBlockingQueue<>(tasks.size());
         queue.addAll(tasks);
         taskNumber = tasks.size();
+        taskID = 1;
         
         try {
             if(!queue.isEmpty()){
@@ -1671,9 +1811,11 @@ public class MainFrameController implements Initializable {
                                 break;
 
                             case MULTI_RES:
-
-                                ProcessingMultiRes process = new ProcessingMultiRes();
-                                process.process(cfg.getOutputFile(), cfg.getFiles(), 0);
+                                
+                                
+                                ProcessingMultiRes process = new ProcessingMultiRes(cfg.getMultiResPadMax());
+                                
+                                process.process(cfg.getOutputFile(), cfg.getFiles());
 
                                 Platform.runLater(new Runnable() {
 
@@ -1712,12 +1854,8 @@ public class MainFrameController implements Initializable {
                 if(newValue == Worker.State.SUCCEEDED){
                     if (!queue.isEmpty()) {
                         try {
-                            if (!queue.isEmpty()) {
-                                taskID++;
-                                executeProcess(queue.take());
-                            }else{
-                                taskID = 1;
-                            }
+                            taskID++;
+                            executeProcess(queue.take());
 
                         } catch (InterruptedException ex) {
                             logger.error(ex);
@@ -1776,6 +1914,28 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionButtonTLSAddToTaskList(ActionEvent event) {
+        
+        boolean check1 = checkEntriesAsNumber(textFieldEnterXMin,
+                textFieldEnterYMin,
+                textFieldEnterZMin,
+                textFieldEnterXMax,
+                textFieldEnterYMax,
+                textFieldEnterZMax,
+                textFieldResolution);
+        
+        boolean check2 = checkEntriesAsFile(textFieldInputFileTLS, textFieldOutputPathTLS);
+        
+        if(!check1 || !check2){
+            
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Check entries");
+            alert.setContentText("Some parameters are not set up, please fill the missing arguments");
+
+            alert.showAndWait();
+            
+            return;
+        }
         
         if (lastFCSaveConfiguration != null) {
             fileChooserSaveConfiguration.setInitialDirectory(lastFCSaveConfiguration.getParentFile());
@@ -1891,6 +2051,12 @@ public class MainFrameController implements Initializable {
             
             VoxelParameters voxParameters = new VoxelParameters();
             voxParameters.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
+            float padMax1m = Float.valueOf(textFieldPadMax1m.getText());
+            float padMax2m = Float.valueOf(textFieldPadMax2m.getText());
+            float padMax3m = Float.valueOf(textFieldPadMax3m.getText());
+            float padMax4m = Float.valueOf(textFieldPadMax4m.getText());
+            
+            cfg.setMultiResPadMax(new float[]{padMax1m, padMax2m, padMax3m, padMax4m});
             cfg.setVoxelParameters(voxParameters);
             
             cfg.writeConfiguration(selectedFile);
@@ -1962,6 +2128,8 @@ public class MainFrameController implements Initializable {
                     textFieldXNumber.setText(String.valueOf(voxelParameters.split.x));
                     textFieldYNumber.setText(String.valueOf(voxelParameters.split.y));
                     textFieldZNumber.setText(String.valueOf(voxelParameters.split.z));
+                    
+                    textFieldResolution.setText(String.valueOf(voxelParameters.resolution));
 
                     checkboxUseDTMFilter.setSelected(voxelParameters.useDTMCorrection());
                     File tmpFile = voxelParameters.getDtmFile();
@@ -2080,7 +2248,6 @@ public class MainFrameController implements Initializable {
                     tabPaneVoxelisation.getSelectionModel().select(2);
                     listViewMultiResVoxelFiles.getItems().addAll(cfg.getFiles());
                     textFieldOutputFileMultiRes.setText(cfg.getOutputFile().getAbsolutePath());
-                    textFieldPADMax.setText(String.valueOf(cfg.getVoxelParameters().getMaxPAD()));
                     
                     break;
                     
@@ -2252,7 +2419,7 @@ public class MainFrameController implements Initializable {
 
                 alert.showAndWait();
 
-            }else{
+            }else if(FileManager.getExtension(file).equals(".las") || FileManager.getExtension(file).equals(".laz")){
                 
                 Matrix4d identityMatrix = new Matrix4d();
                 identityMatrix.setIdentity();
@@ -2285,60 +2452,127 @@ public class MainFrameController implements Initializable {
                                     double xMax=0, yMax=0, zMax=0;
 
                                     Mat4D mat = MatrixConverter.convertMatrix4dToMat4D(resultMatrix);
+                                    LasHeader lasHeader;
+                                    
+                                    switch(FileManager.getExtension(file)){
+                                        case ".las":
+                                            
+                                            LasReader lasReader = new LasReader();
+                                            lasReader.open(file);
 
-                                    LasReader lasReader = new LasReader();
-                                    lasReader.open(file);
+                                            lasHeader = lasReader.getHeader();
+                                            Iterator<PointDataRecordFormat0> iterator = lasReader.iterator();
 
-                                    LasHeader lasHeader = lasReader.getHeader();
-                                    Iterator<PointDataRecordFormat0> iterator = lasReader.iterator();
+                                            while(iterator.hasNext()){
 
-                                    while(iterator.hasNext()){
+                                                PointDataRecordFormat0 point = iterator.next();
 
-                                        PointDataRecordFormat0 point = iterator.next();
+                                                Vec4D pt = new Vec4D(((point.getX()*lasHeader.getxScaleFactor())+lasHeader.getxOffset()),
+                                                            (point.getY()*lasHeader.getyScaleFactor())+lasHeader.getyOffset(),
+                                                            (point.getZ()*lasHeader.getzScaleFactor())+lasHeader.getzOffset(),
+                                                            1);
 
-                                        Vec4D pt = new Vec4D(((point.getX()*lasHeader.getxScaleFactor())+lasHeader.getxOffset()),
-                                                    (point.getY()*lasHeader.getyScaleFactor())+lasHeader.getyOffset(),
-                                                    (point.getZ()*lasHeader.getzScaleFactor())+lasHeader.getzOffset(),
-                                                    1);
+                                                pt = Mat4D.multiply(mat, pt);
 
-                                        pt = Mat4D.multiply(mat, pt);
+                                                if(count != 0){
 
-                                        if(count != 0){
+                                                    if(pt.x < xMin){
+                                                        xMin = pt.x;
+                                                    }else if(pt.x > xMax){
+                                                        xMax = pt.x;
+                                                    }
 
-                                            if(pt.x < xMin){
-                                                xMin = pt.x;
-                                            }else if(pt.x > xMax){
-                                                xMax = pt.x;
+                                                    if(pt.y < yMin){
+                                                        yMin = pt.y;
+                                                    }else if(pt.y > yMax){
+                                                        yMax = pt.y;
+                                                    }
+
+                                                    if(pt.z < zMin){
+                                                        zMin = pt.z;
+                                                    }else if(pt.z > zMax){
+                                                        zMax = pt.z;
+                                                    }
+
+                                                }else{
+
+                                                    xMin = pt.x;
+                                                    yMin = pt.y;
+                                                    zMin = pt.z;
+
+                                                    xMax = pt.x;
+                                                    yMax = pt.y;
+                                                    zMax = pt.z;
+
+                                                    count++;
+                                                }
                                             }
 
-                                            if(pt.y < yMin){
-                                                yMin = pt.y;
-                                            }else if(pt.y > yMax){
-                                                yMax = pt.y;
+                                            minPoint.set(xMin, yMin, zMin);
+                                            maxPoint.set(xMax, yMax, zMax);
+
+                                            break;
+                                            
+                                        case ".laz":
+                                            LazExtraction lazReader = new LazExtraction();
+                                            lazReader.openLazFile(file);
+
+                                            lasHeader = lazReader.getHeader();
+                                            Iterator<LasPoint> it = lazReader.iterator();
+
+                                            while(it.hasNext()){
+
+                                                LasPoint point = it.next();
+
+                                                Vec4D pt = new Vec4D(((point.x*lasHeader.getxScaleFactor())+lasHeader.getxOffset()),
+                                                                    (point.y*lasHeader.getyScaleFactor())+lasHeader.getyOffset(),
+                                                                    (point.z*lasHeader.getzScaleFactor())+lasHeader.getzOffset(),
+                                                                    1);
+
+                                                pt = Mat4D.multiply(mat, pt);
+
+                                                if(count != 0){
+
+                                                    if(pt.x < xMin){
+                                                        xMin = pt.x;
+                                                    }else if(pt.x > xMax){
+                                                        xMax = pt.x;
+                                                    }
+
+                                                    if(pt.y < yMin){
+                                                        yMin = pt.y;
+                                                    }else if(pt.y > yMax){
+                                                        yMax = pt.y;
+                                                    }
+
+                                                    if(pt.z < zMin){
+                                                        zMin = pt.z;
+                                                    }else if(pt.z > zMax){
+                                                        zMax = pt.z;
+                                                    }
+
+                                                }else{
+
+                                                    xMin = pt.x;
+                                                    yMin = pt.y;
+                                                    zMin = pt.z;
+
+                                                    xMax = pt.x;
+                                                    yMax = pt.y;
+                                                    zMax = pt.z;
+
+                                                    count++;
+                                                }
                                             }
 
-                                            if(pt.z < zMin){
-                                                zMin = pt.z;
-                                            }else if(pt.z > zMax){
-                                                zMax = pt.z;
-                                            }
-
-                                        }else{
-
-                                            xMin = pt.x;
-                                            yMin = pt.y;
-                                            zMin = pt.z;
-
-                                            xMax = pt.x;
-                                            yMax = pt.y;
-                                            zMax = pt.z;
-
-                                            count++;
-                                        }
+                                            minPoint.set(xMin, yMin, zMin);
+                                            maxPoint.set(xMax, yMax, zMax);
+                                            
+                                            lazReader.close();
+                                            
+                                            break;
                                     }
                                     
-                                    minPoint.set(xMin, yMin, zMin);
-                                    maxPoint.set(xMax, yMax, zMax);
                                 }
 
                                 Platform.runLater(new Runnable() {
@@ -2401,18 +2635,36 @@ public class MainFrameController implements Initializable {
 
             }else{
                 
-                LasReader lasReader = new LasReader();
-                LasHeader header = lasReader.readHeader(file);
+                LasHeader header = null;
                 
-                double minX = header.getMinX();
-                double minY = header.getMinY();
-                double minZ = header.getMinZ();
+                switch(FileManager.getExtension(file)){
+                    case ".las":
+                        LasReader lasReader = new LasReader();
+                        header = lasReader.readHeader(file);
+                        break;
+                        
+                    case ".laz":
+                        LazExtraction laz = new LazExtraction();
+                        laz.openLazFile(file);
+                        header = laz.getHeader();
+                        laz.close();
+                        break;
+                }
                 
-                double maxX = header.getMaxX();
-                double maxY = header.getMaxY();
-                double maxZ = header.getMaxZ();
+                if(header != null){
+                    
+                    double minX = header.getMinX();
+                    double minY = header.getMinY();
+                    double minZ = header.getMinZ();
+
+                    double maxX = header.getMaxX();
+                    double maxY = header.getMaxY();
+                    double maxZ = header.getMaxZ();
+
+                    return new Point3d[]{new Point3d(minX, minY, minZ), new Point3d(maxX, maxY, maxZ)};
+                }
                 
-                return new Point3d[]{new Point3d(minX, minY, minZ), new Point3d(maxX, maxY, maxZ)};
+                return null;
             }
         }
         
@@ -2444,6 +2696,11 @@ public class MainFrameController implements Initializable {
         
         resetMatrices();
         fillResultMatrix(resultMatrix);
+    }
+
+    @FXML
+    private void onActionButtonResetPadLimitsToDefault(ActionEvent event) {
+        resetPadLimits();
     }
 
 }

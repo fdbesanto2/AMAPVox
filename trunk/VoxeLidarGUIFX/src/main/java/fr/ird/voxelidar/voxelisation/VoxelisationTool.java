@@ -7,7 +7,6 @@ package fr.ird.voxelidar.voxelisation;
 
 import fr.ird.voxelidar.MatrixAndFile;
 import fr.ird.voxelidar.util.ProcessingListener;
-import fr.ird.voxelidar.voxelisation.als.LasVoxelisation;
 import fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
@@ -16,12 +15,14 @@ import fr.ird.voxelidar.engine3d.object.mesh.Attribut;
 import fr.ird.voxelidar.engine3d.object.scene.Dtm;
 import fr.ird.voxelidar.engine3d.object.scene.DtmLoader;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
+import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceLoader;
 import fr.ird.voxelidar.lidar.format.tls.Rsp;
 import fr.ird.voxelidar.util.DataSet;
 import fr.ird.voxelidar.util.DataSet.Mode;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.MatrixConverter;
 import fr.ird.voxelidar.util.TimeCounter;
+import fr.ird.voxelidar.voxelisation.als.LasVoxelisation;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -174,6 +175,42 @@ public class VoxelisationTool {
 
         this.parameters = parameters;
         this.parameters.setTLS(false);
+        
+        if(vop == null){
+            vop = Mat4D.identity();
+        }
+
+        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, trajectoryFile, parameters, filters);
+
+        voxelisation.addProcessingListener(new ProcessingListener() {
+
+            @Override
+            public void processingStepProgress(String progress, int ratio) {
+                fireProgress(progress, ratio);
+            }
+
+            @Override
+            public void processingFinished() {
+
+            }
+        });
+
+        voxelisation.process();
+
+        fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
+
+    }
+    
+    public void voxeliseFromLaz(File output, File input, File trajectoryFile, VoxelParameters parameters, Mat4D vop, List<Filter> filters) {
+
+        startTime = System.currentTimeMillis();
+
+        this.parameters = parameters;
+        this.parameters.setTLS(false);
+        
+        if(vop == null){
+            vop = Mat4D.identity();
+        }
 
         LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, trajectoryFile, parameters, filters);
 
@@ -214,9 +251,10 @@ public class VoxelisationTool {
             String msg = "Merging in progress, file " + (i + 1) + " : " + filesList.size();
             logger.info(msg);
             fireProgress(msg, i);
-
+                        
             VoxelSpace voxelSpace1 = new VoxelSpace(filesList.get(i));
             voxelSpace1.load();
+            
             size = voxelSpace1.data.split.x * voxelSpace1.data.split.y * voxelSpace1.data.split.z;
             map1 = voxelSpace1.data.getVoxelMap();
             
@@ -257,7 +295,7 @@ public class VoxelisationTool {
                         case "PadBflTotal_V2":
                         case "angleMean":
                         case "lMeanTotal":
-                        case "transmittance_v1":
+                        case "transmittance":
                         case "transmittance_v2":
 
                             m = Mode.DISCARD;
@@ -352,7 +390,7 @@ public class VoxelisationTool {
             }
             
             /*recalculate Pad*/
-            Float[] transmittanceArray = result.get("transmittance_v1");
+            Float[] transmittanceArray = result.get("transmittance");
             Float[] transmittance2Array = result.get("transmittance_v2");
             Float[] PadBflTotalArray = result.get("PadBflTotal");
             Float[] PadBflTotal2Array = result.get("PadBflTotal_V2");

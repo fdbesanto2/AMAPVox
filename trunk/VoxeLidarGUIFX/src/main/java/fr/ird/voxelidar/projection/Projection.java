@@ -6,9 +6,10 @@
 package fr.ird.voxelidar.projection;
 
 import fr.ird.voxelidar.engine3d.object.scene.Dtm;
-import fr.ird.voxelidar.engine3d.object.scene.Voxel;
+import fr.ird.voxelidar.engine3d.object.scene.VoxelObject;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData;
 import fr.ird.voxelidar.util.ColorGradient;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import org.apache.commons.collections.MapIterator;
@@ -55,8 +56,10 @@ public class Projection {
             MultiKeyMap mapTerrainXY = terrain.getXYStructure();
                    
 
-            for(Voxel voxel : data.voxels){
-
+            for(Voxel v : data.voxels){
+                
+                VoxelObject voxel = (VoxelObject) v;
+                
                 float value = 0;
                 float[] attributs = voxel.getAttributs();
                 
@@ -69,8 +72,8 @@ public class Projection {
                         break;
                 }
 
-                int x = voxel.indice.x;
-                int y = voxel.indice.z;
+                int x = voxel.$i;
+                int y = voxel.$k;
 
                 if(Float.isNaN(value)){
                     value = 0;
@@ -95,7 +98,7 @@ public class Projection {
             }
         
         }else{
-        
+            /*
             int count = 0;
             for(Voxel voxel : data.voxels){
 
@@ -110,8 +113,8 @@ public class Projection {
                         break;
                 }
 
-                int x = voxel.indice.x;
-                int y = voxel.indice.z;
+                int x = voxel.$i;
+                int y = voxel.$k;
 
                 if(Float.isNaN(value)){
                     value = 0;
@@ -126,6 +129,7 @@ public class Projection {
                 
                 count++;
             }
+            */
         }
         
         

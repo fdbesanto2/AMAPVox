@@ -5,7 +5,7 @@
  */
 package fr.ird.voxelidar.voxelisation.als;
 
-import javax.vecmath.Vector3d;
+import fr.ird.voxelidar.util.ByteConverter;
 
 /**
  *
@@ -27,7 +27,10 @@ public class LasPoint {
     /**
      * las point location
      */
-    public Vector3d location;
+    
+    public double x;
+    public double y;
+    public double z;
 
     /**
      * echo range
@@ -56,15 +59,33 @@ public class LasPoint {
     
     /**
      *
-     * @param location
-     * @param r
-     * @param n
-     * @param i
-     * @param classification
-     * @param t
+     * @param x
+     * @param y
+     * @param z
+     * @param returnNumber
+     * @param numberOfReturns
+     * @param intensity
+     * @param gpsTime
      */
-    public LasPoint(Vector3d location, int r, int n, int i, short classification, double t) {
-        this.location = location;
+    
+    public LasPoint(long x, long y, long z, byte returnNumber, byte numberOfReturns, int intensity, double gpsTime){
+
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        
+        this.i = ByteConverter.unsignedShortToInteger(intensity);
+        this.r = ByteConverter.unsignedByteToShort(returnNumber);
+        this.n = ByteConverter.unsignedByteToShort(numberOfReturns);
+        this.t = gpsTime;
+    }    
+        
+    public LasPoint(double x, double y, double z, int r, int n, int i, short classification, double t) {
+        
+        this.x = x;
+        this.y = x;
+        this.z = x;
+        
         this.r = r;
         this.n = n;
         this.classification = classification;

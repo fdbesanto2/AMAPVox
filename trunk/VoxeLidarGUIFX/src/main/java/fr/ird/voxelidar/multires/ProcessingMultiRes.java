@@ -5,14 +5,17 @@
  */
 package fr.ird.voxelidar.multires;
 
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.ALSVoxel;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.TLSVoxel;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.io.File;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -20,17 +23,31 @@ import javax.vecmath.Point3i;
  */
 public class ProcessingMultiRes {
     
-    private float maxPAD;
-    private int transmittanceMode = 0;
+    private final static Logger logger = Logger.getLogger(ProcessingMultiRes.class);
     
-    public ProcessingMultiRes(){
+    private float maxPAD;
+    
+    public final static float DEFAULT_MAX_PAD_1M = 3.536958f;
+    public final static float DEFAULT_MAX_PAD_2M = 2.262798f;
+    public final static float DEFAULT_MAX_PAD_3M = 1.749859f;
+    public final static float DEFAULT_MAX_PAD_4M = 1.3882959f;
+    
+    private float max_pad_1m = 3.536958f;
+    private float max_pad_2m = 2.262798f;
+    private float max_pad_3m = 1.749859f;
+    private float max_pad_4m = 1.3882959f;
+    
+    public ProcessingMultiRes(float[] padLimits){
         
+        max_pad_1m = padLimits[0];
+        max_pad_2m = padLimits[1];
+        max_pad_3m = padLimits[2];
+        max_pad_4m = padLimits[3];
     }
     
-    public void process(File outputFile, List<File> elements, int transmittanceMode) {
+    public void process(File outputFile, List<File> elements) {
 
-        this.transmittanceMode = transmittanceMode;
-        final Map<Double, VoxelSpace> voxelSpaces = new TreeMap<>();
+        final Map<Double, VoxelSpaceLoader> voxelSpaces = new TreeMap<>();
 
         int count = 0;
         Point3d resolution;
@@ -38,14 +55,14 @@ public class ProcessingMultiRes {
         
         for(File f : elements){
 
-            VoxelSpace voxelSpace = new VoxelSpace(f);
+            VoxelSpaceLoader voxelSpace = new VoxelSpaceLoader(f);
             voxelSpace.load();
 
             resolution = voxelSpace.data.resolution;
             try {
                 voxelSpaces.put(resolution.x, voxelSpace);
             } catch (Exception e) {
-                System.err.println(e);
+                logger.error(e);
             }
 
             if (count == 0) {
@@ -58,8 +75,8 @@ public class ProcessingMultiRes {
 
         }
 
-        Iterator<Map.Entry<Double, VoxelSpace>> entries = voxelSpaces.entrySet().iterator();
-        VoxelSpace vs = entries.next().getValue();
+        Iterator<Map.Entry<Double, VoxelSpaceLoader>> entries = voxelSpaces.entrySet().iterator();
+        VoxelSpaceLoader vs = entries.next().getValue();
 
         int correctValues = 0;
         int correctedValues = 0;
@@ -147,12 +164,13 @@ public class ProcessingMultiRes {
             boolean outOfResolutions = false;
             boolean uncorrectValue = false;
 
-            VoxelSpace vsTemp;
+            VoxelSpaceLoader vsTemp;
             Voxel voxTemp = null;
 
             //while(currentNbSampling < Math.pow(currentResolution, 2)+1 || currentTransmittance == 0){
-            while (currentNbSampling < Math.pow(currentResolution, 2) * 2 + 1 || currentTransmittance == 0) {
-                //while(currentNbSampling <= 0 || currentTransmittance == 0){  
+            //while (currentNbSampling < Math.pow(currentResolution, 2) * 2 + 1 || currentTransmittance == 0) {
+            while(currentNbSampling == 0 || currentTransmittance == 0){  
+                
                 uncorrectValue = true;
 
                 if (!entries.hasNext()) {
@@ -160,7 +178,7 @@ public class ProcessingMultiRes {
                     break;
                 }
 
-                Map.Entry<Double, VoxelSpace> entry = entries.next();
+                Map.Entry<Double, VoxelSpaceLoader> entry = entries.next();
                 vsTemp = entry.getValue();
                 currentResolution = entry.getKey();
 
@@ -168,10 +186,12 @@ public class ProcessingMultiRes {
                 Point3i indices = getIndicesFromIndices(new Point3i(voxel.$i, voxel.$j, voxel.$k), currentResolution);
                 voxTemp = vsTemp.data.getVoxel(indices.x, indices.y, indices.z);
 
-                calculatePAD(voxTemp, currentResolution);
+                if(voxTemp != null){
+                    calculatePAD(voxTemp, currentResolution);
 
-                currentNbSampling = voxTemp.nbSampling;
-                currentTransmittance = voxTemp.transmittance;
+                    currentNbSampling = voxTemp.nbSampling;
+                    currentTransmittance = voxTemp.transmittance;
+                }
             }
 
             if (outOfResolutions) {
@@ -205,27 +225,27 @@ public class ProcessingMultiRes {
             eV.resolution = currentResolution;
             vs.data.voxels.set(n, eV);
         }
-
-        System.out.println("Nombre de valeurs correctes: " + correctValues + "/" + totalValues);
-        System.out.println("Nombre de valeurs corrigées: " + correctedValues + "/" + totalValues);
-        System.out.println("Nombre de valeurs mises à défaut: " + setToDefault + "/" + totalValues);
-
+        
+        logger.info("Nombre de valeurs correctes: " + correctValues + "/" + totalValues);
+        logger.info("Nombre de valeurs corrigées: " + correctedValues + "/" + totalValues);
+        logger.info("Nombre de valeurs mises à défaut: " + setToDefault + "/" + totalValues);
+        
         vs.write(outputFile);
 
     }
     
     private void calculatePAD(Voxel vox, double resolution) {
         
-        if(resolution == 1.0){
-            maxPAD=3.536958f;
-        }else if(resolution == 2.0){
-            maxPAD=2.262798f;
-        }else if(resolution == 2.0){
-            maxPAD=1.749859f;
-        }else if(resolution == 4.0){
-            maxPAD=1.3882959f;
+        if(resolution <= 1.0){
+            maxPAD= max_pad_1m;
+        }else if(resolution <= 2.0){
+            maxPAD= max_pad_2m;
+        }else if(resolution <= 3.0){
+            maxPAD= max_pad_3m;
+        }else if(resolution <= 4.0){
+            maxPAD=max_pad_4m;
         }else{
-            maxPAD=3.536958f;
+            maxPAD= max_pad_4m;
         }
         
         if (vox.nbSampling >= vox.nbEchos) {
@@ -296,14 +316,6 @@ public class ProcessingMultiRes {
 
             } else {
                 
-                switch(transmittanceMode){
-                    case 0:
-                        alsVox.transmittance = (alsVox.bvEntering - alsVox.bvIntercepted) / alsVox.bvEntering;
-                        break;
-                    case 1:
-                        alsVox.transmittance = ((alsVox.bvEntering - alsVox.bvIntercepted) / alsVox.bvEntering) / alsVox.sumSurfaceMultiplyLength ;
-                        break;
-                }
                 alsVox.transmittance = (alsVox.bvEntering - alsVox.bvIntercepted) / alsVox.bvEntering;
 
                 if (alsVox.nbSampling > 1 && alsVox.transmittance == 0) {

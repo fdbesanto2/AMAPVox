@@ -19,6 +19,7 @@ import fr.ird.voxelidar.engine3d.object.mesh.InstancedMesh;
 import fr.ird.voxelidar.util.ColorGradient;
 import fr.ird.voxelidar.util.Settings;
 import fr.ird.voxelidar.util.StandardDeviation;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -128,22 +129,13 @@ public class VoxelSpace extends SceneObject{
         
         this.voxelsFile = voxelSpace;
     }
-    
-    public VoxelSpace(File voxelSpace, String attributToVisualize){
-        
-        data = new VoxelSpaceData();
-        filteredValues = new TreeSet<>();
-        filteredValues.add(Float.NaN);
-        filteredValues.add(0.0f);
-        mapAttributs = new LinkedHashMap<>();
-        variables = new TreeSet<>();
-        listeners = new EventListenerList();
-        fileLoaded = false;
-        
-        this.currentAttribut = attributToVisualize;
-        
-        this.voxelsFile = voxelSpace;
-        
+
+    public void setMapAttributs(Map<String, Attribut> mapAttributs) {
+        this.mapAttributs = mapAttributs;
+    }
+
+    public void setVariables(Set<String> variables) {
+        this.variables = variables;
     }
     
     public void addExtendedMapAttributs(Map<String,Attribut> extendedMapAttributs){
@@ -261,9 +253,9 @@ public class VoxelSpace extends SceneObject{
         
         if(data.voxels.size() > 0){
             
-            widthX = (data.voxels.get(data.voxels.size()-1).position.x) - (data.voxels.get(0).position.x);
-            widthY = (data.voxels.get(data.voxels.size()-1).position.y) - (data.voxels.get(0).position.y);
-            widthZ = (data.voxels.get(data.voxels.size()-1).position.z) - (data.voxels.get(0).position.z);
+            widthX = ((VoxelObject)data.getLastVoxel()).position.x - ((VoxelObject)data.getFirstVoxel()).position.x;
+            widthX = ((VoxelObject)data.getLastVoxel()).position.y - ((VoxelObject)data.getFirstVoxel()).position.y;
+            widthX = ((VoxelObject)data.getLastVoxel()).position.z - ((VoxelObject)data.getFirstVoxel()).position.z;
         }
     }
     
@@ -271,8 +263,8 @@ public class VoxelSpace extends SceneObject{
         
         if(data.voxels.size() > 0){
             
-            Voxel firstVoxel = data.voxels.get(0);
-            Voxel lastVoxel = data.voxels.get(data.voxels.size()-1);
+            VoxelObject firstVoxel = (VoxelObject) data.getFirstVoxel();
+            VoxelObject lastVoxel = (VoxelObject) data.getLastVoxel();
             
             centerX = (firstVoxel.position.x + lastVoxel.position.x)/2.0f;
             centerY = (firstVoxel.position.y + lastVoxel.position.y)/2.0f;
@@ -295,7 +287,7 @@ public class VoxelSpace extends SceneObject{
         }
     }
     
-    private void initAttributs(String[] columnsNames){
+    public void initAttributs(String[] columnsNames){
         
         for(String name : columnsNames){
             variables.add(name);
@@ -356,6 +348,7 @@ public class VoxelSpace extends SceneObject{
                 initAttributs(columnsNames);
                 
                 data.attributsNames.addAll(Arrays.asList(columnsNames));
+                
                 
                 int lineNumber = 0;
                 String line;                
@@ -418,7 +411,7 @@ public class VoxelSpace extends SceneObject{
                         }
                     }                    
                     
-                    data.voxels.add(new Voxel(indice, position, mapAttrs, 1.0f));
+                    data.voxels.add(new VoxelObject(indice, position, mapAttrs, 1.0f));
 
                     lineNumber++;
 
@@ -602,8 +595,10 @@ public class VoxelSpace extends SceneObject{
         
         StandardDeviation sd = new StandardDeviation();
         
-        for(Voxel voxel:data.voxels){
-                    
+        for(Voxel v:data.voxels){
+            
+            VoxelObject voxel = (VoxelObject) v;
+            
             float attributValue;
             
             float[] attributs = voxel.getAttributs();
@@ -722,7 +717,9 @@ public class VoxelSpace extends SceneObject{
         ColorGradient color = new ColorGradient(valMin, valMax);
         color.setGradientColor(gradientColor);
         //ArrayList<Float> values = new ArrayList<>();
-        for (Voxel voxel : data.voxels) {
+        for (Voxel v : data.voxels) {
+            
+            VoxelObject voxel = (VoxelObject) v;
             //float ratio = voxel.attributValue/(attributValueMax-attributValueMin);
             //float value = valMin+ratio*(valMax-valMin);
             //Color colorGenerated = color.getColor(value);
@@ -817,15 +814,17 @@ public class VoxelSpace extends SceneObject{
         float instanceColors[] = new float[instanceNumber*4];
 
         for (int i=0, j=0, k=0;i<data.voxels.size();i++, j+=3 ,k+=4) {
+            
+            VoxelObject voxel = (VoxelObject) data.voxels.get(i);
+            
+            instancePositions[j] = voxel.position.x;
+            instancePositions[j+1] = voxel.position.y;
+            instancePositions[j+2] = voxel.position.z;
 
-            instancePositions[j] = data.voxels.get(i).position.x;
-            instancePositions[j+1] = data.voxels.get(i).position.y;
-            instancePositions[j+2] = data.voxels.get(i).position.z;
-
-            instanceColors[k] = data.voxels.get(i).getRed();
-            instanceColors[k+1] = data.voxels.get(i).getGreen();
-            instanceColors[k+2] = data.voxels.get(i).getBlue();
-            instanceColors[k+3] = data.voxels.get(i).getAlpha();
+            instanceColors[k] = voxel.getRed();
+            instanceColors[k+1] = voxel.getGreen();
+            instanceColors[k+2] = voxel.getBlue();
+            instanceColors[k+3] = voxel.getAlpha();
         }
         
         ((InstancedMesh)mesh).instancePositionsBuffer = Buffers.newDirectFloatBuffer(instancePositions);
@@ -868,11 +867,13 @@ public class VoxelSpace extends SceneObject{
             float instanceColors[] = new float[data.voxels.size()*4];
 
             for (int i=0, j=0;i<data.voxels.size();i++, j+=4) {
-
-                instanceColors[j] = data.voxels.get(i).getRed();
-                instanceColors[j+1] = data.voxels.get(i).getGreen();
-                instanceColors[j+2] = data.voxels.get(i).getBlue();
-                instanceColors[j+3] = data.voxels.get(i).getAlpha();
+                
+                VoxelObject voxel = (VoxelObject) data.voxels.get(i);
+                
+                instanceColors[j] = voxel.getRed();
+                instanceColors[j+1] = voxel.getGreen();
+                instanceColors[j+2] = voxel.getBlue();
+                instanceColors[j+3] = voxel.getAlpha();
             }
 
             ((InstancedMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(instanceColors);

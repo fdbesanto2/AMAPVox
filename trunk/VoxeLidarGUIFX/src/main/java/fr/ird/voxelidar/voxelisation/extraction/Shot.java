@@ -74,7 +74,8 @@ public class Shot{
     }
     
     public void calculateAngle(){
-        this.angle = Math.toDegrees(Math.acos(Math.abs(direction.z)));
+        
+        this.angle = Math.toDegrees(Math.acos(direction.z));
     }
     
     public boolean doFilter(){
@@ -84,6 +85,7 @@ public class Shot{
             switch(f.getVariable()){
                 case "Angle Mean":
                     switch(f.getCondition()){
+                                                
                         case Filter.EQUAL:
                             if(angle != f.getValue())return false;
                             break;

@@ -5,13 +5,9 @@
  */
 package fr.ird.voxelidar.multires;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.vecmath.Point2f;
 import javax.vecmath.Point3d;
@@ -49,7 +45,6 @@ public class VoxelSpaceData{
     
     public VoxelSpaceData(){
         
-        this.type = type;
         voxels = new ArrayList<>();
         minMax = new HashMap<>();
         attributsNames = new ArrayList<>();

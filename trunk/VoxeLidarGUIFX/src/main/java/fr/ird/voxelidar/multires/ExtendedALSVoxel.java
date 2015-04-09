@@ -5,6 +5,9 @@
  */
 package fr.ird.voxelidar.multires;
 
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.ALSVoxel;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
+
 
 /**
  *
@@ -38,6 +41,7 @@ public class ExtendedALSVoxel extends ALSVoxel {
         this.nbEchos = voxel.nbEchos;
         this.nbSampling = voxel.nbSampling;
         this.transmittance = voxel.transmittance;
+        this.transmittance_v2 = voxel.transmittance_v2;
     }
 
 }

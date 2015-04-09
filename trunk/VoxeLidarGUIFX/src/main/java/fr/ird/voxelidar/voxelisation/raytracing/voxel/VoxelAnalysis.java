@@ -614,10 +614,10 @@ public void calculatePADAndWrite(double threshold) {
             //writer.write("i j k nbSampling interceptions path_length lgTraversant lgInterception PAD PAD2 BFIntercepted BFEntering BSIntercepted BSEntering dist"+"\n");
             if (parameters.isTLS()) {
                 writer.write("#type: " +"TLS"+ "\n");
-                writer.write(TLSVoxel.getHeader() + "\n");
+                writer.write(Voxel.getHeader(TLSVoxel.class) + "\n");
             } else {
                 writer.write("#type: " +"ALS"+ "\n");
-                writer.write(ALSVoxel.getHeader() + "\n");
+                writer.write(Voxel.getHeader(ALSVoxel.class) + "\n");
             }
 
             for (int i = 0; i < parameters.split.x; i++) {
@@ -647,40 +647,40 @@ public void calculatePADAndWrite(double threshold) {
 
                                 pad1 = Float.NaN;
                                 pad2 = pad1;
-                                tlsVox.transmittance_v1 = Float.NaN;
+                                tlsVox.transmittance = Float.NaN;
                                 tlsVox.transmittance_v2 = Float.NaN;
 
                             } else if (tlsVox.bflIntercepted > tlsVox.bflEntering) {
 
                                 logger.error("Voxel : " + tlsVox.$i + " " + tlsVox.$j + " " + tlsVox.$k + " -> bflInterceptes > bflEntering, NaN assigné");
                                 
-                                tlsVox.transmittance_v1 = Float.NaN;
+                                tlsVox.transmittance = Float.NaN;
                                 tlsVox.transmittance_v2 = Float.NaN;
                                 pad1 = Float.NaN;
                                 pad2 = pad1;
 
                             } else {
                                 
-                                tlsVox.transmittance_v1 = (tlsVox.bflEntering - tlsVox.bflIntercepted) / tlsVox.bflEntering;
+                                tlsVox.transmittance = (tlsVox.bflEntering - tlsVox.bflIntercepted) / tlsVox.bflEntering;
                                 tlsVox.transmittance_v2 = (tlsVox._transBeforeNorm) / tlsVox.lgTotal;
                                 
-                                if(Math.abs(tlsVox.transmittance_v1 - tlsVox.transmittance_v2) > 0.001){
+                                if(Math.abs(tlsVox.transmittance - tlsVox.transmittance_v2) > 0.001){
                                     System.out.println("test");
                                 }
                                 
-                                if (tlsVox.nbSampling > 1 && tlsVox.transmittance_v1 == 0 && tlsVox.nbSampling == tlsVox.nbEchos) {
+                                if (tlsVox.nbSampling > 1 && tlsVox.transmittance == 0 && tlsVox.nbSampling == tlsVox.nbEchos) {
 
                                     pad1 = MAX_PAD;
                                     pad2 = pad1;
 
-                                } else if (tlsVox.nbSampling <= 2 && tlsVox.transmittance_v1 == 0 && tlsVox.nbSampling == tlsVox.nbEchos) {
+                                } else if (tlsVox.nbSampling <= 2 && tlsVox.transmittance == 0 && tlsVox.nbSampling == tlsVox.nbEchos) {
 
                                     pad1 = Float.NaN;
                                     pad2 = pad1;
 
                                 } else {
                                     
-                                    pad1 = (float) (Math.log(tlsVox.transmittance_v1) / (-0.5 * tlsVox.lMeanTotal));
+                                    pad1 = (float) (Math.log(tlsVox.transmittance) / (-0.5 * tlsVox.lMeanTotal));
                                     pad2 = (float) (Math.log(tlsVox.transmittance_v2) / (-0.5 * tlsVox.lMeanTotal));
                                     
                                     if (Float.isNaN(pad1)) {
@@ -715,7 +715,7 @@ public void calculatePADAndWrite(double threshold) {
 
                                 pad1 = Float.NaN;
                                 pad2 = pad1;
-                                alsVox.transmittance_v1 = Float.NaN;
+                                alsVox.transmittance = Float.NaN;
                                 alsVox.transmittance_v2 = Float.NaN;
 
                             } else if (alsVox.bvIntercepted > alsVox.bvEntering) {
@@ -724,27 +724,27 @@ public void calculatePADAndWrite(double threshold) {
                                 
                                 pad1 = Float.NaN;
                                 pad2 = pad1;
-                                alsVox.transmittance_v1 = Float.NaN;
+                                alsVox.transmittance = Float.NaN;
                                 alsVox.transmittance_v2 = Float.NaN;
 
                             } else {
                                 
-                                alsVox.transmittance_v1 = (alsVox.bvEntering - alsVox.bvIntercepted) / alsVox.bvEntering;
+                                alsVox.transmittance = (alsVox.bvEntering - alsVox.bvIntercepted) / alsVox.bvEntering;
                                 alsVox.transmittance_v2 = (alsVox._transBeforeNorm) / alsVox.sumSurfaceMultiplyLength ;
 
-                                if (alsVox.nbSampling > 1 && alsVox.transmittance_v1 == 0 && alsVox.nbSampling == alsVox.nbEchos) {
+                                if (alsVox.nbSampling > 1 && alsVox.transmittance == 0 && alsVox.nbSampling == alsVox.nbEchos) {
 
                                     pad1 = MAX_PAD;
                                     pad2 = pad1;
 
-                                } else if (alsVox.nbSampling <= 2 && alsVox.transmittance_v1 == 0 && alsVox.nbSampling == alsVox.nbEchos) {
+                                } else if (alsVox.nbSampling <= 2 && alsVox.transmittance == 0 && alsVox.nbSampling == alsVox.nbEchos) {
 
                                     pad1 = Float.NaN;
                                     pad2 = pad1;
 
                                 } else {
 
-                                    pad1 = (float) (Math.log(alsVox.transmittance_v1) / (-0.5 * alsVox.lMeanTotal));
+                                    pad1 = (float) (Math.log(alsVox.transmittance) / (-0.5 * alsVox.lMeanTotal));
                                     pad2 = (float) (Math.log(alsVox.transmittance_v2) / (-0.5 * alsVox.lMeanTotal));
 
                                     if (Float.isNaN(pad1)) {
@@ -778,9 +778,9 @@ public void calculatePADAndWrite(double threshold) {
             logger.info("file written ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
 
         } catch (FileNotFoundException e) {
-            logger.error("Error: " + e.getMessage());
+            logger.error("Error: " + e);
         } catch (Exception e) {
-            logger.error("Error: " + e.getMessage());
+            logger.error("Error: " + e);
         }
 
     }
@@ -794,10 +794,11 @@ public void calculatePADAndWrite(double threshold) {
             logger.info("allocate!!!!!!!!");
 
             if (parameters.isTLS()) {
-                voxels = new TLSVoxel[parameters.split.x][parameters.split.y][parameters.split.z];
+                voxels = new Voxel[parameters.split.x][parameters.split.y][parameters.split.z];
             } else {
-                voxels = new ALSVoxel[parameters.split.x][parameters.split.y][parameters.split.z];
+                voxels = new Voxel[parameters.split.x][parameters.split.y][parameters.split.z];
             }
+            
 
             for (int x = 0; x < parameters.split.x; x++) {
                 for (int y = 0; y < parameters.split.y; y++) {
@@ -809,7 +810,7 @@ public void calculatePADAndWrite(double threshold) {
                             voxels[x][y][z] = new ALSVoxel(x, y, z);
                         }
 
-                        Point3d position = getPosition(new Point3i(voxels[x][y][z].$i, voxels[x][y][z].$j, voxels[x][y][z].$k),
+                        Point3d position = getPosition(new Point3i(x, y, z),
                                 parameters.split, parameters.bottomCorner, parameters.topCorner);
 
                         float dist;
@@ -842,9 +843,10 @@ public void calculatePADAndWrite(double threshold) {
             voxelManager = new VoxelManager(scene, new VoxelManagerSettings(parameters.split, VoxelManagerSettings.NON_TORIC_FINITE_BOX_TOPOLOGY));
 
             voxelManager.showInformations();
+            
 
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e);
         }
 
     }

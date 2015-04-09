@@ -5,10 +5,11 @@
  */
 package fr.ird.voxelidar.lidar.format.dart;
 
-import fr.ird.voxelidar.engine3d.object.scene.Voxel;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData;
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.math.point.Point3I;
+import fr.ird.voxelidar.engine3d.object.scene.VoxelObject;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -99,9 +100,11 @@ public class DartWriter {
         
         ArrayList<String> attributsNames = data.attributsNames;
         
-        for (Voxel voxel : data.voxels) {
+        for (Voxel v : data.voxels) {
             
-            float[] attributs = voxel.getAttributs();
+            VoxelObject voxel = (VoxelObject) v;
+            
+            float[] attributs = voxel.attributs;
             
             float densite;
             try{
@@ -117,9 +120,9 @@ public class DartWriter {
             }
                         
             
-            int indiceX = voxel.indice.x;
-            int indiceY = voxel.indice.y;
-            int indiceZ = voxel.indice.z;
+            int indiceX = voxel.$i;
+            int indiceY = voxel.$j;
+            int indiceZ = voxel.$k;
             
             dart.cells[indiceX][indiceZ][indiceY] = new DartCell();
             

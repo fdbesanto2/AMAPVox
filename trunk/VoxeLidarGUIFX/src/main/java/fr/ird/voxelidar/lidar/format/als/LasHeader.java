@@ -5,6 +5,7 @@
  */
 package fr.ird.voxelidar.lidar.format.als;
 
+import fr.ird.voxelidar.util.ByteConverter;
 import java.math.BigInteger;
 
 
@@ -49,6 +50,38 @@ public class LasHeader {
     private double minY;
     private double maxZ;
     private double minZ;
+    
+    public LasHeader(){
+        
+    }
+
+    public LasHeader(byte versionMajor, byte versionMinor, int numberOfPointrecords, double xScaleFactor, double yScaleFactor, double zScaleFactor, double xOffset, double yOffset, double zOffset, double maxX, double minX, double maxY, double minY, double maxZ, double minZ) {
+        
+        this.versionMajor = ByteConverter.unsignedByteToShort(versionMajor);
+        this.versionMinor = ByteConverter.unsignedByteToShort(versionMinor);
+        
+        
+        this.numberOfPointrecords = ByteConverter.unsignedIntegerToLong(numberOfPointrecords);
+        
+        this.xScaleFactor = xScaleFactor;
+        this.yScaleFactor = yScaleFactor;
+        this.zScaleFactor = zScaleFactor;
+        
+        this.xOffset = xOffset;
+        this.yOffset = yOffset;
+        this.zOffset = zOffset;
+        
+        this.minX = minX;
+        this.minY = minY;
+        this.minZ = minZ;
+        
+        this.maxX = maxX;
+        this.maxY = maxY;
+        this.maxZ = maxZ;
+        
+    }
+    
+    
 
     public long getReserved() {
         return reserved;

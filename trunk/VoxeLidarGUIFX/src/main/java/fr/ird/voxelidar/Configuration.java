@@ -82,6 +82,7 @@ public class Configuration {
     private List<File> files;
     private List<MatrixAndFile> matricesAndFiles;
     private List<Filter> filters;
+    private float[] multiResPadMax;
     
     public Configuration(){
         
@@ -175,7 +176,10 @@ public class Configuration {
             Element dtmFilterElement = new Element("dtm-filter");
             dtmFilterElement.setAttribute(new Attribute("enabled",String.valueOf(voxelParameters.useDTMCorrection())));
             if(voxelParameters.useDTMCorrection()){
-                dtmFilterElement.setAttribute(new Attribute("src", voxelParameters.getDtmFile().getAbsolutePath()));
+                if(voxelParameters.getDtmFile() != null){
+                    dtmFilterElement.setAttribute(new Attribute("src", voxelParameters.getDtmFile().getAbsolutePath()));
+                }
+                
                 dtmFilterElement.setAttribute(new Attribute("height-min",String.valueOf(voxelParameters.minDTMDistance)));
             }
 
@@ -271,6 +275,15 @@ public class Configuration {
             outputFileElement.setAttribute(new Attribute("src",outputFile.getAbsolutePath()));
             processElement.addContent(outputFileElement);
             
+            Element limitsElement = new Element("limits");
+            
+            limitsElement.addContent(createLimitElement("PAD_1m", "", String.valueOf(multiResPadMax[0])));
+            limitsElement.addContent(createLimitElement("PAD_2m", "", String.valueOf(multiResPadMax[1])));
+            limitsElement.addContent(createLimitElement("PAD_3m", "", String.valueOf(multiResPadMax[2])));
+            limitsElement.addContent(createLimitElement("PAD_4m", "", String.valueOf(multiResPadMax[3])));
+            
+            processElement.addContent(limitsElement);
+            
         }else if(processMode == ProcessMode.MERGING){
             
             processElement.setAttribute(new Attribute("mode","merging"));
@@ -304,6 +317,16 @@ public class Configuration {
         }
     }
     
+    private Element createLimitElement(String name, String min, String max){
+        
+        Element limitElement = new Element("limit");
+        limitElement.setAttribute("name", name);
+        limitElement.setAttribute("min", min);
+        limitElement.setAttribute("max", max);
+        
+        return limitElement;
+    }
+    
     private Element createFilesElement(List<File> files){
         
         Element filesElement = new Element("files");
@@ -329,6 +352,7 @@ public class Configuration {
             
             Element outputFileElement;
             Element filesElement;
+            Element limitsElement;
             
             switch(mode){
                 case "voxelisation":
@@ -464,7 +488,7 @@ public class Configuration {
                         }
                     }
                     
-                    Element limitsElement = processElement.getChild("limits");
+                    limitsElement = processElement.getChild("limits");
                     
                     if(limitsElement != null){
                         Element limitElement = limitsElement.getChild("limit");
@@ -571,6 +595,17 @@ public class Configuration {
                     }
                     
                     outputFile = new File(processElement.getChild("output_file").getAttributeValue("src"));
+                    
+                    limitsElement = processElement.getChild("limits");
+                    List<Element> limitElementList = limitsElement.getChildren("limit");
+                    
+                    if(limitElementList != null){
+                        multiResPadMax = new float[4];
+                        multiResPadMax[0] = Float.valueOf(limitElementList.get(0).getAttributeValue("max"));
+                        multiResPadMax[1] = Float.valueOf(limitElementList.get(1).getAttributeValue("max"));
+                        multiResPadMax[2] = Float.valueOf(limitElementList.get(2).getAttributeValue("max"));
+                        multiResPadMax[3] = Float.valueOf(limitElementList.get(3).getAttributeValue("max"));
+                    }
                     
                     break;
             }
@@ -741,6 +776,14 @@ public class Configuration {
 
     public void setFilters(List<Filter> filters) {
         this.filters = filters;
+    }
+
+    public float[] getMultiResPadMax() {
+        return multiResPadMax;
+    }
+
+    public void setMultiResPadMax(float[] multiResPadMax) {
+        this.multiResPadMax = multiResPadMax;
     }
     
 }

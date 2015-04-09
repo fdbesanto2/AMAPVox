@@ -10,17 +10,14 @@ import fr.ird.voxelidar.voxelisation.VoxelParameters;
 import fr.ird.voxelidar.voxelisation.extraction.RxpExtraction;
 import fr.ird.voxelidar.voxelisation.extraction.RxpExtractionListener;
 import fr.ird.voxelidar.voxelisation.extraction.Shot;
-import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat3D;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.object.scene.Dtm;
 import fr.ird.voxelidar.util.Filter;
 import java.io.File;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -58,9 +55,7 @@ public class RxpVoxelisation implements Callable{
         nbVoxelisationFinished = 0;
         this.outputFile = outputFile;
         
-        queue = new LinkedBlockingQueue<>();
-        voxelAnalysis = new VoxelAnalysis(queue, terrain, filters);
-        voxelAnalysis.init(parameters, outputFile);
+        
         
 
         if (vopPop == null) {
@@ -78,6 +73,11 @@ public class RxpVoxelisation implements Callable{
             transfMatrix.mat[4],transfMatrix.mat[5],transfMatrix.mat[6],
             transfMatrix.mat[8],transfMatrix.mat[9],transfMatrix.mat[10]
         };
+        terrain.setTransformationMatrix(vopMatrix);
+        
+        queue = new LinkedBlockingQueue<>();
+        voxelAnalysis = new VoxelAnalysis(queue, terrain, filters);
+        voxelAnalysis.init(parameters, outputFile);
         
         extraction = new RxpExtraction(inputFile, queue, transfMatrix, rotation);
         extractionThread = new Thread(extraction);

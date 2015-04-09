@@ -7,7 +7,6 @@ package fr.ird.voxelidar.voxelisation.raytracing.voxel;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -133,13 +132,17 @@ public class Voxel implements Serializable {
         public double lMeanTotal = 0;
         //public double LMean_NoInterception = 0;
         public double _transBeforeNorm = 0;
-        public double transmittance_v1 = 0;
+        public double transmittance = 0;
         public double transmittance_v2 = 0;
         public double angleMean = 0;
         
-        protected static final Set<String> fieldsNames = new TreeSet<>();
-        private static final Set<Field> _fields = Voxel.getFields(Voxel.class);
         protected final static Logger _logger = Logger.getLogger(Voxel.class);
+        
+
+        protected static Set<String> fieldsNames;
+        protected static Set<Field> _fields;
+        
+        private static boolean _isInitialized = false;
         
 
         /**
@@ -155,6 +158,17 @@ public class Voxel implements Serializable {
             this.$k = k;
         }
         
+        {
+            if(!_isInitialized) {
+                _fields = Voxel.getFields(getClass());
+                _isInitialized = true;
+            }
+        }
+        
+        public Voxel(){
+            
+        }
+        
         public void setPosition(Point3d position){
             this._position = new Point3d(position);
         }
@@ -163,9 +177,60 @@ public class Voxel implements Serializable {
             this.ground_distance = dist;
         }
         
+        public void setFieldValue(Class< ? extends Voxel> c, String fieldName, Object object, Object value){
+            try {
+                Field f = c.getField(fieldName);
+                Class<?> type = f.getType();
+                float v;
+                
+                switch(type.getName()){
+                    case "double":
+                        v = (float)value;
+                        f.setDouble(object, (double)v);
+                        break;
+                    case "float":
+                        f.setFloat(object, (float)value);
+                        break;
+                    case "int":
+                        v = (float)value;
+                        f.setInt(object, (int)v);
+                        break;
+                }
+                
+                
+            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+                _logger.error(ex);
+            }
+        }
+        
+        public static String getHeader(Class c){
+            
+            Voxel.getFields(c);
+            
+            String header = "";
+
+            for (String fieldName : fieldsNames) {
+
+                if(!fieldName.startsWith("_")){
+
+                    if(fieldName.startsWith("$")){
+                        header += fieldName.substring(1)+" ";
+                    }else{
+                        header += fieldName+" ";
+                    }
+
+                }
+            }
+
+            header = header.trim();
+
+            return header;
+        }
         
         protected static Set<Field> getFields(Class c){
-                   
+            
+            fieldsNames = new TreeSet<>();
+            
             Field[] fields = c.getFields();
             
             Set<Field> fieldsSet = new TreeSet<>(new Comparator<Field>() {
@@ -209,24 +274,5 @@ public class Voxel implements Serializable {
             
             voxelString = voxelString.trim();
             return voxelString;
-            /*
-            return sb.append(i).append(" ").
-                    append(j).append(" ").
-                    append(k).append(" ").
-                    append(bfEntering).append(" ").
-                    append(bfIntercepted).append(" ").
-                    append(bsEntering).append(" ").
-                    append(bsIntercepted).append(" ").
-                    append(Lg_Exiting).append(" ").
-                    append(Lg_NoInterception).append(" ").
-                    append(PadBF).append(" ").
-                    append(PadBS).append(" ").
-                    append(ground_distance).append(" ").
-                    append(nbSampling).append(" ").
-                    append(nbEchos).append(" ").
-                    append(nbOutgoing).append(" ").
-                    append(LMean_Exiting).append(" ").
-                    append(angleMean).append(" ").toString();
-                    */
         }
     }

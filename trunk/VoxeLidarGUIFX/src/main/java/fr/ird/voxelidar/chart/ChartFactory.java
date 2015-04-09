@@ -5,11 +5,11 @@
  */
 package fr.ird.voxelidar.chart;
 
+import fr.ird.voxelidar.engine3d.object.scene.VoxelObject;
 import fr.ird.voxelidar.util.VoxelFilter;
-import fr.ird.voxelidar.engine3d.object.scene.RawVoxel;
-import fr.ird.voxelidar.engine3d.object.scene.Voxel;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.util.Processing;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
@@ -42,7 +42,7 @@ public class ChartFactory extends Processing{
                 fireProgress("", (int)(((iterationIndex/(float)iterationsNumber)*100)));
             }
             
-            float[] attributs = voxel.attributs;
+            float[] attributs =  ((VoxelObject)voxel).attributs;
             
             if(filter.doFilter(attributsNames, attributs)){
                 
@@ -76,7 +76,7 @@ public class ChartFactory extends Processing{
         
         for (Voxel voxel : voxelSpace.data.voxels) {
             
-            float[] attributs = voxel.getAttributs();
+            float[] attributs = ((VoxelObject)voxel).attributs;
 
             float dist = attributs[distIndex];
             
@@ -145,7 +145,7 @@ public class ChartFactory extends Processing{
             for (Voxel voxel : voxels) {
                 
                 
-                float[] attributs = voxel.attributs;
+                float[] attributs = ((VoxelObject)voxel).attributs;
                 
                 float dist = 0;
                 try{

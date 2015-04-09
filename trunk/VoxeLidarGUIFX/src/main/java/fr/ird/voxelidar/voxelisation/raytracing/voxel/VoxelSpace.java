@@ -3,13 +3,10 @@
  */
 package fr.ird.voxelidar.voxelisation.raytracing.voxel;
 
-import java.util.ArrayList;
 
 import javax.vecmath.Point3i;
 
 import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
-import fr.ird.voxelidar.voxelisation.raytracing.geometry.shapes.Shape;
-import fr.ird.voxelidar.voxelisation.raytracing.geometry.shapes.ShapeUtils;
 import javax.vecmath.Point3d;
 
 
