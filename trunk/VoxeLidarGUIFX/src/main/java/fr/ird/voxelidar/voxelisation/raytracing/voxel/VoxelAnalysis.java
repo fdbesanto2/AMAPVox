@@ -15,11 +15,16 @@ import fr.ird.voxelidar.engine3d.object.scene.Dtm;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.SimpleFilter;
 import fr.ird.voxelidar.util.TimeCounter;
+import java.awt.Color;
+import java.awt.color.ColorSpace;
+import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.imageio.ImageIO;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
@@ -43,7 +48,7 @@ public class VoxelAnalysis implements Runnable {
     private Point3d offset;
 
     private static float[][] weighting;
-    //private GroundEnergy[][] groundEnergy;
+    private GroundEnergy[][] groundEnergy;
 
     int count1 = 0;
     int count2 = 0;
@@ -55,43 +60,16 @@ public class VoxelAnalysis implements Runnable {
     //private Mat4D transfMatrix;
     //private Mat3D rotation;
     private AtomicBoolean isFinished;
+    private boolean isSet = false;
 
     private final EventListenerList listeners;
     private Dtm terrain;
 
-    //variables temporaires
-    private Point3i lastIndices = new Point3i();
-    private double sumBeamFraction = 0;
-    private double lastBeamFraction = 0;
-    private boolean wasEqual = false;
-    private double lastLongueur = 0;
     private int shotID = 0;
-    private double lastDistanceToHit = 0;
-    private int lastNbEchos = 0;
-    private double lastD1 = 0;
-    private double lastD2 = 0;
-    private int nbEchosInsideVoxel = 1;
-    private double lastEntering;
-    private int lastShotID;
-    private double lastSurface = 0;
-    private ArrayList<Integer> indicesEchosTemp = new ArrayList<>();
-    private double meanLongTemp = 0;
-    private int nbLongTemp = 0;
-    private int lastIndice = 0;
-    private double sumLength;
 
     int lastShot = 0;
     boolean shotChanged = false;
     Point3d lastEchotemp = new Point3d();
-    /*
-     public void setTransfMatrix(Mat4D transfMatrix) {
-     this.transfMatrix = transfMatrix;
-     }
-
-     public void setRotation(Mat3D rotation) {
-     this.rotation = rotation;
-     }
-     */
 
     public void setIsFinished(boolean isFinished) {
         this.isFinished.set(isFinished);
@@ -116,32 +94,21 @@ public class VoxelAnalysis implements Runnable {
     private float getGroundDistance(float x, float y, float z) {
 
         float distance = 0;
-
-        //test
-        /*
-         float test = terrain.getSimpleHeight(-12.0f, 260.0f);
-         float test2 = terrain.getSimpleHeight(-12.5f, 260.5f);
-         float test3 = terrain.getSimpleHeight(-11.5f, 260.5f);
-         float test4 = terrain.getSimpleHeight(-12.5f, 259.5f);
-         float test5 = terrain.getSimpleHeight(-11.5f, 259.5f);
-         float test6 = terrain.getSimpleHeight(-12.6f, 260.49f);
-         */
+        
         if (terrain != null && parameters.useDTMCorrection()) {
             distance = z - (float) (terrain.getSimpleHeight(x, y));
-            //System.out.println(distance);
         }
 
         return distance;
     }
 
     public VoxelAnalysis(LinkedBlockingQueue<Shot> arrayBlockingQueue, Dtm terrain, List<Filter> filters) {
-        // = new BoundingBox3d();
+
         nbShotsTreated = 0;
         isFinished = new AtomicBoolean(false);
         this.arrayBlockingQueue = arrayBlockingQueue;
         listeners = new EventListenerList();
         this.terrain = terrain;
-        sumLength = 0;
         Shot.setFilters(filters);
     }
 
@@ -156,7 +123,6 @@ public class VoxelAnalysis implements Runnable {
         double posY = offset.y + (resolution.y / 2.0d) + (indices.y * resolution.y);
         double posZ = offset.z + (resolution.z / 2.0d) + (indices.z * resolution.z);
 
-        //System.out.println(posZ);
         return new Point3d(posX, posY, posZ);
     }
 
@@ -198,7 +164,7 @@ public class VoxelAnalysis implements Runnable {
         MAX_PAD = parameters.getMaxPAD();
 
         offset = new Point3d(parameters.bottomCorner);
-        //groundEnergy = new GroundEnergy[parameters.split.x][parameters.split.y];
+        groundEnergy = new GroundEnergy[parameters.split.x][parameters.split.y];
 
     }
 
@@ -229,7 +195,6 @@ public class VoxelAnalysis implements Runnable {
 
                         shotID = nbShotsTreated;
 
-                        //if(angle > 9.564216){
                         if (nbShotsTreated % 1000000 == 0 && nbShotsTreated != 0) {
                             logger.info("Shots treated: " + nbShotsTreated);
                         }
@@ -257,6 +222,8 @@ public class VoxelAnalysis implements Runnable {
                             double bfIntercepted = 0;
 
                             shotChanged = true;
+                            isSet = false;
+                            
                             double residualEnergy = 1;
                                                         
                             for (int i = 0; i < shot.nbEchos; i++) {                               
@@ -334,7 +301,6 @@ public class VoxelAnalysis implements Runnable {
                         nbShotsTreated++;
                     }
 
-                    //}
                 } catch (Exception e) {
                     logger.error(e);
                 }
@@ -344,6 +310,10 @@ public class VoxelAnalysis implements Runnable {
             logger.info("voxelisation is finished ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
 
             calculatePADAndWrite(0);
+            
+            if(parameters.isCalculateGroundEnergy() && !parameters.isTLS()){
+                writeGroundEnergy();
+            }
 
         } catch (Exception e) {
             logger.error(e);
@@ -477,12 +447,16 @@ public class VoxelAnalysis implements Runnable {
                  */
                 //on peut chercher ici la distance jusqu'au prochain voxel "sol"
                 if (shotChanged) {
-
-                    if (vox.ground_distance < 1) {
+                    
+                    if(parameters.isCalculateGroundEnergy() && !parameters.isTLS()){
                         
-                        shotChanged = false;
+                        if(vox.ground_distance < parameters.minDTMDistance){
+                            groundEnergy[vox.$i][vox.$j].groundEnergyPotential ++;
+                            shotChanged = false;
+                            context = null;
+                        }
                         
-                        //groundEnergy[vox.i][vox.j].groundEnergyPotential ++;
+                    }else{
                         context = null;
                     }
 
@@ -548,6 +522,13 @@ public class VoxelAnalysis implements Runnable {
                                 intercepted = (1 * longueur);
                                 ((TLSVoxel) vox).bflIntercepted += intercepted;
                             }
+                            
+                        }else{
+                            
+                            if(parameters.isCalculateGroundEnergy() && !parameters.isTLS() && !isSet){
+                                groundEnergy[vox.$i][vox.$j].groundEnergyActual += beamFraction;
+                                isSet = true;
+                            }
                         }
                         
                         if (!parameters.isTLS()) {
@@ -558,18 +539,8 @@ public class VoxelAnalysis implements Runnable {
                         } else {
                             ((TLSVoxel) vox)._transBeforeNorm += (((entering-intercepted)/entering) * longueur);
                         }
-                        
-                        
-
-                    } else {
-                        
-                        //groundEnergy[vox.i][vox.j].groundEnergyActual += beamFraction;
                     }
                     
-                    
-
-                //}
-
                 lastEchotemp = echo;
             }
         }
@@ -582,25 +553,8 @@ public void calculatePADAndWrite(double threshold) {
         long start_time = System.currentTimeMillis();
 
         logger.info("writing file: " + outputFile.getAbsolutePath());
-        /*
-         BufferedWriter writerTemp;
-         try {
-         writerTemp = new BufferedWriter(new FileWriter("c:\\Users\\Julien\\Desktop\\groundEnergy.txt"));
-         writerTemp.write("i j groundEnergyActual groundEnergyPotential\n");
-            
-         for (int i = 0; i < parameters.split.x; i++) {
-         for (int j = 0; j < parameters.split.y; j++) {
-         writerTemp.write(i+" "+j+" "+groundEnergy[i][j].groundEnergyActual+ " "+groundEnergy[i][j].groundEnergyPotential+"\n");
-         }
-         }
-            
-         writerTemp.close();
-         } catch (IOException ex) {
-         logger.error(ex);
-         }
-         */
+        
 
-        //2097152 octets = 2 mo
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
 
             writer.write("VOXEL SPACE" + "\n");
@@ -785,6 +739,68 @@ public void calculatePADAndWrite(double threshold) {
 
     }
 
+    private void writeGroundEnergy(){
+        
+        if(groundEnergy.length > 0 && groundEnergy[0].length > 0){
+            
+            long start_time = System.currentTimeMillis();
+
+            logger.info("writing file: " + parameters.getGroundEnergyFile().getAbsolutePath());
+        
+            try {
+                
+                if(parameters.getGroundEnergyFileFormat() == VoxelParameters.FILE_FORMAT_PNG){
+                    
+                    BufferedImage image = new BufferedImage(parameters.split.x, parameters.split.y, BufferedImage.TYPE_INT_ARGB);
+                    
+                    for (int i = 0; i < parameters.split.x; i++) {
+                        for (int j = 0; j < parameters.split.y; j++) {
+                            
+                            float transmittance = groundEnergy[i][j].groundEnergyActual/groundEnergy[i][j].groundEnergyPotential;
+                            
+                            Color c;
+                            
+                            if(transmittance <= 1.0 && transmittance >= 0.0){
+                                c = new Color(ColorSpace.getInstance(ColorSpace.CS_GRAY), new float[]{transmittance}, 1.0f);
+                                
+                            }else{
+                                c = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+                            }
+                            
+                            image.setRGB(i, parameters.split.y-1-j, c.getRGB());
+                            
+                        }
+                    }
+                    
+                    ImageIO.write(image, "png",new File(parameters.getGroundEnergyFile().getAbsolutePath()));
+                    
+                } else {
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(parameters.getGroundEnergyFile()))) {
+                        writer.write("i j groundEnergyActual groundEnergyPotential transmittance\n");
+
+                        for (int i = 0; i < parameters.split.x; i++) {
+                            for (int j = 0; j < parameters.split.y; j++) {
+                                
+                                float transmittance = groundEnergy[i][j].groundEnergyActual / groundEnergy[i][j].groundEnergyPotential;
+                                writer.write(i + " " + j + " " + groundEnergy[i][j].groundEnergyActual + " " + groundEnergy[i][j].groundEnergyPotential + " " + transmittance + "\n");
+                            }
+                        }
+                    }
+                }                
+                
+                logger.info("file written ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
+
+            } catch (IOException ex) {
+                logger.error(ex);
+            }
+            
+        }else{
+            
+            logger.warn("Ground energy is set up but no values are available");
+        }
+        
+    }
+
     private void createVoxelSpace() {
 
         try {
@@ -830,13 +846,14 @@ public void calculatePADAndWrite(double threshold) {
                     }
                 }
             }
-            /*
-             for (int i = 0; i < parameters.split.x; i++) {
-             for (int j = 0; j < parameters.split.y; j++) {
-             groundEnergy[i][j] = new GroundEnergy();
-             }
-             }
-             */
+            
+            if(parameters.isCalculateGroundEnergy() && !parameters.isTLS()){
+                for (int i = 0; i < parameters.split.x; i++) {
+                    for (int j = 0; j < parameters.split.y; j++) {
+                        groundEnergy[i][j] = new GroundEnergy();
+                    }
+                }
+            }
             Scene scene = new Scene();
             scene.setBoundingBox(new BoundingBox3d(parameters.bottomCorner, parameters.topCorner));
 

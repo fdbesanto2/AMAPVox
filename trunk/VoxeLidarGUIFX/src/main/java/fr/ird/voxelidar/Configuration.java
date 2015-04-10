@@ -234,9 +234,19 @@ public class Configuration {
                 
                 processElement.addContent(filtersElement);
             }
-            
-            
-            if(processMode == ProcessMode.VOXELISATION_TLS && inputType == InputType.RSP_PROJECT){
+            if(processMode == ProcessMode.VOXELISATION_ALS){
+                
+                Element groundEnergyElement = new Element("ground-energy");
+                groundEnergyElement.setAttribute("generate", String.valueOf(voxelParameters.isCalculateGroundEnergy()));
+                
+                if(voxelParameters.getGroundEnergyFile() != null){
+                    groundEnergyElement.setAttribute("src", voxelParameters.getGroundEnergyFile().getAbsolutePath());
+                    groundEnergyElement.setAttribute("type", String.valueOf(voxelParameters.getGroundEnergyFileFormat()));
+                }                
+                
+                processElement.addContent(groundEnergyElement);
+                
+            }else if(processMode == ProcessMode.VOXELISATION_TLS && inputType == InputType.RSP_PROJECT){
                 
                 /***MERGING***/
                 
@@ -518,16 +528,16 @@ public class Configuration {
                     }
                     
                     
-                    switch(type){
+                    switch (type) {
                         case "TLS":
-                            
-                            if(inputType == InputType.RSP_PROJECT){
-                                
+
+                            if (inputType == InputType.RSP_PROJECT) {
+
                                 filesElement = processElement.getChild("files");
                                 List<Element> childrens = filesElement.getChildren("file");
                                 matricesAndFiles = new ArrayList<>();
 
-                                for(Element e : childrens){
+                                for (Element e : childrens) {
 
                                     Matrix4d mat = getMatrixFromData(e.getChildText("matrix"));
                                     File f = new File(e.getAttributeValue("src"));
@@ -536,77 +546,93 @@ public class Configuration {
                                 }
 
                                 Element mergingElement = processElement.getChild("merging");
-                                if(mergingElement != null){
+                                if (mergingElement != null) {
                                     voxelParameters.setMergingAfter(Boolean.valueOf(mergingElement.getAttributeValue("enabled")));
-                                    if(voxelParameters.isMergingAfter()){
+                                    if (voxelParameters.isMergingAfter()) {
                                         voxelParameters.setMergedFile(new File(mergingElement.getAttributeValue("src")));
                                     }
                                 }
+                            }
+
+                            break;
+                            
+                        case "ALS":
+                            try{
+                                Element groundEnergyElement = processElement.getChild("ground-energy");
+                                if(groundEnergyElement != null){
+                                    voxelParameters.setCalculateGroundEnergy(Boolean.valueOf(groundEnergyElement.getAttributeValue("generate")));
+
+                                    if(voxelParameters.isCalculateGroundEnergy()){
+                                        voxelParameters.setGroundEnergyFileFormat(Short.valueOf(groundEnergyElement.getAttributeValue("type")));
+                                        voxelParameters.setGroundEnergyFile(new File(groundEnergyElement.getAttributeValue("src")));
+                                    }
+                                }
+                            }catch(Exception e){
+                                logger.warn("Parameters are missing");
                             }
                             
                             
                             break;
                     }
-                    
+
                     break;
-                    
+
                 case "merging":
                     processMode = ProcessMode.MERGING;
-                    
+
                     outputFile = new File(processElement.getChild("output_file").getAttributeValue("src"));
-                    
+
                     filesElement = processElement.getChild("files");
                     List<Element> childrens = filesElement.getChildren("file");
-                    
+
                     files = new ArrayList<>();
-                    
-                    for(Element e : childrens){
+
+                    for (Element e : childrens) {
                         files.add(new File(e.getAttributeValue("src")));
                     }
-                    
-                    
+
                     break;
-                    
+
                 case "multi-process":
-                    
+
                     processMode = ProcessMode.MULTI_PROCESS;
                     /*
-                    filesElement = processElement.getChildren("files");
+                     filesElement = processElement.getChildren("files");
                     
-                    files = new ArrayList<>();
+                     files = new ArrayList<>();
                     
-                    for(Element e : filesElement){
-                        files.add(new File(e.getAttributeValue("src")));
-                    }
-                    */
+                     for(Element e : filesElement){
+                     files.add(new File(e.getAttributeValue("src")));
+                     }
+                     */
                     break;
-                    
+
                 case "multi-resolutions":
                     processMode = ProcessMode.MULTI_RES;
-                    
+
                     filesElement = processElement.getChild("files");
-                    
+
                     List<Element> fileElementList = filesElement.getChildren("file");
-                    
+
                     files = new ArrayList<>();
-                    
-                    for(Element e : fileElementList){
+
+                    for (Element e : fileElementList) {
                         files.add(new File(e.getAttributeValue("src")));
                     }
-                    
+
                     outputFile = new File(processElement.getChild("output_file").getAttributeValue("src"));
-                    
+
                     limitsElement = processElement.getChild("limits");
                     List<Element> limitElementList = limitsElement.getChildren("limit");
-                    
-                    if(limitElementList != null){
+
+                    if (limitElementList != null) {
                         multiResPadMax = new float[4];
                         multiResPadMax[0] = Float.valueOf(limitElementList.get(0).getAttributeValue("max"));
                         multiResPadMax[1] = Float.valueOf(limitElementList.get(1).getAttributeValue("max"));
                         multiResPadMax[2] = Float.valueOf(limitElementList.get(2).getAttributeValue("max"));
                         multiResPadMax[3] = Float.valueOf(limitElementList.get(3).getAttributeValue("max"));
                     }
-                    
+
                     break;
             }
             

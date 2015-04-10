@@ -20,6 +20,9 @@ public class VoxelParameters {
     public static final int WEIGHTING_FILE = 2;
     public static final int WEIGHTING_FRACTIONING = 3;
     
+    public static final short FILE_FORMAT_PNG = 1;
+    public static final short FILE_FORMAT_TXT = 0;
+    
     public Point3d bottomCorner;
     public Point3d topCorner;
     public Point3i split;
@@ -36,6 +39,10 @@ public class VoxelParameters {
     private float maxPAD = 3;
     private boolean mergingAfter = false;
     private File mergedFile;
+    
+    private boolean calculateGroundEnergy = false;
+    private File groundEnergyFile;
+    private short groundEnergyFileFormat = FILE_FORMAT_TXT;
     
     private int transmittanceMode = 0;
     
@@ -181,4 +188,29 @@ public class VoxelParameters {
     public void setTransmittanceMode(int transmittanceMode) {
         this.transmittanceMode = transmittanceMode;
     }
+
+    public boolean isCalculateGroundEnergy() {
+        return calculateGroundEnergy;
+    }
+
+    public void setCalculateGroundEnergy(boolean calculateGroundEnergy) {
+        this.calculateGroundEnergy = calculateGroundEnergy;
+    }
+
+    public File getGroundEnergyFile() {
+        return groundEnergyFile;
+    }
+
+    public void setGroundEnergyFile(File groundEnergyFile) {
+        this.groundEnergyFile = groundEnergyFile;
+    }
+
+    public short getGroundEnergyFileFormat() {
+        return groundEnergyFileFormat;
+    }
+
+    public void setGroundEnergyFileFormat(short groundEnergyFileFormat) {
+        this.groundEnergyFileFormat = groundEnergyFileFormat;
+    }
+    
 }

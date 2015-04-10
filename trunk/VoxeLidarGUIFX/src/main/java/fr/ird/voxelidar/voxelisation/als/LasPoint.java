@@ -83,8 +83,8 @@ public class LasPoint {
     public LasPoint(double x, double y, double z, int r, int n, int i, short classification, double t) {
         
         this.x = x;
-        this.y = x;
-        this.z = x;
+        this.y = y;
+        this.z = z;
         
         this.r = r;
         this.n = n;

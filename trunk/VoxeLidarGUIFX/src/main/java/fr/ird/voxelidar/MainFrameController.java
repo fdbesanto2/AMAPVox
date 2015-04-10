@@ -78,6 +78,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -154,6 +155,8 @@ public class MainFrameController implements Initializable {
     private FileChooser fileChooserOpenOutputFileMerging;
     private FileChooser fileChooserSaveDartFile;
     private FileChooser fileChooserSaveOutputFileTLS;
+    private FileChooser fileChooserSaveGroundEnergyOutputFile;
+    
     private DirectoryChooser directoryChooserOpenOutputPathTLS;
 
     private Matrix4d popMatrix;
@@ -390,6 +393,18 @@ public class MainFrameController implements Initializable {
     private Label labelPadMax3m;
     @FXML
     private Button buttonResetPadLimitsToDefault;
+    @FXML
+    private TextField textFieldOutputFileGroundEnergy;
+    @FXML
+    private Label labelOutputFileGroundEnergy;
+    @FXML
+    private Button buttonOpenOutputFileGroundEnergy;
+    @FXML
+    private CheckBox checkboxCalculateGroundEnergy;
+    @FXML
+    private ComboBox<String> comboboxGroundEnergyOutputFormat;
+    @FXML
+    private AnchorPane anchorPaneGroundEnergyParameters;
 
     /**
      * Initializes the controller class.
@@ -495,10 +510,14 @@ public class MainFrameController implements Initializable {
         fileChooserOpenOutputFileMerging.getExtensionFilters().addAll(
                 new ExtensionFilter("All Files", "*"),
                 new ExtensionFilter("Voxel Files", "*.vox"));
+        
+        fileChooserSaveGroundEnergyOutputFile  = new FileChooser();
+        fileChooserSaveGroundEnergyOutputFile.setTitle("Save ground energy file");
 
         comboboxModeALS.getItems().addAll("Las file", "Laz file", "Points file (unavailable)", "Shots file (unavailable)");
         comboboxModeTLS.getItems().addAll("Rxp scan", "Rsp project", "Points file (unavailable)", "Shots file (unavailable)");
         comboboxWeighting.getItems().addAll("From the echo number", "From a matrix file", "Local recalculation (unavailable)");
+        comboboxGroundEnergyOutputFormat.getItems().addAll("txt","png");
         
         ClassLoader classLoader = this.getClass().getClassLoader();
         
@@ -722,6 +741,18 @@ public class MainFrameController implements Initializable {
             }
         });
         
+        checkboxCalculateGroundEnergy.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    anchorPaneGroundEnergyParameters.setDisable(false);
+                }else{
+                    anchorPaneGroundEnergyParameters.setDisable(true);
+                }
+            }
+        });
+        
         scanFilter = textFieldTLSFilter.getText();
         filterScan = checkboxFilter.isSelected();
         
@@ -800,17 +831,34 @@ public class MainFrameController implements Initializable {
                         disablePopMatrixChoice(true);
                 }
                 
+                switch(newValue.intValue()){
+                    case 0:
+                        checkboxCalculateGroundEnergy.setDisable(false);
+                        
+                        if(checkboxCalculateGroundEnergy.isSelected()){
+                            anchorPaneGroundEnergyParameters.setDisable(true);
+                            checkboxCalculateGroundEnergy.setDisable(false);
+                        }
+                        
+                        break;
+                    default:
+                        disableSopMatrixChoice(true);
+                        disablePopMatrixChoice(true);
+                        anchorPaneGroundEnergyParameters.setDisable(true);
+                        checkboxCalculateGroundEnergy.setDisable(true);
+                }
+                
                 comboboxFormulaTransmittance.getItems().clear();
                 
                 switch(newValue.intValue()){
                     
                     case 0:
                     case 2:
-                        comboboxFormulaTransmittance.getItems().addAll(ivFormulaTransALSV1, ivFormulaTransALSV2);
+                        comboboxFormulaTransmittance.getItems().addAll(ivFormulaTransTLSV1, ivFormulaTransTLSV2);
                         break;
                     case 1:
                     case 3:
-                        comboboxFormulaTransmittance.getItems().addAll(ivFormulaTransTLSV1, ivFormulaTransTLSV2);
+                        comboboxFormulaTransmittance.getItems().addAll(ivFormulaTransALSV1, ivFormulaTransALSV2);
                         break;
                         
                     default:
@@ -828,6 +876,7 @@ public class MainFrameController implements Initializable {
                         labelPadMax3m.setVisible(true);
                         labelPadMax4m.setVisible(true);
                         textFieldPADMax.setDisable(true);
+                        
                         break;
                     default:
                         textFieldPadMax1m.setVisible(false);
@@ -1092,6 +1141,7 @@ public class MainFrameController implements Initializable {
         };
 
         ProgressDialog d = new ProgressDialog(service);
+        d.initOwner(stage);
         d.show();
         ChangeListener<Boolean> cl = new ChangeListener<Boolean>() {
 
@@ -1115,8 +1165,14 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonOpenInputFileALS(ActionEvent event) {
 
-        if (lastFCOpenInputFileALS != null) {
+        File f = new File(textFieldInputFileALS.getText());
+
+        if(Files.exists(f.toPath())){
+            fileChooserOpenInputFileALS.setInitialDirectory(f.getParentFile());
+        }else if (lastFCOpenInputFileALS != null) {
+
             fileChooserOpenInputFileALS.setInitialDirectory(lastFCOpenInputFileALS.getParentFile());
+
         }
 
         File selectedFile = fileChooserOpenInputFileALS.showOpenDialog(stage);
@@ -1131,6 +1187,12 @@ public class MainFrameController implements Initializable {
 
         if (lastFCOpenTrajectoryFileALS != null) {
             fileChooserOpenTrajectoryFileALS.setInitialDirectory(lastFCOpenTrajectoryFileALS.getParentFile());
+        }else{
+            File f = new File(textFieldTrajectoryFileALS.getText());
+            
+            if(Files.exists(f.toPath())){
+                fileChooserOpenTrajectoryFileALS.setInitialDirectory(f.getParentFile());
+            }
         }
 
         File selectedFile = fileChooserOpenTrajectoryFileALS.showOpenDialog(stage);
@@ -1145,6 +1207,13 @@ public class MainFrameController implements Initializable {
 
         if (lastFCOpenOutputFileALS != null) {
             fileChooserOpenOutputFileALS.setInitialDirectory(lastFCOpenOutputFileALS.getParentFile());
+        }else{
+            File f = new File(textFieldOutputFileALS.getText());
+            
+            if(Files.exists(f.toPath())){
+                fileChooserOpenOutputFileALS.setInitialDirectory(f.getParentFile());
+                fileChooserOpenOutputFileALS.setInitialFileName(f.getName());
+            }
         }
 
         File selectedFile = fileChooserOpenOutputFileALS.showSaveDialog(stage);
@@ -1301,7 +1370,7 @@ public class MainFrameController implements Initializable {
     private void onActionMenuItemSelectionNone(ActionEvent event) {
         listViewVoxelsFiles.getSelectionModel().clearSelection();
     }
-
+    /*
     private void onActionMenuItemLoad(ActionEvent event) {
 
         if (lastFCOpenConfiguration != null) {
@@ -1369,7 +1438,7 @@ public class MainFrameController implements Initializable {
             }
         }
     }
-
+    */
 
     private void onActionButtonOpenSopMatrixFile(ActionEvent event) {
 
@@ -1532,15 +1601,31 @@ public class MainFrameController implements Initializable {
             Alert alert = new Alert(AlertType.WARNING);
             alert.setTitle("Warning");
             alert.setHeaderText("Check entries");
-            alert.setContentText("Some parameters are not set up, please fill the missing arguments");
+            alert.setContentText("Some parameters are not set up,\nplease fill the missing arguments");
 
             alert.showAndWait();
             
             return;
         }
         
+        if(checkboxCalculateGroundEnergy.isSelected() && !checkboxUseDTMFilter.isSelected()){
+            
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setResizable(true);
+            alert.setTitle("INFORMATION");
+            alert.setHeaderText("Incoherence");
+            alert.setContentText("Calculation of ground energy is enabled\nbut DTM filter is not!");
+
+            alert.showAndWait();
+        }
+        
+        
         if (lastFCSaveConfiguration != null) {
             fileChooserSaveConfiguration.setInitialDirectory(lastFCSaveConfiguration.getParentFile());
+            fileChooserSaveConfiguration.setInitialFileName(lastFCSaveConfiguration.getName());
+        }else{
+            fileChooserSaveConfiguration.setInitialDirectory(new File(textFieldOutputFileALS.getText()).getParentFile());
+            fileChooserSaveConfiguration.setInitialFileName(new File(textFieldOutputFileALS.getText()).getName()+"_cfg.xml");
         }
 
         File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
@@ -1552,6 +1637,23 @@ public class MainFrameController implements Initializable {
             
             voxelParameters.setWeighting(comboboxWeighting.getSelectionModel().getSelectedIndex() + 1);
             voxelParameters.setWeightingData(VoxelParameters.DEFAULT_ALS_WEIGHTING);
+            voxelParameters.setCalculateGroundEnergy(checkboxCalculateGroundEnergy.isSelected());
+            
+            if(checkboxCalculateGroundEnergy.isSelected() && !textFieldOutputFileGroundEnergy.getText().equals("")){
+                voxelParameters.setGroundEnergyFile(new File(textFieldOutputFileGroundEnergy.getText()));
+                
+                switch(comboboxGroundEnergyOutputFormat.getSelectionModel().getSelectedIndex()){
+                    case 0:
+                        voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_TXT);
+                        break;
+                    case 1:
+                        voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_PNG);
+                        break;
+                    default:
+                        voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_TXT);
+                }
+                
+            }
 
             InputType it;
 
@@ -1691,7 +1793,7 @@ public class MainFrameController implements Initializable {
                                     }
                                 });
 
-                                voxTool.voxeliseFromLas(cfg.getOutputFile(), cfg.getInputFile(), cfg.getTrajectoryFile(), cfg.getVoxelParameters(), MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()), cfg.getFilters());
+                                voxTool.voxeliseFromAls(cfg.getOutputFile(), cfg.getInputFile(), cfg.getTrajectoryFile(), cfg.getVoxelParameters(), MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()), cfg.getFilters());
 
                                 Platform.runLater(new Runnable() {
 
@@ -1836,6 +1938,7 @@ public class MainFrameController implements Initializable {
         };
 
         d = new ProgressDialog(service);
+        d.initOwner(stage);
         d.setResizable(true);
         d.show();
         
@@ -1939,6 +2042,10 @@ public class MainFrameController implements Initializable {
         
         if (lastFCSaveConfiguration != null) {
             fileChooserSaveConfiguration.setInitialDirectory(lastFCSaveConfiguration.getParentFile());
+            fileChooserSaveConfiguration.setInitialFileName(lastFCSaveConfiguration.getName());
+        }else{
+            fileChooserSaveConfiguration.setInitialDirectory(new File(textFieldOutputPathTLS.getText()));
+            fileChooserSaveConfiguration.setInitialFileName("cfg.xml");
         }
 
         File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
@@ -2193,6 +2300,11 @@ public class MainFrameController implements Initializable {
                                     break;
                             }
                             
+                            checkboxCalculateGroundEnergy.setSelected(cfg.getVoxelParameters().isCalculateGroundEnergy());
+                            if(cfg.getVoxelParameters().getGroundEnergyFile() != null){
+                                comboboxGroundEnergyOutputFormat.getSelectionModel().select(cfg.getVoxelParameters().getGroundEnergyFileFormat());
+                                textFieldOutputFileGroundEnergy.setText(cfg.getVoxelParameters().getGroundEnergyFile().getAbsolutePath());
+                            }
                             
                             break;
                         case VOXELISATION_TLS:
@@ -2597,6 +2709,7 @@ public class MainFrameController implements Initializable {
                 };
                 
                 d = new ProgressDialog(service);
+                d.initOwner(stage);
                 d.setHeaderText("Please wait...");
                 d.setResizable(true);
                 
@@ -2701,6 +2814,22 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonResetPadLimitsToDefault(ActionEvent event) {
         resetPadLimits();
+    }
+
+    @FXML
+    private void onActionButtonOpenOutputFileGroundEnergy(ActionEvent event) {
+        
+        File f = new File(textFieldOutputFileGroundEnergy.getText());
+        if(Files.exists(f.toPath())){
+            fileChooserSaveGroundEnergyOutputFile.setInitialDirectory(f.getParentFile());
+            fileChooserSaveGroundEnergyOutputFile.setInitialFileName(f.getName());
+        }
+                
+        File selectedFile = fileChooserSaveGroundEnergyOutputFile.showSaveDialog(stage);
+        
+        if(selectedFile != null){
+            textFieldOutputFileGroundEnergy.setText(selectedFile.getAbsolutePath());
+        }
     }
 
 }

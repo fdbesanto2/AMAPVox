@@ -205,19 +205,19 @@ public class JoglListener implements GLEventListener {
         
         gl.glDisable(GL3.GL_BLEND );
         
-        eventListener.updateEvents(); 
-        
-        Mat4F normalMatrix = Mat4F.transpose(camera.getViewMatrix());
-        FloatBuffer normalMatrixBuffer = Buffers.newDirectFloatBuffer(normalMatrix.mat);
-        int id = scene.getShaderByName("noTranslationShader");
-        Shader s = scene.getShadersList().get(id);
-        gl.glUseProgram(id);
-            gl.glUniformMatrix4fv(s.uniformMap.get("normalMatrix"), 1, false, normalMatrixBuffer);
-        gl.glUseProgram(0);
+        eventListener.updateEvents();
         
         
         if(viewMatrixChanged || isInit){
             
+            Mat4F normalMatrix = Mat4F.transpose(camera.getViewMatrix());
+            FloatBuffer normalMatrixBuffer = Buffers.newDirectFloatBuffer(normalMatrix.mat);
+            int id = scene.getShaderByName("noTranslationShader");
+            Shader s = scene.getShadersList().get(id);
+            gl.glUseProgram(id);
+                gl.glUniformMatrix4fv(s.uniformMap.get("normalMatrix"), 1, false, normalMatrixBuffer);
+            gl.glUseProgram(0);
+
             FloatBuffer viewMatrixBuffer = Buffers.newDirectFloatBuffer(camera.getViewMatrix().mat);
                     
             for(Entry<Integer, Shader> shader : scene.getShadersList().entrySet()) {

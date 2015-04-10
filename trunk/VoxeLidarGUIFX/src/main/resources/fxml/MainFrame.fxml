@@ -333,6 +333,23 @@
                                                             </AnchorPane>
                                                          </content>
                                                       </Tab>
+                                                      <Tab text="Other">
+                                                         <content>
+                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <CheckBox fx:id="checkboxCalculateGroundEnergy" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Calculate ground energy" AnchorPane.leftAnchor="14.0" />
+                                                                  <AnchorPane fx:id="anchorPaneGroundEnergyParameters" disable="true" layoutX="14.0" layoutY="52.0" prefHeight="123.0" prefWidth="415.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                                     <children>
+                                                                        <TextField fx:id="textFieldOutputFileGroundEnergy" layoutY="66.0" prefHeight="25.0" prefWidth="408.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                                                                        <Button fx:id="buttonOpenOutputFileGroundEnergy" layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileGroundEnergy" text="Open" AnchorPane.leftAnchor="14.0" />
+                                                                        <Label fx:id="labelOutputFileGroundEnergy" layoutY="51.0" text="Output file" AnchorPane.leftAnchor="14.0" />
+                                                                        <ComboBox fx:id="comboboxGroundEnergyOutputFormat" prefHeight="25.0" prefWidth="144.0" promptText="Choose format" AnchorPane.leftAnchor="14.0" />
+                                                                     </children>
+                                                                  </AnchorPane>
+                                                               </children>
+                                                            </AnchorPane>
+                                                         </content>
+                                                      </Tab>
                                                   </tabs>
                                                 </TabPane>
                                              </children>

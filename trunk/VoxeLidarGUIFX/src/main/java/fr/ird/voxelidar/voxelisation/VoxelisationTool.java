@@ -169,39 +169,7 @@ public class VoxelisationTool {
 
     }
 
-    public void voxeliseFromLas(File output, File input, File trajectoryFile, VoxelParameters parameters, Mat4D vop, List<Filter> filters) {
-
-        startTime = System.currentTimeMillis();
-
-        this.parameters = parameters;
-        this.parameters.setTLS(false);
-        
-        if(vop == null){
-            vop = Mat4D.identity();
-        }
-
-        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, trajectoryFile, parameters, filters);
-
-        voxelisation.addProcessingListener(new ProcessingListener() {
-
-            @Override
-            public void processingStepProgress(String progress, int ratio) {
-                fireProgress(progress, ratio);
-            }
-
-            @Override
-            public void processingFinished() {
-
-            }
-        });
-
-        voxelisation.process();
-
-        fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
-
-    }
-    
-    public void voxeliseFromLaz(File output, File input, File trajectoryFile, VoxelParameters parameters, Mat4D vop, List<Filter> filters) {
+    public void voxeliseFromAls(File output, File input, File trajectoryFile, VoxelParameters parameters, Mat4D vop, List<Filter> filters) {
 
         startTime = System.currentTimeMillis();
 
