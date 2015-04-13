@@ -55,7 +55,7 @@ public class LasHeader {
         
     }
 
-    public LasHeader(byte versionMajor, byte versionMinor, int numberOfPointrecords, double xScaleFactor, double yScaleFactor, double zScaleFactor, double xOffset, double yOffset, double zOffset, double maxX, double minX, double maxY, double minY, double maxZ, double minZ) {
+    public LasHeader(byte versionMajor, byte versionMinor, int numberOfPointrecords, double xScaleFactor, double yScaleFactor, double zScaleFactor, double xOffset, double yOffset, double zOffset, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
         
         this.versionMajor = ByteConverter.unsignedByteToShort(versionMajor);
         this.versionMinor = ByteConverter.unsignedByteToShort(versionMinor);
