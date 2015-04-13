@@ -46,28 +46,16 @@
     <ClCompile Include="Fast_serializer.cpp" />
     <ClCompile Include="monmain.cpp" />
     <ClCompile Include="mypointcloud.cpp" />
-    <ClCompile Include="simpleDLL.cpp" />
-    <ClCompile Include="my_class.cpp" />
-    <ClCompile Include="newserializer.cpp" />
     <ClCompile Include="puechabonfilter.cpp" />
     <ClCompile Include="shotfilter.cpp" />
-    <ClCompile Include="simpleserializer.cpp" />
     <ClCompile Include="RxpExtraction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Fast_serializer.h" />
-    <ClInclude Include="Header.h" />
     <ClInclude Include="mypointcloud.h" />
-    <ClInclude Include="Shot.h" />
-    <ClInclude Include="ShotComplete.h" />
-    <ClInclude Include="simpleDLL.h" />
-    <ClInclude Include="my_class.h" />
-    <ClInclude Include="newserializer.h" />
-    <ClInclude Include="Params.h" />
     <ClInclude Include="puechabonfilter.h" />
     <ClInclude Include="serializer.h" />
     <ClInclude Include="shotfilter.h" />
-    <ClInclude Include="simpleserializer.h" />
     <ClInclude Include="RxpExtraction.h" />
   </ItemGroup>
   <ItemGroup>

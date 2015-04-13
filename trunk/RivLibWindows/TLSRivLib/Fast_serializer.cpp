@@ -34,7 +34,7 @@ void Fast_serializer::write(pointcloud* p) {
 	}
 	
 
-	if(nbShots>0) { // si on a des tirs, on rajoute
+	//if(nbShots>0) { // si on a des tirs, on rajoute
 
 
 		jdoubleArray echos = env->NewDoubleArray(nbShots);
@@ -57,7 +57,7 @@ void Fast_serializer::write(pointcloud* p) {
 		env->DeleteLocalRef(echos);
 
 		//count++;
-	}
+	//}
 
 	
 

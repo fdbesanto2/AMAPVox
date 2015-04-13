@@ -7,7 +7,6 @@ using namespace std;
 #include <riegl/scanlib.hpp>
 
 #include "Fast_serializer.h"
-#include "puechabonfilter.h"
 #include "Params.h"
 #include <list>
 

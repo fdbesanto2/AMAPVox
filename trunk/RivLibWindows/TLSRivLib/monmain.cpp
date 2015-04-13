@@ -7,8 +7,6 @@
 #include "newserializer.h"
 #include "Fast_serializer.h"
 #include "simpleserializer.h"
-#include "my_class.h"
-#include "simpleDLL.h"
 
 #include <sstream>
 
@@ -18,77 +16,7 @@ using namespace scanlib;
 
 #define PROGRAMME "TLSRivLib64"
 
-void someCallback(char* msg, int i, Shot*)
-{
 
-}
-
-void test(string filename, Params param) {
-
-	simpleDLLNS::simpleDLL sd;
-	sd.registerCallback(&someCallback);
-	sd.simpleConnection("\\\\forestview01\\BDLidar\\TLS\\Puechabon2013\\PuechabonAvril\\PuechabonAvril2013.RiSCAN\\SCANS\\ScanPos001\\SINGLESCANS\\130403_091135.rxp", 1000000);
-	
-
-	/*
-	simpleDLL dll;
-
-	dll.registerCallback(&someCallback);
-	//dll.simpleConnection("\\\\forestview01\\BDLidar\\TLS\\Puechabon2013\\PuechabonAvril\\PuechabonAvril2013.RiSCAN\\SCANS\\ScanPos001\\SINGLESCANS\\130403_091135.rxp", 1000);
-	dll.simpleConnection("\\\\forestview01\\BDLidar\\TLS\\Puechabon2013\\PuechabonAvril\\PuechabonAvril2013.RiSCAN\\SCANS\\ScanPos001\\SINGLESCANS\\130403_091135.mon.rxp", 1000);
-	*/
-
-	//Shot* t = sd.simpleConnection("\\\\forestview01\\BDLidar\\TLS\\Puechabon2013\\PuechabonAvril\\PuechabonAvril2013.RiSCAN\\SCANS\\ScanPos001\\SINGLESCANS\\130403_091135.rxp");
-
-	//Shot* t = sd.simpleConnection("C:\\Users\\Julien\\Documents\\Visual Studio 2012\\Projects\\TLSRivLib\\testmtd.rxp");
-	//cout<<t->beam_direction_x<<endl;
-
-	//Shot shot = sd.simpleConnection("C:\\Users\\Julien\\Documents\\Visual Studio 2012\\Projects\\TLSRivLib\\testmtd.rxp");
-
-	/*
-	shared_ptr<basic_rconnection> conx;
-	conx = basic_rconnection::create(filename);
-	conx->open();
-
-	decoder_rxpmarker dec(conx);
-	puechabonfilter filter(param);
-
-	serializer *s = new Fast_serializer(cout, filter);
-	mypointcloud my(*s);
-	buffer buf;
-
-	for(dec.get(buf); !dec.eoi(); dec.get(buf)) {
-	my.dispatch(buf.begin(), buf.end());
-	}
-
-	delete(s);
-	*/
-	/*
-	serializer *s = new newserializer(cout, filter);
-	mypointcloud my(*s);
-	buffer buf;
-
-	for(dec.get(buf); !dec.eoi(); dec.get(buf)) {
-	my.dispatch(buf.begin(), buf.end());
-	}
-
-	delete(s);
-	*/
-	//conx->close();
-}
-
-void test2(string filename){
-
-	shared_ptr<basic_rconnection> rc = basic_rconnection::create(filename);
-	decoder_rxpmarker dec(rc);
-	my_class my(cout);
-	buffer buf;
-	rc->open();
-	for (dec.get(buf); !dec.eoi(); dec.get(buf)) {
-		my.dispatch(buf.begin(), buf.end());
-	}
-	rc->close();
-}
 
 void badParam() {
 	cout << "usage : " << PROGRAMME << " -v|h|vm|hm|0 filename" << endl;
@@ -138,8 +66,6 @@ int main(int argc, char* argv[]) {
 		else {
 			param = NOFILTER;
 		}
-		test(string(argv[2]), param);
-		//test2(string(argv[2]));
 
 	}
 	catch (exception& e) {

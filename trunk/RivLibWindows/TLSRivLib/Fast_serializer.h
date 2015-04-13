@@ -1,7 +1,6 @@
 #ifndef FAST_SERIALIZER_H
 #define FAST_SERIALIZER_H
 
-#include "Shot.h"
 #include "serializer.h"
 #include <jni.h> 
 #include <sstream>
