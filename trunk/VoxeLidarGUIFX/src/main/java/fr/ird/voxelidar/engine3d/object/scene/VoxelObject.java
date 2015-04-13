@@ -34,6 +34,9 @@ public class VoxelObject extends Voxel{
     
     public VoxelObject(Point3i indice, Point3f position, float attributValue){
         
+        this.$i = indice.x;
+        this.$j = indice.y;
+        this.$k = indice.z;
         
         this.position = position;
         this.color = new Color(0, 0, 0, 1.0f);
@@ -44,6 +47,10 @@ public class VoxelObject extends Voxel{
     }
     
     public VoxelObject(Point3i indice, Point3f position, float[] attributs, float alpha){
+        
+        this.$i = indice.x;
+        this.$j = indice.y;
+        this.$k = indice.z;
         
         this.position = position;
         

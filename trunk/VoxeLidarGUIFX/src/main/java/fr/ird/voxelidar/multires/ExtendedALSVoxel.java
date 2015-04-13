@@ -20,8 +20,6 @@ public class ExtendedALSVoxel extends ALSVoxel {
     public ExtendedALSVoxel(int i, int j, int k) {
         
         super(i, j, k);
-        
-        _fields = Voxel.getFields(this.getClass());
     }
     
     public ExtendedALSVoxel(ALSVoxel voxel){

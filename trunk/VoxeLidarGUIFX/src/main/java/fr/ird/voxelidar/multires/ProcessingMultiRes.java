@@ -26,6 +26,7 @@ public class ProcessingMultiRes {
     private final static Logger logger = Logger.getLogger(ProcessingMultiRes.class);
     
     private float maxPAD;
+    private VoxelSpaceLoader vs;
     
     public final static float DEFAULT_MAX_PAD_1M = 3.536958f;
     public final static float DEFAULT_MAX_PAD_2M = 2.262798f;
@@ -45,7 +46,7 @@ public class ProcessingMultiRes {
         max_pad_4m = padLimits[3];
     }
     
-    public void process(File outputFile, List<File> elements) {
+    public void process(List<File> elements) {
 
         final Map<Double, VoxelSpaceLoader> voxelSpaces = new TreeMap<>();
 
@@ -76,7 +77,7 @@ public class ProcessingMultiRes {
         }
 
         Iterator<Map.Entry<Double, VoxelSpaceLoader>> entries = voxelSpaces.entrySet().iterator();
-        VoxelSpaceLoader vs = entries.next().getValue();
+        vs = entries.next().getValue();
 
         int correctValues = 0;
         int correctedValues = 0;
@@ -100,21 +101,57 @@ public class ProcessingMultiRes {
         }
 
         //on cherche les voxels non vide les plus haut
-        for (int n = 0; n < vs.data.voxels.size(); n++) {
-
-            Voxel v = vs.data.voxels.get(n);
+        
+        for (int i = 0; i < vs.data.split.x; i++) {
+            for (int j = 0; j < vs.data.split.y; j++) {
+                for (int k = vs.data.split.z-1; k >= 0; k--) {
+                    
+                    Voxel v= vs.data.getVoxel(i, j, k);
+                    
+                    if (v.nbSampling > 0 && v.nbEchos > 0 && k > tabTemp[v.$i][v.$j]) {
+                        tabTemp[v.$i][v.$j] = k;
+                        break;
+                    }
+                }
+            }
+        }
+        /*
+        for (Voxel v : vs.data.voxels) {
+            
             int k = v.$k;
 
             if (v.nbSampling > 0 && v.nbEchos > 0 && k > tabTemp[v.$i][v.$j]) {
                 tabTemp[v.$i][v.$j] = k;
             }
         }
-
-    //on calcule la valeur moyenne de chaque couche
+        */
+        
+        //on calcule la valeur moyenne de chaque couche
         //calcul des intervalles
         float[] padMeanZ = new float[vs.data.split.z];
         int[] padMeanZCount = new int[vs.data.split.z];
 
+        for (int i = 0; i < vs.data.split.x; i++) {
+            for (int j = 0; j < vs.data.split.y; j++) {
+                
+                int indiceMaxZ = tabTemp[i][j];
+                
+                /*on calcul le PAD moyen par couche
+                    pour cela on parcours chaque couche
+                */
+                for (int k = indiceMaxZ; k >= 0; k--) {
+                    
+                    Voxel vox = vs.data.getVoxel(i, j, k);
+                    double pad = ((ALSVoxel) vox).PadBVTotal;
+                    
+                    if (!Double.isNaN(pad)) {
+                        padMeanZ[k] += pad;
+                        padMeanZCount[k]++;
+                    }
+                }
+            }
+        }
+        /*
         for (int i = 0; i < vs.data.split.x; i++) {
             for (int j = 0; j < vs.data.split.y; j++) {
                 for (int k = 0; k < vs.data.split.z; k++) {
@@ -143,7 +180,7 @@ public class ProcessingMultiRes {
                 }
             }
         }
-
+        */
         for (int x = 0; x < padMeanZ.length; x++) {
             padMeanZ[x] = padMeanZ[x] / padMeanZCount[x];
         }
@@ -169,7 +206,7 @@ public class ProcessingMultiRes {
 
             //while(currentNbSampling < Math.pow(currentResolution, 2)+1 || currentTransmittance == 0){
             //while (currentNbSampling < Math.pow(currentResolution, 2) * 2 + 1 || currentTransmittance == 0) {
-            while(currentNbSampling == 0 || currentTransmittance == 0){  
+            while(currentNbSampling == 0 || currentTransmittance == 0 || Double.isNaN(currentTransmittance)){  
                 
                 uncorrectValue = true;
 
@@ -199,7 +236,16 @@ public class ProcessingMultiRes {
 
                 if (((ALSVoxel) voxel).ground_distance > 0) {
                     currentResolution = 0;
-                    ((ALSVoxel) voxel).PadBVTotal = padMeanZ[(int) voxel.ground_distance];
+                    int indice = vs.data.split.z - tabTemp[voxel.$i][voxel.$j] + voxel.$k;
+                    
+                    if(indice >= padMeanZ.length){
+                        ((ALSVoxel) voxel).PadBVTotal = 0;
+                    }else if(indice < 0){
+                        ((ALSVoxel) voxel).PadBVTotal = Double.NaN;
+                    }else{
+                        ((ALSVoxel) voxel).PadBVTotal = padMeanZ[indice];
+                    }
+                    
                 } else {
                     currentResolution = Double.NaN;
                 }
@@ -211,6 +257,10 @@ public class ProcessingMultiRes {
 
                 double oldValue = ((ALSVoxel) voxel).PadBVTotal;
                 double newValue = ((ALSVoxel) voxTemp).PadBVTotal;
+                
+                if(Double.isNaN(newValue)){
+                    logger.error("incorrect Pad value");
+                }
 
                 ((ALSVoxel) voxel).PadBVTotal = newValue;
 
@@ -230,8 +280,12 @@ public class ProcessingMultiRes {
         logger.info("Nombre de valeurs corrigées: " + correctedValues + "/" + totalValues);
         logger.info("Nombre de valeurs mises à défaut: " + setToDefault + "/" + totalValues);
         
-        vs.write(outputFile);
+        
 
+    }
+    
+    public void write(File outputFile){
+        vs.write(outputFile);
     }
     
     private void calculatePAD(Voxel vox, double resolution) {

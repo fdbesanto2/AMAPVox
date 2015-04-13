@@ -267,7 +267,7 @@ public class Voxel implements Serializable {
                         Object newObj = _field.get(this);
                         voxelString += newObj + " ";
                     }catch (IllegalArgumentException | IllegalAccessException ex) {
-                        _logger.error(ex);
+                        //_logger.error(ex);
                     }
                 }
             }
