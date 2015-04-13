@@ -1,11 +1,17 @@
-#include <jni.h>
+#ifdef WIN64
+    #include "win64/jni.h"
+    #include "win64/jni_md.h"
+#else
+    #include "linux64/jni.h"
+    #include "linux64/jni_md.h"
+#endif
+
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
 #include "laszip.hpp"
 #include "bytestreamout_file.hpp"
 #include "bytestreamin_file.hpp"

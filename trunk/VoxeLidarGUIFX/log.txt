@@ -15476,3 +15476,43 @@
 2015-04-13 16:23:42 INFO  - Nombre de valeurs correctes: 727954/862866
 2015-04-13 16:23:42 INFO  - Nombre de valeurs corrigÃ©es: 0/862866
 2015-04-13 16:23:42 INFO  - Nombre de valeurs mises Ã  dÃ©faut: 134912/862866
+2015-04-13 23:12:54 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-1005975303237120751.tmp
+2015-04-13 23:12:54 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-1005975303237120751.tmp
+2015-04-13 23:26:34 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-2964962500178305556.tmp
+2015-04-13 23:26:34 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-2964962500178305556.tmp
+2015-04-13 23:28:09 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-719597241614735339.tmp
+2015-04-13 23:28:09 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-719597241614735339.tmp
+2015-04-13 23:48:20 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-4057850236373804697.tmp
+2015-04-13 23:48:20 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-4057850236373804697.tmp
+2015-04-13 23:48:20 ERROR - Laz file F:\Téléchargements\VoxAMAP_release\samples\las\ALSbuf_xyzirncapt.laz cannot be open
+2015-04-13 23:49:06 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-13 23:54:58 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-5397159250333593655.tmp
+2015-04-13 23:54:58 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-5397159250333593655.tmp
+2015-04-13 23:54:58 ERROR - Laz file F:\Téléchargements\VoxAMAP_release\samples\las\ALSbuf_xyzirncapt.laz cannot be open
+2015-04-13 23:55:50 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-3148895599219610547.tmp
+2015-04-13 23:55:50 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-3148895599219610547.tmp
+2015-04-13 23:55:50 ERROR - Laz file F:\Téléchargements\VoxAMAP_release\samples\las\ALSbuf_xyzirncapt.laz cannot be open
+2015-04-14 00:01:11 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-8566915535236342677.tmp
+2015-04-14 00:01:11 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-8566915535236342677.tmp
+2015-04-14 00:01:11 ERROR - Laz file F:\Téléchargements\VoxAMAP_release\samples\las\ALSbuf_xyzirncapt.laz cannot be open
+2015-04-14 00:14:01 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-6869657044712020043.tmp
+2015-04-14 00:14:01 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-6869657044712020043.tmp
+2015-04-14 00:14:01 ERROR - Laz file F:\Téléchargements\VoxAMAP_release\samples\las\ALSbuf_xyzirncapt.laz cannot be open
+2015-04-14 00:23:08 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-2165677807507557179.tmp
+2015-04-14 00:23:08 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-2165677807507557179.tmp
+2015-04-14 00:35:39 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-3163682061591375398.tmp
+2015-04-14 00:35:39 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-3163682061591375398.tmp
+2015-04-14 00:35:39 INFO  - Laz file F:\Téléchargements\VoxAMAP_release\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 00:36:36 INFO  - Laz file F:\Téléchargements\VoxAMAP_release\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 00:36:43 INFO  - Laz file F:\Téléchargements\VoxAMAP_release\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 00:36:49 INFO  - Laz file F:\Téléchargements\VoxAMAP_release\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 00:37:59 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-3804992746595780959.tmp
+2015-04-14 00:37:59 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-3804992746595780959.tmp
+2015-04-14 00:37:59 INFO  - Laz file F:\Téléchargements\VoxAMAP_release\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 00:39:01 INFO  - Laz file F:\Téléchargements\VoxAMAP_release\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 00:39:36 INFO  - Laz file F:\Téléchargements\VoxAMAP_release\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 00:40:45 INFO  - Laz file F:\Téléchargements\VoxAMAP_release\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 00:43:30 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-4564020121220594158.tmp
+2015-04-14 00:43:30 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-4564020121220594158.tmp
+2015-04-14 00:43:30 INFO  - Laz file F:\Téléchargements\VoxAMAP_release\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 00:43:41 INFO  - Laz file F:\Téléchargements\VoxAMAP_release\samples\las\ALSbuf_xyzirncapt.laz is opened

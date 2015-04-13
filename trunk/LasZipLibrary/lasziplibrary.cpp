@@ -42,13 +42,55 @@ JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtr
     }
 }
 
+char* JNU_GetStringNativeChars(JNIEnv* env, jstring jstr) {
+    //!!!!! C'est ces définitions qu'il me manquait...
+    jclass Class_java_lang_String = env->FindClass("java/lang/String");
+    jmethodID MID_String_getBytes = env->GetMethodID(Class_java_lang_String, "getBytes", "()[B");
+
+
+    jbyteArray bytes = 0;
+    //on utilise ExceptionCheck au lieu de ExceptionOccured => plus besoin de exc
+//	jthrowable exc;
+    char* result = 0;
+
+    if (env->EnsureLocalCapacity(2) < 0) {
+        return 0;  // out of memory error
+    }
+
+    //casté pour que ça marche...
+    bytes = (jbyteArray) env->CallObjectMethod(jstr, MID_String_getBytes);
+
+    //on utilise ExceptionCheck au lieu de ExceptionOccured...
+//	exc = env->ExceptionOccured();
+    jboolean exc = env->ExceptionCheck();
+
+    if (!exc) {
+        jint len = env->GetArrayLength(bytes);
+        result = (char*)malloc(len+1);
+        if (result == 0) {
+            env->DeleteLocalRef(bytes);
+
+            return 0;
+        }
+        env->GetByteArrayRegion(bytes, 0, len, (jbyte*)result);
+        result[len] = 0; // NULL-terminate
+    }
+    else {
+        printf("Exception occured...\n");
+    }
+    env->DeleteLocalRef(bytes);
+
+    return result;
+}
+
+
 JNIEXPORT int JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_open(JNIEnv *env, jobject obj, jlong pointer, jstring file_name)
 {
     long pointerAddress = pointer;
 
     laszip_dll_struct* laszip_dll = (laszip_dll_struct*)pointerAddress;
 
-    const char *fileName = env->GetStringUTFChars(file_name, 0);
+    const char *fileName = JNU_GetStringNativeChars(env, file_name);
 
     std::cout << fileName << std::endl;
 
