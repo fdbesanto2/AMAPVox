@@ -2875,7 +2875,8 @@ public class MainFrameController implements Initializable {
                                                     count++;
                                                 }
                                             }
-
+                                            
+                                            
                                             minPoint.set(xMin, yMin, zMin);
                                             maxPoint.set(xMax, yMax, zMax);
                                             

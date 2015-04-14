@@ -68,7 +68,7 @@ public class LasPoint {
      * @param gpsTime
      */
     
-    public LasPoint(long x, long y, long z, byte returnNumber, byte numberOfReturns, int intensity, double gpsTime){
+    public LasPoint(int x, int y, int z, byte returnNumber, byte numberOfReturns, int intensity, double gpsTime){
 
         this.x = x;
         this.y = y;

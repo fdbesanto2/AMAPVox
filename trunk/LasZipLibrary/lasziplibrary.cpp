@@ -21,7 +21,7 @@ JNIEXPORT long JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtr
 
     lasPointFormat0Class = (jclass)env->NewGlobalRef(c);
 
-    lasPointFormat0Constructor = env->GetMethodID(lasPointFormat0Class, "<init>", "(JJJBBID)V");
+    lasPointFormat0Constructor = env->GetMethodID(lasPointFormat0Class, "<init>", "(IIIBBID)V");
     if (lasPointFormat0Constructor == NULL){
         return -1;
     }

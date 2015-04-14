@@ -59,9 +59,16 @@ public class LazExtraction implements Iterable<LasPoint>{
             default:
                 logger.error("Laz file "+file.getAbsolutePath()+" reading error");
         }
-
-        header = getBasicHeader(lasZipPointer);
         
+        try{
+            header = getBasicHeader(lasZipPointer);
+        }catch(Exception e){
+            logger.error("Cannot get laz header");
+        }
+        
+        if(header == null){
+            logger.error("Cannot get laz header");
+        }
         
     }
     

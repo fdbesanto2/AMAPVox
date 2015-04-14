@@ -15516,3 +15516,51 @@
 2015-04-14 00:43:30 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-4564020121220594158.tmp
 2015-04-14 00:43:30 INFO  - Laz file F:\Téléchargements\VoxAMAP_release\samples\las\ALSbuf_xyzirncapt.laz is opened
 2015-04-14 00:43:41 INFO  - Laz file F:\Téléchargements\VoxAMAP_release\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 23:48:30 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-8150674806076701861.tmp
+2015-04-14 23:48:30 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-8150674806076701861.tmp
+2015-04-14 23:48:30 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 23:48:36 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 23:50:06 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-6426447505386117916.tmp
+2015-04-14 23:50:06 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-6426447505386117916.tmp
+2015-04-14 23:50:06 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 23:50:22 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 23:50:50 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 23:51:01 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 23:51:11 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 23:51:36 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 23:51:55 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 23:52:44 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 23:53:17 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 23:54:02 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 23:55:35 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 23:57:02 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-14 23:59:47 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:01:57 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:08 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:11 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:13 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:18 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:21 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:23 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:24 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:25 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:26 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:27 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:35 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:37 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:41 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:43 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:44 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:45 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:46 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:02:48 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:03:24 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:07:16 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:08:52 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:10:41 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-4196666921153830274.tmp
+2015-04-15 00:10:41 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-4196666921153830274.tmp
+2015-04-15 00:10:42 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:10:56 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:11:11 INFO  - Laz file C:\Users\Julien\Desktop\samples\las\ALSbuf_xyzirncapt.laz is opened
+2015-04-15 00:16:18 INFO  - Laz file F:\Las files\laz.laz is opened
+2015-04-15 00:16:24 INFO  - Laz file F:\Las files\laz.laz is opened
