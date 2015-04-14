@@ -1,8 +1,8 @@
+#include "jni.h"
+
 #ifdef WIN64
-    #include "win64/jni.h"
     #include "win64/jni_md.h"
 #else
-    #include "linux64/jni.h"
     #include "linux64/jni_md.h"
 #endif
 
