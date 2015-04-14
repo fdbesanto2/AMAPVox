@@ -810,9 +810,9 @@ public void calculatePADAndWrite(double threshold) {
             logger.info("allocate!!!!!!!!");
 
             if (parameters.isTLS()) {
-                voxels = new Voxel[parameters.split.x][parameters.split.y][parameters.split.z];
+                voxels = new TLSVoxel[parameters.split.x][parameters.split.y][parameters.split.z];
             } else {
-                voxels = new Voxel[parameters.split.x][parameters.split.y][parameters.split.z];
+                voxels = new ALSVoxel[parameters.split.x][parameters.split.y][parameters.split.z];
             }
             
 

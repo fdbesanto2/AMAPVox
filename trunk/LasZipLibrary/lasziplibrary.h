@@ -1,3 +1,30 @@
+/*--------------------------------------------------------------------------
+
+  Ce programme utilise LASZip "https://github.com/LAStools/LAStools/blob/master/LASzip"
+  sous la licence:
+
+  LICENSE AGREEMENT (for LASzip LiDAR compression):
+
+  LASzip is open-source and is licensed with the standard LGPL version 2.1
+  (see COPYING.txt).
+
+  This software is distributed WITHOUT ANY WARRANTY and without even the
+  implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+--------------------------------------------------------------------------
+
+  PROGRAMMERS:
+
+  martin@rapidlasso.com
+
+--------------------------------------------------------------------------
+
+  COPYRIGHT:
+
+  (c) 2007-2014, martin isenburg, rapidlasso - fast tools to catch reality
+
+--------------------------------------------------------------------------*/
+
 #include "jni.h"
 
 #ifdef WIN64

@@ -42,6 +42,7 @@ JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtr
     }
 }
 
+//morceau de code trouvé sur Internet qui permet de convertir les jstring contenant des accents
 char* JNU_GetStringNativeChars(JNIEnv* env, jstring jstr) {
     //!!!!! C'est ces définitions qu'il me manquait...
     jclass Class_java_lang_String = env->FindClass("java/lang/String");

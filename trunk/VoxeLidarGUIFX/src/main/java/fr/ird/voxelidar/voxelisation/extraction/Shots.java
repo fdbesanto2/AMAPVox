@@ -1,11 +1,6 @@
 package fr.ird.voxelidar.voxelisation.extraction;
 
-import java.util.ArrayList;
 import javax.swing.event.EventListenerList;
-import javax.vecmath.Point3d;
-import javax.vecmath.Point3f;
-import javax.vecmath.Vector3d;
-import javax.vecmath.Vector3f;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
