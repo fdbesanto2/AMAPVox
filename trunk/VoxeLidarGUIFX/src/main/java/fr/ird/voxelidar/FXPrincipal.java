@@ -29,7 +29,7 @@ public class FXPrincipal extends Application {
         
         scene.getStylesheets().add("/styles/Styles.css");
         
-        stage.setTitle("VoxeLidar");
+        stage.setTitle("AMAPVox");
         stage.setScene(scene);
         
         controller.setStage(stage);
