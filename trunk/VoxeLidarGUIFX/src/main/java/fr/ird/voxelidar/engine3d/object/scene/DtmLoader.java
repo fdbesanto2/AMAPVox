@@ -60,14 +60,18 @@ public class DtmLoader {
             int yIndex = 0;
             
             while((line = reader.readLine()) != null){
-                                
-                String[] values = line.split(" ");
+                
+                line = line.trim();
+                String[] values = line.split(" ", -1);
                 if(values.length != nbCols){
                     throw new Exception("nb columns different from ncols header value");
                 }
                 for(int xIndex=0;xIndex<values.length;xIndex++){
                     
                     z = Float.valueOf(values[xIndex]);
+                    if(z == noDataValue){
+                        z = Float.NaN;
+                    }
                     zArray[xIndex][yIndex] = z;
                     
                 }

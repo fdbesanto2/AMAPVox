@@ -25,8 +25,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import org.apache.log4j.Logger;
 
@@ -68,6 +70,10 @@ public class ToolBarFrameController implements Initializable {
     private CheckBox comboboxStretched;
     @FXML
     private CheckBox checkboxStretched;
+    @FXML
+    private RadioButton radiobuttonDontDisplayValues;
+    @FXML
+    private RadioButton radiobuttonDisplayValues;
     
     /**
      * Initializes the controller class.
@@ -183,17 +189,7 @@ public class ToolBarFrameController implements Initializable {
 
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                String[] valuesArray = textFieldFilterValues.getText().replace(" ", "").split(",");
-                Set<Float> values = new TreeSet<>();
-                for(int i=0;i<valuesArray.length;i++){
-                    try{
-                        values.add(Float.valueOf(valuesArray[i]));
-                    }catch(Exception e){}
-                }
-                joglContext.getScene().getVoxelSpace().setFilterValues(values);
-                joglContext.getScene().getVoxelSpace().updateColorValue(joglContext.getScene().getVoxelSpace().getGradient());
-                joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
-                joglContext.drawNextFrame();
+                updateValuesFilter();
             }
         });
         
@@ -220,6 +216,35 @@ public class ToolBarFrameController implements Initializable {
             }
         });
         
+        ToggleGroup group = new ToggleGroup();
+        radiobuttonDisplayValues.setToggleGroup(group);
+        radiobuttonDontDisplayValues.setToggleGroup(group);
+        
+        radiobuttonDontDisplayValues.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                
+                updateValuesFilter();
+            }
+        });
+        
+    }
+    
+    private void updateValuesFilter(){
+        
+        String[] valuesArray = textFieldFilterValues.getText().replace(" ", "").split(",");
+        Set<Float> values = new TreeSet<>();
+        for(int i=0;i<valuesArray.length;i++){
+            try{
+                values.add(Float.valueOf(valuesArray[i]));
+            }catch(Exception e){}
+        }
+
+        joglContext.getScene().getVoxelSpace().setFilterValues(values, radiobuttonDisplayValues.isSelected());
+        joglContext.getScene().getVoxelSpace().updateColorValue(joglContext.getScene().getVoxelSpace().getGradient());
+        joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
+        joglContext.drawNextFrame();
     }
     
     public void setJoglListener(JoglListener joglContext){

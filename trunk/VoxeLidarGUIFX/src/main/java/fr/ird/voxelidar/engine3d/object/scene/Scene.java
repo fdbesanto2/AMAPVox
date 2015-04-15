@@ -122,7 +122,7 @@ public class Scene {
                 voxelSpace.initBuffers(gl);
                 voxelSpace.initVao(gl, shadersList.get(voxelSpace.getShaderId()));
                 voxelSpace.arrayLoaded = true;
-                camera.location = new Vec3F(voxelSpace.centerX-voxelSpace.widthX, voxelSpace.centerY-voxelSpace.widthY, voxelSpace.centerZ-voxelSpace.widthZ);
+                camera.location = new Vec3F(voxelSpace.centerX+voxelSpace.widthX, voxelSpace.centerY+voxelSpace.widthY, voxelSpace.centerZ+voxelSpace.widthZ);
                 camera.target = new Vec3F(voxelSpace.centerX,voxelSpace.centerY,voxelSpace.centerZ);
                 camera.updateViewMatrix();
                 

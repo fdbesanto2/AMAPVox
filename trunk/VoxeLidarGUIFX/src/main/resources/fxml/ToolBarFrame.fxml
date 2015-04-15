@@ -34,9 +34,10 @@
                                     <TextField fx:id="textFieldMinValue" layoutX="96.0" layoutY="224.0" prefHeight="25.0" prefWidth="82.0" />
                                     <TextField fx:id="textFieldMaxValue" layoutX="96.0" layoutY="251.0" prefHeight="25.0" prefWidth="82.0" />
                                     <Button fx:id="buttonResetMinMax" layoutX="20.0" layoutY="289.0" mnemonicParsing="false" onAction="#onActionButtonResetMinMax" text="Reset" AnchorPane.leftAnchor="10.0" />
-                                    <Label layoutX="17.0" layoutY="338.0" text="Don't display those values" AnchorPane.leftAnchor="10.0" />
-                                    <TextField fx:id="textFieldFilterValues" layoutX="7.0" layoutY="363.0" prefHeight="25.0" prefWidth="183.0" promptText="Example: NaN, 0, -1" text="NaN, 0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                                    <TextField fx:id="textFieldFilterValues" layoutX="24.0" layoutY="394.0" prefHeight="25.0" prefWidth="183.0" promptText="Example: NaN, 0, -1" text="NaN, 0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                                     <CheckBox fx:id="checkboxStretched" layoutX="89.0" layoutY="91.0" mnemonicParsing="false" text="Stretched" />
+                                    <RadioButton fx:id="radiobuttonDontDisplayValues" layoutX="16.0" layoutY="335.0" mnemonicParsing="false" selected="true" text="Don't display values" AnchorPane.leftAnchor="10.0" />
+                                    <RadioButton fx:id="radiobuttonDisplayValues" layoutX="23.0" layoutY="363.0" mnemonicParsing="false" text="Display only those values" AnchorPane.leftAnchor="10.0" />
                                  </children>
                               </AnchorPane>
                            </content>

@@ -20,7 +20,6 @@ import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -48,6 +47,7 @@ public class VoxelAnalysis implements Runnable {
     private Point3d offset;
 
     private static float[][] weighting;
+    
     private GroundEnergy[][] groundEnergy;
 
     int count1 = 0;
@@ -526,7 +526,9 @@ public class VoxelAnalysis implements Runnable {
                         }else{
                             
                             if(parameters.isCalculateGroundEnergy() && !parameters.isTLS() && !isSet){
-                                groundEnergy[vox.$i][vox.$j].groundEnergyActual += beamFraction;
+                                groundEnergy[vox.$i][vox.$j].groundEnergyActual += residualEnergy;
+                                groundEnergy[vox.$i][vox.$j].groundEnergyPotential++;
+                                
                                 isSet = true;
                             }
                         }
@@ -763,8 +765,12 @@ public void calculatePADAndWrite(double threshold) {
                             if(transmittance <= 1.0 && transmittance >= 0.0){
                                 c = new Color(ColorSpace.getInstance(ColorSpace.CS_GRAY), new float[]{transmittance}, 1.0f);
                                 
-                            }else{
+                            }else if(transmittance > 1.0){
                                 c = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+                            }else if(transmittance < 0.0){
+                                c = new Color(0.0f, 1.0f, 0.0f, 1.0f);
+                            }else{
+                                c = new Color(0.0f, 0.0f, 1.0f, 1.0f);
                             }
                             
                             image.setRGB(i, parameters.split.y-1-j, c.getRGB());

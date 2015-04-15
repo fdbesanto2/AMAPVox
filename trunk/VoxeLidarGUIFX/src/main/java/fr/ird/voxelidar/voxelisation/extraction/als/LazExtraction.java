@@ -9,9 +9,7 @@ import fr.ird.voxelidar.lidar.format.als.LasHeader;
 import fr.ird.voxelidar.util.NativeLoader;
 import fr.ird.voxelidar.voxelisation.als.LasPoint;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -43,7 +41,12 @@ public class LazExtraction implements Iterable<LasPoint>{
     
     public void openLazFile(File file){
         
-        lasZipPointer = instantiateLasZip();
+        try{
+            lasZipPointer = instantiateLasZip();
+        }catch(Exception e){
+            logger.error("Cannot initialize laszip pointer");
+        }
+        
         
         int result = open(lasZipPointer, file.getAbsolutePath());
             

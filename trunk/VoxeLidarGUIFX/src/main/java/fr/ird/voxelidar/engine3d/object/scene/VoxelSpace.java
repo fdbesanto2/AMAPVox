@@ -99,6 +99,7 @@ public class VoxelSpace extends SceneObject{
     public VoxelSpaceData data;
     
     private Set<Float> filteredValues;
+    private boolean displayValues = false;
     
     private final EventListenerList listeners;
     float sdValue;
@@ -245,8 +246,9 @@ public class VoxelSpace extends SceneObject{
         updateValue();
     }
     
-    public void setFilterValues(Set<Float> values){
+    public void setFilterValues(Set<Float> values, boolean display){
         filteredValues = values;
+        this.displayValues = display;
     }
     
     private void setWidth(){
@@ -254,8 +256,8 @@ public class VoxelSpace extends SceneObject{
         if(data.voxels.size() > 0){
             
             widthX = ((VoxelObject)data.getLastVoxel()).position.x - ((VoxelObject)data.getFirstVoxel()).position.x;
-            widthX = ((VoxelObject)data.getLastVoxel()).position.y - ((VoxelObject)data.getFirstVoxel()).position.y;
-            widthX = ((VoxelObject)data.getLastVoxel()).position.z - ((VoxelObject)data.getFirstVoxel()).position.z;
+            widthY = ((VoxelObject)data.getLastVoxel()).position.y - ((VoxelObject)data.getFirstVoxel()).position.y;
+            widthZ = ((VoxelObject)data.getLastVoxel()).position.z - ((VoxelObject)data.getFirstVoxel()).position.z;
         }
     }
     
@@ -360,8 +362,8 @@ public class VoxelSpace extends SceneObject{
                     
                     
                     Point3i indice = new Point3i(Integer.valueOf(voxelLine[0]), 
-                            Integer.valueOf(voxelLine[2]),
-                            Integer.valueOf(voxelLine[1]));
+                            Integer.valueOf(voxelLine[1]),
+                            Integer.valueOf(voxelLine[2]));
 
                     float[] mapAttrs = new float[data.attributsNames.size()];
 
@@ -395,8 +397,8 @@ public class VoxelSpace extends SceneObject{
                     }
                     
                     Point3f position = new Point3f((float) (data.bottomCorner.x+(indice.x*(data.resolution.x))),
-                                                    (float) (data.bottomCorner.z+(indice.y*(data.resolution.y))),
-                                                    (float) (data.bottomCorner.y+(indice.z*(data.resolution.z))));
+                                                    (float) (data.bottomCorner.y+(indice.y*(data.resolution.y))),
+                                                    (float) (data.bottomCorner.z+(indice.z*(data.resolution.z))));
                     
                     if(lineNumber == 0){
                         data.minY = position.y;
@@ -728,9 +730,19 @@ public class VoxelSpace extends SceneObject{
             voxel.setColor(colorGenerated.getRed(), colorGenerated.getGreen(), colorGenerated.getBlue());
             //values.add(voxel.attributValue);
             if(filteredValues.contains(voxel.attributValue)){
-                voxel.setAlpha(0);
+                if(displayValues){
+                    voxel.setAlpha(1);
+                }else{
+                    voxel.setAlpha(0);
+                }
+                
             }else{
-                voxel.setAlpha(1);
+                if(displayValues){
+                    voxel.setAlpha(0);
+                }else{
+                    voxel.setAlpha(1);
+                }
+                
             }
             
         }

@@ -125,9 +125,9 @@ public class JoglListener implements GLEventListener {
         //this.width = drawable.getWidth();
         //this.height = drawable.getHeight();
         
-        Vec3F eye = new Vec3F(22.75f+45.5f, 72.25f, 195.25f-390.5f);
-        Vec3F target = new Vec3F(22.75f, 72.25f, 195.25f);
-        Vec3F up = new Vec3F(0.0f, 1.0f, 0.0f);
+        Vec3F eye = new Vec3F(80.0f, 72.25f, 200f);
+        Vec3F target = new Vec3F(0.0f, 0.0f, 0.0f);
+        Vec3F up = new Vec3F(0.0f, 0.0f, 1.0f);
         
         
         

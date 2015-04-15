@@ -173,9 +173,6 @@ public class Dtm {
         if(indiceX<zArray.length && indiceY<zArray[0].length){
             z = zArray[indiceX][indiceY];
             
-            if(z == -9999.0f){
-                return Float.NaN;
-            }
         }else{
             return Float.NaN;
         }        
