@@ -5,6 +5,9 @@
  */
 package fr.ird.voxelidar;
 
+import fr.ird.voxelidar.engine3d.object.scene.Dtm;
+import fr.ird.voxelidar.engine3d.object.scene.DtmLoader;
+import java.io.File;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,6 +23,9 @@ public class FXPrincipal extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         
+        Dtm dtm = DtmLoader.readFromAscFile(new File("C:\\Users\\Julien\\Desktop\\samples\\dtm\\ALSbuf_xyzirncapt_dtm.asc"));
+        dtm.buildMesh();
+        dtm.exportObj(new File("C:\\Users\\Julien\\Desktop\\samples\\dtm\\ALSbuf_xyzirncapt_dtm.obj"));
         
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainFrame.fxml"));
         Parent root = loader.load();

@@ -218,6 +218,67 @@ public class Dtm {
         return z;
     }
     
+    public void buildMesh(){
+        
+        if(zArray != null){
+            
+            int width = zArray.length;
+            if(width > 0){
+                
+                int height = zArray[0].length;
+                faces = new ArrayList<>();
+                points = new ArrayList<>();
+                
+                for(int i=0;i<width;i++){
+                    for(int j=0;j<height;j++){
+                        
+                        if(!Float.isNaN(zArray[i][j])){
+                            points.add(new Vec3F(i*cellSize, j*cellSize, zArray[i][j]));
+                        }else{
+                            points.add(new Vec3F(i*cellSize, j*cellSize, -10.0f));
+                        }
+                        
+                        
+                        int point1, point2, point3, point4;
+                        
+                        point1 = get1dFrom2d(i, j);
+                        
+                        if(i+1 < width){
+                            point2 = get1dFrom2d(i+1, j);
+                            
+                            if(j+1 < height){
+                                point3 = get1dFrom2d(i+1, j+1);
+                                point4 = get1dFrom2d(i, j+1);
+                                
+                                if(!Float.isNaN(zArray[i][j]) && !Float.isNaN(zArray[i+1][j+1]) ){
+                                    if(!Float.isNaN(zArray[i+1][j])){
+                                        faces.add(new Face(point1, point2, point3));
+                                    }
+                                    if(!Float.isNaN(zArray[i][j+1])){
+                                        faces.add(new Face(point1, point3, point4));
+                                    }
+                                    
+                                }
+                                
+                            }
+                            
+                        }
+                        
+                        
+                    }
+                }
+                
+                
+            }
+        }
+        
+        
+    }
+    
+    private int get1dFrom2d(int i, int j){
+        return (zArray[0].length*i) + j;
+    }
+    
     public void exportObj(File outputFile){
         
         BufferedWriter writer;
