@@ -9,7 +9,7 @@ JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtr
     return;
 }
 
-JNIEXPORT long JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_instantiateLasZip(JNIEnv *env, jobject obj)
+JNIEXPORT jlong JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_instantiateLasZip(JNIEnv *env, jobject obj)
 {
     laszip_dll_struct* laszip_dll = new laszip_dll_struct;
     memset(laszip_dll, 0, sizeof(laszip_dll_struct));
@@ -27,7 +27,7 @@ JNIEXPORT long JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtr
     }
 
 
-    return (long)laszip_dll;
+    return (jlong)laszip_dll;
 }
 
 JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_deleteLasZip(JNIEnv *env, jobject obj, jlong pointer)
