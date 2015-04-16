@@ -22,11 +22,11 @@ public class FXPrincipal extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        
+        /*
         Dtm dtm = DtmLoader.readFromAscFile(new File("C:\\Users\\Julien\\Desktop\\samples\\dtm\\ALSbuf_xyzirncapt_dtm.asc"));
         dtm.buildMesh();
         dtm.exportObj(new File("C:\\Users\\Julien\\Desktop\\samples\\dtm\\ALSbuf_xyzirncapt_dtm.obj"));
-        
+        */
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainFrame.fxml"));
         Parent root = loader.load();
         MainFrameController controller = loader.getController();
