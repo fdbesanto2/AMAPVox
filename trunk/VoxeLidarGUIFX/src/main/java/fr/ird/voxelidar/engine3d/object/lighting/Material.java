@@ -10,7 +10,7 @@ import java.util.Set;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Material {
     

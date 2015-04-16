@@ -82,7 +82,9 @@ public class ColorGradient {
     public final static Color[] GRADIENT_ROY = createMultiGradient(new Color[] {
                     Color.red, Color.orange, Color.yellow }, 500);
 
-    
+    /**
+     *
+     */
     public final static Color[] GRADIENT_RAINBOW2 = createMultiGradient(
                     new Color[] { Color.blue, Color.green,
                                     Color.yellow, Color.orange, Color.red, Color.pink}, 2000);
@@ -138,23 +140,6 @@ public class ColorGradient {
     	return gradientColor[index];
     }
     
-    public Color getColor(float value, float sd, float average, float realMin, float realMax) {
-    	
-    	float colorIdx = ((value - minValue) / (maxValue-minValue));  
-        
-        //float colorIdx = (minValue-average) / (sd);  
-        
-    	//colorIdx *= sd;
-        //colorIdx += average;
-    	int index = (int) ((gradientColor.length-1)*colorIdx); 
-    	if(index<0) {
-    		index = 0;
-    	}else if (index>=gradientColor.length) {
-    		index = gradientColor.length-1;
-    	}
-    	return gradientColor[index];
-    }
-    
     /**
      *
      * @param gradientColor
@@ -162,8 +147,6 @@ public class ColorGradient {
     public void setGradientColor(Color[] gradientColor) {
         this.gradientColor = gradientColor;
     }
-    
-    
     
     
     /**

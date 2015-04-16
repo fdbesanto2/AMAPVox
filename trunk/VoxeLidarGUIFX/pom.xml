@@ -19,7 +19,7 @@
         <name>Your Organisation</name>
     </organization>
     <scm>
-        <connection>scm:git:file://home/calcul/Documents/Julien/Voxelidar/voxelidar.git</connection>
+        <connection>scm:git:voxeidar.git</connection>
     </scm>
 
     <build>
@@ -27,6 +27,52 @@
             ${project.artifactId}-${project.version}-r${buildNumber}
         </finalName>
         <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/release/</outputDirectory>
+                            <resources>          
+                                <resource>
+                                    <directory>${basedir}/src/main/resources/launcher/</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>              
+                        </configuration>            
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.3</version>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>                    
+                    </execution>
+                </executions>
+                <configuration>
+                    <basedir>${basedir}/target/release/</basedir>
+                    <includes>
+                        <include>click_me.sh</include>
+                        <include>click_me.bat</include>
+                    </includes>
+                    <regex>false</regex>
+                    <outputDir>/</outputDir>
+                    <token>$BUILD_NUMBER$</token>
+                    <value>${buildNumber}</value>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -45,7 +91,7 @@
                             
                             <excludeScope>system</excludeScope>
                             <excludeGroupIds>junit,org.mockito,org.hamcrest</excludeGroupIds>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <outputDirectory>${project.build.directory}/release/lib</outputDirectory>
                             
                         </configuration>
                     </execution>
@@ -56,6 +102,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.6</version>
                 <configuration>
+                    <outputDirectory>${project.build.directory}/release/</outputDirectory>
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
@@ -112,6 +159,7 @@
                 </executions>
                 
                 <configuration>
+                    <shortRevisionLength>8</shortRevisionLength>
                     <revisiononscmfailure>
                         <doCheck>true</doCheck>
                         <doUpdate>true</doUpdate>

@@ -10,7 +10,7 @@ import fr.ird.voxelidar.engine3d.math.point.Point3I;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Dart {
     

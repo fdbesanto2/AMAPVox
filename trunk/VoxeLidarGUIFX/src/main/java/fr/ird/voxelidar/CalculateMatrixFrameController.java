@@ -21,7 +21,7 @@ import javax.vecmath.Vector3d;
 /**
  * FXML Controller class
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class CalculateMatrixFrameController implements Initializable {
     

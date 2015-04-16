@@ -10,7 +10,7 @@ import java.io.Serializable;
 /**
  * This class represent a filter and can is compound of a variable,
  * a condition and a value
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Filter implements Serializable{
     

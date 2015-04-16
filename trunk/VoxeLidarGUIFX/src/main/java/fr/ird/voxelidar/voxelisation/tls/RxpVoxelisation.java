@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class RxpVoxelisation implements Callable{
     
@@ -98,7 +98,6 @@ public class RxpVoxelisation implements Callable{
         
         try {
             
-
             //voxelAnalysis.setTransfMatrix(transfMatrix);
             //voxelAnalysis.setRotation(rotation);
             logger.info("rxp extraction is started");
@@ -112,9 +111,9 @@ public class RxpVoxelisation implements Callable{
             
             
         }catch (InterruptedException ex) {
-            logger.error(ex.getMessage());
+            logger.error("rxp voxelisation interrupted, "+ex.getMessage());
         }catch(Exception e){
-            logger.error(e.getMessage());
+            logger.error("rxp voxelisation failed, "+e.getMessage());
         }
         
         return null;

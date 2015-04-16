@@ -37,7 +37,9 @@ public class VoxelAnalysis implements Runnable {
     private Voxel voxels[][][];
     private VoxelManager voxelManager;
 
-    private final double laserBeamDivergence = 0.0005f;
+    private static final double LASER_BEAM_DIVERGENCE_ALS = 0.0005f;
+    private static final double LASER_BEAM_DIVERGENCE_TLS = 0.00035f;
+    
     private float MAX_PAD = 3;
 
     private int nbShotsTreated;
@@ -284,10 +286,9 @@ public class VoxelAnalysis implements Runnable {
                                     }
 
                                     if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
-
+                                        
                                         residualEnergy -= bfIntercepted;
-                                    } else {
-                                        //residualEnergy -= (bfIntercepted / shot.nbEchos);
+                                        
                                     }
 
                                     bfIntercepted = 0;
@@ -392,10 +393,20 @@ public class VoxelAnalysis implements Runnable {
              * ****************A verifier si il vaut mieux prendre la distance
              * du centre du voxel à la source ou de l'écho à la source*********************
              */
+            double surface;
             double distance = vox._position.distance(source);
 
             //surface de la section du faisceau à la distance de la source
-            double surface = Math.pow(Math.tan(laserBeamDivergence / 2) * distance, 2) * Math.PI;
+            if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
+                if(!parameters.isTLS()){
+                    surface = Math.pow(Math.tan(LASER_BEAM_DIVERGENCE_ALS / 2) * distance, 2) * Math.PI;
+                }else{
+                    surface = Math.pow(Math.tan(LASER_BEAM_DIVERGENCE_TLS / 2) * distance, 2) * Math.PI;
+                }
+            }else{
+                surface = 1;
+            }
+            
 
             // voxel sampled without hit
             /*Si un écho est positionné sur une face du voxel alors il est considéré
@@ -416,20 +427,9 @@ public class VoxelAnalysis implements Runnable {
                 nbSamplingTotal++;
                 
                 vox.angleMean += angle;
-                
-                if (!parameters.isTLS()) {
-                    
-                    ((ALSVoxel) vox).bvEntering += (surface * residualEnergy * longueur);
-                    
-                    vox._transBeforeNorm += (1 * surface * longueur);
-                    ((ALSVoxel) vox).sumSurfaceMultiplyLength += (surface*longueur);
-                    
-                } else {
-                    
-                    ((TLSVoxel) vox).bflEntering += (1 * longueur);
-                    
-                    vox._transBeforeNorm += longueur;
-                }
+                vox.bvEntering += (surface * residualEnergy * longueur);
+                vox._transBeforeNorm += (surface * longueur);
+                vox._sumSurfaceMultiplyLength += (surface*longueur);
                 
                 
                 /*
@@ -494,15 +494,8 @@ public class VoxelAnalysis implements Runnable {
                         vox.angleMean += angle;
                         
                         double entering;
-                        if (!parameters.isTLS()) {
-                            
-                            entering = (surface * beamFraction * longueur);
-                            ((ALSVoxel) vox).bvEntering += entering;
-                            
-                        } else {
-                            entering = (1 * longueur);
-                            ((TLSVoxel) vox).bflEntering += entering;
-                        }
+                        entering = (surface * beamFraction * longueur);
+                        vox.bvEntering += entering;
                         
                         double intercepted = 0;
                         
@@ -511,17 +504,8 @@ public class VoxelAnalysis implements Runnable {
                             
                             vox.nbEchos++;
                             
-                            
-                            if (!parameters.isTLS()) {
-                                
-                                intercepted = (surface * beamFraction * longueur);
-                                
-                                ((ALSVoxel) vox).bvIntercepted += intercepted;
-
-                            } else {
-                                intercepted = (1 * longueur);
-                                ((TLSVoxel) vox).bflIntercepted += intercepted;
-                            }
+                            intercepted = (surface * beamFraction * longueur);
+                            vox.bvIntercepted += intercepted;
                             
                         }else{
                             
@@ -533,14 +517,8 @@ public class VoxelAnalysis implements Runnable {
                             }
                         }
                         
-                        if (!parameters.isTLS()) {
-                            
-                            ((ALSVoxel) vox).sumSurfaceMultiplyLength += (surface*longueur);
-                            ((ALSVoxel) vox)._transBeforeNorm += (((entering-intercepted)/entering) * surface * longueur);
-                            
-                        } else {
-                            ((TLSVoxel) vox)._transBeforeNorm += (((entering-intercepted)/entering) * longueur);
-                        }
+                        vox._sumSurfaceMultiplyLength += (surface*longueur);
+                        vox._transBeforeNorm += (((entering-intercepted)/entering) * surface * longueur);
                     }
                     
                 lastEchotemp = echo;
@@ -591,139 +569,68 @@ public void calculatePADAndWrite(double threshold) {
                             vox.lMeanTotal = vox.lgTotal / (vox.nbSampling);
 
                         }
+                        
+                        Voxel voxel = vox;
 
-                        if (parameters.isTLS()) {
+                        /**
+                         * *PADBV**
+                         */
+                        if (voxel.bvEntering <= threshold) {
 
-                            TLSVoxel tlsVox = (TLSVoxel) vox;
+                            pad1 = Float.NaN;
+                            pad2 = pad1;
+                            voxel.transmittance = Float.NaN;
+                            voxel.transmittance_v2 = Float.NaN;
 
-                            /**
-                             * *PADBV**
-                             */
-                            if (tlsVox.bflEntering <= threshold) {
+                        } else if (voxel.bvIntercepted > voxel.bvEntering) {
 
-                                pad1 = Float.NaN;
-                                pad2 = pad1;
-                                tlsVox.transmittance = Float.NaN;
-                                tlsVox.transmittance_v2 = Float.NaN;
+                            logger.error("Voxel : " + voxel.$i + " " + voxel.$j + " " + voxel.$k + " -> bvInterceptes > bvEntering, NaN assigné, difference: " + (voxel.bvEntering - voxel.bvIntercepted));
 
-                            } else if (tlsVox.bflIntercepted > tlsVox.bflEntering) {
-
-                                logger.error("Voxel : " + tlsVox.$i + " " + tlsVox.$j + " " + tlsVox.$k + " -> bflInterceptes > bflEntering, NaN assigné");
-                                
-                                tlsVox.transmittance = Float.NaN;
-                                tlsVox.transmittance_v2 = Float.NaN;
-                                pad1 = Float.NaN;
-                                pad2 = pad1;
-
-                            } else {
-                                
-                                tlsVox.transmittance = (tlsVox.bflEntering - tlsVox.bflIntercepted) / tlsVox.bflEntering;
-                                tlsVox.transmittance_v2 = (tlsVox._transBeforeNorm) / tlsVox.lgTotal;
-                                
-                                if(Math.abs(tlsVox.transmittance - tlsVox.transmittance_v2) > 0.001){
-                                    System.out.println("test");
-                                }
-                                
-                                if (tlsVox.nbSampling > 1 && tlsVox.transmittance == 0 && tlsVox.nbSampling == tlsVox.nbEchos) {
-
-                                    pad1 = MAX_PAD;
-                                    pad2 = pad1;
-
-                                } else if (tlsVox.nbSampling <= 2 && tlsVox.transmittance == 0 && tlsVox.nbSampling == tlsVox.nbEchos) {
-
-                                    pad1 = Float.NaN;
-                                    pad2 = pad1;
-
-                                } else {
-                                    
-                                    pad1 = (float) (Math.log(tlsVox.transmittance) / (-0.5 * tlsVox.lMeanTotal));
-                                    pad2 = (float) (Math.log(tlsVox.transmittance_v2) / (-0.5 * tlsVox.lMeanTotal));
-                                    
-                                    if (Float.isNaN(pad1)) {
-                                        pad1 = Float.NaN;
-                                    } else if (pad1 > MAX_PAD || Float.isInfinite(pad1)) {
-                                        pad1 = MAX_PAD;
-                                    }
-                                    
-                                    if (Float.isNaN(pad2)) {
-                                        pad2 = Float.NaN;
-                                    } else if (pad2 > MAX_PAD || Float.isInfinite(pad2)) {
-                                        pad2 = MAX_PAD;
-                                    }
-                                }
-
-                            }
-                            
-                            tlsVox.PadBflTotal = pad1 + 0.0f; //set +0.0f to avoid -0.0f
-                            tlsVox.PadBflTotal_V2 = pad2 + 0.0f; //set +0.0f to avoid -0.0f
-
-                            writer.write(tlsVox.toString() + "\n");
+                            pad1 = Float.NaN;
+                            pad2 = pad1;
+                            voxel.transmittance = Float.NaN;
+                            voxel.transmittance_v2 = Float.NaN;
 
                         } else {
 
-                            ALSVoxel alsVox = (ALSVoxel) vox;
+                            voxel.transmittance = (voxel.bvEntering - voxel.bvIntercepted) / voxel.bvEntering;
+                            voxel.transmittance_v2 = (voxel._transBeforeNorm) / voxel._sumSurfaceMultiplyLength ;
 
+                            if (voxel.nbSampling > 1 && voxel.transmittance == 0 && voxel.nbSampling == voxel.nbEchos) {
 
-                            /**
-                             * *PADBV**
-                             */
-                            if (alsVox.bvEntering <= threshold) {
+                                pad1 = MAX_PAD;
+                                pad2 = pad1;
+
+                            } else if (voxel.nbSampling <= 2 && voxel.transmittance == 0 && voxel.nbSampling == voxel.nbEchos) {
 
                                 pad1 = Float.NaN;
                                 pad2 = pad1;
-                                alsVox.transmittance = Float.NaN;
-                                alsVox.transmittance_v2 = Float.NaN;
-
-                            } else if (alsVox.bvIntercepted > alsVox.bvEntering) {
-
-                                logger.error("Voxel : " + alsVox.$i + " " + alsVox.$j + " " + alsVox.$k + " -> bvInterceptes > bvEntering, NaN assigné, difference: " + (alsVox.bvEntering - alsVox.bvIntercepted));
-                                
-                                pad1 = Float.NaN;
-                                pad2 = pad1;
-                                alsVox.transmittance = Float.NaN;
-                                alsVox.transmittance_v2 = Float.NaN;
 
                             } else {
-                                
-                                alsVox.transmittance = (alsVox.bvEntering - alsVox.bvIntercepted) / alsVox.bvEntering;
-                                alsVox.transmittance_v2 = (alsVox._transBeforeNorm) / alsVox.sumSurfaceMultiplyLength ;
 
-                                if (alsVox.nbSampling > 1 && alsVox.transmittance == 0 && alsVox.nbSampling == alsVox.nbEchos) {
+                                pad1 = (float) (Math.log(voxel.transmittance) / (-0.5 * voxel.lMeanTotal));
+                                pad2 = (float) (Math.log(voxel.transmittance_v2) / (-0.5 * voxel.lMeanTotal));
 
-                                    pad1 = MAX_PAD;
-                                    pad2 = pad1;
-
-                                } else if (alsVox.nbSampling <= 2 && alsVox.transmittance == 0 && alsVox.nbSampling == alsVox.nbEchos) {
-
+                                if (Float.isNaN(pad1)) {
                                     pad1 = Float.NaN;
-                                    pad2 = pad1;
+                                } else if (pad1 > MAX_PAD || Float.isInfinite(pad1)) {
+                                    pad1 = MAX_PAD;
+                                }
 
-                                } else {
-
-                                    pad1 = (float) (Math.log(alsVox.transmittance) / (-0.5 * alsVox.lMeanTotal));
-                                    pad2 = (float) (Math.log(alsVox.transmittance_v2) / (-0.5 * alsVox.lMeanTotal));
-
-                                    if (Float.isNaN(pad1)) {
-                                        pad1 = Float.NaN;
-                                    } else if (pad1 > MAX_PAD || Float.isInfinite(pad1)) {
-                                        pad1 = MAX_PAD;
-                                    }
-                                    
-                                    if (Float.isNaN(pad2)) {
-                                        pad2 = Float.NaN;
-                                    } else if (pad2 > MAX_PAD || Float.isInfinite(pad2)) {
-                                        pad2 = MAX_PAD;
-                                    }
-                                    
+                                if (Float.isNaN(pad2)) {
+                                    pad2 = Float.NaN;
+                                } else if (pad2 > MAX_PAD || Float.isInfinite(pad2)) {
+                                    pad2 = MAX_PAD;
                                 }
 
                             }
 
-                            alsVox.PadBVTotal = pad1 + 0.0f; //set +0.0f to avoid -0.0f
-                            alsVox.PadBVTotal_V2 = pad2 + 0.0f; //set +0.0f to avoid -0.0f
-
-                            writer.write(alsVox.toString() + "\n");
                         }
+
+                        voxel.PadBVTotal = pad1 + 0.0f; //set +0.0f to avoid -0.0f
+                        voxel.PadBVTotal_V2 = pad2 + 0.0f; //set +0.0f to avoid -0.0f
+
+                        writer.write(voxel.toString() + "\n");
 
                     }
                 }

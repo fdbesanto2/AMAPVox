@@ -1,0 +1,1 @@
+java -jar VoxeLidarGUIFX-1.0-r$BUILD_NUMBER$.jar

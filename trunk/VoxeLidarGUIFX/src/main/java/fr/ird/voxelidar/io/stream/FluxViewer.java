@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class FluxViewer implements Runnable{
     

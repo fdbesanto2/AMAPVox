@@ -7,7 +7,7 @@ package fr.ird.voxelidar.engine3d.math.vector;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Vec4D {
     

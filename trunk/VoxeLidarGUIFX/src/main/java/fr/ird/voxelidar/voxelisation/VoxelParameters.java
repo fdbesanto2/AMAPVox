@@ -11,7 +11,7 @@ import javax.vecmath.Point3i;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class VoxelParameters {
     

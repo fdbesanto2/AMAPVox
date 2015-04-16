@@ -10,7 +10,7 @@ import java.util.EventListener;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public interface CameraListener extends EventListener {
     

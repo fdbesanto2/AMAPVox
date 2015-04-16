@@ -27,7 +27,7 @@ import org.jdom2.output.XMLOutputter;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Configuration {
     
@@ -348,7 +348,7 @@ public class Configuration {
         return filesElement;
     }
     
-    public void readConfiguration(File inputParametersFile){
+    public void readConfiguration(File inputParametersFile) throws Exception{
                 
         try {
             
@@ -646,7 +646,7 @@ public class Configuration {
             }
             
         } catch (JDOMException | IOException ex) {
-            logger.error(ex);
+            throw new Exception(ex);
         }
 
     }

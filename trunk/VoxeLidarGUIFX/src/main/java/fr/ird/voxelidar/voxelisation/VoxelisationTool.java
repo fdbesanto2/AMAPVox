@@ -40,6 +40,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Vector3d;
@@ -47,7 +48,7 @@ import org.apache.log4j.Logger;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class VoxelisationTool {
 
@@ -57,9 +58,11 @@ public class VoxelisationTool {
     private final EventListenerList listeners;
     private long startTime;
     private Dtm dtm;
+    private boolean cancelled;
     
     public VoxelisationTool() {
         listeners = new EventListenerList();
+        cancelled = false;
     }
 
     public void addVoxelisationToolListener(VoxelisationToolListener listener) {
@@ -77,6 +80,10 @@ public class VoxelisationTool {
         for (VoxelisationToolListener voxelisationToolListener : listeners.getListeners(VoxelisationToolListener.class)) {
             voxelisationToolListener.voxelisationFinished(duration);
         }
+    }
+
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
     }
 
     private Dtm loadDTM(File dtmFile) {
@@ -115,8 +122,9 @@ public class VoxelisationTool {
         rsp.read(input);
         
         ArrayList<File> files = new ArrayList<>();
-
         ExecutorService exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        
+        
         ArrayList<Callable<RxpVoxelisation>> tasks = new ArrayList<>();
 
         dtm = loadDTM(parameters.getDtmFile());
@@ -201,7 +209,7 @@ public class VoxelisationTool {
 
     }
 
-    public void mergeVoxelsFile(List<File> filesList, File output, int transmittanceMode, float maxPAD) throws NullPointerException {
+    public void mergeVoxelsFile(List<File> filesList, File output, int transmittanceMode, float maxPAD){
 
         startTime = System.currentTimeMillis();
         Mode[] toMerge = null;
@@ -215,6 +223,10 @@ public class VoxelisationTool {
         float[] sumTransmittanceMultiplyLgTotal = null;
 
         for (int i = 0; i < filesList.size(); i++) {
+            
+            if(cancelled){
+                return;
+            }
             
             String msg = "Merging in progress, file " + (i + 1) + " : " + filesList.size();
             logger.info(msg);
@@ -259,8 +271,7 @@ public class VoxelisationTool {
 
                         //discard but recalculate after
                         case "PadBVTotal":
-                        case "PadBflTotal":
-                        case "PadBflTotal_V2":
+                        case "PadBVTotal_V2":
                         case "angleMean":
                         case "lMeanTotal":
                         case "transmittance":
@@ -274,18 +285,8 @@ public class VoxelisationTool {
                         case "lgTotal":
                         case "bvEntering":
                         case "bvIntercepted":
-                        case "bflEntering":
-                        case "bflIntercepted":
 
                             m = Mode.SUM;
-                            break;
-                        
-                        case "bfEntering":
-                        case "bfIntercepted":
-                        case "bsEntering":
-                        case "bsIntercepted":
-
-                            m = Mode.REMOVE;
                             break;
 
                         default:
@@ -301,8 +302,6 @@ public class VoxelisationTool {
                 //voxelSpace2.load();
                 //map2 = voxelSpace2.data.getVoxelMap();
                 
-                nbSamplingMultiplyAngleMean = new float[filesList.size()][size];
-                sumTransmittanceMultiplyLgTotal = new float[size];
                 
                 result = map1;
                 map2 = result;
@@ -316,35 +315,14 @@ public class VoxelisationTool {
             Float[] nbTemp1 = map1.get("nbSampling");
             Float[] nbTemp2 = map1.get("angleMean");
             
-            Float[] nbTemp3 = map1.get("transmittance_v2");
             Float[] nbTemp4 = map1.get("lgTotal");
-            
-            for(int j=0;j<nbTemp1.length;j++){
-                
-                nbSamplingMultiplyAngleMean[i][j] = nbTemp1[j] * nbTemp2[j];
-                
-                if(!Float.isNaN(nbTemp3[j]) && !Float.isNaN(nbTemp4[j])){
-                    sumTransmittanceMultiplyLgTotal[j] += (nbTemp3[j] * nbTemp4[j]);
-                }
-                
-            }
-            
-            
 
         }
         
         
-        logger.info("Recalculate PadBVOutgoing, angleMean, lMeanOutgoing, LMean_NoInterception");
+        logger.info("Recalculate lMeanTotal, angleMean, transmittance, PadBVTotal");
         /*recalculate PadBF, angleMean, LMean_Exiting, LMean_NoInterception*/
         if (result != null) {
-            
-            //remove unused variables
-            //result.remove("bfEntering");
-            //result.remove("bfIntercepted");
-            //result.remove("bsEntering");
-            //result.remove("bsIntercepted");
-            //result.remove("transmittance");
-            
             
             /*recalculate lMeanOutgoing, LMean_NoInterception*/
             Float[] nbSamplingArray = result.get("nbSampling");
@@ -359,47 +337,36 @@ public class VoxelisationTool {
             
             /*recalculate Pad*/
             Float[] transmittanceArray = result.get("transmittance");
-            Float[] transmittance2Array = result.get("transmittance_v2");
-            Float[] PadBflTotalArray = result.get("PadBflTotal");
-            Float[] PadBflTotal2Array = result.get("PadBflTotal_V2");
-            Float[] bflEnteringArray = result.get("bflEntering");
-            Float[] bflInterceptedArray = result.get("bflIntercepted");
+            Float[] PadBVTotalArray = result.get("PadBVTotal");
+            Float[] bVEnteringArray = result.get("bvEntering");
+            Float[] bVInterceptedArray = result.get("bvIntercepted");
             
             
-            if(transmittanceArray == null || transmittance2Array == null || PadBflTotalArray == null 
-                                            || bflEnteringArray == null || bflInterceptedArray == null 
+            if(transmittanceArray == null || PadBVTotalArray == null 
+                                            || bVEnteringArray == null || bVInterceptedArray == null 
                                             || nbSamplingArray == null || nbEchosArray == null){
                 
                 logger.error("Arguments are missing");
                 return;
             }
             
-            for (int i = 0; i < PadBflTotalArray.length; i++) {
+            for (int i = 0; i < PadBVTotalArray.length; i++) {
                 
-                transmittanceArray[i] = (bflEnteringArray[i] - bflInterceptedArray[i]) / bflEnteringArray[i];
-                transmittance2Array[i] = sumTransmittanceMultiplyLgTotal[i]/lgTotalArray[i];
-                
-                if(transmittanceArray[i] == 1 && transmittance2Array[i] != 1){
-                    System.out.println(transmittance2Array[i]);
-                }
+                transmittanceArray[i] = (bVEnteringArray[i] - bVInterceptedArray[i]) / bVEnteringArray[i];
                 
                 
-                float pad1, pad2;
+                float pad1;
 
-                if (bflEnteringArray[i] <= 0) {
+                if (bVEnteringArray[i] <= 0) {
 
                     pad1 = Float.NaN;
-                    pad2 = pad1;
                     transmittanceArray[i] = Float.NaN;
-                    transmittance2Array[i] = Float.NaN;
 
-                } else if (bflInterceptedArray[i] > bflEnteringArray[i]) {
+                } else if (bVInterceptedArray[i] > bVEnteringArray[i]) {
 
                     logger.error("BFInterceptes > BFEntering, NaN assigné");
                     pad1 = Float.NaN;
-                    pad2 = pad1;
                     transmittanceArray[i] = Float.NaN;
-                    transmittance2Array[i] = Float.NaN;
                     
 
                 } else {
@@ -407,34 +374,24 @@ public class VoxelisationTool {
                     if (nbSamplingArray[i] > 1 && transmittanceArray[i] == 0 && Objects.equals(nbSamplingArray[i], nbEchosArray[i])) {
 
                         pad1 = maxPAD;
-                        pad2 = pad1;
 
                     } else if (nbSamplingArray[i] <= 2 && transmittanceArray[i] == 0 && Objects.equals(nbSamplingArray[i], nbEchosArray[i])) {
 
                         pad1 = Float.NaN;
-                        pad2 = pad1;
 
                     } else {
 
                         pad1 = (float) (Math.log(transmittanceArray[i]) / (-0.5 * lMeanTotalArray[i]));
-                        pad2 = (float) (Math.log(transmittance2Array[i]) / (-0.5 * lMeanTotalArray[i]));
 
                         if (Float.isNaN(pad1)) {
                             pad1 = Float.NaN;
                         } else if (pad1 > maxPAD || Float.isInfinite(pad1)) {
                             pad1 = maxPAD;
                         }
-                        
-                        if (Float.isNaN(pad2)) {
-                            pad2 = Float.NaN;
-                        } else if (pad2 > maxPAD || Float.isInfinite(pad2)) {
-                            pad2 = maxPAD;
-                        }
                     }
                 }
                 
-                PadBflTotalArray[i] = pad1+0.0f;
-                PadBflTotal2Array[i] = pad2+0.0f;
+                PadBVTotalArray[i] = pad1+0.0f;
             }
             
             
@@ -476,7 +433,10 @@ public class VoxelisationTool {
 
                 for (Entry entry : result.entrySet()) {
                     String columnName = (String) entry.getKey();
-                    header += columnName + " ";
+                    
+                    if(columnName.equals("transmittance_v2") || columnName.equals("PadBVTotal_V2")){
+                        header += columnName + " ";
+                    }
                 }
                 header = header.trim();
                 writer.write(header + "\n");

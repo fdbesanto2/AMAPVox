@@ -14,7 +14,7 @@ import javax.vecmath.Point3i;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class VoxelObject extends Voxel{
     

@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class LazExtraction implements Iterable<LasPoint>{
     

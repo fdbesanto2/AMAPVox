@@ -9,7 +9,7 @@ import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Quat4 {
     

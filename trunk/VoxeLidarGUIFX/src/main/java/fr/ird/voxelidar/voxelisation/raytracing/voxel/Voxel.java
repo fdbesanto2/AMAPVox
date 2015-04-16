@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Voxel implements Serializable {
 
@@ -135,6 +135,11 @@ public class Voxel implements Serializable {
         public double transmittance = 0;
         public double transmittance_v2 = 0;
         public double angleMean = 0;
+        public double bvEntering = 0;
+        public double bvIntercepted = 0;
+        public double PadBVTotal = 0;
+        public double PadBVTotal_V2 = 0;
+        public double _sumSurfaceMultiplyLength = 0;
         
         protected final static Logger _logger = Logger.getLogger(Voxel.class);
         

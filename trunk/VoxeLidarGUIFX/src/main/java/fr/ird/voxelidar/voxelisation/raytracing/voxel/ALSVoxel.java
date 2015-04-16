@@ -7,16 +7,10 @@ package fr.ird.voxelidar.voxelisation.raytracing.voxel;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class ALSVoxel extends Voxel{
     
-    public double bvEntering = 0;
-    public double bvIntercepted = 0;
-    public double sumSurfaceMultiplyLength = 0;
-    public double PadBVTotal = 0;
-    public double PadBVTotal_V2 = 0;
-        
     public ALSVoxel(int i, int j, int k) {
         super(i, j, k);
     }

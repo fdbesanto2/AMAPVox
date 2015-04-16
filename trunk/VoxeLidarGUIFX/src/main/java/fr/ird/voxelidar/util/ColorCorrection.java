@@ -7,7 +7,7 @@ package fr.ird.voxelidar.util;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class ColorCorrection {
     

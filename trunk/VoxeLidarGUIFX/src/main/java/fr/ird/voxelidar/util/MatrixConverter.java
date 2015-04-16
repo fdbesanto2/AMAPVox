@@ -10,7 +10,7 @@ import javax.vecmath.Matrix4d;
 
 /**
  * Convert Matrix from vecmath to Mat
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class MatrixConverter {
     

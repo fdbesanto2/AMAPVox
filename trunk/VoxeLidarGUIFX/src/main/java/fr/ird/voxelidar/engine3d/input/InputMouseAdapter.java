@@ -11,8 +11,8 @@ import com.jogamp.opengl.util.FPSAnimator;
 import fr.ird.voxelidar.engine3d.event.BasicEvent;
 
 /**
- *
- * @author Julien
+ * Class to handle mouse states
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class InputMouseAdapter extends MouseAdapter{
     
@@ -33,7 +33,6 @@ public class InputMouseAdapter extends MouseAdapter{
         
         if(animator.isPaused()){
             animator.resume();
-            //System.out.println("animator resumed");
         }
         
         if(me.getButton() == MouseEvent.BUTTON2){
@@ -52,7 +51,6 @@ public class InputMouseAdapter extends MouseAdapter{
         
         if(animator.isPaused()){
             animator.resume();
-            //System.out.println("animator resumed");
         }
         
         if(me.getButton() == MouseEvent.BUTTON1){
@@ -66,7 +64,6 @@ public class InputMouseAdapter extends MouseAdapter{
         
         if(!animator.isPaused()){
             animator.pause();
-            //System.out.println("animator paused");
         }
         
         if(  me.isAutoRepeat() ) {
@@ -93,7 +90,6 @@ public class InputMouseAdapter extends MouseAdapter{
         
         if(animator.isPaused()){
             animator.resume();
-            //System.out.println("animator resumed");
         }
         
         switch(me.getButton()){
@@ -158,7 +154,6 @@ public class InputMouseAdapter extends MouseAdapter{
         
         if(animator.isPaused()){
             animator.resume();
-            //System.out.println("animator resumed");
         }
         
         float[] rotation = me.getRotation();

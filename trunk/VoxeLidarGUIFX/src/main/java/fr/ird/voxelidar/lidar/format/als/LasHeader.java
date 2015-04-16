@@ -15,7 +15,7 @@ import java.math.BigInteger;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class LasHeader {
 

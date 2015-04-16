@@ -11,7 +11,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * @see <a href= "http://jessicarbrown.com/resources/unsignedtojava.html">http://jessicarbrown.com/resources/unsignedtojava.html</a>
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class ByteConverter {
     

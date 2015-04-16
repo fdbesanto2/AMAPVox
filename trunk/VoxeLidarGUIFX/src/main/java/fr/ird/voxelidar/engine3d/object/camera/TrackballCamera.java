@@ -11,7 +11,7 @@ import javax.swing.event.EventListenerList;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class TrackballCamera extends Camera{
 

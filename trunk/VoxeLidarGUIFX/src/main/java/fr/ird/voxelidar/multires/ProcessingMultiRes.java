@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class ProcessingMultiRes {
     
@@ -317,19 +317,19 @@ public class ProcessingMultiRes {
             /**
              * *PADBV**
              */
-            if (tlsVox.bflEntering <= 0) {
+            if (tlsVox.bvEntering <= 0) {
 
                 pad = Float.NaN;
                 tlsVox.transmittance = Float.NaN;
 
-            } else if (tlsVox.bflIntercepted > tlsVox.bflEntering) {
+            } else if (tlsVox.bvIntercepted > tlsVox.bvEntering) {
 
                 tlsVox.transmittance = Float.NaN;
                 pad = Float.NaN;
 
             } else {
 
-                tlsVox.transmittance = (tlsVox.bflEntering - tlsVox.bflIntercepted) / tlsVox.bflEntering;
+                tlsVox.transmittance = (tlsVox.bvEntering - tlsVox.bvIntercepted) / tlsVox.bvEntering;
 
                 if (tlsVox.nbSampling > 1 && tlsVox.transmittance == 0) {
 
@@ -352,7 +352,7 @@ public class ProcessingMultiRes {
 
             }
             
-            tlsVox.PadBflTotal = pad + 0.0f; //set +0.0f to avoid -0.0f
+            tlsVox.PadBVTotal = pad + 0.0f; //set +0.0f to avoid -0.0f
 
         } else {
 

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class MeshBuffer {
     

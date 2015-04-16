@@ -7,7 +7,7 @@ package fr.ird.voxelidar.lidar.format.als;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class PointDataRecordFormat1 extends PointDataRecordFormat0{
     

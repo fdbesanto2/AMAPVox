@@ -10,7 +10,7 @@ import javax.swing.event.EventListenerList;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public abstract class Processing {
     

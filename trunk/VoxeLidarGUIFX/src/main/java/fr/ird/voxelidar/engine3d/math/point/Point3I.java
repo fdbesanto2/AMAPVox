@@ -7,7 +7,7 @@ package fr.ird.voxelidar.engine3d.math.point;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Point3I {
     

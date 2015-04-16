@@ -7,7 +7,7 @@ package fr.ird.voxelidar.lidar.format.dart;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Turbid {
     

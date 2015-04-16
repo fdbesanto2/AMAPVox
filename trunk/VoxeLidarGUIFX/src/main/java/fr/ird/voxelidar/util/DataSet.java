@@ -15,7 +15,7 @@ import org.apache.commons.collections.iterators.EntrySetMapIterator;
 
 /**
  * DataSet tools
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class DataSet {
     

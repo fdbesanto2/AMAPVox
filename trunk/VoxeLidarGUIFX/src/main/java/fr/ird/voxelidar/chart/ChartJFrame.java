@@ -20,7 +20,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class ChartJFrame extends javax.swing.JFrame {
     

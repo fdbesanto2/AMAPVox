@@ -17,7 +17,7 @@ import java.nio.IntBuffer;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class SimpleSceneObject extends SceneObject{
     

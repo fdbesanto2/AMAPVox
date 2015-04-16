@@ -7,7 +7,7 @@ package fr.ird.voxelidar.io.file;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public abstract class FileAdapter implements FileListener{
 

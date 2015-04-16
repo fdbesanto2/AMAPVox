@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
  * This class can be used to load dynamic library(.so, .dll).
  * This get the library from a stream, usually into the .jar archive, 
  * extract it in a temp folder (can change according to the os) and load it.
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class NativeLoader {
 

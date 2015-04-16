@@ -12,7 +12,7 @@ import java.util.TreeMap;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Settings {
     

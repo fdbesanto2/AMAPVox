@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class SceneObjectFactory {
     /*

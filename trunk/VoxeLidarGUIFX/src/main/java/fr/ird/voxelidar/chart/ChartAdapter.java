@@ -7,7 +7,7 @@ package fr.ird.voxelidar.chart;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public abstract class ChartAdapter implements ChartListener{
 

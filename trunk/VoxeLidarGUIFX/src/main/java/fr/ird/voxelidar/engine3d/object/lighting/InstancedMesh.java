@@ -9,7 +9,7 @@ import java.nio.FloatBuffer;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public interface InstancedMesh {
     

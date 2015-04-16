@@ -14,7 +14,7 @@ import java.util.TreeSet;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class ShaderGenerator {
     

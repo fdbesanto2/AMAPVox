@@ -15,7 +15,7 @@ import org.jfree.data.xy.XYSeries;
 
 /**
  * This class can be used to generate chart contained in a jframe
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Chart {
     

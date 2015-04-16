@@ -8,7 +8,7 @@ package fr.ird.voxelidar.engine3d.object.mesh;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Cube extends Mesh{
     

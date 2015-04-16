@@ -9,7 +9,7 @@ import java.util.EventListener;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public interface VoxelAnalysisListener extends EventListener{
     

@@ -7,7 +7,7 @@ package fr.ird.voxelidar.engine3d.object.lighting;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Shader {
     

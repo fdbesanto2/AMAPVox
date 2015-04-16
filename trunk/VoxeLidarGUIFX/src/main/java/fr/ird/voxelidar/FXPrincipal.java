@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class FXPrincipal extends Application {
 

@@ -6,14 +6,13 @@
 package fr.ird.voxelidar.engine3d.event;
 
 import com.jogamp.opengl.util.FPSAnimator;
-import fr.ird.voxelidar.engine3d.renderer.GLRenderFrame;
 import fr.ird.voxelidar.engine3d.renderer.JoglListener;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import java.awt.Robot;
 
 /**
  * Describes user input behavior
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class BasicEvent extends EventManager{
     

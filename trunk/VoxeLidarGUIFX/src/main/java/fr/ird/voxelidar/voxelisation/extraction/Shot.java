@@ -13,7 +13,7 @@ import javax.vecmath.Vector3d;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Shot{
     

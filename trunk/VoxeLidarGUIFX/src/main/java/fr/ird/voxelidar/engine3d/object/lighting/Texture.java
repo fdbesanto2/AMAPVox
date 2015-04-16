@@ -9,7 +9,7 @@ import java.io.File;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Texture {
     

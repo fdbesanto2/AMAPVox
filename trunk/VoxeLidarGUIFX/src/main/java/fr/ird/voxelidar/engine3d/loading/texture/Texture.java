@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Texture {
     

@@ -11,7 +11,7 @@ import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class ExtendedALSVoxel extends ALSVoxel {
 

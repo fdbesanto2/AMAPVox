@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
 /**
  * FXML Controller class
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class ToolBarFrameController implements Initializable {
     

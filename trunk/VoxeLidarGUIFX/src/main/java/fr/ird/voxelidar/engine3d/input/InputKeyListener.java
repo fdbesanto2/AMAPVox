@@ -12,8 +12,8 @@ import fr.ird.voxelidar.engine3d.event.BasicEvent;
 
 
 /**
- *
- * @author Julien
+ * Class to handle keys states
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class InputKeyListener implements KeyListener{
     
@@ -31,7 +31,6 @@ public class InputKeyListener implements KeyListener{
         
         if(animator.isPaused()){
             animator.resume();
-            //System.out.println("animator resumed");
         }
         
         switch(ke.getKeyCode()){
@@ -62,11 +61,6 @@ public class InputKeyListener implements KeyListener{
         
         if(  ke.isAutoRepeat() ) {
             return;
-        }
-        
-        if(!animator.isPaused()){
-            //animator.pause();
-            //System.out.println("animator paused");
         }
         
         switch(ke.getKeyCode()){

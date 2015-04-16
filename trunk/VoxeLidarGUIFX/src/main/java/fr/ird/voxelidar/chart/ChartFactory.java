@@ -19,7 +19,7 @@ import org.jfree.data.xy.XYSeries;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class ChartFactory extends Processing{
     

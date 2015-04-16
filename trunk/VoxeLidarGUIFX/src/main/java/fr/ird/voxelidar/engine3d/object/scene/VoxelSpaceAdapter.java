@@ -7,7 +7,7 @@ package fr.ird.voxelidar.engine3d.object.scene;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public abstract class VoxelSpaceAdapter implements VoxelSpaceListener{
 

@@ -14,7 +14,7 @@ import java.awt.GraphicsEnvironment;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class GLRenderFrame extends GLWindow{
     

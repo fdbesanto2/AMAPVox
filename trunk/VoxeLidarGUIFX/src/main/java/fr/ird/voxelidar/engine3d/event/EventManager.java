@@ -10,7 +10,7 @@ import fr.ird.voxelidar.engine3d.renderer.JoglListener;
 
 /**
  * Abstract class that describes user input behavior
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public abstract class EventManager {
     

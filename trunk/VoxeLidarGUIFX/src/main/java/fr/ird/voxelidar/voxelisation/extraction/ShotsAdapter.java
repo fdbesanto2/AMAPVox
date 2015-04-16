@@ -7,5 +7,5 @@ package fr.ird.voxelidar.voxelisation.extraction;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */

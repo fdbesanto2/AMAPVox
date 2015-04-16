@@ -9,7 +9,7 @@ import fr.ird.voxelidar.util.ByteConverter;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class LasPoint {
     

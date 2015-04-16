@@ -7,7 +7,7 @@ package fr.ird.voxelidar.voxelisation.als;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class LasShot {
     

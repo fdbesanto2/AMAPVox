@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class GLRenderWindowListener extends WindowAdapter{
 

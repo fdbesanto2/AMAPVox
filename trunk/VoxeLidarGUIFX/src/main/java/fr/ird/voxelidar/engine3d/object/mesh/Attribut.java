@@ -11,7 +11,7 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Attribut {
     

@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 /**
  * FXML Controller class
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class FilterFrameController implements Initializable {
     

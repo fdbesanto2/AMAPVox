@@ -10,7 +10,7 @@ import java.nio.ShortBuffer;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public interface Mesh {
     

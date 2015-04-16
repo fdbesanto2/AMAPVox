@@ -7,7 +7,7 @@ package fr.ird.voxelidar.voxelisation;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public abstract class VoxelisationToolAdapter implements VoxelisationToolListener{
 

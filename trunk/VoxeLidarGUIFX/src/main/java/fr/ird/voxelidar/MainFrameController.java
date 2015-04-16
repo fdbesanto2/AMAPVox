@@ -44,9 +44,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -66,9 +68,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -96,7 +100,7 @@ import org.controlsfx.dialog.ProgressDialog;
 /**
  * FXML Controller class
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class MainFrameController implements Initializable {
     
@@ -1335,7 +1339,27 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionButtonLoadSelectedVoxelFile(ActionEvent event) {
+        
+        File voxelFile = listViewVoxelsFiles.getSelectionModel().getSelectedItem();
+        
+        if(!FileManager.readHeader(voxelFile.getAbsolutePath()).equals("VOXEL SPACE")){
 
+            logger.error("File is not a voxel file: "+voxelFile.getAbsolutePath());
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setHeaderText("Incorrect file");
+            alert.setContentText("File is corrupted or cannot be read!\n"
+                    + "Do you want to keep it?");
+            
+            Optional<ButtonType> result = alert.showAndWait();
+            
+            if(result.get() == ButtonType.CANCEL){
+                listViewVoxelsFiles.getItems().remove(voxelFile);
+            }
+
+            return;
+                
+        }
+            
         String[] parameters = VoxelSpaceData.readAttributs(listViewVoxelsFiles.getSelectionModel().getSelectedItem());
 
         for (int i = 0; i < parameters.length; i++) {
@@ -1721,7 +1745,7 @@ public class MainFrameController implements Initializable {
 
     private void addFileToVoxelList(File file) {
 
-        if (!listViewVoxelsFiles.getItems().contains(file)) {
+        if (!listViewVoxelsFiles.getItems().contains(file) && Files.exists(file.toPath())) {
             listViewVoxelsFiles.getItems().add(file);
             listViewVoxelsFiles.getSelectionModel().select(file);
         }
@@ -1750,11 +1774,37 @@ public class MainFrameController implements Initializable {
     private void executeProcess(final File file) {
 
         final Configuration cfg = new Configuration();
-        cfg.readConfiguration(file);
+        
+        try{
+            cfg.readConfiguration(file);
+            
+        }catch(Exception e){
+            logger.error(e);
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setHeaderText("Incorrect file");
+            alert.setContentText("File is corrupted or cannot be read!\n"+
+                                file.getAbsolutePath());
+            alert.show();
+            
+            if (!queue.isEmpty()) {
+                try {
+                    taskID++;
+                    executeProcess(queue.take());
+
+                } catch (InterruptedException ex) {
+                    logger.error(ex);
+                }
+            }
+            
+            return;
+        }
+        
 
         final long start_time = System.currentTimeMillis();
         ProgressDialog d;
-        Service<Void> service;
+        final Service<Void> service;
+        final VoxelisationTool voxTool = new VoxelisationTool();
+        
 
         ProcessMode processMode = cfg.getProcessMode();
 
@@ -1766,7 +1816,6 @@ public class MainFrameController implements Initializable {
                     @Override
                     protected Void call() throws InterruptedException {
                         
-                        VoxelisationTool voxTool;
                         
                         final String msgTask = "Task "+taskID+"/"+taskNumber+" :"+file.getAbsolutePath();
                         updateMessage(msgTask);
@@ -1775,7 +1824,6 @@ public class MainFrameController implements Initializable {
                             
                             case MERGING:
 
-                                voxTool = new VoxelisationTool();
                                 voxTool.mergeVoxelsFile(cfg.getFiles(), cfg.getOutputFile(), cfg.getVoxelParameters().getTransmittanceMode(), cfg.getVoxelParameters().getMaxPAD());
 
                                 Platform.runLater(new Runnable() {
@@ -1791,7 +1839,6 @@ public class MainFrameController implements Initializable {
                                 
                             case VOXELISATION_ALS:
 
-                                voxTool = new VoxelisationTool();
                                 voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
 
                                     @Override
@@ -1829,7 +1876,6 @@ public class MainFrameController implements Initializable {
 
                             case VOXELISATION_TLS:
 
-                                voxTool = new VoxelisationTool();
                                 voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
 
                                     @Override
@@ -1861,7 +1907,6 @@ public class MainFrameController implements Initializable {
                                                     MatrixConverter.convertMatrix4dToMat4D(cfg.getPopMatrix()), cfg.getMatricesAndFiles(), cfg.getFilters());
 
                                             if (cfg.getVoxelParameters().isMergingAfter()) {
-                                                voxTool = new VoxelisationTool();
 
                                                 voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
 
@@ -1963,6 +2008,17 @@ public class MainFrameController implements Initializable {
         d.initOwner(stage);
         d.setResizable(true);
         d.show();
+        Button buttonCancel = new Button("cancel");
+        d.setGraphic(buttonCancel);
+        
+        buttonCancel.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                service.cancel();
+                voxTool.setCancelled(true);
+            }
+        });
         
         service.exceptionProperty().addListener(new ChangeListener<Throwable>() {
 
@@ -2236,7 +2292,22 @@ public class MainFrameController implements Initializable {
         if (selectedFile != null) {
 
             Configuration cfg = new Configuration();
-            cfg.readConfiguration(selectedFile);
+            try{
+                cfg.readConfiguration(selectedFile);
+
+            }catch(Exception e){
+                logger.error(e);
+                Alert alert = new Alert(AlertType.CONFIRMATION);
+                alert.setHeaderText("Incorrect file");
+                alert.setContentText("File is corrupted or cannot be read!\n"
+                        + "Do you want to keep it?");
+                Optional<ButtonType> result = alert.showAndWait();
+                if(result.get() == ButtonType.CANCEL){
+                    listViewTaskList.getItems().remove(selectedFile);
+                }
+
+                return;
+            }
 
             
 

@@ -7,15 +7,10 @@ package fr.ird.voxelidar.voxelisation.raytracing.voxel;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class TLSVoxel extends Voxel{
-    
-    public double bflEntering = 0;
-    public double bflIntercepted = 0;
-    public double PadBflTotal = 0;
-    public double PadBflTotal_V2 = 0;
-    
+        
     public TLSVoxel(int i, int j, int k) {
         super(i, j, k);
     }

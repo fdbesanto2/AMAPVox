@@ -10,7 +10,7 @@ import java.io.File;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class RxpScan {
     

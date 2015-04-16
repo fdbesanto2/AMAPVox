@@ -11,7 +11,7 @@ import javax.vecmath.Matrix4d;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class MatrixAndFile implements Serializable{
     

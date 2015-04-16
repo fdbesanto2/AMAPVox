@@ -9,7 +9,7 @@ import fr.ird.voxelidar.engine3d.math.point.Point2D;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Vec2D extends Point2D{
     

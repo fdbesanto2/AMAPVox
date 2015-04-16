@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * This class represent a set of filters
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class VoxelFilter implements FilterInterface{
         

@@ -9,7 +9,7 @@ import javax.swing.JComponent;
 
 /**
  *
- * @author Julien
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Misc {
     
