@@ -108,15 +108,10 @@ public class DartWriter {
             
             float densite;
             try{
-                densite = attributs[attributsNames.indexOf("PadBflTotal")];
+                densite = attributs[attributsNames.indexOf("PadBVTotal")];
             }catch(Exception e){ 
-            
-                try{
-                    densite = attributs[attributsNames.indexOf("PadBVTotal")];
-                }catch(Exception e2){ 
-                    logger.error("could not find attribut PadBflTotal or PadBVTotal");
-                    return;
-                }
+                logger.error("could not find attribut PadBflTotal or PadBVTotal");
+                return;
             }
                         
             
@@ -124,22 +119,24 @@ public class DartWriter {
             int indiceY = voxel.$j;
             int indiceZ = voxel.$k;
             
-            dart.cells[indiceX][indiceZ][indiceY] = new DartCell();
+            dart.cells[indiceX][indiceY][indiceZ] = new DartCell();
             
-            dart.cells[indiceX][indiceZ][indiceY].setNbFigures(0);
-            dart.cells[indiceX][indiceZ][indiceY].setNbTurbids(1);
+            dart.cells[indiceX][indiceY][indiceZ].setNbFigures(0);
+            dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(1);
             
             if(Float.isNaN(densite) || densite == 0){
-                dart.cells[indiceX][indiceZ][indiceY].setType(DartCell.CELL_TYPE_EMPTY);
+                dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_EMPTY);
                 densite = 0f;
             }else{
-                dart.cells[indiceX][indiceZ][indiceY].setType(DartCell.CELL_TYPE_TURBID_CROWN);
+                dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_TURBID_CROWN);
             }
             
-            dart.cells[indiceX][indiceZ][indiceY].setTurbids(new Turbid[]{new Turbid(densite, 0)});
+            dart.cells[indiceX][indiceY][indiceZ].setTurbids(new Turbid[]{new Turbid(densite, 0)});
             
         }
         
+        logger.info("Writing dart file "+outputFile.getAbsolutePath());
         DartWriter.writeFromDart(dart, outputFile);
+        logger.info("dart file written");
     }
 }

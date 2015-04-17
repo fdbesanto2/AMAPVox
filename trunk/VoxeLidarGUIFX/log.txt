@@ -41733,3 +41733,57 @@
 2015-04-17 15:58:44 INFO  - Merging in progress, file 98 : 98
 2015-04-17 15:58:45 INFO  - Recalculate lMeanTotal, angleMean, transmittance, PadBVTotal
 2015-04-17 15:58:46 INFO  - writing output file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_pondere/tls_paracou_2013_pondere.vox
+2015-04-17 18:52:00 INFO  - allocate!!!!!!!!
+2015-04-17 18:52:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 18:52:11 INFO  - Shots processed: 141106
+2015-04-17 18:52:11 INFO  - voxelisation is finished ( 10.0 s )
+2015-04-17 18:52:11 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/temp4/las1m.vox
+2015-04-17 18:52:13 INFO  - file written ( 2.0 s )
+2015-04-17 18:52:13 INFO  - las voxelisation finished in 12.0 s
+2015-04-17 18:52:27 INFO  - allocate!!!!!!!!
+2015-04-17 18:52:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(12, 72, 32)
+			Toricity 	:	false
+
+2015-04-17 18:52:30 INFO  - Shots processed: 141106
+2015-04-17 18:52:30 INFO  - voxelisation is finished ( 2.0 s )
+2015-04-17 18:52:30 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/temp4/las2m.vox
+2015-04-17 18:52:30 INFO  - file written ( 0.0 s )
+2015-04-17 18:52:30 INFO  - las voxelisation finished in 3.0 s
+2015-04-17 18:52:40 INFO  - allocate!!!!!!!!
+2015-04-17 18:52:40 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(8, 48, 21)
+			Toricity 	:	false
+
+2015-04-17 18:52:43 INFO  - Shots processed: 141106
+2015-04-17 18:52:43 INFO  - voxelisation is finished ( 3.0 s )
+2015-04-17 18:52:43 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/temp4/las3m.vox
+2015-04-17 18:52:43 INFO  - file written ( 0.0 s )
+2015-04-17 18:52:43 INFO  - las voxelisation finished in 3.0 s
+2015-04-17 18:53:06 INFO  - allocate!!!!!!!!
+2015-04-17 18:53:06 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(6, 36, 16)
+			Toricity 	:	false
+
+2015-04-17 18:53:09 INFO  - Shots processed: 141106
+2015-04-17 18:53:09 INFO  - voxelisation is finished ( 3.0 s )
+2015-04-17 18:53:09 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/temp4/las4m.vox
+2015-04-17 18:53:09 INFO  - file written ( 0.0 s )
+2015-04-17 18:53:09 INFO  - las voxelisation finished in 3.0 s
+2015-04-17 18:53:59 INFO  - Nombre de valeurs correctes: 140847/221184
+2015-04-17 18:53:59 INFO  - Nombre de valeurs corrigées: 37356/221184
+2015-04-17 18:53:59 INFO  - Nombre de valeurs mises à défaut: 42981/221184
+2015-04-17 19:00:25 INFO  - Nombre de valeurs correctes: 140847/221184
+2015-04-17 19:00:25 INFO  - Nombre de valeurs corrigées: 37356/221184
+2015-04-17 19:00:25 INFO  - Nombre de valeurs mises à défaut: 42981/221184
