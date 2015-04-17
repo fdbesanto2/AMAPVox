@@ -32,6 +32,10 @@ public class LazExtraction implements Iterable<LasPoint>{
     private long lasZipPointer;
     private LasHeader header;
     
+    public LazExtraction(){
+        
+    }
+    
     static {
         
         NativeLoader loader = new NativeLoader();

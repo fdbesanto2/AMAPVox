@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import javafx.application.Platform;
 import org.apache.log4j.Logger;
 
 /**
@@ -29,10 +30,17 @@ public class NativeLoader {
         try {
             String path = saveLibrary(library);
             logger.info(path);
+            
             System.load(path);
         } catch (IOException e) {
             logger.warn("Could not find library " + library +
                     " as resource, trying fallback lookup through System.loadLibrary");
+            System.loadLibrary(library);
+        } catch (SecurityException e) {
+            logger.error("Security exception: "+e);
+            System.loadLibrary(library);
+        }catch (Exception e) {
+            logger.error("Unknown error: "+e);
             System.loadLibrary(library);
         }
     }
