@@ -37859,3 +37859,3858 @@
 2015-04-16 18:21:52 INFO  - writing output file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/tls_paracou_2013_non_pondere.vox
 2015-04-16 18:21:53 INFO  - Voxelisation finished in 183.0 s
 2015-04-16 18:21:53 INFO  - Voxelisation finished in 183.0 s
+2015-04-17 09:02:05 ERROR - java.io.FileNotFoundException: File /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/project.rsp not reachable
+2015-04-17 09:02:36 INFO  - Saved libfile: /tmp/RivLibJNI-513904796408562295.tmp
+2015-04-17 09:02:36 INFO  - /tmp/RivLibJNI-513904796408562295.tmp
+2015-04-17 09:02:36 INFO  - rxp extraction is started
+2015-04-17 09:02:36 INFO  - rxp extraction is started
+2015-04-17 09:02:36 INFO  - rxp extraction is started
+2015-04-17 09:02:36 INFO  - rxp extraction is started
+2015-04-17 09:02:36 INFO  - rxp extraction is started
+2015-04-17 09:02:36 INFO  - rxp extraction is started
+2015-04-17 09:02:36 INFO  - rxp extraction is started
+2015-04-17 09:02:36 INFO  - rxp extraction is started
+2015-04-17 09:02:36 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:36 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:36 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:36 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:36 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:36 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:36 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:36 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:37 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:37 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:37 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:38 INFO  - Shots processed: 102033
+2015-04-17 09:02:38 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_155228.mon.rxp.vox
+2015-04-17 09:02:38 INFO  - Shots processed: 103354
+2015-04-17 09:02:38 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:38 INFO  - Shots processed: 105010
+2015-04-17 09:02:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_180238.mon.rxp.vox
+2015-04-17 09:02:38 INFO  - Shots processed: 103140
+2015-04-17 09:02:38 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_173534.mon.rxp.vox
+2015-04-17 09:02:38 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_172354.mon.rxp.vox
+2015-04-17 09:02:38 ERROR - Error: java.util.ConcurrentModificationException
+2015-04-17 09:02:38 INFO  - rxp extraction is started
+2015-04-17 09:02:38 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:38 INFO  - Shots processed: 102762
+2015-04-17 09:02:38 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_181314.mon.rxp.vox
+2015-04-17 09:02:38 INFO  - Shots processed: 102318
+2015-04-17 09:02:38 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_153258.mon.rxp.vox
+2015-04-17 09:02:38 INFO  - Shots processed: 120316
+2015-04-17 09:02:38 INFO  - voxelisation is finished ( 2.0 s )
+2015-04-17 09:02:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_165102.mon.rxp.vox
+2015-04-17 09:02:38 INFO  - Shots processed: 107045
+2015-04-17 09:02:38 INFO  - voxelisation is finished ( 2.0 s )
+2015-04-17 09:02:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_170323.mon.rxp.vox
+2015-04-17 09:02:38 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:39 INFO  - Shots processed: 113065
+2015-04-17 09:02:39 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:02:39 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_183042.mon.rxp.vox
+2015-04-17 09:02:46 INFO  - file written ( 7.0 s )
+2015-04-17 09:02:46 INFO  - file written ( 7.0 s )
+2015-04-17 09:02:46 INFO  - file written ( 7.0 s )
+2015-04-17 09:02:46 INFO  - file written ( 7.0 s )
+2015-04-17 09:02:46 INFO  - file written ( 7.0 s )
+2015-04-17 09:02:46 INFO  - file written ( 7.0 s )
+2015-04-17 09:02:46 INFO  - file written ( 7.0 s )
+2015-04-17 09:02:46 INFO  - file written ( 7.0 s )
+2015-04-17 09:02:46 INFO  - rxp extraction is started
+2015-04-17 09:02:46 INFO  - rxp extraction is started
+2015-04-17 09:02:46 INFO  - rxp extraction is started
+2015-04-17 09:02:46 INFO  - rxp extraction is started
+2015-04-17 09:02:46 INFO  - rxp extraction is started
+2015-04-17 09:02:46 INFO  - rxp extraction is started
+2015-04-17 09:02:46 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:46 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:46 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:46 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:46 INFO  - rxp extraction is started
+2015-04-17 09:02:46 INFO  - rxp extraction is started
+2015-04-17 09:02:46 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:46 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:46 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:46 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:47 INFO  - Shots processed: 103151
+2015-04-17 09:02:47 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_191522.mon.rxp.vox
+2015-04-17 09:02:47 INFO  - Shots processed: 103570
+2015-04-17 09:02:47 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_133920.mon.rxp.vox
+2015-04-17 09:02:47 INFO  - Shots processed: 103979
+2015-04-17 09:02:47 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_134826.mon.rxp.vox
+2015-04-17 09:02:47 INFO  - Shots processed: 104747
+2015-04-17 09:02:47 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_123449.mon.rxp.vox
+2015-04-17 09:02:47 INFO  - Shots processed: 104210
+2015-04-17 09:02:47 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_122225.mon.rxp.vox
+2015-04-17 09:02:47 INFO  - Shots processed: 111237
+2015-04-17 09:02:47 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_125837.mon.rxp.vox
+2015-04-17 09:02:47 INFO  - Shots processed: 108729
+2015-04-17 09:02:47 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_184509.mon.rxp.vox
+2015-04-17 09:02:47 INFO  - Shots processed: 109645
+2015-04-17 09:02:47 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_131257.mon.rxp.vox
+2015-04-17 09:02:48 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:48 INFO  - rxp extraction is started
+2015-04-17 09:02:48 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:48 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:48 INFO  - rxp extraction is started
+2015-04-17 09:02:48 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:48 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:48 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:49 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:49 INFO  - rxp extraction is started
+2015-04-17 09:02:49 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:49 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:49 INFO  - rxp extraction is started
+2015-04-17 09:02:49 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:49 INFO  - rxp extraction is started
+2015-04-17 09:02:49 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:49 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:49 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:49 INFO  - rxp extraction is started
+2015-04-17 09:02:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:49 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:49 INFO  - rxp extraction is started
+2015-04-17 09:02:49 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:49 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:49 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:49 INFO  - rxp extraction is started
+2015-04-17 09:02:49 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:50 INFO  - Shots processed: 106049
+2015-04-17 09:02:50 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_141612.mon.rxp.vox
+2015-04-17 09:02:50 INFO  - Shots processed: 109672
+2015-04-17 09:02:50 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_150855.mon.rxp.vox
+2015-04-17 09:02:50 INFO  - Shots processed: 114237
+2015-04-17 09:02:50 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_145611.mon.rxp.vox
+2015-04-17 09:02:50 INFO  - Shots processed: 104502
+2015-04-17 09:02:50 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_142830.mon.rxp.vox
+2015-04-17 09:02:50 INFO  - Shots processed: 103119
+2015-04-17 09:02:50 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_171803.mon.rxp.vox
+2015-04-17 09:02:50 INFO  - Shots processed: 102526
+2015-04-17 09:02:50 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_172740.mon.rxp.vox
+2015-04-17 09:02:50 INFO  - Shots processed: 102432
+2015-04-17 09:02:50 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_180026.mon.rxp.vox
+2015-04-17 09:02:51 INFO  - Shots processed: 102437
+2015-04-17 09:02:51 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:51 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_181513.mon.rxp.vox
+2015-04-17 09:02:51 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:51 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:51 INFO  - rxp extraction is started
+2015-04-17 09:02:51 INFO  - rxp extraction is started
+2015-04-17 09:02:51 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:51 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:51 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:51 INFO  - rxp extraction is started
+2015-04-17 09:02:51 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:51 INFO  - rxp extraction is started
+2015-04-17 09:02:51 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:51 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:51 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:51 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:51 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:51 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:51 INFO  - rxp extraction is started
+2015-04-17 09:02:51 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:51 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:52 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:52 INFO  - rxp extraction is started
+2015-04-17 09:02:52 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:52 INFO  - rxp extraction is started
+2015-04-17 09:02:52 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:52 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:52 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:52 INFO  - rxp extraction is started
+2015-04-17 09:02:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:52 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:52 INFO  - Shots processed: 105179
+2015-04-17 09:02:52 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:52 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_185857.mon.rxp.vox
+2015-04-17 09:02:52 INFO  - Shots processed: 101801
+2015-04-17 09:02:52 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:52 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_182424.mon.rxp.vox
+2015-04-17 09:02:52 INFO  - Shots processed: 104484
+2015-04-17 09:02:52 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:52 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_191943.mon.rxp.vox
+2015-04-17 09:02:53 INFO  - Shots processed: 101888
+2015-04-17 09:02:53 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_193024.mon.rxp.vox
+2015-04-17 09:02:53 INFO  - Shots processed: 112690
+2015-04-17 09:02:53 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_184530.mon.rxp.vox
+2015-04-17 09:02:53 INFO  - Shots processed: 101887
+2015-04-17 09:02:53 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:02:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_123017.mon.rxp.vox
+2015-04-17 09:02:53 INFO  - Shots processed: 102848
+2015-04-17 09:02:53 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_121750.mon.rxp.vox
+2015-04-17 09:02:53 INFO  - Shots processed: 104408
+2015-04-17 09:02:53 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_125428.mon.rxp.vox
+2015-04-17 09:02:54 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:54 INFO  - rxp extraction is started
+2015-04-17 09:02:54 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:54 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:54 INFO  - rxp extraction is started
+2015-04-17 09:02:54 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:54 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:54 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:54 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:54 INFO  - rxp extraction is started
+2015-04-17 09:02:54 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:54 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:54 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:54 INFO  - rxp extraction is started
+2015-04-17 09:02:54 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:54 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:54 INFO  - rxp extraction is started
+2015-04-17 09:02:54 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:54 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:54 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:54 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:54 INFO  - rxp extraction is started
+2015-04-17 09:02:54 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:54 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:54 INFO  - rxp extraction is started
+2015-04-17 09:02:54 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:54 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:54 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:54 INFO  - rxp extraction is started
+2015-04-17 09:02:54 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:54 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:54 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:55 INFO  - Shots processed: 103262
+2015-04-17 09:02:55 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_130556.mon.rxp.vox
+2015-04-17 09:02:56 INFO  - Shots processed: 101493
+2015-04-17 09:02:56 INFO  - voxelisation is finished ( 2.0 s )
+2015-04-17 09:02:56 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_133226.mon.rxp.vox
+2015-04-17 09:02:56 INFO  - Shots processed: 102603
+2015-04-17 09:02:56 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:56 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_133940.mon.rxp.vox
+2015-04-17 09:02:56 INFO  - Shots processed: 102609
+2015-04-17 09:02:56 INFO  - voxelisation is finished ( 2.0 s )
+2015-04-17 09:02:56 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_143440.mon.rxp.vox
+2015-04-17 09:02:56 INFO  - Shots processed: 102747
+2015-04-17 09:02:56 INFO  - voxelisation is finished ( 2.0 s )
+2015-04-17 09:02:56 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_142431.mon.rxp.vox
+2015-04-17 09:02:56 INFO  - Shots processed: 102448
+2015-04-17 09:02:56 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:56 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_165901.mon.rxp.vox
+2015-04-17 09:02:56 INFO  - Shots processed: 122216
+2015-04-17 09:02:56 INFO  - voxelisation is finished ( 2.0 s )
+2015-04-17 09:02:56 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_145456.mon.rxp.vox
+2015-04-17 09:02:56 INFO  - Shots processed: 123081
+2015-04-17 09:02:56 INFO  - voxelisation is finished ( 2.0 s )
+2015-04-17 09:02:56 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_150850.mon.rxp.vox
+2015-04-17 09:02:57 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:57 INFO  - rxp extraction is started
+2015-04-17 09:02:57 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:57 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:57 INFO  - rxp extraction is started
+2015-04-17 09:02:57 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:57 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:57 INFO  - rxp extraction is started
+2015-04-17 09:02:57 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:58 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:58 INFO  - rxp extraction is started
+2015-04-17 09:02:58 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:58 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:58 INFO  - rxp extraction is started
+2015-04-17 09:02:58 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:58 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:58 INFO  - rxp extraction is started
+2015-04-17 09:02:58 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:58 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:58 INFO  - rxp extraction is started
+2015-04-17 09:02:58 INFO  - file written ( 1.0 s )
+2015-04-17 09:02:58 INFO  - rxp extraction is started
+2015-04-17 09:02:58 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:58 INFO  - allocate!!!!!!!!
+2015-04-17 09:02:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:02:58 INFO  - Shots processed: 102307
+2015-04-17 09:02:58 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:02:58 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_171419.mon.rxp.vox
+2015-04-17 09:02:58 INFO  - Shots processed: 103319
+2015-04-17 09:02:58 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:02:58 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_175252.mon.rxp.vox
+2015-04-17 09:02:58 INFO  - Shots processed: 104259
+2015-04-17 09:02:58 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:02:58 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_180303.mon.rxp.vox
+2015-04-17 09:02:59 INFO  - Shots processed: 108885
+2015-04-17 09:02:59 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:59 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_183508.mon.rxp.vox
+2015-04-17 09:02:59 INFO  - Shots processed: 102233
+2015-04-17 09:02:59 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:02:59 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_185149.mon.rxp.vox
+2015-04-17 09:02:59 INFO  - Shots processed: 113955
+2015-04-17 09:02:59 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:02:59 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_192322.mon.rxp.vox
+2015-04-17 09:02:59 INFO  - Shots processed: 101856
+2015-04-17 09:02:59 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:59 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_135046.mon.rxp.vox
+2015-04-17 09:02:59 INFO  - Shots processed: 121759
+2015-04-17 09:02:59 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:02:59 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_191227.mon.rxp.vox
+2015-04-17 09:03:00 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:00 INFO  - rxp extraction is started
+2015-04-17 09:03:00 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:00 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:00 INFO  - rxp extraction is started
+2015-04-17 09:03:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:00 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:00 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:00 INFO  - rxp extraction is started
+2015-04-17 09:03:00 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:00 INFO  - rxp extraction is started
+2015-04-17 09:03:00 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:00 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:00 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:00 INFO  - rxp extraction is started
+2015-04-17 09:03:00 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:00 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:00 INFO  - rxp extraction is started
+2015-04-17 09:03:00 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:01 INFO  - file written ( 2.0 s )
+2015-04-17 09:03:01 INFO  - file written ( 2.0 s )
+2015-04-17 09:03:01 INFO  - Shots processed: 101333
+2015-04-17 09:03:01 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:03:01 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_140008.mon.rxp.vox
+2015-04-17 09:03:01 INFO  - rxp extraction is started
+2015-04-17 09:03:01 INFO  - rxp extraction is started
+2015-04-17 09:03:01 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:01 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:01 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:01 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:01 INFO  - Shots processed: 107553
+2015-04-17 09:03:01 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:03:01 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_142302.mon.rxp.vox
+2015-04-17 09:03:01 INFO  - Shots processed: 101706
+2015-04-17 09:03:01 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:03:01 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_150134.mon.rxp.vox
+2015-04-17 09:03:01 INFO  - Shots processed: 103866
+2015-04-17 09:03:01 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:03:01 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_143618.mon.rxp.vox
+2015-04-17 09:03:01 INFO  - Shots processed: 101557
+2015-04-17 09:03:01 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:03:01 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_151122.mon.rxp.vox
+2015-04-17 09:03:02 INFO  - Shots processed: 103312
+2015-04-17 09:03:02 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:03:02 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_160832.mon.rxp.vox
+2015-04-17 09:03:02 INFO  - Shots processed: 104405
+2015-04-17 09:03:02 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:03:02 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_164048.mon.rxp.vox
+2015-04-17 09:03:02 INFO  - Shots processed: 112046
+2015-04-17 09:03:02 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:03:02 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_165830.mon.rxp.vox
+2015-04-17 09:03:02 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:02 INFO  - rxp extraction is started
+2015-04-17 09:03:02 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:02 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:02 INFO  - rxp extraction is started
+2015-04-17 09:03:02 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:02 INFO  - rxp extraction is started
+2015-04-17 09:03:02 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:02 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:03 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:03 INFO  - rxp extraction is started
+2015-04-17 09:03:03 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:03 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:03 INFO  - rxp extraction is started
+2015-04-17 09:03:03 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:03 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:03 INFO  - rxp extraction is started
+2015-04-17 09:03:03 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:03 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:03 INFO  - rxp extraction is started
+2015-04-17 09:03:03 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:03 INFO  - Shots processed: 109851
+2015-04-17 09:03:03 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:03:03 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_171823.mon.rxp.vox
+2015-04-17 09:03:03 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:03 INFO  - rxp extraction is started
+2015-04-17 09:03:03 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:03 INFO  - Shots processed: 102738
+2015-04-17 09:03:03 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:03:03 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_174121.mon.rxp.vox
+2015-04-17 09:03:04 INFO  - Shots processed: 100830
+2015-04-17 09:03:04 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:03:04 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_175132.mon.rxp.vox
+2015-04-17 09:03:04 INFO  - Shots processed: 103165
+2015-04-17 09:03:04 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:03:04 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_181739.mon.rxp.vox
+2015-04-17 09:03:04 INFO  - Shots processed: 101623
+2015-04-17 09:03:04 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:03:04 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_182814.mon.rxp.vox
+2015-04-17 09:03:04 INFO  - Shots processed: 105793
+2015-04-17 09:03:04 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:03:04 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_185532.mon.rxp.vox
+2015-04-17 09:03:04 INFO  - Shots processed: 109148
+2015-04-17 09:03:04 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:03:04 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_184325.mon.rxp.vox
+2015-04-17 09:03:04 INFO  - Shots processed: 102003
+2015-04-17 09:03:04 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:03:04 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_191453.mon.rxp.vox
+2015-04-17 09:03:04 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:04 INFO  - rxp extraction is started
+2015-04-17 09:03:04 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:05 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:05 INFO  - rxp extraction is started
+2015-04-17 09:03:05 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:05 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:05 INFO  - rxp extraction is started
+2015-04-17 09:03:05 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:05 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:05 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:05 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:05 INFO  - rxp extraction is started
+2015-04-17 09:03:05 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:05 INFO  - Shots processed: 100679
+2015-04-17 09:03:05 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:03:05 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_192355.mon.rxp.vox
+2015-04-17 09:03:05 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:05 INFO  - Shots processed: 102522
+2015-04-17 09:03:05 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:03:05 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_134352.mon.rxp.vox
+2015-04-17 09:03:05 INFO  - Shots processed: 101857
+2015-04-17 09:03:05 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:03:05 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_133336.mon.rxp.vox
+2015-04-17 09:03:05 INFO  - Shots processed: 107629
+2015-04-17 09:03:05 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:03:05 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_140251.mon.rxp.vox
+2015-04-17 09:03:07 INFO  - file written ( 3.0 s )
+2015-04-17 09:03:07 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:07 INFO  - file written ( 3.0 s )
+2015-04-17 09:03:07 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:07 INFO  - rxp extraction is started
+2015-04-17 09:03:07 INFO  - rxp extraction is started
+2015-04-17 09:03:07 INFO  - rxp extraction is started
+2015-04-17 09:03:07 INFO  - rxp extraction is started
+2015-04-17 09:03:07 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:07 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:07 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:07 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:07 INFO  - file written ( 3.0 s )
+2015-04-17 09:03:07 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:07 INFO  - file written ( 3.0 s )
+2015-04-17 09:03:07 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:07 INFO  - rxp extraction is started
+2015-04-17 09:03:07 INFO  - rxp extraction is started
+2015-04-17 09:03:07 INFO  - rxp extraction is started
+2015-04-17 09:03:07 INFO  - rxp extraction is started
+2015-04-17 09:03:07 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:07 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:07 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:07 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:10 INFO  - Shots processed: 104843
+2015-04-17 09:03:10 INFO  - voxelisation is finished ( 3.0 s )
+2015-04-17 09:03:10 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_141436.mon.rxp.vox
+2015-04-17 09:03:10 INFO  - Shots processed: 102512
+2015-04-17 09:03:10 INFO  - voxelisation is finished ( 3.0 s )
+2015-04-17 09:03:10 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_144829.mon.rxp.vox
+2015-04-17 09:03:10 INFO  - Shots processed: 103308
+2015-04-17 09:03:10 INFO  - voxelisation is finished ( 3.0 s )
+2015-04-17 09:03:10 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_151714.mon.rxp.vox
+2015-04-17 09:03:10 INFO  - Shots processed: 103812
+2015-04-17 09:03:10 INFO  - voxelisation is finished ( 3.0 s )
+2015-04-17 09:03:10 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_143835.mon.rxp.vox
+2015-04-17 09:03:10 INFO  - Shots processed: 102460
+2015-04-17 09:03:10 INFO  - voxelisation is finished ( 3.0 s )
+2015-04-17 09:03:10 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_162929.mon.rxp.vox
+2015-04-17 09:03:10 INFO  - Shots processed: 103921
+2015-04-17 09:03:10 INFO  - voxelisation is finished ( 3.0 s )
+2015-04-17 09:03:10 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_161029.mon.rxp.vox
+2015-04-17 09:03:10 INFO  - Shots processed: 103605
+2015-04-17 09:03:10 INFO  - voxelisation is finished ( 3.0 s )
+2015-04-17 09:03:10 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_152642.mon.rxp.vox
+2015-04-17 09:03:10 INFO  - Shots processed: 106031
+2015-04-17 09:03:10 INFO  - voxelisation is finished ( 3.0 s )
+2015-04-17 09:03:10 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_155553.mon.rxp.vox
+2015-04-17 09:03:11 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:11 INFO  - rxp extraction is started
+2015-04-17 09:03:11 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:11 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:11 INFO  - rxp extraction is started
+2015-04-17 09:03:11 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:11 INFO  - rxp extraction is started
+2015-04-17 09:03:11 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:11 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:11 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:11 INFO  - rxp extraction is started
+2015-04-17 09:03:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:11 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:11 INFO  - rxp extraction is started
+2015-04-17 09:03:11 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:11 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:12 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:12 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:12 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:12 INFO  - rxp extraction is started
+2015-04-17 09:03:12 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:12 INFO  - rxp extraction is started
+2015-04-17 09:03:12 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:12 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:12 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:12 INFO  - rxp extraction is started
+2015-04-17 09:03:12 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:12 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:12 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:12 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:12 INFO  - Shots processed: 102765
+2015-04-17 09:03:12 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:03:12 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_163726.mon.rxp.vox
+2015-04-17 09:03:13 INFO  - Shots processed: 101372
+2015-04-17 09:03:13 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:03:13 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_171242.mon.rxp.vox
+2015-04-17 09:03:13 INFO  - Shots processed: 102517
+2015-04-17 09:03:13 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:03:13 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_170129.mon.rxp.vox
+2015-04-17 09:03:13 INFO  - Shots processed: 105978
+2015-04-17 09:03:13 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:03:13 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_173036.mon.rxp.vox
+2015-04-17 09:03:13 INFO  - Shots processed: 107334
+2015-04-17 09:03:13 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:03:13 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_174226.mon.rxp.vox
+2015-04-17 09:03:13 INFO  - Shots processed: 102093
+2015-04-17 09:03:13 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:03:13 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_181003.mon.rxp.vox
+2015-04-17 09:03:13 INFO  - Shots processed: 103218
+2015-04-17 09:03:13 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:03:13 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_175925.mon.rxp.vox
+2015-04-17 09:03:13 INFO  - Shots processed: 103141
+2015-04-17 09:03:13 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:03:13 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_183037.mon.rxp.vox
+2015-04-17 09:03:13 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:13 INFO  - rxp extraction is started
+2015-04-17 09:03:13 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:14 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:14 INFO  - rxp extraction is started
+2015-04-17 09:03:14 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:14 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:14 INFO  - rxp extraction is started
+2015-04-17 09:03:14 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:14 INFO  - rxp extraction is started
+2015-04-17 09:03:14 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:14 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:14 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:14 INFO  - rxp extraction is started
+2015-04-17 09:03:14 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:14 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:14 INFO  - rxp extraction is started
+2015-04-17 09:03:14 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:14 INFO  - file written ( 1.0 s )
+2015-04-17 09:03:14 INFO  - rxp extraction is started
+2015-04-17 09:03:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:14 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:17 INFO  - file written ( 3.0 s )
+2015-04-17 09:03:17 INFO  - rxp extraction is started
+2015-04-17 09:03:17 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:17 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:17 INFO  - Shots processed: 103251
+2015-04-17 09:03:17 INFO  - voxelisation is finished ( 3.0 s )
+2015-04-17 09:03:17 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_185618.mon.rxp.vox
+2015-04-17 09:03:22 INFO  - Shots processed: 102764
+2015-04-17 09:03:22 INFO  - voxelisation is finished ( 8.0 s )
+2015-04-17 09:03:23 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_190642.mon.rxp.vox
+2015-04-17 09:03:24 INFO  - Shots processed: 120206
+2015-04-17 09:03:24 INFO  - voxelisation is finished ( 9.0 s )
+2015-04-17 09:03:24 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_192239.mon.rxp.vox
+2015-04-17 09:03:24 INFO  - Shots processed: 102495
+2015-04-17 09:03:24 INFO  - voxelisation is finished ( 9.0 s )
+2015-04-17 09:03:24 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_123314.mon.rxp.vox
+2015-04-17 09:03:25 INFO  - Shots processed: 102882
+2015-04-17 09:03:25 INFO  - Shots processed: 120436
+2015-04-17 09:03:25 INFO  - voxelisation is finished ( 10.0 s )
+2015-04-17 09:03:25 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_193411.mon.rxp.vox
+2015-04-17 09:03:25 INFO  - voxelisation is finished ( 10.0 s )
+2015-04-17 09:03:25 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_120013.mon.rxp.vox
+2015-04-17 09:03:25 INFO  - Shots processed: 105916
+2015-04-17 09:03:25 INFO  - voxelisation is finished ( 10.0 s )
+2015-04-17 09:03:25 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_115122.mon.rxp.vox
+2015-04-17 09:03:26 INFO  - Shots processed: 102589
+2015-04-17 09:03:26 INFO  - voxelisation is finished ( 8.0 s )
+2015-04-17 09:03:26 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_124133.mon.rxp.vox
+2015-04-17 09:03:30 INFO  - file written ( 12.0 s )
+2015-04-17 09:03:30 INFO  - rxp extraction is started
+2015-04-17 09:03:30 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:32 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:35 INFO  - file written ( 12.0 s )
+2015-04-17 09:03:35 INFO  - rxp extraction is started
+2015-04-17 09:03:35 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:38 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:41 INFO  - file written ( 17.0 s )
+2015-04-17 09:03:41 INFO  - rxp extraction is started
+2015-04-17 09:03:41 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:44 INFO  - Shots processed: 109173
+2015-04-17 09:03:44 INFO  - voxelisation is finished ( 13.0 s )
+2015-04-17 09:03:44 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_130322.mon.rxp.vox
+2015-04-17 09:03:44 INFO  - file written ( 19.0 s )
+2015-04-17 09:03:44 INFO  - rxp extraction is started
+2015-04-17 09:03:44 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:44 INFO  - file written ( 18.0 s )
+2015-04-17 09:03:44 INFO  - rxp extraction is started
+2015-04-17 09:03:44 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:44 INFO  - allocate!!!!!!!!
+2015-04-17 09:03:46 INFO  - file written ( 21.0 s )
+2015-04-17 09:03:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:03:49 INFO  - file written ( 24.0 s )
+2015-04-17 09:03:52 INFO  - Shots processed: 109925
+2015-04-17 09:03:52 INFO  - voxelisation is finished ( 16.0 s )
+2015-04-17 09:03:52 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_131430.mon.rxp.vox
+2015-04-17 09:03:52 INFO  - Shots processed: 102456
+2015-04-17 09:03:52 INFO  - voxelisation is finished ( 11.0 s )
+2015-04-17 09:03:52 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_134326.mon.rxp.vox
+2015-04-17 09:03:53 INFO  - file written ( 27.0 s )
+2015-04-17 09:03:54 INFO  - Shots processed: 103401
+2015-04-17 09:03:54 INFO  - voxelisation is finished ( 10.0 s )
+2015-04-17 09:03:54 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_190353.mon.rxp.vox
+2015-04-17 09:03:54 INFO  - Shots processed: 103284
+2015-04-17 09:03:54 INFO  - voxelisation is finished ( 10.0 s )
+2015-04-17 09:03:54 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_135249.mon.rxp.vox
+2015-04-17 09:03:57 INFO  - file written ( 13.0 s )
+2015-04-17 09:04:00 INFO  - file written ( 8.0 s )
+2015-04-17 09:04:00 INFO  - file written ( 8.0 s )
+2015-04-17 09:04:01 INFO  - file written ( 7.0 s )
+2015-04-17 09:04:01 INFO  - file written ( 7.0 s )
+2015-04-17 09:04:01 INFO  - Voxelisation finished in 86.0 s
+2015-04-17 09:04:01 INFO  - Merging in progress, file 1 : 98
+2015-04-17 09:04:03 INFO  - Merging in progress, file 2 : 98
+2015-04-17 09:04:04 INFO  - Merging in progress, file 3 : 98
+2015-04-17 09:04:05 INFO  - Merging in progress, file 4 : 98
+2015-04-17 09:04:06 INFO  - Merging in progress, file 5 : 98
+2015-04-17 09:04:07 INFO  - Merging in progress, file 6 : 98
+2015-04-17 09:17:27 INFO  - rxp extraction is started
+2015-04-17 09:17:27 INFO  - rxp extraction is started
+2015-04-17 09:17:27 INFO  - rxp extraction is started
+2015-04-17 09:17:27 INFO  - rxp extraction is started
+2015-04-17 09:17:27 INFO  - rxp extraction is started
+2015-04-17 09:17:27 INFO  - rxp extraction is started
+2015-04-17 09:17:27 INFO  - rxp extraction is started
+2015-04-17 09:17:27 INFO  - rxp extraction is started
+2015-04-17 09:17:27 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:27 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:27 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:27 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:27 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:27 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:27 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:27 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:28 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:28 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:28 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:28 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:28 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:28 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:28 INFO  - Shots processed: 102318
+2015-04-17 09:17:28 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:28 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_153258.mon.rxp.vox
+2015-04-17 09:17:28 INFO  - Shots processed: 103140
+2015-04-17 09:17:28 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:28 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_173534.mon.rxp.vox
+2015-04-17 09:17:28 INFO  - Shots processed: 120316
+2015-04-17 09:17:28 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:28 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_165102.mon.rxp.vox
+2015-04-17 09:17:28 INFO  - Shots processed: 103354
+2015-04-17 09:17:28 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:28 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_180238.mon.rxp.vox
+2015-04-17 09:17:28 INFO  - Shots processed: 107045
+2015-04-17 09:17:28 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:17:28 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_170323.mon.rxp.vox
+2015-04-17 09:17:28 INFO  - Shots processed: 102762
+2015-04-17 09:17:28 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:17:28 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_181314.mon.rxp.vox
+2015-04-17 09:17:28 INFO  - Shots processed: 105010
+2015-04-17 09:17:28 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:17:28 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_172354.mon.rxp.vox
+2015-04-17 09:17:28 INFO  - Shots processed: 102033
+2015-04-17 09:17:28 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:17:28 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_155228.mon.rxp.vox
+2015-04-17 09:17:30 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:30 INFO  - rxp extraction is started
+2015-04-17 09:17:30 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:30 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:30 INFO  - rxp extraction is started
+2015-04-17 09:17:30 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:30 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:30 INFO  - rxp extraction is started
+2015-04-17 09:17:30 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:30 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:30 INFO  - rxp extraction is started
+2015-04-17 09:17:30 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:30 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:30 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:30 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:30 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:30 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:30 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:30 INFO  - rxp extraction is started
+2015-04-17 09:17:30 INFO  - rxp extraction is started
+2015-04-17 09:17:30 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:30 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:30 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:30 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:30 INFO  - rxp extraction is started
+2015-04-17 09:17:30 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:30 INFO  - rxp extraction is started
+2015-04-17 09:17:30 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:30 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:30 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:30 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:30 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:30 INFO  - Shots processed: 108729
+2015-04-17 09:17:30 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:30 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_184509.mon.rxp.vox
+2015-04-17 09:17:30 INFO  - Shots processed: 103151
+2015-04-17 09:17:30 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:30 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_191522.mon.rxp.vox
+2015-04-17 09:17:31 INFO  - Shots processed: 113065
+2015-04-17 09:17:31 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:31 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_183042.mon.rxp.vox
+2015-04-17 09:17:31 INFO  - Shots processed: 104210
+2015-04-17 09:17:31 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:31 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_122225.mon.rxp.vox
+2015-04-17 09:17:31 INFO  - Shots processed: 111237
+2015-04-17 09:17:31 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:31 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_125837.mon.rxp.vox
+2015-04-17 09:17:31 INFO  - Shots processed: 109645
+2015-04-17 09:17:31 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:31 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_131257.mon.rxp.vox
+2015-04-17 09:17:31 INFO  - Shots processed: 103570
+2015-04-17 09:17:31 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:31 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_133920.mon.rxp.vox
+2015-04-17 09:17:31 INFO  - Shots processed: 104747
+2015-04-17 09:17:31 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:17:31 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_123449.mon.rxp.vox
+2015-04-17 09:17:32 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:32 INFO  - rxp extraction is started
+2015-04-17 09:17:32 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:32 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:32 INFO  - rxp extraction is started
+2015-04-17 09:17:32 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:32 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:32 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:32 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:32 INFO  - rxp extraction is started
+2015-04-17 09:17:32 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:32 INFO  - rxp extraction is started
+2015-04-17 09:17:32 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:32 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:32 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:32 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:32 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:32 INFO  - rxp extraction is started
+2015-04-17 09:17:32 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:33 INFO  - Shots processed: 103979
+2015-04-17 09:17:33 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:33 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_134826.mon.rxp.vox
+2015-04-17 09:17:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:33 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:33 INFO  - rxp extraction is started
+2015-04-17 09:17:33 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:33 INFO  - Shots processed: 106049
+2015-04-17 09:17:33 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:33 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_141612.mon.rxp.vox
+2015-04-17 09:17:33 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:33 INFO  - rxp extraction is started
+2015-04-17 09:17:33 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:33 INFO  - Shots processed: 109672
+2015-04-17 09:17:33 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:33 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_150855.mon.rxp.vox
+2015-04-17 09:17:33 INFO  - Shots processed: 114237
+2015-04-17 09:17:33 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:33 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_145611.mon.rxp.vox
+2015-04-17 09:17:33 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:33 INFO  - rxp extraction is started
+2015-04-17 09:17:33 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:33 INFO  - Shots processed: 103119
+2015-04-17 09:17:33 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:33 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_171803.mon.rxp.vox
+2015-04-17 09:17:33 INFO  - Shots processed: 102526
+2015-04-17 09:17:33 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:33 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_172740.mon.rxp.vox
+2015-04-17 09:17:34 INFO  - Shots processed: 104502
+2015-04-17 09:17:34 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:17:34 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_142830.mon.rxp.vox
+2015-04-17 09:17:34 INFO  - Shots processed: 102432
+2015-04-17 09:17:34 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:34 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_180026.mon.rxp.vox
+2015-04-17 09:17:34 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:34 INFO  - rxp extraction is started
+2015-04-17 09:17:34 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:34 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:34 INFO  - rxp extraction is started
+2015-04-17 09:17:34 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:34 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:35 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:35 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:35 INFO  - rxp extraction is started
+2015-04-17 09:17:35 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:35 INFO  - Shots processed: 102437
+2015-04-17 09:17:35 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:35 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_181513.mon.rxp.vox
+2015-04-17 09:17:35 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:35 INFO  - rxp extraction is started
+2015-04-17 09:17:35 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:35 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:35 INFO  - Shots processed: 101801
+2015-04-17 09:17:35 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:35 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_182424.mon.rxp.vox
+2015-04-17 09:17:35 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:35 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:35 INFO  - rxp extraction is started
+2015-04-17 09:17:35 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:35 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:35 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:35 INFO  - rxp extraction is started
+2015-04-17 09:17:35 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:35 INFO  - rxp extraction is started
+2015-04-17 09:17:35 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:35 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:36 INFO  - Shots processed: 112690
+2015-04-17 09:17:36 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:36 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_184530.mon.rxp.vox
+2015-04-17 09:17:36 INFO  - Shots processed: 105179
+2015-04-17 09:17:36 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:36 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_185857.mon.rxp.vox
+2015-04-17 09:17:36 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:36 INFO  - rxp extraction is started
+2015-04-17 09:17:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:36 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:36 INFO  - Shots processed: 104484
+2015-04-17 09:17:36 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:36 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_191943.mon.rxp.vox
+2015-04-17 09:17:36 INFO  - Shots processed: 101888
+2015-04-17 09:17:36 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:36 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_193024.mon.rxp.vox
+2015-04-17 09:17:36 INFO  - Shots processed: 102848
+2015-04-17 09:17:36 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:36 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_121750.mon.rxp.vox
+2015-04-17 09:17:36 INFO  - Shots processed: 101887
+2015-04-17 09:17:36 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:36 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_123017.mon.rxp.vox
+2015-04-17 09:17:37 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:37 INFO  - rxp extraction is started
+2015-04-17 09:17:37 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:37 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:37 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:37 INFO  - rxp extraction is started
+2015-04-17 09:17:37 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:37 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:37 INFO  - Shots processed: 104408
+2015-04-17 09:17:37 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:37 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_125428.mon.rxp.vox
+2015-04-17 09:17:38 INFO  - Shots processed: 103262
+2015-04-17 09:17:38 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_130556.mon.rxp.vox
+2015-04-17 09:17:38 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:38 INFO  - rxp extraction is started
+2015-04-17 09:17:38 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:38 INFO  - rxp extraction is started
+2015-04-17 09:17:38 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:38 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:38 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:38 INFO  - rxp extraction is started
+2015-04-17 09:17:38 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:38 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:38 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:38 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:38 INFO  - rxp extraction is started
+2015-04-17 09:17:38 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:38 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:38 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:38 INFO  - rxp extraction is started
+2015-04-17 09:17:38 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:38 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:38 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:38 INFO  - rxp extraction is started
+2015-04-17 09:17:38 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:38 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:38 INFO  - Shots processed: 102603
+2015-04-17 09:17:38 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_133940.mon.rxp.vox
+2015-04-17 09:17:38 INFO  - Shots processed: 101493
+2015-04-17 09:17:38 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_133226.mon.rxp.vox
+2015-04-17 09:17:38 INFO  - Shots processed: 102747
+2015-04-17 09:17:38 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_142431.mon.rxp.vox
+2015-04-17 09:17:38 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:39 INFO  - Shots processed: 102609
+2015-04-17 09:17:39 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:39 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_143440.mon.rxp.vox
+2015-04-17 09:17:39 INFO  - Shots processed: 122216
+2015-04-17 09:17:39 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:39 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_145456.mon.rxp.vox
+2015-04-17 09:17:40 INFO  - Shots processed: 123081
+2015-04-17 09:17:40 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 09:17:40 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_150850.mon.rxp.vox
+2015-04-17 09:17:40 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:40 INFO  - rxp extraction is started
+2015-04-17 09:17:40 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:40 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:40 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:40 INFO  - rxp extraction is started
+2015-04-17 09:17:40 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:40 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:40 INFO  - Shots processed: 102448
+2015-04-17 09:17:40 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:40 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_165901.mon.rxp.vox
+2015-04-17 09:17:41 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:41 INFO  - rxp extraction is started
+2015-04-17 09:17:41 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:41 INFO  - rxp extraction is started
+2015-04-17 09:17:41 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:41 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:41 INFO  - Shots processed: 102307
+2015-04-17 09:17:41 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:41 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_171419.mon.rxp.vox
+2015-04-17 09:17:41 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:41 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:41 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:41 INFO  - rxp extraction is started
+2015-04-17 09:17:41 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:41 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:41 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:41 INFO  - rxp extraction is started
+2015-04-17 09:17:41 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:41 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:41 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:41 INFO  - rxp extraction is started
+2015-04-17 09:17:41 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:41 INFO  - Shots processed: 103319
+2015-04-17 09:17:41 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:41 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_175252.mon.rxp.vox
+2015-04-17 09:17:41 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:42 INFO  - Shots processed: 104259
+2015-04-17 09:17:42 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:42 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_180303.mon.rxp.vox
+2015-04-17 09:17:42 INFO  - Shots processed: 108885
+2015-04-17 09:17:42 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:42 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_183508.mon.rxp.vox
+2015-04-17 09:17:42 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:42 INFO  - rxp extraction is started
+2015-04-17 09:17:42 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:42 INFO  - Shots processed: 102233
+2015-04-17 09:17:42 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:42 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_185149.mon.rxp.vox
+2015-04-17 09:17:42 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:42 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:42 INFO  - rxp extraction is started
+2015-04-17 09:17:42 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:42 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:42 INFO  - Shots processed: 121759
+2015-04-17 09:17:42 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:42 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_191227.mon.rxp.vox
+2015-04-17 09:17:42 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:42 INFO  - rxp extraction is started
+2015-04-17 09:17:42 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:42 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:42 INFO  - Shots processed: 113955
+2015-04-17 09:17:42 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:42 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_192322.mon.rxp.vox
+2015-04-17 09:17:43 INFO  - Shots processed: 101856
+2015-04-17 09:17:43 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:43 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_135046.mon.rxp.vox
+2015-04-17 09:17:43 INFO  - Shots processed: 101333
+2015-04-17 09:17:43 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:43 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_140008.mon.rxp.vox
+2015-04-17 09:17:43 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:43 INFO  - rxp extraction is started
+2015-04-17 09:17:43 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:43 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:44 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:44 INFO  - rxp extraction is started
+2015-04-17 09:17:44 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:44 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:44 INFO  - rxp extraction is started
+2015-04-17 09:17:44 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:44 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:44 INFO  - Shots processed: 107553
+2015-04-17 09:17:44 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:44 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_142302.mon.rxp.vox
+2015-04-17 09:17:44 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:44 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:44 INFO  - rxp extraction is started
+2015-04-17 09:17:44 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:44 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:44 INFO  - rxp extraction is started
+2015-04-17 09:17:44 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:44 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:44 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:44 INFO  - Shots processed: 103866
+2015-04-17 09:17:44 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:44 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_143618.mon.rxp.vox
+2015-04-17 09:17:44 INFO  - Shots processed: 101706
+2015-04-17 09:17:44 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:44 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_150134.mon.rxp.vox
+2015-04-17 09:17:44 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:44 INFO  - rxp extraction is started
+2015-04-17 09:17:44 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:45 INFO  - Shots processed: 101557
+2015-04-17 09:17:45 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:45 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_151122.mon.rxp.vox
+2015-04-17 09:17:45 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:45 INFO  - Shots processed: 103312
+2015-04-17 09:17:45 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:45 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_160832.mon.rxp.vox
+2015-04-17 09:17:45 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:45 INFO  - rxp extraction is started
+2015-04-17 09:17:45 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:45 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:45 INFO  - rxp extraction is started
+2015-04-17 09:17:45 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:45 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:45 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:45 INFO  - Shots processed: 104405
+2015-04-17 09:17:45 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:45 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_164048.mon.rxp.vox
+2015-04-17 09:17:46 INFO  - Shots processed: 112046
+2015-04-17 09:17:46 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:46 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_165830.mon.rxp.vox
+2015-04-17 09:17:46 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:46 INFO  - rxp extraction is started
+2015-04-17 09:17:46 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:46 INFO  - Shots processed: 109851
+2015-04-17 09:17:46 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:46 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_171823.mon.rxp.vox
+2015-04-17 09:17:46 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:46 INFO  - rxp extraction is started
+2015-04-17 09:17:46 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:46 INFO  - Shots processed: 102738
+2015-04-17 09:17:46 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:46 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_174121.mon.rxp.vox
+2015-04-17 09:17:46 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:46 INFO  - rxp extraction is started
+2015-04-17 09:17:46 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:47 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:47 INFO  - rxp extraction is started
+2015-04-17 09:17:47 INFO  - Shots processed: 100830
+2015-04-17 09:17:47 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_175132.mon.rxp.vox
+2015-04-17 09:17:47 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:47 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:47 INFO  - rxp extraction is started
+2015-04-17 09:17:47 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:47 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:47 INFO  - rxp extraction is started
+2015-04-17 09:17:47 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:47 INFO  - Shots processed: 103165
+2015-04-17 09:17:47 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_181739.mon.rxp.vox
+2015-04-17 09:17:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:47 INFO  - Shots processed: 101623
+2015-04-17 09:17:47 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_182814.mon.rxp.vox
+2015-04-17 09:17:48 INFO  - Shots processed: 109148
+2015-04-17 09:17:48 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:48 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_184325.mon.rxp.vox
+2015-04-17 09:17:48 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:48 INFO  - rxp extraction is started
+2015-04-17 09:17:48 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:48 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:48 INFO  - rxp extraction is started
+2015-04-17 09:17:48 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:48 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:48 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:48 INFO  - Shots processed: 105793
+2015-04-17 09:17:48 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:48 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_185532.mon.rxp.vox
+2015-04-17 09:17:48 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:48 INFO  - rxp extraction is started
+2015-04-17 09:17:48 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:48 INFO  - Shots processed: 102003
+2015-04-17 09:17:48 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:48 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_191453.mon.rxp.vox
+2015-04-17 09:17:48 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:48 INFO  - Shots processed: 100679
+2015-04-17 09:17:48 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:48 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_192355.mon.rxp.vox
+2015-04-17 09:17:48 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:48 INFO  - rxp extraction is started
+2015-04-17 09:17:49 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:49 INFO  - Shots processed: 101857
+2015-04-17 09:17:49 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:49 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_133336.mon.rxp.vox
+2015-04-17 09:17:49 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:49 INFO  - rxp extraction is started
+2015-04-17 09:17:49 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:49 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:49 INFO  - rxp extraction is started
+2015-04-17 09:17:49 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:49 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:49 INFO  - rxp extraction is started
+2015-04-17 09:17:49 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:49 INFO  - Shots processed: 102522
+2015-04-17 09:17:49 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:49 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_134352.mon.rxp.vox
+2015-04-17 09:17:50 INFO  - Shots processed: 107629
+2015-04-17 09:17:50 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_140251.mon.rxp.vox
+2015-04-17 09:17:50 INFO  - Shots processed: 103812
+2015-04-17 09:17:50 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_143835.mon.rxp.vox
+2015-04-17 09:17:50 INFO  - Shots processed: 104843
+2015-04-17 09:17:50 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_141436.mon.rxp.vox
+2015-04-17 09:17:50 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:50 INFO  - rxp extraction is started
+2015-04-17 09:17:50 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:50 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:50 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:50 INFO  - rxp extraction is started
+2015-04-17 09:17:50 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:50 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:50 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:50 INFO  - rxp extraction is started
+2015-04-17 09:17:50 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:50 INFO  - Shots processed: 102512
+2015-04-17 09:17:50 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_144829.mon.rxp.vox
+2015-04-17 09:17:50 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:50 INFO  - rxp extraction is started
+2015-04-17 09:17:51 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:51 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:51 INFO  - Shots processed: 103308
+2015-04-17 09:17:51 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:51 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_151714.mon.rxp.vox
+2015-04-17 09:17:51 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:51 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:51 INFO  - rxp extraction is started
+2015-04-17 09:17:51 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:51 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:51 INFO  - Shots processed: 103605
+2015-04-17 09:17:51 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:51 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_152642.mon.rxp.vox
+2015-04-17 09:17:51 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:51 INFO  - rxp extraction is started
+2015-04-17 09:17:51 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:51 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:51 INFO  - Shots processed: 106031
+2015-04-17 09:17:51 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:51 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_155553.mon.rxp.vox
+2015-04-17 09:17:52 INFO  - Shots processed: 103921
+2015-04-17 09:17:52 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:52 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_161029.mon.rxp.vox
+2015-04-17 09:17:54 INFO  - file written ( 3.0 s )
+2015-04-17 09:17:54 INFO  - Shots processed: 102460
+2015-04-17 09:17:54 INFO  - rxp extraction is started
+2015-04-17 09:17:54 INFO  - voxelisation is finished ( 2.0 s )
+2015-04-17 09:17:54 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_162929.mon.rxp.vox
+2015-04-17 09:17:54 INFO  - file written ( 3.0 s )
+2015-04-17 09:17:54 INFO  - rxp extraction is started
+2015-04-17 09:17:54 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:54 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:54 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:54 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:54 INFO  - file written ( 3.0 s )
+2015-04-17 09:17:54 INFO  - rxp extraction is started
+2015-04-17 09:17:54 INFO  - Shots processed: 102517
+2015-04-17 09:17:54 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:54 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_170129.mon.rxp.vox
+2015-04-17 09:17:54 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:54 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:55 INFO  - Shots processed: 102765
+2015-04-17 09:17:55 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_163726.mon.rxp.vox
+2015-04-17 09:17:55 INFO  - file written ( 3.0 s )
+2015-04-17 09:17:55 INFO  - rxp extraction is started
+2015-04-17 09:17:55 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:55 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:55 INFO  - file written ( 3.0 s )
+2015-04-17 09:17:55 INFO  - rxp extraction is started
+2015-04-17 09:17:55 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:55 INFO  - Shots processed: 101372
+2015-04-17 09:17:55 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_171242.mon.rxp.vox
+2015-04-17 09:17:55 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:55 INFO  - file written ( 3.0 s )
+2015-04-17 09:17:55 INFO  - rxp extraction is started
+2015-04-17 09:17:55 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:55 INFO  - file written ( 3.0 s )
+2015-04-17 09:17:55 INFO  - rxp extraction is started
+2015-04-17 09:17:55 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:55 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:55 INFO  - Shots processed: 105978
+2015-04-17 09:17:55 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_173036.mon.rxp.vox
+2015-04-17 09:17:55 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:55 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:55 INFO  - rxp extraction is started
+2015-04-17 09:17:55 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:56 INFO  - Shots processed: 107334
+2015-04-17 09:17:56 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:56 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_174226.mon.rxp.vox
+2015-04-17 09:17:56 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:56 INFO  - Shots processed: 103218
+2015-04-17 09:17:56 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:56 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_175925.mon.rxp.vox
+2015-04-17 09:17:56 INFO  - Shots processed: 102093
+2015-04-17 09:17:56 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:56 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_181003.mon.rxp.vox
+2015-04-17 09:17:56 INFO  - Shots processed: 103141
+2015-04-17 09:17:56 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:56 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_183037.mon.rxp.vox
+2015-04-17 09:17:56 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:56 INFO  - rxp extraction is started
+2015-04-17 09:17:56 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:56 INFO  - rxp extraction is started
+2015-04-17 09:17:56 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:56 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:56 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:56 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:57 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:57 INFO  - rxp extraction is started
+2015-04-17 09:17:57 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:57 INFO  - Shots processed: 103251
+2015-04-17 09:17:57 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:57 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_185618.mon.rxp.vox
+2015-04-17 09:17:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:57 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:57 INFO  - rxp extraction is started
+2015-04-17 09:17:57 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:57 INFO  - Shots processed: 102764
+2015-04-17 09:17:57 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:57 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_190642.mon.rxp.vox
+2015-04-17 09:17:57 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:57 INFO  - rxp extraction is started
+2015-04-17 09:17:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:57 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:57 INFO  - Shots processed: 120206
+2015-04-17 09:17:57 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:57 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_192239.mon.rxp.vox
+2015-04-17 09:17:58 INFO  - Shots processed: 120436
+2015-04-17 09:17:58 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:58 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_193411.mon.rxp.vox
+2015-04-17 09:17:58 INFO  - Shots processed: 105916
+2015-04-17 09:17:58 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:58 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_115122.mon.rxp.vox
+2015-04-17 09:17:58 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:58 INFO  - rxp extraction is started
+2015-04-17 09:17:58 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:58 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:58 INFO  - rxp extraction is started
+2015-04-17 09:17:58 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:58 INFO  - file written ( 2.0 s )
+2015-04-17 09:17:58 INFO  - rxp extraction is started
+2015-04-17 09:17:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:58 INFO  - allocate!!!!!!!!
+2015-04-17 09:17:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:17:59 INFO  - Shots processed: 102495
+2015-04-17 09:17:59 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:59 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_123314.mon.rxp.vox
+2015-04-17 09:17:59 INFO  - Shots processed: 102589
+2015-04-17 09:17:59 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 09:17:59 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_124133.mon.rxp.vox
+2015-04-17 09:17:59 INFO  - file written ( 1.0 s )
+2015-04-17 09:17:59 INFO  - rxp extraction is started
+2015-04-17 09:17:59 INFO  - allocate!!!!!!!!
+2015-04-17 09:18:01 INFO  - Shots processed: 102882
+2015-04-17 09:18:01 INFO  - voxelisation is finished ( 3.0 s )
+2015-04-17 09:18:01 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_120013.mon.rxp.vox
+2015-04-17 09:18:01 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:18:01 INFO  - file written ( 3.0 s )
+2015-04-17 09:18:01 INFO  - rxp extraction is started
+2015-04-17 09:18:04 INFO  - allocate!!!!!!!!
+2015-04-17 09:18:04 INFO  - file written ( 7.0 s )
+2015-04-17 09:18:04 INFO  - rxp extraction is started
+2015-04-17 09:18:04 INFO  - allocate!!!!!!!!
+2015-04-17 09:18:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:18:10 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:18:12 INFO  - Shots processed: 109173
+2015-04-17 09:18:12 INFO  - voxelisation is finished ( 13.0 s )
+2015-04-17 09:18:12 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_130322.mon.rxp.vox
+2015-04-17 09:18:16 INFO  - Shots processed: 102456
+2015-04-17 09:18:16 INFO  - voxelisation is finished ( 12.0 s )
+2015-04-17 09:18:16 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_134326.mon.rxp.vox
+2015-04-17 09:18:17 INFO  - file written ( 19.0 s )
+2015-04-17 09:18:17 INFO  - file written ( 19.0 s )
+2015-04-17 09:18:17 INFO  - rxp extraction is started
+2015-04-17 09:18:17 INFO  - rxp extraction is started
+2015-04-17 09:18:17 INFO  - allocate!!!!!!!!
+2015-04-17 09:18:17 INFO  - allocate!!!!!!!!
+2015-04-17 09:18:20 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:18:20 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 09:18:23 INFO  - Shots processed: 109925
+2015-04-17 09:18:23 INFO  - voxelisation is finished ( 18.0 s )
+2015-04-17 09:18:23 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_131430.mon.rxp.vox
+2015-04-17 09:18:28 INFO  - Shots processed: 103284
+2015-04-17 09:18:28 INFO  - voxelisation is finished ( 10.0 s )
+2015-04-17 09:18:28 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_135249.mon.rxp.vox
+2015-04-17 09:18:28 INFO  - Shots processed: 103401
+2015-04-17 09:18:28 INFO  - voxelisation is finished ( 10.0 s )
+2015-04-17 09:18:28 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_190353.mon.rxp.vox
+2015-04-17 09:18:29 INFO  - file written ( 30.0 s )
+2015-04-17 09:18:30 INFO  - file written ( 31.0 s )
+2015-04-17 09:18:31 INFO  - file written ( 29.0 s )
+2015-04-17 09:18:34 INFO  - file written ( 21.0 s )
+2015-04-17 09:18:36 INFO  - file written ( 19.0 s )
+2015-04-17 09:18:37 INFO  - file written ( 14.0 s )
+2015-04-17 09:18:38 INFO  - file written ( 10.0 s )
+2015-04-17 09:18:38 INFO  - file written ( 10.0 s )
+2015-04-17 09:18:38 INFO  - Voxelisation finished in 71.0 s
+2015-04-17 09:18:38 INFO  - Merging in progress, file 1 : 98
+2015-04-17 15:31:45 INFO  - Saved libfile: /tmp/RivLibJNI-2654745207203629531.tmp
+2015-04-17 15:31:45 INFO  - /tmp/RivLibJNI-2654745207203629531.tmp
+2015-04-17 15:31:45 INFO  - rxp extraction is started
+2015-04-17 15:31:45 INFO  - rxp extraction is started
+2015-04-17 15:31:45 INFO  - rxp extraction is started
+2015-04-17 15:31:45 INFO  - rxp extraction is started
+2015-04-17 15:31:45 INFO  - rxp extraction is started
+2015-04-17 15:31:45 INFO  - rxp extraction is started
+2015-04-17 15:31:45 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:45 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:45 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:45 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:45 INFO  - rxp extraction is started
+2015-04-17 15:31:45 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:45 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:45 INFO  - rxp extraction is started
+2015-04-17 15:31:45 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:45 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:47 INFO  - Shots processed: 102033
+2015-04-17 15:31:47 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_155228.mon.rxp.vox
+2015-04-17 15:31:47 INFO  - Shots processed: 103140
+2015-04-17 15:31:47 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_173534.mon.rxp.vox
+2015-04-17 15:31:47 INFO  - Shots processed: 102318
+2015-04-17 15:31:47 INFO  - voxelisation is finished ( 2.0 s )
+2015-04-17 15:31:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_153258.mon.rxp.vox
+2015-04-17 15:31:47 INFO  - Shots processed: 105010
+2015-04-17 15:31:47 INFO  - voxelisation is finished ( 2.0 s )
+2015-04-17 15:31:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_172354.mon.rxp.vox
+2015-04-17 15:31:47 INFO  - Shots processed: 103354
+2015-04-17 15:31:47 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_180238.mon.rxp.vox
+2015-04-17 15:31:47 INFO  - Shots processed: 107045
+2015-04-17 15:31:47 INFO  - voxelisation is finished ( 2.0 s )
+2015-04-17 15:31:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_170323.mon.rxp.vox
+2015-04-17 15:31:47 INFO  - Shots processed: 102762
+2015-04-17 15:31:47 INFO  - voxelisation is finished ( 2.0 s )
+2015-04-17 15:31:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_181314.mon.rxp.vox
+2015-04-17 15:31:47 INFO  - Shots processed: 120316
+2015-04-17 15:31:47 INFO  - voxelisation is finished ( 2.0 s )
+2015-04-17 15:31:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_165102.mon.rxp.vox
+2015-04-17 15:31:49 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:49 INFO  - rxp extraction is started
+2015-04-17 15:31:49 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:49 INFO  - rxp extraction is started
+2015-04-17 15:31:49 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:49 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:49 INFO  - rxp extraction is started
+2015-04-17 15:31:49 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:49 INFO  - rxp extraction is started
+2015-04-17 15:31:49 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:49 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:49 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:49 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:49 INFO  - rxp extraction is started
+2015-04-17 15:31:49 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:49 INFO  - rxp extraction is started
+2015-04-17 15:31:49 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:49 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:49 INFO  - rxp extraction is started
+2015-04-17 15:31:49 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:49 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:49 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:49 INFO  - rxp extraction is started
+2015-04-17 15:31:49 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:50 INFO  - Shots processed: 104210
+2015-04-17 15:31:50 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_122225.mon.rxp.vox
+2015-04-17 15:31:50 INFO  - Shots processed: 113065
+2015-04-17 15:31:50 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_183042.mon.rxp.vox
+2015-04-17 15:31:50 INFO  - Shots processed: 109645
+2015-04-17 15:31:50 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_131257.mon.rxp.vox
+2015-04-17 15:31:50 INFO  - Shots processed: 108729
+2015-04-17 15:31:50 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_184509.mon.rxp.vox
+2015-04-17 15:31:50 INFO  - Shots processed: 111237
+2015-04-17 15:31:50 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_125837.mon.rxp.vox
+2015-04-17 15:31:50 INFO  - Shots processed: 103570
+2015-04-17 15:31:50 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_133920.mon.rxp.vox
+2015-04-17 15:31:50 INFO  - Shots processed: 103151
+2015-04-17 15:31:50 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_191522.mon.rxp.vox
+2015-04-17 15:31:50 INFO  - Shots processed: 104747
+2015-04-17 15:31:50 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_123449.mon.rxp.vox
+2015-04-17 15:31:51 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:51 INFO  - rxp extraction is started
+2015-04-17 15:31:51 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:51 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:51 INFO  - rxp extraction is started
+2015-04-17 15:31:51 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:51 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:51 INFO  - rxp extraction is started
+2015-04-17 15:31:51 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:51 INFO  - rxp extraction is started
+2015-04-17 15:31:51 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:51 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:51 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:51 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:51 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:52 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:52 INFO  - rxp extraction is started
+2015-04-17 15:31:52 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:52 INFO  - Shots processed: 103979
+2015-04-17 15:31:52 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:31:52 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_134826.mon.rxp.vox
+2015-04-17 15:31:52 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:52 INFO  - rxp extraction is started
+2015-04-17 15:31:52 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:52 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:52 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:52 INFO  - rxp extraction is started
+2015-04-17 15:31:52 INFO  - rxp extraction is started
+2015-04-17 15:31:52 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:52 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:52 INFO  - Shots processed: 106049
+2015-04-17 15:31:52 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:31:52 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_141612.mon.rxp.vox
+2015-04-17 15:31:52 INFO  - Shots processed: 114237
+2015-04-17 15:31:52 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:31:52 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_145611.mon.rxp.vox
+2015-04-17 15:31:53 INFO  - Shots processed: 109672
+2015-04-17 15:31:53 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_150855.mon.rxp.vox
+2015-04-17 15:31:53 INFO  - Shots processed: 104502
+2015-04-17 15:31:53 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_142830.mon.rxp.vox
+2015-04-17 15:31:53 INFO  - Shots processed: 102432
+2015-04-17 15:31:53 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_180026.mon.rxp.vox
+2015-04-17 15:31:53 INFO  - Shots processed: 103119
+2015-04-17 15:31:53 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_171803.mon.rxp.vox
+2015-04-17 15:31:53 INFO  - Shots processed: 102526
+2015-04-17 15:31:53 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_172740.mon.rxp.vox
+2015-04-17 15:31:54 INFO  - file written ( 2.0 s )
+2015-04-17 15:31:54 INFO  - rxp extraction is started
+2015-04-17 15:31:54 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:54 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:54 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:54 INFO  - rxp extraction is started
+2015-04-17 15:31:54 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:54 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:54 INFO  - file written ( 2.0 s )
+2015-04-17 15:31:54 INFO  - rxp extraction is started
+2015-04-17 15:31:54 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:54 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:54 INFO  - rxp extraction is started
+2015-04-17 15:31:54 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:54 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:54 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:54 INFO  - rxp extraction is started
+2015-04-17 15:31:54 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:54 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:54 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:54 INFO  - Shots processed: 102437
+2015-04-17 15:31:54 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:31:54 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_181513.mon.rxp.vox
+2015-04-17 15:31:54 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:54 INFO  - rxp extraction is started
+2015-04-17 15:31:54 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:54 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:55 INFO  - rxp extraction is started
+2015-04-17 15:31:55 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:55 INFO  - rxp extraction is started
+2015-04-17 15:31:55 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:55 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:55 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:55 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:55 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:55 INFO  - Shots processed: 101801
+2015-04-17 15:31:55 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:31:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_182424.mon.rxp.vox
+2015-04-17 15:31:55 INFO  - Shots processed: 105179
+2015-04-17 15:31:55 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:31:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_185857.mon.rxp.vox
+2015-04-17 15:31:55 INFO  - Shots processed: 104484
+2015-04-17 15:31:55 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:31:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_191943.mon.rxp.vox
+2015-04-17 15:31:55 INFO  - Shots processed: 112690
+2015-04-17 15:31:55 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_184530.mon.rxp.vox
+2015-04-17 15:31:55 INFO  - Shots processed: 101888
+2015-04-17 15:31:55 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:31:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130918_193024.mon.rxp.vox
+2015-04-17 15:31:55 INFO  - Shots processed: 102848
+2015-04-17 15:31:55 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:31:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_121750.mon.rxp.vox
+2015-04-17 15:31:55 INFO  - Shots processed: 101887
+2015-04-17 15:31:55 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:31:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_123017.mon.rxp.vox
+2015-04-17 15:31:56 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:56 INFO  - rxp extraction is started
+2015-04-17 15:31:56 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:56 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:56 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:56 INFO  - rxp extraction is started
+2015-04-17 15:31:56 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:56 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:56 INFO  - rxp extraction is started
+2015-04-17 15:31:56 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:56 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:56 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:56 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:56 INFO  - rxp extraction is started
+2015-04-17 15:31:56 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:56 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:56 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:56 INFO  - rxp extraction is started
+2015-04-17 15:31:56 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:56 INFO  - rxp extraction is started
+2015-04-17 15:31:56 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:56 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:56 INFO  - Shots processed: 104408
+2015-04-17 15:31:56 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:31:56 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_125428.mon.rxp.vox
+2015-04-17 15:31:56 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:56 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:57 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:57 INFO  - rxp extraction is started
+2015-04-17 15:31:57 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:57 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:57 INFO  - rxp extraction is started
+2015-04-17 15:31:57 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:57 INFO  - Shots processed: 101493
+2015-04-17 15:31:57 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:31:57 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_133226.mon.rxp.vox
+2015-04-17 15:31:57 INFO  - Shots processed: 103262
+2015-04-17 15:31:57 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:31:57 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_130556.mon.rxp.vox
+2015-04-17 15:31:58 INFO  - Shots processed: 102603
+2015-04-17 15:31:58 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:58 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_133940.mon.rxp.vox
+2015-04-17 15:31:58 INFO  - Shots processed: 102747
+2015-04-17 15:31:58 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:58 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_142431.mon.rxp.vox
+2015-04-17 15:31:58 INFO  - Shots processed: 102609
+2015-04-17 15:31:58 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:58 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_143440.mon.rxp.vox
+2015-04-17 15:31:58 INFO  - Shots processed: 122216
+2015-04-17 15:31:58 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:58 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_145456.mon.rxp.vox
+2015-04-17 15:31:58 INFO  - Shots processed: 123081
+2015-04-17 15:31:58 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:31:58 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_150850.mon.rxp.vox
+2015-04-17 15:31:59 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:59 INFO  - rxp extraction is started
+2015-04-17 15:31:59 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:59 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:59 INFO  - file written ( 2.0 s )
+2015-04-17 15:31:59 INFO  - rxp extraction is started
+2015-04-17 15:31:59 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:59 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:59 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:59 INFO  - rxp extraction is started
+2015-04-17 15:31:59 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:59 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:59 INFO  - rxp extraction is started
+2015-04-17 15:31:59 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:59 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:59 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:59 INFO  - rxp extraction is started
+2015-04-17 15:31:59 INFO  - Shots processed: 102448
+2015-04-17 15:31:59 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:31:59 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_165901.mon.rxp.vox
+2015-04-17 15:31:59 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:59 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:59 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:59 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:59 INFO  - rxp extraction is started
+2015-04-17 15:31:59 INFO  - allocate!!!!!!!!
+2015-04-17 15:31:59 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:31:59 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:59 INFO  - rxp extraction is started
+2015-04-17 15:31:59 INFO  - file written ( 1.0 s )
+2015-04-17 15:31:59 INFO  - rxp extraction is started
+2015-04-17 15:32:00 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:00 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:00 INFO  - Shots processed: 102307
+2015-04-17 15:32:00 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:00 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_171419.mon.rxp.vox
+2015-04-17 15:32:00 INFO  - Shots processed: 104259
+2015-04-17 15:32:00 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:00 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_180303.mon.rxp.vox
+2015-04-17 15:32:00 INFO  - Shots processed: 103319
+2015-04-17 15:32:00 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:00 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_175252.mon.rxp.vox
+2015-04-17 15:32:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:00 INFO  - Shots processed: 108885
+2015-04-17 15:32:00 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:00 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_183508.mon.rxp.vox
+2015-04-17 15:32:00 INFO  - Shots processed: 102233
+2015-04-17 15:32:00 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:00 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_185149.mon.rxp.vox
+2015-04-17 15:32:00 INFO  - Shots processed: 121759
+2015-04-17 15:32:00 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:00 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_191227.mon.rxp.vox
+2015-04-17 15:32:00 INFO  - Shots processed: 113955
+2015-04-17 15:32:00 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:00 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130919_192322.mon.rxp.vox
+2015-04-17 15:32:00 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:00 INFO  - rxp extraction is started
+2015-04-17 15:32:00 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:01 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:01 INFO  - rxp extraction is started
+2015-04-17 15:32:01 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:01 INFO  - Shots processed: 101856
+2015-04-17 15:32:01 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:01 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_135046.mon.rxp.vox
+2015-04-17 15:32:01 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:01 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:01 INFO  - rxp extraction is started
+2015-04-17 15:32:01 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:01 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:01 INFO  - rxp extraction is started
+2015-04-17 15:32:01 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:01 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:01 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:01 INFO  - rxp extraction is started
+2015-04-17 15:32:01 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:01 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:01 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:01 INFO  - rxp extraction is started
+2015-04-17 15:32:01 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:01 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:01 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:01 INFO  - rxp extraction is started
+2015-04-17 15:32:01 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:01 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:01 INFO  - Shots processed: 101333
+2015-04-17 15:32:01 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:01 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_140008.mon.rxp.vox
+2015-04-17 15:32:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:02 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:02 INFO  - rxp extraction is started
+2015-04-17 15:32:02 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:02 INFO  - Shots processed: 101557
+2015-04-17 15:32:02 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:02 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_151122.mon.rxp.vox
+2015-04-17 15:32:02 INFO  - Shots processed: 107553
+2015-04-17 15:32:02 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:32:02 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_142302.mon.rxp.vox
+2015-04-17 15:32:02 INFO  - Shots processed: 101706
+2015-04-17 15:32:02 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:02 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_150134.mon.rxp.vox
+2015-04-17 15:32:02 INFO  - Shots processed: 103866
+2015-04-17 15:32:02 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:32:02 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_143618.mon.rxp.vox
+2015-04-17 15:32:02 INFO  - Shots processed: 103312
+2015-04-17 15:32:02 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:02 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_160832.mon.rxp.vox
+2015-04-17 15:32:02 INFO  - Shots processed: 104405
+2015-04-17 15:32:02 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:02 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_164048.mon.rxp.vox
+2015-04-17 15:32:02 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:02 INFO  - rxp extraction is started
+2015-04-17 15:32:03 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:04 INFO  - file written ( 2.0 s )
+2015-04-17 15:32:04 INFO  - rxp extraction is started
+2015-04-17 15:32:04 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:04 INFO  - Shots processed: 112046
+2015-04-17 15:32:04 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:32:04 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_165830.mon.rxp.vox
+2015-04-17 15:32:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:04 INFO  - file written ( 2.0 s )
+2015-04-17 15:32:04 INFO  - rxp extraction is started
+2015-04-17 15:32:04 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:04 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:04 INFO  - rxp extraction is started
+2015-04-17 15:32:04 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:04 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:04 INFO  - rxp extraction is started
+2015-04-17 15:32:04 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:04 INFO  - file written ( 2.0 s )
+2015-04-17 15:32:04 INFO  - rxp extraction is started
+2015-04-17 15:32:04 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:04 INFO  - file written ( 2.0 s )
+2015-04-17 15:32:04 INFO  - rxp extraction is started
+2015-04-17 15:32:04 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:04 INFO  - Shots processed: 109851
+2015-04-17 15:32:04 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:04 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_171823.mon.rxp.vox
+2015-04-17 15:32:05 INFO  - file written ( 2.0 s )
+2015-04-17 15:32:05 INFO  - rxp extraction is started
+2015-04-17 15:32:05 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:05 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:05 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:05 INFO  - Shots processed: 102738
+2015-04-17 15:32:05 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:05 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_174121.mon.rxp.vox
+2015-04-17 15:32:05 INFO  - Shots processed: 100830
+2015-04-17 15:32:05 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:05 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_175132.mon.rxp.vox
+2015-04-17 15:32:05 INFO  - Shots processed: 103165
+2015-04-17 15:32:05 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:05 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_181739.mon.rxp.vox
+2015-04-17 15:32:05 INFO  - Shots processed: 101623
+2015-04-17 15:32:05 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:05 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_182814.mon.rxp.vox
+2015-04-17 15:32:05 INFO  - Shots processed: 109148
+2015-04-17 15:32:05 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:05 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_184325.mon.rxp.vox
+2015-04-17 15:32:05 INFO  - Shots processed: 105793
+2015-04-17 15:32:05 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:05 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_185532.mon.rxp.vox
+2015-04-17 15:32:05 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:05 INFO  - rxp extraction is started
+2015-04-17 15:32:05 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:05 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:06 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:06 INFO  - rxp extraction is started
+2015-04-17 15:32:06 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:06 INFO  - Shots processed: 102003
+2015-04-17 15:32:06 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:06 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_191453.mon.rxp.vox
+2015-04-17 15:32:06 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:06 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:06 INFO  - rxp extraction is started
+2015-04-17 15:32:06 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:06 INFO  - rxp extraction is started
+2015-04-17 15:32:06 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:06 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:06 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:06 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:06 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:06 INFO  - rxp extraction is started
+2015-04-17 15:32:06 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:06 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:06 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:06 INFO  - rxp extraction is started
+2015-04-17 15:32:06 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:06 INFO  - Shots processed: 100679
+2015-04-17 15:32:06 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:06 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130920_192355.mon.rxp.vox
+2015-04-17 15:32:06 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:06 INFO  - Shots processed: 101857
+2015-04-17 15:32:06 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:06 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_133336.mon.rxp.vox
+2015-04-17 15:32:06 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:06 INFO  - rxp extraction is started
+2015-04-17 15:32:06 INFO  - Shots processed: 102522
+2015-04-17 15:32:06 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:06 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_134352.mon.rxp.vox
+2015-04-17 15:32:07 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:07 INFO  - Shots processed: 107629
+2015-04-17 15:32:07 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:07 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_140251.mon.rxp.vox
+2015-04-17 15:32:07 INFO  - Shots processed: 104843
+2015-04-17 15:32:07 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:07 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_141436.mon.rxp.vox
+2015-04-17 15:32:07 INFO  - Shots processed: 103812
+2015-04-17 15:32:07 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:07 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_143835.mon.rxp.vox
+2015-04-17 15:32:07 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:07 INFO  - rxp extraction is started
+2015-04-17 15:32:07 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:07 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:07 INFO  - rxp extraction is started
+2015-04-17 15:32:07 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:08 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:08 INFO  - Shots processed: 102512
+2015-04-17 15:32:08 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:08 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_144829.mon.rxp.vox
+2015-04-17 15:32:08 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:08 INFO  - rxp extraction is started
+2015-04-17 15:32:08 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:08 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:08 INFO  - rxp extraction is started
+2015-04-17 15:32:08 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:08 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:08 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:08 INFO  - file written ( 2.0 s )
+2015-04-17 15:32:08 INFO  - rxp extraction is started
+2015-04-17 15:32:08 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:08 INFO  - Shots processed: 103308
+2015-04-17 15:32:08 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:08 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_151714.mon.rxp.vox
+2015-04-17 15:32:08 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:08 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:08 INFO  - rxp extraction is started
+2015-04-17 15:32:08 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:08 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:08 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:08 INFO  - rxp extraction is started
+2015-04-17 15:32:09 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:09 INFO  - file written ( 2.0 s )
+2015-04-17 15:32:09 INFO  - rxp extraction is started
+2015-04-17 15:32:09 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:09 INFO  - Shots processed: 106031
+2015-04-17 15:32:09 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:32:09 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_155553.mon.rxp.vox
+2015-04-17 15:32:09 INFO  - Shots processed: 103605
+2015-04-17 15:32:09 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:32:09 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_152642.mon.rxp.vox
+2015-04-17 15:32:10 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:10 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:10 INFO  - Shots processed: 103921
+2015-04-17 15:32:10 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:32:10 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_161029.mon.rxp.vox
+2015-04-17 15:32:10 INFO  - Shots processed: 102765
+2015-04-17 15:32:10 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:10 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_163726.mon.rxp.vox
+2015-04-17 15:32:10 INFO  - Shots processed: 102517
+2015-04-17 15:32:10 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:10 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_170129.mon.rxp.vox
+2015-04-17 15:32:10 INFO  - Shots processed: 102460
+2015-04-17 15:32:10 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:32:10 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_162929.mon.rxp.vox
+2015-04-17 15:32:10 INFO  - file written ( 2.0 s )
+2015-04-17 15:32:10 INFO  - rxp extraction is started
+2015-04-17 15:32:10 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:10 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:10 INFO  - file written ( 2.0 s )
+2015-04-17 15:32:10 INFO  - rxp extraction is started
+2015-04-17 15:32:10 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:11 INFO  - Shots processed: 101372
+2015-04-17 15:32:11 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:11 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_171242.mon.rxp.vox
+2015-04-17 15:32:11 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:11 INFO  - rxp extraction is started
+2015-04-17 15:32:11 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:11 INFO  - rxp extraction is started
+2015-04-17 15:32:11 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:11 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:11 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:11 INFO  - rxp extraction is started
+2015-04-17 15:32:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:11 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:11 INFO  - rxp extraction is started
+2015-04-17 15:32:11 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:11 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:11 INFO  - file written ( 1.0 s )
+2015-04-17 15:32:11 INFO  - rxp extraction is started
+2015-04-17 15:32:11 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:11 INFO  - Shots processed: 105978
+2015-04-17 15:32:11 INFO  - voxelisation is finished ( 0.0 s )
+2015-04-17 15:32:11 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_173036.mon.rxp.vox
+2015-04-17 15:32:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:12 INFO  - Shots processed: 107334
+2015-04-17 15:32:12 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:32:12 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_174226.mon.rxp.vox
+2015-04-17 15:32:12 INFO  - file written ( 2.0 s )
+2015-04-17 15:32:12 INFO  - rxp extraction is started
+2015-04-17 15:32:12 INFO  - Shots processed: 103218
+2015-04-17 15:32:12 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:32:12 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_175925.mon.rxp.vox
+2015-04-17 15:32:12 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:13 INFO  - Shots processed: 103251
+2015-04-17 15:32:13 INFO  - voxelisation is finished ( 1.0 s )
+2015-04-17 15:32:13 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_185618.mon.rxp.vox
+2015-04-17 15:32:13 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:13 INFO  - Shots processed: 103141
+2015-04-17 15:32:13 INFO  - voxelisation is finished ( 2.0 s )
+2015-04-17 15:32:13 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_183037.mon.rxp.vox
+2015-04-17 15:32:13 INFO  - Shots processed: 102093
+2015-04-17 15:32:13 INFO  - voxelisation is finished ( 2.0 s )
+2015-04-17 15:32:13 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_181003.mon.rxp.vox
+2015-04-17 15:32:16 INFO  - file written ( 5.0 s )
+2015-04-17 15:32:16 INFO  - rxp extraction is started
+2015-04-17 15:32:16 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:16 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:16 INFO  - Shots processed: 102764
+2015-04-17 15:32:16 INFO  - voxelisation is finished ( 3.0 s )
+2015-04-17 15:32:16 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_190642.mon.rxp.vox
+2015-04-17 15:32:21 INFO  - file written ( 9.0 s )
+2015-04-17 15:32:21 INFO  - rxp extraction is started
+2015-04-17 15:32:21 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:24 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:26 INFO  - Shots processed: 120206
+2015-04-17 15:32:26 INFO  - voxelisation is finished ( 10.0 s )
+2015-04-17 15:32:26 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_192239.mon.rxp.vox
+2015-04-17 15:32:26 INFO  - file written ( 14.0 s )
+2015-04-17 15:32:26 INFO  - rxp extraction is started
+2015-04-17 15:32:26 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:27 INFO  - file written ( 14.0 s )
+2015-04-17 15:32:27 INFO  - rxp extraction is started
+2015-04-17 15:32:29 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:29 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:29 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:29 INFO  - file written ( 16.0 s )
+2015-04-17 15:32:29 INFO  - rxp extraction is started
+2015-04-17 15:32:32 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:32 INFO  - file written ( 18.0 s )
+2015-04-17 15:32:32 INFO  - rxp extraction is started
+2015-04-17 15:32:32 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:32 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:35 INFO  - file written ( 21.0 s )
+2015-04-17 15:32:35 INFO  - rxp extraction is started
+2015-04-17 15:32:35 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:35 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:35 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:35 INFO  - file written ( 18.0 s )
+2015-04-17 15:32:35 INFO  - rxp extraction is started
+2015-04-17 15:32:35 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:35 INFO  - Shots processed: 120436
+2015-04-17 15:32:35 INFO  - voxelisation is finished ( 13.0 s )
+2015-04-17 15:32:35 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130923_193411.mon.rxp.vox
+2015-04-17 15:32:35 INFO  - Shots processed: 105916
+2015-04-17 15:32:35 INFO  - voxelisation is finished ( 8.0 s )
+2015-04-17 15:32:35 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_115122.mon.rxp.vox
+2015-04-17 15:32:38 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:40 INFO  - Shots processed: 102882
+2015-04-17 15:32:40 INFO  - voxelisation is finished ( 11.0 s )
+2015-04-17 15:32:40 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_120013.mon.rxp.vox
+2015-04-17 15:32:40 INFO  - Shots processed: 102589
+2015-04-17 15:32:40 INFO  - voxelisation is finished ( 8.0 s )
+2015-04-17 15:32:40 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_124133.mon.rxp.vox
+2015-04-17 15:32:44 INFO  - file written ( 17.0 s )
+2015-04-17 15:32:44 INFO  - rxp extraction is started
+2015-04-17 15:32:44 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:44 INFO  - Shots processed: 102495
+2015-04-17 15:32:44 INFO  - voxelisation is finished ( 12.0 s )
+2015-04-17 15:32:44 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_123314.mon.rxp.vox
+2015-04-17 15:32:44 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:47 INFO  - Shots processed: 109173
+2015-04-17 15:32:47 INFO  - voxelisation is finished ( 12.0 s )
+2015-04-17 15:32:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_130322.mon.rxp.vox
+2015-04-17 15:32:48 INFO  - Shots processed: 109925
+2015-04-17 15:32:48 INFO  - voxelisation is finished ( 13.0 s )
+2015-04-17 15:32:48 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_131430.mon.rxp.vox
+2015-04-17 15:32:52 INFO  - Shots processed: 102456
+2015-04-17 15:32:52 INFO  - voxelisation is finished ( 7.0 s )
+2015-04-17 15:32:52 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_134326.mon.rxp.vox
+2015-04-17 15:32:53 INFO  - file written ( 17.0 s )
+2015-04-17 15:32:53 INFO  - rxp extraction is started
+2015-04-17 15:32:53 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:56 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:32:56 INFO  - file written ( 15.0 s )
+2015-04-17 15:32:56 INFO  - rxp extraction is started
+2015-04-17 15:32:56 INFO  - file written ( 20.0 s )
+2015-04-17 15:32:56 INFO  - allocate!!!!!!!!
+2015-04-17 15:32:56 INFO  - file written ( 15.0 s )
+2015-04-17 15:32:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 142.0, 72.0)
+			Dimensions	:	(24, 144, 64)
+			Toricity 	:	false
+
+2015-04-17 15:33:02 INFO  - file written ( 18.0 s )
+2015-04-17 15:33:02 INFO  - file written ( 15.0 s )
+2015-04-17 15:33:02 INFO  - Shots processed: 103284
+2015-04-17 15:33:02 INFO  - voxelisation is finished ( 9.0 s )
+2015-04-17 15:33:02 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130924_135249.mon.rxp.vox
+2015-04-17 15:33:03 INFO  - Shots processed: 103401
+2015-04-17 15:33:03 INFO  - voxelisation is finished ( 7.0 s )
+2015-04-17 15:33:03 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/130917_190353.mon.rxp.vox
+2015-04-17 15:33:03 INFO  - file written ( 15.0 s )
+2015-04-17 15:33:04 INFO  - file written ( 12.0 s )
+2015-04-17 15:33:07 INFO  - file written ( 4.0 s )
+2015-04-17 15:33:07 INFO  - file written ( 3.0 s )
+2015-04-17 15:33:07 INFO  - Voxelisation finished in 82.0 s
+2015-04-17 15:33:07 INFO  - Merging in progress, file 1 : 98
+2015-04-17 15:34:43 ERROR - java.lang.NullPointerException
+2015-04-17 15:36:05 ERROR - java.lang.NullPointerException
+2015-04-17 15:43:32 INFO  - Merging in progress, file 1 : 98
+2015-04-17 15:43:50 ERROR - java.lang.NullPointerException
+2015-04-17 15:44:05 INFO  - Merging in progress, file 1 : 98
+2015-04-17 15:44:27 ERROR - java.lang.NullPointerException
+2015-04-17 15:44:55 INFO  - Merging in progress, file 1 : 98
+2015-04-17 15:45:24 ERROR - java.lang.NullPointerException
+2015-04-17 15:45:31 INFO  - Merging in progress, file 1 : 98
+2015-04-17 15:46:05 ERROR - java.lang.NullPointerException
+2015-04-17 15:46:40 INFO  - Merging in progress, file 1 : 98
+2015-04-17 15:48:18 INFO  - Merging in progress, file 1 : 98
+2015-04-17 15:48:20 INFO  - Merging in progress, file 2 : 98
+2015-04-17 15:48:21 INFO  - Merging in progress, file 3 : 98
+2015-04-17 15:48:22 INFO  - Merging in progress, file 4 : 98
+2015-04-17 15:48:23 INFO  - Merging in progress, file 5 : 98
+2015-04-17 15:48:24 INFO  - Merging in progress, file 6 : 98
+2015-04-17 15:48:25 INFO  - Merging in progress, file 7 : 98
+2015-04-17 15:48:26 INFO  - Merging in progress, file 8 : 98
+2015-04-17 15:48:27 INFO  - Merging in progress, file 9 : 98
+2015-04-17 15:48:28 INFO  - Merging in progress, file 10 : 98
+2015-04-17 15:48:29 INFO  - Merging in progress, file 11 : 98
+2015-04-17 15:48:30 INFO  - Merging in progress, file 12 : 98
+2015-04-17 15:48:31 INFO  - Merging in progress, file 13 : 98
+2015-04-17 15:48:32 INFO  - Merging in progress, file 14 : 98
+2015-04-17 15:48:33 INFO  - Merging in progress, file 15 : 98
+2015-04-17 15:48:34 INFO  - Merging in progress, file 16 : 98
+2015-04-17 15:48:35 INFO  - Merging in progress, file 17 : 98
+2015-04-17 15:48:36 INFO  - Merging in progress, file 18 : 98
+2015-04-17 15:48:37 INFO  - Merging in progress, file 19 : 98
+2015-04-17 15:48:38 INFO  - Merging in progress, file 20 : 98
+2015-04-17 15:48:39 INFO  - Merging in progress, file 21 : 98
+2015-04-17 15:48:40 INFO  - Merging in progress, file 22 : 98
+2015-04-17 15:48:41 INFO  - Merging in progress, file 23 : 98
+2015-04-17 15:48:42 INFO  - Merging in progress, file 24 : 98
+2015-04-17 15:48:43 INFO  - Merging in progress, file 25 : 98
+2015-04-17 15:48:44 INFO  - Merging in progress, file 26 : 98
+2015-04-17 15:48:45 INFO  - Merging in progress, file 27 : 98
+2015-04-17 15:48:46 INFO  - Merging in progress, file 28 : 98
+2015-04-17 15:48:48 INFO  - Merging in progress, file 29 : 98
+2015-04-17 15:48:49 INFO  - Merging in progress, file 30 : 98
+2015-04-17 15:48:50 INFO  - Merging in progress, file 31 : 98
+2015-04-17 15:48:51 INFO  - Merging in progress, file 32 : 98
+2015-04-17 15:48:51 INFO  - Merging in progress, file 33 : 98
+2015-04-17 15:48:52 INFO  - Merging in progress, file 34 : 98
+2015-04-17 15:48:53 INFO  - Merging in progress, file 35 : 98
+2015-04-17 15:48:55 INFO  - Merging in progress, file 36 : 98
+2015-04-17 15:48:55 INFO  - Merging in progress, file 37 : 98
+2015-04-17 15:48:56 INFO  - Merging in progress, file 38 : 98
+2015-04-17 15:48:57 INFO  - Merging in progress, file 39 : 98
+2015-04-17 15:48:58 INFO  - Merging in progress, file 40 : 98
+2015-04-17 15:48:59 INFO  - Merging in progress, file 41 : 98
+2015-04-17 15:49:00 INFO  - Merging in progress, file 42 : 98
+2015-04-17 15:49:01 INFO  - Merging in progress, file 43 : 98
+2015-04-17 15:49:02 INFO  - Merging in progress, file 44 : 98
+2015-04-17 15:49:03 INFO  - Merging in progress, file 45 : 98
+2015-04-17 15:49:04 INFO  - Merging in progress, file 46 : 98
+2015-04-17 15:49:05 INFO  - Merging in progress, file 47 : 98
+2015-04-17 15:49:06 INFO  - Merging in progress, file 48 : 98
+2015-04-17 15:49:07 INFO  - Merging in progress, file 49 : 98
+2015-04-17 15:49:07 INFO  - Merging in progress, file 50 : 98
+2015-04-17 15:49:09 INFO  - Merging in progress, file 51 : 98
+2015-04-17 15:49:09 INFO  - Merging in progress, file 52 : 98
+2015-04-17 15:49:10 INFO  - Merging in progress, file 53 : 98
+2015-04-17 15:49:11 INFO  - Merging in progress, file 54 : 98
+2015-04-17 15:49:12 INFO  - Merging in progress, file 55 : 98
+2015-04-17 15:49:13 INFO  - Merging in progress, file 56 : 98
+2015-04-17 15:49:14 INFO  - Merging in progress, file 57 : 98
+2015-04-17 15:49:15 INFO  - Merging in progress, file 58 : 98
+2015-04-17 15:49:16 INFO  - Merging in progress, file 59 : 98
+2015-04-17 15:49:17 INFO  - Merging in progress, file 60 : 98
+2015-04-17 15:49:18 INFO  - Merging in progress, file 61 : 98
+2015-04-17 15:49:19 INFO  - Merging in progress, file 62 : 98
+2015-04-17 15:49:20 INFO  - Merging in progress, file 63 : 98
+2015-04-17 15:49:21 INFO  - Merging in progress, file 64 : 98
+2015-04-17 15:49:22 INFO  - Merging in progress, file 65 : 98
+2015-04-17 15:49:22 INFO  - Merging in progress, file 66 : 98
+2015-04-17 15:49:23 INFO  - Merging in progress, file 67 : 98
+2015-04-17 15:49:24 INFO  - Merging in progress, file 68 : 98
+2015-04-17 15:49:25 INFO  - Merging in progress, file 69 : 98
+2015-04-17 15:49:26 INFO  - Merging in progress, file 70 : 98
+2015-04-17 15:49:27 INFO  - Merging in progress, file 71 : 98
+2015-04-17 15:49:28 INFO  - Merging in progress, file 72 : 98
+2015-04-17 15:49:29 INFO  - Merging in progress, file 73 : 98
+2015-04-17 15:49:30 INFO  - Merging in progress, file 74 : 98
+2015-04-17 15:49:31 INFO  - Merging in progress, file 75 : 98
+2015-04-17 15:49:32 INFO  - Merging in progress, file 76 : 98
+2015-04-17 15:49:33 INFO  - Merging in progress, file 77 : 98
+2015-04-17 15:49:34 INFO  - Merging in progress, file 78 : 98
+2015-04-17 15:49:35 INFO  - Merging in progress, file 79 : 98
+2015-04-17 15:49:36 INFO  - Merging in progress, file 80 : 98
+2015-04-17 15:49:37 INFO  - Merging in progress, file 81 : 98
+2015-04-17 15:49:38 INFO  - Merging in progress, file 82 : 98
+2015-04-17 15:49:38 INFO  - Merging in progress, file 83 : 98
+2015-04-17 15:49:39 INFO  - Merging in progress, file 84 : 98
+2015-04-17 15:49:40 INFO  - Merging in progress, file 85 : 98
+2015-04-17 15:49:41 INFO  - Merging in progress, file 86 : 98
+2015-04-17 15:49:42 INFO  - Merging in progress, file 87 : 98
+2015-04-17 15:49:43 INFO  - Merging in progress, file 88 : 98
+2015-04-17 15:49:44 INFO  - Merging in progress, file 89 : 98
+2015-04-17 15:49:45 INFO  - Merging in progress, file 90 : 98
+2015-04-17 15:49:46 INFO  - Merging in progress, file 91 : 98
+2015-04-17 15:49:47 INFO  - Merging in progress, file 92 : 98
+2015-04-17 15:49:48 INFO  - Merging in progress, file 93 : 98
+2015-04-17 15:49:49 INFO  - Merging in progress, file 94 : 98
+2015-04-17 15:49:50 INFO  - Merging in progress, file 95 : 98
+2015-04-17 15:49:51 INFO  - Merging in progress, file 96 : 98
+2015-04-17 15:49:52 INFO  - Merging in progress, file 97 : 98
+2015-04-17 15:49:53 INFO  - Merging in progress, file 98 : 98
+2015-04-17 15:49:54 INFO  - Recalculate lMeanTotal, angleMean, transmittance, PadBVTotal
+2015-04-17 15:49:54 INFO  - writing output file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/tls_paracou_2013_non_pondere.vox
+2015-04-17 15:51:57 INFO  - Merging in progress, file 1 : 98
+2015-04-17 15:51:59 INFO  - Merging in progress, file 2 : 98
+2015-04-17 15:52:00 INFO  - Merging in progress, file 3 : 98
+2015-04-17 15:52:01 INFO  - Merging in progress, file 4 : 98
+2015-04-17 15:52:02 INFO  - Merging in progress, file 5 : 98
+2015-04-17 15:52:03 INFO  - Merging in progress, file 6 : 98
+2015-04-17 15:52:04 INFO  - Merging in progress, file 7 : 98
+2015-04-17 15:52:05 INFO  - Merging in progress, file 8 : 98
+2015-04-17 15:52:06 INFO  - Merging in progress, file 9 : 98
+2015-04-17 15:52:07 INFO  - Merging in progress, file 10 : 98
+2015-04-17 15:52:07 INFO  - Merging in progress, file 11 : 98
+2015-04-17 15:52:08 INFO  - Merging in progress, file 12 : 98
+2015-04-17 15:52:09 INFO  - Merging in progress, file 13 : 98
+2015-04-17 15:52:10 INFO  - Merging in progress, file 14 : 98
+2015-04-17 15:52:11 INFO  - Merging in progress, file 15 : 98
+2015-04-17 15:52:12 INFO  - Merging in progress, file 16 : 98
+2015-04-17 15:52:13 INFO  - Merging in progress, file 17 : 98
+2015-04-17 15:52:14 INFO  - Merging in progress, file 18 : 98
+2015-04-17 15:52:14 INFO  - Merging in progress, file 19 : 98
+2015-04-17 15:52:15 INFO  - Merging in progress, file 20 : 98
+2015-04-17 15:52:16 INFO  - Merging in progress, file 21 : 98
+2015-04-17 15:52:17 INFO  - Merging in progress, file 22 : 98
+2015-04-17 15:52:19 INFO  - Merging in progress, file 23 : 98
+2015-04-17 15:52:20 INFO  - Merging in progress, file 24 : 98
+2015-04-17 15:52:21 INFO  - Merging in progress, file 25 : 98
+2015-04-17 15:52:22 INFO  - Merging in progress, file 26 : 98
+2015-04-17 15:52:23 INFO  - Merging in progress, file 27 : 98
+2015-04-17 15:52:24 INFO  - Merging in progress, file 28 : 98
+2015-04-17 15:52:25 INFO  - Merging in progress, file 29 : 98
+2015-04-17 15:52:26 INFO  - Merging in progress, file 30 : 98
+2015-04-17 15:52:27 INFO  - Merging in progress, file 31 : 98
+2015-04-17 15:52:28 INFO  - Merging in progress, file 32 : 98
+2015-04-17 15:52:29 INFO  - Merging in progress, file 33 : 98
+2015-04-17 15:52:30 INFO  - Merging in progress, file 34 : 98
+2015-04-17 15:52:31 INFO  - Merging in progress, file 35 : 98
+2015-04-17 15:52:32 INFO  - Merging in progress, file 36 : 98
+2015-04-17 15:52:33 INFO  - Merging in progress, file 37 : 98
+2015-04-17 15:52:34 INFO  - Merging in progress, file 38 : 98
+2015-04-17 15:52:35 INFO  - Merging in progress, file 39 : 98
+2015-04-17 15:52:36 INFO  - Merging in progress, file 40 : 98
+2015-04-17 15:52:37 INFO  - Merging in progress, file 41 : 98
+2015-04-17 15:52:38 INFO  - Merging in progress, file 42 : 98
+2015-04-17 15:52:39 INFO  - Merging in progress, file 43 : 98
+2015-04-17 15:52:39 INFO  - Merging in progress, file 44 : 98
+2015-04-17 15:52:40 INFO  - Merging in progress, file 45 : 98
+2015-04-17 15:52:41 INFO  - Merging in progress, file 46 : 98
+2015-04-17 15:52:42 INFO  - Merging in progress, file 47 : 98
+2015-04-17 15:52:43 INFO  - Merging in progress, file 48 : 98
+2015-04-17 15:52:44 INFO  - Merging in progress, file 49 : 98
+2015-04-17 15:52:45 INFO  - Merging in progress, file 50 : 98
+2015-04-17 15:52:46 INFO  - Merging in progress, file 51 : 98
+2015-04-17 15:52:47 INFO  - Merging in progress, file 52 : 98
+2015-04-17 15:52:48 INFO  - Merging in progress, file 53 : 98
+2015-04-17 15:52:49 INFO  - Merging in progress, file 54 : 98
+2015-04-17 15:52:50 INFO  - Merging in progress, file 55 : 98
+2015-04-17 15:52:51 INFO  - Merging in progress, file 56 : 98
+2015-04-17 15:52:52 INFO  - Merging in progress, file 57 : 98
+2015-04-17 15:52:53 INFO  - Merging in progress, file 58 : 98
+2015-04-17 15:52:54 INFO  - Merging in progress, file 59 : 98
+2015-04-17 15:52:56 INFO  - Merging in progress, file 60 : 98
+2015-04-17 15:52:56 INFO  - Merging in progress, file 61 : 98
+2015-04-17 15:52:57 INFO  - Merging in progress, file 62 : 98
+2015-04-17 15:52:58 INFO  - Merging in progress, file 63 : 98
+2015-04-17 15:52:59 INFO  - Merging in progress, file 64 : 98
+2015-04-17 15:53:00 INFO  - Merging in progress, file 65 : 98
+2015-04-17 15:53:01 INFO  - Merging in progress, file 66 : 98
+2015-04-17 15:53:02 INFO  - Merging in progress, file 67 : 98
+2015-04-17 15:53:03 INFO  - Merging in progress, file 68 : 98
+2015-04-17 15:53:04 INFO  - Merging in progress, file 69 : 98
+2015-04-17 15:53:05 INFO  - Merging in progress, file 70 : 98
+2015-04-17 15:53:06 INFO  - Merging in progress, file 71 : 98
+2015-04-17 15:53:07 INFO  - Merging in progress, file 72 : 98
+2015-04-17 15:53:08 INFO  - Merging in progress, file 73 : 98
+2015-04-17 15:53:09 INFO  - Merging in progress, file 74 : 98
+2015-04-17 15:53:09 INFO  - Merging in progress, file 75 : 98
+2015-04-17 15:53:10 INFO  - Merging in progress, file 76 : 98
+2015-04-17 15:53:11 INFO  - Merging in progress, file 77 : 98
+2015-04-17 15:53:12 INFO  - Merging in progress, file 78 : 98
+2015-04-17 15:53:13 INFO  - Merging in progress, file 79 : 98
+2015-04-17 15:53:14 INFO  - Merging in progress, file 80 : 98
+2015-04-17 15:53:15 INFO  - Merging in progress, file 81 : 98
+2015-04-17 15:53:16 INFO  - Merging in progress, file 82 : 98
+2015-04-17 15:53:17 INFO  - Merging in progress, file 83 : 98
+2015-04-17 15:53:18 INFO  - Merging in progress, file 84 : 98
+2015-04-17 15:53:19 INFO  - Merging in progress, file 85 : 98
+2015-04-17 15:53:20 INFO  - Merging in progress, file 86 : 98
+2015-04-17 15:53:21 INFO  - Merging in progress, file 87 : 98
+2015-04-17 15:53:21 INFO  - Merging in progress, file 88 : 98
+2015-04-17 15:53:22 INFO  - Merging in progress, file 89 : 98
+2015-04-17 15:53:23 INFO  - Merging in progress, file 90 : 98
+2015-04-17 15:53:24 INFO  - Merging in progress, file 91 : 98
+2015-04-17 15:53:25 INFO  - Merging in progress, file 92 : 98
+2015-04-17 15:53:26 INFO  - Merging in progress, file 93 : 98
+2015-04-17 15:53:27 INFO  - Merging in progress, file 94 : 98
+2015-04-17 15:53:28 INFO  - Merging in progress, file 95 : 98
+2015-04-17 15:53:28 INFO  - Merging in progress, file 96 : 98
+2015-04-17 15:53:29 INFO  - Merging in progress, file 97 : 98
+2015-04-17 15:53:30 INFO  - Merging in progress, file 98 : 98
+2015-04-17 15:53:31 INFO  - Recalculate lMeanTotal, angleMean, transmittance, PadBVTotal
+2015-04-17 15:53:32 INFO  - writing output file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/tls_paracou_2013_non_pondere.vox
+2015-04-17 15:57:00 INFO  - Merging in progress, file 1 : 98
+2015-04-17 15:57:01 INFO  - Merging in progress, file 2 : 98
+2015-04-17 15:57:02 INFO  - Merging in progress, file 3 : 98
+2015-04-17 15:57:03 INFO  - Merging in progress, file 4 : 98
+2015-04-17 15:57:04 INFO  - Merging in progress, file 5 : 98
+2015-04-17 15:57:05 INFO  - Merging in progress, file 6 : 98
+2015-04-17 15:57:06 INFO  - Merging in progress, file 7 : 98
+2015-04-17 15:57:07 INFO  - Merging in progress, file 8 : 98
+2015-04-17 15:57:08 INFO  - Merging in progress, file 9 : 98
+2015-04-17 15:57:09 INFO  - Merging in progress, file 10 : 98
+2015-04-17 15:57:10 INFO  - Merging in progress, file 11 : 98
+2015-04-17 15:57:11 INFO  - Merging in progress, file 12 : 98
+2015-04-17 15:57:12 INFO  - Merging in progress, file 13 : 98
+2015-04-17 15:57:12 INFO  - Merging in progress, file 14 : 98
+2015-04-17 15:57:13 INFO  - Merging in progress, file 15 : 98
+2015-04-17 15:57:14 INFO  - Merging in progress, file 16 : 98
+2015-04-17 15:57:15 INFO  - Merging in progress, file 17 : 98
+2015-04-17 15:57:16 INFO  - Merging in progress, file 18 : 98
+2015-04-17 15:57:17 INFO  - Merging in progress, file 19 : 98
+2015-04-17 15:57:18 INFO  - Merging in progress, file 20 : 98
+2015-04-17 15:57:19 INFO  - Merging in progress, file 21 : 98
+2015-04-17 15:57:20 INFO  - Merging in progress, file 22 : 98
+2015-04-17 15:57:22 INFO  - Merging in progress, file 23 : 98
+2015-04-17 15:57:23 INFO  - Merging in progress, file 24 : 98
+2015-04-17 15:57:24 INFO  - Merging in progress, file 25 : 98
+2015-04-17 15:57:25 INFO  - Merging in progress, file 26 : 98
+2015-04-17 15:57:26 INFO  - Merging in progress, file 27 : 98
+2015-04-17 15:57:27 INFO  - Merging in progress, file 28 : 98
+2015-04-17 15:57:28 INFO  - Merging in progress, file 29 : 98
+2015-04-17 15:57:29 INFO  - Merging in progress, file 30 : 98
+2015-04-17 15:57:30 INFO  - Merging in progress, file 31 : 98
+2015-04-17 15:57:30 INFO  - Merging in progress, file 32 : 98
+2015-04-17 15:57:31 INFO  - Merging in progress, file 33 : 98
+2015-04-17 15:57:32 INFO  - Merging in progress, file 34 : 98
+2015-04-17 15:57:33 INFO  - Merging in progress, file 35 : 98
+2015-04-17 15:57:34 INFO  - Merging in progress, file 36 : 98
+2015-04-17 15:57:35 INFO  - Merging in progress, file 37 : 98
+2015-04-17 15:57:36 INFO  - Merging in progress, file 38 : 98
+2015-04-17 15:57:37 INFO  - Merging in progress, file 39 : 98
+2015-04-17 15:57:38 INFO  - Merging in progress, file 40 : 98
+2015-04-17 15:57:39 INFO  - Merging in progress, file 41 : 98
+2015-04-17 15:57:40 INFO  - Merging in progress, file 42 : 98
+2015-04-17 15:57:42 INFO  - Merging in progress, file 43 : 98
+2015-04-17 15:57:43 INFO  - Merging in progress, file 44 : 98
+2015-04-17 15:57:44 INFO  - Merging in progress, file 45 : 98
+2015-04-17 15:57:45 INFO  - Merging in progress, file 46 : 98
+2015-04-17 15:57:46 INFO  - Merging in progress, file 47 : 98
+2015-04-17 15:57:47 INFO  - Merging in progress, file 48 : 98
+2015-04-17 15:57:48 INFO  - Merging in progress, file 49 : 98
+2015-04-17 15:57:49 INFO  - Merging in progress, file 50 : 98
+2015-04-17 15:57:50 INFO  - Merging in progress, file 51 : 98
+2015-04-17 15:57:51 INFO  - Merging in progress, file 52 : 98
+2015-04-17 15:57:52 INFO  - Merging in progress, file 53 : 98
+2015-04-17 15:57:54 INFO  - Merging in progress, file 54 : 98
+2015-04-17 15:57:55 INFO  - Merging in progress, file 55 : 98
+2015-04-17 15:57:56 INFO  - Merging in progress, file 56 : 98
+2015-04-17 15:57:57 INFO  - Merging in progress, file 57 : 98
+2015-04-17 15:57:59 INFO  - Merging in progress, file 58 : 98
+2015-04-17 15:58:00 INFO  - Merging in progress, file 59 : 98
+2015-04-17 15:58:01 INFO  - Merging in progress, file 60 : 98
+2015-04-17 15:58:02 INFO  - Merging in progress, file 61 : 98
+2015-04-17 15:58:03 INFO  - Merging in progress, file 62 : 98
+2015-04-17 15:58:04 INFO  - Merging in progress, file 63 : 98
+2015-04-17 15:58:05 INFO  - Merging in progress, file 64 : 98
+2015-04-17 15:58:06 INFO  - Merging in progress, file 65 : 98
+2015-04-17 15:58:08 INFO  - Merging in progress, file 66 : 98
+2015-04-17 15:58:09 INFO  - Merging in progress, file 67 : 98
+2015-04-17 15:58:10 INFO  - Merging in progress, file 68 : 98
+2015-04-17 15:58:11 INFO  - Merging in progress, file 69 : 98
+2015-04-17 15:58:12 INFO  - Merging in progress, file 70 : 98
+2015-04-17 15:58:14 INFO  - Merging in progress, file 71 : 98
+2015-04-17 15:58:15 INFO  - Merging in progress, file 72 : 98
+2015-04-17 15:58:16 INFO  - Merging in progress, file 73 : 98
+2015-04-17 15:58:17 INFO  - Merging in progress, file 74 : 98
+2015-04-17 15:58:18 INFO  - Merging in progress, file 75 : 98
+2015-04-17 15:58:19 INFO  - Merging in progress, file 76 : 98
+2015-04-17 15:58:20 INFO  - Merging in progress, file 77 : 98
+2015-04-17 15:58:21 INFO  - Merging in progress, file 78 : 98
+2015-04-17 15:58:23 INFO  - Merging in progress, file 79 : 98
+2015-04-17 15:58:24 INFO  - Merging in progress, file 80 : 98
+2015-04-17 15:58:25 INFO  - Merging in progress, file 81 : 98
+2015-04-17 15:58:26 INFO  - Merging in progress, file 82 : 98
+2015-04-17 15:58:27 INFO  - Merging in progress, file 83 : 98
+2015-04-17 15:58:28 INFO  - Merging in progress, file 84 : 98
+2015-04-17 15:58:29 INFO  - Merging in progress, file 85 : 98
+2015-04-17 15:58:30 INFO  - Merging in progress, file 86 : 98
+2015-04-17 15:58:32 INFO  - Merging in progress, file 87 : 98
+2015-04-17 15:58:33 INFO  - Merging in progress, file 88 : 98
+2015-04-17 15:58:34 INFO  - Merging in progress, file 89 : 98
+2015-04-17 15:58:35 INFO  - Merging in progress, file 90 : 98
+2015-04-17 15:58:36 INFO  - Merging in progress, file 91 : 98
+2015-04-17 15:58:37 INFO  - Merging in progress, file 92 : 98
+2015-04-17 15:58:38 INFO  - Merging in progress, file 93 : 98
+2015-04-17 15:58:39 INFO  - Merging in progress, file 94 : 98
+2015-04-17 15:58:41 INFO  - Merging in progress, file 95 : 98
+2015-04-17 15:58:42 INFO  - Merging in progress, file 96 : 98
+2015-04-17 15:58:43 INFO  - Merging in progress, file 97 : 98
+2015-04-17 15:58:44 INFO  - Merging in progress, file 98 : 98
+2015-04-17 15:58:45 INFO  - Recalculate lMeanTotal, angleMean, transmittance, PadBVTotal
+2015-04-17 15:58:46 INFO  - writing output file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_pondere/tls_paracou_2013_pondere.vox

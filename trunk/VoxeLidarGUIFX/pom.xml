@@ -113,7 +113,7 @@
                             <Implementation-Build>${buildNumber}</Implementation-Build>
                         </manifestEntries>
                     </archive>
-                    <useDefaultManifestFile>true</useDefaultManifestFile>
+                    <useDefaultManifestFile>false</useDefaultManifestFile>
                 </configuration>
             </plugin>
             <plugin>
