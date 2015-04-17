@@ -44,6 +44,10 @@
                                     <directory>${basedir}/src/main/resources/launcher/</directory>
                                     <filtering>true</filtering>
                                 </resource>
+                                <resource>
+                                    <directory>${basedir}/src/main/resources/misc/</directory>
+                                    <filtering>false</filtering>
+                                </resource>
                             </resources>              
                         </configuration>            
                     </execution>

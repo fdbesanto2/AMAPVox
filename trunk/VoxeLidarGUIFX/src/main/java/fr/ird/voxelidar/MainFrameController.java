@@ -1824,7 +1824,7 @@ public class MainFrameController implements Initializable {
                             
                             case MERGING:
 
-                                voxTool.mergeVoxelsFile(cfg.getFiles(), cfg.getOutputFile(), cfg.getVoxelParameters().getTransmittanceMode(), cfg.getVoxelParameters().getMaxPAD());
+                                voxTool.mergeVoxelsFile(cfg.getFiles(), cfg.getOutputFile(), 0, cfg.getVoxelParameters().getMaxPAD());
 
                                 Platform.runLater(new Runnable() {
 

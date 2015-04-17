@@ -37859,6 +37859,25 @@
 2015-04-16 18:21:52 INFO  - writing output file: /home/calcul/Documents/Julien/Sortie voxels/paracou_2013_tls_non_pondere/tls_paracou_2013_non_pondere.vox
 2015-04-16 18:21:53 INFO  - Voxelisation finished in 183.0 s
 2015-04-16 18:21:53 INFO  - Voxelisation finished in 183.0 s
+2015-04-17 17:10:25 INFO  - Saved libfile: C:\Users\vincent\AppData\Local\Temp\LasZipLibrary-802822075611742586.tmp
+2015-04-17 17:10:25 INFO  - C:\Users\vincent\AppData\Local\Temp\LasZipLibrary-802822075611742586.tmp
+2015-04-17 17:14:37 INFO  - Saved libfile: C:\Users\vincent\AppData\Local\Temp\LasZipLibrary-5850095807381741572.tmp
+2015-04-17 17:15:11 INFO  - C:\Users\vincent\AppData\Local\Temp\LasZipLibrary-5850095807381741572.tmp
+2015-04-17 17:18:16 INFO  - Saved libfile: C:\Users\vincent\AppData\Local\Temp\LasZipLibrary-8232752531583087746.tmp
+2015-04-17 17:18:24 INFO  - C:/Users/vincent/AppData/Local/Temp/LasZipLibrary-8232752531583087746.tmp
+2015-04-17 17:20:25 INFO  - Saved libfile: C:\Users\vincent\AppData\Local\Temp\LasZipLibrary-1598158004220048017.tmp
+2015-04-17 17:21:07 INFO  - C:\Users\vincent\AppData\Local\Temp\LasZipLibrary-1598158004220048017.tmp
+2015-04-17 17:23:34 INFO  - Saved libfile: C:\Users\vincent\AppData\Local\Temp\LasZipLibrary-8193612909407612828.tmp
+2015-04-17 17:23:36 INFO  - C:\Users\vincent\AppData\Local\Temp\LasZipLibrary-8193612909407612828.tmp
+2015-04-17 17:25:25 INFO  - Saved libfile: C:\Users\vincent\AppData\Local\Temp\LasZipLibrary-2777026690712258780.tmp
+2015-04-17 17:25:25 INFO  - C:\Users\vincent\AppData\Local\Temp\LasZipLibrary-2777026690712258780.tmp
+2015-04-17 17:33:13 INFO  - Saved libfile: C:\Users\vincent\AppData\Local\Temp\LasZipLibrary-2210651395611116422.tmp
+2015-04-17 17:33:13 INFO  - C:\Users\vincent\AppData\Local\Temp\LasZipLibrary-2210651395611116422.tmp
+2015-04-17 17:35:09 INFO  - Saved libfile: C:\Users\vincent\AppData\Local\Temp\LasZipLibrary-2924306213976545998.tmp
+2015-04-17 17:35:09 INFO  - C:\Users\vincent\AppData\Local\Temp\LasZipLibrary-2924306213976545998.tmp
+2015-04-17 17:36:05 INFO  - Saved libfile: C:\Users\vincent\AppData\Local\Temp\LasZipLibrary-3904577415740225306.tmp
+2015-04-17 17:36:05 INFO  - C:\Users\vincent\AppData\Local\Temp\LasZipLibrary-3904577415740225306.tmp
+2015-04-17 17:36:10 INFO  - Laz file D:\AMAPvox\VoxAMAP_beta_Release\samples\las\ALSbuf_xyzirncapt.laz is opened
 2015-04-17 09:02:05 ERROR - java.io.FileNotFoundException: File /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/project.rsp not reachable
 2015-04-17 09:02:36 INFO  - Saved libfile: /tmp/RivLibJNI-513904796408562295.tmp
 2015-04-17 09:02:36 INFO  - /tmp/RivLibJNI-513904796408562295.tmp

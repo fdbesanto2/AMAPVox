@@ -58,11 +58,11 @@ public class VoxelParameters {
     public static float[][] DEFAULT_TLS_WEIGHTING = new float[][]{
                         {1.00f, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
                         {0.50f, 0.50f, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
-                        {0.33f, 0.33f, 0.33f, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
+                        {1/3f, 1/3f, 1/3f, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
                         {0.25f, 0.25f, 0.25f, 0.25f, Float.NaN, Float.NaN, Float.NaN},
                         {0.20f, 0.20f, 0.20f, 0.20f, 0.20f, Float.NaN, Float.NaN},
-                        {0.16f, 0.16f, 0.16f, 0.16f, 0.16f, 0.16f, Float.NaN},
-                        {0.142857143f, 0.142857143f, 0.142857143f, 0.142857143f, 0.142857143f, 0.142857143f, 0.142857143f}};
+                        {1/6f, 1/6f, 1/6f, 1/6f, 1/6f, 1/6f, Float.NaN},
+                        {1/7f, 1/7f, 1/7f, 1/7f, 1/7f, 1/7f, 1/7f}};
     
     
     public VoxelParameters() {

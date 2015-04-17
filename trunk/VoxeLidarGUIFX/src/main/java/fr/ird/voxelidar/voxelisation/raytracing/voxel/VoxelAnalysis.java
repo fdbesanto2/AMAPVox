@@ -114,6 +114,14 @@ public class VoxelAnalysis implements Runnable {
         Shot.setFilters(filters);
     }
 
+    /**
+     *
+     * @param indices 
+     * @param splitting
+     * @param minCorner
+     * @param maxCorner
+     * @return
+     */
     public Point3d getPosition(Point3i indices, Point3i splitting, Point3d minCorner, Point3d maxCorner) {
 
         Point3d resolution = new Point3d();

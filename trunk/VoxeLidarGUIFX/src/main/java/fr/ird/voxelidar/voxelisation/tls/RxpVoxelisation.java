@@ -62,8 +62,6 @@ public class RxpVoxelisation implements Callable{
             vopPop = Mat4D.identity();
         }
         
-        //final Mat4D transfMatrix = Mat4D.multiply(Mat4D.multiply(popMatrix, sopMatrix), vopMatrix);
-        //final Mat4D transfMatrix = Mat4D.identity();
         Mat4D popVop = Mat4D.multiply(popMatrix, vopMatrix);
         final Mat4D transfMatrix = Mat4D.multiply(sopMatrix, popVop);
         

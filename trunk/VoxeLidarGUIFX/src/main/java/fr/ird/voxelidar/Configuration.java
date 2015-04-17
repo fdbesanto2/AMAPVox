@@ -11,8 +11,15 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Properties;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
+import java.util.logging.Level;
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
@@ -109,6 +116,26 @@ public class Configuration {
     public void writeConfiguration(File outputParametersFile){
                 
         Element racine = new Element("configuration");
+        racine.setAttribute("creation-date", new Date().toString());
+        
+        try {
+            Class clazz = Configuration.class;
+            String className = clazz.getSimpleName() + ".class";
+            String classPath = clazz.getResource(className).toString();
+            String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
+            Manifest manifest = new Manifest(new URL(manifestPath).openStream());
+            Attributes attributes= manifest.getMainAttributes();
+            String buildVersion = attributes.getValue("Implementation-Build");
+            
+            if(buildVersion != null){
+                racine.setAttribute("build-version", buildVersion);
+            }else{
+                logger.error("Cannot get Implementation-Build property in manifest file");
+            }
+        } catch (Exception ex) {
+            logger.error("Cannot get manifest file: "+ex);
+        }
+        
         Document document = new Document(racine);
         
         Element processElement = new Element("process");
@@ -589,6 +616,15 @@ public class Configuration {
 
                     for (Element e : childrens) {
                         files.add(new File(e.getAttributeValue("src")));
+                    }
+                    
+                    voxelParameters = new VoxelParameters();
+                    
+                    limitsElement = processElement.getChild("limits");
+                    
+                    if(limitsElement != null){
+                        Element limitElement = limitsElement.getChild("limit");
+                        voxelParameters.setMaxPAD(Float.valueOf(limitElement.getAttributeValue("max")));
                     }
 
                     break;
