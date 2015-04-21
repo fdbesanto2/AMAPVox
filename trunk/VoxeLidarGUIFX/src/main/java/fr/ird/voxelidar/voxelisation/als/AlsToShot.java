@@ -171,7 +171,8 @@ public class AlsToShot extends Processing implements Runnable{
                     fireProgress("Reading trajectory file", (int) ((iterations*100)/(float)maxIterations));
                 }
                 
-                String[] lineSplit = line.split(",");
+                line = line.replaceAll(",", " ");
+                String[] lineSplit = line.split(" ");
                 Trajectory traj = new Trajectory(Double.valueOf(lineSplit[0]), Double.valueOf(lineSplit[1]),
                         Double.valueOf(lineSplit[2]));
                 
