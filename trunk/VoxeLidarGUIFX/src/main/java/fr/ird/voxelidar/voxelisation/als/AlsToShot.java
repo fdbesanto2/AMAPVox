@@ -208,7 +208,7 @@ public class AlsToShot extends Processing implements Runnable{
         int index = 0;
         int shotId = 0;
         
-        Shot e = null;
+        Shot shot = null;
         boolean isNewExp = false;
         
         int count = 0;
@@ -286,7 +286,7 @@ public class AlsToShot extends Processing implements Runnable{
                         rangesString = rangesString.trim();
                         */
                         //writer.write(shotId+" "+e.nbEchos+" "+e.origin.x+" "+e.origin.y+" "+e.origin.z+" "+e.direction.x+" "+e.direction.y+" "+e.direction.z+" "+rangesString+"\n");
-                        queue.put(e);
+                        queue.put(shot);
                         
                         shotId ++;
                         
@@ -303,10 +303,10 @@ public class AlsToShot extends Processing implements Runnable{
 
                 if (!isNewExp && time != oldTime) {
                     
-                    e= new Shot(mix.lasPoint.n, new Point3d(mix.xloc_s, mix.yloc_s, mix.zloc_s), 
+                    shot= new Shot(mix.lasPoint.n, new Point3d(mix.xloc_s, mix.yloc_s, mix.zloc_s), 
                                                 new Vector3d(mix.x_u, mix.y_u, mix.z_u), 
                                                 new double[mix.lasPoint.n], new short[mix.lasPoint.n], new int[mix.lasPoint.n]);
-                    e.calculateAngle();
+                    shot.calculateAngle();
                     
                     isNewExp = true;
                 }
@@ -317,13 +317,13 @@ public class AlsToShot extends Processing implements Runnable{
                     
                     int currentEchoIndex = mix.lasPoint.r-1;
                     
-                    e.ranges[currentEchoIndex] = mix.range;
-                    e.classifications[currentEchoIndex] = mix.lasPoint.classification;
+                    shot.ranges[currentEchoIndex] = mix.range;
+                    shot.classifications[currentEchoIndex] = mix.lasPoint.classification;
                     
-                    if(e.classifications[currentEchoIndex] == LasPoint.CLASSIFICATION_GROUND){
-                        e.intensities[currentEchoIndex] = (int) (mix.lasPoint.i * RATIO_REFLECTANCE_VEGETATION_SOL);
+                    if(shot.classifications[currentEchoIndex] == LasPoint.CLASSIFICATION_GROUND){
+                        shot.intensities[currentEchoIndex] = (int) (mix.lasPoint.i * RATIO_REFLECTANCE_VEGETATION_SOL);
                     }else{
-                        e.intensities[currentEchoIndex] = mix.lasPoint.i;
+                        shot.intensities[currentEchoIndex] = mix.lasPoint.i;
                     }
                     count++;
                 }

@@ -103,4 +103,8 @@ unix {
     INSTALLS += target
 }
 
+QMAKE_CFLAGS_RELEASE += /MT
+QMAKE_CXXFLAGS_RELEASE += /MT
+
 DISTFILES +=
+

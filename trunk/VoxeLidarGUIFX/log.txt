@@ -41787,3 +41787,148 @@
 2015-04-17 19:00:25 INFO  - Nombre de valeurs correctes: 140847/221184
 2015-04-17 19:00:25 INFO  - Nombre de valeurs corrigées: 37356/221184
 2015-04-17 19:00:25 INFO  - Nombre de valeurs mises à défaut: 42981/221184
+2015-04-20 17:08:06 INFO  - allocate!!!!!!!!
+2015-04-20 17:08:14 ERROR - 
+2015-04-20 17:08:14 INFO  - las voxelisation finished in 8.0 s
+2015-04-20 17:08:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(114, 716, 149)
+			Toricity 	:	false
+
+2015-04-20 17:08:38 INFO  - Shots processed: 141106
+2015-04-20 17:08:38 INFO  - voxelisation is finished ( 31.0 s )
+2015-04-20 17:08:38 INFO  - writing file: C:\Users\Julien\Desktop\test_1m.vox
+2015-04-20 17:09:32 INFO  - file written ( 54.0 s )
+2015-04-20 17:13:49 INFO  - allocate!!!!!!!!
+2015-04-20 17:13:50 INFO  - Voxel space informations:
+			Corner Inf	:	(286355.15, 583516.74, 9.21)
+			Corner Sup	:	(286479.51, 583798.8, 68.98)
+			Dimensions	:	(124, 282, 59)
+			Toricity 	:	false
+
+2015-04-20 17:14:00 INFO  - Shots processed: 141106
+2015-04-20 17:14:00 INFO  - voxelisation is finished ( 11.0 s )
+2015-04-20 17:14:00 INFO  - writing file: C:\Users\Julien\Desktop\test_1m.vox
+2015-04-20 17:14:10 INFO  - file written ( 9.0 s )
+2015-04-20 17:14:10 INFO  - las voxelisation finished in 21.0 s
+2015-04-20 17:15:51 INFO  - allocate!!!!!!!!
+2015-04-20 17:15:53 INFO  - Voxel space informations:
+			Corner Inf	:	(286355.15, 583516.74, 9.21)
+			Corner Sup	:	(286479.51, 583798.8, 68.98)
+			Dimensions	:	(124, 282, 59)
+			Toricity 	:	false
+
+2015-04-20 17:15:59 INFO  - Shots processed: 141106
+2015-04-20 17:15:59 INFO  - voxelisation is finished ( 7.0 s )
+2015-04-20 17:15:59 INFO  - writing file: E:\test_0.5m.vox
+2015-04-20 17:16:07 INFO  - file written ( 8.0 s )
+2015-04-20 17:16:07 INFO  - las voxelisation finished in 16.0 s
+2015-04-20 17:17:44 INFO  - allocate!!!!!!!!
+2015-04-20 17:23:52 INFO  - las voxelisation finished in 355.0 s
+2015-04-21 13:22:52 INFO  - allocate!!!!!!!!
+2015-04-21 13:22:53 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-8444538287481724378.tmp
+2015-04-21 13:22:53 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-8444538287481724378.tmp
+2015-04-21 13:22:53 INFO  - Laz file F:\Las files\P9INRA_buffer_LAS\P9INRA_buffer_LAS.laz is opened
+2015-04-21 13:22:59 INFO  - Voxel space informations:
+			Corner Inf	:	(286700.0, 583650.0, 9.93)
+			Corner Sup	:	(286949.99, 583899.99, 70.3)
+			Dimensions	:	(249, 249, 60)
+			Toricity 	:	false
+
+2015-04-21 13:30:18 INFO  - Shots processed: 976057
+2015-04-21 13:30:18 INFO  - voxelisation is finished ( 446.0 s )
+2015-04-21 13:30:18 INFO  - writing file: F:\Las files\test.vox
+2015-04-21 13:30:43 INFO  - file written ( 25.0 s )
+2015-04-21 13:30:43 INFO  - las voxelisation finished in 471.0 s
+2015-04-21 13:33:12 INFO  - Laz file F:\Las files\P9INRA_buffer_LAS\P9INRA_buffer_LAS.laz is opened
+2015-04-21 13:33:12 INFO  - allocate!!!!!!!!
+2015-04-21 13:33:16 INFO  - Voxel space informations:
+			Corner Inf	:	(286700.0, 583650.0, 9.93)
+			Corner Sup	:	(286949.99, 583899.99, 70.3)
+			Dimensions	:	(249, 249, 60)
+			Toricity 	:	false
+
+2015-04-21 13:33:37 INFO  - Shots processed: 976057
+2015-04-21 13:33:37 INFO  - voxelisation is finished ( 25.0 s )
+2015-04-21 13:33:37 INFO  - writing file: F:\Las files\test.vox
+2015-04-21 13:34:02 INFO  - file written ( 25.0 s )
+2015-04-21 13:34:02 INFO  - las voxelisation finished in 50.0 s
+2015-04-21 17:02:05 INFO  - allocate!!!!!!!!
+2015-04-21 17:02:06 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-4616314510497346179.tmp
+2015-04-21 17:02:06 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-4616314510497346179.tmp
+2015-04-21 17:02:07 INFO  - Laz file F:\Las files\P9INRA_buffer_LAS\P9INRA_buffer_LAS.laz is opened
+2015-04-21 17:02:11 INFO  - Voxel space informations:
+			Corner Inf	:	(286700.0, 583650.0, 9.93)
+			Corner Sup	:	(286949.99, 583899.99, 70.3)
+			Dimensions	:	(249, 249, 60)
+			Toricity 	:	false
+
+2015-04-21 17:02:34 INFO  - Shots processed: 976057
+2015-04-21 17:02:34 INFO  - voxelisation is finished ( 28.0 s )
+2015-04-21 17:02:34 INFO  - writing file: F:\Las files\test.vox
+2015-04-21 17:02:59 INFO  - file written ( 24.0 s )
+2015-04-21 17:02:59 INFO  - las voxelisation finished in 54.0 s
+2015-04-22 09:48:57 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-5833576846390660018.tmp
+2015-04-22 09:48:57 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-5833576846390660018.tmp
+2015-04-22 09:48:57 INFO  - Laz file F:\Las files\emile\data_inini\inini_als_flt.laz is opened
+2015-04-22 09:49:26 INFO  - Laz file F:\Las files\emile\data_inini\inini_als_flt.laz is opened
+2015-04-22 09:49:26 INFO  - allocate!!!!!!!!
+2015-04-22 09:49:27 INFO  - Voxel space informations:
+			Corner Inf	:	(217300.62, 389765.48, 227.81)
+			Corner Sup	:	(217543.16, 390036.38, 320.85)
+			Dimensions	:	(121, 135, 46)
+			Toricity 	:	false
+
+2015-04-22 09:50:00 ERROR - 
+2015-04-22 09:50:00 INFO  - las voxelisation finished in 34.0 s
+2015-04-22 09:50:02 INFO  - Laz file F:\Las files\emile\data_inini\inini_als_flt.laz is opened
+2015-04-22 09:50:02 INFO  - allocate!!!!!!!!
+2015-04-22 09:50:03 INFO  - Voxel space informations:
+			Corner Inf	:	(217300.62, 389765.48, 227.81)
+			Corner Sup	:	(217543.16, 390036.38, 320.85)
+			Dimensions	:	(121, 135, 46)
+			Toricity 	:	false
+
+2015-04-22 09:50:31 ERROR - 
+2015-04-22 09:50:31 INFO  - las voxelisation finished in 29.0 s
+2015-04-22 09:50:36 INFO  - Laz file F:\Las files\emile\data_inini\inini_als_flt.laz is opened
+2015-04-22 09:50:36 INFO  - allocate!!!!!!!!
+2015-04-22 09:50:37 INFO  - Voxel space informations:
+			Corner Inf	:	(217300.62, 389765.48, 227.81)
+			Corner Sup	:	(217543.16, 390036.38, 320.85)
+			Dimensions	:	(121, 135, 46)
+			Toricity 	:	false
+
+2015-04-22 11:00:55 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-6245793924362008685.tmp
+2015-04-22 11:00:55 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-6245793924362008685.tmp
+2015-04-22 11:00:55 INFO  - Laz file F:\Las files\emile2\inini_als3\inini_als3.laz is opened
+2015-04-22 11:01:23 INFO  - allocate!!!!!!!!
+2015-04-22 11:01:23 INFO  - Laz file F:\Las files\emile2\inini_als3\inini_als3.laz is opened
+2015-04-22 11:01:25 INFO  - Voxel space informations:
+			Corner Inf	:	(217300.63, 389765.49, 227.82)
+			Corner Sup	:	(217543.15, 390036.37, 867.6800000000001)
+			Dimensions	:	(80, 90, 213)
+			Toricity 	:	false
+
+2015-04-22 11:03:17 ERROR - 
+2015-04-22 11:03:17 INFO  - las voxelisation finished in 114.0 s
+2015-04-22 11:03:18 INFO  - allocate!!!!!!!!
+2015-04-22 11:03:18 INFO  - Laz file F:\Las files\emile2\inini_als3\inini_als3.laz is opened
+2015-04-22 11:03:19 INFO  - Voxel space informations:
+			Corner Inf	:	(217300.63, 389765.49, 227.82)
+			Corner Sup	:	(217543.15, 390036.37, 867.6800000000001)
+			Dimensions	:	(80, 90, 213)
+			Toricity 	:	false
+
+2015-04-22 11:07:13 ERROR - 
+2015-04-22 11:07:13 INFO  - las voxelisation finished in 235.0 s
+2015-04-22 12:33:09 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-9125314064137883800.tmp
+2015-04-22 12:33:09 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-9125314064137883800.tmp
+2015-04-22 12:33:09 INFO  - Laz file F:\Las files\emile2\inini_als3\inini_als3.laz is opened
+2015-04-22 12:35:42 INFO  - Laz file F:\Las files\emile2\inini_als3\inini_als3.laz is opened
+2015-04-22 12:36:20 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-5578330109297840124.tmp
+2015-04-22 12:36:20 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-5578330109297840124.tmp
+2015-04-22 14:08:50 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-3628059947121308528.tmp
+2015-04-22 14:08:50 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-3628059947121308528.tmp
+2015-04-22 14:08:50 INFO  - Laz file F:\Las files\emile2\inini_als3\inini_als3.laz is opened

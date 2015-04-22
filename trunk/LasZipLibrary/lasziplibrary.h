@@ -24,12 +24,14 @@
   (c) 2007-2014, martin isenburg, rapidlasso - fast tools to catch reality
 
 --------------------------------------------------------------------------*/
-
-#include "jni.h"
+#ifndef LASZIPLIBRARY_H
+#define LASZIPLIBRARY_H
 
 #ifdef WIN64
+    #include "win64/jni.h"
     #include "win64/jni_md.h"
 #else
+    #include "linux64/jni.h"
     #include "linux64/jni_md.h"
 #endif
 
@@ -182,7 +184,7 @@ extern "C" {
     JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_afficherBonjour
         (JNIEnv *, jobject);
 
-    JNIEXPORT long JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_instantiateLasZip
+    JNIEXPORT jlong JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_instantiateLasZip
         (JNIEnv *, jobject);
 
     JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_deleteLasZip
@@ -203,4 +205,6 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+#endif
+
 #endif
