@@ -146,6 +146,11 @@ public class AlsToShot extends Processing implements Runnable{
         double minTime = lasPointList.get(0).t;
         double maxTime = lasPointList.get(lasPointList.size()-1).t;
         
+        if(minTime == maxTime){
+            logger.error("ALS file doesn't contains time relative information, minimum and maximum time = "+minTime);
+            return;
+        }
+        
         
         /***reading trajectory file***/
         
