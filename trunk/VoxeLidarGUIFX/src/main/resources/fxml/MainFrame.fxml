@@ -290,6 +290,7 @@
                                                                            </image>
                                                                         </ImageView>
                                                                      </graphic></Button>
+                                                                  <CheckBox fx:id="checkboxRemoveLowPoint" layoutX="21.0" layoutY="321.0" mnemonicParsing="false" text="Remove low point (noise)" />
                                                                </children>
                                                             </AnchorPane>
                                                          </content>

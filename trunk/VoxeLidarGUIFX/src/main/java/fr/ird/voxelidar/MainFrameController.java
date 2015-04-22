@@ -103,6 +103,10 @@ import org.controlsfx.dialog.ProgressDialog;
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class MainFrameController implements Initializable {
+    @FXML
+    private ComboBox<?> comboboxScript;
+    @FXML
+    private CheckBox checkboxRemoveLowPoint;
     
     public class MinMax{
         
@@ -863,13 +867,14 @@ public class MainFrameController implements Initializable {
                             anchorPaneGroundEnergyParameters.setDisable(true);
                             checkboxCalculateGroundEnergy.setDisable(false);
                         }
-                        
+                        checkboxRemoveLowPoint.setDisable(false);
                         break;
                     default:
                         disableSopMatrixChoice(true);
                         disablePopMatrixChoice(true);
                         anchorPaneGroundEnergyParameters.setDisable(true);
                         checkboxCalculateGroundEnergy.setDisable(true);
+                        checkboxRemoveLowPoint.setDisable(true);
                 }
                 
                 comboboxFormulaTransmittance.getItems().clear();
@@ -1729,6 +1734,7 @@ public class MainFrameController implements Initializable {
                     checkboxUseVopMatrix.isSelected(), vopMatrix);
             
             cfg.setFilters(listviewFilters.getItems());
+            cfg.setRemoveLowPoint(checkboxRemoveLowPoint.isSelected());
             
             cfg.writeConfiguration(selectedFile);
 
@@ -1861,7 +1867,7 @@ public class MainFrameController implements Initializable {
                                     }
                                 });
 
-                                voxTool.voxeliseFromAls(cfg.getOutputFile(), cfg.getInputFile(), cfg.getTrajectoryFile(), cfg.getVoxelParameters(), MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()), cfg.getFilters());
+                                voxTool.voxeliseFromAls(cfg.getOutputFile(), cfg.getInputFile(), cfg.getTrajectoryFile(), cfg.getVoxelParameters(), MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()), cfg.getFilters(), cfg.isRemoveLowPoint());
 
                                 Platform.runLater(new Runnable() {
 
@@ -2341,6 +2347,7 @@ public class MainFrameController implements Initializable {
                     checkboxUsePopMatrix.setSelected(cfg.isUsePopMatrix());
                     checkboxUseSopMatrix.setSelected(cfg.isUseSopMatrix());
                     checkboxUseVopMatrix.setSelected(cfg.isUseVopMatrix());
+                    checkboxRemoveLowPoint.setSelected(cfg.isRemoveLowPoint());
 
                     popMatrix = cfg.getPopMatrix();
                     sopMatrix = cfg.getSopMatrix();

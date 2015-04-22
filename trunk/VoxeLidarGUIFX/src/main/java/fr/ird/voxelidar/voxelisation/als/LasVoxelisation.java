@@ -34,8 +34,9 @@ public class LasVoxelisation extends Processing {
     private final VoxelParameters parameters;
     private VoxelAnalysis voxelAnalysis;
     private LinkedBlockingQueue<Shot> queue;
+    private final boolean filterLowPoints;
 
-    public LasVoxelisation(File alsFile, File outputFile, Mat4D transfMatrix, File trajectoryFile, VoxelParameters parameters, List<Filter> filters) {
+    public LasVoxelisation(File alsFile, File outputFile, Mat4D transfMatrix, File trajectoryFile, VoxelParameters parameters, List<Filter> filters, boolean filterLowPoints) {
 
         this.alsFile = alsFile;
         this.outputFile = outputFile;
@@ -59,6 +60,7 @@ public class LasVoxelisation extends Processing {
         
         
         voxelAnalysis = new VoxelAnalysis(queue, terrain, filters);
+        this.filterLowPoints = filterLowPoints;
     }
 
     @Override
@@ -68,7 +70,7 @@ public class LasVoxelisation extends Processing {
         final long start_time = System.currentTimeMillis();
         
         voxelAnalysis.init(parameters, outputFile);
-        final AlsToShot conversion = new AlsToShot(queue, trajectoryFile, alsFile, popMatrix);
+        final AlsToShot conversion = new AlsToShot(queue, trajectoryFile, alsFile, popMatrix, filterLowPoints);
         
         try {
             

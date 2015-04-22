@@ -11,15 +11,12 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-import java.util.logging.Level;
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
@@ -89,6 +86,7 @@ public class Configuration {
     private List<File> files;
     private List<MatrixAndFile> matricesAndFiles;
     private List<Filter> filters;
+    private boolean removeLowPoint = false;
     private float[] multiResPadMax;
     
     public Configuration(){
@@ -248,19 +246,29 @@ public class Configuration {
             limitsElement.addContent(limitElement);
             processElement.addContent(limitsElement);
             
-            if(filters != null){
-                Element filtersElement = new Element("filters");
+            Element filtersElement = new Element("filters");
+            
+            if(filters != null && !filters.isEmpty()){
+                
+                
+                Element shotFilterElement = new Element("shot-filters");
                 
                 for(Filter f : filters){
                     Element filterElement = new Element("filter");
                     filterElement.setAttribute("variable", f.getVariable());
                     filterElement.setAttribute("inequality", f.getConditionString());
                     filterElement.setAttribute("value", String.valueOf(f.getValue()));
-                    filtersElement.addContent(filterElement);
+                    shotFilterElement.addContent(filterElement);
                 }
                 
-                processElement.addContent(filtersElement);
+                filtersElement.addContent(shotFilterElement);
             }
+            Element pointsFilterElement = new Element("point-filters");
+            pointsFilterElement.addContent(new Element("low-point-filter").setAttribute("enabled", String.valueOf(removeLowPoint)));
+            filtersElement.addContent(pointsFilterElement);
+            
+            processElement.addContent(filtersElement);
+            
             if(processMode == ProcessMode.VOXELISATION_ALS){
                 
                 Element groundEnergyElement = new Element("ground-energy");
@@ -536,23 +544,38 @@ public class Configuration {
                     Element filtersElement = processElement.getChild("filters");
                     if(filtersElement != null){
                         
-                        List<Element> childrensFilter = filtersElement.getChildren("filter");
+                        Element shotFiltersElement = filtersElement.getChild("shot-filters");
                         
-                        
-                        if(childrensFilter != null){
-                            
-                            filters = new ArrayList<>();
-                            
-                            for(Element e : childrensFilter){
+                        if(shotFiltersElement != null){
+                            List<Element> childrensFilter = shotFiltersElement.getChildren("filter");
 
-                                String variable = e.getAttributeValue("variable");
-                                String inequality = e.getAttributeValue("inequality");
-                                String value = e.getAttributeValue("value");
-                                
-                                filters.add(new Filter(variable, Double.valueOf(value), Filter.getConditionFromString(inequality)));
+                            if(childrensFilter != null){
+
+                                filters = new ArrayList<>();
+
+                                for(Element e : childrensFilter){
+
+                                    String variable = e.getAttributeValue("variable");
+                                    String inequality = e.getAttributeValue("inequality");
+                                    String value = e.getAttributeValue("value");
+
+                                    filters.add(new Filter(variable, Double.valueOf(value), Filter.getConditionFromString(inequality)));
+                                }
                             }
                         }
+                        
+                        
+                        Element pointFiltersElement = filtersElement.getChild("point-filters");
+                        if(pointFiltersElement != null){
+                            Element lowPointFilterElement = pointFiltersElement.getChild("low-point-filter");
+                            if(lowPointFilterElement !=null){
+                                removeLowPoint = Boolean.valueOf(lowPointFilterElement.getAttributeValue("enabled"));
+                            }
+                        }
+                        
                     }
+                    
+                    
                     
                     
                     switch (type) {
@@ -846,6 +869,14 @@ public class Configuration {
 
     public void setMultiResPadMax(float[] multiResPadMax) {
         this.multiResPadMax = multiResPadMax;
+    }
+
+    public boolean isRemoveLowPoint() {
+        return removeLowPoint;
+    }
+
+    public void setRemoveLowPoint(boolean removeLowPoint) {
+        this.removeLowPoint = removeLowPoint;
     }
     
 }

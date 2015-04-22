@@ -47,18 +47,20 @@ public class AlsToShot extends Processing implements Runnable{
     private final Mat4D popMatrix;
     private final BlockingQueue<Shot> queue;
     private boolean isFinished;
+    private final boolean filterLowPoint;
 
     public void setIsFinished(boolean isFinished) {
         this.isFinished = isFinished;
     }
     
-    public AlsToShot(BlockingQueue<Shot> queue,File trajectoryFile, File alsFile, Mat4D popMatrix){
+    public AlsToShot(BlockingQueue<Shot> queue, File trajectoryFile, File alsFile, Mat4D popMatrix, boolean filterLowPoint){
 
         this.trajectoryFile = trajectoryFile;
         this.popMatrix = popMatrix;
         this.alsFile = alsFile;
         this.queue = queue;
         isFinished = false;
+        this.filterLowPoint = filterLowPoint;
     }
 
     @Override
@@ -100,9 +102,11 @@ public class AlsToShot extends Processing implements Runnable{
                     }
                     Vector3d location = new Vector3d((p.getX() * header.getxScaleFactor()) + header.getxOffset(), (p.getY() * header.getyScaleFactor()) + header.getyOffset(), (p.getZ() * header.getzScaleFactor()) + header.getzOffset());
 
-
-                    LasPoint point = new LasPoint(location.x, location.y, location.z, p.getReturnNumber(), p.getNumberOfReturns(), p.getIntensity(), p.getClassification(), p.getGpsTime());
-                    lasPointList.add(point);
+                    if((filterLowPoint && p.getClassification() == 7) || !filterLowPoint){
+                        LasPoint point = new LasPoint(location.x, location.y, location.z, p.getReturnNumber(), p.getNumberOfReturns(), p.getIntensity(), p.getClassification(), p.getGpsTime());
+                        lasPointList.add(point);
+                    }
+                    
 
                     iterations++;
                 }
@@ -121,7 +125,10 @@ public class AlsToShot extends Processing implements Runnable{
                     p.y = (p.y * header.getyScaleFactor()) + header.getyOffset();
                     p.z = (p.z * header.getzScaleFactor()) + header.getzOffset();
                     
-                    lasPointList.add(p);
+                    if((filterLowPoint && p.classification == 7) || !filterLowPoint){
+                        lasPointList.add(p);
+                    }
+                    
                 }
                 laz.close();
                         

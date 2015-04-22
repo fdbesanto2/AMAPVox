@@ -174,7 +174,7 @@ public class VoxelisationTool {
 
     }
 
-    public void voxeliseFromAls(File output, File input, File trajectoryFile, VoxelParameters parameters, Mat4D vop, List<Filter> filters) {
+    public void voxeliseFromAls(File output, File input, File trajectoryFile, VoxelParameters parameters, Mat4D vop, List<Filter> filters, boolean filterLowPoints) {
 
         startTime = System.currentTimeMillis();
 
@@ -185,7 +185,7 @@ public class VoxelisationTool {
             vop = Mat4D.identity();
         }
 
-        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, trajectoryFile, parameters, filters);
+        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, trajectoryFile, parameters, filters, filterLowPoints);
 
         voxelisation.addProcessingListener(new ProcessingListener() {
 
