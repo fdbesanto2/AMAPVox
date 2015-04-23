@@ -542,16 +542,19 @@ public class Configuration {
                     
                     
                     Element filtersElement = processElement.getChild("filters");
+                    filters = new ArrayList<>();
+                    
                     if(filtersElement != null){
                         
                         Element shotFiltersElement = filtersElement.getChild("shot-filters");
                         
-                        if(shotFiltersElement != null){
+                        if(shotFiltersElement != null){                            
+                            
                             List<Element> childrensFilter = shotFiltersElement.getChildren("filter");
 
                             if(childrensFilter != null){
 
-                                filters = new ArrayList<>();
+                                
 
                                 for(Element e : childrensFilter){
 
