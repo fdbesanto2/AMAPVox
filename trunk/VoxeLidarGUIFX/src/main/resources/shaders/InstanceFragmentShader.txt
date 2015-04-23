@@ -8,5 +8,8 @@ void main()
     if(Color.a == 0){
         discard;
     }
-    outColor = Color;
+    if(Color.r == 0){
+        discard;
+    }
+    outColor = vec4(Color.r, Color.g, Color.b, Color.r);
 }

@@ -820,7 +820,7 @@ public class VoxelSpace extends SceneObject{
         
         List l = new ArrayList();
         
-        mesh = new InstancedMesh(MeshFactory.createTexturedCube(cubeSize), instanceNumber);
+        mesh = new InstancedMesh(MeshFactory.createCube(cubeSize), instanceNumber);
         
         float instancePositions[] = new float[instanceNumber*3];
         float instanceColors[] = new float[instanceNumber*4];

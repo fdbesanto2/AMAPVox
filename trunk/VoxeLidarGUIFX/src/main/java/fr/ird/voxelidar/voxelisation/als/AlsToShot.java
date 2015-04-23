@@ -27,6 +27,7 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.BlockingQueue;
+import java.util.logging.Level;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
@@ -233,7 +234,13 @@ public class AlsToShot extends Processing implements Runnable{
             }
             
             double targetTime = lasPoint.t;
-            index = searchNearestMax(targetTime, tgps, index);
+            try{
+                index = searchNearestMax(targetTime, tgps, index);
+            }catch(Exception e){
+                logger.error("Trajectory file is invalid, out of bounds exception.");
+                return;
+            }
+            
             double max = tgps.get(index);
             double min = tgps.get(index-1);
             double ratio = (lasPoint.t - min) / (max - min);
@@ -366,6 +373,9 @@ public class AlsToShot extends Processing implements Runnable{
                 
         while(!found){
             
+            if(index > list.size() -1){
+                throw new IndexOutOfBoundsException("Index is out");
+            }
             double currentValue = list.get(index);
             
             if(list.get(index) < value){

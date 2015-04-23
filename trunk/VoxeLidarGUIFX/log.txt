@@ -41932,3 +41932,43 @@
 2015-04-22 14:08:50 INFO  - Saved libfile: C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-3628059947121308528.tmp
 2015-04-22 14:08:50 INFO  - C:\Users\Julien\AppData\Local\Temp\LasZipLibrary-3628059947121308528.tmp
 2015-04-22 14:08:50 INFO  - Laz file F:\Las files\emile2\inini_als3\inini_als3.laz is opened
+2015-04-23 16:57:57 INFO  - allocate!!!!!!!!
+2015-04-23 16:57:57 INFO  - Saved libfile: /tmp/LasZipLibrary-2188436931358983897.tmp
+2015-04-23 16:57:57 INFO  - /tmp/LasZipLibrary-2188436931358983897.tmp
+2015-04-23 16:57:57 INFO  - Laz file /home/calcul/Documents/Julien/test_blaise/P9INRA_buffer_ALS.laz is opened
+2015-04-23 16:58:03 INFO  - Voxel space informations:
+			Corner Inf	:	(286700.0, 583650.0, 9.93)
+			Corner Sup	:	(286949.99, 583899.99, 70.3)
+			Dimensions	:	(49, 49, 12)
+			Toricity 	:	false
+
+2015-04-23 16:59:46 ERROR - Trajectory file is invalid, out of bounds exception.
+2015-04-23 17:00:45 ERROR - 
+2015-04-23 17:00:45 INFO  - las voxelisation finished in 167.0 s
+2015-04-23 17:01:32 INFO  - allocate!!!!!!!!
+2015-04-23 17:01:32 INFO  - Laz file /home/calcul/Documents/Julien/test_blaise/P9INRA_buffer_ALS.laz is opened
+2015-04-23 17:01:32 INFO  - Voxel space informations:
+			Corner Inf	:	(286700.0, 583650.0, 9.93)
+			Corner Sup	:	(286949.99, 583899.99, 70.3)
+			Dimensions	:	(49, 49, 12)
+			Toricity 	:	false
+
+2015-04-23 17:02:18 ERROR - 
+2015-04-23 17:02:18 INFO  - las voxelisation finished in 45.0 s
+2015-04-23 17:02:59 INFO  - Shots processed: 976057
+2015-04-23 17:02:59 INFO  - voxelisation is finished ( 86.0 s )
+2015-04-23 17:02:59 INFO  - writing file: /home/calcul/Documents/Julien/test_blaise/las.vox
+2015-04-23 17:02:59 INFO  - file written ( 0.0 s )
+2015-04-23 17:06:27 INFO  - allocate!!!!!!!!
+2015-04-23 17:06:27 INFO  - Laz file /home/calcul/Documents/Julien/test_blaise/P9INRA_buffer_ALS.laz is opened
+2015-04-23 17:06:27 INFO  - Voxel space informations:
+			Corner Inf	:	(286700.0, 583650.0, 9.93)
+			Corner Sup	:	(286949.99, 583899.99, 70.3)
+			Dimensions	:	(49, 49, 12)
+			Toricity 	:	false
+
+2015-04-23 17:06:41 INFO  - Shots processed: 976057
+2015-04-23 17:06:41 INFO  - voxelisation is finished ( 13.0 s )
+2015-04-23 17:06:41 INFO  - writing file: /home/calcul/Documents/Julien/test_blaise/las.vox
+2015-04-23 17:06:41 INFO  - file written ( 0.0 s )
+2015-04-23 17:06:41 INFO  - las voxelisation finished in 13.0 s

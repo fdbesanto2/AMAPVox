@@ -119,12 +119,6 @@ public class JoglListener implements GLEventListener {
                 
         GL3 gl = drawable.getGL().getGL3();
         
-        //calculate fps every 61 frames (wait render speed to stabilize)
-        //drawable.getAnimator().setUpdateFPSFrames(61, null);
-        
-        //this.width = drawable.getWidth();
-        //this.height = drawable.getHeight();
-        
         Vec3F eye = new Vec3F(80.0f, 72.25f, 200f);
         Vec3F target = new Vec3F(0.0f, 0.0f, 0.0f);
         Vec3F up = new Vec3F(0.0f, 0.0f, 1.0f);
@@ -140,20 +134,22 @@ public class JoglListener implements GLEventListener {
                 
         gl.glEnable(GL3.GL_DEPTH_TEST);
         gl.glDepthFunc(GL3.GL_LEQUAL);
+                
         gl.glClearDepthf(1.0f);
         
-        gl.glEnable(GL3.GL_LINE_SMOOTH);
-        gl.glEnable(GL3.GL_POLYGON_SMOOTH);
+        //gl.glEnable(GL3.GL_LINE_SMOOTH);
+        //gl.glEnable(GL3.GL_POLYGON_SMOOTH);
         
         //gl.glPolygonMode(GL3.GL_FRONT, GL3.GL_LINE);
         //gl.glPolygonMode(GL3.GL_BACK, GL3.GL_LINE);
         //gl.glPolygonMode(GL3.GL_FRONT_AND_BACK, GL3.GL_LINE);
-        //gl.glDisable(GL3.GL_CULL_FACE);
+        gl.glFrontFace(GL3.GL_CCW);
+        gl.glDisable(GL3.GL_CULL_FACE);
         
-        gl.glHint(GL3.GL_LINE_SMOOTH_HINT, GL3.GL_NICEST);
-        gl.glHint(GL3.GL_GENERATE_MIPMAP_HINT, GL3.GL_NICEST);
-        gl.glHint(GL3.GL_POLYGON_SMOOTH_HINT, GL3.GL_NICEST);
-        gl.glHint(GL3.GL_FRAGMENT_SHADER_DERIVATIVE_HINT, GL3.GL_NICEST);
+        //gl.glHint(GL3.GL_LINE_SMOOTH_HINT, GL3.GL_NICEST);
+        //gl.glHint(GL3.GL_GENERATE_MIPMAP_HINT, GL3.GL_NICEST);
+        //gl.glHint(GL3.GL_POLYGON_SMOOTH_HINT, GL3.GL_NICEST);
+        //gl.glHint(GL3.GL_FRAGMENT_SHADER_DERIVATIVE_HINT, GL3.GL_NICEST);
         
         //drawable.setAutoSwapBufferMode(true);
         
@@ -203,7 +199,7 @@ public class JoglListener implements GLEventListener {
         gl.glClear(GL3.GL_DEPTH_BUFFER_BIT|GL3.GL_COLOR_BUFFER_BIT);
         gl.glClearColor(worldColor.x, worldColor.y, worldColor.z, 1.0f);
         
-        gl.glDisable(GL3.GL_BLEND );
+        gl.glDisable(GL3.GL_BLEND);
         
         eventListener.updateEvents();
         
@@ -240,7 +236,6 @@ public class JoglListener implements GLEventListener {
             for(Entry<Integer, Shader> shader : scene.getShadersList().entrySet()) {
 
                 if(!shader.getValue().isOrtho){
-                    String threadName = Thread.currentThread().getName();
                     gl.glUseProgram(shader.getKey());
                         gl.glUniformMatrix4fv(shader.getValue().uniformMap.get("projMatrix"), 1, false, projMatrixBuffer);
                     gl.glUseProgram(0);
