@@ -904,7 +904,8 @@ public class VoxelSpace extends SceneObject{
             
             cubeSizeUpdated = true;
         }
-        
+        //gl.glDisable(GL3.GL_DEPTH_TEST);
         draw(gl, GL3.GL_TRIANGLES);
+        //gl.glEnable(GL3.GL_DEPTH_TEST);
     }
 }

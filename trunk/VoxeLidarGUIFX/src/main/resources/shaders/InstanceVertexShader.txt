@@ -1,8 +1,10 @@
-#version 140
+#version 150
 
-uniform mat4 viewMatrix, projMatrix;
+uniform mat4 viewMatrix, projMatrix, normalMatrix;
+uniform vec3 eyePosition;
 
 in vec4 position;
+in vec3 normal;
 in vec3 instance_position;
 in vec4 instance_color;
 
@@ -10,7 +12,31 @@ flat out vec4 Color;
  
 void main()
 {
-    Color = instance_color;
+    mat4 modelviewmatrix = projMatrix * viewMatrix;
+    vec4 LightPosition = normalize(vec4(1, 1, 1, 1));
+    vec3 La = vec3(0.2, 0.2, 0.2);
+    vec3 Ld = vec3(1.0, 1.0, 1.0);
+    vec3 Ls = vec3(0.5, 0.5, 0.5);
+    vec3 Ka = vec3(1.0, 1.0, 1.0);
+    vec3 Kd = vec3(instance_color.r, instance_color.g, instance_color.b);
+    vec3 Ks=vec3(0.5, 0.5, 0.5);
+    float Shininess = 1;
+
+    vec3 tnorm = normalize(mat3(normalMatrix) * normal);
+    vec4 eyeCoords = vec4(normalize(eyePosition), 1);
+
+    vec3 s = normalize(vec3(LightPosition));
+    vec3 v = normalize(-position.xyz);
+    vec3 r = reflect(-s, tnorm);
+    vec3 ambient = La * Ka;
+    float sDotN = max(dot(s, tnorm), 0.0);
+    vec3 diffuse = Ld * Kd* sDotN;
+    vec3 spec = vec3(0.0);
+    if(sDotN > 0.0){
+        spec = Ls * Ks * pow(max(dot(r, v),0.0), Shininess);
+    }
+
+    Color = vec4(vec3(ambient + diffuse + spec), instance_color.a);
 
     gl_Position = projMatrix * viewMatrix  * (position+vec4(instance_position,0.0));
 }

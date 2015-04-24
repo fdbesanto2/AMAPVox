@@ -47,68 +47,39 @@ public class MeshFactory {
     public static Mesh createCube(float size){
         
         float vertexData[] = new float[]
-        {size/2.0f, -size/2.0f, -size/2.0f,
+        {size/2.0f, size/2.0f, -size/2.0f,
+        size/2.0f, -size/2.0f, -size/2.0f,
+        -size/2.0f, -size/2.0f, -size/2.0f,
+        -size/2.0f, size/2.0f, -size/2.0f,
+        size/2.0f, size/2.0f, size/2.0f,
         size/2.0f, -size/2.0f, size/2.0f,
         -size/2.0f, -size/2.0f, size/2.0f,
-        -size/2.0f, -size/2.0f, -size/2.0f,
-        size/2.0f, size/2.0f, -size/2.0f,
-        size/2.0f, size/2.0f, size/2.0f,
-        -size/2.0f, size/2.0f, size/2.0f,
-        -size/2.0f, size/2.0f, -size/2.0f};
-        /*
-        float aoData[] = new float[]
-            {1, 0, 0, 0,
-            1, -0.649359f, 0.680704f,0.339080f,
-            1, -0.384346f,-0.401203f,-0.831453f,
-            0.750000f,-0.888967f,0.025329f,0.457271f,
-            0.500000f,0.016968f,0.453997f,-0.890842f,
-            0.500000f,0.605377f,-0.568562f,-0.557006f,
-            0.400000f,0.999899f,-0.009149f,0.010885f,
-            0.750000f, 0.602468f, -0.559680f, 0.569026f };
-        */
-        /*
-        short indexData[] = new short[]
-        {0, 1, 2,
-        7, 6, 5,
-        4, 5, 1,
-        5, 6, 2,
-        2, 6, 7,
-        4, 0, 3,
-        3, 0, 2,
-        4, 7, 5,
-        0, 4, 1,
-        1, 5, 2,
-        3, 2, 7,
-        7, 4, 3};
-        */
-        /*
+        -size/2.0f, size/2.0f, size/2.0f};
+        
+        float[] normalData = new float[]
+        {0.577349f, 0.577349f, -0.577349f,
+        0.577349f, -0.577349f, -0.577349f,
+        -0.577349f, -0.577349f, -0.577349f,
+        -0.577349f, 0.577349f, -0.577349f,
+        0.577349f, 0.577349f, 0.577349f,
+        0.577349f, -0.577349f, 0.577349f,
+        -0.577349f, -0.577349f, 0.577349f,
+        -0.577349f, 0.577349f, 0.577349f};
+        
         short indexData[] = new short[]
         {0, 1, 2,
         4, 7, 6,
         0, 4, 5,
-        1, 5, 2,
-        2, 6, 3,
+        1, 5, 6,
+        2, 6, 7,
         4, 0, 3,
         3, 0, 2,
         5, 4, 6,
         1, 0, 5,
-        5, 6, 2,
-        6, 7, 3,
+        2, 1, 6,
+        3, 2, 7,
         7, 4, 3};
-        */
-        short indexData[] = new short[]
-        {0, 3, 1,
-        4, 7, 5,
-        0, 1, 4,
-        2, 5, 1,
-        3, 6, 2,
-        4, 7, 0,
-        1, 3, 2,
-        7, 5, 6,
-        4, 1, 5,
-        5, 2, 6,
-        6, 3, 7,
-        7, 0, 3};
+        
         
         
         Mesh cube = new Mesh();
@@ -116,7 +87,7 @@ public class MeshFactory {
         cube.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
         cube.indexBuffer = Buffers.newDirectShortBuffer(indexData);
         cube.vertexCount = indexData.length;
-        
+        cube.normalBuffer  = Buffers.newDirectFloatBuffer(normalData);
         
         return cube;
     }

@@ -143,8 +143,8 @@ public class JoglListener implements GLEventListener {
         //gl.glPolygonMode(GL3.GL_FRONT, GL3.GL_LINE);
         //gl.glPolygonMode(GL3.GL_BACK, GL3.GL_LINE);
         //gl.glPolygonMode(GL3.GL_FRONT_AND_BACK, GL3.GL_LINE);
-        gl.glFrontFace(GL3.GL_CCW);
-        gl.glDisable(GL3.GL_CULL_FACE);
+        //gl.glEnable(GL3.GL_CULL_FACE);
+        //gl.glCullFace(GL3.GL_FRONT_AND_BACK);
         
         //gl.glHint(GL3.GL_LINE_SMOOTH_HINT, GL3.GL_NICEST);
         //gl.glHint(GL3.GL_GENERATE_MIPMAP_HINT, GL3.GL_NICEST);
@@ -212,6 +212,13 @@ public class JoglListener implements GLEventListener {
             Shader s = scene.getShadersList().get(id);
             gl.glUseProgram(id);
                 gl.glUniformMatrix4fv(s.uniformMap.get("normalMatrix"), 1, false, normalMatrixBuffer);
+            gl.glUseProgram(0);
+            
+            int id2 = scene.getShaderByName("instanceShader");
+            Shader s2 = scene.getShadersList().get(id2);
+            gl.glUseProgram(id2);
+                gl.glUniformMatrix4fv(s2.uniformMap.get("normalMatrix"), 1, false, normalMatrixBuffer);
+                gl.glUniform3f(s2.uniformMap.get("eyePosition"), camera.location.x, camera.location.y, camera.location.z);
             gl.glUseProgram(0);
 
             FloatBuffer viewMatrixBuffer = Buffers.newDirectFloatBuffer(camera.getViewMatrix().mat);
@@ -320,8 +327,8 @@ public class JoglListener implements GLEventListener {
             InputStreamReader instanceFragmentShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/InstanceFragmentShader.txt"));
             //Shader instanceShader = shadGenerator.generateShader(gl, EnumSet.of(Flag.INSTANCED, Flag.TEXTURED), "instanceShader");
             Shader instanceShader = new Shader(gl, instanceFragmentShader, instanceVertexShader, "instanceShader");
-            instanceShader.setUniformLocations(new String[]{"viewMatrix","projMatrix"});
-            instanceShader.setAttributeLocations(new String[]{"position", "instance_position", "instance_color"});
+            instanceShader.setUniformLocations(new String[]{"viewMatrix","projMatrix", "normalMatrix", "Material", "Light", "eyePosition"});
+            instanceShader.setAttributeLocations(new String[]{"position", "normal", "instance_position", "instance_color"});
             
             logger.debug("shader compiled: "+instanceShader.name);
             
