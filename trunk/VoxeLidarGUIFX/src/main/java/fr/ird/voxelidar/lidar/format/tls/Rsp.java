@@ -105,44 +105,55 @@ public class Rsp {
                 rxp.setName(child.getAttributeValue("name"));
                 rxp.setFold(child.getAttributeValue("fold"));
                 
-                Element singlescans = child.getChild("singlescans");
-                String singlescansFold = singlescans.getAttributeValue("fold");
-                Map<Integer, RxpScan> scanList = new HashMap<>();
+                Element registeredElement = child.getChild("registered");
                 
-                List<Element> scans = singlescans.getChildren("scan");
-                
-                Element sop = child.getChild("sop");
-                Mat4D sopMatrix = extractMat4D(sop.getChildText("matrix"));
-                rxp.setSopMatrix(sopMatrix);
-                
-                int compteur = 0;
-                for(Element sc:scans){
-                                        
-                    RxpScan scan = new RxpScan();
-                    scan.setName(sc.getAttributeValue("name"));
-                    scan.setFileName(sc.getChildText("file"));
-                    String rspFilePathOnly = rspFile.getAbsolutePath().substring(0,rspFile.getAbsolutePath().lastIndexOf(File.separator));
+                if(registeredElement != null){
                     
-                    scan.setAbsolutePath(FilenameUtils.separatorsToSystem(rspFilePathOnly+"\\"+folderScanPositions+"\\"+rxp.getFold()+"\\"+singlescansFold+"\\")+scan.getFileName());
-                    scanList.put(scanCount, scan);
-                    
-                    if(scan.getName().contains(".mon")){
-                        rxp.setRxpLiteFile(new File(scan.getAbsolutePath()));
-                        rxp.setScanLite(scan);
+                    if(Integer.valueOf(registeredElement.getText()) == 1){
+                        
+                        Element singlescans = child.getChild("singlescans");
+                        String singlescansFold = singlescans.getAttributeValue("fold");
+                        Map<Integer, RxpScan> scanList = new HashMap<>();
+
+                        List<Element> scans = singlescans.getChildren("scan");
+
+                        Element sop = child.getChild("sop");
+                        Mat4D sopMatrix = extractMat4D(sop.getChildText("matrix"));
+                        rxp.setSopMatrix(sopMatrix);
+
+                        int compteur = 0;
+                        for(Element sc:scans){
+
+                            RxpScan scan = new RxpScan();
+                            scan.setName(sc.getAttributeValue("name"));
+                            scan.setFileName(sc.getChildText("file"));
+                            String rspFilePathOnly = rspFile.getAbsolutePath().substring(0,rspFile.getAbsolutePath().lastIndexOf(File.separator));
+
+                            scan.setAbsolutePath(FilenameUtils.separatorsToSystem(rspFilePathOnly+"\\"+folderScanPositions+"\\"+rxp.getFold()+"\\"+singlescansFold+"\\")+scan.getFileName());
+                            scanList.put(scanCount, scan);
+
+                            if(scan.getName().contains(".mon")){
+                                rxp.setRxpLiteFile(new File(scan.getAbsolutePath()));
+                                rxp.setScanLite(scan);
+                            }else{
+                                rxp.setScanFull(scan);
+                            }
+                            scan.setFile(new File(scan.getAbsolutePath()));
+                            scan.setSopMatrix(sopMatrix);
+
+
+                            compteur++;
+                            scanCount++;
+                        }
+
+                        rxp.setScanList(scanList);
+
+                        rxpList.add(rxp);
                     }else{
-                        rxp.setScanFull(scan);
+                        logger.info("Scan "+ rxp.getName() +" skipped cause unregistered");
                     }
-                    scan.setFile(new File(scan.getAbsolutePath()));
-                    scan.setSopMatrix(sopMatrix);
-                    
-                    
-                    compteur++;
-                    scanCount++;
                 }
                 
-                rxp.setScanList(scanList);
-                
-                rxpList.add(rxp);
             }
             
         } catch (JDOMException | IOException ex) {

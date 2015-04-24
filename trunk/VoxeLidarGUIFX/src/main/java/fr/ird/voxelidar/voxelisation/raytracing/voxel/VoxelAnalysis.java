@@ -311,7 +311,7 @@ public class VoxelAnalysis implements Runnable {
                     }
 
                 } catch (Exception e) {
-                    logger.error(e);
+                    //logger.error(e);
                 }
             }
 

@@ -162,11 +162,11 @@ public class Scene {
             
             for(SceneObject object : objectsList){
                 
-                if(object.isAlphaRequired){
+                //if(object.isAlphaRequired){
                     gl.glEnable(GL3.GL_BLEND);
-                }else{
-                    gl.glDisable(GL3.GL_BLEND);
-                }
+                //}else{
+                    //gl.glDisable(GL3.GL_BLEND);
+                //}
                 
                 gl.glUseProgram(object.getShaderId());
                     object.draw(gl, object.getDrawType());

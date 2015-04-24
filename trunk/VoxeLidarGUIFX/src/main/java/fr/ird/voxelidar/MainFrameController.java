@@ -79,6 +79,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -107,6 +108,8 @@ public class MainFrameController implements Initializable {
     private ComboBox<?> comboboxScript;
     @FXML
     private CheckBox checkboxRemoveLowPoint;
+    @FXML
+    private Slider sliderRSPCoresToUse;
     
     public class MinMax{
         
@@ -939,6 +942,12 @@ public class MainFrameController implements Initializable {
         });
         
         resetPadLimits();
+        
+        int availableCores = Runtime.getRuntime().availableProcessors();
+        
+        sliderRSPCoresToUse.setMin(1);
+        sliderRSPCoresToUse.setMax(availableCores);
+        sliderRSPCoresToUse.setValue(availableCores);
 
     }
 
@@ -1805,6 +1814,8 @@ public class MainFrameController implements Initializable {
             return;
         }
         
+        final int coreNumberToUse = (int)sliderRSPCoresToUse.getValue();
+        
 
         final long start_time = System.currentTimeMillis();
         ProgressDialog d;
@@ -1910,7 +1921,8 @@ public class MainFrameController implements Initializable {
                                         try {
                                             ArrayList<File> outputFiles = voxTool.voxeliseFromRsp(cfg.getOutputFile(), cfg.getInputFile(), cfg.getVoxelParameters(),
                                                     MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()),
-                                                    MatrixConverter.convertMatrix4dToMat4D(cfg.getPopMatrix()), cfg.getMatricesAndFiles(), cfg.getFilters());
+                                                    MatrixConverter.convertMatrix4dToMat4D(cfg.getPopMatrix()), 
+                                                    cfg.getMatricesAndFiles(), cfg.getFilters(), coreNumberToUse);
 
                                             if (cfg.getVoxelParameters().isMergingAfter()) {
 

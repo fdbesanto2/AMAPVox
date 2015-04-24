@@ -35,11 +35,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Matrix4d;
@@ -59,6 +61,7 @@ public class VoxelisationTool {
     private long startTime;
     private Dtm dtm;
     private boolean cancelled;
+    private ExecutorService exec;
 
     public VoxelisationTool() {
         listeners = new EventListenerList();
@@ -84,6 +87,10 @@ public class VoxelisationTool {
 
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
+        
+        if(exec != null){
+            exec.shutdownNow();
+        }
     }
 
     private Dtm loadDTM(File dtmFile) {
@@ -102,7 +109,7 @@ public class VoxelisationTool {
         return terrain;
     }
 
-    public ArrayList<File> voxeliseFromRsp(File output, File input, VoxelParameters parameters, Mat4D vop, Mat4D pop, List<MatrixAndFile> matricesAndFiles, List<Filter> filters) throws FileNotFoundException {
+    public ArrayList<File> voxeliseFromRsp(File output, File input, VoxelParameters parameters, Mat4D vop, Mat4D pop, List<MatrixAndFile> matricesAndFiles, List<Filter> filters, int coresNumber) throws FileNotFoundException {
 
         if (!Files.isReadable(output.toPath())) {
             throw new FileNotFoundException("File " + output.getAbsolutePath() + " not reachable");
@@ -117,13 +124,15 @@ public class VoxelisationTool {
         this.parameters = parameters;
         this.parameters.setTLS(true);
 
-        Rsp rsp = new Rsp();
-        rsp.read(input);
+        //Rsp rsp = new Rsp();
+        //rsp.read(input);
 
         ArrayList<File> files = new ArrayList<>();
-        ExecutorService exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-
-        ArrayList<Callable<RxpVoxelisation>> tasks = new ArrayList<>();
+        exec = Executors.newFixedThreadPool(coresNumber);
+        
+        LinkedBlockingQueue<Callable<RxpVoxelisation>>  tasks = new LinkedBlockingQueue<>();
+        
+        //ArrayList<Callable<RxpVoxelisation>> tasks = new ArrayList<>();
 
         dtm = loadDTM(parameters.getDtmFile());
 

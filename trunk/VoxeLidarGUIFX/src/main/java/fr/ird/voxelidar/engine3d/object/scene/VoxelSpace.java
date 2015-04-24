@@ -776,6 +776,14 @@ public class VoxelSpace extends SceneObject{
         cubeSizeUpdated = false;
     }
     
+    public void switchLightOn(){
+        
+    }
+    
+    public void switchLightOff(){
+        
+    }
+    
     @Override
     public void initVao(GL3 gl, Shader shader){
         

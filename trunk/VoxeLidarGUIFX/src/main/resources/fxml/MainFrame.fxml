@@ -461,6 +461,16 @@
                                  </children></AnchorPane>
                            </content>
                         </Tab>
+                        <Tab text="Parameters">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Slider fx:id="sliderRSPCoresToUse" blockIncrement="1.0" layoutX="22.0" layoutY="81.0" majorTickUnit="1.0" max="4.0" min="1.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="4.0" />
+                                    <Label layoutX="22.0" layoutY="55.0" text="TLS - Rsp project - cores to use" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
                     </tabs>
                   </TabPane>
                </children>

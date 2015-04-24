@@ -47,7 +47,7 @@ public class BasicEvent extends EventManager{
     public int yOffset;
     
     private int i=0;
-    private final float mouseSpeed = 1.1f;
+    private final float mouseSpeed = 2.0f;
     
     public boolean leftMouseWasReleased;
     public boolean isMouseLocationUpdated;
