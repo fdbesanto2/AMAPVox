@@ -5,12 +5,6 @@
  */
 package fr.ird.voxelidar;
 
-import fr.ird.voxelidar.engine3d.object.scene.Dtm;
-import fr.ird.voxelidar.engine3d.object.scene.DtmLoader;
-import fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction;
-import fr.ird.voxelidar.voxelisation.extraction.tls.Shot;
-import java.io.File;
-import java.util.Iterator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -25,9 +19,10 @@ public class FXPrincipal extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        
         /*
         RxpExtraction rxpExtraction = new RxpExtraction();
-        rxpExtraction.openRxpFile(new File("/media/forestview01/BDLidar/TLS/Paracou2014/FTH2014.RiSCAN/SCANS/ScanPos002/SINGLESCANS/850215_172246.mon.rxp"));
+        rxpExtraction.openRxpFile(new File("F:\\Rxp files\\850215_172246.mon.rxp"));
         
         Iterator<Shot> iterator = rxpExtraction.iterator();
         

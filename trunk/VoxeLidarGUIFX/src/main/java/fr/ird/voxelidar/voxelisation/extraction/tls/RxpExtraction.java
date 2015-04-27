@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 public class RxpExtraction implements Iterable<Shot>{
     
     public final static Logger logger = Logger.getLogger(LazExtraction.class);
-    private final static String NATIVE_LIBRARY_NAME = "RivLibLibraryV2";
+    private final static String NATIVE_LIBRARY_NAME = "RivLibLibrary";
     
     private native void afficherBonjour();
     private native long instantiate();
@@ -79,7 +79,7 @@ public class RxpExtraction implements Iterable<Shot>{
             
             @Override
             public boolean hasNext() {
-                return true;
+                return hasShot(rxpPointer);
             }
 
             @Override

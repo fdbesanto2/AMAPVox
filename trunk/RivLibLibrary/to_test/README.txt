@@ -1,0 +1,3 @@
+Les fichiers dans ce dossier peuvent être destinés à créer une nouvelle DLL pour RivLib. Par manque de temps je n'ai pas pu finir ce que j'ai commencé.
+Le but par rapport à la librairie actuelle est d'avoir une méthode getShot native qui serait appelée depuis java pour récupérer les tirs+échos un à un.
+Actuellement on appelle une méthode depuis Java qui va extraire tous les tirs+échos et nativement on va appeler une méthode Java qui est interceptée par une méthode de callback.

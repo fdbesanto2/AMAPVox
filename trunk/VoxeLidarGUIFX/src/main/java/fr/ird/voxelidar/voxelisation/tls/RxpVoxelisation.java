@@ -27,7 +27,6 @@ import org.apache.log4j.Logger;
 public class RxpVoxelisation implements Callable{
     
     private final static Logger logger = Logger.getLogger(RxpVoxelisation.class);
-    private Mat4D vopPop;
     private final VoxelParameters parameters;
     private static final int compteur = 1;
     //private VoxelAnalysis voxelAnalysis;
@@ -56,12 +55,6 @@ public class RxpVoxelisation implements Callable{
         this.outputFile = outputFile;
         
         
-        
-
-        if (vopPop == null) {
-            vopPop = Mat4D.identity();
-        }
-        
         Mat4D popVop = Mat4D.multiply(popMatrix, vopMatrix);
         final Mat4D transfMatrix = Mat4D.multiply(sopMatrix, popVop);
         
@@ -71,7 +64,10 @@ public class RxpVoxelisation implements Callable{
             transfMatrix.mat[4],transfMatrix.mat[5],transfMatrix.mat[6],
             transfMatrix.mat[8],transfMatrix.mat[9],transfMatrix.mat[10]
         };
-        terrain.setTransformationMatrix(vopMatrix);
+        
+        if(terrain != null){
+            terrain.setTransformationMatrix(vopMatrix);
+        }
         
         queue = new LinkedBlockingQueue<>();
         voxelAnalysis = new VoxelAnalysis(queue, terrain, filters);

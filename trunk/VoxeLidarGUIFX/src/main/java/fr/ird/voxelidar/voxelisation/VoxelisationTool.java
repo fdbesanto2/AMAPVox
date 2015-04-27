@@ -175,6 +175,10 @@ public class VoxelisationTool {
         if (dtm == null && dtmFile != null) {
             dtm = loadDTM(dtmFile);
         }
+        
+        if(pop == null){ pop = Mat4D.identity();}
+        if(sop == null){ sop = Mat4D.identity();}
+        if(vop == null){ vop = Mat4D.identity();}
 
         RxpVoxelisation voxelisation = new RxpVoxelisation(input, output, vop, pop, sop, parameters, dtm, filters);
         voxelisation.call();

@@ -31,15 +31,19 @@ INCLUDEPATH += $$PWD/include
 DEPENDPATH += $$PWD/include
 
 
-INCLUDEPATH += $$PWD/include/win64
-DEPENDPATH += $$PWD/include/linux64
+win32::INCLUDEPATH += $$PWD/include/win64
+win32::DEPENDPATH += $$PWD/include/win64
+
+
+unix::INCLUDEPATH += $$PWD/include/linux64
+unix::DEPENDPATH += $$PWD/include/linux64
 
 unix:!macx: PRE_TARGETDEPS += $$PWD/lib/libLasZip.a
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lib/ -lLasZip
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/ -lLasZipd
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lib/ -lLasZip
 
 win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/lib/libLasZip.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/lib/libLasZipd.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/lib/libLasZip.a
 else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/lib/LasZip.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/lib/LasZipd.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/lib/LasZip.lib

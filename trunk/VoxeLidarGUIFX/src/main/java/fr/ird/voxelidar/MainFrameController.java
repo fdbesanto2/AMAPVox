@@ -2140,7 +2140,13 @@ public class MainFrameController implements Initializable {
             fileChooserSaveConfiguration.setInitialDirectory(lastFCSaveConfiguration.getParentFile());
             fileChooserSaveConfiguration.setInitialFileName(lastFCSaveConfiguration.getName());
         }else{
-            fileChooserSaveConfiguration.setInitialDirectory(new File(textFieldOutputPathTLS.getText()));
+            File tempFile = new File(textFieldOutputPathTLS.getText());
+            if(tempFile.isDirectory()){
+                fileChooserSaveConfiguration.setInitialDirectory(tempFile);
+            }else{
+                fileChooserSaveConfiguration.setInitialDirectory(tempFile.getParentFile());
+            }
+            
             fileChooserSaveConfiguration.setInitialFileName("cfg.xml");
         }
 

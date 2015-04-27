@@ -1,0 +1,1 @@
+Project Qt unique (windows et linux) permettant de générer une DLL pour extraire les tirs + échos d'un fichier rxp riegl.

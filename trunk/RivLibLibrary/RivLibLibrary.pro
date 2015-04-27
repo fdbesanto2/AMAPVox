@@ -12,77 +12,92 @@ TEMPLATE = lib
 DEFINES += RIVLIBLIBRARY_LIBRARY
 
 SOURCES += \
-    rivliblibrary.cpp \
-    mypointcloud.cpp \
-    puechabonfilter.cpp \
-    fastserializer.cpp \
-    shotfilter.cpp
+    src/Fast_serializer.cpp \
+    src/mypointcloud.cpp \
+    src/puechabonfilter.cpp \
+    src/RxpExtraction.cpp \
+    src/shotfilter.cpp
 
 HEADERS += \
-    rivliblibrary.h \
-    serializer.h \
-    shotfilter.h \
-    mypointcloud.h \
-    puechabonfilter.h \
-    fastserializer.h
+    src/Fast_serializer.h \
+    src/mypointcloud.h \
+    src/Parameters.h \
+    src/puechabonfilter.h \
+    src/RxpExtraction.h \
+    src/serializer.h \
+    src/shotfilter.h
 
 unix {
     target.path = /usr/lib
     INSTALLS += target
 }
 
-unix:!macx: LIBS += -L$$PWD/lib/ -lscanlib-mt-s
+QMAKE_CFLAGS_DEBUG += /MT
+QMAKE_CXXFLAGS_DEBUG += /MT
+
+QMAKE_CFLAGS_RELEASE += /MT
+QMAKE_CXXFLAGS_RELEASE += /MT
 
 INCLUDEPATH += $$PWD/include
 DEPENDPATH += $$PWD/include
 
-unix:!macx: PRE_TARGETDEPS += $$PWD/lib/libscanlib-mt-s.a
+win32:INCLUDEPATH += $$PWD/include/win64
+win32:DEPENDPATH += $$PWD/include/win64
 
-unix:!macx: LIBS += -L$$PWD/lib/ -lrftlib-mt-s
+unix:INCLUDEPATH += $$PWD/include/linux64
+unix:DEPENDPATH += $$PWD/include/linux64
 
-INCLUDEPATH += $$PWD/include
-DEPENDPATH += $$PWD/include
 
-unix:!macx: PRE_TARGETDEPS += $$PWD/lib/librftlib-mt-s.a
+win32: LIBS += -L$$PWD/lib/windows/ -lctrlifc-mt-s
 
-unix:!macx: LIBS += -L$$PWD/lib/ -lctrllib-mt-s
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/lib/windows/ctrlifc-mt-s.lib
 
-INCLUDEPATH += $$PWD/include
-DEPENDPATH += $$PWD/include
 
-unix:!macx: PRE_TARGETDEPS += $$PWD/lib/libctrllib-mt-s.a
+win32: LIBS += -L$$PWD/lib/windows/ -llibctrllib-mt-s
 
-unix:!macx: LIBS += -L$$PWD/lib/ -lboost_thread-mt-s-1_43_0-vns
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/lib/windows/libctrllib-mt-s.lib
+else:win32-g++: PRE_TARGETDEPS += $$PWD/lib/linux/libctrllib-mt-s.a
 
-INCLUDEPATH += $$PWD/include
-DEPENDPATH += $$PWD/include
+win32: LIBS += -L$$PWD/lib/windows/ -llibriboost_chrono-mt-s
 
-unix:!macx: PRE_TARGETDEPS += $$PWD/lib/libboost_thread-mt-s-1_43_0-vns.a
 
-unix:!macx: LIBS += -L$$PWD/lib/ -lboost_system-mt-s-1_43_0-vns
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/lib/windows/libriboost_chrono-mt-s.lib
 
-INCLUDEPATH += $$PWD/include
-DEPENDPATH += $$PWD/include
+win32: LIBS += -L$$PWD/lib/windows/ -llibriboost_date_time-mt-s
 
-unix:!macx: PRE_TARGETDEPS += $$PWD/lib/libboost_system-mt-s-1_43_0-vns.a
 
-unix:!macx: LIBS += -L$$PWD/lib/ -lboost_regex-mt-s-1_43_0-vns
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/lib/windows/libriboost_date_time-mt-s.lib
+else:win32-g++: PRE_TARGETDEPS += $$PWD/lib/linux/libboost_date_time-mt-s.a
 
-INCLUDEPATH += $$PWD/include
-DEPENDPATH += $$PWD/include
+win32: LIBS += -L$$PWD/lib/windows/ -llibriboost_filesystem-mt-s
 
-unix:!macx: PRE_TARGETDEPS += $$PWD/lib/libboost_regex-mt-s-1_43_0-vns.a
 
-unix:!macx: LIBS += -L$$PWD/lib/ -lboost_filesystem-mt-s-1_43_0-vns
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/lib/windows/libriboost_filesystem-mt-s.lib
+else:win32-g++: PRE_TARGETDEPS += $$PWD/lib/linux/libboost_filesystem-mt-s.a
 
-INCLUDEPATH += $$PWD/include
-DEPENDPATH += $$PWD/include
+win32: LIBS += -L$$PWD/lib/windows/ -llibriboost_regex-mt-s
 
-unix:!macx: PRE_TARGETDEPS += $$PWD/lib/libboost_filesystem-mt-s-1_43_0-vns.a
 
-unix:!macx: LIBS += -L$$PWD/lib/ -lboost_date_time-mt-s-1_43_0-vns
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/lib/windows/libriboost_regex-mt-s.lib
+else:win32-g++: PRE_TARGETDEPS += $$PWD/lib/linux/libboost_regex-mt-s.a
 
-INCLUDEPATH += $$PWD/include
-DEPENDPATH += $$PWD/include
+win32: LIBS += -L$$PWD/lib/windows/ -llibriboost_system-mt-s
 
-unix:!macx: PRE_TARGETDEPS += $$PWD/lib/libboost_date_time-mt-s-1_43_0-vns.a
+
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/lib/windows/libriboost_system-mt-s.lib
+else:win32-g++: PRE_TARGETDEPS += $$PWD/lib/linux/libboost_system-mt-s.a
+
+win32: LIBS += -L$$PWD/lib/windows/ -llibriboost_thread-mt-s
+
+
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/lib/windows/libriboost_thread-mt-s.lib
+else:win32-g++: PRE_TARGETDEPS += $$PWD/lib/linux/libboost_thread-mt-s.a
+
+
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/lib/windows/scanifc-mt-s.lib
+
+win32: LIBS += -L$$PWD/lib/windows/ -llibscanlib-mt-s
+
+
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/lib/windows/libscanlib-mt-s.lib
+else:win32-g++: PRE_TARGETDEPS += $$PWD/lib/linux/libscanlib-mt-s.a
