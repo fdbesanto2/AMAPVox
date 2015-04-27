@@ -60,6 +60,7 @@ import javafx.concurrent.Worker;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -966,7 +967,7 @@ public class MainFrameController implements Initializable {
         sliderRSPCoresToUse.setMax(availableCores);
         sliderRSPCoresToUse.setValue(availableCores);
         
-        listViewTaskList.setOnDragOver(new EventHandler<DragEvent>() {
+        EventHandler<DragEvent> dragOverEvent = new EventHandler<DragEvent>() {
 
             @Override
             public void handle(DragEvent event) {
@@ -977,7 +978,28 @@ public class MainFrameController implements Initializable {
                     event.consume();
                 }
             }
-        });
+        };
+        
+        textFieldInputFileALS.setOnDragOver(dragOverEvent);
+        textFieldTrajectoryFileALS.setOnDragOver(dragOverEvent);
+        textFieldOutputFileALS.setOnDragOver(dragOverEvent);
+        textFieldInputFileTLS.setOnDragOver(dragOverEvent);
+        textFieldOutputFileMultiRes.setOnDragOver(dragOverEvent);
+        textFieldOutputFileMerging.setOnDragOver(dragOverEvent);
+        textfieldDTMPath.setOnDragOver(dragOverEvent);
+        textFieldOutputFileGroundEnergy.setOnDragOver(dragOverEvent);
+        listViewTaskList.setOnDragOver(dragOverEvent);
+        listViewMultiResVoxelFiles.setOnDragOver(dragOverEvent);
+        listViewVoxelsFiles.setOnDragOver(dragOverEvent);
+        
+        setDragDroppedSingleFileEvent(textFieldInputFileALS);
+        setDragDroppedSingleFileEvent(textFieldTrajectoryFileALS);
+        setDragDroppedSingleFileEvent(textFieldOutputFileALS);
+        setDragDroppedSingleFileEvent(textFieldInputFileTLS);
+        setDragDroppedSingleFileEvent(textFieldOutputFileMultiRes);
+        setDragDroppedSingleFileEvent(textFieldOutputFileMerging);
+        setDragDroppedSingleFileEvent(textfieldDTMPath);
+        setDragDroppedSingleFileEvent(textFieldOutputFileGroundEnergy);
         
         listViewTaskList.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
@@ -992,19 +1014,6 @@ public class MainFrameController implements Initializable {
                 }
                 event.setDropCompleted(success);
                 event.consume();
-            }
-        });
-        
-        listViewVoxelsFiles.setOnDragOver(new EventHandler<DragEvent>() {
-
-            @Override
-            public void handle(DragEvent event) {
-                Dragboard db = event.getDragboard();
-                if (db.hasFiles()) {
-                    event.acceptTransferModes(TransferMode.COPY);
-                } else {
-                    event.consume();
-                }
             }
         });
         
@@ -1024,21 +1033,6 @@ public class MainFrameController implements Initializable {
             }
         });
         
-        listViewVoxelsFiles.setOnDragDetected(new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(MouseEvent event) {
-                
-                Dragboard db = listViewVoxelsFiles.startDragAndDrop(TransferMode.COPY);
-        
-                ClipboardContent content = new ClipboardContent();
-                content.putFiles(listViewVoxelsFiles.getItems());
-                db.setContent(content);
-
-                event.consume();
-            }
-        });
-        
         listViewMultiResVoxelFiles.setOnDragOver(new EventHandler<DragEvent>() {
 
             @Override
@@ -1052,6 +1046,23 @@ public class MainFrameController implements Initializable {
             }
         });
         
+        listViewVoxelsFiles.setOnDragDetected(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                
+                Dragboard db = listViewVoxelsFiles.startDragAndDrop(TransferMode.COPY);
+        
+                ClipboardContent content = new ClipboardContent();
+                content.putFiles(listViewVoxelsFiles.getSelectionModel().getSelectedItems());
+                db.setContent(content);
+
+                event.consume();
+            }
+        });
+        
+        
+        
         listViewMultiResVoxelFiles.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
@@ -1059,7 +1070,7 @@ public class MainFrameController implements Initializable {
                 boolean success = false;
                 if (db.hasFiles()) {
                     success = true;
-                    listViewMultiResVoxelFiles.getSelectionModel().getSelectedItems().addAll(db.getFiles());
+                    listViewMultiResVoxelFiles.getItems().addAll(db.getFiles());
                 }
                 event.setDropCompleted(success);
                 event.consume();
@@ -1070,6 +1081,27 @@ public class MainFrameController implements Initializable {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+    
+    private void setDragDroppedSingleFileEvent(final TextField textField){
+        
+        textField.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+                if (db.hasFiles() && db.getFiles().size() == 1) {
+                    success = true;
+                    for (File file:db.getFiles()) {
+                        if(file != null){
+                            textField.setText(file.getAbsolutePath());
+                        }
+                    }
+                }
+                event.setDropCompleted(success);
+                event.consume();
+            }
+        });
     }
     
     private boolean checkEntryAsNumber(TextField textField){
