@@ -6,6 +6,7 @@
 #include "puechabonfilter.h"
 #include "Fast_serializer.h"
 #include <riegl/scanlib.hpp>
+#include <cstdlib>
 
 
 #include <list>

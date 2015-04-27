@@ -32,11 +32,11 @@ unix {
     INSTALLS += target
 }
 
-QMAKE_CFLAGS_DEBUG += /MT
-QMAKE_CXXFLAGS_DEBUG += /MT
+win32:QMAKE_CFLAGS_DEBUG += /MT
+win32:QMAKE_CXXFLAGS_DEBUG += /MT
 
-QMAKE_CFLAGS_RELEASE += /MT
-QMAKE_CXXFLAGS_RELEASE += /MT
+win32:QMAKE_CFLAGS_RELEASE += /MT
+win32:QMAKE_CXXFLAGS_RELEASE += /MT
 
 INCLUDEPATH += $$PWD/include
 DEPENDPATH += $$PWD/include
@@ -101,3 +101,31 @@ win32: LIBS += -L$$PWD/lib/windows/ -llibscanlib-mt-s
 
 win32:!win32-g++: PRE_TARGETDEPS += $$PWD/lib/windows/libscanlib-mt-s.lib
 else:win32-g++: PRE_TARGETDEPS += $$PWD/lib/linux/libscanlib-mt-s.a
+
+
+
+unix:!macx: LIBS += -L$$PWD/lib/linux/ -lscanlib-mt-s
+unix:!macx: PRE_TARGETDEPS += $$PWD/lib/linux/libscanlib-mt-s.a
+
+unix:!macx: LIBS += -L$$PWD/lib/linux/ -lboost_regex-mt-s-1_43_0-vns
+unix:!macx: PRE_TARGETDEPS += $$PWD/lib/linux/libboost_regex-mt-s-1_43_0-vns.a
+
+unix:!macx: LIBS += -L$$PWD/lib/linux/ -lrftlib-mt-s
+unix:!macx: PRE_TARGETDEPS += $$PWD/lib/linux/librftlib-mt-s.a
+
+unix:!macx: LIBS += -L$$PWD/lib/linux/ -lctrllib-mt-s
+unix:!macx: PRE_TARGETDEPS += $$PWD/lib/linux/libctrllib-mt-s.a
+
+unix:!macx: LIBS += -L$$PWD/lib/linux/ -lboost_filesystem-mt-s-1_43_0-vns
+unix:!macx: PRE_TARGETDEPS += $$PWD/lib/linux/libboost_filesystem-mt-s-1_43_0-vns.a
+
+unix:!macx: LIBS += -L$$PWD/lib/linux/ -lboost_thread-mt-s-1_43_0-vns
+unix:!macx: PRE_TARGETDEPS += $$PWD/lib/linux/libboost_thread-mt-s-1_43_0-vns.a
+
+unix:!macx: LIBS += -L$$PWD/lib/linux/ -lboost_system-mt-s-1_43_0-vns
+unix:!macx: PRE_TARGETDEPS += $$PWD/lib/linux/libboost_system-mt-s-1_43_0-vns.a
+
+unix:!macx: LIBS += -L$$PWD/lib/linux/ -lboost_date_time-mt-s-1_43_0-vns
+unix:!macx: PRE_TARGETDEPS += $$PWD/lib/linux/libboost_date_time-mt-s-1_43_0-vns.a
+
+

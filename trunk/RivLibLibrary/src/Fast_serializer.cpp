@@ -29,7 +29,7 @@ void Fast_serializer::write(pointcloud* p) {
 	for(pointcloud::target_count_type i = 0; i < p->target_count; ++i) {
 			
 			target t = p->targets[i];
-			tmp[i] = t.echo_range;
+            tmp[i] = t.echo_range;
 			nbShots++;
 	}
 	

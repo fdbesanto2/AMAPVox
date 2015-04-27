@@ -27,7 +27,7 @@ char* JNU_GetStringNativeChars(JNIEnv* env, jstring jstr) {
 
     if (!exc) {
         jint len = env->GetArrayLength(bytes);
-        result = (char*)malloc(len+1);
+        result = (char*)std::malloc(len+1);
         if (result == 0) {
             env->DeleteLocalRef(bytes);
 
