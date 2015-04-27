@@ -177,12 +177,23 @@ public class VoxelSpaceLoader{
                 
                 
                 //offset
-                String type = reader.readLine().split(" ")[1];
+                String[] metadatas = reader.readLine().split(" ");
+                String type = metadatas[1];
                 
                 if(type.equals("ALS")){
                     data.type = Type.ALS;
                 }else{
                     data.type = Type.TLS;
+                }
+                
+                if(metadatas.length > 3){
+                    
+                    data.res = Float.valueOf(metadatas[3]);
+                    
+                    if(metadatas.length > 5){
+                        data.maxPad = Float.valueOf(metadatas[5]);
+                    }
+                    
                 }
                 
                 String[] columnsNames = reader.readLine().split(" ");
@@ -303,12 +314,24 @@ public class VoxelSpaceLoader{
             writer.write("#min_corner: " + this.data.bottomCorner.x + " " + this.data.bottomCorner.y + " " + this.data.bottomCorner.z + "\n");
             writer.write("#max_corner: " + this.data.topCorner.x + " " + this.data.topCorner.y + " " + this.data.topCorner.z + "\n");
             writer.write("#split: " + this.data.split.x + " " + this.data.split.y + " " + this.data.split.z + "\n");
-
+            
+            String metadata = "";
+            String type = "";
+            
+            metadata += "#res: "+data.res+" ";
+            metadata += "#MAX_PAD: "+data.maxPad;
+            
             if (data.type.equals(Type.TLS)) {
-                writer.write("#type: " +"TLS"+ "\n");
+                type += "#type: " +"TLS"+ " ";
+                type += metadata+"\n";
+                writer.write(type);
+                
                 writer.write(Voxel.getHeader(ExtendedTLSVoxel.class) + "\n");
             } else {
-                writer.write("#type: " +"ALS"+ "\n");
+                type += "#type: " +"ALS"+ " ";
+                type += metadata+"\n";
+                writer.write(type);
+                
                 writer.write(Voxel.getHeader(ExtendedALSVoxel.class) + "\n");
             }
 

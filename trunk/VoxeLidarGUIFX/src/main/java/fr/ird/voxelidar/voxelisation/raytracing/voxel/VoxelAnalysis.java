@@ -550,15 +550,23 @@ public void calculatePADAndWrite(double threshold) {
             writer.write("#max_corner: " + voxSpace.getBoundingBox().max.x + " " + voxSpace.getBoundingBox().max.y + " " + voxSpace.getBoundingBox().max.z + "\n");
             writer.write("#split: " + voxSpace.getSplitting().x + " " + voxSpace.getSplitting().y + " " + voxSpace.getSplitting().z + "\n");
 
+            String metadata = "";
+            String type = "";
             
-
-            //writer.write("i j k shots path_length BFintercepted BFentering BSintercepted BSentering PAD"+"\n");
-            //writer.write("i j k nbSampling interceptions path_length lgTraversant lgInterception PAD PAD2 BFIntercepted BFEntering BSIntercepted BSEntering dist"+"\n");
+            metadata += "#res: "+parameters.resolution+" ";
+            metadata += "#MAX_PAD: "+parameters.getMaxPAD();
+            
             if (parameters.isTLS()) {
-                writer.write("#type: " +"TLS"+ "\n");
+                type += "#type: " +"TLS"+ " ";
+                type += metadata+"\n";
+                writer.write(type);
+                
                 writer.write(Voxel.getHeader(TLSVoxel.class) + "\n");
             } else {
-                writer.write("#type: " +"ALS"+ "\n");
+                type += "#type: " +"ALS"+ " ";
+                type += metadata+"\n";
+                writer.write(type);
+                
                 writer.write(Voxel.getHeader(ALSVoxel.class) + "\n");
             }
 

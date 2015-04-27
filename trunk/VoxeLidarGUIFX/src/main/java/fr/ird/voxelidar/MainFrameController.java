@@ -110,6 +110,16 @@ public class MainFrameController implements Initializable {
     private CheckBox checkboxRemoveLowPoint;
     @FXML
     private Slider sliderRSPCoresToUse;
+    @FXML
+    private TextField textFieldPadMax5m;
+    @FXML
+    private Label labelPadMax5m;
+    @FXML
+    private CheckBox checkboxOverwritePadLimit;
+    @FXML
+    private AnchorPane anchorpanePadLimits;
+    @FXML
+    private Button buttonOpenSopMatrixFile;
     
     public class MinMax{
         
@@ -766,8 +776,10 @@ public class MainFrameController implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if(newValue){
                     checkBoxUseDefaultSopMatrix.setDisable(false);
+                    buttonOpenSopMatrixFile.setDisable(false);
                 }else{
                     checkBoxUseDefaultSopMatrix.setDisable(true);
+                    buttonOpenSopMatrixFile.setDisable(true);
                 }
             }
         });
@@ -794,6 +806,18 @@ public class MainFrameController implements Initializable {
                 
                 doFilterOnScanListView();
                 
+            }
+        });
+        
+        checkboxOverwritePadLimit.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    anchorpanePadLimits.setDisable(false);
+                }else{
+                    anchorpanePadLimits.setDisable(true);
+                }
             }
         });
         
@@ -839,7 +863,7 @@ public class MainFrameController implements Initializable {
                         textFieldTLSFilter.setDisable(true);
                         checkboxMergeAfter.setDisable(true);
                         textFieldMergedFileName.setDisable(true);
-                        disableSopMatrixChoice(true);
+                        //disableSopMatrixChoice(true);
                         labelTLSOutputPath.setText("Output file");
                 }
             }
@@ -899,26 +923,14 @@ public class MainFrameController implements Initializable {
                 switch(newValue.intValue()){
                     
                     case 2:
-                        textFieldPadMax1m.setVisible(true);
-                        textFieldPadMax2m.setVisible(true);
-                        textFieldPadMax3m.setVisible(true);
-                        textFieldPadMax4m.setVisible(true);
-                        labelPadMax1m.setVisible(true);
-                        labelPadMax2m.setVisible(true);
-                        labelPadMax3m.setVisible(true);
-                        labelPadMax4m.setVisible(true);
+                        anchorpanePadLimits.setVisible(true);
+                        checkboxOverwritePadLimit.setVisible(true);
                         textFieldPADMax.setDisable(true);
                         
                         break;
                     default:
-                        textFieldPadMax1m.setVisible(false);
-                        textFieldPadMax2m.setVisible(false);
-                        textFieldPadMax3m.setVisible(false);
-                        textFieldPadMax4m.setVisible(false);
-                        labelPadMax1m.setVisible(false);
-                        labelPadMax2m.setVisible(false);
-                        labelPadMax3m.setVisible(false);
-                        labelPadMax4m.setVisible(false);
+                        anchorpanePadLimits.setVisible(false);
+                        checkboxOverwritePadLimit.setVisible(false);
                         textFieldPADMax.setDisable(false);
                 }
             }
@@ -1037,11 +1049,12 @@ public class MainFrameController implements Initializable {
         textFieldPadMax2m.setText(String.valueOf(ProcessingMultiRes.DEFAULT_MAX_PAD_2M));
         textFieldPadMax3m.setText(String.valueOf(ProcessingMultiRes.DEFAULT_MAX_PAD_3M));
         textFieldPadMax4m.setText(String.valueOf(ProcessingMultiRes.DEFAULT_MAX_PAD_4M));
+        textFieldPadMax5m.setText(String.valueOf(ProcessingMultiRes.DEFAULT_MAX_PAD_5M));
     }
     
     private void disableSopMatrixChoice(boolean value){
         
-        if(value){
+        if(!value){
             checkboxUseSopMatrix.setDisable(true);
             checkBoxUseDefaultSopMatrix.setDisable(true);
         }else{
@@ -1052,7 +1065,7 @@ public class MainFrameController implements Initializable {
     
     private void disablePopMatrixChoice(boolean value){
         
-        if(value){
+        if(!value){
             checkboxUsePopMatrix.setDisable(true);
             checkBoxUseDefaultPopMatrix.setDisable(true);
             buttonOpenPopMatrixFile.setDisable(true);
@@ -1429,76 +1442,8 @@ public class MainFrameController implements Initializable {
     private void onActionMenuItemSelectionNone(ActionEvent event) {
         listViewVoxelsFiles.getSelectionModel().clearSelection();
     }
-    /*
-    private void onActionMenuItemLoad(ActionEvent event) {
 
-        if (lastFCOpenConfiguration != null) {
-            fileChooserOpenConfiguration.setInitialDirectory(lastFCOpenConfiguration.getParentFile());
-        }
-
-        File selectedFile = fileChooserOpenConfiguration.showOpenDialog(stage);
-        if (selectedFile != null) {
-
-            lastFCOpenConfiguration = selectedFile;
-
-            Configuration cfg = new Configuration();
-            cfg.readConfiguration(selectedFile);
-
-            VoxelParameters voxelParameters = cfg.getVoxelParameters();
-            textFieldEnterXMin.setText(String.valueOf(voxelParameters.bottomCorner.x));
-            textFieldEnterYMin.setText(String.valueOf(voxelParameters.bottomCorner.y));
-            textFieldEnterZMin.setText(String.valueOf(voxelParameters.bottomCorner.z));
-
-            textFieldEnterXMax.setText(String.valueOf(voxelParameters.topCorner.x));
-            textFieldEnterYMax.setText(String.valueOf(voxelParameters.topCorner.y));
-            textFieldEnterZMax.setText(String.valueOf(voxelParameters.topCorner.z));
-
-            textFieldXNumber.setText(String.valueOf(voxelParameters.split.x));
-            textFieldYNumber.setText(String.valueOf(voxelParameters.split.y));
-            textFieldZNumber.setText(String.valueOf(voxelParameters.split.z));
-
-            checkboxUseDTMFilter.setSelected(voxelParameters.useDTMCorrection());
-            textfieldDTMPath.setText(voxelParameters.getDtmFile().getAbsolutePath());
-            textfieldDTMValue.setText(String.valueOf(voxelParameters.minDTMDistance));
-
-            checkboxUsePopMatrix.setSelected(cfg.isUsePopMatrix());
-            checkboxUseSopMatrix.setSelected(cfg.isUseSopMatrix());
-            checkboxUseVopMatrix.setSelected(cfg.isUseVopMatrix());
-            
-            if(cfg.getPopMatrix() != null){
-                popMatrix = cfg.getPopMatrix();
-            }
-            if(cfg.getSopMatrix() != null){
-                sopMatrix = cfg.getSopMatrix();
-            }
-            if(cfg.getVopMatrix() != null){
-                vopMatrix = cfg.getVopMatrix();
-            }
-            
-
-            updateResultMatrix();
-
-            switch (cfg.getProcessMode().mode) {
-                case 0:
-                    textFieldInputFileALS.setText(cfg.getInputFile().getAbsolutePath());
-                    textFieldTrajectoryFileALS.setText(cfg.getTrajectoryFile().getAbsolutePath());
-                    textFieldOutputFileALS.setText(cfg.getOutputFile().getAbsolutePath());
-                    comboboxModeALS.getSelectionModel().select(cfg.getInputType().type);
-                    break;
-
-            }
-
-            ProcessMode processMode = cfg.getProcessMode();
-
-            switch (processMode.mode) {
-                case 0:
-
-                    break;
-            }
-        }
-    }
-    */
-
+    @FXML
     private void onActionButtonOpenSopMatrixFile(ActionEvent event) {
 
         if (lastFCOpenSopMatrixFile != null) {
@@ -1507,11 +1452,62 @@ public class MainFrameController implements Initializable {
 
         File selectedFile = fileChooserOpenSopMatrixFile.showOpenDialog(stage);
         if (selectedFile != null) {
-
-            sopMatrix = MatrixFileParser.getMatrixFromFile(selectedFile);
-            updateResultMatrix();
-
+            
             lastFCOpenSopMatrixFile = selectedFile;
+            
+            String extension = FileManager.getExtension(selectedFile);
+            Matrix4d mat;
+            
+            switch(extension){
+                case ".rsp":
+                    
+                    Rsp tempRsp = new Rsp();
+                    tempRsp.read(selectedFile);
+                    
+                    //scan unique
+                    if(comboboxModeTLS.getSelectionModel().getSelectedIndex() == 0){
+                        
+                        File scanFile;
+                        if(textFieldInputFileTLS.getText().equals("")){
+                            scanFile = null;
+                        }else{
+                            scanFile = new File(textFieldInputFileTLS.getText());
+                        }
+                        
+                        if(scanFile != null && Files.exists(scanFile.toPath())){
+                            RxpScan rxpScan = tempRsp.getRxpScanByName(scanFile.getName());
+                            if(rxpScan != null){
+                                sopMatrix = MatrixConverter.convertMat4DToMatrix4d(rxpScan.getSopMatrix());
+                            }else{
+                                Alert alert = new Alert(AlertType.ERROR);
+                                alert.setTitle("Error");
+                                alert.setHeaderText("Cannot get sop matrix from rsp file");
+                                alert.setContentText("Check rsp file!");
+
+                                alert.showAndWait();
+                            }
+                        }else{
+                            Alert alert = new Alert(AlertType.ERROR);
+                            alert.setTitle("Error");
+                            alert.setHeaderText("Cannot get sop matrix from rsp file");
+                            alert.setContentText("TLS input file should be a valid rxp file!");
+
+                            alert.showAndWait();
+                        }
+                    }
+                    
+                    break;
+                default:
+                    mat = MatrixFileParser.getMatrixFromFile(selectedFile);
+                    if(mat != null){
+                        sopMatrix = mat;
+                    }else{
+                        showMatrixFormatErrorDialog();
+                    }
+                    
+            }
+             
+            updateResultMatrix();
         }
 
     }
@@ -1535,6 +1531,19 @@ public class MainFrameController implements Initializable {
                     Rsp tempRsp = new Rsp();
                     tempRsp.read(selectedFile);
                     mat = MatrixConverter.convertMat4DToMatrix4d(tempRsp.getPopMatrix());
+                    
+                    //scan unique
+                    if(comboboxModeTLS.getSelectionModel().getSelectedIndex() == 0){
+                        
+                        File scanFile = new File(textFieldInputFileTLS.getText());
+                        
+                        if(Files.exists(scanFile.toPath())){
+                            RxpScan rxpScan = tempRsp.getRxpScanByName(scanFile.getName());
+                            if(rxpScan != null){
+                                sopMatrix = MatrixConverter.convertMat4DToMatrix4d(rxpScan.getSopMatrix());
+                            }
+                        }
+                    }
                     
                     break;
                 default:
@@ -1999,7 +2008,7 @@ public class MainFrameController implements Initializable {
                             case MULTI_RES:
                                 
                                 
-                                ProcessingMultiRes process = new ProcessingMultiRes(cfg.getMultiResPadMax());
+                                ProcessingMultiRes process = new ProcessingMultiRes(cfg.getMultiResPadMax(), cfg.isMultiResUseDefaultMaxPad());
                                 
                                 process.process(cfg.getFiles());
 
@@ -2264,8 +2273,10 @@ public class MainFrameController implements Initializable {
             float padMax2m = Float.valueOf(textFieldPadMax2m.getText());
             float padMax3m = Float.valueOf(textFieldPadMax3m.getText());
             float padMax4m = Float.valueOf(textFieldPadMax4m.getText());
+            float padMax5m = Float.valueOf(textFieldPadMax5m.getText());
+            cfg.setMultiResUseDefaultMaxPad(!checkboxOverwritePadLimit.isSelected());
             
-            cfg.setMultiResPadMax(new float[]{padMax1m, padMax2m, padMax3m, padMax4m});
+            cfg.setMultiResPadMax(new float[]{padMax1m, padMax2m, padMax3m, padMax4m, padMax5m});
             cfg.setVoxelParameters(voxParameters);
             
             cfg.writeConfiguration(selectedFile);
@@ -2366,6 +2377,8 @@ public class MainFrameController implements Initializable {
                     checkboxUseSopMatrix.setSelected(cfg.isUseSopMatrix());
                     checkboxUseVopMatrix.setSelected(cfg.isUseVopMatrix());
                     checkboxRemoveLowPoint.setSelected(cfg.isRemoveLowPoint());
+                    
+                    textFieldPADMax.setText(String.valueOf(cfg.getVoxelParameters().getMaxPAD()));
 
                     popMatrix = cfg.getPopMatrix();
                     sopMatrix = cfg.getSopMatrix();
@@ -2478,7 +2491,7 @@ public class MainFrameController implements Initializable {
                     tabPaneVoxelisation.getSelectionModel().select(2);
                     listViewMultiResVoxelFiles.getItems().addAll(cfg.getFiles());
                     textFieldOutputFileMultiRes.setText(cfg.getOutputFile().getAbsolutePath());
-                    
+                    checkboxOverwritePadLimit.setSelected(!cfg.isMultiResUseDefaultMaxPad());
                     break;
                     
                 case MERGING:

@@ -342,9 +342,24 @@ public class VoxelSpace extends SceneObject{
                 data.resolution.z = (data.topCorner.z - data.bottomCorner.z) / data.split.z;
                 
                 
-                //offset
-                String[] offsetString = reader.readLine().split(" ");
-                //Vec3F offset = new Vec3F(Float.valueOf(offsetString[1]), Float.valueOf(offsetString[2]),Float.valueOf(offsetString[3]));
+                String[] metadatas = reader.readLine().split(" ");
+                String type = metadatas[1];
+                
+                if(type.equals("ALS")){
+                    data.type = fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData.Type.ALS;
+                }else{
+                    data.type = fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData.Type.TLS;
+                }
+                
+                if(metadatas.length > 3){
+                    
+                    data.res = Float.valueOf(metadatas[3]);
+                    
+                    if(metadatas.length > 5){
+                        data.maxPad = Float.valueOf(metadatas[5]);
+                    }
+                    
+                }
                 
                 String[] columnsNames = reader.readLine().split(" ");
                 initAttributs(columnsNames);

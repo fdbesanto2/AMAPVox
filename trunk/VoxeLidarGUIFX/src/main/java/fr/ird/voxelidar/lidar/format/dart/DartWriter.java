@@ -95,7 +95,7 @@ public class DartWriter {
         
         Dart dart = new Dart(
                 new Point3I(data.split.x,data.split.y,data.split.z),
-                new Point3F((float)data.resolution.x, (float)data.resolution.y, (float)data.resolution.z),
+                new Point3F(data.res, data.res, data.res),
                 data.split.x*data.split.y);
         
         ArrayList<String> attributsNames = data.attributsNames;

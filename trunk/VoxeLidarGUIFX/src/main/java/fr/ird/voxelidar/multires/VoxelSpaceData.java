@@ -35,9 +35,12 @@ public class VoxelSpaceData{
     public float minY, maxY;
     public Point3i split;
     public Point3d resolution;
+    public float res;
     public Point3d bottomCorner;
     public Point3d topCorner;
     public Type type;
+    
+    public float maxPad = 5.0f;
     
     public ArrayList<Voxel> voxels;
     

@@ -26,24 +26,31 @@ public class ProcessingMultiRes {
     private final static Logger logger = Logger.getLogger(ProcessingMultiRes.class);
     
     private float maxPAD;
+    private boolean useDefaultMaxPad = false;
+    
     private VoxelSpaceLoader vs;
     
     public final static float DEFAULT_MAX_PAD_1M = 3.536958f;
     public final static float DEFAULT_MAX_PAD_2M = 2.262798f;
     public final static float DEFAULT_MAX_PAD_3M = 1.749859f;
     public final static float DEFAULT_MAX_PAD_4M = 1.3882959f;
+    public final static float DEFAULT_MAX_PAD_5M = 0.69f;
     
-    private float max_pad_1m = 3.536958f;
-    private float max_pad_2m = 2.262798f;
-    private float max_pad_3m = 1.749859f;
-    private float max_pad_4m = 1.3882959f;
+    private float max_pad_1m = DEFAULT_MAX_PAD_1M;
+    private float max_pad_2m = DEFAULT_MAX_PAD_2M;
+    private float max_pad_3m = DEFAULT_MAX_PAD_3M;
+    private float max_pad_4m = DEFAULT_MAX_PAD_4M;
+    private float max_pad_5m = DEFAULT_MAX_PAD_5M;
     
-    public ProcessingMultiRes(float[] padLimits){
+    public ProcessingMultiRes(float[] padLimits, boolean useDefaultMaxPad){
         
         max_pad_1m = padLimits[0];
         max_pad_2m = padLimits[1];
         max_pad_3m = padLimits[2];
         max_pad_4m = padLimits[3];
+        max_pad_5m = padLimits[4];
+        
+        this.useDefaultMaxPad = useDefaultMaxPad;
     }
     
     public void process(List<File> elements) {
@@ -190,7 +197,7 @@ public class ProcessingMultiRes {
             double currentResolution = vs.data.resolution.x;
 
             Voxel voxel = vs.data.voxels.get(n);
-            calculatePAD(voxel, currentResolution);
+            calculatePAD(voxel, currentResolution, useDefaultMaxPad, vs.data.maxPad);
 
             entries = voxelSpaces.entrySet().iterator();
             entries.next().getValue();
@@ -224,7 +231,7 @@ public class ProcessingMultiRes {
                 voxTemp = vsTemp.data.getVoxel(indices.x, indices.y, indices.z);
 
                 if(voxTemp != null){
-                    calculatePAD(voxTemp, currentResolution);
+                    calculatePAD(voxTemp, currentResolution, useDefaultMaxPad, vs.data.maxPad);
 
                     currentNbSampling = voxTemp.nbSampling;
                     currentTransmittance = voxTemp.transmittance;
@@ -243,7 +250,12 @@ public class ProcessingMultiRes {
                     }else if(indice < 0){
                         ((ALSVoxel) voxel).PadBVTotal = Double.NaN;
                     }else{
-                        ((ALSVoxel) voxel).PadBVTotal = padMeanZ[indice];
+                        if(useDefaultMaxPad && padMeanZ[indice]>vs.data.maxPad){
+                            ((ALSVoxel) voxel).PadBVTotal = vs.data.maxPad;
+                        }else{
+                            ((ALSVoxel) voxel).PadBVTotal = padMeanZ[indice];
+                        }
+                        
                     }
                     
                 } else {
@@ -288,19 +300,26 @@ public class ProcessingMultiRes {
         vs.write(outputFile);
     }
     
-    private void calculatePAD(Voxel vox, double resolution) {
+    private void calculatePAD(Voxel vox, double resolution, boolean useDefault, float defaultMaxPad) {
         
-        if(resolution <= 1.0){
-            maxPAD= max_pad_1m;
-        }else if(resolution <= 2.0){
-            maxPAD= max_pad_2m;
-        }else if(resolution <= 3.0){
-            maxPAD= max_pad_3m;
-        }else if(resolution <= 4.0){
-            maxPAD=max_pad_4m;
+        if(useDefault){
+            maxPAD = defaultMaxPad;
         }else{
-            maxPAD= max_pad_4m;
+            if(resolution <= 1.0){
+                maxPAD = max_pad_1m;
+            }else if(resolution <= 2.0){
+                maxPAD = max_pad_2m;
+            }else if(resolution <= 3.0){
+                maxPAD = max_pad_3m;
+            }else if(resolution <= 4.0){
+                maxPAD = max_pad_4m;
+            }else if(resolution <= 5.0){
+                maxPAD = max_pad_5m;
+            }else{
+                maxPAD = max_pad_5m;
+            }
         }
+        
         
         if (vox.nbSampling >= vox.nbEchos) {
             

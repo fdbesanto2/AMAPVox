@@ -5,7 +5,6 @@
  */
 package fr.ird.voxelidar.engine3d.object.scene;
 
-import fr.ird.voxelidar.engine3d.object.mesh.Attribut;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,6 +33,9 @@ public class VoxelSpaceData{
     
     public ArrayList<Voxel> voxels;
     public Type type;
+    
+    public float res;
+    public float maxPad = 5.0f;
     
     private final static Logger logger = Logger.getLogger(VoxelSpaceData.class);
     

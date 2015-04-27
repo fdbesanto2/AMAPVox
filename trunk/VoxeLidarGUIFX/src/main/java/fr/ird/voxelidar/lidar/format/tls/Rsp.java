@@ -11,8 +11,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
@@ -40,7 +42,19 @@ public class Rsp {
         popMatrix = Mat4D.identity();
     }
     
-    //public void getRxpBy
+    public RxpScan getRxpScanByName(String name){
+        
+        for(Scans scans : rxpList){
+            for (Entry entry : scans.getScanList().entrySet()) {
+                RxpScan scan = (RxpScan) entry.getValue();
+                if(scan.getFileName().equals(name)){
+                    return scan;
+                }
+            }
+        }
+        
+        return null;
+    }
     
     public Mat4D getPopMatrix() {
         return popMatrix;

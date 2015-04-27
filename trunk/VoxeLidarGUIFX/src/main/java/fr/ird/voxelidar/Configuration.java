@@ -88,6 +88,7 @@ public class Configuration {
     private List<Filter> filters;
     private boolean removeLowPoint = false;
     private float[] multiResPadMax;
+    private boolean multiResUseDefaultMaxPad = false;
     
     public Configuration(){
         
@@ -322,10 +323,13 @@ public class Configuration {
             
             Element limitsElement = new Element("limits");
             
+            limitsElement.setAttribute("use-default", String.valueOf(multiResUseDefaultMaxPad));
+            
             limitsElement.addContent(createLimitElement("PAD_1m", "", String.valueOf(multiResPadMax[0])));
             limitsElement.addContent(createLimitElement("PAD_2m", "", String.valueOf(multiResPadMax[1])));
             limitsElement.addContent(createLimitElement("PAD_3m", "", String.valueOf(multiResPadMax[2])));
             limitsElement.addContent(createLimitElement("PAD_4m", "", String.valueOf(multiResPadMax[3])));
+            limitsElement.addContent(createLimitElement("PAD_5m", "", String.valueOf(multiResPadMax[4])));
             
             processElement.addContent(limitsElement);
             
@@ -685,14 +689,21 @@ public class Configuration {
                     outputFile = new File(processElement.getChild("output_file").getAttributeValue("src"));
 
                     limitsElement = processElement.getChild("limits");
+                    
+                    String tmp = limitsElement.getAttributeValue("use-default");
+                    if(tmp != null){
+                        multiResUseDefaultMaxPad = Boolean.valueOf(tmp);
+                    }
+                    
                     List<Element> limitElementList = limitsElement.getChildren("limit");
 
                     if (limitElementList != null) {
-                        multiResPadMax = new float[4];
+                        multiResPadMax = new float[5];
                         multiResPadMax[0] = Float.valueOf(limitElementList.get(0).getAttributeValue("max"));
                         multiResPadMax[1] = Float.valueOf(limitElementList.get(1).getAttributeValue("max"));
                         multiResPadMax[2] = Float.valueOf(limitElementList.get(2).getAttributeValue("max"));
                         multiResPadMax[3] = Float.valueOf(limitElementList.get(3).getAttributeValue("max"));
+                        multiResPadMax[4] = Float.valueOf(limitElementList.get(4).getAttributeValue("max"));
                     }
 
                     break;
@@ -880,6 +891,14 @@ public class Configuration {
 
     public void setRemoveLowPoint(boolean removeLowPoint) {
         this.removeLowPoint = removeLowPoint;
+    }
+
+    public boolean isMultiResUseDefaultMaxPad() {
+        return multiResUseDefaultMaxPad;
+    }
+
+    public void setMultiResUseDefaultMaxPad(boolean multiResUseDefaultMaxPad) {
+        this.multiResUseDefaultMaxPad = multiResUseDefaultMaxPad;
     }
     
 }

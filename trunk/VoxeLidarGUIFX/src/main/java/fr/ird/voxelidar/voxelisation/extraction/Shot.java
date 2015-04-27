@@ -83,7 +83,7 @@ public class Shot{
         for(Filter f : filters){
             
             switch(f.getVariable()){
-                case "Angle Mean":
+                case "Angle":
                     switch(f.getCondition()){
                                                 
                         case Filter.EQUAL:

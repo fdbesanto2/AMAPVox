@@ -42,7 +42,7 @@ public class FilterFrameController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         
         comboboxInequality.getItems().addAll("!=", "==", "<", "<=", ">", ">=");
-        comboboxVariable.getItems().addAll("Angle Mean");
+        comboboxVariable.getItems().addAll("Angle");
         
         comboboxInequality.getSelectionModel().selectFirst();
         comboboxVariable.getSelectionModel().selectFirst();
