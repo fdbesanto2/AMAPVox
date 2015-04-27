@@ -126,6 +126,19 @@ public class MainFrameController implements Initializable {
     private AnchorPane anchorpanePadLimits;
     @FXML
     private Button buttonOpenSopMatrixFile;
+    @FXML
+    private MenuItem menuitemClearWindow;
+    @FXML
+    private AnchorPane anchorpaneRoot;
+
+    @FXML
+    private void onActionMenuitemClearWindow(ActionEvent event) {
+        try {
+            resetComponents();
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     public class MinMax{
         
@@ -1081,6 +1094,44 @@ public class MainFrameController implements Initializable {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+    
+    
+    private void resetComponents() throws Exception{
+        
+        
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainFrame.fxml"));
+                    Parent root = loader.load();
+                    
+                    Scene scene = new Scene(root);
+                    
+                    scene.getStylesheets().add("/styles/Styles.css");
+                    
+                    //stage.setTitle("AMAPVox");
+                    stage = new Stage();
+                    stage.setTitle("AMAPVox");
+                    stage.setScene(scene);
+                } catch (IOException ex) {
+                    java.util.logging.Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        
+            }
+        });
+        /*
+        textFieldInputFileALS.setText("");
+        textFieldTrajectoryFileALS.setText("");
+        textFieldOutputFileALS.setText("");
+        textFieldOutputFileGroundEnergy.setText("");
+        textfieldDTMPath.setText("");
+        textFieldInputFileTLS.setText("");
+        textFieldOutputPathTLS.setText("");
+        textFieldMergedFileName.setText("merged.vox");
+        */
     }
     
     private void setDragDroppedSingleFileEvent(final TextField textField){
