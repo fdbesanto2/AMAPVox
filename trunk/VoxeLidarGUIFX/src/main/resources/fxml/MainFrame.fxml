@@ -209,20 +209,36 @@
                                                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                                      </rowConstraints>
                                                                      <children>
-                                                                        <Button fx:id="buttonOpenPopMatrixFile" mnemonicParsing="false" onAction="#onActionButtonOpenPopMatrixFile" text="Open file" GridPane.columnIndex="3" />
+                                                                        <Button fx:id="buttonOpenPopMatrixFile" mnemonicParsing="false" onAction="#onActionButtonOpenPopMatrixFile" text="Open file" GridPane.columnIndex="3">
+                                                                           <tooltip>
+                                                                              <Tooltip text="Matrix file or Rsp file allowed" />
+                                                                           </tooltip></Button>
                                                                         <CheckBox fx:id="checkboxUsePopMatrix" disable="true" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onActionCheckboxUsePopMatrix" selected="true" text="Use POP matrix">
                                                                            <tooltip>
-                                                                              <Tooltip text="Empty Tooltip" />
+                                                                              <Tooltip text="Project Orientation and Position matrix" />
                                                                            </tooltip></CheckBox>
-                                                                        <CheckBox fx:id="checkboxUseSopMatrix" disable="true" mnemonicParsing="false" onAction="#onActionCheckboxUseSopMatrix" prefHeight="24.0" prefWidth="126.0" selected="true" text="Use SOP matrix" GridPane.rowIndex="1" />
-                                                                        <CheckBox fx:id="checkboxUseVopMatrix" mnemonicParsing="false" onAction="#onActionCheckboxUseVopMatrix" prefHeight="24.0" prefWidth="126.0" text="Use VOP matrix" GridPane.rowIndex="2" />
+                                                                        <CheckBox fx:id="checkboxUseSopMatrix" disable="true" mnemonicParsing="false" onAction="#onActionCheckboxUseSopMatrix" prefHeight="24.0" prefWidth="126.0" selected="true" text="Use SOP matrix" GridPane.rowIndex="1">
+                                                                           <tooltip>
+                                                                              <Tooltip text="System Orientation and Position matrix" />
+                                                                           </tooltip></CheckBox>
+                                                                        <CheckBox fx:id="checkboxUseVopMatrix" mnemonicParsing="false" onAction="#onActionCheckboxUseVopMatrix" prefHeight="24.0" prefWidth="126.0" text="Use VOP matrix" GridPane.rowIndex="2">
+                                                                           <tooltip>
+                                                                              <Tooltip text="Voxel Orientation and Position matrix" />
+                                                                           </tooltip></CheckBox>
                                                                         <Button fx:id="buttonEnterReferencePointsVop" disable="true" mnemonicParsing="false" onAction="#onActionButtonEnterReferencePointsVop" prefHeight="22.0" prefWidth="164.0" text="Enter reference points" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                                         <Label alignment="BOTTOM_CENTER" prefHeight="18.0" prefWidth="16.0" text="or" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                                                         <CheckBox fx:id="checkBoxUseDefaultSopMatrix" disable="true" mnemonicParsing="false" prefHeight="24.0" prefWidth="103.0" selected="true" text="Use default" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                                         <CheckBox fx:id="checkBoxUseDefaultPopMatrix" disable="true" mnemonicParsing="false" prefHeight="24.0" prefWidth="103.0" selected="true" text="Use default" GridPane.columnIndex="1" />
-                                                                        <Button fx:id="buttonOpenVopMatrixFile" disable="true" mnemonicParsing="false" onAction="#onActionButtonOpenVopMatrixFile" text="Open file" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                                                        <Button fx:id="buttonOpenVopMatrixFile" disable="true" mnemonicParsing="false" onAction="#onActionButtonOpenVopMatrixFile" text="Open file" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                                                                           <tooltip>
+                                                                              <Tooltip text="Matrix file allowed" />
+                                                                           </tooltip></Button>
                                                                         <Label alignment="BOTTOM_CENTER" prefHeight="18.0" prefWidth="16.0" text="or" GridPane.columnIndex="2" />
-                                                                        <Button fx:id="buttonOpenSopMatrixFile" mnemonicParsing="false" onAction="#onActionButtonOpenSopMatrixFile" text="Open file" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                                                        <Button fx:id="buttonOpenSopMatrixFile" mnemonicParsing="false" onAction="#onActionButtonOpenSopMatrixFile" text="Open file" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                                                           <tooltip>
+                                                                              <Tooltip text="Matrix file or Rsp file allowed" />
+                                                                           </tooltip>
+                                                                        </Button>
                                                                         <Label alignment="BOTTOM_CENTER" prefHeight="18.0" prefWidth="16.0" text="or" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                                                      </children>
                                                                   </GridPane>
@@ -529,7 +545,10 @@
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <Button fx:id="buttonLoadSelectedTask" disable="true" layoutX="235.0" layoutY="109.0" mnemonicParsing="false" onAction="#onActionButtonLoadSelectedTask" text="Load" AnchorPane.bottomAnchor="0.0" />
+                                    <Button fx:id="buttonLoadSelectedTask" disable="true" layoutX="235.0" layoutY="109.0" mnemonicParsing="false" onAction="#onActionButtonLoadSelectedTask" text="Load" AnchorPane.bottomAnchor="0.0">
+                                       <tooltip>
+                                          <Tooltip text="Load the selected task parameters into the frame" />
+                                       </tooltip></Button>
                                  </children>
                               </AnchorPane>
                            </content>
@@ -539,7 +558,10 @@
                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                  <children>
                                     <ListView fx:id="listViewVoxelsFiles" layoutX="32.4" layoutY="30.4" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                    <Button fx:id="buttonLoadSelectedVoxelFile" disable="true" layoutX="316.0" layoutY="88.0" mnemonicParsing="false" onAction="#onActionButtonLoadSelectedVoxelFile" text="Load" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                                    <Button fx:id="buttonLoadSelectedVoxelFile" disable="true" layoutX="316.0" layoutY="88.0" mnemonicParsing="false" onAction="#onActionButtonLoadSelectedVoxelFile" text="Load" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                       <tooltip>
+                                          <Tooltip text="Load header of selected voxel file " />
+                                       </tooltip></Button>
                                     <Button fx:id="buttonRemoveVoxelFileFromListView" layoutX="125.0" layoutY="108.0" mnemonicParsing="false" onAction="#onActionButtonRemoveVoxelFileFromListView" AnchorPane.bottomAnchor="0.0">
                                        <graphic>
                                           <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">

@@ -83,6 +83,11 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -960,6 +965,106 @@ public class MainFrameController implements Initializable {
         sliderRSPCoresToUse.setMin(1);
         sliderRSPCoresToUse.setMax(availableCores);
         sliderRSPCoresToUse.setValue(availableCores);
+        
+        listViewTaskList.setOnDragOver(new EventHandler<DragEvent>() {
+
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                if (db.hasFiles()) {
+                    event.acceptTransferModes(TransferMode.COPY);
+                } else {
+                    event.consume();
+                }
+            }
+        });
+        
+        listViewTaskList.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+                if (db.hasFiles()) {
+                    success = true;
+                    for (File file:db.getFiles()) {
+                        addFileToTaskList(file);
+                    }
+                }
+                event.setDropCompleted(success);
+                event.consume();
+            }
+        });
+        
+        listViewVoxelsFiles.setOnDragOver(new EventHandler<DragEvent>() {
+
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                if (db.hasFiles()) {
+                    event.acceptTransferModes(TransferMode.COPY);
+                } else {
+                    event.consume();
+                }
+            }
+        });
+        
+        listViewVoxelsFiles.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+                if (db.hasFiles()) {
+                    success = true;
+                    for (File file:db.getFiles()) {
+                        addFileToVoxelList(file);
+                    }
+                }
+                event.setDropCompleted(success);
+                event.consume();
+            }
+        });
+        
+        listViewVoxelsFiles.setOnDragDetected(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                
+                Dragboard db = listViewVoxelsFiles.startDragAndDrop(TransferMode.COPY);
+        
+                ClipboardContent content = new ClipboardContent();
+                content.putFiles(listViewVoxelsFiles.getItems());
+                db.setContent(content);
+
+                event.consume();
+            }
+        });
+        
+        listViewMultiResVoxelFiles.setOnDragOver(new EventHandler<DragEvent>() {
+
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                if (db.hasFiles()) {
+                    event.acceptTransferModes(TransferMode.COPY);
+                } else {
+                    event.consume();
+                }
+            }
+        });
+        
+        listViewMultiResVoxelFiles.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+                if (db.hasFiles()) {
+                    success = true;
+                    listViewMultiResVoxelFiles.getSelectionModel().getSelectedItems().addAll(db.getFiles());
+                }
+                event.setDropCompleted(success);
+                event.consume();
+            }
+        });
 
     }
 
