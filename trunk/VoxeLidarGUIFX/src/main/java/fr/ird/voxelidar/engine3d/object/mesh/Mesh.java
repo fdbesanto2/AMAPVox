@@ -5,6 +5,8 @@
  */
 package fr.ird.voxelidar.engine3d.object.mesh;
 
+import com.jogamp.common.nio.Buffers;
+import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
@@ -22,5 +24,16 @@ public class Mesh {
     //protected MeshBuffer meshBuffer;
     public int vertexCount;
     
+    public void setGlobalScale(float scale){
+        
+        float[] tab = new float[vertexBuffer.capacity()];
+        vertexBuffer.get(tab);
+        
+        for(int i=0;i<tab.length;i++){
+            tab[i] *= scale;
+        }
+        
+        vertexBuffer = Buffers.newDirectFloatBuffer(tab);
+    }    
     
 }

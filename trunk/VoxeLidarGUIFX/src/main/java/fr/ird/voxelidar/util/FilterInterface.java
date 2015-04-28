@@ -6,6 +6,8 @@
 package fr.ird.voxelidar.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -13,7 +15,7 @@ import java.util.ArrayList;
  */
 public interface FilterInterface {
     
-    public static final ArrayList<Filter> filters = new ArrayList<>();
+    public static Set<Filter> filters = new HashSet<>();
     public void addFilter(Filter filter);
     public boolean doFilter(ArrayList<String> attributsNames, float[] attributs);
     public boolean doFilter(ArrayList<String> attributsNames, float attribut);

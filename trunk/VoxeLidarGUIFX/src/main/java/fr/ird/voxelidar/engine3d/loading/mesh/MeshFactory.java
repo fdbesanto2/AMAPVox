@@ -11,6 +11,7 @@ import fr.ird.voxelidar.engine3d.object.mesh.Grid;
 import fr.ird.voxelidar.engine3d.object.mesh.Mesh;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3i;
+import fr.ird.voxelidar.engine3d.object.mesh.Face;
 import fr.ird.voxelidar.engine3d.object.mesh.TexturedMesh;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -18,8 +19,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 
 /**
  *
@@ -262,6 +269,136 @@ public class MeshFactory {
         return MeshFactory.createPlane(startPoint, width, height);
     }
     
+    public static Mesh createMeshFromX3D(InputStreamReader x3dFile){
+        
+        SAXBuilder sxb = new SAXBuilder();
+        
+        try {
+            Document document = sxb.build(x3dFile);
+            Element root = document.getRootElement();
+            List<Element> shapes = root.getChild("Scene")
+                                        .getChild("Transform")
+                                        .getChild("Transform")
+                                        .getChild("Group")
+                                        .getChildren("Shape");
+            
+            List<Short> faces = new ArrayList<>();
+            List<Vec3F> vertices = new ArrayList<>();
+            List<Vec3F> normales = new ArrayList<>();
+            Map<Integer, Vec3F> colors = new HashMap<>();
+            
+            for(Element shape : shapes){
+                
+                Element indexedFaceSetElement = shape.getChild("IndexedFaceSet");
+                Element appearanceElement = shape.getChild("Appearance");
+                String diffuseColorString = appearanceElement.getChild("Material").getAttributeValue("diffuseColor");
+                String[] split = diffuseColorString.split(" ");
+                Vec3F currentColor = new Vec3F(Float.valueOf(split[0]), Float.valueOf(split[1]), Float.valueOf(split[2]));
+                
+                String coordinatesIndices = indexedFaceSetElement.getAttributeValue("coordIndex");
+                String[] coordinatesIndicesArray = coordinatesIndices.split(" ");
+                
+                
+                for(String s : coordinatesIndicesArray){
+                    short indice = Short.valueOf(s);
+                    
+                    if(indice != -1){
+                        faces.add(indice);
+                        colors.put((int)indice, currentColor);
+                    }
+                }
+                
+                Element coordinateElement = indexedFaceSetElement.getChild("Coordinate");
+                if(coordinateElement != null){
+                    String point = coordinateElement.getAttributeValue("point");
+                    
+                    if(point != null){
+                        String[] pointArray = point.split(" ");
+                    
+                    int count = -1;
+                    float x = 0, y = 0, z;
+                    
+                        for (String p : pointArray) {
+
+                            float value = Float.valueOf(p);
+                            count++;
+
+                            switch (count) {
+                                case 0:
+                                    x = value;
+                                    break;
+                                case 1:
+                                    y = value;
+                                    break;
+                                case 2:
+                                    z = value;
+                                    vertices.add(new Vec3F(x, y, z));
+                                    count = -1;
+                                    break;
+                            }
+
+                        }
+                    }
+                    
+                }
+                
+                Element normalElement = indexedFaceSetElement.getChild("Normal");
+                if(normalElement != null){
+                    String normalesVector = normalElement.getAttributeValue("vector");
+                    
+                    if(normalesVector != null){
+                        String[] normalesArray = normalesVector.split(" ");
+
+                        int count = -1;
+                        float x = 0, y = 0, z;
+
+                        for (String p : normalesArray) {
+
+                            float value = Float.valueOf(p);
+                            count++;
+
+                            switch (count) {
+                                case 0:
+                                    x = value;
+                                    break;
+                                case 1:
+                                    y = value;
+                                    break;
+                                case 2:
+                                    z = value;
+                                    normales.add(new Vec3F(x, y, z));
+                                    count = -1;
+                                    break;
+                            }
+
+                        }
+                    }
+                }
+            }
+            
+            Mesh mesh = MeshFactory.createMeshWithNormales(vertices, normales, faces);
+            
+            float colorData[] = new float[vertices.size()*3];
+            for(int i=0, j=0;i<vertices.size();i++,j+=3){
+
+                colorData[j] = colors.get(i).x;
+                colorData[j+1] = colors.get(i).y;
+                colorData[j+2] = colors.get(i).z;
+
+            }
+
+            mesh.colorBuffer = Buffers.newDirectFloatBuffer(colorData);
+            
+            return mesh;
+            
+            
+        } catch (JDOMException | IOException ex) {
+            logger.error(ex);
+        }
+        
+        return null;
+    }
+    
     public static Mesh createMeshFromObj(InputStreamReader objFile, InputStreamReader objMaterial){
         
         Mesh mesh = new Mesh();
@@ -395,7 +532,7 @@ public class MeshFactory {
         return mesh;
     }
     
-    public static Mesh createMeshWithNormales(ArrayList<Vec3F> points, ArrayList<Vec3F> normales, ArrayList<Short> faces){
+    public static Mesh createMeshWithNormales(List<Vec3F> points, List<Vec3F> normales, List<Short> faces){
         
         Mesh mesh = new Mesh();
         

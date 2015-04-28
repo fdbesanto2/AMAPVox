@@ -34,7 +34,7 @@ public class ProcessingMultiRes {
     public final static float DEFAULT_MAX_PAD_2M = 2.262798f;
     public final static float DEFAULT_MAX_PAD_3M = 1.749859f;
     public final static float DEFAULT_MAX_PAD_4M = 1.3882959f;
-    public final static float DEFAULT_MAX_PAD_5M = 0.69f;
+    public final static float DEFAULT_MAX_PAD_5M = 1.0848f;
     
     private float max_pad_1m = DEFAULT_MAX_PAD_1M;
     private float max_pad_2m = DEFAULT_MAX_PAD_2M;

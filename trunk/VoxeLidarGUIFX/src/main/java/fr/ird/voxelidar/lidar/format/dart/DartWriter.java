@@ -113,7 +113,8 @@ public class DartWriter {
                 logger.error("could not find attribut PadBflTotal or PadBVTotal");
                 return;
             }
-                        
+            
+            densite *= data.res;
             
             int indiceX = voxel.$i;
             int indiceY = voxel.$j;

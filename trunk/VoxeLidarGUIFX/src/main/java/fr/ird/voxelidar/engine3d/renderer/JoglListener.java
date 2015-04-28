@@ -354,10 +354,14 @@ public class JoglListener implements GLEventListener {
             scene.addShader(instanceShader);
             scene.addShader(basicShader);
             scene.addShader(texturedShader);
-            
+            /*
             Mesh axisMesh = MeshFactory.createMeshFromObj(
                     new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("mesh/axis.obj")), 
                     new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("mesh/axis.mtl")));
+            */
+            Mesh axisMesh = MeshFactory.createMeshFromX3D( new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("mesh/axis.x3d")));
+            
+            axisMesh.setGlobalScale(0.03f);
             
             SceneObject axis = new SimpleSceneObject(axisMesh, noTranslationShader.getProgramId(), false);
             axis.setDrawType(GL3.GL_TRIANGLES);

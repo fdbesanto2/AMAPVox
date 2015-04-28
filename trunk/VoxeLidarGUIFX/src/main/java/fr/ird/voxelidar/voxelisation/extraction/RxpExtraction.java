@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
 public class RxpExtraction implements Runnable{
     
     public final static Logger logger = Logger.getLogger(RxpExtraction.class);
-    private final static String NATIVE_LIBRARY_NAME = "RivLibLibrary";
+    private final static String NATIVE_LIBRARY_NAME = "RivLibJNI";
     private final EventListenerList listeners;
     
     private final LinkedBlockingQueue<Shot> arrayBlockingQueue;

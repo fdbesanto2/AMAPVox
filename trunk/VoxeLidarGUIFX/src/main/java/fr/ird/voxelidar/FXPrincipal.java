@@ -20,6 +20,7 @@ public class FXPrincipal extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         
+        
         /*
         RxpExtraction rxpExtraction = new RxpExtraction();
         rxpExtraction.openRxpFile(new File("F:\\Rxp files\\850215_172246.mon.rxp"));

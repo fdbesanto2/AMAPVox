@@ -9,14 +9,16 @@ package fr.ird.voxelidar;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.renderer.JoglListener;
 import fr.ird.voxelidar.util.ColorGradient;
+import fr.ird.voxelidar.util.CombinedFilter;
+import fr.ird.voxelidar.util.Filter;
 import java.awt.Color;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.TreeSet;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -234,14 +236,60 @@ public class ToolBarFrameController implements Initializable {
     private void updateValuesFilter(){
         
         String[] valuesArray = textFieldFilterValues.getText().replace(" ", "").split(",");
-        Set<Float> values = new TreeSet<>();
+        Set<CombinedFilter> filterValues = new HashSet<>();
         for(int i=0;i<valuesArray.length;i++){
             try{
-                values.add(Float.valueOf(valuesArray[i]));
+                if(valuesArray[i].contains("[") || valuesArray[i].contains("]") ){
+                    int index = valuesArray[i].indexOf("->");
+                    
+                    if(index != -1){
+                        char firstInequality = valuesArray[i].charAt(0);
+                        char secondInequality = valuesArray[i].charAt(valuesArray[i].length()-1);
+                        
+                        
+                        float firstValue = Float.valueOf(valuesArray[i].substring(1, index));
+                        float secondValue = Float.valueOf(valuesArray[i].substring(index+2, valuesArray[i].length()-1));
+                        
+                        int firstInequalityID;
+                        switch(firstInequality){
+                            case ']':
+                                firstInequalityID = Filter.GREATER_THAN;
+                                break;
+                            case '[':
+                                firstInequalityID = Filter.GREATER_THAN_OR_EQUAL;
+                                break;
+                            default:
+                                firstInequalityID = Filter.GREATER_THAN_OR_EQUAL;
+                        }
+                        
+                        int secondInequalityID;
+                        switch(secondInequality){
+                            case ']':
+                                secondInequalityID = Filter.LESS_THAN_OR_EQUAL;
+                                break;
+                            case '[':
+                                secondInequalityID = Filter.LESS_THAN;
+                                break;
+                            default:
+                                secondInequalityID = Filter.LESS_THAN_OR_EQUAL;
+                        }
+                        
+                        
+                        filterValues.add(new CombinedFilter(
+                                new Filter("x", firstValue, firstInequalityID), 
+                                new Filter("x", secondValue, secondInequalityID), CombinedFilter.AND));
+                    }
+                    
+                }else{
+                    filterValues.add(new CombinedFilter(
+                                new Filter("x", Float.valueOf(valuesArray[i]), Filter.EQUAL), 
+                                null, CombinedFilter.AND));
+                }
+                
             }catch(Exception e){}
         }
 
-        joglContext.getScene().getVoxelSpace().setFilterValues(values, radiobuttonDisplayValues.isSelected());
+        joglContext.getScene().getVoxelSpace().setFilterValues(filterValues, radiobuttonDisplayValues.isSelected());
         joglContext.getScene().getVoxelSpace().updateColorValue(joglContext.getScene().getVoxelSpace().getGradient());
         joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
         joglContext.drawNextFrame();

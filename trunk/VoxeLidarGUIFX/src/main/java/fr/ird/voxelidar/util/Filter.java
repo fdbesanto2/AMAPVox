@@ -91,6 +91,32 @@ public class Filter implements Serializable{
         }
     }
     
+    public boolean doFilter(float value){
+        
+        switch(condition){
+            case Filter.EQUAL:
+                if(value == this.value)return true;
+                break;
+            case Filter.GREATER_THAN:
+                if(value > this.value)return true;
+                break;
+            case Filter.GREATER_THAN_OR_EQUAL:
+                if(value >= this.value)return true;
+                break;
+            case Filter.LESS_THAN:
+                if(value < this.value)return true;
+                break;
+            case Filter.LESS_THAN_OR_EQUAL:
+                if(value <= this.value)return true;
+                break;
+            case Filter.NOT_EQUAL:
+                if(value != this.value)return true;
+                break;
+        }
+        
+        return false;
+    }
+    
     /**
      *
      * @param condition the condition as a string 

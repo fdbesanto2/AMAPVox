@@ -6,6 +6,7 @@
 package fr.ird.voxelidar.util;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  *
@@ -16,6 +17,18 @@ public class SimpleFilter implements FilterInterface{
     @Override
     public void addFilter(Filter filter) {
         filters.add(filter);
+    }
+    
+    public void setFilters(Set<Filter> newFilters){
+        
+        if(newFilters != null){
+            filters.clear();
+
+            for(Filter f : newFilters){
+                filters.add(f);
+            }
+        }
+        
     }
 
     @Override
@@ -54,6 +67,37 @@ public class SimpleFilter implements FilterInterface{
         }
         
         return true;
+    }
+    
+    public boolean doOrFilter(float attribut) {
+        
+        for(Filter filter : filters){
+            
+            float value = attribut;
+            
+            switch(filter.getCondition()){
+                case Filter.EQUAL:
+                    if(value == filter.getValue())return true;
+                    break;
+                case Filter.GREATER_THAN:
+                    if(value > filter.getValue())return true;
+                    break;
+                case Filter.GREATER_THAN_OR_EQUAL:
+                    if(value >= filter.getValue())return true;
+                    break;
+                case Filter.LESS_THAN:
+                    if(value < filter.getValue())return true;
+                    break;
+                case Filter.LESS_THAN_OR_EQUAL:
+                    if(value <= filter.getValue())return true;
+                    break;
+                case Filter.NOT_EQUAL:
+                    if(value != filter.getValue())return true;
+                    break;
+            }
+        }
+        
+        return false;
     }
     
     

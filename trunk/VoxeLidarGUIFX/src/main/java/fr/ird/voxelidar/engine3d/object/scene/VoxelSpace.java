@@ -17,7 +17,11 @@ import fr.ird.voxelidar.engine3d.math.point.Point2F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.object.mesh.InstancedMesh;
 import fr.ird.voxelidar.util.ColorGradient;
+import fr.ird.voxelidar.util.CombinedFilter;
+import fr.ird.voxelidar.util.CombinedFilters;
+import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.Settings;
+import fr.ird.voxelidar.util.SimpleFilter;
 import fr.ird.voxelidar.util.StandardDeviation;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.awt.Color;
@@ -98,7 +102,8 @@ public class VoxelSpace extends SceneObject{
     
     public VoxelSpaceData data;
     
-    private Set<Float> filteredValues;
+    //private Set<Filter> filteredValues;
+    private CombinedFilters combinedFilters;
     private boolean displayValues = false;
     
     private final EventListenerList listeners;
@@ -108,9 +113,12 @@ public class VoxelSpace extends SceneObject{
     public VoxelSpace(){
         
         data = new VoxelSpaceData();
-        filteredValues = new TreeSet<>();
-        filteredValues.add(Float.NaN);
-        filteredValues.add(0.0f);
+        //filteredValues = new TreeSet<>();
+        //filteredValues.add(new Filter("x", Float.NaN, Filter.EQUAL));
+        //filteredValues.add(new Filter("x", 0.0f, Filter.EQUAL));
+        combinedFilters = new CombinedFilters();
+        combinedFilters.addFilter(new CombinedFilter(new Filter("x", Float.NaN, Filter.EQUAL), null, CombinedFilter.AND));
+        combinedFilters.addFilter(new CombinedFilter(new Filter("x", 0.0f, Filter.EQUAL), null, CombinedFilter.AND));
         mapAttributs = new LinkedHashMap<>();
         variables = new TreeSet<>();
         listeners = new EventListenerList();
@@ -120,9 +128,12 @@ public class VoxelSpace extends SceneObject{
     public VoxelSpace(File voxelSpace){
         
         data = new VoxelSpaceData();
-        filteredValues = new TreeSet<>();
-        filteredValues.add(Float.NaN);
-        filteredValues.add(0.0f);
+        //filteredValues = new TreeSet<>();
+        //filteredValues.add(new Filter("x", Float.NaN, Filter.EQUAL));
+        //filteredValues.add(new Filter("x", 0.0f, Filter.EQUAL));
+        combinedFilters = new CombinedFilters();
+        combinedFilters.addFilter(new CombinedFilter(new Filter("x", Float.NaN, Filter.EQUAL), null, CombinedFilter.AND));
+        combinedFilters.addFilter(new CombinedFilter(new Filter("x", 0.0f, Filter.EQUAL), null, CombinedFilter.AND));
         mapAttributs = new LinkedHashMap<>();
         variables = new TreeSet<>();
         listeners = new EventListenerList();
@@ -246,8 +257,9 @@ public class VoxelSpace extends SceneObject{
         updateValue();
     }
     
-    public void setFilterValues(Set<Float> values, boolean display){
-        filteredValues = values;
+    public void setFilterValues(Set<CombinedFilter> values, boolean display){
+        combinedFilters = new CombinedFilters();
+        combinedFilters.setFilters(values);
         this.displayValues = display;
     }
     
@@ -744,22 +756,18 @@ public class VoxelSpace extends SceneObject{
             
             voxel.setColor(colorGenerated.getRed(), colorGenerated.getGreen(), colorGenerated.getBlue());
             //values.add(voxel.attributValue);
-            if(filteredValues.contains(voxel.attributValue)){
-                if(displayValues){
-                    voxel.setAlpha(1);
-                }else{
-                    voxel.setAlpha(0);
-                }
-                
-            }else{
-                if(displayValues){
-                    voxel.setAlpha(0);
-                }else{
-                    voxel.setAlpha(1);
-                }
-                
-            }
             
+            boolean isFiltered = combinedFilters.doFilter(voxel.attributValue);
+            
+            if(isFiltered && displayValues){
+                voxel.setAlpha(1);
+            }else if(isFiltered && !displayValues){
+                voxel.setAlpha(0);
+            }else if(!isFiltered && displayValues){
+                voxel.setAlpha(0);
+            }else{
+                voxel.setAlpha(1);
+            }
         }
         //System.out.println("test");
         //voxelList = ImageEqualisation.scaleHistogramm(voxelList);
