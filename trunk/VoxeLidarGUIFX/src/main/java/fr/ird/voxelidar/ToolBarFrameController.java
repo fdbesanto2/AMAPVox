@@ -7,6 +7,7 @@ package fr.ird.voxelidar;
  */
 
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
+import fr.ird.voxelidar.engine3d.object.camera.TrackballCamera;
 import fr.ird.voxelidar.engine3d.renderer.JoglListener;
 import fr.ird.voxelidar.util.ColorGradient;
 import fr.ird.voxelidar.util.CombinedFilter;
@@ -19,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -76,6 +78,28 @@ public class ToolBarFrameController implements Initializable {
     private RadioButton radiobuttonDontDisplayValues;
     @FXML
     private RadioButton radiobuttonDisplayValues;
+    @FXML
+    private Tooltip tooltipTextfieldFilter;
+    @FXML
+    private Button buttonApplyMinMax;
+    @FXML
+    private TextField textfieldCameraFOV;
+    @FXML
+    private TextField textfieldCameraLeft;
+    @FXML
+    private TextField textfieldCameraRight;
+    @FXML
+    private TextField textfieldCameraTop;
+    @FXML
+    private TextField textfieldCameraBottom;
+    @FXML
+    private TextField textfieldCameraFar;
+    @FXML
+    private TextField textfieldCameraNear;
+    @FXML
+    private RadioButton radiobuttonPerspectiveCamera;
+    @FXML
+    private RadioButton radiobuttonOrthographicCamera;
     
     /**
      * Initializes the controller class.
@@ -177,11 +201,13 @@ public class ToolBarFrameController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 try{
+                    joglContext.getScene().getVoxelSpace().resetAttributValueRange();
                     joglContext.getScene().getVoxelSpace().changeCurrentAttribut(newValue);
                     joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
                     joglContext.drawNextFrame();
                     textFieldMinValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMin));
                     textFieldMaxValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMax));
+                    
                 }catch(Exception e){}
                 
             }
@@ -218,9 +244,9 @@ public class ToolBarFrameController implements Initializable {
             }
         });
         
-        ToggleGroup group = new ToggleGroup();
-        radiobuttonDisplayValues.setToggleGroup(group);
-        radiobuttonDontDisplayValues.setToggleGroup(group);
+        ToggleGroup groupDisplayValues = new ToggleGroup();
+        radiobuttonDisplayValues.setToggleGroup(groupDisplayValues);
+        radiobuttonDontDisplayValues.setToggleGroup(groupDisplayValues);
         
         radiobuttonDontDisplayValues.selectedProperty().addListener(new ChangeListener<Boolean>() {
 
@@ -231,6 +257,173 @@ public class ToolBarFrameController implements Initializable {
             }
         });
         
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+                textFieldVoxelSize.setText(String.valueOf(joglContext.getScene().getVoxelSpace().getCubeSize()));
+                textFieldMinValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMin));
+                textFieldMaxValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMax));
+            }
+        });
+        
+        
+        tooltipTextfieldFilter.setText("Syntax: value1, value2\nvalue can be a floating point number\nor a value range [1.0->2.0[");
+        
+        textfieldCameraFOV.textProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                try{
+                    float fov = Float.valueOf(newValue);
+                    TrackballCamera camera = joglContext.getCamera();
+                    joglContext.getCamera().setPerspective(fov, camera.getAspect(), camera.getNearPersp(), camera.getFarPersp());
+                    joglContext.drawNextFrame();
+                    
+                }catch(Exception e){}
+            }
+        });
+        
+        textfieldCameraTop.textProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                try{
+                    float top = Float.valueOf(newValue);
+                    TrackballCamera camera = joglContext.getCamera();
+                    joglContext.getCamera().setOrthographic(camera.getLeft(), camera.getRight(), top, camera.getBottom(), camera.getNearOrtho(), camera.getFarOrtho());
+                    joglContext.drawNextFrame();
+                    
+                }catch(Exception e){}
+            }
+        });
+        
+        textfieldCameraBottom.textProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                try{
+                    float bottom = Float.valueOf(newValue);
+                    TrackballCamera camera = joglContext.getCamera();
+                    joglContext.getCamera().setOrthographic(camera.getLeft(), camera.getRight(), camera.getTop(), bottom, camera.getNearOrtho(), camera.getFarOrtho());
+                    joglContext.drawNextFrame();
+                    
+                }catch(Exception e){}
+            }
+        });
+        
+        textfieldCameraLeft.textProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                try{
+                    float left = Float.valueOf(newValue);
+                    TrackballCamera camera = joglContext.getCamera();
+                    joglContext.getCamera().setOrthographic(left, camera.getRight(), camera.getTop(), camera.getBottom(), camera.getNearOrtho(), camera.getFarOrtho());
+                    joglContext.drawNextFrame();
+                    
+                }catch(Exception e){}
+            }
+        });
+        
+        textfieldCameraRight.textProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                try{
+                    float right = Float.valueOf(newValue);
+                    TrackballCamera camera = joglContext.getCamera();
+                    joglContext.getCamera().setOrthographic(camera.getLeft(), right, camera.getTop(), camera.getBottom(), camera.getNearOrtho(), camera.getFarOrtho());
+                    joglContext.drawNextFrame();
+                    
+                }catch(Exception e){}
+            }
+        });
+        
+        textfieldCameraNear.textProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                try{
+                    float near = Float.valueOf(newValue);
+                    TrackballCamera camera = joglContext.getCamera();
+                    if(radiobuttonOrthographicCamera.isSelected()){
+                        joglContext.getCamera().setOrthographic(camera.getLeft(), camera.getRight(), camera.getTop(), camera.getBottom(), near, camera.getFarOrtho());
+                    }else{
+                        joglContext.getCamera().setPerspective(camera.getFovy(), camera.getAspect(), near, camera.getFarPersp());
+                    }
+                    
+                    joglContext.drawNextFrame();
+                    
+                }catch(Exception e){}
+            }
+        });
+        
+        textfieldCameraFar.textProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                try{
+                    float far = Float.valueOf(newValue);
+                    TrackballCamera camera = joglContext.getCamera();
+                    if(radiobuttonOrthographicCamera.isSelected()){
+                        joglContext.getCamera().setOrthographic(camera.getLeft(), camera.getRight(), camera.getTop(), camera.getBottom(), camera.getNearOrtho(), far);
+                    }else{
+                        joglContext.getCamera().setPerspective(camera.getFovy(), camera.getAspect(), camera.getNearPersp(), far);
+                    }
+                    
+                    joglContext.drawNextFrame();
+                    
+                }catch(Exception e){}
+            }
+        });
+        
+        ToggleGroup groupCameraMod = new ToggleGroup();
+        radiobuttonPerspectiveCamera.setToggleGroup(groupCameraMod);
+        radiobuttonOrthographicCamera.setToggleGroup(groupCameraMod);
+        
+        radiobuttonOrthographicCamera.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    
+                    try{
+                        float left = Float.valueOf(textfieldCameraLeft.getText());
+                        float right = Float.valueOf(textfieldCameraRight.getText());
+                        float top = Float.valueOf(textfieldCameraTop.getText());
+                        float bottom = Float.valueOf(textfieldCameraBottom.getText());
+                        float near = Float.valueOf(textfieldCameraNear.getText());
+                        float far = Float.valueOf(textfieldCameraFar.getText());
+
+                        joglContext.getCamera().setOrthographic(left, right, top, bottom, near, far);
+                        joglContext.drawNextFrame();
+                    }catch(Exception e){}
+                    
+                }
+            }
+        });
+        
+        radiobuttonPerspectiveCamera.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    
+                    try{
+                        float fov = Float.valueOf(textfieldCameraFOV.getText());
+                        float near = Float.valueOf(textfieldCameraNear.getText());
+                        float far = Float.valueOf(textfieldCameraFar.getText());
+
+                        TrackballCamera camera = joglContext.getCamera();
+                        joglContext.getCamera().setPerspective(fov, camera.getAspect(), near, far);
+                        joglContext.drawNextFrame();
+                        
+                    }catch(Exception e){}
+                    
+                }
+            }
+        });
     }
     
     private void updateValuesFilter(){
@@ -315,6 +508,35 @@ public class ToolBarFrameController implements Initializable {
 
     @FXML
     private void onActionButtonResetMinMax(ActionEvent event) {
+        
+        textFieldMinValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMin));
+        textFieldMaxValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMax));
+        
+        joglContext.getScene().getVoxelSpace().resetAttributValueRange();
+        joglContext.getScene().getVoxelSpace().updateValue();
+        joglContext.getScene().getVoxelSpace().updateColorValue(joglContext.getScene().getVoxelSpace().getGradient());
+        joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
+        joglContext.drawNextFrame();
+    }
+
+    @FXML
+    private void onActionButtonApplyMinMax(ActionEvent event) {
+        
+        try{
+            float min = Float.valueOf(textFieldMinValue.getText());
+            float max = Float.valueOf(textFieldMaxValue.getText());
+            
+            joglContext.getScene().getVoxelSpace().setAttributValueRange(min, max);
+            joglContext.getScene().getVoxelSpace().updateValue();
+            joglContext.getScene().getVoxelSpace().updateColorValue(joglContext.getScene().getVoxelSpace().getGradient());
+            joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
+            joglContext.drawNextFrame();
+            
+        }catch(Exception e){
+            logger.error("error");
+        }
+        
+        
     }
     
 }

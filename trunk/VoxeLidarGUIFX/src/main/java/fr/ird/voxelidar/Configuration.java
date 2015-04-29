@@ -566,7 +566,7 @@ public class Configuration {
                                     String inequality = e.getAttributeValue("inequality");
                                     String value = e.getAttributeValue("value");
 
-                                    filters.add(new Filter(variable, Double.valueOf(value), Filter.getConditionFromString(inequality)));
+                                    filters.add(new Filter(variable, Float.valueOf(value), Filter.getConditionFromString(inequality)));
                                 }
                             }
                         }

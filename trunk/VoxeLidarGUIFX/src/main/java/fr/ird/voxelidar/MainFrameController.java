@@ -160,6 +160,7 @@ public class MainFrameController implements Initializable {
     private BlockingQueue<File> queue = new ArrayBlockingQueue<>(100);
     private int taskNumber = 0;
     private int taskID = 1;
+    private boolean removeWarnings = false;
     
     private CalculateMatrixFrameController calculateMatrixFrameController;
     private FilterFrameController filterFrameController;
@@ -1318,18 +1319,7 @@ public class MainFrameController implements Initializable {
                                 listViewVoxelsFiles.getSelectionModel().getSelectedItem().toString(),
                                 voxelSpace, settings);
         
-        Stage toolBarFrameStage = new Stage();
-        ToolBarFrameController toolBarFrameController;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ToolBarFrame.fxml"));
-        Parent root;
-        try {
-            root = loader.load();
-            Scene scene = new Scene(root);
-            toolBarFrameStage.setScene(scene);
-        } catch (IOException ex) {
-            logger.error(ex);
-        }
-        toolBarFrameController = loader.getController();
+        final Stage toolBarFrameStage = new Stage();
         
         Service<Void> service = new Service<Void>() {
             @Override
@@ -1356,6 +1346,18 @@ public class MainFrameController implements Initializable {
                                 
                                 stage.setAlwaysOnTop(false);
                                 
+                                ToolBarFrameController toolBarFrameController;
+                                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ToolBarFrame.fxml"));
+                                Parent root;
+                                try {
+                                    root = loader.load();
+                                    Scene scene = new Scene(root);
+                                    toolBarFrameStage.setScene(scene);
+                                } catch (IOException ex) {
+                                    logger.error(ex);
+                                }
+                                toolBarFrameController = loader.getController();
+
                                 toolBarFrameController.setJoglListener(joglWindow.getJoglContext());
                                 toolBarFrameController.setAttributes(comboboxAttributeToView.getItems());
 
@@ -1367,8 +1369,9 @@ public class MainFrameController implements Initializable {
                                 toolBarFrameStage.setY(joglWindow.getPosition().getY());
                                 toolBarFrameStage.show();
 
-
+                                
                                 joglWindow.setOnTop();
+                                toolBarFrameStage.setAlwaysOnTop(true);
                                 
                             }
                         });
@@ -1389,8 +1392,16 @@ public class MainFrameController implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 
                 if(newValue){
-                    joglWindow.setOnTop();
-                    toolBarFrameStage.setAlwaysOnTop(true);
+                    
+                    Platform.runLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            joglWindow.setOnTop();
+                            toolBarFrameStage.setAlwaysOnTop(true);
+                        }
+                    });
+                    
                     stage.focusedProperty().removeListener(this);
                 }
                 
@@ -3007,7 +3018,7 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonAutomatic(ActionEvent event) {
         
-        if(textFieldInputFileALS.getText().equals("")){
+        if(textFieldInputFileALS.getText().equals("") && !removeWarnings){
             
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Information");
@@ -3223,7 +3234,7 @@ public class MainFrameController implements Initializable {
     
     private Point3d[] getLasMinMax(File file){
         
-        if(textFieldInputFileALS.getText().equals("")){
+        if(textFieldInputFileALS.getText().equals("") && !removeWarnings){
             
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Information");
@@ -3331,6 +3342,8 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonExecuteScript(ActionEvent event) {
        
+        removeWarnings = true;
+        
         DirectoryChooser directoryChooserOutputPath = new DirectoryChooser();
         directoryChooserOutputPath.setTitle("Choose output path: ");
 
@@ -3426,6 +3439,8 @@ public class MainFrameController implements Initializable {
                 }
             }
         }
+        
+        removeWarnings = false;
 
     }
 

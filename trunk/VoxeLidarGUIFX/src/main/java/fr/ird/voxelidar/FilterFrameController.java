@@ -59,7 +59,7 @@ public class FilterFrameController implements Initializable {
         }
             
         Filter filter = new Filter(comboboxVariable.getSelectionModel().getSelectedItem(),
-            Double.valueOf(textfieldValue.getText()), comboboxInequality.getSelectionModel().getSelectedIndex());
+            Float.valueOf(textfieldValue.getText()), comboboxInequality.getSelectionModel().getSelectedIndex());
         
         
         return filter;

@@ -21,7 +21,6 @@ import fr.ird.voxelidar.util.CombinedFilter;
 import fr.ird.voxelidar.util.CombinedFilters;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.Settings;
-import fr.ird.voxelidar.util.SimpleFilter;
 import fr.ird.voxelidar.util.StandardDeviation;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.awt.Color;
@@ -78,6 +77,9 @@ public class VoxelSpace extends SceneObject{
     private boolean fileLoaded;
     public float attributValueMax;
     public float attributValueMin;
+    public float attributValueMaxClipped;
+    public float attributValueMinClipped;
+    private boolean useClippedRangeValue = false;
     public float min;
     public float max;
     
@@ -149,6 +151,11 @@ public class VoxelSpace extends SceneObject{
     public void setVariables(Set<String> variables) {
         this.variables = variables;
     }
+
+    public float getCubeSize() {
+        return cubeSize;
+    }
+    
     
     public void addExtendedMapAttributs(Map<String,Attribut> extendedMapAttributs){
         for(Entry entry : extendedMapAttributs.entrySet()){
@@ -578,6 +585,22 @@ public class VoxelSpace extends SceneObject{
 
         setFileLoaded(true);
     }
+    
+    public void setAttributValueRange(float minClipped, float maxClipped){
+        
+        useClippedRangeValue = true;
+        attributValueMinClipped = minClipped;
+        attributValueMaxClipped = maxClipped;
+    }
+    
+    public void resetAttributValueRange(){
+        useClippedRangeValue = false;
+    }
+
+    public boolean isUseClippedRangeValue() {
+        return useClippedRangeValue;
+    }
+    
     /*
     public final void loadFromFile(File f){
         
@@ -705,7 +728,11 @@ public class VoxelSpace extends SceneObject{
             setGradientColor(gradient, min, max);
             
         }else{
-            setGradientColor(gradient, attributValueMin, attributValueMax);
+            if(useClippedRangeValue){
+                setGradientColor(gradient, attributValueMinClipped, attributValueMaxClipped);
+            }else{
+                setGradientColor(gradient, attributValueMin, attributValueMax);
+            }
         }
         
         
@@ -726,7 +753,12 @@ public class VoxelSpace extends SceneObject{
         if(stretched){
             setGradientColor(gradient, min, max);
         }else{
-            setGradientColor(gradient, attributValueMin, attributValueMax);
+            if(useClippedRangeValue){
+                setGradientColor(gradient, attributValueMinClipped, attributValueMaxClipped);
+            }else{
+                setGradientColor(gradient, attributValueMin, attributValueMax);
+            }
+            
         }
         
     }
@@ -788,7 +820,11 @@ public class VoxelSpace extends SceneObject{
         if(stretched){
             return ScaleGradient.generateScale(gradient, min, max, width, height, ScaleGradient.HORIZONTAL);
         }else{
-            return ScaleGradient.generateScale(gradient, attributValueMin, attributValueMax, width, height, ScaleGradient.HORIZONTAL);
+            if(useClippedRangeValue){
+                return ScaleGradient.generateScale(gradient, attributValueMinClipped, attributValueMaxClipped, width, height, ScaleGradient.HORIZONTAL);
+            }else{
+                return ScaleGradient.generateScale(gradient, attributValueMin, attributValueMax, width, height, ScaleGradient.HORIZONTAL);
+            }
         }
         
     }

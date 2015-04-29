@@ -27,7 +27,7 @@ public class Filter implements Serializable{
     public final static int GREATER_THAN_OR_EQUAL = 5;
     
     private final String variable;
-    private final double value;
+    private final float value;
     private final int condition;
     
     /**
@@ -36,7 +36,7 @@ public class Filter implements Serializable{
      * @param value The value to test
      * @param condition The condition to compare the variable to value
      */
-    public Filter(String variable, double value, int condition) {
+    public Filter(String variable, float value, int condition) {
         this.variable = variable;
         this.value = value;
         this.condition = condition;
@@ -95,7 +95,11 @@ public class Filter implements Serializable{
         
         switch(condition){
             case Filter.EQUAL:
-                if(value == this.value)return true;
+                if(Float.isNaN(this.value)){
+                    if(Float.isNaN(value))return true;
+                }else{
+                    if(value == this.value)return true;
+                }
                 break;
             case Filter.GREATER_THAN:
                 if(value > this.value)return true;
@@ -110,7 +114,12 @@ public class Filter implements Serializable{
                 if(value <= this.value)return true;
                 break;
             case Filter.NOT_EQUAL:
-                if(value != this.value)return true;
+                if(Float.isNaN(this.value)){
+                    if(!Float.isNaN(value))return true;
+                }else{
+                    if(value != this.value)return true;
+                }
+                
                 break;
         }
         
@@ -158,7 +167,7 @@ public class Filter implements Serializable{
             return null;
         }
         
-        Filter filter = new Filter(split[0], Double.valueOf(split[2]), getConditionFromString(split[1]));
+        Filter filter = new Filter(split[0], Float.valueOf(split[2]), getConditionFromString(split[1]));
         
         return filter;
     }

@@ -281,7 +281,7 @@
                                                                         </VBox>
                                                                      </children>
                                                                   </HBox>
-                                                                  <Button fx:id="buttonResetToIdentity" layoutX="14.0" layoutY="272.0" mnemonicParsing="false" onAction="#onActionButtonResetToIdentity" text="Reset to identity" />
+                                                                  <Button fx:id="buttonResetToIdentity" layoutX="14.0" layoutY="272.0" mnemonicParsing="false" onAction="#onActionButtonResetToIdentity" text="Reset to identity" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="272.0" />
                                                                </children>
                                                             </AnchorPane>
                                                       </content>

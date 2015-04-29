@@ -97,6 +97,50 @@ public abstract class Camera {
     public void projectIsometric(){
         
     }
+
+    public float getFovy() {
+        return fovy;
+    }
+
+    public float getNearPersp() {
+        return nearPersp;
+    }
+
+    public float getNearOrtho() {
+        return nearOrtho;
+    }
+
+    public float getLeft() {
+        return left;
+    }
+
+    public float getRight() {
+        return right;
+    }
+
+    public float getBottom() {
+        return bottom;
+    }
+
+    public float getTop() {
+        return top;
+    }
+
+    public Vec3F getUp() {
+        return up;
+    }
+
+    public float getFarPersp() {
+        return farPersp;
+    }
+
+    public float getFarOrtho() {
+        return farOrtho;
+    }
+
+    public float getAspect() {
+        return aspect;
+    }
     
     /**
      *

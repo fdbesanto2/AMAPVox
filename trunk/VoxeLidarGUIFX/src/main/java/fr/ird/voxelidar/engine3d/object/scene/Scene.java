@@ -111,7 +111,12 @@ public class Scene {
                 if(voxelSpace.isStretched()){
                     texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.min, voxelSpace.max, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
                 }else{
-                    texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMin, voxelSpace.attributValueMax, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
+                    if(voxelSpace.isUseClippedRangeValue()){
+                        texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMinClipped, voxelSpace.attributValueMaxClipped, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMinClipped, voxelSpace.attributValueMaxClipped);
+                    }else{
+                        texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMin, voxelSpace.attributValueMax, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
+                    }
+                    
                 }
                 
                 scalePlane = SceneObjectFactory.createTexturedPlane(new Vec3F(40, 20, 0), width-80, (int)(height/20), texture, getShaderByName("textureShader"));
@@ -145,7 +150,12 @@ public class Scene {
                 if(voxelSpace.isStretched()){
                     texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.min, voxelSpace.max, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
                 }else{
-                    texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMin, voxelSpace.attributValueMax, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
+                    if(voxelSpace.isUseClippedRangeValue()){
+                        texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMinClipped, voxelSpace.attributValueMaxClipped, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMinClipped, voxelSpace.attributValueMaxClipped);
+                    }else{
+                        texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMin, voxelSpace.attributValueMax, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
+                    }
+                    
                 }
                 
                 changeObjectTexture(scalePlane.getId(), texture);
