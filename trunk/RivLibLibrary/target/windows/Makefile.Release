@@ -125,7 +125,7 @@ $(OBJECTS) $(LIBS)
 <<
 
 qmake: FORCE
-	@$(QMAKE) -spec win32-msvc2013 CONFIG+=debug -o Makefile.Release ..\..\RivLibLibrary.pro
+	@$(QMAKE) -spec win32-msvc2013 -o Makefile.Release ..\..\RivLibLibrary.pro
 
 qmake_all: FORCE
 

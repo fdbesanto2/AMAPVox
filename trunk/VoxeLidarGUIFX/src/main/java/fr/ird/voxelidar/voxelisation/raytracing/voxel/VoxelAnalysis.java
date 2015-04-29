@@ -119,19 +119,18 @@ public class VoxelAnalysis implements Runnable {
      * @param indices 
      * @param splitting
      * @param minCorner
-     * @param maxCorner
      * @return
      */
-    public Point3d getPosition(Point3i indices, Point3i splitting, Point3d minCorner, Point3d maxCorner) {
-
+    public Point3d getPosition(Point3i indices, Point3i splitting, Point3d minCorner) {
+        /*
         Point3d resolution = new Point3d();
         resolution.x = (maxCorner.x - minCorner.x) / splitting.x;
         resolution.y = (maxCorner.y - minCorner.y) / splitting.y;
         resolution.z = (maxCorner.z - minCorner.z) / splitting.z;
-
-        double posX = offset.x + (resolution.x / 2.0d) + (indices.x * resolution.x);
-        double posY = offset.y + (resolution.y / 2.0d) + (indices.y * resolution.y);
-        double posZ = offset.z + (resolution.z / 2.0d) + (indices.z * resolution.z);
+        */
+        double posX = minCorner.x + (parameters.resolution / 2.0d) + (indices.x * parameters.resolution);
+        double posY = minCorner.y + (parameters.resolution / 2.0d) + (indices.y * parameters.resolution);
+        double posZ = minCorner.z + (parameters.resolution / 2.0d) + (indices.z * parameters.resolution);
 
         return new Point3d(posX, posY, posZ);
     }
@@ -756,7 +755,7 @@ public void calculatePADAndWrite(double threshold) {
                         }
 
                         Point3d position = getPosition(new Point3i(x, y, z),
-                                parameters.split, parameters.bottomCorner, parameters.topCorner);
+                                parameters.split, parameters.bottomCorner);
 
                         float dist;
                         if (terrain != null && parameters.useDTMCorrection()) {

@@ -1392,15 +1392,8 @@ public class MainFrameController implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 
                 if(newValue){
-                    
-                    Platform.runLater(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            joglWindow.setOnTop();
-                            toolBarFrameStage.setAlwaysOnTop(true);
-                        }
-                    });
+                    joglWindow.setOnTop();
+                    toolBarFrameStage.setAlwaysOnTop(true);
                     
                     stage.focusedProperty().removeListener(this);
                 }
