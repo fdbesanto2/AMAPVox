@@ -2164,9 +2164,7 @@ public class MainFrameController implements Initializable {
                                                     }
                                                 }
                                             });
-                                        } catch (FileNotFoundException ex) {
-                                            logger.error(ex);
-                                        } catch(NullPointerException e){
+                                        }catch(Exception e){
                                             
                                         }
 

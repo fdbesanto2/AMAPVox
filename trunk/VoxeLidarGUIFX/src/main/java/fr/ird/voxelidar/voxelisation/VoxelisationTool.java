@@ -105,14 +105,14 @@ public class VoxelisationTool {
         return terrain;
     }
 
-    public ArrayList<File> voxeliseFromRsp(File output, File input, VoxelParameters parameters, Mat4D vop, Mat4D pop, List<MatrixAndFile> matricesAndFiles, List<Filter> filters, int coresNumber) throws FileNotFoundException {
+    public ArrayList<File> voxeliseFromRsp(File output, File input, VoxelParameters parameters, Mat4D vop, Mat4D pop, List<MatrixAndFile> matricesAndFiles, List<Filter> filters, int coresNumber){
 
         if (!Files.isReadable(output.toPath())) {
-            throw new FileNotFoundException("File " + output.getAbsolutePath() + " not reachable");
+            logger.error("File " + output.getAbsolutePath() + " not reachable");
         }
 
         if (!Files.isReadable(input.toPath())) {
-            throw new FileNotFoundException("File " + input.getAbsolutePath() + " not reachable");
+            logger.error("File " + input.getAbsolutePath() + " not reachable");
         }
 
         startTime = System.currentTimeMillis();
@@ -227,7 +227,7 @@ public class VoxelisationTool {
         float resolution = 0;
 
         float[][] nbSamplingMultiplyAngleMean = null;
-        float[] sumTransmittanceMultiplyLgTotal = null;
+        //float[] sumTransmittanceMultiplyLgTotal = null;
 
         for (int i = 0; i < filesList.size(); i++) {
 
@@ -307,7 +307,7 @@ public class VoxelisationTool {
                 }
                 
                 nbSamplingMultiplyAngleMean = new float[filesList.size()][size];
-                sumTransmittanceMultiplyLgTotal = new float[size];
+                //sumTransmittanceMultiplyLgTotal = new float[size];
 
                 result = map1;
                 map2 = result;
@@ -317,18 +317,21 @@ public class VoxelisationTool {
                 result = DataSet.mergeTwoDataSet(map1, map2, toMerge);
                 map2 = result;
             }
-
+            
             Float[] nbTemp1 = map1.get("nbSampling");
             Float[] nbTemp2 = map1.get("angleMean");
-            Float[] nbTemp3 = map1.get("transmittance_v2");
-            Float[] nbTemp4 = map1.get("lgTotal");
+            //Float[] nbTemp3 = map1.get("transmittance_v2");
+            //Float[] nbTemp4 = map1.get("lgTotal");
             
             for(int j=0;j<nbTemp1.length;j++){
                 nbSamplingMultiplyAngleMean[i][j] = nbTemp1[j] * nbTemp2[j];
+                /*
                 if(!Float.isNaN(nbTemp3[j]) && !Float.isNaN(nbTemp4[j])){
                     sumTransmittanceMultiplyLgTotal[j] += (nbTemp3[j] * nbTemp4[j]);
                 }
+                */
             }
+            
         }
 
         logger.info("Recalculate lMeanTotal, angleMean, transmittance, PadBVTotal");
