@@ -54,7 +54,9 @@ public class RxpVoxelisation implements Callable{
         nbVoxelisationFinished = 0;
         this.outputFile = outputFile;
         
-        
+        if(vopMatrix == null){
+            vopMatrix = Mat4D.identity();
+        }
         Mat4D popVop = Mat4D.multiply(popMatrix, vopMatrix);
         final Mat4D transfMatrix = Mat4D.multiply(sopMatrix, popVop);
         
