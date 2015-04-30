@@ -39,7 +39,7 @@ public class ExtendedALSVoxel extends ALSVoxel {
         this.nbEchos = voxel.nbEchos;
         this.nbSampling = voxel.nbSampling;
         this.transmittance = voxel.transmittance;
-        this.transmittance_v2 = voxel.transmittance_v2;
+        this._transmittance_v2 = voxel._transmittance_v2;
     }
 
 }

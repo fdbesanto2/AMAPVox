@@ -478,7 +478,7 @@ public class VoxelAnalysis implements Runnable {
                  et le nombre d'interception (interceptions) 
                  et la longueur parcourue(lgInterception)*/
                 //if ((echoDistance >= parameters.minDTMDistance && echoDistance!= Float.NaN && parameters.useDTMCorrection()) || !parameters.useDTMCorrection()) {
-                    if ((classification != 2 && !parameters.isTLS()) || parameters.isTLS()) { // if not ground
+                    //if ((classification != 2 && !parameters.isTLS()) || parameters.isTLS()) { // if not ground
                         
                         /*
                          * Si distanceToHit == d1,on incrémente le compteur d'échos
@@ -507,7 +507,8 @@ public class VoxelAnalysis implements Runnable {
                         double intercepted = 0;
                         
                         
-                        if ((echoDistance >= parameters.minDTMDistance && echoDistance!= Float.NaN && parameters.useDTMCorrection())|| !parameters.useDTMCorrection()){
+                        if (((classification != 2 && !parameters.isTLS()) || parameters.isTLS()) && 
+                                ((echoDistance >= parameters.minDTMDistance && echoDistance!= Float.NaN && parameters.useDTMCorrection())|| !parameters.useDTMCorrection())){
                             
                             vox.nbEchos++;
                             
@@ -526,7 +527,7 @@ public class VoxelAnalysis implements Runnable {
                         
                         vox._sumSurfaceMultiplyLength += (surface*longueur);
                         vox._transBeforeNorm += (((entering-intercepted)/entering) * surface * longueur);
-                    }
+                    //}
                     
                 lastEchotemp = echo;
             }
@@ -595,7 +596,7 @@ public void calculatePADAndWrite(double threshold) {
                             pad1 = Float.NaN;
                             pad2 = pad1;
                             voxel.transmittance = Float.NaN;
-                            voxel.transmittance_v2 = Float.NaN;
+                            voxel._transmittance_v2 = Float.NaN;
 
                         } else if (voxel.bvIntercepted > voxel.bvEntering) {
 
@@ -604,12 +605,12 @@ public void calculatePADAndWrite(double threshold) {
                             pad1 = Float.NaN;
                             pad2 = pad1;
                             voxel.transmittance = Float.NaN;
-                            voxel.transmittance_v2 = Float.NaN;
+                            voxel._transmittance_v2 = Float.NaN;
 
                         } else {
 
                             voxel.transmittance = (voxel.bvEntering - voxel.bvIntercepted) / voxel.bvEntering;
-                            voxel.transmittance_v2 = (voxel._transBeforeNorm) / voxel._sumSurfaceMultiplyLength ;
+                            voxel._transmittance_v2 = (voxel._transBeforeNorm) / voxel._sumSurfaceMultiplyLength ;
 
                             if (voxel.nbSampling > 1 && voxel.transmittance == 0 && voxel.nbSampling == voxel.nbEchos) {
 
@@ -624,7 +625,7 @@ public void calculatePADAndWrite(double threshold) {
                             } else {
 
                                 pad1 = (float) (Math.log(voxel.transmittance) / (-0.5 * voxel.lMeanTotal));
-                                pad2 = (float) (Math.log(voxel.transmittance_v2) / (-0.5 * voxel.lMeanTotal));
+                                pad2 = (float) (Math.log(voxel._transmittance_v2) / (-0.5 * voxel.lMeanTotal));
 
                                 if (Float.isNaN(pad1)) {
                                     pad1 = Float.NaN;
@@ -643,7 +644,7 @@ public void calculatePADAndWrite(double threshold) {
                         }
 
                         voxel.PadBVTotal = pad1 + 0.0f; //set +0.0f to avoid -0.0f
-                        voxel.PadBVTotal_V2 = pad2 + 0.0f; //set +0.0f to avoid -0.0f
+                        voxel._PadBVTotal_V2 = pad2 + 0.0f; //set +0.0f to avoid -0.0f
 
                         writer.write(voxel.toString() + "\n");
 

@@ -700,7 +700,21 @@ public class VoxelSpace extends SceneObject{
             voxel.setAlpha(255);
             
             values[count] = voxel.attributValue;
-            sd.addValue(voxel.attributValue);
+            
+            if(stretched){
+                if(useClippedRangeValue){
+                    if(voxel.attributValue < attributValueMinClipped){
+                        sd.addValue(attributValueMinClipped);
+                    }else if(voxel.attributValue > attributValueMaxClipped){
+                        sd.addValue(attributValueMaxClipped);
+                    }else{
+                        sd.addValue(voxel.attributValue); 
+                   }
+                }else{
+                    sd.addValue(voxel.attributValue);
+                }
+            }
+            
             count++;
             
         }
@@ -714,16 +728,23 @@ public class VoxelSpace extends SceneObject{
             min = average-(2*sdValue);
             max = average+(2*sdValue);
             
-            if(min < attributValueMin){
-                min = attributValueMin;
+            if(useClippedRangeValue){
+                if(min < attributValueMinClipped){
+                    min = attributValueMinClipped;
+                }
+
+                if(max > attributValueMaxClipped){
+                    max = attributValueMaxClipped;
+                }
+            }else{
+                if(min < attributValueMin){
+                    min = attributValueMin;
+                }
+
+                if(max > attributValueMax){
+                    max = attributValueMax;
+                }
             }
-            
-            if(max > attributValueMax){
-                max = attributValueMax;
-            }
-            
-            //min = average - (2*sdValue);
-            //max = average + (2*sdValue);
 
             setGradientColor(gradient, min, max);
             

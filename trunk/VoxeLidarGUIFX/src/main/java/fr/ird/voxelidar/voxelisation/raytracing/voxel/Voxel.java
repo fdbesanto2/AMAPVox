@@ -133,12 +133,12 @@ public class Voxel implements Serializable {
         //public double LMean_NoInterception = 0;
         public double _transBeforeNorm = 0;
         public double transmittance = 0;
-        public double transmittance_v2 = 0;
+        public double _transmittance_v2 = 0;
         public double angleMean = 0;
         public double bvEntering = 0;
         public double bvIntercepted = 0;
         public double PadBVTotal = 0;
-        public double PadBVTotal_V2 = 0;
+        public double _PadBVTotal_V2 = 0;
         public double _sumSurfaceMultiplyLength = 0;
         
         protected final static Logger _logger = Logger.getLogger(Voxel.class);

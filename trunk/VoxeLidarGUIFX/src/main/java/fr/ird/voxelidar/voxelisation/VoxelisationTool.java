@@ -15,7 +15,6 @@ import fr.ird.voxelidar.engine3d.object.mesh.Attribut;
 import fr.ird.voxelidar.engine3d.object.scene.Dtm;
 import fr.ird.voxelidar.engine3d.object.scene.DtmLoader;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
-import fr.ird.voxelidar.lidar.format.tls.Rsp;
 import fr.ird.voxelidar.util.DataSet;
 import fr.ird.voxelidar.util.DataSet.Mode;
 import fr.ird.voxelidar.util.Filter;
@@ -29,13 +28,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -228,6 +224,7 @@ public class VoxelisationTool {
         double bottomCornerX = 0, bottomCornerY = 0, bottomCornerZ = 0;
         double topCornerX = 0, topCornerY = 0, topCornerZ = 0;
         int splitX = 0, splitY = 0, splitZ = 0;
+        float resolution = 0;
 
         float[][] nbSamplingMultiplyAngleMean = null;
         float[] sumTransmittanceMultiplyLgTotal = null;
@@ -259,6 +256,9 @@ public class VoxelisationTool {
             splitX = voxelSpace1.data.split.x;
             splitY = voxelSpace1.data.split.y;
             splitZ = voxelSpace1.data.split.z;
+            
+            resolution = voxelSpace1.data.res;
+            
 
             if (i == 0) {
                 Map<String, Attribut> mapAttributs = voxelSpace1.getMapAttributs();
@@ -334,6 +334,12 @@ public class VoxelisationTool {
         logger.info("Recalculate lMeanTotal, angleMean, transmittance, PadBVTotal");
         /*recalculate PadBF, angleMean, LMean_Exiting, LMean_NoInterception*/
         if (result != null) {
+            
+            try{
+                result.remove("PadBVTotal_V2");
+                result.remove("transmittance_v2");
+            }catch(Exception e){}
+            
 
             /*recalculate lMeanOutgoing, LMean_NoInterception*/
             Float[] nbSamplingArray = result.get("nbSampling");
@@ -348,14 +354,14 @@ public class VoxelisationTool {
 
             /*recalculate Pad*/
             Float[] transmittanceArray = result.get("transmittance");
-            Float[] transmittance2Array = result.get("transmittance_v2");
+            //Float[] transmittance2Array = result.get("transmittance_v2");
             Float[] PadBVTotalArray = result.get("PadBVTotal");
-            Float[] PadBVTotal2Array = result.get("PadBVTotal_V2");
+            //Float[] PadBVTotal2Array = result.get("PadBVTotal_V2");
             Float[] bVEnteringArray = result.get("bvEntering");
             Float[] bVInterceptedArray = result.get("bvIntercepted");
 
-            if (transmittanceArray == null || transmittance2Array == null || PadBVTotalArray == null
-                    || PadBVTotal2Array == null || bVEnteringArray == null || bVInterceptedArray == null
+            if (transmittanceArray == null /*|| transmittance2Array == null*/ || PadBVTotalArray == null
+                    /*|| PadBVTotal2Array == null*/ || bVEnteringArray == null || bVInterceptedArray == null
                     || nbSamplingArray == null || nbEchosArray == null) {
 
                 logger.error("Arguments are missing");
@@ -365,61 +371,61 @@ public class VoxelisationTool {
             for (int i = 0; i < PadBVTotalArray.length; i++) {
 
                 transmittanceArray[i] = (bVEnteringArray[i] - bVInterceptedArray[i]) / bVEnteringArray[i];
-                transmittance2Array[i] = sumTransmittanceMultiplyLgTotal[i]/lgTotalArray[i];
+                //transmittance2Array[i] = sumTransmittanceMultiplyLgTotal[i]/lgTotalArray[i];
                 
-                float pad1, pad2;
+                float pad1/*, pad2*/;
 
                 if (bVEnteringArray[i] <= 0) {
 
                     pad1 = Float.NaN;
-                    pad2 = pad1;
+                    //pad2 = pad1;
                     
                     transmittanceArray[i] = Float.NaN;
-                    transmittance2Array[i] = Float.NaN;
+                    //transmittance2Array[i] = Float.NaN;
 
                 } else if (bVInterceptedArray[i] > bVEnteringArray[i]) {
 
                     logger.error("BFInterceptes > BFEntering, NaN assigné");
                     
                     pad1 = Float.NaN;
-                    pad2 = pad1;
+                    //pad2 = pad1;
                     
                     transmittanceArray[i] = Float.NaN;
-                    transmittance2Array[i] = Float.NaN;
+                    //transmittance2Array[i] = Float.NaN;
 
                 } else {
 
                     if (nbSamplingArray[i] > 1 && transmittanceArray[i] == 0 && Objects.equals(nbSamplingArray[i], nbEchosArray[i])) {
 
                         pad1 = maxPAD;
-                        pad2 = pad1;
+                        //pad2 = pad1;
 
                     } else if (nbSamplingArray[i] <= 2 && transmittanceArray[i] == 0 && Objects.equals(nbSamplingArray[i], nbEchosArray[i])) {
 
                         pad1 = Float.NaN;
-                        pad2 = pad1;
+                        //pad2 = pad1;
 
                     } else {
 
                         pad1 = (float) (Math.log(transmittanceArray[i]) / (-0.5 * lMeanTotalArray[i]));
-                        pad2 = (float) (Math.log(transmittance2Array[i]) / (-0.5 * lMeanTotalArray[i]));
+                        //pad2 = (float) (Math.log(transmittance2Array[i]) / (-0.5 * lMeanTotalArray[i]));
 
                         if (Float.isNaN(pad1)) {
                             pad1 = Float.NaN;
                         } else if (pad1 > maxPAD || Float.isInfinite(pad1)) {
                             pad1 = maxPAD;
                         }
-                        
+                        /*
                         if (Float.isNaN(pad2)) {
                             pad2 = Float.NaN;
                         } else if (pad2 > maxPAD || Float.isInfinite(pad2)) {
                             pad2 = maxPAD;
-                        }
+                        }*/
                     }
                 }
 
                 PadBVTotalArray[i] = pad1 + 0.0f;
-                PadBVTotal2Array[i] = pad2 + 0.0f;
+                //PadBVTotal2Array[i] = pad2 + 0.0f;
             }
 
             /*recalculate angleMean*/
@@ -453,13 +459,13 @@ public class VoxelisationTool {
                 writer.write("#max_corner: " + (float) topCornerX + " " + (float) topCornerY + " " + (float) topCornerZ + "\n");
                 writer.write("#split: " + splitX + " " + splitY + " " + splitZ + "\n");
 
-                writer.write("#type: TLS" + "\n");
+                writer.write("#type: TLS" + " #res: "+resolution+" "+"#MAX_PAD: "+maxPAD+"\n");
 
                 String header = "";
 
                 for (Entry entry : result.entrySet()) {
                     String columnName = (String) entry.getKey();
-
+                    
                     header += columnName + " ";
                 }
                 header = header.trim();

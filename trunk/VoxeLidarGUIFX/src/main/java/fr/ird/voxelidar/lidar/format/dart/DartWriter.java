@@ -86,11 +86,6 @@ public class DartWriter {
         }
     }
     
-    public static void writeFromVoxelsFile(File inputFile, File outputFile){
-        
-        DartWriter.writeFromDart(null, outputFile);
-    }
-    
     public static void writeFromVoxelSpace(VoxelSpaceData data, File outputFile){
         
         Dart dart = new Dart(
