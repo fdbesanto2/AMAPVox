@@ -50,7 +50,7 @@ JNIEXPORT jlong JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExt
     rpx_extraction_struct* extraction_dll = new rpx_extraction_struct;
     memset(extraction_dll, 0, sizeof(rpx_extraction_struct));
 
-    extraction_dll->connexion  = new std::tr1::shared_ptr<basic_rconnection>();
+    extraction_dll->connexion  = std::tr1::shared_ptr<basic_rconnection>();
 
     jclass shotClass = env->FindClass("fr/ird/voxelidar/voxelisation/extraction/Shot");
     if (shotClass == NULL){
@@ -72,7 +72,7 @@ JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtr
     long pointerAddress = (long)pointer;
     rpx_extraction_struct *extraction_dll  = (rpx_extraction_struct*)pointerAddress;
 
-    delete extraction_dll->connexion;
+    //delete extraction_dll->connexion;
 
     delete extraction_dll->decoder;
 
@@ -92,9 +92,9 @@ JNIEXPORT int JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtra
 
         const char *str1 = JNU_GetStringNativeChars(env, file_name);
 
-        *(extraction_dll->connexion) = basic_rconnection::create(str1);
+        extraction_dll->connexion = basic_rconnection::create(str1);
 
-        (*extraction_dll->connexion)->open();
+        extraction_dll->connexion->open();
 
         extraction_dll->decoder = new decoder_rxpmarker(*extraction_dll->connexion);
 
@@ -117,7 +117,7 @@ JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtr
         long pointerAddress = (long)pointer;
         rpx_extraction_struct *extraction_dll  = (rpx_extraction_struct*)pointerAddress;
 
-        (*extraction_dll->connexion)->close();
+        extraction_dll->connexion->close();
 
     }catch ( const std::exception & e ){
         std::cout << "Cannot close rxp file: " << e.what() << std::endl;
@@ -138,10 +138,6 @@ JNIEXPORT jobject JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpE
     long pointerAddress = (long)pointer;
     rpx_extraction_struct *extraction_dll  = (rpx_extraction_struct*)pointerAddress;
 
-    if(extraction_dll->decoder->eoi()){
-        return NULL;
-    }
-
     if(extraction_dll->pointcloud->shots->empty()) {
         buffer buf;
         while(!extraction_dll->decoder->eoi() && extraction_dll->pointcloud->shots->empty()){
@@ -154,8 +150,10 @@ JNIEXPORT jobject JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpE
 
     if(!extraction_dll->pointcloud->shots->empty()){
         jobject shotTemp;
-        shotTemp = *extraction_dll->pointcloud->shots->top();
+        jobject *shotPtr = extraction_dll->pointcloud->shots->top();
+        shotTemp = *shotPtr;
         extraction_dll->pointcloud->shots->pop();
+        delete shotPtr;
         return shotTemp;
     }
 

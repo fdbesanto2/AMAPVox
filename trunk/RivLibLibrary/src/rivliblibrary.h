@@ -33,7 +33,7 @@ using namespace scanlib;
 
 typedef struct rpx_extraction {
 
-    std::tr1::shared_ptr<scanlib::basic_rconnection>* connexion;
+    std::tr1::shared_ptr<scanlib::basic_rconnection> connexion;
     FastSerializer* serializer;
     decoder_rxpmarker* decoder;
     mypointcloud* pointcloud;
