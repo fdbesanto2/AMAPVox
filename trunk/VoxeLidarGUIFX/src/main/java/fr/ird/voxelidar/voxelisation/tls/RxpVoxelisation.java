@@ -7,17 +7,19 @@ package fr.ird.voxelidar.voxelisation.tls;
 
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis;
 import fr.ird.voxelidar.voxelisation.VoxelParameters;
-import fr.ird.voxelidar.voxelisation.extraction.RxpExtraction;
-import fr.ird.voxelidar.voxelisation.extraction.RxpExtractionListener;
-import fr.ird.voxelidar.voxelisation.extraction.Shot;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat3D;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
+import fr.ird.voxelidar.engine3d.math.vector.Vec3D;
+import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import fr.ird.voxelidar.engine3d.object.scene.Dtm;
 import fr.ird.voxelidar.util.Filter;
+import fr.ird.voxelidar.util.TimeCounter;
 import java.io.File;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.LinkedBlockingQueue;
+import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
 
 /**
@@ -27,16 +29,11 @@ import org.apache.log4j.Logger;
 public class RxpVoxelisation implements Callable{
     
     private final static Logger logger = Logger.getLogger(RxpVoxelisation.class);
-    private final VoxelParameters parameters;
-    private static final int compteur = 1;
-    //private VoxelAnalysis voxelAnalysis;
-    private final LinkedBlockingQueue<Shot> queue;
     private int nbVoxelisationFinished;
-    private final File outputFile;
+    private final File inputFile;
     private final VoxelAnalysis voxelAnalysis;
-    private final RxpExtraction extraction;
-    private final Thread extractionThread;
-    private final Thread voxelAnalysisThread;
+    final Mat4D transfMatrix;
+    final Mat3D rotation;
 
     public int getNbVoxelisationFinished() {
         return nbVoxelisationFinished;
@@ -47,20 +44,17 @@ public class RxpVoxelisation implements Callable{
     }    
     
     public RxpVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, Dtm terrain, List<Filter> filters){
-        
-        //this.vopPop = vopPop;
-        this.parameters = parameters;
-        
+                
         nbVoxelisationFinished = 0;
-        this.outputFile = outputFile;
+        this.inputFile = inputFile;
         
         if(vopMatrix == null){
             vopMatrix = Mat4D.identity();
         }
         Mat4D popVop = Mat4D.multiply(popMatrix, vopMatrix);
-        final Mat4D transfMatrix = Mat4D.multiply(sopMatrix, popVop);
+        transfMatrix = Mat4D.multiply(sopMatrix, popVop);
         
-        final Mat3D rotation = new Mat3D();
+        rotation = new Mat3D();
         rotation.mat = new double[]{
             transfMatrix.mat[0],transfMatrix.mat[1],transfMatrix.mat[2],
             transfMatrix.mat[4],transfMatrix.mat[5],transfMatrix.mat[6],
@@ -71,47 +65,62 @@ public class RxpVoxelisation implements Callable{
             terrain.setTransformationMatrix(vopMatrix);
         }
         
-        queue = new LinkedBlockingQueue<>();
-        voxelAnalysis = new VoxelAnalysis(queue, terrain, filters);
+        voxelAnalysis = new VoxelAnalysis(terrain, filters);
         voxelAnalysis.init(parameters, outputFile);
-        
-        extraction = new RxpExtraction(inputFile, queue, transfMatrix, rotation);
-        extractionThread = new Thread(extraction);
-        voxelAnalysisThread = new Thread(voxelAnalysis);
-        
-        extraction.addRxpExtractionListener(new RxpExtractionListener() {
-
-            @Override
-            public void isFinished() {
-
-                voxelAnalysis.setIsFinished(true);
-            }
-        });
     }
 
     @Override
     public Object call() {
         
         try {
-            
-            //voxelAnalysis.setTransfMatrix(transfMatrix);
-            //voxelAnalysis.setRotation(rotation);
             logger.info("rxp extraction is started");
-            
-            extractionThread.start();
-            //extractionThread.setPriority(Thread.MIN_PRIORITY);
-            
-            voxelAnalysisThread.start();
-            //wait until extraction is finished
-            voxelAnalysisThread.join();
-            
-            
-        }catch (InterruptedException ex) {
-            logger.error("rxp voxelisation interrupted, "+ex.getMessage());
+            extract();
         }catch(Exception e){
-            logger.error("rxp voxelisation failed, "+e.getMessage());
+            logger.error("rxp voxelisation failed, "+e);
         }
         
         return null;
+    }
+    
+    public void extract(){
+        
+        long startTime = System.currentTimeMillis();
+        
+        voxelAnalysis.createVoxelSpace();
+        fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction rxpExtraction = new fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction();
+        rxpExtraction.openRxpFile(inputFile);
+        
+        Iterator<fr.ird.voxelidar.voxelisation.extraction.Shot> iterator = rxpExtraction.iterator();
+        
+        fr.ird.voxelidar.voxelisation.extraction.Shot shot;
+        while(iterator.hasNext()){
+            
+            shot = iterator.next();
+            if(shot != null){
+                
+                Vec4D locVector = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
+
+                Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
+
+                shot.setOriginAndDirection(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z));
+                
+                voxelAnalysis.processOneShot(shot);
+                
+            }
+            
+        }
+        
+        
+        
+        logger.info("Shots processed: " + voxelAnalysis.nbShotsTreated);
+        logger.info("voxelisation is finished ( " + TimeCounter.getElapsedStringTimeInSeconds(startTime) + " )");
+        
+        rxpExtraction.close();
+        
+        voxelAnalysis.calculatePADAndWrite(0);
+
+        if(voxelAnalysis.parameters.isCalculateGroundEnergy() && !voxelAnalysis.parameters.isTLS()){
+            voxelAnalysis.writeGroundEnergy();
+        }
     }
 }

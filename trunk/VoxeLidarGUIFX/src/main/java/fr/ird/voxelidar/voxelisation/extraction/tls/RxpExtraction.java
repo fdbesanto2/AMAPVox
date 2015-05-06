@@ -1,8 +1,8 @@
 package fr.ird.voxelidar.voxelisation.extraction.tls;
 
 
+import fr.ird.voxelidar.voxelisation.extraction.Shot;
 import fr.ird.voxelidar.util.NativeLoader;
-import fr.ird.voxelidar.voxelisation.extraction.als.LazExtraction;
 import java.io.File;
 import java.util.Iterator;
 import org.apache.log4j.Logger;
@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
  */
 public class RxpExtraction implements Iterable<Shot>{
     
-    public final static Logger logger = Logger.getLogger(LazExtraction.class);
+    public final static Logger logger = Logger.getLogger(RxpExtraction.class);
     private final static String NATIVE_LIBRARY_NAME = "RivLibLibrary";
     
     private native void afficherBonjour();
@@ -43,26 +43,28 @@ public class RxpExtraction implements Iterable<Shot>{
     
     public void openRxpFile(File file){
         
-        try{
-            rxpPointer = instantiate();
-        }catch(Exception e){
-            logger.error("Cannot initialize rxp pointer");
-        }
-        
-        
-        int result = open(rxpPointer, file.getAbsolutePath());
-            
-        switch(result){
+        rxpPointer = instantiate();
+
+        switch ((int) rxpPointer) {
             case -1:
-                logger.error("Rxp file "+file.getAbsolutePath()+" cannot be open");
                 break;
-
-            case 0:
-                logger.info("Rxp file "+file.getAbsolutePath()+" is opened");
+            case -2:
                 break;
-
             default:
-                logger.error("Rxp file "+file.getAbsolutePath()+" reading error");
+                int result = open(rxpPointer, file.getAbsolutePath());
+
+                switch (result) {
+                    case -1:
+                        logger.error("Rxp file " + file.getAbsolutePath() + " cannot be open");
+                        break;
+
+                    case 0:
+                        logger.info("Rxp file " + file.getAbsolutePath() + " is open");
+                        break;
+
+                    default:
+                        logger.error("Rxp file " + file.getAbsolutePath() + " reading error");
+                }
         }
         
     }

@@ -23,7 +23,6 @@ import fr.ird.voxelidar.util.TimeCounter;
 import fr.ird.voxelidar.voxelisation.als.LasVoxelisation;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,10 +32,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
 import javax.swing.event.EventListenerList;
@@ -119,36 +116,34 @@ public class VoxelisationTool {
 
         this.parameters = parameters;
         this.parameters.setTLS(true);
-
-        //Rsp rsp = new Rsp();
-        //rsp.read(input);
-
+        
+        dtm = loadDTM(parameters.getDtmFile());
+        
         ArrayList<File> files = new ArrayList<>();
         exec = Executors.newFixedThreadPool(coresNumber);
-        
-        LinkedBlockingQueue<Callable<RxpVoxelisation>>  tasks = new LinkedBlockingQueue<>();
-        
-        //ArrayList<Callable<RxpVoxelisation>> tasks = new ArrayList<>();
-
-        dtm = loadDTM(parameters.getDtmFile());
-
-        int count = 1;
-        for (MatrixAndFile file : matricesAndFiles) {
-
-            File outputFile = new File(output.getAbsolutePath() + "/" + file.file.getName() + ".vox");
-            tasks.add(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixConverter.convertMatrix4dToMat4D(file.matrix), this.parameters, dtm, filters));
-            files.add(outputFile);
-            count++;
-        }
 
         try {
-            List<Future> results = (List) exec.invokeAll(tasks);
-            exec.shutdown();
+            LinkedBlockingQueue<Callable<RxpVoxelisation>>  tasks = new LinkedBlockingQueue<>(matricesAndFiles.size());
+
+            int count = 1;
+            for (MatrixAndFile file : matricesAndFiles) {
+
+                File outputFile = new File(output.getAbsolutePath() + "/" + file.file.getName() + ".vox");
+                tasks.add(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixConverter.convertMatrix4dToMat4D(file.matrix), this.parameters, dtm, filters));
+                files.add(outputFile);
+                count++;
+            }
+            exec.invokeAll(tasks);
+            
+            /*
             for (Future f : results) {
                 f.get();
             }
-        } catch (InterruptedException | RejectedExecutionException | NullPointerException | ExecutionException ex) {
+            */
+        } catch (InterruptedException | RejectedExecutionException | NullPointerException ex) {
             logger.error(ex.getMessage());
+        }finally{
+            exec.shutdown();
         }
 
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));

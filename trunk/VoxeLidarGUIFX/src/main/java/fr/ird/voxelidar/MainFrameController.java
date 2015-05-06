@@ -33,6 +33,8 @@ import fr.ird.voxelidar.voxelisation.VoxelisationTool;
 import fr.ird.voxelidar.voxelisation.VoxelisationToolListener;
 import fr.ird.voxelidar.voxelisation.als.LasPoint;
 import fr.ird.voxelidar.voxelisation.extraction.als.LazExtraction;
+import fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction;
+import fr.ird.voxelidar.voxelisation.extraction.Shot;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -2221,12 +2223,12 @@ public class MainFrameController implements Initializable {
             }
         };
 
-        d = new ProgressDialog(service);
-        d.initOwner(stage);
-        d.setResizable(true);
-        d.show();
+        //d = new ProgressDialog(service);
+        //d.initOwner(stage);
+        //d.setResizable(true);
+        //d.show();
         Button buttonCancel = new Button("cancel");
-        d.setGraphic(buttonCancel);
+        //d.setGraphic(buttonCancel);
         
         buttonCancel.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -3332,7 +3334,9 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionButtonExecuteScript(ActionEvent event) {
-       
+        
+               
+        
         removeWarnings = true;
         
         DirectoryChooser directoryChooserOutputPath = new DirectoryChooser();
@@ -3432,7 +3436,8 @@ public class MainFrameController implements Initializable {
         }
         
         removeWarnings = false;
-
+                
     }
+                
 
 }
