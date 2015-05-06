@@ -9,7 +9,9 @@
 #define MYPOINTCLOUD_H_
 
 #include "serializer.h"
+#include "jni.h"
 #include "puechabonfilter.h"
+#include <stack>
 #include "riegl/pointcloud.hpp"
 #include <iostream>
 
@@ -19,14 +21,18 @@ using namespace std;
 class mypointcloud: public scanlib::pointcloud {
 
 public:
-	mypointcloud(serializer& ser);
-	virtual ~mypointcloud();
+    mypointcloud(serializer& ser, JNIEnv *env, jmethodID* shotConstructor );
+    virtual ~mypointcloud();
+    stack<jobject*> *shots;
+    jmethodID *shotConstructor;
 protected :
 	void on_echo_transformed(echo_type echo);
 	void on_shot();
 	void on_shot_end();
+
 private :
-	serializer& serialize;
+    JNIEnv *env;
+    serializer& serialize;
 };
 
 #endif /* MYPINTCLOUD_H_ */

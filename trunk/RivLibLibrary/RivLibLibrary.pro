@@ -12,20 +12,19 @@ TEMPLATE = lib
 DEFINES += RIVLIBLIBRARY_LIBRARY
 
 SOURCES += \
-    src/Fast_serializer.cpp \
-    src/mypointcloud.cpp \
+    src/fastserializer.cpp \
+    src/rivliblibrary.cpp \
+    src/shotfilter.cpp \
     src/puechabonfilter.cpp \
-    src/RxpExtraction.cpp \
-    src/shotfilter.cpp
+    src/mypointcloud.cpp
 
 HEADERS += \
-    src/Fast_serializer.h \
-    src/mypointcloud.h \
-    src/Parameters.h \
-    src/puechabonfilter.h \
-    src/RxpExtraction.h \
+    src/fastserializer.h \
+    src/rivliblibrary.h \
     src/serializer.h \
-    src/shotfilter.h
+    src/shotfilter.h \
+    src/puechabonfilter.h \
+    src/mypointcloud.h
 
 unix {
     target.path = /usr/lib
