@@ -31,7 +31,7 @@ public class RxpVoxelisation implements Callable{
     private final static Logger logger = Logger.getLogger(RxpVoxelisation.class);
     private int nbVoxelisationFinished;
     private final File inputFile;
-    private final VoxelAnalysis voxelAnalysis;
+    private VoxelAnalysis voxelAnalysis;
     final Mat4D transfMatrix;
     final Mat3D rotation;
 
@@ -72,55 +72,57 @@ public class RxpVoxelisation implements Callable{
     @Override
     public Object call() {
         
+        
         try {
             logger.info("rxp extraction is started");
-            extract();
+            
+            long startTime = System.currentTimeMillis();
+        
+            voxelAnalysis.createVoxelSpace();
+            fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction rxpExtraction = new fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction();
+            rxpExtraction.openRxpFile(inputFile);
+            
+            Iterator<fr.ird.voxelidar.voxelisation.extraction.Shot> iterator = rxpExtraction.iterator();
+
+            fr.ird.voxelidar.voxelisation.extraction.Shot shot;
+            while(iterator.hasNext()){
+
+                shot = iterator.next();
+                if(shot != null){
+                    
+                    Vec4D locVector = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
+
+                    Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
+
+                    shot.setOriginAndDirection(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z));
+                    try{
+                        voxelAnalysis.processOneShot(shot);
+                    }catch(Exception e){
+                        logger.error("ERROR !!!!!!!!!!");
+                    }
+
+                }
+
+            }
+            
+            logger.info("Shots processed: " + voxelAnalysis.nbShotsTreated);
+            logger.info("voxelisation is finished ( " + TimeCounter.getElapsedStringTimeInSeconds(startTime) + " )");
+
+            rxpExtraction.close();
+
+            voxelAnalysis.calculatePADAndWrite(0);
+
+            if(voxelAnalysis.parameters.isCalculateGroundEnergy() && !voxelAnalysis.parameters.isTLS()){
+                voxelAnalysis.writeGroundEnergy();
+            }
+            
+            //permet de signaler au garbage collector que cet élément peut être supprimé
+            voxelAnalysis = null;
+        
         }catch(Exception e){
             logger.error("rxp voxelisation failed, "+e);
         }
         
         return null;
-    }
-    
-    public void extract(){
-        
-        long startTime = System.currentTimeMillis();
-        
-        voxelAnalysis.createVoxelSpace();
-        fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction rxpExtraction = new fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction();
-        rxpExtraction.openRxpFile(inputFile);
-        
-        Iterator<fr.ird.voxelidar.voxelisation.extraction.Shot> iterator = rxpExtraction.iterator();
-        
-        fr.ird.voxelidar.voxelisation.extraction.Shot shot;
-        while(iterator.hasNext()){
-            
-            shot = iterator.next();
-            if(shot != null){
-                
-                Vec4D locVector = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
-
-                Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
-
-                shot.setOriginAndDirection(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z));
-                
-                voxelAnalysis.processOneShot(shot);
-                
-            }
-            
-        }
-        
-        
-        
-        logger.info("Shots processed: " + voxelAnalysis.nbShotsTreated);
-        logger.info("voxelisation is finished ( " + TimeCounter.getElapsedStringTimeInSeconds(startTime) + " )");
-        
-        rxpExtraction.close();
-        
-        voxelAnalysis.calculatePADAndWrite(0);
-
-        if(voxelAnalysis.parameters.isCalculateGroundEnergy() && !voxelAnalysis.parameters.isTLS()){
-            voxelAnalysis.writeGroundEnergy();
-        }
     }
 }

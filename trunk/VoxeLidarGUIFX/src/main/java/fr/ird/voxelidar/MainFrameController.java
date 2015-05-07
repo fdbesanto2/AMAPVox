@@ -95,6 +95,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
@@ -2223,12 +2224,14 @@ public class MainFrameController implements Initializable {
             }
         };
 
-        //d = new ProgressDialog(service);
-        //d.initOwner(stage);
-        //d.setResizable(true);
-        //d.show();
+        d = new ProgressDialog(service);
+        d.initModality(Modality.NONE);
+        d.initOwner(stage);
+        d.setResizable(true);
+        d.show();
         Button buttonCancel = new Button("cancel");
-        //d.setGraphic(buttonCancel);
+        d.setGraphic(buttonCancel);
+        
         
         buttonCancel.setOnAction(new EventHandler<ActionEvent>() {
 
