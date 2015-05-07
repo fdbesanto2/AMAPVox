@@ -37,7 +37,6 @@ typedef struct rpx_extraction {
     FastSerializer* serializer;
     decoder_rxpmarker* decoder;
     mypointcloud* pointcloud;
-    jmethodID *shotConstructor;
 
 } rpx_extraction_struct;
 

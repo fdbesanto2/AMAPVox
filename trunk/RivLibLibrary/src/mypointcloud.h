@@ -21,10 +21,10 @@ using namespace std;
 class mypointcloud: public scanlib::pointcloud {
 
 public:
-    mypointcloud(serializer& ser, JNIEnv *env, jmethodID* shotConstructor );
+    mypointcloud(serializer& ser, JNIEnv *env);
     virtual ~mypointcloud();
     stack<jobject*> *shots;
-    jmethodID *shotConstructor;
+
 protected :
 	void on_echo_transformed(echo_type echo);
 	void on_shot();
@@ -33,6 +33,7 @@ protected :
 private :
     JNIEnv *env;
     serializer& serialize;
+
 };
 
 #endif /* MYPINTCLOUD_H_ */

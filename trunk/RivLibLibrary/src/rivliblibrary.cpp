@@ -45,22 +45,13 @@ JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtr
     return;
 }
 
-JNIEXPORT jlong JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_instantiate(JNIEnv *env, jobject){
+JNIEXPORT jlong JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_instantiate(JNIEnv *, jobject){
 
     rpx_extraction_struct* extraction_dll = new rpx_extraction_struct;
     memset(extraction_dll, 0, sizeof(rpx_extraction_struct));
 
     extraction_dll->connexion  = std::tr1::shared_ptr<basic_rconnection>();
 
-    jclass shotClass = env->FindClass("fr/ird/voxelidar/voxelisation/extraction/Shot");
-    if (shotClass == NULL){
-        return -1;
-    }
-    extraction_dll->shotConstructor = new jmethodID();
-    *extraction_dll->shotConstructor = env->GetMethodID(shotClass, "<init>", "(IDDDDDD[D)V");
-    if (extraction_dll->shotConstructor == NULL){
-        return -2;
-    }
 
     return (jlong)extraction_dll;
 }
@@ -72,7 +63,7 @@ JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtr
     long pointerAddress = (long)pointer;
     rpx_extraction_struct *extraction_dll  = (rpx_extraction_struct*)pointerAddress;
 
-    //delete extraction_dll->connexion;
+    extraction_dll->connexion.reset();
 
     delete extraction_dll->decoder;
 
@@ -100,7 +91,7 @@ JNIEXPORT int JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtra
 
         puechabonfilter filter;
         extraction_dll->serializer = new FastSerializer(std::cout, filter);
-        extraction_dll->pointcloud = new mypointcloud(*extraction_dll->serializer, env, extraction_dll->shotConstructor);
+        extraction_dll->pointcloud = new mypointcloud(*extraction_dll->serializer, env);
 
     }catch ( const std::exception &  ){
         return -1;
