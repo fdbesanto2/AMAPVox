@@ -7,6 +7,7 @@ package fr.ird.voxelidar.util;
 
 import fr.ird.voxelidar.util.Filter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,7 +40,7 @@ public class VoxelFilter implements FilterInterface{
      * if one condition is not
      */
     @Override
-    public boolean doFilter(ArrayList<String> attributsNames, float[] attributs){
+    public boolean doFilter(List<String> attributsNames, float[] attributs){
         
         for(Filter filter : filters){
             
@@ -71,7 +72,7 @@ public class VoxelFilter implements FilterInterface{
     }
 
     @Override
-    public boolean doFilter(ArrayList<String> attributsNames, float attribut) {
+    public boolean doFilter(List<String> attributsNames, float attribut) {
         return true;
     }
 }

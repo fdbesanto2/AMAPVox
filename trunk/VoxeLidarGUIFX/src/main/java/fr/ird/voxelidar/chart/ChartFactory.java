@@ -12,6 +12,7 @@ import fr.ird.voxelidar.util.Processing;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.vecmath.Point2f;
 import org.apache.log4j.Logger;
@@ -30,7 +31,7 @@ public class ChartFactory extends Processing{
         ArrayList<Voxel> voxels = voxelSpace.data.voxels;
         
         XYSeries data = new XYSeries("ALS");
-        ArrayList<String> attributsNames = voxelSpace.data.attributsNames;
+        List<String> attributsNames = voxelSpace.data.header.attributsNames;
         
         int iterationsNumber = voxels.size();
         int step = iterationsNumber/10;
@@ -68,8 +69,8 @@ public class ChartFactory extends Processing{
         Map<String, Point2f> minMax = voxelSpace.data.getMinMax();
         Point2f get = minMax.get("dist");
         
-        int distIndex = voxelSpace.data.attributsNames.indexOf("dist");
-        int nbSamplingIndex = voxelSpace.data.attributsNames.indexOf("BFEntering");
+        int distIndex = voxelSpace.data.header.attributsNames.indexOf("dist");
+        int nbSamplingIndex = voxelSpace.data.header.attributsNames.indexOf("BFEntering");
         
         float minDist = 0, maxDist=0;
         boolean isRangesInit = false;
@@ -140,7 +141,7 @@ public class ChartFactory extends Processing{
             
             float averagePAD = 0;
             int count = 0;
-            ArrayList<String> attributsNames = voxelSpace.data.attributsNames;
+            List<String> attributsNames = voxelSpace.data.header.attributsNames;
             
             for (Voxel voxel : voxels) {
                 

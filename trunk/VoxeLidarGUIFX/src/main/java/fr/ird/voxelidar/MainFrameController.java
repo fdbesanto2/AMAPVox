@@ -23,6 +23,7 @@ import fr.ird.voxelidar.lidar.format.tls.Rsp;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.lidar.format.tls.Scans;
 import fr.ird.voxelidar.multires.ProcessingMultiRes;
+import fr.ird.voxelidar.util.CombinedFilter;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.MatrixConverter;
 import fr.ird.voxelidar.util.MatrixFileParser;
@@ -42,12 +43,14 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
@@ -81,10 +84,13 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
@@ -133,6 +139,18 @@ public class MainFrameController implements Initializable {
     private MenuItem menuitemClearWindow;
     @FXML
     private AnchorPane anchorpaneRoot;
+    @FXML
+    private CheckBox checkboxEnablePreFiltering;
+    @FXML
+    private RadioButton radiobuttonDisplayValues;
+    @FXML
+    private TextField textFieldFilterValues;
+    @FXML
+    private Tooltip tooltipTextfieldFilter;
+    @FXML
+    private RadioButton radiobuttonDontDisplayValues;
+    @FXML
+    private AnchorPane anchorpanePreFiltering;
 
     @FXML
     private void onActionMenuitemClearWindow(ActionEvent event) {
@@ -844,6 +862,18 @@ public class MainFrameController implements Initializable {
             }
         });
         
+        checkboxEnablePreFiltering.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    anchorpanePreFiltering.setDisable(false);
+                }else{
+                    anchorpanePreFiltering.setDisable(true);
+                }
+            }
+        });
+        
         comboboxWeighting.disableProperty().bind(checkboxEnableWeighting.selectedProperty().not());
         
         textFieldTLSFilter.textProperty().addListener(new ChangeListener<String>() {
@@ -1093,6 +1123,10 @@ public class MainFrameController implements Initializable {
                 event.consume();
             }
         });
+        
+        ToggleGroup groupDisplayFiltering = new ToggleGroup();
+        radiobuttonDisplayValues.setToggleGroup(groupDisplayFiltering);
+        radiobuttonDontDisplayValues.setToggleGroup(groupDisplayFiltering);
 
     }
 
@@ -1322,6 +1356,68 @@ public class MainFrameController implements Initializable {
                                 listViewVoxelsFiles.getSelectionModel().getSelectedItem().toString(),
                                 voxelSpace, settings);
         
+        final boolean enablePreFiltering = checkboxEnablePreFiltering.isSelected();
+        final boolean displayFilteredValues = radiobuttonDisplayValues.isSelected();
+        
+        final Set<CombinedFilter> filterValues = new HashSet<>();
+        
+        if(enablePreFiltering){
+            
+            String[] valuesArray = textFieldFilterValues.getText().replace(" ", "").split(",");
+            
+            for(int i=0;i<valuesArray.length;i++){
+                try{
+                    if(valuesArray[i].contains("[") || valuesArray[i].contains("]") ){
+                        int index = valuesArray[i].indexOf("->");
+
+                        if(index != -1){
+                            char firstInequality = valuesArray[i].charAt(0);
+                            char secondInequality = valuesArray[i].charAt(valuesArray[i].length()-1);
+
+
+                            float firstValue = Float.valueOf(valuesArray[i].substring(1, index));
+                            float secondValue = Float.valueOf(valuesArray[i].substring(index+2, valuesArray[i].length()-1));
+
+                            int firstInequalityID;
+                            switch(firstInequality){
+                                case ']':
+                                    firstInequalityID = Filter.GREATER_THAN;
+                                    break;
+                                case '[':
+                                    firstInequalityID = Filter.GREATER_THAN_OR_EQUAL;
+                                    break;
+                                default:
+                                    firstInequalityID = Filter.GREATER_THAN_OR_EQUAL;
+                            }
+
+                            int secondInequalityID;
+                            switch(secondInequality){
+                                case ']':
+                                    secondInequalityID = Filter.LESS_THAN_OR_EQUAL;
+                                    break;
+                                case '[':
+                                    secondInequalityID = Filter.LESS_THAN;
+                                    break;
+                                default:
+                                    secondInequalityID = Filter.LESS_THAN_OR_EQUAL;
+                            }
+
+
+                            filterValues.add(new CombinedFilter(
+                                    new Filter("x", firstValue, firstInequalityID), 
+                                    new Filter("x", secondValue, secondInequalityID), CombinedFilter.AND));
+                        }
+
+                    }else{
+                        filterValues.add(new CombinedFilter(
+                                    new Filter("x", Float.valueOf(valuesArray[i]), Filter.EQUAL), 
+                                    null, CombinedFilter.AND));
+                    }
+
+                }catch(Exception e){}
+            }
+        }
+        
         final Stage toolBarFrameStage = new Stage();
         
         Service<Void> service = new Service<Void>() {
@@ -1338,6 +1434,12 @@ public class MainFrameController implements Initializable {
                                 updateProgress(progress, 100);
                             }
                         });
+                        
+                        
+                        voxelSpace.setPreFilterValues(enablePreFiltering);
+                        if(enablePreFiltering){
+                            voxelSpace.setFilterValues(filterValues, displayFilteredValues);
+                        }
                         
                         voxelSpace.load();
                         voxelSpace.updateValue();
@@ -2045,7 +2147,7 @@ public class MainFrameController implements Initializable {
                             
                             case MERGING:
 
-                                voxTool.mergeVoxelsFile(cfg.getFiles(), cfg.getOutputFile(), 0, cfg.getVoxelParameters().getMaxPAD());
+                                voxTool.mergeVoxelsFileV2(cfg.getFiles(), cfg.getOutputFile(), 0, cfg.getVoxelParameters().getMaxPAD());
 
                                 Platform.runLater(new Runnable() {
 

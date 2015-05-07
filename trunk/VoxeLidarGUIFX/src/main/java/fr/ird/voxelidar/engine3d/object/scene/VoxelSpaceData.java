@@ -32,20 +32,21 @@ public class VoxelSpaceData{
     public float minY, maxY;
     
     public ArrayList<Voxel> voxels;
-    public Type type;
+    //public Type type;
     
-    public float res;
-    public float maxPad = 5.0f;
+    //public float res;
+    //public float maxPad = 5.0f;
     
     private final static Logger logger = Logger.getLogger(VoxelSpaceData.class);
-    
+    public VoxelSpaceHeader header;
+    /*
     public Point3i split;
     public Point3d resolution;
     public Point3d bottomCorner;
     public Point3d topCorner;
     
     public ArrayList<String> attributsNames;
-    
+    */
    
     
     public enum Type{
@@ -61,14 +62,15 @@ public class VoxelSpaceData{
     public VoxelSpaceData(){
         
         voxels = new ArrayList<>();
+        /*
         attributsNames = new ArrayList<>();
         
         split = new Point3i();
         resolution = new Point3d();
         bottomCorner = new Point3d();
         topCorner = new Point3d();
-        
-        voxels = new ArrayList<>();
+        */
+        header = new VoxelSpaceHeader();
         minMax = new HashMap<>();
         
     }
@@ -85,7 +87,7 @@ public class VoxelSpaceData{
         
         Map<String, Float[]> voxelMap = new LinkedHashMap<>();
         
-        for (String attribut : attributsNames) {
+        for (String attribut : header.attributsNames) {
             
             voxelMap.put(attribut, new Float[voxels.size()]);
         }
@@ -95,7 +97,7 @@ public class VoxelSpaceData{
             float[] attributsValues = ((VoxelObject)voxels.get(j)).attributs;
             
             for(int i=0;i<attributsValues.length;i++){
-                voxelMap.get(attributsNames.get(i))[j] = attributsValues[i];
+                voxelMap.get(header.attributsNames.get(i))[j] = attributsValues[i];
             }
         }
         
@@ -118,7 +120,7 @@ public class VoxelSpaceData{
     }
     
     private int get1DFrom3D(int i, int j, int k){
-        return (i*split.y*split.z) + (j*split.z) +  k;
+        return (i*header.split.y*header.split.z) + (j*header.split.z) +  k;
     }
     
     public Voxel getLastVoxel(){
@@ -167,7 +169,7 @@ public class VoxelSpaceData{
     public void calculateAttributsLimits(){
         
         
-        for(int i=0;i<attributsNames.size();i++){
+        for(int i=0;i<header.attributsNames.size();i++){
             
             float min, max;
             
@@ -191,7 +193,7 @@ public class VoxelSpaceData{
 
             }
             
-            minMax.put(attributsNames.get(i), new Point2f(min, max));
+            minMax.put(header.attributsNames.get(i), new Point2f(min, max));
         }
         
         

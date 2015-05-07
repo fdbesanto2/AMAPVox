@@ -65,10 +65,10 @@ public class Projection {
                 
                 switch(type){
                     case Projection.PAI:
-                        value = generatePAI(attributs[data.attributsNames.indexOf("interceptions")], attributs[data.attributsNames.indexOf("nbSampling")]);
+                        value = generatePAI(attributs[data.header.attributsNames.indexOf("interceptions")], attributs[data.header.attributsNames.indexOf("nbSampling")]);
                         break;
                     case Projection.TRANSMITTANCE:
-                        value = generateTransmittanceMap(attributs[data.attributsNames.indexOf("interceptions")], attributs[data.attributsNames.indexOf("nbSampling")]);
+                        value = generateTransmittanceMap(attributs[data.header.attributsNames.indexOf("interceptions")], attributs[data.header.attributsNames.indexOf("nbSampling")]);
                         break;
                 }
 
@@ -164,7 +164,7 @@ public class Projection {
         
         ColorGradient gradient = new ColorGradient(minValue, maxValue);
         gradient.setGradientColor(ColorGradient.GRADIENT_HEAT);
-        Color[][] texture = new Color[data.split.x][data.split.y];
+        Color[][] texture = new Color[data.header.split.x][data.header.split.y];
         
         it = map.mapIterator();
 
@@ -182,10 +182,10 @@ public class Projection {
         
         
         
-        BufferedImage bi = new BufferedImage(data.split.x, data.split.y, BufferedImage.TYPE_INT_RGB);
+        BufferedImage bi = new BufferedImage(data.header.split.x, data.header.split.y, BufferedImage.TYPE_INT_RGB);
         
-        for (int i = 0; i < data.split.x; i++) {
-            for (int j = 0; j < data.split.y; j++) {
+        for (int i = 0; i < data.header.split.x; i++) {
+            for (int j = 0; j < data.header.split.y; j++) {
 
                 bi.setRGB(i, j, texture[i][j].getRGB());
             }

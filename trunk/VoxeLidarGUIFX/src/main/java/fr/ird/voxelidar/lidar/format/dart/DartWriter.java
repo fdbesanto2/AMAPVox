@@ -14,7 +14,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
@@ -89,11 +89,11 @@ public class DartWriter {
     public static void writeFromVoxelSpace(VoxelSpaceData data, File outputFile){
         
         Dart dart = new Dart(
-                new Point3I(data.split.x,data.split.y,data.split.z),
-                new Point3F(data.res, data.res, data.res),
-                data.split.x*data.split.y);
+                new Point3I(data.header.split.x,data.header.split.y,data.header.split.z),
+                new Point3F(data.header.res, data.header.res, data.header.res),
+                data.header.split.x*data.header.split.y);
         
-        ArrayList<String> attributsNames = data.attributsNames;
+        List<String> attributsNames = data.header.attributsNames;
         
         for (Voxel v : data.voxels) {
             
@@ -109,7 +109,7 @@ public class DartWriter {
                 return;
             }
             
-            densite *= data.res;
+            densite *= data.header.res;
             
             int indiceX = voxel.$i;
             int indiceY = voxel.$j;

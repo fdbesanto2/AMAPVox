@@ -44,6 +44,15 @@ public class FileManager {
         }
     }
     
+    public static void skipLines(BufferedReader reader, int number){
+        try {
+            for(int i=0;i<number;i++){
+                reader.readLine();
+            }
+        } catch (IOException ex) {
+            logger.error(ex);
+        }
+    }
     
     
     public void addFileListener(FileListener listener) {

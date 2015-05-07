@@ -5,7 +5,7 @@
  */
 package fr.ird.voxelidar.util;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -32,13 +32,13 @@ public class SimpleFilter implements FilterInterface{
     }
 
     @Override
-    public boolean doFilter(ArrayList<String> attributsNames, float[] attributs) {
+    public boolean doFilter(List<String> attributsNames, float[] attributs) {
         
         return false;
     }
 
     @Override
-    public boolean doFilter(ArrayList<String> attributsNames, float attribut) {
+    public boolean doFilter(List<String> attributsNames, float attribut) {
         
         for(Filter filter : filters){
             

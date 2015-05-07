@@ -31,7 +31,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -40,6 +39,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
@@ -107,6 +107,7 @@ public class VoxelSpace extends SceneObject{
     //private Set<Filter> filteredValues;
     private CombinedFilters combinedFilters;
     private boolean displayValues = false;
+    private boolean preFilterValues = false;
     
     private final EventListenerList listeners;
     float sdValue;
@@ -154,6 +155,14 @@ public class VoxelSpace extends SceneObject{
 
     public float getCubeSize() {
         return cubeSize;
+    }
+
+    public boolean isPreFilterValues() {
+        return preFilterValues;
+    }
+
+    public void setPreFilterValues(boolean preFilterValues) {
+        this.preFilterValues = preFilterValues;
     }
     
     
@@ -308,7 +317,7 @@ public class VoxelSpace extends SceneObject{
         }
     }
     
-    public void initAttributs(String[] columnsNames){
+    public void initAttributs(List<String> columnsNames){
         
         for(String name : columnsNames){
             variables.add(name);
@@ -319,6 +328,9 @@ public class VoxelSpace extends SceneObject{
         }
     }
     
+    
+    
+    
     private void readVoxelFormat1(File f){
         
         String header = FileManager.readHeader(f.getAbsolutePath());
@@ -327,9 +339,11 @@ public class VoxelSpace extends SceneObject{
         if(header.equals("VOXEL SPACE")){
             
             data = new VoxelSpaceData();
+            data.header = VoxelSpaceHeader.readVoxelFileHeader(f);
+            initAttributs(data.header.attributsNames);
             
             int count = FileManager.getLineNumber(file.getAbsolutePath());
-
+            
             /******read file*****/
 
             BufferedReader reader;
@@ -339,52 +353,7 @@ public class VoxelSpace extends SceneObject{
                 Map<String, Point2F> minMax = new HashMap<>();
                 
                 //header
-                reader.readLine();
-                
-                
-                String[] minC = reader.readLine().split(" ");
-                data.bottomCorner.x =  Double.valueOf(minC[1]);
-                data.bottomCorner.y =  Double.valueOf(minC[2]);
-                data.bottomCorner.z =  Double.valueOf(minC[3]);
-                
-                String[] maxC = reader.readLine().split(" ");
-                data.topCorner.x =  Double.valueOf(maxC[1]);
-                data.topCorner.y =  Double.valueOf(maxC[2]);
-                data.topCorner.z =  Double.valueOf(maxC[3]);
-                
-                String[] split = reader.readLine().split(" ");
-                
-                data.split = new Point3i(Integer.valueOf(split[1]), Integer.valueOf(split[2]), Integer.valueOf(split[3]));
-                
-                data.resolution.x = (data.topCorner.x - data.bottomCorner.x) / data.split.x;
-                data.resolution.y = (data.topCorner.y - data.bottomCorner.y) / data.split.y;
-                data.resolution.z = (data.topCorner.z - data.bottomCorner.z) / data.split.z;
-                
-                
-                String[] metadatas = reader.readLine().split(" ");
-                String type = metadatas[1];
-                
-                if(type.equals("ALS")){
-                    data.type = fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData.Type.ALS;
-                }else{
-                    data.type = fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData.Type.TLS;
-                }
-                
-                if(metadatas.length > 3){
-                    
-                    data.res = Float.valueOf(metadatas[3]);
-                    
-                    if(metadatas.length > 5){
-                        data.maxPad = Float.valueOf(metadatas[5]);
-                    }
-                    
-                }
-                
-                String[] columnsNames = reader.readLine().split(" ");
-                initAttributs(columnsNames);
-                
-                data.attributsNames.addAll(Arrays.asList(columnsNames));
-                
+                FileManager.skipLines(reader, 6);
                 
                 int lineNumber = 0;
                 String line;                
@@ -399,7 +368,7 @@ public class VoxelSpace extends SceneObject{
                             Integer.valueOf(voxelLine[1]),
                             Integer.valueOf(voxelLine[2]));
 
-                    float[] mapAttrs = new float[data.attributsNames.size()];
+                    float[] mapAttrs = new float[data.header.attributsNames.size()];
 
                     for (int i=0;i<voxelLine.length;i++) {
                         
@@ -409,7 +378,7 @@ public class VoxelSpace extends SceneObject{
                         
                         Point2F minMaxPoint;
                         
-                        if((minMaxPoint = minMax.get(columnsNames[i]))!=null){
+                        if((minMaxPoint = minMax.get(data.header.attributsNames.get(i)))!=null){
                             
                             float min = minMaxPoint.x;
                             float max = minMaxPoint.y;
@@ -423,16 +392,16 @@ public class VoxelSpace extends SceneObject{
                             }
                             
                             minMaxPoint = new Point2F(min, max);
-                            minMax.put(columnsNames[i], minMaxPoint);
+                            minMax.put(data.header.attributsNames.get(i), minMaxPoint);
                             
                         }else{
-                            minMax.put(columnsNames[i], new Point2F(value, value));
+                            minMax.put(data.header.attributsNames.get(i), new Point2F(value, value));
                         }
                     }
                     
-                    Point3f position = new Point3f((float) (data.bottomCorner.x+(indice.x*(data.resolution.x))),
-                                                    (float) (data.bottomCorner.y+(indice.y*(data.resolution.y))),
-                                                    (float) (data.bottomCorner.z+(indice.z*(data.resolution.z))));
+                    Point3f position = new Point3f((float) (data.header.bottomCorner.x+(indice.x*(data.header.resolution.x))),
+                                                    (float) (data.header.bottomCorner.y+(indice.y*(data.header.resolution.y))),
+                                                    (float) (data.header.bottomCorner.z+(indice.z*(data.header.resolution.z))));
                     
                     if(lineNumber == 0){
                         data.minY = position.y;
@@ -657,7 +626,7 @@ public class VoxelSpace extends SceneObject{
             
             for(int i=0; i< attributs.length;i++){
                 
-                String name = data.attributsNames.get(i);
+                String name = data.header.attributsNames.get(i);
                 double value = attributs[i];
                 attribut.getExpression().setVariable(name, value);
             }
@@ -755,13 +724,6 @@ public class VoxelSpace extends SceneObject{
                 setGradientColor(gradient, attributValueMin, attributValueMax);
             }
         }
-        
-        
-        /*
-        colorGradient = new ColorGradient(attributValueMin, attributValueMax);
-        setGradientColor(gradient, attributValueMin, attributValueMax);
-        */
-        
         
     }
 
@@ -902,33 +864,49 @@ public class VoxelSpace extends SceneObject{
     @Override
     public void initBuffers(GL3 gl){
         
-        cubeSize = (float) (data.resolution.x/2.0f);
+        cubeSize = (float) (data.header.resolution.x/2.0f);
         
-        int instanceNumber = data.voxels.size();
+        int instanceNumber = data.voxels.size();        
         
-        List l = new ArrayList();
-        
-        mesh = new InstancedMesh(MeshFactory.createCube(cubeSize), instanceNumber);
         
         float instancePositions[] = new float[instanceNumber*3];
         float instanceColors[] = new float[instanceNumber*4];
+        int count0 = 0;
+        int count1 = 0;
+        int count2 = 0;
 
         for (int i=0, j=0, k=0;i<data.voxels.size();i++, j+=3 ,k+=4) {
             
             VoxelObject voxel = (VoxelObject) data.voxels.get(i);
+            boolean isFiltered = true;
             
-            instancePositions[j] = voxel.position.x;
-            instancePositions[j+1] = voxel.position.y;
-            instancePositions[j+2] = voxel.position.z;
+            if(preFilterValues){
+                isFiltered = combinedFilters.doFilter(voxel.attributValue);
+            }
+            
+            
+            if(isFiltered){
+                
+                count0 ++;
+                
+                instancePositions[count1] = voxel.position.x;
+                instancePositions[count1+1] = voxel.position.y;
+                instancePositions[count1+2] = voxel.position.z;
+                count1 += 3;
 
-            instanceColors[k] = voxel.getRed();
-            instanceColors[k+1] = voxel.getGreen();
-            instanceColors[k+2] = voxel.getBlue();
-            instanceColors[k+3] = voxel.getAlpha();
+                instanceColors[count2] = voxel.getRed();
+                instanceColors[count2+1] = voxel.getGreen();
+                instanceColors[count2+2] = voxel.getBlue();
+                instanceColors[count2+3] = voxel.getAlpha();
+                
+                count2 +=4 ;
+            }
+            
         }
         
-        ((InstancedMesh)mesh).instancePositionsBuffer = Buffers.newDirectFloatBuffer(instancePositions);
-        ((InstancedMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(instanceColors);
+        mesh = new InstancedMesh(MeshFactory.createCube(cubeSize), count0);
+        ((InstancedMesh)mesh).instancePositionsBuffer = Buffers.newDirectFloatBuffer(instancePositions, 0, count1);
+        ((InstancedMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(instanceColors, 0, count2);
         
         buffer = new MeshBuffer(gl);
         
@@ -965,18 +943,31 @@ public class VoxelSpace extends SceneObject{
         if(!gradientUpdated){
             
             float instanceColors[] = new float[data.voxels.size()*4];
-
+            
+            int count0 = 0;
+            
             for (int i=0, j=0;i<data.voxels.size();i++, j+=4) {
                 
                 VoxelObject voxel = (VoxelObject) data.voxels.get(i);
                 
-                instanceColors[j] = voxel.getRed();
-                instanceColors[j+1] = voxel.getGreen();
-                instanceColors[j+2] = voxel.getBlue();
-                instanceColors[j+3] = voxel.getAlpha();
+                boolean isFiltered = true;
+            
+                if(preFilterValues){
+                    isFiltered = combinedFilters.doFilter(voxel.attributValue);
+                }
+
+
+                if(isFiltered){
+                
+                    instanceColors[count0] = voxel.getRed();
+                    instanceColors[count0+1] = voxel.getGreen();
+                    instanceColors[count0+2] = voxel.getBlue();
+                    instanceColors[count0+3] = voxel.getAlpha();
+                    count0 += 4;
+                }
             }
 
-            ((InstancedMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(instanceColors);
+            ((InstancedMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(instanceColors, 0, count0);
             
             buffer.updateBuffer(gl, 2, ((InstancedMesh)mesh).instanceColorsBuffer);
             
@@ -985,7 +976,7 @@ public class VoxelSpace extends SceneObject{
         
         if(!cubeSizeUpdated){
             
-            int instanceNumber = data.voxels.size();
+            int instanceNumber = ((InstancedMesh)mesh).instanceNumber;
             mesh = new InstancedMesh(MeshFactory.createCube(cubeSize), instanceNumber);
             
             buffer.updateBuffer(gl, 0, mesh.vertexBuffer);

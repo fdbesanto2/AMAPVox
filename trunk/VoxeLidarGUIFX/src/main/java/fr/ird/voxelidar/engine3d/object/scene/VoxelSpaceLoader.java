@@ -122,36 +122,36 @@ public class VoxelSpaceLoader{
                 
                 
                 String[] minC = reader.readLine().split(" ");
-                data.bottomCorner.x =  Double.valueOf(minC[1]);
-                data.bottomCorner.y =  Double.valueOf(minC[2]);
-                data.bottomCorner.z =  Double.valueOf(minC[3]);
+                data.header.bottomCorner.x =  Double.valueOf(minC[1]);
+                data.header.bottomCorner.y =  Double.valueOf(minC[2]);
+                data.header.bottomCorner.z =  Double.valueOf(minC[3]);
                 
                 String[] maxC = reader.readLine().split(" ");
-                data.topCorner.x =  Double.valueOf(maxC[1]);
-                data.topCorner.y =  Double.valueOf(maxC[2]);
-                data.topCorner.z =  Double.valueOf(maxC[3]);
+                data.header.topCorner.x =  Double.valueOf(maxC[1]);
+                data.header.topCorner.y =  Double.valueOf(maxC[2]);
+                data.header.topCorner.z =  Double.valueOf(maxC[3]);
                 
                 String[] split = reader.readLine().split(" ");
                 
-                data.split = new Point3i(Integer.valueOf(split[1]), Integer.valueOf(split[2]), Integer.valueOf(split[3]));
+                data.header.split = new Point3i(Integer.valueOf(split[1]), Integer.valueOf(split[2]), Integer.valueOf(split[3]));
                 
-                data.resolution.x = (data.topCorner.x - data.bottomCorner.x) / data.split.x;
-                data.resolution.y = (data.topCorner.y - data.bottomCorner.y) / data.split.y;
-                data.resolution.z = (data.topCorner.z - data.bottomCorner.z) / data.split.z;
+                data.header.resolution.x = (data.header.topCorner.x - data.header.bottomCorner.x) / data.header.split.x;
+                data.header.resolution.y = (data.header.topCorner.y - data.header.bottomCorner.y) / data.header.split.y;
+                data.header.resolution.z = (data.header.topCorner.z - data.header.bottomCorner.z) / data.header.split.z;
                 
                 
                 //offset
                 String type = reader.readLine().split(" ")[1];
                 
                 if(type.equals("ALS")){
-                    data.type = Type.ALS;
+                    data.header.type = Type.ALS;
                 }else{
-                    data.type = Type.TLS;
+                    data.header.type = Type.TLS;
                 }
                 
                 String[] columnsNames = reader.readLine().split(" ");
                 
-                data.attributsNames.addAll(Arrays.asList(columnsNames));
+                data.header.attributsNames.addAll(Arrays.asList(columnsNames));
                 
                 
                 int lineNumber = 0;
@@ -167,7 +167,7 @@ public class VoxelSpaceLoader{
                             Integer.valueOf(voxelLine[1]),
                             Integer.valueOf(voxelLine[2]));
 
-                    float[] mapAttrs = new float[data.attributsNames.size()];
+                    float[] mapAttrs = new float[data.header.attributsNames.size()];
 
                     for (int i=0;i<voxelLine.length;i++) {
                         
@@ -198,9 +198,9 @@ public class VoxelSpaceLoader{
                         }
                     }
                     
-                    Point3f position = new Point3f((float) (data.bottomCorner.x+(indice.x*(data.resolution.x))),
-                                                    (float) (data.bottomCorner.z+(indice.y*(data.resolution.y))),
-                                                    (float) (data.bottomCorner.y+(indice.z*(data.resolution.z))));
+                    Point3f position = new Point3f((float) (data.header.bottomCorner.x+(indice.x*(data.header.resolution.x))),
+                                                    (float) (data.header.bottomCorner.z+(indice.y*(data.header.resolution.y))),
+                                                    (float) (data.header.bottomCorner.y+(indice.z*(data.header.resolution.z))));
                     
                     if(lineNumber == 0){
                         data.minY = position.y;
@@ -265,11 +265,11 @@ public class VoxelSpaceLoader{
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
 
             writer.write("VOXEL SPACE" + "\n");
-            writer.write("#min_corner: " + data.bottomCorner.x + " " + data.bottomCorner.y + " " + data.bottomCorner.z + "\n");
-            writer.write("#max_corner: " + data.topCorner.x + " " + data.topCorner.y + " " + data.topCorner.z + "\n");
-            writer.write("#split: " + data.split.x + " " + data.split.y + " " + data.split.z + "\n");
+            writer.write("#min_corner: " + data.header.bottomCorner.x + " " + data.header.bottomCorner.y + " " + data.header.bottomCorner.z + "\n");
+            writer.write("#max_corner: " + data.header.topCorner.x + " " + data.header.topCorner.y + " " + data.header.topCorner.z + "\n");
+            writer.write("#split: " + data.header.split.x + " " + data.header.split.y + " " + data.header.split.z + "\n");
 
-            if (data.type.equals(Type.TLS)) {
+            if (data.header.type.equals(Type.TLS)) {
                 writer.write("#type: " +"TLS"+ "\n");
                 writer.write(Voxel.getHeader(TLSVoxel.class) + "\n");
             } else {
@@ -277,9 +277,9 @@ public class VoxelSpaceLoader{
                 writer.write(Voxel.getHeader(ALSVoxel.class) + "\n");
             }
 
-            for (int i = 0; i < data.split.x; i++) {
-                for (int j = 0; j < data.split.y; j++) {
-                    for (int k = 0; k < data.split.z; k++) {
+            for (int i = 0; i < data.header.split.x; i++) {
+                for (int j = 0; j < data.header.split.y; j++) {
+                    for (int k = 0; k < data.header.split.z; k++) {
 
                         Voxel vox = data.getVoxel(i, j, k);
                         

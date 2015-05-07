@@ -15,14 +15,19 @@ import fr.ird.voxelidar.engine3d.object.mesh.Attribut;
 import fr.ird.voxelidar.engine3d.object.scene.Dtm;
 import fr.ird.voxelidar.engine3d.object.scene.DtmLoader;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
+import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceHeader;
+import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.util.DataSet;
 import fr.ird.voxelidar.util.DataSet.Mode;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.MatrixConverter;
 import fr.ird.voxelidar.util.TimeCounter;
 import fr.ird.voxelidar.voxelisation.als.LasVoxelisation;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -36,6 +41,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Vector3d;
@@ -45,8 +51,11 @@ import org.apache.log4j.Logger;
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class VoxelisationTool {
 
+
+public class VoxelisationTool {
+    
+    
     final static Logger logger = Logger.getLogger(VoxelisationTool.class);
 
     private VoxelParameters parameters;
@@ -209,6 +218,301 @@ public class VoxelisationTool {
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
 
     }
+    
+    
+    public void mergeVoxelsFileV2(List<File> filesList, File output, int transmittanceMode, float maxPAD) {
+        
+        startTime = System.currentTimeMillis();
+        Mode[] toMerge;
+        int size;
+        VoxelSpaceHeader voxelSpaceHeader;
+
+        float[][] nbSamplingMultiplyAngleMean;
+        float[][] resultingFile;
+        int columnNumber;
+        
+        int padBVTotalColumnIndex = -1;
+        int angleMeanColumnIndex = -1;
+        int bvEnteringColumnIndex = -1;
+        int bvInterceptedColumnIndex = -1;
+        int lMeanTotalColumnIndex = -1;
+        int lgTotalColumnIndex = -1;
+        int nbEchosColumnIndex = -1;
+        int nbSamplingColumnIndex = -1;
+        int transmittanceColumnIndex = -1;
+        
+        if(filesList.size() > 0){
+            
+            voxelSpaceHeader = VoxelSpaceHeader.readVoxelFileHeader(filesList.get(0));
+            size = voxelSpaceHeader.split.x * voxelSpaceHeader.split.y * voxelSpaceHeader.split.z;
+            columnNumber = voxelSpaceHeader.attributsNames.size();
+            resultingFile = new float[size][columnNumber];
+            toMerge = new Mode[columnNumber];
+            
+            for(int i=0;i<toMerge.length;i++){
+                
+                String columnName = voxelSpaceHeader.attributsNames.get(i);
+                                
+                switch(columnName){
+                    case "i":
+                    case "j":
+                    case "k":
+                        toMerge[i] = Mode.DISCARD;
+                        break;
+                    case "ground_distance":
+                        toMerge[i] = Mode.DISCARD;
+                        break;
+                    //discard but recalculate after
+                    case "PadBVTotal":
+                        padBVTotalColumnIndex = i;
+                        toMerge[i] = Mode.DISCARD;
+                        break;
+                    case "angleMean":
+                        angleMeanColumnIndex = i;
+                        toMerge[i] = Mode.DISCARD;
+                        break;
+                    case "lMeanTotal":
+                        lMeanTotalColumnIndex = i;
+                        toMerge[i] = Mode.DISCARD;
+                        break;
+                    case "transmittance":
+                        transmittanceColumnIndex = i;
+                        toMerge[i] = Mode.DISCARD;
+                        break;
+
+                    case "nbSampling":
+                        nbSamplingColumnIndex = i;
+                        toMerge[i] = Mode.SUM;
+                        break;
+                    case "nbEchos":
+                        nbEchosColumnIndex = i;
+                        toMerge[i] = Mode.SUM;
+                        break;
+                    case "lgTotal":
+                        lgTotalColumnIndex = i;
+                        toMerge[i] = Mode.SUM;
+                        break;
+                    case "bvEntering":
+                        bvEnteringColumnIndex = i;
+                        toMerge[i] = Mode.SUM;
+                        break;
+                    case "bvIntercepted":
+                        bvInterceptedColumnIndex = i;
+                        toMerge[i] = Mode.SUM;
+                        break;
+
+                    default:
+                        toMerge[i] = Mode.DISCARD;
+                }
+            }
+            
+            nbSamplingMultiplyAngleMean = new float[filesList.size()][size];
+            
+            
+            
+        }else{
+            logger.info("No file to merge");
+            return;
+        }
+
+        for (int i = 0; i < filesList.size(); i++) {
+
+            if (cancelled) {
+                return;
+            }
+
+            String msg = "Merging in progress, file " + (i + 1) + " : " + filesList.size();
+            logger.info(msg);
+            fireProgress(msg, i);
+            
+            try (BufferedReader reader = new BufferedReader(new FileReader(filesList.get(i)))){
+                
+                
+                int count = 0;
+                FileManager.skipLines(reader, 6);
+                
+                String currentFileLine;
+                while((currentFileLine = reader.readLine()) != null){
+                    
+                    String[] lineSplittedFile = currentFileLine.split(" ");
+                    
+                    if(lineSplittedFile.length != columnNumber){
+                        logger.error("Columns number doesn't match!");
+                        return;
+                    }
+                    
+                    float[] voxelLine = new float[columnNumber];
+                    float nbSampling = 0;
+                    float angleMean = 0;
+                    
+                    for(int j=0;j<lineSplittedFile.length;j++){
+                        
+                        float currentValue = Float.valueOf(lineSplittedFile[j]);
+                        float resultValue;
+                        
+                        if(i == 0){
+                            resultValue = currentValue;
+                        }else{
+                            resultValue = resultingFile[count][j];
+                            switch(toMerge[j]){
+                                case SUM:
+                                    if(Float.isNaN(resultValue)){
+                                        resultValue = Float.valueOf(lineSplittedFile[j]);
+                                    }else if(!Float.isNaN(currentValue)){
+                                        resultValue += currentValue;
+                                    }
+                                    break;
+                                default:
+                                    resultValue = currentValue;
+                            }
+                        } 
+                        
+                        if(j == nbSamplingColumnIndex){
+                            nbSampling =  Float.valueOf(lineSplittedFile[j]);
+                        }else if(j == angleMeanColumnIndex){
+                            angleMean =  Float.valueOf(lineSplittedFile[j]);
+                        }
+                        
+                        voxelLine[j] = resultValue;
+                    }
+                    
+                    resultingFile[count] = voxelLine;
+                    nbSamplingMultiplyAngleMean[i][count] = nbSampling * angleMean;
+                    
+                    count++;
+                }
+                
+            } catch (FileNotFoundException ex) {
+                logger.error(ex);
+            } catch (IOException ex) {
+                logger.error(ex);
+            }
+        }
+
+        logger.info("Compute angleMean");
+        if(nbSamplingColumnIndex != -1 && angleMeanColumnIndex !=-1){
+            
+            for (int i = 0; i < size; i++) {
+                
+                float sum = 0;
+                
+                for (int j = 0; j < filesList.size(); j++) {
+                    if (!Float.isNaN(nbSamplingMultiplyAngleMean[j][i])) {
+                        sum += nbSamplingMultiplyAngleMean[j][i];
+                    } 
+                }
+
+                resultingFile[i][angleMeanColumnIndex] = sum/(resultingFile[i][nbSamplingColumnIndex]);
+            }
+
+                
+            
+        }else{
+            logger.error("nbSampling or angleMean columns are missing, cannot re-compute angleMean");
+        }
+        
+        logger.info("Compute lMeanTotal");
+        for (int i = 0; i < size; i++) {
+            
+            resultingFile[i][lMeanTotalColumnIndex] = resultingFile[i][lgTotalColumnIndex] / resultingFile[i][nbSamplingColumnIndex];
+        }
+        
+        logger.info("Compute transmittance and PAD");
+        for (int i = 0; i < size; i++) {
+            
+            resultingFile[i][transmittanceColumnIndex] = (resultingFile[i][bvEnteringColumnIndex] - resultingFile[i][bvInterceptedColumnIndex])/
+                                                        resultingFile[i][bvEnteringColumnIndex];
+
+            float pad1;
+
+            if (resultingFile[i][bvEnteringColumnIndex] <= 0) {
+
+                pad1 = Float.NaN;
+                resultingFile[i][transmittanceColumnIndex] = Float.NaN;
+
+            } else if (resultingFile[i][bvInterceptedColumnIndex] > resultingFile[i][bvEnteringColumnIndex]) {
+
+                logger.error("BFInterceptes > BFEntering, NaN assigné");
+
+                pad1 = Float.NaN;
+                resultingFile[i][transmittanceColumnIndex] = Float.NaN;
+
+            } else {
+
+                if (resultingFile[i][nbSamplingColumnIndex] > 1 && resultingFile[i][transmittanceColumnIndex] == 0 && Objects.equals(resultingFile[i][nbSamplingColumnIndex], resultingFile[i][nbEchosColumnIndex])) {
+
+                    pad1 = maxPAD;
+
+                } else if (resultingFile[i][nbSamplingColumnIndex] <= 2 && resultingFile[i][transmittanceColumnIndex] == 0 && Objects.equals(resultingFile[i][nbSamplingColumnIndex], resultingFile[i][nbEchosColumnIndex])) {
+
+                    pad1 = Float.NaN;
+
+                } else {
+
+                    pad1 = (float) (Math.log(resultingFile[i][transmittanceColumnIndex]) / (-0.5 * resultingFile[i][lMeanTotalColumnIndex]));
+
+                    if (Float.isNaN(pad1)) {
+                        pad1 = Float.NaN;
+                    } else if (pad1 > maxPAD || Float.isInfinite(pad1)) {
+                        pad1 = maxPAD;
+                    }
+                }
+            }
+
+            resultingFile[i][padBVTotalColumnIndex] = pad1 + 0.0f;
+        }
+        
+        logger.info("writing output file: " + output.getAbsolutePath());
+        long start_time = System.currentTimeMillis();
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
+
+            writer.write("VOXEL SPACE" + "\n");
+            writer.write("#min_corner: " + (float) voxelSpaceHeader.bottomCorner.x + " " + (float) voxelSpaceHeader.bottomCorner.y + " " + (float) voxelSpaceHeader.bottomCorner.z + "\n");
+            writer.write("#max_corner: " + (float) voxelSpaceHeader.topCorner.x + " " + (float) voxelSpaceHeader.topCorner.y + " " + (float) voxelSpaceHeader.topCorner.z + "\n");
+            writer.write("#split: " + voxelSpaceHeader.split.x + " " + voxelSpaceHeader.split.y + " " + voxelSpaceHeader.split.z + "\n");
+
+            writer.write("#type: TLS" + " #res: "+voxelSpaceHeader.res+" "+"#MAX_PAD: "+maxPAD+"\n");
+
+            String header = "";
+            
+            for (String columnName : voxelSpaceHeader.attributsNames) {
+                header += columnName + " ";
+            }
+            header = header.trim();
+            writer.write(header + "\n");
+
+            for (int i = 0; i < size; i++) {
+
+                StringBuilder voxel = new StringBuilder();
+                
+                for (int j = 0;j<columnNumber;j++){
+                    
+                    if (j < 3) {
+                        voxel.append((int)resultingFile[i][j]);
+                    }else{
+                        voxel.append(resultingFile[i][j]);
+                    }
+                    
+                    if(j < columnNumber-1){
+                        voxel.append(" ");
+                    }
+                }
+
+                writer.write(voxel.toString() + "\n");
+
+            }
+            
+            logger.info("file written ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
+
+        } catch (IOException ex) {
+            logger.error(ex);
+        }
+        
+        
+
+        fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
+    }
 
     public void mergeVoxelsFile(List<File> filesList, File output, int transmittanceMode, float maxPAD) {
 
@@ -237,22 +541,22 @@ public class VoxelisationTool {
             VoxelSpace voxelSpace1 = new VoxelSpace(filesList.get(i));
             voxelSpace1.load();
 
-            size = voxelSpace1.data.split.x * voxelSpace1.data.split.y * voxelSpace1.data.split.z;
+            size = voxelSpace1.data.header.split.x * voxelSpace1.data.header.split.y * voxelSpace1.data.header.split.z;
             map1 = voxelSpace1.data.getVoxelMap();
 
-            bottomCornerX = voxelSpace1.data.bottomCorner.x;
-            bottomCornerY = voxelSpace1.data.bottomCorner.y;
-            bottomCornerZ = voxelSpace1.data.bottomCorner.z;
+            bottomCornerX = voxelSpace1.data.header.bottomCorner.x;
+            bottomCornerY = voxelSpace1.data.header.bottomCorner.y;
+            bottomCornerZ = voxelSpace1.data.header.bottomCorner.z;
 
-            topCornerX = voxelSpace1.data.topCorner.x;
-            topCornerY = voxelSpace1.data.topCorner.y;
-            topCornerZ = voxelSpace1.data.topCorner.z;
+            topCornerX = voxelSpace1.data.header.topCorner.x;
+            topCornerY = voxelSpace1.data.header.topCorner.y;
+            topCornerZ = voxelSpace1.data.header.topCorner.z;
 
-            splitX = voxelSpace1.data.split.x;
-            splitY = voxelSpace1.data.split.y;
-            splitZ = voxelSpace1.data.split.z;
+            splitX = voxelSpace1.data.header.split.x;
+            splitY = voxelSpace1.data.header.split.y;
+            splitZ = voxelSpace1.data.header.split.z;
             
-            resolution = voxelSpace1.data.res;
+            resolution = voxelSpace1.data.header.res;
             
 
             if (i == 0) {
