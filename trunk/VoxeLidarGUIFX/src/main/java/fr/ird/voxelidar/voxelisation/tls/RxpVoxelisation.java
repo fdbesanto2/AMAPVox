@@ -109,8 +109,13 @@ public class RxpVoxelisation implements Callable{
             logger.info("voxelisation is finished ( " + TimeCounter.getElapsedStringTimeInSeconds(startTime) + " )");
 
             rxpExtraction.close();
-
-            voxelAnalysis.calculatePADAndWrite(0);
+            
+            try{
+                voxelAnalysis.calculatePADAndWrite(0);
+            }catch(Exception e){
+                logger.error(e);
+            }
+            
 
             if(voxelAnalysis.parameters.isCalculateGroundEnergy() && !voxelAnalysis.parameters.isTLS()){
                 voxelAnalysis.writeGroundEnergy();
