@@ -2253,7 +2253,7 @@ public class MainFrameController implements Initializable {
                                                     }
                                                 });
 
-                                                voxTool.mergeVoxelsFile(outputFiles, cfg.getVoxelParameters().getMergedFile(), cfg.getVoxelParameters().getTransmittanceMode(), cfg.getVoxelParameters().getMaxPAD());
+                                                voxTool.mergeVoxelsFileV2(outputFiles, cfg.getVoxelParameters().getMergedFile(), cfg.getVoxelParameters().getTransmittanceMode(), cfg.getVoxelParameters().getMaxPAD());
                                             }
 
                                             Platform.runLater(new Runnable() {
