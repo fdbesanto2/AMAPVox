@@ -95,11 +95,7 @@ public class RxpVoxelisation implements Callable{
                     Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
 
                     shot.setOriginAndDirection(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z));
-                    try{
-                        voxelAnalysis.processOneShot(shot);
-                    }catch(Exception e){
-                        logger.error("ERROR !!!!!!!!!!");
-                    }
+                    voxelAnalysis.processOneShot(shot);
 
                 }
 
@@ -109,12 +105,7 @@ public class RxpVoxelisation implements Callable{
             logger.info("voxelisation is finished ( " + TimeCounter.getElapsedStringTimeInSeconds(startTime) + " )");
 
             rxpExtraction.close();
-            
-            try{
-                voxelAnalysis.calculatePADAndWrite(0);
-            }catch(Exception e){
-                logger.error(e);
-            }
+            voxelAnalysis.calculatePADAndWrite(0);
             
 
             if(voxelAnalysis.parameters.isCalculateGroundEnergy() && !voxelAnalysis.parameters.isTLS()){

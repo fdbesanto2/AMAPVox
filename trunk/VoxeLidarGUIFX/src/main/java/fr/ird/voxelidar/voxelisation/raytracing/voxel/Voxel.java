@@ -157,7 +157,7 @@ public class Voxel implements Serializable {
          * @param k
          */
         public Voxel(int i, int j, int k) {
-
+            
             this.$i = i;
             this.$j = j;
             this.$k = k;
@@ -165,7 +165,7 @@ public class Voxel implements Serializable {
         
         {
             if(!_isInitialized) {
-                _fields = Voxel.getFields(getClass());
+                _fields = Voxel.getFields(Voxel.class);
                 _isInitialized = true;
             }
         }

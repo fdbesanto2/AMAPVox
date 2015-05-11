@@ -48,7 +48,7 @@ public class VoxelAnalysis implements Runnable {
     private static int compteur2 = 1;
     private Point3d offset;
 
-    private static float[][] weighting;
+    private float[][] weighting;
     
     private GroundEnergy[][] groundEnergy;
 
@@ -188,6 +188,11 @@ public class VoxelAnalysis implements Runnable {
     }
     
     public void processOneShot(Shot shot){
+        
+        if(voxelManager == null){
+            logger.error("VoxelManager not initialized, what happened??");
+            return;
+        }
         
         if (shot != null && shot.doFilter()) {
 
@@ -683,13 +688,13 @@ public void calculatePADAndWrite(double threshold) {
                 type += metadata+"\n";
                 writer.write(type);
                 
-                writer.write(Voxel.getHeader(TLSVoxel.class) + "\n");
+                writer.write(Voxel.getHeader(Voxel.class) + "\n");
             } else {
                 type += "#type: " +"ALS"+ " ";
                 type += metadata+"\n";
                 writer.write(type);
                 
-                writer.write(Voxel.getHeader(ALSVoxel.class) + "\n");
+                writer.write(Voxel.getHeader(Voxel.class) + "\n");
             }
 
             for (int i = 0; i < parameters.split.x; i++) {
@@ -865,9 +870,9 @@ public void calculatePADAndWrite(double threshold) {
             logger.info("allocate!!!!!!!!");
 
             if (parameters.isTLS()) {
-                voxels = new TLSVoxel[parameters.split.x][parameters.split.y][parameters.split.z];
+                voxels = new Voxel[parameters.split.x][parameters.split.y][parameters.split.z];
             } else {
-                voxels = new ALSVoxel[parameters.split.x][parameters.split.y][parameters.split.z];
+                voxels = new Voxel[parameters.split.x][parameters.split.y][parameters.split.z];
             }
             
 
@@ -876,9 +881,9 @@ public void calculatePADAndWrite(double threshold) {
                     for (int z = 0; z < parameters.split.z; z++) {
 
                         if (parameters.isTLS()) {
-                            voxels[x][y][z] = new TLSVoxel(x, y, z);
+                            voxels[x][y][z] = new Voxel(x, y, z);
                         } else {
-                            voxels[x][y][z] = new ALSVoxel(x, y, z);
+                            voxels[x][y][z] = new Voxel(x, y, z);
                         }
 
                         Point3d position = getPosition(new Point3i(x, y, z),

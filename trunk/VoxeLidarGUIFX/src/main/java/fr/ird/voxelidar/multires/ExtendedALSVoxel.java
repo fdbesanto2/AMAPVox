@@ -6,7 +6,6 @@
 package fr.ird.voxelidar.multires;
 
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.ALSVoxel;
-import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 
 
 /**
