@@ -32,7 +32,10 @@ public class DartWriter {
             
             writer = new BufferedWriter(new FileWriter(outputFile));
             
-            writer.write(dart.getSceneDimension().x+" "+dart.getSceneDimension().y+" "+dart.getSceneDimension().z+"\n");
+            writer.write(dart.getSceneDimension().x*dart.getCellDimension().x+" "+
+                        dart.getSceneDimension().y*dart.getCellDimension().y+" "+
+                        dart.getSceneDimension().z*dart.getCellDimension().z+"\n");
+            
             writer.write(dart.getCellDimension().x+" "+dart.getCellDimension().y+" "+dart.getCellDimension().z+"\n");
             writer.write(dart.getCellsNumberByLayer()+"\n");
             

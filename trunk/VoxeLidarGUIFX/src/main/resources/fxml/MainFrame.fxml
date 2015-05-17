@@ -290,31 +290,78 @@
                                                          <content>
                                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="332.0" prefWidth="420.0">
                                                                <children>
-                                                                  <CheckBox fx:id="checkboxUseDTMFilter" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onActionCheckboxUseDTMFilter" text="DTM filter" />
-                                                                  <TextField fx:id="textfieldDTMPath" disable="true" layoutX="150.0" layoutY="48.0" prefHeight="25.0" prefWidth="227.0" />
-                                                                  <Label fx:id="labelDTMPath" disable="true" layoutX="39.0" layoutY="53.0" text="DTM path (.asc)" />
-                                                                  <Button fx:id="buttonOpenDTMFile" disable="true" layoutX="383.0" layoutY="48.0" mnemonicParsing="false" onAction="#onActionButtonOpenDTMFile" text="Open" />
-                                                                  <Label fx:id="labelDTMValue" disable="true" layoutX="40.0" layoutY="88.0" text="Value" />
-                                                                  <TextField fx:id="textfieldDTMValue" disable="true" layoutX="150.0" layoutY="83.0" prefHeight="25.0" prefWidth="55.0" text="1" />
-                                                                  <Label layoutX="21.0" layoutY="147.0" text="Shots" />
-                                                                  <ListView fx:id="listviewFilters" layoutX="69.0" layoutY="147.0" prefHeight="112.0" prefWidth="273.0" />
-                                                                  <Button fx:id="buttonAddFilter" layoutX="69.0" layoutY="270.0" mnemonicParsing="false" onAction="#onActionButtonAddFilter" text="Add filter">
-                                                                     <graphic>
-                                                                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                           <image>
-                                                                              <Image url="@icons/gnome_list_add.png" />
-                                                                           </image>
-                                                                        </ImageView>
-                                                                     </graphic></Button>
-                                                                  <Button fx:id="buttonRemoveFilter" layoutX="178.0" layoutY="270.0" mnemonicParsing="false" onAction="#onActionButtonRemoveFilter" prefHeight="25.0" prefWidth="128.0" text="Remove filter">
-                                                                     <graphic>
-                                                                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                           <image>
-                                                                              <Image url="@icons/gnome_list_remove.png" />
-                                                                           </image>
-                                                                        </ImageView>
-                                                                     </graphic></Button>
-                                                                  <CheckBox fx:id="checkboxRemoveLowPoint" layoutX="21.0" layoutY="321.0" mnemonicParsing="false" text="Remove low point (noise)" />
+                                                                  <Accordion layoutX="12.0" layoutY="4.0" prefHeight="388.0" prefWidth="451.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                    <panes>
+                                                                      <TitledPane prefHeight="281.0" prefWidth="457.0" text="DTM">
+                                                                           <content>
+                                                                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                                                 <children>
+                                                                                    <CheckBox fx:id="checkboxUseDTMFilter" layoutX="14.0" layoutY="23.0" mnemonicParsing="false" onAction="#onActionCheckboxUseDTMFilter" text="DTM filter" AnchorPane.leftAnchor="10.0" />
+                                                                                    <TextField fx:id="textfieldDTMPath" disable="true" layoutX="108.0" layoutY="55.0" prefHeight="25.0" prefWidth="227.0" />
+                                                                                    <Label fx:id="labelDTMPath" disable="true" layoutX="14.0" layoutY="59.0" text="DTM path (.asc)" AnchorPane.leftAnchor="10.0" />
+                                                                                    <Button fx:id="buttonOpenDTMFile" disable="true" layoutX="335.0" layoutY="55.0" mnemonicParsing="false" onAction="#onActionButtonOpenDTMFile" text="Open" />
+                                                                                    <Label fx:id="labelDTMValue" disable="true" layoutX="108.0" layoutY="101.0" text="Offset (distance above ground)" AnchorPane.leftAnchor="108.0" />
+                                                                                    <TextField fx:id="textfieldDTMValue" disable="true" layoutX="283.0" layoutY="97.0" prefHeight="25.0" prefWidth="55.0" text="1" />
+                                                                                 </children>
+                                                                              </AnchorPane>
+                                                                           </content>
+                                                                        </TitledPane>
+                                                                      <TitledPane expanded="false" text="Shots">
+                                                                           <content>
+                                                                              <AnchorPane prefHeight="189.0" prefWidth="427.0">
+                                                                                 <children>
+                                                                                    <ListView fx:id="listviewFilters" layoutX="7.0" layoutY="19.0" prefHeight="123.0" prefWidth="343.0" />
+                                                                                    <Button fx:id="buttonAddFilter" layoutX="7.0" layoutY="153.0" mnemonicParsing="false" onAction="#onActionButtonAddFilter" text="Add filter">
+                                                                                       <graphic>
+                                                                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                             <image>
+                                                                                                <Image url="@icons/gnome_list_add.png" />
+                                                                                             </image>
+                                                                                          </ImageView>
+                                                                                       </graphic>
+                                                                                    </Button>
+                                                                                    <Button fx:id="buttonRemoveFilter" layoutX="222.0" layoutY="153.0" mnemonicParsing="false" onAction="#onActionButtonRemoveFilter" prefHeight="25.0" prefWidth="128.0" text="Remove filter">
+                                                                                       <graphic>
+                                                                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                             <image>
+                                                                                                <Image url="@icons/gnome_list_remove.png" />
+                                                                                             </image>
+                                                                                          </ImageView>
+                                                                                       </graphic>
+                                                                                    </Button>
+                                                                                 </children>
+                                                                              </AnchorPane>
+                                                                           </content>
+                                                                        </TitledPane>
+                                                                        <TitledPane expanded="false" prefHeight="200.0" prefWidth="200.0" text="Point cloud">
+                                                                           <content>
+                                                                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                                                 <children>
+                                                                                    <CheckBox fx:id="checkboxUsePointcloudFilter" layoutX="7.0" layoutY="21.0" mnemonicParsing="false" onAction="#onActionCheckboxUsePointcloudFilter" text="Point cloud filter" AnchorPane.leftAnchor="10.0" />
+                                                                                    <AnchorPane fx:id="anchorpanePointCloudFilterParameters" layoutX="20.0" layoutY="49.0" prefHeight="70.0" prefWidth="416.0">
+                                                                                       <children>
+                                                                                          <TextField fx:id="textfieldPointCloudPath" disable="true" layoutX="125.0" prefHeight="25.0" prefWidth="227.0" />
+                                                                                          <Label fx:id="labelPointCloudErrorMarginValue" disable="true" layoutX="97.99999809265137" layoutY="49.0" text="Error's margin" AnchorPane.leftAnchor="108.0" />
+                                                                                          <TextField fx:id="textfieldPointCloudErrorMargin" disable="true" layoutX="183.0" layoutY="45.0" prefHeight="25.0" prefWidth="55.0" text="0.08" />
+                                                                                          <Label fx:id="labelPointCloudPath" disable="true" layoutY="4.0" text="Point cloud path (.txt)" AnchorPane.leftAnchor="10.0" />
+                                                                                          <Button fx:id="buttonOpenPointCloudFile" disable="true" layoutX="352.0" mnemonicParsing="false" onAction="#onActionButtonOpenPointCloudFile" text="Open" />
+                                                                                       </children>
+                                                                                    </AnchorPane>
+                                                                                 </children>
+                                                                              </AnchorPane>
+                                                                           </content>
+                                                                        </TitledPane>
+                                                                        <TitledPane expanded="false" prefHeight="200.0" prefWidth="200.0" text="Other">
+                                                                           <content>
+                                                                              <AnchorPane>
+                                                                                 <children>
+                                                                                    <CheckBox fx:id="checkboxRemoveLowPoint" layoutX="14.0" layoutY="20.0" mnemonicParsing="false" text="Remove low point (noise)" />
+                                                                                 </children>
+                                                                              </AnchorPane>
+                                                                           </content>
+                                                                        </TitledPane>
+                                                                    </panes>
+                                                                  </Accordion>
                                                                </children>
                                                             </AnchorPane>
                                                          </content>

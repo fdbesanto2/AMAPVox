@@ -35,6 +35,11 @@ public class VoxelParameters {
     private boolean useDTMCorrection;
     private File dtmFile;
     public float minDTMDistance = 1;
+    
+    private boolean usePointCloudFilter = false;
+    private File pointcloudFile;
+    private float pointcloudErrorMargin = 0.08f;
+    
     private boolean TLS;
     private float maxPAD = 3;
     private boolean mergingAfter = false;
@@ -212,5 +217,30 @@ public class VoxelParameters {
     public void setGroundEnergyFileFormat(short groundEnergyFileFormat) {
         this.groundEnergyFileFormat = groundEnergyFileFormat;
     }
+
+    public boolean isUsePointCloudFilter() {
+        return usePointCloudFilter;
+    }
+
+    public void setUsePointCloudFilter(boolean usePointCloudFilter) {
+        this.usePointCloudFilter = usePointCloudFilter;
+    }
+
+    public File getPointcloudFile() {
+        return pointcloudFile;
+    }
+
+    public void setPointcloudFile(File pointcloudFile) {
+        this.pointcloudFile = pointcloudFile;
+    }
+
+    public float getPointcloudErrorMargin() {
+        return pointcloudErrorMargin;
+    }
+
+    public void setPointcloudErrorMargin(float pointcloudErrorMargin) {
+        this.pointcloudErrorMargin = pointcloudErrorMargin;
+    }
+    
     
 }

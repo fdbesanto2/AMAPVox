@@ -1,5 +1,6 @@
 package fr.ird.voxelidar.voxelisation.raytracing.voxel;
 
+import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.voxelisation.VoxelParameters;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,18 +15,25 @@ import fr.ird.voxelidar.engine3d.object.scene.Dtm;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.SimpleFilter;
 import fr.ird.voxelidar.util.TimeCounter;
+import fr.ird.voxelidar.voxelisation.PointCloud;
 import fr.ird.voxelidar.voxelisation.extraction.Shot;
 import java.awt.Color;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.imageio.ImageIO;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3d;
+import javax.vecmath.Point3f;
 import org.apache.log4j.Logger;
 
 public class VoxelAnalysis implements Runnable {
@@ -66,6 +74,8 @@ public class VoxelAnalysis implements Runnable {
 
     private final EventListenerList listeners;
     private Dtm terrain;
+    private PointCloud pointcloud;
+    //List<Point3d> echoList = new ArrayList<>();
 
     private int shotID = 0;
 
@@ -104,12 +114,13 @@ public class VoxelAnalysis implements Runnable {
         return distance;
     }
     
-    public VoxelAnalysis(Dtm terrain, List<Filter> filters) {
+    public VoxelAnalysis(Dtm terrain, PointCloud pointcloud, List<Filter> filters) {
 
         nbShotsTreated = 0;
         isFinished = new AtomicBoolean(false);
         listeners = new EventListenerList();
         this.terrain = terrain;
+        this.pointcloud = pointcloud;
         Shot.setFilters(filters);
     }
 
@@ -263,6 +274,8 @@ public class VoxelAnalysis implements Runnable {
                             break;
 
                     }
+                   
+                   //echoList.add(new Point3d(echo.x, echo.y, echo.z));
 
                     if(areEchoInsideSameVoxel(echo, nextEcho)){
 
@@ -397,6 +410,8 @@ public class VoxelAnalysis implements Runnable {
 
                                 }
                                
+                                
+                               
                                 if(areEchoInsideSameVoxel(echo, nextEcho)){
                                    
                                    /*ne rien faire dans ce cas
@@ -493,6 +508,7 @@ public class VoxelAnalysis implements Runnable {
 
         //get shot line
         LineElement lineElement = new LineSegment(origin, echo);
+        
 
         //get the first voxel cross by the line
         VoxelCrossingContext context = voxelManager.getFirstVoxel(lineElement);
@@ -501,6 +517,12 @@ public class VoxelAnalysis implements Runnable {
         
         //calculate ground distance
         float echoDistance = getGroundDistance((float) echo.x, (float) echo.y, (float) echo.z);
+        boolean isPointInsidePointCloud = true;
+        
+        if(parameters.isUsePointCloudFilter() && pointcloud != null){
+            isPointInsidePointCloud = pointcloud.isPointInsidePointCloud(new Point3F((float) echo.x, (float) echo.y, (float) echo.z), parameters.getPointcloudErrorMargin());
+        }
+        
 
         while ((context != null) && (context.indices != null)) {
 
@@ -635,7 +657,8 @@ public class VoxelAnalysis implements Runnable {
                         
                         
                         if (((classification != 2 && !parameters.isTLS()) || parameters.isTLS()) && 
-                                ((echoDistance >= parameters.minDTMDistance && echoDistance!= Float.NaN && parameters.useDTMCorrection())|| !parameters.useDTMCorrection())){
+                                ((echoDistance >= parameters.minDTMDistance && echoDistance!= Float.NaN && parameters.useDTMCorrection())|| !parameters.useDTMCorrection()) &&
+                                isPointInsidePointCloud){
                             
                             vox.nbEchos++;
                             
@@ -780,7 +803,20 @@ public void calculatePADAndWrite(double threshold) {
             }
 
             writer.close();
-
+//            
+//            DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.US);
+//            otherSymbols.setDecimalSeparator('.');
+//            otherSymbols.setGroupingSeparator('.'); 
+//            
+//            DecimalFormat format = new DecimalFormat("###.###", otherSymbols);
+//            format.setRoundingMode(RoundingMode.FLOOR);
+            /*
+            try (BufferedWriter writer2 = new BufferedWriter(new FileWriter(new File("e:\\test.txt"),true))) {
+                for(Point3d echo : echoList){
+                    writer2.write(((long)(echo.x*1000))/1000.0f+" "+((long)(echo.y*1000))/1000.0f+" "+((long)(echo.z*1000))/1000.0f+"\n");
+                }
+            }
+            */
             logger.info("file written ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
 
         } catch (FileNotFoundException e) {

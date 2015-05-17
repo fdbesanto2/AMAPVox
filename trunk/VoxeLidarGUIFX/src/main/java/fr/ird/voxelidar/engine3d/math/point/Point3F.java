@@ -9,7 +9,7 @@ package fr.ird.voxelidar.engine3d.math.point;
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class Point3F {
+public class Point3F  implements Comparable<Point3F>{
     
     public float x, y, z;
 
@@ -24,5 +24,33 @@ public class Point3F {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+    
+    public float distanceTo(Point3F point){
+        
+        return (float) Math.sqrt(Math.pow(point.x-x, 2)+Math.pow(point.y-y, 2)+Math.pow(point.z-z, 2));
+    }
+    
+    @Override
+    public int compareTo(Point3F o) {
+        if(o.x > this.x){
+            return -1;
+        }else if(o.x < this.x){
+            return 1;
+        }else{
+            if(o.y > this.y){
+                return -1;
+            }else if(o.y < this.y){
+                return 1;
+            }else{
+                if(o.z > this.z){
+                    return -1;
+                }else if(o.z < this.z){
+                    return 1;
+                }else{
+                    return 0;
+                }
+            }
+        }
     }
 }

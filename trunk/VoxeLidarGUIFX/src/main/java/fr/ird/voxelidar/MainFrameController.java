@@ -34,10 +34,7 @@ import fr.ird.voxelidar.voxelisation.VoxelisationTool;
 import fr.ird.voxelidar.voxelisation.VoxelisationToolListener;
 import fr.ird.voxelidar.voxelisation.als.LasPoint;
 import fr.ird.voxelidar.voxelisation.extraction.als.LazExtraction;
-import fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction;
-import fr.ird.voxelidar.voxelisation.extraction.Shot;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -65,7 +62,6 @@ import javafx.concurrent.Worker;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -78,7 +74,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.DialogEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -151,6 +146,20 @@ public class MainFrameController implements Initializable {
     private RadioButton radiobuttonDontDisplayValues;
     @FXML
     private AnchorPane anchorpanePreFiltering;
+    @FXML
+    private Button buttonOpenPointCloudFile;
+    @FXML
+    private Label labelPointCloudPath;
+    @FXML
+    private TextField textfieldPointCloudPath;
+    @FXML
+    private CheckBox checkboxUsePointcloudFilter;
+    @FXML
+    private TextField textfieldPointCloudErrorMargin;
+    @FXML
+    private Label labelPointCloudErrorMarginValue;
+    @FXML
+    private AnchorPane anchorpanePointCloudFilterParameters;
 
     @FXML
     private void onActionMenuitemClearWindow(ActionEvent event) {
@@ -159,6 +168,24 @@ public class MainFrameController implements Initializable {
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @FXML
+    private void onActionButtonOpenPointCloudFile(ActionEvent event) {
+        
+        if (lastFCOpenPointCloudFile != null) {
+            fileChooserOpenPointCloudFile.setInitialDirectory(lastFCOpenPointCloudFile.getParentFile());
+        }
+
+        File selectedFile = fileChooserOpenPointCloudFile.showOpenDialog(stage);
+        if (selectedFile != null) {
+            textfieldPointCloudPath.setText(selectedFile.getAbsolutePath());
+            lastFCOpenPointCloudFile = selectedFile;
+        }
+    }
+
+    @FXML
+    private void onActionCheckboxUsePointcloudFilter(ActionEvent event) {
     }
     
     public class MinMax{
@@ -202,6 +229,7 @@ public class MainFrameController implements Initializable {
     private File lastFCOpenSopMatrixFile;
     private File lastFCOpenVopMatrixFile;
     private File lastFCOpenDTMFile;
+    private File lastFCOpenPointCloudFile;
     private File lastFCOpenMultiResVoxelFile;
     private File lastFCSaveOutputFileMultiRes;
     private File lastFCAddTask;
@@ -221,6 +249,7 @@ public class MainFrameController implements Initializable {
     private FileChooser fileChooserOpenVopMatrixFile;
     private FileChooser fileChooserOpenPonderationFile;
     private FileChooser fileChooserOpenDTMFile;
+    private FileChooser fileChooserOpenPointCloudFile;
     private FileChooser fileChooserOpenMultiResVoxelFile;
     private FileChooser fileChooserAddTask;
     private FileChooser fileChooserOpenOutputFileMultiRes;
@@ -562,6 +591,12 @@ public class MainFrameController implements Initializable {
         fileChooserOpenDTMFile.getExtensionFilters().addAll(
                 new ExtensionFilter("All Files", "*"),
                 new ExtensionFilter("DTM Files", "*.asc"));
+        
+        fileChooserOpenPointCloudFile = new FileChooser();
+        fileChooserOpenPointCloudFile.setTitle("Choose point cloud file");
+        fileChooserOpenPointCloudFile.getExtensionFilters().addAll(
+                new ExtensionFilter("All Files", "*"),
+                new ExtensionFilter("TXT Files", "*.txt"));
 
         fileChooserOpenMultiResVoxelFile = new FileChooser();
         fileChooserOpenMultiResVoxelFile.setTitle("Choose voxel file");
@@ -779,6 +814,29 @@ public class MainFrameController implements Initializable {
                     textfieldDTMValue.setDisable(true);
                     labelDTMValue.setDisable(true);
                     labelDTMPath.setDisable(true);
+                }
+            }
+        });
+        
+        checkboxUsePointcloudFilter.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    anchorpanePointCloudFilterParameters.setDisable(false);
+                    labelPointCloudPath.setDisable(false);
+                    textfieldPointCloudPath.setDisable(false);
+                    buttonOpenPointCloudFile.setDisable(false);
+                    labelPointCloudErrorMarginValue.setDisable(false);
+                    textfieldPointCloudErrorMargin.setDisable(false);
+                            
+                }else{
+                    anchorpanePointCloudFilterParameters.setDisable(true);
+                    labelPointCloudPath.setDisable(true);
+                    textfieldPointCloudPath.setDisable(true);
+                    buttonOpenPointCloudFile.setDisable(true);
+                    labelPointCloudErrorMarginValue.setDisable(true);
+                    textfieldPointCloudErrorMargin.setDisable(true);
                 }
             }
         });
@@ -1444,6 +1502,9 @@ public class MainFrameController implements Initializable {
                         voxelSpace.load();
                         voxelSpace.updateValue();
                         
+                        final int posX = joglWindow.getPosition().getX();
+                        final int posY = joglWindow.getPosition().getX();
+                        
                         Platform.runLater(new Runnable() {
 
                             @Override
@@ -1470,8 +1531,8 @@ public class MainFrameController implements Initializable {
 
                                 joglWindow.show();
 
-                                toolBarFrameStage.setX(joglWindow.getPosition().getX()-toolBarFrameStage.getWidth());
-                                toolBarFrameStage.setY(joglWindow.getPosition().getY());
+                                toolBarFrameStage.setX(posX-toolBarFrameStage.getWidth());
+                                toolBarFrameStage.setY(posY);
                                 toolBarFrameStage.show();
 
                                 
@@ -2410,6 +2471,12 @@ public class MainFrameController implements Initializable {
             voxelParameters.minDTMDistance = Float.valueOf(textfieldDTMValue.getText());
             voxelParameters.setDtmFile(new File(textfieldDTMPath.getText()));
         }
+        
+        voxelParameters.setUsePointCloudFilter(checkboxUsePointcloudFilter.isSelected());
+        if(checkboxUsePointcloudFilter.isSelected()){
+            voxelParameters.setPointcloudErrorMargin(Float.valueOf(textfieldPointCloudErrorMargin.getText()));
+            voxelParameters.setPointcloudFile(new File(textfieldPointCloudPath.getText()));
+        }
 
         voxelParameters.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
         voxelParameters.setTransmittanceMode(comboboxFormulaTransmittance.getSelectionModel().getSelectedIndex());
@@ -2668,6 +2735,13 @@ public class MainFrameController implements Initializable {
                     if(tmpFile != null){
                         textfieldDTMPath.setText(tmpFile.getAbsolutePath());
                         textfieldDTMValue.setText(String.valueOf(voxelParameters.minDTMDistance));
+                    }
+                    
+                    checkboxUsePointcloudFilter.setSelected(voxelParameters.isUsePointCloudFilter());
+                    File tmpFile2 = voxelParameters.getPointcloudFile();
+                    if(tmpFile2 != null){
+                        textfieldPointCloudPath.setText(tmpFile2.getAbsolutePath());
+                        textfieldPointCloudErrorMargin.setText(String.valueOf(voxelParameters.getPointcloudErrorMargin()));
                     }
 
                     checkboxUsePopMatrix.setSelected(cfg.isUsePopMatrix());

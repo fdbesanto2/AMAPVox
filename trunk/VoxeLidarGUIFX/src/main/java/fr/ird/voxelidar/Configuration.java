@@ -197,7 +197,7 @@ public class Configuration {
             
             processElement.addContent(ponderationElement);
             
-            /***DEM FILTER***/
+            /***DTM FILTER***/
             
             Element dtmFilterElement = new Element("dtm-filter");
             dtmFilterElement.setAttribute(new Attribute("enabled",String.valueOf(voxelParameters.useDTMCorrection())));
@@ -208,8 +208,20 @@ public class Configuration {
                 
                 dtmFilterElement.setAttribute(new Attribute("height-min",String.valueOf(voxelParameters.minDTMDistance)));
             }
-
+            
             processElement.addContent(dtmFilterElement);
+            
+            Element pointcloudFilterElement = new Element("pointcloud-filter");
+            pointcloudFilterElement.setAttribute(new Attribute("enabled",String.valueOf(voxelParameters.isUsePointCloudFilter())));
+            if(voxelParameters.isUsePointCloudFilter()){
+                if(voxelParameters.getPointcloudFile()!= null){
+                    pointcloudFilterElement.setAttribute(new Attribute("src", voxelParameters.getPointcloudFile().getAbsolutePath()));
+                }
+                
+                pointcloudFilterElement.setAttribute(new Attribute("error-margin",String.valueOf(voxelParameters.getPointcloudErrorMargin())));
+            }
+            
+            processElement.addContent(pointcloudFilterElement);
             
             /***TRANSFORMATION***/
             
@@ -506,6 +518,17 @@ public class Configuration {
                         if(useDTM){
                             voxelParameters.setDtmFile(new File(dtmFilterElement.getAttributeValue("src")));
                             voxelParameters.minDTMDistance = Float.valueOf(dtmFilterElement.getAttributeValue("height-min"));
+                        }                        
+                    }
+                    
+                    Element pointcloudFilterElement = processElement.getChild("pointcloud-filter");
+                    
+                    if(pointcloudFilterElement != null){
+                        boolean usePointCloudFilter = Boolean.valueOf(pointcloudFilterElement.getAttributeValue("enabled"));
+                        voxelParameters.setUsePointCloudFilter(usePointCloudFilter);
+                        if(usePointCloudFilter){
+                            voxelParameters.setPointcloudFile(new File(pointcloudFilterElement.getAttributeValue("src")));
+                            voxelParameters.setPointcloudErrorMargin(Float.valueOf(pointcloudFilterElement.getAttributeValue("error-margin")));
                         }                        
                     }
                     

@@ -14,6 +14,7 @@ import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import fr.ird.voxelidar.engine3d.object.scene.Dtm;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.TimeCounter;
+import fr.ird.voxelidar.voxelisation.PointCloud;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
@@ -43,7 +44,7 @@ public class RxpVoxelisation implements Callable{
         this.nbVoxelisationFinished = nbVoxelisationFinished;
     }    
     
-    public RxpVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, Dtm terrain, List<Filter> filters){
+    public RxpVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, Dtm terrain, PointCloud pointcloud, List<Filter> filters){
                 
         nbVoxelisationFinished = 0;
         this.inputFile = inputFile;
@@ -65,7 +66,7 @@ public class RxpVoxelisation implements Callable{
             terrain.setTransformationMatrix(vopMatrix);
         }
         
-        voxelAnalysis = new VoxelAnalysis(terrain, filters);
+        voxelAnalysis = new VoxelAnalysis(terrain, pointcloud, filters);
         voxelAnalysis.init(parameters, outputFile);
     }
 

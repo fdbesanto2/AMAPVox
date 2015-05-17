@@ -44,6 +44,7 @@ import java.util.concurrent.RejectedExecutionException;
 import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Matrix4d;
+import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
 
@@ -62,6 +63,7 @@ public class VoxelisationTool {
     private final EventListenerList listeners;
     private long startTime;
     private Dtm dtm;
+    private PointCloud pointcloud;
     private boolean cancelled;
     private ExecutorService exec;
 
@@ -110,6 +112,27 @@ public class VoxelisationTool {
 
         return terrain;
     }
+    
+    private PointCloud loadPointcloud(File pointcloudFile) {
+
+        PointCloud ptCloud = null;
+
+        if (pointcloudFile != null && parameters.isUsePointCloudFilter()) {
+
+            try {
+                ptCloud = new PointCloud();
+                
+                logger.info("Loading point cloud file...");
+                ptCloud.readFromFile(pointcloudFile);
+                logger.info("Point cloud file loaded");
+                
+            } catch (Exception ex) {
+                logger.error(ex);
+            }
+        }
+
+        return ptCloud;
+    }
 
     public ArrayList<File> voxeliseFromRsp(File output, File input, VoxelParameters parameters, Mat4D vop, Mat4D pop, List<MatrixAndFile> matricesAndFiles, List<Filter> filters, int coresNumber){
 
@@ -128,6 +151,8 @@ public class VoxelisationTool {
         
         dtm = loadDTM(parameters.getDtmFile());
         
+        pointcloud = loadPointcloud(parameters.getPointcloudFile());
+        
         ArrayList<File> files = new ArrayList<>();
         exec = Executors.newFixedThreadPool(coresNumber);
 
@@ -138,7 +163,7 @@ public class VoxelisationTool {
             for (MatrixAndFile file : matricesAndFiles) {
 
                 File outputFile = new File(output.getAbsolutePath() + "/" + file.file.getName() + ".vox");
-                tasks.add(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixConverter.convertMatrix4dToMat4D(file.matrix), this.parameters, dtm, filters));
+                tasks.add(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixConverter.convertMatrix4dToMat4D(file.matrix), this.parameters, dtm, pointcloud, filters));
                 files.add(outputFile);
                 count++;
             }
@@ -180,7 +205,7 @@ public class VoxelisationTool {
         if(sop == null){ sop = Mat4D.identity();}
         if(vop == null){ vop = Mat4D.identity();}
 
-        RxpVoxelisation voxelisation = new RxpVoxelisation(input, output, vop, pop, sop, parameters, dtm, filters);
+        RxpVoxelisation voxelisation = new RxpVoxelisation(input, output, vop, pop, sop, parameters, dtm, pointcloud, filters);
         voxelisation.call();
 
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
