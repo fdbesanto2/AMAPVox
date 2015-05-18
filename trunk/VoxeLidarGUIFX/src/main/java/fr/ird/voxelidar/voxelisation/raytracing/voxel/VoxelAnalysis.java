@@ -12,6 +12,7 @@ import fr.ird.voxelidar.voxelisation.raytracing.geometry.LineSegment;
 import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelManager.VoxelCrossingContext;
 import fr.ird.voxelidar.engine3d.object.scene.Dtm;
+import fr.ird.voxelidar.octree.Octree;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.SimpleFilter;
 import fr.ird.voxelidar.util.TimeCounter;
@@ -74,7 +75,7 @@ public class VoxelAnalysis implements Runnable {
 
     private final EventListenerList listeners;
     private Dtm terrain;
-    private PointCloud pointcloud;
+    private Octree pointcloud;
     //List<Point3d> echoList = new ArrayList<>();
 
     private int shotID = 0;
@@ -114,7 +115,7 @@ public class VoxelAnalysis implements Runnable {
         return distance;
     }
     
-    public VoxelAnalysis(Dtm terrain, PointCloud pointcloud, List<Filter> filters) {
+    public VoxelAnalysis(Dtm terrain, Octree pointcloud, List<Filter> filters) {
 
         nbShotsTreated = 0;
         isFinished = new AtomicBoolean(false);
@@ -520,7 +521,7 @@ public class VoxelAnalysis implements Runnable {
         boolean isPointInsidePointCloud = true;
         
         if(parameters.isUsePointCloudFilter() && pointcloud != null){
-            isPointInsidePointCloud = pointcloud.isPointInsidePointCloud(new Point3F((float) echo.x, (float) echo.y, (float) echo.z), parameters.getPointcloudErrorMargin());
+            isPointInsidePointCloud = pointcloud.isPointBelongToPointcloud(new Point3F((float) echo.x, (float) echo.y, (float) echo.z), parameters.getPointcloudErrorMargin());
         }
         
 

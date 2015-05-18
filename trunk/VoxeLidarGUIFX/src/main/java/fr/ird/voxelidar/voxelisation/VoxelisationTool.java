@@ -17,6 +17,7 @@ import fr.ird.voxelidar.engine3d.object.scene.DtmLoader;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceHeader;
 import fr.ird.voxelidar.io.file.FileManager;
+import fr.ird.voxelidar.octree.Octree;
 import fr.ird.voxelidar.util.DataSet;
 import fr.ird.voxelidar.util.DataSet.Mode;
 import fr.ird.voxelidar.util.Filter;
@@ -63,7 +64,8 @@ public class VoxelisationTool {
     private final EventListenerList listeners;
     private long startTime;
     private Dtm dtm;
-    private PointCloud pointcloud;
+    private Octree pointcloud;
+    //private PointCloud pointcloud;
     private boolean cancelled;
     private ExecutorService exec;
 
@@ -113,6 +115,28 @@ public class VoxelisationTool {
         return terrain;
     }
     
+    private Octree loadOctree(File pointcloudFile) {
+
+        Octree octree = null;
+        
+        if (pointcloudFile != null && parameters.isUsePointCloudFilter()) {
+
+            try {
+                octree = new Octree(50);
+                
+                logger.info("Loading point cloud file...");
+                octree.loadPointsFromFile(pointcloudFile);
+                octree.build();
+                logger.info("Point cloud file loaded");
+                
+            } catch (Exception ex) {
+                logger.error(ex);
+            }
+        }
+
+        return octree;
+    }
+    
     private PointCloud loadPointcloud(File pointcloudFile) {
 
         PointCloud ptCloud = null;
@@ -151,7 +175,8 @@ public class VoxelisationTool {
         
         dtm = loadDTM(parameters.getDtmFile());
         
-        pointcloud = loadPointcloud(parameters.getPointcloudFile());
+        pointcloud = loadOctree(parameters.getPointcloudFile());
+        //pointcloud = loadPointcloud(parameters.getPointcloudFile());
         
         ArrayList<File> files = new ArrayList<>();
         exec = Executors.newFixedThreadPool(coresNumber);

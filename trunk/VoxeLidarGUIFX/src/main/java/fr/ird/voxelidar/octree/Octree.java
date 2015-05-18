@@ -42,8 +42,12 @@ public class Octree {
     private Point3F maxPoint;
     private int depth;
     private Node root;
+    private List<Node> leafs;
     
     private final int maximumPoints;
+    
+    public final static short BINARY_SEARCH = 0;
+    public final static short INCREMENTAL_SEARCH = 1;
     
     public Octree(int maximumPoints){
         this.maximumPoints = maximumPoints;
@@ -159,6 +163,33 @@ public class Octree {
         }
     }
     
+    public List<Node> getLeafs(){
+        
+        leafs = new ArrayList<>();
+        
+        if(root != null){
+            getChilds(root);
+        }
+        
+        return leafs;
+    }
+    
+    private void getChilds(Node node){
+        
+        if(node.hasChilds()){
+            
+            for(short i=0;i<8;i++){
+                Node child = node.getChild(i);
+                if(child.isLeaf()){
+                    leafs.add(child);
+                }else{
+                    getChilds(child);
+                }
+            }
+
+        }
+    }
+    
     public Node traverse(Point3F point){
         
         Node node = null;
@@ -169,20 +200,60 @@ public class Octree {
             
             while(node.hasChilds()){
                 short indice = node.getIndiceFromPoint(point);
-                node = node.getChild(indice);
+                
+                Node tmp = node.getChild(indice);
+                if(tmp != null){
+                    node = tmp;
+                }else{
+                    return null;
+                }
+                
             }
         }
         
         return node;
     }
     
-    public Point3F incrementalSearchNearestPoint(Point3F point){
+    public Point3F searchNearestPoint(Point3F point, short type){
+        
+        switch(type){
+            case BINARY_SEARCH:
+                break;
+            case INCREMENTAL_SEARCH:
+                return incrementalSearchNearestPoint(point);
+        }
+        
+        return null;
+    }
+    
+    public boolean isPointBelongToPointcloud(Point3F point, float errorMargin){
+        
+        Point3F incrementalSearchNearestPoint = searchNearestPoint(point, Octree.INCREMENTAL_SEARCH);
+                            
+                            
+        boolean test = false;
+        if(incrementalSearchNearestPoint != null){
+            float distance = point.distanceTo(incrementalSearchNearestPoint);
+
+            if(distance < errorMargin){
+                test = true;
+            }
+        }
+        
+        return test;
+    }
+    
+    private Point3F incrementalSearchNearestPoint(Point3F point){
         
         Point3F nearestPoint = null;
         
         if(root != null){
             
             Node leaf = traverse(point);
+            
+            if(leaf == null){
+                return null;
+            }
             
             float distance = 99999999;
             

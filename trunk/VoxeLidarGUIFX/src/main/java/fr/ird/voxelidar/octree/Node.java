@@ -17,6 +17,7 @@ package fr.ird.voxelidar.octree;
 
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.math.point.Point3I;
+import java.util.Arrays;
 import org.apache.log4j.Logger;
 
 /**
@@ -177,7 +178,11 @@ public class Node {
     }
 
     public int[] getPoints() {
-        return points;
+        
+        if(points != null){
+            return Arrays.copyOf(points, pointNumber);
+        }
+        return null;
     }
     
     private void subdivide(){
@@ -217,7 +222,7 @@ public class Node {
     
     public Node getChild(short indice){
         
-        if(childs != null){
+        if(childs != null && indice <= 7 && indice >= 0){
             return childs[indice];
         }
         
