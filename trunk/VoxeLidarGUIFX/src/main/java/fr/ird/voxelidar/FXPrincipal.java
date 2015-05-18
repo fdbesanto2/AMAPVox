@@ -5,6 +5,8 @@
  */
 package fr.ird.voxelidar;
 
+import fr.ird.voxelidar.engine3d.math.point.Point3F;
+import fr.ird.voxelidar.octree.Octree;
 import fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction;
 import fr.ird.voxelidar.voxelisation.extraction.Shot;
 import java.io.File;
@@ -24,6 +26,11 @@ public class FXPrincipal extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         
+        Octree octree = new Octree(50);
+        octree.loadPointsFromFile(new File("/media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/pointclouds/ID_61_full.txt"));
+        octree.build();
+        
+        Point3F incrementalSearchNearestPoint = octree.incrementalSearchNearestPoint(new Point3F(-17.0f, 20.0f, 10.0f));
         
         /*
         Dtm dtm = DtmLoader.readFromAscFile(new File("C:\\Users\\Julien\\Desktop\\samples\\dtm\\ALSbuf_xyzirncapt_dtm.asc"));
