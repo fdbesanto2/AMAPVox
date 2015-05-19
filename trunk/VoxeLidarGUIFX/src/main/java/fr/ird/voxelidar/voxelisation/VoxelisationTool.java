@@ -18,6 +18,7 @@ import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceHeader;
 import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.octree.Octree;
+import fr.ird.voxelidar.octree.OctreeFactory;
 import fr.ird.voxelidar.util.DataSet;
 import fr.ird.voxelidar.util.DataSet.Mode;
 import fr.ird.voxelidar.util.Filter;
@@ -122,10 +123,8 @@ public class VoxelisationTool {
         if (pointcloudFile != null && parameters.isUsePointCloudFilter()) {
 
             try {
-                octree = new Octree(50);
-                
                 logger.info("Loading point cloud file...");
-                octree.loadPointsFromFile(pointcloudFile);
+                octree = OctreeFactory.createOctreeFromPointFile(pointcloudFile, OctreeFactory.DEFAULT_MAXIMUM_POINT_NUMBER);
                 octree.build();
                 logger.info("Point cloud file loaded");
                 

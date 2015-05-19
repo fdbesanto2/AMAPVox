@@ -5,25 +5,29 @@
  */
 package fr.ird.voxelidar;
 
+import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
+import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
-import fr.ird.voxelidar.octree.Node;
+import fr.ird.voxelidar.engine3d.math.vector.Vec4;
+import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
+import fr.ird.voxelidar.lidar.format.als.LasHeader;
+import fr.ird.voxelidar.lidar.format.als.LasReader;
+import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
+import fr.ird.voxelidar.lidar.format.tls.Rsp;
 import fr.ird.voxelidar.octree.Octree;
-import fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction;
-import fr.ird.voxelidar.voxelisation.extraction.Shot;
-import java.io.BufferedReader;
+import fr.ird.voxelidar.octree.OctreeFactory;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.FileFilter;
+import java.io.FileWriter;
 import java.util.Iterator;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 
 /**
  *
@@ -34,77 +38,54 @@ public class FXPrincipal extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         /*
-        Octree octree = new Octree(50);
-        octree.loadPointsFromFile(new File("G:\\2014-03-31.ID2-3.RISCAN\\pointclouds\\ID_61_full.txt"));
-        //octree.loadPointsFromFile(new File("/media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/pointclouds/ID_61_full.txt"));
+        Octree octree = OctreeFactory.createOctreeFromPointFile(new File("/media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/pointclouds/ID_61_Vf.txt"), 50);
         octree.build();
         
-        int count = 0;
-        int count2 = 0;
+        File directory = new File("/media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/ascii");
         
-        long startTime = System.currentTimeMillis();
-            try (BufferedReader reader = new BufferedReader(new FileReader(new File("e:\\test.txt")))) {
-                String line;
+        File[] fileList = directory.listFiles();
+        
+        Rsp rsp = new Rsp();
+        rsp.read(new File("/media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/project.rsp"));
+        Mat4D popMatrix = rsp.getPopMatrix();
+        
+        
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/ascii/result.txt")))){
+            
+            for(File file : fileList){
+                
+                if(file.getName().contains(".las")){
+                    
+                    LasReader reader = new LasReader();
+                    reader.open(file);
 
-                while ((line = reader.readLine()) != null) {
-                    String[] split = line.split(" ");
-                    
-                    
-                    if (split.length == 3) {
-                        try {
-                            
-                            if(count2 == 103){
-                                System.out.println("test");
-                            }
-                            Point3F value = new Point3F(Float.valueOf(split[0]),Float.valueOf(split[1]),Float.valueOf(split[2]));
-                            Point3F incrementalSearchNearestPoint = octree.searchNearestPoint(value, Octree.INCREMENTAL_SEARCH);
-                            
-                            
-                            boolean test = false;
-                            if(incrementalSearchNearestPoint != null){
-                                float distance = value.distanceTo(incrementalSearchNearestPoint);
-                                
-                                if(distance < 0.01f){
-                                    test = true;
-                                }
-                                
-                                if (test) {
-                                    count++;
-                                }
-                            }
-                            
-                            
-                            
-                        } catch (Exception e) {
-                            System.err.println(e);
+                    LasHeader header = reader.getHeader();
+
+                    for (PointDataRecordFormat0 p : reader) {
+
+
+                        Point3d location = new Point3d(((p.getX() * header.getxScaleFactor()) + header.getxOffset()),
+                                                        ((p.getY() * header.getyScaleFactor()) + header.getyOffset()),
+                                                        ((p.getZ() * header.getzScaleFactor()) + header.getzOffset()));
+
+                        Vec4D transformedLocation = Mat4D.multiply(popMatrix, new Vec4D(location.x, location.y, location.z, 1));
+
+                        boolean pointBelongsToPointcloud = octree.isPointBelongsToPointcloud(new Point3F((float)transformedLocation.x, (float)transformedLocation.y, (float)transformedLocation.z), 0.0025f);
+
+                        if(pointBelongsToPointcloud){
+                            writer.write(transformedLocation.x+" "+transformedLocation.y+" "+transformedLocation.z+" "+p.getNumberOfReturns()+" "+p.getReturnNumber()+" "+p.getIntensity()+"\n");
                         }
-
-                        count2++;
 
                     }
                 }
-
-                long endTime = System.currentTimeMillis();
-                System.out.println("temps de traitement: " + ((endTime - startTime) * Math.pow(10, -3)));
-                System.out.println("max distance "+0.1);
-                System.out.println("ratio: "+count+"/"+octree.getPoints().length);
-                //System.out.println("exact values: "+ptCloudTool.exactValue);
-                //System.out.println("approximate values: "+ptCloudTool.approximateValue);
-
-            } catch (FileNotFoundException ex) {
                 
-            } catch (IOException ex) {
                 
             }
+            
+        }
         */
-        //Point3F incrementalSearchNearestPoint = octree.incrementalSearchNearestPoint(new Point3F(-9.166f, 10.019f, -2.301f));
-        //Point3F incrementalSearchNearestPoint = octree.incrementalSearchNearestPoint(new Point3F(-9.166f, 10.019f, -2.301f));
         
-        /*
-        Dtm dtm = DtmLoader.readFromAscFile(new File("C:\\Users\\Julien\\Desktop\\samples\\dtm\\ALSbuf_xyzirncapt_dtm.asc"));
-        dtm.buildMesh();
-        dtm.exportObj(new File("C:\\Users\\Julien\\Desktop\\samples\\dtm\\ALSbuf_xyzirncapt_dtm.obj"));
-        */
+        
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainFrame.fxml"));
         Parent root = loader.load();
         MainFrameController controller = loader.getController();

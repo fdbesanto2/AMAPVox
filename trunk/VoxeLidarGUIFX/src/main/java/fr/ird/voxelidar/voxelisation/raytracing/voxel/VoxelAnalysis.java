@@ -16,25 +16,18 @@ import fr.ird.voxelidar.octree.Octree;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.SimpleFilter;
 import fr.ird.voxelidar.util.TimeCounter;
-import fr.ird.voxelidar.voxelisation.PointCloud;
 import fr.ird.voxelidar.voxelisation.extraction.Shot;
 import java.awt.Color;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.imageio.ImageIO;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3d;
-import javax.vecmath.Point3f;
 import org.apache.log4j.Logger;
 
 public class VoxelAnalysis implements Runnable {
@@ -521,7 +514,7 @@ public class VoxelAnalysis implements Runnable {
         boolean isPointInsidePointCloud = true;
         
         if(parameters.isUsePointCloudFilter() && pointcloud != null){
-            isPointInsidePointCloud = pointcloud.isPointBelongToPointcloud(new Point3F((float) echo.x, (float) echo.y, (float) echo.z), parameters.getPointcloudErrorMargin());
+            isPointInsidePointCloud = pointcloud.isPointBelongsToPointcloud(new Point3F((float) echo.x, (float) echo.y, (float) echo.z), parameters.getPointcloudErrorMargin());
         }
         
 

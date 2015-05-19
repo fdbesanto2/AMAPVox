@@ -22,4 +22,9 @@ public class Point2F {
         this.x = x;
         this.y = y;
     }
+    
+    public float distanceTo(Point2F point){
+        
+        return (float) Math.sqrt(Math.pow(point.x-x, 2)+Math.pow(point.y-y, 2));
+    }
 }

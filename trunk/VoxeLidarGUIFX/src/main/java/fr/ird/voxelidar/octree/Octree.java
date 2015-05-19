@@ -15,16 +15,8 @@ For further information, please contact Gregoire Vincent.
 package fr.ird.voxelidar.octree;
 
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
-import fr.ird.voxelidar.engine3d.math.point.Point3I;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -52,99 +44,6 @@ public class Octree {
     public Octree(int maximumPoints){
         this.maximumPoints = maximumPoints;
         depth = 0;
-    }
-    
-    public void loadPointsFromFile(File file){
-        
-        List<Point3F> pointList = new ArrayList<>();
-        
-        try(BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            
-            String line;
-            boolean isInit = false;
-            String separator = " ";
-            int count = 1;
-            
-            while((line = reader.readLine()) != null){
-                
-                if(!isInit){
-                    if(line.contains(",") && line.contains(".")){
-                        separator = ",";
-                    }
-                    
-                    String[] split = line.split(separator);
-                    if(split.length > 3){
-                        logger.info("Point file contains more columns than necessary, parsing the three first");
-                    }else if(split.length < 3){
-                        logger.error("Point file doesn't contains valid columns!");
-                        reader.close();
-                        return;
-                    }
-                    
-                    isInit = true;
-                }
-                
-                String[] split = line.split(separator);
-                if(split.length < 3){
-                    logger.error("Error parsing line "+count);
-                    reader.close();
-                    return;
-                }
-                
-                pointList.add(new Point3F(Float.valueOf(split[0]), Float.valueOf(split[1]), Float.valueOf(split[2])));
-                count++;
-            }
-            
-        } catch (FileNotFoundException ex) {
-            logger.error(ex);
-        } catch (IOException ex) {
-            logger.error(ex);
-        }
-        
-        points = new Point3F[pointList.size()];
-        
-        float minPointX = 0, minPointY = 0, minPointZ = 0;
-        float maxPointX = 0, maxPointY = 0, maxPointZ = 0;
-        
-        boolean init = false;
-        for(Point3F point : pointList){
-            
-            if(!init){
-                minPointX = point.x;
-                minPointY = point.y;
-                minPointZ = point.z;
-                
-                maxPointX = point.x;
-                maxPointY = point.y;
-                maxPointZ = point.z;
-                
-                init = true;
-                
-            }else{
-                
-                if(point.x > maxPointX){
-                    maxPointX = point.x;
-                }else if(point.x < minPointX){
-                    minPointX = point.x;
-                }
-                
-                if(point.y > maxPointY){
-                    maxPointY = point.y;
-                }else if(point.y < minPointY){
-                    minPointY = point.y;
-                }
-                
-                if(point.z > maxPointZ){
-                    maxPointZ = point.z;
-                }else if(point.z < minPointZ){
-                    minPointZ = point.z;
-                }
-            }
-        }
-        minPoint = new Point3F(minPointX, minPointY, minPointZ);
-        maxPoint = new Point3F(maxPointX, maxPointY, maxPointZ);
-        
-        pointList.toArray(points);
     }
     
     public void build(){
@@ -199,14 +98,15 @@ public class Octree {
             node = root;
             
             while(node.hasChilds()){
-                short indice = node.getIndiceFromPoint(point);
+                short indice = node.get1DIndiceFromPoint(point);
                 
-                Node tmp = node.getChild(indice);
-                if(tmp != null){
-                    node = tmp;
-                }else{
+                //le point est à l'extérieur de la bounding-box
+                if(indice == -1){
                     return null;
                 }
+                
+                Node child = node.getChild(indice);
+                node = child;
                 
             }
         }
@@ -214,26 +114,27 @@ public class Octree {
         return node;
     }
     
-    public Point3F searchNearestPoint(Point3F point, short type){
+    public Point3F searchNearestPoint(Point3F point, short type, float errorMargin){
         
         switch(type){
             case BINARY_SEARCH:
                 break;
             case INCREMENTAL_SEARCH:
-                return incrementalSearchNearestPoint(point);
+                return incrementalSearchNearestPoint(point, errorMargin);
         }
         
         return null;
     }
     
-    public boolean isPointBelongToPointcloud(Point3F point, float errorMargin){
+    public boolean isPointBelongsToPointcloud(Point3F point, float errorMargin){
         
-        Point3F incrementalSearchNearestPoint = searchNearestPoint(point, Octree.INCREMENTAL_SEARCH);
+        Point3F incrementalSearchNearestPoint = searchNearestPoint(point, Octree.INCREMENTAL_SEARCH, errorMargin);
                             
                             
         boolean test = false;
         if(incrementalSearchNearestPoint != null){
             float distance = point.distanceTo(incrementalSearchNearestPoint);
+            
 
             if(distance < errorMargin){
                 test = true;
@@ -243,7 +144,7 @@ public class Octree {
         return test;
     }
     
-    private Point3F incrementalSearchNearestPoint(Point3F point){
+    private Point3F incrementalSearchNearestPoint(Point3F point, float errorMargin){
         
         Point3F nearestPoint = null;
         
@@ -272,9 +173,89 @@ public class Octree {
                 }
             }
             
+            if(distance > errorMargin){
+                
+                List<Node> nodesIntersectingSphere = new ArrayList<>();
+                
+                Sphere searchArea = new Sphere(point, errorMargin);
+                
+                incrementalSphereIntersectionSearch(nodesIntersectingSphere, root, searchArea);
+                
+                for(Node node : nodesIntersectingSphere){
+                    
+                    nearestPoints = node.getPoints();
+
+                    if(nearestPoints != null){
+
+                        for (int pointToTest : nearestPoints) {
+
+                            float dist = point.distanceTo(points[pointToTest]);
+
+                            if(dist < distance){
+                                distance = dist;
+                                nearestPoint = points[pointToTest];
+                            }
+                        }
+                    }
+                }
+            }
+            
         }
         
         return nearestPoint;
+    }
+    
+    private void incrementalSphereIntersectionSearch(List<Node> nodesIntersectingSphere, Node node, Sphere sphere){
+        
+        if(sphereIntersection(node, sphere)){
+                    
+            if(node.hasChilds()){
+
+                for(short i=0;i<8;i++){
+                    Node child = node.getChild(i);
+                    boolean intersect = sphereIntersection(child, sphere);
+
+                    if(child.isLeaf() && intersect){
+                        nodesIntersectingSphere.add(child);
+                    }else{
+                        incrementalSphereIntersectionSearch(nodesIntersectingSphere, child, sphere);
+                    }
+                }
+
+            }else{
+                nodesIntersectingSphere.add(node);
+            }
+        }
+    }
+    
+    private boolean sphereIntersection(Node node, Sphere sphere){
+        
+        float dist_squared = sphere.getRadius()*sphere.getRadius();
+        
+        Point3F sphereCenter = sphere.getCenter();
+        
+        Point3F nodeBottomCorner = node.getMinPoint();
+        Point3F nodeTopCorner = node.getMaxPoint();
+        
+        if (sphereCenter.x < nodeBottomCorner.x){
+            dist_squared -= Math.pow(sphereCenter.x - nodeBottomCorner.x, 2);
+        }else if (sphereCenter.x > nodeTopCorner.x) {
+            dist_squared -= Math.pow(sphereCenter.x - nodeTopCorner.x, 2);
+        }
+        
+        if (sphereCenter.y < nodeBottomCorner.y){
+            dist_squared -= Math.pow(sphereCenter.y - nodeBottomCorner.y, 2);
+        }else if (sphereCenter.y > nodeTopCorner.y) {
+            dist_squared -= Math.pow(sphereCenter.y - nodeTopCorner.y, 2);
+        }
+        
+        if (sphereCenter.z < nodeBottomCorner.z){
+            dist_squared -= Math.pow(sphereCenter.z - nodeBottomCorner.z, 2);
+        }else if (sphereCenter.z > nodeTopCorner.z) {
+            dist_squared -= Math.pow(sphereCenter.z - nodeTopCorner.z, 2);
+        }
+        
+        return dist_squared > 0;
     }
 
     public int getMaximumPoints() {
@@ -291,6 +272,18 @@ public class Octree {
 
     public void setDepth(int depth) {
         this.depth = depth;
+    }
+
+    public void setPoints(Point3F[] points) {
+        this.points = points;
+    }
+
+    public void setMinPoint(Point3F minPoint) {
+        this.minPoint = minPoint;
+    }
+
+    public void setMaxPoint(Point3F maxPoint) {
+        this.maxPoint = maxPoint;
     }
     
 }

@@ -41,7 +41,7 @@ public class RxpExtraction implements Iterable<Shot>{
         
     }
     
-    public void openRxpFile(File file){
+    public int openRxpFile(File file){
         
         Thread.currentThread().setContextClassLoader(ClassLoader.getSystemClassLoader());
         
@@ -67,7 +67,11 @@ public class RxpExtraction implements Iterable<Shot>{
                     default:
                         logger.error("Rxp file " + file.getAbsolutePath() + " reading error");
                 }
+            
+                return result;
         }
+        
+        return -1;
         
     }
     

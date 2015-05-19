@@ -139,11 +139,11 @@ public class Node {
             int childContainingPointID;
             Point3F point = octree.getPoints()[indice];
 
-            Point3I indices = getIndicesFromPoint(point);
+            Point3I indices = get3DIndicesFromPoint(point);
 
             childContainingPointID = get1DIndiceFrom3DIndices(indices.x, indices.y, indices.z);
 
-            if(childContainingPointID >= 0 && childContainingPointID <=7){
+            if(isInsideRange(childContainingPointID, 0, 7)){
                 //on ajoute le point à l'enfant
                 childs[childContainingPointID].insertPoint(octree, indice);
             }else{
@@ -153,21 +153,32 @@ public class Node {
         }
     }
     
-    public short getIndiceFromPoint(Point3F point){
+    public short get1DIndiceFromPoint(Point3F point){
         
-        Point3I indices = getIndicesFromPoint(point);
+        Point3I indices = get3DIndicesFromPoint(point);
+        
+        if(indices == null){
+            return -1;
+        }
+        
         return get1DIndiceFrom3DIndices(indices.x, indices.y, indices.z);
     }
     
-    public Point3I getIndicesFromPoint(Point3F point){
+    public Point3I get3DIndicesFromPoint(Point3F point){
         
         int indiceX = (int)((point.x-minPoint.x)/((maxPoint.x-minPoint.x)/2.0f));
         int indiceY = (int)((point.y-minPoint.y)/((maxPoint.y-minPoint.y)/2.0f));
         int indiceZ = (int)((point.z-minPoint.z)/((maxPoint.z-minPoint.z)/2.0f));
-
-        if(indiceX == 2.0f){indiceX = 1;}
-        if(indiceY == 2.0f){indiceY = 1;}
-        if(indiceZ == 2.0f){indiceZ = 1;}
+        
+        //cas où la coordonnée du point est sur la limite maximum de la bounding-box
+        if(indiceX == 2){indiceX = 1;}
+        if(indiceY == 2){indiceY = 1;}
+        if(indiceZ == 2){indiceZ = 1;}
+        
+        //cas où la coordonnée est à l'extérieur de la bounding-box
+        if(!isInsideRange(indiceX, 0, 1) || !isInsideRange(indiceY, 0, 1) || !isInsideRange(indiceZ, 0, 1)){
+            return null;
+        }
         
         return new Point3I(indiceX, indiceY, indiceZ);
     }
@@ -220,6 +231,36 @@ public class Node {
         return result;
     }
     
+    public float getTopCornerDistance(Point3F point){
+        
+        return point.distanceTo(new Point3F(point.x, point.y, maxPoint.z));
+    }
+    
+    public float getBottomCornerDistance(Point3F point){
+        
+        return point.distanceTo(new Point3F(point.x, point.y, minPoint.z));
+    }
+    
+    public float getLeftCornerDistance(Point3F point){
+        
+        return point.distanceTo(new Point3F(minPoint.x, point.y, point.z));
+    }
+    
+    public float getRightCornerDistance(Point3F point){
+        
+        return point.distanceTo(new Point3F(maxPoint.x, point.y, point.z));
+    }
+    
+    public float getFrontCornerDistance(Point3F point){
+        
+        return point.distanceTo(new Point3F(point.x, minPoint.y, point.z));
+    }
+    
+    public float getBackCornerDistance(Point3F point){
+        
+        return point.distanceTo(new Point3F(point.x, maxPoint.y, point.z));
+    }
+    
     public Node getChild(short indice){
         
         if(childs != null && indice <= 7 && indice >= 0){
@@ -228,4 +269,17 @@ public class Node {
         
         return null;
     }
+    
+    private boolean isInsideRange(int value, int min, int max){
+        return (value >= min && value <= max);
+    }
+
+    public Point3F getMinPoint() {
+        return minPoint;
+    }
+
+    public Point3F getMaxPoint() {
+        return maxPoint;
+    }
+    
 }
