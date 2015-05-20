@@ -37,8 +37,9 @@ public class FXPrincipal extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        
         /*
-        Octree octree = OctreeFactory.createOctreeFromPointFile(new File("/media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/pointclouds/ID_61_Vf.txt"), 50);
+        Octree octree = OctreeFactory.createOctreeFromPointFile(new File("/media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/pointclouds/ID_61_Vf.txt"), 50, false);
         octree.build();
         
         File directory = new File("/media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/ascii");
@@ -70,7 +71,7 @@ public class FXPrincipal extends Application {
 
                         Vec4D transformedLocation = Mat4D.multiply(popMatrix, new Vec4D(location.x, location.y, location.z, 1));
 
-                        boolean pointBelongsToPointcloud = octree.isPointBelongsToPointcloud(new Point3F((float)transformedLocation.x, (float)transformedLocation.y, (float)transformedLocation.z), 0.0025f);
+                        boolean pointBelongsToPointcloud = octree.isPointBelongsToPointcloud(new Point3F((float)transformedLocation.x, (float)transformedLocation.y, (float)transformedLocation.z), 0.0025f, Octree.INCREMENTAL_SEARCH);
 
                         if(pointBelongsToPointcloud){
                             writer.write(transformedLocation.x+" "+transformedLocation.y+" "+transformedLocation.z+" "+p.getNumberOfReturns()+" "+p.getReturnNumber()+" "+p.getIntensity()+"\n");
@@ -83,8 +84,8 @@ public class FXPrincipal extends Application {
             }
             
         }
-        */
         
+        */
         
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainFrame.fxml"));
         Parent root = loader.load();

@@ -16,6 +16,7 @@ import fr.ird.voxelidar.octree.Octree;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.TimeCounter;
 import fr.ird.voxelidar.voxelisation.PointCloud;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysisData;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
@@ -72,7 +73,7 @@ public class RxpVoxelisation implements Callable{
     }
 
     @Override
-    public Object call() {
+    public VoxelAnalysisData call() {
         
         
         try {
@@ -119,8 +120,12 @@ public class RxpVoxelisation implements Callable{
                 voxelAnalysis.writeGroundEnergy();
             }
             
+            VoxelAnalysisData resultData = voxelAnalysis.getResultData();
+            
             //permet de signaler au garbage collector que cet élément peut être supprimé
             voxelAnalysis = null;
+            
+            return resultData;
         
         }catch(Exception e){
             logger.error("rxp voxelisation failed, "+e);

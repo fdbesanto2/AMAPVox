@@ -49,6 +49,7 @@ public class VoxelAnalysis implements Runnable {
     private static int compteur = 1;
     private static int compteur2 = 1;
     private Point3d offset;
+    private VoxelAnalysisData resultData;
 
     private float[][] weighting;
     
@@ -116,6 +117,7 @@ public class VoxelAnalysis implements Runnable {
         this.terrain = terrain;
         this.pointcloud = pointcloud;
         Shot.setFilters(filters);
+        resultData = new VoxelAnalysisData();
     }
 
     public VoxelAnalysis(LinkedBlockingQueue<Shot> arrayBlockingQueue, Dtm terrain, List<Filter> filters) {
@@ -126,6 +128,7 @@ public class VoxelAnalysis implements Runnable {
         listeners = new EventListenerList();
         this.terrain = terrain;
         Shot.setFilters(filters);
+        resultData = new VoxelAnalysisData();
     }
 
     /**
@@ -514,7 +517,7 @@ public class VoxelAnalysis implements Runnable {
         boolean isPointInsidePointCloud = true;
         
         if(parameters.isUsePointCloudFilter() && pointcloud != null){
-            isPointInsidePointCloud = pointcloud.isPointBelongsToPointcloud(new Point3F((float) echo.x, (float) echo.y, (float) echo.z), parameters.getPointcloudErrorMargin());
+            isPointInsidePointCloud = pointcloud.isPointBelongsToPointcloud(new Point3F((float) echo.x, (float) echo.y, (float) echo.z), parameters.getPointcloudErrorMargin(), Octree.INCREMENTAL_SEARCH);
         }
         
 
@@ -656,10 +659,16 @@ public class VoxelAnalysis implements Runnable {
                             
                             vox.nbEchos++;
                             
+                            if(parameters.isUsePointCloudFilter()){
+                                resultData.filteredPointsCount++;
+                            }
+                            
+                            
                             intercepted = (surface * beamFraction * longueur);
                             vox.bvIntercepted += intercepted;
                             
                         }else{
+                            
                             
                             if(parameters.isCalculateGroundEnergy() && !parameters.isTLS() && !isSet){
                                 groundEnergy[vox.$i][vox.$j].groundEnergyActual += residualEnergy;
@@ -956,5 +965,9 @@ public void calculatePADAndWrite(double threshold) {
             logger.error(e+" "+this.getClass().getName());
         }
 
+    }
+
+    public VoxelAnalysisData getResultData() {
+        return resultData;
     }
 }

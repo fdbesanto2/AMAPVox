@@ -25,6 +25,7 @@ import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.MatrixConverter;
 import fr.ird.voxelidar.util.TimeCounter;
 import fr.ird.voxelidar.voxelisation.als.LasVoxelisation;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysisData;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -39,8 +40,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.logging.Level;
@@ -124,7 +127,7 @@ public class VoxelisationTool {
 
             try {
                 logger.info("Loading point cloud file...");
-                octree = OctreeFactory.createOctreeFromPointFile(pointcloudFile, OctreeFactory.DEFAULT_MAXIMUM_POINT_NUMBER);
+                octree = OctreeFactory.createOctreeFromPointFile(pointcloudFile, OctreeFactory.DEFAULT_MAXIMUM_POINT_NUMBER, false);
                 octree.build();
                 logger.info("Point cloud file loaded");
                 
@@ -179,7 +182,8 @@ public class VoxelisationTool {
         
         ArrayList<File> files = new ArrayList<>();
         exec = Executors.newFixedThreadPool(coresNumber);
-
+        
+        
         try {
             LinkedBlockingQueue<Callable<RxpVoxelisation>>  tasks = new LinkedBlockingQueue<>(matricesAndFiles.size());
 
@@ -191,18 +195,32 @@ public class VoxelisationTool {
                 files.add(outputFile);
                 count++;
             }
-            exec.invokeAll(tasks);
             
-            /*
-            for (Future f : results) {
-                f.get();
-            }
-            */
-        } catch (InterruptedException | RejectedExecutionException | NullPointerException ex) {
-            logger.error(ex.getMessage());
-        }finally{
+            List<Future<RxpVoxelisation>> results = exec.invokeAll(tasks);
+            
             exec.shutdown();
+            
+            if(parameters.isUsePointCloudFilter() && pointcloud != null){
+                
+                int filteredPointsCount = 0;
+                for (Future f : results) {
+                    VoxelAnalysisData resultData = (VoxelAnalysisData) f.get();
+                    filteredPointsCount += resultData.filteredPointsCount;
+                }
+                
+                logger.info("Number of echos filtered : "+filteredPointsCount);
+                logger.info("Number of points in point cloud: "+pointcloud.getPoints().length);
+            }
+            
+            
+        } catch (InterruptedException | RejectedExecutionException | NullPointerException | ExecutionException ex) {
+            logger.error(ex);
+        }finally{
+            
         }
+        
+            
+        
 
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
 

@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
 
@@ -25,7 +26,7 @@ public class OctreeFactory {
     public final static int DEFAULT_MAXIMUM_POINT_NUMBER = 50;
     
     
-    public static Octree createOctreeFromPointFile(File file, int maximumPointNumber){
+    public static Octree createOctreeFromPointFile(File file, int maximumPointNumber, boolean sortPoints){
         
         List<Point3F> pointList = new ArrayList<>();
         
@@ -115,6 +116,10 @@ public class OctreeFactory {
         
         Point3F minPoint = new Point3F(minPointX, minPointY, minPointZ);
         Point3F maxPoint = new Point3F(maxPointX, maxPointY, maxPointZ);
+        
+        if(sortPoints){
+            Collections.sort(pointList);
+        }
         
         pointList.toArray(points);
         

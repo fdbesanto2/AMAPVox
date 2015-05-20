@@ -194,6 +194,8 @@ public class RxpExtraction implements Runnable{
         if(voxelAnalysis.parameters.isCalculateGroundEnergy() && !voxelAnalysis.parameters.isTLS()){
             voxelAnalysis.writeGroundEnergy();
         }
+        
+        
     }
     
 
