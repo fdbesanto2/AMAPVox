@@ -27,10 +27,13 @@ public class RxpExtraction implements Iterable<Shot>{
     private native void afficherBonjour();
     private native long instantiate();
     private native void delete(long pointer);
-    private native int open(long pointer, String file_name);
+    private native int open(long pointer, String file_name, int shotType);
     private native void closeConnexion(long pointer);
     private native Shot getNextShot(long pointer);
     private native boolean hasShot(long pointer);
+    
+    public final static short SIMPLE_SHOT = 1;
+    public final static short SHOT_WITH_REFLECTANCE = 2;
     
     private long rxpPointer;
     
@@ -41,7 +44,7 @@ public class RxpExtraction implements Iterable<Shot>{
         
     }
     
-    public int openRxpFile(File file){
+    public int openRxpFile(File file, int shotType){
         
         Thread.currentThread().setContextClassLoader(ClassLoader.getSystemClassLoader());
         
@@ -53,7 +56,7 @@ public class RxpExtraction implements Iterable<Shot>{
             case -2:
                 break;
             default:
-                int result = open(rxpPointer, file.getAbsolutePath());
+                int result = open(rxpPointer, file.getAbsolutePath(), shotType);
 
                 switch (result) {
                     case -1:

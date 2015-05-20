@@ -25,6 +25,7 @@
 #include <fstream>
 
 using namespace scanlib;
+using namespace mpc;
 
 
 #ifndef _Included_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction
@@ -53,7 +54,7 @@ extern "C" {
         (JNIEnv *, jobject, jlong pointer);
 
     JNIEXPORT int JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_open
-    (JNIEnv *, jobject, jlong pointer, jstring file_name);
+    (JNIEnv *, jobject, jlong pointer, jstring file_name, jint shotType);
 
     JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_closeConnexion
     (JNIEnv *, jobject, jlong pointer);

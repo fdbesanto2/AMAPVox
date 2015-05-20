@@ -153,7 +153,7 @@ public class RxpExtraction implements Runnable{
         
         voxelAnalysis.createVoxelSpace();
         fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction rxpExtraction = new fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction();
-        rxpExtraction.openRxpFile(rxpFile);
+        rxpExtraction.openRxpFile(rxpFile, fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction.SHOT_WITH_REFLECTANCE);
         
         Iterator<fr.ird.voxelidar.voxelisation.extraction.Shot> iterator = rxpExtraction.iterator();
         
@@ -206,7 +206,7 @@ public class RxpExtraction implements Runnable{
         long startTime = System.currentTimeMillis();
         
         fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction rxpExtraction = new fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction();
-        rxpExtraction.openRxpFile(rxpFile);
+        rxpExtraction.openRxpFile(rxpFile, fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction.SHOT_WITH_REFLECTANCE);
         
         Iterator<fr.ird.voxelidar.voxelisation.extraction.Shot> iterator = rxpExtraction.iterator();
         

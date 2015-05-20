@@ -23,6 +23,15 @@ public class Shot {
     public double ranges[];
     public int intensities[];
     public short classifications[];
+    
+    /**
+     *This is the ratio of the received power to the power that would
+    be received from a white diffuse target at the same distance
+    expressed in dB. The reflectance represents a range independent
+    property of the target.  The surface normal of this target is assumed
+    to be in parallel to the laser beam direction.
+     */
+    public float reflectances[];
 
     public double angle;
     private static List<Filter> filters;
@@ -45,6 +54,19 @@ public class Shot {
         this.direction = new Vector3d(directionX, directionY, directionZ);
         this.ranges = ranges;
     }
+    
+    public Shot(int nbEchos,
+            double originX, double originY, double originZ,
+            double directionX, double directionY, double directionZ,
+            double[] ranges, float[] reflectances) {
+
+        this.origin = new Point3d(originX, originY, originZ);
+        this.nbEchos = nbEchos;
+        this.direction = new Vector3d(directionX, directionY, directionZ);
+        this.ranges = ranges;
+        this.reflectances = reflectances;
+    }
+
 
     public Shot(int nbEchos, Point3d origin, Vector3d direction, double[] ranges) {
 

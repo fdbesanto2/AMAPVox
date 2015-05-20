@@ -83,7 +83,7 @@ public class RxpVoxelisation implements Callable{
         
             voxelAnalysis.createVoxelSpace();
             fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction rxpExtraction = new fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction();
-            int result = rxpExtraction.openRxpFile(inputFile);
+            int result = rxpExtraction.openRxpFile(inputFile, fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction.SHOT_WITH_REFLECTANCE);
             
             if(result != 0){
                 logger.error("Extraction aborted");

@@ -22,6 +22,7 @@ import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -77,6 +78,28 @@ public class VoxelAnalysis implements Runnable {
     int lastShot = 0;
     boolean shotChanged = false;
     Point3d lastEchotemp = new Point3d();
+    
+    List<TempClass> tempList;
+    
+    private class TempClass{
+        
+        public float x;
+        public float y;
+        public float z;
+        public int returnNumber;
+        public int numberOfReturns;
+        public float reflectance;
+
+        public TempClass(float x, float y, float z, int returnNumber, int numberOfReturns, float reflectance) {
+            
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.returnNumber = returnNumber;
+            this.numberOfReturns = numberOfReturns;
+            this.reflectance = reflectance;
+        }
+    }
 
     public void setIsFinished(boolean isFinished) {
         this.isFinished.set(isFinished);
@@ -118,6 +141,7 @@ public class VoxelAnalysis implements Runnable {
         this.pointcloud = pointcloud;
         Shot.setFilters(filters);
         resultData = new VoxelAnalysisData();
+        tempList = new ArrayList<>();
     }
 
     public VoxelAnalysis(LinkedBlockingQueue<Shot> arrayBlockingQueue, Dtm terrain, List<Filter> filters) {
@@ -217,7 +241,7 @@ public class VoxelAnalysis implements Runnable {
 
                 LineSegment seg = new LineSegment(shot.origin, shot.direction, 999999);
                 Point3d echo = new Point3d(seg.getEnd());
-                propagate(origin, echo, (short) 0, 1, 1, shot.origin, false, shot.angle, shot.nbEchos, 0);
+                propagate(origin, echo, (short) 0, 1, 1, shot.origin, false, shot.angle, shot.nbEchos, 0, -1);
 
             } else {
 
@@ -291,9 +315,9 @@ public class VoxelAnalysis implements Runnable {
 
                         // propagate
                         if (parameters.isTLS()) {
-                            propagate(origin, echo, (short) 0, beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i);
+                            propagate(origin, echo, (short) 0, beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i, shot.reflectances[i]);
                         } else {
-                            propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i);
+                            propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i, shot.reflectances[i]);
                         }
 
                         if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
@@ -352,7 +376,7 @@ public class VoxelAnalysis implements Runnable {
 
                             LineSegment seg = new LineSegment(shot.origin, shot.direction, 999999);
                             Point3d echo = new Point3d(seg.getEnd());
-                            propagate(origin, echo, (short) 0, 1, 1, shot.origin, false, shot.angle, shot.nbEchos, 0);
+                            propagate(origin, echo, (short) 0, 1, 1, shot.origin, false, shot.angle, shot.nbEchos, 0, -1);
 
                         } else {
 
@@ -426,9 +450,9 @@ public class VoxelAnalysis implements Runnable {
 
                                     // propagate
                                     if (parameters.isTLS()) {
-                                        propagate(origin, echo, (short) 0, beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i);
+                                        propagate(origin, echo, (short) 0, beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i, -1);
                                     } else {
-                                        propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i);
+                                        propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i, -1);
                                     }
 
                                     if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
@@ -501,7 +525,7 @@ public class VoxelAnalysis implements Runnable {
      * @param source shot origin
      */
     
-    private void propagate(Point3d origin, Point3d echo, short classification, double beamFraction, double residualEnergy, Point3d source, boolean lastEcho, double angle, int nbEchos, int indiceEcho) {
+    private void propagate(Point3d origin, Point3d echo, short classification, double beamFraction, double residualEnergy, Point3d source, boolean lastEcho, double angle, int nbEchos, int indiceEcho, float reflectance) {
 
         //get shot line
         LineElement lineElement = new LineSegment(origin, echo);
@@ -661,6 +685,7 @@ public class VoxelAnalysis implements Runnable {
                             
                             if(parameters.isUsePointCloudFilter()){
                                 resultData.filteredPointsCount++;
+                                tempList.add(new TempClass((float)echo.x, (float)echo.y, (float)echo.z, indiceEcho, nbEchos, reflectance));
                             }
                             
                             
@@ -806,6 +831,16 @@ public void calculatePADAndWrite(double threshold) {
             }
 
             writer.close();
+            
+            //temp
+            
+            try (BufferedWriter writer2 = new BufferedWriter(new FileWriter(new File("/home/calcul/Documents/Julien/temp/test.txt"),true))) {
+                for(TempClass tc : tempList){
+                    writer2.write(tc.x+" "+tc.y+" "+tc.z+" "+tc.returnNumber+" "+tc.numberOfReturns+" "+tc.reflectance+"\n");
+                }
+            }
+            
+            
 //            
 //            DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.US);
 //            otherSymbols.setDecimalSeparator('.');

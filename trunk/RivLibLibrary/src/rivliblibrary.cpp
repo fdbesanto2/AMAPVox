@@ -74,7 +74,7 @@ JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtr
     delete extraction_dll;
 }
 
-JNIEXPORT int JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_open(JNIEnv *env, jobject, jlong pointer, jstring file_name){
+JNIEXPORT int JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_open(JNIEnv *env, jobject, jlong pointer, jstring file_name, jint shotType){
 
     try
     {
@@ -91,7 +91,22 @@ JNIEXPORT int JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtra
 
         puechabonfilter filter;
         extraction_dll->serializer = new FastSerializer(std::cout, filter);
-        extraction_dll->pointcloud = new mypointcloud(*extraction_dll->serializer, env);
+
+
+        ShotType shotTypeID;
+
+        switch(shotType){
+            case 1:
+                shotTypeID = mpc::SIMPLE;
+                break;
+            case 2:
+                shotTypeID = mpc::WITH_REFLECTANCE;
+                break;
+            default:
+                shotTypeID = mpc::SIMPLE;
+                break;
+        }
+        extraction_dll->pointcloud = new mypointcloud(*extraction_dll->serializer, env, shotTypeID);
 
     }catch ( const std::exception &  ){
         return -1;
