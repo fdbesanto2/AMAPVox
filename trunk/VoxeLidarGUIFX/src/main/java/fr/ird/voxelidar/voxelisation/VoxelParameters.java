@@ -6,6 +6,7 @@
 package fr.ird.voxelidar.voxelisation;
 
 import java.io.File;
+import java.util.List;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
 
@@ -36,9 +37,10 @@ public class VoxelParameters {
     private File dtmFile;
     public float minDTMDistance = 1;
     
+    private List<PointcloudFilter> pointcloudFilters;
     private boolean usePointCloudFilter = false;
-    private File pointcloudFile;
-    private float pointcloudErrorMargin = 0.08f;
+    //private File pointcloudFile;
+    //private float pointcloudErrorMargin = 0.08f;
     
     private boolean TLS;
     private float maxPAD = 3;
@@ -226,21 +228,12 @@ public class VoxelParameters {
         this.usePointCloudFilter = usePointCloudFilter;
     }
 
-    public File getPointcloudFile() {
-        return pointcloudFile;
+    public List<PointcloudFilter> getPointcloudFilters() {
+        return pointcloudFilters;
     }
 
-    public void setPointcloudFile(File pointcloudFile) {
-        this.pointcloudFile = pointcloudFile;
-    }
-
-    public float getPointcloudErrorMargin() {
-        return pointcloudErrorMargin;
-    }
-
-    public void setPointcloudErrorMargin(float pointcloudErrorMargin) {
-        this.pointcloudErrorMargin = pointcloudErrorMargin;
-    }
-    
+    public void setPointcloudFilters(List<PointcloudFilter> pointcloudFilters) {
+        this.pointcloudFilters = pointcloudFilters;
+    }    
     
 }

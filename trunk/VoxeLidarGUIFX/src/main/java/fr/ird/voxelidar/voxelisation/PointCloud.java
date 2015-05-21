@@ -16,6 +16,7 @@ For further information, please contact Gregoire Vincent.
 package fr.ird.voxelidar.voxelisation;
 
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
+import fr.ird.voxelidar.voxelisation.raytracing.BoundingBox3F;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -85,8 +86,6 @@ public class PointCloud {
     
     public void readFromFile(File file){
         
-        try {
-            
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 points = new ArrayList<>();
                 String line;
@@ -100,7 +99,6 @@ public class PointCloud {
                     Point3F point = new Point3F(Float.valueOf(split[0]), Float.valueOf(split[1]), Float.valueOf(split[2]));
                     points.add(point);
                 }
-            }
             
             long startTime = System.currentTimeMillis();
             Collections.sort(points);
@@ -118,5 +116,50 @@ public class PointCloud {
         } catch (IOException ex) {
             logger.error(ex);
         }
+    }
+    
+    public BoundingBox3F getBoundingBox(){
+        
+        float xMin = 0, yMin = 0, zMin = 0;
+        float xMax = 0, yMax = 0, zMax = 0;
+        
+        int count = 0;
+        
+        for(Point3F point : points){
+            
+            if(count == 0){
+                
+                xMin = point.x;
+                xMax = point.x;
+                yMin = point.y;
+                yMax = point.y;
+                zMin = point.z;
+                zMax = point.z;
+                
+            }else{
+                
+                if(point.x < xMin){
+                    xMin = point.x;
+                }else if(point.x > xMax){
+                    xMax = point.x;
+                }
+                
+                if(point.y < yMin){
+                    yMin = point.y;
+                }else if(point.y > yMax){
+                    yMax = point.y;
+                }
+                
+                if(point.z < zMin){
+                    zMin = point.z;
+                }else if(point.z > zMax){
+                    zMax = point.z;
+                }
+            }
+            
+            count++;
+        }
+        
+        return new BoundingBox3F(new Point3F(xMin, yMin, zMin), new Point3F(xMax, yMax, zMax));
     }
 }

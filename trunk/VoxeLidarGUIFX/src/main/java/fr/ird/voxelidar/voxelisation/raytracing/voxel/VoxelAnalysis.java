@@ -70,7 +70,7 @@ public class VoxelAnalysis implements Runnable {
 
     private final EventListenerList listeners;
     private Dtm terrain;
-    private Octree pointcloud;
+    private List<Octree> pointcloudList;
     //List<Point3d> echoList = new ArrayList<>();
 
     private int shotID = 0;
@@ -79,7 +79,7 @@ public class VoxelAnalysis implements Runnable {
     boolean shotChanged = false;
     Point3d lastEchotemp = new Point3d();
     
-    List<TempClass> tempList;
+    //List<TempClass> tempList;
     
     private class TempClass{
         
@@ -132,16 +132,16 @@ public class VoxelAnalysis implements Runnable {
         return distance;
     }
     
-    public VoxelAnalysis(Dtm terrain, Octree pointcloud, List<Filter> filters) {
+    public VoxelAnalysis(Dtm terrain, List<Octree> pointcloud, List<Filter> filters) {
 
         nbShotsTreated = 0;
         isFinished = new AtomicBoolean(false);
         listeners = new EventListenerList();
         this.terrain = terrain;
-        this.pointcloud = pointcloud;
+        this.pointcloudList = pointcloud;
         Shot.setFilters(filters);
         resultData = new VoxelAnalysisData();
-        tempList = new ArrayList<>();
+        //tempList = new ArrayList<>();
     }
 
     public VoxelAnalysis(LinkedBlockingQueue<Shot> arrayBlockingQueue, Dtm terrain, List<Filter> filters) {
@@ -538,10 +538,28 @@ public class VoxelAnalysis implements Runnable {
         
         //calculate ground distance
         float echoDistance = getGroundDistance((float) echo.x, (float) echo.y, (float) echo.z);
-        boolean isPointInsidePointCloud = true;
+        boolean keepEcho = true;
         
-        if(parameters.isUsePointCloudFilter() && pointcloud != null){
-            isPointInsidePointCloud = pointcloud.isPointBelongsToPointcloud(new Point3F((float) echo.x, (float) echo.y, (float) echo.z), parameters.getPointcloudErrorMargin(), Octree.INCREMENTAL_SEARCH);
+        if(parameters.isUsePointCloudFilter() && pointcloudList != null){
+            
+            Point3F point = new Point3F((float) echo.x, (float) echo.y, (float) echo.z);
+            
+            int count = 0;
+            boolean test;
+            
+            for(Octree octree : pointcloudList){
+                
+                test = octree.isPointBelongsToPointcloud(point, parameters.getPointcloudFilters().get(count).getPointcloudErrorMargin(), Octree.INCREMENTAL_SEARCH);
+                
+                if(parameters.getPointcloudFilters().get(count).isKeep()){
+                    keepEcho = test;
+                }else{
+                    if(test){
+                        keepEcho = false;
+                    }
+                }
+                count++;
+            }
         }
         
 
@@ -679,13 +697,13 @@ public class VoxelAnalysis implements Runnable {
                         
                         if (((classification != 2 && !parameters.isTLS()) || parameters.isTLS()) && 
                                 ((echoDistance >= parameters.minDTMDistance && echoDistance!= Float.NaN && parameters.useDTMCorrection())|| !parameters.useDTMCorrection()) &&
-                                isPointInsidePointCloud){
+                                keepEcho){
                             
                             vox.nbEchos++;
                             
                             if(parameters.isUsePointCloudFilter()){
                                 resultData.filteredPointsCount++;
-                                tempList.add(new TempClass((float)echo.x, (float)echo.y, (float)echo.z, indiceEcho, nbEchos, reflectance));
+                                //tempList.add(new TempClass((float)echo.x, (float)echo.y, (float)echo.z, indiceEcho, nbEchos, reflectance));
                             }
                             
                             
@@ -833,12 +851,12 @@ public void calculatePADAndWrite(double threshold) {
             writer.close();
             
             //temp
-            
+            /*
             try (BufferedWriter writer2 = new BufferedWriter(new FileWriter(new File("/home/calcul/Documents/Julien/temp/test.txt"),true))) {
                 for(TempClass tc : tempList){
-                    writer2.write(tc.x+" "+tc.y+" "+tc.z+" "+tc.returnNumber+" "+tc.numberOfReturns+" "+tc.reflectance+"\n");
+                    writer2.write(tc.x+" "+tc.y+" "+tc.z+" "+tc.returnNumber+1+" "+tc.numberOfReturns+" "+tc.reflectance+"\n");
                 }
-            }
+            }*/
             
             
 //            

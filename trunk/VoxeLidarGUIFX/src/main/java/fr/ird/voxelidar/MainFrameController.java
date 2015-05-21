@@ -29,11 +29,14 @@ import fr.ird.voxelidar.util.MatrixConverter;
 import fr.ird.voxelidar.util.MatrixFileParser;
 import fr.ird.voxelidar.util.Settings;
 import fr.ird.voxelidar.util.TimeCounter;
+import fr.ird.voxelidar.voxelisation.PointCloud;
+import fr.ird.voxelidar.voxelisation.PointcloudFilter;
 import fr.ird.voxelidar.voxelisation.VoxelParameters;
 import fr.ird.voxelidar.voxelisation.VoxelisationTool;
 import fr.ird.voxelidar.voxelisation.VoxelisationToolListener;
 import fr.ird.voxelidar.voxelisation.als.LasPoint;
 import fr.ird.voxelidar.voxelisation.extraction.als.LazExtraction;
+import fr.ird.voxelidar.voxelisation.raytracing.BoundingBox3F;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -65,6 +68,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -146,47 +150,25 @@ public class MainFrameController implements Initializable {
     private RadioButton radiobuttonDontDisplayValues;
     @FXML
     private AnchorPane anchorpanePreFiltering;
-    @FXML
-    private Button buttonOpenPointCloudFile;
-    @FXML
-    private Label labelPointCloudPath;
-    @FXML
-    private TextField textfieldPointCloudPath;
+    //private Button buttonOpenPointCloudFile;
+    //private Label labelPointCloudPath;
+    //private TextField textfieldPointCloudPath;
+    
     @FXML
     private CheckBox checkboxUsePointcloudFilter;
-    @FXML
+    /*
     private TextField textfieldPointCloudErrorMargin;
-    @FXML
     private Label labelPointCloudErrorMarginValue;
-    @FXML
     private AnchorPane anchorpanePointCloudFilterParameters;
-
+    */
+    
     @FXML
-    private void onActionMenuitemClearWindow(ActionEvent event) {
-        try {
-            resetComponents();
-        } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
+    private Button buttonAddPointcloudFilter;
+    
     @FXML
-    private void onActionButtonOpenPointCloudFile(ActionEvent event) {
-        
-        if (lastFCOpenPointCloudFile != null) {
-            fileChooserOpenPointCloudFile.setInitialDirectory(lastFCOpenPointCloudFile.getParentFile());
-        }
-
-        File selectedFile = fileChooserOpenPointCloudFile.showOpenDialog(stage);
-        if (selectedFile != null) {
-            textfieldPointCloudPath.setText(selectedFile.getAbsolutePath());
-            lastFCOpenPointCloudFile = selectedFile;
-        }
-    }
-
+    private AnchorPane anchorpanePointCloudFiltering;
     @FXML
-    private void onActionCheckboxUsePointcloudFilter(ActionEvent event) {
-    }
+    private Button buttonGetBoundingBox;
     
     public class MinMax{
         
@@ -270,6 +252,7 @@ public class MainFrameController implements Initializable {
     private boolean filterScan;
     private List<MatrixAndFile> items;
     private Rsp rsp;
+    private double currentLastPointCloudLayoutY;
     
     private final static String MATRIX_FORMAT_ERROR_MSG = "Matrix file has to look like this: \n\n\t1.0 0.0 0.0 0.0\n\t0.0 1.0 0.0 0.0\n\t0.0 0.0 1.0 0.0\n\t0.0 0.0 0.0 1.0\n";
     
@@ -818,28 +801,7 @@ public class MainFrameController implements Initializable {
             }
         });
         
-        checkboxUsePointcloudFilter.selectedProperty().addListener(new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if(newValue){
-                    anchorpanePointCloudFilterParameters.setDisable(false);
-                    labelPointCloudPath.setDisable(false);
-                    textfieldPointCloudPath.setDisable(false);
-                    buttonOpenPointCloudFile.setDisable(false);
-                    labelPointCloudErrorMarginValue.setDisable(false);
-                    textfieldPointCloudErrorMargin.setDisable(false);
-                            
-                }else{
-                    anchorpanePointCloudFilterParameters.setDisable(true);
-                    labelPointCloudPath.setDisable(true);
-                    textfieldPointCloudPath.setDisable(true);
-                    buttonOpenPointCloudFile.setDisable(true);
-                    labelPointCloudErrorMarginValue.setDisable(true);
-                    textfieldPointCloudErrorMargin.setDisable(true);
-                }
-            }
-        });
+        
         
         checkboxUseVopMatrix.selectedProperty().addListener(new ChangeListener<Boolean>() {
 
@@ -1185,6 +1147,28 @@ public class MainFrameController implements Initializable {
         ToggleGroup groupDisplayFiltering = new ToggleGroup();
         radiobuttonDisplayValues.setToggleGroup(groupDisplayFiltering);
         radiobuttonDontDisplayValues.setToggleGroup(groupDisplayFiltering);
+        
+        currentLastPointCloudLayoutY = 50;
+        addPointcloudFilterComponent();
+        
+        checkboxUsePointcloudFilter.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                
+                ObservableList<Node> list = anchorpanePointCloudFiltering.getChildren();
+                for(Node n : list){
+                    if(n instanceof PointCloudFilterPaneComponent){
+                        
+                        PointCloudFilterPaneComponent panel = (PointCloudFilterPaneComponent) n;
+                        panel.disableContent(!newValue);
+                    }
+                }
+                
+                buttonAddPointcloudFilter.setDisable(!newValue);
+                
+            }
+        });
 
     }
 
@@ -2474,8 +2458,29 @@ public class MainFrameController implements Initializable {
         
         voxelParameters.setUsePointCloudFilter(checkboxUsePointcloudFilter.isSelected());
         if(checkboxUsePointcloudFilter.isSelected()){
-            voxelParameters.setPointcloudErrorMargin(Float.valueOf(textfieldPointCloudErrorMargin.getText()));
-            voxelParameters.setPointcloudFile(new File(textfieldPointCloudPath.getText()));
+            
+            List<PointcloudFilter> pointcloudFilters = new ArrayList<>();
+            
+            ObservableList<Node> childrenUnmodifiable = anchorpanePointCloudFiltering.getChildrenUnmodifiable();
+            for(Node n : childrenUnmodifiable){
+                if(n instanceof PointCloudFilterPaneComponent){
+                    PointCloudFilterPaneComponent pane = (PointCloudFilterPaneComponent) n;
+                    
+                    boolean keep;
+                    
+                    int index = pane.getComboboxPointCloudFilteringType().getSelectionModel().getSelectedIndex();
+                    keep = index == 0;
+                    
+                    pointcloudFilters.add(new PointcloudFilter(new File(pane.getTextfieldPointCloudPath().getText()), 
+                                                                Float.valueOf(pane.getTextfieldPointCloudErrorMargin().getText()), 
+                                                                keep));
+                }
+            }
+            
+            voxelParameters.setPointcloudFilters(pointcloudFilters);
+            
+            //voxelParameters.setPointcloudErrorMargin(Float.valueOf(textfieldPointCloudErrorMargin.getText()));
+            //voxelParameters.setPointcloudFile(new File(textfieldPointCloudPath.getText()));
         }
 
         voxelParameters.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
@@ -2738,10 +2743,24 @@ public class MainFrameController implements Initializable {
                     }
                     
                     checkboxUsePointcloudFilter.setSelected(voxelParameters.isUsePointCloudFilter());
-                    File tmpFile2 = voxelParameters.getPointcloudFile();
-                    if(tmpFile2 != null){
-                        textfieldPointCloudPath.setText(tmpFile2.getAbsolutePath());
-                        textfieldPointCloudErrorMargin.setText(String.valueOf(voxelParameters.getPointcloudErrorMargin()));
+                    List<PointcloudFilter> pointcloudFilters = voxelParameters.getPointcloudFilters();
+                    if(pointcloudFilters != null){
+                        
+                        clearPointcloudFiltersPane();
+                        
+                        for(PointcloudFilter filter : pointcloudFilters){
+                            PointCloudFilterPaneComponent pane = addPointcloudFilterComponent();
+                            pane.getTextfieldPointCloudPath().setText(filter.getPointcloudFile().getAbsolutePath());
+                            pane.getTextfieldPointCloudErrorMargin().setText(String.valueOf(filter.getPointcloudErrorMargin()));
+                            
+                            int index;
+                            if(filter.isKeep()){
+                                index = 0;
+                            }else{
+                                index = 1;
+                            }
+                            pane.getComboboxPointCloudFilteringType().getSelectionModel().select(index);
+                        }
                     }
 
                     checkboxUsePopMatrix.setSelected(cfg.isUsePopMatrix());
@@ -3617,6 +3636,215 @@ public class MainFrameController implements Initializable {
         removeWarnings = false;
                 
     }
+    
+    @FXML
+    private void onActionMenuitemClearWindow(ActionEvent event) {
+        try {
+            resetComponents();
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void onActionButtonOpenPointCloudFile(ActionEvent event) {
+        
+        
+    }
+
+    @FXML
+    private void onActionCheckboxUsePointcloudFilter(ActionEvent event) {
+    }
+
+    @FXML
+    private void onActionButtonAddPointcloudFilter(ActionEvent event) {
+        
+        addPointcloudFilterComponent();
+    }
+    
+    private PointCloudFilterPaneComponent addPointcloudFilterComponent(){
+        
+        PointCloudFilterPaneComponent pcfpc = new PointCloudFilterPaneComponent(anchorpanePointCloudFiltering);
+        
+        pcfpc.getButtonRemovePointCloudFilter().setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
                 
+                int index = anchorpanePointCloudFiltering.getChildren().indexOf(pcfpc);
+                
+                anchorpanePointCloudFiltering.getChildren().remove(index);
+                
+                ObservableList<Node> list = anchorpanePointCloudFiltering.getChildren();
+                
+                int count = 0;
+                int count2 = 0;
+                boolean offsetModified = false;
+                
+                for(Node n : list){
+                    if(n instanceof AnchorPane){
+                        
+                        count++;
+                        
+                        AnchorPane p = (AnchorPane) n;
+                        if((count+count2) >= index ){
+                            
+                            if((count+count2) > index ){
+                                double offset = p.getLayoutY()-70;
+                                p.setLayoutY(offset);
+                            }
+                            
+                            if(!offsetModified){
+                                currentLastPointCloudLayoutY -= 70;
+                                offsetModified = true;
+                            }
+                            
+                        }
+                        
+                    }else{
+                        count2++;
+                    }
+                }
+            }
+        });
+        
+        pcfpc.getButtonOpenPointCloudFile().setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                if (lastFCOpenPointCloudFile != null) {
+                    fileChooserOpenPointCloudFile.setInitialDirectory(lastFCOpenPointCloudFile.getParentFile());
+                }
+
+                File selectedFile = fileChooserOpenPointCloudFile.showOpenDialog(stage);
+                if (selectedFile != null) {
+                    pcfpc.getTextfieldPointCloudPath().setText(selectedFile.getAbsolutePath());
+                    lastFCOpenPointCloudFile = selectedFile;
+                }
+            }
+        });
+        
+        pcfpc.disableContent(!checkboxUsePointcloudFilter.isSelected());
+        
+        pcfpc.relocate(pcfpc.getLayoutX(), currentLastPointCloudLayoutY);
+        currentLastPointCloudLayoutY += 70;
+        
+        anchorpanePointCloudFiltering.getChildren().add(pcfpc);
+        
+        return pcfpc;
+    }
+                
+    private void clearPointcloudFiltersPane(){
+        
+        ObservableList<Node> children = anchorpanePointCloudFiltering.getChildren();
+        
+        List<PointCloudFilterPaneComponent> tempList = new ArrayList<>();
+        
+        for(Node n : children){
+            if(n instanceof PointCloudFilterPaneComponent){
+                
+                PointCloudFilterPaneComponent comp = (PointCloudFilterPaneComponent) n;
+                tempList.add(comp);
+            }
+        }
+        
+        children.removeAll(tempList);
+        
+        currentLastPointCloudLayoutY = 50;
+        
+    }
+    
+    @FXML
+    private void onActionButtonGetBoundingBox(ActionEvent event) {
+        
+        ObservableList<Node> children = anchorpanePointCloudFiltering.getChildren();
+        
+        List<PointCloudFilterPaneComponent> tempList = new ArrayList<>();
+        
+        for(Node n : children){
+            if(n instanceof PointCloudFilterPaneComponent){
+                
+                PointCloudFilterPaneComponent comp = (PointCloudFilterPaneComponent) n;
+                tempList.add(comp);
+            }
+        }
+        
+        Service<Void> service = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws InterruptedException {
+                        
+                        final BoundingBox3F boundingBox = new BoundingBox3F();
+                        
+                        int count = 0;
+        
+                        for(PointCloudFilterPaneComponent pane : tempList){
+
+                            if(pane.getComboboxPointCloudFilteringType().getSelectionModel().getSelectedIndex() == 0){
+
+                                File file = new File(pane.getTextfieldPointCloudPath().getText());
+
+                                if(Files.exists(file.toPath()) && file.isFile()){
+
+                                    PointCloud pc = new PointCloud();
+                                    pc.readFromFile(file);
+                                    
+                                    BoundingBox3F boundingBox2;
+                                    if(count == 0){
+                                        boundingBox2 = pc.getBoundingBox();
+                                        boundingBox.min = boundingBox2.min;
+                                        boundingBox.max = boundingBox2.max;
+                                        
+                                    }else{
+                                        boundingBox2 = pc.getBoundingBox();
+                                        boundingBox.keepLargest(boundingBox2);
+                                    }
+                                    count++;
+                                }
+                            }
+                        }
+                        
+                        Platform.runLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Alert alert = new Alert(AlertType.CONFIRMATION);
+                                alert.setTitle("Information");
+                                alert.setHeaderText("Bounding box:");
+                                alert.setContentText("Minimum: "+"x: "+boundingBox.min.x+" y: "+boundingBox.min.y+" z: "+boundingBox.min.z+"\n"+
+                                                    "Maximum: "+"x: "+boundingBox.max.x+" y: "+boundingBox.max.y+" z: "+boundingBox.max.z+"\n\n"+
+                                                    "Use for voxel space bounding-box?");
+                                
+                                
+                                alert.initModality(Modality.NONE);
+                                Optional<ButtonType> answer = alert.showAndWait();
+                                if(answer.get() == ButtonType.OK){
+                                    
+                                    textFieldEnterXMin.setText(String.valueOf(boundingBox.min.x));
+                                    textFieldEnterYMin.setText(String.valueOf(boundingBox.min.y));
+                                    textFieldEnterZMin.setText(String.valueOf(boundingBox.min.z));
+                                    
+                                    textFieldEnterXMax.setText(String.valueOf(boundingBox.max.x));
+                                    textFieldEnterYMax.setText(String.valueOf(boundingBox.max.y));
+                                    textFieldEnterZMax.setText(String.valueOf(boundingBox.max.z));
+                                }
+                            }
+                        });
+                        
+                        return null;
+                    }
+                };
+            }
+        };
+
+        ProgressDialog d = new ProgressDialog(service);
+        d.initOwner(stage);
+        d.show();
+        
+        service.start();
+        
+        
+    }
 
 }

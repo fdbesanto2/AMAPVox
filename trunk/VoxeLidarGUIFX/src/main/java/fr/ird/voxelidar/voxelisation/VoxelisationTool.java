@@ -68,7 +68,7 @@ public class VoxelisationTool {
     private final EventListenerList listeners;
     private long startTime;
     private Dtm dtm;
-    private Octree pointcloud;
+    private List<Octree> pointcloudList;
     //private PointCloud pointcloud;
     private boolean cancelled;
     private ExecutorService exec;
@@ -177,7 +177,16 @@ public class VoxelisationTool {
         
         dtm = loadDTM(parameters.getDtmFile());
         
-        pointcloud = loadOctree(parameters.getPointcloudFile());
+        List<PointcloudFilter> pointcloudFilters = parameters.getPointcloudFilters();
+        
+        if(pointcloudFilters != null){
+            
+            pointcloudList = new ArrayList<>();
+            for(PointcloudFilter filter : pointcloudFilters){
+                pointcloudList.add(loadOctree(filter.getPointcloudFile()));
+            }
+        }
+        
         //pointcloud = loadPointcloud(parameters.getPointcloudFile());
         
         ArrayList<File> files = new ArrayList<>();
@@ -191,7 +200,7 @@ public class VoxelisationTool {
             for (MatrixAndFile file : matricesAndFiles) {
 
                 File outputFile = new File(output.getAbsolutePath() + "/" + file.file.getName() + ".vox");
-                tasks.add(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixConverter.convertMatrix4dToMat4D(file.matrix), this.parameters, dtm, pointcloud, filters));
+                tasks.add(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixConverter.convertMatrix4dToMat4D(file.matrix), this.parameters, dtm, pointcloudList, filters));
                 files.add(outputFile);
                 count++;
             }
@@ -200,7 +209,7 @@ public class VoxelisationTool {
             
             exec.shutdown();
             
-            if(parameters.isUsePointCloudFilter() && pointcloud != null){
+            if(parameters.isUsePointCloudFilter() && pointcloudList != null){
                 
                 int filteredPointsCount = 0;
                 for (Future f : results) {
@@ -209,7 +218,7 @@ public class VoxelisationTool {
                 }
                 
                 logger.info("Number of echos filtered : "+filteredPointsCount);
-                logger.info("Number of points in point cloud: "+pointcloud.getPoints().length);
+                //logger.info("Number of points in point cloud: "+pointcloudList.getPoints().length);
             }
             
             
@@ -247,7 +256,7 @@ public class VoxelisationTool {
         if(sop == null){ sop = Mat4D.identity();}
         if(vop == null){ vop = Mat4D.identity();}
 
-        RxpVoxelisation voxelisation = new RxpVoxelisation(input, output, vop, pop, sop, parameters, dtm, pointcloud, filters);
+        RxpVoxelisation voxelisation = new RxpVoxelisation(input, output, vop, pop, sop, parameters, dtm, pointcloudList, filters);
         voxelisation.call();
 
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));

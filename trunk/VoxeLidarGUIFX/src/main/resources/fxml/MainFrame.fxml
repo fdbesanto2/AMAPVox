@@ -297,11 +297,11 @@
                                                                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                                                  <children>
                                                                                     <CheckBox fx:id="checkboxUseDTMFilter" layoutX="14.0" layoutY="23.0" mnemonicParsing="false" onAction="#onActionCheckboxUseDTMFilter" text="DTM filter" AnchorPane.leftAnchor="10.0" />
-                                                                                    <TextField fx:id="textfieldDTMPath" disable="true" layoutX="108.0" layoutY="55.0" prefHeight="25.0" prefWidth="227.0" />
+                                                                                    <TextField fx:id="textfieldDTMPath" disable="true" layoutX="124.0" layoutY="54.0" prefHeight="25.0" prefWidth="227.0" AnchorPane.leftAnchor="124.0" />
                                                                                     <Label fx:id="labelDTMPath" disable="true" layoutX="14.0" layoutY="59.0" text="DTM path (.asc)" AnchorPane.leftAnchor="10.0" />
-                                                                                    <Button fx:id="buttonOpenDTMFile" disable="true" layoutX="335.0" layoutY="55.0" mnemonicParsing="false" onAction="#onActionButtonOpenDTMFile" text="Open" />
+                                                                                    <Button fx:id="buttonOpenDTMFile" disable="true" layoutX="361.0" layoutY="54.0" mnemonicParsing="false" onAction="#onActionButtonOpenDTMFile" text="Open" AnchorPane.leftAnchor="361.0" />
                                                                                     <Label fx:id="labelDTMValue" disable="true" layoutX="108.0" layoutY="101.0" text="Offset (distance above ground)" AnchorPane.leftAnchor="108.0" />
-                                                                                    <TextField fx:id="textfieldDTMValue" disable="true" layoutX="283.0" layoutY="97.0" prefHeight="25.0" prefWidth="55.0" text="1" />
+                                                                                    <TextField fx:id="textfieldDTMValue" disable="true" layoutX="324.0" layoutY="96.0" prefHeight="25.0" prefWidth="55.0" text="1" />
                                                                                  </children>
                                                                               </AnchorPane>
                                                                            </content>
@@ -335,20 +335,25 @@
                                                                         </TitledPane>
                                                                         <TitledPane expanded="false" prefHeight="200.0" prefWidth="200.0" text="Point cloud">
                                                                            <content>
-                                                                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                                                                 <children>
-                                                                                    <CheckBox fx:id="checkboxUsePointcloudFilter" layoutX="7.0" layoutY="21.0" mnemonicParsing="false" onAction="#onActionCheckboxUsePointcloudFilter" text="Point cloud filter" AnchorPane.leftAnchor="10.0" />
-                                                                                    <AnchorPane fx:id="anchorpanePointCloudFilterParameters" layoutX="20.0" layoutY="49.0" prefHeight="70.0" prefWidth="416.0">
+                                                                              <ScrollPane prefViewportHeight="278.0" prefViewportWidth="457.0">
+                                                                                 <content>
+                                                                                    <AnchorPane fx:id="anchorpanePointCloudFiltering" prefHeight="200.0" prefWidth="424.0">
                                                                                        <children>
-                                                                                          <TextField fx:id="textfieldPointCloudPath" disable="true" layoutX="125.0" prefHeight="25.0" prefWidth="227.0" />
-                                                                                          <Label fx:id="labelPointCloudErrorMarginValue" disable="true" layoutX="97.99999809265137" layoutY="49.0" text="Error's margin" AnchorPane.leftAnchor="108.0" />
-                                                                                          <TextField fx:id="textfieldPointCloudErrorMargin" disable="true" layoutX="183.0" layoutY="45.0" prefHeight="25.0" prefWidth="55.0" text="0.08" />
-                                                                                          <Label fx:id="labelPointCloudPath" disable="true" layoutY="4.0" text="Point cloud path (.txt)" AnchorPane.leftAnchor="10.0" />
-                                                                                          <Button fx:id="buttonOpenPointCloudFile" disable="true" layoutX="352.0" mnemonicParsing="false" onAction="#onActionButtonOpenPointCloudFile" text="Open" />
+                                                                                          <CheckBox fx:id="checkboxUsePointcloudFilter" layoutX="7.0" layoutY="21.0" mnemonicParsing="false" onAction="#onActionCheckboxUsePointcloudFilter" text="Point cloud filter" AnchorPane.leftAnchor="10.0" />
+                                                                                          <Button fx:id="buttonAddPointcloudFilter" disable="true" layoutX="167.0" layoutY="18.0" mnemonicParsing="false" onAction="#onActionButtonAddPointcloudFilter" text="Add">
+                                                                                             <graphic>
+                                                                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                   <image>
+                                                                                                      <Image url="@icons/gnome_list_add.png" />
+                                                                                                   </image>
+                                                                                                </ImageView>
+                                                                                             </graphic>
+                                                                                          </Button>
+                                                                                          <Button fx:id="buttonGetBoundingBox" layoutX="242.0" layoutY="18.0" mnemonicParsing="false" onAction="#onActionButtonGetBoundingBox" text="Get bounding-box" />
                                                                                        </children>
                                                                                     </AnchorPane>
-                                                                                 </children>
-                                                                              </AnchorPane>
+                                                                                 </content>
+                                                                              </ScrollPane>
                                                                            </content>
                                                                         </TitledPane>
                                                                         <TitledPane expanded="false" prefHeight="200.0" prefWidth="200.0" text="Other">

@@ -6,6 +6,7 @@
 package fr.ird.voxelidar;
 
 import fr.ird.voxelidar.util.Filter;
+import fr.ird.voxelidar.voxelisation.PointcloudFilter;
 import fr.ird.voxelidar.voxelisation.VoxelParameters;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -211,17 +212,35 @@ public class Configuration {
             
             processElement.addContent(dtmFilterElement);
             
-            Element pointcloudFilterElement = new Element("pointcloud-filter");
-            pointcloudFilterElement.setAttribute(new Attribute("enabled",String.valueOf(voxelParameters.isUsePointCloudFilter())));
+            Element pointcloudFiltersElement = new Element("pointcloud-filters");
+            pointcloudFiltersElement.setAttribute(new Attribute("enabled",String.valueOf(voxelParameters.isUsePointCloudFilter())));
+            
             if(voxelParameters.isUsePointCloudFilter()){
-                if(voxelParameters.getPointcloudFile()!= null){
-                    pointcloudFilterElement.setAttribute(new Attribute("src", voxelParameters.getPointcloudFile().getAbsolutePath()));
+                
+                List<PointcloudFilter> pointcloudFilters = voxelParameters.getPointcloudFilters();
+                
+                if(pointcloudFilters != null){
+                    
+                    for(PointcloudFilter filter: pointcloudFilters){
+                        Element pointcloudFilterElement = new Element("pointcloud-filter");
+                        pointcloudFilterElement.setAttribute(new Attribute("src", filter.getPointcloudFile().getAbsolutePath()));
+                        pointcloudFilterElement.setAttribute(new Attribute("error-margin",String.valueOf(filter.getPointcloudErrorMargin())));
+                        
+                        String operationType;
+                        if(filter.isKeep()){
+                            operationType = "Keep";
+                        }else{
+                            operationType = "Discard";
+                        }
+                        
+                        pointcloudFilterElement.setAttribute(new Attribute("operation-type",operationType));
+                        pointcloudFiltersElement.addContent(pointcloudFilterElement);
+                    }
                 }
                 
-                pointcloudFilterElement.setAttribute(new Attribute("error-margin",String.valueOf(voxelParameters.getPointcloudErrorMargin())));
             }
             
-            processElement.addContent(pointcloudFilterElement);
+            processElement.addContent(pointcloudFiltersElement);
             
             /***TRANSFORMATION***/
             
@@ -521,14 +540,33 @@ public class Configuration {
                         }                        
                     }
                     
-                    Element pointcloudFilterElement = processElement.getChild("pointcloud-filter");
+                    Element pointcloudFiltersElement = processElement.getChild("pointcloud-filters");
                     
-                    if(pointcloudFilterElement != null){
-                        boolean usePointCloudFilter = Boolean.valueOf(pointcloudFilterElement.getAttributeValue("enabled"));
+                    if(pointcloudFiltersElement != null){
+                        boolean usePointCloudFilter = Boolean.valueOf(pointcloudFiltersElement.getAttributeValue("enabled"));
                         voxelParameters.setUsePointCloudFilter(usePointCloudFilter);
                         if(usePointCloudFilter){
-                            voxelParameters.setPointcloudFile(new File(pointcloudFilterElement.getAttributeValue("src")));
-                            voxelParameters.setPointcloudErrorMargin(Float.valueOf(pointcloudFilterElement.getAttributeValue("error-margin")));
+                            
+                            List<Element> childrens = pointcloudFiltersElement.getChildren("pointcloud-filter");
+                            
+                            if(childrens != null){
+                                List<PointcloudFilter> pointcloudFilters = new ArrayList<>();
+                                for(Element e : childrens){
+                                    
+                                    boolean keep;
+                                    String operationType = e.getAttributeValue("operation-type");
+                                    if(operationType.equals("Keep")){
+                                        keep = true;
+                                    }else{
+                                        keep = false;
+                                    }
+                                    pointcloudFilters.add(new PointcloudFilter(new File(e.getAttributeValue("src")), 
+                                            Float.valueOf(e.getAttributeValue("error-margin")), keep));
+                                }
+                                
+                                voxelParameters.setPointcloudFilters(pointcloudFilters);
+                                
+                            }
                         }                        
                     }
                     
