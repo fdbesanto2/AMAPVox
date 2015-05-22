@@ -147,7 +147,8 @@ public class Voxel implements Serializable {
         protected static Set<String> fieldsNames;
         protected static Set<Field> _fields;
         
-        private static boolean _isInitialized = false;
+        private static boolean classInit = false;
+        
         
 
         /**
@@ -163,11 +164,20 @@ public class Voxel implements Serializable {
             this.$k = k;
         }
         
-        {
-            if(!_isInitialized) {
-                _fields = Voxel.getFields(Voxel.class);
-                _isInitialized = true;
+        public Voxel(int i, int j, int k, Class c) {
+            
+            this.$i = i;
+            this.$j = j;
+            this.$k = k;
+            
+            if(!classInit){
+                _fields = Voxel.getFields(c);
+                classInit = true;
             }
+        }
+        
+        static{
+            _fields = Voxel.getFields(Voxel.class);
         }
         
         public Voxel(){

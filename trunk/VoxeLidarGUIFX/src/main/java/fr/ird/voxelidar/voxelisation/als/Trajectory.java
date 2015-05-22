@@ -14,11 +14,19 @@ public class Trajectory {
     public double x;
     public double y;
     public double z;
+    public double t;
 
     public Trajectory(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+    
+    public Trajectory(double x, double y, double z, double t) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.t = t;
     }
     
     

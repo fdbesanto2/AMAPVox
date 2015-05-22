@@ -13,7 +13,6 @@ import fr.ird.voxelidar.engine3d.object.mesh.Attribut;
 import fr.ird.voxelidar.engine3d.loading.mesh.MeshFactory;
 import fr.ird.voxelidar.engine3d.loading.shader.Shader;
 import fr.ird.voxelidar.io.file.FileManager;
-import fr.ird.voxelidar.engine3d.math.point.Point2F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.object.mesh.InstancedMesh;
 import fr.ird.voxelidar.util.ColorGradient;
@@ -22,7 +21,6 @@ import fr.ird.voxelidar.util.CombinedFilters;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.Settings;
 import fr.ird.voxelidar.util.StandardDeviation;
-import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -31,15 +29,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
@@ -350,7 +345,7 @@ public class VoxelSpace extends SceneObject{
             try {
                 reader = new BufferedReader(new FileReader(file));
                 
-                Map<String, Point2F> minMax = new HashMap<>();
+                //Map<String, Point2F> minMax = new HashMap<>();
                 
                 //header
                 FileManager.skipLines(reader, 6);
@@ -376,8 +371,8 @@ public class VoxelSpace extends SceneObject{
                         
                         mapAttrs[i] = value;
                         
-                        Point2F minMaxPoint;
-                        
+                        //Point2F minMaxPoint;
+                        /*
                         if((minMaxPoint = minMax.get(data.header.attributsNames.get(i)))!=null){
                             
                             float min = minMaxPoint.x;
@@ -396,7 +391,7 @@ public class VoxelSpace extends SceneObject{
                             
                         }else{
                             minMax.put(data.header.attributsNames.get(i), new Point2F(value, value));
-                        }
+                        }*/
                     }
                     
                     Point3f position = new Point3f((float) (data.header.bottomCorner.x+(indice.x*(data.header.resolution.x))),
@@ -423,7 +418,7 @@ public class VoxelSpace extends SceneObject{
                     setReadFileProgress((lineNumber * 100) / count);
                 }
                 
-                data.calculateAttributsLimits();
+                //data.calculateAttributsLimits();
                 
                 reader.close();
 
@@ -609,16 +604,15 @@ public class VoxelSpace extends SceneObject{
         
         Attribut attribut = mapAttributs.get(currentAttribut);
         
-        float[] values = new float[data.voxels.size()];
+        //float[] values = new float[data.voxels.size()];
         
         int count = 0;
         boolean minMaxInit = false;
         
         StandardDeviation sd = new StandardDeviation();
         
-        for(Voxel v:data.voxels){
+        for(VoxelObject voxel:data.voxels){
             
-            VoxelObject voxel = (VoxelObject) v;
             
             float attributValue;
             
@@ -668,7 +662,7 @@ public class VoxelSpace extends SceneObject{
             
             voxel.setAlpha(255);
             
-            values[count] = voxel.attributValue;
+            //values[count] = voxel.attributValue;
             
             if(stretched){
                 if(useClippedRangeValue){
@@ -761,9 +755,8 @@ public class VoxelSpace extends SceneObject{
         ColorGradient color = new ColorGradient(valMin, valMax);
         color.setGradientColor(gradientColor);
         //ArrayList<Float> values = new ArrayList<>();
-        for (Voxel v : data.voxels) {
+        for (VoxelObject voxel : data.voxels) {
             
-            VoxelObject voxel = (VoxelObject) v;
             //float ratio = voxel.attributValue/(attributValueMax-attributValueMin);
             //float value = valMin+ratio*(valMax-valMin);
             //Color colorGenerated = color.getColor(value);
@@ -877,7 +870,7 @@ public class VoxelSpace extends SceneObject{
 
         for (int i=0, j=0, k=0;i<data.voxels.size();i++, j+=3 ,k+=4) {
             
-            VoxelObject voxel = (VoxelObject) data.voxels.get(i);
+            VoxelObject voxel = data.voxels.get(i);
             boolean isFiltered = true;
             
             if(preFilterValues){

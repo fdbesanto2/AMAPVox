@@ -11,7 +11,7 @@ import fr.ird.voxelidar.util.ByteConverter;
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class LasPoint {
+public class LasPoint implements Comparable<LasPoint>{
     
     public final static int CLASSIFICATION_CREATED_NEVER_CLASSIFIED = 0;
     public final static int CLASSIFICATION_UNCLASSIFIED = 1;
@@ -92,4 +92,16 @@ public class LasPoint {
         this.i = i;
         this.t = t;
     }    
+
+    @Override
+    public int compareTo(LasPoint o) {
+        
+        if(o.t > this.t){
+            return -1;
+        }else if(o.t < this.t){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
 }

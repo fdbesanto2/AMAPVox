@@ -28,7 +28,7 @@ public class ChartFactory extends Processing{
     
     public XYSeries generateChartWithFilters(VoxelSpace voxelSpace, String horizontalAxis, String verticalAxis, VoxelFilter filter){
         
-        ArrayList<Voxel> voxels = voxelSpace.data.voxels;
+        ArrayList<VoxelObject> voxels = voxelSpace.data.voxels;
         
         XYSeries data = new XYSeries("ALS");
         List<String> attributsNames = voxelSpace.data.header.attributsNames;
@@ -37,13 +37,13 @@ public class ChartFactory extends Processing{
         int step = iterationsNumber/10;
         
         int iterationIndex = 0;
-        for (Voxel voxel : voxels) {
+        for (VoxelObject voxel : voxels) {
             
             if(iterationIndex % step == 0){
                 fireProgress("", (int)(((iterationIndex/(float)iterationsNumber)*100)));
             }
             
-            float[] attributs =  ((VoxelObject)voxel).attributs;
+            float[] attributs =  voxel.attributs;
             
             if(filter.doFilter(attributsNames, attributs)){
                 
@@ -64,7 +64,7 @@ public class ChartFactory extends Processing{
     
     public XYSeries generateVegetationProfile(VoxelFilter filter, VoxelSpace voxelSpace){
         
-        ArrayList<Voxel> voxels = voxelSpace.data.voxels;
+        ArrayList<VoxelObject> voxels = voxelSpace.data.voxels;
         
         Map<String, Point2f> minMax = voxelSpace.data.getMinMax();
         Point2f get = minMax.get("dist");
@@ -75,9 +75,9 @@ public class ChartFactory extends Processing{
         float minDist = 0, maxDist=0;
         boolean isRangesInit = false;
         
-        for (Voxel voxel : voxelSpace.data.voxels) {
+        for (VoxelObject voxel : voxelSpace.data.voxels) {
             
-            float[] attributs = ((VoxelObject)voxel).attributs;
+            float[] attributs = voxel.attributs;
 
             float dist = attributs[distIndex];
             
@@ -143,10 +143,10 @@ public class ChartFactory extends Processing{
             int count = 0;
             List<String> attributsNames = voxelSpace.data.header.attributsNames;
             
-            for (Voxel voxel : voxels) {
+            for (VoxelObject voxel : voxels) {
                 
                 
-                float[] attributs = ((VoxelObject)voxel).attributs;
+                float[] attributs = voxel.attributs;
                 
                 float dist = 0;
                 try{

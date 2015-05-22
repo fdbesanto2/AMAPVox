@@ -33,7 +33,7 @@ public class LasVoxelisation extends Processing {
     private final File outputFile;
     private final VoxelParameters parameters;
     private VoxelAnalysis voxelAnalysis;
-    private LinkedBlockingQueue<Shot> queue;
+    //private LinkedBlockingQueue<Shot> queue;
     private final boolean filterLowPoints;
 
     public LasVoxelisation(File alsFile, File outputFile, Mat4D transfMatrix, File trajectoryFile, VoxelParameters parameters, List<Filter> filters, boolean filterLowPoints) {
@@ -44,7 +44,7 @@ public class LasVoxelisation extends Processing {
         this.trajectoryFile = trajectoryFile;
         this.parameters = parameters;
         
-        queue = new LinkedBlockingQueue<>();
+        //queue = new LinkedBlockingQueue<>();
         
         Dtm terrain = null;
         
@@ -59,7 +59,7 @@ public class LasVoxelisation extends Processing {
         }
         
         
-        voxelAnalysis = new VoxelAnalysis(queue, terrain, filters);
+        voxelAnalysis = new VoxelAnalysis(null, terrain, filters);
         this.filterLowPoints = filterLowPoints;
     }
 
@@ -70,7 +70,9 @@ public class LasVoxelisation extends Processing {
         final long start_time = System.currentTimeMillis();
         
         voxelAnalysis.init(parameters, outputFile);
-        final AlsToShot conversion = new AlsToShot(queue, trajectoryFile, alsFile, popMatrix, filterLowPoints);
+        voxelAnalysis.createVoxelSpace();
+        
+        final PointsToShot conversion = new PointsToShot(voxelAnalysis, trajectoryFile, alsFile, popMatrix, filterLowPoints);
         
         try {
             
@@ -92,11 +94,17 @@ public class LasVoxelisation extends Processing {
             
             t2.start();
             
-            Thread t = new Thread(voxelAnalysis);
-            t.start();
+            //Thread t = new Thread(voxelAnalysis);
+            //t.start();
             
             //wait until voxelisation finished
-            t.join();
+            t2.join();
+            
+            voxelAnalysis.calculatePADAndWrite(0);
+            
+            if(parameters.isCalculateGroundEnergy() && !parameters.isTLS()){
+                voxelAnalysis.writeGroundEnergy();
+            }
             
             return outputFile;
             

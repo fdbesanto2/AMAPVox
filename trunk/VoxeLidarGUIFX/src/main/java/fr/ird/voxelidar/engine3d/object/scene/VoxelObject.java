@@ -16,8 +16,11 @@ import javax.vecmath.Point3i;
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class VoxelObject extends Voxel{
+public class VoxelObject{
     
+    public int $i;
+    public int $j;
+    public int $k;
     public final Point3f position;
     public float[] attributs;
     
@@ -26,7 +29,7 @@ public class VoxelObject extends Voxel{
     public float attributValue;
     
     private Color color;
-    public Map<String, Point2f> minMax;
+    //public Map<String, Point2f> minMax;
 
     public float[] getAttributs() {
         return attributs;

@@ -6,14 +6,12 @@
 package fr.ird.voxelidar.multires;
 
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.ALSVoxel;
-import fr.ird.voxelidar.voxelisation.raytracing.voxel.TLSVoxel;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
 import org.apache.log4j.Logger;
 
@@ -55,10 +53,10 @@ public class ProcessingMultiRes {
     
     public void process(List<File> elements) {
 
-        final Map<Double, VoxelSpaceLoader> voxelSpaces = new TreeMap<>();
+        final Map<Float, VoxelSpaceLoader> voxelSpaces = new TreeMap<>();
 
         int count = 0;
-        Point3d resolution;
+        float resolution;
         double minResolution = 0;
         
         for(File f : elements){
@@ -66,24 +64,24 @@ public class ProcessingMultiRes {
             VoxelSpaceLoader voxelSpace = new VoxelSpaceLoader(f);
             voxelSpace.load();
 
-            resolution = voxelSpace.data.resolution;
+            resolution = voxelSpace.data.res;
             try {
-                voxelSpaces.put(resolution.x, voxelSpace);
+                voxelSpaces.put(resolution, voxelSpace);
             } catch (Exception e) {
                 logger.error(e);
             }
 
             if (count == 0) {
-                minResolution = resolution.x;
-            } else if (minResolution > resolution.x) {
-                minResolution = resolution.x;
+                minResolution = resolution;
+            } else if (minResolution > resolution) {
+                minResolution = resolution;
             }
 
             count++;
 
         }
 
-        Iterator<Map.Entry<Double, VoxelSpaceLoader>> entries = voxelSpaces.entrySet().iterator();
+        Iterator<Map.Entry<Float, VoxelSpaceLoader>> entries = voxelSpaces.entrySet().iterator();
         vs = entries.next().getValue();
 
         int correctValues = 0;
@@ -194,9 +192,9 @@ public class ProcessingMultiRes {
 
         for (int n = 0; n < vs.data.voxels.size(); n++) {
 
-            double currentResolution = vs.data.resolution.x;
+            float currentResolution = vs.data.res;
 
-            Voxel voxel = vs.data.voxels.get(n);
+            ExtendedALSVoxel voxel = vs.data.voxels.get(n);
             calculatePAD(voxel, currentResolution, useDefaultMaxPad, vs.data.maxPad);
 
             entries = voxelSpaces.entrySet().iterator();
@@ -209,7 +207,7 @@ public class ProcessingMultiRes {
             boolean uncorrectValue = false;
 
             VoxelSpaceLoader vsTemp;
-            Voxel voxTemp = null;
+            ExtendedALSVoxel voxTemp = null;
 
             //while(currentNbSampling < Math.pow(currentResolution, 2)+1 || currentTransmittance == 0){
             //while (currentNbSampling < Math.pow(currentResolution, 2) * 2 + 1 || currentTransmittance == 0) {
@@ -222,7 +220,7 @@ public class ProcessingMultiRes {
                     break;
                 }
 
-                Map.Entry<Double, VoxelSpaceLoader> entry = entries.next();
+                Map.Entry<Float, VoxelSpaceLoader> entry = entries.next();
                 vsTemp = entry.getValue();
                 currentResolution = entry.getKey();
 
@@ -230,7 +228,7 @@ public class ProcessingMultiRes {
                 Point3i indices = getIndicesFromIndices(new Point3i(voxel.$i, voxel.$j, voxel.$k), currentResolution);
                 voxTemp = vsTemp.data.getVoxel(indices.x, indices.y, indices.z);
 
-                if(voxTemp != null){
+                if(voxTemp != null  && voxTemp.ground_distance > 1){
                     calculatePAD(voxTemp, currentResolution, useDefaultMaxPad, vs.data.maxPad);
 
                     currentNbSampling = voxTemp.nbSampling;
@@ -241,25 +239,25 @@ public class ProcessingMultiRes {
             if (outOfResolutions) {
                 //on met les valeurs par défaut
 
-                if (((ALSVoxel) voxel).ground_distance > 0) {
+                if (voxel.ground_distance > 1) {
                     currentResolution = 0;
                     int indice = vs.data.split.z - tabTemp[voxel.$i][voxel.$j] + voxel.$k;
                     
                     if(indice >= padMeanZ.length){
-                        ((ALSVoxel) voxel).PadBVTotal = 0;
+                        voxel.PadBVTotal = 0;
                     }else if(indice < 0){
-                        ((ALSVoxel) voxel).PadBVTotal = Double.NaN;
+                        voxel.PadBVTotal = Double.NaN;
                     }else{
                         if(useDefaultMaxPad && padMeanZ[indice]>vs.data.maxPad){
-                            ((ALSVoxel) voxel).PadBVTotal = vs.data.maxPad;
+                            voxel.PadBVTotal = vs.data.maxPad;
                         }else{
-                            ((ALSVoxel) voxel).PadBVTotal = padMeanZ[indice];
+                            voxel.PadBVTotal = padMeanZ[indice];
                         }
                         
                     }
                     
                 } else {
-                    currentResolution = Double.NaN;
+                    currentResolution = Float.NaN;
                 }
 
                 setToDefault++;
@@ -267,14 +265,14 @@ public class ProcessingMultiRes {
             } else if (uncorrectValue) {
                 //on applique la nouvelle valeur de Pad
 
-                double oldValue = ((ALSVoxel) voxel).PadBVTotal;
-                double newValue = ((ALSVoxel) voxTemp).PadBVTotal;
+                double oldValue = voxel.PadBVTotal;
+                double newValue = voxTemp.PadBVTotal;
                 
                 if(Double.isNaN(newValue)){
                     logger.error("incorrect Pad value");
                 }
 
-                ((ALSVoxel) voxel).PadBVTotal = newValue;
+                voxel.PadBVTotal = newValue;
 
                 correctedValues++;
 
@@ -282,10 +280,9 @@ public class ProcessingMultiRes {
                 correctValues++;
             }
 
-            ExtendedALSVoxel eV = new ExtendedALSVoxel((ALSVoxel) voxel);
 
-            eV.resolution = currentResolution;
-            vs.data.voxels.set(n, eV);
+            voxel.resolution = currentResolution;
+            vs.data.voxels.set(n, voxel);
         }
         
         logger.info("Nombre de valeurs correctes: " + correctValues + "/" + totalValues);
@@ -300,7 +297,7 @@ public class ProcessingMultiRes {
         vs.write(outputFile);
     }
     
-    private void calculatePAD(Voxel vox, double resolution, boolean useDefault, float defaultMaxPad) {
+    private void calculatePAD(ExtendedALSVoxel vox, double resolution, boolean useDefault, float defaultMaxPad) {
         
         if(useDefault){
             maxPAD = defaultMaxPad;
@@ -329,90 +326,42 @@ public class ProcessingMultiRes {
         
         float pad;
 
-        if (vox instanceof TLSVoxel) {
+        if (vox.bvEntering <= 0) {
 
-            TLSVoxel tlsVox = (TLSVoxel) vox;
+            pad = Float.NaN;
+            vox.transmittance = Float.NaN;
 
-            /**
-             * *PADBV**
-             */
-            if (tlsVox.bvEntering <= 0) {
+        } else if (vox.bvIntercepted > vox.bvEntering) {
 
-                pad = Float.NaN;
-                tlsVox.transmittance = Float.NaN;
-
-            } else if (tlsVox.bvIntercepted > tlsVox.bvEntering) {
-
-                tlsVox.transmittance = Float.NaN;
-                pad = Float.NaN;
-
-            } else {
-
-                tlsVox.transmittance = (tlsVox.bvEntering - tlsVox.bvIntercepted) / tlsVox.bvEntering;
-
-                if (tlsVox.nbSampling > 1 && tlsVox.transmittance == 0) {
-
-                    pad = maxPAD;
-
-                } else if (tlsVox.nbSampling <= 2 && tlsVox.transmittance == 0) {
-
-                    pad = Float.NaN;
-
-                } else {
-                    
-                    pad = (float) (Math.log(tlsVox.transmittance) / (-0.5 * tlsVox.lMeanTotal));
-                    
-                    if (Float.isNaN(pad)) {
-                        pad = Float.NaN;
-                    } else if (pad > maxPAD || Float.isInfinite(pad)) {
-                        pad = maxPAD;
-                    }
-                }
-
-            }
-            
-            tlsVox.PadBVTotal = pad + 0.0f; //set +0.0f to avoid -0.0f
+            pad = Float.NaN;
+            vox.transmittance = Float.NaN;
 
         } else {
 
-            ALSVoxel alsVox = (ALSVoxel) vox;
+            vox.transmittance = (vox.bvEntering - vox.bvIntercepted) / vox.bvEntering;
 
-            if (alsVox.bvEntering <= 0) {
-                
+            if (vox.nbSampling > 1 && vox.transmittance == 0) {
+
+                pad = maxPAD;
+
+            } else if (vox.nbSampling < 2 && vox.transmittance == 0) {
+
                 pad = Float.NaN;
-                alsVox.transmittance = Float.NaN;
-
-            } else if (alsVox.bvIntercepted > alsVox.bvEntering) {
-
-                pad = Float.NaN;
-                alsVox.transmittance = Float.NaN;
 
             } else {
-                
-                alsVox.transmittance = (alsVox.bvEntering - alsVox.bvIntercepted) / alsVox.bvEntering;
 
-                if (alsVox.nbSampling > 1 && alsVox.transmittance == 0) {
+                pad = (float) (Math.log(vox.transmittance) / (-0.5 * vox.lMeanTotal));
 
-                    pad = maxPAD;
-
-                } else if (alsVox.nbSampling < 2 && alsVox.transmittance == 0) {
-
+                if (Float.isNaN(pad)) {
                     pad = Float.NaN;
-
-                } else {
-
-                    pad = (float) (Math.log(alsVox.transmittance) / (-0.5 * alsVox.lMeanTotal));
-
-                    if (Float.isNaN(pad)) {
-                        pad = Float.NaN;
-                    } else if (pad > maxPAD || Float.isInfinite(pad)) {
-                        pad = maxPAD;
-                    }
+                } else if (pad > maxPAD || Float.isInfinite(pad)) {
+                    pad = maxPAD;
                 }
-
             }
-            alsVox.PadBVTotal = pad + 0.0f; //set +0.0f to avoid -0.0f
+
         }
+        
+        vox.PadBVTotal = pad + 0.0f; //set +0.0f to avoid -0.0f
 
     }
     

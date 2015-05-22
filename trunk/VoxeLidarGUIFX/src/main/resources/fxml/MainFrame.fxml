@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import fr.ird.voxelidar.*?>
 
-<AnchorPane fx:id="anchorpaneRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="659.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ird.voxelidar.MainFrameController">
+<AnchorPane fx:id="anchorpaneRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="659.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ird.voxelidar.gui.MainFrameController">
    <children>
       <MenuBar maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="25.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <menus>
@@ -464,9 +464,9 @@
                                                             </ImageView>
                                                          </graphic>
                                                       </Button>
-                                                      <TextField fx:id="textFieldScriptFile" layoutX="144.0" layoutY="96.0" prefHeight="25.0" prefWidth="314.0" />
+                                                      <TextField fx:id="textFieldScriptFile" layoutX="144.0" layoutY="96.0" prefHeight="25.0" prefWidth="365.0" />
                                                       <Label layoutX="14.0" layoutY="135.0" text="or choose a script" />
-                                                      <ComboBox fx:id="comboboxScript" layoutX="144.0" layoutY="130.0" prefWidth="150.0" />
+                                                      <ComboBox fx:id="comboboxScript" layoutX="144.0" layoutY="130.0" prefHeight="25.0" prefWidth="366.0" />
                                                    </children>
                                                 </AnchorPane>
                                           </content>

@@ -56,9 +56,8 @@ public class Projection {
             MultiKeyMap mapTerrainXY = terrain.getXYStructure();
                    
 
-            for(Voxel v : data.voxels){
+            for(VoxelObject voxel : data.voxels){
                 
-                VoxelObject voxel = (VoxelObject) v;
                 
                 float value = 0;
                 float[] attributs = voxel.getAttributs();

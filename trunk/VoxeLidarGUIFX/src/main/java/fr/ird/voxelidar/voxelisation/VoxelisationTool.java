@@ -5,7 +5,7 @@
  */
 package fr.ird.voxelidar.voxelisation;
 
-import fr.ird.voxelidar.MatrixAndFile;
+import fr.ird.voxelidar.configuration.MatrixAndFile;
 import fr.ird.voxelidar.util.ProcessingListener;
 import fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;

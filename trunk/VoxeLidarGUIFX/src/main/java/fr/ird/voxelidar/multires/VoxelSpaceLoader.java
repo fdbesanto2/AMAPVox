@@ -9,8 +9,6 @@ import fr.ird.voxelidar.engine3d.math.point.Point2F;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceListener;
 import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.multires.VoxelSpaceData.Type;
-import fr.ird.voxelidar.voxelisation.raytracing.voxel.ALSVoxel;
-import fr.ird.voxelidar.voxelisation.raytracing.voxel.TLSVoxel;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -261,14 +259,10 @@ public class VoxelSpaceLoader{
                         }
                     }
                     
-                    Voxel vox;
+                    ExtendedALSVoxel vox;
                     
-                    if(type.equals("ALS")){
-                        vox = new ALSVoxel(indice.x, indice.y, indice.z);
-                    }else{
-                        vox = new TLSVoxel(indice.x, indice.y, indice.z);
-                    }
-                    
+                    vox = new ExtendedALSVoxel(indice.x, indice.y, indice.z, ExtendedALSVoxel.class);
+                        
                     for(int i=3;i<mapAttrs.length;i++){
                         vox.setFieldValue(vox.getClass(), columnsNames[i], vox, mapAttrs[i]);
                     }
@@ -339,13 +333,9 @@ public class VoxelSpaceLoader{
                 for (int j = 0; j < data.split.y; j++) {
                     for (int k = 0; k < data.split.z; k++) {
 
-                        Voxel vox = data.getVoxel(i, j, k);
+                        ExtendedALSVoxel vox = data.getVoxel(i, j, k);
                         
-                        if(vox instanceof ALSVoxel){
-                            writer.write(vox.toString() + "\n");
-                        }else{
-                            writer.write(vox.toString() + "\n");
-                        }
+                        writer.write(vox.toString() + "\n");
                     }
                 }
             }

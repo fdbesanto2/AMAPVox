@@ -10,6 +10,7 @@ import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
+import fr.ird.voxelidar.gui.MainFrameController;
 import fr.ird.voxelidar.lidar.format.als.LasHeader;
 import fr.ird.voxelidar.lidar.format.als.LasReader;
 import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;

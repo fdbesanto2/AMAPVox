@@ -98,9 +98,8 @@ public class DartWriter {
         
         List<String> attributsNames = data.header.attributsNames;
         
-        for (Voxel v : data.voxels) {
+        for (VoxelObject voxel : data.voxels) {
             
-            VoxelObject voxel = (VoxelObject) v;
             
             float[] attributs = voxel.attributs;
             

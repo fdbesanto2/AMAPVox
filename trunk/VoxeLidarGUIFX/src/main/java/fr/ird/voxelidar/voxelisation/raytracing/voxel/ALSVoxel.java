@@ -14,4 +14,8 @@ public class ALSVoxel extends Voxel{
     public ALSVoxel(int i, int j, int k) {
         super(i, j, k);
     }
+    
+    public ALSVoxel(int i, int j, int k, Class c) {
+        super(i, j, k, c);
+    }
 }

@@ -31,7 +31,7 @@ import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
 
-public class VoxelAnalysis implements Runnable {
+public class VoxelAnalysis {
 
     private final static Logger logger = Logger.getLogger(VoxelAnalysis.class);
 
@@ -317,7 +317,7 @@ public class VoxelAnalysis implements Runnable {
                         if (parameters.isTLS()) {
                             propagate(origin, echo, (short) 0, beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i, shot.reflectances[i]);
                         } else {
-                            propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i, shot.reflectances[i]);
+                            propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i, -1.0f);
                         }
 
                         if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
@@ -336,160 +336,6 @@ public class VoxelAnalysis implements Runnable {
 
             nbShotsTreated++;
         }
-    }
-
-    @Override
-    public void run() {
-
-        try {
-            long start_time = System.currentTimeMillis();
-
-            createVoxelSpace();
-
-            boolean first = true;
-
-            //try {
-            /**
-             * *TEST : write shots file***
-             */
-            //BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\Julien\\Desktop\\test_rxp.txt"));
-            //writer.write("\"key\" \"n\" \"xloc_s\" \"yloc_s\" \"zloc_s\" \"x_u\" \"y_u\" \"z_u\" \"r1\" \"r2\" \"r3\" \"r4\" \"r5\" \"r6\" \"r7\"\n");
-            //writer.write("\"n\" \"xloc_s\" \"yloc_s\" \"zloc_s\" \"x_u\" \"y_u\" \"z_u\" \"r1\" \"r2\" \"r3\" \"r4\" \"r5\" \"r6\" \"r7\"\n");            
-            while (!isFinished.get() || !arrayBlockingQueue.isEmpty()) {
-
-                try {
-
-                    Shot shot = arrayBlockingQueue.poll();
-
-                    if (shot != null && shot.doFilter()) {
-
-                        shotID = nbShotsTreated;
-
-                        if (nbShotsTreated % 1000000 == 0 && nbShotsTreated != 0) {
-                            logger.info("Shots treated: " + nbShotsTreated);
-                        }
-
-                        shot.direction.normalize();
-                        Point3d origin = new Point3d(shot.origin);
-
-                        if (shot.nbEchos == 0) {
-
-                            LineSegment seg = new LineSegment(shot.origin, shot.direction, 999999);
-                            Point3d echo = new Point3d(seg.getEnd());
-                            propagate(origin, echo, (short) 0, 1, 1, shot.origin, false, shot.angle, shot.nbEchos, 0, -1);
-
-                        } else {
-
-                            double beamFraction = 1;
-                            int sumIntensities = 0;
-
-                            if (!parameters.isTLS()) {
-                                for (int i = 0; i < shot.nbEchos; i++) {
-                                    sumIntensities += shot.intensities[i];
-                                }
-                            }
-
-                            double bfIntercepted = 0;
-
-                            shotChanged = true;
-                            isSet = false;
-                            
-                            double residualEnergy = 1;
-                                                        
-                            for (int i = 0; i < shot.nbEchos; i++) {                               
-                               
-                               
-                               Point3d nextEcho = null;
-                               
-                               if(i < shot.nbEchos-1){
-                                   nextEcho = new Point3d(getEchoLocation(shot, i+1));
-                               }
-
-                               Point3d echo = getEchoLocation(shot, i);
-                               
-                               switch (parameters.getWeighting()) {
-
-                                    case VoxelParameters.WEIGHTING_FRACTIONING:
-                                        if (shot.nbEchos == 1) {
-                                            bfIntercepted = 1;
-                                        } else {
-                                            bfIntercepted = (shot.intensities[i]) / (double) sumIntensities;
-                                        }
-
-                                        break;
-
-                                    case VoxelParameters.WEIGHTING_ECHOS_NUMBER:
-                                    case VoxelParameters.WEIGHTING_FILE:
-
-                                        bfIntercepted += weighting[shot.nbEchos - 1][i];
-
-                                        break;
-
-                                    default:
-                                        bfIntercepted = 1;
-                                        break;
-
-                                }
-                               
-                                
-                               
-                                if(areEchoInsideSameVoxel(echo, nextEcho)){
-                                   
-                                   /*ne rien faire dans ce cas
-                                   le beamFraction est incrémenté et l'opération se fera sur l'écho suivant*/
-                                   count2++;
-                                }else{
-                                    
-                                    if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
-                                        beamFraction = bfIntercepted;
-                                    }
-
-                                    boolean lastEcho;
-                                    
-                                    lastEcho = i == shot.nbEchos - 1;
-
-                                    // propagate
-                                    if (parameters.isTLS()) {
-                                        propagate(origin, echo, (short) 0, beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i, -1);
-                                    } else {
-                                        propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i, -1);
-                                    }
-
-                                    if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
-                                        
-                                        residualEnergy -= bfIntercepted;
-                                        
-                                    }
-
-                                    bfIntercepted = 0;
-                                }
-                               
-                               origin = new Point3d(echo);
-                               
-                            }
-                        }
-
-                        nbShotsTreated++;
-                    }
-
-                } catch (Exception e) {
-                    logger.error(e+" "+this.getClass().getName());
-                }
-            }
-
-            logger.info("Shots processed: " + nbShotsTreated);
-            logger.info("voxelisation is finished ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
-
-            calculatePADAndWrite(0);
-            
-            if(parameters.isCalculateGroundEnergy() && !parameters.isTLS()){
-                writeGroundEnergy();
-            }
-
-        } catch (Exception e) {
-            logger.error(e+" "+this.getClass().getName());
-        }
-
     }
     
     private Point3d getEchoLocation(Shot shot, int indice){

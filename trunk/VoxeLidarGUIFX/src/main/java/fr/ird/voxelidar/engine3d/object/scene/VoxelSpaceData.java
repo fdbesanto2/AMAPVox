@@ -5,7 +5,6 @@
  */
 package fr.ird.voxelidar.engine3d.object.scene;
 
-import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,8 +15,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.vecmath.Point2f;
-import javax.vecmath.Point3d;
-import javax.vecmath.Point3i;
 import org.apache.log4j.Logger;
 
 
@@ -31,7 +28,7 @@ public class VoxelSpaceData{
     
     public float minY, maxY;
     
-    public ArrayList<Voxel> voxels;
+    public ArrayList<VoxelObject> voxels;
     //public Type type;
     
     //public float res;
@@ -104,11 +101,11 @@ public class VoxelSpaceData{
         return voxelMap;
     }
     
-    public Voxel getVoxel(int indice){
+    public VoxelObject getVoxel(int indice){
         return voxels.get(indice);
     }
     
-    public Voxel getVoxel(int i, int j, int k){
+    public VoxelObject getVoxel(int i, int j, int k){
         
         int index = get1DFrom3D(i, j, k);
         
@@ -123,7 +120,7 @@ public class VoxelSpaceData{
         return (i*header.split.y*header.split.z) + (j*header.split.z) +  k;
     }
     
-    public Voxel getLastVoxel(){
+    public VoxelObject getLastVoxel(){
         
         if(voxels != null && !voxels.isEmpty()){
             return voxels.get(voxels.size()-1);
@@ -132,7 +129,7 @@ public class VoxelSpaceData{
         return null;
     }
     
-    public Voxel getFirstVoxel(){
+    public VoxelObject getFirstVoxel(){
         
         if(voxels != null && !voxels.isEmpty()){
             return voxels.get(0);
