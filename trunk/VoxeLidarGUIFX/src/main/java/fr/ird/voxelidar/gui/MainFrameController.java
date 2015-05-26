@@ -5,7 +5,6 @@
  */
 package fr.ird.voxelidar.gui;
 
-import com.jogamp.opengl.GLException;
 import fr.ird.voxelidar.configuration.Configuration;
 import fr.ird.voxelidar.configuration.Configuration.InputType;
 import fr.ird.voxelidar.configuration.Configuration.ProcessMode;
@@ -15,6 +14,7 @@ import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceAdapter;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData;
+import fr.ird.voxelidar.engine3d.renderer.JoglListenerListener;
 import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.lidar.format.als.LasHeader;
 import fr.ird.voxelidar.lidar.format.als.LasReader;
@@ -38,6 +38,7 @@ import fr.ird.voxelidar.voxelisation.VoxelisationToolListener;
 import fr.ird.voxelidar.voxelisation.als.LasPoint;
 import fr.ird.voxelidar.voxelisation.extraction.als.LazExtraction;
 import fr.ird.voxelidar.voxelisation.raytracing.BoundingBox3F;
+import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
@@ -105,6 +106,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
@@ -260,8 +262,8 @@ public class MainFrameController implements Initializable {
     private Rsp rsp;
     private double currentLastPointCloudLayoutY;
     
-    final static int SCREEN_WIDTH = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getWidth();
-    final static int SCREEN_HEIGHT = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getHeight();
+    static double SCREEN_WIDTH;
+    static double SCREEN_HEIGHT;
 
     private final static String MATRIX_FORMAT_ERROR_MSG = "Matrix file has to look like this: \n\n\t1.0 0.0 0.0 0.0\n\t0.0 1.0 0.0 0.0\n\t0.0 0.0 1.0 0.0\n\t0.0 0.0 0.0 1.0\n";
 
@@ -1179,7 +1181,23 @@ public class MainFrameController implements Initializable {
     }
 
     public void setStage(Stage stage) {
+        
         this.stage = stage;
+        
+        stage.setOnShown(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+                ObservableList<Screen> screens = Screen.getScreensForRectangle(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
+
+                if(screens != null && screens.size() > 0){
+                    SCREEN_WIDTH = screens.get(0).getBounds().getWidth();
+                    SCREEN_HEIGHT = screens.get(0).getBounds().getHeight();
+                }
+            }
+        });
+        
+        
     }
 
     private void resetComponents() throws Exception {
@@ -1396,22 +1414,7 @@ public class MainFrameController implements Initializable {
         final boolean displayFilteredValues = radiobuttonDisplayValues.isSelected();
         final String filteredValues = textFieldFilterValues.getText();
         
-        final VoxelSpace voxelSpace = new VoxelSpace(voxelFile);
-
-        Settings settings = new Settings(false, true, true, true, attributeToView);
-
-        voxelSpace.setSettings(settings);
-        voxelSpace.setCurrentAttribut(settings.attributeToVisualize);
-
-        final JOGLWindow joglWindow;
-        try {
-            joglWindow = new JOGLWindow((SCREEN_WIDTH / 4), SCREEN_HEIGHT / 4, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
-                    voxelFile.toString(),
-                    voxelSpace, settings);
-        } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
-            return;
-        }
+        
         
         final Stage toolBarFrameStage = new Stage();
         
@@ -1425,7 +1428,7 @@ public class MainFrameController implements Initializable {
 
                     @Override
                     protected Object call() throws Exception {
-
+                        
                         final Set<CombinedFilter> filterValues = new HashSet<>();
 
                         if (enablePreFiltering) {
@@ -1474,6 +1477,23 @@ public class MainFrameController implements Initializable {
                                 }
                             }
                         }
+                        
+                        final VoxelSpace voxelSpace = new VoxelSpace(voxelFile);
+
+                        Settings settings = new Settings(false, true, true, true, attributeToView);
+
+                        voxelSpace.setSettings(settings);
+                        voxelSpace.setCurrentAttribut(settings.attributeToVisualize);
+
+                        final JOGLWindow joglWindow;
+                        try {
+                            joglWindow = new JOGLWindow(((int)SCREEN_WIDTH / 4), (int)SCREEN_HEIGHT / 4, (int)(SCREEN_WIDTH / 1.5d), (int)SCREEN_HEIGHT / 2,
+                                    voxelFile.toString(),
+                                    voxelSpace, settings);
+                        } catch (Exception ex) {
+                            logger.error(ex.getMessage(), ex);
+                            return null;
+                        }
 
                         voxelSpace.addVoxelSpaceListener(new VoxelSpaceAdapter() {
 
@@ -1494,7 +1514,7 @@ public class MainFrameController implements Initializable {
                         final int posX = joglWindow.getPosition().getX();
                         final int posY = joglWindow.getPosition().getY();                        
                         
-                        //joglWindow.setOnTop();
+                        
                         
                         Platform.runLater(new Runnable() {
 
@@ -1518,18 +1538,36 @@ public class MainFrameController implements Initializable {
                                     
                                     
                                     toolBarFrameController.setAttributes(comboboxAttributeToView.getItems());
-                                    joglWindow.addWindowListener(new GLRenderWindowListener(toolBarFrameStage, joglWindow.getAnimator()));
+                                    
                                     toolBarFrameController.setStage(toolBarFrameStage);
                                     
-                                    
-                                    joglWindow.show();
                                     toolBarFrameStage.setX(posX);
                                     toolBarFrameStage.setY(posY);
                                     toolBarFrameStage.show();
                                     
-                                    toolBarFrameStage.setHeight(SCREEN_HEIGHT / 2);
-
+                                    //toolBarFrameStage.setHeight(joglWindow.getHeight() / 2);
+                                    joglWindow.getJoglContext().startX = (int)toolBarFrameStage.getWidth();
                                     
+                                    joglWindow.getJoglContext().addListener(new JoglListenerListener() {
+
+                                        @Override
+                                        public void sceneInitialized() {
+                                            joglWindow.setOnTop();
+                                            toolBarFrameController.initContent();
+                                            Platform.runLater(new Runnable() {
+
+                                                @Override
+                                                public void run() {
+                                                    toolBarFrameStage.setAlwaysOnTop(true);
+                                                }
+                                            });
+                                            
+                                        }
+                                    });
+                                    
+                                    joglWindow.addWindowListener(new GLRenderWindowListener(toolBarFrameStage, joglWindow.getAnimator()));
+                                    //joglWindow.setOnTop();
+                                    joglWindow.show();
                                     
                                     toolBarFrameStage.setAlwaysOnTop(true);
 
@@ -1551,7 +1589,7 @@ public class MainFrameController implements Initializable {
         ProgressDialog d = new ProgressDialog(s);
         d.initOwner(stage);
         d.show();
-        
+        /*
         ChangeListener<Boolean> cl = new ChangeListener<Boolean>() {
 
             @Override
@@ -1563,8 +1601,7 @@ public class MainFrameController implements Initializable {
 
                         @Override
                         public void run() {
-                            //joglWindow.setOnTop();
-                            toolBarFrameStage.setAlwaysOnTop(true);
+                            
                             
                         }
                     });
@@ -1577,7 +1614,7 @@ public class MainFrameController implements Initializable {
             }
         };
         stage.focusedProperty().addListener(cl);
-        
+        */
         s.start();
 
     }

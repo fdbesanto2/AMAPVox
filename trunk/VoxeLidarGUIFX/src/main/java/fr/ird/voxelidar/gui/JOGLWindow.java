@@ -29,7 +29,10 @@ public class JOGLWindow{
     private final Logger logger = Logger.getLogger(JOGLWindow.class);
     private final GLRenderFrame renderFrame;
     private final JoglListener joglContext;
-    private final FPSAnimator animator;    
+    private final FPSAnimator animator;  
+    
+    private int width;
+    private int height;
     
     public JOGLWindow(int posX, int posY, int width, int height, String title, VoxelSpace voxelSpace, Settings settings) throws GLException, Exception{
         
@@ -38,6 +41,9 @@ public class JOGLWindow{
             GLCapabilities caps = new GLCapabilities(glp);
             caps.setDoubleBuffered(true);
 
+            this.width = width;
+            this.height = height;
+            
             renderFrame = GLRenderFrame.create(caps, posX, posY, width, height, title);
             
 
@@ -46,11 +52,13 @@ public class JOGLWindow{
             joglContext = new JoglListener(voxelSpace, settings, animator);
             BasicEvent eventListener = new BasicEvent(animator, joglContext);
             joglContext.attachEventListener(eventListener);
+            
+            joglContext.width = width;
+            joglContext.height = height;
 
             renderFrame.addGLEventListener(joglContext);
             renderFrame.addKeyListener(new InputKeyListener(eventListener, animator));
             renderFrame.addMouseListener(new InputMouseAdapter(eventListener, animator));
-            
 
             animator.start();
             
@@ -89,6 +97,14 @@ public class JOGLWindow{
 
     public FPSAnimator getAnimator() {
         return animator;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
     
 }

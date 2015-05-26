@@ -194,13 +194,13 @@ public class VoxelisationTool {
         
         
         try {
-            LinkedBlockingQueue<Callable<RxpVoxelisation>>  tasks = new LinkedBlockingQueue<>(matricesAndFiles.size());
+            LinkedBlockingQueue<Callable<RxpVoxelisation>>  tasks = new LinkedBlockingQueue<>();
 
             int count = 1;
             for (MatrixAndFile file : matricesAndFiles) {
 
                 File outputFile = new File(output.getAbsolutePath() + "/" + file.file.getName() + ".vox");
-                tasks.add(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixConverter.convertMatrix4dToMat4D(file.matrix), this.parameters, dtm, pointcloudList, filters));
+                tasks.put(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixConverter.convertMatrix4dToMat4D(file.matrix), this.parameters, dtm, pointcloudList, filters));
                 files.add(outputFile);
                 count++;
             }

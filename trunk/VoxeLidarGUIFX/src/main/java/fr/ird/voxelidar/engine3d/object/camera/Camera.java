@@ -33,7 +33,7 @@ public abstract class Camera {
     public Vec3F orientation;
     protected boolean isUpdated;
     protected float phi,theta;
-    protected boolean isPerspective;
+    protected boolean isPerspective = true;
     protected float angleX = 0.0f;
     protected float angleY = 0.0f;
     protected float angleZ = 0.0f;
@@ -53,6 +53,7 @@ public abstract class Camera {
     public abstract void fireProjectionMatrixChanged(Mat4F projMatrix);
     public abstract void setTarget(Vec3F target);
     public abstract void setLocation(Vec3F location);
+    
     
     public void project(Vec3F location, Vec3F target){
         
@@ -140,6 +141,15 @@ public abstract class Camera {
 
     public float getAspect() {
         return aspect;
+    }
+
+    public void setIsPerspective(boolean isPerspective) {
+        this.isPerspective = isPerspective;
+    }
+    
+    public void setRotation(Vec3F axis, float angle){
+        
+        viewMatrix = Mat4F.setRotation(viewMatrix, axis, angle);
     }
     
     /**

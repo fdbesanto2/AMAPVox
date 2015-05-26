@@ -29,8 +29,8 @@ public class BasicEvent extends EventManager{
     public boolean rightMouseDragged;
     public boolean spaceKeyPressed;
     public boolean escapeKeyPressed;
-    private int mouseXCurrentLocation;
-    private int mouseYCurrentLocation;
+    public int mouseXCurrentLocation;
+    public int mouseYCurrentLocation;
     public int xrel, yrel;
     
     public boolean relativeMouseMode;

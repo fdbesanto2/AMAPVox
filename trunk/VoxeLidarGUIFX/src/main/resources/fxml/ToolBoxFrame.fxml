@@ -8,18 +8,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="541.0" prefWidth="219.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ird.voxelidar.gui.ToolBoxFrameController">
+<AnchorPane id="AnchorPane" minHeight="0.0" prefHeight="541.0" prefWidth="219.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ird.voxelidar.gui.ToolBoxFrameController">
     <stylesheets>
         <URL value="@/styles/toolbarframe.css" />
     </stylesheets>
     <children>
       <HBox>
          <children>
-              <TabPane fx:id="tabpaneContent" layoutX="-12.0" layoutY="23.0" minWidth="-Infinity" prefHeight="541.0" prefWidth="219.0" style="-fx-background-color: rgba(0, 0, 0, 0);" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <TabPane fx:id="tabpaneContent" layoutX="-12.0" layoutY="23.0" minHeight="0.0" minWidth="-Infinity" prefHeight="541.0" prefWidth="219.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <tabs>
                       <Tab text="Parameters">
                           <content>
-                              <Accordion nodeOrientation="LEFT_TO_RIGHT">
+                              <Accordion minHeight="0.0" nodeOrientation="LEFT_TO_RIGHT">
                                   <panes>
                                       <TitledPane text="Voxels">
                                           <content>
@@ -75,7 +75,34 @@
                                       </TitledPane>
                                       <TitledPane text="View">
                                           <content>
-                                              <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                       <children>
+                                          <GridPane layoutX="8.0" layoutY="38.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0">
+                                            <columnConstraints>
+                                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="45.0" />
+                                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="45.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                             <children>
+                                                <Button fx:id="buttonViewTop" alignment="CENTER" mnemonicParsing="false" onAction="#onActionButtonViewTop" text="Top" GridPane.columnIndex="1" />
+                                                <Button fx:id="buttonViewRight" mnemonicParsing="false" onAction="#onActionButtonViewRight" text="Right" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                <Button fx:id="buttonViewBottom" mnemonicParsing="false" onAction="#onActionButtonViewBottom" text="Bottom" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <Button fx:id="buttonViewLeft" mnemonicParsing="false" onAction="#onActionButtonViewLeft" text="Left" GridPane.rowIndex="1" />
+                                                <Button fx:id="buttonViewFront" mnemonicParsing="false" onAction="#onActionButtonViewFront" text="Front" GridPane.rowIndex="4" />
+                                                <Button fx:id="buttonViewBack" mnemonicParsing="false" onAction="#onActionButtonViewBack" text="Back" GridPane.rowIndex="5" />
+                                                <Button fx:id="buttonViewIsometric" mnemonicParsing="false" onAction="#onActionButtonViewIsometric" prefHeight="25.0" prefWidth="94.0" text="Isometric" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                             </children>
+                                          </GridPane>
+                                       </children></AnchorPane>
                                           </content>
                                       </TitledPane>
                                       <TitledPane prefHeight="200.0" prefWidth="200.0" text="Camera">
@@ -89,17 +116,9 @@
                                                               <RadioButton fx:id="radiobuttonPerspectiveCamera" layoutX="14.0" layoutY="5.0" mnemonicParsing="false" selected="true" text="Perspective" AnchorPane.leftAnchor="6.0" />
                                                           </children>
                                                       </AnchorPane>
-                                                      <AnchorPane layoutX="32.0" layoutY="113.0" prefHeight="156.0" prefWidth="202.0" style="-fx-border-style: dashed; -fx-border-radius: 20;" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0">
+                                                      <AnchorPane layoutX="10.4" layoutY="113.0" prefHeight="30.0" prefWidth="201.0" style="-fx-border-style: dashed; -fx-border-radius: 20;" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0">
                                                           <children>
                                                               <RadioButton fx:id="radiobuttonOrthographicCamera" layoutX="6.0" layoutY="5.0" mnemonicParsing="false" text="Orthographic" AnchorPane.leftAnchor="6.0" />
-                                                              <TextField fx:id="textfieldCameraLeft" layoutX="25.0" layoutY="75.0" prefHeight="25.0" prefWidth="57.0" text="-10" AnchorPane.leftAnchor="30.0" />
-                                                              <Label layoutX="-2.0" layoutY="81.0" text="Left" AnchorPane.leftAnchor="3.0" />
-                                                              <Label layoutX="146.0" layoutY="82.0" text="Right" AnchorPane.rightAnchor="3.0" />
-                                                              <TextField fx:id="textfieldCameraRight" alignment="CENTER_RIGHT" layoutX="86.0" layoutY="75.0" prefHeight="25.0" prefWidth="57.0" text="10" AnchorPane.rightAnchor="40.0" />
-                                                              <Label layoutX="85.0" layoutY="27.0" text="Top" />
-                                                              <TextField fx:id="textfieldCameraTop" alignment="CENTER" layoutX="60.0" layoutY="42.0" prefHeight="25.0" prefWidth="57.0" text="10" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" />
-                                                              <TextField fx:id="textfieldCameraBottom" alignment="CENTER" layoutX="62.0" layoutY="105.0" prefHeight="25.0" prefWidth="57.0" text="-10" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" />
-                                                              <Label layoutX="73.0" layoutY="135.0" text="Bottom" />
                                                           </children>
                                                       </AnchorPane>
                                                       <Label layoutX="27.0" layoutY="355.0" text="Far" />

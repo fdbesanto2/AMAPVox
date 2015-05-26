@@ -36,6 +36,7 @@ import java.nio.FloatBuffer;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map.Entry;
+import javax.swing.event.EventListenerList;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -53,8 +54,13 @@ public class JoglListener implements GLEventListener {
     TrackballCamera camera;
     private Scene scene;
     private Vec3F worldColor;
+    
     public int width;
     public int height;
+    
+    public int startX = 0;
+    public int startY = 0;
+    
     private Dtm terrain;
     private Settings settings;
     private boolean isFpsInit = false;
@@ -64,6 +70,8 @@ public class JoglListener implements GLEventListener {
     private boolean viewMatrixChanged = false;
     private boolean projectionMatrixChanged = false;
     private boolean isInit;
+    
+    private final EventListenerList listeners;
 
     
     public Settings getSettings() {
@@ -89,6 +97,10 @@ public class JoglListener implements GLEventListener {
     public TrackballCamera getCamera() {
         return camera;
     }
+
+    public BasicEvent getEventListener() {
+        return eventListener;
+    }
     
     public JoglListener(VoxelSpace voxelSpace, Settings settings, FPSAnimator animator){
         
@@ -96,6 +108,7 @@ public class JoglListener implements GLEventListener {
         this.settings = settings;
         this.animator = animator;
         worldColor = new Vec3F(200.0f/255.0f, 200.0f/255.0f, 200.0f/255.0f);
+        listeners = new EventListenerList();
     }
     /*
     public JoglListener(JFrameSettingUp parent, Dtm terrain, Settings settings, FPSAnimator animator){
@@ -110,6 +123,17 @@ public class JoglListener implements GLEventListener {
     public void attachEventListener(BasicEvent eventListener){
         
         this.eventListener = eventListener;
+    }
+    
+    public void addListener(JoglListenerListener listener){
+        listeners.add(JoglListenerListener.class, listener);
+    }
+    
+    public void fireSceneInitialized() {
+
+        for (JoglListenerListener listener : listeners.getListeners(JoglListenerListener.class)) {
+            listener.sceneInitialized();
+        }
     }
     
     @Override
@@ -127,6 +151,7 @@ public class JoglListener implements GLEventListener {
         
         camera = new TrackballCamera();
         camera.init(eye, target, up);
+        camera.initOrtho(-((this.width-startX)/100), (this.width-startX)/100, this.height/100, -(this.height)/100, camera.getNearOrtho(), camera.getFarOrtho());
         
         initScene(gl);
         
@@ -180,22 +205,34 @@ public class JoglListener implements GLEventListener {
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
         
-        GL3 gl=drawable.getGL().getGL3();
-        gl.glViewport(0, 0, width, height);
         this.width = width;
         this.height = height;
         
-        scene.setWidth(width);
+        GL3 gl=drawable.getGL().getGL3();
+        gl.glViewport(startX, startY, this.width-startX, this.height);        
+        
+        scene.setWidth(width-startX);
         scene.setHeight(height);
         
-        camera.setPerspective(60.0f, (1.0f*width)/height, 0.1f, 1000.0f);
+        updateCamera();
+    }
+    
+    public void updateCamera(){
+        
+        if(camera.isIsPerspective()){
+            camera.setPerspective(60.0f, (1.0f*this.width-startX)/height, 0.1f, 1000.0f);
+        }else{
+            camera.initOrtho(-((this.width-startX)/100), (this.width-startX)/100, this.height/100, -(this.height)/100, camera.getNearOrtho(), camera.getFarOrtho());
+            camera.setOrthographic(camera.getNearOrtho(), camera.getFarOrtho());
+        }
+        
     }
     
     private void render(GLAutoDrawable drawable) {
         
         GL3 gl = drawable.getGL().getGL3();
         
-        gl.glViewport(0, 0, width, height);
+        gl.glViewport(startX, startY, width-startX, height);
         gl.glClear(GL3.GL_DEPTH_BUFFER_BIT|GL3.GL_COLOR_BUFFER_BIT);
         gl.glClearColor(worldColor.x, worldColor.y, worldColor.z, 1.0f);
         
@@ -320,16 +357,16 @@ public class JoglListener implements GLEventListener {
             logger.debug("shader compiled: "+basicShader.name);
                 */
             
-            InputStreamReader noTranslationVertexShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/NoTranslationVertexShader.txt"));
-            InputStreamReader noTranslationFragmentShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/NoTranslationFragmentShader.txt"));
+            InputStreamReader noTranslationVertexShader = new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("shaders/NoTranslationVertexShader.txt"));
+            InputStreamReader noTranslationFragmentShader = new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("shaders/NoTranslationFragmentShader.txt"));
             Shader noTranslationShader = new Shader(gl, noTranslationFragmentShader, noTranslationVertexShader, "noTranslationShader");
             noTranslationShader.setUniformLocations(new String[]{"viewMatrix","projMatrix", "normalMatrix", "Material", "Light"});
             noTranslationShader.setAttributeLocations(new String[]{"position","color", "normal"});
             
             logger.debug("shader compiled: "+noTranslationShader.name);
             
-            InputStreamReader instanceVertexShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/InstanceVertexShader.txt"));
-            InputStreamReader instanceFragmentShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/InstanceFragmentShader.txt"));
+            InputStreamReader instanceVertexShader = new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("shaders/InstanceVertexShader.txt"));
+            InputStreamReader instanceFragmentShader = new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("shaders/InstanceFragmentShader.txt"));
             //Shader instanceShader = shadGenerator.generateShader(gl, EnumSet.of(Flag.INSTANCED, Flag.TEXTURED), "instanceShader");
             Shader instanceShader = new Shader(gl, instanceFragmentShader, instanceVertexShader, "instanceShader");
             instanceShader.setUniformLocations(new String[]{"viewMatrix","projMatrix"});
@@ -359,7 +396,8 @@ public class JoglListener implements GLEventListener {
                     new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("mesh/axis.obj")), 
                     new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("mesh/axis.mtl")));
             */
-            Mesh axisMesh = MeshFactory.createMeshFromX3D( new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("mesh/axis.x3d")));
+            
+            Mesh axisMesh = MeshFactory.createMeshFromX3D( new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("mesh/axis.x3d")));
             
             axisMesh.setGlobalScale(0.03f);
             
@@ -455,6 +493,8 @@ public class JoglListener implements GLEventListener {
             scene.setVoxelSpace(voxelSpace);
             
             scene.canDraw = true;
+            
+            fireSceneInitialized();
             
         }catch(Exception e){
             logger.error("error in scene initialization", e);

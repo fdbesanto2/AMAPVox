@@ -7,7 +7,6 @@ package fr.ird.voxelidar.engine3d.math.matrix;
 
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4;
-import static java.lang.Double.NaN;
 
 /**
  *
@@ -26,7 +25,7 @@ public class Mat4F {
     
     public Mat4F(Mat4F source){
         
-        mat = new float[9];
+        mat = new float[16];
         
         mat[0] = source.mat[0];
         mat[1] = source.mat[1];
@@ -197,13 +196,39 @@ public class Mat4F {
     
     
     */
+    
+    public static Mat4F setRotation(Mat4F matrix, Vec3F axis, float angle){
+        
+        Mat4F result = new Mat4F(matrix);
+        
+        if(axis.x != 0){
+            result.mat[5] = (float) Math.cos(angle);
+            result.mat[6] = -(float) Math.sin(angle);
+            result.mat[9] = (float) Math.sin(angle);
+            result.mat[10] = (float) Math.cos(angle);
+        }else if(axis.y != 0){
+            result.mat[0] = (float) Math.cos(angle);
+            result.mat[2] = (float) Math.sin(angle);
+            result.mat[8] = -(float) Math.sin(angle);
+            result.mat[10] = (float) Math.cos(angle);
+        }else if(axis.z != 0){
+            result.mat[0] = (float) Math.cos(angle);
+            result.mat[1] = -(float) Math.sin(angle);
+            result.mat[4] = (float) Math.sin(angle);
+            result.mat[5] = (float) Math.cos(angle);
+        }
+        
+        return result;
+        
+    }
+    
     public static float[] rotate(float[] mat, float angle, float[] axis){
         
         float[] dest = Mat4F.create();
         
         float x = axis[0], y = axis[1], z = axis[2];
         float len = (float)Math.sqrt(x*x + y*y + z*z);
-        if (len == NaN) { return null; }
+        if (Float.isNaN(len)) { return null; }
         if (len != 1) {
                 len = 1 / len;
                 x *= len; 
@@ -303,75 +328,25 @@ public class Mat4F {
      */
     public static Mat4F lookAt(Vec3F eye, Vec3F center, Vec3F up){
         
-        
-        float   eyex = eye.x,
-                eyey = eye.y,
-                eyez = eye.z,
-                upx = up.x,
-                upy = up.y,
-                upz = up.z,
-                centerx = center.x,
-                centery = center.y,
-                centerz = center.z;
 
-        if (eyex == centerx && eyey == centery && eyez == centerz) {
+        if (eye.x == center.x && eye.y == center.y && eye.z == center.z) {
                 return Mat4F.identity();
         }
         
-        float z0,z1,z2,x0,x1,x2,y0,y1,y2,len;
         
-        //vec3.direction(eye, center, z);
-        z0 = eyex - center.x;
-        z1 = eyey - center.y;
-        z2 = eyez - center.z;
-        
-        // normalize (no check needed for 0 because of early return)
-        len = (float)(1/Math.sqrt(z0*z0 + z1*z1 + z2*z2));
-        z0 *= len;
-        z1 *= len;
-        z2 *= len;
-        
-        //vec3.normalize(vec3.cross(up, z, x));
-        x0 = upy*z2 - upz*z1;
-        x1 = upz*z0 - upx*z2;
-        x2 = upx*z1 - upy*z0;
-        len = (float)(Math.sqrt(x0*x0 + x1*x1 + x2*x2));
-        if (len == NaN) {
-                x0 = 0;
-                x1 = 0;
-                x2 = 0;
-        } else {
-                len = 1/len;
-                x0 *= len;
-                x1 *= len;
-                x2 *= len;
-        }
-        
-        //vec3.normalize(vec3.cross(z, x, y));
-        y0 = z1*x2 - z2*x1;
-        y1 = z2*x0 - z0*x2;
-        y2 = z0*x1 - z1*x0;
-        
-        len = (float)(Math.sqrt(y0*y0 + y1*y1 + y2*y2));
-        if (len == NaN) {
-                y0 = 0;
-                y1 = 0;
-                y2 = 0;
-        } else {
-                len = 1/len;
-                y0 *= len;
-                y1 *= len;
-                y2 *= len;
-        }
+        Vec3F f = Vec3F.normalize(Vec3F.substract(eye, center));
+        Vec3F s = Vec3F.normalize(Vec3F.cross(up, f));
+        Vec3F u = Vec3F.cross(f, s);
         
         Mat4F result = new Mat4F();
         
         result.mat = new float[]{
-            x0, y0, z0, 0,
-            x1, y1, z1, 0,
-            x2, y2, z2, 0,
-            -(x0*eyex + x1*eyey + x2*eyez), -(y0*eyex + y1*eyey + y2*eyez), -(z0*eyex + z1*eyey + z2*eyez), 1
+            s.x, u.x, f.x, 0,
+            s.y, u.y, f.y, 0,
+            s.z, u.z, f.z, 0,
+            -Vec3F.dot(s, eye), -Vec3F.dot(u, eye), -Vec3F.dot(f, eye), 1
         };
+        
         
         return result;
     }

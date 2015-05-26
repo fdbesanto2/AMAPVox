@@ -98,14 +98,6 @@ public class ToolBoxFrameController implements Initializable {
     @FXML
     private TextField textfieldCameraFOV;
     @FXML
-    private TextField textfieldCameraLeft;
-    @FXML
-    private TextField textfieldCameraRight;
-    @FXML
-    private TextField textfieldCameraTop;
-    @FXML
-    private TextField textfieldCameraBottom;
-    @FXML
     private TextField textfieldCameraFar;
     @FXML
     private TextField textfieldCameraNear;
@@ -119,6 +111,20 @@ public class ToolBoxFrameController implements Initializable {
     private TabPane tabpaneContent;
     @FXML
     private ImageView imageViewArrowHiddingPane;
+    @FXML
+    private Button buttonViewTop;
+    @FXML
+    private Button buttonViewRight;
+    @FXML
+    private Button buttonViewBottom;
+    @FXML
+    private Button buttonViewLeft;
+    @FXML
+    private Button buttonViewFront;
+    @FXML
+    private Button buttonViewBack;
+    @FXML
+    private Button buttonViewIsometric;
     
     /**
      * Initializes the controller class.
@@ -329,62 +335,6 @@ public class ToolBoxFrameController implements Initializable {
             }
         });
         
-        textfieldCameraTop.textProperty().addListener(new ChangeListener<String>() {
-
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                try{
-                    float top = Float.valueOf(newValue);
-                    TrackballCamera camera = joglContext.getCamera();
-                    joglContext.getCamera().setOrthographic(camera.getLeft(), camera.getRight(), top, camera.getBottom(), camera.getNearOrtho(), camera.getFarOrtho());
-                    joglContext.drawNextFrame();
-                    
-                }catch(Exception e){}
-            }
-        });
-        
-        textfieldCameraBottom.textProperty().addListener(new ChangeListener<String>() {
-
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                try{
-                    float bottom = Float.valueOf(newValue);
-                    TrackballCamera camera = joglContext.getCamera();
-                    joglContext.getCamera().setOrthographic(camera.getLeft(), camera.getRight(), camera.getTop(), bottom, camera.getNearOrtho(), camera.getFarOrtho());
-                    joglContext.drawNextFrame();
-                    
-                }catch(Exception e){}
-            }
-        });
-        
-        textfieldCameraLeft.textProperty().addListener(new ChangeListener<String>() {
-
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                try{
-                    float left = Float.valueOf(newValue);
-                    TrackballCamera camera = joglContext.getCamera();
-                    joglContext.getCamera().setOrthographic(left, camera.getRight(), camera.getTop(), camera.getBottom(), camera.getNearOrtho(), camera.getFarOrtho());
-                    joglContext.drawNextFrame();
-                    
-                }catch(Exception e){}
-            }
-        });
-        
-        textfieldCameraRight.textProperty().addListener(new ChangeListener<String>() {
-
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                try{
-                    float right = Float.valueOf(newValue);
-                    TrackballCamera camera = joglContext.getCamera();
-                    joglContext.getCamera().setOrthographic(camera.getLeft(), right, camera.getTop(), camera.getBottom(), camera.getNearOrtho(), camera.getFarOrtho());
-                    joglContext.drawNextFrame();
-                    
-                }catch(Exception e){}
-            }
-        });
-        
         textfieldCameraNear.textProperty().addListener(new ChangeListener<String>() {
 
             @Override
@@ -434,14 +384,10 @@ public class ToolBoxFrameController implements Initializable {
                 if(newValue){
                     
                     try{
-                        float left = Float.valueOf(textfieldCameraLeft.getText());
-                        float right = Float.valueOf(textfieldCameraRight.getText());
-                        float top = Float.valueOf(textfieldCameraTop.getText());
-                        float bottom = Float.valueOf(textfieldCameraBottom.getText());
                         float near = Float.valueOf(textfieldCameraNear.getText());
                         float far = Float.valueOf(textfieldCameraFar.getText());
-
-                        joglContext.getCamera().setOrthographic(left, right, top, bottom, near, far);
+                        joglContext.getCamera().setOrthographic(near, far);
+                        joglContext.updateCamera();
                         joglContext.drawNextFrame();
                     }catch(Exception e){}
                     
@@ -469,7 +415,17 @@ public class ToolBoxFrameController implements Initializable {
                 }
             }
         });
-        /*
+        
+        
+    }
+    
+    public void setStage(Stage stage){
+        this.stage = stage;
+        maxHeight = stage.getHeight();
+    }
+    
+    public void initContent(){
+        
         Platform.runLater(new Runnable() {
             
             @Override
@@ -478,12 +434,7 @@ public class ToolBoxFrameController implements Initializable {
                 textFieldMinValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMin));
                 textFieldMaxValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMax));
             }
-        });*/
-    }
-    
-    public void setStage(Stage stage){
-        this.stage = stage;
-        maxHeight = stage.getHeight();
+        });
     }
     
     private void updateValuesFilter(){
@@ -640,19 +591,67 @@ public class ToolBoxFrameController implements Initializable {
             originalContentPaneWidth = tabpaneContent.getWidth();
             
             tabpaneContent.setPrefWidth(0);
+            
+            joglContext.startX = 0;
+            
             stage.setWidth(14);
             imageViewArrowHiddingPane.setRotate(180);
             isHidden = true;
             
-            joglContext.drawNextFrame();
             
         }else{
             tabpaneContent.setPrefWidth(originalContentPaneWidth);
             stage.setWidth(originalStageWidth);
+            
+            joglContext.startX = ((int)stage.getWidth());
+            
             imageViewArrowHiddingPane.setRotate(0);
             isHidden = false;
         }
         
+        joglContext.updateCamera();
+        joglContext.drawNextFrame();
+        
+    }
+
+    @FXML
+    private void onActionButtonViewTop(ActionEvent event) {
+        
+        
+        joglContext.getCamera().setLocation(new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX()+0.0001f, 
+                                                      joglContext.getScene().getVoxelSpace().getCenterY()+0.0001f,
+                                                      joglContext.getScene().getVoxelSpace().getCenterZ()+150));
+        
+        joglContext.getCamera().updateViewMatrix();
+        joglContext.getCamera().setRotation(new Vec3F(0, 0, 1), 0);
+        joglContext.getEventListener().mouseXOldLocation = joglContext.getEventListener().mouseXCurrentLocation;
+        joglContext.getEventListener().mouseYOldLocation = joglContext.getEventListener().mouseYCurrentLocation;
+        joglContext.getCamera().notifyViewMatrixChanged();
+        joglContext.drawNextFrame();
+    }
+
+    @FXML
+    private void onActionButtonViewRight(ActionEvent event) {
+    }
+
+    @FXML
+    private void onActionButtonViewBottom(ActionEvent event) {
+    }
+
+    @FXML
+    private void onActionButtonViewLeft(ActionEvent event) {
+    }
+
+    @FXML
+    private void onActionButtonViewFront(ActionEvent event) {
+    }
+
+    @FXML
+    private void onActionButtonViewBack(ActionEvent event) {
+    }
+
+    @FXML
+    private void onActionButtonViewIsometric(ActionEvent event) {
     }
     
 }

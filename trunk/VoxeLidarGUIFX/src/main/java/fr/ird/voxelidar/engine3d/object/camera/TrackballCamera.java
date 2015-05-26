@@ -49,8 +49,21 @@ public class TrackballCamera extends Camera{
         orientation = Vec3F.substract(target, location);
         orientation = Vec3F.normalize(orientation);
         
+        
+        
+        
         updateViewMatrix();
         
+    }
+    
+    public void initOrtho(float left, float right, float top, float bottom, float near, float far){
+        
+        this.left = left;
+        this.right = right;
+        this.top = top;
+        this.bottom = bottom;
+        this.nearOrtho = near;
+        this.farOrtho = far;
     }
     
     @Override
@@ -278,6 +291,11 @@ public class TrackballCamera extends Camera{
     public void updateViewMatrix(){
         
         viewMatrix = Mat4F.lookAt(location, target, up);
+        notifyViewMatrixChanged();
+        
+    }
+    
+    public void notifyViewMatrixChanged(){
         
         fireLocationChanged(location);
         fireTargetChanged(target);
@@ -352,6 +370,20 @@ public class TrackballCamera extends Camera{
             }
             
         }
+    }
+
+    public boolean isIsPerspective() {
+        return isPerspective;
+    }
+
+    public void setOrthographic(float near, float far) {
+        
+        this.nearOrtho = near;
+        this.farOrtho = far;
+        
+        this.isPerspective = false;
+        
+        updateProjMatrix();
     }
     
 }

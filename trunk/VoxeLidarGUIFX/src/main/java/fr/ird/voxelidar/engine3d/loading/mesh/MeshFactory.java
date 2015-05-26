@@ -272,6 +272,7 @@ public class MeshFactory {
     public static Mesh createMeshFromX3D(InputStreamReader x3dFile){
         
         SAXBuilder sxb = new SAXBuilder();
+        sxb.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
         
         try {
             Document document = sxb.build(x3dFile);
