@@ -26,6 +26,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
@@ -93,11 +94,15 @@ public class FXPrincipal extends Application {
         MainFrameController controller = loader.getController();
         
         Scene scene = new Scene(root);
-        
+            
         scene.getStylesheets().add("/styles/Styles.css");
         
         stage.setTitle("AMAPVox");
         stage.setScene(scene);
+        stage.getIcons().addAll(new Image("/icons/icon_512x512.png"), 
+                        new Image("/icons/icon_256x256.png"), 
+                        new Image("/icons/icon_128x128.png"),
+                        new Image("/icons/icon_64x64.png"));
         
         controller.setStage(stage);
         

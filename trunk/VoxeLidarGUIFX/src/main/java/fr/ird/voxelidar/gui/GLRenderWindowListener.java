@@ -19,14 +19,16 @@ import javafx.stage.Stage;
  */
 public class GLRenderWindowListener extends WindowAdapter{
 
-    private final Stage stage;
+    private final Stage toolboxStage;
     private final FPSAnimator animator;
     
     public boolean isToolBoxFocused;
+    private double maxToolBoxHeight;
     
     public GLRenderWindowListener(Stage stage, FPSAnimator animator){
         
-        this.stage = stage;
+        this.toolboxStage = stage;
+        maxToolBoxHeight = toolboxStage.getHeight();
         
         this.animator = animator;
         this.isToolBoxFocused = false;
@@ -36,7 +38,23 @@ public class GLRenderWindowListener extends WindowAdapter{
     @Override
     public void windowResized(WindowEvent we) {
         
-        //String name = Thread.currentThread().getName();
+        Window window = (Window)we.getSource();
+        final int height = window.getHeight();
+        
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+                
+                if(height < maxToolBoxHeight){
+                    toolboxStage.setHeight(height);
+                }else{
+                    toolboxStage.setHeight(maxToolBoxHeight);
+                }
+                
+            }
+        });
+        
         if(animator.isPaused()){
             animator.resume();
         }
@@ -55,8 +73,9 @@ public class GLRenderWindowListener extends WindowAdapter{
             @Override
             public void run() {
                 //stage.toFront();
-                stage.setX((int)locationOnScreen.getX()-stage.getWidth());
-                stage.setY((int)locationOnScreen.getY());
+                toolboxStage.setX((int)locationOnScreen.getX());
+                //toolboxStage.setX((int)locationOnScreen.getX()-toolboxStage.getWidth());
+                toolboxStage.setY((int)locationOnScreen.getY());
             }
         });
         
@@ -70,7 +89,7 @@ public class GLRenderWindowListener extends WindowAdapter{
 
             @Override
             public void run() {
-                stage.close();
+                toolboxStage.close();
             }
         });
         
@@ -83,8 +102,8 @@ public class GLRenderWindowListener extends WindowAdapter{
 
             @Override
             public void run() {
-                if(!stage.isShowing()){
-                    stage.toFront();
+                if(!toolboxStage.isShowing()){
+                    toolboxStage.toFront();
                 }
             }
         });

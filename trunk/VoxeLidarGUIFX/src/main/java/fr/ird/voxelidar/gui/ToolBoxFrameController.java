@@ -23,6 +23,8 @@ import java.util.Set;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -31,9 +33,12 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 
 /**
@@ -41,13 +46,21 @@ import org.apache.log4j.Logger;
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class ToolBarFrameController implements Initializable {
+public class ToolBoxFrameController implements Initializable {
     
-    private final static Logger logger = Logger.getLogger(ToolBarFrameController.class);
+    private final static Logger logger = Logger.getLogger(ToolBoxFrameController.class);
     
     private JoglListener joglContext;
     private ArrayList<String> gradientColorNames;
     private ArrayList<Color[]> gradientColors;
+    
+    private Stage stage;
+    
+    private double originalStageWidth;
+    private double originalContentPaneWidth;
+    private boolean isHidden;
+    
+    public double maxHeight;
     
     @FXML
     private ComboBox<String> comboBoxAttributeToShow;
@@ -100,6 +113,12 @@ public class ToolBarFrameController implements Initializable {
     private RadioButton radiobuttonPerspectiveCamera;
     @FXML
     private RadioButton radiobuttonOrthographicCamera;
+    @FXML
+    private Button buttonHideToolBox;
+    @FXML
+    private TabPane tabpaneContent;
+    @FXML
+    private ImageView imageViewArrowHiddingPane;
     
     /**
      * Initializes the controller class.
@@ -112,6 +131,10 @@ public class ToolBarFrameController implements Initializable {
         
         gradientColorNames = new ArrayList<>();
         gradientColors = new ArrayList<>();
+        
+        isHidden = false;
+        
+        //initContent();
         
         try {
             
@@ -130,6 +153,7 @@ public class ToolBarFrameController implements Initializable {
             logger.error(ex);
         }
         
+                
         comboboxGradient.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 
             @Override
@@ -157,16 +181,39 @@ public class ToolBarFrameController implements Initializable {
             }
         });
         
+        Task colorChangingTask = new Task() {
+
+            @Override
+            protected Object call() throws Exception {
+                
+                Vec3F worldColor = joglContext.getWorldColor();
+                joglContext.setWorldColor(new Vec3F((float) (sliderColorRed.getValue()/255.0), worldColor.y,worldColor.z));
+                try{
+                    joglContext.drawNextFrame();
+                }catch(Exception e){}
+                
+                return null;
+            }
+        };
+        
+        Service s = new Service() {
+
+            @Override
+            protected Task createTask() {
+                return colorChangingTask;
+            }
+        };
+        
+        
+        
         sliderColorRed.valueProperty().addListener(new ChangeListener<Number>() {
 
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                Vec3F worldColor = joglContext.getWorldColor();
-                joglContext.setWorldColor(new Vec3F((float) (sliderColorRed.getValue()/255.0), worldColor.y,worldColor.z));
+                
                 sliderColorRed.setTooltip(new Tooltip(String.valueOf(sliderColorRed.getValue())));
-                try{
-                    joglContext.drawNextFrame();
-                }catch(Exception e){}
+                  
+                s.restart();
                 
             }
         });
@@ -175,9 +222,12 @@ public class ToolBarFrameController implements Initializable {
 
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                
+                sliderColorGreen.setTooltip(new Tooltip(String.valueOf(sliderColorGreen.getValue())));
+                
                 Vec3F worldColor = joglContext.getWorldColor();
                 joglContext.setWorldColor(new Vec3F(worldColor.x, (float) (sliderColorGreen.getValue()/255.0), worldColor.z));
-                sliderColorGreen.setTooltip(new Tooltip(String.valueOf(sliderColorGreen.getValue())));
+                
                 try{
                     joglContext.drawNextFrame();
                 }catch(Exception e){}
@@ -188,9 +238,12 @@ public class ToolBarFrameController implements Initializable {
 
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                
+                sliderColorBlue.setTooltip(new Tooltip(String.valueOf(sliderColorBlue.getValue())));
+                
                 Vec3F worldColor = joglContext.getWorldColor();
                 joglContext.setWorldColor(new Vec3F(worldColor.x,worldColor.y, (float) (sliderColorBlue.getValue()/255.0)));
-                sliderColorBlue.setTooltip(new Tooltip(String.valueOf(sliderColorBlue.getValue())));
+                
                 try{
                     joglContext.drawNextFrame();
                 }catch(Exception e){}
@@ -257,15 +310,7 @@ public class ToolBarFrameController implements Initializable {
             }
         });
         
-        Platform.runLater(new Runnable() {
-
-            @Override
-            public void run() {
-                textFieldVoxelSize.setText(String.valueOf(joglContext.getScene().getVoxelSpace().getCubeSize()));
-                textFieldMinValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMin));
-                textFieldMaxValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMax));
-            }
-        });
+        
         
         
         tooltipTextfieldFilter.setText("Syntax: value1, value2\nvalue can be a floating point number\nor a value range [1.0->2.0[");
@@ -424,68 +469,96 @@ public class ToolBarFrameController implements Initializable {
                 }
             }
         });
+        /*
+        Platform.runLater(new Runnable() {
+            
+            @Override
+            public void run() {
+                textFieldVoxelSize.setText(String.valueOf(joglContext.getScene().getVoxelSpace().getCubeSize()));
+                textFieldMinValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMin));
+                textFieldMaxValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMax));
+            }
+        });*/
+    }
+    
+    public void setStage(Stage stage){
+        this.stage = stage;
+        maxHeight = stage.getHeight();
     }
     
     private void updateValuesFilter(){
         
-        String[] valuesArray = textFieldFilterValues.getText().replace(" ", "").split(",");
-        Set<CombinedFilter> filterValues = new HashSet<>();
-        for(int i=0;i<valuesArray.length;i++){
-            try{
-                if(valuesArray[i].contains("[") || valuesArray[i].contains("]") ){
-                    int index = valuesArray[i].indexOf("->");
-                    
-                    if(index != -1){
-                        char firstInequality = valuesArray[i].charAt(0);
-                        char secondInequality = valuesArray[i].charAt(valuesArray[i].length()-1);
-                        
-                        
-                        float firstValue = Float.valueOf(valuesArray[i].substring(1, index));
-                        float secondValue = Float.valueOf(valuesArray[i].substring(index+2, valuesArray[i].length()-1));
-                        
-                        int firstInequalityID;
-                        switch(firstInequality){
-                            case ']':
-                                firstInequalityID = Filter.GREATER_THAN;
-                                break;
-                            case '[':
-                                firstInequalityID = Filter.GREATER_THAN_OR_EQUAL;
-                                break;
-                            default:
-                                firstInequalityID = Filter.GREATER_THAN_OR_EQUAL;
-                        }
-                        
-                        int secondInequalityID;
-                        switch(secondInequality){
-                            case ']':
-                                secondInequalityID = Filter.LESS_THAN_OR_EQUAL;
-                                break;
-                            case '[':
-                                secondInequalityID = Filter.LESS_THAN;
-                                break;
-                            default:
-                                secondInequalityID = Filter.LESS_THAN_OR_EQUAL;
-                        }
-                        
-                        
-                        filterValues.add(new CombinedFilter(
-                                new Filter("x", firstValue, firstInequalityID), 
-                                new Filter("x", secondValue, secondInequalityID), CombinedFilter.AND));
-                    }
-                    
-                }else{
-                    filterValues.add(new CombinedFilter(
-                                new Filter("x", Float.valueOf(valuesArray[i]), Filter.EQUAL), 
-                                null, CombinedFilter.AND));
-                }
-                
-            }catch(Exception e){}
-        }
+        final String[] valuesArray = textFieldFilterValues.getText().replace(" ", "").split(",");
+        
+        Task task = new Task() {
 
-        joglContext.getScene().getVoxelSpace().setFilterValues(filterValues, radiobuttonDisplayValues.isSelected());
-        joglContext.getScene().getVoxelSpace().updateColorValue(joglContext.getScene().getVoxelSpace().getGradient());
-        joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
-        joglContext.drawNextFrame();
+            @Override
+            protected Object call() throws Exception {
+                
+                Set<CombinedFilter> filterValues = new HashSet<>();
+                for(int i=0;i<valuesArray.length;i++){
+                    try{
+                        if(valuesArray[i].contains("[") || valuesArray[i].contains("]") ){
+                            int index = valuesArray[i].indexOf("->");
+
+                            if(index != -1){
+                                char firstInequality = valuesArray[i].charAt(0);
+                                char secondInequality = valuesArray[i].charAt(valuesArray[i].length()-1);
+
+
+                                float firstValue = Float.valueOf(valuesArray[i].substring(1, index));
+                                float secondValue = Float.valueOf(valuesArray[i].substring(index+2, valuesArray[i].length()-1));
+
+                                int firstInequalityID;
+                                switch(firstInequality){
+                                    case ']':
+                                        firstInequalityID = Filter.GREATER_THAN;
+                                        break;
+                                    case '[':
+                                        firstInequalityID = Filter.GREATER_THAN_OR_EQUAL;
+                                        break;
+                                    default:
+                                        firstInequalityID = Filter.GREATER_THAN_OR_EQUAL;
+                                }
+
+                                int secondInequalityID;
+                                switch(secondInequality){
+                                    case ']':
+                                        secondInequalityID = Filter.LESS_THAN_OR_EQUAL;
+                                        break;
+                                    case '[':
+                                        secondInequalityID = Filter.LESS_THAN;
+                                        break;
+                                    default:
+                                        secondInequalityID = Filter.LESS_THAN_OR_EQUAL;
+                                }
+
+
+                                filterValues.add(new CombinedFilter(
+                                        new Filter("x", firstValue, firstInequalityID), 
+                                        new Filter("x", secondValue, secondInequalityID), CombinedFilter.AND));
+                            }
+
+                        }else{
+                            filterValues.add(new CombinedFilter(
+                                        new Filter("x", Float.valueOf(valuesArray[i]), Filter.EQUAL), 
+                                        null, CombinedFilter.AND));
+                        }
+
+                    }catch(Exception e){}
+                }
+
+                joglContext.getScene().getVoxelSpace().setFilterValues(filterValues, radiobuttonDisplayValues.isSelected());
+                joglContext.getScene().getVoxelSpace().updateColorValue(joglContext.getScene().getVoxelSpace().getGradient());
+                joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
+                joglContext.drawNextFrame();
+                
+                return null;
+            }
+        };
+        
+        new Thread(task).start();
+        
     }
     
     public void setJoglListener(JoglListener joglContext){
@@ -496,14 +569,33 @@ public class ToolBarFrameController implements Initializable {
         comboBoxAttributeToShow.getItems().addAll(attributes);
         comboBoxAttributeToShow.getSelectionModel().select(joglContext.getSettings().attributeToVisualize);
     }
+    
 
     @FXML
     private void onActionButtonApplyVoxelSize(ActionEvent event) {
         
-        Float voxelSize = Float.valueOf(textFieldVoxelSize.getText());
+        Task task = new Task() {
+
+            @Override
+            protected Object call() throws Exception {
+                
+                try{
+                    Float voxelSize = Float.valueOf(textFieldVoxelSize.getText());
+
+                    joglContext.getScene().getVoxelSpace().updateCubeSize(null, voxelSize);
+                    joglContext.drawNextFrame();
+
+                }catch(NumberFormatException e){
+                    logger.error("Cannot parse string value to float", e);
+                }catch(Exception e){
+                    logger.error("Unknown exception", e);
+                }
+                
+                return null;
+            }
+        };
         
-        joglContext.getScene().getVoxelSpace().updateCubeSize(null, voxelSize);
-        joglContext.drawNextFrame();
+        new Thread(task).start();
     }
 
     @FXML
@@ -532,10 +624,34 @@ public class ToolBarFrameController implements Initializable {
             joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
             joglContext.drawNextFrame();
             
+        }catch(NumberFormatException e){
+            logger.error("Cannot parse string value to float", e);
         }catch(Exception e){
-            logger.error("error");
+            logger.error("Unknown exception", e);
         }
+    }
+
+    @FXML
+    private void onActionButtonHideToolBox(ActionEvent event) {
         
+        if(!isHidden){
+            
+            originalStageWidth = stage.getWidth();
+            originalContentPaneWidth = tabpaneContent.getWidth();
+            
+            tabpaneContent.setPrefWidth(0);
+            stage.setWidth(14);
+            imageViewArrowHiddingPane.setRotate(180);
+            isHidden = true;
+            
+            joglContext.drawNextFrame();
+            
+        }else{
+            tabpaneContent.setPrefWidth(originalContentPaneWidth);
+            stage.setWidth(originalStageWidth);
+            imageViewArrowHiddingPane.setRotate(0);
+            isHidden = false;
+        }
         
     }
     

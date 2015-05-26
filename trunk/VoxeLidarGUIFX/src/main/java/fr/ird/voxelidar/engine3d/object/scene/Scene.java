@@ -133,7 +133,7 @@ public class Scene {
                 
                 int textureShaderId = getShaderByName("textureShader");
                 gl.glUseProgram(textureShaderId);
-                    FloatBuffer projectionMatrix = Buffers.newDirectFloatBuffer(Mat4F.ortho(0, 640, 0, 480, -10, 1000).mat);
+                    FloatBuffer projectionMatrix = Buffers.newDirectFloatBuffer(Mat4F.ortho(0, width, 0, height, -10, 1000).mat);
                     FloatBuffer viewMatrix = Buffers.newDirectFloatBuffer(Mat4F.lookAt(new Vec3F(0,0,0), new Vec3F(0,0,0), new Vec3F(0,1,0)).mat);
                     Shader shader = shadersList.get(textureShaderId);
                     gl.glUniformMatrix4fv(shader.uniformMap.get("viewMatrix"), 1, false, viewMatrix);

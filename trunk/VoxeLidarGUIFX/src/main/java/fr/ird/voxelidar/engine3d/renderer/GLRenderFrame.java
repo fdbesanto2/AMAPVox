@@ -26,7 +26,7 @@ public class GLRenderFrame extends GLWindow{
         super(w);
     }
     
-    public static GLRenderFrame create(GLCapabilities caps, int width, int height, String title){
+    public static GLRenderFrame create(GLCapabilities caps, int posX, int posY, int width, int height, String title){
         
                 
         GLRenderFrame viewer = new GLRenderFrame(NewtFactory.createWindow(caps)); 
@@ -35,8 +35,9 @@ public class GLRenderFrame extends GLWindow{
         viewer.setSize(width, height);
         viewer.width = width;
         viewer.height = height;
-        viewer.setPosition((GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getWidth()/2)-320,
-                           (GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getHeight()/2)-240);
+        viewer.setPosition(posX, posY);
+        /*viewer.setPosition((GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getWidth()/2)-320,
+                           (GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getHeight()/2)-240);*/
         //viewer.setAlwaysOnTop(true); 
         viewer.setDefaultCloseOperation(WindowClosingProtocol.WindowClosingMode.DISPOSE_ON_CLOSE);
 

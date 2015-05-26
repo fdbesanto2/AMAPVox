@@ -37,7 +37,7 @@ public class Voxel implements Serializable {
         /**
          * Nombre de fois où un rayon à échantillonné le voxel
          */
-        public int nbSampling = 0;
+        public int nbSampling;
         
         /**
          * Nombre de fois où un rayon à échantillonné le voxel
@@ -47,7 +47,7 @@ public class Voxel implements Serializable {
         /**
          * Nombre d'échos dans le voxel
          */
-        public int nbEchos = 0;
+        public int nbEchos;
 
         /**
          * Longueurs cumulées des trajets optiques dans le voxel dans le cas 
@@ -62,7 +62,7 @@ public class Voxel implements Serializable {
          */
         //public double lgOutgoing = 0;
         
-        public double lgTotal = 0;
+        public double lgTotal;
 
         /**
          * PAD beam fraction, calcul du PAD selon la formule:
@@ -109,7 +109,7 @@ public class Voxel implements Serializable {
         /**
          * Distance du voxel par rapport au sol
          */
-        public float ground_distance = 10;
+        public float ground_distance;
 
         /**
          *  Position du voxel dans l'espace
@@ -129,17 +129,17 @@ public class Voxel implements Serializable {
          * En TLS est égal à: lgTraversant / (nbSampling - nbEchos)
          */
         //public double lMeanOutgoing = 0;
-        public double lMeanTotal = 0;
+        public double lMeanTotal;
         //public double LMean_NoInterception = 0;
-        public double _transBeforeNorm = 0;
-        public double transmittance = 0;
-        public double _transmittance_v2 = 0;
-        public double angleMean = 0;
-        public double bvEntering = 0;
-        public double bvIntercepted = 0;
-        public double PadBVTotal = 0;
-        public double _PadBVTotal_V2 = 0;
-        public double _sumSurfaceMultiplyLength = 0;
+        public double _transBeforeNorm;
+        public double transmittance;
+        public double _transmittance_v2;
+        public double angleMean;
+        public double bvEntering;
+        public double bvIntercepted;
+        public double PadBVTotal;
+        public double _PadBVTotal_V2;
+        public double _sumSurfaceMultiplyLength;
         
         protected final static Logger _logger = Logger.getLogger(Voxel.class);
         
@@ -147,7 +147,7 @@ public class Voxel implements Serializable {
         protected static Set<String> fieldsNames;
         protected static Set<Field> _fields;
         
-        private static boolean classInit = false;
+        private static boolean classInit;
         
         
 
