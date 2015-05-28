@@ -6,6 +6,7 @@ package fr.ird.voxelidar.gui;
  * and open the template in the editor.
  */
 
+import com.jogamp.newt.event.WindowListener;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.object.camera.TrackballCamera;
 import fr.ird.voxelidar.engine3d.renderer.JoglListener;
@@ -51,6 +52,7 @@ public class ToolBoxFrameController implements Initializable {
     private final static Logger logger = Logger.getLogger(ToolBoxFrameController.class);
     
     private JoglListener joglContext;
+    
     private ArrayList<String> gradientColorNames;
     private ArrayList<Color[]> gradientColors;
     
@@ -421,8 +423,10 @@ public class ToolBoxFrameController implements Initializable {
     }
     
     public void setStage(Stage stage){
+        
         this.stage = stage;
         maxHeight = stage.getHeight();
+        
     }
     
     public void initContent(){

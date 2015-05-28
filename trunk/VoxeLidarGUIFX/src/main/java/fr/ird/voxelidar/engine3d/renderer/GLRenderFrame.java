@@ -8,10 +8,11 @@ package fr.ird.voxelidar.engine3d.renderer;
 import com.jogamp.nativewindow.WindowClosingProtocol;
 import com.jogamp.newt.NewtFactory;
 import com.jogamp.newt.Window;
+import com.jogamp.newt.event.WindowEvent;
+import com.jogamp.newt.event.WindowListener;
+import com.jogamp.newt.event.WindowUpdateEvent;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.GLCapabilities;
-import java.awt.GraphicsEnvironment;
-
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
@@ -43,4 +44,5 @@ public class GLRenderFrame extends GLWindow{
 
         return viewer; 
     }
+
 }

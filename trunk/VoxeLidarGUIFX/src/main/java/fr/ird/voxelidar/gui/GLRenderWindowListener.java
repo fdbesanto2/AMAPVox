@@ -98,6 +98,7 @@ public class GLRenderWindowListener extends WindowAdapter{
     @Override
     public void windowGainedFocus(WindowEvent we) {
         
+        /*
         Platform.runLater(new Runnable() {
 
             @Override
@@ -106,6 +107,11 @@ public class GLRenderWindowListener extends WindowAdapter{
                     toolboxStage.toFront();
                 }
             }
-        });
+        });*/
+    }
+    
+    @Override
+    public void windowLostFocus(WindowEvent we) {
+        
     }
 }

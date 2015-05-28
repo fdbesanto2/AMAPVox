@@ -5,6 +5,9 @@
  */
 package fr.ird.voxelidar.gui;
 
+import com.jogamp.newt.event.WindowAdapter;
+import com.jogamp.newt.event.WindowListener;
+import com.jogamp.newt.event.WindowUpdateEvent;
 import fr.ird.voxelidar.configuration.Configuration;
 import fr.ird.voxelidar.configuration.Configuration.InputType;
 import fr.ird.voxelidar.configuration.Configuration.ProcessMode;
@@ -1538,6 +1541,19 @@ public class MainFrameController implements Initializable {
                                     Scene scene = new Scene(root);
                                     toolBarFrameStage.setScene(scene);
                                     toolBarFrameStage.initStyle(StageStyle.UNDECORATED);
+                                    toolBarFrameStage.focusedProperty().addListener(new ChangeListener<Boolean>() {
+
+                                        @Override
+                                        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                                            if(newValue){
+                                                toolBarFrameStage.setAlwaysOnTop(true);
+                                            }else{
+                                                if(!joglWindow.isFocused()){
+                                                    toolBarFrameStage.setAlwaysOnTop(false);
+                                                }
+                                            }
+                                        }
+                                    });
 
                                     toolBarFrameController = loader.getController();
                                     toolBarFrameController.setJoglListener(joglWindow.getJoglContext());
@@ -1568,6 +1584,38 @@ public class MainFrameController implements Initializable {
                                                 }
                                             });
                                             
+                                        }
+                                    });
+                                    
+                                    joglWindow.addWindowListener(new WindowAdapter() {
+
+                                        @Override
+                                        public void windowGainedFocus(com.jogamp.newt.event.WindowEvent e) {
+                                            
+                                            joglWindow.setIsFocused(true);
+                                            Platform.runLater(new Runnable() {
+
+                                                @Override
+                                                public void run() {
+                                                    toolBarFrameStage.setIconified(false);
+                                                    toolBarFrameStage.setAlwaysOnTop(true);
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void windowLostFocus(com.jogamp.newt.event.WindowEvent e) {
+                                            joglWindow.setIsFocused(false);
+                                            Platform.runLater(new Runnable() {
+
+                                                @Override
+                                                public void run() {
+                                                    if(!toolBarFrameStage.focusedProperty().get()){
+                                                        toolBarFrameStage.setIconified(true);
+                                                        toolBarFrameStage.setAlwaysOnTop(false);
+                                                    }
+                                                }
+                                            });
                                         }
                                     });
                                     

@@ -6,7 +6,10 @@
 package fr.ird.voxelidar.gui;
 
 import com.jogamp.nativewindow.util.Point;
+import com.jogamp.newt.Window;
+import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.event.WindowListener;
+import com.jogamp.newt.event.WindowUpdateEvent;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLException;
 import com.jogamp.opengl.GLProfile;
@@ -34,6 +37,8 @@ public class JOGLWindow{
     private int width;
     private int height;
     
+    private boolean focused;
+    
     public JOGLWindow(int posX, int posY, int width, int height, String title, VoxelSpace voxelSpace, Settings settings) throws GLException, Exception{
         
         try{
@@ -45,8 +50,6 @@ public class JOGLWindow{
             this.height = height;
             
             renderFrame = GLRenderFrame.create(caps, posX, posY, width, height, title);
-            
-
             animator = new FPSAnimator(renderFrame, 60);
 
             joglContext = new JoglListener(voxelSpace, settings, animator);
@@ -105,6 +108,14 @@ public class JOGLWindow{
 
     public int getHeight() {
         return height;
+    }
+
+    public boolean isFocused() {
+        return focused;
+    }
+
+    public void setIsFocused(boolean focused) {
+        this.focused = focused;
     }
     
 }
