@@ -43,7 +43,7 @@ public class VoxelParameters {
     //private float pointcloudErrorMargin = 0.08f;
     
     private boolean TLS;
-    private float maxPAD = 3;
+    private float maxPAD = 5;
     private boolean mergingAfter = false;
     private File mergedFile;
     

@@ -17,19 +17,10 @@ import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import fr.ird.voxelidar.util.Processing;
 import fr.ird.voxelidar.voxelisation.extraction.als.LazExtraction;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.concurrent.BlockingQueue;
-import java.util.logging.Level;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
@@ -46,20 +37,23 @@ public class PointsToShot extends Processing implements Runnable{
     
     private Las las;
     private final File alsFile;
-    private final File trajectoryFile;
+    //private final File trajectoryFile;
     private final Mat4D popMatrix;
     //private final BlockingQueue<Shot> queue;
     private VoxelAnalysis voxelAnalysis;
     private boolean isFinished;
     private final boolean filterLowPoint;
+    private List<Trajectory> trajectoryList;
+    private boolean updateALS = true;
+    private List<LasPoint> lasPointList;
 
     public void setIsFinished(boolean isFinished) {
         this.isFinished = isFinished;
     }
     
-    public PointsToShot(VoxelAnalysis voxelAnalysis, File trajectoryFile, File alsFile, Mat4D popMatrix, boolean filterLowPoint){
+    public PointsToShot(VoxelAnalysis voxelAnalysis, List<Trajectory> trajectoryList, File alsFile, Mat4D popMatrix, boolean filterLowPoint){
 
-        this.trajectoryFile = trajectoryFile;
+        this.trajectoryList = trajectoryList;
         this.popMatrix = popMatrix;
         this.alsFile = alsFile;
         this.voxelAnalysis = voxelAnalysis;
@@ -68,9 +62,20 @@ public class PointsToShot extends Processing implements Runnable{
         this.filterLowPoint = filterLowPoint;
     }
 
+    public void setVoxelAnalysis(VoxelAnalysis voxelAnalysis) {
+        this.voxelAnalysis = voxelAnalysis;
+    }
+
+    public boolean isUpdateALS() {
+        return updateALS;
+    }
+
+    public void setUpdateALS(boolean updateALS) {
+        this.updateALS = updateALS;
+    }
+
     @Override
     public void run() {
-        
         
         setStepNumber(3);
         
@@ -80,83 +85,90 @@ public class PointsToShot extends Processing implements Runnable{
         long maxIterations;
         int step;
         
-        /***reading las***/
-        ArrayList<LasPoint> lasPointList = new ArrayList<>();
-        LasHeader header;
-        
-        switch(FileManager.getExtension(alsFile)){
-            case ".las":
-                
-                LasReader lasReader = new LasReader();
+        if(updateALS){
+            
+            /***reading las***/
+            
+            lasPointList = new ArrayList<>();
+            
+            LasHeader header;
 
-                lasReader.open(alsFile);
-                header = lasReader.getHeader();
+            switch(FileManager.getExtension(alsFile)){
+                case ".las":
 
-                maxIterations = header.getNumberOfPointrecords();
-                step = (int) (maxIterations/10);
+                    LasReader lasReader = new LasReader();
 
-                for (PointDataRecordFormat0 p : lasReader) {
+                    lasReader.open(alsFile);
+                    header = lasReader.getHeader();
 
-                    if(iterations % step == 0){
-                        fireProgress("Reading *.las", (int) ((iterations*100)/(float)maxIterations));
+                    maxIterations = header.getNumberOfPointrecords();
+                    step = (int) (maxIterations/10);
+
+                    for (PointDataRecordFormat0 p : lasReader) {
+
+                        if(iterations % step == 0){
+                            fireProgress("Reading *.las", (int) ((iterations*100)/(float)maxIterations));
+                        }
+
+                        if(p.isHasQLineExtrabytes()){
+                            QLineExtrabytes qLineExtrabytes = p.getQLineExtrabytes();
+                            logger.info("QLineExtrabytes" + qLineExtrabytes.getAmplitude()+" "+qLineExtrabytes.getPulseWidth());
+                        }
+                        Vector3d location = new Vector3d((p.getX() * header.getxScaleFactor()) + header.getxOffset(), (p.getY() * header.getyScaleFactor()) + header.getyOffset(), (p.getZ() * header.getzScaleFactor()) + header.getzOffset());
+
+                        if((filterLowPoint && p.getClassification() == 7) || !filterLowPoint){
+                            LasPoint point = new LasPoint(location.x, location.y, location.z, p.getReturnNumber(), p.getNumberOfReturns(), p.getIntensity(), p.getClassification(), p.getGpsTime());
+                            lasPointList.add(point);
+                        }
+
+
+                        iterations++;
                     }
+                    break;
 
-                    if(p.isHasQLineExtrabytes()){
-                        QLineExtrabytes qLineExtrabytes = p.getQLineExtrabytes();
-                        logger.info("QLineExtrabytes" + qLineExtrabytes.getAmplitude()+" "+qLineExtrabytes.getPulseWidth());
-                    }
-                    Vector3d location = new Vector3d((p.getX() * header.getxScaleFactor()) + header.getxOffset(), (p.getY() * header.getyScaleFactor()) + header.getyOffset(), (p.getZ() * header.getzScaleFactor()) + header.getzOffset());
+                case ".laz":
 
-                    if((filterLowPoint && p.getClassification() == 7) || !filterLowPoint){
-                        LasPoint point = new LasPoint(location.x, location.y, location.z, p.getReturnNumber(), p.getNumberOfReturns(), p.getIntensity(), p.getClassification(), p.getGpsTime());
-                        lasPointList.add(point);
-                    }
-                    
+                    LazExtraction laz = new LazExtraction();
+                    laz.openLazFile(alsFile);
 
-                    iterations++;
-                }
-                break;
-                
-            case ".laz":
-                
-                LazExtraction laz = new LazExtraction();
-                laz.openLazFile(alsFile);
-                
-                header = laz.getHeader();
-                
-                for (LasPoint p : laz) {
-                    
-                    p.x = (p.x * header.getxScaleFactor()) + header.getxOffset();
-                    p.y = (p.y * header.getyScaleFactor()) + header.getyOffset();
-                    p.z = (p.z * header.getzScaleFactor()) + header.getzOffset();
-                    
-                    if((filterLowPoint && p.classification == 7) || !filterLowPoint){
-                        lasPointList.add(p);
+                    header = laz.getHeader();
+
+                    for (LasPoint p : laz) {
+
+                        p.x = (p.x * header.getxScaleFactor()) + header.getxOffset();
+                        p.y = (p.y * header.getyScaleFactor()) + header.getyOffset();
+                        p.z = (p.z * header.getzScaleFactor()) + header.getzOffset();
+
+                        if((filterLowPoint && p.classification == 7) || !filterLowPoint){
+                            lasPointList.add(p);
+                        }
+
                     }
-                    
-                }
-                laz.close();
-                        
-                break;
+                    laz.close();
+
+                    break;
+            }
+
+            /***sort las by time***/
+            Collections.sort(lasPointList);
+
+            double minTime = lasPointList.get(0).t;
+            double maxTime = lasPointList.get(lasPointList.size()-1).t;
+
+            if(minTime == maxTime){
+                logger.error("ALS file doesn't contains time relative information, minimum and maximum time = "+minTime);
+                return;
+            }
         }
         
-        /***sort las by time***/
-        Collections.sort(lasPointList);
-        
-        double minTime = lasPointList.get(0).t;
-        double maxTime = lasPointList.get(lasPointList.size()-1).t;
-        
-        if(minTime == maxTime){
-            logger.error("ALS file doesn't contains time relative information, minimum and maximum time = "+minTime);
-            return;
-        }
         
         
         /***reading trajectory file***/
         
-        fireProgress("Reading trajectory file", 0);
+        //fireProgress("Reading trajectory file", 0);
         
         //Map<Double, Trajectory> trajectoryMap = new TreeMap<>();
+        /*
         List<Trajectory> trajectoryList = new ArrayList<>();
         
         try {
@@ -200,7 +212,7 @@ public class PointsToShot extends Processing implements Runnable{
             logger.error(ex);
         } catch (IOException ex) {
             logger.error(ex);
-        }
+        }*/
         
         //ArrayList<Double> tgps = new ArrayList<>();
         /*

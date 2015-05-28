@@ -262,7 +262,8 @@ public class ToolBoxFrameController implements Initializable {
                 try{
                     joglContext.getScene().getVoxelSpace().resetAttributValueRange();
                     joglContext.getScene().getVoxelSpace().changeCurrentAttribut(newValue);
-                    joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
+                    joglContext.getScene().getVoxelSpace().updateVao();
+                    //joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
                     joglContext.drawNextFrame();
                     textFieldMinValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMin));
                     textFieldMaxValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMax));
@@ -502,6 +503,7 @@ public class ToolBoxFrameController implements Initializable {
                 joglContext.getScene().getVoxelSpace().setFilterValues(filterValues, radiobuttonDisplayValues.isSelected());
                 joglContext.getScene().getVoxelSpace().updateColorValue(joglContext.getScene().getVoxelSpace().getGradient());
                 joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
+                joglContext.getScene().getVoxelSpace().updateVao();
                 joglContext.drawNextFrame();
                 
                 return null;

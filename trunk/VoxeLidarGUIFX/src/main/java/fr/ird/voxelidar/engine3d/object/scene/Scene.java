@@ -164,7 +164,7 @@ public class Scene {
             /***draw voxel space***/
             //gl.glEnable(GL3.GL_BLEND);
             gl.glUseProgram(voxelSpace.getShaderId());
-                voxelSpace.render(gl);
+                voxelSpace.render(gl,shadersList.get(voxelSpace.getShaderId()));
             gl.glUseProgram(0);
             //gl.glDisable(GL3.GL_BLEND);
             

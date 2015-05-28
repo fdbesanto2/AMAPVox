@@ -5,6 +5,8 @@
  */
 package fr.ird.voxelidar.voxelisation;
 
+import fr.ird.voxelidar.configuration.Configuration;
+import fr.ird.voxelidar.configuration.Input;
 import fr.ird.voxelidar.configuration.MatrixAndFile;
 import fr.ird.voxelidar.util.ProcessingListener;
 import fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation;
@@ -17,6 +19,7 @@ import fr.ird.voxelidar.engine3d.object.scene.DtmLoader;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceHeader;
 import fr.ird.voxelidar.io.file.FileManager;
+import fr.ird.voxelidar.multires.ProcessingMultiRes;
 import fr.ird.voxelidar.octree.Octree;
 import fr.ird.voxelidar.octree.OctreeFactory;
 import fr.ird.voxelidar.util.DataSet;
@@ -25,6 +28,7 @@ import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.MatrixConverter;
 import fr.ird.voxelidar.util.TimeCounter;
 import fr.ird.voxelidar.voxelisation.als.LasVoxelisation;
+import fr.ird.voxelidar.voxelisation.als.Trajectory;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysisData;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -274,8 +278,75 @@ public class VoxelisationTool {
             vop = Mat4D.identity();
         }
 
-        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, trajectoryFile, parameters, filters, filterLowPoints);
+        
+        
+        Dtm terrain = null;
+        
+        if(parameters.getDtmFile() != null && parameters.useDTMCorrection() ){
+            
+            fireProgress("Reading DTM file", 0);
+            
+            try {
+                terrain = DtmLoader.readFromAscFile(parameters.getDtmFile());
+                terrain.setTransformationMatrix(vop);
+            } catch (Exception ex) {
+                logger.error(ex);
+            }
+        } 
+        
+        fireProgress("Reading trajectory file", 0);
+        
+        List<Trajectory> trajectoryList = new ArrayList<>();
+        
+        try {
+            //maxIterations = FileManager.getLineNumber(trajectoryFile.getAbsolutePath());
+            //step = (int) (maxIterations/10);
+            //iterations = 0;
+            
+            
+            
+            BufferedReader reader = new BufferedReader(new FileReader(trajectoryFile));
 
+            String line;
+
+            //skip header
+            reader.readLine();
+
+            while ((line = reader.readLine()) != null) {
+                /*
+                if(iterations % step == 0){
+                    fireProgress("Reading trajectory file", (int) ((iterations*100)/(float)maxIterations));
+                }*/
+                
+                line = line.replaceAll(",", " ");
+                String[] lineSplit = line.split(" ");
+                
+                Double time = Double.valueOf(lineSplit[3]);
+                
+                Trajectory traj = new Trajectory(Double.valueOf(lineSplit[0]), Double.valueOf(lineSplit[1]),
+                        Double.valueOf(lineSplit[2]), time);
+
+                //troncate unused values
+                //if(time >= minTime-0.01 && time <= maxTime+0.01){
+                    trajectoryList.add(traj);
+                    //trajectoryMap.put(time, traj);
+                //}
+                
+                //iterations++;
+            }
+
+        } catch (FileNotFoundException ex) {
+            logger.error(ex);
+            return;
+        } catch (IOException ex) {
+            logger.error(ex);
+            return;
+        }
+        
+        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, parameters, filters, filterLowPoints);
+        
+        voxelisation.init(terrain, trajectoryList);
+        
         voxelisation.addProcessingListener(new ProcessingListener() {
 
             @Override
@@ -587,6 +658,149 @@ public class VoxelisationTool {
         
         
 
+        fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
+    }
+    
+    public void multiVoxelisation(Configuration configuration){
+        
+        startTime = System.currentTimeMillis();
+        configuration.getVoxelParameters().setTLS(false);
+        
+        Dtm terrain = null;
+        Mat4D vopMatrix = MatrixConverter.convertMatrix4dToMat4D(configuration.getVopMatrix());
+        if(vopMatrix == null){
+            vopMatrix = Mat4D.identity();
+        }
+        
+        
+        if(configuration.getVoxelParameters().getDtmFile() != null && configuration.getVoxelParameters().useDTMCorrection() ){
+            
+            fireProgress("Reading DTM file", 0);
+            
+            try {
+                terrain = DtmLoader.readFromAscFile(configuration.getVoxelParameters().getDtmFile());
+                terrain.setTransformationMatrix(vopMatrix);
+                
+            } catch (Exception ex) {
+                logger.error(ex);
+            }
+        } 
+        
+        fireProgress("Reading trajectory file", 0);
+        
+        if(configuration.getTrajectoryFile() == null){
+            logger.error("Trajectory file is null");
+            return;
+        }
+        
+        List<Trajectory> trajectoryList = new ArrayList<>();
+        
+        try {
+            //maxIterations = FileManager.getLineNumber(trajectoryFile.getAbsolutePath());
+            //step = (int) (maxIterations/10);
+            //iterations = 0;
+            
+            BufferedReader reader = new BufferedReader(new FileReader(configuration.getTrajectoryFile()));
+
+            String line;
+
+            //skip header
+            reader.readLine();
+
+            while ((line = reader.readLine()) != null) {
+                /*
+                if(iterations % step == 0){
+                    fireProgress("Reading trajectory file", (int) ((iterations*100)/(float)maxIterations));
+                }*/
+                
+                line = line.replaceAll(",", " ");
+                String[] lineSplit = line.split(" ");
+                
+                Double time = Double.valueOf(lineSplit[3]);
+                
+                Trajectory traj = new Trajectory(Double.valueOf(lineSplit[0]), Double.valueOf(lineSplit[1]),
+                        Double.valueOf(lineSplit[2]), time);
+
+                //troncate unused values
+                //if(time >= minTime-0.01 && time <= maxTime+0.01){
+                    trajectoryList.add(traj);
+                    //trajectoryMap.put(time, traj);
+                //}
+                
+                //iterations++;
+            }
+
+        } catch (FileNotFoundException ex) {
+            logger.error(ex);
+            return;
+        } catch (IOException ex) {
+            logger.error(ex);
+            return;
+        }
+        
+        
+        
+        List<Input> inputs = configuration.getMultiProcessInputs();
+        
+        //List<Callable<Object>> tasks = new ArrayList<>();
+        //exec = Executors.newSingleThreadExecutor();
+        VoxelParameters params = configuration.getVoxelParameters();
+        
+        int count = 1;
+        for(Input input : inputs){
+            
+            if(cancelled){
+                return;
+            }
+            
+            List<Input> multiResInputs = input.multiResList;
+            
+            fireProgress("Processing file "+count+"/"+inputs.size()+" : "+input.inputFile.getAbsolutePath(), 0);
+            
+            params.setBottomCorner(input.voxelParameters.getBottomCorner());
+            params.setTopCorner(input.voxelParameters.getTopCorner());
+            params.setSplit(input.voxelParameters.getSplit());
+            params.setResolution(input.voxelParameters.getResolution());
+            
+            LasVoxelisation voxelisation = new LasVoxelisation(input.inputFile, input.outputFile, vopMatrix, params, configuration.getFilters(), configuration.isRemoveLowPoint());
+            voxelisation.init(terrain, trajectoryList);
+            
+            voxelisation.process();
+            
+            List<File> files = new ArrayList<>();
+            files.add(input.outputFile);
+            
+            if(multiResInputs != null){
+                
+                for(Input multiResInput : multiResInputs){
+                    
+                    params.setSplit(multiResInput.voxelParameters.getSplit());
+                    params.setResolution(multiResInput.voxelParameters.getResolution());
+                    voxelisation.setOutputFile(multiResInput.outputFile);
+                    voxelisation.setParameters(params);
+                    voxelisation.setUpdateALS(false);
+                    
+                    voxelisation.process();
+                    
+                    files.add(multiResInput.outputFile);
+                }
+                
+                ProcessingMultiRes processingMultiRes = new ProcessingMultiRes(configuration.getMultiResPadMax(), false);
+                processingMultiRes.process(files);
+                processingMultiRes.write(input.outputFileMultiRes);
+            }
+            
+            count++;
+        }
+        /*
+        try {
+            exec.invokeAll(tasks);
+        } catch (InterruptedException ex) {
+            logger.error("Cannot launch executor service", ex);
+        }finally{
+            exec.shutdown();
+        }
+        */
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
     }
 

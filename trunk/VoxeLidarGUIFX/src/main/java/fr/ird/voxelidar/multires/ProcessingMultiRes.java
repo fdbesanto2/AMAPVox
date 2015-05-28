@@ -8,6 +8,8 @@ package fr.ird.voxelidar.multires;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.ALSVoxel;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.io.File;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -189,6 +191,7 @@ public class ProcessingMultiRes {
         for (int x = 0; x < padMeanZ.length; x++) {
             padMeanZ[x] = padMeanZ[x] / padMeanZCount[x];
         }
+        
 
         for (int n = 0; n < vs.data.voxels.size(); n++) {
 
@@ -227,13 +230,17 @@ public class ProcessingMultiRes {
                 //il faudra utiliser la vraie position 
                 Point3i indices = getIndicesFromIndices(new Point3i(voxel.$i, voxel.$j, voxel.$k), currentResolution);
                 voxTemp = vsTemp.data.getVoxel(indices.x, indices.y, indices.z);
+                
+                if(voxTemp != null  && voxTemp.$i == indices.x && voxTemp.$j == indices.y && voxTemp.$k == indices.z){
+                    
+                    if(voxTemp.ground_distance > 1){
+                        calculatePAD(voxTemp, currentResolution, useDefaultMaxPad, vs.data.maxPad);
 
-                if(voxTemp != null  && voxTemp.ground_distance > 1){
-                    calculatePAD(voxTemp, currentResolution, useDefaultMaxPad, vs.data.maxPad);
-
-                    currentNbSampling = voxTemp.nbSampling;
-                    currentTransmittance = voxTemp.transmittance;
+                        currentNbSampling = voxTemp.nbSampling;
+                        currentTransmittance = voxTemp.transmittance;
+                    }
                 }
+                
             }
 
             if (outOfResolutions) {
@@ -282,8 +289,11 @@ public class ProcessingMultiRes {
 
 
             voxel.resolution = currentResolution;
+            
+            
             vs.data.voxels.set(n, voxel);
         }
+        
         
         logger.info("Nombre de valeurs correctes: " + correctValues + "/" + totalValues);
         logger.info("Nombre de valeurs corrigées: " + correctedValues + "/" + totalValues);

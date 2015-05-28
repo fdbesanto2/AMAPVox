@@ -29,6 +29,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,6 +96,7 @@ public class VoxelSpace extends SceneObject{
     
     private boolean gradientUpdated = false;
     private boolean cubeSizeUpdated;
+    private boolean instancesUpdated = true;
     
     private boolean stretched = false;
     
@@ -854,6 +857,50 @@ public class VoxelSpace extends SceneObject{
         gradientUpdated = true;
     }
     
+    public void updateVao(){
+        
+        List<Float> instancePositionsList = new ArrayList<>();
+        List<Float> instanceColorsList = new ArrayList<>();
+
+        for (int i=0;i<data.voxels.size();i++) {
+            
+            VoxelObject voxel = data.voxels.get(i);            
+            
+
+
+            if(voxel.getAlpha() != 0){
+                
+                instancePositionsList.add(voxel.position.x);
+                instancePositionsList.add(voxel.position.y);
+                instancePositionsList.add(voxel.position.z);
+                
+                instanceColorsList.add(voxel.getRed());
+                instanceColorsList.add(voxel.getGreen());
+                instanceColorsList.add(voxel.getBlue());
+                instanceColorsList.add(voxel.getAlpha());
+            }
+            
+        }
+        
+        float[] instancePositions = new float[instancePositionsList.size()];
+        float[] instanceColors = new float[instanceColorsList.size()];
+        
+        for(int i=0;i<instancePositionsList.size();i++){
+            instancePositions[i] = instancePositionsList.get(i);
+        }
+        
+        for(int i=0;i<instanceColorsList.size();i++){
+            instanceColors[i] = instanceColorsList.get(i);
+        }
+        
+        ((InstancedMesh)mesh).instancePositionsBuffer = Buffers.newDirectFloatBuffer(instancePositions);
+        ((InstancedMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(instanceColors);
+        
+        ((InstancedMesh)mesh).instanceNumber = instancePositions.length/3;
+        
+        instancesUpdated = false;
+    }
+    
     @Override
     public void initBuffers(GL3 gl){
         
@@ -923,7 +970,6 @@ public class VoxelSpace extends SceneObject{
             }else{
                 gl.glDrawElements(drawType, mesh.vertexCount, GL3.GL_UNSIGNED_SHORT, 0);
             }
-            
 
             if(texture != null){
                 gl.glBindTexture(GL3.GL_TEXTURE_2D, 0);
@@ -931,7 +977,35 @@ public class VoxelSpace extends SceneObject{
         gl.glBindVertexArray(0);
     }
     
-    public void render(GL3 gl){
+    public void render(GL3 gl, Shader shader){
+        
+        if(!instancesUpdated){
+            
+            buffer.updateBuffer(gl, 1, ((InstancedMesh)mesh).instancePositionsBuffer);
+            buffer.updateBuffer(gl, 2, ((InstancedMesh)mesh).instanceColorsBuffer);
+            
+            gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, buffer.getVboId());
+
+                gl.glEnableVertexAttribArray(shader.attributeMap.get("position"));
+                gl.glVertexAttribPointer(shader.attributeMap.get("position"), 3, GL3.GL_FLOAT, false, 0, 0);
+                
+                gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_position"));
+                gl.glVertexAttribPointer(shader.attributeMap.get("instance_position"), 3, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE);
+                gl.glVertexAttribDivisor(shader.attributeMap.get("instance_position"), 1);
+                
+                gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_color"));
+                gl.glVertexAttribPointer(shader.attributeMap.get("instance_color"), 4, GL3.GL_FLOAT, false, 0, (mesh.vertexBuffer.capacity()+((InstancedMesh)mesh).instancePositionsBuffer.capacity())*FLOAT_SIZE);
+                gl.glVertexAttribDivisor(shader.attributeMap.get("instance_color"), 1);
+                
+                //gl.glEnableVertexAttribArray(shader.attributeMap.get("ambient_occlusion"));
+                //gl.glVertexAttribPointer(shader.attributeMap.get("ambient_occlusion"), 4, GL3.GL_FLOAT, false, 0, 0);
+                 
+            gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, buffer.getIboId());
+            
+            gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, 0);
+            
+            instancesUpdated = true;
+        }
         
         if(!gradientUpdated){
             

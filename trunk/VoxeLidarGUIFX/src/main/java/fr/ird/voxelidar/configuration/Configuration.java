@@ -45,8 +45,9 @@ public class Configuration {
         VOXELISATION_ALS(0),
         VOXELISATION_TLS(1),
         MERGING(2),
-        MULTI_PROCESS(3),
-        MULTI_RES(4);
+        MULTI_VOXELISATION_ALS_AND_MULTI_RES(3),
+        MULTI_RES(4),
+        ;
         
         public final int mode;
         
@@ -85,13 +86,43 @@ public class Configuration {
     private Matrix4d sopMatrix;
     private Matrix4d vopMatrix;
     private List<File> files;
+    private List<Input> multiProcessInputs;
+    private boolean correctNaNs;
     private List<MatrixAndFile> matricesAndFiles;
     private List<Filter> filters;
     private boolean removeLowPoint = false;
     private float[] multiResPadMax;
     private boolean multiResUseDefaultMaxPad = false;
     
+    private Element voxelSpaceElement;
+    private Element inputFileElement;
+    private Element outputFileElement;
+    private Element groundEnergyElement;
+    private Element subVoxelSpaceElement;
+    
     public Configuration(){
+        
+    }
+    
+    public static Configuration createMultiFileVoxelisationConfiguration(InputType inputType, 
+            List<Input> inputs, File trajectoryFile, File outputPath, VoxelParameters voxelParameters, 
+            boolean usePopMatrix, Matrix4d popMatrix, boolean useSopMatrix, Matrix4d sopMatrix, boolean useVopMatrix, Matrix4d vopMatrix){
+        
+        Configuration configuration = new Configuration();
+        
+        configuration.processMode = ProcessMode.MULTI_VOXELISATION_ALS_AND_MULTI_RES;
+        configuration.inputType = inputType;
+        configuration.trajectoryFile = trajectoryFile;
+        configuration.outputFile = outputPath;
+        configuration.voxelParameters = voxelParameters;
+        configuration.usePopMatrix = usePopMatrix;
+        configuration.useSopMatrix = useSopMatrix;
+        configuration.useVopMatrix = useVopMatrix;
+        configuration.popMatrix = popMatrix;
+        configuration.sopMatrix = sopMatrix;
+        configuration.vopMatrix = vopMatrix;
+        
+        return configuration;
         
     }
     
@@ -133,7 +164,7 @@ public class Configuration {
                 logger.error("Cannot get Implementation-Build property in manifest file");
             }
         } catch (Exception ex) {
-            logger.error("Cannot get manifest file: "+ex);
+            logger.error("Cannot get manifest file: ",ex);
         }
         
         Document document = new Document(racine);
@@ -142,43 +173,55 @@ public class Configuration {
         racine.addContent(processElement);
         
         
-        if(processMode == ProcessMode.VOXELISATION_ALS || processMode == ProcessMode.VOXELISATION_TLS){
+        if(processMode == ProcessMode.VOXELISATION_ALS || 
+            processMode == ProcessMode.VOXELISATION_TLS || 
+            processMode == ProcessMode.MULTI_VOXELISATION_ALS_AND_MULTI_RES){
             
             if(processMode == ProcessMode.VOXELISATION_ALS){
                 processElement.setAttribute(new Attribute("mode","voxelisation"));
+                processElement.setAttribute(new Attribute("type","ALS"));
+            }else if(processMode == ProcessMode.MULTI_VOXELISATION_ALS_AND_MULTI_RES){
+                processElement.setAttribute(new Attribute("mode","multi-voxelisation"));
                 processElement.setAttribute(new Attribute("type","ALS"));
             }else{
                 processElement.setAttribute(new Attribute("mode","voxelisation"));
                 processElement.setAttribute(new Attribute("type","TLS"));
             }
             
-            Element inputFileElement = new Element("input_file");
-            inputFileElement.setAttribute(new Attribute("type", String.valueOf(inputType.type)));
-            inputFileElement.setAttribute(new Attribute("src",inputFile.getAbsolutePath()));
-            processElement.addContent(inputFileElement);
+            if(processMode != ProcessMode.MULTI_VOXELISATION_ALS_AND_MULTI_RES){
+                
+                inputFileElement = new Element("input_file");
+                inputFileElement.setAttribute(new Attribute("type", String.valueOf(inputType.type)));
+                inputFileElement.setAttribute(new Attribute("src",inputFile.getAbsolutePath()));
+                processElement.addContent(inputFileElement);
+                
+                outputFileElement = new Element("output_file");
+                outputFileElement.setAttribute(new Attribute("src",outputFile.getAbsolutePath()));
+                processElement.addContent(outputFileElement);
+            }            
             
-            if(processMode == ProcessMode.VOXELISATION_ALS){
+            if(processMode == ProcessMode.VOXELISATION_ALS || processMode == ProcessMode.MULTI_VOXELISATION_ALS_AND_MULTI_RES ){
                 Element trajectoryFileElement = new Element("trajectory");
                 trajectoryFileElement.setAttribute(new Attribute("src",trajectoryFile.getAbsolutePath()));
                 processElement.addContent(trajectoryFileElement);
             }
             
-            Element outputFileElement = new Element("output_file");
-            outputFileElement.setAttribute(new Attribute("src",outputFile.getAbsolutePath()));
-            processElement.addContent(outputFileElement);
+            if(processMode != ProcessMode.MULTI_VOXELISATION_ALS_AND_MULTI_RES){
+                
+                voxelSpaceElement = new Element("voxelspace");
+                voxelSpaceElement.setAttribute("xmin", String.valueOf(voxelParameters.bottomCorner.x));
+                voxelSpaceElement.setAttribute("ymin", String.valueOf(voxelParameters.bottomCorner.y));
+                voxelSpaceElement.setAttribute("zmin", String.valueOf(voxelParameters.bottomCorner.z));
+                voxelSpaceElement.setAttribute("xmax", String.valueOf(voxelParameters.topCorner.x));
+                voxelSpaceElement.setAttribute("ymax", String.valueOf(voxelParameters.topCorner.y));
+                voxelSpaceElement.setAttribute("zmax", String.valueOf(voxelParameters.topCorner.z));
+                voxelSpaceElement.setAttribute("splitX", String.valueOf(voxelParameters.split.x));
+                voxelSpaceElement.setAttribute("splitY", String.valueOf(voxelParameters.split.y));
+                voxelSpaceElement.setAttribute("splitZ", String.valueOf(voxelParameters.split.z));
+                voxelSpaceElement.setAttribute("resolution", String.valueOf(voxelParameters.resolution));
+                processElement.addContent(voxelSpaceElement);
+            }
             
-            Element voxelSpaceElement = new Element("voxelspace");
-            voxelSpaceElement.setAttribute("xmin", String.valueOf(voxelParameters.bottomCorner.x));
-            voxelSpaceElement.setAttribute("ymin", String.valueOf(voxelParameters.bottomCorner.y));
-            voxelSpaceElement.setAttribute("zmin", String.valueOf(voxelParameters.bottomCorner.z));
-            voxelSpaceElement.setAttribute("xmax", String.valueOf(voxelParameters.topCorner.x));
-            voxelSpaceElement.setAttribute("ymax", String.valueOf(voxelParameters.topCorner.y));
-            voxelSpaceElement.setAttribute("zmax", String.valueOf(voxelParameters.topCorner.z));
-            voxelSpaceElement.setAttribute("splitX", String.valueOf(voxelParameters.split.x));
-            voxelSpaceElement.setAttribute("splitY", String.valueOf(voxelParameters.split.y));
-            voxelSpaceElement.setAttribute("splitZ", String.valueOf(voxelParameters.split.z));
-            voxelSpaceElement.setAttribute("resolution", String.valueOf(voxelParameters.resolution));
-            processElement.addContent(voxelSpaceElement);
             
             /***PONDERATION***/
             Element ponderationElement = new Element("ponderation");
@@ -276,12 +319,14 @@ public class Configuration {
             limitElement.setAttribute("min", "");
             limitElement.setAttribute("max", String.valueOf(voxelParameters.getMaxPAD()));
             limitsElement.addContent(limitElement);
-            processElement.addContent(limitsElement);
+            
+            if(processMode != ProcessMode.MULTI_VOXELISATION_ALS_AND_MULTI_RES){
+                processElement.addContent(limitsElement);
+            }
             
             Element filtersElement = new Element("filters");
             
             if(filters != null && !filters.isEmpty()){
-                
                 
                 Element shotFilterElement = new Element("shot-filters");
                 
@@ -301,9 +346,113 @@ public class Configuration {
             
             processElement.addContent(filtersElement);
             
+            if(processMode == ProcessMode.MULTI_VOXELISATION_ALS_AND_MULTI_RES){
+                
+                limitsElement.setAttribute("use-default", String.valueOf(multiResUseDefaultMaxPad));
+
+                limitsElement.addContent(createLimitElement("PAD_1m", "", String.valueOf(multiResPadMax[0])));
+                limitsElement.addContent(createLimitElement("PAD_2m", "", String.valueOf(multiResPadMax[1])));
+                limitsElement.addContent(createLimitElement("PAD_3m", "", String.valueOf(multiResPadMax[2])));
+                limitsElement.addContent(createLimitElement("PAD_4m", "", String.valueOf(multiResPadMax[3])));
+                limitsElement.addContent(createLimitElement("PAD_5m", "", String.valueOf(multiResPadMax[4])));
+            
+                processElement.addContent(limitsElement);
+                
+                Element inputsElement = new Element("inputs");
+                
+                if(multiProcessInputs != null){
+
+                    for(Input input : multiProcessInputs){
+
+                        Element inputElement = new Element("input");
+
+                        if(input.voxelParameters != null){
+                            voxelSpaceElement = new Element("voxelspace");
+                            voxelSpaceElement.setAttribute("xmin", String.valueOf(input.voxelParameters.bottomCorner.x));
+                            voxelSpaceElement.setAttribute("ymin", String.valueOf(input.voxelParameters.bottomCorner.y));
+                            voxelSpaceElement.setAttribute("zmin", String.valueOf(input.voxelParameters.bottomCorner.z));
+                            voxelSpaceElement.setAttribute("xmax", String.valueOf(input.voxelParameters.topCorner.x));
+                            voxelSpaceElement.setAttribute("ymax", String.valueOf(input.voxelParameters.topCorner.y));
+                            voxelSpaceElement.setAttribute("zmax", String.valueOf(input.voxelParameters.topCorner.z));
+                            voxelSpaceElement.setAttribute("splitX", String.valueOf(input.voxelParameters.split.x));
+                            voxelSpaceElement.setAttribute("splitY", String.valueOf(input.voxelParameters.split.y));
+                            voxelSpaceElement.setAttribute("splitZ", String.valueOf(input.voxelParameters.split.z));
+                            voxelSpaceElement.setAttribute("resolution", String.valueOf(input.voxelParameters.resolution));
+                            inputElement.addContent(voxelSpaceElement);
+                        }
+                        if(input.inputFile != null){
+                            inputFileElement = new Element("input_file");
+                            inputFileElement.setAttribute(new Attribute("type", String.valueOf(inputType.type)));
+                            inputFileElement.setAttribute(new Attribute("src",input.inputFile.getAbsolutePath()));
+                            inputElement.addContent(inputFileElement);
+
+                        }
+                        if(input.outputFile != null){
+                            outputFileElement = new Element("output_file");
+                            outputFileElement.setAttribute(new Attribute("src",input.outputFile.getAbsolutePath()));
+                            inputElement.addContent(outputFileElement);
+                        }
+                        
+                        if(input.voxelParameters.getGroundEnergyFile() != null){
+                            groundEnergyElement = new Element("ground-energy");
+                            groundEnergyElement.setAttribute("generate", String.valueOf(input.voxelParameters.isCalculateGroundEnergy()));
+
+                            if(input.voxelParameters.getGroundEnergyFile() != null){
+                                groundEnergyElement.setAttribute("src", input.voxelParameters.getGroundEnergyFile().getAbsolutePath());
+                                groundEnergyElement.setAttribute("type", String.valueOf(input.voxelParameters.getGroundEnergyFileFormat()));
+                            }
+                            inputElement.addContent(groundEnergyElement);
+                        }
+                        
+                        if(input.multiResList != null){
+                            
+                            Element multiResElement = new Element("multi-res");
+                            multiResElement.setAttribute("enabled", String.valueOf(isCorrectNaNs()));
+                            
+                            if(isCorrectNaNs()){
+                                
+                                Element multiResInputsElement = new Element("inputs");
+                            
+                                for(Input subInput : input.multiResList){
+
+                                    Element multiResInputElement = new Element("input");
+                                    subVoxelSpaceElement = new Element("voxelspace");
+                                    subVoxelSpaceElement.setAttribute("splitX", String.valueOf(subInput.voxelParameters.split.x));
+                                    subVoxelSpaceElement.setAttribute("splitY", String.valueOf(subInput.voxelParameters.split.y));
+                                    subVoxelSpaceElement.setAttribute("splitZ", String.valueOf(subInput.voxelParameters.split.z));
+                                    subVoxelSpaceElement.setAttribute("resolution", String.valueOf(subInput.voxelParameters.resolution));
+                                    multiResInputElement.addContent(subVoxelSpaceElement);
+
+                                    Element subOutputFileElement = new Element("output-file");
+                                    subOutputFileElement.setAttribute(new Attribute("src",subInput.outputFile.getAbsolutePath()));
+                                    multiResInputElement.addContent(subOutputFileElement);
+
+                                    multiResInputsElement.addContent(multiResInputElement);
+
+                                }
+
+                                multiResElement.addContent(multiResInputsElement);
+
+                                if(input.outputFileMultiRes != null){
+                                    multiResElement.addContent(new Element("output-file").setAttribute("src", input.outputFileMultiRes.getAbsolutePath()));
+                                }
+                            }
+                            
+                            
+                            inputElement.addContent(multiResElement);
+                        }
+
+                        inputsElement.addContent(inputElement);
+                    }
+                }
+
+                processElement.addContent(inputsElement);
+            }
+            
+            
             if(processMode == ProcessMode.VOXELISATION_ALS){
                 
-                Element groundEnergyElement = new Element("ground-energy");
+                groundEnergyElement = new Element("ground-energy");
                 groundEnergyElement.setAttribute("generate", String.valueOf(voxelParameters.isCalculateGroundEnergy()));
                 
                 if(voxelParameters.getGroundEnergyFile() != null){
@@ -348,7 +497,7 @@ public class Configuration {
             
             processElement.addContent(createFilesElement(files));
             
-            Element outputFileElement = new Element("output_file");
+            outputFileElement = new Element("output_file");
             outputFileElement.setAttribute(new Attribute("src",outputFile.getAbsolutePath()));
             processElement.addContent(outputFileElement);
             
@@ -368,7 +517,7 @@ public class Configuration {
             
             processElement.setAttribute(new Attribute("mode","merging"));
             
-            Element outputFileElement = new Element("output_file");
+            outputFileElement = new Element("output_file");
             outputFileElement.setAttribute(new Attribute("src",outputFile.getAbsolutePath()));
             processElement.addContent(outputFileElement);
             
@@ -418,6 +567,26 @@ public class Configuration {
         return filesElement;
     }
     
+    private InputType getInputFileType(int type){
+        
+        switch(type){
+            case 0:
+                return InputType.LAS_FILE;
+            case 1:
+                return InputType.LAZ_FILE;
+            case 2:
+                return InputType.POINTS_FILE;
+            case 3:
+                return InputType.LAS_FILE;
+            case 4:
+                return InputType.RXP_SCAN;
+            case 5:
+                return InputType.RSP_PROJECT;
+        }
+        
+        return null;
+    }
+    
     public void readConfiguration(File inputParametersFile) throws Exception{
                 
         try {
@@ -430,43 +599,37 @@ public class Configuration {
             String mode = processElement.getAttributeValue("mode");
             String type = processElement.getAttributeValue("type");
             
-            Element outputFileElement;
             Element filesElement;
             Element limitsElement;
+            Element trajectoryFileElement;
             
             switch(mode){
+                
                 case "voxelisation":
-                    Element inputFileElement = processElement.getChild("input_file");
+                case "multi-voxelisation":
                     
-                    int inputTypeInteger = Integer.valueOf(inputFileElement.getAttributeValue("type"));
+                    voxelParameters = new VoxelParameters();
                     
-                    switch(inputTypeInteger){
-                        case 0:
-                            inputType = InputType.LAS_FILE;
-                            break;
-                        case 1:
-                            inputType = InputType.LAZ_FILE;
-                            break;
-                        case 2:
-                            inputType = InputType.POINTS_FILE;
-                            break;
-                        case 3:
-                            inputType = InputType.LAS_FILE;
-                            break;
-                        case 4:
-                            inputType = InputType.RXP_SCAN;
-                            break;
-                        case 5:
-                            inputType = InputType.RSP_PROJECT;
-                            break;
+                    if(mode.equals("voxelisation")){
+                        
+                        inputFileElement = processElement.getChild("input_file");
+                    
+                        int inputTypeInteger = Integer.valueOf(inputFileElement.getAttributeValue("type"));
+                        inputType = getInputFileType(inputTypeInteger);
+                        
+
+                        inputFile = new File(inputFileElement.getAttributeValue("src"));
                     }
-                    
-                    inputFile = new File(inputFileElement.getAttributeValue("src"));
                     
                     switch(type){
                         case "ALS":
-                            processMode = ProcessMode.VOXELISATION_ALS;
-                            Element trajectoryFileElement = processElement.getChild("trajectory");
+                            if(mode.equals("multi-voxelisation")){
+                                processMode = ProcessMode.MULTI_VOXELISATION_ALS_AND_MULTI_RES;
+                            }else{
+                                processMode = ProcessMode.VOXELISATION_ALS;
+                            }
+                            
+                            trajectoryFileElement = processElement.getChild("trajectory");
                             trajectoryFile = new File(trajectoryFileElement.getAttributeValue("src"));
                             
                             break;
@@ -475,30 +638,33 @@ public class Configuration {
                             break;
                     }
                     
-                    outputFileElement = processElement.getChild("output_file");
-                    outputFile = new File(outputFileElement.getAttributeValue("src"));
-                    
-                    Element voxelSpaceElement = processElement.getChild("voxelspace");
-                    
-                    voxelParameters = new VoxelParameters();
-                    voxelParameters.setBottomCorner(new Point3d(
-                                    Double.valueOf(voxelSpaceElement.getAttributeValue("xmin")), 
-                                    Double.valueOf(voxelSpaceElement.getAttributeValue("ymin")), 
-                                    Double.valueOf(voxelSpaceElement.getAttributeValue("zmin"))));
+                    if(mode.equals("voxelisation")){
+                        
+                        outputFileElement = processElement.getChild("output_file");
+                        outputFile = new File(outputFileElement.getAttributeValue("src"));
 
-                    voxelParameters.setTopCorner(new Point3d(
-                                        Double.valueOf(voxelSpaceElement.getAttributeValue("xmax")), 
-                                        Double.valueOf(voxelSpaceElement.getAttributeValue("ymax")), 
-                                        Double.valueOf(voxelSpaceElement.getAttributeValue("zmax"))));
+                        voxelSpaceElement = processElement.getChild("voxelspace");
 
-                    voxelParameters.setSplit(new Point3i(
-                                        Integer.valueOf(voxelSpaceElement.getAttributeValue("splitX")), 
-                                        Integer.valueOf(voxelSpaceElement.getAttributeValue("splitY")), 
-                                        Integer.valueOf(voxelSpaceElement.getAttributeValue("splitZ"))));
-                    
-                    try{
-                        voxelParameters.setResolution(Double.valueOf(voxelSpaceElement.getAttributeValue("resolution")));
-                    }catch(Exception e){}
+                        
+                        voxelParameters.setBottomCorner(new Point3d(
+                                        Double.valueOf(voxelSpaceElement.getAttributeValue("xmin")), 
+                                        Double.valueOf(voxelSpaceElement.getAttributeValue("ymin")), 
+                                        Double.valueOf(voxelSpaceElement.getAttributeValue("zmin"))));
+
+                        voxelParameters.setTopCorner(new Point3d(
+                                            Double.valueOf(voxelSpaceElement.getAttributeValue("xmax")), 
+                                            Double.valueOf(voxelSpaceElement.getAttributeValue("ymax")), 
+                                            Double.valueOf(voxelSpaceElement.getAttributeValue("zmax"))));
+
+                        voxelParameters.setSplit(new Point3i(
+                                            Integer.valueOf(voxelSpaceElement.getAttributeValue("splitX")), 
+                                            Integer.valueOf(voxelSpaceElement.getAttributeValue("splitY")), 
+                                            Integer.valueOf(voxelSpaceElement.getAttributeValue("splitZ"))));
+
+                        try{
+                            voxelParameters.setResolution(Double.valueOf(voxelSpaceElement.getAttributeValue("resolution")));
+                        }catch(Exception e){}
+                    }
                     
                     
                     Element ponderationElement = processElement.getChild("ponderation");
@@ -601,8 +767,28 @@ public class Configuration {
                     limitsElement = processElement.getChild("limits");
                     
                     if(limitsElement != null){
-                        Element limitElement = limitsElement.getChild("limit");
-                        voxelParameters.setMaxPAD(Float.valueOf(limitElement.getAttributeValue("max")));
+                        List<Element> limitChildrensElement = limitsElement.getChildren("limit");
+                        
+                        if(limitChildrensElement != null){
+                            
+                            if(limitChildrensElement.size() > 0){
+                                voxelParameters.setMaxPAD(Float.valueOf(limitChildrensElement.get(0).getAttributeValue("max")));
+                            }
+                            if(mode.equals("multi-voxelisation")){
+                                if(limitChildrensElement.size() >= 6){
+                                    multiResPadMax = new float[5];
+                                    multiResPadMax[0] = Float.valueOf(limitChildrensElement.get(1).getAttributeValue("max"));
+                                    multiResPadMax[1] = Float.valueOf(limitChildrensElement.get(2).getAttributeValue("max"));
+                                    multiResPadMax[2] = Float.valueOf(limitChildrensElement.get(3).getAttributeValue("max"));
+                                    multiResPadMax[3] = Float.valueOf(limitChildrensElement.get(4).getAttributeValue("max"));
+                                    multiResPadMax[4] = Float.valueOf(limitChildrensElement.get(5).getAttributeValue("max"));
+                                    
+                                }
+                            }
+                            
+                        }
+                        
+                        
                     }
                     
                     
@@ -641,9 +827,7 @@ public class Configuration {
                             }
                         }
                         
-                    }
-                    
-                    
+                    }                    
                     
                     
                     switch (type) {
@@ -676,13 +860,15 @@ public class Configuration {
                             
                         case "ALS":
                             try{
-                                Element groundEnergyElement = processElement.getChild("ground-energy");
+                                groundEnergyElement = processElement.getChild("ground-energy");
                                 if(groundEnergyElement != null){
                                     voxelParameters.setCalculateGroundEnergy(Boolean.valueOf(groundEnergyElement.getAttributeValue("generate")));
 
-                                    if(voxelParameters.isCalculateGroundEnergy()){
-                                        voxelParameters.setGroundEnergyFileFormat(Short.valueOf(groundEnergyElement.getAttributeValue("type")));
-                                        voxelParameters.setGroundEnergyFile(new File(groundEnergyElement.getAttributeValue("src")));
+                                    if(mode.equals("voxelisation")){
+                                        if(voxelParameters.isCalculateGroundEnergy()){
+                                            voxelParameters.setGroundEnergyFileFormat(Short.valueOf(groundEnergyElement.getAttributeValue("type")));
+                                            voxelParameters.setGroundEnergyFile(new File(groundEnergyElement.getAttributeValue("src")));
+                                        }
                                     }
                                 }
                             }catch(Exception e){
@@ -691,6 +877,124 @@ public class Configuration {
                             
                             
                             break;
+                    }
+                    
+                    if(mode.equals("multi-voxelisation")){
+                        
+                        Element inputsElement = processElement.getChild("inputs");
+                        
+                        if(inputsElement != null){
+                            List<Element> childrens = inputsElement.getChildren("input");
+                            
+                            if(childrens != null){
+                                
+                                multiProcessInputs = new ArrayList<>();
+                                
+                                int count = 0;
+                                
+                                for(Element child : childrens){
+                                    
+                                    subVoxelSpaceElement = child.getChild("voxelspace");
+                                    
+                                    VoxelParameters multiProcessVoxelParameters = null;
+                                    
+                                    if(subVoxelSpaceElement != null){
+                                        
+                                        multiProcessVoxelParameters = new VoxelParameters();
+                                        double resolution = Double.valueOf(subVoxelSpaceElement.getAttributeValue("resolution"));
+                                        
+                                        multiProcessVoxelParameters.setBottomCorner(new Point3d(
+                                                        Double.valueOf(subVoxelSpaceElement.getAttributeValue("xmin")), 
+                                                        Double.valueOf(subVoxelSpaceElement.getAttributeValue("ymin")), 
+                                                        Double.valueOf(subVoxelSpaceElement.getAttributeValue("zmin"))));
+
+                                        multiProcessVoxelParameters.setTopCorner(new Point3d(
+                                                            Double.valueOf(subVoxelSpaceElement.getAttributeValue("xmax")), 
+                                                            Double.valueOf(subVoxelSpaceElement.getAttributeValue("ymax")), 
+                                                            Double.valueOf(subVoxelSpaceElement.getAttributeValue("zmax"))));
+
+                                        multiProcessVoxelParameters.setSplit(new Point3i(
+                                                            Integer.valueOf(subVoxelSpaceElement.getAttributeValue("splitX")), 
+                                                            Integer.valueOf(subVoxelSpaceElement.getAttributeValue("splitY")), 
+                                                            Integer.valueOf(subVoxelSpaceElement.getAttributeValue("splitZ"))));
+
+                                        
+                                        multiProcessVoxelParameters.setResolution(resolution);
+                                    }
+                                    
+                                    File inputFileChild = null;
+                                    Element inputFileChildElement = child.getChild("input_file");
+                                    
+                                    if(inputFileChildElement != null){
+                                        
+                                        if(count == 0){
+                                            inputType = getInputFileType(Integer.valueOf(inputFileChildElement.getAttributeValue("type")));
+                                        }
+                                        inputFileChild = new File(inputFileChildElement.getAttributeValue("src"));
+                                    }
+                                    
+                                    File outputFileChild = null;
+                                    Element ouputFileChildElement = child.getChild("output_file");
+                                    
+                                    if(ouputFileChildElement != null){
+                                        
+                                        outputFileChild = new File(ouputFileChildElement.getAttributeValue("src"));
+                                    }
+                                    
+                                    List<Input> multiResInputs = null;
+                                    Element multiResElement = child.getChild("multi-res");
+                                    File multiResOutputFile = null;
+                                    
+                                    if(multiResElement != null){
+                                        
+                                        boolean multiResEnabled = Boolean.valueOf(multiResElement.getAttributeValue("enabled"));
+                                        
+                                        if(multiResEnabled){
+                                            multiResInputs = new ArrayList<>();
+                                            List<Element> multiResInputsElement = multiResElement.getChild("inputs").getChildren("input");
+                                            
+                                            for(Element element : multiResInputsElement){
+                                                
+                                                Element subSubVoxelSpaceElement = element.getChild("voxelspace");
+                                    
+                                                VoxelParameters subVoxelParameters = null;
+
+                                                if(subVoxelSpaceElement != null){
+                                                    int splitX = Integer.valueOf(subSubVoxelSpaceElement.getAttributeValue("splitX"));
+                                                    int splitY = Integer.valueOf(subSubVoxelSpaceElement.getAttributeValue("splitY"));
+                                                    int splitZ = Integer.valueOf(subSubVoxelSpaceElement.getAttributeValue("splitZ"));
+                                                    double resolution = Double.valueOf(subSubVoxelSpaceElement.getAttributeValue("resolution"));
+
+                                                    subVoxelParameters = new VoxelParameters(null, null, new Point3i(splitX, splitY, splitZ));
+                                                    subVoxelParameters.setResolution(resolution);
+                                                }
+                                                
+                                                Element subSubOutputFileElement = element.getChild("output-file");
+                                                
+                                                File subOutputFile = null;
+                                                if(subSubOutputFileElement != null){
+                                                    subOutputFile = new File(subSubOutputFileElement.getAttributeValue("src"));
+                                                }
+                                                
+                                                multiResInputs.add(new Input(subVoxelParameters, null, subOutputFile, null, null));
+                                            }
+                                            
+                                            Element multiResOutputFileElement = multiResElement.getChild("output-file");
+                                            
+                                            if(multiResOutputFileElement != null){
+                                                multiResOutputFile = new File(multiResOutputFileElement.getAttributeValue("src"));
+                                            }
+                                        }
+                                    }
+                                    
+                                    multiProcessInputs.add(new Input(multiProcessVoxelParameters, inputFileChild, outputFileChild, multiResInputs, multiResOutputFile));
+                                    
+                                }
+                                
+                                count++;
+                            }
+                            
+                        }
                     }
 
                     break;
@@ -722,7 +1026,7 @@ public class Configuration {
 
                 case "multi-process":
 
-                    processMode = ProcessMode.MULTI_PROCESS;
+                    processMode = ProcessMode.MULTI_VOXELISATION_ALS_AND_MULTI_RES;
                     /*
                      filesElement = processElement.getChildren("files");
                     
@@ -960,6 +1264,22 @@ public class Configuration {
 
     public void setMultiResUseDefaultMaxPad(boolean multiResUseDefaultMaxPad) {
         this.multiResUseDefaultMaxPad = multiResUseDefaultMaxPad;
+    }
+
+    public List<Input> getMultiProcessInputs() {
+        return multiProcessInputs;
+    }
+
+    public void setMultiProcessInputs(List<Input> multiProcessInputs) {
+        this.multiProcessInputs = multiProcessInputs;
+    }    
+
+    public boolean isCorrectNaNs() {
+        return correctNaNs;
+    }
+
+    public void setCorrectNaNs(boolean correctNaNs) {
+        this.correctNaNs = correctNaNs;
     }
     
 }

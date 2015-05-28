@@ -11,6 +11,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -36,7 +37,8 @@ public class MeshBuffer {
      */
     private final int iboId;
     
-    private final ArrayList<Long> offsets;
+    private final List<Long> offsets;
+    private final List<Long> buffersSizes;
     
     /**
      *
@@ -47,6 +49,8 @@ public class MeshBuffer {
         totalBuffersSize = 0;
         offset = 0;
         offsets = new ArrayList<>();
+        buffersSizes = new ArrayList<>();
+        
         offsets.add(0l);
         
         IntBuffer tmp = IntBuffer.allocate(2);
@@ -103,6 +107,7 @@ public class MeshBuffer {
         gl.glBufferSubData(GL3.GL_ARRAY_BUFFER, offset, bufferSize, buffer);
         offset += bufferSize;
         offsets.add(offset);
+        buffersSizes.add(bufferSize);
     }
     
     /**
@@ -115,9 +120,41 @@ public class MeshBuffer {
         
         bindBuffer(gl);
             
-            gl.glBufferSubData(GL3.GL_ARRAY_BUFFER, offsets.get(index), buffer.capacity()*FLOAT_SIZE, buffer);
+            long bufferSize = buffer.capacity()*FLOAT_SIZE;
+            long difference = bufferSize-buffersSizes.get(index);
+            
+            totalBuffersSize += difference;
+            //gl.glBufferData(GL3.GL_ARRAY_BUFFER, totalBuffersSize, null, GL3.GL_STATIC_DRAW);
+        
+            gl.glBufferSubData(GL3.GL_ARRAY_BUFFER, offsets.get(index), bufferSize, buffer);
+            
+            long oldBufferSize = buffersSizes.get(index);
+            
+            if(bufferSize != oldBufferSize){
+                
+                buffersSizes.set(index, bufferSize);
+                
+                if((index+1) < offsets.size()){
+                    
+                    offsets.set(index+1, computeOffset(index+1));
+                }
+            }
         
         unbindBuffer(gl);
+    }
+    
+    private long computeOffset(int index){
+        
+        long offsetTot = 0;
+        
+        if(index <= buffersSizes.size()){
+            
+            for(int i=0;i<index;i++) {
+                offsetTot+=buffersSizes.get(i);
+            }
+        }
+        
+        return offsetTot;
     }
 
     /**

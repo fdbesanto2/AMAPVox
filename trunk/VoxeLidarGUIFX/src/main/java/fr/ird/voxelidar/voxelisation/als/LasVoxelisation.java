@@ -27,40 +27,45 @@ public class LasVoxelisation extends Processing {
     
     private final Logger logger = Logger.getLogger(LasVoxelisation.class);
     
-    private final File alsFile;
-    private final Mat4D popMatrix;
-    private final File trajectoryFile;
-    private final File outputFile;
-    private final VoxelParameters parameters;
+    private File alsFile;
+    private final Mat4D transfMatrix;
+    //private final File trajectoryFile;
+    private File outputFile;
+    private VoxelParameters parameters;
     private VoxelAnalysis voxelAnalysis;
+    private List<Trajectory> trajectoryList;
     //private LinkedBlockingQueue<Shot> queue;
     private final boolean filterLowPoints;
+    private List<Filter> filters;
+    private boolean alsFileChanged;
+    private boolean updateALS = true;
+    private PointsToShot conversion;
 
-    public LasVoxelisation(File alsFile, File outputFile, Mat4D transfMatrix, File trajectoryFile, VoxelParameters parameters, List<Filter> filters, boolean filterLowPoints) {
+    public LasVoxelisation(File alsFile, File outputFile, Mat4D transfMatrix/*, File trajectoryFile*/, VoxelParameters parameters, List<Filter> filters, boolean filterLowPoints) {
 
         this.alsFile = alsFile;
         this.outputFile = outputFile;
-        this.popMatrix = transfMatrix;
-        this.trajectoryFile = trajectoryFile;
+        this.transfMatrix = transfMatrix;
+        //this.trajectoryFile = trajectoryFile;
         this.parameters = parameters;
-        
-        //queue = new LinkedBlockingQueue<>();
-        
-        Dtm terrain = null;
-        
-        if(parameters.getDtmFile() != null && parameters.useDTMCorrection() ){
-            
-            try {
-                terrain = DtmLoader.readFromAscFile(parameters.getDtmFile());
-                terrain.setTransformationMatrix(transfMatrix);
-            } catch (Exception ex) {
-                logger.error(ex);
-            }
-        }
-        
+        this.filterLowPoints = filterLowPoints;
+        this.filters = filters;
+    }
+    
+    
+    public void init(Dtm terrain, List<Trajectory> trajectoryList){
         
         voxelAnalysis = new VoxelAnalysis(null, terrain, filters);
-        this.filterLowPoints = filterLowPoints;
+        this.trajectoryList = trajectoryList;
+        
+    }
+    
+    public boolean isUpdateALS() {
+        return updateALS;
+    }
+
+    public void setUpdateALS(boolean updateALS) {
+        this.updateALS = updateALS;
     }
 
     @Override
@@ -72,9 +77,9 @@ public class LasVoxelisation extends Processing {
         voxelAnalysis.init(parameters, outputFile);
         voxelAnalysis.createVoxelSpace();
         
-        final PointsToShot conversion = new PointsToShot(voxelAnalysis, trajectoryFile, alsFile, popMatrix, filterLowPoints);
-        
-        try {
+        if(updateALS || conversion == null){
+            
+            conversion = new PointsToShot(voxelAnalysis, trajectoryList, alsFile, transfMatrix, filterLowPoints);
             
             conversion.addProcessingListener(new ProcessingListener() {
 
@@ -89,6 +94,11 @@ public class LasVoxelisation extends Processing {
                     fireProgress(progress, ratio);
                 }
             });
+        }else if(!updateALS){
+            conversion.setUpdateALS(updateALS);
+        }
+        
+        try {
             
             Thread t2 = new Thread(conversion);
             
@@ -115,4 +125,30 @@ public class LasVoxelisation extends Processing {
         return null;
     }   
 
+    public File getAlsFile() {
+        return alsFile;
+    }
+
+    public void setAlsFile(File alsFile) {
+        this.alsFile = alsFile;
+        alsFileChanged = true;
+        
+    }
+
+    public File getOutputFile() {
+        return outputFile;
+    }
+
+    public void setOutputFile(File outputFile) {
+        this.outputFile = outputFile;
+    }
+
+    public VoxelParameters getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(VoxelParameters parameters) {
+        this.parameters = parameters;
+    }
+    
 }

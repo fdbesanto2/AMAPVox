@@ -47,14 +47,14 @@
                                                                <children>
                                                                   <Button fx:id="buttonOpenInputFileALS" layoutX="14.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="100.0" />
                                                                   <ComboBox fx:id="comboboxModeALS" layoutX="14.0" layoutY="14.0" prefWidth="150.0" promptText="Choose mode..." />
-                                                                  <Label layoutX="14.0" layoutY="58.0" text="Input file" />
+                                                                  <Label layoutX="14.0" layoutY="58.0" text="Input file(s)" />
                                                                   <TextField fx:id="textFieldInputFileALS" layoutX="14.0" layoutY="73.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
-                                                                  <TextField fx:id="textFieldTrajectoryFileALS" layoutX="14.0" layoutY="172.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
-                                                                  <Label layoutX="14.0" layoutY="155.0" text="Trajectory file" />
-                                                                  <Button fx:id="buttonOpenTrajectoryFileALS" layoutX="14.0" layoutY="197.0" mnemonicParsing="false" onAction="#onActionButtonOpenTrajectoryFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="200.0" />
-                                                                  <TextField fx:id="textFieldOutputFileALS" layoutX="14.0" layoutY="250.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
-                                                                  <Label layoutX="14.0" layoutY="235.0" text="Output file" />
-                                                                  <Button fx:id="buttonOpenOutputFileALS" layoutX="14.0" layoutY="275.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="277.0" />
+                                                                  <TextField fx:id="textFieldTrajectoryFileALS" layoutX="14.0" layoutY="155.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                                  <Label layoutX="14.0" layoutY="138.0" text="Trajectory file" AnchorPane.leftAnchor="14.0" />
+                                                                  <Button fx:id="buttonOpenTrajectoryFileALS" layoutX="14.0" layoutY="183.0" mnemonicParsing="false" onAction="#onActionButtonOpenTrajectoryFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="183.0" />
+                                                                  <TextField fx:id="textFieldOutputFileALS" layoutX="14.0" layoutY="233.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                                  <Label layoutX="14.0" layoutY="218.0" text="Output file/path" AnchorPane.leftAnchor="14.0" />
+                                                                  <Button fx:id="buttonOpenOutputFileALS" layoutX="14.0" layoutY="260.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="260.0" />
                                                                   <Button fx:id="buttonALSAddToTaskList" layoutX="210.0" layoutY="349.0" mnemonicParsing="false" onAction="#onActionButtonALSAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
                                                                      <graphic>
                                                                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
@@ -64,6 +64,8 @@
                                                                         </ImageView>
                                                                      </graphic>
                                                                   </Button>
+                                                                  <TextField fx:id="textfieldResMultiRes" disable="true" layoutX="133.0" layoutY="299.0" prefHeight="25.0" prefWidth="175.0" promptText="Resolutions (ex: 1, 2, 3)" />
+                                                                  <CheckBox fx:id="checkboxMultiResAfter" layoutX="14.0" layoutY="302.0" mnemonicParsing="false" text="Correct NaNs" AnchorPane.leftAnchor="14.0" />
                                                                </children></AnchorPane>
                                                       </content>
                                                     </Tab>
