@@ -1548,6 +1548,7 @@ public class MainFrameController implements Initializable {
                                             if(newValue){
                                                 toolBarFrameStage.setAlwaysOnTop(true);
                                             }else{
+                                                
                                                 if(!joglWindow.isFocused()){
                                                     toolBarFrameStage.setAlwaysOnTop(false);
                                                 }
@@ -1605,6 +1606,7 @@ public class MainFrameController implements Initializable {
 
                                         @Override
                                         public void windowLostFocus(com.jogamp.newt.event.WindowEvent e) {
+                                            
                                             joglWindow.setIsFocused(false);
                                             Platform.runLater(new Runnable() {
 

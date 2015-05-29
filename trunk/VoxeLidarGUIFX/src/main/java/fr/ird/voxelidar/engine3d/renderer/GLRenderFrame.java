@@ -32,6 +32,7 @@ public class GLRenderFrame extends GLWindow{
                 
         GLRenderFrame viewer = new GLRenderFrame(NewtFactory.createWindow(caps)); 
         viewer.setTitle("3D viewer - "+title);
+        
         //viewer.setVisible(true); 
         viewer.setSize(width, height);
         viewer.width = width;

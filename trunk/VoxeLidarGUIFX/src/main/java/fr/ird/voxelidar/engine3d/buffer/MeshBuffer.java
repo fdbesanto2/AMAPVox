@@ -21,9 +21,11 @@ public class MeshBuffer {
     
     public static final int FLOAT_SIZE = Buffers.SIZEOF_FLOAT;
     public static final int SHORT_SIZE = Buffers.SIZEOF_SHORT;
+    public static final int DEFAULT_SIZE = -1;
     
     long offset = 0;
     long totalBuffersSize;
+    
     
     /**
      * Vertex Buffer Object identifier
@@ -51,7 +53,7 @@ public class MeshBuffer {
         offsets = new ArrayList<>();
         buffersSizes = new ArrayList<>();
         
-        offsets.add(0l);
+        //offsets.add(0l);
         
         IntBuffer tmp = IntBuffer.allocate(2);
         gl.glGenBuffers(2, tmp);
@@ -62,16 +64,21 @@ public class MeshBuffer {
     /**
      *
      * @param gl opengl context
+     * @param maxSize size to reserve to the gpu
      * @param indexBuffer Short buffer containing indices to link vertices, faces, texture coordinates
      * @see <a href="https://www.opengl.org/wiki/Vertex_Specification#Index_buffers">https://www.opengl.org/wiki/Vertex_Specification#Index_buffers</a>
      * @param floatBuffers Float buffer to set to the GPU, can be vertices positions, texture coordinates, color values
      */
-    public void initBuffers(GL3 gl, ShortBuffer indexBuffer, FloatBuffer... floatBuffers){
+    public void initBuffers(GL3 gl, int maxSize, ShortBuffer indexBuffer, FloatBuffer... floatBuffers){
         
         bindBuffer(gl);
         
-        for (FloatBuffer buffer : floatBuffers) {
-            totalBuffersSize += buffer.capacity()*FLOAT_SIZE;
+        if(maxSize == DEFAULT_SIZE){
+            for (FloatBuffer buffer : floatBuffers) {
+                totalBuffersSize += buffer.capacity()*FLOAT_SIZE;
+            }
+        }else{
+            totalBuffersSize = maxSize;
         }
         
         gl.glBufferData(GL3.GL_ARRAY_BUFFER, totalBuffersSize, null, GL3.GL_STATIC_DRAW);
@@ -105,8 +112,8 @@ public class MeshBuffer {
         
         long bufferSize = buffer.capacity()*FLOAT_SIZE;
         gl.glBufferSubData(GL3.GL_ARRAY_BUFFER, offset, bufferSize, buffer);
-        offset += bufferSize;
         offsets.add(offset);
+        offset += bufferSize;
         buffersSizes.add(bufferSize);
     }
     

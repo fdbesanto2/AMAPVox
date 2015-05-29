@@ -32,7 +32,7 @@ public class SimpleSceneObject extends SceneObject{
         buffer = new MeshBuffer(gl);
         
         if(mesh instanceof InstancedMesh){
-            buffer.initBuffers(gl, mesh.indexBuffer, new FloatBuffer[]{mesh.vertexBuffer, 
+            buffer.initBuffers(gl, MeshBuffer.DEFAULT_SIZE, mesh.indexBuffer, new FloatBuffer[]{mesh.vertexBuffer, 
                                     ((InstancedMesh)mesh).instancePositionsBuffer, 
                                     ((InstancedMesh)mesh).instanceColorsBuffer});
             
@@ -40,16 +40,16 @@ public class SimpleSceneObject extends SceneObject{
             
             if(((TexturedMesh)mesh).textureCoordinatesBuffer != null){
                 
-                buffer.initBuffers(gl, mesh.indexBuffer, new FloatBuffer[]{mesh.vertexBuffer, 
+                buffer.initBuffers(gl, MeshBuffer.DEFAULT_SIZE, mesh.indexBuffer, new FloatBuffer[]{mesh.vertexBuffer, 
                                     ((TexturedMesh)mesh).textureCoordinatesBuffer});
             }
             
         }else if(mesh.colorBuffer != null){
             
-            buffer.initBuffers(gl, mesh.indexBuffer, new FloatBuffer[]{mesh.vertexBuffer, 
+            buffer.initBuffers(gl, MeshBuffer.DEFAULT_SIZE, mesh.indexBuffer, new FloatBuffer[]{mesh.vertexBuffer, 
                                                                     mesh.colorBuffer, mesh.normalBuffer});
         }else{
-             buffer.initBuffers(gl, mesh.indexBuffer, new FloatBuffer[]{mesh.vertexBuffer});
+             buffer.initBuffers(gl, MeshBuffer.DEFAULT_SIZE, mesh.indexBuffer, new FloatBuffer[]{mesh.vertexBuffer});
         }
     }
     

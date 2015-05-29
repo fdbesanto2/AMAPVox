@@ -950,8 +950,10 @@ public class VoxelSpace extends SceneObject{
         
         buffer = new MeshBuffer(gl);
         
+        int maxSize = (mesh.vertexBuffer.capacity()*MeshBuffer.FLOAT_SIZE)+(data.voxels.size()*3*MeshBuffer.FLOAT_SIZE)+(data.voxels.size()*4*MeshBuffer.FLOAT_SIZE);
+        
         if(mesh instanceof InstancedMesh){
-            buffer.initBuffers(gl, mesh.indexBuffer, new FloatBuffer[]{mesh.vertexBuffer, 
+            buffer.initBuffers(gl, maxSize, mesh.indexBuffer, new FloatBuffer[]{mesh.vertexBuffer, 
                                     ((InstancedMesh)mesh).instancePositionsBuffer, 
                                     ((InstancedMesh)mesh).instanceColorsBuffer});
         }
