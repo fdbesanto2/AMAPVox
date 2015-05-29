@@ -50779,3 +50779,2307 @@ Caused by: java.lang.IndexOutOfBoundsException: Index: 1, Size: 1
 	at jogamp.opengl.GLAutoDrawableBase$2.run(GLAutoDrawableBase.java:442)
 	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1277)
 	... 27 more
+2015-05-29 15:52:20 INFO  - Loading point cloud file...
+2015-05-29 15:52:20 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 15:52:22 INFO  - Point cloud file loaded
+2015-05-29 15:52:22 INFO  - Loading point cloud file...
+2015-05-29 15:52:22 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 15:52:23 INFO  - Point cloud file loaded
+2015-05-29 15:52:23 INFO  - Saved libfile: /tmp/RivLibLibrary-4969832045548498380.tmp
+2015-05-29 15:52:23 INFO  - /tmp/RivLibLibrary-4969832045548498380.tmp
+2015-05-29 15:52:23 INFO  - rxp extraction is started
+2015-05-29 15:52:23 INFO  - rxp extraction is started
+2015-05-29 15:52:23 INFO  - rxp extraction is started
+2015-05-29 15:52:23 INFO  - rxp extraction is started
+2015-05-29 15:52:23 INFO  - rxp extraction is started
+2015-05-29 15:52:23 INFO  - rxp extraction is started
+2015-05-29 15:52:23 INFO  - allocate!!!!!!!!
+2015-05-29 15:52:23 INFO  - allocate!!!!!!!!
+2015-05-29 15:52:23 INFO  - allocate!!!!!!!!
+2015-05-29 15:52:23 INFO  - allocate!!!!!!!!
+2015-05-29 15:52:23 INFO  - allocate!!!!!!!!
+2015-05-29 15:52:23 INFO  - allocate!!!!!!!!
+2015-05-29 15:52:24 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-05-29 15:52:24 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-05-29 15:52:24 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-05-29 15:52:24 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-05-29 15:52:24 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-05-29 15:52:24 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-05-29 15:52:24 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-05-29 15:52:24 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-05-29 15:52:24 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-05-29 15:52:24 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-05-29 15:52:24 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-05-29 15:52:24 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-05-29 15:52:30 INFO  - Shots processed: 1000000
+2015-05-29 15:52:30 INFO  - Shots processed: 1000000
+2015-05-29 15:52:30 INFO  - Shots processed: 1000000
+2015-05-29 15:52:31 INFO  - Shots processed: 1000000
+2015-05-29 15:52:31 INFO  - Shots processed: 1000000
+2015-05-29 15:52:32 INFO  - Shots processed: 1000000
+2015-05-29 15:52:36 INFO  - Shots processed: 2000000
+2015-05-29 15:52:36 INFO  - Shots processed: 2000000
+2015-05-29 15:52:37 INFO  - Shots processed: 2000000
+2015-05-29 15:52:37 INFO  - Shots processed: 2000000
+2015-05-29 15:52:37 INFO  - Shots processed: 2000000
+2015-05-29 15:52:38 INFO  - Shots processed: 2000000
+2015-05-29 15:52:41 INFO  - Shots processed: 3000000
+2015-05-29 15:52:42 INFO  - Shots processed: 3000000
+2015-05-29 15:52:43 INFO  - Shots processed: 3000000
+2015-05-29 15:52:44 INFO  - Shots processed: 3000000
+2015-05-29 15:52:44 INFO  - Shots processed: 3000000
+2015-05-29 15:52:45 INFO  - Shots processed: 3000000
+2015-05-29 15:52:47 INFO  - Shots processed: 4000000
+2015-05-29 15:52:49 INFO  - Shots processed: 4000000
+2015-05-29 15:52:49 INFO  - Shots processed: 4000000
+2015-05-29 15:52:50 INFO  - Shots processed: 4000000
+2015-05-29 15:52:53 INFO  - Shots processed: 4000000
+2015-05-29 15:52:53 INFO  - Shots processed: 5000000
+2015-05-29 15:52:54 INFO  - Shots processed: 4000000
+2015-05-29 15:52:54 INFO  - Shots processed: 4810881
+2015-05-29 15:52:54 INFO  - voxelisation is finished ( 30.0 s )
+2015-05-29 15:52:54 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101534.rxp.vox
+2015-05-29 15:52:54 INFO  - file written ( 0.0 s )
+2015-05-29 15:52:58 INFO  - Shots processed: 5000000
+2015-05-29 15:53:00 INFO  - Shots processed: 6000000
+2015-05-29 15:53:00 INFO  - Shots processed: 5000000
+2015-05-29 15:53:00 INFO  - Shots processed: 5000000
+2015-05-29 15:53:01 INFO  - Shots processed: 5000000
+2015-05-29 15:53:07 INFO  - Shots processed: 6000000
+2015-05-29 15:53:07 INFO  - Shots processed: 6000000
+2015-05-29 15:53:07 INFO  - Shots processed: 6000000
+2015-05-29 15:53:07 INFO  - Shots processed: 7000000
+2015-05-29 15:53:12 INFO  - Shots processed: 6000000
+2015-05-29 15:53:12 INFO  - Shots processed: 7000000
+2015-05-29 15:53:13 INFO  - Shots processed: 7000000
+2015-05-29 15:53:14 INFO  - Shots processed: 7000000
+2015-05-29 15:53:16 INFO  - Shots processed: 8000000
+2015-05-29 15:53:18 INFO  - Shots processed: 8000000
+2015-05-29 15:53:18 INFO  - Shots processed: 8000000
+2015-05-29 15:53:20 INFO  - Shots processed: 8000000
+2015-05-29 15:53:22 INFO  - Shots processed: 7000000
+2015-05-29 15:53:23 INFO  - Shots processed: 9000000
+2015-05-29 15:53:23 INFO  - Shots processed: 9000000
+2015-05-29 15:53:24 INFO  - Shots processed: 9000000
+2015-05-29 15:53:26 INFO  - Shots processed: 9000000
+2015-05-29 15:53:28 INFO  - Shots processed: 8000000
+2015-05-29 15:53:29 INFO  - Shots processed: 10000000
+2015-05-29 15:53:30 INFO  - Shots processed: 10000000
+2015-05-29 15:53:30 INFO  - Shots processed: 10000000
+2015-05-29 15:53:31 INFO  - Shots processed: 10000000
+2015-05-29 15:53:33 INFO  - Shots processed: 9000000
+2015-05-29 15:53:35 INFO  - Shots processed: 11000000
+2015-05-29 15:53:35 INFO  - Shots processed: 11000000
+2015-05-29 15:53:35 INFO  - Shots processed: 11000000
+2015-05-29 15:53:36 INFO  - Shots processed: 11295629
+2015-05-29 15:53:36 INFO  - voxelisation is finished ( 73.0 s )
+2015-05-29 15:53:36 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_112953.rxp.vox
+2015-05-29 15:53:37 INFO  - file written ( 0.0 s )
+2015-05-29 15:53:37 INFO  - Shots processed: 11293701
+2015-05-29 15:53:37 INFO  - voxelisation is finished ( 73.0 s )
+2015-05-29 15:53:37 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_113724.rxp.vox
+2015-05-29 15:53:37 INFO  - Shots processed: 11000000
+2015-05-29 15:53:37 INFO  - Shots processed: 11295489
+2015-05-29 15:53:37 INFO  - voxelisation is finished ( 73.0 s )
+2015-05-29 15:53:37 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_115917.rxp.vox
+2015-05-29 15:53:38 INFO  - file written ( 0.0 s )
+2015-05-29 15:53:38 INFO  - file written ( 0.0 s )
+2015-05-29 15:53:39 INFO  - Shots processed: 11295882
+2015-05-29 15:53:39 INFO  - voxelisation is finished ( 75.0 s )
+2015-05-29 15:53:39 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_110207.rxp.vox
+2015-05-29 15:53:39 INFO  - file written ( 0.0 s )
+2015-05-29 15:53:39 INFO  - Shots processed: 10000000
+2015-05-29 15:53:44 INFO  - Shots processed: 11000000
+2015-05-29 15:53:49 INFO  - Shots processed: 12000000
+2015-05-29 15:53:54 INFO  - Shots processed: 13000000
+2015-05-29 15:53:55 INFO  - Shots processed: 13166931
+2015-05-29 15:53:55 INFO  - voxelisation is finished ( 91.0 s )
+2015-05-29 15:53:55 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101944.rxp.vox
+2015-05-29 15:53:55 INFO  - file written ( 0.0 s )
+2015-05-29 15:53:55 INFO  - Number of echos filtered : 833699
+2015-05-29 15:53:55 INFO  - Voxelisation finished in 95.0 s
+2015-05-29 15:53:55 INFO  - Merging in progress, file 1 : 6
+2015-05-29 15:53:56 INFO  - Merging in progress, file 2 : 6
+2015-05-29 15:53:56 INFO  - Merging in progress, file 3 : 6
+2015-05-29 15:53:56 INFO  - Merging in progress, file 4 : 6
+2015-05-29 15:53:56 INFO  - Merging in progress, file 5 : 6
+2015-05-29 15:53:56 INFO  - Merging in progress, file 6 : 6
+2015-05-29 15:53:56 INFO  - Compute angleMean
+2015-05-29 15:53:57 INFO  - Compute lMeanTotal
+2015-05-29 15:53:57 INFO  - Compute transmittance and PAD
+2015-05-29 15:53:57 INFO  - writing output file: /home/calcul/Documents/Julien/test_tls_pierre/output2/merged.vox
+2015-05-29 15:53:57 INFO  - file written ( 0.0 s )
+2015-05-29 15:53:57 INFO  - Voxelisation finished in 96.0 s
+2015-05-29 15:53:57 INFO  - Voxelisation finished in 96.0 s
+2015-05-29 15:58:32 INFO  - Loading point cloud file...
+2015-05-29 15:58:32 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 15:58:34 INFO  - Point cloud file loaded
+2015-05-29 15:58:34 INFO  - Loading point cloud file...
+2015-05-29 15:58:34 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 15:58:34 INFO  - Point cloud file loaded
+2015-05-29 15:58:34 INFO  - rxp extraction is started
+2015-05-29 15:58:34 INFO  - rxp extraction is started
+2015-05-29 15:58:34 INFO  - allocate!!!!!!!!
+2015-05-29 15:58:34 INFO  - rxp extraction is started
+2015-05-29 15:58:34 INFO  - allocate!!!!!!!!
+2015-05-29 15:58:34 INFO  - rxp extraction is started
+2015-05-29 15:58:34 INFO  - rxp extraction is started
+2015-05-29 15:58:34 INFO  - allocate!!!!!!!!
+2015-05-29 15:58:34 INFO  - allocate!!!!!!!!
+2015-05-29 15:58:34 INFO  - rxp extraction is started
+2015-05-29 15:58:34 INFO  - allocate!!!!!!!!
+2015-05-29 15:58:34 INFO  - allocate!!!!!!!!
+2015-05-29 15:58:34 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 15:58:34 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-05-29 15:58:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 15:58:36 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-05-29 15:58:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 15:58:36 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-05-29 15:58:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 15:58:36 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-05-29 15:58:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 15:58:36 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-05-29 15:58:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 15:58:36 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-05-29 15:58:42 INFO  - Shots processed: 1000000
+2015-05-29 15:58:42 INFO  - Shots processed: 1000000
+2015-05-29 15:58:43 INFO  - Shots processed: 1000000
+2015-05-29 15:58:43 INFO  - Shots processed: 1000000
+2015-05-29 15:58:43 INFO  - Shots processed: 1000000
+2015-05-29 15:58:47 INFO  - Shots processed: 1000000
+2015-05-29 15:58:48 INFO  - Shots processed: 2000000
+2015-05-29 15:58:48 INFO  - Shots processed: 2000000
+2015-05-29 15:58:49 INFO  - Shots processed: 2000000
+2015-05-29 15:58:50 INFO  - Shots processed: 2000000
+2015-05-29 15:58:50 INFO  - Shots processed: 2000000
+2015-05-29 15:58:53 INFO  - Shots processed: 3000000
+2015-05-29 15:58:53 INFO  - Shots processed: 2000000
+2015-05-29 15:58:55 INFO  - Shots processed: 3000000
+2015-05-29 15:58:55 INFO  - Shots processed: 3000000
+2015-05-29 15:58:59 INFO  - Shots processed: 4000000
+2015-05-29 15:58:59 INFO  - Shots processed: 3000000
+2015-05-29 15:59:00 INFO  - Shots processed: 3000000
+2015-05-29 15:59:00 INFO  - Shots processed: 3000000
+2015-05-29 15:59:04 INFO  - Shots processed: 4000000
+2015-05-29 15:59:05 INFO  - Shots processed: 4000000
+2015-05-29 15:59:06 INFO  - Shots processed: 5000000
+2015-05-29 15:59:07 INFO  - Shots processed: 4000000
+2015-05-29 15:59:10 INFO  - Shots processed: 4810881
+2015-05-29 15:59:10 INFO  - voxelisation is finished ( 35.0 s )
+2015-05-29 15:59:10 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101534.rxp.vox
+2015-05-29 15:59:12 INFO  - Shots processed: 4000000
+2015-05-29 15:59:13 INFO  - Shots processed: 4000000
+2015-05-29 15:59:14 INFO  - file written ( 4.0 s )
+2015-05-29 15:59:15 INFO  - Shots processed: 6000000
+2015-05-29 15:59:18 INFO  - Shots processed: 5000000
+2015-05-29 15:59:23 INFO  - Shots processed: 5000000
+2015-05-29 15:59:24 INFO  - Shots processed: 5000000
+2015-05-29 15:59:24 INFO  - Shots processed: 5000000
+2015-05-29 15:59:25 INFO  - Shots processed: 7000000
+2015-05-29 15:59:30 INFO  - Shots processed: 6000000
+2015-05-29 15:59:32 INFO  - Shots processed: 6000000
+2015-05-29 15:59:32 INFO  - Shots processed: 6000000
+2015-05-29 15:59:36 INFO  - Shots processed: 7000000
+2015-05-29 15:59:38 INFO  - Shots processed: 7000000
+2015-05-29 15:59:38 INFO  - Shots processed: 8000000
+2015-05-29 15:59:42 INFO  - Shots processed: 8000000
+2015-05-29 15:59:44 INFO  - Shots processed: 8000000
+2015-05-29 15:59:44 INFO  - Shots processed: 7000000
+2015-05-29 15:59:46 INFO  - Shots processed: 6000000
+2015-05-29 15:59:47 INFO  - Shots processed: 9000000
+2015-05-29 15:59:47 INFO  - Shots processed: 9000000
+2015-05-29 15:59:49 INFO  - Shots processed: 9000000
+2015-05-29 15:59:52 INFO  - Shots processed: 8000000
+2015-05-29 15:59:53 INFO  - Shots processed: 10000000
+2015-05-29 15:59:53 INFO  - Shots processed: 10000000
+2015-05-29 15:59:55 INFO  - Shots processed: 10000000
+2015-05-29 15:59:58 INFO  - Shots processed: 9000000
+2015-05-29 15:59:58 INFO  - Shots processed: 11000000
+2015-05-29 15:59:59 INFO  - Shots processed: 11000000
+2015-05-29 16:00:00 INFO  - Shots processed: 11293701
+2015-05-29 16:00:00 INFO  - voxelisation is finished ( 86.0 s )
+2015-05-29 16:00:00 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_113724.rxp.vox
+2015-05-29 16:00:00 INFO  - Shots processed: 11000000
+2015-05-29 16:00:01 INFO  - Shots processed: 11295489
+2015-05-29 16:00:01 INFO  - voxelisation is finished ( 86.0 s )
+2015-05-29 16:00:01 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_115917.rxp.vox
+2015-05-29 16:00:02 INFO  - Shots processed: 11295629
+2015-05-29 16:00:02 INFO  - voxelisation is finished ( 87.0 s )
+2015-05-29 16:00:02 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_112953.rxp.vox
+2015-05-29 16:00:03 INFO  - Shots processed: 7000000
+2015-05-29 16:00:04 INFO  - Shots processed: 10000000
+2015-05-29 16:00:08 INFO  - file written ( 8.0 s )
+2015-05-29 16:00:09 INFO  - Shots processed: 11000000
+2015-05-29 16:00:09 INFO  - Shots processed: 8000000
+2015-05-29 16:00:09 INFO  - file written ( 8.0 s )
+2015-05-29 16:00:10 INFO  - file written ( 8.0 s )
+2015-05-29 16:00:11 INFO  - Shots processed: 11295882
+2015-05-29 16:00:11 INFO  - voxelisation is finished ( 96.0 s )
+2015-05-29 16:00:11 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_110207.rxp.vox
+2015-05-29 16:00:14 INFO  - Shots processed: 9000000
+2015-05-29 16:00:19 INFO  - file written ( 8.0 s )
+2015-05-29 16:00:19 INFO  - Shots processed: 10000000
+2015-05-29 16:00:24 INFO  - Shots processed: 11000000
+2015-05-29 16:00:29 INFO  - Shots processed: 12000000
+2015-05-29 16:00:34 INFO  - Shots processed: 13000000
+2015-05-29 16:00:35 INFO  - Shots processed: 13166931
+2015-05-29 16:00:35 INFO  - voxelisation is finished ( 121.0 s )
+2015-05-29 16:00:35 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101944.rxp.vox
+2015-05-29 16:00:44 INFO  - file written ( 8.0 s )
+2015-05-29 16:00:44 INFO  - Number of echos filtered : 834783
+2015-05-29 16:00:44 INFO  - Voxelisation finished in 132.0 s
+2015-05-29 16:00:44 INFO  - Merging in progress, file 1 : 6
+2015-05-29 16:00:46 INFO  - Merging in progress, file 2 : 6
+2015-05-29 16:00:52 INFO  - Merging in progress, file 3 : 6
+2015-05-29 16:00:57 INFO  - Merging in progress, file 4 : 6
+2015-05-29 16:01:03 INFO  - Merging in progress, file 5 : 6
+2015-05-29 16:01:08 INFO  - Merging in progress, file 6 : 6
+2015-05-29 16:01:13 INFO  - Compute angleMean
+2015-05-29 16:01:13 INFO  - Compute lMeanTotal
+2015-05-29 16:01:13 INFO  - Compute transmittance and PAD
+2015-05-29 16:01:14 INFO  - writing output file: /home/calcul/Documents/Julien/test_tls_pierre/output2/merged.vox
+2015-05-29 16:01:17 INFO  - file written ( 3.0 s )
+2015-05-29 16:01:17 INFO  - Voxelisation finished in 165.0 s
+2015-05-29 16:01:17 INFO  - Voxelisation finished in 165.0 s
+2015-05-29 17:08:08 INFO  - Loading point cloud file...
+2015-05-29 17:08:08 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 17:08:11 INFO  - Point cloud file loaded
+2015-05-29 17:08:11 INFO  - Loading point cloud file...
+2015-05-29 17:08:11 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 17:08:11 INFO  - Point cloud file loaded
+2015-05-29 17:08:11 INFO  - Saved libfile: /tmp/RivLibLibrary-8243579066159990477.tmp
+2015-05-29 17:08:11 INFO  - /tmp/RivLibLibrary-8243579066159990477.tmp
+2015-05-29 17:08:11 INFO  - rxp extraction is started
+2015-05-29 17:08:11 INFO  - rxp extraction is started
+2015-05-29 17:08:12 INFO  - rxp extraction is started
+2015-05-29 17:08:12 INFO  - rxp extraction is started
+2015-05-29 17:08:12 INFO  - rxp extraction is started
+2015-05-29 17:08:12 INFO  - rxp extraction is started
+2015-05-29 17:08:12 INFO  - allocate!!!!!!!!
+2015-05-29 17:08:12 INFO  - allocate!!!!!!!!
+2015-05-29 17:08:12 INFO  - allocate!!!!!!!!
+2015-05-29 17:08:12 INFO  - allocate!!!!!!!!
+2015-05-29 17:08:12 INFO  - allocate!!!!!!!!
+2015-05-29 17:08:12 INFO  - allocate!!!!!!!!
+2015-05-29 17:08:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 17:08:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 17:08:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 17:08:14 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-05-29 17:08:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 17:08:14 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-05-29 17:08:14 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-05-29 17:08:14 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-05-29 17:08:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 17:08:14 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-05-29 17:08:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 17:08:14 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-05-29 17:08:23 INFO  - Shots processed: 1000000
+2015-05-29 17:08:24 INFO  - Shots processed: 1000000
+2015-05-29 17:08:25 INFO  - Shots processed: 1000000
+2015-05-29 17:08:25 INFO  - Shots processed: 1000000
+2015-05-29 17:08:25 INFO  - Shots processed: 1000000
+2015-05-29 17:08:30 INFO  - Shots processed: 2000000
+2015-05-29 17:08:31 INFO  - Shots processed: 1000000
+2015-05-29 17:08:31 INFO  - Shots processed: 2000000
+2015-05-29 17:08:33 INFO  - Shots processed: 2000000
+2015-05-29 17:08:33 INFO  - Shots processed: 2000000
+2015-05-29 17:08:33 INFO  - Shots processed: 2000000
+2015-05-29 17:08:36 INFO  - Shots processed: 3000000
+2015-05-29 17:08:38 INFO  - Shots processed: 2000000
+2015-05-29 17:08:39 INFO  - Shots processed: 3000000
+2015-05-29 17:08:40 INFO  - Shots processed: 3000000
+2015-05-29 17:08:42 INFO  - Shots processed: 4000000
+2015-05-29 17:08:44 INFO  - Shots processed: 3000000
+2015-05-29 17:08:46 INFO  - Shots processed: 3000000
+2015-05-29 17:08:47 INFO  - Shots processed: 3000000
+2015-05-29 17:08:50 INFO  - Shots processed: 4000000
+2015-05-29 17:08:51 INFO  - Shots processed: 5000000
+2015-05-29 17:08:51 INFO  - Shots processed: 4000000
+2015-05-29 17:08:53 INFO  - Shots processed: 4000000
+2015-05-29 17:08:55 INFO  - Shots processed: 4810881
+2015-05-29 17:08:55 INFO  - voxelisation is finished ( 43.0 s )
+2015-05-29 17:08:55 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101534.rxp.vox
+2015-05-29 17:09:02 INFO  - Shots processed: 6000000
+2015-05-29 17:09:03 INFO  - Shots processed: 4000000
+2015-05-29 17:09:03 INFO  - file written ( 7.0 s )
+2015-05-29 17:09:04 INFO  - Shots processed: 4000000
+2015-05-29 17:09:11 INFO  - Shots processed: 5000000
+2015-05-29 17:09:14 INFO  - Shots processed: 7000000
+2015-05-29 17:09:14 INFO  - Shots processed: 5000000
+2015-05-29 17:09:15 INFO  - Shots processed: 5000000
+2015-05-29 17:09:18 INFO  - Shots processed: 5000000
+2015-05-29 17:09:23 INFO  - Shots processed: 6000000
+2015-05-29 17:09:27 INFO  - Shots processed: 6000000
+2015-05-29 17:09:29 INFO  - Shots processed: 6000000
+2015-05-29 17:09:30 INFO  - Shots processed: 7000000
+2015-05-29 17:09:30 INFO  - Shots processed: 8000000
+2015-05-29 17:09:33 INFO  - Shots processed: 7000000
+2015-05-29 17:09:36 INFO  - Shots processed: 8000000
+2015-05-29 17:09:40 INFO  - Shots processed: 6000000
+2015-05-29 17:09:40 INFO  - Shots processed: 8000000
+2015-05-29 17:09:40 INFO  - Shots processed: 9000000
+2015-05-29 17:09:43 INFO  - Shots processed: 9000000
+2015-05-29 17:09:44 INFO  - Shots processed: 7000000
+2015-05-29 17:09:46 INFO  - Shots processed: 9000000
+2015-05-29 17:09:47 INFO  - Shots processed: 10000000
+2015-05-29 17:09:49 INFO  - Shots processed: 10000000
+2015-05-29 17:09:52 INFO  - Shots processed: 10000000
+2015-05-29 17:09:53 INFO  - Shots processed: 8000000
+2015-05-29 17:09:54 INFO  - Shots processed: 11000000
+2015-05-29 17:09:56 INFO  - Shots processed: 11295489
+2015-05-29 17:09:56 INFO  - voxelisation is finished ( 104.0 s )
+2015-05-29 17:09:56 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_115917.rxp.vox
+2015-05-29 17:09:56 INFO  - Shots processed: 11000000
+2015-05-29 17:09:59 INFO  - Shots processed: 11293701
+2015-05-29 17:09:59 INFO  - voxelisation is finished ( 107.0 s )
+2015-05-29 17:09:59 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_113724.rxp.vox
+2015-05-29 17:10:00 INFO  - Shots processed: 11000000
+2015-05-29 17:10:02 INFO  - Shots processed: 7000000
+2015-05-29 17:10:02 INFO  - Shots processed: 9000000
+2015-05-29 17:10:02 INFO  - Shots processed: 11295629
+2015-05-29 17:10:02 INFO  - voxelisation is finished ( 110.0 s )
+2015-05-29 17:10:02 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_112953.rxp.vox
+2015-05-29 17:10:08 INFO  - file written ( 12.0 s )
+2015-05-29 17:10:08 INFO  - Shots processed: 10000000
+2015-05-29 17:10:09 INFO  - file written ( 10.0 s )
+2015-05-29 17:10:10 INFO  - Shots processed: 8000000
+2015-05-29 17:10:11 INFO  - file written ( 8.0 s )
+2015-05-29 17:10:14 INFO  - Shots processed: 11000000
+2015-05-29 17:10:15 INFO  - Shots processed: 9000000
+2015-05-29 17:10:16 INFO  - Shots processed: 11295882
+2015-05-29 17:10:16 INFO  - voxelisation is finished ( 124.0 s )
+2015-05-29 17:10:16 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_110207.rxp.vox
+2015-05-29 17:10:20 INFO  - Shots processed: 10000000
+2015-05-29 17:10:23 INFO  - file written ( 7.0 s )
+2015-05-29 17:10:26 INFO  - Shots processed: 11000000
+2015-05-29 17:10:31 INFO  - Shots processed: 12000000
+2015-05-29 17:10:36 INFO  - Shots processed: 13000000
+2015-05-29 17:10:37 INFO  - Shots processed: 13166931
+2015-05-29 17:10:37 INFO  - voxelisation is finished ( 145.0 s )
+2015-05-29 17:10:37 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101944.rxp.vox
+2015-05-29 17:10:45 INFO  - file written ( 7.0 s )
+2015-05-29 17:10:45 INFO  - Number of echos filtered : 834783
+2015-05-29 17:10:45 INFO  - Voxelisation finished in 156.0 s
+2015-05-29 17:10:45 INFO  - Merging in progress, file 1 : 6
+2015-05-29 17:10:48 INFO  - Merging in progress, file 2 : 6
+2015-05-29 17:10:54 INFO  - Merging in progress, file 3 : 6
+2015-05-29 17:11:00 INFO  - Merging in progress, file 4 : 6
+2015-05-29 17:11:05 INFO  - Merging in progress, file 5 : 6
+2015-05-29 17:11:11 INFO  - Merging in progress, file 6 : 6
+2015-05-29 17:11:17 INFO  - Compute angleMean
+2015-05-29 17:11:17 INFO  - Compute lMeanTotal
+2015-05-29 17:11:17 INFO  - Compute transmittance and PAD
+2015-05-29 17:11:18 INFO  - writing output file: /home/calcul/Documents/Julien/test_tls_pierre/output2/merged.vox
+2015-05-29 17:11:22 INFO  - file written ( 3.0 s )
+2015-05-29 17:11:22 INFO  - Voxelisation finished in 193.0 s
+2015-05-29 17:11:22 INFO  - Voxelisation finished in 193.0 s
+2015-05-29 17:45:02 INFO  - Loading point cloud file...
+2015-05-29 17:45:02 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 17:46:28 INFO  - Point cloud file loaded
+2015-05-29 17:46:28 INFO  - Loading point cloud file...
+2015-05-29 17:46:28 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 17:46:52 INFO  - Point cloud file loaded
+2015-05-29 17:46:52 INFO  - Saved libfile: /tmp/RivLibLibrary-6847283380491827670.tmp
+2015-05-29 17:46:52 INFO  - /tmp/RivLibLibrary-6847283380491827670.tmp
+2015-05-29 17:46:52 INFO  - rxp extraction is started
+2015-05-29 17:46:52 INFO  - rxp extraction is started
+2015-05-29 17:46:52 INFO  - rxp extraction is started
+2015-05-29 17:46:52 INFO  - rxp extraction is started
+2015-05-29 17:46:52 INFO  - rxp extraction is started
+2015-05-29 17:46:52 INFO  - allocate!!!!!!!!
+2015-05-29 17:46:52 INFO  - allocate!!!!!!!!
+2015-05-29 17:46:52 INFO  - allocate!!!!!!!!
+2015-05-29 17:46:52 INFO  - rxp extraction is started
+2015-05-29 17:46:52 INFO  - allocate!!!!!!!!
+2015-05-29 17:46:52 INFO  - allocate!!!!!!!!
+2015-05-29 17:46:52 INFO  - allocate!!!!!!!!
+2015-05-29 17:47:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 17:47:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 17:47:02 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-05-29 17:47:02 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-05-29 17:47:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 17:47:03 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-05-29 17:47:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 17:47:03 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-05-29 17:47:06 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 17:47:06 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-05-29 17:47:06 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 17:47:06 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-05-29 17:48:51 INFO  - Shots processed: 1000000
+2015-05-29 17:48:52 INFO  - Shots processed: 1000000
+2015-05-29 17:48:52 INFO  - Shots processed: 1000000
+2015-05-29 17:48:56 INFO  - Shots processed: 1000000
+2015-05-29 17:49:04 INFO  - Shots processed: 1000000
+2015-05-29 17:50:33 INFO  - Shots processed: 2000000
+2015-05-29 17:50:37 INFO  - Shots processed: 2000000
+2015-05-29 17:50:37 INFO  - Shots processed: 2000000
+2015-05-29 17:51:39 INFO  - Shots processed: 2000000
+2015-05-29 17:51:42 INFO  - Shots processed: 2000000
+2015-05-29 17:52:24 INFO  - Shots processed: 3000000
+2015-05-29 17:52:29 INFO  - Shots processed: 3000000
+2015-05-29 17:53:19 INFO  - Shots processed: 3000000
+2015-05-29 17:54:05 INFO  - Shots processed: 1000000
+2015-05-29 17:54:13 INFO  - Shots processed: 4000000
+2015-05-29 17:56:14 INFO  - Shots processed: 2000000
+2015-05-29 17:56:30 INFO  - Shots processed: 4000000
+2015-05-29 18:02:23 INFO  - Loading point cloud file...
+2015-05-29 18:02:23 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:02:25 INFO  - Point cloud file loaded
+2015-05-29 18:02:25 INFO  - Loading point cloud file...
+2015-05-29 18:02:25 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:02:26 INFO  - Point cloud file loaded
+2015-05-29 18:02:26 INFO  - Saved libfile: /tmp/RivLibLibrary-5151396039721604909.tmp
+2015-05-29 18:02:26 INFO  - /tmp/RivLibLibrary-5151396039721604909.tmp
+2015-05-29 18:02:26 INFO  - rxp extraction is started
+2015-05-29 18:02:26 INFO  - allocate!!!!!!!!
+2015-05-29 18:02:26 INFO  - rxp extraction is started
+2015-05-29 18:02:26 INFO  - rxp extraction is started
+2015-05-29 18:02:26 INFO  - rxp extraction is started
+2015-05-29 18:02:26 INFO  - allocate!!!!!!!!
+2015-05-29 18:02:26 INFO  - rxp extraction is started
+2015-05-29 18:02:26 INFO  - allocate!!!!!!!!
+2015-05-29 18:02:26 INFO  - allocate!!!!!!!!
+2015-05-29 18:02:26 INFO  - allocate!!!!!!!!
+2015-05-29 18:02:26 INFO  - rxp extraction is started
+2015-05-29 18:02:26 INFO  - allocate!!!!!!!!
+2015-05-29 18:02:29 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:02:29 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:02:29 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:02:29 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-05-29 18:02:29 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:02:29 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:02:29 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:02:29 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-05-29 18:02:29 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-05-29 18:02:29 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-05-29 18:02:29 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-05-29 18:02:29 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-05-29 18:02:38 INFO  - Shots processed: 1000000
+2015-05-29 18:02:39 INFO  - Shots processed: 1000000
+2015-05-29 18:02:39 INFO  - Shots processed: 1000000
+2015-05-29 18:02:39 INFO  - Shots processed: 1000000
+2015-05-29 18:02:39 INFO  - Shots processed: 1000000
+2015-05-29 18:02:45 INFO  - Shots processed: 2000000
+2015-05-29 18:02:45 INFO  - Shots processed: 2000000
+2015-05-29 18:02:46 INFO  - Shots processed: 2000000
+2015-05-29 18:02:47 INFO  - Shots processed: 1000000
+2015-05-29 18:02:48 INFO  - Shots processed: 2000000
+2015-05-29 18:02:49 INFO  - Shots processed: 2000000
+2015-05-29 18:02:50 ERROR - java.lang.InterruptedException
+2015-05-29 18:02:50 INFO  - Voxelisation finished in 27.0 s
+2015-05-29 18:02:50 ERROR - java.io.FileNotFoundException: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101534.rxp.vox (Aucun fichier ou dossier de ce type)
+2015-05-29 18:02:52 INFO  - Shots processed: 3000000
+2015-05-29 18:02:54 INFO  - Shots processed: 3000000
+2015-05-29 18:02:54 INFO  - Shots processed: 3000000
+2015-05-29 18:02:55 INFO  - Shots processed: 2000000
+2015-05-29 18:02:59 INFO  - Shots processed: 4000000
+2015-05-29 18:03:02 INFO  - Shots processed: 3000000
+2015-05-29 18:03:02 INFO  - Shots processed: 3000000
+2015-05-29 18:03:03 INFO  - Shots processed: 3000000
+2015-05-29 18:03:05 INFO  - Shots processed: 4000000
+2015-05-29 18:03:07 INFO  - Shots processed: 5000000
+2015-05-29 18:03:08 INFO  - Shots processed: 4000000
+2015-05-29 18:03:11 INFO  - Shots processed: 4000000
+2015-05-29 18:03:18 INFO  - Shots processed: 4810881
+2015-05-29 18:03:18 INFO  - voxelisation is finished ( 51.0 s )
+2015-05-29 18:03:18 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101534.rxp.vox
+2015-05-29 18:03:21 INFO  - Shots processed: 4000000
+2015-05-29 18:03:22 INFO  - Shots processed: 4000000
+2015-05-29 18:03:24 INFO  - Shots processed: 6000000
+2015-05-29 18:03:26 INFO  - file written ( 8.0 s )
+2015-05-29 18:03:28 INFO  - Shots processed: 5000000
+2015-05-29 18:03:35 INFO  - Shots processed: 5000000
+2015-05-29 18:03:36 INFO  - Shots processed: 5000000
+2015-05-29 18:03:36 INFO  - Shots processed: 7000000
+2015-05-29 18:03:37 INFO  - Shots processed: 5000000
+2015-05-29 18:03:43 INFO  - Shots processed: 6000000
+2015-05-29 18:03:43 INFO  - Shots processed: 6000000
+2015-05-29 18:03:45 INFO  - Shots processed: 6000000
+2015-05-29 18:03:50 INFO  - Shots processed: 7000000
+2015-05-29 18:03:51 INFO  - Shots processed: 8000000
+2015-05-29 18:03:53 INFO  - Shots processed: 7000000
+2015-05-29 18:03:58 INFO  - Shots processed: 8000000
+2015-05-29 18:03:59 INFO  - Shots processed: 7000000
+2015-05-29 18:04:00 INFO  - Shots processed: 8000000
+2015-05-29 18:04:02 INFO  - Shots processed: 9000000
+2015-05-29 18:04:02 INFO  - Shots processed: 6000000
+2015-05-29 18:04:04 INFO  - Shots processed: 9000000
+2015-05-29 18:04:07 INFO  - Shots processed: 9000000
+2015-05-29 18:04:08 INFO  - Shots processed: 8000000
+2015-05-29 18:04:10 INFO  - Shots processed: 10000000
+2015-05-29 18:04:10 INFO  - Shots processed: 10000000
+2015-05-29 18:04:13 INFO  - Shots processed: 10000000
+2015-05-29 18:04:14 INFO  - Shots processed: 9000000
+2015-05-29 18:04:16 INFO  - Shots processed: 11000000
+2015-05-29 18:04:17 INFO  - Shots processed: 11000000
+2015-05-29 18:04:18 INFO  - Shots processed: 11295489
+2015-05-29 18:04:18 INFO  - voxelisation is finished ( 112.0 s )
+2015-05-29 18:04:18 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_115917.rxp.vox
+2015-05-29 18:04:18 INFO  - Shots processed: 11293701
+2015-05-29 18:04:18 INFO  - voxelisation is finished ( 112.0 s )
+2015-05-29 18:04:18 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_113724.rxp.vox
+2015-05-29 18:04:19 INFO  - Shots processed: 11000000
+2015-05-29 18:04:21 INFO  - Shots processed: 10000000
+2015-05-29 18:04:21 INFO  - Shots processed: 11295629
+2015-05-29 18:04:21 INFO  - voxelisation is finished ( 115.0 s )
+2015-05-29 18:04:21 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_112953.rxp.vox
+2015-05-29 18:04:22 INFO  - Shots processed: 7000000
+2015-05-29 18:04:26 INFO  - Shots processed: 11000000
+2015-05-29 18:04:27 INFO  - file written ( 8.0 s )
+2015-05-29 18:04:27 INFO  - file written ( 8.0 s )
+2015-05-29 18:04:28 INFO  - Shots processed: 11295882
+2015-05-29 18:04:28 INFO  - voxelisation is finished ( 122.0 s )
+2015-05-29 18:04:28 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_110207.rxp.vox
+2015-05-29 18:04:28 INFO  - Shots processed: 8000000
+2015-05-29 18:04:29 INFO  - file written ( 7.0 s )
+2015-05-29 18:04:34 INFO  - Shots processed: 9000000
+2015-05-29 18:04:36 INFO  - file written ( 7.0 s )
+2015-05-29 18:04:39 INFO  - Shots processed: 10000000
+2015-05-29 18:04:45 INFO  - Shots processed: 11000000
+2015-05-29 18:06:52 INFO  - Loading point cloud file...
+2015-05-29 18:06:52 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:06:55 INFO  - Point cloud file loaded
+2015-05-29 18:06:55 INFO  - Loading point cloud file...
+2015-05-29 18:06:55 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:06:55 INFO  - Point cloud file loaded
+2015-05-29 18:06:55 INFO  - Saved libfile: /tmp/RivLibLibrary-7046336963513364002.tmp
+2015-05-29 18:06:55 INFO  - /tmp/RivLibLibrary-7046336963513364002.tmp
+2015-05-29 18:06:55 INFO  - rxp extraction is started
+2015-05-29 18:06:55 INFO  - rxp extraction is started
+2015-05-29 18:06:55 INFO  - rxp extraction is started
+2015-05-29 18:06:55 INFO  - rxp extraction is started
+2015-05-29 18:06:55 INFO  - rxp extraction is started
+2015-05-29 18:06:55 INFO  - rxp extraction is started
+2015-05-29 18:06:55 INFO  - allocate!!!!!!!!
+2015-05-29 18:06:55 INFO  - allocate!!!!!!!!
+2015-05-29 18:06:55 INFO  - allocate!!!!!!!!
+2015-05-29 18:06:55 INFO  - allocate!!!!!!!!
+2015-05-29 18:06:55 INFO  - allocate!!!!!!!!
+2015-05-29 18:06:55 INFO  - allocate!!!!!!!!
+2015-05-29 18:06:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:06:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:06:58 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-05-29 18:06:58 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-05-29 18:06:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:06:58 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-05-29 18:06:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:06:58 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-05-29 18:06:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:06:58 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-05-29 18:06:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:06:58 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-05-29 18:07:08 INFO  - Shots processed: 1000000
+2015-05-29 18:07:08 INFO  - Shots processed: 1000000
+2015-05-29 18:07:08 INFO  - Shots processed: 1000000
+2015-05-29 18:07:08 INFO  - Shots processed: 1000000
+2015-05-29 18:07:09 INFO  - Shots processed: 1000000
+2015-05-29 18:07:11 ERROR - java.lang.InterruptedException
+2015-05-29 18:07:11 INFO  - Task cancelled
+2015-05-29 18:07:11 INFO  - Task cancelled
+2015-05-29 18:07:11 INFO  - Task cancelled
+2015-05-29 18:07:11 INFO  - Task cancelled
+2015-05-29 18:07:11 INFO  - Task cancelled
+2015-05-29 18:07:11 INFO  - Task cancelled
+2015-05-29 18:07:11 INFO  - Voxelisation finished in 19.0 s
+2015-05-29 18:07:11 ERROR - java.io.FileNotFoundException: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101534.rxp.vox (Aucun fichier ou dossier de ce type)
+2015-05-29 18:07:24 INFO  - Loading point cloud file...
+2015-05-29 18:07:24 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:07:26 INFO  - Point cloud file loaded
+2015-05-29 18:07:26 INFO  - Loading point cloud file...
+2015-05-29 18:07:26 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:07:27 INFO  - Point cloud file loaded
+2015-05-29 18:07:27 INFO  - rxp extraction is started
+2015-05-29 18:07:27 INFO  - rxp extraction is started
+2015-05-29 18:07:27 INFO  - rxp extraction is started
+2015-05-29 18:07:27 INFO  - allocate!!!!!!!!
+2015-05-29 18:07:27 INFO  - rxp extraction is started
+2015-05-29 18:07:27 INFO  - rxp extraction is started
+2015-05-29 18:07:27 INFO  - rxp extraction is started
+2015-05-29 18:07:27 INFO  - allocate!!!!!!!!
+2015-05-29 18:07:27 INFO  - allocate!!!!!!!!
+2015-05-29 18:07:27 INFO  - allocate!!!!!!!!
+2015-05-29 18:07:27 INFO  - allocate!!!!!!!!
+2015-05-29 18:07:27 INFO  - allocate!!!!!!!!
+2015-05-29 18:07:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:07:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:07:27 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-05-29 18:07:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:07:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:07:27 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-05-29 18:07:27 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-05-29 18:07:27 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-05-29 18:07:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:07:27 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-05-29 18:07:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:07:27 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-05-29 18:07:37 INFO  - Shots processed: 1000000
+2015-05-29 18:07:38 INFO  - Shots processed: 1000000
+2015-05-29 18:07:38 INFO  - Shots processed: 1000000
+2015-05-29 18:07:39 INFO  - Shots processed: 1000000
+2015-05-29 18:07:39 INFO  - Shots processed: 1000000
+2015-05-29 18:07:40 ERROR - java.lang.InterruptedException
+2015-05-29 18:07:40 INFO  - Task cancelled
+2015-05-29 18:07:40 INFO  - Voxelisation finished in 16.0 s
+2015-05-29 18:07:40 INFO  - Task cancelled
+2015-05-29 18:07:40 ERROR - java.io.FileNotFoundException: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101534.rxp.vox (Aucun fichier ou dossier de ce type)
+2015-05-29 18:07:40 INFO  - Task cancelled
+2015-05-29 18:07:40 INFO  - Task cancelled
+2015-05-29 18:07:40 INFO  - Task cancelled
+2015-05-29 18:07:40 INFO  - Task cancelled
+2015-05-29 18:11:53 INFO  - Loading point cloud file...
+2015-05-29 18:11:53 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:11:56 INFO  - Point cloud file loaded
+2015-05-29 18:11:56 INFO  - Loading point cloud file...
+2015-05-29 18:11:56 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:11:57 INFO  - Point cloud file loaded
+2015-05-29 18:11:57 INFO  - Saved libfile: /tmp/RivLibLibrary-4373831407288587855.tmp
+2015-05-29 18:11:57 INFO  - /tmp/RivLibLibrary-4373831407288587855.tmp
+2015-05-29 18:11:57 INFO  - rxp extraction is started
+2015-05-29 18:11:57 INFO  - rxp extraction is started
+2015-05-29 18:11:57 INFO  - rxp extraction is started
+2015-05-29 18:11:57 INFO  - rxp extraction is started
+2015-05-29 18:11:57 INFO  - rxp extraction is started
+2015-05-29 18:11:57 INFO  - rxp extraction is started
+2015-05-29 18:11:57 INFO  - allocate!!!!!!!!
+2015-05-29 18:11:57 INFO  - allocate!!!!!!!!
+2015-05-29 18:11:57 INFO  - allocate!!!!!!!!
+2015-05-29 18:11:57 INFO  - allocate!!!!!!!!
+2015-05-29 18:11:57 INFO  - allocate!!!!!!!!
+2015-05-29 18:11:57 INFO  - allocate!!!!!!!!
+2015-05-29 18:12:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:12:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:12:00 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-05-29 18:12:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:12:00 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-05-29 18:12:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:12:00 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-05-29 18:12:00 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-05-29 18:12:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:12:00 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-05-29 18:12:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:12:00 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-05-29 18:12:08 INFO  - Shots processed: 1000000
+2015-05-29 18:12:09 INFO  - Shots processed: 1000000
+2015-05-29 18:12:09 INFO  - Shots processed: 1000000
+2015-05-29 18:12:10 INFO  - Shots processed: 1000000
+2015-05-29 18:12:10 INFO  - Shots processed: 1000000
+2015-05-29 18:12:15 INFO  - Shots processed: 2000000
+2015-05-29 18:12:15 ERROR - Project voxelisation stopped
+2015-05-29 18:12:15 INFO  - Task cancelled
+2015-05-29 18:12:15 INFO  - Task cancelled
+2015-05-29 18:12:15 INFO  - Voxelisation finished in 22.0 s
+2015-05-29 18:12:15 INFO  - Task cancelled
+2015-05-29 18:12:15 INFO  - Task cancelled
+2015-05-29 18:12:15 INFO  - Task cancelled
+2015-05-29 18:12:15 INFO  - Task cancelled
+2015-05-29 18:12:15 ERROR - java.io.FileNotFoundException: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101534.rxp.vox (Aucun fichier ou dossier de ce type)
+2015-05-29 18:18:25 INFO  - Loading point cloud file...
+2015-05-29 18:18:25 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:18:28 INFO  - Point cloud file loaded
+2015-05-29 18:18:28 INFO  - Loading point cloud file...
+2015-05-29 18:18:28 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:18:28 INFO  - Point cloud file loaded
+2015-05-29 18:18:28 INFO  - Saved libfile: /tmp/RivLibLibrary-6522035900299067944.tmp
+2015-05-29 18:18:28 INFO  - /tmp/RivLibLibrary-6522035900299067944.tmp
+2015-05-29 18:18:28 INFO  - rxp extraction is started
+2015-05-29 18:18:28 INFO  - rxp extraction is started
+2015-05-29 18:18:28 INFO  - rxp extraction is started
+2015-05-29 18:18:28 INFO  - allocate!!!!!!!!
+2015-05-29 18:18:28 INFO  - rxp extraction is started
+2015-05-29 18:18:28 INFO  - rxp extraction is started
+2015-05-29 18:18:28 INFO  - allocate!!!!!!!!
+2015-05-29 18:18:28 INFO  - allocate!!!!!!!!
+2015-05-29 18:18:28 INFO  - rxp extraction is started
+2015-05-29 18:18:28 INFO  - allocate!!!!!!!!
+2015-05-29 18:18:28 INFO  - allocate!!!!!!!!
+2015-05-29 18:18:28 INFO  - allocate!!!!!!!!
+2015-05-29 18:18:31 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:18:31 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:18:31 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:18:31 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:18:31 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-05-29 18:18:31 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-05-29 18:18:31 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-05-29 18:18:31 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-05-29 18:18:31 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:18:31 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-05-29 18:18:31 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(93, 113, 145)
+			Toricity 	:	false
+
+2015-05-29 18:18:31 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-05-29 18:18:41 INFO  - Shots processed: 1000000
+2015-05-29 18:18:41 INFO  - Shots processed: 1000000
+2015-05-29 18:18:41 INFO  - Shots processed: 1000000
+2015-05-29 18:18:42 INFO  - Shots processed: 1000000
+2015-05-29 18:18:42 INFO  - Shots processed: 1000000
+2015-05-29 18:18:44 INFO  - Project voxelisation stopped
+2015-05-29 18:18:44 INFO  - Task cancelled
+2015-05-29 18:18:44 INFO  - Task cancelled
+2015-05-29 18:18:44 INFO  - Task cancelled
+2015-05-29 18:18:44 INFO  - Task cancelled
+2015-05-29 18:18:44 INFO  - Task cancelled
+2015-05-29 18:18:44 INFO  - Task cancelled
+2015-05-29 18:19:52 INFO  - Loading point cloud file...
+2015-05-29 18:19:52 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:19:54 INFO  - Point cloud file loaded
+2015-05-29 18:19:54 INFO  - Loading point cloud file...
+2015-05-29 18:19:54 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:19:54 INFO  - Point cloud file loaded
+2015-05-29 18:19:54 INFO  - rxp extraction is started
+2015-05-29 18:19:54 INFO  - allocate!!!!!!!!
+2015-05-29 18:19:54 INFO  - rxp extraction is started
+2015-05-29 18:19:54 INFO  - allocate!!!!!!!!
+2015-05-29 18:19:54 INFO  - rxp extraction is started
+2015-05-29 18:19:54 INFO  - allocate!!!!!!!!
+2015-05-29 18:19:54 INFO  - rxp extraction is started
+2015-05-29 18:19:54 INFO  - allocate!!!!!!!!
+2015-05-29 18:19:54 INFO  - rxp extraction is started
+2015-05-29 18:19:54 INFO  - allocate!!!!!!!!
+2015-05-29 18:19:54 INFO  - rxp extraction is started
+2015-05-29 18:19:54 INFO  - allocate!!!!!!!!
+2015-05-29 18:19:59 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-05-29 18:19:59 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-05-29 18:19:59 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-05-29 18:19:59 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-05-29 18:19:59 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-05-29 18:20:07 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-05-29 18:20:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-05-29 18:20:07 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-05-29 18:20:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-05-29 18:20:07 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-05-29 18:20:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-05-29 18:20:07 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-05-29 18:20:15 INFO  - Shots processed: 1000000
+2015-05-29 18:20:16 INFO  - Shots processed: 1000000
+2015-05-29 18:20:17 INFO  - Shots processed: 1000000
+2015-05-29 18:20:17 INFO  - Shots processed: 1000000
+2015-05-29 18:20:17 INFO  - Shots processed: 1000000
+2015-05-29 18:20:23 INFO  - Shots processed: 2000000
+2015-05-29 18:20:24 INFO  - Shots processed: 2000000
+2015-05-29 18:20:25 INFO  - Shots processed: 2000000
+2015-05-29 18:20:27 INFO  - Shots processed: 2000000
+2015-05-29 18:20:27 INFO  - Shots processed: 2000000
+2015-05-29 18:20:30 INFO  - Shots processed: 1000000
+2015-05-29 18:20:31 INFO  - Shots processed: 3000000
+2015-05-29 18:20:34 INFO  - Shots processed: 3000000
+2015-05-29 18:20:34 INFO  - Shots processed: 3000000
+2015-05-29 18:20:39 INFO  - Shots processed: 4000000
+2015-05-29 18:20:40 INFO  - Shots processed: 2000000
+2015-05-29 18:20:41 INFO  - Shots processed: 3000000
+2015-05-29 18:20:44 INFO  - Shots processed: 3000000
+2015-05-29 18:20:47 INFO  - Shots processed: 5000000
+2015-05-29 18:20:47 INFO  - Shots processed: 3000000
+2015-05-29 18:20:47 INFO  - Shots processed: 4000000
+2015-05-29 18:20:53 INFO  - Shots processed: 4000000
+2015-05-29 18:20:56 INFO  - Shots processed: 4000000
+2015-05-29 18:20:58 INFO  - Shots processed: 4810881
+2015-05-29 18:20:58 INFO  - voxelisation is finished ( 63.0 s )
+2015-05-29 18:20:58 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101534.rxp.vox
+2015-05-29 18:21:00 INFO  - Shots processed: 6000000
+2015-05-29 18:21:06 INFO  - Shots processed: 4000000
+2015-05-29 18:21:09 INFO  - Shots processed: 4000000
+2015-05-29 18:21:16 INFO  - Shots processed: 5000000
+2015-05-29 18:21:21 INFO  - Shots processed: 7000000
+2015-05-29 18:21:22 INFO  - file written ( 24.0 s )
+2015-05-29 18:21:28 INFO  - Shots processed: 5000000
+2015-05-29 18:21:32 INFO  - Shots processed: 5000000
+2015-05-29 18:21:33 INFO  - Shots processed: 5000000
+2015-05-29 18:21:39 INFO  - Shots processed: 6000000
+2015-05-29 18:21:43 INFO  - Shots processed: 6000000
+2015-05-29 18:21:43 INFO  - Shots processed: 6000000
+2015-05-29 18:21:44 INFO  - Shots processed: 8000000
+2015-05-29 18:21:46 INFO  - Shots processed: 7000000
+2015-05-29 18:21:50 INFO  - Shots processed: 7000000
+2015-05-29 18:21:51 INFO  - Shots processed: 8000000
+2015-05-29 18:21:56 INFO  - Shots processed: 8000000
+2015-05-29 18:21:56 INFO  - Shots processed: 9000000
+2015-05-29 18:21:57 INFO  - Shots processed: 9000000
+2015-05-29 18:22:02 INFO  - Shots processed: 9000000
+2015-05-29 18:22:03 INFO  - Shots processed: 10000000
+2015-05-29 18:22:03 INFO  - Shots processed: 10000000
+2015-05-29 18:22:05 INFO  - Shots processed: 7000000
+2015-05-29 18:22:08 INFO  - Shots processed: 10000000
+2015-05-29 18:22:09 INFO  - Shots processed: 11000000
+2015-05-29 18:22:10 INFO  - Shots processed: 11000000
+2015-05-29 18:22:11 INFO  - Shots processed: 11295489
+2015-05-29 18:22:11 INFO  - voxelisation is finished ( 136.0 s )
+2015-05-29 18:22:11 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_115917.rxp.vox
+2015-05-29 18:22:12 INFO  - Shots processed: 11293701
+2015-05-29 18:22:12 INFO  - voxelisation is finished ( 137.0 s )
+2015-05-29 18:22:12 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_113724.rxp.vox
+2015-05-29 18:22:13 INFO  - Shots processed: 6000000
+2015-05-29 18:22:14 INFO  - Shots processed: 11000000
+2015-05-29 18:22:16 INFO  - Shots processed: 11295629
+2015-05-29 18:22:16 INFO  - voxelisation is finished ( 141.0 s )
+2015-05-29 18:22:16 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_112953.rxp.vox
+2015-05-29 18:22:18 INFO  - Shots processed: 8000000
+2015-05-29 18:22:26 INFO  - Shots processed: 9000000
+2015-05-29 18:22:32 INFO  - Shots processed: 10000000
+2015-05-29 18:22:38 INFO  - Shots processed: 11000000
+2015-05-29 18:22:40 INFO  - Shots processed: 11295882
+2015-05-29 18:22:40 INFO  - voxelisation is finished ( 165.0 s )
+2015-05-29 18:22:40 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_110207.rxp.vox
+2015-05-29 18:22:44 INFO  - file written ( 33.0 s )
+2015-05-29 18:22:45 INFO  - file written ( 33.0 s )
+2015-05-29 18:22:47 INFO  - Shots processed: 7000000
+2015-05-29 18:22:47 INFO  - file written ( 31.0 s )
+2015-05-29 18:22:54 INFO  - Shots processed: 8000000
+2015-05-29 18:23:00 INFO  - Shots processed: 9000000
+2015-05-29 18:23:06 INFO  - Shots processed: 10000000
+2015-05-29 18:23:06 INFO  - file written ( 26.0 s )
+2015-05-29 18:23:11 INFO  - Shots processed: 11000000
+2015-05-29 18:23:17 INFO  - Shots processed: 12000000
+2015-05-29 18:23:22 INFO  - Shots processed: 13000000
+2015-05-29 18:23:23 INFO  - Shots processed: 13166931
+2015-05-29 18:23:23 INFO  - voxelisation is finished ( 208.0 s )
+2015-05-29 18:23:23 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101944.rxp.vox
+2015-05-29 18:23:48 INFO  - file written ( 24.0 s )
+2015-05-29 18:23:48 ERROR - java.lang.NullPointerException
+2015-05-29 18:29:09 INFO  - Loading point cloud file...
+2015-05-29 18:29:09 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:29:11 INFO  - Point cloud file loaded
+2015-05-29 18:29:11 INFO  - Loading point cloud file...
+2015-05-29 18:29:11 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:29:11 INFO  - Point cloud file loaded
+2015-05-29 18:29:11 INFO  - rxp extraction is started
+2015-05-29 18:29:11 INFO  - allocate!!!!!!!!
+2015-05-29 18:29:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-05-29 18:29:11 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-05-29 18:29:11 INFO  - rxp extraction is started
+2015-05-29 18:29:11 INFO  - allocate!!!!!!!!
+2015-05-29 18:29:11 INFO  - rxp extraction is started
+2015-05-29 18:29:11 INFO  - allocate!!!!!!!!
+2015-05-29 18:29:11 INFO  - rxp extraction is started
+2015-05-29 18:29:11 INFO  - allocate!!!!!!!!
+2015-05-29 18:29:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-05-29 18:29:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-05-29 18:29:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-05-29 18:29:11 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-05-29 18:29:11 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-05-29 18:29:11 INFO  - rxp extraction is started
+2015-05-29 18:29:11 INFO  - allocate!!!!!!!!
+2015-05-29 18:29:11 INFO  - rxp extraction is started
+2015-05-29 18:29:11 INFO  - allocate!!!!!!!!
+2015-05-29 18:29:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-05-29 18:29:11 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-05-29 18:29:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-05-29 18:29:11 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-05-29 18:29:11 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-05-29 18:29:19 INFO  - Shots processed: 1000000
+2015-05-29 18:29:19 INFO  - Shots processed: 1000000
+2015-05-29 18:29:19 INFO  - Shots processed: 1000000
+2015-05-29 18:29:19 INFO  - Shots processed: 1000000
+2015-05-29 18:29:20 INFO  - Shots processed: 1000000
+2015-05-29 18:29:22 INFO  - Shots processed: 1000000
+2015-05-29 18:29:26 INFO  - Shots processed: 2000000
+2015-05-29 18:29:26 INFO  - Shots processed: 2000000
+2015-05-29 18:29:26 INFO  - Shots processed: 2000000
+2015-05-29 18:29:27 INFO  - Shots processed: 2000000
+2015-05-29 18:29:28 INFO  - Shots processed: 2000000
+2015-05-29 18:29:29 INFO  - Shots processed: 2000000
+2015-05-29 18:29:32 INFO  - Shots processed: 3000000
+2015-05-29 18:29:33 INFO  - Shots processed: 3000000
+2015-05-29 18:29:35 INFO  - Shots processed: 3000000
+2015-05-29 18:29:36 INFO  - Shots processed: 3000000
+2015-05-29 18:29:37 INFO  - Shots processed: 3000000
+2015-05-29 18:29:37 INFO  - Shots processed: 3000000
+2015-05-29 18:29:39 INFO  - Shots processed: 4000000
+2015-05-29 18:29:41 INFO  - Shots processed: 4000000
+2015-05-29 18:29:44 INFO  - Shots processed: 4000000
+2015-05-29 18:29:46 INFO  - Shots processed: 4000000
+2015-05-29 18:29:46 INFO  - Shots processed: 4000000
+2015-05-29 18:29:47 INFO  - Shots processed: 5000000
+2015-05-29 18:29:49 INFO  - Shots processed: 4000000
+2015-05-29 18:29:50 INFO  - Shots processed: 4810881
+2015-05-29 18:29:50 INFO  - voxelisation is finished ( 38.0 s )
+2015-05-29 18:29:50 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101534.rxp.vox
+2015-05-29 18:29:50 INFO  - file written ( 0.0 s )
+2015-05-29 18:29:52 INFO  - Shots processed: 5000000
+2015-05-29 18:29:54 INFO  - Shots processed: 5000000
+2015-05-29 18:29:55 INFO  - Shots processed: 6000000
+2015-05-29 18:29:57 INFO  - Shots processed: 5000000
+2015-05-29 18:29:57 INFO  - Shots processed: 5000000
+2015-05-29 18:30:01 INFO  - Shots processed: 6000000
+2015-05-29 18:30:02 INFO  - Shots processed: 6000000
+2015-05-29 18:30:03 INFO  - Shots processed: 7000000
+2015-05-29 18:30:03 INFO  - Shots processed: 6000000
+2015-05-29 18:30:07 INFO  - Shots processed: 7000000
+2015-05-29 18:30:10 INFO  - Shots processed: 7000000
+2015-05-29 18:30:10 INFO  - Shots processed: 7000000
+2015-05-29 18:30:10 INFO  - Shots processed: 6000000
+2015-05-29 18:30:13 INFO  - Shots processed: 8000000
+2015-05-29 18:30:13 INFO  - Shots processed: 8000000
+2015-05-29 18:30:16 INFO  - Shots processed: 8000000
+2015-05-29 18:30:16 INFO  - Shots processed: 8000000
+2015-05-29 18:30:19 INFO  - Shots processed: 9000000
+2015-05-29 18:30:20 INFO  - Shots processed: 9000000
+2015-05-29 18:30:21 INFO  - Shots processed: 7000000
+2015-05-29 18:30:22 INFO  - Shots processed: 9000000
+2015-05-29 18:30:22 INFO  - Shots processed: 9000000
+2015-05-29 18:30:25 INFO  - Shots processed: 10000000
+2015-05-29 18:30:27 INFO  - Shots processed: 10000000
+2015-05-29 18:30:27 INFO  - Shots processed: 8000000
+2015-05-29 18:30:28 INFO  - Shots processed: 10000000
+2015-05-29 18:30:28 INFO  - Shots processed: 10000000
+2015-05-29 18:30:32 INFO  - Shots processed: 11000000
+2015-05-29 18:30:33 INFO  - Shots processed: 11295629
+2015-05-29 18:30:33 INFO  - voxelisation is finished ( 82.0 s )
+2015-05-29 18:30:33 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_112953.rxp.vox
+2015-05-29 18:30:34 INFO  - file written ( 0.0 s )
+2015-05-29 18:30:34 INFO  - Shots processed: 11000000
+2015-05-29 18:30:34 INFO  - Shots processed: 9000000
+2015-05-29 18:30:34 INFO  - Shots processed: 11000000
+2015-05-29 18:30:34 INFO  - Shots processed: 11000000
+2015-05-29 18:30:36 INFO  - Shots processed: 11295489
+2015-05-29 18:30:36 INFO  - voxelisation is finished ( 84.0 s )
+2015-05-29 18:30:36 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_115917.rxp.vox
+2015-05-29 18:30:36 INFO  - Shots processed: 11293701
+2015-05-29 18:30:36 INFO  - voxelisation is finished ( 84.0 s )
+2015-05-29 18:30:36 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_113724.rxp.vox
+2015-05-29 18:30:36 INFO  - Shots processed: 11295882
+2015-05-29 18:30:36 INFO  - voxelisation is finished ( 84.0 s )
+2015-05-29 18:30:36 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_110207.rxp.vox
+2015-05-29 18:30:36 INFO  - file written ( 0.0 s )
+2015-05-29 18:30:36 INFO  - file written ( 0.0 s )
+2015-05-29 18:30:36 INFO  - file written ( 0.0 s )
+2015-05-29 18:30:39 INFO  - Shots processed: 10000000
+2015-05-29 18:30:45 INFO  - Shots processed: 11000000
+2015-05-29 18:30:50 INFO  - Shots processed: 12000000
+2015-05-29 18:30:56 INFO  - Shots processed: 13000000
+2015-05-29 18:30:56 INFO  - Shots processed: 13166931
+2015-05-29 18:30:56 INFO  - voxelisation is finished ( 105.0 s )
+2015-05-29 18:30:56 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101944.rxp.vox
+2015-05-29 18:30:57 INFO  - file written ( 0.0 s )
+2015-05-29 18:30:57 ERROR - java.lang.NullPointerException
+2015-05-29 18:35:09 INFO  - Loading point cloud file...
+2015-05-29 18:35:09 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:35:11 INFO  - Point cloud file loaded
+2015-05-29 18:35:11 INFO  - Loading point cloud file...
+2015-05-29 18:35:11 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:35:12 INFO  - Point cloud file loaded
+2015-05-29 18:35:12 INFO  - Saved libfile: /tmp/RivLibLibrary-2500494362508436351.tmp
+2015-05-29 18:35:12 INFO  - /tmp/RivLibLibrary-2500494362508436351.tmp
+2015-05-29 18:35:12 INFO  - rxp extraction is started
+2015-05-29 18:35:12 INFO  - rxp extraction is started
+2015-05-29 18:35:12 INFO  - rxp extraction is started
+2015-05-29 18:35:12 INFO  - rxp extraction is started
+2015-05-29 18:35:12 INFO  - rxp extraction is started
+2015-05-29 18:35:12 INFO  - rxp extraction is started
+2015-05-29 18:35:12 INFO  - allocate!!!!!!!!
+2015-05-29 18:35:12 INFO  - allocate!!!!!!!!
+2015-05-29 18:35:12 INFO  - allocate!!!!!!!!
+2015-05-29 18:35:12 INFO  - allocate!!!!!!!!
+2015-05-29 18:35:12 INFO  - allocate!!!!!!!!
+2015-05-29 18:35:12 INFO  - allocate!!!!!!!!
+2015-05-29 18:35:12 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(6, 7, 9)
+			Toricity 	:	false
+
+2015-05-29 18:35:12 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(6, 7, 9)
+			Toricity 	:	false
+
+2015-05-29 18:35:12 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(6, 7, 9)
+			Toricity 	:	false
+
+2015-05-29 18:35:12 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(6, 7, 9)
+			Toricity 	:	false
+
+2015-05-29 18:35:12 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-05-29 18:35:12 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(6, 7, 9)
+			Toricity 	:	false
+
+2015-05-29 18:35:12 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-05-29 18:35:12 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-05-29 18:35:12 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-05-29 18:35:12 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(6, 7, 9)
+			Toricity 	:	false
+
+2015-05-29 18:35:12 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-05-29 18:35:12 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-05-29 18:35:20 INFO  - Shots processed: 1000000
+2015-05-29 18:35:21 INFO  - Shots processed: 1000000
+2015-05-29 18:35:21 INFO  - Shots processed: 1000000
+2015-05-29 18:35:21 INFO  - Shots processed: 1000000
+2015-05-29 18:35:21 INFO  - Shots processed: 1000000
+2015-05-29 18:35:22 INFO  - Shots processed: 1000000
+2015-05-29 18:35:27 INFO  - Shots processed: 2000000
+2015-05-29 18:35:28 INFO  - Shots processed: 2000000
+2015-05-29 18:35:29 INFO  - Shots processed: 2000000
+2015-05-29 18:35:29 INFO  - Shots processed: 2000000
+2015-05-29 18:35:30 INFO  - Shots processed: 2000000
+2015-05-29 18:35:30 INFO  - Shots processed: 2000000
+2015-05-29 18:35:34 INFO  - Shots processed: 3000000
+2015-05-29 18:35:35 INFO  - Shots processed: 3000000
+2015-05-29 18:35:36 INFO  - Shots processed: 3000000
+2015-05-29 18:35:38 INFO  - Shots processed: 3000000
+2015-05-29 18:35:38 INFO  - Shots processed: 3000000
+2015-05-29 18:35:40 INFO  - Shots processed: 3000000
+2015-05-29 18:35:41 INFO  - Shots processed: 4000000
+2015-05-29 18:35:43 INFO  - Shots processed: 4000000
+2015-05-29 18:35:44 INFO  - Shots processed: 4000000
+2015-05-29 18:35:46 INFO  - Shots processed: 4000000
+2015-05-29 18:35:47 INFO  - Shots processed: 4000000
+2015-05-29 18:35:49 INFO  - Shots processed: 4810881
+2015-05-29 18:35:49 INFO  - voxelisation is finished ( 37.0 s )
+2015-05-29 18:35:49 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101534.rxp.vox
+2015-05-29 18:35:49 INFO  - file written ( 0.0 s )
+2015-05-29 18:35:50 INFO  - Shots processed: 5000000
+2015-05-29 18:35:50 INFO  - Shots processed: 4000000
+2015-05-29 18:35:56 INFO  - Shots processed: 5000000
+2015-05-29 18:35:56 INFO  - Shots processed: 5000000
+2015-05-29 18:35:56 INFO  - Shots processed: 5000000
+2015-05-29 18:35:58 INFO  - Shots processed: 6000000
+2015-05-29 18:35:59 INFO  - Shots processed: 5000000
+2015-05-29 18:36:03 INFO  - Shots processed: 6000000
+2015-05-29 18:36:04 INFO  - Shots processed: 6000000
+2015-05-29 18:36:06 INFO  - Shots processed: 6000000
+2015-05-29 18:36:06 INFO  - Shots processed: 7000000
+2015-05-29 18:36:06 INFO  - Shots processed: 6000000
+2015-05-29 18:36:09 INFO  - Shots processed: 7000000
+2015-05-29 18:36:11 INFO  - Shots processed: 7000000
+2015-05-29 18:36:12 INFO  - Shots processed: 7000000
+2015-05-29 18:36:14 INFO  - Shots processed: 8000000
+2015-05-29 18:36:14 INFO  - Shots processed: 7000000
+2015-05-29 18:36:15 INFO  - Shots processed: 8000000
+2015-05-29 18:36:17 INFO  - Shots processed: 8000000
+2015-05-29 18:36:17 INFO  - Shots processed: 8000000
+2015-05-29 18:36:20 INFO  - Shots processed: 8000000
+2015-05-29 18:36:21 INFO  - Shots processed: 9000000
+2015-05-29 18:36:21 INFO  - Shots processed: 9000000
+2015-05-29 18:36:23 INFO  - Shots processed: 9000000
+2015-05-29 18:36:23 INFO  - Shots processed: 9000000
+2015-05-29 18:36:25 INFO  - Shots processed: 9000000
+2015-05-29 18:36:27 INFO  - Shots processed: 10000000
+2015-05-29 18:36:28 INFO  - Shots processed: 10000000
+2015-05-29 18:36:29 INFO  - Shots processed: 10000000
+2015-05-29 18:36:29 INFO  - Shots processed: 10000000
+2015-05-29 18:36:32 INFO  - Shots processed: 10000000
+2015-05-29 18:36:34 INFO  - Shots processed: 11000000
+2015-05-29 18:36:34 INFO  - Shots processed: 11000000
+2015-05-29 18:36:36 INFO  - Shots processed: 11000000
+2015-05-29 18:36:36 INFO  - Shots processed: 11295629
+2015-05-29 18:36:36 INFO  - voxelisation is finished ( 84.0 s )
+2015-05-29 18:36:36 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_112953.rxp.vox
+2015-05-29 18:36:36 INFO  - file written ( 0.0 s )
+2015-05-29 18:36:36 INFO  - Shots processed: 11295489
+2015-05-29 18:36:36 INFO  - voxelisation is finished ( 84.0 s )
+2015-05-29 18:36:36 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_115917.rxp.vox
+2015-05-29 18:36:36 INFO  - file written ( 0.0 s )
+2015-05-29 18:36:36 INFO  - Shots processed: 11000000
+2015-05-29 18:36:38 INFO  - Shots processed: 11295882
+2015-05-29 18:36:38 INFO  - voxelisation is finished ( 85.0 s )
+2015-05-29 18:36:38 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_110207.rxp.vox
+2015-05-29 18:36:38 INFO  - file written ( 0.0 s )
+2015-05-29 18:36:38 INFO  - Shots processed: 11293701
+2015-05-29 18:36:38 INFO  - voxelisation is finished ( 86.0 s )
+2015-05-29 18:36:38 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_113724.rxp.vox
+2015-05-29 18:36:38 INFO  - file written ( 0.0 s )
+2015-05-29 18:36:39 INFO  - Shots processed: 11000000
+2015-05-29 18:36:44 INFO  - Shots processed: 12000000
+2015-05-29 18:36:49 INFO  - Shots processed: 13000000
+2015-05-29 18:36:50 INFO  - Shots processed: 13166931
+2015-05-29 18:36:50 INFO  - voxelisation is finished ( 97.0 s )
+2015-05-29 18:36:50 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101944.rxp.vox
+2015-05-29 18:36:50 INFO  - file written ( 0.0 s )
+2015-05-29 18:36:50 ERROR - Unknwown exception
+java.lang.NullPointerException
+	at fr.ird.voxelidar.voxelisation.VoxelisationTool.voxeliseFromRsp(VoxelisationTool.java:228)
+	at fr.ird.voxelidar.gui.MainFrameController$30$1.call(MainFrameController.java:2489)
+	at fr.ird.voxelidar.gui.MainFrameController$30$1.call(MainFrameController.java:2400)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$389/778601893.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$387/1188260488.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-05-29 18:40:44 INFO  - Loading point cloud file...
+2015-05-29 18:40:44 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:40:47 INFO  - Point cloud file loaded
+2015-05-29 18:40:47 INFO  - Loading point cloud file...
+2015-05-29 18:40:47 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:40:47 INFO  - Point cloud file loaded
+2015-05-29 18:40:47 INFO  - Saved libfile: /tmp/RivLibLibrary-3826943544244398240.tmp
+2015-05-29 18:40:47 INFO  - /tmp/RivLibLibrary-3826943544244398240.tmp
+2015-05-29 18:40:47 INFO  - rxp extraction is started
+2015-05-29 18:40:47 INFO  - rxp extraction is started
+2015-05-29 18:40:47 INFO  - rxp extraction is started
+2015-05-29 18:40:47 INFO  - rxp extraction is started
+2015-05-29 18:40:47 INFO  - rxp extraction is started
+2015-05-29 18:40:47 INFO  - rxp extraction is started
+2015-05-29 18:40:47 INFO  - allocate!!!!!!!!
+2015-05-29 18:40:47 INFO  - allocate!!!!!!!!
+2015-05-29 18:40:47 INFO  - allocate!!!!!!!!
+2015-05-29 18:40:47 INFO  - allocate!!!!!!!!
+2015-05-29 18:40:47 INFO  - allocate!!!!!!!!
+2015-05-29 18:40:47 INFO  - allocate!!!!!!!!
+2015-05-29 18:40:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(6, 7, 9)
+			Toricity 	:	false
+
+2015-05-29 18:40:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(6, 7, 9)
+			Toricity 	:	false
+
+2015-05-29 18:40:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(6, 7, 9)
+			Toricity 	:	false
+
+2015-05-29 18:40:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(6, 7, 9)
+			Toricity 	:	false
+
+2015-05-29 18:40:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(6, 7, 9)
+			Toricity 	:	false
+
+2015-05-29 18:40:47 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-05-29 18:40:47 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-05-29 18:40:47 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-05-29 18:40:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(6, 7, 9)
+			Toricity 	:	false
+
+2015-05-29 18:40:47 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-05-29 18:40:47 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-05-29 18:40:47 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-05-29 18:40:55 INFO  - Shots processed: 1000000
+2015-05-29 18:40:56 INFO  - Shots processed: 1000000
+2015-05-29 18:40:56 INFO  - Shots processed: 1000000
+2015-05-29 18:40:56 INFO  - Shots processed: 1000000
+2015-05-29 18:40:56 INFO  - Shots processed: 1000000
+2015-05-29 18:40:57 INFO  - Shots processed: 1000000
+2015-05-29 18:41:03 INFO  - Shots processed: 2000000
+2015-05-29 18:41:04 INFO  - Shots processed: 2000000
+2015-05-29 18:41:04 INFO  - Shots processed: 2000000
+2015-05-29 18:41:05 INFO  - Shots processed: 2000000
+2015-05-29 18:41:05 INFO  - Shots processed: 2000000
+2015-05-29 18:41:06 INFO  - Shots processed: 2000000
+2015-05-29 18:41:10 INFO  - Shots processed: 3000000
+2015-05-29 18:41:11 INFO  - Shots processed: 3000000
+2015-05-29 18:41:11 INFO  - Shots processed: 3000000
+2015-05-29 18:41:13 INFO  - Shots processed: 3000000
+2015-05-29 18:41:14 INFO  - Shots processed: 3000000
+2015-05-29 18:41:17 INFO  - Shots processed: 4000000
+2015-05-29 18:41:18 INFO  - Shots processed: 3000000
+2015-05-29 18:41:18 INFO  - Shots processed: 4000000
+2015-05-29 18:41:19 INFO  - Shots processed: 4000000
+2015-05-29 18:41:21 INFO  - Shots processed: 4000000
+2015-05-29 18:41:24 INFO  - Shots processed: 4000000
+2015-05-29 18:41:25 INFO  - Shots processed: 4810881
+2015-05-29 18:41:25 INFO  - voxelisation is finished ( 37.0 s )
+2015-05-29 18:41:25 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101534.rxp.vox
+2015-05-29 18:41:25 INFO  - file written ( 0.0 s )
+2015-05-29 18:41:25 INFO  - Shots processed: 5000000
+2015-05-29 18:41:28 INFO  - Shots processed: 4000000
+2015-05-29 18:41:30 INFO  - Shots processed: 5000000
+2015-05-29 18:41:32 INFO  - Shots processed: 5000000
+2015-05-29 18:41:33 INFO  - Shots processed: 6000000
+2015-05-29 18:41:33 INFO  - Shots processed: 5000000
+2015-05-29 18:41:35 INFO  - Shots processed: 5000000
+2015-05-29 18:41:38 INFO  - Shots processed: 6000000
+2015-05-29 18:41:39 INFO  - Shots processed: 6000000
+2015-05-29 18:41:40 INFO  - Shots processed: 7000000
+2015-05-29 18:41:42 INFO  - Shots processed: 6000000
+2015-05-29 18:41:43 INFO  - Shots processed: 6000000
+2015-05-29 18:41:45 INFO  - Shots processed: 7000000
+2015-05-29 18:41:45 INFO  - Shots processed: 7000000
+2015-05-29 18:41:48 INFO  - Shots processed: 7000000
+2015-05-29 18:41:49 INFO  - Shots processed: 8000000
+2015-05-29 18:41:51 INFO  - Shots processed: 8000000
+2015-05-29 18:41:51 INFO  - Shots processed: 7000000
+2015-05-29 18:41:51 INFO  - Shots processed: 8000000
+2015-05-29 18:41:55 INFO  - Shots processed: 8000000
+2015-05-29 18:41:56 INFO  - Shots processed: 9000000
+2015-05-29 18:41:57 INFO  - Shots processed: 9000000
+2015-05-29 18:41:57 INFO  - Shots processed: 9000000
+2015-05-29 18:41:58 INFO  - Shots processed: 8000000
+2015-05-29 18:42:01 INFO  - Shots processed: 9000000
+2015-05-29 18:42:03 INFO  - Shots processed: 10000000
+2015-05-29 18:42:04 INFO  - Shots processed: 10000000
+2015-05-29 18:42:04 INFO  - Shots processed: 10000000
+2015-05-29 18:42:04 INFO  - Shots processed: 9000000
+2015-05-29 18:42:07 INFO  - Shots processed: 10000000
+2015-05-29 18:42:10 INFO  - Shots processed: 11000000
+2015-05-29 18:42:10 INFO  - Shots processed: 11000000
+2015-05-29 18:42:10 INFO  - Shots processed: 11000000
+2015-05-29 18:42:11 INFO  - Shots processed: 10000000
+2015-05-29 18:42:12 INFO  - Shots processed: 11295489
+2015-05-29 18:42:12 INFO  - voxelisation is finished ( 84.0 s )
+2015-05-29 18:42:12 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_115917.rxp.vox
+2015-05-29 18:42:12 INFO  - file written ( 0.0 s )
+2015-05-29 18:42:12 INFO  - Shots processed: 11295629
+2015-05-29 18:42:12 INFO  - voxelisation is finished ( 84.0 s )
+2015-05-29 18:42:12 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_112953.rxp.vox
+2015-05-29 18:42:12 INFO  - file written ( 0.0 s )
+2015-05-29 18:42:12 INFO  - Shots processed: 11295882
+2015-05-29 18:42:12 INFO  - voxelisation is finished ( 84.0 s )
+2015-05-29 18:42:12 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_110207.rxp.vox
+2015-05-29 18:42:12 INFO  - file written ( 0.0 s )
+2015-05-29 18:42:13 INFO  - Shots processed: 11000000
+2015-05-29 18:42:15 INFO  - Shots processed: 11293701
+2015-05-29 18:42:15 INFO  - voxelisation is finished ( 87.0 s )
+2015-05-29 18:42:15 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_113724.rxp.vox
+2015-05-29 18:42:15 INFO  - file written ( 0.0 s )
+2015-05-29 18:42:16 INFO  - Shots processed: 11000000
+2015-05-29 18:42:22 INFO  - Shots processed: 12000000
+2015-05-29 18:42:27 INFO  - Shots processed: 13000000
+2015-05-29 18:42:28 INFO  - Shots processed: 13166931
+2015-05-29 18:42:28 INFO  - voxelisation is finished ( 100.0 s )
+2015-05-29 18:42:28 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101944.rxp.vox
+2015-05-29 18:42:28 INFO  - file written ( 0.0 s )
+2015-05-29 18:42:28 INFO  - Voxelisation finished in 104.0 s
+2015-05-29 18:42:35 INFO  - Merging in progress, file 1 : 6
+2015-05-29 18:42:35 INFO  - Merging in progress, file 2 : 6
+2015-05-29 18:42:35 INFO  - Merging in progress, file 3 : 6
+2015-05-29 18:42:35 INFO  - Merging in progress, file 4 : 6
+2015-05-29 18:42:35 INFO  - Merging in progress, file 5 : 6
+2015-05-29 18:42:35 INFO  - Merging in progress, file 6 : 6
+2015-05-29 18:42:35 INFO  - Compute angleMean
+2015-05-29 18:42:35 INFO  - Compute lMeanTotal
+2015-05-29 18:42:35 INFO  - Compute transmittance and PAD
+2015-05-29 18:42:35 INFO  - writing output file: /home/calcul/Documents/Julien/test_tls_pierre/output2/merged.vox
+2015-05-29 18:42:35 INFO  - file written ( 0.0 s )
+2015-05-29 18:42:35 INFO  - Voxelisation finished in 111.0 s
+2015-05-29 18:42:35 INFO  - Voxelisation finished in 111.0 s
+2015-05-29 18:43:07 INFO  - Loading point cloud file...
+2015-05-29 18:43:07 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:43:09 INFO  - Point cloud file loaded
+2015-05-29 18:43:09 INFO  - Loading point cloud file...
+2015-05-29 18:43:09 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:43:10 INFO  - Point cloud file loaded
+2015-05-29 18:43:10 INFO  - rxp extraction is started
+2015-05-29 18:43:10 INFO  - allocate!!!!!!!!
+2015-05-29 18:43:10 INFO  - rxp extraction is started
+2015-05-29 18:43:10 INFO  - allocate!!!!!!!!
+2015-05-29 18:43:10 INFO  - rxp extraction is started
+2015-05-29 18:43:10 INFO  - allocate!!!!!!!!
+2015-05-29 18:43:10 INFO  - rxp extraction is started
+2015-05-29 18:43:10 INFO  - allocate!!!!!!!!
+2015-05-29 18:43:10 INFO  - rxp extraction is started
+2015-05-29 18:43:10 INFO  - allocate!!!!!!!!
+2015-05-29 18:43:10 INFO  - rxp extraction is started
+2015-05-29 18:43:10 INFO  - allocate!!!!!!!!
+2015-05-29 18:43:24 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-05-29 18:43:24 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-05-29 18:43:24 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-05-29 18:43:24 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-05-29 18:43:24 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-05-29 18:43:24 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-05-29 18:43:24 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-05-29 18:43:24 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-05-29 18:43:24 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-05-29 18:43:24 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-05-29 18:43:24 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-05-29 18:43:24 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-05-29 18:43:34 INFO  - Shots processed: 1000000
+2015-05-29 18:43:35 INFO  - Shots processed: 1000000
+2015-05-29 18:43:35 INFO  - Shots processed: 1000000
+2015-05-29 18:43:35 INFO  - Shots processed: 1000000
+2015-05-29 18:43:36 INFO  - Shots processed: 1000000
+2015-05-29 18:43:41 INFO  - Shots processed: 2000000
+2015-05-29 18:43:43 INFO  - Shots processed: 2000000
+2015-05-29 18:43:44 INFO  - Shots processed: 2000000
+2015-05-29 18:43:45 INFO  - Shots processed: 2000000
+2015-05-29 18:43:47 INFO  - Shots processed: 2000000
+2015-05-29 18:43:48 INFO  - Shots processed: 1000000
+2015-05-29 18:43:48 INFO  - Shots processed: 3000000
+2015-05-29 18:43:52 INFO  - Shots processed: 3000000
+2015-05-29 18:43:52 INFO  - Shots processed: 3000000
+2015-05-29 18:43:55 INFO  - Shots processed: 4000000
+2015-05-29 18:43:55 INFO  - Shots processed: 2000000
+2015-05-29 18:44:02 INFO  - Shots processed: 3000000
+2015-05-29 18:44:02 INFO  - Shots processed: 3000000
+2015-05-29 18:44:04 INFO  - Shots processed: 5000000
+2015-05-29 18:44:06 INFO  - Shots processed: 3000000
+2015-05-29 18:44:06 INFO  - Shots processed: 4000000
+2015-05-29 18:44:08 INFO  - Shots processed: 4000000
+2015-05-29 18:44:13 INFO  - Shots processed: 4000000
+2015-05-29 18:44:14 INFO  - Shots processed: 4810881
+2015-05-29 18:44:14 INFO  - voxelisation is finished ( 64.0 s )
+2015-05-29 18:44:14 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101534.rxp.vox
+2015-05-29 18:44:21 INFO  - Shots processed: 6000000
+2015-05-29 18:44:27 INFO  - Shots processed: 4000000
+2015-05-29 18:44:28 INFO  - Shots processed: 4000000
+2015-05-29 18:44:35 INFO  - Shots processed: 5000000
+2015-05-29 18:44:37 INFO  - file written ( 22.0 s )
+2015-05-29 18:44:41 INFO  - Shots processed: 7000000
+2015-05-29 18:44:45 INFO  - Shots processed: 5000000
+2015-05-29 18:44:46 INFO  - Shots processed: 5000000
+2015-05-29 18:44:47 INFO  - Shots processed: 5000000
+2015-05-29 18:44:56 INFO  - Shots processed: 6000000
+2015-05-29 18:44:58 INFO  - Shots processed: 6000000
+2015-05-29 18:44:59 INFO  - Shots processed: 6000000
+2015-05-29 18:45:02 INFO  - Shots processed: 8000000
+2015-05-29 18:45:02 INFO  - Shots processed: 7000000
+2015-05-29 18:45:04 INFO  - Shots processed: 7000000
+2015-05-29 18:45:08 INFO  - Shots processed: 8000000
+2015-05-29 18:45:10 INFO  - Shots processed: 8000000
+2015-05-29 18:45:14 INFO  - Shots processed: 9000000
+2015-05-29 18:45:14 INFO  - Shots processed: 9000000
+2015-05-29 18:45:16 INFO  - Shots processed: 9000000
+2015-05-29 18:45:20 INFO  - Shots processed: 7000000
+2015-05-29 18:45:21 INFO  - Shots processed: 10000000
+2015-05-29 18:45:21 INFO  - Shots processed: 10000000
+2015-05-29 18:45:23 INFO  - Shots processed: 10000000
+2015-05-29 18:45:24 INFO  - Shots processed: 6000000
+2015-05-29 18:45:28 INFO  - Shots processed: 11000000
+2015-05-29 18:45:28 INFO  - Shots processed: 11000000
+2015-05-29 18:45:29 INFO  - Shots processed: 11000000
+2015-05-29 18:45:30 INFO  - Shots processed: 11293701
+2015-05-29 18:45:30 INFO  - voxelisation is finished ( 139.0 s )
+2015-05-29 18:45:30 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_113724.rxp.vox
+2015-05-29 18:45:30 INFO  - Shots processed: 11295489
+2015-05-29 18:45:30 INFO  - voxelisation is finished ( 139.0 s )
+2015-05-29 18:45:30 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_115917.rxp.vox
+2015-05-29 18:45:31 INFO  - Shots processed: 11295629
+2015-05-29 18:45:31 INFO  - voxelisation is finished ( 141.0 s )
+2015-05-29 18:45:31 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_112953.rxp.vox
+2015-05-29 18:45:31 INFO  - Shots processed: 8000000
+2015-05-29 18:45:39 INFO  - Shots processed: 9000000
+2015-05-29 18:45:45 INFO  - Shots processed: 10000000
+2015-05-29 18:45:51 INFO  - Shots processed: 11000000
+2015-05-29 18:45:53 INFO  - Shots processed: 11295882
+2015-05-29 18:45:53 INFO  - voxelisation is finished ( 162.0 s )
+2015-05-29 18:45:53 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_110207.rxp.vox
+2015-05-29 18:45:56 INFO  - Shots processed: 7000000
+2015-05-29 18:46:04 INFO  - Shots processed: 8000000
+2015-05-29 18:46:04 INFO  - file written ( 34.0 s )
+2015-05-29 18:46:05 INFO  - file written ( 34.0 s )
+2015-05-29 18:46:05 INFO  - file written ( 34.0 s )
+2015-05-29 18:46:09 INFO  - Shots processed: 9000000
+2015-05-29 18:46:15 INFO  - Shots processed: 10000000
+2015-05-29 18:46:21 INFO  - file written ( 28.0 s )
+2015-05-29 18:46:21 INFO  - Shots processed: 11000000
+2015-05-29 18:46:27 INFO  - Shots processed: 12000000
+2015-05-29 18:46:32 INFO  - Shots processed: 13000000
+2015-05-29 18:46:33 INFO  - Shots processed: 13166931
+2015-05-29 18:46:33 INFO  - voxelisation is finished ( 203.0 s )
+2015-05-29 18:46:33 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101944.rxp.vox
+2015-05-29 18:46:59 INFO  - file written ( 26.0 s )
+2015-05-29 18:46:59 INFO  - Voxelisation finished in 231.0 s
+2015-05-29 18:46:59 INFO  - Merging in progress, file 1 : 6
+2015-05-29 18:47:09 INFO  - Merging in progress, file 2 : 6
+2015-05-29 18:47:34 INFO  - Merging in progress, file 3 : 6
+2015-05-29 18:47:54 INFO  - Merging in progress, file 4 : 6
+2015-05-29 18:48:14 INFO  - Merging in progress, file 5 : 6
+2015-05-29 18:48:34 INFO  - Merging in progress, file 6 : 6
+2015-05-29 18:48:54 INFO  - Compute angleMean
+2015-05-29 18:48:55 INFO  - Compute lMeanTotal
+2015-05-29 18:48:55 INFO  - Compute transmittance and PAD
+2015-05-29 18:48:55 INFO  - writing output file: /home/calcul/Documents/Julien/test_tls_pierre/output2/merged.vox
+2015-05-29 18:49:07 INFO  - file written ( 12.0 s )
+2015-05-29 18:49:07 INFO  - Voxelisation finished in 360.0 s
+2015-05-29 18:49:07 INFO  - Voxelisation finished in 360.0 s
+2015-05-29 18:58:22 INFO  - Loading point cloud file...
+2015-05-29 18:58:22 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:58:25 INFO  - Point cloud file loaded
+2015-05-29 18:58:25 INFO  - Loading point cloud file...
+2015-05-29 18:58:25 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 18:58:26 INFO  - Point cloud file loaded
+2015-05-29 18:58:26 INFO  - Saved libfile: /tmp/RivLibLibrary-1302521486816999076.tmp
+2015-05-29 18:58:26 INFO  - /tmp/RivLibLibrary-1302521486816999076.tmp
+2015-05-29 18:58:26 INFO  - rxp extraction is started
+2015-05-29 18:58:26 INFO  - rxp extraction is started
+2015-05-29 18:58:26 INFO  - rxp extraction is started
+2015-05-29 18:58:26 INFO  - rxp extraction is started
+2015-05-29 18:58:26 INFO  - rxp extraction is started
+2015-05-29 18:58:26 INFO  - rxp extraction is started
+2015-05-29 18:58:26 INFO  - allocate!!!!!!!!
+2015-05-29 18:58:26 INFO  - allocate!!!!!!!!
+2015-05-29 18:58:26 INFO  - allocate!!!!!!!!
+2015-05-29 18:58:26 INFO  - allocate!!!!!!!!
+2015-05-29 18:58:26 INFO  - allocate!!!!!!!!
+2015-05-29 18:58:26 INFO  - allocate!!!!!!!!
+2015-05-29 18:58:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(56, 68, 87)
+			Toricity 	:	false
+
+2015-05-29 18:58:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-05-29 18:58:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(56, 68, 87)
+			Toricity 	:	false
+
+2015-05-29 18:58:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-05-29 18:58:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(56, 68, 87)
+			Toricity 	:	false
+
+2015-05-29 18:58:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(56, 68, 87)
+			Toricity 	:	false
+
+2015-05-29 18:58:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(56, 68, 87)
+			Toricity 	:	false
+
+2015-05-29 18:58:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-05-29 18:58:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(56, 68, 87)
+			Toricity 	:	false
+
+2015-05-29 18:58:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-05-29 18:58:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-05-29 18:58:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-05-29 18:58:34 INFO  - Shots processed: 1000000
+2015-05-29 18:58:34 INFO  - Shots processed: 1000000
+2015-05-29 18:58:35 INFO  - Shots processed: 1000000
+2015-05-29 18:58:35 INFO  - Shots processed: 1000000
+2015-05-29 18:58:35 INFO  - Shots processed: 1000000
+2015-05-29 18:58:39 INFO  - Shots processed: 1000000
+2015-05-29 18:58:41 INFO  - Shots processed: 2000000
+2015-05-29 18:58:42 INFO  - Shots processed: 2000000
+2015-05-29 18:58:43 INFO  - Shots processed: 2000000
+2015-05-29 18:58:43 INFO  - Shots processed: 2000000
+2015-05-29 18:58:44 INFO  - Shots processed: 2000000
+2015-05-29 18:58:47 INFO  - Shots processed: 2000000
+2015-05-29 18:58:48 INFO  - Shots processed: 3000000
+2015-05-29 18:58:50 INFO  - Shots processed: 3000000
+2015-05-29 18:58:51 INFO  - Shots processed: 3000000
+2015-05-29 18:58:54 INFO  - Shots processed: 3000000
+2015-05-29 18:58:55 INFO  - Shots processed: 4000000
+2015-05-29 18:58:55 INFO  - Shots processed: 3000000
+2015-05-29 18:58:56 INFO  - Shots processed: 3000000
+2015-05-29 18:59:01 INFO  - Shots processed: 4000000
+2015-05-29 18:59:01 INFO  - Shots processed: 4000000
+2015-05-29 18:59:02 INFO  - Shots processed: 4000000
+2015-05-29 18:59:03 INFO  - Shots processed: 5000000
+2015-05-29 18:59:06 INFO  - Shots processed: 4810881
+2015-05-29 18:59:06 INFO  - voxelisation is finished ( 40.0 s )
+2015-05-29 18:59:06 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/50cm/140331_101534.rxp.vox
+2015-05-29 18:59:09 INFO  - Shots processed: 4000000
+2015-05-29 18:59:09 INFO  - file written ( 2.0 s )
+2015-05-29 18:59:10 INFO  - Shots processed: 4000000
+2015-05-29 18:59:13 INFO  - Shots processed: 6000000
+2015-05-29 18:59:15 INFO  - Shots processed: 5000000
+2015-05-29 18:59:19 INFO  - Shots processed: 5000000
+2015-05-29 18:59:19 INFO  - Shots processed: 5000000
+2015-05-29 18:59:19 INFO  - Shots processed: 5000000
+2015-05-29 18:59:23 INFO  - Shots processed: 7000000
+2015-05-29 18:59:27 INFO  - Shots processed: 6000000
+2015-05-29 18:59:27 INFO  - Shots processed: 6000000
+2015-05-29 18:59:27 INFO  - Shots processed: 6000000
+2015-05-29 18:59:33 INFO  - Shots processed: 7000000
+2015-05-29 18:59:34 INFO  - Shots processed: 7000000
+2015-05-29 18:59:35 INFO  - Shots processed: 8000000
+2015-05-29 18:59:37 INFO  - Shots processed: 6000000
+2015-05-29 18:59:37 INFO  - Shots processed: 7000000
+2015-05-29 18:59:40 INFO  - Shots processed: 8000000
+2015-05-29 18:59:40 INFO  - Shots processed: 8000000
+2015-05-29 18:59:44 INFO  - Shots processed: 9000000
+2015-05-29 18:59:45 INFO  - Shots processed: 8000000
+2015-05-29 18:59:46 INFO  - Shots processed: 9000000
+2015-05-29 18:59:46 INFO  - Shots processed: 9000000
+2015-05-29 18:59:51 INFO  - Shots processed: 10000000
+2015-05-29 18:59:52 INFO  - Shots processed: 9000000
+2015-05-29 18:59:52 INFO  - Shots processed: 7000000
+2015-05-29 18:59:52 INFO  - Shots processed: 10000000
+2015-05-29 18:59:53 INFO  - Shots processed: 10000000
+2015-05-29 18:59:58 INFO  - Shots processed: 11000000
+2015-05-29 18:59:58 INFO  - Shots processed: 10000000
+2015-05-29 18:59:59 INFO  - Shots processed: 11000000
+2015-05-29 18:59:59 INFO  - Shots processed: 8000000
+2015-05-29 18:59:59 INFO  - Shots processed: 11000000
+2015-05-29 19:00:00 INFO  - Shots processed: 11295489
+2015-05-29 19:00:00 INFO  - voxelisation is finished ( 93.0 s )
+2015-05-29 19:00:00 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/50cm/140331_115917.rxp.vox
+2015-05-29 19:00:01 INFO  - Shots processed: 11295629
+2015-05-29 19:00:01 INFO  - voxelisation is finished ( 94.0 s )
+2015-05-29 19:00:01 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/50cm/140331_112953.rxp.vox
+2015-05-29 19:00:01 INFO  - Shots processed: 11293701
+2015-05-29 19:00:01 INFO  - voxelisation is finished ( 95.0 s )
+2015-05-29 19:00:01 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/50cm/140331_113724.rxp.vox
+2015-05-29 19:00:02 INFO  - file written ( 2.0 s )
+2015-05-29 19:00:03 INFO  - file written ( 2.0 s )
+2015-05-29 19:00:03 INFO  - file written ( 2.0 s )
+2015-05-29 19:00:04 INFO  - Shots processed: 11000000
+2015-05-29 19:00:05 INFO  - Shots processed: 9000000
+2015-05-29 19:00:06 INFO  - Shots processed: 11295882
+2015-05-29 19:00:06 INFO  - voxelisation is finished ( 100.0 s )
+2015-05-29 19:00:06 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/50cm/140331_110207.rxp.vox
+2015-05-29 19:00:07 INFO  - file written ( 1.0 s )
+2015-05-29 19:00:11 INFO  - Shots processed: 10000000
+2015-05-29 19:00:16 INFO  - Shots processed: 11000000
+2015-05-29 19:00:22 INFO  - Shots processed: 12000000
+2015-05-29 19:00:28 INFO  - Shots processed: 13000000
+2015-05-29 19:00:29 INFO  - Shots processed: 13166931
+2015-05-29 19:00:29 INFO  - voxelisation is finished ( 122.0 s )
+2015-05-29 19:00:29 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/50cm/140331_101944.rxp.vox
+2015-05-29 19:00:30 INFO  - file written ( 1.0 s )
+2015-05-29 19:00:30 INFO  - Voxelisation finished in 128.0 s
+2015-05-29 19:00:30 INFO  - Merging in progress, file 1 : 6
+2015-05-29 19:00:31 INFO  - Merging in progress, file 2 : 6
+2015-05-29 19:00:33 INFO  - Merging in progress, file 3 : 6
+2015-05-29 19:00:34 INFO  - Merging in progress, file 4 : 6
+2015-05-29 19:00:36 INFO  - Merging in progress, file 5 : 6
+2015-05-29 19:00:37 INFO  - Merging in progress, file 6 : 6
+2015-05-29 19:00:38 INFO  - Compute angleMean
+2015-05-29 19:00:38 INFO  - Compute lMeanTotal
+2015-05-29 19:00:38 INFO  - Compute transmittance and PAD
+2015-05-29 19:00:38 INFO  - writing output file: /home/calcul/Documents/Julien/test_tls_pierre/output2/50cm/merged.vox
+2015-05-29 19:00:40 INFO  - file written ( 1.0 s )
+2015-05-29 19:00:40 INFO  - Voxelisation finished in 137.0 s
+2015-05-29 19:00:40 INFO  - Voxelisation finished in 137.0 s
+2015-05-29 19:06:32 INFO  - Loading point cloud file...
+2015-05-29 19:06:32 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 19:06:34 INFO  - Point cloud file loaded
+2015-05-29 19:06:34 INFO  - Loading point cloud file...
+2015-05-29 19:06:34 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 19:06:35 INFO  - Point cloud file loaded
+2015-05-29 19:06:35 INFO  - Saved libfile: /tmp/RivLibLibrary-2912456278326771369.tmp
+2015-05-29 19:06:35 INFO  - /tmp/RivLibLibrary-2912456278326771369.tmp
+2015-05-29 19:06:35 INFO  - rxp extraction is started
+2015-05-29 19:06:35 INFO  - rxp extraction is started
+2015-05-29 19:06:35 INFO  - rxp extraction is started
+2015-05-29 19:06:35 INFO  - rxp extraction is started
+2015-05-29 19:06:35 INFO  - rxp extraction is started
+2015-05-29 19:06:35 INFO  - rxp extraction is started
+2015-05-29 19:06:35 INFO  - allocate!!!!!!!!
+2015-05-29 19:06:35 INFO  - allocate!!!!!!!!
+2015-05-29 19:06:35 INFO  - allocate!!!!!!!!
+2015-05-29 19:06:35 INFO  - allocate!!!!!!!!
+2015-05-29 19:06:35 INFO  - allocate!!!!!!!!
+2015-05-29 19:06:35 INFO  - allocate!!!!!!!!
+2015-05-29 19:06:35 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(56, 68, 87)
+			Toricity 	:	false
+
+2015-05-29 19:06:35 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(56, 68, 87)
+			Toricity 	:	false
+
+2015-05-29 19:06:35 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(56, 68, 87)
+			Toricity 	:	false
+
+2015-05-29 19:06:35 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-05-29 19:06:35 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(56, 68, 87)
+			Toricity 	:	false
+
+2015-05-29 19:06:35 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(56, 68, 87)
+			Toricity 	:	false
+
+2015-05-29 19:06:35 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-05-29 19:06:35 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-05-29 19:06:35 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-05-29 19:06:35 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-05-29 19:06:35 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(56, 68, 87)
+			Toricity 	:	false
+
+2015-05-29 19:06:35 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-05-29 19:06:43 INFO  - Shots processed: 1000000
+2015-05-29 19:06:43 INFO  - Shots processed: 1000000
+2015-05-29 19:06:43 INFO  - Shots processed: 1000000
+2015-05-29 19:06:43 INFO  - Shots processed: 1000000
+2015-05-29 19:06:44 INFO  - Shots processed: 1000000
+2015-05-29 19:06:47 INFO  - Shots processed: 1000000
+2015-05-29 19:06:50 INFO  - Shots processed: 2000000
+2015-05-29 19:06:50 INFO  - Shots processed: 2000000
+2015-05-29 19:06:51 INFO  - Shots processed: 2000000
+2015-05-29 19:06:52 INFO  - Shots processed: 2000000
+2015-05-29 19:06:52 INFO  - Shots processed: 2000000
+2015-05-29 19:06:55 INFO  - Shots processed: 2000000
+2015-05-29 19:06:56 INFO  - Shots processed: 3000000
+2015-05-29 19:06:58 INFO  - Shots processed: 3000000
+2015-05-29 19:07:00 INFO  - Shots processed: 3000000
+2015-05-29 19:07:02 INFO  - Shots processed: 3000000
+2015-05-29 19:07:03 INFO  - Shots processed: 4000000
+2015-05-29 19:07:04 INFO  - Shots processed: 3000000
+2015-05-29 19:07:04 INFO  - Shots processed: 3000000
+2015-05-29 19:07:09 INFO  - Shots processed: 4000000
+2015-05-29 19:07:10 INFO  - Shots processed: 4000000
+2015-05-29 19:07:10 INFO  - Shots processed: 4000000
+2015-05-29 19:07:11 INFO  - Shots processed: 5000000
+2015-05-29 19:07:15 INFO  - Shots processed: 4810881
+2015-05-29 19:07:15 INFO  - voxelisation is finished ( 40.0 s )
+2015-05-29 19:07:15 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/50cm/140331_101534.rxp.vox
+2015-05-29 19:07:17 INFO  - file written ( 1.0 s )
+2015-05-29 19:07:17 INFO  - Shots processed: 4000000
+2015-05-29 19:07:18 INFO  - Shots processed: 4000000
+2015-05-29 19:07:21 INFO  - Shots processed: 6000000
+2015-05-29 19:07:24 INFO  - Shots processed: 5000000
+2015-05-29 19:07:27 INFO  - Shots processed: 5000000
+2015-05-29 19:07:27 INFO  - Shots processed: 5000000
+2015-05-29 19:07:28 INFO  - Shots processed: 5000000
+2015-05-29 19:07:31 INFO  - Shots processed: 7000000
+2015-05-29 19:07:35 INFO  - Shots processed: 6000000
+2015-05-29 19:07:35 INFO  - Shots processed: 6000000
+2015-05-29 19:07:37 INFO  - Shots processed: 6000000
+2015-05-29 19:07:41 INFO  - Shots processed: 7000000
+2015-05-29 19:07:42 INFO  - Shots processed: 7000000
+2015-05-29 19:07:44 INFO  - Shots processed: 8000000
+2015-05-29 19:07:45 INFO  - Shots processed: 6000000
+2015-05-29 19:07:47 INFO  - Shots processed: 8000000
+2015-05-29 19:07:47 INFO  - Shots processed: 7000000
+2015-05-29 19:07:48 INFO  - Shots processed: 8000000
+2015-05-29 19:07:52 INFO  - Shots processed: 9000000
+2015-05-29 19:07:53 INFO  - Shots processed: 9000000
+2015-05-29 19:07:54 INFO  - Shots processed: 9000000
+2015-05-29 19:07:55 INFO  - Shots processed: 8000000
+2015-05-29 19:07:59 INFO  - Shots processed: 10000000
+2015-05-29 19:07:59 INFO  - Shots processed: 10000000
+2015-05-29 19:08:00 INFO  - Shots processed: 10000000
+2015-05-29 19:08:00 INFO  - Shots processed: 7000000
+2015-05-29 19:08:01 INFO  - Shots processed: 9000000
+2015-05-29 19:08:06 INFO  - Shots processed: 11000000
+2015-05-29 19:08:06 INFO  - Shots processed: 11000000
+2015-05-29 19:08:06 INFO  - Shots processed: 11000000
+2015-05-29 19:08:07 INFO  - Shots processed: 8000000
+2015-05-29 19:08:08 INFO  - Shots processed: 11293701
+2015-05-29 19:08:08 INFO  - voxelisation is finished ( 92.0 s )
+2015-05-29 19:08:08 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/50cm/140331_113724.rxp.vox
+2015-05-29 19:08:08 INFO  - Shots processed: 11295489
+2015-05-29 19:08:08 INFO  - voxelisation is finished ( 93.0 s )
+2015-05-29 19:08:08 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/50cm/140331_115917.rxp.vox
+2015-05-29 19:08:08 INFO  - Shots processed: 10000000
+2015-05-29 19:08:08 INFO  - Shots processed: 11295629
+2015-05-29 19:08:08 INFO  - voxelisation is finished ( 93.0 s )
+2015-05-29 19:08:08 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/50cm/140331_112953.rxp.vox
+2015-05-29 19:08:10 INFO  - file written ( 2.0 s )
+2015-05-29 19:08:10 INFO  - file written ( 2.0 s )
+2015-05-29 19:08:10 INFO  - file written ( 1.0 s )
+2015-05-29 19:08:13 INFO  - Shots processed: 9000000
+2015-05-29 19:08:14 INFO  - Shots processed: 11000000
+2015-05-29 19:08:15 INFO  - Shots processed: 11295882
+2015-05-29 19:08:15 INFO  - voxelisation is finished ( 100.0 s )
+2015-05-29 19:08:15 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/50cm/140331_110207.rxp.vox
+2015-05-29 19:08:17 INFO  - file written ( 1.0 s )
+2015-05-29 19:08:18 INFO  - Shots processed: 10000000
+2015-05-29 19:08:24 INFO  - Shots processed: 11000000
+2015-05-29 19:08:29 INFO  - Shots processed: 12000000
+2015-05-29 19:08:34 INFO  - Shots processed: 13000000
+2015-05-29 19:08:35 INFO  - Shots processed: 13166931
+2015-05-29 19:08:35 INFO  - voxelisation is finished ( 120.0 s )
+2015-05-29 19:08:35 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/50cm/140331_101944.rxp.vox
+2015-05-29 19:08:37 INFO  - file written ( 1.0 s )
+2015-05-29 19:08:37 INFO  - Voxelisation finished in 125.0 s
+2015-05-29 19:08:37 INFO  - Merging in progress, file 1 : 6
+2015-05-29 19:08:37 INFO  - Merging in progress, file 2 : 6
+2015-05-29 19:08:38 INFO  - Merging in progress, file 3 : 6
+2015-05-29 19:08:40 INFO  - Merging in progress, file 4 : 6
+2015-05-29 19:08:41 INFO  - Merging in progress, file 5 : 6
+2015-05-29 19:08:42 INFO  - Merging in progress, file 6 : 6
+2015-05-29 19:08:43 INFO  - Compute angleMean
+2015-05-29 19:08:43 INFO  - Compute lMeanTotal
+2015-05-29 19:08:43 INFO  - Compute transmittance and PAD
+2015-05-29 19:08:43 INFO  - writing output file: /home/calcul/Documents/Julien/test_tls_pierre/output2/50cm/merged.vox
+2015-05-29 19:08:45 INFO  - file written ( 1.0 s )
+2015-05-29 19:08:45 INFO  - Voxelisation finished in 133.0 s
+2015-05-29 19:08:45 INFO  - Voxelisation finished in 133.0 s
+2015-05-29 19:12:12 INFO  - Loading point cloud file...
+2015-05-29 19:12:12 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 19:12:14 INFO  - Point cloud file loaded
+2015-05-29 19:12:14 INFO  - Loading point cloud file...
+2015-05-29 19:12:14 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 19:12:15 INFO  - Point cloud file loaded
+2015-05-29 19:12:15 INFO  - rxp extraction is started
+2015-05-29 19:12:15 INFO  - allocate!!!!!!!!
+2015-05-29 19:12:15 INFO  - rxp extraction is started
+2015-05-29 19:12:15 INFO  - allocate!!!!!!!!
+2015-05-29 19:12:15 INFO  - rxp extraction is started
+2015-05-29 19:12:15 INFO  - allocate!!!!!!!!
+2015-05-29 19:12:15 INFO  - rxp extraction is started
+2015-05-29 19:12:15 INFO  - allocate!!!!!!!!
+2015-05-29 19:12:15 INFO  - rxp extraction is started
+2015-05-29 19:12:15 INFO  - allocate!!!!!!!!
+2015-05-29 19:12:15 INFO  - rxp extraction is started
+2015-05-29 19:12:15 INFO  - allocate!!!!!!!!
+2015-05-29 19:12:26 ERROR - Java heap space
+java.lang.OutOfMemoryError: Java heap space
+	at fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis.createVoxelSpace(VoxelAnalysis.java:811)
+	at fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation.call(RxpVoxelisation.java:83)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-05-29 19:12:35 ERROR - Java heap space
+java.lang.OutOfMemoryError: Java heap space
+	at fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis.createVoxelSpace(VoxelAnalysis.java:811)
+	at fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation.call(RxpVoxelisation.java:83)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-05-29 19:12:31 ERROR - Java heap space
+java.lang.OutOfMemoryError: Java heap space
+	at fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis.createVoxelSpace(VoxelAnalysis.java:811)
+	at fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation.call(RxpVoxelisation.java:83)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-05-29 19:12:40 ERROR - Java heap space
+java.lang.OutOfMemoryError: Java heap space
+	at fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis.createVoxelSpace(VoxelAnalysis.java:811)
+	at fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation.call(RxpVoxelisation.java:83)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-05-29 19:12:45 ERROR - Java heap space
+java.lang.OutOfMemoryError: Java heap space
+2015-05-29 19:12:53 ERROR - Java heap space
+java.lang.OutOfMemoryError: Java heap space
+2015-05-29 19:12:53 INFO  - Voxelisation finished in 41.0 s
+2015-05-29 19:12:53 ERROR - java.io.FileNotFoundException: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101534.rxp.vox (Aucun fichier ou dossier de ce type)
+2015-05-29 19:13:44 INFO  - Loading point cloud file...
+2015-05-29 19:13:44 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 19:13:47 INFO  - Point cloud file loaded
+2015-05-29 19:13:47 INFO  - Loading point cloud file...
+2015-05-29 19:13:47 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 19:13:47 INFO  - Point cloud file loaded
+2015-05-29 19:13:47 INFO  - Saved libfile: /tmp/RivLibLibrary-7681013545003343328.tmp
+2015-05-29 19:13:47 INFO  - /tmp/RivLibLibrary-7681013545003343328.tmp
+2015-05-29 19:13:47 INFO  - rxp extraction is started
+2015-05-29 19:13:47 INFO  - rxp extraction is started
+2015-05-29 19:13:47 INFO  - rxp extraction is started
+2015-05-29 19:13:47 INFO  - rxp extraction is started
+2015-05-29 19:13:47 INFO  - rxp extraction is started
+2015-05-29 19:13:47 INFO  - rxp extraction is started
+2015-05-29 19:13:47 INFO  - allocate!!!!!!!!
+2015-05-29 19:13:47 INFO  - allocate!!!!!!!!
+2015-05-29 19:13:47 INFO  - allocate!!!!!!!!
+2015-05-29 19:13:47 INFO  - allocate!!!!!!!!
+2015-05-29 19:13:47 INFO  - allocate!!!!!!!!
+2015-05-29 19:13:47 INFO  - allocate!!!!!!!!
+2015-05-29 19:13:54 ERROR - Java heap space
+java.lang.OutOfMemoryError: Java heap space
+	at fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis.createVoxelSpace(VoxelAnalysis.java:811)
+	at fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation.call(RxpVoxelisation.java:83)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-05-29 19:13:58 ERROR - Java heap space
+java.lang.OutOfMemoryError: Java heap space
+	at fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis.createVoxelSpace(VoxelAnalysis.java:811)
+	at fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation.call(RxpVoxelisation.java:83)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-05-29 19:14:05 ERROR - Java heap space
+java.lang.OutOfMemoryError: Java heap space
+	at fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis.createVoxelSpace(VoxelAnalysis.java:811)
+	at fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation.call(RxpVoxelisation.java:83)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-05-29 19:14:11 ERROR - Java heap space
+java.lang.OutOfMemoryError: Java heap space
+	at fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis.createVoxelSpace(VoxelAnalysis.java:811)
+	at fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation.call(RxpVoxelisation.java:83)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-05-29 19:14:16 ERROR - Java heap space
+java.lang.OutOfMemoryError: Java heap space
+2015-05-29 19:14:27 ERROR - Java heap space
+java.lang.OutOfMemoryError: Java heap space
+2015-05-29 19:14:27 INFO  - Voxelisation finished in 43.0 s
+2015-05-29 19:14:27 ERROR - java.io.FileNotFoundException: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101534.rxp.vox (Aucun fichier ou dossier de ce type)
+2015-05-29 19:15:48 INFO  - Loading point cloud file...
+2015-05-29 19:15:48 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 19:15:50 INFO  - Point cloud file loaded
+2015-05-29 19:15:50 INFO  - Loading point cloud file...
+2015-05-29 19:15:50 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 19:15:51 INFO  - Point cloud file loaded
+2015-05-29 19:15:51 INFO  - Saved libfile: /tmp/RivLibLibrary-7744707022885727272.tmp
+2015-05-29 19:15:51 INFO  - /tmp/RivLibLibrary-7744707022885727272.tmp
+2015-05-29 19:15:51 INFO  - rxp extraction is started
+2015-05-29 19:15:51 INFO  - rxp extraction is started
+2015-05-29 19:15:51 INFO  - rxp extraction is started
+2015-05-29 19:15:51 INFO  - rxp extraction is started
+2015-05-29 19:15:51 INFO  - rxp extraction is started
+2015-05-29 19:15:51 INFO  - rxp extraction is started
+2015-05-29 19:15:51 INFO  - allocate!!!!!!!!
+2015-05-29 19:15:51 INFO  - allocate!!!!!!!!
+2015-05-29 19:15:51 INFO  - allocate!!!!!!!!
+2015-05-29 19:15:51 INFO  - allocate!!!!!!!!
+2015-05-29 19:15:51 INFO  - allocate!!!!!!!!
+2015-05-29 19:15:51 INFO  - allocate!!!!!!!!
+2015-05-29 19:16:22 INFO  - Voxelisation finished in 34.0 s
+2015-05-29 19:16:22 ERROR - java.io.FileNotFoundException: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101534.rxp.vox (Aucun fichier ou dossier de ce type)
+2015-05-29 19:17:01 INFO  - Loading point cloud file...
+2015-05-29 19:17:01 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 19:17:03 INFO  - Point cloud file loaded
+2015-05-29 19:17:03 INFO  - Loading point cloud file...
+2015-05-29 19:17:03 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 19:17:04 INFO  - Point cloud file loaded
+2015-05-29 19:17:04 INFO  - rxp extraction is started
+2015-05-29 19:17:04 INFO  - allocate!!!!!!!!
+2015-05-29 19:17:04 INFO  - rxp extraction is started
+2015-05-29 19:17:04 INFO  - allocate!!!!!!!!
+2015-05-29 19:17:04 INFO  - rxp extraction is started
+2015-05-29 19:17:04 INFO  - allocate!!!!!!!!
+2015-05-29 19:17:04 INFO  - rxp extraction is started
+2015-05-29 19:17:04 INFO  - allocate!!!!!!!!
+2015-05-29 19:17:04 INFO  - rxp extraction is started
+2015-05-29 19:17:04 INFO  - allocate!!!!!!!!
+2015-05-29 19:17:04 INFO  - rxp extraction is started
+2015-05-29 19:17:04 INFO  - allocate!!!!!!!!
+2015-05-29 19:17:34 INFO  - Voxelisation finished in 32.0 s
+2015-05-29 19:17:34 ERROR - java.io.FileNotFoundException: /home/calcul/Documents/Julien/test_tls_pierre/output2/140331_101534.rxp.vox (Aucun fichier ou dossier de ce type)
+2015-05-29 19:20:27 INFO  - Loading point cloud file...
+2015-05-29 19:20:27 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 19:20:30 INFO  - Point cloud file loaded
+2015-05-29 19:20:30 INFO  - Loading point cloud file...
+2015-05-29 19:20:30 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-05-29 19:20:30 INFO  - Point cloud file loaded
+2015-05-29 19:20:30 INFO  - Saved libfile: /tmp/RivLibLibrary-6654811452181221393.tmp
+2015-05-29 19:20:30 INFO  - /tmp/RivLibLibrary-6654811452181221393.tmp
+2015-05-29 19:20:30 INFO  - rxp extraction is started
+2015-05-29 19:20:30 INFO  - rxp extraction is started
+2015-05-29 19:20:30 INFO  - rxp extraction is started
+2015-05-29 19:20:30 INFO  - rxp extraction is started
+2015-05-29 19:20:30 INFO  - rxp extraction is started
+2015-05-29 19:20:30 INFO  - rxp extraction is started
+2015-05-29 19:20:30 INFO  - allocate!!!!!!!!
+2015-05-29 19:20:30 INFO  - allocate!!!!!!!!
+2015-05-29 19:20:30 INFO  - allocate!!!!!!!!
+2015-05-29 19:20:30 INFO  - allocate!!!!!!!!
+2015-05-29 19:20:30 INFO  - allocate!!!!!!!!
+2015-05-29 19:20:30 INFO  - allocate!!!!!!!!
+2015-05-29 19:20:39 ERROR - Unsufficient memory, you need to allocate more to the JVM, change the Xmx value!
+java.lang.OutOfMemoryError: Java heap space
+	at fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis.createVoxelSpace(VoxelAnalysis.java:811)
+	at fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation.call(RxpVoxelisation.java:83)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-05-29 19:20:45 ERROR - Unsufficient memory, you need to allocate more to the JVM, change the Xmx value!
+java.lang.OutOfMemoryError: Java heap space
+	at fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis.createVoxelSpace(VoxelAnalysis.java:811)
+	at fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation.call(RxpVoxelisation.java:83)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-05-29 19:20:49 ERROR - Unsufficient memory, you need to allocate more to the JVM, change the Xmx value!
+java.lang.OutOfMemoryError: Java heap space
+	at fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis.createVoxelSpace(VoxelAnalysis.java:811)
+	at fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation.call(RxpVoxelisation.java:83)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)

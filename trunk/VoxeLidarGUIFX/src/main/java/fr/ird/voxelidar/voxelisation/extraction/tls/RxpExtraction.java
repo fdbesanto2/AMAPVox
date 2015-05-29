@@ -45,9 +45,7 @@ public class RxpExtraction implements Iterable<Shot>{
     }
     
     public int openRxpFile(File file, int shotType){
-        
-        Thread.currentThread().setContextClassLoader(ClassLoader.getSystemClassLoader());
-        
+                
         rxpPointer = instantiate();
 
         switch ((int) rxpPointer) {

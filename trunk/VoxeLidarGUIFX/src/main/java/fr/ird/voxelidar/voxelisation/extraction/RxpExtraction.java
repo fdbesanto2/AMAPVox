@@ -146,7 +146,7 @@ public class RxpExtraction implements Runnable{
         System.out.println("test");
     }
     */
-    
+    /*
     public void extract(VoxelAnalysis voxelAnalysis){
         
         long startTime = System.currentTimeMillis();
@@ -196,7 +196,7 @@ public class RxpExtraction implements Runnable{
         }
         
         
-    }
+    }*/
     
 
     @Override

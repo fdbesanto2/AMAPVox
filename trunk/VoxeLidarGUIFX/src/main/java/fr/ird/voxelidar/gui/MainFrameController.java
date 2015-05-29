@@ -2513,8 +2513,10 @@ public class MainFrameController implements Initializable {
                                                         logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
                                                     }
                                                 });
-
-                                                voxTool.mergeVoxelsFileV2(outputFiles, cfg.getVoxelParameters().getMergedFile(), cfg.getVoxelParameters().getTransmittanceMode(), cfg.getVoxelParameters().getMaxPAD());
+                                                //if(!voxTool.isCancelled()){
+                                                    voxTool.mergeVoxelsFileV2(outputFiles, cfg.getVoxelParameters().getMergedFile(), cfg.getVoxelParameters().getTransmittanceMode(), cfg.getVoxelParameters().getMaxPAD());
+                                                //}
+                                                
                                             }
 
                                             Platform.runLater(new Runnable() {
@@ -2522,15 +2524,18 @@ public class MainFrameController implements Initializable {
                                                 @Override
                                                 public void run() {
 
-                                                    for (File file : outputFiles) {
-                                                        addFileToVoxelList(file);
-                                                    }
-                                                    if (cfg.getVoxelParameters().isMergingAfter()) {
-                                                        addFileToVoxelList(cfg.getVoxelParameters().getMergedFile());
+                                                    if(!voxTool.isCancelled()){
+                                                        for (File file : outputFiles) {
+                                                            addFileToVoxelList(file);
+                                                        }
+                                                        if (cfg.getVoxelParameters().isMergingAfter()) {
+                                                            addFileToVoxelList(cfg.getVoxelParameters().getMergedFile());
+                                                        }
                                                     }
                                                 }
                                             });
-                                        } catch (Exception e) {
+                                            
+                                        }catch (Exception e) {
 
                                         }
 
@@ -2660,7 +2665,7 @@ public class MainFrameController implements Initializable {
 
             @Override
             public void handle(WorkerStateEvent event) {
-                logger.error(service.getException());
+                logger.error("Service failed : ",service.getException());
             }
         });
 

@@ -253,7 +253,7 @@ public class ProcessingMultiRes {
                     if(indice >= padMeanZ.length){
                         voxel.PadBVTotal = 0;
                     }else if(indice < 0){
-                        voxel.PadBVTotal = Double.NaN;
+                        voxel.PadBVTotal = Float.NaN;
                     }else{
                         if(useDefaultMaxPad && padMeanZ[indice]>vs.data.maxPad){
                             voxel.PadBVTotal = vs.data.maxPad;
@@ -272,8 +272,8 @@ public class ProcessingMultiRes {
             } else if (uncorrectValue) {
                 //on applique la nouvelle valeur de Pad
 
-                double oldValue = voxel.PadBVTotal;
-                double newValue = voxTemp.PadBVTotal;
+                //float oldValue = voxel.PadBVTotal;
+                float newValue = voxTemp.PadBVTotal;
                 
                 if(Double.isNaN(newValue)){
                     logger.error("incorrect Pad value");

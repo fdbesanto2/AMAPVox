@@ -506,7 +506,7 @@ public class ToolBoxFrameController implements Initializable {
 
                 joglContext.getScene().getVoxelSpace().setFilterValues(filterValues, radiobuttonDisplayValues.isSelected());
                 joglContext.getScene().getVoxelSpace().updateColorValue(joglContext.getScene().getVoxelSpace().getGradient());
-                joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
+                //joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
                 joglContext.getScene().getVoxelSpace().updateVao();
                 joglContext.drawNextFrame();
                 

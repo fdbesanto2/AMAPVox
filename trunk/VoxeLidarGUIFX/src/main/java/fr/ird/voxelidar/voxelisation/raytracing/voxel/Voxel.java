@@ -62,7 +62,7 @@ public class Voxel implements Serializable {
          */
         //public double lgOutgoing = 0;
         
-        public double lgTotal;
+        public float lgTotal;
 
         /**
          * PAD beam fraction, calcul du PAD selon la formule:
@@ -131,15 +131,15 @@ public class Voxel implements Serializable {
         //public double lMeanOutgoing = 0;
         public double lMeanTotal;
         //public double LMean_NoInterception = 0;
-        public double _transBeforeNorm;
-        public double transmittance;
-        public double _transmittance_v2;
-        public double angleMean;
-        public double bvEntering;
-        public double bvIntercepted;
-        public double PadBVTotal;
-        public double _PadBVTotal_V2;
-        public double _sumSurfaceMultiplyLength;
+        //public double _transBeforeNorm;
+        public float transmittance;
+        //public double _transmittance_v2;
+        public float angleMean;
+        public float bvEntering;
+        public float bvIntercepted;
+        public float PadBVTotal;
+        //public float _PadBVTotal_V2;
+        //public double _sumSurfaceMultiplyLength;
         
         protected final static Logger _logger = Logger.getLogger(Voxel.class);
         

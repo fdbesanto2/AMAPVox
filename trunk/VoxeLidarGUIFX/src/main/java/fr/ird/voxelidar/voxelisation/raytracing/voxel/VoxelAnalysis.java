@@ -40,8 +40,8 @@ public class VoxelAnalysis {
     private Voxel voxels[][][];
     private VoxelManager voxelManager;
 
-    private static final double LASER_BEAM_DIVERGENCE_ALS = 0.0005f;
-    private static final double LASER_BEAM_DIVERGENCE_TLS = 0.00035f;
+    private static final float LASER_BEAM_DIVERGENCE_ALS = 0.0005f;
+    private static final float LASER_BEAM_DIVERGENCE_TLS = 0.00035f;
     
     private float MAX_PAD = 3;
 
@@ -469,8 +469,8 @@ public class VoxelAnalysis {
                 
                 vox.angleMean += angle;
                 vox.bvEntering += (surface * residualEnergy * longueur);
-                vox._transBeforeNorm += (surface * longueur);
-                vox._sumSurfaceMultiplyLength += (surface*longueur);
+                //vox._transBeforeNorm += (surface * longueur);
+                //vox._sumSurfaceMultiplyLength += (surface*longueur);
                 
                 
                 /*
@@ -567,8 +567,8 @@ public class VoxelAnalysis {
                             }
                         }
                         
-                        vox._sumSurfaceMultiplyLength += (surface*longueur);
-                        vox._transBeforeNorm += (((entering-intercepted)/entering) * surface * longueur);
+                        //vox._sumSurfaceMultiplyLength += (surface*longueur);
+                        //vox._transBeforeNorm += (((entering-intercepted)/entering) * surface * longueur);
                     //}
                     
                 lastEchotemp = echo;
@@ -618,7 +618,7 @@ public void calculatePADAndWrite(double threshold) {
 
                         Voxel vox = voxels[i][j][k];
 
-                        float pad1, pad2;
+                        float pad1/*, pad2*/;
 
                         vox.angleMean = vox.angleMean / vox.nbSampling;
 
@@ -636,57 +636,57 @@ public void calculatePADAndWrite(double threshold) {
                         if (voxel.bvEntering <= threshold) {
 
                             pad1 = Float.NaN;
-                            pad2 = pad1;
+                            //pad2 = pad1;
                             voxel.transmittance = Float.NaN;
-                            voxel._transmittance_v2 = Float.NaN;
+                            //voxel._transmittance_v2 = Float.NaN;
 
                         } else if (voxel.bvIntercepted > voxel.bvEntering) {
 
                             logger.error("Voxel : " + voxel.$i + " " + voxel.$j + " " + voxel.$k + " -> bvInterceptes > bvEntering, NaN assigné, difference: " + (voxel.bvEntering - voxel.bvIntercepted));
 
                             pad1 = Float.NaN;
-                            pad2 = pad1;
+                            //pad2 = pad1;
                             voxel.transmittance = Float.NaN;
-                            voxel._transmittance_v2 = Float.NaN;
+                            //voxel._transmittance_v2 = Float.NaN;
 
                         } else {
 
                             voxel.transmittance = (voxel.bvEntering - voxel.bvIntercepted) / voxel.bvEntering;
-                            voxel._transmittance_v2 = (voxel._transBeforeNorm) / voxel._sumSurfaceMultiplyLength ;
+                            //voxel._transmittance_v2 = (voxel._transBeforeNorm) / voxel._sumSurfaceMultiplyLength ;
 
                             if (voxel.nbSampling > 1 && voxel.transmittance == 0 && voxel.nbSampling == voxel.nbEchos) {
 
                                 pad1 = MAX_PAD;
-                                pad2 = pad1;
+                                //pad2 = pad1;
 
                             } else if (voxel.nbSampling <= 2 && voxel.transmittance == 0 && voxel.nbSampling == voxel.nbEchos) {
 
                                 pad1 = Float.NaN;
-                                pad2 = pad1;
+                                //pad2 = pad1;
 
                             } else {
 
                                 pad1 = (float) (Math.log(voxel.transmittance) / (-0.5 * voxel.lMeanTotal));
-                                pad2 = (float) (Math.log(voxel._transmittance_v2) / (-0.5 * voxel.lMeanTotal));
+                                //pad2 = (float) (Math.log(voxel._transmittance_v2) / (-0.5 * voxel.lMeanTotal));
 
                                 if (Float.isNaN(pad1)) {
                                     pad1 = Float.NaN;
                                 } else if (pad1 > MAX_PAD || Float.isInfinite(pad1)) {
                                     pad1 = MAX_PAD;
                                 }
-
+                                /*
                                 if (Float.isNaN(pad2)) {
                                     pad2 = Float.NaN;
                                 } else if (pad2 > MAX_PAD || Float.isInfinite(pad2)) {
                                     pad2 = MAX_PAD;
-                                }
+                                }*/
 
                             }
 
                         }
 
                         voxel.PadBVTotal = pad1 + 0.0f; //set +0.0f to avoid -0.0f
-                        voxel._PadBVTotal_V2 = pad2 + 0.0f; //set +0.0f to avoid -0.0f
+                        //voxel._PadBVTotal_V2 = pad2 + 0.0f; //set +0.0f to avoid -0.0f
 
                         writer.write(voxel.toString() + "\n");
 
@@ -813,45 +813,52 @@ public void calculatePADAndWrite(double threshold) {
                 voxels = new Voxel[parameters.split.x][parameters.split.y][parameters.split.z];
             }
             
+            try{
+                for (int x = 0; x < parameters.split.x; x++) {
+                    for (int y = 0; y < parameters.split.y; y++) {
+                        for (int z = 0; z < parameters.split.z; z++) {
 
-            for (int x = 0; x < parameters.split.x; x++) {
-                for (int y = 0; y < parameters.split.y; y++) {
-                    for (int z = 0; z < parameters.split.z; z++) {
-
-                        if (parameters.isTLS()) {
-                            voxels[x][y][z] = new Voxel(x, y, z);
-                        } else {
-                            voxels[x][y][z] = new Voxel(x, y, z);
-                        }
-
-                        Point3d position = getPosition(new Point3i(x, y, z),
-                                parameters.split, parameters.bottomCorner);
-
-                        float dist;
-                        if (terrain != null && parameters.useDTMCorrection()) {
-                            float dtmHeightXY = terrain.getSimpleHeight((float) position.x, (float) position.y);
-                            if (dtmHeightXY == Float.NaN) {
-                                dist = (float) (position.z);
+                            if (parameters.isTLS()) {
+                                voxels[x][y][z] = new Voxel(x, y, z);
                             } else {
-                                dist = (float) (position.z - dtmHeightXY);
+                                voxels[x][y][z] = new Voxel(x, y, z);
                             }
 
-                        } else {
-                            dist = (float) (position.z);
+                            Point3d position = getPosition(new Point3i(x, y, z),
+                                    parameters.split, parameters.bottomCorner);
+
+                            float dist;
+                            if (terrain != null && parameters.useDTMCorrection()) {
+                                float dtmHeightXY = terrain.getSimpleHeight((float) position.x, (float) position.y);
+                                if (dtmHeightXY == Float.NaN) {
+                                    dist = (float) (position.z);
+                                } else {
+                                    dist = (float) (position.z - dtmHeightXY);
+                                }
+
+                            } else {
+                                dist = (float) (position.z);
+                            }
+                            voxels[x][y][z].setDist(dist);
+                            voxels[x][y][z].setPosition(position);
                         }
-                        voxels[x][y][z].setDist(dist);
-                        voxels[x][y][z].setPosition(position);
                     }
                 }
+
+                if(parameters.isCalculateGroundEnergy() && !parameters.isTLS()){
+                    for (int i = 0; i < parameters.split.x; i++) {
+                        for (int j = 0; j < parameters.split.y; j++) {
+                            groundEnergy[i][j] = new GroundEnergy();
+                        }
+                    }
+                }
+                
+            }catch(OutOfMemoryError ex){
+                throw new Exception("Unsufficient memory, you need to allocation more, change the Xmx value!", ex);
+            }catch(Exception ex){
+                throw new Exception("Error during instantiation of voxel space: ", ex);
             }
             
-            if(parameters.isCalculateGroundEnergy() && !parameters.isTLS()){
-                for (int i = 0; i < parameters.split.x; i++) {
-                    for (int j = 0; j < parameters.split.y; j++) {
-                        groundEnergy[i][j] = new GroundEnergy();
-                    }
-                }
-            }
             Scene scene = new Scene();
             scene.setBoundingBox(new BoundingBox3d(parameters.bottomCorner, parameters.topCorner));
 

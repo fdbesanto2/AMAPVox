@@ -144,7 +144,7 @@ public class Scene {
 
             }            
             
-            if(!voxelSpace.isGradientUpdated()){
+            if(!voxelSpace.isGradientUpdated() || voxelSpace.isInstancesUpdated()){
                 Texture texture;
                 
                 if(voxelSpace.isStretched()){

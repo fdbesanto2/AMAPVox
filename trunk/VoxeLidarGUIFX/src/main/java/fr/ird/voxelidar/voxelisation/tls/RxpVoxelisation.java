@@ -15,7 +15,6 @@ import fr.ird.voxelidar.engine3d.object.scene.Dtm;
 import fr.ird.voxelidar.octree.Octree;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.TimeCounter;
-import fr.ird.voxelidar.voxelisation.PointCloud;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysisData;
 import java.io.File;
 import java.util.Iterator;
@@ -73,7 +72,7 @@ public class RxpVoxelisation implements Callable{
     }
 
     @Override
-    public VoxelAnalysisData call() {
+    public Object call() {
         
         
         try {
@@ -94,6 +93,11 @@ public class RxpVoxelisation implements Callable{
 
             fr.ird.voxelidar.voxelisation.extraction.Shot shot;
             while(iterator.hasNext()){
+                
+                if (Thread.currentThread().isInterrupted()){
+                    logger.info("Task cancelled");
+                    return null;
+                }
 
                 shot = iterator.next();
                 if(shot != null){
@@ -120,15 +124,17 @@ public class RxpVoxelisation implements Callable{
                 voxelAnalysis.writeGroundEnergy();
             }
             
-            VoxelAnalysisData resultData = voxelAnalysis.getResultData();
+            //VoxelAnalysisData resultData = voxelAnalysis.getResultData();
             
             //permet de signaler au garbage collector que cet élément peut être supprimé
             voxelAnalysis = null;
             
-            return resultData;
+            //return resultData;
         
-        }catch(Exception e){
-            logger.error("rxp voxelisation failed, "+e);
+        }catch(OutOfMemoryError ex){
+            logger.error("Unsufficient memory, you need to allocate more to the JVM, change the Xmx value!",ex);
+        }catch(Exception ex){
+            logger.error("Unknow exception in RXPVoxelisation.class",ex);
         }
         
         return null;

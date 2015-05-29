@@ -29,6 +29,7 @@ import fr.ird.voxelidar.util.MatrixConverter;
 import fr.ird.voxelidar.util.TimeCounter;
 import fr.ird.voxelidar.voxelisation.als.LasVoxelisation;
 import fr.ird.voxelidar.voxelisation.als.Trajectory;
+import fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysisData;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -50,10 +51,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Matrix4d;
-import javax.vecmath.Point3f;
 import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
 
@@ -105,6 +104,10 @@ public class VoxelisationTool {
         if(exec != null){
             exec.shutdownNow();
         }
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
     }
 
     private Dtm loadDTM(File dtmFile) {
@@ -209,10 +212,14 @@ public class VoxelisationTool {
                 count++;
             }
             
-            List<Future<RxpVoxelisation>> results = exec.invokeAll(tasks);
+            //test pour savoir si le chargemen tardif de la librairie est en cause
+            RxpExtraction rxpExtraction = new RxpExtraction();
+            rxpExtraction = null;
+            
+            /*List<Future<RxpVoxelisation>> results = */exec.invokeAll(tasks);
             
             exec.shutdown();
-            
+            /*
             if(parameters.isUsePointCloudFilter() && pointcloudList != null){
                 
                 int filteredPointsCount = 0;
@@ -221,18 +228,22 @@ public class VoxelisationTool {
                     filteredPointsCount += resultData.filteredPointsCount;
                 }
                 
-                logger.info("Number of echos filtered : "+filteredPointsCount);
+                //logger.info("Number of echos filtered : "+filteredPointsCount);
                 //logger.info("Number of points in point cloud: "+pointcloudList.getPoints().length);
-            }
+            }*/
             
             
-        } catch (InterruptedException | RejectedExecutionException | NullPointerException | ExecutionException ex) {
-            logger.error(ex);
+        }catch (InterruptedException ex){
+            logger.info("Voxelisation was stopped");
+            cancelled = true;
+            return null;
+        }catch(NullPointerException ex){
+            logger.error("Unknwown exception", ex);
+            cancelled = true;
+            return null;
         }finally{
             
         }
-        
-            
         
 
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
@@ -368,6 +379,8 @@ public class VoxelisationTool {
     
     
     public void mergeVoxelsFileV2(List<File> filesList, File output, int transmittanceMode, float maxPAD) {
+        
+        cancelled = false;
         
         startTime = System.currentTimeMillis();
         Mode[] toMerge;

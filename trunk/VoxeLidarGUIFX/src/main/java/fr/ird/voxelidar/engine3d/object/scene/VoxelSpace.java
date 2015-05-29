@@ -99,6 +99,7 @@ public class VoxelSpace extends SceneObject{
     private boolean cubeSizeUpdated;
     private boolean instancesUpdated;
     
+    
     private boolean stretched;
     
     public VoxelSpaceData data;
@@ -784,7 +785,7 @@ public class VoxelSpace extends SceneObject{
         gradientUpdated = false;
         
     }
-    
+    /*
     public BufferedImage createScaleImage(int width, int height){
         
         if(stretched){
@@ -797,7 +798,7 @@ public class VoxelSpace extends SceneObject{
             }
         }
         
-    }
+    }*/
     
     public void updateCubeSize(GL3 gl, float size){
         
@@ -811,6 +812,14 @@ public class VoxelSpace extends SceneObject{
     
     public void switchLightOff(){
         
+    }
+
+    public boolean isInstancesUpdated() {
+        return instancesUpdated;
+    }
+
+    public void setInstancesUpdated(boolean instancesUpdated) {
+        this.instancesUpdated = instancesUpdated;
     }
     
     @Override
