@@ -30,6 +30,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -76,13 +77,13 @@ public class VoxelSpace extends SceneObject{
     public float attributValueMin;
     public float attributValueMaxClipped;
     public float attributValueMinClipped;
-    private boolean useClippedRangeValue = false;
+    private boolean useClippedRangeValue;
     public float min;
     public float max;
     
     private File voxelsFile;
     
-    public boolean arrayLoaded = false;
+    public boolean arrayLoaded;
     private Settings settings;
     private Map<String,Attribut> mapAttributs;
     private Set<String> variables;
@@ -94,18 +95,17 @@ public class VoxelSpace extends SceneObject{
     private Color[] gradient = ColorGradient.GRADIENT_HEAT;
     private ColorGradient colorGradient;
     
-    private boolean gradientUpdated = false;
+    private boolean gradientUpdated;
     private boolean cubeSizeUpdated;
-    private boolean instancesUpdated = true;
+    private boolean instancesUpdated;
     
-    private boolean stretched = false;
+    private boolean stretched;
     
     public VoxelSpaceData data;
     
     //private Set<Filter> filteredValues;
     private CombinedFilters combinedFilters;
-    private boolean displayValues = false;
-    private boolean preFilterValues = false;
+    private boolean displayValues;
     
     private final EventListenerList listeners;
     float sdValue;
@@ -154,15 +154,6 @@ public class VoxelSpace extends SceneObject{
     public float getCubeSize() {
         return cubeSize;
     }
-
-    public boolean isPreFilterValues() {
-        return preFilterValues;
-    }
-
-    public void setPreFilterValues(boolean preFilterValues) {
-        this.preFilterValues = preFilterValues;
-    }
-    
     
     public void addExtendedMapAttributs(Map<String,Attribut> extendedMapAttributs){
         for(Entry entry : extendedMapAttributs.entrySet()){
@@ -864,9 +855,7 @@ public class VoxelSpace extends SceneObject{
 
         for (int i=0;i<data.voxels.size();i++) {
             
-            VoxelObject voxel = data.voxels.get(i);            
-            
-
+            VoxelObject voxel = data.voxels.get(i);
 
             if(voxel.getAlpha() != 0){
                 
@@ -907,56 +896,13 @@ public class VoxelSpace extends SceneObject{
         cubeSize = (float) (data.header.resolution.x/2.0f);
         
         int instanceNumber = data.voxels.size();        
-        
-        
-        float instancePositions[] = new float[instanceNumber*3];
-        float instanceColors[] = new float[instanceNumber*4];
-        int count0 = 0;
-        int count1 = 0;
-        int count2 = 0;
-
-        for (int i=0, j=0, k=0;i<data.voxels.size();i++, j+=3 ,k+=4) {
-            
-            VoxelObject voxel = data.voxels.get(i);
-            boolean isFiltered = true;
-            
-            if(preFilterValues){
-                isFiltered = combinedFilters.doFilter(voxel.attributValue);
-            }
-            
-            
-            if(isFiltered){
-                
-                count0 ++;
-                
-                instancePositions[count1] = voxel.position.x;
-                instancePositions[count1+1] = voxel.position.y;
-                instancePositions[count1+2] = voxel.position.z;
-                count1 += 3;
-
-                instanceColors[count2] = voxel.getRed();
-                instanceColors[count2+1] = voxel.getGreen();
-                instanceColors[count2+2] = voxel.getBlue();
-                instanceColors[count2+3] = voxel.getAlpha();
-                
-                count2 +=4 ;
-            }
-            
-        }
-        
-        mesh = new InstancedMesh(MeshFactory.createCube(cubeSize), count0);
-        ((InstancedMesh)mesh).instancePositionsBuffer = Buffers.newDirectFloatBuffer(instancePositions, 0, count1);
-        ((InstancedMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(instanceColors, 0, count2);
-        
+        mesh = new InstancedMesh(MeshFactory.createCube(cubeSize), instanceNumber);
         buffer = new MeshBuffer(gl);
         
         int maxSize = (mesh.vertexBuffer.capacity()*MeshBuffer.FLOAT_SIZE)+(data.voxels.size()*3*MeshBuffer.FLOAT_SIZE)+(data.voxels.size()*4*MeshBuffer.FLOAT_SIZE);
+        buffer.initBuffersV2(gl, maxSize, mesh.indexBuffer, mesh.vertexBuffer);
         
-        if(mesh instanceof InstancedMesh){
-            buffer.initBuffers(gl, maxSize, mesh.indexBuffer, new FloatBuffer[]{mesh.vertexBuffer, 
-                                    ((InstancedMesh)mesh).instancePositionsBuffer, 
-                                    ((InstancedMesh)mesh).instanceColorsBuffer});
-        }
+        updateVao();
     }
     
     @Override
@@ -986,25 +932,26 @@ public class VoxelSpace extends SceneObject{
             buffer.updateBuffer(gl, 1, ((InstancedMesh)mesh).instancePositionsBuffer);
             buffer.updateBuffer(gl, 2, ((InstancedMesh)mesh).instanceColorsBuffer);
             
-            gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, buffer.getVboId());
+            gl.glBindVertexArray(vaoId);
+        
+                gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, buffer.getVboId());
 
-                gl.glEnableVertexAttribArray(shader.attributeMap.get("position"));
-                gl.glVertexAttribPointer(shader.attributeMap.get("position"), 3, GL3.GL_FLOAT, false, 0, 0);
-                
-                gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_position"));
-                gl.glVertexAttribPointer(shader.attributeMap.get("instance_position"), 3, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE);
-                gl.glVertexAttribDivisor(shader.attributeMap.get("instance_position"), 1);
-                
-                gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_color"));
-                gl.glVertexAttribPointer(shader.attributeMap.get("instance_color"), 4, GL3.GL_FLOAT, false, 0, (mesh.vertexBuffer.capacity()+((InstancedMesh)mesh).instancePositionsBuffer.capacity())*FLOAT_SIZE);
-                gl.glVertexAttribDivisor(shader.attributeMap.get("instance_color"), 1);
-                
-                //gl.glEnableVertexAttribArray(shader.attributeMap.get("ambient_occlusion"));
-                //gl.glVertexAttribPointer(shader.attributeMap.get("ambient_occlusion"), 4, GL3.GL_FLOAT, false, 0, 0);
-                 
-            gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, buffer.getIboId());
-            
-            gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, 0);
+                    gl.glEnableVertexAttribArray(shader.attributeMap.get("position"));
+                    gl.glVertexAttribPointer(shader.attributeMap.get("position"), 3, GL3.GL_FLOAT, false, 0, 0);
+
+                    gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_position"));
+                    gl.glVertexAttribPointer(shader.attributeMap.get("instance_position"), 3, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE);
+                    gl.glVertexAttribDivisor(shader.attributeMap.get("instance_position"), 1);
+
+                    gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_color"));
+                    gl.glVertexAttribPointer(shader.attributeMap.get("instance_color"), 4, GL3.GL_FLOAT, false, 0, (mesh.vertexBuffer.capacity()+((InstancedMesh)mesh).instancePositionsBuffer.capacity())*FLOAT_SIZE);
+                    gl.glVertexAttribDivisor(shader.attributeMap.get("instance_color"), 1);
+
+                gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, buffer.getIboId());
+
+                gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, 0);
+
+            gl.glBindVertexArray(0);
             
             instancesUpdated = true;
         }
@@ -1018,15 +965,8 @@ public class VoxelSpace extends SceneObject{
             for (int i=0, j=0;i<data.voxels.size();i++, j+=4) {
                 
                 VoxelObject voxel = (VoxelObject) data.voxels.get(i);
-                
-                boolean isFiltered = true;
-            
-                if(preFilterValues){
-                    isFiltered = combinedFilters.doFilter(voxel.attributValue);
-                }
 
-
-                if(isFiltered){
+                if(voxel.getAlpha() != 0){
                 
                     instanceColors[count0] = voxel.getRed();
                     instanceColors[count0+1] = voxel.getGreen();

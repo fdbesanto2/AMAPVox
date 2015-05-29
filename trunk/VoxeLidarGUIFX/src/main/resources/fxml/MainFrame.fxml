@@ -503,18 +503,7 @@
                                                                      <content>
                                                                         <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                                            <children>
-                                                                              <CheckBox fx:id="checkboxEnablePreFiltering" layoutX="27.0" layoutY="28.0" mnemonicParsing="false" text="Enable pre-filtering" />
-                                                                              <AnchorPane fx:id="anchorpanePreFiltering" disable="true" layoutX="27.0" layoutY="66.0">
-                                                                                 <children>
-                                                                                    <RadioButton fx:id="radiobuttonDisplayValues" layoutY="30.0" mnemonicParsing="false" text="Display only those values" AnchorPane.leftAnchor="27.0" />
-                                                                                    <TextField fx:id="textFieldFilterValues" layoutY="69.0" prefHeight="25.0" prefWidth="183.0" promptText="Example: NaN, 0, -1" text="NaN, 0" AnchorPane.leftAnchor="27.0">
-                                                                                       <tooltip>
-                                                                                          <Tooltip fx:id="tooltipTextfieldFilter" />
-                                                                                       </tooltip>
-                                                                                    </TextField>
-                                                                                    <RadioButton fx:id="radiobuttonDontDisplayValues" mnemonicParsing="false" selected="true" text="Don't display values" AnchorPane.leftAnchor="27.0" />
-                                                                                 </children>
-                                                                              </AnchorPane>
+                                                                              <AnchorPane fx:id="anchorpanePreFiltering" disable="true" layoutX="27.0" layoutY="66.0" />
                                                                            </children></AnchorPane>
                                                                      </content>
                                                                   </Tab>

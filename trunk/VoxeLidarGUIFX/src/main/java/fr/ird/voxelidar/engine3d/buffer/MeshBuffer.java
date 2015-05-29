@@ -94,6 +94,24 @@ public class MeshBuffer {
         unbindBuffer(gl);
     }
     
+    public void initBuffersV2(GL3 gl, int maxSize, ShortBuffer indexBuffer, FloatBuffer... floatBuffers){
+        
+        bindBuffer(gl);
+        
+        totalBuffersSize = maxSize;
+        gl.glBufferData(GL3.GL_ARRAY_BUFFER, totalBuffersSize, null, GL3.GL_STATIC_DRAW);
+        
+        for (FloatBuffer buffer : floatBuffers) {
+            addSubBuffer(gl, buffer);
+        }
+        
+        gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, iboId);
+            gl.glBufferData(GL3.GL_ELEMENT_ARRAY_BUFFER, indexBuffer.capacity()*SHORT_SIZE, indexBuffer, GL3.GL_STATIC_DRAW);
+        gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, 0);
+        
+        unbindBuffer(gl);
+    }
+    
     /**
      *
      * @param gl opengl context
@@ -128,6 +146,15 @@ public class MeshBuffer {
         bindBuffer(gl);
             
             long bufferSize = buffer.capacity()*FLOAT_SIZE;
+            
+            if(index >= buffersSizes.size()){
+                buffersSizes.add(bufferSize);
+            }
+            
+            if(index >= offsets.size()){
+                offsets.add(computeOffset(index));
+            }
+            
             long difference = bufferSize-buffersSizes.get(index);
             
             totalBuffersSize += difference;

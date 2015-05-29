@@ -6,8 +6,6 @@
 package fr.ird.voxelidar.gui;
 
 import com.jogamp.newt.event.WindowAdapter;
-import com.jogamp.newt.event.WindowListener;
-import com.jogamp.newt.event.WindowUpdateEvent;
 import fr.ird.voxelidar.configuration.Configuration;
 import fr.ird.voxelidar.configuration.Configuration.InputType;
 import fr.ird.voxelidar.configuration.Configuration.ProcessMode;
@@ -42,8 +40,6 @@ import fr.ird.voxelidar.voxelisation.VoxelisationToolListener;
 import fr.ird.voxelidar.voxelisation.als.LasPoint;
 import fr.ird.voxelidar.voxelisation.extraction.als.LazExtraction;
 import fr.ird.voxelidar.voxelisation.raytracing.BoundingBox3F;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -71,9 +67,7 @@ import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -98,7 +92,6 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
@@ -150,18 +143,6 @@ public class MainFrameController implements Initializable {
     private MenuItem menuitemClearWindow;
     @FXML
     private AnchorPane anchorpaneRoot;
-    @FXML
-    private CheckBox checkboxEnablePreFiltering;
-    @FXML
-    private RadioButton radiobuttonDisplayValues;
-    @FXML
-    private TextField textFieldFilterValues;
-    @FXML
-    private Tooltip tooltipTextfieldFilter;
-    @FXML
-    private RadioButton radiobuttonDontDisplayValues;
-    @FXML
-    private AnchorPane anchorpanePreFiltering;
     //private Button buttonOpenPointCloudFile;
     //private Label labelPointCloudPath;
     //private TextField textfieldPointCloudPath;
@@ -892,18 +873,6 @@ public class MainFrameController implements Initializable {
                 }
             }
         });
-
-        checkboxEnablePreFiltering.selectedProperty().addListener(new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue) {
-                    anchorpanePreFiltering.setDisable(false);
-                } else {
-                    anchorpanePreFiltering.setDisable(true);
-                }
-            }
-        });
         
         textfieldResMultiRes.disableProperty().bind(checkboxMultiResAfter.selectedProperty().not());
 
@@ -1155,9 +1124,6 @@ public class MainFrameController implements Initializable {
             }
         });
 
-        ToggleGroup groupDisplayFiltering = new ToggleGroup();
-        radiobuttonDisplayValues.setToggleGroup(groupDisplayFiltering);
-        radiobuttonDontDisplayValues.setToggleGroup(groupDisplayFiltering);
 
         currentLastPointCloudLayoutY = 50;
         addPointcloudFilterComponent();
@@ -1419,11 +1385,6 @@ public class MainFrameController implements Initializable {
 
         final File voxelFile = listViewVoxelsFiles.getSelectionModel().getSelectedItem();
         final String attributeToView = comboboxAttributeToView.getSelectionModel().getSelectedItem();
-        final boolean enablePreFiltering = checkboxEnablePreFiltering.isSelected();
-        final boolean displayFilteredValues = radiobuttonDisplayValues.isSelected();
-        final String filteredValues = textFieldFilterValues.getText();
-        
-        
         
         final Stage toolBarFrameStage = new Stage();
         
@@ -1438,54 +1399,6 @@ public class MainFrameController implements Initializable {
                     @Override
                     protected Object call() throws Exception {
                         
-                        final Set<CombinedFilter> filterValues = new HashSet<>();
-
-                        if (enablePreFiltering) {
-
-                            String[] valuesArray = filteredValues.replace(" ", "").split(",");
-
-                            for (String filteringString : valuesArray) {
-                                try {
-                                    if (filteringString.contains("[") || filteringString.contains("]")) {
-                                        int index = filteringString.indexOf("->");
-                                        if (index != -1) {
-                                            char firstInequality = filteringString.charAt(0);
-                                            char secondInequality = filteringString.charAt(filteringString.length() - 1);
-                                            float firstValue = Float.valueOf(filteringString.substring(1, index));
-                                            float secondValue = Float.valueOf(filteringString.substring(index + 2, filteringString.length() - 1));
-                                            int firstInequalityID;
-                                            switch (firstInequality) {
-                                                case ']':
-                                                    firstInequalityID = Filter.GREATER_THAN;
-                                                    break;
-                                                case '[':
-                                                    firstInequalityID = Filter.GREATER_THAN_OR_EQUAL;
-                                                    break;
-                                                default:
-                                                    firstInequalityID = Filter.GREATER_THAN_OR_EQUAL;
-                                            }
-                                            int secondInequalityID;
-                                            switch (secondInequality) {
-                                                case ']':
-                                                    secondInequalityID = Filter.LESS_THAN_OR_EQUAL;
-                                                    break;
-                                                case '[':
-                                                    secondInequalityID = Filter.LESS_THAN;
-                                                    break;
-                                                default:
-                                                    secondInequalityID = Filter.LESS_THAN_OR_EQUAL;
-                                            }
-                                            filterValues.add(new CombinedFilter(
-                                                    new Filter("x", firstValue, firstInequalityID),
-                                                    new Filter("x", secondValue, secondInequalityID), CombinedFilter.AND));
-                                        }
-                                    } else {
-                                        filterValues.add(new CombinedFilter(new Filter("x", Float.valueOf(filteringString), Filter.EQUAL), null, CombinedFilter.AND));
-                                    }
-                                } catch (Exception e) {
-                                }
-                            }
-                        }
                         
                         final VoxelSpace voxelSpace = new VoxelSpace(voxelFile);
 
@@ -1511,11 +1424,6 @@ public class MainFrameController implements Initializable {
                                 updateProgress(progress, 100);
                             }
                         });
-
-                        voxelSpace.setPreFilterValues(enablePreFiltering);
-                        if (enablePreFiltering) {
-                            voxelSpace.setFilterValues(filterValues, displayFilteredValues);
-                        }
 
                         voxelSpace.load();
                         voxelSpace.updateValue();
