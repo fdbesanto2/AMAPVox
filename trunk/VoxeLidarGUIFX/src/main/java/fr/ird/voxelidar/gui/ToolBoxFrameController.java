@@ -27,6 +27,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -39,6 +40,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 
@@ -127,6 +130,8 @@ public class ToolBoxFrameController implements Initializable {
     private Button buttonViewBack;
     @FXML
     private Button buttonViewIsometric;
+    @FXML
+    private Button buttonOKValidationFilter;
     
     /**
      * Initializes the controller class.
@@ -275,11 +280,14 @@ public class ToolBoxFrameController implements Initializable {
             }
         });
         
-        textFieldFilterValues.textProperty().addListener(new ChangeListener<String>() {
+        textFieldFilterValues.setOnKeyReleased(new EventHandler<KeyEvent>() {
 
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                updateValuesFilter();
+            public void handle(KeyEvent event) {
+                
+                if(event.getCode() == KeyCode.ENTER){
+                    updateValuesFilter();
+                }
             }
         });
         
@@ -658,6 +666,11 @@ public class ToolBoxFrameController implements Initializable {
 
     @FXML
     private void onActionButtonViewIsometric(ActionEvent event) {
+    }
+
+    @FXML
+    private void onActionButtonOKValidationFilter(ActionEvent event) {
+        updateValuesFilter();
     }
     
 }

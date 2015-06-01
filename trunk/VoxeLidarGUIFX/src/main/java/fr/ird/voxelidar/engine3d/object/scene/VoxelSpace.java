@@ -8,7 +8,6 @@ package fr.ird.voxelidar.engine3d.object.scene;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL3;
 import fr.ird.voxelidar.engine3d.buffer.MeshBuffer;
-import fr.ird.voxelidar.util.image.ScaleGradient;
 import fr.ird.voxelidar.engine3d.object.mesh.Attribut;
 import fr.ird.voxelidar.engine3d.loading.mesh.MeshFactory;
 import fr.ird.voxelidar.engine3d.loading.shader.Shader;
@@ -22,16 +21,12 @@ import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.Settings;
 import fr.ird.voxelidar.util.StandardDeviation;
 import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,6 +93,8 @@ public class VoxelSpace extends SceneObject{
     private boolean gradientUpdated;
     private boolean cubeSizeUpdated;
     private boolean instancesUpdated;
+    
+    private int voxelNumberToDraw = 0;
     
     
     private boolean stretched;
@@ -750,6 +747,8 @@ public class VoxelSpace extends SceneObject{
         ColorGradient color = new ColorGradient(valMin, valMax);
         color.setGradientColor(gradientColor);
         //ArrayList<Float> values = new ArrayList<>();
+        voxelNumberToDraw = 0;
+        
         for (VoxelObject voxel : data.voxels) {
             
             //float ratio = voxel.attributValue/(attributValueMax-attributValueMin);
@@ -764,12 +763,14 @@ public class VoxelSpace extends SceneObject{
             
             if(isFiltered && displayValues){
                 voxel.setAlpha(1);
+                voxelNumberToDraw++;
             }else if(isFiltered && !displayValues){
                 voxel.setAlpha(0);
             }else if(!isFiltered && displayValues){
                 voxel.setAlpha(0);
             }else{
                 voxel.setAlpha(1);
+                voxelNumberToDraw++;
             }
         }
         //System.out.println("test");
@@ -859,15 +860,36 @@ public class VoxelSpace extends SceneObject{
     
     public void updateVao(){
         
-        List<Float> instancePositionsList = new ArrayList<>();
-        List<Float> instanceColorsList = new ArrayList<>();
+        //List<Float> instancePositionsList = new ArrayList<>();
+        //List<Float> instanceColorsList = new ArrayList<>();
+        
+        float[] instancePositions = new float[voxelNumberToDraw*3];
+        float[] instanceColors = new float[voxelNumberToDraw*4];
 
-        for (int i=0;i<data.voxels.size();i++) {
+        int positionCount = 0;
+        int colorCount = 0;
+        
+        for (VoxelObject voxel : data.voxels) {
             
-            VoxelObject voxel = data.voxels.get(i);
-
             if(voxel.getAlpha() != 0){
                 
+                if(positionCount < instancePositions.length && colorCount < instanceColors.length){
+                    
+                    instancePositions[positionCount] = voxel.position.x;
+                    instancePositions[positionCount+1] = voxel.position.y;
+                    instancePositions[positionCount+2] = voxel.position.z;
+
+                    instanceColors[colorCount] = voxel.getRed();
+                    instanceColors[colorCount+1] = voxel.getGreen();
+                    instanceColors[colorCount+2] = voxel.getBlue();
+                    instanceColors[colorCount+3] = voxel.getAlpha();
+
+                    positionCount += 3;
+                    colorCount += 4;
+                }
+                
+                
+                /*
                 instancePositionsList.add(voxel.position.x);
                 instancePositionsList.add(voxel.position.y);
                 instancePositionsList.add(voxel.position.z);
@@ -876,20 +898,20 @@ public class VoxelSpace extends SceneObject{
                 instanceColorsList.add(voxel.getGreen());
                 instanceColorsList.add(voxel.getBlue());
                 instanceColorsList.add(voxel.getAlpha());
+                */
+                
             }
-            
         }
         
-        float[] instancePositions = new float[instancePositionsList.size()];
-        float[] instanceColors = new float[instanceColorsList.size()];
         
+        /*
         for(int i=0;i<instancePositionsList.size();i++){
             instancePositions[i] = instancePositionsList.get(i);
         }
         
         for(int i=0;i<instanceColorsList.size();i++){
             instanceColors[i] = instanceColorsList.get(i);
-        }
+        }*/
         
         ((InstancedMesh)mesh).instancePositionsBuffer = Buffers.newDirectFloatBuffer(instancePositions);
         ((InstancedMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(instanceColors);
