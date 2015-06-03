@@ -30,8 +30,8 @@ public class Scene {
         ??optimisation 
     */
     
-    private final ArrayList<SceneObject> objectsList;
-    private final Map<Integer, Shader> shadersList;
+    public final ArrayList<SceneObject> objectsList;
+    public final Map<Integer, Shader> shadersList;
     private VoxelSpace voxelSpace;
     public boolean canDraw;
     private SceneObject scalePlane;
@@ -101,23 +101,31 @@ public class Scene {
         
     }
     
+    private Texture createColorScaleTexture(GL3 gl){
+        
+        Texture texture;
+        
+        if(voxelSpace.isStretched()){
+            texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.min, voxelSpace.max, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
+        }else{
+            if(voxelSpace.isUseClippedRangeValue()){
+                texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMinClipped, voxelSpace.attributValueMaxClipped, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMinClipped, voxelSpace.attributValueMaxClipped);
+            }else{
+                texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMin, voxelSpace.attributValueMax, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
+            }
+
+        }
+        
+        return texture;
+    }
+    
     public void draw(final GL3 gl, Camera camera){
         
         if(canDraw){
             
             if(!voxelSpace.arrayLoaded){
                 
-                Texture texture;
-                if(voxelSpace.isStretched()){
-                    texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.min, voxelSpace.max, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
-                }else{
-                    if(voxelSpace.isUseClippedRangeValue()){
-                        texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMinClipped, voxelSpace.attributValueMaxClipped, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMinClipped, voxelSpace.attributValueMaxClipped);
-                    }else{
-                        texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMin, voxelSpace.attributValueMax, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
-                    }
-                    
-                }
+                Texture texture= createColorScaleTexture(gl);
                 
                 scalePlane = SceneObjectFactory.createTexturedPlane(new Vec3F(40, 20, 0), width-80, (int)(height/20), texture, getShaderByName("textureShader"));
                 scalePlane.setDrawType(GL3.GL_TRIANGLES);
@@ -127,7 +135,8 @@ public class Scene {
                 voxelSpace.initBuffers(gl);
                 voxelSpace.initVao(gl, shadersList.get(voxelSpace.getShaderId()));
                 voxelSpace.arrayLoaded = true;
-                camera.location = new Vec3F(voxelSpace.centerX+voxelSpace.widthX, voxelSpace.centerY+voxelSpace.widthY, voxelSpace.centerZ+voxelSpace.widthZ);
+                camera.location = new Vec3F(voxelSpace.centerX, voxelSpace.centerY, voxelSpace.centerZ+voxelSpace.widthZ);
+                //camera.location = new Vec3F(voxelSpace.centerX+voxelSpace.widthX, voxelSpace.centerY+voxelSpace.widthY, voxelSpace.centerZ+voxelSpace.widthZ);
                 camera.target = new Vec3F(voxelSpace.centerX,voxelSpace.centerY,voxelSpace.centerZ);
                 camera.updateViewMatrix();
                 
@@ -142,21 +151,13 @@ public class Scene {
                     gl.glUniform1i(shader.uniformMap.get("texture"),0);
                 gl.glUseProgram(0);
 
-            }            
+            }  
             
-            if(!voxelSpace.isGradientUpdated() || voxelSpace.isInstancesUpdated()){
-                Texture texture;
+            boolean wasInstancesNotUpdated = !voxelSpace.isInstancesUpdated();
+            
+            if(!voxelSpace.isGradientUpdated()){
                 
-                if(voxelSpace.isStretched()){
-                    texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.min, voxelSpace.max, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
-                }else{
-                    if(voxelSpace.isUseClippedRangeValue()){
-                        texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMinClipped, voxelSpace.attributValueMaxClipped, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMinClipped, voxelSpace.attributValueMaxClipped);
-                    }else{
-                        texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMin, voxelSpace.attributValueMax, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
-                    }
-                    
-                }
+                Texture texture= createColorScaleTexture(gl);
                 
                 changeObjectTexture(scalePlane.getId(), texture);
             }
@@ -167,6 +168,12 @@ public class Scene {
                 voxelSpace.render(gl,shadersList.get(voxelSpace.getShaderId()));
             gl.glUseProgram(0);
             //gl.glDisable(GL3.GL_BLEND);
+            
+            if(!voxelSpace.isGradientUpdated() || wasInstancesNotUpdated){
+                
+                Texture texture= createColorScaleTexture(gl);
+                changeObjectTexture(scalePlane.getId(), texture);
+            }
             
             /***draw scene objects***/
             

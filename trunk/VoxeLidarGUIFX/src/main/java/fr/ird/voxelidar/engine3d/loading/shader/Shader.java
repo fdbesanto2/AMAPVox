@@ -19,7 +19,17 @@ import org.apache.log4j.Logger;
  */
 public class Shader {
     
-    final static Logger logger = Logger.getLogger(Shader.class);
+    private final static Logger logger = Logger.getLogger(Shader.class);
+    
+    public final static String[] MINIMAL_SHADER_UNIFORMS = new String[]{"viewMatrix","projMatrix"};
+    public final static String[] LIGHT_SHADER_UNIFORMS = new String[]{"normalMatrix", "Material", "Light"};
+    public final static String[] TEXTURE_SHADER_UNIFORMS = new String[]{"texture"};
+    
+    public final static String[] MINIMAL_SHADER_ATTRIBUTES = new String[]{"position","color"};
+    public final static String[] LIGHT_SHADER_ATTRIBUTES = new String[]{"normal"};
+    public final static String[] INSTANCE_SHADER_ATTRIBUTES = new String[]{"instance_position", "instance_color"};
+    public final static String[] TEXTURE_SHADER_ATTRIBUTES = new String[]{"textureCoordinates"};
+    
     
     private int vertexShaderId;
     private int fragmentShaderId;
@@ -189,5 +199,47 @@ public class Shader {
         for (String uniform : uniformList) {
             uniformMap.put(uniform,gl.glGetUniformLocation(programId, uniform));
         }
+    }
+    
+    public static String[] composeShaderUniforms(String[]... uniformsArrays){
+        
+        int count = 0;
+        
+        for (String[] uniformsArray : uniformsArrays) {
+            count += uniformsArray.length;
+        }
+        
+        String[] globalUniformArray = new String[count];
+        
+        int count2 = 0;
+        for (int i=0;i< uniformsArrays.length;i++) {
+            for (int j = 0; j<uniformsArrays[i].length; j++) {
+                globalUniformArray[count2] = uniformsArrays[i][j];
+                count2++;
+            }
+        }
+        
+        return globalUniformArray;
+    }
+    
+    public static String[] composeShaderAttributes(String[]... attributesArrays){
+        
+        int count = 0;
+        
+        for (String[] attributesArray : attributesArrays) {
+            count += attributesArray.length;
+        }
+        
+        String[] globalAttributeArray = new String[count];
+        
+        int count2 = 0;
+        for (int i=0;i< attributesArrays.length;i++) {
+            for (int j = 0; j<attributesArrays[i].length; j++) {
+                globalAttributeArray[count2] = attributesArrays[i][j];
+                count2++;
+            }
+        }
+        
+        return globalAttributeArray;
     }
 }

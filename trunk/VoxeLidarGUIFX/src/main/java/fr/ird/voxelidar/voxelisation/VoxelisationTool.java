@@ -13,7 +13,7 @@ import fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.vector.Vec2D;
-import fr.ird.voxelidar.engine3d.object.mesh.Attribut;
+import fr.ird.voxelidar.engine3d.misc.Attribut;
 import fr.ird.voxelidar.engine3d.object.scene.Dtm;
 import fr.ird.voxelidar.engine3d.object.scene.DtmLoader;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;

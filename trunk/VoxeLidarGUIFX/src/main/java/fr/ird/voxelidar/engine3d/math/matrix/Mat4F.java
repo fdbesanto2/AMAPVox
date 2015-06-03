@@ -5,6 +5,7 @@
  */
 package fr.ird.voxelidar.engine3d.math.matrix;
 
+import com.jogamp.opengl.math.Quaternion;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4;
 
@@ -330,21 +331,26 @@ public class Mat4F {
         
 
         if (eye.x == center.x && eye.y == center.y && eye.z == center.z) {
-                return Mat4F.identity();
+            return Mat4F.identity();
         }
         
+        Vec3F forward = Vec3F.normalize(Vec3F.substract(eye, center));
         
-        Vec3F f = Vec3F.normalize(Vec3F.substract(eye, center));
-        Vec3F s = Vec3F.normalize(Vec3F.cross(up, f));
-        Vec3F u = Vec3F.cross(f, s);
+        Vec3F right = Vec3F.normalize(Vec3F.cross(up, forward));
+        
+        if(Vec3F.length(right) == 0){
+            right.x = -1;
+        }
+        
+        Vec3F newUp = Vec3F.cross(forward, right);
         
         Mat4F result = new Mat4F();
         
         result.mat = new float[]{
-            s.x, u.x, f.x, 0,
-            s.y, u.y, f.y, 0,
-            s.z, u.z, f.z, 0,
-            -Vec3F.dot(s, eye), -Vec3F.dot(u, eye), -Vec3F.dot(f, eye), 1
+            right.x, newUp.x, forward.x, 0,
+            right.y, newUp.y, forward.y, 0,
+            right.z, newUp.z, forward.z, 0,
+            -Vec3F.dot(right, eye), -Vec3F.dot(newUp, eye), -Vec3F.dot(forward, eye), 1
         };
         
         

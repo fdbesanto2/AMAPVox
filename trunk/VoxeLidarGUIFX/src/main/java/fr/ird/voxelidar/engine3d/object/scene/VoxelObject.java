@@ -5,10 +5,7 @@
  */
 package fr.ird.voxelidar.engine3d.object.scene;
 
-import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.awt.Color;
-import java.util.Map;
-import javax.vecmath.Point2f;
 import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
 

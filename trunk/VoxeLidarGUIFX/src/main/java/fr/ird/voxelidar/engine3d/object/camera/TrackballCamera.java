@@ -5,7 +5,10 @@
  */
 package fr.ird.voxelidar.engine3d.object.camera;
 
+import com.jogamp.opengl.math.Quaternion;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
+import fr.ird.voxelidar.engine3d.math.point.Point3F;
+import fr.ird.voxelidar.engine3d.math.quaternion.QuaternionUtility;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import javax.swing.event.EventListenerList;
 
@@ -15,6 +18,7 @@ import javax.swing.event.EventListenerList;
  */
 public class TrackballCamera extends Camera{
 
+    public boolean needToInverse;
     
 
     public float getAngleX() {
@@ -33,26 +37,29 @@ public class TrackballCamera extends Camera{
     public TrackballCamera(){
         
         listeners = new EventListenerList();
+        viewMatrix = Mat4F.identity();
+        
     }
     
     @Override
     public void init(Vec3F location, Vec3F target, Vec3F up) {
         
-        
+        /*
         this.location =location;
         this.target = target;
+        */
         this.up = up;
-        
+        /*
         viewMatrix = Mat4F.identity();
         viewMatrix = Mat4F.lookAt(location, target, up);
         
         orientation = Vec3F.substract(target, location);
         orientation = Vec3F.normalize(orientation);
+        */
         
         
         
-        
-        updateViewMatrix();
+        //updateViewMatrix();
         
     }
     
@@ -160,22 +167,28 @@ public class TrackballCamera extends Camera{
     public void rotateFromOrientation(Vec3F axis, Vec3F pivot, float angle){
         
         orientation = Vec3F.substract(target, location);
+        float r = Vec3F.length(orientation);
+        
         orientation = Vec3F.normalize(orientation);
 
         Vec3F viewXAxis = new Vec3F(orientation.x, orientation.y, orientation.z);
         Vec3F viewUpAxis = up;
         Vec3F viewYAxis = Vec3F.cross(orientation, viewUpAxis);
+        
+        if(Vec3F.length(viewYAxis) == 0){
+            viewYAxis.x = 1;
+        }
 
 
         boolean skipY = false;
         
         if(Vec3F.length(viewYAxis) < 0.2f) {
 
-            if(orientation.y < 0 && angle > 0) 
+            if(orientation.y < 0 && angle > 0){
                 skipY = true;  
-            else if(orientation.y > 0 && angle < 0) 
-                skipY = true;                
-
+            }else if(orientation.y > 0 && angle < 0){
+                skipY = true;   
+            }
         }
 
         Vec3F viewZAxis = Vec3F.cross(viewYAxis, viewXAxis);
@@ -184,11 +197,8 @@ public class TrackballCamera extends Camera{
         viewYAxis = Vec3F.normalize(viewYAxis);
         viewZAxis = Vec3F.normalize(viewZAxis);
 
-        float r = Vec3F.length(Vec3F.substract(target, location));
-
-
         float x=0, y=0, z=0;
-
+        
 
         if(axis.x != 0){
 
@@ -196,18 +206,24 @@ public class TrackballCamera extends Camera{
             //M = C + A* r * cos(t) + B * r *sin(t) avec M = position sur le cercle, C = centre du cercle, A = vecteur du cercle, B = vecteur du cercle orthogonal à A, r = rayon du cercle, t = angle
             //position = Vec3.add(pivot, Vec3.add(Vec3.multiply(viewXAxis, r* (float)Math.cos(angleX)), Vec3.multiply(viewYAxis, r* (float)Math.sin(angleX))));
             angle = -angle;
+            float angleSinus = (float)Math.sin(angle);
+            float angleCosinus = (float)Math.cos(angle);
 
-            x = pivot.x + (-viewXAxis.x * r * (float)Math.cos(angle)) + (viewYAxis.x * r * (float)Math.sin(angle));
-            y = pivot.y + (-viewXAxis.y * r * (float)Math.cos(angle)) + (viewYAxis.y * r * (float)Math.sin(angle));
-            z = pivot.z + (-viewXAxis.z * r * (float)Math.cos(angle)) + (viewYAxis.z * r * (float)Math.sin(angle));
+            x = pivot.x + (-viewXAxis.x * r * angleCosinus) + (viewYAxis.x * r * angleSinus);
+            y = pivot.y + (-viewXAxis.y * r * angleCosinus) + (viewYAxis.y * r * angleSinus);
+            z = pivot.z + (-viewXAxis.z * r * angleCosinus) + (viewYAxis.z * r * angleSinus);
 
         }else if(axis.y != 0){
             //position = Vec3.add(pivot, Vec3.add(Vec3.multiply(viewXAxis, r* (float)Math.cos(angleY)), Vec3.multiply(viewZAxis, r* (float)Math.sin(angleY))));
             if(skipY)
                 return;
-            x = pivot.x + (-viewXAxis.x * r * (float)Math.cos(angle)) + (viewZAxis.x * r * (float)Math.sin(angle));
-            y = pivot.y + (-viewXAxis.y * r * (float)Math.cos(angle)) + (viewZAxis.y * r * (float)Math.sin(angle));
-            z = pivot.z + (-viewXAxis.z * r * (float)Math.cos(angle)) + (viewZAxis.z * r * (float)Math.sin(angle));
+            
+            float angleSinus = (float)Math.sin(angle);
+            float angleCosinus = (float)Math.cos(angle);
+            
+            x = pivot.x + (-viewXAxis.x * r * angleCosinus) + (viewZAxis.x * r * angleSinus);
+            y = pivot.y + (-viewXAxis.y * r * angleCosinus) + (viewZAxis.y * r * angleSinus);
+            z = pivot.z + (-viewXAxis.z * r * angleCosinus) + (viewZAxis.z * r * angleSinus);
 
         }else if(axis.z != 0){
             //position = Vec3.add(pivot, Vec3.add(Vec3.multiply(viewXAxis, r* (float)Math.cos(angleZ)), Vec3.multiply(viewYAxis, r* (float)Math.sin(angleZ))));
@@ -220,6 +236,10 @@ public class TrackballCamera extends Camera{
 
 
         target = pivot;
+        
+        if(skipY){
+            needToInverse = true;
+        }
 
         updateViewMatrix();
         
@@ -255,19 +275,19 @@ public class TrackballCamera extends Camera{
             
             Vec3F sideShift = Vec3F.normalize(Vec3F.cross(up, orientation));
             location = Vec3F.add(location, Vec3F.multiply(sideShift, translation.x));
-            //target = Vec3.add(target, Vec3.multiply(sideShift, translation.x));
+            //target = Vec3F.add(target, Vec3F.multiply(sideShift, translation.x));
         }
         if(translation.y != 0.0f){
             
             Vec3F verticalShift = up;
             location = Vec3F.add(location, Vec3F.multiply(verticalShift, translation.y));
-            //target = Vec3.add(target, Vec3.multiply(verticalShift, translation.y));
+            //target = Vec3F.add(target, Vec3F.multiply(verticalShift, translation.y));
         }
         if(translation.z !=0.0f){
             
             if(isPerspective){
                 location = Vec3F.add(location, Vec3F.multiply(orientation, translation.z));
-               // target = Vec3.add(target, Vec3.multiply(orientation, translation.z)); //use for not reaching the target
+                //target = Vec3F.add(target, Vec3F.multiply(orientation, translation.z)); //use for not reaching the target
                 //setPerspective(70.0f, (1.0f*640)/480, near-translation.z, far-translation.z);
             }else{
                 
@@ -291,6 +311,30 @@ public class TrackballCamera extends Camera{
     public void updateViewMatrix(){
         
         viewMatrix = Mat4F.lookAt(location, target, up);
+        /*
+        if(needToInverse){
+            
+            Vec3F backward = Vec3F.multiply(Vec3F.normalize(Vec3F.substract(location, target)), -1);
+            
+            viewMatrix.mat[2] = -viewMatrix.mat[2];
+            viewMatrix.mat[6] = -viewMatrix.mat[6];
+            viewMatrix.mat[10] = -viewMatrix.mat[10];
+            
+            viewMatrix.mat[0] = -viewMatrix.mat[0];
+            viewMatrix.mat[4] = -viewMatrix.mat[4];
+            viewMatrix.mat[8] = -viewMatrix.mat[8];
+            
+            needToInverse = false;
+        }*/
+        
+        //System.out.println(location.x+" "+location.y+" "+location.z);
+        /*
+        Point3F eyePoint = new Point3F(location.x, location.y, location.z);
+        Point3F targetPoint = new Point3F(target.x, target.y, target.z);
+        
+        
+        viewMatrix = QuaternionUtility.lookRotation(eyePoint, targetPoint, up);
+        */
         notifyViewMatrixChanged();
         
     }

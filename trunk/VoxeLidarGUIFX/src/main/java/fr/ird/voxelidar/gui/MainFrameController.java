@@ -5,6 +5,7 @@
  */
 package fr.ird.voxelidar.gui;
 
+import com.dropbox.core.DbxException;
 import com.jogamp.newt.event.WindowAdapter;
 import fr.ird.voxelidar.configuration.Configuration;
 import fr.ird.voxelidar.configuration.Configuration.InputType;
@@ -26,7 +27,7 @@ import fr.ird.voxelidar.lidar.format.tls.Rsp;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.lidar.format.tls.Scans;
 import fr.ird.voxelidar.multires.ProcessingMultiRes;
-import fr.ird.voxelidar.util.CombinedFilter;
+import fr.ird.voxelidar.update.Updater;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.MatrixConverter;
 import fr.ird.voxelidar.util.MatrixFileParser;
@@ -46,14 +47,12 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
@@ -86,12 +85,10 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
@@ -166,6 +163,44 @@ public class MainFrameController implements Initializable {
     private TextField textfieldResMultiRes;
     @FXML
     private CheckBox checkboxMultiResAfter;
+    @FXML
+    private MenuItem menuItemUpdate;
+    @FXML
+    private AnchorPane anchorpanePreFiltering;
+
+    @FXML
+    private void onActionMenuItemUpdate(ActionEvent event) {
+        
+        Service<Void> service = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws InterruptedException {
+
+                            Updater updater = new Updater();
+                            
+                            try {
+                                updater.update();
+                            } catch (DbxException ex) {
+                                logger.error("DBXException", ex);
+                            } catch (IOException ex) {
+                                logger.error("IOException", ex);
+                            }
+                            
+                            return null;
+                    }
+                };
+            }
+        };
+
+        ProgressDialog d = new ProgressDialog(service);
+        d.initOwner(stage);
+        d.show();
+
+        service.start();
+        
+    }
 
     public class MinMax {
 
@@ -1233,7 +1268,7 @@ public class MainFrameController implements Initializable {
     }
 
     private boolean checkEntryAsNumber(TextField textField) {
-
+        
         if (!NumberUtils.isNumber(textField.getText())) {
             textField.getStyleClass().add("invalidEntry");
             return false;

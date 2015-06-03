@@ -632,12 +632,18 @@ public class ToolBoxFrameController implements Initializable {
     private void onActionButtonViewTop(ActionEvent event) {
         
         
-        joglContext.getCamera().setLocation(new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX()+0.0001f, 
-                                                      joglContext.getScene().getVoxelSpace().getCenterY()+0.0001f,
+        
+        joglContext.getCamera().setLocation(new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
+                                                      joglContext.getScene().getVoxelSpace().getCenterY(),
                                                       joglContext.getScene().getVoxelSpace().getCenterZ()+150));
         
+        joglContext.getCamera().setTarget(new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
+                                                      joglContext.getScene().getVoxelSpace().getCenterY(),
+                                                      joglContext.getScene().getVoxelSpace().getCenterZ()));
+        
         joglContext.getCamera().updateViewMatrix();
-        joglContext.getCamera().setRotation(new Vec3F(0, 0, 1), 0);
+        //joglContext.getCamera().setRotation(new Vec3F(0, 0, 1), (float) Math.toRadians(0));
+        
         joglContext.getEventListener().mouseXOldLocation = joglContext.getEventListener().mouseXCurrentLocation;
         joglContext.getEventListener().mouseYOldLocation = joglContext.getEventListener().mouseYCurrentLocation;
         joglContext.getCamera().notifyViewMatrixChanged();

@@ -5,7 +5,7 @@
  */
 package fr.ird.voxelidar.util;
 
-import fr.ird.voxelidar.engine3d.object.mesh.Attribut;
+import fr.ird.voxelidar.engine3d.misc.Attribut;
 import java.io.File;
 import java.util.Map;
 import java.util.TreeMap;

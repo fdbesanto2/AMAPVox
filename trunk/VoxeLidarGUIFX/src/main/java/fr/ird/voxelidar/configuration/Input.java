@@ -18,7 +18,6 @@ package fr.ird.voxelidar.configuration;
 import fr.ird.voxelidar.voxelisation.VoxelParameters;
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 
 /**
  *

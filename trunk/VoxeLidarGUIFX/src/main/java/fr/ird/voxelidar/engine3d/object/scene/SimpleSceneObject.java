@@ -6,13 +6,10 @@
 package fr.ird.voxelidar.engine3d.object.scene;
 
 import com.jogamp.opengl.GL3;
-import fr.ird.voxelidar.engine3d.buffer.MeshBuffer;
+import fr.ird.voxelidar.engine3d.mesh.GLMesh;
 import fr.ird.voxelidar.engine3d.loading.shader.Shader;
-import fr.ird.voxelidar.engine3d.object.mesh.InstancedMesh;
-import fr.ird.voxelidar.engine3d.object.mesh.Mesh;
-import fr.ird.voxelidar.engine3d.object.mesh.TexturedMesh;
+import fr.ird.voxelidar.engine3d.mesh.TexturedGLMesh;
 import static fr.ird.voxelidar.engine3d.object.scene.VoxelSpace.FLOAT_SIZE;
-import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 /**
@@ -21,7 +18,7 @@ import java.nio.IntBuffer;
  */
 public class SimpleSceneObject extends SceneObject{
     
-    public SimpleSceneObject(Mesh mesh, int shaderId, boolean isAlphaRequired){
+    public SimpleSceneObject(GLMesh mesh, int shaderId, boolean isAlphaRequired){
         
         super(mesh, shaderId, isAlphaRequired);
     }
@@ -29,28 +26,7 @@ public class SimpleSceneObject extends SceneObject{
     @Override
     public void initBuffers(GL3 gl){
         
-        buffer = new MeshBuffer(gl);
-        
-        if(mesh instanceof InstancedMesh){
-            buffer.initBuffers(gl, MeshBuffer.DEFAULT_SIZE, mesh.indexBuffer, new FloatBuffer[]{mesh.vertexBuffer, 
-                                    ((InstancedMesh)mesh).instancePositionsBuffer, 
-                                    ((InstancedMesh)mesh).instanceColorsBuffer});
-            
-        }else if(mesh instanceof TexturedMesh){
-            
-            if(((TexturedMesh)mesh).textureCoordinatesBuffer != null){
-                
-                buffer.initBuffers(gl, MeshBuffer.DEFAULT_SIZE, mesh.indexBuffer, new FloatBuffer[]{mesh.vertexBuffer, 
-                                    ((TexturedMesh)mesh).textureCoordinatesBuffer});
-            }
-            
-        }else if(mesh.colorBuffer != null){
-            
-            buffer.initBuffers(gl, MeshBuffer.DEFAULT_SIZE, mesh.indexBuffer, new FloatBuffer[]{mesh.vertexBuffer, 
-                                                                    mesh.colorBuffer, mesh.normalBuffer});
-        }else{
-             buffer.initBuffers(gl, MeshBuffer.DEFAULT_SIZE, mesh.indexBuffer, new FloatBuffer[]{mesh.vertexBuffer});
-        }
+        mesh.initBuffers(gl, GLMesh.DEFAULT_SIZE);
     }
     
     @Override
@@ -63,7 +39,7 @@ public class SimpleSceneObject extends SceneObject{
         
         gl.glBindVertexArray(vaoId);
         
-            gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, buffer.getVboId());
+            gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, mesh.getVboId());
                 
                 if(textureId != 0){
                     //gl.glActiveTexture(GL3.GL_TEXTURE0);
@@ -79,7 +55,7 @@ public class SimpleSceneObject extends SceneObject{
                     
                     gl.glEnableVertexAttribArray(shader.attributeMap.get("normal"));
                     gl.glVertexAttribPointer(shader.attributeMap.get("normal"), 3, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE+mesh.normalBuffer.capacity()*FLOAT_SIZE);
-                }else if(mesh instanceof TexturedMesh){
+                }else if(mesh instanceof TexturedGLMesh){
                     gl.glEnableVertexAttribArray(shader.attributeMap.get("textureCoordinates"));
                     gl.glVertexAttribPointer(shader.attributeMap.get("textureCoordinates"), 2, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE);
                 }
@@ -88,7 +64,7 @@ public class SimpleSceneObject extends SceneObject{
                     gl.glBindTexture(GL3.GL_TEXTURE_2D, 0);
                 }
                  
-            gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, buffer.getIboId());
+            gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, mesh.getIboId());
             
             gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, 0);
             
@@ -103,12 +79,7 @@ public class SimpleSceneObject extends SceneObject{
                 gl.glBindTexture(GL3.GL_TEXTURE_2D, textureId);
             }
             
-            if(mesh instanceof InstancedMesh){
-                gl.glDrawElementsInstanced(drawType, mesh.vertexCount, GL3.GL_UNSIGNED_SHORT, 0, ((InstancedMesh)mesh).instanceNumber);
-            }else{
-                gl.glDrawElements(drawType, mesh.vertexCount, GL3.GL_UNSIGNED_SHORT, 0);
-            }
-            
+            mesh.draw(gl);
 
             if(texture != null){
                 gl.glBindTexture(GL3.GL_TEXTURE_2D, 0);

@@ -7,13 +7,14 @@ package fr.ird.voxelidar.engine3d.object.scene;
 
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL3;
-import fr.ird.voxelidar.engine3d.buffer.MeshBuffer;
-import fr.ird.voxelidar.engine3d.object.mesh.Attribut;
-import fr.ird.voxelidar.engine3d.loading.mesh.MeshFactory;
+import fr.ird.voxelidar.engine3d.mesh.GLMesh;
+import fr.ird.voxelidar.engine3d.misc.Attribut;
+import fr.ird.voxelidar.engine3d.mesh.GLMeshFactory;
 import fr.ird.voxelidar.engine3d.loading.shader.Shader;
 import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
-import fr.ird.voxelidar.engine3d.object.mesh.InstancedMesh;
+import fr.ird.voxelidar.engine3d.mesh.InstancedGLMesh;
+import fr.ird.voxelidar.engine3d.mesh.SimpleGLMesh;
 import fr.ird.voxelidar.util.ColorGradient;
 import fr.ird.voxelidar.util.CombinedFilter;
 import fr.ird.voxelidar.util.CombinedFilters;
@@ -91,7 +92,7 @@ public class VoxelSpace extends SceneObject{
     private ColorGradient colorGradient;
     
     private boolean gradientUpdated;
-    private boolean cubeSizeUpdated;
+    private boolean cubeSizeUpdated = true;
     private boolean instancesUpdated;
     
     private int voxelNumberToDraw = 0;
@@ -833,7 +834,7 @@ public class VoxelSpace extends SceneObject{
         
         gl.glBindVertexArray(vaoId);
         
-            gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, buffer.getVboId());
+            gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, mesh.getVboId());
 
                 gl.glEnableVertexAttribArray(shader.attributeMap.get("position"));
                 gl.glVertexAttribPointer(shader.attributeMap.get("position"), 3, GL3.GL_FLOAT, false, 0, 0);
@@ -843,13 +844,13 @@ public class VoxelSpace extends SceneObject{
                 gl.glVertexAttribDivisor(shader.attributeMap.get("instance_position"), 1);
                 
                 gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_color"));
-                gl.glVertexAttribPointer(shader.attributeMap.get("instance_color"), 4, GL3.GL_FLOAT, false, 0, (mesh.vertexBuffer.capacity()+((InstancedMesh)mesh).instancePositionsBuffer.capacity())*FLOAT_SIZE);
+                gl.glVertexAttribPointer(shader.attributeMap.get("instance_color"), 4, GL3.GL_FLOAT, false, 0, (mesh.vertexBuffer.capacity()+((InstancedGLMesh)mesh).instancePositionsBuffer.capacity())*FLOAT_SIZE);
                 gl.glVertexAttribDivisor(shader.attributeMap.get("instance_color"), 1);
                 
                 //gl.glEnableVertexAttribArray(shader.attributeMap.get("ambient_occlusion"));
                 //gl.glVertexAttribPointer(shader.attributeMap.get("ambient_occlusion"), 4, GL3.GL_FLOAT, false, 0, 0);
                  
-            gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, buffer.getIboId());
+            gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, mesh.getIboId());
             
             gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, 0);
             
@@ -913,10 +914,10 @@ public class VoxelSpace extends SceneObject{
             instanceColors[i] = instanceColorsList.get(i);
         }*/
         
-        ((InstancedMesh)mesh).instancePositionsBuffer = Buffers.newDirectFloatBuffer(instancePositions);
-        ((InstancedMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(instanceColors);
+        ((InstancedGLMesh)mesh).instancePositionsBuffer = Buffers.newDirectFloatBuffer(instancePositions);
+        ((InstancedGLMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(instanceColors);
         
-        ((InstancedMesh)mesh).instanceNumber = instancePositions.length/3;
+        ((InstancedGLMesh)mesh).setInstanceNumber(instancePositions.length/3);
         
         instancesUpdated = false;
     }
@@ -926,12 +927,12 @@ public class VoxelSpace extends SceneObject{
         
         cubeSize = (float) (data.header.resolution.x/2.0f);
         
-        int instanceNumber = data.voxels.size();        
-        mesh = new InstancedMesh(MeshFactory.createCube(cubeSize), instanceNumber);
-        buffer = new MeshBuffer(gl);
+        int instanceNumber = data.voxels.size();    
+        mesh = new InstancedGLMesh(gl, GLMeshFactory.createCube(cubeSize), instanceNumber);
+        //mesh = new SimpleGLMesh(gl);
         
-        int maxSize = (mesh.vertexBuffer.capacity()*MeshBuffer.FLOAT_SIZE)+(data.voxels.size()*3*MeshBuffer.FLOAT_SIZE)+(data.voxels.size()*4*MeshBuffer.FLOAT_SIZE);
-        buffer.initBuffersV2(gl, maxSize, mesh.indexBuffer, mesh.vertexBuffer);
+        int maxSize = (mesh.vertexBuffer.capacity()*GLMesh.FLOAT_SIZE)+(data.voxels.size()*3*GLMesh.FLOAT_SIZE)+(data.voxels.size()*4*GLMesh.FLOAT_SIZE);
+        mesh.initBuffers(gl, maxSize);
         
         updateVao();
     }
@@ -943,12 +944,13 @@ public class VoxelSpace extends SceneObject{
             if(texture != null){
                 gl.glBindTexture(GL3.GL_TEXTURE_2D, textureId);
             }
-            
-            if(mesh instanceof InstancedMesh){
-                gl.glDrawElementsInstanced(drawType, mesh.vertexCount, GL3.GL_UNSIGNED_SHORT, 0, ((InstancedMesh)mesh).instanceNumber);
+            mesh.draw(gl);
+            /*
+            if(mesh instanceof InstancedGLMesh){
+                gl.glDrawElementsInstanced(drawType, mesh.vertexCount, GL3.GL_UNSIGNED_SHORT, 0, ((InstancedGLMesh)mesh).getInstanceNumber());
             }else{
                 gl.glDrawElements(drawType, mesh.vertexCount, GL3.GL_UNSIGNED_SHORT, 0);
-            }
+            }*/
 
             if(texture != null){
                 gl.glBindTexture(GL3.GL_TEXTURE_2D, 0);
@@ -960,12 +962,12 @@ public class VoxelSpace extends SceneObject{
         
         if(!instancesUpdated){
             
-            buffer.updateBuffer(gl, 1, ((InstancedMesh)mesh).instancePositionsBuffer);
-            buffer.updateBuffer(gl, 2, ((InstancedMesh)mesh).instanceColorsBuffer);
+            mesh.updateBuffer(gl, 1, ((InstancedGLMesh)mesh).instancePositionsBuffer);
+            mesh.updateBuffer(gl, 2, ((InstancedGLMesh)mesh).instanceColorsBuffer);
             
             gl.glBindVertexArray(vaoId);
         
-                gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, buffer.getVboId());
+                gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, mesh.getVboId());
 
                     gl.glEnableVertexAttribArray(shader.attributeMap.get("position"));
                     gl.glVertexAttribPointer(shader.attributeMap.get("position"), 3, GL3.GL_FLOAT, false, 0, 0);
@@ -975,10 +977,10 @@ public class VoxelSpace extends SceneObject{
                     gl.glVertexAttribDivisor(shader.attributeMap.get("instance_position"), 1);
 
                     gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_color"));
-                    gl.glVertexAttribPointer(shader.attributeMap.get("instance_color"), 4, GL3.GL_FLOAT, false, 0, (mesh.vertexBuffer.capacity()+((InstancedMesh)mesh).instancePositionsBuffer.capacity())*FLOAT_SIZE);
+                    gl.glVertexAttribPointer(shader.attributeMap.get("instance_color"), 4, GL3.GL_FLOAT, false, 0, (mesh.vertexBuffer.capacity()+((InstancedGLMesh)mesh).instancePositionsBuffer.capacity())*FLOAT_SIZE);
                     gl.glVertexAttribDivisor(shader.attributeMap.get("instance_color"), 1);
 
-                gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, buffer.getIboId());
+                gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, mesh.getIboId());
 
                 gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, 0);
 
@@ -1007,19 +1009,17 @@ public class VoxelSpace extends SceneObject{
                 }
             }
 
-            ((InstancedMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(instanceColors, 0, count0);
+            ((InstancedGLMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(instanceColors, 0, count0);
             
-            buffer.updateBuffer(gl, 2, ((InstancedMesh)mesh).instanceColorsBuffer);
+            mesh.updateBuffer(gl, 2, ((InstancedGLMesh)mesh).instanceColorsBuffer);
             
             gradientUpdated = true;
         }
         
         if(!cubeSizeUpdated){
             
-            int instanceNumber = ((InstancedMesh)mesh).instanceNumber;
-            mesh = new InstancedMesh(MeshFactory.createCube(cubeSize), instanceNumber);
-            
-            buffer.updateBuffer(gl, 0, mesh.vertexBuffer);
+            GLMesh cube = GLMeshFactory.createCube(cubeSize);
+            mesh.updateBuffer(gl, 0, cube.vertexBuffer);
             
             cubeSizeUpdated = true;
         }

@@ -6,9 +6,8 @@
 package fr.ird.voxelidar.engine3d.object.scene;
 
 import com.jogamp.opengl.GL3;
-import fr.ird.voxelidar.engine3d.buffer.MeshBuffer;
+import fr.ird.voxelidar.engine3d.mesh.GLMesh;
 import fr.ird.voxelidar.engine3d.loading.texture.Texture;
-import fr.ird.voxelidar.engine3d.object.mesh.Mesh;
 import fr.ird.voxelidar.engine3d.loading.shader.Shader;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 
@@ -18,8 +17,8 @@ import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
  */
 public abstract class SceneObject{
     
-    public Mesh mesh ;
-    protected MeshBuffer buffer;
+    //public Mesh mesh ;
+    protected GLMesh mesh;
     protected int vaoId, shaderId, textureId;
     private int drawType;
     public boolean isAlphaRequired;
@@ -51,7 +50,7 @@ public abstract class SceneObject{
         
     }
     
-    public SceneObject(Mesh mesh, int shaderId, boolean isAlphaRequired){
+    public SceneObject(GLMesh mesh, int shaderId, boolean isAlphaRequired){
         
         this.mesh = mesh;
         this.shaderId = shaderId;

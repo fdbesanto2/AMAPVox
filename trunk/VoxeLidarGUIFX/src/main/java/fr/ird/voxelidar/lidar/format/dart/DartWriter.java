@@ -42,9 +42,9 @@ public class DartWriter {
             
             for(int z=0; z<dart.getSceneDimension().z; z++){
                 
-                for(int x=0; x<dart.getSceneDimension().x; x++){
+                for(int y=dart.getSceneDimension().y-1; y>=0; y--){
                     
-                    for(int y=0; y<dart.getSceneDimension().y; y++){
+                    for(int x=0; x<dart.getSceneDimension().x; x++){
                         
                         DartCell cell = dart.cells[x][y][z];
                         

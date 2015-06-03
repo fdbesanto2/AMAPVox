@@ -10,9 +10,8 @@ import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.util.FPSAnimator;
-import fr.ird.voxelidar.engine3d.object.mesh.Mesh;
 import fr.ird.voxelidar.engine3d.event.BasicEvent;
-import fr.ird.voxelidar.engine3d.loading.mesh.MeshFactory;
+import fr.ird.voxelidar.engine3d.mesh.GLMeshFactory;
 import fr.ird.voxelidar.engine3d.object.camera.CameraAdapter;
 import fr.ird.voxelidar.engine3d.object.camera.TrackballCamera;
 import fr.ird.voxelidar.engine3d.object.scene.Scene;
@@ -20,11 +19,9 @@ import fr.ird.voxelidar.engine3d.object.scene.SceneObject;
 import fr.ird.voxelidar.engine3d.object.scene.Dtm;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.loading.shader.Shader;
-import fr.ird.voxelidar.engine3d.loading.shader.ShaderGenerator;
-import fr.ird.voxelidar.engine3d.loading.shader.ShaderGenerator.Flag;
-import fr.ird.voxelidar.engine3d.loading.texture.Texture;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
+import fr.ird.voxelidar.engine3d.mesh.GLMesh;
 import fr.ird.voxelidar.engine3d.object.scene.SimpleSceneObject;
 import fr.ird.voxelidar.util.Settings;
 import java.io.File;
@@ -33,7 +30,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map.Entry;
 import javax.swing.event.EventListenerList;
@@ -142,12 +138,15 @@ public class JoglListener implements GLEventListener {
         isInit = true;
                 
         GL3 gl = drawable.getGL().getGL3();
+        /*
+        Vec3F eye = new Vec3F(80.0f, 72.25f, 200f);
+        Vec3F target = new Vec3F(0.0f, 0.0f, 0.0f);
+        Vec3F up = new Vec3F(0.0f, 0.0f, 1.0f);
+        */
         
         Vec3F eye = new Vec3F(80.0f, 72.25f, 200f);
         Vec3F target = new Vec3F(0.0f, 0.0f, 0.0f);
         Vec3F up = new Vec3F(0.0f, 0.0f, 1.0f);
-        
-        
         
         camera = new TrackballCamera();
         camera.init(eye, target, up);
@@ -335,73 +334,42 @@ public class JoglListener implements GLEventListener {
         
         scene = new Scene();
         
-        
         try{
-            //set shaders
-            //InputStreamReader simpleVertexShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/SimpleVertexShader.txt"));
-            //InputStreamReader simpleFragmentShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/SimpleFragmentShader.txt"));
-            ShaderGenerator shadGenerator = new ShaderGenerator();
-            Shader basicShader = shadGenerator.generateShader(gl, EnumSet.of(Flag.COLORED), "basicShader");
-            //Shader basicShader = new Shader(gl, simpleFragmentShader, simpleVertexShader, "basicShader");
-            //basicShader.setUniformLocations(new String[]{"viewMatrix","projMatrix"});
-            //basicShader.setAttributeLocations(new String[]{"position","color"});
-            
-            logger.debug("shader compiled: "+basicShader.name);
-            /*
-            InputStreamReader aoVertexShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/AOVertexShader.txt"));
-            InputStreamReader aoFragmentShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/AOFragmentShader.txt"));
-            Shader aoShader = new Shader(gl, aoFragmentShader, aoVertexShader, "aoShader");
-            aoShader.setUniformLocations(new String[]{"viewMatrix","projMatrix"});
-            aoShader.setAttributeLocations(new String[]{"position", "instance_position", "instance_color","ambient_occlusion"});
-            
-            logger.debug("shader compiled: "+basicShader.name);
-                */
-            
+                        
             InputStreamReader noTranslationVertexShader = new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("shaders/NoTranslationVertexShader.txt"));
             InputStreamReader noTranslationFragmentShader = new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("shaders/NoTranslationFragmentShader.txt"));
             Shader noTranslationShader = new Shader(gl, noTranslationFragmentShader, noTranslationVertexShader, "noTranslationShader");
-            noTranslationShader.setUniformLocations(new String[]{"viewMatrix","projMatrix", "normalMatrix", "Material", "Light"});
-            noTranslationShader.setAttributeLocations(new String[]{"position","color", "normal"});
+            noTranslationShader.setAttributeLocations(Shader.composeShaderAttributes(Shader.MINIMAL_SHADER_ATTRIBUTES, Shader.LIGHT_SHADER_ATTRIBUTES));
+            noTranslationShader.setUniformLocations(Shader.composeShaderUniforms(Shader.MINIMAL_SHADER_UNIFORMS, Shader.LIGHT_SHADER_UNIFORMS));
             
             logger.debug("shader compiled: "+noTranslationShader.name);
             
             InputStreamReader instanceVertexShader = new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("shaders/InstanceVertexShader.txt"));
             InputStreamReader instanceFragmentShader = new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("shaders/InstanceFragmentShader.txt"));
-            //Shader instanceShader = shadGenerator.generateShader(gl, EnumSet.of(Flag.INSTANCED, Flag.TEXTURED), "instanceShader");
             Shader instanceShader = new Shader(gl, instanceFragmentShader, instanceVertexShader, "instanceShader");
-            instanceShader.setUniformLocations(new String[]{"viewMatrix","projMatrix"});
-            //instanceShader.setUniformLocations(new String[]{"viewMatrix","projMatrix", "normalMatrix", "Material", "Light", "eyePosition","enableLighting"});
-            //instanceShader.setAttributeLocations(new String[]{"position", "normal", "instance_position", "instance_color"});
-            instanceShader.setAttributeLocations(new String[]{"position", "instance_position", "instance_color"});
+            instanceShader.setUniformLocations(Shader.composeShaderUniforms(Shader.MINIMAL_SHADER_UNIFORMS));
+            instanceShader.setAttributeLocations(Shader.composeShaderAttributes(new String[]{"position"}, Shader.INSTANCE_SHADER_ATTRIBUTES));
             
             logger.debug("shader compiled: "+instanceShader.name);
             
-            //InputStreamReader textureVertexShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/TextureVertexShader.txt"));
-            //InputStreamReader textureFragmentShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/TextureFragmentShader.txt"));
-            Shader texturedShader = shadGenerator.generateShader(gl, EnumSet.of(Flag.TEXTURED), "textureShader");
-            //Shader texturedShader = new Shader(gl, textureFragmentShader, textureVertexShader, "textureShader");
-            //texturedShader.setUniformLocations(new String[]{"viewMatrix","projMatrix","texture"});
-            //texturedShader.setAttributeLocations(new String[]{"position","textureCoordinates"});
+            InputStreamReader textureVertexShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/TextureVertexShader.txt"));
+            InputStreamReader textureFragmentShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/TextureFragmentShader.txt"));
+            Shader texturedShader = new Shader(gl, textureFragmentShader, textureVertexShader, "textureShader");
+            texturedShader.setUniformLocations(Shader.composeShaderUniforms(Shader.MINIMAL_SHADER_UNIFORMS, Shader.TEXTURE_SHADER_UNIFORMS));
+            texturedShader.setAttributeLocations(Shader.composeShaderAttributes(new String[]{"position"}, Shader.TEXTURE_SHADER_ATTRIBUTES));
             texturedShader.isOrtho = true;
 
             logger.debug("shader compiled: "+texturedShader.name);
             
-            //scene.addShader(aoShader);
             scene.addShader(noTranslationShader);
             scene.addShader(instanceShader);
-            scene.addShader(basicShader);
             scene.addShader(texturedShader);
-            /*
-            Mesh axisMesh = MeshFactory.createMeshFromObj(
-                    new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("mesh/axis.obj")), 
-                    new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("mesh/axis.mtl")));
-            */
             
-            Mesh axisMesh = MeshFactory.createMeshFromX3D( new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("mesh/axis.x3d")));
-            
+            GLMesh axisMesh = GLMeshFactory.createMeshFromX3D(new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("mesh/axis.x3d")));
             axisMesh.setGlobalScale(0.03f);
             
             SceneObject axis = new SimpleSceneObject(axisMesh, noTranslationShader.getProgramId(), false);
+            
             axis.setDrawType(GL3.GL_TRIANGLES);
             scene.addObject(axis, gl);
             
@@ -419,23 +387,6 @@ public class JoglListener implements GLEventListener {
             
             camera.addCameraListener(new CameraAdapter() {
                 
-                
-                @Override
-                public void locationChanged(final Vec3F location) {
-                    
-                    //toolBox.jTextFieldXCameraPosition.setText(String.valueOf(location.x));
-                    //toolBox.jTextFieldYCameraPosition.setText(String.valueOf(location.y));
-                    //toolBox.jTextFieldZCameraPosition.setText(String.valueOf(location.z));
-                }
-
-                @Override
-                public void targetChanged(final Vec3F target) {
-                    //toolBox.jTextFieldXCameraTarget.setText(String.valueOf(target.x));
-                    //toolBox.jTextFieldYCameraTarget.setText(String.valueOf(target.y));
-                    //toolBox.jTextFieldZCameraTarget.setText(String.valueOf(target.z));
-                    
-                }
-
                 @Override
                 public void viewMatrixChanged(Mat4F viewMatrix) {
                     //must be updated inside the thread loop
@@ -451,44 +402,6 @@ public class JoglListener implements GLEventListener {
             
             voxelSpace.setSettings(settings);
             voxelSpace.setShaderId(instanceShader.getProgramId());
-            
-            
-            //voxelSpace.attachTexture(Texture.createFromFile(gl, new File("/home/calcul/Documents/Julien/Blends/uv_texture.png")));
-            
-            //voxelSpace = new VoxelSpace(gl, aoShader.getProgramId(), settings);
-            //voxelSpace.setAttributToVisualize(settings.attributeToVisualize);
-
-            //final JProgressLoadingFile progress = new JProgressLoadingFile(parent);
-            //progress.setVisible(true);
-            /*
-            voxelSpace.addVoxelSpaceListener(new VoxelSpaceAdapter() {
-
-                @Override
-                public void voxelSpaceCreationProgress(int progression){
-
-                    //progress.jProgressBar1.setValue(progression);
-                }
-
-                
-                @Override
-                public void voxelSpaceCreationFinished(){
-                    //progress.dispose();
-
-                    scene.canDraw = true;
-                    
-                    drawNextFrame();
-                }
-            });
-            */
-            /*
-            try{
-                voxelSpace.loadFromFile(settings.voxelSpaceFile);
-                //voxelSpace.loadFromFile(settings.voxelSpaceFile, settings.mapAttributs, terrain, false);
-            }catch(Exception e){
-                logger.error("cannot load voxel space from file", e);
-            }
-            */
-
 
             scene.setVoxelSpace(voxelSpace);
             

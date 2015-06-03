@@ -152,22 +152,22 @@ public class BasicEvent extends EventManager{
         
         if(rightKeyPressed){
             
-            joglContext.getCamera().translate(new Vec3F(-10.0f, 0.0f, 0.0f));
+            joglContext.getCamera().translate(new Vec3F(4.0f, 0.0f, 0.0f));
         }
         
         if(leftKeyPressed){
             
-            joglContext.getCamera().translate(new Vec3F(10.0f, 0.0f, 0.0f));
+            joglContext.getCamera().translate(new Vec3F(4.0f, 0.0f, 0.0f));
         }
         
         if(upKeyPressed){
             
-            joglContext.getCamera().translate(new Vec3F(0.0f, 10.0f, 0.0f));
+            joglContext.getCamera().translate(new Vec3F(0.0f, 4.0f, 0.0f));
         }
         
         if(downKeyPressed){
             
-            joglContext.getCamera().translate(new Vec3F(0.0f, -10.0f, 0.0f));
+            joglContext.getCamera().translate(new Vec3F(0.0f, -4.0f, 0.0f));
         }
         
         if(spaceKeyPressed){
