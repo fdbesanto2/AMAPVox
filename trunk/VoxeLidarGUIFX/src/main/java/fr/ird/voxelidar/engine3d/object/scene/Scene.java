@@ -31,6 +31,7 @@ public class Scene {
     */
     
     public final ArrayList<SceneObject> objectsList;
+    public final ArrayList<Camera> cameraList;
     public final Map<Integer, Shader> shadersList;
     private VoxelSpace voxelSpace;
     public boolean canDraw;
@@ -41,6 +42,7 @@ public class Scene {
     public Scene(){
         
         objectsList = new ArrayList<>();
+        cameraList = new ArrayList<>();
         shadersList = new HashMap<>();
         canDraw = false;
     }
@@ -135,8 +137,8 @@ public class Scene {
                 voxelSpace.initBuffers(gl);
                 voxelSpace.initVao(gl, shadersList.get(voxelSpace.getShaderId()));
                 voxelSpace.arrayLoaded = true;
-                camera.location = new Vec3F(voxelSpace.centerX, voxelSpace.centerY, voxelSpace.centerZ+voxelSpace.widthZ);
-                //camera.location = new Vec3F(voxelSpace.centerX+voxelSpace.widthX, voxelSpace.centerY+voxelSpace.widthY, voxelSpace.centerZ+voxelSpace.widthZ);
+                //camera.location = new Vec3F(voxelSpace.centerX, voxelSpace.centerY, voxelSpace.centerZ+voxelSpace.widthZ);
+                camera.location = new Vec3F(voxelSpace.centerX+voxelSpace.widthX, voxelSpace.centerY+voxelSpace.widthY, voxelSpace.centerZ+voxelSpace.widthZ);
                 camera.target = new Vec3F(voxelSpace.centerX,voxelSpace.centerY,voxelSpace.centerZ);
                 camera.updateViewMatrix();
                 
@@ -186,7 +188,7 @@ public class Scene {
                 //}
                 
                 gl.glUseProgram(object.getShaderId());
-                    object.draw(gl, object.getDrawType());
+                    object.draw(gl);
                 gl.glUseProgram(0);
                 
             }

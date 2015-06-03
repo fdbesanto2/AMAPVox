@@ -26,11 +26,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import org.apache.log4j.Logger;
@@ -45,6 +49,9 @@ public class Updater {
     
     final String APP_KEY = "yv02kehoorehcli";
     final String APP_SECRET = "i8z195pbw5gfei3";
+    
+    public String lastVersionRevision="";
+    public String lastVersionCreationDate="";
 
 
     public void update() throws FileNotFoundException, DbxException, IOException {
@@ -88,16 +95,28 @@ public class Updater {
             }
             
             if(lastKey != null && lastFile != null){
+                                      
+                URL myURL = getClass().getProtectionDomain().getCodeSource().getLocation();
+                java.net.URI myURI;
+                try {
+                    myURI = myURL.toURI();
+                }catch (URISyntaxException e1){
+                    logger.error("Cannot get current jar file directory", e1);
+                    return;
+                }
                 
-                String workingDirectory = System.getProperty("user.dir");
+                File workingDirectoryFile = new File(Paths.get(myURI).toFile().toString());
+                File workingDirectory = new File(workingDirectoryFile.getParent());
+                
+                //String workingDirectory = Paths.get(".").toAbsolutePath().normalize().toString();
                 File tempZipFile = new File(workingDirectory+"/"+lastFile.getName());
                 logger.info("Saving archive file: " + tempZipFile.getAbsolutePath());
                 
                 try (FileOutputStream outputStream = new FileOutputStream(tempZipFile)) {
-                    
                     client.getFile(lastFile.getAbsolutePath(), null, outputStream);
                 }catch(Exception e){
-                    
+                    logger.error("Cannot get file on server", e);
+                    return;
                 }
                 
                 
@@ -125,6 +144,7 @@ public class Updater {
                             }
                             
                             dest.flush();
+                            
                             
                         }catch(IOException ex){
                             logger.error("Cannot write file : "+entryFile.getAbsolutePath(), ex);

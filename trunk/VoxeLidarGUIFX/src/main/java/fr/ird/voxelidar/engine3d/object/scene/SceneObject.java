@@ -93,7 +93,7 @@ public abstract class SceneObject{
     
     public abstract void initVao(GL3 gl, Shader shader);
     
-    public abstract void draw(GL3 gl, int drawType);
+    public abstract void draw(GL3 gl);
 
     
 }

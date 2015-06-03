@@ -72,7 +72,7 @@ public class SimpleSceneObject extends SceneObject{
     }
     
     @Override
-    public void draw(GL3 gl, int drawType){
+    public void draw(GL3 gl){
         
         gl.glBindVertexArray(vaoId);
             if(texture != null){

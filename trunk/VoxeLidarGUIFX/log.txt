@@ -12138,6 +12138,57 @@
 2015-04-28 10:59:18 INFO  - file written ( 0.0 s )
 2015-04-28 10:59:18 INFO  - Voxelisation finished in 1206.0 s
 2015-04-28 10:59:18 ERROR - java.lang.NoClassDefFoundError: fr/ird/voxelidar/MainFrameController$29$1$5
-2015-06-03 17:07:47 INFO  - Extracting: windows/readme.txt
-2015-06-03 17:07:47 INFO  - Extracting: windows/vcredist_x64.exe
-2015-06-03 17:07:47 INFO  - Removing archive file: /home/calcul/Documents/Julien/VoxeLidar/trunk/VoxeLidarGUIFX/VoxeLidarGUIFX-1.0-rcea1bfe3.zip
+2015-06-03 17:44:51 INFO  - Extracting: windows/readme.txt
+2015-06-03 17:44:51 INFO  - Extracting: windows/vcredist_x64.exe
+2015-06-03 17:44:51 INFO  - Removing archive file: /home/calcul/Documents/Julien/VoxeLidar/trunk/VoxeLidarGUIFX/VoxeLidarGUIFX-1.0-rcea1bfe3.zip
+2015-06-03 18:00:25 INFO  - Saving archive file: /home/calcul/Documents/Julien/VoxeLidar/trunk/VoxeLidarGUIFX/target/release/VoxeLidarGUIFX-1.0-rcea1bfe3.zip
+2015-06-03 18:00:37 INFO  - Extracting: Logiciel de voxelisation de données LIDAR_v2.odt
+2015-06-03 18:00:37 INFO  - Extracting: VoxeLidarGUIFX-1.0-rcea1bfe3.jar
+2015-06-03 18:00:37 INFO  - Extracting: click_me.bat
+2015-06-03 18:00:37 INFO  - Extracting: click_me.sh
+2015-06-03 18:00:37 INFO  - Extracting: lib/commons-collections-3.2.1.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/commons-io-1.3.2.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/commons-lang3-3.3.2.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/commons-math-2.0.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/controlsfx-8.20.8.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/exp4j-0.4.0.ALPHA-3.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/gluegen-rt-2.3.0-natives-android-aarch64.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/gluegen-rt-2.3.0-natives-android-armv6.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/gluegen-rt-2.3.0-natives-linux-amd64.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/gluegen-rt-2.3.0-natives-linux-armv6.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/gluegen-rt-2.3.0-natives-linux-armv6hf.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/gluegen-rt-2.3.0-natives-linux-i586.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/gluegen-rt-2.3.0-natives-macosx-universal.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/gluegen-rt-2.3.0-natives-solaris-amd64.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/gluegen-rt-2.3.0-natives-solaris-i586.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/gluegen-rt-2.3.0-natives-windows-amd64.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/gluegen-rt-2.3.0-natives-windows-i586.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/gluegen-rt-2.3.0.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/gluegen-rt-main-2.3.0.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/guava-r05.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/jcommon-1.0.23.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/jdom2-2.0.5.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/jfreechart-1.0.19.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/jogl-all-2.3.0-natives-android-aarch64.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/jogl-all-2.3.0-natives-android-armv6.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/jogl-all-2.3.0-natives-linux-amd64.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/jogl-all-2.3.0-natives-linux-armv6.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/jogl-all-2.3.0-natives-linux-armv6hf.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/jogl-all-2.3.0-natives-linux-i586.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/jogl-all-2.3.0-natives-macosx-universal.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/jogl-all-2.3.0-natives-solaris-amd64.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/jogl-all-2.3.0-natives-solaris-i586.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/jogl-all-2.3.0-natives-windows-amd64.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/jogl-all-2.3.0-natives-windows-i586.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/jogl-all-2.3.0.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/jogl-all-main-2.3.0.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/log4j-1.2.17.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/opencsv-2.0.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/openjfx-dialogs-1.0.2.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/sax-2.0.1.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/swing-layout-1.0.3.jar
+2015-06-03 18:00:37 INFO  - Extracting: lib/vecmath-1.3.1.jar
+2015-06-03 18:00:37 INFO  - Extracting: log.txt
+2015-06-03 18:00:37 INFO  - Extracting: windows/readme.txt
+2015-06-03 18:00:37 INFO  - Extracting: windows/vcredist_x64.exe
+2015-06-03 18:00:37 INFO  - Removing archive file: /home/calcul/Documents/Julien/VoxeLidar/trunk/VoxeLidarGUIFX/target/release/VoxeLidarGUIFX-1.0-rcea1bfe3.zip

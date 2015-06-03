@@ -938,19 +938,13 @@ public class VoxelSpace extends SceneObject{
     }
     
     @Override
-    public void draw(GL3 gl, int drawType) {
+    public void draw(GL3 gl) {
         
         gl.glBindVertexArray(vaoId);
             if(texture != null){
                 gl.glBindTexture(GL3.GL_TEXTURE_2D, textureId);
             }
             mesh.draw(gl);
-            /*
-            if(mesh instanceof InstancedGLMesh){
-                gl.glDrawElementsInstanced(drawType, mesh.vertexCount, GL3.GL_UNSIGNED_SHORT, 0, ((InstancedGLMesh)mesh).getInstanceNumber());
-            }else{
-                gl.glDrawElements(drawType, mesh.vertexCount, GL3.GL_UNSIGNED_SHORT, 0);
-            }*/
 
             if(texture != null){
                 gl.glBindTexture(GL3.GL_TEXTURE_2D, 0);
@@ -1024,7 +1018,7 @@ public class VoxelSpace extends SceneObject{
             cubeSizeUpdated = true;
         }
         //gl.glDisable(GL3.GL_DEPTH_TEST);
-        draw(gl, GL3.GL_TRIANGLES);
+        draw(gl);
         //gl.glEnable(GL3.GL_DEPTH_TEST);
     }
 }

@@ -22,22 +22,14 @@ import fr.ird.voxelidar.engine3d.loading.shader.Shader;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.mesh.GLMesh;
+import fr.ird.voxelidar.engine3d.object.scene.SceneManager;
 import fr.ird.voxelidar.engine3d.object.scene.SimpleSceneObject;
 import fr.ird.voxelidar.util.Settings;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
-import java.util.List;
 import java.util.Map.Entry;
 import javax.swing.event.EventListenerList;
 import org.apache.log4j.Logger;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
 
 /**
  *
@@ -49,6 +41,7 @@ public class JoglListener implements GLEventListener {
     private BasicEvent eventListener;
     TrackballCamera camera;
     private Scene scene;
+    private SceneManager sceneManager;
     private Vec3F worldColor;
     
     public int width;
@@ -152,6 +145,9 @@ public class JoglListener implements GLEventListener {
         camera.init(eye, target, up);
         camera.initOrtho(-((this.width-startX)/100), (this.width-startX)/100, this.height/100, -(this.height)/100, camera.getNearOrtho(), camera.getFarOrtho());
         
+        //sceneManager = new SceneManager();
+        
+        
         initScene(gl);
         
         gl.glBlendFunc(GL3.GL_SRC_ALPHA, GL3.GL_ONE_MINUS_SRC_ALPHA );
@@ -249,19 +245,7 @@ public class JoglListener implements GLEventListener {
             gl.glUseProgram(id);
                 gl.glUniformMatrix4fv(s.uniformMap.get("normalMatrix"), 1, false, normalMatrixBuffer);
             gl.glUseProgram(0);
-            /*
-            int id2 = scene.getShaderByName("instanceShader");
-            Shader s2 = scene.getShadersList().get(id2);
-            gl.glUseProgram(id2);
-                gl.glUniformMatrix4fv(s2.uniformMap.get("normalMatrix"), 1, false, normalMatrixBuffer);
-                gl.glUniform3f(s2.uniformMap.get("eyePosition"), camera.location.x, camera.location.y, camera.location.z);
-                
-                if(isInit){
-                    gl.glUniform1i(s2.uniformMap.get("enableLighting"), 0);
-                }
-                
-            gl.glUseProgram(0);
-            */
+            
             FloatBuffer viewMatrixBuffer = Buffers.newDirectFloatBuffer(camera.getViewMatrix().mat);
                     
             for(Entry<Integer, Shader> shader : scene.getShadersList().entrySet()) {
@@ -301,33 +285,6 @@ public class JoglListener implements GLEventListener {
             animator.pause();
             justOnce = false;
         }
-    }
-    
-    public void loadScene(GL3 gl, File sceneFile){
-        
-        Document document;
-        Element root;
-        SAXBuilder sxb =new SAXBuilder();
-        
-        //avoid loading of dtd file
-        sxb.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-        
-        try {
-            document = sxb.build(new FileInputStream(sceneFile));
-            root = document.getRootElement();
-            Element objects = root.getChild("objects");
-            List<Element> objectsElement = objects.getChildren("object");
-            
-            for(Element object:objectsElement){
-                
-            }
-            
-        } catch (FileNotFoundException ex) {
-            logger.error(ex);
-        } catch (JDOMException | IOException ex) {
-            logger.error(ex);
-        }
-        
     }
     
     private void initScene(final GL3 gl){

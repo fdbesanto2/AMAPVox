@@ -178,7 +178,7 @@ public class MainFrameController implements Initializable {
                     @Override
                     protected Void call() throws InterruptedException {
 
-                            Updater updater = new Updater();
+                            final Updater updater = new Updater();
                             
                             try {
                                 updater.update();
@@ -187,6 +187,18 @@ public class MainFrameController implements Initializable {
                             } catch (IOException ex) {
                                 logger.error("IOException", ex);
                             }
+                            
+                            Platform.runLater(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    Alert alert = new Alert(AlertType.INFORMATION);
+                                    alert.setTitle("Information");
+                                    alert.setHeaderText("About the Update");
+                                    alert.setContentText("AmapVox needs to be restarted in order to apply update!");
+                                    alert.show();
+                                }
+                            });
                             
                             return null;
                     }
