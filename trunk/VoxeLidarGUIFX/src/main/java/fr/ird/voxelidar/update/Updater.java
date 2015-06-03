@@ -37,6 +37,7 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -107,13 +108,13 @@ public class Updater {
                 
                 File workingDirectoryFile = new File(Paths.get(myURI).toFile().toString());
                 File workingDirectory = new File(workingDirectoryFile.getParent());
-                
                 //String workingDirectory = Paths.get(".").toAbsolutePath().normalize().toString();
                 File tempZipFile = new File(workingDirectory+"/"+lastFile.getName());
                 logger.info("Saving archive file: " + tempZipFile.getAbsolutePath());
                 
                 try (FileOutputStream outputStream = new FileOutputStream(tempZipFile)) {
-                    client.getFile(lastFile.getAbsolutePath(), null, outputStream);
+                    String filePath = lastFile.getPath().replaceAll("\\\\", "/");
+                    client.getFile(filePath, null, outputStream);
                 }catch(Exception e){
                     logger.error("Cannot get file on server", e);
                     return;
