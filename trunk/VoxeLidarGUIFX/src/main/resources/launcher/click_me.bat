@@ -1,12 +1,21 @@
 @ECHO OFF
 
 for /f "skip=1" %%p in ('wmic os get freephysicalmemory') do ( 
-  set m=%%p
+  set availableMemory=%%p
   goto :done
 )
 :done
-echo free: %m%
-set /A freeMemory=m-2097152
-echo Java max heap size fixed to %freeMemory%, is total available memory minus 2go
+echo available memory: %availableMemory%
+set /A maxJVMMemory=availableMemory-2097152
 
-java -jar -Xmx%freeMemory%k VoxeLidarGUIFX-1.0-r$BUILD_NUMBER$.jar
+if %maxJVMMemory% LEQ 0 (GOTO :defaultMemory) else (GOTO :common)
+
+:defaultMemory
+echo test
+set /A maxJVMMemory=2097152
+GOTO :common
+
+:common
+echo Java max heap size fixed to %maxJVMMemory%
+
+java -jar -Xmx%maxJVMMemory%k %~dp0%VoxeLidarGUIFX-1.0-r$BUILD_NUMBER$.jar

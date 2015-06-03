@@ -170,7 +170,7 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionMenuItemUpdate(ActionEvent event) {
-        
+                                    
         Service<Void> service = new Service<Void>() {
             @Override
             protected Task<Void> createTask() {
@@ -180,13 +180,7 @@ public class MainFrameController implements Initializable {
 
                             final Updater updater = new Updater();
                             
-                            try {
-                                updater.update();
-                            } catch (DbxException ex) {
-                                logger.error("DBXException", ex);
-                            } catch (IOException ex) {
-                                logger.error("IOException", ex);
-                            }
+                            updater.update();
                             
                             Platform.runLater(new Runnable() {
 

@@ -247,7 +247,13 @@
             <artifactId>dropbox-core-sdk</artifactId>
             <version>1.7.7</version>
         </dependency>
-        
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.9</version>
+        </dependency>
+
+
     </dependencies>
 
 </project>
