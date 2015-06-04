@@ -9,12 +9,19 @@ import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData;
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.math.point.Point3I;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelObject;
-import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
+import fr.ird.voxelidar.lidar.format.dtm.DTMPoint;
+import fr.ird.voxelidar.lidar.format.dtm.DtmLoader;
+import fr.ird.voxelidar.lidar.format.dtm.Face;
+import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import org.apache.log4j.Logger;
 
 /**
@@ -25,7 +32,35 @@ public class DartWriter {
     
     private final static Logger logger = Logger.getLogger(DartWriter.class);
     
-    public static void writeFromDart(Dart dart, File outputFile){
+    private boolean generateTrianglesFile;
+    private File dtmFile;
+    private File trianglesFile;
+
+    public boolean isGenerateTrianglesFile() {
+        return generateTrianglesFile;
+    }
+
+    public void setGenerateTrianglesFile(boolean generateTrianglesFile) {
+        this.generateTrianglesFile = generateTrianglesFile;
+    }
+
+    public File getDtmFile() {
+        return dtmFile;
+    }
+
+    public void setDtmFile(File dtmFile) {
+        this.dtmFile = dtmFile;
+    }
+
+    public File getTrianglesFile() {
+        return trianglesFile;
+    }
+
+    public void setTrianglesFile(File trianglesFile) {
+        this.trianglesFile = trianglesFile;
+    }    
+    
+    public void writeFromDart(Dart dart, File outputFile){
         
         BufferedWriter writer;
         try {
@@ -89,7 +124,7 @@ public class DartWriter {
         }
     }
     
-    public static void writeFromVoxelSpace(VoxelSpaceData data, File outputFile){
+    public void writeFromVoxelSpace(VoxelSpaceData data, File outputFile){
         
         Dart dart = new Dart(
                 new Point3I(data.header.split.x,data.header.split.y,data.header.split.z),
@@ -98,8 +133,41 @@ public class DartWriter {
         
         List<String> attributsNames = data.header.attributsNames;
         
-        for (VoxelObject voxel : data.voxels) {
+        RegularDtm dtm = null;
+        
+        Set<Integer>[][][] faces = null;
+        
+        if(generateTrianglesFile && dtmFile != null){
             
+            try {
+                logger.info("Reading DTM : "+dtmFile.getAbsolutePath());
+                
+                dtm = DtmLoader.readFromAscFile(dtmFile);
+                dtm.buildMesh();
+                
+                faces = new TreeSet[data.header.split.x][data.header.split.y][data.header.split.z];
+                ArrayList<DTMPoint> points = dtm.getPoints();
+                
+                for(DTMPoint point : points){
+                    
+                    Point3I voxelIndice = data.getIndicesFromPoint(point.x, point.y, point.z);
+                    if(voxelIndice != null){
+                        
+                        if(faces[voxelIndice.x][voxelIndice.y][voxelIndice.z] == null){
+                            faces[voxelIndice.x][voxelIndice.y][voxelIndice.z] = new TreeSet<>();
+                        }
+                        
+                        faces[voxelIndice.x][voxelIndice.y][voxelIndice.z].addAll(point.faces);
+                    }
+                }
+                
+            } catch (Exception ex) {
+                logger.error("Cannot read dtm file "+dtmFile.getAbsolutePath(), ex);
+                dtm = null;
+            }
+        }
+        
+        for (VoxelObject voxel : data.voxels) {
             
             float[] attributs = voxel.attributs;
             
@@ -119,7 +187,19 @@ public class DartWriter {
             
             dart.cells[indiceX][indiceY][indiceZ] = new DartCell();
             
-            dart.cells[indiceX][indiceY][indiceZ].setNbFigures(0);
+            //on récupère les triangles contenus dans le voxel
+            
+            int nbFigures = 0;
+            if(faces != null){
+                
+                if(faces[indiceX][indiceY][indiceZ] == null){
+                    nbFigures = 0;
+                }else{
+                    nbFigures = faces[indiceX][indiceY][indiceZ].size();
+                }
+            }
+            
+            dart.cells[indiceX][indiceY][indiceZ].setNbFigures(nbFigures);
             dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(1);
             
             if(Float.isNaN(densite) || densite == 0){
@@ -131,10 +211,71 @@ public class DartWriter {
             
             dart.cells[indiceX][indiceY][indiceZ].setTurbids(new Turbid[]{new Turbid(densite, 0)});
             
+            if(faces != null){
+                
+                if(faces[indiceX][indiceY][indiceZ] != null){
+                    
+                    int[] figureIndices = new int[faces[indiceX][indiceY][indiceZ].size()];
+                
+                    Iterator<Integer> iterator = faces[indiceX][indiceY][indiceZ].iterator();
+                    int count = 0;
+                    while (iterator.hasNext()) {
+                        Integer next = iterator.next();
+                        figureIndices[count] = next;
+                        count++;
+                    }
+
+                    dart.cells[indiceX][indiceY][indiceZ].setFigureIndex(figureIndices);
+                }
+            }
+        }
+        
+        if(generateTrianglesFile && dtmFile != null){
+            
+            logger.info("Writing triangles file");
+            
+            if(dtm != null){
+                
+                ArrayList<Face> faceList = dtm.getFaces();
+                ArrayList<DTMPoint> pointList = dtm.getPoints();
+                
+                int shapeType = 0; //triangle = 0 and parallelogram = 1
+                int scattererType = 0;
+                int scattererPropertyIndex = 0;
+                int temperaturePropertyIndex = 0;
+                int simpleOrDoubleFace = 0;
+                int typeOfSurface = 2; //ground
+                
+                try(BufferedWriter writer = new BufferedWriter(new FileWriter(trianglesFile))) {
+                    
+                    for(Face face : faceList){
+                                                
+                        DTMPoint point1 = pointList.get(face.getPoint1());
+                        DTMPoint point2 = pointList.get(face.getPoint2());
+                        DTMPoint point3 = pointList.get(face.getPoint3());
+                        
+                        writer.write(shapeType+" "+point1.x+" "+point1.y+" "+point1.z+" "+
+                                                    point2.x+" "+point2.y+" "+point2.z+" "+
+                                                    point3.x+" "+point3.y+" "+point3.z+" "+
+                                                    scattererType+" "+
+                                                    scattererPropertyIndex+" "+
+                                                    temperaturePropertyIndex+" "+
+                                                    simpleOrDoubleFace+" "+
+                                                    scattererType+" "+
+                                                    scattererPropertyIndex+" "+
+                                                    temperaturePropertyIndex+" "+
+                                                    typeOfSurface+"\n");
+                    }
+                    
+                } catch (IOException ex) {
+                    logger.error("Cannot write triangles file : "+trianglesFile.getAbsolutePath(), ex);
+                }
+                
+            }
         }
         
         logger.info("Writing dart file "+outputFile.getAbsolutePath());
-        DartWriter.writeFromDart(dart, outputFile);
+        writeFromDart(dart, outputFile);
         logger.info("dart file written");
     }
 }

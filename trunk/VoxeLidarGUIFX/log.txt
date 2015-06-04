@@ -959,3 +959,263 @@ java.lang.IllegalArgumentException: Mark is not supported.
 2015-06-03 22:38:30 INFO  - Extracting: click_me.sh
 2015-06-03 22:38:30 INFO  - Extracting: VoxeLidarGUIFX-1.0-rbeacb85a.jar
 2015-06-03 22:38:30 INFO  - Removing archive file: E:\Programmation\VoxeLidar\trunk\VoxeLidarGUIFX\target\release\VoxeLidarGUIFX-1.0-rbeacb85a.zip
+2015-06-04 15:07:16 INFO  - Loading point cloud file...
+2015-06-04 15:07:16 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-06-04 15:07:25 INFO  - Point cloud file loaded
+2015-06-04 15:07:25 INFO  - Loading point cloud file...
+2015-06-04 15:07:25 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-06-04 15:07:26 INFO  - Point cloud file loaded
+2015-06-04 15:07:26 INFO  - Saved libfile: /tmp/RivLibLibrary-7126834937817376673.tmp
+2015-06-04 15:07:26 INFO  - /tmp/RivLibLibrary-7126834937817376673.tmp
+2015-06-04 15:07:26 INFO  - rxp extraction is started
+2015-06-04 15:07:26 INFO  - rxp extraction is started
+2015-06-04 15:07:26 INFO  - rxp extraction is started
+2015-06-04 15:07:26 INFO  - rxp extraction is started
+2015-06-04 15:07:26 INFO  - rxp extraction is started
+2015-06-04 15:07:26 INFO  - rxp extraction is started
+2015-06-04 15:07:26 INFO  - allocate!!!!!!!!
+2015-06-04 15:07:26 INFO  - allocate!!!!!!!!
+2015-06-04 15:07:26 INFO  - allocate!!!!!!!!
+2015-06-04 15:07:26 INFO  - allocate!!!!!!!!
+2015-06-04 15:07:26 INFO  - allocate!!!!!!!!
+2015-06-04 15:07:26 INFO  - allocate!!!!!!!!
+2015-06-04 15:07:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-3.0, 5.0, -5.0)
+			Corner Sup	:	(0.0, 8.0, -2.0)
+			Dimensions	:	(3, 3, 3)
+			Toricity 	:	false
+
+2015-06-04 15:07:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-3.0, 5.0, -5.0)
+			Corner Sup	:	(0.0, 8.0, -2.0)
+			Dimensions	:	(3, 3, 3)
+			Toricity 	:	false
+
+2015-06-04 15:07:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-3.0, 5.0, -5.0)
+			Corner Sup	:	(0.0, 8.0, -2.0)
+			Dimensions	:	(3, 3, 3)
+			Toricity 	:	false
+
+2015-06-04 15:07:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-3.0, 5.0, -5.0)
+			Corner Sup	:	(0.0, 8.0, -2.0)
+			Dimensions	:	(3, 3, 3)
+			Toricity 	:	false
+
+2015-06-04 15:07:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-3.0, 5.0, -5.0)
+			Corner Sup	:	(0.0, 8.0, -2.0)
+			Dimensions	:	(3, 3, 3)
+			Toricity 	:	false
+
+2015-06-04 15:07:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-3.0, 5.0, -5.0)
+			Corner Sup	:	(0.0, 8.0, -2.0)
+			Dimensions	:	(3, 3, 3)
+			Toricity 	:	false
+
+2015-06-04 15:07:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-06-04 15:07:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-06-04 15:07:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-06-04 15:07:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-06-04 15:07:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-06-04 15:07:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-06-04 15:07:32 INFO  - Shots processed: 1000000
+2015-06-04 15:07:33 INFO  - Shots processed: 1000000
+2015-06-04 15:07:33 INFO  - Shots processed: 1000000
+2015-06-04 15:07:33 INFO  - Shots processed: 1000000
+2015-06-04 15:07:33 INFO  - Shots processed: 1000000
+2015-06-04 15:07:33 INFO  - Shots processed: 1000000
+2015-06-04 15:07:38 INFO  - Shots processed: 2000000
+2015-06-04 15:07:39 INFO  - Shots processed: 2000000
+2015-06-04 15:07:39 INFO  - Shots processed: 2000000
+2015-06-04 15:07:39 INFO  - Shots processed: 2000000
+2015-06-04 15:07:39 INFO  - Shots processed: 2000000
+2015-06-04 15:07:39 INFO  - Shots processed: 2000000
+2015-06-04 15:07:44 INFO  - Shots processed: 3000000
+2015-06-04 15:07:45 INFO  - Shots processed: 3000000
+2015-06-04 15:07:45 INFO  - Shots processed: 3000000
+2015-06-04 15:07:46 INFO  - Shots processed: 3000000
+2015-06-04 15:07:46 INFO  - Shots processed: 3000000
+2015-06-04 15:07:47 INFO  - Shots processed: 3000000
+2015-06-04 15:07:50 INFO  - Shots processed: 4000000
+2015-06-04 15:07:52 INFO  - Shots processed: 4000000
+2015-06-04 15:07:52 INFO  - Shots processed: 4000000
+2015-06-04 15:07:53 INFO  - Shots processed: 4000000
+2015-06-04 15:07:53 INFO  - Shots processed: 4000000
+2015-06-04 15:07:54 INFO  - Shots processed: 4000000
+2015-06-04 15:07:56 INFO  - Shots processed: 5000000
+2015-06-04 15:07:57 INFO  - Shots processed: 4810881
+2015-06-04 15:07:57 INFO  - voxelisation is finished ( 30.0 s )
+2015-06-04 15:07:57 INFO  - writing file: /home/calcul/Documents/Julien/dart_projet_fusion_triangles_maket/output_temp/140331_101534.rxp.vox
+2015-06-04 15:07:57 INFO  - file written ( 0.0 s )
+2015-06-04 15:08:00 INFO  - Shots processed: 5000000
+2015-06-04 15:08:00 INFO  - Shots processed: 5000000
+2015-06-04 15:08:00 INFO  - Shots processed: 5000000
+2015-06-04 15:08:00 INFO  - Shots processed: 5000000
+2015-06-04 15:08:02 INFO  - Shots processed: 6000000
+2015-06-04 15:08:06 INFO  - Shots processed: 6000000
+2015-06-04 15:08:06 INFO  - Shots processed: 6000000
+2015-06-04 15:08:07 INFO  - Shots processed: 6000000
+2015-06-04 15:08:09 INFO  - Shots processed: 6000000
+2015-06-04 15:08:09 INFO  - Shots processed: 7000000
+2015-06-04 15:08:12 INFO  - Shots processed: 7000000
+2015-06-04 15:08:12 INFO  - Shots processed: 7000000
+2015-06-04 15:08:13 INFO  - Shots processed: 7000000
+2015-06-04 15:08:16 INFO  - Shots processed: 7000000
+2015-06-04 15:08:16 INFO  - Shots processed: 8000000
+2015-06-04 15:08:17 INFO  - Shots processed: 8000000
+2015-06-04 15:08:18 INFO  - Shots processed: 8000000
+2015-06-04 15:08:19 INFO  - Shots processed: 8000000
+2015-06-04 15:08:22 INFO  - Shots processed: 8000000
+2015-06-04 15:08:23 INFO  - Shots processed: 9000000
+2015-06-04 15:08:23 INFO  - Shots processed: 9000000
+2015-06-04 15:08:24 INFO  - Shots processed: 9000000
+2015-06-04 15:08:25 INFO  - Shots processed: 9000000
+2015-06-04 15:08:28 INFO  - Shots processed: 9000000
+2015-06-04 15:08:29 INFO  - Shots processed: 10000000
+2015-06-04 15:08:29 INFO  - Shots processed: 10000000
+2015-06-04 15:08:30 INFO  - Shots processed: 10000000
+2015-06-04 15:08:31 INFO  - Shots processed: 10000000
+2015-06-04 15:08:34 INFO  - Shots processed: 10000000
+2015-06-04 15:08:35 INFO  - Shots processed: 11000000
+2015-06-04 15:08:35 INFO  - Shots processed: 11000000
+2015-06-04 15:08:36 INFO  - Shots processed: 11000000
+2015-06-04 15:08:36 INFO  - Voxelisation was stopped
+2015-06-04 15:08:36 INFO  - Task cancelled
+2015-06-04 15:08:36 INFO  - Task cancelled
+2015-06-04 15:08:36 INFO  - Task cancelled
+2015-06-04 15:08:36 INFO  - Task cancelled
+2015-06-04 15:08:36 INFO  - Task cancelled
+2015-06-04 15:29:18 INFO  - Writing dart file /home/calcul/Documents/Julien/dart_projet_fusion_triangles_maket/test.vox.maket
+2015-06-04 15:29:18 INFO  - dart file written
+2015-06-04 15:35:58 INFO  - Writing dart file /home/calcul/Documents/Julien/dart_projet_fusion_triangles_maket/test.vox.maket.v2
+2015-06-04 15:35:58 INFO  - dart file written
+2015-06-04 18:38:22 INFO  - Saved libfile: /tmp/LasZipLibrary-7538757121805348851.tmp
+2015-06-04 18:38:22 INFO  - /tmp/LasZipLibrary-7538757121805348851.tmp
+2015-06-04 18:38:22 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:38:33 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:38:37 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:38:51 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:38:55 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:39:39 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:39:42 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:40:54 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:41:36 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:41:55 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:42:00 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:42:20 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:43:18 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:43:56 INFO  - Laz file /home/calcul/Documents/Julien/hobo_50_100m.laz is opened
+2015-06-04 18:44:11 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:47:16 INFO  - Saved libfile: /tmp/LasZipLibrary-748941097115914078.tmp
+2015-06-04 18:47:16 INFO  - /tmp/LasZipLibrary-748941097115914078.tmp
+2015-06-04 18:47:16 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:47:31 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:48:13 INFO  - allocate!!!!!!!!
+2015-06-04 18:48:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-04 18:48:14 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:48:16 INFO  - writing file: /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox
+2015-06-04 18:48:19 INFO  - file written ( 3.0 s )
+2015-06-04 18:48:19 INFO  - las voxelisation finished in 9.0 s
+2015-06-04 18:48:50 INFO  - allocate!!!!!!!!
+2015-06-04 18:48:51 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-04 18:48:51 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-04 18:48:52 INFO  - writing file: /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox
+2015-06-04 18:48:56 INFO  - file written ( 3.0 s )
+2015-06-04 18:48:56 INFO  - las voxelisation finished in 9.0 s
+2015-06-04 18:53:21 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-04 18:53:21 ERROR - Cannot read dtm file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+java.lang.IndexOutOfBoundsException: Index: 301, Size: 19
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at fr.ird.voxelidar.lidar.format.dtm.RegularDtm.buildMesh(RegularDtm.java:240)
+	at fr.ird.voxelidar.lidar.format.dart.DartWriter.writeFromVoxelSpace(DartWriter.java:146)
+	at fr.ird.voxelidar.FXPrincipal.start(FXPrincipal.java:37)
+	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$159(LauncherImpl.java:863)
+	at com.sun.javafx.application.LauncherImpl$$Lambda$58/562133482.run(Unknown Source)
+	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$172(PlatformImpl.java:326)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$50/157456214.run(Unknown Source)
+	at com.sun.javafx.application.PlatformImpl.lambda$null$170(PlatformImpl.java:295)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$53/785690766.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.application.PlatformImpl.lambda$runLater$171(PlatformImpl.java:294)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$52/1659791576.run(Unknown Source)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$48(GtkApplication.java:139)
+	at com.sun.glass.ui.gtk.GtkApplication$$Lambda$41/1345636186.run(Unknown Source)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-04 18:53:21 INFO  - Writing triangles file
+2015-06-04 18:53:21 INFO  - Writing dart file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/maket.txt
+2015-06-04 18:53:21 INFO  - dart file written
+2015-06-04 18:54:40 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-04 18:54:40 ERROR - Cannot read dtm file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+java.lang.IndexOutOfBoundsException: Index: 301, Size: 19
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at fr.ird.voxelidar.lidar.format.dtm.RegularDtm.buildMesh(RegularDtm.java:240)
+	at fr.ird.voxelidar.lidar.format.dart.DartWriter.writeFromVoxelSpace(DartWriter.java:146)
+	at fr.ird.voxelidar.FXPrincipal.start(FXPrincipal.java:37)
+	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$159(LauncherImpl.java:863)
+	at com.sun.javafx.application.LauncherImpl$$Lambda$58/1384421669.run(Unknown Source)
+	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$172(PlatformImpl.java:326)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$51/157456214.run(Unknown Source)
+	at com.sun.javafx.application.PlatformImpl.lambda$null$170(PlatformImpl.java:295)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$53/1311587010.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.application.PlatformImpl.lambda$runLater$171(PlatformImpl.java:294)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$52/1659791576.run(Unknown Source)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$48(GtkApplication.java:139)
+	at com.sun.glass.ui.gtk.GtkApplication$$Lambda$41/1345636186.run(Unknown Source)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-04 18:54:41 INFO  - Writing triangles file
+2015-06-04 18:54:41 INFO  - Writing dart file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/maket.txt
+2015-06-04 18:54:41 INFO  - dart file written
+2015-06-04 18:56:40 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-04 19:00:00 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-04 19:01:01 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-04 19:02:10 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-04 19:03:19 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-04 19:04:15 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-04 19:04:15 INFO  - Writing triangles file
+2015-06-04 19:04:15 INFO  - Writing dart file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/maket.txt
+2015-06-04 19:04:16 INFO  - dart file written
+2015-06-04 19:05:34 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-04 19:05:34 INFO  - Writing triangles file
+2015-06-04 19:05:34 INFO  - Writing dart file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/maket.txt
+2015-06-04 19:06:21 INFO  - dart file written
+2015-06-04 19:09:38 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-04 19:10:40 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-04 19:10:40 INFO  - Writing triangles file
+2015-06-04 19:10:41 INFO  - Writing dart file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/maket.txt
+2015-06-04 19:10:41 INFO  - dart file written
+2015-06-04 19:12:25 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-04 19:12:25 INFO  - Writing triangles file
+2015-06-04 19:12:25 INFO  - Writing dart file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/maket.txt
+2015-06-04 19:17:50 INFO  - dart file written
+2015-06-04 19:52:51 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-04 19:52:51 INFO  - Writing triangles file
+2015-06-04 19:52:51 INFO  - Writing dart file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/maket.txt
+2015-06-04 19:52:51 INFO  - dart file written
+2015-06-04 19:54:09 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-04 19:54:09 INFO  - Writing triangles file
+2015-06-04 19:54:09 INFO  - Writing dart file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/maket.txt
+2015-06-04 19:54:09 INFO  - dart file written
+2015-06-04 20:03:21 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-04 20:03:22 INFO  - Writing triangles file
+2015-06-04 20:03:22 INFO  - Writing dart file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/maket.txt
+2015-06-04 20:03:22 INFO  - dart file written

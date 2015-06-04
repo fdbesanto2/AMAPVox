@@ -3,14 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.ird.voxelidar.engine3d.object.scene;
+package fr.ird.voxelidar.lidar.format.dtm;
 
-import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
-import fr.ird.voxelidar.engine3d.object.mesh.Face;
 import fr.ird.voxelidar.io.file.FileAdapter;
 import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
-import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import fr.ird.voxelidar.util.delaunay.Delaunay_Triangulation;
 import fr.ird.voxelidar.util.delaunay.Point_dt;
 import fr.ird.voxelidar.util.delaunay.Triangle_dt;
@@ -22,9 +19,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 /**
@@ -35,7 +29,7 @@ public class DtmLoader {
 
     final static Logger logger = Logger.getLogger(DtmLoader.class);
     
-    public static Dtm readFromAscFile(File ascFile) throws Exception{
+    public static RegularDtm readFromAscFile(File ascFile) throws Exception{
         
         final String pathFile = ascFile.getAbsolutePath();
         
@@ -79,7 +73,7 @@ public class DtmLoader {
                 yIndex++;
             }
             
-            Dtm terrain = new Dtm(pathFile, zArray, xLeftCorner, yLeftCorner, step);
+            RegularDtm terrain = new RegularDtm(pathFile, zArray, xLeftCorner, yLeftCorner, step);
         
             return terrain;
             
@@ -288,59 +282,5 @@ public class DtmLoader {
         
         
         return faces;
-    }
-    
-    public static Dtm readFromFile(File file){
-        
-        final String pathFile = file.getAbsolutePath();
-        
-        FileManager m = new FileManager();
-        
-        m.addFileListener(new FileAdapter() {
-            @Override
-            public void fileRead(){
-                logger.debug("terrain file "+pathFile+" read");
-            }
-        });
-        
-
-        ArrayList<String> lines = m.readAllLines(file);
-
-        //create points list
-        ArrayList<Vec3F> points = new ArrayList<>();
-
-        for (int i=0;i<lines.size();i++) {
-
-            if(lines.get(i) != null){
-
-                String[] split = lines.get(i).split(" ");
-                Float x = Float.valueOf(split[0]);
-                Float y = Float.valueOf(split[2]);
-                Float z = Float.valueOf(split[1]);
-
-                points.add(new Vec3F(x, y, z));
-            }
-
-
-        }
-
-        
-        /*
-        ArrayList<Short> faces = new ArrayList<>();
-        int largeur =42+1;
-
-        for(int i = 0;i<points.size();i++){
-
-            faces.add((short)i);
-            faces.add((short)(i+1));
-            faces.add((short)(i+largeur));
-        }
-        */
-        ArrayList<Face> faces = DtmLoader.triangulate(points);
-        Dtm terrain = new Dtm(pathFile, points, faces);
-        
-        //terrain.exportObj();
-
-        return terrain;
     }
 }

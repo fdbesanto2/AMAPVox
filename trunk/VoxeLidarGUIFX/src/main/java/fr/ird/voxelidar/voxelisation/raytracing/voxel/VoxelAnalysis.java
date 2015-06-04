@@ -11,7 +11,7 @@ import fr.ird.voxelidar.voxelisation.raytracing.geometry.LineElement;
 import fr.ird.voxelidar.voxelisation.raytracing.geometry.LineSegment;
 import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelManager.VoxelCrossingContext;
-import fr.ird.voxelidar.engine3d.object.scene.Dtm;
+import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
 import fr.ird.voxelidar.octree.Octree;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.SimpleFilter;
@@ -69,7 +69,7 @@ public class VoxelAnalysis {
     private boolean isSet = false;
 
     private final EventListenerList listeners;
-    private Dtm terrain;
+    private RegularDtm terrain;
     private List<Octree> pointcloudList;
     //List<Point3d> echoList = new ArrayList<>();
 
@@ -132,7 +132,7 @@ public class VoxelAnalysis {
         return distance;
     }
     
-    public VoxelAnalysis(Dtm terrain, List<Octree> pointcloud, List<Filter> filters) {
+    public VoxelAnalysis(RegularDtm terrain, List<Octree> pointcloud, List<Filter> filters) {
 
         nbShotsTreated = 0;
         isFinished = new AtomicBoolean(false);
@@ -144,7 +144,7 @@ public class VoxelAnalysis {
         //tempList = new ArrayList<>();
     }
 
-    public VoxelAnalysis(LinkedBlockingQueue<Shot> arrayBlockingQueue, Dtm terrain, List<Filter> filters) {
+    public VoxelAnalysis(LinkedBlockingQueue<Shot> arrayBlockingQueue, RegularDtm terrain, List<Filter> filters) {
 
         nbShotsTreated = 0;
         isFinished = new AtomicBoolean(false);

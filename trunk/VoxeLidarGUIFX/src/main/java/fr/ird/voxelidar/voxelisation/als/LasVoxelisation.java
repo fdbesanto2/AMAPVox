@@ -8,8 +8,8 @@ package fr.ird.voxelidar.voxelisation.als;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis;
 import fr.ird.voxelidar.voxelisation.VoxelParameters;
 import fr.ird.voxelidar.voxelisation.extraction.Shot;
-import fr.ird.voxelidar.engine3d.object.scene.Dtm;
-import fr.ird.voxelidar.engine3d.object.scene.DtmLoader;
+import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
+import fr.ird.voxelidar.lidar.format.dtm.DtmLoader;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.Processing;
@@ -53,7 +53,7 @@ public class LasVoxelisation extends Processing {
     }
     
     
-    public void init(Dtm terrain, List<Trajectory> trajectoryList){
+    public void init(RegularDtm terrain, List<Trajectory> trajectoryList){
         
         voxelAnalysis = new VoxelAnalysis(null, terrain, filters);
         this.trajectoryList = trajectoryList;

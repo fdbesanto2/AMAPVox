@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.ird.voxelidar.engine3d.object.mesh;
+package fr.ird.voxelidar.lidar.format.dtm;
 
 /**
  *
@@ -11,7 +11,7 @@ package fr.ird.voxelidar.engine3d.object.mesh;
  */
 public class Face {
     
-    private int point1, point2, point3;
+    private final int point1, point2, point3;
 
     public int getPoint1() {
         return point1;

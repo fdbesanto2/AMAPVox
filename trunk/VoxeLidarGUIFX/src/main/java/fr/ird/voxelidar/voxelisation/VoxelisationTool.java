@@ -14,8 +14,8 @@ import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.vector.Vec2D;
 import fr.ird.voxelidar.engine3d.misc.Attribut;
-import fr.ird.voxelidar.engine3d.object.scene.Dtm;
-import fr.ird.voxelidar.engine3d.object.scene.DtmLoader;
+import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
+import fr.ird.voxelidar.lidar.format.dtm.DtmLoader;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceHeader;
 import fr.ird.voxelidar.io.file.FileManager;
@@ -70,7 +70,7 @@ public class VoxelisationTool {
     private VoxelParameters parameters;
     private final EventListenerList listeners;
     private long startTime;
-    private Dtm dtm;
+    private RegularDtm dtm;
     private List<Octree> pointcloudList;
     //private PointCloud pointcloud;
     private boolean cancelled;
@@ -110,9 +110,9 @@ public class VoxelisationTool {
         return cancelled;
     }
 
-    private Dtm loadDTM(File dtmFile) {
+    private RegularDtm loadDTM(File dtmFile) {
 
-        Dtm terrain = null;
+        RegularDtm terrain = null;
 
         if (dtmFile != null && parameters.useDTMCorrection()) {
 
@@ -291,7 +291,7 @@ public class VoxelisationTool {
 
         
         
-        Dtm terrain = null;
+        RegularDtm terrain = null;
         
         if(parameters.getDtmFile() != null && parameters.useDTMCorrection() ){
             
@@ -679,7 +679,7 @@ public class VoxelisationTool {
         startTime = System.currentTimeMillis();
         configuration.getVoxelParameters().setTLS(false);
         
-        Dtm terrain = null;
+        RegularDtm terrain = null;
         Mat4D vopMatrix = MatrixConverter.convertMatrix4dToMat4D(configuration.getVopMatrix());
         if(vopMatrix == null){
             vopMatrix = Mat4D.identity();

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="283.0" prefWidth="473.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="fr.ird.voxelidar.gui.DartExporterFrameController">
+   <children>
+      <CheckBox fx:id="checkboxGenerateTrianglesFile" layoutX="20.0" layoutY="96.0" mnemonicParsing="false" text="Generate triangles file" AnchorPane.leftAnchor="20.0" />
+      <AnchorPane fx:id="anchorpaneTrianglesGeneration" disable="true" layoutX="20.0" layoutY="134.0" prefHeight="99.0" prefWidth="343.0">
+         <children>
+            <TextField fx:id="textfieldTrianglesFilePath" layoutX="0.0380859375" layoutY="15.0" prefHeight="25.0" prefWidth="264.0" AnchorPane.leftAnchor="20.0" />
+            <TextField fx:id="textfieldDTMFilePath" layoutX="0.0380859375" layoutY="74.0" prefHeight="25.0" prefWidth="264.0" AnchorPane.leftAnchor="20.0" />
+            <Label layoutX="0.0380859375" layoutY="59.0" text="DTM file path" AnchorPane.leftAnchor="20.0" />
+            <Label layoutX="0.0380859375" text="Triangles file path" AnchorPane.leftAnchor="20.0" />
+            <Button fx:id="buttonOpenDTMFile" layoutX="287.0" layoutY="74.0" mnemonicParsing="false" onAction="#onActionButtonOpenDTMFile" text="Open" AnchorPane.leftAnchor="287.0" />
+            <Button fx:id="buttonOpenTriangleFile" layoutX="287.0" layoutY="15.0" mnemonicParsing="false" onAction="#onActionButtonOpenTriangleFile" text="Open" AnchorPane.leftAnchor="287.0" />
+         </children>
+      </AnchorPane>
+      <Button fx:id="buttonExportMaket" layoutX="398.0" layoutY="244.0" mnemonicParsing="false" onAction="#onActionButtonExportMaket" text="Export" />
+      <TextField fx:id="textfieldMaketFilePath" layoutX="20.0" layoutY="50.0" prefHeight="25.0" prefWidth="264.0" AnchorPane.leftAnchor="20.0" />
+      <Button fx:id="buttonOpenMaketFile" layoutX="286.0" layoutY="50.0" mnemonicParsing="false" onAction="#onActionButtonOpenMaketFile" text="Open" AnchorPane.leftAnchor="286.0" />
+      <Label layoutX="20.0" layoutY="35.0" text="Maket file path" AnchorPane.leftAnchor="20.0" />
+   </children>
+</AnchorPane>

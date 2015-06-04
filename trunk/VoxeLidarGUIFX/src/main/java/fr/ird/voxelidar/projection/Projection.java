@@ -5,7 +5,7 @@
  */
 package fr.ird.voxelidar.projection;
 
-import fr.ird.voxelidar.engine3d.object.scene.Dtm;
+import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelObject;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData;
 import fr.ird.voxelidar.util.ColorGradient;
@@ -26,7 +26,7 @@ public class Projection {
     final static Logger logger = Logger.getLogger(Projection.class);
     
     private final VoxelSpaceData data;
-    private final Dtm terrain;
+    private final RegularDtm terrain;
     private float minValue;
     private float maxValue;
     
@@ -41,7 +41,7 @@ public class Projection {
         return maxValue;
     }
     
-    public Projection(VoxelSpaceData voxelSpace, Dtm terrain){
+    public Projection(VoxelSpaceData voxelSpace, RegularDtm terrain){
         
         this.data = voxelSpace;
         this.terrain = terrain;

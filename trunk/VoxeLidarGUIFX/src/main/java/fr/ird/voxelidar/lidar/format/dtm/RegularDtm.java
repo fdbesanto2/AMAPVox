@@ -3,12 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.ird.voxelidar.engine3d.object.scene;
+package fr.ird.voxelidar.lidar.format.dtm;
 
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
-import fr.ird.voxelidar.engine3d.object.mesh.Face;
 import fr.ird.voxelidar.engine3d.math.vector.Vec2F;
-import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -26,10 +24,10 @@ import org.apache.log4j.Logger;
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class Dtm {
+public class RegularDtm {
     
-    private final Logger logger = Logger.getLogger(Dtm.class);
-    private ArrayList<Vec3F> points;
+    private final Logger logger = Logger.getLogger(RegularDtm.class);
+    private ArrayList<DTMPoint> points;
     private ArrayList<Face> faces;
     private String path;
     private MultiKeyMap map;
@@ -61,29 +59,15 @@ public class Dtm {
         return path;
     }
     
-    public ArrayList<Vec3F> getPoints() {
+    public ArrayList<DTMPoint> getPoints() {
         return points;
     }
 
     public ArrayList<Face> getFaces() {
         return faces;
-    }
-    
-    public ArrayList<Short> getIndices(){
+    }    
         
-        ArrayList<Short> indices = new ArrayList<>();
-        
-        for (Face face : faces) {
-            indices.add((short) face.getPoint1());
-            indices.add((short) face.getPoint2());
-            indices.add((short) face.getPoint3());
-        }
-        
-        return indices;
-    }
-    
-        
-    public Dtm(String path, ArrayList<Vec3F> points, ArrayList<Face> faces){
+    public RegularDtm(String path, ArrayList<DTMPoint> points, ArrayList<Face> faces){
         
         this.transformationMatrix = Mat4D.identity();
         
@@ -92,7 +76,7 @@ public class Dtm {
         this.path = path;
     }
     
-    public Dtm(String path, float[][] zArray, float xLeftLowerCorner, float yLeftLowerCorner, float cellSize){
+    public RegularDtm(String path, float[][] zArray, float xLeftLowerCorner, float yLeftLowerCorner, float cellSize){
         
         this.transformationMatrix = Mat4D.identity();
         
@@ -144,7 +128,7 @@ public class Dtm {
         resolution = new Point2d(maxCorner.x-minCorner.x/splitting, maxCorner.y-minCorner.y);
        
         
-        for (Vec3F point : points) {
+        for (DTMPoint point : points) {
             
             map.put(point.x+0.0f, point.z+0.0f, point.y+0.0f);
         }
@@ -230,10 +214,21 @@ public class Dtm {
                     for(int j=0;j<height;j++){
                         
                         if(!Float.isNaN(zArray[i][j])){
-                            points.add(new Vec3F(i*cellSize, j*cellSize, zArray[i][j]));
+                            points.add(new DTMPoint(i*cellSize, j*cellSize, zArray[i][j]));
                         }else{
-                            points.add(new Vec3F(i*cellSize, j*cellSize, -10.0f));
+                            points.add(new DTMPoint(i*cellSize, j*cellSize, -10.0f));
                         }
+                    }
+                }
+                
+                for(int i=0;i<width;i++){
+                    for(int j=0;j<height;j++){
+                        /*
+                        if(!Float.isNaN(zArray[i][j])){
+                            points.add(new DTMPoint(i*cellSize, j*cellSize, zArray[i][j]));
+                        }else{
+                            points.add(new DTMPoint(i*cellSize, j*cellSize, -10.0f));
+                        }*/
                         
                         
                         int point1, point2, point3, point4;
@@ -250,26 +245,26 @@ public class Dtm {
                                 if(!Float.isNaN(zArray[i][j]) && !Float.isNaN(zArray[i+1][j+1]) ){
                                     if(!Float.isNaN(zArray[i+1][j])){
                                         faces.add(new Face(point1, point2, point3));
+                                        
+                                        int faceID = faces.size()-1;
+                                        points.get(point1).faces.add(faceID);
+                                        points.get(point2).faces.add(faceID);
+                                        points.get(point3).faces.add(faceID);
                                     }
                                     if(!Float.isNaN(zArray[i][j+1])){
                                         faces.add(new Face(point1, point3, point4));
+                                        int faceID = faces.size()-1;
+                                        points.get(point1).faces.add(faceID);
+                                        points.get(point2).faces.add(faceID);
+                                        points.get(point3).faces.add(faceID);
                                     }
-                                    
                                 }
-                                
                             }
-                            
                         }
-                        
-                        
                     }
                 }
-                
-                
             }
         }
-        
-        
     }
     
     private int get1dFrom2d(int i, int j){
@@ -284,7 +279,7 @@ public class Dtm {
             
             writer.write("o terrain\n");
             
-            for (Vec3F point : points) {
+            for (DTMPoint point : points) {
                 writer.write("v " + point.x + " " + point.y + " " + point.z + " " + "\n");
             }
             
@@ -307,9 +302,9 @@ public class Dtm {
         
         for (Face triangle : faces) {
             
-            Vec3F pointA = points.get(triangle.getPoint1());
-            Vec3F pointB = points.get(triangle.getPoint2());
-            Vec3F pointC = points.get(triangle.getPoint3());
+            DTMPoint pointA = points.get(triangle.getPoint1());
+            DTMPoint pointB = points.get(triangle.getPoint2());
+            DTMPoint pointC = points.get(triangle.getPoint3());
             
             Vec2F vecAB = Vec2F.createVec2FromPoints(new Vec2F(pointA.x, pointA.z), new Vec2F(pointB.x, pointB.z));
             Vec2F vecBC = Vec2F.createVec2FromPoints(new Vec2F(pointB.x, pointB.z), new Vec2F(pointC.x, pointC.z));

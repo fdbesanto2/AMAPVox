@@ -5,6 +5,8 @@
  */
 package fr.ird.voxelidar.engine3d.object.scene;
 
+import fr.ird.voxelidar.engine3d.math.point.Point3F;
+import fr.ird.voxelidar.engine3d.math.point.Point3I;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -136,6 +138,36 @@ public class VoxelSpaceData{
         }
         
         return null;
+    }
+    
+    public Point3I getIndicesFromPoint(float x, float y ,float z){
+        
+        // shift to scene Min
+        Point3F pt =new Point3F (x, y, z);
+        pt.x -= header.bottomCorner.x;
+        pt.y -= header.bottomCorner.y;
+        pt.z -= header.bottomCorner.z;
+
+        if ((pt.z < 0) || (pt.z >= header.split.z)){
+            return null;
+        }
+        if ((pt.x < 0) || (pt.x >= header.split.x)){
+            return null;
+        }
+        if ((pt.y < 0) || (pt.y >= header.split.y)){
+            return null;
+        }
+        pt.x /= header.res;
+        pt.y /= header.res;
+        pt.z /= header.res;
+
+        Point3I indices = new Point3I();
+
+        indices.x = (int) Math.floor ((double) (pt.x % header.split.x)); if (indices.x<0) indices.x += header.split.x;
+        indices.y = (int) Math.floor ((double) (pt.y % header.split.y)); if (indices.y<0) indices.y += header.split.y;
+        indices.z = (int) Math.min (pt.z, header.split.z-1);
+                
+        return indices;
     }
 
     

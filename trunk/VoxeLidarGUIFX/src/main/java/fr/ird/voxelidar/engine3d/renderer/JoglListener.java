@@ -16,7 +16,7 @@ import fr.ird.voxelidar.engine3d.object.camera.CameraAdapter;
 import fr.ird.voxelidar.engine3d.object.camera.TrackballCamera;
 import fr.ird.voxelidar.engine3d.object.scene.Scene;
 import fr.ird.voxelidar.engine3d.object.scene.SceneObject;
-import fr.ird.voxelidar.engine3d.object.scene.Dtm;
+import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.loading.shader.Shader;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
@@ -50,7 +50,7 @@ public class JoglListener implements GLEventListener {
     public int startX = 0;
     public int startY = 0;
     
-    private Dtm terrain;
+    private RegularDtm terrain;
     private Settings settings;
     private boolean isFpsInit = false;
     final static Logger logger = Logger.getLogger(JoglListener.class);
@@ -67,7 +67,7 @@ public class JoglListener implements GLEventListener {
         return settings;
     }
 
-    public Dtm getTerrain() {
+    public RegularDtm getTerrain() {
         return terrain;
     }
     

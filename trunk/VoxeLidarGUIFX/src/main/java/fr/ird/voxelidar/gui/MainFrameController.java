@@ -5,7 +5,6 @@
  */
 package fr.ird.voxelidar.gui;
 
-import com.dropbox.core.DbxException;
 import com.jogamp.newt.event.WindowAdapter;
 import fr.ird.voxelidar.configuration.Configuration;
 import fr.ird.voxelidar.configuration.Configuration.InputType;
@@ -22,7 +21,6 @@ import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.lidar.format.als.LasHeader;
 import fr.ird.voxelidar.lidar.format.als.LasReader;
 import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
-import fr.ird.voxelidar.lidar.format.dart.DartWriter;
 import fr.ird.voxelidar.lidar.format.tls.Rsp;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.lidar.format.tls.Scans;
@@ -3205,6 +3203,24 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionMenuItemExportDart(ActionEvent event) {
 
+        Stage exportDartFrame = new Stage();
+        DartExporterFrameController controller;
+        
+        Parent root;
+        
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DartExporterFrame.fxml"));
+            root = loader.load();
+            controller = loader.getController();
+            controller.setStage(exportDartFrame);
+            controller.setVoxelFile(listViewVoxelsFiles.getSelectionModel().getSelectedItem());
+            exportDartFrame.setScene(new Scene(root));
+        } catch (IOException ex) {
+            logger.error(ex);
+        }
+        
+        exportDartFrame.show();
+        /*
         if (lastFCSaveDartFile != null) {
             fileChooserSaveDartFile.setInitialDirectory(lastFCSaveDartFile.getParentFile());
         }
@@ -3229,7 +3245,8 @@ public class MainFrameController implements Initializable {
                             voxelSpace.addVoxelSpaceListener(new VoxelSpaceAdapter() {
                                 @Override
                                 public void voxelSpaceCreationFinished() {
-                                    DartWriter.writeFromVoxelSpace(voxelSpace.data, selectedFile);
+                                    DartWriter dartWriter = new DartWriter();
+                                    dartWriter.writeFromVoxelSpace(voxelSpace.data, selectedFile);
                                 }
                             });
 
@@ -3247,6 +3264,7 @@ public class MainFrameController implements Initializable {
         d.show();
 
         service.start();
+        */
     }
 
     @FXML
