@@ -6,6 +6,7 @@
 package fr.ird.voxelidar.lidar.format.dtm;
 
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
+import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec2F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import java.io.BufferedWriter;
@@ -36,7 +37,8 @@ public class RegularDtm {
     float xLeftLowerCorner;
     float yLeftLowerCorner;
     float cellSize;
-    int rowNumber;
+    public int rowNumber;
+    public int colNumber;
     
     private Map m;
     
@@ -44,7 +46,9 @@ public class RegularDtm {
     private Point2d maxCorner = new Point2d();
     private Point2d resolution;
     private float splitting;
+    
     private Mat4D transformationMatrix;
+    private Mat4D inverseTransfMat;
     
     public Point3d getNearest(Point3d position){
         
@@ -76,7 +80,7 @@ public class RegularDtm {
         this.path = path;
     }
     
-    public RegularDtm(String path, float[][] zArray, float xLeftLowerCorner, float yLeftLowerCorner, float cellSize){
+    public RegularDtm(String path, float[][] zArray, float xLeftLowerCorner, float yLeftLowerCorner, float cellSize, int nbCols, int nbRows){
         
         this.transformationMatrix = Mat4D.identity();
         
@@ -85,7 +89,8 @@ public class RegularDtm {
         this.xLeftLowerCorner = xLeftLowerCorner;
         this.yLeftLowerCorner = yLeftLowerCorner;
         this.cellSize = cellSize;
-        this.rowNumber = zArray[0].length;
+        this.rowNumber = nbRows;
+        this.colNumber = nbCols;
     }
     
     
@@ -138,7 +143,7 @@ public class RegularDtm {
     
     public float getSimpleHeight(float posX, float posY){
         
-        Vec4D multiply = Mat4D.multiply(Mat4D.inverse(transformationMatrix), new Vec4D(posX, posY, 1, 1));
+        Vec4D multiply = Mat4D.multiply(inverseTransfMat, new Vec4D(posX, posY, 1, 1));
         posX = (float) multiply.x;
         posY = (float) multiply.y;
         
@@ -201,6 +206,8 @@ public class RegularDtm {
     
     public void buildMesh(){
         
+        
+        
         if(zArray != null){
             
             int width = zArray.length;
@@ -213,11 +220,21 @@ public class RegularDtm {
                 for(int i=0;i<width;i++){
                     for(int j=0;j<height;j++){
                         
+                        float z ;
+                        
                         if(!Float.isNaN(zArray[i][j])){
-                            points.add(new DTMPoint(i*cellSize, j*cellSize, zArray[i][j]));
+                            z = zArray[i][j];
+                            
                         }else{
-                            points.add(new DTMPoint(i*cellSize, j*cellSize, -10.0f));
+                            z = -10.0f;
                         }
+                        
+                        DTMPoint point = new DTMPoint((i*cellSize+xLeftLowerCorner), ( -(j-rowNumber)*cellSize+yLeftLowerCorner), z);
+                        Vec4D result = Mat4D.multiply(transformationMatrix, new Vec4D(point.x, point.y, point.z, 1));
+                        point.x = (float) result.x;
+                        point.y = (float) result.y;
+                        point.z = (float) result.z;
+                        points.add(point);
                     }
                 }
                 
@@ -331,6 +348,7 @@ public class RegularDtm {
 
     public void setTransformationMatrix(Mat4D transformationMatrix) {
         this.transformationMatrix = transformationMatrix;
+        this.inverseTransfMat = Mat4D.inverse(transformationMatrix);
     }
 
     public Mat4D getTransformationMatrix() {

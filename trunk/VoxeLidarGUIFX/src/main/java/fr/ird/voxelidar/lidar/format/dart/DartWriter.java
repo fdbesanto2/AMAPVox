@@ -5,6 +5,8 @@
  */
 package fr.ird.voxelidar.lidar.format.dart;
 
+import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
+import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData;
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.math.point.Point3I;
@@ -33,6 +35,7 @@ public class DartWriter {
     private final static Logger logger = Logger.getLogger(DartWriter.class);
     
     private boolean generateTrianglesFile;
+    private Mat4D transfMatrix;
     private File dtmFile;
     private File trianglesFile;
 
@@ -59,6 +62,18 @@ public class DartWriter {
     public void setTrianglesFile(File trianglesFile) {
         this.trianglesFile = trianglesFile;
     }    
+
+    public Mat4D getTransfMatrix() {
+        return transfMatrix;
+    }
+
+    public void setTransfMatrix(Mat4D transfMatrix) {
+        this.transfMatrix = transfMatrix;
+    }    
+    
+    public DartWriter(){
+        transfMatrix = Mat4D.identity();
+    }
     
     public void writeFromDart(Dart dart, File outputFile){
         
@@ -77,11 +92,15 @@ public class DartWriter {
             
             for(int z=0; z<dart.getSceneDimension().z; z++){
                 
-                for(int y=dart.getSceneDimension().y-1; y>=0; y--){
+                for(int x=0; x<dart.getSceneDimension().x; x++){
+                //for(int y=dart.getSceneDimension().y-1; y>=0; y--){
+                for(int y=0; y<dart.getSceneDimension().y; y++){
                     
-                    for(int x=0; x<dart.getSceneDimension().x; x++){
+                    
                         
                         DartCell cell = dart.cells[x][y][z];
+                        
+                        String stringToWrite = "";
                         
                         if(cell.getType() == DartCell.CELL_TYPE_TURBID_CROWN){
                             
@@ -102,13 +121,18 @@ public class DartWriter {
                             for(int i=0;i<cell.getNbFigures();i++){
                                 figures+=" "+cell.getFigureIndex()[i];
                             }
-
-                            writer.write(cell.getType()+" "+cell.getNbFigures()+figures+" "+cell.getNbTurbids()+turbids+" ");
+                            
+                            stringToWrite = cell.getType()+" "+cell.getNbFigures()+figures+" "+cell.getNbTurbids()+turbids+" ";
 
                         }else{
-                            writer.write("0"+" ");
+                            stringToWrite = "0"+" ";
                         }
+                        /*
+                        if(x == dart.getSceneDimension().x-1){
+                            stringToWrite = stringToWrite.trim();
+                        }*/
                         
+                        writer.write(stringToWrite);
                     }
                     
                     writer.write("\n");
@@ -143,7 +167,9 @@ public class DartWriter {
                 logger.info("Reading DTM : "+dtmFile.getAbsolutePath());
                 
                 dtm = DtmLoader.readFromAscFile(dtmFile);
+                dtm.setTransformationMatrix(transfMatrix);
                 dtm.buildMesh();
+                dtm.exportObj(new File("/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/test.obj"));
                 
                 faces = new TreeSet[data.header.split.x][data.header.split.y][data.header.split.z];
                 ArrayList<DTMPoint> points = dtm.getPoints();
@@ -254,9 +280,9 @@ public class DartWriter {
                         DTMPoint point2 = pointList.get(face.getPoint2());
                         DTMPoint point3 = pointList.get(face.getPoint3());
                         
-                        writer.write(shapeType+" "+point1.x+" "+point1.y+" "+point1.z+" "+
-                                                    point2.x+" "+point2.y+" "+point2.z+" "+
-                                                    point3.x+" "+point3.y+" "+point3.z+" "+
+                        writer.write(shapeType+" "+(float)(point1.x-data.header.bottomCorner.x)+" "+(float)(point1.y-data.header.bottomCorner.y)+" "+(float)(point1.z-data.header.bottomCorner.z)+" "+
+                                                    (float)(point2.x-data.header.bottomCorner.x)+" "+(float)(point2.y-data.header.bottomCorner.y)+" "+(float)(point2.z-data.header.bottomCorner.z)+" "+
+                                                    (float)(point3.x-data.header.bottomCorner.x)+" "+(float)(point3.y-data.header.bottomCorner.y)+" "+(float)(point3.z-data.header.bottomCorner.z)+" "+
                                                     scattererType+" "+
                                                     scattererPropertyIndex+" "+
                                                     temperaturePropertyIndex+" "+

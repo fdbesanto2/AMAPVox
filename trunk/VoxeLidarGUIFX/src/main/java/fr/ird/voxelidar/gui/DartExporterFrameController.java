@@ -14,6 +14,7 @@ For further information, please contact Gregoire Vincent.
  */
 
 
+import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceAdapter;
 import fr.ird.voxelidar.lidar.format.dart.DartWriter;
@@ -211,6 +212,14 @@ public class DartExporterFrameController implements Initializable {
                             public void voxelSpaceCreationFinished() {
                                 DartWriter dartWriter = new DartWriter();
                                 dartWriter.setDtmFile(dtmFile);
+                                
+                                Mat4D transfMatrix = new Mat4D();
+                                transfMatrix.mat=new double[]{0.9540688863574789, 0.29958731629459895, 0.0, -448120.0441687209,
+                                                                -0.29958731629459895, 0.9540688863574789, 0.0, -470918.3928060016,
+                                                                0.0, 0.0, 1.0, 0.0,
+                                                                0.0, 0.0, 0.0, 1.0};
+                                
+                                dartWriter.setTransfMatrix(transfMatrix);
                                 dartWriter.setTrianglesFile(triangleFile);
                                 dartWriter.setGenerateTrianglesFile(generateTriangleFile);
                                 dartWriter.writeFromVoxelSpace(voxelSpace.data, maketFile);

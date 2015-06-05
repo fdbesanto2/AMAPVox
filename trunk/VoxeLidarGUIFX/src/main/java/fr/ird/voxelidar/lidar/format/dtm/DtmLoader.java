@@ -73,7 +73,7 @@ public class DtmLoader {
                 yIndex++;
             }
             
-            RegularDtm terrain = new RegularDtm(pathFile, zArray, xLeftCorner, yLeftCorner, step);
+            RegularDtm terrain = new RegularDtm(pathFile, zArray, xLeftCorner, yLeftCorner, step, nbCols, nbRows);
         
             return terrain;
             
