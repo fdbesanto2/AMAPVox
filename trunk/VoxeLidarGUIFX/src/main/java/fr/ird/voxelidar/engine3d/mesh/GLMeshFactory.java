@@ -558,7 +558,7 @@ public class GLMeshFactory {
                 Vec3F vec1 = Vec3F.substract(new Vec3F(point2.x, point2.y, point2.z), new Vec3F(point1.x, point1.y, point1.z));
                 Vec3F vec2 = Vec3F.substract(new Vec3F(point3.x, point3.y, point3.z), new Vec3F(point1.x, point1.y, point1.z));
                 
-                meanNormale = Vec3F.add(meanNormale, Vec3F.normalize(Vec3F.cross(vec1, vec2)));
+                meanNormale = Vec3F.add(meanNormale, Vec3F.normalize(Vec3F.cross(vec2, vec1)));
                 
             }
             

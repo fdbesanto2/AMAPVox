@@ -53,6 +53,18 @@ public class InputKeyListener implements KeyListener{
             case KeyEvent.VK_ESCAPE:
                 listener.escapeKeyPressed = true;
                 break;
+            case KeyEvent.VK_Z:
+                listener.zKeyPressed = true;
+                break;
+            case KeyEvent.VK_S:
+                listener.sKeyPressed = true;
+                break;
+            case KeyEvent.VK_Q:
+                listener.qKeyPressed = true;
+                break;
+            case KeyEvent.VK_D:
+                listener.dKeyPressed = true;
+                break;
         }
     }
 
@@ -79,6 +91,18 @@ public class InputKeyListener implements KeyListener{
                 break;
             case KeyEvent.VK_ENTER:
                 listener.spaceKeyPressed = false;
+                break;
+            case KeyEvent.VK_Z:
+                listener.zKeyPressed = false;
+                break;
+            case KeyEvent.VK_S:
+                listener.sKeyPressed = false;
+                break;
+            case KeyEvent.VK_Q:
+                listener.qKeyPressed = false;
+                break;
+            case KeyEvent.VK_D:
+                listener.dKeyPressed = false;
                 break;
         }
     }

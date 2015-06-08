@@ -19,7 +19,9 @@ import fr.ird.voxelidar.engine3d.object.scene.SceneObject;
 import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.loading.shader.Shader;
+import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
+import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.mesh.GLMesh;
 import fr.ird.voxelidar.engine3d.object.scene.SceneManager;
@@ -62,6 +64,9 @@ public class JoglListener implements GLEventListener {
     private boolean projectionMatrixChanged = false;
     private boolean isInit;
     
+    private Point3F lightPosition;
+    private boolean lightPositionChanged = true;
+    
     private final EventListenerList listeners;
 
     
@@ -92,6 +97,17 @@ public class JoglListener implements GLEventListener {
     public BasicEvent getEventListener() {
         return eventListener;
     }
+
+    public Point3F getLightPosition() {
+        return lightPosition;
+    }
+
+    public void setLightPosition(Point3F lightPosition) {
+        this.lightPosition = lightPosition;
+        lightPositionChanged = true;
+        System.out.println(lightPosition.x+" "+lightPosition.y+" "+lightPosition.z);
+        
+    }
     
     public JoglListener(VoxelSpace voxelSpace, Settings settings, FPSAnimator animator){
         
@@ -100,6 +116,7 @@ public class JoglListener implements GLEventListener {
         this.animator = animator;
         worldColor = new Vec3F(200.0f/255.0f, 200.0f/255.0f, 200.0f/255.0f);
         listeners = new EventListenerList();
+        lightPosition = new Point3F();
     }
     /*
     public JoglListener(JFrameSettingUp parent, Dtm terrain, Settings settings, FPSAnimator animator){
@@ -237,21 +254,31 @@ public class JoglListener implements GLEventListener {
         
         eventListener.updateEvents();
         
+        if(lightPositionChanged){
+            
+            int id2 = scene.getShaderByName("lightShader");
+            Shader s2 = scene.getShadersList().get(id2);
+            gl.glUseProgram(id2);
+                gl.glUniform3f(s2.uniformMap.get("lightPosition"), lightPosition.x, lightPosition.y, lightPosition.z);
+            gl.glUseProgram(0);
+            
+            int id = scene.getShaderByName("instanceShader");
+            Shader s = scene.getShadersList().get(id);
+            gl.glUseProgram(id);
+                gl.glUniform3f(s.uniformMap.get("lightPosition"), lightPosition.x, lightPosition.y, lightPosition.z);
+            gl.glUseProgram(0);
+            
+            lightPositionChanged = false;
+        }
         
         if(viewMatrixChanged || isInit){
             
-            Mat4F normalMatrix = Mat4F.transpose(camera.getViewMatrix());
+            Mat4F normalMatrix = Mat4F.transpose(Mat4F.inverse(camera.getViewMatrix()));
             FloatBuffer normalMatrixBuffer = Buffers.newDirectFloatBuffer(normalMatrix.mat);
             int id = scene.getShaderByName("noTranslationShader");
             Shader s = scene.getShadersList().get(id);
             gl.glUseProgram(id);
                 gl.glUniformMatrix4fv(s.uniformMap.get("normalMatrix"), 1, false, normalMatrixBuffer);
-            gl.glUseProgram(0);
-            
-            int id2 = scene.getShaderByName("lightShader");
-            Shader s2 = scene.getShadersList().get(id2);
-            gl.glUseProgram(id2);
-                gl.glUniformMatrix4fv(s2.uniformMap.get("normalMatrix"), 1, false, normalMatrixBuffer);
             gl.glUseProgram(0);
             
             FloatBuffer viewMatrixBuffer = Buffers.newDirectFloatBuffer(camera.getViewMatrix().mat);
@@ -312,7 +339,7 @@ public class JoglListener implements GLEventListener {
             InputStreamReader instanceVertexShader = new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("shaders/InstanceVertexShader.txt"));
             InputStreamReader instanceFragmentShader = new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("shaders/InstanceFragmentShader.txt"));
             Shader instanceShader = new Shader(gl, instanceFragmentShader, instanceVertexShader, "instanceShader");
-            instanceShader.setUniformLocations(Shader.composeShaderUniforms(Shader.MINIMAL_SHADER_UNIFORMS));
+            instanceShader.setUniformLocations(Shader.composeShaderUniforms((Shader.composeShaderUniforms(Shader.MINIMAL_SHADER_UNIFORMS, Shader.LIGHT_SHADER_UNIFORMS)), new String[]{"eyeCoordinates", "lightPosition"}));
             instanceShader.setAttributeLocations(Shader.composeShaderAttributes(new String[]{"position"}, Shader.INSTANCE_SHADER_ATTRIBUTES));
             
             logger.debug("shader compiled: "+instanceShader.name);
@@ -329,7 +356,7 @@ public class JoglListener implements GLEventListener {
             InputStreamReader lightedVertexShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/LightVertexShader.txt"));
             InputStreamReader lightedFragmentShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/LightFragmentShader.txt"));
             Shader lightedShader = new Shader(gl, lightedFragmentShader, lightedVertexShader, "lightShader");
-            lightedShader.setUniformLocations(Shader.composeShaderUniforms(Shader.MINIMAL_SHADER_UNIFORMS, Shader.LIGHT_SHADER_UNIFORMS));
+            lightedShader.setUniformLocations(Shader.composeShaderUniforms((Shader.composeShaderUniforms(Shader.MINIMAL_SHADER_UNIFORMS, Shader.LIGHT_SHADER_UNIFORMS)), new String[]{"eyeCoordinates", "lightPosition"}));
             lightedShader.setAttributeLocations(Shader.composeShaderAttributes(new String[]{"position", "color"}, Shader.LIGHT_SHADER_ATTRIBUTES));
 
             logger.debug("shader compiled: "+texturedShader.name);
@@ -347,7 +374,16 @@ public class JoglListener implements GLEventListener {
             axis.setDrawType(GL3.GL_TRIANGLES);
             scene.addObject(axis, gl);
             
-            RegularDtm dtm = DtmLoader.readFromAscFile(new File("/home/calcul/Documents/Julien/mnt.asc"));
+            RegularDtm dtm = DtmLoader.readFromAscFile(new File("C:\\Users\\Julien\\Desktop\\samples\\dtm\\ALSbuf_xyzirncapt_dtm.asc"));
+            
+            Mat4D transfMatrix = new Mat4D();
+            transfMatrix.mat=new double[]{0.9540688863574789, 0.29958731629459895, 0.0, -448120.0441687209,
+                                        -0.29958731629459895, 0.9540688863574789, 0.0, -470918.3928060016,
+                                        0.0, 0.0, 1.0, 0.0,
+                                        0.0, 0.0, 0.0, 1.0
+                                        };
+            
+            dtm.setTransformationMatrix(transfMatrix);
             dtm.buildMesh();
             
             GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormales(dtm.getPoints(), dtm.getFaces());

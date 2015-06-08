@@ -38,6 +38,8 @@ public class TrackballCamera extends Camera{
         
         listeners = new EventListenerList();
         viewMatrix = Mat4F.identity();
+        location = new Vec3F();
+        target = new Vec3F();
         
     }
     

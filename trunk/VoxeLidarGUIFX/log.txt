@@ -2177,3 +2177,117 @@ Caused by: java.lang.NullPointerException
 	at jogamp.opengl.GLAutoDrawableBase$2.run(GLAutoDrawableBase.java:442)
 	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1277)
 	... 27 more
+2015-06-08 20:20:09 ERROR - error in scene initialization
+com.jogamp.opengl.GLException: Caught NullPointerException: null on thread Thread-4-FPSAWTAnimator#00-Timer0
+	at com.jogamp.opengl.GLException.newGLException(GLException.java:76)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1311)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at jogamp.opengl.GLAutoDrawableBase.defaultWindowResizedOp(GLAutoDrawableBase.java:259)
+	at com.jogamp.newt.opengl.GLWindow.access$200(GLWindow.java:119)
+	at com.jogamp.newt.opengl.GLWindow$2.windowResized(GLWindow.java:141)
+	at jogamp.newt.WindowImpl.consumeWindowEvent(WindowImpl.java:3682)
+	at jogamp.newt.WindowImpl.sendWindowEvent(WindowImpl.java:3616)
+	at jogamp.newt.WindowImpl$AlwaysOnTopAction.run(WindowImpl.java:1708)
+	at jogamp.newt.WindowImpl.runOnEDTIfAvail(WindowImpl.java:2131)
+	at jogamp.newt.WindowImpl.setAlwaysOnTop(WindowImpl.java:1717)
+	at com.jogamp.newt.opengl.GLWindow.setAlwaysOnTop(GLWindow.java:320)
+	at fr.ird.voxelidar.gui.JOGLWindow.setOnTop(JOGLWindow.java:93)
+	at fr.ird.voxelidar.gui.MainFrameController$31$1$2$2.sceneInitialized(MainFrameController.java:1607)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.fireSceneInitialized(JoglListener.java:127)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:403)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:154)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+Caused by: java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.render(JoglListener.java:256)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.display(JoglListener.java:191)
+	at jogamp.opengl.GLDrawableHelper.displayImpl(GLDrawableHelper.java:691)
+	at jogamp.opengl.GLDrawableHelper.display(GLDrawableHelper.java:673)
+	at jogamp.opengl.GLAutoDrawableBase$2.run(GLAutoDrawableBase.java:442)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1277)
+	... 27 more
+2015-06-08 21:56:02 ERROR - Failed compile vertex shader: 0(17) : error C1008: undefined variable "vertNormal"
+0(18) : error C1008: undefined variable "vert"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+2015-06-08 21:56:02 ERROR - Fail reading shaders files
+2015-06-08 21:57:17 ERROR - Failed compile vertex shader: 0(17) : error C1008: undefined variable "vertNormal"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+2015-06-08 21:57:17 ERROR - Fail reading shaders files
+2015-06-08 21:58:23 ERROR - Failed compile fragment shader: 0(22) : error C1068: too much data in type constructor
+0(22) : error C1060: incompatible types in initialization
+0(22) : error C1056: invalid initialization
+0(24) : error C7011: implicit cast from "vec4" to "vec3"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+2015-06-08 21:58:23 ERROR - Fail reading shaders files
+2015-06-08 22:00:48 ERROR - Failed compile fragment shader: 0(22) : error C1068: too much data in type constructor
+0(22) : error C1060: incompatible types in initialization
+0(22) : error C1056: invalid initialization
+0(24) : error C1068: too much data in type constructor
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+2015-06-08 22:00:48 ERROR - Fail reading shaders files
+2015-06-08 22:02:47 ERROR - Failed compile fragment shader: 0(22) : error C1067: too little data in type constructor
+0(22) : error C7011: implicit cast from "vec4" to "vec3"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+2015-06-08 22:02:47 ERROR - Fail reading shaders files
+2015-06-08 22:03:44 ERROR - Failed compile fragment shader: 0(11) : error C1008: undefined variable "normalMatrix"
+0(13) : error C1008: undefined variable "model"
+0(15) : error C1008: undefined variable "lightPosition"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+2015-06-08 22:03:44 ERROR - Fail reading shaders files
+2015-06-08 22:05:37 ERROR - Failed compile fragment shader: 0(11) : error C1008: undefined variable "normalMatrix"
+0(13) : error C1008: undefined variable "viewMatrix"
+0(15) : error C1008: undefined variable "lightPosition"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+2015-06-08 22:05:37 ERROR - Fail reading shaders files
+2015-06-09 00:28:38 ERROR - Failed compile fragment shader: 0(27) : error C1115: unable to find compatible overloaded function "max(float)"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+2015-06-09 00:28:38 ERROR - Fail reading shaders files
+2015-06-09 00:43:26 ERROR - error in scene initialization
+com.jogamp.opengl.GLException: Caught NullPointerException: null on thread Thread-4-FPSAWTAnimator#00-Timer0
+	at com.jogamp.opengl.GLException.newGLException(GLException.java:76)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1311)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at jogamp.opengl.GLAutoDrawableBase.defaultWindowResizedOp(GLAutoDrawableBase.java:259)
+	at com.jogamp.newt.opengl.GLWindow.access$200(GLWindow.java:119)
+	at com.jogamp.newt.opengl.GLWindow$2.windowResized(GLWindow.java:141)
+	at jogamp.newt.WindowImpl.consumeWindowEvent(WindowImpl.java:3682)
+	at jogamp.newt.WindowImpl.sendWindowEvent(WindowImpl.java:3616)
+	at jogamp.newt.WindowImpl$AlwaysOnTopAction.run(WindowImpl.java:1708)
+	at jogamp.newt.WindowImpl.runOnEDTIfAvail(WindowImpl.java:2131)
+	at jogamp.newt.WindowImpl.setAlwaysOnTop(WindowImpl.java:1717)
+	at com.jogamp.newt.opengl.GLWindow.setAlwaysOnTop(GLWindow.java:320)
+	at fr.ird.voxelidar.gui.JOGLWindow.setOnTop(JOGLWindow.java:93)
+	at fr.ird.voxelidar.gui.MainFrameController$31$1$2$2.sceneInitialized(MainFrameController.java:1607)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.fireSceneInitialized(JoglListener.java:143)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:428)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:170)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+Caused by: java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.render(JoglListener.java:268)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.display(JoglListener.java:207)
+	at jogamp.opengl.GLDrawableHelper.displayImpl(GLDrawableHelper.java:691)
+	at jogamp.opengl.GLDrawableHelper.display(GLDrawableHelper.java:673)
+	at jogamp.opengl.GLAutoDrawableBase$2.run(GLAutoDrawableBase.java:442)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1277)
+	... 27 more

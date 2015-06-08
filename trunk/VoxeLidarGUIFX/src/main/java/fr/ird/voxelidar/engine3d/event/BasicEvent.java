@@ -6,6 +6,7 @@
 package fr.ird.voxelidar.engine3d.event;
 
 import com.jogamp.opengl.util.FPSAnimator;
+import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.renderer.JoglListener;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import java.awt.Robot;
@@ -20,10 +21,17 @@ public class BasicEvent extends EventManager{
     public boolean mouseMiddleButtonClicked;
     public boolean mouseWheelRotateUp;
     public boolean mouseWheelRotateDown;
+    
     public boolean leftKeyPressed;
     public boolean rightKeyPressed;
     public boolean upKeyPressed;
     public boolean downKeyPressed;
+    
+    public boolean zKeyPressed;
+    public boolean sKeyPressed;
+    public boolean qKeyPressed;
+    public boolean dKeyPressed;
+    
     public boolean leftMousePressed;
     public boolean leftMouseDragged;
     public boolean rightMouseDragged;
@@ -157,7 +165,7 @@ public class BasicEvent extends EventManager{
         
         if(leftKeyPressed){
             
-            joglContext.getCamera().translate(new Vec3F(4.0f, 0.0f, 0.0f));
+            joglContext.getCamera().translate(new Vec3F(-4.0f, 0.0f, 0.0f));
         }
         
         if(upKeyPressed){
@@ -168,6 +176,30 @@ public class BasicEvent extends EventManager{
         if(downKeyPressed){
             
             joglContext.getCamera().translate(new Vec3F(0.0f, -4.0f, 0.0f));
+        }
+        
+        if(dKeyPressed){
+            
+            Point3F currentLightPosition = joglContext.getLightPosition();
+            joglContext.setLightPosition(new Point3F(currentLightPosition.x, currentLightPosition.y+1, currentLightPosition.z));
+        }
+        
+        if(qKeyPressed){
+            
+            Point3F currentLightPosition = joglContext.getLightPosition();
+            joglContext.setLightPosition(new Point3F(currentLightPosition.x, currentLightPosition.y-1, currentLightPosition.z));
+        }
+        
+        if(zKeyPressed){
+            
+            Point3F currentLightPosition = joglContext.getLightPosition();
+            joglContext.setLightPosition(new Point3F(currentLightPosition.x, currentLightPosition.y, currentLightPosition.z+1));
+        }
+        
+        if(sKeyPressed){
+            
+            Point3F currentLightPosition = joglContext.getLightPosition();
+            joglContext.setLightPosition(new Point3F(currentLightPosition.x, currentLightPosition.y, currentLightPosition.z-1));
         }
         
         if(spaceKeyPressed){
