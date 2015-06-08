@@ -6,7 +6,6 @@
 package fr.ird.voxelidar.lidar.format.dtm;
 
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
-import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec2F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import java.io.BufferedWriter;
@@ -15,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.vecmath.Point2d;
 import javax.vecmath.Point3d;
@@ -63,11 +63,11 @@ public class RegularDtm {
         return path;
     }
     
-    public ArrayList<DTMPoint> getPoints() {
+    public List<DTMPoint> getPoints() {
         return points;
     }
 
-    public ArrayList<Face> getFaces() {
+    public List<Face> getFaces() {
         return faces;
     }    
         
@@ -205,7 +205,6 @@ public class RegularDtm {
     }
     
     public void buildMesh(){
-        
         
         
         if(zArray != null){

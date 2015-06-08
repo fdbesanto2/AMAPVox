@@ -1750,3 +1750,430 @@ file:/home/calcul/Documents/Julien/VoxeLidar/trunk/VoxeLidarGUIFX/target/release
 2015-06-08 13:41:58 INFO  - Writing triangles file
 2015-06-08 13:41:58 INFO  - Writing dart file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/maket.txt
 2015-06-08 13:41:59 INFO  - dart file written
+2015-06-08 17:30:44 ERROR - File /home/calcul/Documents/Julien/test_tls_pierre/output2/1m not reachable
+2015-06-08 17:30:44 INFO  - Loading point cloud file...
+2015-06-08 17:30:44 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-06-08 17:30:52 INFO  - Point cloud file loaded
+2015-06-08 17:30:52 INFO  - Saved libfile: /tmp/RivLibLibrary-7412623998014168112.tmp
+2015-06-08 17:30:52 INFO  - /tmp/RivLibLibrary-7412623998014168112.tmp
+2015-06-08 17:30:52 INFO  - rxp extraction is started
+2015-06-08 17:30:52 INFO  - rxp extraction is started
+2015-06-08 17:30:52 INFO  - rxp extraction is started
+2015-06-08 17:30:52 INFO  - rxp extraction is started
+2015-06-08 17:30:52 INFO  - rxp extraction is started
+2015-06-08 17:30:52 INFO  - rxp extraction is started
+2015-06-08 17:30:52 INFO  - allocate!!!!!!!!
+2015-06-08 17:30:52 INFO  - allocate!!!!!!!!
+2015-06-08 17:30:52 INFO  - allocate!!!!!!!!
+2015-06-08 17:30:52 INFO  - allocate!!!!!!!!
+2015-06-08 17:30:52 INFO  - allocate!!!!!!!!
+2015-06-08 17:30:52 INFO  - allocate!!!!!!!!
+2015-06-08 17:30:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-06-08 17:30:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-06-08 17:30:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-06-08 17:30:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-06-08 17:30:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-06-08 17:30:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-06-08 17:30:52 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-06-08 17:30:52 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-06-08 17:30:52 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-06-08 17:30:52 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-06-08 17:30:52 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-06-08 17:30:52 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-06-08 17:31:00 INFO  - Shots processed: 1000000
+2015-06-08 17:31:00 INFO  - Shots processed: 1000000
+2015-06-08 17:31:00 INFO  - Shots processed: 1000000
+2015-06-08 17:31:00 INFO  - Shots processed: 1000000
+2015-06-08 17:31:00 INFO  - Shots processed: 1000000
+2015-06-08 17:31:01 INFO  - Shots processed: 1000000
+2015-06-08 17:31:06 INFO  - Shots processed: 2000000
+2015-06-08 17:31:07 INFO  - Shots processed: 2000000
+2015-06-08 17:31:07 INFO  - Shots processed: 2000000
+2015-06-08 17:31:07 INFO  - Shots processed: 2000000
+2015-06-08 17:31:07 INFO  - Shots processed: 2000000
+2015-06-08 17:31:08 INFO  - Shots processed: 2000000
+2015-06-08 17:31:12 INFO  - Shots processed: 3000000
+2015-06-08 17:31:14 INFO  - Shots processed: 3000000
+2015-06-08 17:31:14 INFO  - Shots processed: 3000000
+2015-06-08 17:31:14 INFO  - Shots processed: 3000000
+2015-06-08 17:31:16 INFO  - Shots processed: 3000000
+2015-06-08 17:31:16 INFO  - Shots processed: 3000000
+2015-06-08 17:31:18 INFO  - Shots processed: 4000000
+2015-06-08 17:31:20 INFO  - Shots processed: 4000000
+2015-06-08 17:31:22 INFO  - Shots processed: 4000000
+2015-06-08 17:31:22 INFO  - Shots processed: 4000000
+2015-06-08 17:31:24 INFO  - Shots processed: 4000000
+2015-06-08 17:31:24 INFO  - Shots processed: 4000000
+2015-06-08 17:31:25 INFO  - Shots processed: 5000000
+2015-06-08 17:31:25 INFO  - Shots processed: 4810881
+2015-06-08 17:31:25 INFO  - voxelisation is finished ( 32.0 s )
+2015-06-08 17:31:25 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/1m/140331_101534.rxp.vox
+2015-06-08 17:31:25 ERROR - Error: java.io.FileNotFoundException: /home/calcul/Documents/Julien/test_tls_pierre/output2/1m/140331_101534.rxp.vox (Aucun fichier ou dossier de ce type)
+2015-06-08 17:31:31 INFO  - Shots processed: 5000000
+2015-06-08 17:31:32 INFO  - Shots processed: 5000000
+2015-06-08 17:31:32 INFO  - Shots processed: 5000000
+2015-06-08 17:31:32 INFO  - Shots processed: 6000000
+2015-06-08 17:31:32 INFO  - Shots processed: 5000000
+2015-06-08 17:31:39 INFO  - Shots processed: 6000000
+2015-06-08 17:31:39 INFO  - Shots processed: 6000000
+2015-06-08 17:31:40 INFO  - Shots processed: 6000000
+2015-06-08 17:31:40 INFO  - Shots processed: 7000000
+2015-06-08 17:31:43 INFO  - Shots processed: 6000000
+2015-06-08 17:31:45 INFO  - Shots processed: 7000000
+2015-06-08 17:31:46 INFO  - Shots processed: 7000000
+2015-06-08 17:31:47 INFO  - Voxelisation was stopped
+2015-06-08 17:31:47 INFO  - Task cancelled
+2015-06-08 17:31:47 INFO  - Task cancelled
+2015-06-08 17:31:47 INFO  - Task cancelled
+2015-06-08 17:31:47 INFO  - Task cancelled
+2015-06-08 17:31:47 INFO  - Task cancelled
+2015-06-08 17:32:24 INFO  - Loading point cloud file...
+2015-06-08 17:32:24 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-06-08 17:32:26 INFO  - Point cloud file loaded
+2015-06-08 17:32:26 INFO  - rxp extraction is started
+2015-06-08 17:32:26 INFO  - rxp extraction is started
+2015-06-08 17:32:26 INFO  - allocate!!!!!!!!
+2015-06-08 17:32:26 INFO  - allocate!!!!!!!!
+2015-06-08 17:32:26 INFO  - rxp extraction is started
+2015-06-08 17:32:26 INFO  - allocate!!!!!!!!
+2015-06-08 17:32:26 INFO  - rxp extraction is started
+2015-06-08 17:32:26 INFO  - rxp extraction is started
+2015-06-08 17:32:26 INFO  - allocate!!!!!!!!
+2015-06-08 17:32:26 INFO  - allocate!!!!!!!!
+2015-06-08 17:32:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-06-08 17:32:26 INFO  - rxp extraction is started
+2015-06-08 17:32:26 INFO  - allocate!!!!!!!!
+2015-06-08 17:32:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-06-08 17:32:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-06-08 17:32:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-06-08 17:32:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-06-08 17:32:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-06-08 17:32:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-06-08 17:32:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-06-08 17:32:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-06-08 17:32:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(28, 34, 44)
+			Toricity 	:	false
+
+2015-06-08 17:32:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-06-08 17:32:26 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-06-08 17:32:32 INFO  - Shots processed: 1000000
+2015-06-08 17:32:32 INFO  - Shots processed: 1000000
+2015-06-08 17:32:33 INFO  - Shots processed: 1000000
+2015-06-08 17:32:33 INFO  - Shots processed: 1000000
+2015-06-08 17:32:33 INFO  - Shots processed: 1000000
+2015-06-08 17:32:34 INFO  - Shots processed: 1000000
+2015-06-08 17:32:38 INFO  - Shots processed: 2000000
+2015-06-08 17:32:39 INFO  - Shots processed: 2000000
+2015-06-08 17:32:39 INFO  - Shots processed: 2000000
+2015-06-08 17:32:40 INFO  - Shots processed: 2000000
+2015-06-08 17:32:40 INFO  - Shots processed: 2000000
+2015-06-08 17:32:40 INFO  - Shots processed: 2000000
+2015-06-08 17:32:44 INFO  - Shots processed: 3000000
+2015-06-08 17:32:45 INFO  - Shots processed: 3000000
+2015-06-08 17:32:46 INFO  - Shots processed: 3000000
+2015-06-08 17:32:46 INFO  - Shots processed: 3000000
+2015-06-08 17:32:47 INFO  - Shots processed: 3000000
+2015-06-08 17:32:48 INFO  - Shots processed: 3000000
+2015-06-08 17:32:50 INFO  - Shots processed: 4000000
+2015-06-08 17:32:53 INFO  - Shots processed: 4000000
+2015-06-08 17:32:53 INFO  - Shots processed: 4000000
+2015-06-08 17:32:53 INFO  - Shots processed: 4000000
+2015-06-08 17:32:56 INFO  - Shots processed: 4000000
+2015-06-08 17:32:56 INFO  - Shots processed: 4000000
+2015-06-08 17:32:57 INFO  - Shots processed: 5000000
+2015-06-08 17:32:57 INFO  - Shots processed: 4810881
+2015-06-08 17:32:57 INFO  - voxelisation is finished ( 31.0 s )
+2015-06-08 17:32:57 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/1m/140331_101534.rxp.vox
+2015-06-08 17:32:58 INFO  - file written ( 0.0 s )
+2015-06-08 17:33:02 INFO  - Shots processed: 5000000
+2015-06-08 17:33:03 INFO  - Shots processed: 5000000
+2015-06-08 17:33:04 INFO  - Shots processed: 5000000
+2015-06-08 17:33:04 INFO  - Shots processed: 5000000
+2015-06-08 17:33:04 INFO  - Shots processed: 6000000
+2015-06-08 17:33:10 INFO  - Shots processed: 6000000
+2015-06-08 17:33:10 INFO  - Shots processed: 6000000
+2015-06-08 17:33:11 INFO  - Shots processed: 6000000
+2015-06-08 17:33:12 INFO  - Shots processed: 7000000
+2015-06-08 17:33:13 INFO  - Shots processed: 6000000
+2015-06-08 17:33:16 INFO  - Shots processed: 7000000
+2015-06-08 17:33:17 INFO  - Shots processed: 7000000
+2015-06-08 17:33:17 INFO  - Shots processed: 7000000
+2015-06-08 17:33:21 INFO  - Shots processed: 8000000
+2015-06-08 17:33:22 INFO  - Shots processed: 8000000
+2015-06-08 17:33:23 INFO  - Shots processed: 8000000
+2015-06-08 17:33:23 INFO  - Shots processed: 7000000
+2015-06-08 17:33:24 INFO  - Shots processed: 8000000
+2015-06-08 17:33:28 INFO  - Shots processed: 9000000
+2015-06-08 17:33:28 INFO  - Shots processed: 9000000
+2015-06-08 17:33:29 INFO  - Shots processed: 9000000
+2015-06-08 17:33:30 INFO  - Shots processed: 8000000
+2015-06-08 17:33:30 INFO  - Shots processed: 9000000
+2015-06-08 17:33:35 INFO  - Shots processed: 10000000
+2015-06-08 17:33:35 INFO  - Shots processed: 10000000
+2015-06-08 17:33:35 INFO  - Shots processed: 10000000
+2015-06-08 17:33:36 INFO  - Shots processed: 9000000
+2015-06-08 17:33:37 INFO  - Shots processed: 10000000
+2015-06-08 17:33:41 INFO  - Shots processed: 11000000
+2015-06-08 17:33:42 INFO  - Shots processed: 11000000
+2015-06-08 17:33:42 INFO  - Shots processed: 11000000
+2015-06-08 17:33:42 INFO  - Shots processed: 10000000
+2015-06-08 17:33:43 INFO  - Shots processed: 11000000
+2015-06-08 17:33:43 INFO  - Shots processed: 11295629
+2015-06-08 17:33:43 INFO  - voxelisation is finished ( 77.0 s )
+2015-06-08 17:33:43 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/1m/140331_112953.rxp.vox
+2015-06-08 17:33:43 INFO  - file written ( 0.0 s )
+2015-06-08 17:33:44 INFO  - Shots processed: 11293701
+2015-06-08 17:33:44 INFO  - voxelisation is finished ( 77.0 s )
+2015-06-08 17:33:44 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/1m/140331_113724.rxp.vox
+2015-06-08 17:33:44 INFO  - Shots processed: 11295489
+2015-06-08 17:33:44 INFO  - voxelisation is finished ( 77.0 s )
+2015-06-08 17:33:44 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/1m/140331_115917.rxp.vox
+2015-06-08 17:33:44 INFO  - file written ( 0.0 s )
+2015-06-08 17:33:44 INFO  - file written ( 0.0 s )
+2015-06-08 17:33:45 INFO  - Shots processed: 11295882
+2015-06-08 17:33:45 INFO  - voxelisation is finished ( 78.0 s )
+2015-06-08 17:33:45 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/1m/140331_110207.rxp.vox
+2015-06-08 17:33:45 INFO  - file written ( 0.0 s )
+2015-06-08 17:33:48 INFO  - Shots processed: 11000000
+2015-06-08 17:33:54 INFO  - Shots processed: 12000000
+2015-06-08 17:33:59 INFO  - Shots processed: 13000000
+2015-06-08 17:34:00 INFO  - Shots processed: 13166931
+2015-06-08 17:34:00 INFO  - voxelisation is finished ( 94.0 s )
+2015-06-08 17:34:00 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/1m/140331_101944.rxp.vox
+2015-06-08 17:34:00 INFO  - file written ( 0.0 s )
+2015-06-08 17:34:00 INFO  - Voxelisation finished in 96.0 s
+2015-06-08 17:34:00 INFO  - Merging in progress, file 1 : 6
+2015-06-08 17:34:00 INFO  - Merging in progress, file 2 : 6
+2015-06-08 17:34:01 INFO  - Merging in progress, file 3 : 6
+2015-06-08 17:34:01 INFO  - Merging in progress, file 4 : 6
+2015-06-08 17:34:01 INFO  - Merging in progress, file 5 : 6
+2015-06-08 17:34:01 INFO  - Merging in progress, file 6 : 6
+2015-06-08 17:34:01 INFO  - Compute angleMean
+2015-06-08 17:34:01 INFO  - Compute lMeanTotal
+2015-06-08 17:34:01 INFO  - Compute transmittance and PAD
+2015-06-08 17:34:01 INFO  - writing output file: /home/calcul/Documents/Julien/test_tls_pierre/output2/1m/merged.vox
+2015-06-08 17:34:01 INFO  - file written ( 0.0 s )
+2015-06-08 17:34:01 INFO  - Voxelisation finished in 97.0 s
+2015-06-08 17:34:01 INFO  - Voxelisation finished in 97.0 s
+2015-06-08 18:36:20 ERROR - Fail link program
+2015-06-08 18:36:47 ERROR - error in scene initialization
+java.lang.ArrayIndexOutOfBoundsException: 25159
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshAndComputeNormales(GLMeshFactory.java:576)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:348)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:153)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-06-08 18:37:13 ERROR - Fail link program
+2015-06-08 18:39:25 ERROR - Failed compile vertex shader: 0:39(50): error: size mismatch for matrix multiplication
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+2015-06-08 18:39:25 ERROR - Fail reading shaders files
+2015-06-08 18:40:38 ERROR - Fail link program
+2015-06-08 18:44:09 ERROR - error in scene initialization
+java.lang.ArrayIndexOutOfBoundsException: 25159
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshAndComputeNormales(GLMeshFactory.java:576)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:348)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:153)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-06-08 18:44:57 ERROR - error in scene initialization
+java.lang.ArrayIndexOutOfBoundsException: 25159
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshAndComputeNormales(GLMeshFactory.java:576)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:348)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:153)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-06-08 18:46:14 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.SimpleGLMesh.initBuffers(SimpleGLMesh.java:54)
+	at fr.ird.voxelidar.engine3d.object.scene.SimpleSceneObject.initBuffers(SimpleSceneObject.java:29)
+	at fr.ird.voxelidar.engine3d.object.scene.Scene.addObject(Scene.java:72)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:351)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:153)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-06-08 18:47:03 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.SimpleGLMesh.initBuffers(SimpleGLMesh.java:54)
+	at fr.ird.voxelidar.engine3d.object.scene.SimpleSceneObject.initBuffers(SimpleSceneObject.java:29)
+	at fr.ird.voxelidar.engine3d.object.scene.Scene.addObject(Scene.java:72)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:351)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:153)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-06-08 18:48:48 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.SimpleGLMesh.initBuffers(SimpleGLMesh.java:54)
+	at fr.ird.voxelidar.engine3d.object.scene.SimpleSceneObject.initBuffers(SimpleSceneObject.java:29)
+	at fr.ird.voxelidar.engine3d.object.scene.Scene.addObject(Scene.java:72)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:351)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:153)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-06-08 18:51:59 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.object.scene.SimpleSceneObject.initVao(SimpleSceneObject.java:53)
+	at fr.ird.voxelidar.engine3d.object.scene.Scene.addObject(Scene.java:73)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:351)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:153)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-06-08 18:55:46 ERROR - error in scene initialization
+com.jogamp.opengl.GLException: Caught NullPointerException: null on thread Thread-3-FPSAWTAnimator#00-Timer0
+	at com.jogamp.opengl.GLException.newGLException(GLException.java:76)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1311)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at jogamp.opengl.GLAutoDrawableBase.defaultWindowResizedOp(GLAutoDrawableBase.java:259)
+	at com.jogamp.newt.opengl.GLWindow.access$200(GLWindow.java:119)
+	at com.jogamp.newt.opengl.GLWindow$2.windowResized(GLWindow.java:141)
+	at jogamp.newt.WindowImpl.consumeWindowEvent(WindowImpl.java:3682)
+	at jogamp.newt.WindowImpl.sendWindowEvent(WindowImpl.java:3616)
+	at jogamp.newt.WindowImpl$AlwaysOnTopAction.run(WindowImpl.java:1708)
+	at jogamp.newt.WindowImpl.runOnEDTIfAvail(WindowImpl.java:2131)
+	at jogamp.newt.WindowImpl.setAlwaysOnTop(WindowImpl.java:1717)
+	at com.jogamp.newt.opengl.GLWindow.setAlwaysOnTop(GLWindow.java:320)
+	at fr.ird.voxelidar.gui.JOGLWindow.setOnTop(JOGLWindow.java:93)
+	at fr.ird.voxelidar.gui.MainFrameController$31$1$2$2.sceneInitialized(MainFrameController.java:1607)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.fireSceneInitialized(JoglListener.java:126)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:392)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:153)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+Caused by: java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.render(JoglListener.java:254)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.display(JoglListener.java:190)
+	at jogamp.opengl.GLDrawableHelper.displayImpl(GLDrawableHelper.java:691)
+	at jogamp.opengl.GLDrawableHelper.display(GLDrawableHelper.java:673)
+	at jogamp.opengl.GLAutoDrawableBase$2.run(GLAutoDrawableBase.java:442)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1277)
+	... 27 more

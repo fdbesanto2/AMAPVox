@@ -24,7 +24,9 @@ import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.mesh.GLMesh;
 import fr.ird.voxelidar.engine3d.object.scene.SceneManager;
 import fr.ird.voxelidar.engine3d.object.scene.SimpleSceneObject;
+import fr.ird.voxelidar.lidar.format.dtm.DtmLoader;
 import fr.ird.voxelidar.util.Settings;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
 import java.util.Map.Entry;
@@ -246,6 +248,12 @@ public class JoglListener implements GLEventListener {
                 gl.glUniformMatrix4fv(s.uniformMap.get("normalMatrix"), 1, false, normalMatrixBuffer);
             gl.glUseProgram(0);
             
+            int id2 = scene.getShaderByName("lightShader");
+            Shader s2 = scene.getShadersList().get(id2);
+            gl.glUseProgram(id2);
+                gl.glUniformMatrix4fv(s2.uniformMap.get("normalMatrix"), 1, false, normalMatrixBuffer);
+            gl.glUseProgram(0);
+            
             FloatBuffer viewMatrixBuffer = Buffers.newDirectFloatBuffer(camera.getViewMatrix().mat);
                     
             for(Entry<Integer, Shader> shader : scene.getShadersList().entrySet()) {
@@ -318,9 +326,18 @@ public class JoglListener implements GLEventListener {
 
             logger.debug("shader compiled: "+texturedShader.name);
             
+            InputStreamReader lightedVertexShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/LightVertexShader.txt"));
+            InputStreamReader lightedFragmentShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/LightFragmentShader.txt"));
+            Shader lightedShader = new Shader(gl, lightedFragmentShader, lightedVertexShader, "lightShader");
+            lightedShader.setUniformLocations(Shader.composeShaderUniforms(Shader.MINIMAL_SHADER_UNIFORMS, Shader.LIGHT_SHADER_UNIFORMS));
+            lightedShader.setAttributeLocations(Shader.composeShaderAttributes(new String[]{"position", "color"}, Shader.LIGHT_SHADER_ATTRIBUTES));
+
+            logger.debug("shader compiled: "+texturedShader.name);
+            
             scene.addShader(noTranslationShader);
             scene.addShader(instanceShader);
             scene.addShader(texturedShader);
+            scene.addShader(lightedShader);
             
             GLMesh axisMesh = GLMeshFactory.createMeshFromX3D(new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("mesh/axis.x3d")));
             axisMesh.setGlobalScale(0.03f);
@@ -329,6 +346,14 @@ public class JoglListener implements GLEventListener {
             
             axis.setDrawType(GL3.GL_TRIANGLES);
             scene.addObject(axis, gl);
+            
+            RegularDtm dtm = DtmLoader.readFromAscFile(new File("/home/calcul/Documents/Julien/mnt.asc"));
+            dtm.buildMesh();
+            
+            GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormales(dtm.getPoints(), dtm.getFaces());
+            SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, lightedShader.getProgramId(), false);
+            axis.setDrawType(GL3.GL_TRIANGLES);
+            scene.addObject(dtmSceneObject, gl);
             
             if(settings.drawAxis){
                 //SceneObject sceneObject = new SimpleSceneObject(MeshFactory.createLandmark(-1000, 1000), basicShader.getProgramId(), false);

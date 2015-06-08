@@ -7,9 +7,12 @@ package fr.ird.voxelidar.engine3d.mesh;
 
 import com.jogamp.common.nio.Buffers;
 import fr.ird.voxelidar.engine3d.loading.texture.Texture;
+import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.object.mesh.Grid;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3i;
+import fr.ird.voxelidar.lidar.format.dtm.DTMPoint;
+import fr.ird.voxelidar.lidar.format.dtm.Face;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -524,6 +527,71 @@ public class GLMeshFactory {
         mesh.indexBuffer = Buffers.newDirectShortBuffer(indexData);
         
         mesh.vertexCount = indexData.length;
+        
+        return mesh;
+    }
+    
+    public static GLMesh createMeshAndComputeNormales(List<DTMPoint> points, List<Face> faces){
+        GLMesh mesh = new SimpleGLMesh();
+        
+        float[] vertexData = new float[points.size()*3];
+        for(int i=0,j=0 ; i<points.size(); i++, j+=3){
+            
+            vertexData[j] = points.get(i).x;
+            vertexData[j+1] = points.get(i).y;
+            vertexData[j+2] = points.get(i).z;
+        }
+        
+        float[] normalData = new float[points.size()*3];
+        for(int i=0,j=0 ; i<points.size(); i++, j+=3){
+            
+            Vec3F meanNormale = new Vec3F(0, 0, 0);
+            
+            for(Integer faceIndex : points.get(i).faces){
+                
+                Face face = faces.get(faceIndex);
+                
+                DTMPoint point1 = points.get(face.getPoint1());
+                DTMPoint point2 = points.get(face.getPoint2());
+                DTMPoint point3 = points.get(face.getPoint3());
+                
+                Vec3F vec1 = Vec3F.substract(new Vec3F(point2.x, point2.y, point2.z), new Vec3F(point1.x, point1.y, point1.z));
+                Vec3F vec2 = Vec3F.substract(new Vec3F(point3.x, point3.y, point3.z), new Vec3F(point1.x, point1.y, point1.z));
+                
+                meanNormale = Vec3F.add(meanNormale, Vec3F.normalize(Vec3F.cross(vec1, vec2)));
+                
+            }
+            
+            meanNormale = Vec3F.normalize(meanNormale);
+            
+            normalData[j] = meanNormale.x;
+            normalData[j+1] = meanNormale.y;
+            normalData[j+2] = meanNormale.z;
+        }
+        
+        short indexData[] = new short[faces.size()*3];
+        for(int i=0, j=0 ; i<faces.size(); i++, j+=3){
+            
+            indexData[j] = (short) faces.get(i).getPoint1();
+            indexData[j+1] = (short) faces.get(i).getPoint2();
+            indexData[j+2] = (short) faces.get(i).getPoint3();
+        }
+        
+        mesh.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
+        mesh.indexBuffer = Buffers.newDirectShortBuffer(indexData);
+        mesh.normalBuffer = Buffers.newDirectFloatBuffer(normalData);
+        mesh.vertexCount = indexData.length;
+        
+        float colorData[] = new float[points.size()*3];
+        for(int i=0, j=0;i<points.size();i++,j+=3){
+            
+            colorData[j] = 0.5f;
+            colorData[j+1] = 0.5f;
+            colorData[j+2] = 0.5f;
+            
+        }
+        
+        mesh.colorBuffer = Buffers.newDirectFloatBuffer(colorData);
         
         return mesh;
     }

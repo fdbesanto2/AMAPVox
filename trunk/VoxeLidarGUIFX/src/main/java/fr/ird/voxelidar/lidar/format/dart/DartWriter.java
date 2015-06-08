@@ -172,7 +172,7 @@ public class DartWriter {
                 dtm.exportObj(new File("/home/calcul/Documents/Julien/test.obj"));
                 
                 faces = new TreeSet[data.header.split.x][data.header.split.y][data.header.split.z];
-                ArrayList<DTMPoint> points = dtm.getPoints();
+                List<DTMPoint> points = dtm.getPoints();
                 
                 for(DTMPoint point : points){
                     
@@ -267,8 +267,8 @@ public class DartWriter {
             
             if(dtm != null){
                 
-                ArrayList<Face> faceList = dtm.getFaces();
-                ArrayList<DTMPoint> pointList = dtm.getPoints();
+                List<Face> faceList = dtm.getFaces();
+                List<DTMPoint> pointList = dtm.getPoints();
                 
                 int shapeType = 0; //triangle = 0 and parallelogram = 1
                 int scattererType = 0;

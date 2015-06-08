@@ -239,9 +239,9 @@ public class MainFrameController implements Initializable {
                 final boolean global;
                 
                 if(result.get() == buttonTypeGlobal){
-                    global = false;
-                }else if(result.get() == buttonTypeLocal){
                     global = true;
+                }else if(result.get() == buttonTypeLocal){
+                    global = false;
                 }else{
                     return;
                 }
