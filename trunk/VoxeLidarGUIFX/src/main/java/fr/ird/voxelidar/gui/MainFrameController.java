@@ -21,6 +21,7 @@ import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.lidar.format.als.LasHeader;
 import fr.ird.voxelidar.lidar.format.als.LasReader;
 import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
+import fr.ird.voxelidar.lidar.format.dart.DartPlotsXMLWriter;
 import fr.ird.voxelidar.lidar.format.tls.Rsp;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.lidar.format.tls.Scans;
@@ -165,6 +166,8 @@ public class MainFrameController implements Initializable {
     private MenuItem menuItemUpdate;
     @FXML
     private AnchorPane anchorpanePreFiltering;
+    @FXML
+    private MenuItem menuItemExportDartPlots;
 
     @FXML
     private void onActionMenuItemUpdate(ActionEvent event) {
@@ -203,6 +206,85 @@ public class MainFrameController implements Initializable {
         d.show();
 
         service.start();
+        
+    }
+
+    @FXML
+    private void onActionMenuItemExportDartPlots(ActionEvent event) {
+        
+        final File voxelFile = listViewVoxelsFiles.getSelectionModel().getSelectedItem();
+        
+        if(checkVoxelFile(voxelFile)){
+            
+            fileChooserSaveDartFile.setInitialFileName("plots.xml");
+            fileChooserSaveDartFile.setInitialDirectory(voxelFile.getParentFile());
+            
+            final File plotFile = fileChooserSaveDartFile.showSaveDialog(stage);
+            
+            if(plotFile != null){
+                
+                Alert alert = new Alert(AlertType.CONFIRMATION);
+                
+                alert.setTitle("Coordinate system");
+                alert.setContentText("Choose your coordinate system");
+                
+                ButtonType buttonTypeGlobal = new ButtonType("Global");
+                ButtonType buttonTypeLocal = new ButtonType("Local");
+
+                alert.getButtonTypes().setAll(buttonTypeGlobal, buttonTypeLocal);
+                
+                Optional<ButtonType> result = alert.showAndWait();
+                
+                
+                final boolean global;
+                
+                if(result.get() == buttonTypeGlobal){
+                    global = false;
+                }else if(result.get() == buttonTypeLocal){
+                    global = true;
+                }else{
+                    return;
+                }
+                
+                final DartPlotsXMLWriter dartPlotsXML = new DartPlotsXMLWriter();
+                
+                Service service = new Service() {
+
+                    @Override
+                    protected Task createTask() {
+                        return new Task<Object>() {
+
+                            @Override
+                            protected Object call() throws Exception {
+                                
+                                
+                                dartPlotsXML.writeFromVoxelFile(voxelFile, plotFile, global);
+                                return null;
+                            }
+                        };
+                    }
+                };
+                
+                ProgressDialog progressDialog = new ProgressDialog(service);
+                progressDialog.show();
+                service.start();
+                
+                Button buttonCancel = new Button("cancel");
+                progressDialog.setGraphic(buttonCancel);
+
+                buttonCancel.setOnAction(new EventHandler<ActionEvent>() {
+
+                    @Override
+                    public void handle(ActionEvent event) {
+                        service.cancel();
+                        dartPlotsXML.setCancelled(true);
+                    }
+                });
+                
+            }
+        }
+        
+        
         
     }
 
@@ -1793,14 +1875,17 @@ public class MainFrameController implements Initializable {
             }
         }
     }
-
-    @FXML
-    private void onActionButtonLoadSelectedVoxelFile(ActionEvent event) {
-
-        File voxelFile = listViewVoxelsFiles.getSelectionModel().getSelectedItem();
-
-        if (!FileManager.readHeader(voxelFile.getAbsolutePath()).equals("VOXEL SPACE")) {
-
+    
+    private boolean checkVoxelFile(File voxelFile){
+        
+        boolean valid = true;
+        
+        if(voxelFile == null || !FileManager.readHeader(voxelFile.getAbsolutePath()).equals("VOXEL SPACE")){
+            valid = false;
+        }
+        
+        if(!valid){
+            
             logger.error("File is not a voxel file: " + voxelFile.getAbsolutePath());
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setHeaderText("Incorrect file");
@@ -1812,9 +1897,18 @@ public class MainFrameController implements Initializable {
             if (result.get() == ButtonType.CANCEL) {
                 listViewVoxelsFiles.getItems().remove(voxelFile);
             }
+        }
+        
+        return valid;
+    }
 
+    @FXML
+    private void onActionButtonLoadSelectedVoxelFile(ActionEvent event) {
+
+        File voxelFile = listViewVoxelsFiles.getSelectionModel().getSelectedItem();
+
+        if (!checkVoxelFile(voxelFile)) {
             return;
-
         }
 
         String[] parameters = VoxelSpaceData.readAttributs(listViewVoxelsFiles.getSelectionModel().getSelectedItem());
@@ -1992,7 +2086,7 @@ public class MainFrameController implements Initializable {
         }
     }
 
-    private void showMatrixFormatErrorDialog() {
+    public void showMatrixFormatErrorDialog() {
 
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle("Error");
@@ -3208,63 +3302,24 @@ public class MainFrameController implements Initializable {
         
         Parent root;
         
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DartExporterFrame.fxml"));
-            root = loader.load();
-            controller = loader.getController();
-            controller.setStage(exportDartFrame);
-            controller.setVoxelFile(listViewVoxelsFiles.getSelectionModel().getSelectedItem());
-            exportDartFrame.setScene(new Scene(root));
-        } catch (IOException ex) {
-            logger.error(ex);
-        }
+        File voxelFile = listViewVoxelsFiles.getSelectionModel().getSelectedItem();
         
-        exportDartFrame.show();
-        /*
-        if (lastFCSaveDartFile != null) {
-            fileChooserSaveDartFile.setInitialDirectory(lastFCSaveDartFile.getParentFile());
-        }
-
-        final File selectedFile = fileChooserSaveDartFile.showSaveDialog(stage);
-
-        ProgressDialog d;
-        Service<Void> service;
-
-        service = new Service<Void>() {
-
-            @Override
-            protected Task<Void> createTask() {
-                return new Task<Void>() {
-                    @Override
-                    protected Void call() throws InterruptedException {
-
-                        if (selectedFile != null) {
-                            lastFCSaveDartFile = selectedFile;
-
-                            final VoxelSpace voxelSpace = new VoxelSpace();
-                            voxelSpace.addVoxelSpaceListener(new VoxelSpaceAdapter() {
-                                @Override
-                                public void voxelSpaceCreationFinished() {
-                                    DartWriter dartWriter = new DartWriter();
-                                    dartWriter.writeFromVoxelSpace(voxelSpace.data, selectedFile);
-                                }
-                            });
-
-                            voxelSpace.loadFromFile(listViewVoxelsFiles.getSelectionModel().getSelectedItem());
-                        }
-                        return null;
-                    }
-                };
+        if(checkVoxelFile(voxelFile)){
+            
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DartExporterFrame.fxml"));
+                root = loader.load();
+                controller = loader.getController();
+                controller.setStage(exportDartFrame);
+                controller.setParent(this);
+                controller.setVoxelFile(voxelFile);
+                exportDartFrame.setScene(new Scene(root));
+            } catch (IOException ex) {
+                logger.error(ex);
             }
-        };
 
-        d = new ProgressDialog(service);
-        d.initOwner(stage);
-        d.setResizable(true);
-        d.show();
-
-        service.start();
-        */
+            exportDartFrame.show();
+        }
     }
 
     @FXML
@@ -4277,6 +4332,14 @@ public class MainFrameController implements Initializable {
 
         service.start();
 
+    }
+
+    public Stage getCalculateMatrixFrame() {
+        return calculateMatrixFrame;
+    }
+
+    public CalculateMatrixFrameController getCalculateMatrixFrameController() {
+        return calculateMatrixFrameController;
     }
 
 }

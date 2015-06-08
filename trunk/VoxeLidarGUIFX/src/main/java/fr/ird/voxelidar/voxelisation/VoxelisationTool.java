@@ -22,6 +22,7 @@ import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.multires.ProcessingMultiRes;
 import fr.ird.voxelidar.octree.Octree;
 import fr.ird.voxelidar.octree.OctreeFactory;
+import fr.ird.voxelidar.util.Cancellable;
 import fr.ird.voxelidar.util.DataSet;
 import fr.ird.voxelidar.util.DataSet.Mode;
 import fr.ird.voxelidar.util.Filter;
@@ -30,7 +31,6 @@ import fr.ird.voxelidar.util.TimeCounter;
 import fr.ird.voxelidar.voxelisation.als.LasVoxelisation;
 import fr.ird.voxelidar.voxelisation.als.Trajectory;
 import fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction;
-import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysisData;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -45,12 +45,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.RejectedExecutionException;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Vector3d;
@@ -62,7 +59,7 @@ import org.apache.log4j.Logger;
  */
 
 
-public class VoxelisationTool {
+public class VoxelisationTool implements Cancellable{
     
     
     final static Logger logger = Logger.getLogger(VoxelisationTool.class);
@@ -98,6 +95,7 @@ public class VoxelisationTool {
         }
     }
 
+    @Override
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
         
@@ -106,6 +104,7 @@ public class VoxelisationTool {
         }
     }
 
+    @Override
     public boolean isCancelled() {
         return cancelled;
     }

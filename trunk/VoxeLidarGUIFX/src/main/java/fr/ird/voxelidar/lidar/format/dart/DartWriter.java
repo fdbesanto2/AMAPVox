@@ -102,7 +102,7 @@ public class DartWriter {
                         
                         String stringToWrite = "";
                         
-                        if(cell.getType() == DartCell.CELL_TYPE_TURBID_CROWN){
+                        if(cell.getType() != DartCell.CELL_TYPE_EMPTY){
                             
                             String turbids ="";
 
@@ -169,7 +169,7 @@ public class DartWriter {
                 dtm = DtmLoader.readFromAscFile(dtmFile);
                 dtm.setTransformationMatrix(transfMatrix);
                 dtm.buildMesh();
-                dtm.exportObj(new File("/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/test.obj"));
+                dtm.exportObj(new File("/home/calcul/Documents/Julien/test.obj"));
                 
                 faces = new TreeSet[data.header.split.x][data.header.split.y][data.header.split.z];
                 ArrayList<DTMPoint> points = dtm.getPoints();
@@ -232,7 +232,12 @@ public class DartWriter {
                 dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_EMPTY);
                 densite = 0f;
             }else{
-                dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_TURBID_CROWN);
+                if(nbFigures > 0){
+                    dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_OPAQUE_GROUND);
+                }else{
+                    dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_TURBID_CROWN);
+                }
+                
             }
             
             dart.cells[indiceX][indiceY][indiceZ].setTurbids(new Turbid[]{new Turbid(densite, 0)});

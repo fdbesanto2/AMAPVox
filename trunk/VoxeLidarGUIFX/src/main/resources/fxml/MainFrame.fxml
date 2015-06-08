@@ -648,7 +648,8 @@
                                     </Button>
                                     <MenuButton fx:id="menuButtonExport" disable="true" layoutX="227.0" layoutY="128.0" mnemonicParsing="false" text="Export" AnchorPane.bottomAnchor="0.0">
                                       <items>
-                                        <MenuItem fx:id="menuItemExportDart" mnemonicParsing="false" onAction="#onActionMenuItemExportDart" text="Dart" />
+                                        <MenuItem fx:id="menuItemExportDart" mnemonicParsing="false" onAction="#onActionMenuItemExportDart" text="Dart (maket.txt)" />
+                                          <MenuItem fx:id="menuItemExportDartPlots" mnemonicParsing="false" onAction="#onActionMenuItemExportDartPlots" text="Dart (plots.txt)" />
                                       </items>
                                     </MenuButton>
                                  </children>

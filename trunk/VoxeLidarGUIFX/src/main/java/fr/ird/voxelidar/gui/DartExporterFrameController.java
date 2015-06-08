@@ -18,6 +18,8 @@ import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceAdapter;
 import fr.ird.voxelidar.lidar.format.dart.DartWriter;
+import fr.ird.voxelidar.util.MatrixConverter;
+import fr.ird.voxelidar.util.MatrixFileParser;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -38,6 +40,8 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import javax.vecmath.Matrix4d;
 import org.controlsfx.dialog.ProgressDialog;
 
 /**
@@ -50,11 +54,17 @@ import org.controlsfx.dialog.ProgressDialog;
 public class DartExporterFrameController implements Initializable {
 
     private Stage stage;
+    private MainFrameController parent;
+    
     private FileChooser fileChooserSaveMaketFile;
     private FileChooser fileChooserSaveTrianglesFile;
     private FileChooser fileChooserOpenDTMFile;
+    private FileChooser fileChooserOpenVopMatrixFile;
     
     private File voxelFile;
+    private Matrix4d vopMatrix;
+    
+    private final static String MATRIX_FORMAT_ERROR_MSG = "Matrix file has to look like this: \n\n\t1.0 0.0 0.0 0.0\n\t0.0 1.0 0.0 0.0\n\t0.0 0.0 1.0 0.0\n\t0.0 0.0 0.0 1.0\n";
     
     @FXML
     private CheckBox checkboxGenerateTrianglesFile;
@@ -74,12 +84,21 @@ public class DartExporterFrameController implements Initializable {
     private AnchorPane anchorpaneTrianglesGeneration;
     @FXML
     private Button buttonExportMaket;
+    @FXML
+    private Button buttonEnterReferencePointsVop;
+    @FXML
+    private CheckBox checkboxUseVopMatrix;
+    @FXML
+    private Button buttonOpenVopMatrixFile;
     
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        vopMatrix = new Matrix4d();
+        vopMatrix.setIdentity();
         
         EventHandler<DragEvent> dragOverEvent = new EventHandler<DragEvent>() {
 
@@ -108,13 +127,17 @@ public class DartExporterFrameController implements Initializable {
         
         fileChooserSaveTrianglesFile = new FileChooser();
         fileChooserSaveTrianglesFile.setTitle("Save triangle file");
-        fileChooserSaveTrianglesFile.setInitialFileName("triangle.txt");
+        fileChooserSaveTrianglesFile.setInitialFileName("triangles.txt");
         
         fileChooserOpenDTMFile = new FileChooser();
         fileChooserOpenDTMFile.setTitle("Choose DTM file");
         fileChooserOpenDTMFile.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("All Files", "*"),
                 new FileChooser.ExtensionFilter("DTM Files", "*.asc"));
+        
+        fileChooserOpenVopMatrixFile = new FileChooser();
+        fileChooserOpenVopMatrixFile.setTitle("Choose Matrix file");
+        
         
         checkboxGenerateTrianglesFile.selectedProperty().addListener(new ChangeListener<Boolean>() {
 
@@ -123,17 +146,39 @@ public class DartExporterFrameController implements Initializable {
                 anchorpaneTrianglesGeneration.setDisable(!newValue);
             }
         });
+        
+        checkboxUseVopMatrix.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (newValue) {
+                    buttonOpenVopMatrixFile.setDisable(false);
+                    buttonEnterReferencePointsVop.setDisable(false);
+                } else {
+                    buttonOpenVopMatrixFile.setDisable(true);
+                    buttonEnterReferencePointsVop.setDisable(true);
+                }
+            }
+        });
     }    
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+    
+    public void setParent(MainFrameController controller){
+        this.parent = controller;
     }
 
     public void setVoxelFile(File voxelFile) {
         this.voxelFile = voxelFile;
         
         textfieldMaketFilePath.setText(voxelFile.getParent()+"/"+"maket.txt");
-        textfieldTrianglesFilePath.setText(voxelFile.getParent()+"/"+"triangle.txt");
+        textfieldTrianglesFilePath.setText(voxelFile.getParent()+"/"+"triangles.txt");
+        fileChooserOpenVopMatrixFile.setInitialDirectory(voxelFile.getParentFile());
+        fileChooserSaveMaketFile.setInitialDirectory(voxelFile.getParentFile());
+        fileChooserOpenDTMFile.setInitialDirectory(voxelFile.getParentFile());
+        fileChooserSaveTrianglesFile.setInitialDirectory(voxelFile.getParentFile());
     }
 
     @FXML
@@ -213,11 +258,11 @@ public class DartExporterFrameController implements Initializable {
                                 DartWriter dartWriter = new DartWriter();
                                 dartWriter.setDtmFile(dtmFile);
                                 
-                                Mat4D transfMatrix = new Mat4D();
-                                transfMatrix.mat=new double[]{0.9540688863574789, 0.29958731629459895, 0.0, -448120.0441687209,
-                                                                -0.29958731629459895, 0.9540688863574789, 0.0, -470918.3928060016,
-                                                                0.0, 0.0, 1.0, 0.0,
-                                                                0.0, 0.0, 0.0, 1.0};
+                                Mat4D transfMatrix = MatrixConverter.convertMatrix4dToMat4D(vopMatrix);
+                                if(transfMatrix == null){
+                                    transfMatrix = Mat4D.identity();
+                                }
+                                
                                 
                                 dartWriter.setTransfMatrix(transfMatrix);
                                 dartWriter.setTrianglesFile(triangleFile);
@@ -240,5 +285,46 @@ public class DartExporterFrameController implements Initializable {
         d.show();
 
         service.start();
+    }
+
+    @FXML
+    private void onActionButtonEnterReferencePointsVop(ActionEvent event) {
+        
+        parent.getCalculateMatrixFrame().show();
+
+        parent.getCalculateMatrixFrame().setOnHidden(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+
+                if (parent.getCalculateMatrixFrameController().getMatrix() != null) {
+                    vopMatrix = parent.getCalculateMatrixFrameController().getMatrix();
+                }
+            }
+        });
+    }
+
+    @FXML
+    private void onActionCheckboxUseVopMatrix(ActionEvent event) {
+    }
+
+    @FXML
+    private void onActionButtonOpenVopMatrixFile(ActionEvent event) {
+        
+        File selectedFile = fileChooserOpenVopMatrixFile.showOpenDialog(stage);
+        if (selectedFile != null) {
+
+            Matrix4d mat = MatrixFileParser.getMatrixFromFile(selectedFile);
+            if (mat != null) {
+                vopMatrix = MatrixFileParser.getMatrixFromFile(selectedFile);
+                if (vopMatrix == null) {
+                    vopMatrix = new Matrix4d();
+                    vopMatrix.setIdentity();
+                }
+                
+            } else {
+                parent.showMatrixFormatErrorDialog();
+            }
+        }
     }
 }

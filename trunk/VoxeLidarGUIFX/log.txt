@@ -1487,3 +1487,266 @@ java.lang.IndexOutOfBoundsException: Index: 301, Size: 19
 2015-06-05 17:23:41 INFO  - Writing triangles file
 2015-06-05 17:23:41 INFO  - Writing dart file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/maket.txt
 2015-06-05 17:23:41 INFO  - dart file written
+2015-06-08 08:15:27 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-08 08:15:27 INFO  - Writing triangles file
+2015-06-08 08:15:27 INFO  - Writing dart file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/maket.txt
+2015-06-08 08:15:28 INFO  - dart file written
+2015-06-08 08:17:19 ERROR - javafx.fxml.LoadException: 
+file:/home/calcul/Documents/Julien/VoxeLidar/trunk/VoxeLidarGUIFX/target/release/VoxeLidarGUIFX-1.0-r87b2f027.jar!/fxml/DartExporterFrame.fxml
+
+2015-06-08 08:28:30 ERROR - File is not a voxel file: /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox_cfg.xml
+2015-06-08 08:28:42 ERROR - File is not a voxel file: /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox_cfg.xml
+2015-06-08 08:41:58 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-08 08:41:58 INFO  - Writing triangles file
+2015-06-08 08:41:58 INFO  - Writing dart file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/maket.txt
+2015-06-08 08:41:59 INFO  - dart file written
+2015-06-08 08:44:08 INFO  - Reading DTM : /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc
+2015-06-08 08:44:08 INFO  - Writing triangles file
+2015-06-08 08:44:08 INFO  - Writing dart file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/maket.txt
+2015-06-08 08:44:08 INFO  - dart file written
+2015-06-08 11:06:31 INFO  - Loading point cloud file...
+2015-06-08 11:06:31 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-06-08 11:06:40 INFO  - Point cloud file loaded
+2015-06-08 11:06:40 INFO  - Saved libfile: /tmp/RivLibLibrary-8184314267830559545.tmp
+2015-06-08 11:06:40 INFO  - /tmp/RivLibLibrary-8184314267830559545.tmp
+2015-06-08 11:06:40 INFO  - rxp extraction is started
+2015-06-08 11:06:40 INFO  - rxp extraction is started
+2015-06-08 11:06:40 INFO  - rxp extraction is started
+2015-06-08 11:06:40 INFO  - rxp extraction is started
+2015-06-08 11:06:40 INFO  - rxp extraction is started
+2015-06-08 11:06:40 INFO  - rxp extraction is started
+2015-06-08 11:06:40 INFO  - allocate!!!!!!!!
+2015-06-08 11:06:40 INFO  - allocate!!!!!!!!
+2015-06-08 11:06:40 INFO  - allocate!!!!!!!!
+2015-06-08 11:06:40 INFO  - allocate!!!!!!!!
+2015-06-08 11:06:40 INFO  - allocate!!!!!!!!
+2015-06-08 11:06:40 INFO  - allocate!!!!!!!!
+2015-06-08 11:11:25 INFO  - Loading point cloud file...
+2015-06-08 11:11:25 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-06-08 11:11:27 INFO  - Point cloud file loaded
+2015-06-08 11:11:27 INFO  - Saved libfile: /tmp/RivLibLibrary-5243736084359313884.tmp
+2015-06-08 11:11:27 INFO  - /tmp/RivLibLibrary-5243736084359313884.tmp
+2015-06-08 11:11:27 INFO  - rxp extraction is started
+2015-06-08 11:11:27 INFO  - rxp extraction is started
+2015-06-08 11:11:27 INFO  - rxp extraction is started
+2015-06-08 11:11:27 INFO  - rxp extraction is started
+2015-06-08 11:11:27 INFO  - rxp extraction is started
+2015-06-08 11:11:27 INFO  - rxp extraction is started
+2015-06-08 11:11:27 INFO  - allocate!!!!!!!!
+2015-06-08 11:11:27 INFO  - allocate!!!!!!!!
+2015-06-08 11:11:27 INFO  - allocate!!!!!!!!
+2015-06-08 11:11:27 INFO  - allocate!!!!!!!!
+2015-06-08 11:11:27 INFO  - allocate!!!!!!!!
+2015-06-08 11:11:27 INFO  - allocate!!!!!!!!
+2015-06-08 11:11:32 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-06-08 11:11:32 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-06-08 11:11:37 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-06-08 11:11:37 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-06-08 11:11:37 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-06-08 11:11:37 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-06-08 11:11:37 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-06-08 11:11:37 INFO  - Voxel space informations:
+			Corner Inf	:	(-29.208, 4.843, -9.389)
+			Corner Sup	:	(-1.366, 38.582, 33.963)
+			Dimensions	:	(140, 169, 217)
+			Toricity 	:	false
+
+2015-06-08 11:11:38 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-06-08 11:11:38 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-06-08 11:11:38 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-06-08 11:11:38 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-06-08 11:11:46 INFO  - Shots processed: 1000000
+2015-06-08 11:11:47 INFO  - Shots processed: 1000000
+2015-06-08 11:11:47 INFO  - Shots processed: 1000000
+2015-06-08 11:11:47 INFO  - Shots processed: 1000000
+2015-06-08 11:11:47 INFO  - Shots processed: 1000000
+2015-06-08 11:11:52 INFO  - Shots processed: 2000000
+2015-06-08 11:11:53 INFO  - Shots processed: 2000000
+2015-06-08 11:11:53 INFO  - Shots processed: 2000000
+2015-06-08 11:11:54 INFO  - Shots processed: 1000000
+2015-06-08 11:11:54 INFO  - Shots processed: 2000000
+2015-06-08 11:11:55 INFO  - Shots processed: 2000000
+2015-06-08 11:11:58 INFO  - Shots processed: 3000000
+2015-06-08 11:12:00 INFO  - Shots processed: 3000000
+2015-06-08 11:12:00 INFO  - Shots processed: 3000000
+2015-06-08 11:12:01 INFO  - Shots processed: 2000000
+2015-06-08 11:12:04 INFO  - Shots processed: 4000000
+2015-06-08 11:12:06 INFO  - Shots processed: 3000000
+2015-06-08 11:12:07 INFO  - Shots processed: 3000000
+2015-06-08 11:12:07 INFO  - Shots processed: 3000000
+2015-06-08 11:12:10 INFO  - Shots processed: 4000000
+2015-06-08 11:12:11 INFO  - Shots processed: 5000000
+2015-06-08 11:12:13 INFO  - Shots processed: 4000000
+2015-06-08 11:12:15 INFO  - Shots processed: 4000000
+2015-06-08 11:12:17 INFO  - Shots processed: 4810881
+2015-06-08 11:12:17 INFO  - voxelisation is finished ( 50.0 s )
+2015-06-08 11:12:17 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/20cm/140331_101534.rxp.vox
+2015-06-08 11:12:22 INFO  - Shots processed: 6000000
+2015-06-08 11:12:22 INFO  - Shots processed: 4000000
+2015-06-08 11:12:22 INFO  - Shots processed: 4000000
+2015-06-08 11:12:29 INFO  - Shots processed: 5000000
+2015-06-08 11:12:31 INFO  - file written ( 13.0 s )
+2015-06-08 11:12:37 INFO  - Shots processed: 7000000
+2015-06-08 11:12:38 INFO  - Shots processed: 5000000
+2015-06-08 11:12:39 INFO  - Shots processed: 5000000
+2015-06-08 11:12:40 INFO  - Shots processed: 5000000
+2015-06-08 11:12:47 INFO  - Shots processed: 6000000
+2015-06-08 11:12:49 INFO  - Shots processed: 6000000
+2015-06-08 11:12:49 INFO  - Shots processed: 6000000
+2015-06-08 11:12:53 INFO  - Shots processed: 7000000
+2015-06-08 11:12:53 INFO  - Shots processed: 8000000
+2015-06-08 11:12:55 INFO  - Shots processed: 7000000
+2015-06-08 11:12:59 INFO  - Shots processed: 8000000
+2015-06-08 11:13:00 INFO  - Shots processed: 8000000
+2015-06-08 11:13:04 INFO  - Shots processed: 9000000
+2015-06-08 11:13:04 INFO  - Shots processed: 9000000
+2015-06-08 11:13:05 INFO  - Shots processed: 7000000
+2015-06-08 11:13:06 INFO  - Shots processed: 9000000
+2015-06-08 11:13:08 INFO  - Shots processed: 6000000
+2015-06-08 11:13:10 INFO  - Shots processed: 10000000
+2015-06-08 11:13:10 INFO  - Shots processed: 10000000
+2015-06-08 11:13:12 INFO  - Shots processed: 10000000
+2015-06-08 11:13:15 INFO  - Shots processed: 8000000
+2015-06-08 11:13:16 INFO  - Shots processed: 11000000
+2015-06-08 11:13:17 INFO  - Shots processed: 11000000
+2015-06-08 11:13:18 INFO  - Shots processed: 11000000
+2015-06-08 11:13:18 INFO  - Shots processed: 11293701
+2015-06-08 11:13:18 INFO  - voxelisation is finished ( 111.0 s )
+2015-06-08 11:13:18 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/20cm/140331_113724.rxp.vox
+2015-06-08 11:13:19 INFO  - Shots processed: 11295489
+2015-06-08 11:13:19 INFO  - voxelisation is finished ( 111.0 s )
+2015-06-08 11:13:19 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/20cm/140331_115917.rxp.vox
+2015-06-08 11:13:20 INFO  - Shots processed: 11295629
+2015-06-08 11:13:20 INFO  - voxelisation is finished ( 112.0 s )
+2015-06-08 11:13:20 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/20cm/140331_112953.rxp.vox
+2015-06-08 11:13:21 INFO  - Shots processed: 9000000
+2015-06-08 11:13:27 INFO  - Shots processed: 10000000
+2015-06-08 11:13:31 INFO  - Shots processed: 7000000
+2015-06-08 11:13:33 INFO  - Shots processed: 11000000
+2015-06-08 11:13:34 INFO  - Shots processed: 11295882
+2015-06-08 11:13:34 INFO  - voxelisation is finished ( 127.0 s )
+2015-06-08 11:13:34 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/20cm/140331_110207.rxp.vox
+2015-06-08 11:13:38 INFO  - file written ( 20.0 s )
+2015-06-08 11:13:39 INFO  - Shots processed: 8000000
+2015-06-08 11:13:39 INFO  - file written ( 20.0 s )
+2015-06-08 11:13:40 INFO  - file written ( 19.0 s )
+2015-06-08 11:13:44 INFO  - Shots processed: 9000000
+2015-06-08 11:13:50 INFO  - Shots processed: 10000000
+2015-06-08 11:13:54 INFO  - file written ( 19.0 s )
+2015-06-08 11:13:55 INFO  - Shots processed: 11000000
+2015-06-08 11:14:01 INFO  - Shots processed: 12000000
+2015-06-08 11:14:07 INFO  - Shots processed: 13000000
+2015-06-08 11:14:07 INFO  - Shots processed: 13166931
+2015-06-08 11:14:07 INFO  - voxelisation is finished ( 160.0 s )
+2015-06-08 11:14:07 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/output2/20cm/140331_101944.rxp.vox
+2015-06-08 11:14:27 INFO  - file written ( 19.0 s )
+2015-06-08 11:14:27 INFO  - Voxelisation finished in 182.0 s
+2015-06-08 11:14:27 INFO  - Merging in progress, file 1 : 6
+2015-06-08 11:14:38 INFO  - Merging in progress, file 2 : 6
+2015-06-08 11:14:57 INFO  - Merging in progress, file 3 : 6
+2015-06-08 11:15:14 INFO  - Merging in progress, file 4 : 6
+2015-06-08 11:15:31 INFO  - Merging in progress, file 5 : 6
+2015-06-08 11:15:48 INFO  - Merging in progress, file 6 : 6
+2015-06-08 11:16:04 INFO  - Compute angleMean
+2015-06-08 11:16:05 INFO  - Compute lMeanTotal
+2015-06-08 11:16:05 INFO  - Compute transmittance and PAD
+2015-06-08 11:16:05 INFO  - writing output file: /home/calcul/Documents/Julien/test_tls_pierre/output2/20cm/merged_with_trunk.vox
+2015-06-08 11:16:17 INFO  - file written ( 11.0 s )
+2015-06-08 11:16:17 INFO  - Voxelisation finished in 292.0 s
+2015-06-08 11:16:17 INFO  - Voxelisation finished in 292.0 s
+2015-06-08 11:44:16 INFO  - Saved libfile: /tmp/LasZipLibrary-6379063217599411482.tmp
+2015-06-08 11:44:16 INFO  - /tmp/LasZipLibrary-6379063217599411482.tmp
+2015-06-08 11:44:16 INFO  - Laz file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/paracou_als_100m.laz is opened
+2015-06-08 11:48:00 INFO  - allocate!!!!!!!!
+2015-06-08 11:48:00 INFO  - Voxel space informations:
+			Corner Inf	:	(286624.0, 583759.0, 15.4)
+			Corner Sup	:	(286724.0, 583859.0, 70.4)
+			Dimensions	:	(100, 100, 56)
+			Toricity 	:	false
+
+2015-06-08 11:48:00 INFO  - Laz file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/paracou_als_100m.laz is opened
+2015-06-08 11:48:02 INFO  - writing file: /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/las.vox
+2015-06-08 11:48:05 INFO  - file written ( 2.0 s )
+2015-06-08 11:48:05 INFO  - las voxelisation finished in 9.0 s
+2015-06-08 11:56:11 INFO  - Reading DTM : /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/mnt.asc
+2015-06-08 11:56:11 INFO  - Writing triangles file
+2015-06-08 11:56:11 INFO  - Writing dart file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/maket.txt
+2015-06-08 11:56:11 INFO  - dart file written
+2015-06-08 11:59:13 INFO  - allocate!!!!!!!!
+2015-06-08 11:59:13 INFO  - Voxel space informations:
+			Corner Inf	:	(286624.0, 583759.0, 15.4)
+			Corner Sup	:	(286724.0, 583859.0, 70.4)
+			Dimensions	:	(100, 100, 56)
+			Toricity 	:	false
+
+2015-06-08 11:59:13 INFO  - Saved libfile: /tmp/LasZipLibrary-3732021647700117175.tmp
+2015-06-08 11:59:13 INFO  - /tmp/LasZipLibrary-3732021647700117175.tmp
+2015-06-08 11:59:13 INFO  - Laz file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/paracou_als_100m.laz is opened
+2015-06-08 11:59:16 INFO  - writing file: /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/las.vox
+2015-06-08 11:59:18 INFO  - file written ( 2.0 s )
+2015-06-08 11:59:18 INFO  - las voxelisation finished in 9.0 s
+2015-06-08 11:59:43 INFO  - allocate!!!!!!!!
+2015-06-08 11:59:43 INFO  - Voxel space informations:
+			Corner Inf	:	(286624.0, 583759.0, 15.4)
+			Corner Sup	:	(286724.0, 583859.0, 70.4)
+			Dimensions	:	(100, 100, 56)
+			Toricity 	:	false
+
+2015-06-08 11:59:43 INFO  - Laz file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/paracou_als_100m.laz is opened
+2015-06-08 11:59:46 INFO  - writing file: /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/las.vox
+2015-06-08 11:59:48 INFO  - file written ( 2.0 s )
+2015-06-08 11:59:48 INFO  - las voxelisation finished in 8.0 s
+2015-06-08 12:00:46 INFO  - Reading DTM : /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/mnt.asc
+2015-06-08 12:00:46 INFO  - Writing triangles file
+2015-06-08 12:00:46 INFO  - Writing dart file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/maket.txt
+2015-06-08 12:00:47 INFO  - dart file written
+2015-06-08 12:20:35 INFO  - Reading DTM : /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/mnt.asc
+2015-06-08 12:20:35 INFO  - Writing triangles file
+2015-06-08 12:20:35 INFO  - Writing dart file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/maket.txt
+2015-06-08 12:20:35 INFO  - dart file written
+2015-06-08 12:31:30 INFO  - Reading DTM : /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/mnt.asc
+2015-06-08 12:31:30 INFO  - Writing triangles file
+2015-06-08 12:31:30 INFO  - Writing dart file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/maket.txt
+2015-06-08 12:31:30 INFO  - dart file written
+2015-06-08 13:41:20 INFO  - allocate!!!!!!!!
+2015-06-08 13:41:20 INFO  - Voxel space informations:
+			Corner Inf	:	(286624.0, 583759.0, 15.4)
+			Corner Sup	:	(286724.0, 583859.0, 70.4)
+			Dimensions	:	(100, 100, 56)
+			Toricity 	:	false
+
+2015-06-08 13:41:20 INFO  - Saved libfile: /tmp/LasZipLibrary-7495811671769017977.tmp
+2015-06-08 13:41:20 INFO  - /tmp/LasZipLibrary-7495811671769017977.tmp
+2015-06-08 13:41:20 INFO  - Laz file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/paracou_als_100m.laz is opened
+2015-06-08 13:41:22 INFO  - writing file: /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/las.vox
+2015-06-08 13:41:25 INFO  - file written ( 2.0 s )
+2015-06-08 13:41:25 INFO  - las voxelisation finished in 8.0 s
+2015-06-08 13:41:58 INFO  - Reading DTM : /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/mnt.asc
+2015-06-08 13:41:58 INFO  - Writing triangles file
+2015-06-08 13:41:58 INFO  - Writing dart file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/maket.txt
+2015-06-08 13:41:59 INFO  - dart file written
