@@ -13,6 +13,9 @@ import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3i;
 import fr.ird.voxelidar.lidar.format.dtm.DTMPoint;
 import fr.ird.voxelidar.lidar.format.dtm.Face;
+import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
+import fr.ird.voxelidar.util.ColorGradient;
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -531,7 +534,11 @@ public class GLMeshFactory {
         return mesh;
     }
     
-    public static GLMesh createMeshAndComputeNormales(List<DTMPoint> points, List<Face> faces){
+    public static GLMesh createMeshAndComputeNormalesFromDTM(RegularDtm dtm){
+        
+        List<DTMPoint> points = dtm.getPoints();
+        List<Face> faces = dtm.getFaces();
+        
         GLMesh mesh = new SimpleGLMesh();
         
         float[] vertexData = new float[points.size()*3];
@@ -582,12 +589,16 @@ public class GLMeshFactory {
         mesh.normalBuffer = Buffers.newDirectFloatBuffer(normalData);
         mesh.vertexCount = indexData.length;
         
+        ColorGradient gradient = new ColorGradient(dtm.getzMin(), dtm.getzMax());
+        gradient.setGradientColor(ColorGradient.GRADIENT_RAINBOW);
+        
         float colorData[] = new float[points.size()*3];
         for(int i=0, j=0;i<points.size();i++,j+=3){
             
-            colorData[j] = 0.5f;
-            colorData[j+1] = 0.5f;
-            colorData[j+2] = 0.5f;
+            Color color = gradient.getColor(points.get(i).z);
+            colorData[j] = color.getRed()/255.0f;
+            colorData[j+1] = color.getGreen()/255.0f;
+            colorData[j+2] =  color.getBlue()/255.0f;
             
         }
         

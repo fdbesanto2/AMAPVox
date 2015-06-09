@@ -64,12 +64,19 @@
                                           <content>
                                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                   <children>
-                                                      <Slider fx:id="sliderColorRed" layoutX="59.4" layoutY="29.0" majorTickUnit="15.0" max="255.0" minorTickCount="0" prefHeight="16.0" prefWidth="148.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="200.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="0.0" />
-                                                      <Label layoutX="14.0" layoutY="30.0" text="Red" />
-                                                      <Label layoutX="14.0" layoutY="62.0" text="Green" />
-                                                      <Slider fx:id="sliderColorGreen" layoutX="59.0" layoutY="61.0" majorTickUnit="15.0" max="255.0" minorTickCount="0" prefHeight="16.0" prefWidth="148.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="200.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="0.0" />
-                                                      <Label layoutX="13.0" layoutY="99.0" text="Blue" />
-                                                      <Slider fx:id="sliderColorBlue" layoutX="58.0" layoutY="98.0" majorTickUnit="15.0" max="255.0" minorTickCount="0" prefHeight="16.0" prefWidth="148.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="200.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="0.0" />
+                                          <Label layoutX="14.0" layoutY="31.0" text="Background color" AnchorPane.leftAnchor="5.0" />
+                                          <AnchorPane layoutX="11.0" layoutY="108.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="190.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0">
+                                             <children>
+                                                <CheckBox fx:id="checkboxEnableLighting" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Enable lighting" AnchorPane.leftAnchor="5.0" />
+                                                <ColorPicker fx:id="colorpickerLightingAmbientColor" editable="true" layoutX="41.0" layoutY="61.0" prefHeight="25.0" prefWidth="120.0" AnchorPane.leftAnchor="40.0" />
+                                                <Label layoutX="21.0" layoutY="45.0" text="Ambient color" AnchorPane.leftAnchor="20.0" />
+                                                <Label layoutX="21.0" layoutY="94.0" text="Diffuse color" AnchorPane.leftAnchor="20.0" />
+                                                <ColorPicker fx:id="colorpickerLightingDiffuseColor" editable="true" layoutX="41.0" layoutY="110.0" prefHeight="25.0" prefWidth="120.0" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="111.0" />
+                                                <Label layoutX="18.0" layoutY="143.0" text="Specular color" AnchorPane.leftAnchor="20.0" />
+                                                <ColorPicker fx:id="colorpickerLightingSpecularColor" editable="true" layoutX="38.0" layoutY="159.0" prefHeight="25.0" prefWidth="120.0" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="159.0" />
+                                             </children>
+                                          </AnchorPane>
+                                          <ColorPicker fx:id="colorPickerBackgroundColor" editable="true" layoutX="13.0" layoutY="52.0" prefHeight="25.0" prefWidth="120.0" AnchorPane.leftAnchor="5.0" />
                                                   </children>
                                               </AnchorPane>
                                           </content>

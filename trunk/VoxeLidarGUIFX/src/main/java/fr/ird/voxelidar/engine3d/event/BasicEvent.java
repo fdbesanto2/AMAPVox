@@ -180,26 +180,26 @@ public class BasicEvent extends EventManager{
         
         if(dKeyPressed){
             
-            Point3F currentLightPosition = joglContext.getLightPosition();
-            joglContext.setLightPosition(new Point3F(currentLightPosition.x, currentLightPosition.y+1, currentLightPosition.z));
+            Point3F currentLightPosition = joglContext.getScene().getLightPosition();
+            joglContext.getScene().setLightPosition(new Point3F(currentLightPosition.x, currentLightPosition.y+1, currentLightPosition.z));
         }
         
         if(qKeyPressed){
             
-            Point3F currentLightPosition = joglContext.getLightPosition();
-            joglContext.setLightPosition(new Point3F(currentLightPosition.x, currentLightPosition.y-1, currentLightPosition.z));
+            Point3F currentLightPosition = joglContext.getScene().getLightPosition();
+            joglContext.getScene().setLightPosition(new Point3F(currentLightPosition.x, currentLightPosition.y-1, currentLightPosition.z));
         }
         
         if(zKeyPressed){
             
-            Point3F currentLightPosition = joglContext.getLightPosition();
-            joglContext.setLightPosition(new Point3F(currentLightPosition.x, currentLightPosition.y, currentLightPosition.z+1));
+            Point3F currentLightPosition = joglContext.getScene().getLightPosition();
+            joglContext.getScene().setLightPosition(new Point3F(currentLightPosition.x, currentLightPosition.y, currentLightPosition.z+1));
         }
         
         if(sKeyPressed){
             
-            Point3F currentLightPosition = joglContext.getLightPosition();
-            joglContext.setLightPosition(new Point3F(currentLightPosition.x, currentLightPosition.y, currentLightPosition.z-1));
+            Point3F currentLightPosition = joglContext.getScene().getLightPosition();
+            joglContext.getScene().setLightPosition(new Point3F(currentLightPosition.x, currentLightPosition.y, currentLightPosition.z-1));
         }
         
         if(spaceKeyPressed){

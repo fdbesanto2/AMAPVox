@@ -89,7 +89,7 @@ public class DartPlotsXMLWriter implements Cancellable{
 
                         float lad = Float.valueOf(lineSplittedFile[padIndex]);
 
-                        if (!Float.isNaN(lad)) {
+                        if (!Float.isNaN(lad) && lad != 0) {
 
                             int i = Integer.valueOf(lineSplittedFile[indiceIIndex]);
                             int j = Integer.valueOf(lineSplittedFile[indiceJIndex]);

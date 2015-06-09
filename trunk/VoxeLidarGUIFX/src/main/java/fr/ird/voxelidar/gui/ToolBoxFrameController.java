@@ -6,7 +6,6 @@ package fr.ird.voxelidar.gui;
  * and open the template in the editor.
  */
 
-import com.jogamp.newt.event.WindowListener;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.object.camera.TrackballCamera;
 import fr.ird.voxelidar.engine3d.renderer.JoglListener;
@@ -24,7 +23,6 @@ import java.util.Set;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -32,9 +30,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -75,12 +73,6 @@ public class ToolBoxFrameController implements Initializable {
     private TextField textFieldVoxelSize;
     @FXML
     private Button buttonApplyVoxelSize;
-    @FXML
-    private Slider sliderColorRed;
-    @FXML
-    private Slider sliderColorGreen;
-    @FXML
-    private Slider sliderColorBlue;
     @FXML
     private TextField textFieldMinValue;
     @FXML
@@ -132,6 +124,16 @@ public class ToolBoxFrameController implements Initializable {
     private Button buttonViewIsometric;
     @FXML
     private Button buttonOKValidationFilter;
+    @FXML
+    private ColorPicker colorpickerLightingAmbientColor;
+    @FXML
+    private ColorPicker colorpickerLightingDiffuseColor;
+    @FXML
+    private ColorPicker colorpickerLightingSpecularColor;
+    @FXML
+    private ColorPicker colorPickerBackgroundColor;
+    @FXML
+    private CheckBox checkboxEnableLighting;
     
     /**
      * Initializes the controller class.
@@ -146,6 +148,11 @@ public class ToolBoxFrameController implements Initializable {
         gradientColors = new ArrayList<>();
         
         isHidden = false;
+        
+        colorPickerBackgroundColor.setValue(new javafx.scene.paint.Color(0.8, 0.8, 0.8, 1));
+        colorpickerLightingAmbientColor.setValue(new javafx.scene.paint.Color(0.2, 0.2, 0.2, 1));
+        colorpickerLightingDiffuseColor.setValue(new javafx.scene.paint.Color(1.0, 1.0, 1.0, 1));
+        colorpickerLightingSpecularColor.setValue(new javafx.scene.paint.Color(1.0, 1.0, 1.0, 1));
         
         //initContent();
         
@@ -194,74 +201,43 @@ public class ToolBoxFrameController implements Initializable {
             }
         });
         
-        Task colorChangingTask = new Task() {
+        colorPickerBackgroundColor.valueProperty().addListener(new ChangeListener<javafx.scene.paint.Color>() {
 
             @Override
-            protected Object call() throws Exception {
+            public void changed(ObservableValue<? extends javafx.scene.paint.Color> observable, javafx.scene.paint.Color oldValue, javafx.scene.paint.Color newValue) {
                 
-                Vec3F worldColor = joglContext.getWorldColor();
-                joglContext.setWorldColor(new Vec3F((float) (sliderColorRed.getValue()/255.0), worldColor.y,worldColor.z));
-                try{
-                    joglContext.drawNextFrame();
-                }catch(Exception e){}
-                
-                return null;
-            }
-        };
-        
-        Service s = new Service() {
-
-            @Override
-            protected Task createTask() {
-                return colorChangingTask;
-            }
-        };
-        
-        
-        
-        sliderColorRed.valueProperty().addListener(new ChangeListener<Number>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                
-                sliderColorRed.setTooltip(new Tooltip(String.valueOf(sliderColorRed.getValue())));
-                  
-                s.restart();
-                
+                joglContext.setWorldColor(new Vec3F((float)newValue.getRed(), (float)newValue.getGreen(), (float)newValue.getBlue()));
+                joglContext.drawNextFrame();
             }
         });
         
-        sliderColorGreen.valueProperty().addListener(new ChangeListener<Number>() {
+        colorpickerLightingAmbientColor.valueProperty().addListener(new ChangeListener<javafx.scene.paint.Color>() {
 
             @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                
-                sliderColorGreen.setTooltip(new Tooltip(String.valueOf(sliderColorGreen.getValue())));
-                
-                Vec3F worldColor = joglContext.getWorldColor();
-                joglContext.setWorldColor(new Vec3F(worldColor.x, (float) (sliderColorGreen.getValue()/255.0), worldColor.z));
-                
-                try{
-                    joglContext.drawNextFrame();
-                }catch(Exception e){}
+            public void changed(ObservableValue<? extends javafx.scene.paint.Color> observable, javafx.scene.paint.Color oldValue, javafx.scene.paint.Color newValue) {
+                joglContext.getScene().setLightAmbientValue(new Vec3F((float)newValue.getRed(), (float)newValue.getGreen(), (float)newValue.getBlue()));
+                joglContext.drawNextFrame();
             }
         });
         
-        sliderColorBlue.valueProperty().addListener(new ChangeListener<Number>() {
+        colorpickerLightingDiffuseColor.valueProperty().addListener(new ChangeListener<javafx.scene.paint.Color>() {
 
             @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                
-                sliderColorBlue.setTooltip(new Tooltip(String.valueOf(sliderColorBlue.getValue())));
-                
-                Vec3F worldColor = joglContext.getWorldColor();
-                joglContext.setWorldColor(new Vec3F(worldColor.x,worldColor.y, (float) (sliderColorBlue.getValue()/255.0)));
-                
-                try{
-                    joglContext.drawNextFrame();
-                }catch(Exception e){}
+            public void changed(ObservableValue<? extends javafx.scene.paint.Color> observable, javafx.scene.paint.Color oldValue, javafx.scene.paint.Color newValue) {
+                joglContext.getScene().setLightDiffuseValue(new Vec3F((float)newValue.getRed(), (float)newValue.getGreen(), (float)newValue.getBlue()));
+                joglContext.drawNextFrame();
             }
         });
+        
+        colorpickerLightingSpecularColor.valueProperty().addListener(new ChangeListener<javafx.scene.paint.Color>() {
+
+            @Override
+            public void changed(ObservableValue<? extends javafx.scene.paint.Color> observable, javafx.scene.paint.Color oldValue, javafx.scene.paint.Color newValue) {
+                joglContext.getScene().setLightSpecularValue(new Vec3F((float)newValue.getRed(), (float)newValue.getGreen(), (float)newValue.getBlue()));
+                joglContext.drawNextFrame();
+            }
+        });
+        
         comboBoxAttributeToShow.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 
             @Override
@@ -277,6 +253,21 @@ public class ToolBoxFrameController implements Initializable {
                     
                 }catch(Exception e){}
                 
+            }
+        });
+        
+        checkboxEnableLighting.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                
+                if(newValue){
+                    joglContext.getScene().getVoxelSpace().setShaderId(joglContext.getScene().getShaderByName("instanceLightedShader"));
+                }else{
+                    joglContext.getScene().getVoxelSpace().setShaderId(joglContext.getScene().getShaderByName("instanceShader"));
+                }
+                
+                joglContext.drawNextFrame();
             }
         });
         

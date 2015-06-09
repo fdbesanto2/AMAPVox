@@ -488,13 +488,41 @@
                                           <content>
                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                    <children>
-                                                      <SplitPane dividerPositions="0.5" layoutX="33.0" layoutY="50.0" prefHeight="414.0" prefWidth="765.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                      <SplitPane dividerPositions="0.6618610747051114" layoutX="33.0" layoutY="50.0" prefHeight="414.0" prefWidth="765.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <items>
                                                             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                                <children>
                                                                   <ComboBox fx:id="comboboxAttributeToView" layoutX="153.0" layoutY="86.0" prefWidth="150.0" />
                                                                   <Label layoutX="32.0" layoutY="90.0" text="Attribute to view" />
                                                                   <Button fx:id="buttonOpen3DView" disable="true" layoutX="207.0" layoutY="373.0" mnemonicParsing="false" onAction="#onActionButtonVizualize" text="Open display window" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                                                                  <CheckBox fx:id="checkboxRaster" layoutX="25.0" layoutY="148.0" mnemonicParsing="false" text="Raster" />
+                                                                  <AnchorPane fx:id="anchorPaneRasterParameters" disable="true" layoutX="99.0" layoutY="142.0">
+                                                                     <children>
+                                                                        <TextField fx:id="textfieldRasterFilePath" layoutX="26.0" prefHeight="25.0" prefWidth="296.0" />
+                                                                        <HBox layoutY="39.0">
+                                                                           <children>
+                                                                              <CheckBox fx:id="checkboxUseTransformationMatrix" layoutX="78.0" layoutY="182.0" mnemonicParsing="false" onAction="#onActionCheckboxUseTransformationMatrix" prefHeight="24.0" prefWidth="127.0" text="Transformation">
+                                                                                 <tooltip>
+                                                                                    <Tooltip text="Voxel Orientation and Position matrix" />
+                                                                                 </tooltip>
+                                                                              </CheckBox>
+                                                                              <Button fx:id="buttonEnterReferencePointsTransformation" disable="true" layoutX="205.0" layoutY="182.0" mnemonicParsing="false" onAction="#onActionButtonEnterReferencePointsTransformation" prefHeight="22.0" prefWidth="164.0" text="Enter reference points" />
+                                                                              <Label alignment="BOTTOM_CENTER" layoutX="377.0" layoutY="188.0" prefHeight="18.0" prefWidth="16.0" text="or">
+                                                                                 <HBox.margin>
+                                                                                    <Insets left="2.0" right="2.0" top="2.0" />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                              <Button fx:id="buttonOpenTransformationMatrixFile" disable="true" layoutX="401.0" layoutY="184.0" mnemonicParsing="false" onAction="#onActionButtonOpenTransformationMatrixFile" text="Open file">
+                                                                                 <tooltip>
+                                                                                    <Tooltip text="Matrix file allowed" />
+                                                                                 </tooltip>
+                                                                              </Button>
+                                                                           </children>
+                                                                        </HBox>
+                                                                        <Button fx:id="buttonOpenRasterFile" layoutX="322.0" mnemonicParsing="false" onAction="#onActionButtonOpenRasterFile" text="Open" />
+                                                                     </children>
+                                                                  </AnchorPane>
+                                                                  <CheckBox fx:id="checkboxFitRasterToVoxelSpace" layoutX="99.0" layoutY="217.0" mnemonicParsing="false" selected="true" text="Fit to voxel space" />
                                                                </children>
                                                             </AnchorPane>
                                                             <TabPane prefHeight="412.0" prefWidth="395.0" tabClosingPolicy="UNAVAILABLE">

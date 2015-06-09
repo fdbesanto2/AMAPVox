@@ -2291,3 +2291,213 @@ Caused by: java.lang.NullPointerException
 	at jogamp.opengl.GLAutoDrawableBase$2.run(GLAutoDrawableBase.java:442)
 	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1277)
 	... 27 more
+2015-06-09 08:21:31 ERROR - Failed compile vertex shader: 0:16(50): error: size mismatch for matrix multiplication
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+2015-06-09 08:21:31 ERROR - Fail reading shaders files
+2015-06-09 08:32:08 ERROR - Failed compile fragment shader: 0:16(11): error: type mismatch
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+2015-06-09 08:32:08 ERROR - Fail reading shaders files
+2015-06-09 11:31:05 ERROR - Fail link program
+2015-06-09 12:12:41 ERROR - 
+java.lang.NullPointerException
+	at fr.ird.voxelidar.gui.MainFrameController$34$1.call(MainFrameController.java:1642)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$390/879852720.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$388/767296995.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-09 14:10:53 INFO  - Computing dtm normals
+2015-06-09 14:29:46 INFO  - Computing dtm normals
+2015-06-09 14:29:46 ERROR - error in scene initialization
+java.lang.IndexOutOfBoundsException: Index: 35376, Size: 35375
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshAndComputeNormalesFromDTM(GLMeshFactory.java:598)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:444)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:157)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-06-09 14:31:16 INFO  - Computing dtm normals
+2015-06-09 14:34:38 INFO  - Computing dtm normals
+2015-06-09 14:36:44 INFO  - Computing dtm normals
+2015-06-09 14:39:40 INFO  - Computing dtm normals
+2015-06-09 14:51:19 ERROR - Failed compile vertex shader: 0:7(19): error: interpolation qualifier `flat' can only be applied to vertex shader outputs and fragment shader inputs.
+0:7(19): error: qualifier 'flat' cannot be applied to vertex shader inputs
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+2015-06-09 14:51:19 ERROR - Fail reading shaders files
+2015-06-09 15:25:54 ERROR - Index: 4251, Size: 4145
+java.lang.IndexOutOfBoundsException: Index: 4251, Size: 4145
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at fr.ird.voxelidar.lidar.format.dtm.RegularDtm.buildMesh(RegularDtm.java:311)
+	at fr.ird.voxelidar.gui.MainFrameController$34$1.call(MainFrameController.java:1651)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$386/1385893033.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$384/814349959.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-09 15:27:21 ERROR - Index: 18, Size: 0
+java.lang.IndexOutOfBoundsException: Index: 18, Size: 0
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at fr.ird.voxelidar.lidar.format.dtm.RegularDtm.buildMesh(RegularDtm.java:310)
+	at fr.ird.voxelidar.gui.MainFrameController$34$1.call(MainFrameController.java:1651)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$385/1241674498.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$383/1181102433.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-09 15:33:00 ERROR - Index: 4251, Size: 4145
+java.lang.IndexOutOfBoundsException: Index: 4251, Size: 4145
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at fr.ird.voxelidar.lidar.format.dtm.RegularDtm.buildMesh(RegularDtm.java:311)
+	at fr.ird.voxelidar.gui.MainFrameController$34$1.call(MainFrameController.java:1651)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$388/290430865.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$386/1373978797.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-09 16:05:08 ERROR - Index: 4251, Size: 4145
+java.lang.IndexOutOfBoundsException: Index: 4251, Size: 4145
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at fr.ird.voxelidar.lidar.format.dtm.RegularDtm.buildMesh(RegularDtm.java:311)
+	at fr.ird.voxelidar.gui.MainFrameController$34$1.call(MainFrameController.java:1651)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$387/1456930929.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$385/983797531.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-09 16:06:23 INFO  - Computing dtm normals
+2015-06-09 16:06:23 ERROR - error in scene initialization
+java.lang.ArrayIndexOutOfBoundsException: 106200
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshAndComputeNormalesFromDTM(GLMeshFactory.java:550)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:444)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:157)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-06-09 16:08:03 INFO  - Computing dtm normals
+2015-06-09 16:08:46 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshAndComputeNormalesFromDTM(GLMeshFactory.java:622)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:444)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:157)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-06-09 16:08:53 INFO  - Computing dtm normals
+2015-06-09 16:13:10 INFO  - Computing dtm normals
+2015-06-09 16:14:36 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshAndComputeNormalesFromDTM(GLMeshFactory.java:626)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:444)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:157)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-06-09 16:23:45 INFO  - Computing dtm normals
+2015-06-09 16:24:42 INFO  - Computing dtm normals
+2015-06-09 16:27:43 INFO  - Computing dtm normals
+2015-06-09 16:28:55 INFO  - Computing dtm normals
+2015-06-09 17:02:51 INFO  - Computing dtm normals
+2015-06-09 18:04:58 ERROR - Index: 19930, Size: 144
+java.lang.IndexOutOfBoundsException: Index: 19930, Size: 144
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at fr.ird.voxelidar.lidar.format.dtm.RegularDtm.buildMesh(RegularDtm.java:335)
+	at fr.ird.voxelidar.gui.MainFrameController$34$1.call(MainFrameController.java:1651)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$385/1572847869.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$383/1360184744.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-09 18:08:28 INFO  - Computing dtm normals
+2015-06-09 18:08:43 INFO  - Computing dtm normals
+2015-06-09 18:08:52 INFO  - Computing dtm normals
+2015-06-09 18:13:32 INFO  - Computing dtm normals
+2015-06-09 18:16:54 INFO  - Computing dtm normals
+2015-06-09 18:17:08 INFO  - Computing dtm normals
+2015-06-09 18:23:41 INFO  - Computing dtm normals
+2015-06-09 18:24:09 INFO  - Computing dtm normals
+2015-06-09 18:24:14 INFO  - Computing dtm normals
+2015-06-09 18:25:01 INFO  - Computing dtm normals
+2015-06-09 18:25:14 INFO  - Computing dtm normals
+2015-06-09 18:25:56 INFO  - Computing dtm normals
+2015-06-09 18:26:15 INFO  - Computing dtm normals
+2015-06-09 18:27:38 INFO  - Computing dtm normals
+2015-06-09 18:28:19 INFO  - Computing dtm normals
+2015-06-09 18:28:27 INFO  - Computing dtm normals
+2015-06-09 18:28:58 INFO  - Computing dtm normals
+2015-06-09 18:30:26 INFO  - Computing dtm normals
+2015-06-09 18:30:33 INFO  - Computing dtm normals
+2015-06-09 18:32:20 INFO  - Computing dtm normals
+2015-06-09 18:32:28 INFO  - Computing dtm normals
+2015-06-09 18:33:04 INFO  - Computing dtm normals
+2015-06-09 18:37:45 INFO  - Computing dtm normals
+2015-06-09 18:39:04 INFO  - Computing dtm normals
+2015-06-09 18:39:47 INFO  - Computing dtm normals

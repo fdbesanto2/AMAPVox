@@ -6,6 +6,8 @@
 package fr.ird.voxelidar.lidar.format.dtm;
 
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
+import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
+import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec2F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import java.io.BufferedWriter;
@@ -28,8 +30,18 @@ import org.apache.log4j.Logger;
 public class RegularDtm {
     
     private final Logger logger = Logger.getLogger(RegularDtm.class);
+    
     private ArrayList<DTMPoint> points;
     private ArrayList<Face> faces;
+    
+    private float zMin;
+    private float zMax;
+    
+    private int indiceXMin = -1;
+    private int indiceYMin = -1;
+    private int indiceXMax = -1;
+    private int indiceYMax = -1;
+    
     private String path;
     private MultiKeyMap map;
     
@@ -204,6 +216,33 @@ public class RegularDtm {
         return z;
     }
     
+    public void setLimits(Point3F min, Point3F max){
+        
+        Vec4D maxPoint = Mat4D.multiply(Mat4D.inverse(transformationMatrix), new Vec4D(min.x, min.y, min.z, 1));
+        Vec4D minPoint = Mat4D.multiply(Mat4D.inverse(transformationMatrix), new Vec4D(max.x, max.y, max.z, 1));
+                
+        indiceXMin = (int)((minPoint.x-xLeftLowerCorner)/cellSize);
+        if(indiceXMin < 0){
+            indiceXMin = -1;
+        }
+        
+        indiceYMin = (int)(rowNumber-(minPoint.y-yLeftLowerCorner)/cellSize);
+        if(indiceYMin < 0){
+            indiceYMin = -1;
+        }
+        
+        indiceXMax = (int)((maxPoint.x-xLeftLowerCorner)/cellSize);
+        if(indiceXMax > zArray.length){
+            indiceXMax = -1;
+        }
+        
+        indiceYMax = (int)(rowNumber-(maxPoint.y-yLeftLowerCorner)/cellSize);
+        if(indiceYMax > zArray[0].length){
+            indiceYMax = -1;
+        }
+        
+    }
+    
     public void buildMesh(){
         
         
@@ -216,8 +255,18 @@ public class RegularDtm {
                 faces = new ArrayList<>();
                 points = new ArrayList<>();
                 
-                for(int i=0;i<width;i++){
-                    for(int j=0;j<height;j++){
+                
+                if(indiceXMin == -1){indiceXMin = 0;}
+                
+                if(indiceYMin == -1){indiceYMin = 0;}
+                
+                if(indiceXMax == -1){indiceXMax = width;}
+                
+                if(indiceYMax == -1){indiceYMax = height;}
+                
+                
+                for(int i = indiceXMin;i<indiceXMax;i++){
+                    for(int j = indiceYMin;j<indiceYMax;j++){
                         
                         float z ;
                         
@@ -230,22 +279,30 @@ public class RegularDtm {
                         
                         DTMPoint point = new DTMPoint((i*cellSize+xLeftLowerCorner), ( -(j-rowNumber)*cellSize+yLeftLowerCorner), z);
                         Vec4D result = Mat4D.multiply(transformationMatrix, new Vec4D(point.x, point.y, point.z, 1));
+                        
                         point.x = (float) result.x;
                         point.y = (float) result.y;
+
+
+                        if(i == 0 && j == 0){
+                            zMin = (float) result.z;
+                            zMax = (float) result.z;
+                        }else{
+                            if(result.z < zMin){
+                                zMin = (float) result.z;
+                            }
+                            if(result.z > zMax){
+                                zMax = (float) result.z;
+                            }
+                        }
+
                         point.z = (float) result.z;
-                        points.add(point);
+                        points.add(point);                     
                     }
                 }
                 
-                for(int i=0;i<width;i++){
-                    for(int j=0;j<height;j++){
-                        /*
-                        if(!Float.isNaN(zArray[i][j])){
-                            points.add(new DTMPoint(i*cellSize, j*cellSize, zArray[i][j]));
-                        }else{
-                            points.add(new DTMPoint(i*cellSize, j*cellSize, -10.0f));
-                        }*/
-                        
+                for(int i = indiceXMin;i<indiceXMax;i++){
+                    for(int j = indiceYMin;j<indiceYMax;j++){
                         
                         int point1, point2, point3, point4;
                         
@@ -259,21 +316,28 @@ public class RegularDtm {
                                 point4 = get1dFrom2d(i, j+1);
                                 
                                 if(!Float.isNaN(zArray[i][j]) && !Float.isNaN(zArray[i+1][j+1]) ){
-                                    if(!Float.isNaN(zArray[i+1][j])){
-                                        faces.add(new Face(point1, point2, point3));
+                                    
+                                    if(point1 < points.size() && point2  < points.size() && point3  < points.size()){
+                                        if(!Float.isNaN(zArray[i+1][j])){
+                                            faces.add(new Face(point1, point2, point3));
+
+                                            int faceID = faces.size()-1;
+                                            points.get(point1).faces.add(faceID);
+                                            points.get(point2).faces.add(faceID);
+                                            points.get(point3).faces.add(faceID);
+                                        }
                                         
-                                        int faceID = faces.size()-1;
-                                        points.get(point1).faces.add(faceID);
-                                        points.get(point2).faces.add(faceID);
-                                        points.get(point3).faces.add(faceID);
                                     }
-                                    if(!Float.isNaN(zArray[i][j+1])){
-                                        faces.add(new Face(point1, point3, point4));
-                                        int faceID = faces.size()-1;
-                                        points.get(point1).faces.add(faceID);
-                                        points.get(point2).faces.add(faceID);
-                                        points.get(point3).faces.add(faceID);
-                                    }
+                                    
+                                    if(point1 < points.size() && point3  < points.size() && point4  < points.size()){
+                                        if(!Float.isNaN(zArray[i][j+1])){
+                                            faces.add(new Face(point1, point3, point4));
+                                            int faceID = faces.size()-1;
+                                            points.get(point1).faces.add(faceID);
+                                            points.get(point3).faces.add(faceID);
+                                            points.get(point4).faces.add(faceID);
+                                        }
+                                    } 
                                 }
                             }
                         }
@@ -284,7 +348,8 @@ public class RegularDtm {
     }
     
     private int get1dFrom2d(int i, int j){
-        return (zArray[0].length*i) + j;
+        
+        return ((indiceYMax-indiceYMin)*(i-indiceXMin)) + (j-indiceYMin);
     }
     
     public void exportObj(File outputFile){
@@ -353,5 +418,12 @@ public class RegularDtm {
     public Mat4D getTransformationMatrix() {
         return transformationMatrix;
     }
-    
+
+    public float getzMin() {
+        return zMin;
+    }
+
+    public float getzMax() {
+        return zMax;
+    }
 }

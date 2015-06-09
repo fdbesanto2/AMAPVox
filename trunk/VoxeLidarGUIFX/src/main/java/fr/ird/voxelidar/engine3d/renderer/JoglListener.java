@@ -19,16 +19,13 @@ import fr.ird.voxelidar.engine3d.object.scene.SceneObject;
 import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.loading.shader.Shader;
-import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.mesh.GLMesh;
 import fr.ird.voxelidar.engine3d.object.scene.SceneManager;
 import fr.ird.voxelidar.engine3d.object.scene.SimpleSceneObject;
-import fr.ird.voxelidar.lidar.format.dtm.DtmLoader;
 import fr.ird.voxelidar.util.Settings;
-import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
 import java.util.Map.Entry;
@@ -64,8 +61,7 @@ public class JoglListener implements GLEventListener {
     private boolean projectionMatrixChanged = false;
     private boolean isInit;
     
-    private Point3F lightPosition;
-    private boolean lightPositionChanged = true;
+    
     
     private final EventListenerList listeners;
 
@@ -98,25 +94,16 @@ public class JoglListener implements GLEventListener {
         return eventListener;
     }
 
-    public Point3F getLightPosition() {
-        return lightPosition;
-    }
-
-    public void setLightPosition(Point3F lightPosition) {
-        this.lightPosition = lightPosition;
-        lightPositionChanged = true;
-        System.out.println(lightPosition.x+" "+lightPosition.y+" "+lightPosition.z);
-        
-    }
+    
     
     public JoglListener(VoxelSpace voxelSpace, Settings settings, FPSAnimator animator){
         
+        scene = new Scene();
         this.voxelSpace = voxelSpace;
         this.settings = settings;
         this.animator = animator;
         worldColor = new Vec3F(200.0f/255.0f, 200.0f/255.0f, 200.0f/255.0f);
         listeners = new EventListenerList();
-        lightPosition = new Point3F();
     }
     /*
     public JoglListener(JFrameSettingUp parent, Dtm terrain, Settings settings, FPSAnimator animator){
@@ -254,24 +241,76 @@ public class JoglListener implements GLEventListener {
         
         eventListener.updateEvents();
         
-        if(lightPositionChanged){
+        if(scene.isLightAmbientColorChanged()){
+            
+            int id = scene.getShaderByName("instanceLightedShader");
+            Shader s = scene.getShadersList().get(id);
+            gl.glUseProgram(id);
+                gl.glUniform3f(s.uniformMap.get("lambient"), scene.getLight().ambient.x, scene.getLight().ambient.y, scene.getLight().ambient.z);
+            gl.glUseProgram(0);
+            
+            scene.setLightAmbientColorChanged(false);
+        }
+        
+        if(scene.isLightDiffuseColorChanged()){
+            
+            int id = scene.getShaderByName("instanceLightedShader");
+            Shader s = scene.getShadersList().get(id);
+            gl.glUseProgram(id);
+                gl.glUniform3f(s.uniformMap.get("ldiffuse"), scene.getLight().diffuse.x, scene.getLight().diffuse.y, scene.getLight().diffuse.z);
+            gl.glUseProgram(0);
+            
+            scene.setLightDiffuseColorChanged(false);
+        }
+        
+        if(scene.isLightSpecularColorChanged()){
+            
+            int id = scene.getShaderByName("instanceLightedShader");
+            Shader s = scene.getShadersList().get(id);
+            gl.glUseProgram(id);
+                gl.glUniform3f(s.uniformMap.get("lspecular"), scene.getLight().specular.x, scene.getLight().specular.y, scene.getLight().specular.z);
+            gl.glUseProgram(0);
+            
+            scene.setLightSpecularColorChanged(false);
+        }
+        
+        if(isInit){
+            
+            scene.setLightPosition(new Point3F(0, 0, scene.getVoxelSpace().centerZ+scene.getVoxelSpace().widthZ+100));
+            
+            int id = scene.getShaderByName("instanceLightedShader");
+            Shader s = scene.getShadersList().get(id);
+            gl.glUseProgram(id);
+                gl.glUniform3f(s.uniformMap.get("lambient"), scene.getLight().ambient.x, scene.getLight().ambient.y, scene.getLight().ambient.z);
+                gl.glUniform3f(s.uniformMap.get("ldiffuse"), scene.getLight().diffuse.x, scene.getLight().diffuse.y, scene.getLight().diffuse.z);
+                gl.glUniform3f(s.uniformMap.get("lspecular"), scene.getLight().specular.x, scene.getLight().specular.y, scene.getLight().specular.z);
+                gl.glUniform3f(s.uniformMap.get("lightPosition"), scene.getLight().position.x, scene.getLight().position.y, scene.getLight().position.z);
+            gl.glUseProgram(0);
+            
+            scene.setLightAmbientColorChanged(false);
+            scene.setLightDiffuseColorChanged(false);
+            scene.setLightSpecularColorChanged(false);
+        }
+        
+        if(scene.isLightPositionChanged()){
             
             int id2 = scene.getShaderByName("lightShader");
             Shader s2 = scene.getShadersList().get(id2);
             gl.glUseProgram(id2);
-                gl.glUniform3f(s2.uniformMap.get("lightPosition"), lightPosition.x, lightPosition.y, lightPosition.z);
+                gl.glUniform3f(s2.uniformMap.get("lightPosition"), scene.getLight().position.x, scene.getLight().position.y, scene.getLight().position.z);
             gl.glUseProgram(0);
-            
-            int id = scene.getShaderByName("instanceShader");
+            /*
+            int id = scene.getShaderByName("instanceLightedShader");
             Shader s = scene.getShadersList().get(id);
             gl.glUseProgram(id);
-                gl.glUniform3f(s.uniformMap.get("lightPosition"), lightPosition.x, lightPosition.y, lightPosition.z);
+                gl.glUniform3f(s.uniformMap.get("lightPosition"), scene.getLight().position.x, scene.getLight().position.y, scene.getLight().position.z);
             gl.glUseProgram(0);
-            
-            lightPositionChanged = false;
+            */
+            scene.setLightPositionChanged(false);
         }
         
         if(viewMatrixChanged || isInit){
+            
             
             Mat4F normalMatrix = Mat4F.transpose(Mat4F.inverse(camera.getViewMatrix()));
             FloatBuffer normalMatrixBuffer = Buffers.newDirectFloatBuffer(normalMatrix.mat);
@@ -324,7 +363,7 @@ public class JoglListener implements GLEventListener {
     
     private void initScene(final GL3 gl){
         
-        scene = new Scene();
+       
         
         try{
                         
@@ -336,13 +375,19 @@ public class JoglListener implements GLEventListener {
             
             logger.debug("shader compiled: "+noTranslationShader.name);
             
+            InputStreamReader instanceLightedVertexShader = new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("shaders/InstanceLightedVertexShader.txt"));
+            InputStreamReader instanceLightedFragmentShader = new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("shaders/InstanceLightedFragmentShader.txt"));
+            Shader instanceLightedShader = new Shader(gl, instanceLightedFragmentShader, instanceLightedVertexShader, "instanceLightedShader");
+            instanceLightedShader.setUniformLocations(Shader.composeShaderUniforms(Shader.MINIMAL_SHADER_UNIFORMS, new String[]{"lightPosition", "lambient", "ldiffuse", "lspecular"}));
+            instanceLightedShader.setAttributeLocations(Shader.composeShaderAttributes(new String[]{"position"}, Shader.INSTANCE_SHADER_ATTRIBUTES));
+            
             InputStreamReader instanceVertexShader = new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("shaders/InstanceVertexShader.txt"));
             InputStreamReader instanceFragmentShader = new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("shaders/InstanceFragmentShader.txt"));
             Shader instanceShader = new Shader(gl, instanceFragmentShader, instanceVertexShader, "instanceShader");
-            instanceShader.setUniformLocations(Shader.composeShaderUniforms((Shader.composeShaderUniforms(Shader.MINIMAL_SHADER_UNIFORMS, Shader.LIGHT_SHADER_UNIFORMS)), new String[]{"eyeCoordinates", "lightPosition"}));
+            instanceShader.setUniformLocations(Shader.MINIMAL_SHADER_UNIFORMS);
             instanceShader.setAttributeLocations(Shader.composeShaderAttributes(new String[]{"position"}, Shader.INSTANCE_SHADER_ATTRIBUTES));
             
-            logger.debug("shader compiled: "+instanceShader.name);
+            logger.debug("shader compiled: "+instanceLightedShader.name);
             
             InputStreamReader textureVertexShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/TextureVertexShader.txt"));
             InputStreamReader textureFragmentShader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("shaders/TextureFragmentShader.txt"));
@@ -362,6 +407,7 @@ public class JoglListener implements GLEventListener {
             logger.debug("shader compiled: "+texturedShader.name);
             
             scene.addShader(noTranslationShader);
+            scene.addShader(instanceLightedShader);
             scene.addShader(instanceShader);
             scene.addShader(texturedShader);
             scene.addShader(lightedShader);
@@ -373,7 +419,7 @@ public class JoglListener implements GLEventListener {
             
             axis.setDrawType(GL3.GL_TRIANGLES);
             scene.addObject(axis, gl);
-            
+            /*
             RegularDtm dtm = DtmLoader.readFromAscFile(new File("C:\\Users\\Julien\\Desktop\\samples\\dtm\\ALSbuf_xyzirncapt_dtm.asc"));
             
             Mat4D transfMatrix = new Mat4D();
@@ -388,8 +434,19 @@ public class JoglListener implements GLEventListener {
             
             GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormales(dtm.getPoints(), dtm.getFaces());
             SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, lightedShader.getProgramId(), false);
-            axis.setDrawType(GL3.GL_TRIANGLES);
+            
             scene.addObject(dtmSceneObject, gl);
+            */
+            
+            if(scene.getDtm() != null){
+                
+                logger.info("Computing dtm normals");
+                GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormalesFromDTM(scene.getDtm());
+                
+                SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, lightedShader.getProgramId(), false);
+
+                scene.addObject(dtmSceneObject, gl);
+            }
             
             if(settings.drawAxis){
                 //SceneObject sceneObject = new SimpleSceneObject(MeshFactory.createLandmark(-1000, 1000), basicShader.getProgramId(), false);
@@ -419,7 +476,7 @@ public class JoglListener implements GLEventListener {
             });
             
             voxelSpace.setSettings(settings);
-            voxelSpace.setShaderId(instanceShader.getProgramId());
+            voxelSpace.setShaderId(instanceLightedShader.getProgramId());
 
             scene.setVoxelSpace(voxelSpace);
             

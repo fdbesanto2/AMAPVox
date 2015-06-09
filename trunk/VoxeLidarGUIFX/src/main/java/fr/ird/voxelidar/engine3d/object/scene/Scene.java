@@ -12,7 +12,10 @@ import fr.ird.voxelidar.engine3d.loading.texture.Texture;
 import fr.ird.voxelidar.engine3d.object.camera.Camera;
 import fr.ird.voxelidar.engine3d.loading.shader.Shader;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
+import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
+import fr.ird.voxelidar.engine3d.object.lighting.Light;
+import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,12 +35,19 @@ public class Scene {
     
     public final ArrayList<SceneObject> objectsList;
     public final ArrayList<Camera> cameraList;
+    private Light light;
     public final Map<Integer, Shader> shadersList;
     private VoxelSpace voxelSpace;
+    private RegularDtm dtm;
     public boolean canDraw;
     private SceneObject scalePlane;
     private int width;
     private int height;
+    
+    private boolean lightPositionChanged = true;
+    private boolean lightAmbientColorChanged = true;
+    private boolean lightDiffuseColorChanged = true;
+    private boolean lightSpecularColorChanged = true;
     
     public Scene(){
         
@@ -45,6 +55,7 @@ public class Scene {
         cameraList = new ArrayList<>();
         shadersList = new HashMap<>();
         canDraw = false;
+        light = new Light();
     }
 
     public void setWidth(int width) {
@@ -196,5 +207,77 @@ public class Scene {
         }
         
     }
+
+    public Light getLight() {
+        return light;
+    }
+
+    public void setLight(Light light) {
+        this.light = light;
+    }
     
+    public void setLightAmbientValue(Vec3F ambient){
+        light.ambient = ambient;
+        lightAmbientColorChanged = true;
+    }
+    
+    public void setLightDiffuseValue(Vec3F diffuse){
+        light.diffuse = diffuse;
+        lightDiffuseColorChanged = true;
+    }
+    
+    public void setLightSpecularValue(Vec3F specular){
+        light.specular = specular;
+        lightSpecularColorChanged = true;
+    }
+    
+    public Point3F getLightPosition() {
+        return light.position;
+    }
+
+    public void setLightPosition(Point3F position) {
+        this.light.position = position;
+        lightPositionChanged = true;
+        
+    }
+
+    public boolean isLightPositionChanged() {
+        return lightPositionChanged;
+    }
+
+    public void setLightPositionChanged(boolean lightPositionChanged) {
+        this.lightPositionChanged = lightPositionChanged;
+    }
+
+    public boolean isLightAmbientColorChanged() {
+        return lightAmbientColorChanged;
+    }
+
+    public void setLightAmbientColorChanged(boolean lightAmbientColorChanged) {
+        this.lightAmbientColorChanged = lightAmbientColorChanged;
+    }
+
+    public boolean isLightDiffuseColorChanged() {
+        return lightDiffuseColorChanged;
+    }
+
+    public void setLightDiffuseColorChanged(boolean lightDiffuseColorChanged) {
+        this.lightDiffuseColorChanged = lightDiffuseColorChanged;
+    }
+
+    public boolean isLightSpecularColorChanged() {
+        return lightSpecularColorChanged;
+    }
+
+    public void setLightSpecularColorChanged(boolean lightSpecularColorChanged) {
+        this.lightSpecularColorChanged = lightSpecularColorChanged;
+    }
+
+    public RegularDtm getDtm() {
+        return dtm;
+    }
+
+    public void setDtm(RegularDtm dtm) {
+        this.dtm = dtm;
+    }
 }

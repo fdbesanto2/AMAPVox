@@ -14,7 +14,6 @@ import fr.ird.voxelidar.engine3d.loading.shader.Shader;
 import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.mesh.InstancedGLMesh;
-import fr.ird.voxelidar.engine3d.mesh.SimpleGLMesh;
 import fr.ird.voxelidar.util.ColorGradient;
 import fr.ird.voxelidar.util.CombinedFilter;
 import fr.ird.voxelidar.util.CombinedFilters;
@@ -27,7 +26,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -846,9 +844,6 @@ public class VoxelSpace extends SceneObject{
                 gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_color"));
                 gl.glVertexAttribPointer(shader.attributeMap.get("instance_color"), 4, GL3.GL_FLOAT, false, 0, (mesh.vertexBuffer.capacity()+((InstancedGLMesh)mesh).instancePositionsBuffer.capacity())*FLOAT_SIZE);
                 gl.glVertexAttribDivisor(shader.attributeMap.get("instance_color"), 1);
-                
-                //gl.glEnableVertexAttribArray(shader.attributeMap.get("ambient_occlusion"));
-                //gl.glVertexAttribPointer(shader.attributeMap.get("ambient_occlusion"), 4, GL3.GL_FLOAT, false, 0, 0);
                  
             gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, mesh.getIboId());
             

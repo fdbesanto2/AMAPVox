@@ -12,16 +12,20 @@ import fr.ird.voxelidar.configuration.Configuration.ProcessMode;
 import fr.ird.voxelidar.configuration.Input;
 import fr.ird.voxelidar.configuration.MatrixAndFile;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
+import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceAdapter;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData;
+import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceHeader;
 import fr.ird.voxelidar.engine3d.renderer.JoglListenerListener;
 import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.lidar.format.als.LasHeader;
 import fr.ird.voxelidar.lidar.format.als.LasReader;
 import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
 import fr.ird.voxelidar.lidar.format.dart.DartPlotsXMLWriter;
+import fr.ird.voxelidar.lidar.format.dtm.DtmLoader;
+import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
 import fr.ird.voxelidar.lidar.format.tls.Rsp;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.lidar.format.tls.Scans;
@@ -168,6 +172,22 @@ public class MainFrameController implements Initializable {
     private AnchorPane anchorpanePreFiltering;
     @FXML
     private MenuItem menuItemExportDartPlots;
+    @FXML
+    private CheckBox checkboxRaster;
+    @FXML
+    private TextField textfieldRasterFilePath;
+    @FXML
+    private CheckBox checkboxUseTransformationMatrix;
+    @FXML
+    private Button buttonEnterReferencePointsTransformation;
+    @FXML
+    private Button buttonOpenTransformationMatrixFile;
+    @FXML
+    private Button buttonOpenRasterFile;
+    @FXML
+    private AnchorPane anchorPaneRasterParameters;
+    @FXML
+    private CheckBox checkboxFitRasterToVoxelSpace;
 
     @FXML
     private void onActionMenuItemUpdate(ActionEvent event) {
@@ -288,6 +308,59 @@ public class MainFrameController implements Initializable {
         
     }
 
+    @FXML
+    private void onActionCheckboxUseTransformationMatrix(ActionEvent event) {
+    }
+
+    @FXML
+    private void onActionButtonEnterReferencePointsTransformation(ActionEvent event) {
+        
+        calculateMatrixFrame.show();
+
+        calculateMatrixFrame.setOnHidden(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+
+                if (calculateMatrixFrameController.getMatrix() != null) {
+                    rasterTransfMatrix = calculateMatrixFrameController.getMatrix();
+                }
+            }
+        });
+    }
+
+    @FXML
+    private void onActionButtonOpenTransformationMatrixFile(ActionEvent event) {
+        
+        File selectedFile = fileChooserOpenVopMatrixFile.showOpenDialog(stage);
+        
+        if(selectedFile != null){
+            
+            Matrix4d mat = MatrixFileParser.getMatrixFromFile(selectedFile);
+            if (mat != null) {
+                
+                rasterTransfMatrix = MatrixFileParser.getMatrixFromFile(selectedFile);
+                if (rasterTransfMatrix == null) {
+                    rasterTransfMatrix = new Matrix4d();
+                    rasterTransfMatrix.setIdentity();
+                }
+                
+            } else {
+                showMatrixFormatErrorDialog();
+            }
+        }
+    }
+
+    @FXML
+    private void onActionButtonOpenRasterFile(ActionEvent event) {
+        
+        File selectedFile = fileChooserOpenDTMFile.showOpenDialog(stage);
+        
+        if(selectedFile != null){
+            textfieldRasterFilePath.setText(selectedFile.getAbsolutePath());
+        }
+    }
+
     public class MinMax {
 
         public Point3d min;
@@ -366,6 +439,8 @@ public class MainFrameController implements Initializable {
     private Matrix4d sopMatrix;
     private Matrix4d vopMatrix;
     private Matrix4d resultMatrix;
+    
+    private Matrix4d rasterTransfMatrix;
 
     private String scanFilter;
     private boolean filterScan;
@@ -1273,7 +1348,26 @@ public class MainFrameController implements Initializable {
                 "Multiple files ALS process + multi res");
 
         comboboxScript.getSelectionModel().selectFirst();
+        
+        checkboxRaster.selectedProperty().addListener(new ChangeListener<Boolean>() {
 
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                anchorPaneRasterParameters.setDisable(!newValue);
+            }
+        });
+        
+        rasterTransfMatrix = new Matrix4d();
+        rasterTransfMatrix.setIdentity();
+        
+        checkboxUseTransformationMatrix.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                buttonEnterReferencePointsTransformation.setDisable(!newValue);
+                buttonOpenTransformationMatrixFile.setDisable(!newValue);
+            }
+        });
     }
 
     public void setStage(Stage stage) {
@@ -1508,8 +1602,10 @@ public class MainFrameController implements Initializable {
         final String attributeToView = comboboxAttributeToView.getSelectionModel().getSelectedItem();
         
         final Stage toolBarFrameStage = new Stage();
-        
-        
+        final boolean drawDTM = checkboxRaster.isSelected();
+        final File dtmFile = new File(textfieldRasterFilePath.getText());
+        final Matrix4d dtmTransfMatrix = rasterTransfMatrix;
+        final boolean fitDTMToVoxelSpace = checkboxFitRasterToVoxelSpace.isSelected();
         
         Service s = new Service() {
 
@@ -1533,6 +1629,30 @@ public class MainFrameController implements Initializable {
                             joglWindow = new JOGLWindow(((int)SCREEN_WIDTH / 4), (int)SCREEN_HEIGHT / 4, (int)(SCREEN_WIDTH / 1.5d), (int)SCREEN_HEIGHT / 2,
                                     voxelFile.toString(),
                                     voxelSpace, settings);
+                            
+                            if(drawDTM && dtmFile != null){
+                                
+                                updateMessage("Reading raster file: "+dtmFile.getAbsolutePath());
+                                
+                                RegularDtm dtm = DtmLoader.readFromAscFile(dtmFile);
+            
+                                if(dtmTransfMatrix != null){
+                                    dtm.setTransformationMatrix(MatrixConverter.convertMatrix4dToMat4D(dtmTransfMatrix));
+                                }
+                                
+                                if(fitDTMToVoxelSpace){
+                                    
+                                    VoxelSpaceHeader header = VoxelSpaceHeader.readVoxelFileHeader(voxelFile);
+                                    dtm.setLimits(new Point3F((float)header.bottomCorner.x, (float)header.bottomCorner.y, (float)header.bottomCorner.z), 
+                                                  new Point3F((float)header.topCorner.x, (float)header.topCorner.y, (float)header.topCorner.z));
+                                }
+                                
+                                updateMessage("Converting raster to mesh");
+                                dtm.buildMesh();
+                                
+                                joglWindow.getJoglContext().getScene().setDtm(dtm);
+                            }
+                            
                         } catch (Exception ex) {
                             logger.error(ex.getMessage(), ex);
                             return null;
