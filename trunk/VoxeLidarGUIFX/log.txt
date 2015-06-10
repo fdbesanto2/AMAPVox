@@ -2501,3 +2501,586 @@ java.lang.IndexOutOfBoundsException: Index: 19930, Size: 144
 2015-06-09 18:37:45 INFO  - Computing dtm normals
 2015-06-09 18:39:04 INFO  - Computing dtm normals
 2015-06-09 18:39:47 INFO  - Computing dtm normals
+2015-06-10 08:03:29 INFO  - Computing dtm normals
+2015-06-10 08:14:17 INFO  - Computing dtm normals
+2015-06-10 08:17:12 INFO  - Computing dtm normals
+2015-06-10 08:19:48 ERROR - For input string: "SPACE"
+java.lang.NumberFormatException: For input string: "SPACE"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:580)
+	at java.lang.Integer.valueOf(Integer.java:766)
+	at fr.ird.voxelidar.lidar.format.dtm.DtmLoader.readFromAscFile(DtmLoader.java:41)
+	at fr.ird.voxelidar.gui.MainFrameController$34$1.call(MainFrameController.java:1637)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$385/408713433.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$383/452419835.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-10 08:23:47 INFO  - Computing dtm normals
+2015-06-10 08:36:43 INFO  - Computing dtm normals
+2015-06-10 08:39:53 INFO  - Computing dtm normals
+2015-06-10 08:43:21 INFO  - Computing dtm normals
+2015-06-10 08:45:31 INFO  - Computing dtm normals
+2015-06-10 08:48:26 INFO  - Computing dtm normals
+2015-06-10 08:50:00 INFO  - Computing dtm normals
+2015-06-10 08:52:55 INFO  - Computing dtm normals
+2015-06-10 08:54:18 INFO  - Computing dtm normals
+2015-06-10 08:54:30 INFO  - Computing dtm normals
+2015-06-10 09:40:05 INFO  - Reading DTM : /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/mnt.asc
+2015-06-10 09:40:05 INFO  - Writing triangles file
+2015-06-10 09:40:05 INFO  - Writing dart file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/maket.txt
+2015-06-10 09:40:06 INFO  - dart file written
+2015-06-10 09:47:02 INFO  - Reading DTM : /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/mnt.asc
+2015-06-10 09:47:02 INFO  - Writing triangles file
+2015-06-10 09:47:02 INFO  - Writing dart file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/maket.txt
+2015-06-10 09:47:03 INFO  - dart file written
+2015-06-10 10:03:35 INFO  - Computing dtm normals
+2015-06-10 10:08:04 INFO  - Computing dtm normals
+2015-06-10 10:55:29 INFO  - Computing dtm normals
+2015-06-10 10:56:14 INFO  - Computing dtm normals
+2015-06-10 10:57:46 INFO  - Computing dtm normals
+2015-06-10 12:13:59 INFO  - Loading point cloud file...
+2015-06-10 12:13:59 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-06-10 12:14:02 INFO  - Point cloud file loaded
+2015-06-10 12:14:02 INFO  - Saved libfile: /tmp/RivLibLibrary-9110900174392988801.tmp
+2015-06-10 12:14:02 INFO  - /tmp/RivLibLibrary-9110900174392988801.tmp
+2015-06-10 12:14:02 INFO  - rxp extraction is started
+2015-06-10 12:14:02 INFO  - rxp extraction is started
+2015-06-10 12:14:02 INFO  - rxp extraction is started
+2015-06-10 12:14:02 INFO  - rxp extraction is started
+2015-06-10 12:14:02 INFO  - rxp extraction is started
+2015-06-10 12:14:02 INFO  - rxp extraction is started
+2015-06-10 12:14:02 INFO  - allocate!!!!!!!!
+2015-06-10 12:14:02 INFO  - allocate!!!!!!!!
+2015-06-10 12:14:02 INFO  - allocate!!!!!!!!
+2015-06-10 12:14:02 INFO  - allocate!!!!!!!!
+2015-06-10 12:14:02 INFO  - allocate!!!!!!!!
+2015-06-10 12:14:02 INFO  - allocate!!!!!!!!
+2015-06-10 12:14:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -5.0)
+			Corner Sup	:	(50.0, 50.0, 45.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2015-06-10 12:14:02 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-06-10 12:14:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -5.0)
+			Corner Sup	:	(50.0, 50.0, 45.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2015-06-10 12:14:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -5.0)
+			Corner Sup	:	(50.0, 50.0, 45.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2015-06-10 12:14:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -5.0)
+			Corner Sup	:	(50.0, 50.0, 45.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2015-06-10 12:14:02 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-06-10 12:14:02 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-06-10 12:14:02 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-06-10 12:14:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -5.0)
+			Corner Sup	:	(50.0, 50.0, 45.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2015-06-10 12:14:02 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-06-10 12:14:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -5.0)
+			Corner Sup	:	(50.0, 50.0, 45.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2015-06-10 12:14:02 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-06-10 12:14:17 INFO  - Shots processed: 1000000
+2015-06-10 12:14:19 INFO  - Shots processed: 1000000
+2015-06-10 12:14:20 INFO  - Shots processed: 1000000
+2015-06-10 12:14:21 INFO  - Shots processed: 1000000
+2015-06-10 12:14:22 INFO  - Shots processed: 1000000
+2015-06-10 12:14:23 INFO  - Shots processed: 1000000
+2015-06-10 12:14:29 INFO  - Shots processed: 2000000
+2015-06-10 12:14:33 INFO  - Shots processed: 2000000
+2015-06-10 12:14:34 INFO  - Shots processed: 2000000
+2015-06-10 12:14:37 INFO  - Shots processed: 2000000
+2015-06-10 12:14:38 INFO  - Shots processed: 2000000
+2015-06-10 12:14:39 INFO  - Shots processed: 2000000
+2015-06-10 12:14:39 INFO  - Shots processed: 3000000
+2015-06-10 12:14:48 INFO  - Shots processed: 3000000
+2015-06-10 12:14:48 INFO  - Shots processed: 3000000
+2015-06-10 12:14:52 INFO  - Shots processed: 3000000
+2015-06-10 12:14:54 INFO  - Shots processed: 3000000
+2015-06-10 12:14:54 INFO  - Shots processed: 4000000
+2015-06-10 12:14:55 INFO  - Shots processed: 3000000
+2015-06-10 12:15:05 INFO  - Shots processed: 4000000
+2015-06-10 12:15:06 INFO  - Shots processed: 4000000
+2015-06-10 12:15:07 INFO  - Shots processed: 4000000
+2015-06-10 12:15:10 INFO  - Shots processed: 5000000
+2015-06-10 12:15:12 INFO  - Shots processed: 4000000
+2015-06-10 12:15:12 INFO  - Shots processed: 4000000
+2015-06-10 12:15:16 INFO  - Shots processed: 4810881
+2015-06-10 12:15:16 INFO  - voxelisation is finished ( 74.0 s )
+2015-06-10 12:15:16 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_101534.rxp.vox
+2015-06-10 12:15:20 INFO  - file written ( 3.0 s )
+2015-06-10 12:15:25 INFO  - Shots processed: 5000000
+2015-06-10 12:15:27 INFO  - Shots processed: 5000000
+2015-06-10 12:15:28 INFO  - Shots processed: 6000000
+2015-06-10 12:15:30 INFO  - Shots processed: 5000000
+2015-06-10 12:15:32 INFO  - Shots processed: 5000000
+2015-06-10 12:15:42 INFO  - Shots processed: 6000000
+2015-06-10 12:15:43 INFO  - Shots processed: 7000000
+2015-06-10 12:15:44 INFO  - Shots processed: 6000000
+2015-06-10 12:15:48 INFO  - Shots processed: 6000000
+2015-06-10 12:15:49 INFO  - Shots processed: 6000000
+2015-06-10 12:15:57 INFO  - Shots processed: 7000000
+2015-06-10 12:16:00 INFO  - Shots processed: 7000000
+2015-06-10 12:16:02 INFO  - Shots processed: 8000000
+2015-06-10 12:16:03 INFO  - Shots processed: 7000000
+2015-06-10 12:16:05 INFO  - Shots processed: 7000000
+2015-06-10 12:16:08 INFO  - Shots processed: 8000000
+2015-06-10 12:16:12 INFO  - Shots processed: 8000000
+2015-06-10 12:16:14 INFO  - Shots processed: 8000000
+2015-06-10 12:16:18 INFO  - Shots processed: 9000000
+2015-06-10 12:16:19 INFO  - Shots processed: 9000000
+2015-06-10 12:16:19 INFO  - Shots processed: 8000000
+2015-06-10 12:16:22 INFO  - Shots processed: 9000000
+2015-06-10 12:16:26 INFO  - Shots processed: 9000000
+2015-06-10 12:16:28 INFO  - Shots processed: 10000000
+2015-06-10 12:16:30 INFO  - Shots processed: 10000000
+2015-06-10 12:16:32 INFO  - Shots processed: 10000000
+2015-06-10 12:16:32 INFO  - Shots processed: 9000000
+2015-06-10 12:16:37 INFO  - Shots processed: 10000000
+2015-06-10 12:16:37 INFO  - Shots processed: 11000000
+2015-06-10 12:16:39 INFO  - Shots processed: 11293701
+2015-06-10 12:16:39 INFO  - voxelisation is finished ( 157.0 s )
+2015-06-10 12:16:39 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_113724.rxp.vox
+2015-06-10 12:16:42 INFO  - file written ( 2.0 s )
+2015-06-10 12:16:43 INFO  - Shots processed: 11000000
+2015-06-10 12:16:45 INFO  - Shots processed: 11000000
+2015-06-10 12:16:46 INFO  - Shots processed: 11295629
+2015-06-10 12:16:46 INFO  - voxelisation is finished ( 163.0 s )
+2015-06-10 12:16:46 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_112953.rxp.vox
+2015-06-10 12:16:46 INFO  - Shots processed: 11000000
+2015-06-10 12:16:47 INFO  - Shots processed: 10000000
+2015-06-10 12:16:48 INFO  - Shots processed: 11295882
+2015-06-10 12:16:48 INFO  - voxelisation is finished ( 166.0 s )
+2015-06-10 12:16:48 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_110207.rxp.vox
+2015-06-10 12:16:49 INFO  - Shots processed: 11295489
+2015-06-10 12:16:49 INFO  - voxelisation is finished ( 166.0 s )
+2015-06-10 12:16:49 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_115917.rxp.vox
+2015-06-10 12:16:49 INFO  - file written ( 3.0 s )
+2015-06-10 12:16:50 INFO  - file written ( 2.0 s )
+2015-06-10 12:16:51 INFO  - file written ( 1.0 s )
+2015-06-10 12:16:56 INFO  - Shots processed: 11000000
+2015-06-10 12:17:04 INFO  - Shots processed: 12000000
+2015-06-10 12:17:11 INFO  - Shots processed: 13000000
+2015-06-10 12:17:12 INFO  - Shots processed: 13166931
+2015-06-10 12:17:12 INFO  - voxelisation is finished ( 189.0 s )
+2015-06-10 12:17:12 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_101944.rxp.vox
+2015-06-10 12:17:13 INFO  - file written ( 1.0 s )
+2015-06-10 12:17:13 INFO  - Voxelisation finished in 194.0 s
+2015-06-10 12:17:13 INFO  - Merging in progress, file 1 : 6
+2015-06-10 12:17:15 INFO  - Merging in progress, file 2 : 6
+2015-06-10 12:17:16 INFO  - Merging in progress, file 3 : 6
+2015-06-10 12:17:18 INFO  - Merging in progress, file 4 : 6
+2015-06-10 12:17:19 INFO  - Merging in progress, file 5 : 6
+2015-06-10 12:17:21 INFO  - Merging in progress, file 6 : 6
+2015-06-10 12:17:22 INFO  - Compute angleMean
+2015-06-10 12:17:22 INFO  - Compute lMeanTotal
+2015-06-10 12:17:22 INFO  - Compute transmittance and PAD
+2015-06-10 12:17:22 INFO  - writing output file: /home/calcul/Documents/Julien/test_tls_pierre/merged.vox
+2015-06-10 12:17:23 INFO  - file written ( 1.0 s )
+2015-06-10 12:17:23 INFO  - Voxelisation finished in 204.0 s
+2015-06-10 12:17:23 INFO  - Voxelisation finished in 204.0 s
+2015-06-10 12:19:02 INFO  - Loading point cloud file...
+2015-06-10 12:19:02 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-06-10 12:19:04 INFO  - Point cloud file loaded
+2015-06-10 12:19:04 INFO  - rxp extraction is started
+2015-06-10 12:19:04 INFO  - rxp extraction is started
+2015-06-10 12:19:04 INFO  - allocate!!!!!!!!
+2015-06-10 12:19:04 INFO  - allocate!!!!!!!!
+2015-06-10 12:19:04 INFO  - rxp extraction is started
+2015-06-10 12:19:04 INFO  - allocate!!!!!!!!
+2015-06-10 12:19:04 INFO  - rxp extraction is started
+2015-06-10 12:19:04 INFO  - allocate!!!!!!!!
+2015-06-10 12:19:04 INFO  - rxp extraction is started
+2015-06-10 12:19:04 INFO  - allocate!!!!!!!!
+2015-06-10 12:19:04 INFO  - rxp extraction is started
+2015-06-10 12:19:04 INFO  - allocate!!!!!!!!
+2015-06-10 12:19:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -5.0)
+			Corner Sup	:	(50.0, 50.0, 45.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2015-06-10 12:19:04 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-06-10 12:19:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -5.0)
+			Corner Sup	:	(50.0, 50.0, 45.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2015-06-10 12:19:04 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-06-10 12:19:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -5.0)
+			Corner Sup	:	(50.0, 50.0, 45.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2015-06-10 12:19:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -5.0)
+			Corner Sup	:	(50.0, 50.0, 45.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2015-06-10 12:19:04 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-06-10 12:19:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -5.0)
+			Corner Sup	:	(50.0, 50.0, 45.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2015-06-10 12:19:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -5.0)
+			Corner Sup	:	(50.0, 50.0, 45.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2015-06-10 12:19:04 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-06-10 12:19:05 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-06-10 12:19:04 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-06-10 12:19:19 INFO  - Shots processed: 1000000
+2015-06-10 12:19:19 INFO  - Shots processed: 1000000
+2015-06-10 12:19:21 INFO  - Shots processed: 1000000
+2015-06-10 12:19:23 INFO  - Shots processed: 1000000
+2015-06-10 12:19:23 INFO  - Shots processed: 1000000
+2015-06-10 12:19:28 INFO  - Shots processed: 1000000
+2015-06-10 12:19:31 INFO  - Shots processed: 2000000
+2015-06-10 12:19:35 INFO  - Shots processed: 2000000
+2015-06-10 12:19:36 INFO  - Shots processed: 2000000
+2015-06-10 12:19:36 INFO  - Shots processed: 2000000
+2015-06-10 12:19:38 INFO  - Shots processed: 2000000
+2015-06-10 12:19:42 INFO  - Shots processed: 3000000
+2015-06-10 12:19:44 INFO  - Shots processed: 2000000
+2015-06-10 12:19:50 INFO  - Shots processed: 3000000
+2015-06-10 12:19:50 INFO  - Shots processed: 3000000
+2015-06-10 12:19:53 INFO  - Shots processed: 3000000
+2015-06-10 12:19:54 INFO  - Shots processed: 3000000
+2015-06-10 12:19:54 INFO  - Shots processed: 4000000
+2015-06-10 12:19:56 INFO  - Shots processed: 3000000
+2015-06-10 12:20:10 INFO  - Shots processed: 4000000
+2015-06-10 12:20:12 INFO  - Shots processed: 5000000
+2015-06-10 12:20:12 INFO  - Shots processed: 4000000
+2015-06-10 12:20:14 INFO  - Shots processed: 4000000
+2015-06-10 12:20:15 INFO  - Shots processed: 4000000
+2015-06-10 12:20:15 INFO  - Shots processed: 4000000
+2015-06-10 12:20:23 INFO  - Shots processed: 4810881
+2015-06-10 12:20:23 INFO  - voxelisation is finished ( 78.0 s )
+2015-06-10 12:20:23 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_101534.rxp.vox
+2015-06-10 12:20:24 INFO  - file written ( 1.0 s )
+2015-06-10 12:20:27 INFO  - Shots processed: 5000000
+2015-06-10 12:20:27 INFO  - Shots processed: 5000000
+2015-06-10 12:20:27 INFO  - Shots processed: 5000000
+2015-06-10 12:20:27 INFO  - Shots processed: 6000000
+2015-06-10 12:20:28 INFO  - Shots processed: 5000000
+2015-06-10 12:20:39 INFO  - Shots processed: 6000000
+2015-06-10 12:20:39 INFO  - Shots processed: 7000000
+2015-06-10 12:20:39 INFO  - Shots processed: 6000000
+2015-06-10 12:20:39 INFO  - Shots processed: 6000000
+2015-06-10 12:20:40 INFO  - Shots processed: 6000000
+2015-06-10 12:20:48 INFO  - Shots processed: 7000000
+2015-06-10 12:20:49 INFO  - Shots processed: 7000000
+2015-06-10 12:20:49 INFO  - Shots processed: 7000000
+2015-06-10 12:20:51 INFO  - Shots processed: 7000000
+2015-06-10 12:20:52 INFO  - Shots processed: 8000000
+2015-06-10 12:20:55 INFO  - Shots processed: 8000000
+2015-06-10 12:20:56 INFO  - Shots processed: 8000000
+2015-06-10 12:20:58 INFO  - Shots processed: 8000000
+2015-06-10 12:21:00 INFO  - Shots processed: 8000000
+2015-06-10 12:21:01 INFO  - Shots processed: 9000000
+2015-06-10 12:21:02 INFO  - Shots processed: 9000000
+2015-06-10 12:21:02 INFO  - Shots processed: 9000000
+2015-06-10 12:21:07 INFO  - Shots processed: 9000000
+2015-06-10 12:21:08 INFO  - Shots processed: 10000000
+2015-06-10 12:21:09 INFO  - Shots processed: 10000000
+2015-06-10 12:21:09 INFO  - Shots processed: 9000000
+2015-06-10 12:21:12 INFO  - Shots processed: 10000000
+2015-06-10 12:21:15 INFO  - Shots processed: 11000000
+2015-06-10 12:21:15 INFO  - Shots processed: 10000000
+2015-06-10 12:21:15 INFO  - Shots processed: 11000000
+2015-06-10 12:21:16 INFO  - Shots processed: 11295629
+2015-06-10 12:21:16 INFO  - voxelisation is finished ( 132.0 s )
+2015-06-10 12:21:16 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_112953.rxp.vox
+2015-06-10 12:21:17 INFO  - Shots processed: 11293701
+2015-06-10 12:21:17 INFO  - voxelisation is finished ( 133.0 s )
+2015-06-10 12:21:17 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_113724.rxp.vox
+2015-06-10 12:21:18 INFO  - file written ( 2.0 s )
+2015-06-10 12:21:19 INFO  - file written ( 1.0 s )
+2015-06-10 12:21:19 INFO  - Shots processed: 10000000
+2015-06-10 12:21:22 INFO  - Shots processed: 11000000
+2015-06-10 12:21:22 INFO  - Shots processed: 11000000
+2015-06-10 12:21:23 INFO  - Shots processed: 11295882
+2015-06-10 12:21:23 INFO  - voxelisation is finished ( 139.0 s )
+2015-06-10 12:21:23 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_110207.rxp.vox
+2015-06-10 12:21:25 INFO  - Shots processed: 11295489
+2015-06-10 12:21:25 INFO  - voxelisation is finished ( 140.0 s )
+2015-06-10 12:21:25 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_115917.rxp.vox
+2015-06-10 12:21:25 INFO  - file written ( 1.0 s )
+2015-06-10 12:21:26 INFO  - file written ( 1.0 s )
+2015-06-10 12:21:29 INFO  - Shots processed: 11000000
+2015-06-10 12:21:37 INFO  - Shots processed: 12000000
+2015-06-10 12:21:44 INFO  - Shots processed: 13000000
+2015-06-10 12:21:45 INFO  - Shots processed: 13166931
+2015-06-10 12:21:45 INFO  - voxelisation is finished ( 161.0 s )
+2015-06-10 12:21:45 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_101944.rxp.vox
+2015-06-10 12:21:47 INFO  - file written ( 1.0 s )
+2015-06-10 12:21:47 INFO  - Voxelisation finished in 165.0 s
+2015-06-10 12:21:47 INFO  - Merging in progress, file 1 : 6
+2015-06-10 12:21:48 INFO  - Merging in progress, file 2 : 6
+2015-06-10 12:21:49 INFO  - Merging in progress, file 3 : 6
+2015-06-10 12:21:51 INFO  - Merging in progress, file 4 : 6
+2015-06-10 12:21:52 INFO  - Merging in progress, file 5 : 6
+2015-06-10 12:21:53 INFO  - Merging in progress, file 6 : 6
+2015-06-10 12:21:55 INFO  - Compute angleMean
+2015-06-10 12:21:55 INFO  - Compute lMeanTotal
+2015-06-10 12:21:55 INFO  - Compute transmittance and PAD
+2015-06-10 12:21:55 INFO  - writing output file: /home/calcul/Documents/Julien/test_tls_pierre/merged.vox
+2015-06-10 12:21:56 INFO  - file written ( 0.0 s )
+2015-06-10 12:21:56 INFO  - Voxelisation finished in 174.0 s
+2015-06-10 12:21:56 INFO  - Voxelisation finished in 174.0 s
+2015-06-10 12:35:51 INFO  - Computing dtm normals
+2015-06-10 12:39:33 INFO  - Computing dtm normals
+2015-06-10 14:02:02 INFO  - Loading point cloud file...
+2015-06-10 14:02:02 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-06-10 14:02:04 INFO  - Point cloud file loaded
+2015-06-10 14:02:04 INFO  - Saved libfile: /tmp/RivLibLibrary-6940296704672019828.tmp
+2015-06-10 14:02:04 INFO  - /tmp/RivLibLibrary-6940296704672019828.tmp
+2015-06-10 14:02:04 INFO  - rxp extraction is started
+2015-06-10 14:02:04 INFO  - rxp extraction is started
+2015-06-10 14:02:04 INFO  - rxp extraction is started
+2015-06-10 14:02:04 INFO  - rxp extraction is started
+2015-06-10 14:02:04 INFO  - rxp extraction is started
+2015-06-10 14:02:04 INFO  - rxp extraction is started
+2015-06-10 14:02:04 INFO  - allocate!!!!!!!!
+2015-06-10 14:02:04 INFO  - allocate!!!!!!!!
+2015-06-10 14:02:04 INFO  - allocate!!!!!!!!
+2015-06-10 14:02:04 INFO  - allocate!!!!!!!!
+2015-06-10 14:02:04 INFO  - allocate!!!!!!!!
+2015-06-10 14:02:04 INFO  - allocate!!!!!!!!
+2015-06-10 14:02:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-21.51608, -5.657139, -1.9879286)
+			Corner Sup	:	(7.9040527, 24.302492, 44.113934)
+			Dimensions	:	(30, 30, 47)
+			Toricity 	:	false
+
+2015-06-10 14:02:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-21.51608, -5.657139, -1.9879286)
+			Corner Sup	:	(7.9040527, 24.302492, 44.113934)
+			Dimensions	:	(30, 30, 47)
+			Toricity 	:	false
+
+2015-06-10 14:02:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-21.51608, -5.657139, -1.9879286)
+			Corner Sup	:	(7.9040527, 24.302492, 44.113934)
+			Dimensions	:	(30, 30, 47)
+			Toricity 	:	false
+
+2015-06-10 14:02:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-21.51608, -5.657139, -1.9879286)
+			Corner Sup	:	(7.9040527, 24.302492, 44.113934)
+			Dimensions	:	(30, 30, 47)
+			Toricity 	:	false
+
+2015-06-10 14:02:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-21.51608, -5.657139, -1.9879286)
+			Corner Sup	:	(7.9040527, 24.302492, 44.113934)
+			Dimensions	:	(30, 30, 47)
+			Toricity 	:	false
+
+2015-06-10 14:02:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-21.51608, -5.657139, -1.9879286)
+			Corner Sup	:	(7.9040527, 24.302492, 44.113934)
+			Dimensions	:	(30, 30, 47)
+			Toricity 	:	false
+
+2015-06-10 14:02:04 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-06-10 14:02:04 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-06-10 14:02:04 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-06-10 14:02:04 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-06-10 14:02:04 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-06-10 14:02:04 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-06-10 14:02:11 INFO  - Shots processed: 1000000
+2015-06-10 14:02:11 INFO  - Shots processed: 1000000
+2015-06-10 14:02:11 INFO  - Shots processed: 1000000
+2015-06-10 14:02:11 INFO  - Shots processed: 1000000
+2015-06-10 14:02:12 INFO  - Shots processed: 1000000
+2015-06-10 14:02:14 INFO  - Shots processed: 1000000
+2015-06-10 14:02:17 INFO  - Shots processed: 2000000
+2015-06-10 14:02:18 INFO  - Shots processed: 2000000
+2015-06-10 14:02:18 INFO  - Shots processed: 2000000
+2015-06-10 14:02:18 INFO  - Shots processed: 2000000
+2015-06-10 14:02:20 INFO  - Shots processed: 2000000
+2015-06-10 14:02:22 INFO  - Shots processed: 2000000
+2015-06-10 14:02:23 INFO  - Shots processed: 3000000
+2015-06-10 14:02:25 INFO  - Shots processed: 3000000
+2015-06-10 14:02:25 INFO  - Shots processed: 3000000
+2015-06-10 14:02:26 INFO  - Shots processed: 3000000
+2015-06-10 14:02:28 INFO  - Shots processed: 3000000
+2015-06-10 14:02:29 INFO  - Shots processed: 4000000
+2015-06-10 14:02:30 INFO  - Shots processed: 3000000
+2015-06-10 14:02:33 INFO  - Shots processed: 4000000
+2015-06-10 14:02:34 INFO  - Shots processed: 4000000
+2015-06-10 14:02:34 INFO  - Shots processed: 4000000
+2015-06-10 14:02:36 INFO  - Shots processed: 5000000
+2015-06-10 14:02:36 INFO  - Shots processed: 4000000
+2015-06-10 14:02:37 INFO  - Shots processed: 4000000
+2015-06-10 14:02:40 INFO  - Shots processed: 5000000
+2015-06-10 14:02:42 INFO  - Shots processed: 5000000
+2015-06-10 14:02:42 INFO  - Shots processed: 4810881
+2015-06-10 14:02:42 INFO  - voxelisation is finished ( 38.0 s )
+2015-06-10 14:02:42 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_101534.rxp.vox
+2015-06-10 14:02:42 INFO  - file written ( 0.0 s )
+2015-06-10 14:02:43 INFO  - Shots processed: 6000000
+2015-06-10 14:02:45 INFO  - Shots processed: 5000000
+2015-06-10 14:02:46 INFO  - Shots processed: 6000000
+2015-06-10 14:02:48 INFO  - Shots processed: 6000000
+2015-06-10 14:02:48 INFO  - Shots processed: 5000000
+2015-06-10 14:02:51 INFO  - Shots processed: 7000000
+2015-06-10 14:02:52 INFO  - Shots processed: 7000000
+2015-06-10 14:02:54 INFO  - Shots processed: 7000000
+2015-06-10 14:02:55 INFO  - Shots processed: 6000000
+2015-06-10 14:02:58 INFO  - Shots processed: 8000000
+2015-06-10 14:02:59 INFO  - Shots processed: 8000000
+2015-06-10 14:02:59 INFO  - Shots processed: 6000000
+2015-06-10 14:02:59 INFO  - Shots processed: 8000000
+2015-06-10 14:03:03 INFO  - Shots processed: 7000000
+2015-06-10 14:03:04 INFO  - Shots processed: 9000000
+2015-06-10 14:03:05 INFO  - Shots processed: 9000000
+2015-06-10 14:03:05 INFO  - Shots processed: 9000000
+2015-06-10 14:03:09 INFO  - Shots processed: 7000000
+2015-06-10 14:03:09 INFO  - Shots processed: 10000000
+2015-06-10 14:03:10 INFO  - Shots processed: 8000000
+2015-06-10 14:03:11 INFO  - Shots processed: 10000000
+2015-06-10 14:03:11 INFO  - Shots processed: 10000000
+2015-06-10 14:03:15 INFO  - Shots processed: 11000000
+2015-06-10 14:03:17 INFO  - Shots processed: 11000000
+2015-06-10 14:03:17 INFO  - Shots processed: 9000000
+2015-06-10 14:03:17 INFO  - Shots processed: 11295629
+2015-06-10 14:03:17 INFO  - voxelisation is finished ( 72.0 s )
+2015-06-10 14:03:17 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_112953.rxp.vox
+2015-06-10 14:03:17 INFO  - file written ( 0.0 s )
+2015-06-10 14:03:17 INFO  - Shots processed: 8000000
+2015-06-10 14:03:18 INFO  - Shots processed: 11000000
+2015-06-10 14:03:18 INFO  - Shots processed: 11293701
+2015-06-10 14:03:18 INFO  - voxelisation is finished ( 74.0 s )
+2015-06-10 14:03:18 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_113724.rxp.vox
+2015-06-10 14:03:18 INFO  - file written ( 0.0 s )
+2015-06-10 14:03:19 INFO  - Shots processed: 11295489
+2015-06-10 14:03:19 INFO  - voxelisation is finished ( 75.0 s )
+2015-06-10 14:03:19 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_115917.rxp.vox
+2015-06-10 14:03:20 INFO  - file written ( 0.0 s )
+2015-06-10 14:03:22 INFO  - Shots processed: 10000000
+2015-06-10 14:03:24 INFO  - Shots processed: 9000000
+2015-06-10 14:03:27 INFO  - Shots processed: 11000000
+2015-06-10 14:03:29 INFO  - Shots processed: 11295882
+2015-06-10 14:03:29 INFO  - voxelisation is finished ( 84.0 s )
+2015-06-10 14:03:29 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_110207.rxp.vox
+2015-06-10 14:03:29 INFO  - file written ( 0.0 s )
+2015-06-10 14:03:31 INFO  - Shots processed: 10000000
+2015-06-10 14:03:37 INFO  - Shots processed: 11000000
+2015-06-10 14:03:43 INFO  - Shots processed: 12000000
+2015-06-10 14:03:49 INFO  - Shots processed: 13000000
+2015-06-10 14:03:49 INFO  - Shots processed: 13166931
+2015-06-10 14:03:49 INFO  - voxelisation is finished ( 105.0 s )
+2015-06-10 14:03:49 INFO  - writing file: /home/calcul/Documents/Julien/test_tls_pierre/140331_101944.rxp.vox
+2015-06-10 14:03:50 INFO  - file written ( 0.0 s )
+2015-06-10 14:03:50 INFO  - Voxelisation finished in 108.0 s
+2015-06-10 14:03:50 INFO  - Merging in progress, file 1 : 6
+2015-06-10 14:03:50 INFO  - Merging in progress, file 2 : 6
+2015-06-10 14:03:50 INFO  - Merging in progress, file 3 : 6
+2015-06-10 14:03:50 INFO  - Merging in progress, file 4 : 6
+2015-06-10 14:03:50 INFO  - Merging in progress, file 5 : 6
+2015-06-10 14:03:50 INFO  - Merging in progress, file 6 : 6
+2015-06-10 14:03:51 INFO  - Compute angleMean
+2015-06-10 14:03:51 INFO  - Compute lMeanTotal
+2015-06-10 14:03:51 INFO  - Compute transmittance and PAD
+2015-06-10 14:03:51 INFO  - writing output file: /home/calcul/Documents/Julien/test_tls_pierre/merged.vox
+2015-06-10 14:03:51 INFO  - file written ( 0.0 s )
+2015-06-10 14:03:51 INFO  - Voxelisation finished in 109.0 s
+2015-06-10 14:03:51 INFO  - Voxelisation finished in 109.0 s
+2015-06-10 15:16:28 INFO  - Reading DTM : /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/mnt.asc
+2015-06-10 15:16:29 INFO  - Writing triangles file
+2015-06-10 15:16:29 INFO  - Writing dart file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/maket.txt
+2015-06-10 15:16:29 INFO  - dart file written
+2015-06-10 15:21:06 INFO  - Reading DTM : /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/mnt.asc
+2015-06-10 15:21:07 INFO  - Writing triangles file
+2015-06-10 15:21:07 INFO  - Writing dart file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/maket.txt
+2015-06-10 15:21:07 INFO  - dart file written
+2015-06-10 16:06:34 INFO  - Computing dtm normals
+2015-06-10 16:07:27 INFO  - Computing dtm normals
+2015-06-10 16:08:37 INFO  - Computing dtm normals
+2015-06-10 16:14:29 INFO  - Computing dtm normals
+2015-06-10 16:15:17 INFO  - Computing dtm normals
+2015-06-10 16:15:35 INFO  - Computing dtm normals
+2015-06-10 16:15:57 INFO  - Computing dtm normals
+2015-06-10 16:16:17 INFO  - Computing dtm normals
+2015-06-10 16:16:52 INFO  - Computing dtm normals
+2015-06-10 16:17:49 INFO  - Computing dtm normals
+2015-06-10 16:18:06 INFO  - Computing dtm normals
+2015-06-10 16:18:16 INFO  - Computing dtm normals
+2015-06-10 16:18:25 INFO  - Computing dtm normals
+2015-06-10 16:18:34 INFO  - Computing dtm normals
+2015-06-10 16:18:43 INFO  - Computing dtm normals
+2015-06-10 16:18:52 INFO  - Computing dtm normals
+2015-06-10 16:19:03 INFO  - Computing dtm normals
+2015-06-10 16:19:14 INFO  - Computing dtm normals
+2015-06-10 16:20:29 INFO  - Computing dtm normals
+2015-06-10 16:27:37 INFO  - Computing dtm normals
+2015-06-10 16:28:10 INFO  - Computing dtm normals
+2015-06-10 16:31:29 INFO  - Computing dtm normals
+2015-06-10 16:39:13 INFO  - Computing dtm normals
+2015-06-10 16:39:42 INFO  - Computing dtm normals
+2015-06-10 16:42:51 INFO  - Computing dtm normals
+2015-06-10 16:45:15 INFO  - Computing dtm normals
+2015-06-10 16:48:35 INFO  - Computing dtm normals
+2015-06-10 16:55:56 INFO  - Computing dtm normals
+2015-06-10 17:16:14 INFO  - Computing dtm normals
+2015-06-10 17:17:44 INFO  - Computing dtm normals
+2015-06-10 17:19:00 INFO  - Computing dtm normals
+2015-06-10 17:21:28 INFO  - Computing dtm normals
+2015-06-10 17:26:01 INFO  - Computing dtm normals
+2015-06-10 18:25:02 INFO  - Reading DTM : /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/mnt.asc
+2015-06-10 18:25:03 INFO  - Writing triangles file
+2015-06-10 18:25:03 INFO  - Writing dart file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/maket.txt
+2015-06-10 18:25:03 INFO  - dart file written
+2015-06-10 18:34:54 INFO  - allocate!!!!!!!!
+2015-06-10 18:34:54 INFO  - Voxel space informations:
+			Corner Inf	:	(286624.0, 583759.0, 15.4)
+			Corner Sup	:	(286724.0, 583859.0, 70.4)
+			Dimensions	:	(100, 100, 56)
+			Toricity 	:	false
+
+2015-06-10 18:34:54 INFO  - Saved libfile: /tmp/LasZipLibrary-3322479408562552459.tmp
+2015-06-10 18:34:54 INFO  - /tmp/LasZipLibrary-3322479408562552459.tmp
+2015-06-10 18:34:54 INFO  - Laz file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/paracou_als_100m.laz is opened
+2015-06-10 18:34:57 INFO  - writing file: /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/las.vox
+2015-06-10 18:35:00 INFO  - file written ( 2.0 s )
+2015-06-10 18:35:00 INFO  - las voxelisation finished in 10.0 s
+2015-06-10 18:35:13 INFO  - Reading DTM : /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/mnt.asc
+2015-06-10 18:35:13 INFO  - Writing triangles file
+2015-06-10 18:35:13 INFO  - Writing dart file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/maket.txt
+2015-06-10 18:35:13 INFO  - dart file written
+2015-06-10 18:41:20 INFO  - Computing dtm normals
+2015-06-10 18:48:55 INFO  - Computing dtm normals
+2015-06-10 18:53:56 INFO  - Computing dtm normals
+2015-06-10 18:57:18 INFO  - Computing dtm normals

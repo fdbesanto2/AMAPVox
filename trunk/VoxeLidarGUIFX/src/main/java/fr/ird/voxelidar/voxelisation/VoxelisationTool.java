@@ -125,7 +125,7 @@ public class VoxelisationTool implements Cancellable{
         return terrain;
     }
     
-    private Octree loadOctree(File pointcloudFile) {
+    private Octree loadOctree(File pointcloudFile, Mat4D vopMatrix) {
 
         Octree octree = null;
         
@@ -133,7 +133,7 @@ public class VoxelisationTool implements Cancellable{
 
             try {
                 logger.info("Loading point cloud file...");
-                octree = OctreeFactory.createOctreeFromPointFile(pointcloudFile, OctreeFactory.DEFAULT_MAXIMUM_POINT_NUMBER, false);
+                octree = OctreeFactory.createOctreeFromPointFile(pointcloudFile, OctreeFactory.DEFAULT_MAXIMUM_POINT_NUMBER, false, vopMatrix);
                 octree.build();
                 logger.info("Point cloud file loaded");
                 
@@ -145,7 +145,7 @@ public class VoxelisationTool implements Cancellable{
         return octree;
     }
     
-    private PointCloud loadPointcloud(File pointcloudFile) {
+    private PointCloud loadPointcloud(File pointcloudFile, Mat4D transfMatrix) {
 
         PointCloud ptCloud = null;
 
@@ -155,7 +155,7 @@ public class VoxelisationTool implements Cancellable{
                 ptCloud = new PointCloud();
                 
                 logger.info("Loading point cloud file...");
-                ptCloud.readFromFile(pointcloudFile);
+                ptCloud.readFromFile(pointcloudFile, transfMatrix);
                 logger.info("Point cloud file loaded");
                 
             } catch (Exception ex) {
@@ -187,9 +187,11 @@ public class VoxelisationTool implements Cancellable{
         
         if(pointcloudFilters != null){
             
+            if(vop == null){ vop = Mat4D.identity();}
+            
             pointcloudList = new ArrayList<>();
             for(PointcloudFilter filter : pointcloudFilters){
-                pointcloudList.add(loadOctree(filter.getPointcloudFile()));
+                pointcloudList.add(loadOctree(filter.getPointcloudFile(), vop));
             }
         }
         

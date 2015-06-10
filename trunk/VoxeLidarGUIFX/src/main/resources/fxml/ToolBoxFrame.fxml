@@ -131,7 +131,7 @@
                                                       </AnchorPane>
                                                       <Label layoutX="27.0" layoutY="355.0" text="Far" />
                                                       <TextField fx:id="textfieldCameraFar" alignment="CENTER" layoutX="61.0" layoutY="350.0" prefHeight="25.0" prefWidth="57.0" text="1000" />
-                                                      <TextField fx:id="textfieldCameraNear" alignment="CENTER" layoutX="61.0" layoutY="312.0" prefHeight="25.0" prefWidth="57.0" text="0.1" />
+                                                      <TextField fx:id="textfieldCameraNear" alignment="CENTER" layoutX="61.0" layoutY="312.0" prefHeight="25.0" prefWidth="57.0" text="1" />
                                                       <Label layoutX="21.0" layoutY="316.0" text="Near" />
                                                   </children>
                                               </AnchorPane>

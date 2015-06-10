@@ -151,6 +151,7 @@ public class JoglListener implements GLEventListener {
         camera.init(eye, target, up);
         camera.initOrtho(-((this.width-startX)/100), (this.width-startX)/100, this.height/100, -(this.height)/100, camera.getNearOrtho(), camera.getFarOrtho());
         
+        
         //sceneManager = new SceneManager();
         
         
@@ -215,13 +216,17 @@ public class JoglListener implements GLEventListener {
         scene.setWidth(width-startX);
         scene.setHeight(height);
         
+        if(isInit){
+            camera.setPerspective(60.0f, (1.0f*this.width-startX)/height, 1.0f, 1000.0f);
+        }
+        
         updateCamera();
     }
     
     public void updateCamera(){
         
         if(camera.isIsPerspective()){
-            camera.setPerspective(60.0f, (1.0f*this.width-startX)/height, 0.1f, 1000.0f);
+            camera.setPerspective(60.0f, (1.0f*this.width-startX)/height, camera.getNearPersp(), camera.getFarPersp());
         }else{
             camera.initOrtho(-((this.width-startX)/100), (this.width-startX)/100, this.height/100, -(this.height)/100, camera.getNearOrtho(), camera.getFarOrtho());
             camera.setOrthographic(camera.getNearOrtho(), camera.getFarOrtho());
@@ -276,7 +281,7 @@ public class JoglListener implements GLEventListener {
         
         if(isInit){
             
-            scene.setLightPosition(new Point3F(0, 0, scene.getVoxelSpace().centerZ+scene.getVoxelSpace().widthZ+100));
+            scene.setLightPosition(new Point3F(scene.getVoxelSpace().centerX, scene.getVoxelSpace().centerY, scene.getVoxelSpace().centerZ+scene.getVoxelSpace().widthZ+100));
             
             int id = scene.getShaderByName("instanceLightedShader");
             Shader s = scene.getShadersList().get(id);

@@ -16,8 +16,6 @@ package fr.ird.voxelidar.engine3d.mesh;
 
 import com.jogamp.opengl.GL3;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
 import java.util.ArrayList;
 
 /**
@@ -70,7 +68,7 @@ public class SimpleGLMesh extends GLMesh{
 
     @Override
     public void draw(GL3 gl) {
-        gl.glDrawElements(GL3.GL_TRIANGLES, vertexCount, GL3.GL_UNSIGNED_SHORT, 0);
+        gl.glDrawElements(GL3.GL_TRIANGLES, vertexCount, GL3.GL_UNSIGNED_INT, 0);
     }
     
 }

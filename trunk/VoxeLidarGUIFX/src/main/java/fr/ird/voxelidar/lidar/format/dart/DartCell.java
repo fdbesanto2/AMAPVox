@@ -14,6 +14,7 @@ public class DartCell {
     public static final int CELL_TYPE_EMPTY = 0;
     public static final int CELL_TYPE_OPAQUE_AIR = 1;
     public static final int CELL_TYPE_OPAQUE_GROUND = 2;
+    public static final int CELL_TYPE_DEM_GROUND = 7;
     public static final int CELL_TYPE_OPAQUE_WATER = 3;
     public static final int CELL_TYPE_OPAQUE_ROAD = 4;
     public static final int CELL_TYPE_TURBID_CROWN = 6;

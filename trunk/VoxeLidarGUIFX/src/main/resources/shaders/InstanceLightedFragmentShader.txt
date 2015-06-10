@@ -21,7 +21,7 @@ void main()
 
     vec3 ambient = mambient*lambient;
 
-    vec3 surf2light = normalize(lightPosition-fragPosition);
+    vec3 surf2light = normalize(vec3(0, 0, lightPosition.z) -fragPosition);
     vec3 norm = normalize(vec3(1.0, 1.0, 1.0));
     float dcont = max(0.0, dot(norm, surf2light));
     vec3 diffuse=dcont*mdiffuse*ldiffuse;

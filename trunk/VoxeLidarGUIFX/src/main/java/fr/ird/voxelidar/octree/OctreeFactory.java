@@ -5,7 +5,9 @@
  */
 package fr.ird.voxelidar.octree;
 
+import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
+import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,7 +28,7 @@ public class OctreeFactory {
     public final static int DEFAULT_MAXIMUM_POINT_NUMBER = 50;
     
     
-    public static Octree createOctreeFromPointFile(File file, int maximumPointNumber, boolean sortPoints){
+    public static Octree createOctreeFromPointFile(File file, int maximumPointNumber, boolean sortPoints, Mat4D transfMatrix){
         
         List<Point3F> pointList = new ArrayList<>();
         
@@ -63,7 +65,9 @@ public class OctreeFactory {
                     return null;
                 }
                 
-                pointList.add(new Point3F(Float.valueOf(split[0]), Float.valueOf(split[1]), Float.valueOf(split[2])));
+                Vec4D transformedPoint = Mat4D.multiply(transfMatrix, new Vec4D(Float.valueOf(split[0]), Float.valueOf(split[1]), Float.valueOf(split[2]), 1));
+                
+                pointList.add(new Point3F((float) transformedPoint.x, (float) transformedPoint.y, (float) transformedPoint.z));
                 count++;
             }
             

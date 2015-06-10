@@ -7,6 +7,7 @@ package fr.ird.voxelidar.lidar.format.dtm;
 
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
+import fr.ird.voxelidar.engine3d.math.point.Point2F;
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec2F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
@@ -216,17 +217,46 @@ public class RegularDtm {
         return z;
     }
     
-    public void setLimits(Point3F min, Point3F max){
+    public void setLimits(Point3F min, Point3F max, int offset){
         
-        Vec4D maxPoint = Mat4D.multiply(Mat4D.inverse(transformationMatrix), new Vec4D(min.x, min.y, min.z, 1));
-        Vec4D minPoint = Mat4D.multiply(Mat4D.inverse(transformationMatrix), new Vec4D(max.x, max.y, max.z, 1));
+        //calculate the 4 corners
+        
+        min.x -= (offset*cellSize);
+        min.y -= (offset*cellSize);
+        
+        max.x += (offset*cellSize);
+        max.y += (offset*cellSize);
+        
+        Vec4D corner1 = Mat4D.multiply(Mat4D.inverse(transformationMatrix), new Vec4D(min.x, min.y, min.z, 1));
+        Vec4D corner2 = Mat4D.multiply(Mat4D.inverse(transformationMatrix),  new Vec4D(max.x, min.y, min.z, 1));
+        Vec4D corner3 = Mat4D.multiply(Mat4D.inverse(transformationMatrix), new Vec4D(max.x, max.y, max.z, 1));
+        Vec4D corner4 = Mat4D.multiply(Mat4D.inverse(transformationMatrix),  new Vec4D(min.x, max.y, min.z, 1));
+        
+        float xMin = (float) corner1.x;
+        float yMin = (float) corner1.y;
+        float xMax = (float) corner3.x;
+        float yMax = (float) corner3.y;
+        
+        if(corner2.x < xMin){xMin = (float) corner2.x;}
+        if(corner2.x > xMax){xMax = (float) corner2.x;}
+        if(corner2.y < yMin){yMin = (float) corner2.y;}
+        if(corner2.y > yMax){yMax = (float) corner2.y;}
+        if(corner4.x < xMin){xMin = (float) corner4.x;}
+        if(corner4.x > xMax){xMax = (float) corner4.x;}
+        if(corner4.y < yMin){yMin = (float) corner4.y;}
+        if(corner4.y > yMax){yMax = (float) corner4.y;}
+        
+        
+        Point2F minPoint = new Point2F(xMin, yMin);
+        Point2F maxPoint = new Point2F(xMax, yMax);
+        
                 
         indiceXMin = (int)((minPoint.x-xLeftLowerCorner)/cellSize);
         if(indiceXMin < 0){
             indiceXMin = -1;
         }
         
-        indiceYMin = (int)(rowNumber-(minPoint.y-yLeftLowerCorner)/cellSize);
+        indiceYMin = (int)(rowNumber-(maxPoint.y-yLeftLowerCorner)/cellSize);
         if(indiceYMin < 0){
             indiceYMin = -1;
         }
@@ -236,7 +266,7 @@ public class RegularDtm {
             indiceXMax = -1;
         }
         
-        indiceYMax = (int)(rowNumber-(maxPoint.y-yLeftLowerCorner)/cellSize);
+        indiceYMax = (int)(rowNumber-(minPoint.y-yLeftLowerCorner)/cellSize);
         if(indiceYMax > zArray[0].length){
             indiceYMax = -1;
         }
@@ -308,10 +338,10 @@ public class RegularDtm {
                         
                         point1 = get1dFrom2d(i, j);
                         
-                        if(i+1 < width){
+                        if(i+1 < (indiceXMax)){
                             point2 = get1dFrom2d(i+1, j);
                             
-                            if(j+1 < height){
+                            if(j+1 < (indiceYMax)){
                                 point3 = get1dFrom2d(i+1, j+1);
                                 point4 = get1dFrom2d(i, j+1);
                                 

@@ -38,7 +38,7 @@ public class InstancedGLMesh extends GLMesh{
 
     @Override
     public void draw(GL3 gl) {
-        gl.glDrawElementsInstanced(GL3.GL_TRIANGLES, vertexCount, GL3.GL_UNSIGNED_SHORT, 0, instanceNumber);
+        gl.glDrawElementsInstanced(GL3.GL_TRIANGLES, vertexCount, GL3.GL_UNSIGNED_INT, 0, instanceNumber);
     }
 
     @Override

@@ -9,7 +9,6 @@ import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL3;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,8 @@ import java.util.List;
 public abstract class GLMesh {
     
     public static final int FLOAT_SIZE = Buffers.SIZEOF_FLOAT;
-    public static final int SHORT_SIZE = Buffers.SIZEOF_SHORT;
+    public static final int INTEGER_SIZE = Buffers.SIZEOF_INT;
+    //public static final int SHORT_SIZE = Buffers.SIZEOF_SHORT;
     public static final int DEFAULT_SIZE = -1;
     
     long offset = 0;
@@ -28,7 +28,7 @@ public abstract class GLMesh {
     
     public FloatBuffer vertexBuffer;
     public FloatBuffer normalBuffer;
-    public ShortBuffer indexBuffer;
+    public IntBuffer indexBuffer;
     public FloatBuffer colorBuffer;
     public int vertexCount;
     
@@ -248,7 +248,7 @@ public abstract class GLMesh {
     protected void sendIBOData(GL3 gl){
         
         gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, iboId);
-            gl.glBufferData(GL3.GL_ELEMENT_ARRAY_BUFFER, indexBuffer.capacity()*SHORT_SIZE, indexBuffer, GL3.GL_STATIC_DRAW);
+            gl.glBufferData(GL3.GL_ELEMENT_ARRAY_BUFFER, indexBuffer.capacity()*INTEGER_SIZE, indexBuffer, GL3.GL_STATIC_DRAW);
         gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, 0);
     }
     

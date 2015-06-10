@@ -74,7 +74,7 @@ public class GLMeshFactory {
         -0.577349f, -0.577349f, 0.577349f,
         -0.577349f, 0.577349f, 0.577349f};
         
-        short indexData[] = new short[]
+        int indexData[] = new int[]
         {0, 1, 2,
         4, 7, 6,
         0, 4, 5,
@@ -93,7 +93,7 @@ public class GLMeshFactory {
         GLMesh cube = new SimpleGLMesh();
         //cube.aoBuffer =  Buffers.newDirectFloatBuffer(aoData);
         cube.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
-        cube.indexBuffer = Buffers.newDirectShortBuffer(indexData);
+        cube.indexBuffer = Buffers.newDirectIntBuffer(indexData);
         cube.vertexCount = indexData.length;
         cube.normalBuffer  = Buffers.newDirectFloatBuffer(normalData);
         
@@ -116,7 +116,7 @@ public class GLMeshFactory {
          0, 0,
          1, 0};
         
-        short indexData[] = new short[]
+        int indexData[] = new int[]
         {0, 1, 3,
         2, 0, 3};
         
@@ -130,7 +130,7 @@ public class GLMeshFactory {
         */
         plane.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
         plane.textureCoordinatesBuffer = Buffers.newDirectFloatBuffer(textCoordData);
-        plane.indexBuffer = Buffers.newDirectShortBuffer(indexData);
+        plane.indexBuffer = Buffers.newDirectIntBuffer(indexData);
         plane.vertexCount = indexData.length;
         
         return plane;
@@ -141,7 +141,7 @@ public class GLMeshFactory {
                 
         int pointsNumber = (int) (size / resolution);
         float pointsArray[] = new float[12*pointsNumber];
-        short indexArray[] = new short[12*pointsNumber];
+        int indexArray[] = new int[12*pointsNumber];
         int pointsArrayIndex = 0, indexArrayIndex = 0;
         
         /**grid for x axis**/
@@ -159,7 +159,7 @@ public class GLMeshFactory {
             pointsArrayIndex++;
             
             
-            indexArray[indexArrayIndex] = (short)(pointsArrayIndex-1);
+            indexArray[indexArrayIndex] = (pointsArrayIndex-1);
             indexArrayIndex++;
             
             /**second point**/
@@ -174,7 +174,7 @@ public class GLMeshFactory {
             pointsArrayIndex++;
             
             
-            indexArray[indexArrayIndex] = (short)(pointsArrayIndex-1);
+            indexArray[indexArrayIndex] = (pointsArrayIndex-1);
             indexArrayIndex++;
         }
         
@@ -193,7 +193,7 @@ public class GLMeshFactory {
             pointsArrayIndex++;
             
             
-            indexArray[indexArrayIndex] = (short) (pointsArrayIndex-1);
+            indexArray[indexArrayIndex] =  (pointsArrayIndex-1);
             indexArrayIndex++;
             
             /**second point**/
@@ -208,13 +208,13 @@ public class GLMeshFactory {
             pointsArrayIndex++;
             
             
-            indexArray[indexArrayIndex] = (short)(pointsArrayIndex-1);
+            indexArray[indexArrayIndex] = (pointsArrayIndex-1);
             indexArrayIndex++;
         }
         
         Grid grid = new Grid();
         grid.vertexBuffer = Buffers.newDirectFloatBuffer(pointsArray);
-        grid.indexBuffer = Buffers.newDirectShortBuffer(indexArray);
+        grid.indexBuffer = Buffers.newDirectIntBuffer(indexArray);
         grid.vertexCount = indexArrayIndex;
         
         return grid;
@@ -244,7 +244,7 @@ public class GLMeshFactory {
             1.0f,0.0f,0.0f
         };
         
-        short indexData[] = new short[]
+        int indexData[] = new int[]
         {
             0, 1,
             2, 3,
@@ -253,7 +253,7 @@ public class GLMeshFactory {
         
         mesh.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
         mesh.colorBuffer = Buffers.newDirectFloatBuffer(colorData);
-        mesh.indexBuffer = Buffers.newDirectShortBuffer(indexData);
+        mesh.indexBuffer = Buffers.newDirectIntBuffer(indexData);
         
         mesh.vertexCount = indexData.length;
         
@@ -284,7 +284,7 @@ public class GLMeshFactory {
                                         .getChild("Group")
                                         .getChildren("Shape");
             
-            List<Short> faces = new ArrayList<>();
+            List<Integer> faces = new ArrayList<>();
             List<Vec3F> vertices = new ArrayList<>();
             List<Vec3F> normales = new ArrayList<>();
             Map<Integer, Vec3F> colors = new HashMap<>();
@@ -302,7 +302,7 @@ public class GLMeshFactory {
                 
                 
                 for(String s : coordinatesIndicesArray){
-                    short indice = Short.valueOf(s);
+                    int indice = Integer.valueOf(s);
                     
                     if(indice != -1){
                         faces.add(indice);
@@ -408,7 +408,7 @@ public class GLMeshFactory {
         ArrayList<Vec3F> vertices = new ArrayList<>();
         ArrayList<Vec3F> normales = new ArrayList<>();
         Map<Integer, Vec3F> colors = new HashMap<>();
-        ArrayList<Short> faces = new ArrayList<>();
+        ArrayList<Integer> faces = new ArrayList<>();
         Map<String, Vec3F> materials = new HashMap<>();
         
         try {
@@ -465,9 +465,9 @@ public class GLMeshFactory {
                     colors.put(face.y-1, currentColor);
                     colors.put(face.z-1, currentColor);
                     
-                    faces.add((short)(face.x-1));
-                    faces.add((short)(face.y-1));
-                    faces.add((short)(face.z-1));
+                    faces.add(face.x-1);
+                    faces.add(face.y-1);
+                    faces.add(face.z-1);
                     
                 }else if(line.startsWith("usemtl ")){
                     currentColor = materials.get(line.split(" ")[1]);
@@ -499,7 +499,7 @@ public class GLMeshFactory {
         return mesh;
     }
     
-    public static GLMesh createMesh(ArrayList<Vec3F> points, ArrayList<Short> faces){
+    public static GLMesh createMesh(ArrayList<Vec3F> points, ArrayList<Integer> faces){
         
         GLMesh mesh = new SimpleGLMesh();
         
@@ -519,7 +519,7 @@ public class GLMeshFactory {
             vertexData[i+2] = points.get(i).z;
         }
         */
-        short indexData[] = new short[faces.size()];
+        int indexData[] = new int[faces.size()];
         
         for(int i=0 ; i<faces.size() ; i ++){
             
@@ -527,7 +527,7 @@ public class GLMeshFactory {
         }
         
         mesh.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
-        mesh.indexBuffer = Buffers.newDirectShortBuffer(indexData);
+        mesh.indexBuffer = Buffers.newDirectIntBuffer(indexData);
         
         mesh.vertexCount = indexData.length;
         
@@ -576,16 +576,16 @@ public class GLMeshFactory {
             normalData[j+2] = meanNormale.z;
         }
         
-        short indexData[] = new short[faces.size()*3];
+        int indexData[] = new int[faces.size()*3];
         for(int i=0, j=0 ; i<faces.size(); i++, j+=3){
             
-            indexData[j] = (short) faces.get(i).getPoint1();
-            indexData[j+1] = (short) faces.get(i).getPoint2();
-            indexData[j+2] = (short) faces.get(i).getPoint3();
+            indexData[j] = faces.get(i).getPoint1();
+            indexData[j+1] = faces.get(i).getPoint2();
+            indexData[j+2] = faces.get(i).getPoint3();
         }
         
         mesh.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
-        mesh.indexBuffer = Buffers.newDirectShortBuffer(indexData);
+        mesh.indexBuffer = Buffers.newDirectIntBuffer(indexData);
         mesh.normalBuffer = Buffers.newDirectFloatBuffer(normalData);
         mesh.vertexCount = indexData.length;
         
@@ -607,7 +607,7 @@ public class GLMeshFactory {
         return mesh;
     }
     
-    public static GLMesh createMeshWithNormales(List<Vec3F> points, List<Vec3F> normales, List<Short> faces){
+    public static GLMesh createMeshWithNormales(List<Vec3F> points, List<Vec3F> normales, List<Integer> faces){
         
         GLMesh mesh = new SimpleGLMesh();
         
@@ -628,7 +628,7 @@ public class GLMeshFactory {
             normalData[j+2] = normales.get(i).z;
         }
         
-        short indexData[] = new short[faces.size()];
+        int indexData[] = new int[faces.size()];
         
         for(int i=0 ; i<faces.size() ; i ++){
             
@@ -636,7 +636,7 @@ public class GLMeshFactory {
         }
         
         mesh.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
-        mesh.indexBuffer = Buffers.newDirectShortBuffer(indexData);
+        mesh.indexBuffer = Buffers.newDirectIntBuffer(indexData);
         mesh.normalBuffer = Buffers.newDirectFloatBuffer(normalData);
         mesh.vertexCount = indexData.length;
         

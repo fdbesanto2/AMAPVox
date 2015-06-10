@@ -6,7 +6,6 @@
 package fr.ird.voxelidar.lidar.format.dart;
 
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
-import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData;
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.math.point.Point3I;
@@ -19,7 +18,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -114,6 +112,10 @@ public class DartWriter {
                                     turbids+=" "+cell.getTurbids()[i].LAI+" "+cell.getTurbids()[i].leafPhaseFunction+" 0";
                                 }
                                 
+                            }
+                            
+                            if(cell.getNbTurbids() == 0){
+                                turbids += " 0";
                             }
 
                             String figures ="";
@@ -229,7 +231,14 @@ public class DartWriter {
             dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(1);
             
             if(Float.isNaN(densite) || densite == 0){
-                dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_EMPTY);
+                
+                if(nbFigures == 0){
+                    dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_EMPTY);
+                }else{
+                    dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_DEM_GROUND);
+                    dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(0);
+                }
+                
                 densite = 0f;
             }else{
                 if(nbFigures > 0){

@@ -47,7 +47,6 @@ public class VoxelSpace extends SceneObject{
     
     public static final int FLOAT_SIZE = Buffers.SIZEOF_FLOAT;
     public static final int INT_SIZE = Buffers.SIZEOF_INT;
-    public static final int SHORT_SIZE = Buffers.SIZEOF_SHORT;
     
     public static final int VOXELSPACE_FORMAT1 = 1;
     public static final int VOXELSPACE_FORMAT2 = 2;

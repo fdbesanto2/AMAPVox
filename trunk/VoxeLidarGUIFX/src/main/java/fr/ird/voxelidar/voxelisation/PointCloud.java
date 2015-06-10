@@ -15,7 +15,9 @@ For further information, please contact Gregoire Vincent.
 
 package fr.ird.voxelidar.voxelisation;
 
+import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
+import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import fr.ird.voxelidar.voxelisation.raytracing.BoundingBox3F;
 import java.io.BufferedReader;
 import java.io.File;
@@ -84,20 +86,18 @@ public class PointCloud {
         //return Collections.binarySearch(points, point);
     }
     
-    public void readFromFile(File file){
+    public void readFromFile(File file, Mat4D transfMatrix){
         
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 points = new ArrayList<>();
                 String line;
                 while((line = reader.readLine()) != null){
+                    
                     String[] split = line.split(",");
-                    /*
-                    Point3f point = new Point3f(Math.round(Float.valueOf(split[0])*1000)/1000.0f,
-                                                    Math.round(Float.valueOf(split[1])*1000)/1000.0f,
-                                                    Math.round(Float.valueOf(split[2])*1000)/1000.0f);
-                    */
-                    Point3F point = new Point3F(Float.valueOf(split[0]), Float.valueOf(split[1]), Float.valueOf(split[2]));
-                    points.add(point);
+                    
+                    Vec4D transformedPoint = Mat4D.multiply(transfMatrix, new Vec4D(Float.valueOf(split[0]), Float.valueOf(split[1]), Float.valueOf(split[2]), 1));
+                
+                    points.add(new Point3F((float) transformedPoint.x, (float) transformedPoint.y, (float) transformedPoint.z));
                 }
             
             long startTime = System.currentTimeMillis();

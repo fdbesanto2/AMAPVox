@@ -188,6 +188,8 @@ public class MainFrameController implements Initializable {
     private AnchorPane anchorPaneRasterParameters;
     @FXML
     private CheckBox checkboxFitRasterToVoxelSpace;
+    @FXML
+    private TextField textfieldRasterFittingMargin;
 
     @FXML
     private void onActionMenuItemUpdate(ActionEvent event) {
@@ -332,6 +334,8 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonOpenTransformationMatrixFile(ActionEvent event) {
         
+        fileChooserOpenVopMatrixFile.setInitialDirectory(listViewVoxelsFiles.getSelectionModel().getSelectedItem().getParentFile());
+        
         File selectedFile = fileChooserOpenVopMatrixFile.showOpenDialog(stage);
         
         if(selectedFile != null){
@@ -353,6 +357,8 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionButtonOpenRasterFile(ActionEvent event) {
+        
+        fileChooserOpenDTMFile.setInitialDirectory(listViewVoxelsFiles.getSelectionModel().getSelectedItem().getParentFile());
         
         File selectedFile = fileChooserOpenDTMFile.showOpenDialog(stage);
         
@@ -1236,6 +1242,7 @@ public class MainFrameController implements Initializable {
         listViewTaskList.setOnDragOver(dragOverEvent);
         listViewMultiResVoxelFiles.setOnDragOver(dragOverEvent);
         listViewVoxelsFiles.setOnDragOver(dragOverEvent);
+        textfieldRasterFilePath.setOnDragOver(dragOverEvent);
 
         setDragDroppedSingleFileEvent(textFieldInputFileALS);
         setDragDroppedSingleFileEvent(textFieldTrajectoryFileALS);
@@ -1245,6 +1252,7 @@ public class MainFrameController implements Initializable {
         setDragDroppedSingleFileEvent(textFieldOutputFileMerging);
         setDragDroppedSingleFileEvent(textfieldDTMPath);
         setDragDroppedSingleFileEvent(textFieldOutputFileGroundEnergy);
+        setDragDroppedSingleFileEvent(textfieldRasterFilePath);
 
         listViewTaskList.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
@@ -1606,6 +1614,8 @@ public class MainFrameController implements Initializable {
         final File dtmFile = new File(textfieldRasterFilePath.getText());
         final Matrix4d dtmTransfMatrix = rasterTransfMatrix;
         final boolean fitDTMToVoxelSpace = checkboxFitRasterToVoxelSpace.isSelected();
+        final int mntFittingMargin = Integer.valueOf(textfieldRasterFittingMargin.getText());
+        final boolean transform  = checkboxUseTransformationMatrix.isSelected();
         
         Service s = new Service() {
 
@@ -1636,7 +1646,7 @@ public class MainFrameController implements Initializable {
                                 
                                 RegularDtm dtm = DtmLoader.readFromAscFile(dtmFile);
             
-                                if(dtmTransfMatrix != null){
+                                if(transform && dtmTransfMatrix != null){
                                     dtm.setTransformationMatrix(MatrixConverter.convertMatrix4dToMat4D(dtmTransfMatrix));
                                 }
                                 
@@ -1644,11 +1654,12 @@ public class MainFrameController implements Initializable {
                                     
                                     VoxelSpaceHeader header = VoxelSpaceHeader.readVoxelFileHeader(voxelFile);
                                     dtm.setLimits(new Point3F((float)header.bottomCorner.x, (float)header.bottomCorner.y, (float)header.bottomCorner.z), 
-                                                  new Point3F((float)header.topCorner.x, (float)header.topCorner.y, (float)header.topCorner.z));
+                                                  new Point3F((float)header.topCorner.x, (float)header.topCorner.y, (float)header.topCorner.z), mntFittingMargin);
                                 }
                                 
                                 updateMessage("Converting raster to mesh");
                                 dtm.buildMesh();
+                                //dtm.exportObj(new File("/home/calcul/Documents/Julien/test.obj"));
                                 
                                 joglWindow.getJoglContext().getScene().setDtm(dtm);
                             }
@@ -4365,6 +4376,11 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonGetBoundingBox(ActionEvent event) {
 
+        Mat4D vopMatrixTmp = MatrixConverter.convertMatrix4dToMat4D(vopMatrix);
+        if(vopMatrixTmp == null){vopMatrixTmp = Mat4D.identity();}
+        
+        final Mat4D transfMatrix = vopMatrixTmp;
+        
         ObservableList<Node> children = anchorpanePointCloudFiltering.getChildren();
 
         List<PointCloudFilterPaneComponent> tempList = new ArrayList<>();
@@ -4397,7 +4413,7 @@ public class MainFrameController implements Initializable {
                                 if (Files.exists(file.toPath()) && file.isFile()) {
 
                                     PointCloud pc = new PointCloud();
-                                    pc.readFromFile(file);
+                                    pc.readFromFile(file, transfMatrix);
 
                                     BoundingBox3F boundingBox2;
                                     if (count == 0) {

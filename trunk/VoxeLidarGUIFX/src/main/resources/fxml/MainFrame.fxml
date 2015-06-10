@@ -523,6 +523,8 @@
                                                                      </children>
                                                                   </AnchorPane>
                                                                   <CheckBox fx:id="checkboxFitRasterToVoxelSpace" layoutX="99.0" layoutY="217.0" mnemonicParsing="false" selected="true" text="Fit to voxel space" />
+                                                                  <Label layoutX="251.0" layoutY="220.0" text="Margin (cell number)" />
+                                                                  <TextField fx:id="textfieldRasterFittingMargin" layoutX="395.0" layoutY="215.0" prefHeight="25.0" prefWidth="84.0" text="0" />
                                                                </children>
                                                             </AnchorPane>
                                                             <TabPane prefHeight="412.0" prefWidth="395.0" tabClosingPolicy="UNAVAILABLE">
