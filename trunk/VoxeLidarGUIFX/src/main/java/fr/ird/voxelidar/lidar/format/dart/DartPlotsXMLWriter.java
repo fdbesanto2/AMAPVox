@@ -64,7 +64,7 @@ public class DartPlotsXMLWriter implements Cancellable{
         try {
             
             XMLStreamWriter writer = new IndentingXMLStreamWriter(factory.createXMLStreamWriter(new FileWriter(plotFile)));
-            writer.writeStartDocument("UTF-8", "1.0");
+            writer.writeStartDocument();
             
             writer.writeStartElement("DartFile");
             

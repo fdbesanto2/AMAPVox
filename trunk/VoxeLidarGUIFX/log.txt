@@ -3084,3 +3084,514 @@ java.lang.NumberFormatException: For input string: "SPACE"
 2015-06-10 18:48:55 INFO  - Computing dtm normals
 2015-06-10 18:53:56 INFO  - Computing dtm normals
 2015-06-10 18:57:18 INFO  - Computing dtm normals
+2015-06-11 09:07:15 INFO  - allocate!!!!!!!!
+2015-06-11 09:07:15 INFO  - Voxel space informations:
+			Corner Inf	:	(286624.0, 583759.0, 15.4)
+			Corner Sup	:	(286724.0, 583859.0, 70.4)
+			Dimensions	:	(100, 100, 56)
+			Toricity 	:	false
+
+2015-06-11 09:07:15 INFO  - Saved libfile: /tmp/LasZipLibrary-6151151274220811507.tmp
+2015-06-11 09:07:15 INFO  - /tmp/LasZipLibrary-6151151274220811507.tmp
+2015-06-11 09:07:15 INFO  - Laz file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/paracou_als_100m.laz is opened
+2015-06-11 09:07:18 INFO  - writing file: /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/las.vox
+2015-06-11 09:07:21 INFO  - file written ( 3.0 s )
+2015-06-11 09:07:21 INFO  - las voxelisation finished in 9.0 s
+2015-06-11 09:07:34 INFO  - Reading DTM : /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/mnt.asc
+2015-06-11 09:07:34 INFO  - Writing triangles file
+2015-06-11 09:07:34 INFO  - Writing dart file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/maket.txt
+2015-06-11 09:07:35 INFO  - dart file written
+2015-06-11 09:09:59 INFO  - allocate!!!!!!!!
+2015-06-11 09:09:59 INFO  - Voxel space informations:
+			Corner Inf	:	(286624.0, 583759.0, 15.4)
+			Corner Sup	:	(286724.0, 583859.0, 70.4)
+			Dimensions	:	(100, 100, 56)
+			Toricity 	:	false
+
+2015-06-11 09:09:59 INFO  - Saved libfile: /tmp/LasZipLibrary-2123746295525116125.tmp
+2015-06-11 09:09:59 INFO  - /tmp/LasZipLibrary-2123746295525116125.tmp
+2015-06-11 09:09:59 INFO  - Laz file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/paracou_als_100m.laz is opened
+2015-06-11 09:10:01 INFO  - writing file: /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/las.vox
+2015-06-11 09:10:04 INFO  - file written ( 2.0 s )
+2015-06-11 09:10:04 INFO  - las voxelisation finished in 9.0 s
+2015-06-11 09:10:14 INFO  - Reading DTM : /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/mnt.asc
+2015-06-11 09:10:14 INFO  - Writing triangles file
+2015-06-11 09:10:15 INFO  - Writing dart file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/maket.txt
+2015-06-11 09:10:15 INFO  - dart file written
+2015-06-11 09:27:28 INFO  - allocate!!!!!!!!
+2015-06-11 09:27:28 INFO  - Voxel space informations:
+			Corner Inf	:	(286624.0, 583759.0, 15.4)
+			Corner Sup	:	(286724.0, 583859.0, 70.4)
+			Dimensions	:	(100, 100, 56)
+			Toricity 	:	false
+
+2015-06-11 09:27:28 INFO  - Saved libfile: /tmp/LasZipLibrary-7646250294926772190.tmp
+2015-06-11 09:27:28 INFO  - /tmp/LasZipLibrary-7646250294926772190.tmp
+2015-06-11 09:27:28 INFO  - Laz file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/paracou_als_100m.laz is opened
+2015-06-11 09:27:31 INFO  - writing file: /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/las.vox
+2015-06-11 09:27:33 INFO  - file written ( 2.0 s )
+2015-06-11 09:27:33 INFO  - las voxelisation finished in 9.0 s
+2015-06-11 09:27:44 INFO  - Reading DTM : /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/mnt.asc
+2015-06-11 09:27:45 INFO  - Writing triangles file
+2015-06-11 09:27:45 INFO  - Writing dart file /home/calcul/DART_5.5.3/user_data/simulations/amap_dart_sims_paracou/maket.txt
+2015-06-11 09:27:45 INFO  - dart file written
+2015-06-11 10:35:16 ERROR - Cannot read file
+java.io.IOException: Stream closed
+	at sun.nio.cs.StreamDecoder.ensureOpen(StreamDecoder.java:46)
+	at sun.nio.cs.StreamDecoder.read(StreamDecoder.java:148)
+	at java.io.InputStreamReader.read(InputStreamReader.java:184)
+	at java.io.BufferedReader.fill(BufferedReader.java:161)
+	at java.io.BufferedReader.readLine(BufferedReader.java:324)
+	at java.io.BufferedReader.readLine(BufferedReader.java:389)
+	at fr.ird.voxelidar.transmittance.Turtle.<init>(Turtle.java:33)
+	at fr.ird.voxelidar.transmittance.PadTransmittance.<init>(PadTransmittance.java:65)
+	at fr.ird.voxelidar.FXPrincipal.start(FXPrincipal.java:27)
+	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$159(LauncherImpl.java:863)
+	at com.sun.javafx.application.LauncherImpl$$Lambda$58/1214515716.run(Unknown Source)
+	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$172(PlatformImpl.java:326)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$51/157456214.run(Unknown Source)
+	at com.sun.javafx.application.PlatformImpl.lambda$null$170(PlatformImpl.java:295)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$53/636386146.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.application.PlatformImpl.lambda$runLater$171(PlatformImpl.java:294)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$52/1659791576.run(Unknown Source)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$48(GtkApplication.java:139)
+	at com.sun.glass.ui.gtk.GtkApplication$$Lambda$41/1345636186.run(Unknown Source)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-11 10:37:22 ERROR - Cannot read file
+java.io.IOException: Stream closed
+	at sun.nio.cs.StreamDecoder.ensureOpen(StreamDecoder.java:46)
+	at sun.nio.cs.StreamDecoder.read(StreamDecoder.java:148)
+	at java.io.InputStreamReader.read(InputStreamReader.java:184)
+	at java.io.BufferedReader.fill(BufferedReader.java:161)
+	at java.io.BufferedReader.readLine(BufferedReader.java:324)
+	at java.io.BufferedReader.readLine(BufferedReader.java:389)
+	at fr.ird.voxelidar.transmittance.Turtle.<init>(Turtle.java:33)
+	at fr.ird.voxelidar.transmittance.PadTransmittance.<init>(PadTransmittance.java:65)
+	at fr.ird.voxelidar.FXPrincipal.start(FXPrincipal.java:27)
+	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$159(LauncherImpl.java:863)
+	at com.sun.javafx.application.LauncherImpl$$Lambda$58/246276576.run(Unknown Source)
+	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$172(PlatformImpl.java:326)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$51/157456214.run(Unknown Source)
+	at com.sun.javafx.application.PlatformImpl.lambda$null$170(PlatformImpl.java:295)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$53/1778411920.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.application.PlatformImpl.lambda$runLater$171(PlatformImpl.java:294)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$52/1659791576.run(Unknown Source)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$48(GtkApplication.java:139)
+	at com.sun.glass.ui.gtk.GtkApplication$$Lambda$41/1345636186.run(Unknown Source)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-11 10:53:00 INFO  - Turtle built with 406 sectors
+2015-06-11 10:53:00 INFO  - ===== /home/calcul/Documents/Julien/Projet_nouragues/output2/hobo_1_100m.laz_multires_.vox =====
+2015-06-11 10:53:00 INFO  - header: VOXEL SPACE
+2015-06-11 10:53:00 INFO  - VOXEL SPACE
+2015-06-11 10:53:00 INFO  - Min corner: (313211.0, 451557.0, 68.16000366210938)
+2015-06-11 10:53:00 INFO  - Max corner: (313411.0, 451757.0, 160.52000427246094)
+2015-06-11 10:53:00 INFO  - Splitting: (200, 200, 93)
+2015-06-11 10:53:00 INFO  - allocate Voxels
+2015-06-11 10:53:00 INFO  - allocate MNT
+2015-06-11 10:53:00 INFO  - Data parsing
+2015-06-11 10:53:00 ERROR - Error happened when reading file : /home/calcul/Documents/Julien/Projet_nouragues/output2/hobo_1_100m.laz_multires_.vox
+java.lang.NumberFormatException: For input string: "i"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:580)
+	at java.lang.Integer.valueOf(Integer.java:766)
+	at fr.ird.voxelidar.transmittance.PadTransmittance.parseLineData(PadTransmittance.java:206)
+	at fr.ird.voxelidar.transmittance.PadTransmittance.readData(PadTransmittance.java:183)
+	at fr.ird.voxelidar.transmittance.PadTransmittance.processOneFile(PadTransmittance.java:74)
+	at fr.ird.voxelidar.FXPrincipal.start(FXPrincipal.java:28)
+	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$159(LauncherImpl.java:863)
+	at com.sun.javafx.application.LauncherImpl$$Lambda$58/2114960529.run(Unknown Source)
+	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$172(PlatformImpl.java:326)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$50/157456214.run(Unknown Source)
+	at com.sun.javafx.application.PlatformImpl.lambda$null$170(PlatformImpl.java:295)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$53/1801272036.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.application.PlatformImpl.lambda$runLater$171(PlatformImpl.java:294)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$52/1659791576.run(Unknown Source)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$48(GtkApplication.java:139)
+	at com.sun.glass.ui.gtk.GtkApplication$$Lambda$41/1345636186.run(Unknown Source)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-11 10:53:00 INFO  - nb positions= 400
+2015-06-11 10:53:08 INFO  - Computation of transmittance
+2015-06-11 10:53:51 INFO  - Turtle built with 406 sectors
+2015-06-11 10:53:51 INFO  - ===== /home/calcul/Documents/Julien/Projet_nouragues/output2/hobo_1_100m.laz_multires_.vox =====
+2015-06-11 10:53:51 INFO  - header: VOXEL SPACE
+2015-06-11 10:53:51 INFO  - VOXEL SPACE
+2015-06-11 10:53:51 INFO  - Min corner: (313211.0, 451557.0, 68.16000366210938)
+2015-06-11 10:53:51 INFO  - Max corner: (313411.0, 451757.0, 160.52000427246094)
+2015-06-11 10:53:51 INFO  - Splitting: (200, 200, 93)
+2015-06-11 10:53:51 INFO  - allocate Voxels
+2015-06-11 10:53:51 INFO  - allocate MNT
+2015-06-11 10:53:51 INFO  - Data parsing
+2015-06-11 10:54:42 INFO  - Turtle built with 406 sectors
+2015-06-11 10:54:42 INFO  - ===== /home/calcul/Documents/Julien/Projet_nouragues/output2/hobo_1_100m.laz_multires_.vox =====
+2015-06-11 10:54:42 INFO  - header: VOXEL SPACE
+2015-06-11 10:55:07 INFO  - VOXEL SPACE
+2015-06-11 10:55:09 INFO  - Min corner: (313211.0, 451557.0, 68.16000366210938)
+2015-06-11 10:55:09 INFO  - Max corner: (313411.0, 451757.0, 160.52000427246094)
+2015-06-11 10:55:11 INFO  - Splitting: (200, 200, 93)
+2015-06-11 10:55:13 INFO  - allocate Voxels
+2015-06-11 10:55:20 INFO  - allocate MNT
+2015-06-11 10:55:31 INFO  - Data parsing
+2015-06-11 10:56:22 INFO  - Turtle built with 406 sectors
+2015-06-11 10:56:22 INFO  - ===== /home/calcul/Documents/Julien/Projet_nouragues/output2/hobo_1_100m.laz_multires_.vox =====
+2015-06-11 10:56:22 INFO  - header: VOXEL SPACE
+2015-06-11 10:56:24 INFO  - VOXEL SPACE
+2015-06-11 10:56:24 INFO  - Min corner: (313211.0, 451557.0, 68.16000366210938)
+2015-06-11 10:56:24 INFO  - Max corner: (313411.0, 451757.0, 160.52000427246094)
+2015-06-11 10:56:24 INFO  - Splitting: (200, 200, 93)
+2015-06-11 10:56:24 INFO  - allocate Voxels
+2015-06-11 10:56:24 INFO  - allocate MNT
+2015-06-11 10:56:24 INFO  - Data parsing
+2015-06-11 10:56:25 INFO  - .
+2015-06-11 10:56:25 INFO  - .
+2015-06-11 10:56:25 INFO  - .
+2015-06-11 10:56:25 INFO  - .
+2015-06-11 10:56:25 INFO  - .
+2015-06-11 10:56:26 INFO  - .
+2015-06-11 10:56:26 INFO  - .
+2015-06-11 10:56:26 INFO  - .
+2015-06-11 10:56:26 INFO  - .
+2015-06-11 10:56:26 INFO  -  1000000 shots
+
+2015-06-11 10:56:26 INFO  - .
+2015-06-11 10:56:26 INFO  - .
+2015-06-11 10:56:26 INFO  - .
+2015-06-11 10:56:27 INFO  - .
+2015-06-11 10:56:27 INFO  - .
+2015-06-11 10:56:27 INFO  - .
+2015-06-11 10:56:27 INFO  - .
+2015-06-11 10:56:27 INFO  - .
+2015-06-11 10:56:27 INFO  - .
+2015-06-11 10:56:28 INFO  -  2000000 shots
+
+2015-06-11 10:56:28 INFO  - .
+2015-06-11 10:56:28 INFO  - .
+2015-06-11 10:56:28 INFO  - .
+2015-06-11 10:56:28 INFO  - .
+2015-06-11 10:56:28 INFO  - .
+2015-06-11 10:56:28 INFO  - .
+2015-06-11 10:56:28 INFO  - .
+2015-06-11 10:56:29 INFO  - .
+2015-06-11 10:56:29 INFO  - .
+2015-06-11 10:56:29 INFO  -  3000000 shots
+
+2015-06-11 10:56:29 INFO  - .
+2015-06-11 10:56:29 INFO  - .
+2015-06-11 10:56:29 INFO  - .
+2015-06-11 10:56:29 INFO  - .
+2015-06-11 10:56:29 INFO  - .
+2015-06-11 10:56:30 INFO  - .
+2015-06-11 10:56:30 INFO  - .
+2015-06-11 10:56:30 INFO  - 3720000scans
+
+2015-06-11 10:56:30 INFO  - nb positions= 400
+2015-06-11 10:56:38 INFO  - Computation of transmittance
+2015-06-11 10:58:05 INFO  - Turtle built with 406 sectors
+2015-06-11 10:58:05 INFO  - ===== /home/calcul/Documents/Julien/Projet_nouragues/output2/hobo_1_100m.laz_multires_.vox =====
+2015-06-11 10:58:05 INFO  - header: VOXEL SPACE
+2015-06-11 10:58:05 INFO  - VOXEL SPACE
+2015-06-11 10:58:05 INFO  - Min corner: (313211.0, 451557.0, 68.16000366210938)
+2015-06-11 10:58:05 INFO  - Max corner: (313411.0, 451757.0, 160.52000427246094)
+2015-06-11 10:58:05 INFO  - Splitting: (200, 200, 93)
+2015-06-11 10:58:05 INFO  - allocate Voxels
+2015-06-11 10:58:05 INFO  - allocate MNT
+2015-06-11 10:58:05 INFO  - Data parsing
+2015-06-11 10:58:05 INFO  - .
+2015-06-11 10:58:05 INFO  - .
+2015-06-11 10:58:06 INFO  - .
+2015-06-11 10:58:06 INFO  - .
+2015-06-11 10:58:06 INFO  - .
+2015-06-11 10:58:06 INFO  - .
+2015-06-11 10:58:06 INFO  - .
+2015-06-11 10:58:06 INFO  - .
+2015-06-11 10:58:06 INFO  - .
+2015-06-11 10:58:06 INFO  -  1000000 shots
+
+2015-06-11 10:58:07 INFO  - .
+2015-06-11 10:58:07 INFO  - .
+2015-06-11 10:58:07 INFO  - .
+2015-06-11 10:58:07 INFO  - .
+2015-06-11 10:58:07 INFO  - .
+2015-06-11 10:58:07 INFO  - .
+2015-06-11 10:58:07 INFO  - .
+2015-06-11 10:58:08 INFO  - .
+2015-06-11 10:58:08 INFO  - .
+2015-06-11 10:58:08 INFO  -  2000000 shots
+
+2015-06-11 10:58:08 INFO  - .
+2015-06-11 10:58:08 INFO  - .
+2015-06-11 10:58:08 INFO  - .
+2015-06-11 10:58:08 INFO  - .
+2015-06-11 10:58:08 INFO  - .
+2015-06-11 10:58:08 INFO  - .
+2015-06-11 10:58:09 INFO  - .
+2015-06-11 10:58:09 INFO  - .
+2015-06-11 10:58:09 INFO  - .
+2015-06-11 10:58:09 INFO  -  3000000 shots
+
+2015-06-11 10:58:09 INFO  - .
+2015-06-11 10:58:09 INFO  - .
+2015-06-11 10:58:09 INFO  - .
+2015-06-11 10:58:09 INFO  - .
+2015-06-11 10:58:10 INFO  - .
+2015-06-11 10:58:10 INFO  - .
+2015-06-11 10:58:10 INFO  - .
+2015-06-11 10:58:10 INFO  - 3720000scans
+
+2015-06-11 10:58:10 INFO  - nb positions= 400
+2015-06-11 10:58:18 INFO  - Computation of transmittance
+2015-06-11 10:58:42 INFO  - Turtle built with 406 sectors
+2015-06-11 10:58:42 INFO  - ===== /home/calcul/Documents/Julien/Projet_nouragues/output2/hobo_1_100m.laz_multires_.vox =====
+2015-06-11 10:58:42 INFO  - header: VOXEL SPACE
+2015-06-11 10:58:42 INFO  - VOXEL SPACE
+2015-06-11 10:58:42 INFO  - Min corner: (313211.0, 451557.0, 68.16000366210938)
+2015-06-11 10:58:42 INFO  - Max corner: (313411.0, 451757.0, 160.52000427246094)
+2015-06-11 10:58:42 INFO  - Splitting: (200, 200, 93)
+2015-06-11 10:58:42 INFO  - allocate Voxels
+2015-06-11 10:58:43 INFO  - allocate MNT
+2015-06-11 10:58:43 INFO  - Data parsing
+2015-06-11 10:58:43 INFO  - .
+2015-06-11 10:58:43 INFO  - .
+2015-06-11 10:58:43 INFO  - .
+2015-06-11 10:58:43 INFO  - .
+2015-06-11 10:58:43 INFO  - .
+2015-06-11 10:58:44 INFO  - .
+2015-06-11 10:58:44 INFO  - .
+2015-06-11 10:58:44 INFO  - .
+2015-06-11 10:58:44 INFO  - .
+2015-06-11 10:58:44 INFO  -  1000000 shots
+
+2015-06-11 10:58:44 INFO  - .
+2015-06-11 10:58:44 INFO  - .
+2015-06-11 10:58:44 INFO  - .
+2015-06-11 10:58:45 INFO  - .
+2015-06-11 10:58:45 INFO  - .
+2015-06-11 10:58:45 INFO  - .
+2015-06-11 10:58:45 INFO  - .
+2015-06-11 10:58:45 INFO  - .
+2015-06-11 10:58:45 INFO  - .
+2015-06-11 10:58:45 INFO  -  2000000 shots
+
+2015-06-11 10:58:46 INFO  - .
+2015-06-11 10:58:46 INFO  - .
+2015-06-11 10:58:46 INFO  - .
+2015-06-11 10:58:46 INFO  - .
+2015-06-11 10:58:46 INFO  - .
+2015-06-11 10:58:46 INFO  - .
+2015-06-11 10:58:46 INFO  - .
+2015-06-11 10:58:46 INFO  - .
+2015-06-11 10:58:46 INFO  - .
+2015-06-11 10:58:47 INFO  -  3000000 shots
+
+2015-06-11 10:58:47 INFO  - .
+2015-06-11 10:58:47 INFO  - .
+2015-06-11 10:58:47 INFO  - .
+2015-06-11 10:58:47 INFO  - .
+2015-06-11 10:58:47 INFO  - .
+2015-06-11 10:58:47 INFO  - .
+2015-06-11 10:58:48 INFO  - .
+2015-06-11 10:58:48 INFO  - 3720000scans
+
+2015-06-11 10:58:48 INFO  - nb positions= 400
+2015-06-11 10:58:56 INFO  - Computation of transmittance
+2015-06-11 11:00:20 INFO  - Turtle built with 406 sectors
+2015-06-11 11:00:20 INFO  - ===== /home/calcul/Documents/Julien/Projet_nouragues/output2/hobo_1_100m.laz_multires_.vox =====
+2015-06-11 11:00:20 INFO  - header: VOXEL SPACE
+2015-06-11 11:00:20 INFO  - VOXEL SPACE
+2015-06-11 11:00:20 INFO  - Min corner: (313211.0, 451557.0, 68.16000366210938)
+2015-06-11 11:00:20 INFO  - Max corner: (313411.0, 451757.0, 160.52000427246094)
+2015-06-11 11:00:20 INFO  - Splitting: (200, 200, 93)
+2015-06-11 11:00:20 INFO  - allocate Voxels
+2015-06-11 11:00:20 INFO  - allocate MNT
+2015-06-11 11:00:20 INFO  - Data parsing
+2015-06-11 11:00:20 INFO  - .
+2015-06-11 11:00:20 INFO  - .
+2015-06-11 11:00:21 INFO  - .
+2015-06-11 11:00:21 INFO  - .
+2015-06-11 11:00:21 INFO  - .
+2015-06-11 11:00:21 INFO  - .
+2015-06-11 11:00:21 INFO  - .
+2015-06-11 11:00:21 INFO  - .
+2015-06-11 11:00:21 INFO  - .
+2015-06-11 11:00:21 INFO  -  1000000 shots
+
+2015-06-11 11:00:22 INFO  - .
+2015-06-11 11:00:22 INFO  - .
+2015-06-11 11:00:22 INFO  - .
+2015-06-11 11:00:22 INFO  - .
+2015-06-11 11:00:22 INFO  - .
+2015-06-11 11:00:22 INFO  - .
+2015-06-11 11:00:22 INFO  - .
+2015-06-11 11:00:23 INFO  - .
+2015-06-11 11:00:23 INFO  - .
+2015-06-11 11:00:23 INFO  -  2000000 shots
+
+2015-06-11 11:00:23 INFO  - .
+2015-06-11 11:00:23 INFO  - .
+2015-06-11 11:00:23 INFO  - .
+2015-06-11 11:00:23 INFO  - .
+2015-06-11 11:00:23 INFO  - .
+2015-06-11 11:00:23 INFO  - .
+2015-06-11 11:00:24 INFO  - .
+2015-06-11 11:00:24 INFO  - .
+2015-06-11 11:00:24 INFO  - .
+2015-06-11 11:00:24 INFO  -  3000000 shots
+
+2015-06-11 11:00:24 INFO  - .
+2015-06-11 11:00:24 INFO  - .
+2015-06-11 11:00:24 INFO  - .
+2015-06-11 11:00:24 INFO  - .
+2015-06-11 11:00:24 INFO  - .
+2015-06-11 11:00:25 INFO  - .
+2015-06-11 11:00:25 INFO  - .
+2015-06-11 11:00:25 INFO  - 3720000scans
+
+2015-06-11 11:00:25 INFO  - nb positions= 400
+2015-06-11 11:00:34 INFO  - Computation of transmittance
+2015-06-11 11:00:46 INFO  - max density: 47.46506357938051
+2015-06-11 11:32:25 INFO  - Turtle built with 406 sectors
+2015-06-11 11:32:25 INFO  - ===== /home/calcul/Documents/Julien/Projet_nouragues/output2/hobo_1_100m.laz_multires_.vox =====
+2015-06-11 11:32:25 INFO  - header: VOXEL SPACE
+2015-06-11 11:32:25 INFO  - VOXEL SPACE
+2015-06-11 11:32:25 INFO  - Min corner: (313211.0, 451557.0, 68.16000366210938)
+2015-06-11 11:32:25 INFO  - Max corner: (313411.0, 451757.0, 160.52000427246094)
+2015-06-11 11:32:25 INFO  - Splitting: (200, 200, 93)
+2015-06-11 11:32:25 INFO  - allocate Voxels
+2015-06-11 11:32:25 INFO  - allocate MNT
+2015-06-11 11:32:25 INFO  - Data parsing
+2015-06-11 11:32:25 INFO  - .
+2015-06-11 11:32:25 INFO  - .
+2015-06-11 11:32:25 INFO  - .
+2015-06-11 11:32:25 INFO  - .
+2015-06-11 11:32:26 INFO  - .
+2015-06-11 11:32:26 INFO  - .
+2015-06-11 11:32:26 INFO  - .
+2015-06-11 11:32:26 INFO  - .
+2015-06-11 11:32:26 INFO  - .
+2015-06-11 11:32:26 INFO  -  1000000 shots
+
+2015-06-11 11:32:26 INFO  - .
+2015-06-11 11:32:27 INFO  - .
+2015-06-11 11:32:27 INFO  - .
+2015-06-11 11:32:27 INFO  - .
+2015-06-11 11:32:27 INFO  - .
+2015-06-11 11:32:27 INFO  - .
+2015-06-11 11:32:27 INFO  - .
+2015-06-11 11:32:27 INFO  - .
+2015-06-11 11:32:28 INFO  - .
+2015-06-11 11:32:28 INFO  -  2000000 shots
+
+2015-06-11 11:32:28 INFO  - .
+2015-06-11 11:32:28 INFO  - .
+2015-06-11 11:32:28 INFO  - .
+2015-06-11 11:32:28 INFO  - .
+2015-06-11 11:32:28 INFO  - .
+2015-06-11 11:32:28 INFO  - .
+2015-06-11 11:32:28 INFO  - .
+2015-06-11 11:32:29 INFO  - .
+2015-06-11 11:32:29 INFO  - .
+2015-06-11 11:32:29 INFO  -  3000000 shots
+
+2015-06-11 11:32:29 INFO  - .
+2015-06-11 11:32:29 INFO  - .
+2015-06-11 11:32:29 INFO  - .
+2015-06-11 11:32:29 INFO  - .
+2015-06-11 11:32:29 INFO  - .
+2015-06-11 11:32:30 INFO  - .
+2015-06-11 11:32:30 INFO  - .
+2015-06-11 11:32:30 INFO  - 3720000scans
+
+2015-06-11 11:32:30 INFO  - nb positions= 400
+2015-06-11 11:32:38 INFO  - Computation of transmittance
+2015-06-11 14:48:38 INFO  - Turtle built with 406 sectors
+2015-06-11 14:48:38 INFO  - ===== /home/calcul/Documents/Julien/Projet_nouragues/output2/hobo_1_100m.laz_multires_.vox =====
+2015-06-11 14:48:38 ERROR - Can't open file: /home/calcul/Documents/Julien/Projet_nouragues/output2/hobo_1_100m.laz_multires_.vox
+java.io.FileNotFoundException: /home/calcul/Documents/Julien/Projet_nouragues/output2/hobo_1_100m.laz_multires_.vox (Aucun fichier ou dossier de ce type)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at java.io.FileReader.<init>(FileReader.java:72)
+	at fr.ird.voxelidar.transmittance.PadTransmittance.readData(PadTransmittance.java:172)
+	at fr.ird.voxelidar.transmittance.PadTransmittance.processOneFile(PadTransmittance.java:74)
+	at fr.ird.voxelidar.FXPrincipal.start(FXPrincipal.java:28)
+	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$159(LauncherImpl.java:863)
+	at com.sun.javafx.application.LauncherImpl$$Lambda$58/1214515716.run(Unknown Source)
+	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$172(PlatformImpl.java:326)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$50/157456214.run(Unknown Source)
+	at com.sun.javafx.application.PlatformImpl.lambda$null$170(PlatformImpl.java:295)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$53/2103062952.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.application.PlatformImpl.lambda$runLater$171(PlatformImpl.java:294)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$52/1659791576.run(Unknown Source)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$48(GtkApplication.java:139)
+	at com.sun.glass.ui.gtk.GtkApplication$$Lambda$41/1345636186.run(Unknown Source)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-11 14:53:32 INFO  - Computing dtm normals
+2015-06-11 14:54:04 INFO  - Computing dtm normals
+2015-06-11 14:54:33 INFO  - Computing dtm normals
+2015-06-11 14:57:22 INFO  - Computing dtm normals
+2015-06-11 16:15:37 INFO  - Writing dart file /home/calcul/Documents/Julien/Sortie voxels/Projet_nouragues/output/maket.txt
+2015-06-11 16:15:38 INFO  - dart file written
+2015-06-11 16:19:19 INFO  - Reading DTM : /home/calcul/Documents/Julien/VoxeLidar/trunk/VoxeLidarGUIFX
+2015-06-11 16:19:19 ERROR -  (Aucun fichier ou dossier de ce type)
+java.io.FileNotFoundException:  (Aucun fichier ou dossier de ce type)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at java.io.FileReader.<init>(FileReader.java:72)
+	at fr.ird.voxelidar.lidar.format.dtm.DtmLoader.readFromAscFile(DtmLoader.java:39)
+	at fr.ird.voxelidar.lidar.format.dart.DartWriter.writeFromVoxelSpace(DartWriter.java:171)
+	at fr.ird.voxelidar.gui.DartExporterFrameController$5$1$1.voxelSpaceCreationFinished(DartExporterFrameController.java:270)
+	at fr.ird.voxelidar.engine3d.object.scene.VoxelSpace.firefileLoaded(VoxelSpace.java:224)
+	at fr.ird.voxelidar.engine3d.object.scene.VoxelSpace.setFileLoaded(VoxelSpace.java:204)
+	at fr.ird.voxelidar.engine3d.object.scene.VoxelSpace.loadFromFile(VoxelSpace.java:540)
+	at fr.ird.voxelidar.gui.DartExporterFrameController$5$1.call(DartExporterFrameController.java:274)
+	at fr.ird.voxelidar.gui.DartExporterFrameController$5$1.call(DartExporterFrameController.java:251)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$385/748945911.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$383/1587499995.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-11 16:19:19 ERROR - Cannot read dtm file /home/calcul/Documents/Julien/VoxeLidar/trunk/VoxeLidarGUIFX
+java.lang.NullPointerException
+	at fr.ird.voxelidar.lidar.format.dart.DartWriter.writeFromVoxelSpace(DartWriter.java:172)
+	at fr.ird.voxelidar.gui.DartExporterFrameController$5$1$1.voxelSpaceCreationFinished(DartExporterFrameController.java:270)
+	at fr.ird.voxelidar.engine3d.object.scene.VoxelSpace.firefileLoaded(VoxelSpace.java:224)
+	at fr.ird.voxelidar.engine3d.object.scene.VoxelSpace.setFileLoaded(VoxelSpace.java:204)
+	at fr.ird.voxelidar.engine3d.object.scene.VoxelSpace.loadFromFile(VoxelSpace.java:540)
+	at fr.ird.voxelidar.gui.DartExporterFrameController$5$1.call(DartExporterFrameController.java:274)
+	at fr.ird.voxelidar.gui.DartExporterFrameController$5$1.call(DartExporterFrameController.java:251)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$385/748945911.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$383/1587499995.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-11 16:19:19 INFO  - Writing triangles file
+2015-06-11 16:19:19 INFO  - Writing dart file /home/calcul/Documents/Julien/Sortie voxels/Projet_nouragues/output/maket.txt
+2015-06-11 16:19:20 INFO  - dart file written
+2015-06-11 16:20:21 INFO  - Reading DTM : /home/calcul/Documents/Julien/Sortie voxels/Projet_nouragues/wholegroundmodel_1m.asc
+2015-06-11 16:22:24 INFO  - Writing triangles file
+2015-06-11 16:24:24 INFO  - Reading DTM : /home/calcul/Documents/Julien/Sortie voxels/Projet_nouragues/wholegroundmodel_1m.asc
+2015-06-11 16:27:04 INFO  - Writing triangles file
+2015-06-11 16:29:40 INFO  - Writing dart file /home/calcul/Documents/Julien/Sortie voxels/Projet_nouragues/output/maket.txt
+2015-06-11 16:29:42 INFO  - dart file written

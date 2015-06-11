@@ -1,130 +1,101 @@
-//package fr.ird.voxelidar.transmittance;
-//
-//import java.awt.Color;
-//import java.util.ArrayList;
-//import java.util.HashMap;
-//import java.util.Set;
-//import java.util.TreeSet;
-//
-//import javax.vecmath.Point2f;
-//import javax.vecmath.Point3f;
-//import javax.vecmath.Vector2f;
-//import javax.vecmath.Vector3f;
-//
-//import jeeb.workspace.sunrapp.util.Colouring;
-//
-//public class Turtle {
-//
-//	public Vector3f[] directions;
-//	public float[] elevation;
-//	public float[] azimuth;
-//
-//	private GeometryWithAttribute turtleGWA;
-//
-//	public Turtle(int scale, boolean onlyUpward) {
-//
-//		Mesh mesh = buildTurtle(scale);
-//		Point3f[] points = mesh.getPoints();
-//
-//		int nbSectors = points.length;
-//		if (onlyUpward)
-//			nbSectors /= 2;
-//		directions = new Vector3f[nbSectors];
-//		elevation = new float[nbSectors];
-//		azimuth = new float[nbSectors];
-//		int sector = 0;
-//		for (int p = 0; p < points.length; p++) {
-//			boolean keep = true;
-//			if (onlyUpward && (points[p].z < 0.0))
-//				keep = false;
-//			if (keep) {
-//				directions[sector] = new Vector3f(points[p]);
-//				directions[sector].normalize(); // shouldn't be necessary
-//				elevation[sector] = (float) Math.asin(points[p].z);
-//				Vector2f proj = new Vector2f(points[p].x, points[p].y);
-//				proj.normalize();
-//				azimuth[sector] = (float) Math.acos(proj.x);
-//				if (proj.y > 0) {
-//					azimuth[sector] = (float) (Math.PI * 2.) - azimuth[sector];
-//
-//				}
-//
-//				azimuth[sector] -= Math.PI / 2;
-//				if (azimuth[sector] < 0) {
-//					azimuth[sector] += 2 * Math.PI;
-//				}
-//				sector++;
-//			}
-//		}
-//	}
-//
-//	public float getElevationAngle(int d) {
-//		return elevation[d];
-//	}
-//
-//	public float getZenithAngle(int d) {
-//		return (float) ((Math.PI / 2) - elevation[d]);
-//	}
-//
-//	public float getAzimuthAngle(int d) {
-//		return azimuth[d];
-//	}	
-//
-//	public int getNbDirections() {
-//		return directions.length;
-//	}
-//
-//	/**
-//	 * TODO: compute the radius of sectors; either individually or on average
-//	 */
-//	public void edgeLength() {
-//
-//		// edges length
-//		// for (int sp=0; sp<sPath.size()-1; sp++) {
-//		// Vector3f edge = new Vector3f(pts2[sPath.get(sp)]);
-//		// edge.sub(pts2[sPath.get(sp+1)]);
-//		// System.out.println(edge.length());
-//		// }
-//	}
-//	
-//
-//	// /** To move in MeshUtils
-//	// * @param mesh
-//	// * @return
-//	// */
-//	// public SimpleMesh relistPointsIndices (SimpleMesh mesh) {
-//	//
-//	// TreeSet<Integer> sPtsIndices = new TreeSet<Integer>();
-//	// int[][] paths = mesh.getPaths();
-//	// for (int f=0; f<paths.length; f++) {
-//	// for (int p=0; p<paths[f].length; p++) {
-//	// sPtsIndices.add(paths[f][p]);
-//	// }
-//	// }
-//	// Point3f[] points = mesh.getPoints();
-//	// Point3f[] newPoints = new Point3f[sPtsIndices.size()];
-//	// HashMap<Integer, Integer> newPtsIndices = new HashMap<Integer,
-//	// Integer>();
-//	// int n = 0;
-//	// for (int i : sPtsIndices) {
-//	// newPtsIndices.put(i, n);
-//	// newPoints[n] = points[i];
-//	// n ++;
-//	// }
-//	//
-//	// int[][] newPaths = new int[paths.length][];
-//	// for (int f=0; f<paths.length; f++) {
-//	// newPaths[f] = new int[paths[f].length];
-//	// for (int p=0; p<paths[f].length; p++) {
-//	// newPaths[f][p] = newPtsIndices.get(paths[f][p]);
-//	// }
-//	// }
-//	//
-//	// SimpleMesh newMesh = new SimpleMesh(newPoints, newPaths);
-//	// newMesh.computeNormals();
-//	// newMesh.reverseNormals();
-//	//
-//	// return newMesh;
-//	// }
-//
-//}
+package fr.ird.voxelidar.transmittance;
+
+import fr.ird.voxelidar.io.file.FileManager;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import javax.vecmath.Point3f;
+import javax.vecmath.Vector2f;
+import javax.vecmath.Vector3f;
+
+import org.apache.log4j.Logger;
+
+public class Turtle {
+
+    private final static Logger logger = Logger.getLogger(Turtle.class);
+    
+    public Vector3f[] directions;
+    public float[] elevation;
+    public float[] azimuth;
+
+    public Turtle(int nbDirections) {
+
+        InputStreamReader pointsStream = new InputStreamReader(Turtle.class.getClassLoader().getResourceAsStream("misc/directions"));
+        int pointsNumber = 406;
+        
+        directions = new Vector3f[pointsNumber];
+        
+        try (BufferedReader reader = new BufferedReader(pointsStream)) {
+
+            String line;
+            int count = 0;
+
+            while ((line = reader.readLine()) != null) {
+                
+                String[] split = line.split("\t");
+                directions[count] = new Vector3f(Float.valueOf(split[0]), Float.valueOf(split[1]), Float.valueOf(split[2]));
+                count++;
+            }
+            
+            int nbSectors = pointsNumber;
+            
+            elevation = new float[nbSectors];
+            azimuth = new float[nbSectors];
+
+            for (int p = 0, sector = 0; p < pointsNumber; p++) {
+                    
+                elevation[sector] = (float) Math.asin(directions[p].z);
+                Vector2f proj = new Vector2f(directions[p].x, directions[p].y);
+                proj.normalize();
+                azimuth[sector] = (float) Math.acos(proj.x);
+                if (proj.y > 0) {
+                    azimuth[sector] = (float) (Math.PI * 2.) - azimuth[sector];
+                }
+
+                azimuth[sector] -= Math.PI / 2;
+                if (azimuth[sector] < 0) {
+                    azimuth[sector] += 2 * Math.PI;
+                }
+
+                sector++;
+            }
+
+        } catch (IOException ex) {
+            logger.error("Cannot read file", ex);
+        }
+
+        
+
+        
+    }
+   
+    public float getElevationAngle(int d) {
+        return elevation[d];
+    }
+
+    public float getZenithAngle(int d) {
+        return (float) ((Math.PI / 2) - elevation[d]);
+    }
+
+    public float getAzimuthAngle(int d) {
+        return azimuth[d];
+    }
+
+
+    public int getNbDirections() {
+        return directions.length;
+    }
+
+    /**
+     * TODO: compute the radius of sectors; either individually or on average
+     */
+    public void edgeLength() {
+
+		// edges length
+        // for (int sp=0; sp<sPath.size()-1; sp++) {
+        // Vector3f edge = new Vector3f(pts2[sPath.get(sp)]);
+        // edge.sub(pts2[sPath.get(sp+1)]);
+        // System.out.println(edge.length());
+        // }
+    }
+}

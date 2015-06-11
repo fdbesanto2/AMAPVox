@@ -5,11 +5,8 @@
  */
 package fr.ird.voxelidar;
 
-import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
-import fr.ird.voxelidar.lidar.format.dart.DartWriter;
-import fr.ird.voxelidar.lidar.format.dtm.DtmLoader;
-import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
 import fr.ird.voxelidar.gui.MainFrameController;
+import fr.ird.voxelidar.transmittance.PadTransmittance;
 import java.io.File;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -27,16 +24,10 @@ public class FXPrincipal extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         /*
-        VoxelSpace voxelSpace = new VoxelSpace();
-        voxelSpace.loadFromFile(new File("/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox"));
+        PadTransmittance padTransmittance = new PadTransmittance();
+        padTransmittance.processOneFile(new File("/home/calcul/Documents/Julien/Projet_nouragues/output2/hobo_1_100m.laz_multires_.vox"));
         
-        DartWriter dartWriter = new DartWriter();
-        dartWriter.setGenerateTrianglesFile(true);
-        dartWriter.setTrianglesFile(new File("/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/triangles.txt"));
-        dartWriter.setDtmFile(new File("/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc"));
-        dartWriter.writeFromVoxelSpace(voxelSpace.data, new File("/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/maket.txt"));
         */
-        
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainFrame.fxml"));
         Parent root = loader.load();
         MainFrameController controller = loader.getController();

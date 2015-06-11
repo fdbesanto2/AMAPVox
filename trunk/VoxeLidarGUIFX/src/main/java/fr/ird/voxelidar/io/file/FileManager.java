@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import javax.swing.event.EventListenerList;
 import org.apache.log4j.Logger;
@@ -71,6 +72,25 @@ public class FileManager {
         fileRead = false;
     }
     
+    public static int getLineNumber(InputStreamReader stream){
+        
+        int count = 0;
+        
+        try (BufferedReader reader = new BufferedReader(stream)) {
+
+
+            while ((reader.readLine()) != null) {
+                count++;
+            }
+            
+            return count;
+
+        } catch (IOException ex) {
+            logger.error("Cannot read file", ex);
+        }
+
+        return -1;
+    }
     
     public static int getLineNumber(String path){
         
