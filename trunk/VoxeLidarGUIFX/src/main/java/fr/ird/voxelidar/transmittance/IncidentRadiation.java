@@ -1,11 +1,7 @@
 package fr.ird.voxelidar.transmittance;
 
-import java.text.NumberFormat;
-
-import javax.vecmath.Point2f;
 import javax.vecmath.Vector3f;
 
-import jeeb.workspace.sunrapp.geometry.utils.CoordinatesConversion;
 
 
 /**
@@ -15,7 +11,7 @@ import jeeb.workspace.sunrapp.geometry.utils.CoordinatesConversion;
  */
 public class IncidentRadiation implements DirectionList {
 
-	public float global; // MJ
+	public float global; // MegaJoules
 	public float direct; // MJ
 	public float diffuse; // MJ
 	public float[] directionalDiffuse;

@@ -279,6 +279,23 @@ public class JoglListener implements GLEventListener {
             scene.setLightSpecularColorChanged(false);
         }
         
+        if(scene.isLightPositionChanged()){
+            
+            int id2 = scene.getShaderByName("lightShader");
+            Shader s2 = scene.getShadersList().get(id2);
+            gl.glUseProgram(id2);
+                gl.glUniform3f(s2.uniformMap.get("lightPosition"), scene.getLight().position.x, scene.getLight().position.y, scene.getLight().position.z);
+            gl.glUseProgram(0);
+            /*
+            int id = scene.getShaderByName("instanceLightedShader");
+            Shader s = scene.getShadersList().get(id);
+            gl.glUseProgram(id);
+                gl.glUniform3f(s.uniformMap.get("lightPosition"), scene.getLight().position.x, scene.getLight().position.y, scene.getLight().position.z);
+            gl.glUseProgram(0);
+            */
+            scene.setLightPositionChanged(false);
+        }
+        
         if(isInit){
             
             scene.setLightPosition(new Point3F(scene.getVoxelSpace().centerX, scene.getVoxelSpace().centerY, scene.getVoxelSpace().centerZ+scene.getVoxelSpace().widthZ+100));
@@ -297,22 +314,6 @@ public class JoglListener implements GLEventListener {
             scene.setLightSpecularColorChanged(false);
         }
         
-        if(scene.isLightPositionChanged()){
-            
-            int id2 = scene.getShaderByName("lightShader");
-            Shader s2 = scene.getShadersList().get(id2);
-            gl.glUseProgram(id2);
-                gl.glUniform3f(s2.uniformMap.get("lightPosition"), scene.getLight().position.x, scene.getLight().position.y, scene.getLight().position.z);
-            gl.glUseProgram(0);
-            /*
-            int id = scene.getShaderByName("instanceLightedShader");
-            Shader s = scene.getShadersList().get(id);
-            gl.glUseProgram(id);
-                gl.glUniform3f(s.uniformMap.get("lightPosition"), scene.getLight().position.x, scene.getLight().position.y, scene.getLight().position.z);
-            gl.glUseProgram(0);
-            */
-            scene.setLightPositionChanged(false);
-        }
         
         if(viewMatrixChanged || isInit){
             

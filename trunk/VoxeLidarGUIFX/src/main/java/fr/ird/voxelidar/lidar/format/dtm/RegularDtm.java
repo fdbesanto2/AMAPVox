@@ -87,6 +87,7 @@ public class RegularDtm {
     public RegularDtm(String path, ArrayList<DTMPoint> points, ArrayList<Face> faces){
         
         this.transformationMatrix = Mat4D.identity();
+        this.inverseTransfMat = Mat4D.identity();
         
         this.points = points;
         this.faces = faces;
@@ -96,6 +97,7 @@ public class RegularDtm {
     public RegularDtm(String path, float[][] zArray, float xLeftLowerCorner, float yLeftLowerCorner, float cellSize, int nbCols, int nbRows){
         
         this.transformationMatrix = Mat4D.identity();
+        this.inverseTransfMat = Mat4D.identity();
         
         this.path = path;
         this.zArray = zArray;
@@ -227,10 +229,10 @@ public class RegularDtm {
         max.x += (offset*cellSize);
         max.y += (offset*cellSize);
         
-        Vec4D corner1 = Mat4D.multiply(Mat4D.inverse(transformationMatrix), new Vec4D(min.x, min.y, min.z, 1));
-        Vec4D corner2 = Mat4D.multiply(Mat4D.inverse(transformationMatrix),  new Vec4D(max.x, min.y, min.z, 1));
-        Vec4D corner3 = Mat4D.multiply(Mat4D.inverse(transformationMatrix), new Vec4D(max.x, max.y, max.z, 1));
-        Vec4D corner4 = Mat4D.multiply(Mat4D.inverse(transformationMatrix),  new Vec4D(min.x, max.y, min.z, 1));
+        Vec4D corner1 = Mat4D.multiply(inverseTransfMat, new Vec4D(min.x, min.y, min.z, 1));
+        Vec4D corner2 = Mat4D.multiply(inverseTransfMat,  new Vec4D(max.x, min.y, min.z, 1));
+        Vec4D corner3 = Mat4D.multiply(inverseTransfMat, new Vec4D(max.x, max.y, max.z, 1));
+        Vec4D corner4 = Mat4D.multiply(inverseTransfMat,  new Vec4D(min.x, max.y, min.z, 1));
         
         float xMin = (float) corner1.x;
         float yMin = (float) corner1.y;
@@ -375,6 +377,8 @@ public class RegularDtm {
                 }
             }
         }
+        
+        zArray = null;
     }
     
     private int get1dFrom2d(int i, int j){

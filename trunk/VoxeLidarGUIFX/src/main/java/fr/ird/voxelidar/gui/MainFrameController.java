@@ -88,6 +88,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
@@ -123,8 +124,6 @@ import org.controlsfx.dialog.ProgressDialog;
  */
 public class MainFrameController implements Initializable {
 
-    @FXML
-    private ComboBox<String> comboboxScript;
     @FXML
     private CheckBox checkboxRemoveLowPoint;
     @FXML
@@ -190,6 +189,42 @@ public class MainFrameController implements Initializable {
     private CheckBox checkboxFitRasterToVoxelSpace;
     @FXML
     private TextField textfieldRasterFittingMargin;
+    @FXML
+    private TextField textfieldVoxelFilePathTransmittance;
+    @FXML
+    private Button buttonOpenVoxelFileTransmittance;
+    @FXML
+    private Button buttonAddVoxelFileToListView1;
+    @FXML
+    private Button buttonRemoveVoxelFileFromListView1;
+    @FXML
+    private MenuItem menuItemSelectionAll1;
+    @FXML
+    private MenuItem menuItemSelectionNone1;
+    @FXML
+    private ComboBox<?> comboboxChooseDirectionsNumber;
+    @FXML
+    private TextField textfieldScannerPosCenterY;
+    @FXML
+    private Button buttonOpenScannerPointsPositionsFile;
+    @FXML
+    private TextField textfieldScannerPosCenterX;
+    @FXML
+    private TextField textfieldScannerPosCenterZ;
+    @FXML
+    private TextField textfieldScannerPointsPositionsFile;
+    @FXML
+    private RadioButton radiobuttonScannerPosSquaredArea;
+    @FXML
+    private TextField textfieldScannerStepArea;
+    @FXML
+    private RadioButton radiobuttonScannerPosFile;
+    @FXML
+    private TextField textfieldScannerWidthArea;
+    @FXML
+    private Button buttonALSAddToTaskList1;
+    @FXML
+    private Button buttonAddVoxelFileToListView2;
 
     @FXML
     private void onActionMenuItemUpdate(ActionEvent event) {
@@ -693,12 +728,6 @@ public class MainFrameController implements Initializable {
     private ComboBox<String> comboboxGroundEnergyOutputFormat;
     @FXML
     private AnchorPane anchorPaneGroundEnergyParameters;
-    @FXML
-    private Button buttonOpenScriptFile;
-    @FXML
-    private Button buttonExecuteScript;
-    @FXML
-    private TextField textFieldScriptFile;
 
     /**
      * Initializes the controller class.
@@ -1350,12 +1379,6 @@ public class MainFrameController implements Initializable {
 
             }
         });
-
-        comboboxScript.getItems().addAll("Config file generator: Multiple files ALS process",
-                "Config file generator: Multiple files ALS process + multi res",
-                "Multiple files ALS process + multi res");
-
-        comboboxScript.getSelectionModel().selectFirst();
         
         checkboxRaster.selectedProperty().addListener(new ChangeListener<Boolean>() {
 
@@ -4007,255 +4030,6 @@ public class MainFrameController implements Initializable {
         if (selectedFile != null) {
             textFieldOutputFileGroundEnergy.setText(selectedFile.getAbsolutePath());
         }
-    }
-
-    @FXML
-    private void onActionButtonExecuteScript(ActionEvent event) {
-
-        DirectoryChooser directoryChooserOutputPath;
-        File outputPathFile;
-
-        switch (comboboxScript.getSelectionModel().getSelectedIndex()) {
-
-            case 0:
-
-                removeWarnings = true;
-
-                directoryChooserOutputPath = new DirectoryChooser();
-                directoryChooserOutputPath.setTitle("Choose output path: ");
-
-                outputPathFile = directoryChooserOutputPath.showDialog(stage);
-
-                if (outputPathFile != null) {
-
-                    FileChooser fileChooserChooseLasFiles = new FileChooser();
-                    fileChooserChooseLasFiles.setTitle("Select ALS files: ");
-
-                    List<File> selectedFiles = fileChooserChooseLasFiles.showOpenMultipleDialog(stage);
-
-                    if (selectedFiles != null) {
-
-                        for (File file : selectedFiles) {
-
-                            MinMax minMax = calculateAutomaticallyMinAndMax(file);
-
-                            VoxelParameters voxelParameters = new VoxelParameters();
-
-                            voxelParameters.setBottomCorner(minMax.min);
-                            voxelParameters.setTopCorner(minMax.max);
-
-                            double resolution = Double.valueOf(textFieldResolution.getText());
-                            int splitX = (int) ((minMax.max.x - minMax.min.x) / resolution);
-                            int splitY = (int) ((minMax.max.y - minMax.min.y) / resolution);
-                            int splitZ = (int) ((minMax.max.z - minMax.min.z) / resolution);
-
-                            voxelParameters.setSplit(new Point3i(splitX, splitY, splitZ));
-                            voxelParameters.setResolution(resolution);
-
-                            voxelParameters.setUseDTMCorrection(checkboxUseDTMFilter.isSelected());
-                            if (checkboxUseDTMFilter.isSelected()) {
-                                voxelParameters.minDTMDistance = Float.valueOf(textfieldDTMValue.getText());
-                                voxelParameters.setDtmFile(new File(textfieldDTMPath.getText()));
-                            }
-
-                            voxelParameters.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
-                            voxelParameters.setTransmittanceMode(comboboxFormulaTransmittance.getSelectionModel().getSelectedIndex());
-
-                            voxelParameters.setWeighting(comboboxWeighting.getSelectionModel().getSelectedIndex() + 1);
-                            voxelParameters.setWeightingData(VoxelParameters.DEFAULT_ALS_WEIGHTING);
-                            voxelParameters.setCalculateGroundEnergy(checkboxCalculateGroundEnergy.isSelected());
-
-                            if (checkboxCalculateGroundEnergy.isSelected() && !textFieldOutputFileGroundEnergy.getText().equals("")) {
-                                voxelParameters.setGroundEnergyFile(new File(textFieldOutputFileGroundEnergy.getText()));
-
-                                switch (comboboxGroundEnergyOutputFormat.getSelectionModel().getSelectedIndex()) {
-                                    case 0:
-                                        voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_TXT);
-                                        break;
-                                    case 1:
-                                        voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_PNG);
-                                        break;
-                                    default:
-                                        voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_TXT);
-                                }
-
-                            }
-
-                            InputType it;
-
-                            switch (comboboxModeALS.getSelectionModel().getSelectedIndex()) {
-                                case 0:
-                                    it = InputType.LAS_FILE;
-                                    break;
-                                case 1:
-                                    it = InputType.LAZ_FILE;
-                                    break;
-                                case 2:
-                                    it = InputType.POINTS_FILE;
-                                    break;
-                                case 3:
-                                    it = InputType.SHOTS_FILE;
-                                    break;
-                                default:
-                                    it = InputType.LAS_FILE;
-                            }
-
-                            Configuration cfg = new Configuration(ProcessMode.VOXELISATION_ALS, it,
-                                    file,
-                                    new File(textFieldTrajectoryFileALS.getText()),
-                                    new File(outputPathFile.getAbsolutePath() + "/" + file.getName() + ".vox"),
-                                    voxelParameters,
-                                    checkboxUsePopMatrix.isSelected(), popMatrix,
-                                    checkboxUseSopMatrix.isSelected(), sopMatrix,
-                                    checkboxUseVopMatrix.isSelected(), vopMatrix);
-
-                            cfg.setFilters(listviewFilters.getItems());
-                            File configFile = new File(outputPathFile.getAbsolutePath() + "/" + file.getName() + ".cfg");
-                            cfg.writeConfiguration(configFile);
-                            listViewTaskList.getItems().add(configFile);
-                        }
-                    }
-                }
-
-                removeWarnings = false;
-
-                break;
-            case 1:
-
-                removeWarnings = true;
-
-                directoryChooserOutputPath = new DirectoryChooser();
-                directoryChooserOutputPath.setTitle("Choose output path: ");
-
-                outputPathFile = directoryChooserOutputPath.showDialog(stage);
-
-                if (outputPathFile != null) {
-
-                    FileChooser fileChooserChooseLasFiles = new FileChooser();
-                    fileChooserChooseLasFiles.setTitle("Select ALS files: ");
-
-                    List<File> selectedFiles = fileChooserChooseLasFiles.showOpenMultipleDialog(stage);
-
-                    if (selectedFiles != null) {
-
-                        for (File file : selectedFiles) {
-
-                            MinMax minMax = calculateAutomaticallyMinAndMax(file);
-                            List<File> tempList = new ArrayList<>();
-
-                            for (int i = 1; i < 5; i++) {
-
-                                VoxelParameters voxelParameters = new VoxelParameters();
-
-                                voxelParameters.setBottomCorner(minMax.min);
-                                voxelParameters.setTopCorner(minMax.max);
-
-                                double resolution = i;
-                                int splitX = (int) ((minMax.max.x - minMax.min.x) / resolution);
-                                int splitY = (int) ((minMax.max.y - minMax.min.y) / resolution);
-                                int splitZ = (int) ((minMax.max.z - minMax.min.z) / resolution);
-
-                                voxelParameters.setSplit(new Point3i(splitX, splitY, splitZ));
-                                voxelParameters.setResolution(resolution);
-
-                                voxelParameters.setUseDTMCorrection(checkboxUseDTMFilter.isSelected());
-                                if (checkboxUseDTMFilter.isSelected()) {
-                                    voxelParameters.minDTMDistance = Float.valueOf(textfieldDTMValue.getText());
-                                    voxelParameters.setDtmFile(new File(textfieldDTMPath.getText()));
-                                }
-
-                                voxelParameters.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
-                                voxelParameters.setTransmittanceMode(comboboxFormulaTransmittance.getSelectionModel().getSelectedIndex());
-
-                                voxelParameters.setWeighting(comboboxWeighting.getSelectionModel().getSelectedIndex() + 1);
-                                voxelParameters.setWeightingData(VoxelParameters.DEFAULT_ALS_WEIGHTING);
-                                voxelParameters.setCalculateGroundEnergy(checkboxCalculateGroundEnergy.isSelected());
-
-                                if (checkboxCalculateGroundEnergy.isSelected() && !textFieldOutputFileGroundEnergy.getText().equals("")) {
-                                    voxelParameters.setGroundEnergyFile(new File(textFieldOutputFileGroundEnergy.getText()));
-
-                                    switch (comboboxGroundEnergyOutputFormat.getSelectionModel().getSelectedIndex()) {
-                                        case 0:
-                                            voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_TXT);
-                                            break;
-                                        case 1:
-                                            voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_PNG);
-                                            break;
-                                        default:
-                                            voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_TXT);
-                                    }
-
-                                }
-
-                                InputType it;
-
-                                switch (comboboxModeALS.getSelectionModel().getSelectedIndex()) {
-                                    case 0:
-                                        it = InputType.LAS_FILE;
-                                        break;
-                                    case 1:
-                                        it = InputType.LAZ_FILE;
-                                        break;
-                                    case 2:
-                                        it = InputType.POINTS_FILE;
-                                        break;
-                                    case 3:
-                                        it = InputType.SHOTS_FILE;
-                                        break;
-                                    default:
-                                        it = InputType.LAS_FILE;
-                                }
-
-                                File voxFile = new File(outputPathFile.getAbsolutePath() + "/" + file.getName() + "_res" + i + "m.vox");
-                                tempList.add(voxFile);
-
-                                Configuration cfg = new Configuration(ProcessMode.VOXELISATION_ALS, it,
-                                        file,
-                                        new File(textFieldTrajectoryFileALS.getText()),
-                                        voxFile,
-                                        voxelParameters,
-                                        checkboxUsePopMatrix.isSelected(), popMatrix,
-                                        checkboxUseSopMatrix.isSelected(), sopMatrix,
-                                        checkboxUseVopMatrix.isSelected(), vopMatrix);
-
-                                cfg.setFilters(listviewFilters.getItems());
-                                File configFile = new File(outputPathFile.getAbsolutePath() + "/" + file.getName() + "_res" + i + "m.cfg");
-                                cfg.writeConfiguration(configFile);
-                                listViewTaskList.getItems().add(configFile);
-                            }
-
-                            File multiResConfigFile = new File(outputPathFile.getAbsolutePath() + "/" + file.getName() + "_multi_res.cfg");
-
-                            Configuration cfg = new Configuration();
-                            cfg.setProcessMode(ProcessMode.MULTI_RES);
-                            cfg.setOutputFile(new File(outputPathFile.getAbsolutePath() + "/" + file.getName() + "_multi_res.vox"));
-                            cfg.setFiles(tempList);
-
-                            VoxelParameters voxParameters = new VoxelParameters();
-                            voxParameters.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
-                            float padMax1m = Float.valueOf(textFieldPadMax1m.getText());
-                            float padMax2m = Float.valueOf(textFieldPadMax2m.getText());
-                            float padMax3m = Float.valueOf(textFieldPadMax3m.getText());
-                            float padMax4m = Float.valueOf(textFieldPadMax4m.getText());
-                            float padMax5m = Float.valueOf(textFieldPadMax5m.getText());
-                            cfg.setMultiResUseDefaultMaxPad(!checkboxOverwritePadLimit.isSelected());
-
-                            cfg.setMultiResPadMax(new float[]{padMax1m, padMax2m, padMax3m, padMax4m, padMax5m});
-                            cfg.setVoxelParameters(voxParameters);
-
-                            cfg.writeConfiguration(multiResConfigFile);
-
-                            listViewTaskList.getItems().add(multiResConfigFile);
-                        }
-                    }
-                }
-
-                removeWarnings = false;
-
-                break;
-            
-        }
-
     }
 
     @FXML

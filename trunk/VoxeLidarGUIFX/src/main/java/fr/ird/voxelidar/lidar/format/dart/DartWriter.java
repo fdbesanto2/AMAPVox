@@ -18,6 +18,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -129,6 +130,7 @@ public class DartWriter {
                         }else{
                             stringToWrite = "0"+" ";
                         }
+                        
                         /*
                         if(x == dart.getSceneDimension().x-1){
                             stringToWrite = stringToWrite.trim();
@@ -170,19 +172,21 @@ public class DartWriter {
                 
                 dtm = DtmLoader.readFromAscFile(dtmFile);
                 dtm.setTransformationMatrix(transfMatrix);
+                dtm.setLimits(new Point3F((float)data.header.bottomCorner.x, (float)data.header.bottomCorner.y, (float)data.header.bottomCorner.z), 
+                                                  new Point3F((float)data.header.topCorner.x, (float)data.header.topCorner.y, (float)data.header.topCorner.z), 10);
                 dtm.buildMesh();
-                dtm.exportObj(new File("/home/calcul/Documents/Julien/test.obj"));
+                //dtm.exportObj(new File("/home/calcul/Documents/Julien/test.obj"));
                 
-                faces = new TreeSet[data.header.split.x][data.header.split.y][data.header.split.z];
+                faces = new HashSet[data.header.split.x][data.header.split.y][data.header.split.z];
                 List<DTMPoint> points = dtm.getPoints();
                 
                 for(DTMPoint point : points){
                     
-                    Point3I voxelIndice = data.getIndicesFromPoint(point.x, point.y, point.z);
+                    Point3I voxelIndice = data.getIndicesFromPoint(point.x, point.y-0.0000001f, point.z);
                     if(voxelIndice != null){
                         
                         if(faces[voxelIndice.x][voxelIndice.y][voxelIndice.z] == null){
-                            faces[voxelIndice.x][voxelIndice.y][voxelIndice.z] = new TreeSet<>();
+                            faces[voxelIndice.x][voxelIndice.y][voxelIndice.z] = new HashSet<>();
                         }
                         
                         faces[voxelIndice.x][voxelIndice.y][voxelIndice.z].addAll(point.faces);
@@ -230,13 +234,14 @@ public class DartWriter {
             dart.cells[indiceX][indiceY][indiceZ].setNbFigures(nbFigures);
             dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(1);
             
+            
             if(Float.isNaN(densite) || densite == 0){
                 
                 if(nbFigures == 0){
                     dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_EMPTY);
                 }else{
-                    dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_DEM_GROUND);
-                    dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(0);
+                    dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_OPAQUE_GROUND);
+                    //dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(0);
                 }
                 
                 densite = 0f;
@@ -248,6 +253,17 @@ public class DartWriter {
                 }
                 
             }
+            
+            if(densite == 0){
+                //dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(0);
+                densite = 0.0000001f;
+            }
+            
+            //densite = ((int)(densite*1000))/1000.0f;
+            
+            //test
+            //dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_TURBID_CROWN);
+            //densite = 0.5f;
             
             dart.cells[indiceX][indiceY][indiceZ].setTurbids(new Turbid[]{new Turbid(densite, 0)});
             
@@ -290,9 +306,9 @@ public class DartWriter {
                     
                     for(Face face : faceList){
                                                 
-                        DTMPoint point1 = pointList.get(face.getPoint1());
+                        DTMPoint point1 = pointList.get(face.getPoint3());
                         DTMPoint point2 = pointList.get(face.getPoint2());
-                        DTMPoint point3 = pointList.get(face.getPoint3());
+                        DTMPoint point3 = pointList.get(face.getPoint1());
                         
                         writer.write(shapeType+" "+(float)(point1.x-data.header.bottomCorner.x)+" "+(float)(point1.y-data.header.bottomCorner.y)+" "+(float)(point1.z-data.header.bottomCorner.z)+" "+
                                                     (float)(point2.x-data.header.bottomCorner.x)+" "+(float)(point2.y-data.header.bottomCorner.y)+" "+(float)(point2.z-data.header.bottomCorner.z)+" "+

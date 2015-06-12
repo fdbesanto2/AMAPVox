@@ -82,7 +82,7 @@ public class VoxelSpaceHeader {
                 String[] split = reader.readLine().split(" ");
                 
                 voxelSpaceHeader.split = new Point3i(Integer.valueOf(split[1]), Integer.valueOf(split[2]), Integer.valueOf(split[3]));
-                
+                                
                 voxelSpaceHeader.resolution.x = (voxelSpaceHeader.topCorner.x - voxelSpaceHeader.bottomCorner.x) / voxelSpaceHeader.split.x;
                 voxelSpaceHeader.resolution.y = (voxelSpaceHeader.topCorner.y - voxelSpaceHeader.bottomCorner.y) / voxelSpaceHeader.split.y;
                 voxelSpaceHeader.resolution.z = (voxelSpaceHeader.topCorner.z - voxelSpaceHeader.bottomCorner.z) / voxelSpaceHeader.split.z;

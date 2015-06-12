@@ -1127,6 +1127,7 @@ public class VoxelisationTool implements Cancellable{
         Matrix4d mat4x4Rotation = new Matrix4d();
         Matrix4d mat4x4Translation = new Matrix4d();
 
+        //rotation autour de l'axe z
         mat4x4Rotation.set(new double[]{
             (double) Math.cos(rho), (double) -Math.sin(rho), 0, 0,
             (double) Math.sin(rho), (double) Math.cos(rho), 0, 0,
