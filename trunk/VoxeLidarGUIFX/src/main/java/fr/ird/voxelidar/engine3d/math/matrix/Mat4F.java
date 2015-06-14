@@ -339,7 +339,7 @@ public class Mat4F {
         Vec3F right = Vec3F.normalize(Vec3F.cross(up, forward));
         
         if(Vec3F.length(right) == 0){
-            right.x = -1;
+            right.x = 1;
         }
         
         Vec3F newUp = Vec3F.cross(forward, right);

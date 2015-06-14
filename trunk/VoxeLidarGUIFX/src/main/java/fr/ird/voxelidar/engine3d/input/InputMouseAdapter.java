@@ -57,6 +57,11 @@ public class InputMouseAdapter extends MouseAdapter{
             
             listener.leftMousePressed = true;
         }
+        
+        if(me.getButton() == MouseEvent.BUTTON3){
+            
+            listener.rightMousePressed = true;
+        }
     }
 
     @Override
@@ -73,6 +78,11 @@ public class InputMouseAdapter extends MouseAdapter{
         if(me.getButton() == MouseEvent.BUTTON1){
             
             listener.leftMousePressed = false;
+        }
+        
+        if(me.getButton() == MouseEvent.BUTTON3){
+            
+            listener.rightMousePressed = false;
         }
         
     }

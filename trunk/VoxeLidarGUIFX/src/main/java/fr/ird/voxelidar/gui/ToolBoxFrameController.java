@@ -623,17 +623,12 @@ public class ToolBoxFrameController implements Initializable {
     private void onActionButtonViewTop(ActionEvent event) {
         
         
-        
-        joglContext.getCamera().setLocation(new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
+        joglContext.getCamera().project(new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
                                                       joglContext.getScene().getVoxelSpace().getCenterY(),
-                                                      joglContext.getScene().getVoxelSpace().getCenterZ()+150));
-        
-        joglContext.getCamera().setTarget(new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
+                                                      joglContext.getScene().getVoxelSpace().getCenterZ()+150), 
+                                        new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
                                                       joglContext.getScene().getVoxelSpace().getCenterY(),
                                                       joglContext.getScene().getVoxelSpace().getCenterZ()));
-        
-        joglContext.getCamera().updateViewMatrix();
-        //joglContext.getCamera().setRotation(new Vec3F(0, 0, 1), (float) Math.toRadians(0));
         
         joglContext.getEventListener().mouseXOldLocation = joglContext.getEventListener().mouseXCurrentLocation;
         joglContext.getEventListener().mouseYOldLocation = joglContext.getEventListener().mouseYCurrentLocation;
@@ -643,14 +638,65 @@ public class ToolBoxFrameController implements Initializable {
 
     @FXML
     private void onActionButtonViewRight(ActionEvent event) {
+        
+        Vec3F location = joglContext.getCamera().getLocation();
+        
+        if(location.x < 0){
+            joglContext.getCamera().setLocation(new Vec3F(-location.x, location.y, location.z));
+        }else if(location.x == 0){
+            joglContext.getCamera().setLocation(new Vec3F(joglContext.getCamera().getLocation().z-joglContext.getCamera().getTarget().z,
+                                                        location.y,
+                                                        joglContext.getScene().getVoxelSpace().getCenterZ()));
+        }
+        
+        joglContext.getCamera().setTarget(new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
+                                                      joglContext.getCamera().getLocation().y,
+                                                      joglContext.getCamera().getLocation().z));
+        
+        joglContext.getCamera().updateViewMatrix();
+        
+        joglContext.getEventListener().mouseXOldLocation = joglContext.getEventListener().mouseXCurrentLocation;
+        joglContext.getEventListener().mouseYOldLocation = joglContext.getEventListener().mouseYCurrentLocation;
+        joglContext.getCamera().notifyViewMatrixChanged();
+        joglContext.drawNextFrame();
     }
 
     @FXML
     private void onActionButtonViewBottom(ActionEvent event) {
+                
+        joglContext.getCamera().project(new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
+                                                      joglContext.getScene().getVoxelSpace().getCenterY(),
+                                                      joglContext.getScene().getVoxelSpace().getCenterZ()-150), 
+                                        new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
+                                                      joglContext.getScene().getVoxelSpace().getCenterY(),
+                                                      joglContext.getScene().getVoxelSpace().getCenterZ()));
+        
+        
+        joglContext.getEventListener().mouseXOldLocation = joglContext.getEventListener().mouseXCurrentLocation;
+        joglContext.getEventListener().mouseYOldLocation = joglContext.getEventListener().mouseYCurrentLocation;
+        joglContext.getCamera().notifyViewMatrixChanged();
+        joglContext.drawNextFrame();
     }
 
     @FXML
     private void onActionButtonViewLeft(ActionEvent event) {
+        
+        Vec3F location = joglContext.getCamera().getLocation();
+        
+        if(location.x > 0){
+            joglContext.getCamera().setLocation(new Vec3F(-location.x, location.y, location.z));
+        }
+        
+        joglContext.getCamera().setTarget(new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
+                                                      joglContext.getCamera().getLocation().y,
+                                                      joglContext.getCamera().getLocation().z));
+        
+        joglContext.getCamera().updateViewMatrix();
+        
+        joglContext.getEventListener().mouseXOldLocation = joglContext.getEventListener().mouseXCurrentLocation;
+        joglContext.getEventListener().mouseYOldLocation = joglContext.getEventListener().mouseYCurrentLocation;
+        joglContext.getCamera().notifyViewMatrixChanged();
+        joglContext.drawNextFrame();
     }
 
     @FXML

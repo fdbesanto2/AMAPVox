@@ -27,10 +27,9 @@ public abstract class Camera {
     protected float right;
     protected float bottom;
     protected float top;
-    public Vec3F location;
-    public Vec3F target;
+    protected Vec3F location;
+    protected Vec3F target;
     protected Vec3F up;
-    public Vec3F orientation;
     protected boolean isUpdated;
     protected float phi,theta;
     protected boolean isPerspective = true;
@@ -53,6 +52,8 @@ public abstract class Camera {
     public abstract void fireProjectionMatrixChanged(Mat4F projMatrix);
     public abstract void setTarget(Vec3F target);
     public abstract void setLocation(Vec3F location);
+    public abstract Vec3F getTarget();
+    public abstract Vec3F getLocation();
     
     
     public void project(Vec3F location, Vec3F target){
@@ -86,7 +87,7 @@ public abstract class Camera {
         project(new Vec3F(location.x, location.y, location.z), new Vec3F(-1, 0, 0));
     }
     public void projectRight(){
-        project(new Vec3F(location.x, location.y, location.z), new Vec3F(1, 0, 0));
+        project(new Vec3F(location.x, location.y, location.z), new Vec3F(location.x, location.y, location.z));
     }
     public void projectFront(){
         

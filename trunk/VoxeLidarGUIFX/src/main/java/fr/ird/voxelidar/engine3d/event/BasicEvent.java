@@ -33,6 +33,7 @@ public class BasicEvent extends EventManager{
     public boolean dKeyPressed;
     
     public boolean leftMousePressed;
+    public boolean rightMousePressed;
     public boolean leftMouseDragged;
     public boolean rightMouseDragged;
     public boolean spaceKeyPressed;
@@ -54,10 +55,13 @@ public class BasicEvent extends EventManager{
     public int xOffset;
     public int yOffset;
     
+    private Vec3F center;
+    
     private int i=0;
     private final float mouseSpeed = 2.0f;
     
     public boolean leftMouseWasReleased;
+    public boolean rightMouseWasReleased;
     public boolean isMouseLocationUpdated;
 
     public void setMouseXCurrentLocation(int mouseXCurrentLocation) {
@@ -100,6 +104,8 @@ public class BasicEvent extends EventManager{
         leftMouseWasReleased = false;
         escapeKeyPressed = false;
         isMouseLocationUpdated = false;
+        
+        center = new Vec3F();
     }
     
     
@@ -126,27 +132,58 @@ public class BasicEvent extends EventManager{
             leftMouseWasReleased = true;
         }
         
+        if(rightMousePressed){
+            
+            //if left mouse button was released then it's pressing
+            if(rightMouseWasReleased){
+                
+                mouseXOldLocation = mouseXCurrentLocation;
+                mouseYOldLocation = mouseYCurrentLocation;
+
+                rightMouseWasReleased = false;
+            }
+            
+        }else{
+            
+            rightMouseWasReleased = true;
+        }
+        
         
         
         if(isMouseLocationUpdated && leftMousePressed){
             
-            Vec3F center = new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(),joglContext.getScene().getVoxelSpace().getCenterY(),joglContext.getScene().getVoxelSpace().getCenterZ());
+            
             xOffset = mouseXCurrentLocation - mouseXOldLocation;
             yOffset = mouseYCurrentLocation - mouseYOldLocation;
-            
+            /*
+            float x = 0;
+            float y = 0;
             
             if(xOffset != 0){
-                joglContext.getCamera().rotateFromOrientation(new Vec3F(1.0f, 0.0f, 0.0f), center, (float) Math.toRadians(xOffset)*mouseSpeed);
+                x = 1;
             }
             if(yOffset != 0){
-                joglContext.getCamera().rotateFromOrientation(new Vec3F(0.0f, 1.0f, 0.0f), center, (float) Math.toRadians(yOffset)*mouseSpeed);
+                y = 1;
+            }
+            
+            joglContext.getCamera().rotateFromOrientation(new Vec3F(x, y, 0.0f), null, (float) Math.toRadians(xOffset)*mouseSpeed);*/
+            
+            Vec3F.normalize(new Vec3F(xOffset, yOffset, mouseSpeed));
+            
+            if(xOffset != 0){
+                joglContext.getCamera().rotateFromOrientation(new Vec3F(1.0f, 0.0f, 0.0f), null, (float) Math.toRadians(xOffset)*mouseSpeed);
+            }
+            if(yOffset != 0){
+                joglContext.getCamera().rotateFromOrientation(new Vec3F(0.0f, 1.0f, 0.0f), null, (float) Math.toRadians(yOffset)*mouseSpeed);
             }
         }
         
         //translate the world
         if(rightMouseDragged){
             
-            joglContext.getCamera().translate(new Vec3F(xrel, yrel, 0.0f));
+            xOffset = mouseXCurrentLocation - mouseXOldLocation;
+            yOffset = mouseYCurrentLocation - mouseYOldLocation;
+            joglContext.getCamera().translateV2(new Vec3F(xOffset, yOffset, 0.0f));
         }
         
         if(mouseWheelRotateUp){
@@ -234,25 +271,8 @@ public class BasicEvent extends EventManager{
         escapeKeyPressed = false;
         isMouseLocationUpdated = false;
     }
-    
-    /**
-     *
-     */
-    public void updateToolBox(){
-        
-        /*
-        joglContext.toolBox.jTextFieldXCameraPosition.setText(String.valueOf(joglContext.getCamera().location.x));
-        joglContext.toolBox.jTextFieldYCameraPosition.setText(String.valueOf(joglContext.getCamera().location.y));
-        joglContext.toolBox.jTextFieldZCameraPosition.setText(String.valueOf(joglContext.getCamera().location.z));
-        
-        joglContext.toolBox.jTextFieldXCameraTarget.setText(String.valueOf(joglContext.getCamera().target.x));
-        joglContext.toolBox.jTextFieldYCameraTarget.setText(String.valueOf(joglContext.getCamera().target.y));
-        joglContext.toolBox.jTextFieldZCameraTarget.setText(String.valueOf(joglContext.getCamera().target.z));
-        
-        joglContext.toolBox.jTextFieldFovPerspectiveCamera.setText(String.valueOf(joglContext.getCamera().fovy));
-        joglContext.toolBox.jTextFieldAspectPerspectiveCamera.setText(String.valueOf(joglContext.getCamera().aspect));
-        joglContext.toolBox.jTextFieldNearPerspectiveCamera.setText(String.valueOf(joglContext.getCamera().nearPersp));
-        joglContext.toolBox.jTextFieldFarPerspectiveCamera.setText(String.valueOf(joglContext.getCamera().farPersp));
-        */
+
+    public void setCenter(Vec3F center) {
+        this.center = center;
     }
 }

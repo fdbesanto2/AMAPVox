@@ -298,6 +298,7 @@ public class JoglListener implements GLEventListener {
         
         if(isInit){
             
+            camera.setPivot(new Vec3F(scene.getVoxelSpace().centerX, scene.getVoxelSpace().centerY, scene.getVoxelSpace().centerZ));
             scene.setLightPosition(new Point3F(scene.getVoxelSpace().centerX, scene.getVoxelSpace().centerY, scene.getVoxelSpace().centerZ+scene.getVoxelSpace().widthZ+100));
             
             int id = scene.getShaderByName("instanceLightedShader");

@@ -4026,3 +4026,17 @@ java.lang.ArrayStoreException: java.util.TreeSet
 2015-06-12 18:58:14 INFO  - dart file written
 2015-06-12 19:13:33 INFO  - Computing dtm normals
 2015-06-12 19:15:26 INFO  - Computing dtm normals
+2015-06-13 07:51:02 INFO  - allocate!!!!!!!!
+2015-06-13 07:51:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-1512.85758771759, -2634.421401747968, 6.54)
+			Corner Sup	:	(-1431.1463811919675, -2546.624347677687, 55.33)
+			Dimensions	:	(82, 88, 49)
+			Toricity 	:	false
+
+2015-06-13 07:51:04 INFO  - writing file: F:\Paracou2013\las.vox
+2015-06-13 07:51:06 INFO  - file written ( 2.0 s )
+2015-06-13 07:51:06 INFO  - las voxelisation finished in 17.0 s
+2015-06-13 07:56:58 INFO  - Computing dtm normals
+2015-06-13 07:58:25 INFO  - Computing dtm normals
+2015-06-14 00:34:44 INFO  - Computing dtm normals
+2015-06-14 20:45:58 INFO  - Computing dtm normals
