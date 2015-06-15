@@ -157,15 +157,19 @@ public class VoxelSpaceData{
         if ((pt.y < 0) || (pt.y >= header.split.y)){
             return null;
         }
-        pt.x /= header.resolution.x;
-        pt.y /= header.resolution.y;
-        pt.z /= header.resolution.z;
+        pt.x /= header.res;
+        pt.y /= header.res;
+        pt.z /= header.res;
 
         Point3I indices = new Point3I();
-
+        
+        indices.x = (int)pt.x;
+        indices.y = (int)pt.y;
+        indices.z = (int)pt.z;
+        /*
         indices.x = (int) Math.floor ((double) (pt.x % header.split.x)); if (indices.x<0) indices.x += header.split.x;
         indices.y = (int) Math.floor ((double) (pt.y % header.split.y)); if (indices.y<0) indices.y += header.split.y;
-        indices.z = (int) Math.min (pt.z, header.split.z-1);
+        indices.z = (int) Math.min (pt.z, header.split.z-1);*/
                 
         return indices;
     }

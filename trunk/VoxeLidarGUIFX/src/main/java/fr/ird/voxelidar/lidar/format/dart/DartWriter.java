@@ -174,6 +174,8 @@ public class DartWriter {
                 dtm.setTransformationMatrix(transfMatrix);
                 dtm.setLimits(new Point3F((float)data.header.bottomCorner.x, (float)data.header.bottomCorner.y, (float)data.header.bottomCorner.z), 
                                                   new Point3F((float)data.header.topCorner.x, (float)data.header.topCorner.y, (float)data.header.topCorner.z), 10);
+                
+                logger.info("Building DTM");
                 dtm.buildMesh();
                 //dtm.exportObj(new File("/home/calcul/Documents/Julien/test.obj"));
                 
@@ -182,7 +184,7 @@ public class DartWriter {
                 
                 for(DTMPoint point : points){
                     
-                    Point3I voxelIndice = data.getIndicesFromPoint(point.x, point.y-0.0000001f, point.z);
+                    Point3I voxelIndice = data.getIndicesFromPoint(point.x, point.y-1, point.z);
                     if(voxelIndice != null){
                         
                         if(faces[voxelIndice.x][voxelIndice.y][voxelIndice.z] == null){
@@ -241,23 +243,24 @@ public class DartWriter {
                     dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_EMPTY);
                 }else{
                     dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_OPAQUE_GROUND);
-                    //dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(0);
+                    dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(0);
                 }
                 
                 densite = 0f;
             }else{
                 if(nbFigures > 0){
                     dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_OPAQUE_GROUND);
+                    dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(0);
                 }else{
                     dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_TURBID_CROWN);
                 }
                 
             }
-            
+            /*
             if(densite == 0){
                 //dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(0);
-                densite = 0.0000001f;
-            }
+                densite = 0.001f;
+            }*/
             
             //densite = ((int)(densite*1000))/1000.0f;
             

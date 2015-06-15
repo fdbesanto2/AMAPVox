@@ -268,9 +268,15 @@ public class VoxelSpace extends SceneObject{
         
         if(data.voxels.size() > 0){
             
-            widthX = ((VoxelObject)data.getLastVoxel()).position.x - ((VoxelObject)data.getFirstVoxel()).position.x;
-            widthY = ((VoxelObject)data.getLastVoxel()).position.y - ((VoxelObject)data.getFirstVoxel()).position.y;
-            widthZ = ((VoxelObject)data.getLastVoxel()).position.z - ((VoxelObject)data.getFirstVoxel()).position.z;
+            VoxelObject lastVoxel = ((VoxelObject)data.getLastVoxel());
+            VoxelObject firstVoxel = ((VoxelObject)data.getFirstVoxel());
+            
+            Point3f lastVoxelPosition = getVoxelPosition(lastVoxel.$i, lastVoxel.$j, lastVoxel.$k);
+            Point3f firstVoxelPosition = getVoxelPosition(firstVoxel.$i, firstVoxel.$j, firstVoxel.$k);
+            
+            widthX = lastVoxelPosition.x - firstVoxelPosition.x;
+            widthY = lastVoxelPosition.y - firstVoxelPosition.y;
+            widthZ = lastVoxelPosition.z - firstVoxelPosition.z;
         }
     }
     
@@ -281,9 +287,12 @@ public class VoxelSpace extends SceneObject{
             VoxelObject firstVoxel = (VoxelObject) data.getFirstVoxel();
             VoxelObject lastVoxel = (VoxelObject) data.getLastVoxel();
             
-            centerX = (firstVoxel.position.x + lastVoxel.position.x)/2.0f;
-            centerY = (firstVoxel.position.y + lastVoxel.position.y)/2.0f;
-            centerZ = (firstVoxel.position.z + lastVoxel.position.z)/2.0f;
+            Point3f lastVoxelPosition = getVoxelPosition(lastVoxel.$i, lastVoxel.$j, lastVoxel.$k);
+            Point3f firstVoxelPosition = getVoxelPosition(firstVoxel.$i, firstVoxel.$j, firstVoxel.$k);
+            
+            centerX = (firstVoxelPosition.x + lastVoxelPosition.x)/2.0f;
+            centerY = (firstVoxelPosition.y + lastVoxelPosition.y)/2.0f;
+            centerZ = (firstVoxelPosition.z + lastVoxelPosition.z)/2.0f;
         }
         
     }
@@ -384,9 +393,7 @@ public class VoxelSpace extends SceneObject{
                         }*/
                     }
                     
-                    Point3f position = new Point3f((float) (data.header.bottomCorner.x+(indice.x*(data.header.resolution.x))),
-                                                    (float) (data.header.bottomCorner.y+(indice.y*(data.header.resolution.y))),
-                                                    (float) (data.header.bottomCorner.z+(indice.z*(data.header.resolution.z))));
+                    Point3f position = getVoxelPosition(indice.x, indice.y, indice.z);
                     
                     if(lineNumber == 0){
                         data.minY = position.y;
@@ -401,7 +408,7 @@ public class VoxelSpace extends SceneObject{
                         }
                     }                    
                     
-                    data.voxels.add(new VoxelObject(indice, position, mapAttrs, 1.0f));
+                    data.voxels.add(new VoxelObject(indice, mapAttrs, 1.0f));
 
                     lineNumber++;
 
@@ -419,6 +426,13 @@ public class VoxelSpace extends SceneObject{
             }
             
         }
+    }
+    
+    private Point3f getVoxelPosition(int i, int j, int k){
+        
+        return new Point3f((float) (data.header.bottomCorner.x+(i*(data.header.resolution.x))),
+                                                    (float) (data.header.bottomCorner.y+(j*(data.header.resolution.y))),
+                                                    (float) (data.header.bottomCorner.z+(k*(data.header.resolution.z))));
     }
     
 //    private void readVoxelFormat2(File f){
@@ -870,9 +884,11 @@ public class VoxelSpace extends SceneObject{
                 
                 if(positionCount < instancePositions.length && colorCount < instanceColors.length){
                     
-                    instancePositions[positionCount] = voxel.position.x;
-                    instancePositions[positionCount+1] = voxel.position.y;
-                    instancePositions[positionCount+2] = voxel.position.z;
+                    Point3f position = getVoxelPosition(voxel.$i, voxel.$j, voxel.$k);
+                    
+                    instancePositions[positionCount] = position.x;
+                    instancePositions[positionCount+1] = position.y;
+                    instancePositions[positionCount+2] = position.z;
 
                     instanceColors[colorCount] = voxel.getRed();
                     instanceColors[colorCount+1] = voxel.getGreen();

@@ -310,12 +310,7 @@ public class VoxelisationTool implements Cancellable{
         
         List<Trajectory> trajectoryList = new ArrayList<>();
         
-        try {
-            //maxIterations = FileManager.getLineNumber(trajectoryFile.getAbsolutePath());
-            //step = (int) (maxIterations/10);
-            //iterations = 0;
-            
-            
+        try {            
             
             BufferedReader reader = new BufferedReader(new FileReader(trajectoryFile));
 
@@ -325,10 +320,6 @@ public class VoxelisationTool implements Cancellable{
             reader.readLine();
 
             while ((line = reader.readLine()) != null) {
-                /*
-                if(iterations % step == 0){
-                    fireProgress("Reading trajectory file", (int) ((iterations*100)/(float)maxIterations));
-                }*/
                 
                 line = line.replaceAll(",", " ");
                 String[] lineSplit = line.split(" ");
@@ -341,10 +332,7 @@ public class VoxelisationTool implements Cancellable{
                 //troncate unused values
                 //if(time >= minTime-0.01 && time <= maxTime+0.01){
                     trajectoryList.add(traj);
-                    //trajectoryMap.put(time, traj);
                 //}
-                
-                //iterations++;
             }
 
         } catch (FileNotFoundException ex) {
@@ -355,9 +343,7 @@ public class VoxelisationTool implements Cancellable{
             return;
         }
         
-        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, parameters, filters, filterLowPoints);
-        
-        voxelisation.init(terrain, trajectoryList);
+        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, parameters, filters, filterLowPoints, terrain, trajectoryList);
         
         voxelisation.addProcessingListener(new ProcessingListener() {
 
@@ -776,8 +762,7 @@ public class VoxelisationTool implements Cancellable{
             params.setSplit(input.voxelParameters.getSplit());
             params.setResolution(input.voxelParameters.getResolution());
             
-            LasVoxelisation voxelisation = new LasVoxelisation(input.inputFile, input.outputFile, vopMatrix, params, configuration.getFilters(), configuration.isRemoveLowPoint());
-            voxelisation.init(terrain, trajectoryList);
+            LasVoxelisation voxelisation = new LasVoxelisation(input.inputFile, input.outputFile, vopMatrix, params, configuration.getFilters(), configuration.isRemoveLowPoint(), terrain, trajectoryList);
             
             voxelisation.process();
             

@@ -309,7 +309,7 @@ public class RegularDtm {
                             z = -10.0f;
                         }
                         
-                        DTMPoint point = new DTMPoint((i*cellSize+xLeftLowerCorner), ( -(j-rowNumber)*cellSize+yLeftLowerCorner), z);
+                        DTMPoint point = new DTMPoint((i*cellSize+xLeftLowerCorner),  (-j+rowNumber)*cellSize+yLeftLowerCorner, z);
                         Vec4D result = Mat4D.multiply(transformationMatrix, new Vec4D(point.x, point.y, point.z, 1));
                         
                         point.x = (float) result.x;

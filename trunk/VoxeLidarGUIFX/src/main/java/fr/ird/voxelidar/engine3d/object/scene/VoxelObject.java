@@ -18,7 +18,7 @@ public class VoxelObject{
     public int $i;
     public int $j;
     public int $k;
-    public final Point3f position;
+    //public final Point3f position;
     public float[] attributs;
     
     public int type;
@@ -32,13 +32,13 @@ public class VoxelObject{
         return attributs;
     }
     
-    public VoxelObject(Point3i indice, Point3f position, float attributValue){
+    public VoxelObject(Point3i indice/*, Point3f position*/, float attributValue){
         
         this.$i = indice.x;
         this.$j = indice.y;
         this.$k = indice.z;
         
-        this.position = position;
+        //this.position = position;
         this.color = new Color(0, 0, 0, 1.0f);
         
         this.attributValue = attributValue;
@@ -46,13 +46,13 @@ public class VoxelObject{
         this.type = 6;
     }
     
-    public VoxelObject(Point3i indice, Point3f position, float[] attributs, float alpha){
+    public VoxelObject(Point3i indice/*, Point3f position*/, float[] attributs, float alpha){
         
         this.$i = indice.x;
         this.$j = indice.y;
         this.$k = indice.z;
         
-        this.position = position;
+        //this.position = position;
         
         this.color = new Color(0, 0, 0, 1.0f);
         this.attributs = attributs;

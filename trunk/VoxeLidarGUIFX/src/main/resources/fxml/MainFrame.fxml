@@ -590,7 +590,7 @@
                                                                   <ComboBox fx:id="comboboxAttributeToView" layoutX="153.0" layoutY="86.0" prefWidth="150.0" />
                                                                   <Label layoutX="32.0" layoutY="90.0" text="Attribute to view" />
                                                                   <Button fx:id="buttonOpen3DView" disable="true" layoutX="207.0" layoutY="373.0" mnemonicParsing="false" onAction="#onActionButtonVizualize" text="Open display window" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                                                                  <CheckBox fx:id="checkboxRaster" layoutX="38.0" layoutY="147.0" mnemonicParsing="false" style="-fx-scale-x: 1.5; -fx-scale-y: 1.5;" text="Raster" />
+                                                                  <CheckBox fx:id="checkboxRaster" layoutX="38.0" layoutY="147.0" mnemonicParsing="false" style="-fx-scale-x: 1.4; -fx-scale-y: 1.4;" text="Raster" />
                                                                   <AnchorPane fx:id="anchorPaneRasterParameters" disable="true" layoutX="109.0" layoutY="138.0">
                                                                      <children>
                                                                         <TextField fx:id="textfieldRasterFilePath" layoutX="26.0" prefHeight="25.0" prefWidth="296.0" />
@@ -620,7 +620,7 @@
                                                                   <CheckBox fx:id="checkboxFitRasterToVoxelSpace" layoutX="99.0" layoutY="217.0" mnemonicParsing="false" selected="true" text="Fit to voxel space" />
                                                                   <Label layoutX="251.0" layoutY="220.0" text="Margin (cell number)" />
                                                                   <TextField fx:id="textfieldRasterFittingMargin" layoutX="395.0" layoutY="215.0" prefHeight="25.0" prefWidth="84.0" text="0" />
-                                                                  <Button fx:id="buttonAddVoxelFileToListView2" layoutX="61.0" layoutY="176.0" mnemonicParsing="false" onAction="#onActionButtonAddVoxelFileToListView">
+                                                                  <Button fx:id="buttonSetTransformationMatrix" layoutX="61.0" layoutY="176.0" mnemonicParsing="false" onAction="#onActionButtonSetTransformationMatrix">
                                                                      <graphic>
                                                                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                                                            <image>

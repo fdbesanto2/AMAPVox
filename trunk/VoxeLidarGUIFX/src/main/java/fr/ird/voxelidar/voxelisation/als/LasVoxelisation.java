@@ -15,6 +15,7 @@ import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.Processing;
 import fr.ird.voxelidar.util.ProcessingListener;
 import java.io.File;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.log4j.Logger;
@@ -29,35 +30,26 @@ public class LasVoxelisation extends Processing {
     
     private File alsFile;
     private final Mat4D transfMatrix;
-    //private final File trajectoryFile;
     private File outputFile;
     private VoxelParameters parameters;
-    private VoxelAnalysis voxelAnalysis;
-    private List<Trajectory> trajectoryList;
-    //private LinkedBlockingQueue<Shot> queue;
+    private final List<Trajectory> trajectoryList;
     private final boolean filterLowPoints;
-    private List<Filter> filters;
-    private boolean alsFileChanged;
-    private boolean updateALS = true;
+    private final List<Filter> filters;
+    private boolean updateALS;
     private PointsToShot conversion;
+    private final RegularDtm terrain;
 
-    public LasVoxelisation(File alsFile, File outputFile, Mat4D transfMatrix/*, File trajectoryFile*/, VoxelParameters parameters, List<Filter> filters, boolean filterLowPoints) {
+    public LasVoxelisation(File alsFile, File outputFile, Mat4D transfMatrix, VoxelParameters parameters, List<Filter> filters, boolean filterLowPoints, RegularDtm terrain, List<Trajectory> trajectoryList) {
 
         this.alsFile = alsFile;
         this.outputFile = outputFile;
         this.transfMatrix = transfMatrix;
-        //this.trajectoryFile = trajectoryFile;
         this.parameters = parameters;
         this.filterLowPoints = filterLowPoints;
         this.filters = filters;
-    }
-    
-    
-    public void init(RegularDtm terrain, List<Trajectory> trajectoryList){
-        
-        voxelAnalysis = new VoxelAnalysis(null, terrain, filters);
+        this.terrain = terrain;
         this.trajectoryList = trajectoryList;
-        
+        this.updateALS = true;
     }
     
     public boolean isUpdateALS() {
@@ -70,59 +62,52 @@ public class LasVoxelisation extends Processing {
 
     @Override
     public File process() {
-        
                 
-        final long start_time = System.currentTimeMillis();
-        
+        VoxelAnalysis voxelAnalysis = new VoxelAnalysis(terrain, null, filters);
         voxelAnalysis.init(parameters, outputFile);
         voxelAnalysis.createVoxelSpace();
         
+        
         if(updateALS || conversion == null){
             
-            conversion = new PointsToShot(voxelAnalysis, trajectoryList, alsFile, transfMatrix, filterLowPoints);
+            conversion = new PointsToShot(trajectoryList, alsFile, transfMatrix, filterLowPoints);
             
             conversion.addProcessingListener(new ProcessingListener() {
-
-                @Override
-                public void processingFinished() {
-                    
-                    voxelAnalysis.setIsFinished(true);
-                }
 
                 @Override
                 public void processingStepProgress(String progress, int ratio) {
                     fireProgress(progress, ratio);
                 }
+
+                @Override
+                public void processingFinished() {
+                    fireFinished();
+                }
             });
+            
         }else if(!updateALS){
             conversion.setUpdateALS(updateALS);
         }
         
-        try {
-            
-            Thread t2 = new Thread(conversion);
-            
-            t2.start();
-            
-            //Thread t = new Thread(voxelAnalysis);
-            //t.start();
-            
-            //wait until voxelisation finished
-            t2.join();
-            
-            voxelAnalysis.calculatePADAndWrite(0);
-            
-            if(parameters.isCalculateGroundEnergy() && !parameters.isTLS()){
-                voxelAnalysis.writeGroundEnergy();
-            }
-            
-            return outputFile;
-            
-        } catch (InterruptedException ex) {
-            logger.error(ex.getMessage());
+        conversion.init();
+                    
+        Iterator<Shot> iterator = conversion.iterator();
+        
+        Shot shot;
+        
+        while((shot = iterator.next()) != null){
+                        
+            voxelAnalysis.processOneShot(shot);
         }
         
-        return null;
+
+        voxelAnalysis.calculatePADAndWrite(0);
+
+        if(parameters.isCalculateGroundEnergy() && !parameters.isTLS()){
+            voxelAnalysis.writeGroundEnergy();
+        }
+
+        return outputFile;
     }   
 
     public File getAlsFile() {
@@ -131,7 +116,6 @@ public class LasVoxelisation extends Processing {
 
     public void setAlsFile(File alsFile) {
         this.alsFile = alsFile;
-        alsFileChanged = true;
         
     }
 

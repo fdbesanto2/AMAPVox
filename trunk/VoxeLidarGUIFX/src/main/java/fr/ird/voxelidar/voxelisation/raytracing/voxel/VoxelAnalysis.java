@@ -14,7 +14,6 @@ import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelManager.VoxelCrossing
 import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
 import fr.ird.voxelidar.octree.Octree;
 import fr.ird.voxelidar.util.Filter;
-import fr.ird.voxelidar.util.SimpleFilter;
 import fr.ird.voxelidar.util.TimeCounter;
 import fr.ird.voxelidar.voxelisation.extraction.Shot;
 import java.awt.Color;
@@ -22,10 +21,8 @@ import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javax.imageio.ImageIO;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3d;
@@ -35,7 +32,6 @@ public class VoxelAnalysis {
 
     private final static Logger logger = Logger.getLogger(VoxelAnalysis.class);
 
-    private SimpleFilter filter;
     private VoxelSpace voxSpace;
     private Voxel voxels[][][];
     private VoxelManager voxelManager;
@@ -47,15 +43,11 @@ public class VoxelAnalysis {
 
     public int nbShotsTreated;
     private File outputFile;
-    private static int compteur = 1;
-    private static int compteur2 = 1;
-    private Point3d offset;
     private VoxelAnalysisData resultData;
 
     private float[][] weighting;
     
     private GroundEnergy[][] groundEnergy;
-
     int count1 = 0;
     int count2 = 0;
     int count3 = 0;
@@ -63,48 +55,16 @@ public class VoxelAnalysis {
     public VoxelParameters parameters;
     private LinkedBlockingQueue<Shot> arrayBlockingQueue;
 
-    //private Mat4D transfMatrix;
-    //private Mat3D rotation;
-    private AtomicBoolean isFinished;
     private boolean isSet = false;
 
     private final EventListenerList listeners;
     private RegularDtm terrain;
     private List<Octree> pointcloudList;
-    //List<Point3d> echoList = new ArrayList<>();
-
-    private int shotID = 0;
 
     int lastShot = 0;
     boolean shotChanged = false;
     Point3d lastEchotemp = new Point3d();
     
-    //List<TempClass> tempList;
-    
-    private class TempClass{
-        
-        public float x;
-        public float y;
-        public float z;
-        public int returnNumber;
-        public int numberOfReturns;
-        public float reflectance;
-
-        public TempClass(float x, float y, float z, int returnNumber, int numberOfReturns, float reflectance) {
-            
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.returnNumber = returnNumber;
-            this.numberOfReturns = numberOfReturns;
-            this.reflectance = reflectance;
-        }
-    }
-
-    public void setIsFinished(boolean isFinished) {
-        this.isFinished.set(isFinished);
-    }
-
     int nbSamplingTotal = 0;
 
     /**
@@ -135,22 +95,9 @@ public class VoxelAnalysis {
     public VoxelAnalysis(RegularDtm terrain, List<Octree> pointcloud, List<Filter> filters) {
 
         nbShotsTreated = 0;
-        isFinished = new AtomicBoolean(false);
         listeners = new EventListenerList();
         this.terrain = terrain;
         this.pointcloudList = pointcloud;
-        Shot.setFilters(filters);
-        resultData = new VoxelAnalysisData();
-        //tempList = new ArrayList<>();
-    }
-
-    public VoxelAnalysis(LinkedBlockingQueue<Shot> arrayBlockingQueue, RegularDtm terrain, List<Filter> filters) {
-
-        nbShotsTreated = 0;
-        isFinished = new AtomicBoolean(false);
-        this.arrayBlockingQueue = arrayBlockingQueue;
-        listeners = new EventListenerList();
-        this.terrain = terrain;
         Shot.setFilters(filters);
         resultData = new VoxelAnalysisData();
     }
@@ -181,41 +128,7 @@ public class VoxelAnalysis {
         this.parameters = parameters;
         this.outputFile = outputFile;
         weighting = parameters.getWeightingData();
-        /*
-        switch (parameters.getWeighting()) {
-
-            case VoxelParameters.WEIGHTING_ECHOS_NUMBER:
-
-                if (parameters.isTLS()) {
-                    weighting = VoxelParameters.DEFAULT_TLS_WEIGHTING;
-                } else {
-                    weighting = VoxelParameters.DEFAULT_ALS_WEIGHTING;
-                }
-
-                break;
-
-            case VoxelParameters.WEIGHTING_NONE:
-
-                break;
-
-            case VoxelParameters.WEIGHTING_FILE:
-
-                //read file
-                File weightingFile = parameters.getWeightingFile();
-
-                break;
-
-            case VoxelParameters.WEIGHTING_FRACTIONING:
-
-                break;
-
-        }
-        */
         MAX_PAD = parameters.getMaxPAD();
-
-        offset = new Point3d(parameters.bottomCorner);
-        
-        
 
     }
     
@@ -228,7 +141,6 @@ public class VoxelAnalysis {
         
         if (shot != null && shot.doFilter()) {
 
-            shotID = nbShotsTreated;
 
             if (nbShotsTreated % 1000000 == 0 && nbShotsTreated != 0) {
                 logger.info("Shots processed: " + nbShotsTreated);
@@ -296,8 +208,6 @@ public class VoxelAnalysis {
 
                     }
                    
-                   //echoList.add(new Point3d(echo.x, echo.y, echo.z));
-
                     if(areEchoInsideSameVoxel(echo, nextEcho)){
 
                        /*ne rien faire dans ce cas
@@ -416,8 +326,6 @@ public class VoxelAnalysis {
 
             //current voxel
             Point3i indices = context.indices;
-            
-            
 
             context = voxelManager.CrossVoxel(lineElement, context.indices);
 
@@ -425,8 +333,11 @@ public class VoxelAnalysis {
             double d2 = context.length;
             
 
-            Voxel vox = voxels[indices.x][indices.y][indices.z];
+            if(voxels[indices.x][indices.y][indices.z] == null){
+                voxels[indices.x][indices.y][indices.z] = initVoxel(indices.x, indices.y, indices.z);
+            }
             
+            Voxel vox = voxels[indices.x][indices.y][indices.z];
             
             
             //distance de l'écho à la source
@@ -435,7 +346,9 @@ public class VoxelAnalysis {
              * du centre du voxel à la source ou de l'écho à la source*********************
              */
             double surface;
-            double distance = vox._position.distance(source);
+            
+            //recalculé pour éviter le stockage de trois doubles (24 octets) par voxel
+            double distance = getPosition(new Point3i(indices.x, indices.y, indices.z), parameters.split, parameters.bottomCorner).distance(source);
 
             //surface de la section du faisceau à la distance de la source
             if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
@@ -511,65 +424,60 @@ public class VoxelAnalysis {
                  on incrémente et le nombre de tirs entrants (nbsampling) 
                  et le nombre d'interception (interceptions) 
                  et la longueur parcourue(lgInterception)*/
-                //if ((echoDistance >= parameters.minDTMDistance && echoDistance!= Float.NaN && parameters.useDTMCorrection()) || !parameters.useDTMCorrection()) {
-                    //if ((classification != 2 && !parameters.isTLS()) || parameters.isTLS()) { // if not ground
-                        
-                        /*
-                         * Si distanceToHit == d1,on incrémente le compteur d'échos
-                         */
+                    /*
+                     * Si distanceToHit == d1,on incrémente le compteur d'échos
+                     */
 
-                        vox.nbSampling++;
+                    vox.nbSampling++;
 
-                        nbSamplingTotal++;
+                    nbSamplingTotal++;
 
-                        double longueur;
-                        
-                        if(lastEcho){
-                            longueur = (distanceToHit - d1);
-                        }else{
-                            longueur = (d2 - d1);
+                    double longueur;
+
+                    if(lastEcho){
+                        longueur = (distanceToHit - d1);
+                    }else{
+                        longueur = (d2 - d1);
+                    }
+
+                    vox.lgTotal += longueur;
+
+                    vox.angleMean += angle;
+
+                    double entering;
+                    entering = (surface * beamFraction * longueur);
+                    vox.bvEntering += entering;
+
+                    double intercepted = 0;
+
+
+                    if (((classification != 2 && !parameters.isTLS()) || parameters.isTLS()) && 
+                            ((echoDistance >= parameters.minDTMDistance && echoDistance!= Float.NaN && parameters.useDTMCorrection())|| !parameters.useDTMCorrection()) &&
+                            keepEcho){
+
+                        vox.nbEchos++;
+
+                        if(parameters.isUsePointCloudFilter()){
+                            resultData.filteredPointsCount++;
                         }
-                        
-                        vox.lgTotal += longueur;
-                        
-                        vox.angleMean += angle;
-                        
-                        double entering;
-                        entering = (surface * beamFraction * longueur);
-                        vox.bvEntering += entering;
-                        
-                        double intercepted = 0;
-                        
-                        
-                        if (((classification != 2 && !parameters.isTLS()) || parameters.isTLS()) && 
-                                ((echoDistance >= parameters.minDTMDistance && echoDistance!= Float.NaN && parameters.useDTMCorrection())|| !parameters.useDTMCorrection()) &&
-                                keepEcho){
-                            
-                            vox.nbEchos++;
-                            
-                            if(parameters.isUsePointCloudFilter()){
-                                resultData.filteredPointsCount++;
-                                //tempList.add(new TempClass((float)echo.x, (float)echo.y, (float)echo.z, indiceEcho, nbEchos, reflectance));
-                            }
-                            
-                            
-                            intercepted = (surface * beamFraction * longueur);
-                            vox.bvIntercepted += intercepted;
-                            
-                        }else{
-                            
-                            
-                            if(parameters.isCalculateGroundEnergy() && !parameters.isTLS() && !isSet){
-                                groundEnergy[vox.$i][vox.$j].groundEnergyActual += residualEnergy;
-                                groundEnergy[vox.$i][vox.$j].groundEnergyPotential++;
-                                
-                                isSet = true;
-                            }
+
+
+                        intercepted = (surface * beamFraction * longueur);
+                        vox.bvIntercepted += intercepted;
+
+                    }else{
+
+
+                        if(parameters.isCalculateGroundEnergy() && !parameters.isTLS() && !isSet){
+                            groundEnergy[vox.$i][vox.$j].groundEnergyActual += residualEnergy;
+                            groundEnergy[vox.$i][vox.$j].groundEnergyPotential++;
+
+                            isSet = true;
                         }
-                        
-                        //vox._sumSurfaceMultiplyLength += (surface*longueur);
-                        //vox._transBeforeNorm += (((entering-intercepted)/entering) * surface * longueur);
-                    //}
+                    }
+
+                    //vox._sumSurfaceMultiplyLength += (surface*longueur);
+                    //vox._transBeforeNorm += (((entering-intercepted)/entering) * surface * longueur);
                     
                 lastEchotemp = echo;
             }
@@ -617,6 +525,11 @@ public void calculatePADAndWrite(double threshold) {
                     for (int k = 0; k < parameters.split.z; k++) {
 
                         Voxel vox = voxels[i][j][k];
+                        
+                        if(vox == null){
+                            
+                            vox = initVoxel(i, j, k);
+                        }
 
                         float pad1/*, pad2*/;
 
@@ -696,29 +609,6 @@ public void calculatePADAndWrite(double threshold) {
 
             writer.close();
             
-            //temp
-            /*
-            try (BufferedWriter writer2 = new BufferedWriter(new FileWriter(new File("/home/calcul/Documents/Julien/temp/test.txt"),true))) {
-                for(TempClass tc : tempList){
-                    writer2.write(tc.x+" "+tc.y+" "+tc.z+" "+tc.returnNumber+1+" "+tc.numberOfReturns+" "+tc.reflectance+"\n");
-                }
-            }*/
-            
-            
-//            
-//            DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.US);
-//            otherSymbols.setDecimalSeparator('.');
-//            otherSymbols.setGroupingSeparator('.'); 
-//            
-//            DecimalFormat format = new DecimalFormat("###.###", otherSymbols);
-//            format.setRoundingMode(RoundingMode.FLOOR);
-            /*
-            try (BufferedWriter writer2 = new BufferedWriter(new FileWriter(new File("e:\\test.txt"),true))) {
-                for(Point3d echo : echoList){
-                    writer2.write(((long)(echo.x*1000))/1000.0f+" "+((long)(echo.y*1000))/1000.0f+" "+((long)(echo.z*1000))/1000.0f+"\n");
-                }
-            }
-            */
             logger.info("file written ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
 
         } catch (FileNotFoundException e) {
@@ -807,22 +697,14 @@ public void calculatePADAndWrite(double threshold) {
             // allocate voxels
             logger.info("allocate!!!!!!!!");
 
-            if (parameters.isTLS()) {
-                voxels = new Voxel[parameters.split.x][parameters.split.y][parameters.split.z];
-            } else {
-                voxels = new Voxel[parameters.split.x][parameters.split.y][parameters.split.z];
-            }
+            voxels = new Voxel[parameters.split.x][parameters.split.y][parameters.split.z];
             
             try{
                 for (int x = 0; x < parameters.split.x; x++) {
                     for (int y = 0; y < parameters.split.y; y++) {
                         for (int z = 0; z < parameters.split.z; z++) {
-
-                            if (parameters.isTLS()) {
-                                voxels[x][y][z] = new Voxel(x, y, z);
-                            } else {
-                                voxels[x][y][z] = new Voxel(x, y, z);
-                            }
+                            /*
+                            voxels[x][y][z] = new Voxel(x, y, z);
 
                             Point3d position = getPosition(new Point3i(x, y, z),
                                     parameters.split, parameters.bottomCorner);
@@ -840,7 +722,7 @@ public void calculatePADAndWrite(double threshold) {
                                 dist = (float) (position.z);
                             }
                             voxels[x][y][z].setDist(dist);
-                            voxels[x][y][z].setPosition(position);
+                            voxels[x][y][z].setPosition(position);*/
                         }
                     }
                 }
@@ -875,5 +757,32 @@ public void calculatePADAndWrite(double threshold) {
 
     public VoxelAnalysisData getResultData() {
         return resultData;
+    }
+    
+    private Voxel initVoxel(int i, int j, int k){
+        
+        Voxel vox = new Voxel(i, j, k);
+        
+        Point3d position = getPosition(new Point3i(i, j, k),
+        parameters.split, parameters.bottomCorner);
+
+        float dist;
+
+        if (terrain != null && parameters.useDTMCorrection()) {
+            float dtmHeightXY = terrain.getSimpleHeight((float) position.x, (float) position.y);
+            if (dtmHeightXY == Float.NaN) {
+                dist = (float) (position.z);
+            } else {
+                dist = (float) (position.z - dtmHeightXY);
+            }
+
+        } else {
+            dist = (float) (position.z);
+        }
+
+        vox.setDist(dist);
+        //vox.setPosition(position);
+        
+        return vox;
     }
 }

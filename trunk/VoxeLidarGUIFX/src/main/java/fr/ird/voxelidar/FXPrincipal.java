@@ -7,6 +7,7 @@ package fr.ird.voxelidar;
 
 import fr.ird.voxelidar.gui.MainFrameController;
 import fr.ird.voxelidar.transmittance.PadTransmittance;
+import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.io.File;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -23,6 +24,7 @@ public class FXPrincipal extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+                
         /*
         PadTransmittance padTransmittance = new PadTransmittance();
         padTransmittance.processOneFile(new File("/home/calcul/Documents/Julien/Projet_nouragues/output2/hobo_1_100m.laz_multires_.vox"));

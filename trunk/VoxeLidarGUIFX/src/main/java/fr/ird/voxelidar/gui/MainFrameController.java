@@ -224,7 +224,7 @@ public class MainFrameController implements Initializable {
     @FXML
     private Button buttonALSAddToTaskList1;
     @FXML
-    private Button buttonAddVoxelFileToListView2;
+    private Button buttonSetTransformationMatrix;
 
     @FXML
     private void onActionMenuItemUpdate(ActionEvent event) {
@@ -402,6 +402,21 @@ public class MainFrameController implements Initializable {
         }
     }
 
+    @FXML
+    private void onActionButtonSetTransformationMatrix(ActionEvent event) {
+        
+        transformationFrame.setOnHidden(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+
+                transformationFrameController.getMatrix();
+            }
+        });
+        
+        transformationFrame.show();
+    }
+
     public class MinMax {
 
         public Point3d min;
@@ -418,6 +433,9 @@ public class MainFrameController implements Initializable {
 
     private Stage calculateMatrixFrame;
     private Stage filterFrame;
+    private Stage transformationFrame;
+    
+    private TransformationFrameController transformationFrameController;
 
     private BlockingQueue<File> queue = new ArrayBlockingQueue<>(100);
     private int taskNumber = 0;
@@ -848,6 +866,21 @@ public class MainFrameController implements Initializable {
 
         fileChooserSaveGroundEnergyOutputFile = new FileChooser();
         fileChooserSaveGroundEnergyOutputFile.setTitle("Save ground energy file");
+        
+        transformationFrame = new Stage();
+        
+        Parent root;
+            
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TransformationFrame.fxml"));
+            root = loader.load();
+            transformationFrameController = loader.getController();
+            transformationFrameController.setStage(transformationFrame);
+            transformationFrameController.setParent(this);
+            transformationFrame.setScene(new Scene(root));
+        } catch (IOException ex) {
+            logger.error(ex);
+        }
 
         comboboxModeALS.getItems().addAll("Las file", "Laz file", "Points file (unavailable)", "Shots file (unavailable)");
         comboboxModeTLS.getItems().addAll("Rxp scan", "Rsp project", "Points file (unavailable)", "Shots file (unavailable)");
@@ -940,7 +973,6 @@ public class MainFrameController implements Initializable {
 
         calculateMatrixFrame = new Stage();
 
-        Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CalculateMatrixFrame.fxml"));
             root = loader.load();
@@ -4151,7 +4183,7 @@ public class MainFrameController implements Initializable {
     private void onActionButtonGetBoundingBox(ActionEvent event) {
 
         Mat4D vopMatrixTmp = MatrixConverter.convertMatrix4dToMat4D(vopMatrix);
-        if(vopMatrixTmp == null){vopMatrixTmp = Mat4D.identity();}
+        if(vopMatrixTmp == null && checkboxUseVopMatrix.isSelected()){vopMatrixTmp = Mat4D.identity();}
         
         final Mat4D transfMatrix = vopMatrixTmp;
         
