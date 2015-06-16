@@ -6983,3 +6983,4 @@ java.lang.ArrayStoreException: java.util.TreeSet
 2015-06-16 09:07:11 ERROR - javafx.fxml.LoadException: 
 file:/E:/Programmation/VoxeLidar/trunk/VoxeLidarGUIFX/target/release/VoxeLidarGUIFX-1.0-r906ee913.jar!/fxml/TransformationFrame.fxml
 
+2015-06-16 14:28:01 INFO  - Computing dtm normals

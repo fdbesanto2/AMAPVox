@@ -350,23 +350,6 @@ public class MainFrameController implements Initializable {
     }
 
     @FXML
-    private void onActionButtonEnterReferencePointsTransformation(ActionEvent event) {
-        
-        calculateMatrixFrame.show();
-
-        calculateMatrixFrame.setOnHidden(new EventHandler<WindowEvent>() {
-
-            @Override
-            public void handle(WindowEvent event) {
-
-                if (calculateMatrixFrameController.getMatrix() != null) {
-                    rasterTransfMatrix = calculateMatrixFrameController.getMatrix();
-                }
-            }
-        });
-    }
-
-    @FXML
     private void onActionButtonOpenTransformationMatrixFile(ActionEvent event) {
         
         fileChooserOpenVopMatrixFile.setInitialDirectory(listViewVoxelsFiles.getSelectionModel().getSelectedItem().getParentFile());
@@ -404,13 +387,24 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionButtonSetTransformationMatrix(ActionEvent event) {
+                
+        transformationFrameController.reset();
         
         transformationFrame.setOnHidden(new EventHandler<WindowEvent>() {
 
             @Override
             public void handle(WindowEvent event) {
-
-                transformationFrameController.getMatrix();
+                
+                if(transformationFrameController.isConfirmed()){
+                    
+                    rasterTransfMatrix = transformationFrameController.getMatrix();
+                
+                    if (rasterTransfMatrix == null) {
+                        rasterTransfMatrix = new Matrix4d();
+                        rasterTransfMatrix.setIdentity();
+                    }
+                }
+                
             }
         });
         
@@ -1427,8 +1421,7 @@ public class MainFrameController implements Initializable {
 
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                buttonEnterReferencePointsTransformation.setDisable(!newValue);
-                buttonOpenTransformationMatrixFile.setDisable(!newValue);
+                buttonSetTransformationMatrix.setDisable(!newValue);
             }
         });
     }

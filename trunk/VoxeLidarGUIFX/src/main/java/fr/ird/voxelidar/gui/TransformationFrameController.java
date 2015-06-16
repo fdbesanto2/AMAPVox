@@ -17,6 +17,7 @@ For further information, please contact Gregoire Vincent.
 
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.util.MatrixFileParser;
+import fr.ird.voxelidar.voxelisation.VoxelisationTool;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -113,7 +114,27 @@ public class TransformationFrameController implements Initializable {
     private TextField labelAxisRotationZ;
     
     
-    private boolean isMatrixFilling;
+    private boolean confirmed;
+    
+    private boolean modifyingAxisRotationPanel;
+    private boolean modifyingEulerRotationPanel;
+    private boolean modifyingTranslationPanel;
+    private boolean modifyingTransformationMatrixPanel;
+    @FXML
+    private Button buttonAcceptExtremumsPoints;
+    @FXML
+    private TextField textFieldPoint1X;
+    @FXML
+    private TextField textFieldPoint1Y;
+    @FXML
+    private TextField textFieldPoint1Z;
+    @FXML
+    private TextField textFieldPoint2X;
+    @FXML
+    private TextField textFieldPoint2Y;
+    @FXML
+    private TextField textFieldPoint2Z;
+    
     /**
      * Initializes the controller class.
      */
@@ -121,7 +142,7 @@ public class TransformationFrameController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         
         setToIdentity();
-        isMatrixFilling = false;
+        reset();
         
         labelTranslationX.textProperty().addListener(new ChangeListener<String>() {
 
@@ -214,7 +235,9 @@ public class TransformationFrameController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 
-                if(!isMatrixFilling){
+                modifyingEulerRotationPanel = true;
+                
+                if(!modifyingTransformationMatrixPanel){
                     try{
                         double value = Double.valueOf(labelEulerRotationX.getText());
                         matrixM11.setText(String.valueOf(Math.cos(value)));
@@ -222,7 +245,10 @@ public class TransformationFrameController implements Initializable {
                         matrixM21.setText(String.valueOf(Math.sin(value)));
                         matrixM22.setText(String.valueOf(Math.cos(value)));
                     }catch(Exception e){}
-                }                
+                }
+                
+                modifyingEulerRotationPanel = false;
+                                
             }
         });
         
@@ -231,7 +257,9 @@ public class TransformationFrameController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 
-                if(!isMatrixFilling){
+                modifyingEulerRotationPanel = true;
+                
+                if(!modifyingTransformationMatrixPanel){
                     try{
                         double value = Double.valueOf(labelEulerRotationY.getText());
                         matrixM00.setText(String.valueOf(Math.cos(value)));
@@ -240,6 +268,10 @@ public class TransformationFrameController implements Initializable {
                         matrixM22.setText(String.valueOf(Math.cos(value)));
                     }catch(Exception e){}
                 }
+                
+                
+                modifyingEulerRotationPanel = false;
+                
             }
         });
         
@@ -248,7 +280,9 @@ public class TransformationFrameController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 
-                if(!isMatrixFilling){
+                modifyingEulerRotationPanel = true;
+                
+                if(!modifyingTransformationMatrixPanel){
                     try{
                         double value = Double.valueOf(labelEulerRotationZ.getText());
                         matrixM00.setText(String.valueOf(Math.cos(value)));
@@ -257,6 +291,8 @@ public class TransformationFrameController implements Initializable {
                         matrixM11.setText(String.valueOf(Math.cos(value)));
                     }catch(Exception e){}
                 }
+                
+                modifyingEulerRotationPanel = false;
             }
         });
         
@@ -265,11 +301,13 @@ public class TransformationFrameController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 
-                if(!isMatrixFilling){
-                    isMatrixFilling = true;
+                modifyingAxisRotationPanel = true;
+                
+                if(!modifyingTransformationMatrixPanel){
                     calculateRotationMatrix();
-                    isMatrixFilling = false;
                 }
+                
+                modifyingAxisRotationPanel = false;
                 
             }
         };
@@ -285,12 +323,13 @@ public class TransformationFrameController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 
-                if(!isMatrixFilling){
-                    isMatrixFilling = true;
+                if(!modifyingAxisRotationPanel && !modifyingEulerRotationPanel){
+                    modifyingTransformationMatrixPanel = true;
                     getEulerFromMatrix();
                     getRotationAxisAndAngle();
-                    isMatrixFilling = false;
+                    modifyingTransformationMatrixPanel = false;
                 }
+                
             }
         };
         
@@ -334,7 +373,7 @@ public class TransformationFrameController implements Initializable {
         Vector3d vec = new Vector3d(uX, uY, uZ);
         vec.normalize();
         
-        if(Double.isNaN(vec.length())){
+        if(!Double.isNaN(vec.length())){
             uX = vec.x;
             uY = vec.y;
             uZ = vec.z;
@@ -372,8 +411,6 @@ public class TransformationFrameController implements Initializable {
     }
     
     private void fillMatrix(Matrix4d matrix){
-        
-        
         
         matrixM00.setText(String.valueOf(matrix.m00));
         matrixM01.setText(String.valueOf(matrix.m01));
@@ -559,14 +596,13 @@ public class TransformationFrameController implements Initializable {
             
             Matrix4d mat = MatrixFileParser.getMatrixFromFile(selectedFile);
             if (mat != null) {
-                //avoid matrix textproperty event
-                isMatrixFilling = true;
+                
+                modifyingTransformationMatrixPanel = true;
                 
                 fillMatrix(mat);
-                getEulerFromMatrix();
-                getRotationAxisAndAngle();
                 
-                isMatrixFilling = false;
+                modifyingTransformationMatrixPanel = false;
+                
             } else {
                 parent.showMatrixFormatErrorDialog();
             }
@@ -575,5 +611,38 @@ public class TransformationFrameController implements Initializable {
 
     @FXML
     private void onActionButtonConfirm(ActionEvent event) {
+        confirmed = true;
+        stage.close();
+    }
+
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+    
+    public void reset(){
+        
+        confirmed = false;
+        
+        modifyingAxisRotationPanel = false;
+        modifyingEulerRotationPanel = false;
+        modifyingTransformationMatrixPanel = false;
+        modifyingTranslationPanel = false;
+    }
+
+    @FXML
+    private void onActionButtonAcceptExtremumsPoints(ActionEvent event) {
+        
+        try{
+            Vector3d point1 = new Vector3d(Double.valueOf(textFieldPoint1X.getText()), Double.valueOf(textFieldPoint1Y.getText()), Double.valueOf(textFieldPoint1Z.getText()));
+            Vector3d point2 = new Vector3d(Double.valueOf(textFieldPoint2X.getText()), Double.valueOf(textFieldPoint2Y.getText()), Double.valueOf(textFieldPoint2Z.getText()));
+            Matrix4d matrix = VoxelisationTool.getMatrixTransformation(point1, point2);
+
+            if(matrix != null){
+                fillMatrix(matrix);
+            }
+        }catch(Exception e){
+            
+        }
+        
     }
 }
