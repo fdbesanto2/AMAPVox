@@ -5,7 +5,7 @@
  */
 package fr.ird.voxelidar.voxelisation;
 
-import fr.ird.voxelidar.configuration.Configuration;
+import fr.ird.voxelidar.configuration.VoxelisationConfiguration;
 import fr.ird.voxelidar.configuration.Input;
 import fr.ird.voxelidar.configuration.MatrixAndFile;
 import fr.ird.voxelidar.util.ProcessingListener;
@@ -661,7 +661,7 @@ public class VoxelisationTool implements Cancellable{
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
     }
     
-    public void multiVoxelisation(Configuration configuration){
+    public void multiVoxelisation(VoxelisationConfiguration configuration){
         
         startTime = System.currentTimeMillis();
         configuration.getVoxelParameters().setTLS(false);

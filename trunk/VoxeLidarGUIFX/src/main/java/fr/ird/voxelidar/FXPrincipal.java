@@ -5,6 +5,7 @@
  */
 package fr.ird.voxelidar;
 
+import fr.ird.voxelidar.gui.DateChooserFrameController;
 import fr.ird.voxelidar.gui.MainFrameController;
 import fr.ird.voxelidar.transmittance.PadTransmittance;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
@@ -30,6 +31,7 @@ public class FXPrincipal extends Application {
         padTransmittance.processOneFile(new File("/home/calcul/Documents/Julien/Projet_nouragues/output2/hobo_1_100m.laz_multires_.vox"));
         
         */
+        
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainFrame.fxml"));
         Parent root = loader.load();
         MainFrameController controller = loader.getController();

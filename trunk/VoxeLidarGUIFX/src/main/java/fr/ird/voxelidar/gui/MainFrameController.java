@@ -6,9 +6,14 @@
 package fr.ird.voxelidar.gui;
 
 import com.jogamp.newt.event.WindowAdapter;
-import fr.ird.voxelidar.configuration.Configuration;
 import fr.ird.voxelidar.configuration.Configuration.InputType;
 import fr.ird.voxelidar.configuration.Configuration.ProcessMode;
+import static fr.ird.voxelidar.configuration.Configuration.ProcessMode.MERGING;
+import static fr.ird.voxelidar.configuration.Configuration.ProcessMode.MULTI_RES;
+import static fr.ird.voxelidar.configuration.Configuration.ProcessMode.MULTI_VOXELISATION_ALS_AND_MULTI_RES;
+import static fr.ird.voxelidar.configuration.Configuration.ProcessMode.VOXELISATION_ALS;
+import static fr.ird.voxelidar.configuration.Configuration.ProcessMode.VOXELISATION_TLS;
+import fr.ird.voxelidar.configuration.VoxelisationConfiguration;
 import fr.ird.voxelidar.configuration.Input;
 import fr.ird.voxelidar.configuration.MatrixAndFile;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
@@ -30,6 +35,7 @@ import fr.ird.voxelidar.lidar.format.tls.Rsp;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.lidar.format.tls.Scans;
 import fr.ird.voxelidar.multires.ProcessingMultiRes;
+import fr.ird.voxelidar.transmittance.SimulationPeriod;
 import fr.ird.voxelidar.update.Updater;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.MatrixConverter;
@@ -62,6 +68,7 @@ import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
@@ -92,7 +99,10 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
@@ -124,303 +134,7 @@ import org.controlsfx.dialog.ProgressDialog;
  */
 public class MainFrameController implements Initializable {
 
-    @FXML
-    private CheckBox checkboxRemoveLowPoint;
-    @FXML
-    private Slider sliderRSPCoresToUse;
-    @FXML
-    private TextField textFieldPadMax5m;
-    @FXML
-    private Label labelPadMax5m;
-    @FXML
-    private CheckBox checkboxOverwritePadLimit;
-    @FXML
-    private AnchorPane anchorpanePadLimits;
-    @FXML
-    private Button buttonOpenSopMatrixFile;
-    @FXML
-    private MenuItem menuitemClearWindow;
-    @FXML
-    private AnchorPane anchorpaneRoot;
-    //private Button buttonOpenPointCloudFile;
-    //private Label labelPointCloudPath;
-    //private TextField textfieldPointCloudPath;
-
-    @FXML
-    private CheckBox checkboxUsePointcloudFilter;
-    /*
-     private TextField textfieldPointCloudErrorMargin;
-     private Label labelPointCloudErrorMarginValue;
-     private AnchorPane anchorpanePointCloudFilterParameters;
-     */
-
-    @FXML
-    private Button buttonAddPointcloudFilter;
-
-    @FXML
-    private AnchorPane anchorpanePointCloudFiltering;
-    @FXML
-    private Button buttonGetBoundingBox;
-    @FXML
-    private TextField textfieldResMultiRes;
-    @FXML
-    private CheckBox checkboxMultiResAfter;
-    @FXML
-    private MenuItem menuItemUpdate;
-    @FXML
-    private AnchorPane anchorpanePreFiltering;
-    @FXML
-    private MenuItem menuItemExportDartPlots;
-    @FXML
-    private CheckBox checkboxRaster;
-    @FXML
-    private TextField textfieldRasterFilePath;
-    @FXML
-    private CheckBox checkboxUseTransformationMatrix;
-    @FXML
-    private Button buttonEnterReferencePointsTransformation;
-    @FXML
-    private Button buttonOpenTransformationMatrixFile;
-    @FXML
-    private Button buttonOpenRasterFile;
-    @FXML
-    private AnchorPane anchorPaneRasterParameters;
-    @FXML
-    private CheckBox checkboxFitRasterToVoxelSpace;
-    @FXML
-    private TextField textfieldRasterFittingMargin;
-    @FXML
-    private TextField textfieldVoxelFilePathTransmittance;
-    @FXML
-    private Button buttonOpenVoxelFileTransmittance;
-    @FXML
-    private Button buttonAddVoxelFileToListView1;
-    @FXML
-    private Button buttonRemoveVoxelFileFromListView1;
-    @FXML
-    private MenuItem menuItemSelectionAll1;
-    @FXML
-    private MenuItem menuItemSelectionNone1;
-    @FXML
-    private ComboBox<?> comboboxChooseDirectionsNumber;
-    @FXML
-    private TextField textfieldScannerPosCenterY;
-    @FXML
-    private Button buttonOpenScannerPointsPositionsFile;
-    @FXML
-    private TextField textfieldScannerPosCenterX;
-    @FXML
-    private TextField textfieldScannerPosCenterZ;
-    @FXML
-    private TextField textfieldScannerPointsPositionsFile;
-    @FXML
-    private RadioButton radiobuttonScannerPosSquaredArea;
-    @FXML
-    private TextField textfieldScannerStepArea;
-    @FXML
-    private RadioButton radiobuttonScannerPosFile;
-    @FXML
-    private TextField textfieldScannerWidthArea;
-    @FXML
-    private Button buttonALSAddToTaskList1;
-    @FXML
-    private Button buttonSetTransformationMatrix;
-
-    @FXML
-    private void onActionMenuItemUpdate(ActionEvent event) {
-                                    
-        Service<Void> service = new Service<Void>() {
-            @Override
-            protected Task<Void> createTask() {
-                return new Task<Void>() {
-                    @Override
-                    protected Void call() throws InterruptedException {
-
-                            final Updater updater = new Updater();
-                            
-                            updater.update();
-                            
-                            Platform.runLater(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    Alert alert = new Alert(AlertType.INFORMATION);
-                                    alert.setTitle("Information");
-                                    alert.setHeaderText("About the Update");
-                                    alert.setContentText("AmapVox needs to be restarted in order to apply update!");
-                                    alert.show();
-                                }
-                            });
-                            
-                            return null;
-                    }
-                };
-            }
-        };
-
-        ProgressDialog d = new ProgressDialog(service);
-        d.initOwner(stage);
-        d.show();
-
-        service.start();
-        
-    }
-
-    @FXML
-    private void onActionMenuItemExportDartPlots(ActionEvent event) {
-        
-        final File voxelFile = listViewVoxelsFiles.getSelectionModel().getSelectedItem();
-        
-        if(checkVoxelFile(voxelFile)){
-            
-            fileChooserSaveDartFile.setInitialFileName("plots.xml");
-            fileChooserSaveDartFile.setInitialDirectory(voxelFile.getParentFile());
-            
-            final File plotFile = fileChooserSaveDartFile.showSaveDialog(stage);
-            
-            if(plotFile != null){
-                
-                Alert alert = new Alert(AlertType.CONFIRMATION);
-                
-                alert.setTitle("Coordinate system");
-                alert.setContentText("Choose your coordinate system");
-                
-                ButtonType buttonTypeGlobal = new ButtonType("Global");
-                ButtonType buttonTypeLocal = new ButtonType("Local");
-
-                alert.getButtonTypes().setAll(buttonTypeGlobal, buttonTypeLocal);
-                
-                Optional<ButtonType> result = alert.showAndWait();
-                
-                
-                final boolean global;
-                
-                if(result.get() == buttonTypeGlobal){
-                    global = true;
-                }else if(result.get() == buttonTypeLocal){
-                    global = false;
-                }else{
-                    return;
-                }
-                
-                final DartPlotsXMLWriter dartPlotsXML = new DartPlotsXMLWriter();
-                
-                Service service = new Service() {
-
-                    @Override
-                    protected Task createTask() {
-                        return new Task<Object>() {
-
-                            @Override
-                            protected Object call() throws Exception {
-                                
-                                
-                                dartPlotsXML.writeFromVoxelFile(voxelFile, plotFile, global);
-                                return null;
-                            }
-                        };
-                    }
-                };
-                
-                ProgressDialog progressDialog = new ProgressDialog(service);
-                progressDialog.show();
-                service.start();
-                
-                Button buttonCancel = new Button("cancel");
-                progressDialog.setGraphic(buttonCancel);
-
-                buttonCancel.setOnAction(new EventHandler<ActionEvent>() {
-
-                    @Override
-                    public void handle(ActionEvent event) {
-                        service.cancel();
-                        dartPlotsXML.setCancelled(true);
-                    }
-                });
-                
-            }
-        }
-        
-        
-        
-    }
-
-    @FXML
-    private void onActionCheckboxUseTransformationMatrix(ActionEvent event) {
-    }
-
-    @FXML
-    private void onActionButtonOpenTransformationMatrixFile(ActionEvent event) {
-        
-        fileChooserOpenVopMatrixFile.setInitialDirectory(listViewVoxelsFiles.getSelectionModel().getSelectedItem().getParentFile());
-        
-        File selectedFile = fileChooserOpenVopMatrixFile.showOpenDialog(stage);
-        
-        if(selectedFile != null){
-            
-            Matrix4d mat = MatrixFileParser.getMatrixFromFile(selectedFile);
-            if (mat != null) {
-                
-                rasterTransfMatrix = MatrixFileParser.getMatrixFromFile(selectedFile);
-                if (rasterTransfMatrix == null) {
-                    rasterTransfMatrix = new Matrix4d();
-                    rasterTransfMatrix.setIdentity();
-                }
-                
-            } else {
-                showMatrixFormatErrorDialog();
-            }
-        }
-    }
-
-    @FXML
-    private void onActionButtonOpenRasterFile(ActionEvent event) {
-        
-        fileChooserOpenDTMFile.setInitialDirectory(listViewVoxelsFiles.getSelectionModel().getSelectedItem().getParentFile());
-        
-        File selectedFile = fileChooserOpenDTMFile.showOpenDialog(stage);
-        
-        if(selectedFile != null){
-            textfieldRasterFilePath.setText(selectedFile.getAbsolutePath());
-        }
-    }
-
-    @FXML
-    private void onActionButtonSetTransformationMatrix(ActionEvent event) {
-                
-        transformationFrameController.reset();
-        
-        transformationFrame.setOnHidden(new EventHandler<WindowEvent>() {
-
-            @Override
-            public void handle(WindowEvent event) {
-                
-                if(transformationFrameController.isConfirmed()){
-                    
-                    rasterTransfMatrix = transformationFrameController.getMatrix();
-                
-                    if (rasterTransfMatrix == null) {
-                        rasterTransfMatrix = new Matrix4d();
-                        rasterTransfMatrix.setIdentity();
-                    }
-                }
-                
-            }
-        });
-        
-        transformationFrame.show();
-    }
-
-    public class MinMax {
-
-        public Point3d min;
-        public Point3d max;
-
-        public MinMax(Point3d min, Point3d max) {
-            this.min = min;
-            this.max = max;
-        }
-    }
+    
 
     private final static Logger logger = Logger.getLogger(MainFrameController.class);
     private Stage stage;
@@ -428,8 +142,10 @@ public class MainFrameController implements Initializable {
     private Stage calculateMatrixFrame;
     private Stage filterFrame;
     private Stage transformationFrame;
+    private Stage dateChooserFrame;
     
     private TransformationFrameController transformationFrameController;
+    private DateChooserFrameController dateChooserFrameController;
 
     private BlockingQueue<File> queue = new ArrayBlockingQueue<>(100);
     private int taskNumber = 0;
@@ -444,7 +160,6 @@ public class MainFrameController implements Initializable {
     private ImageView ivFormulaTransTLSV1;
     private ImageView ivFormulaTransTLSV2;
 
-    private File lastFCOpenConfiguration;
     private File lastFCSaveConfiguration;
     private File lastFCOpenInputFileALS;
     private File lastFCOpenTrajectoryFileALS;
@@ -459,9 +174,11 @@ public class MainFrameController implements Initializable {
     private File lastFCOpenMultiResVoxelFile;
     private File lastFCSaveOutputFileMultiRes;
     private File lastFCAddTask;
-    private File lastFCSaveDartFile;
     private File lastFCSaveMergingFile;
     private File lastFCOpenPonderationFile;
+    private File lastFCOpenPointsPositionFile;
+    private File lastFCSaveTransmittanceTextFile;
+    private File lastFCSaveTransmittanceBitmapFile;
 
     private FileChooser fileChooserOpenConfiguration;
     private FileChooser fileChooserSaveConfiguration;
@@ -484,7 +201,10 @@ public class MainFrameController implements Initializable {
     private FileChooser fileChooserSaveDartFile;
     private FileChooser fileChooserSaveOutputFileTLS;
     private FileChooser fileChooserSaveGroundEnergyOutputFile;
-
+    private FileChooser fileChooserOpenPointsPositionFile;
+    private FileChooser fileChooserSaveTransmittanceTextFile;
+    private FileChooser fileChooserSaveTransmittanceBitmapFile;
+    
     private DirectoryChooser directoryChooserOpenOutputPathALS;
     private DirectoryChooser directoryChooserOpenOutputPathTLS;
 
@@ -506,7 +226,50 @@ public class MainFrameController implements Initializable {
 
     private final static String MATRIX_FORMAT_ERROR_MSG = "Matrix file has to look like this: \n\n\t1.0 0.0 0.0 0.0\n\t0.0 1.0 0.0 0.0\n\t0.0 0.0 1.0 0.0\n\t0.0 0.0 0.0 1.0\n";
 
-    private RangeSlider rangeSliderFilterValue;
+    private ObservableList<SimulationPeriod> data;
+    
+    @FXML
+    private CheckBox checkboxRemoveLowPoint;
+    @FXML
+    private Slider sliderRSPCoresToUse;
+    @FXML
+    private TextField textFieldPadMax5m;
+    @FXML
+    private CheckBox checkboxOverwritePadLimit;
+    @FXML
+    private AnchorPane anchorpanePadLimits;
+    @FXML
+    private Button buttonOpenSopMatrixFile;
+    @FXML
+    private CheckBox checkboxUsePointcloudFilter;
+    @FXML
+    private Button buttonAddPointcloudFilter;
+    @FXML
+    private AnchorPane anchorpanePointCloudFiltering;
+    @FXML
+    private TextField textfieldResMultiRes;
+    @FXML
+    private CheckBox checkboxMultiResAfter;
+    @FXML
+    private CheckBox checkboxRaster;
+    @FXML
+    private TextField textfieldRasterFilePath;
+    @FXML
+    private CheckBox checkboxUseTransformationMatrix;
+    @FXML
+    private AnchorPane anchorPaneRasterParameters;
+    @FXML
+    private CheckBox checkboxFitRasterToVoxelSpace;
+    @FXML
+    private TextField textfieldRasterFittingMargin;
+    @FXML
+    private Button buttonSetTransformationMatrix;
+    @FXML
+    private TableView<SimulationPeriod> tableViewSimulationPeriods;
+    @FXML
+    private TableColumn<SimulationPeriod,String> tableColumnPeriod;
+    @FXML
+    private TableColumn<SimulationPeriod, String> tableColumnClearness;
     @FXML
     private TextField textFieldEnterXMax;
     @FXML
@@ -574,16 +337,6 @@ public class MainFrameController implements Initializable {
     @FXML
     private TextField textfieldDTMValue;
     @FXML
-    private Button buttonOpenInputFileALS;
-    @FXML
-    private Button buttonOpenTrajectoryFileALS;
-    @FXML
-    private Button buttonOpenOutputFileALS;
-    @FXML
-    private Button buttonOpenOutputPathTLS;
-    @FXML
-    private Button buttonOpenInputFileTLS;
-    @FXML
     private TextField textFieldInputFileALS;
     @FXML
     private TextField textFieldTrajectoryFileALS;
@@ -600,21 +353,11 @@ public class MainFrameController implements Initializable {
     @FXML
     private Button buttonLoadSelectedVoxelFile;
     @FXML
-    private Button buttonRemoveVoxelFileFromListView;
-    @FXML
-    private Button buttonAddVoxelFileToListView;
-    @FXML
     private ListView<File> listViewVoxelsFiles;
-    @FXML
-    private MenuItem menuItemSelectionAll;
-    @FXML
-    private MenuItem menuItemSelectionNone;
     @FXML
     private Button buttonOpen3DView;
     @FXML
     private ComboBox<String> comboboxAttributeToView;
-    @FXML
-    private Button buttonCreateAttribut;
     @FXML
     private Button buttonOpenPopMatrixFile;
     @FXML
@@ -630,32 +373,11 @@ public class MainFrameController implements Initializable {
     @FXML
     private Label labelDTMValue;
     @FXML
-    private Button buttonALSAddToTaskList;
-    @FXML
-    private Button buttonExecute;
-    @FXML
-    private Button buttonTLSAddToTaskList;
-    @FXML
-    private Button buttonAddVoxelFileToMultiResListView;
-    @FXML
-    private MenuItem menuItemSelectionAllMultiRes;
-    @FXML
-    private MenuItem menuItemSelectionNoneMultiRes;
-    @FXML
-    private Button buttonRemoveVoxelFileFromMultiResListView;
-    @FXML
     private ListView<File> listViewMultiResVoxelFiles;
-    @FXML
-    private Button buttonMultiResAddToTaskList;
-    @FXML
-    private Button buttonOpenOutputFileMultiRes;
     @FXML
     private TextField textFieldOutputFileMultiRes;
     @FXML
-    private Button buttonAddTaskToListView;
-    @FXML
     private Button buttonLoadSelectedTask;
-    private CheckBox comboBoxEnableWeighting;
     @FXML
     private CheckBox checkboxEnableWeighting;
     @FXML
@@ -665,15 +387,7 @@ public class MainFrameController implements Initializable {
     @FXML
     private TabPane tabPaneVoxelisation;
     @FXML
-    private Button buttonRemoveTaskFromListView;
-    @FXML
-    private MenuItem menuItemTaskSelectionAll;
-    @FXML
-    private MenuItem menuItemTaskSelectionNone;
-    @FXML
     private MenuButton menuButtonExport;
-    @FXML
-    private MenuItem menuItemExportDart;
     @FXML
     private TabPane tabPaneMain;
     @FXML
@@ -689,27 +403,15 @@ public class MainFrameController implements Initializable {
     @FXML
     private TextField textFieldMergedFileName;
     @FXML
-    private Button buttonMergingAddToTaskList;
-    @FXML
-    private Button buttonOpenOutputFileMerging;
-    @FXML
     private TextField textFieldOutputFileMerging;
     @FXML
     private ListView<Filter> listviewFilters;
-    @FXML
-    private Button buttonAddFilter;
-    @FXML
-    private Button buttonRemoveFilter;
     @FXML
     private Label labelTLSOutputPath;
     @FXML
     private Button buttonOpenPonderationFile;
     @FXML
     private ComboBox<ImageView> comboboxFormulaTransmittance;
-    @FXML
-    private Button buttonAutomatic;
-    @FXML
-    private Button buttonResetToIdentity;
     @FXML
     private TextField textFieldPadMax1m;
     @FXML
@@ -719,34 +421,207 @@ public class MainFrameController implements Initializable {
     @FXML
     private TextField textFieldPadMax3m;
     @FXML
-    private Label labelPadMax1m;
-    @FXML
-    private Label labelPadMax2m;
-    @FXML
-    private Label labelPadMax4m;
-    @FXML
-    private Label labelPadMax3m;
-    @FXML
-    private Button buttonResetPadLimitsToDefault;
-    @FXML
     private TextField textFieldOutputFileGroundEnergy;
-    @FXML
-    private Label labelOutputFileGroundEnergy;
-    @FXML
-    private Button buttonOpenOutputFileGroundEnergy;
     @FXML
     private CheckBox checkboxCalculateGroundEnergy;
     @FXML
     private ComboBox<String> comboboxGroundEnergyOutputFormat;
     @FXML
     private AnchorPane anchorPaneGroundEnergyParameters;
-
+    private RangeSlider rangeSliderFilterValue;
+    @FXML
+    private AnchorPane anchorpaneRoot;
+    @FXML
+    private MenuItem menuitemClearWindow;
+    @FXML
+    private MenuItem menuItemUpdate;
+    @FXML
+    private MenuItem menuItemSelectionAllMultiRes;
+    @FXML
+    private MenuItem menuItemSelectionNoneMultiRes;
+    @FXML
+    private Label labelPadMax4m;
+    @FXML
+    private Label labelPadMax1m;
+    @FXML
+    private Label labelPadMax5m;
+    @FXML
+    private Label labelPadMax3m;
+    @FXML
+    private Label labelPadMax2m;
+    @FXML
+    private Label labelOutputFileGroundEnergy;
+    @FXML
+    private TextField textfieldVoxelFilePathTransmittance;
+    @FXML
+    private CheckBox comboboxGenerateTextFile;
+    @FXML
+    private TextField textfieldOutputTextFilePath;
+    @FXML
+    private ComboBox<Integer> comboboxChooseDirectionsNumber;
+    @FXML
+    private TextField textfieldScannerPosCenterY;
+    @FXML
+    private TextField textfieldScannerPosCenterX;
+    @FXML
+    private TextField textfieldScannerPosCenterZ;
+    @FXML
+    private TextField textfieldScannerPointsPositionsFile;
+    @FXML
+    private RadioButton radiobuttonScannerPosSquaredArea;
+    @FXML
+    private TextField textfieldScannerStepArea;
+    @FXML
+    private RadioButton radiobuttonScannerPosFile;
+    @FXML
+    private TextField textfieldScannerWidthArea;
+    @FXML
+    private TextField textfieldLatitudeRadians;
+    @FXML
+    private CheckBox comboboxGenerateBitmapFile;
+    @FXML
+    private TextField textfieldOutputBitmapFilePath;
+    @FXML
+    private CheckBox checkboxRaster1;
+    @FXML
+    private AnchorPane anchorpanePreFiltering;
+    @FXML
+    private Button buttonOpenInputFileALS;
+    @FXML
+    private Button buttonOpenTrajectoryFileALS;
+    @FXML
+    private Button buttonOpenOutputFileALS;
+    @FXML
+    private Button buttonALSAddToTaskList;
+    @FXML
+    private Button buttonOpenOutputPathTLS;
+    @FXML
+    private Button buttonOpenInputFileTLS;
+    @FXML
+    private Button buttonTLSAddToTaskList;
+    @FXML
+    private Button buttonAddVoxelFileToMultiResListView;
+    @FXML
+    private Button buttonRemoveVoxelFileFromMultiResListView;
+    @FXML
+    private Button buttonMultiResAddToTaskList;
+    @FXML
+    private Button buttonOpenOutputFileMultiRes;
+    @FXML
+    private Button buttonMergingAddToTaskList;
+    @FXML
+    private Button buttonOpenOutputFileMerging;
+    @FXML
+    private Button buttonAutomatic;
+    @FXML
+    private Button buttonResetToIdentity;
+    @FXML
+    private Button buttonAddFilter;
+    @FXML
+    private Button buttonRemoveFilter;
+    @FXML
+    private Button buttonGetBoundingBox;
+    @FXML
+    private Button buttonResetPadLimitsToDefault;
+    @FXML
+    private Button buttonOpenOutputFileGroundEnergy;
+    @FXML
+    private Button buttonOpenVoxelFileTransmittance;
+    @FXML
+    private Button buttonOpenOutputTextFile;
+    @FXML
+    private Button buttonAddPeriodToPeriodList;
+    @FXML
+    private Button buttonRemovePeriodFromPeriodList;
+    @FXML
+    private MenuButton menuButtonSelectionPeriodsList;
+    @FXML
+    private Button buttonOpenScannerPointsPositionsFile;
+    @FXML
+    private Button buttonOpenOutputBitmapFile;
+    @FXML
+    private Button buttonOpenRasterFile;
+    @FXML
+    private Button buttonCreateAttribut;
+    @FXML
+    private MenuItem menuItemTaskSelectionAll;
+    @FXML
+    private MenuItem menuItemTaskSelectionNone;
+    @FXML
+    private Button buttonRemoveTaskFromListView;
+    @FXML
+    private Button buttonExecute;
+    @FXML
+    private Button buttonAddTaskToListView;
+    @FXML
+    private Button buttonRemoveVoxelFileFromListView;
+    @FXML
+    private MenuItem menuItemSelectionAll;
+    @FXML
+    private MenuItem menuItemSelectionNone;
+    @FXML
+    private Button buttonAddVoxelFileToListView;
+    @FXML
+    private MenuItem menuItemExportDart;
+    @FXML
+    private MenuItem menuItemExportDartPlots;
+    @FXML
+    private Button buttonTransmittanceAddToTaskList;
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+        data = FXCollections.observableArrayList();
+        
+        tableViewSimulationPeriods.setItems(data);
+        tableViewSimulationPeriods.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        
+        comboboxChooseDirectionsNumber.getItems().addAll(1, 6, 16, 46, 136, 406);
+        comboboxChooseDirectionsNumber.getSelectionModel().selectFirst();
+        
+        ToggleGroup scannerPositionsMode = new ToggleGroup();
+        
+        radiobuttonScannerPosSquaredArea.setToggleGroup(scannerPositionsMode);
+        radiobuttonScannerPosFile.setToggleGroup(scannerPositionsMode);
+        
+        tableColumnPeriod.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<SimulationPeriod, String>, ObservableValue<String>>() {
+
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<SimulationPeriod, String> param) {
+                return param.getValue().getPeriod();
+            }
+        });
+        
+        tableColumnClearness.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<SimulationPeriod, String>, ObservableValue<String>>() {
+
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<SimulationPeriod, String> param) {
+                return param.getValue().getClearnessCoefficient();
+            }
+        });
+        
+        comboboxGenerateTextFile.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                textfieldOutputTextFilePath.setDisable(!newValue);
+                buttonOpenOutputTextFile.setDisable(!newValue);
+                
+            }
+        });
+        
+        comboboxGenerateBitmapFile.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                textfieldOutputBitmapFilePath.setDisable(!newValue);
+                buttonOpenOutputBitmapFile.setDisable(!newValue);
+                
+            }
+        });
+         
         fileChooserOpenConfiguration = new FileChooser();
         fileChooserOpenConfiguration.setTitle("Choose configuration file");
 
@@ -785,6 +660,12 @@ public class MainFrameController implements Initializable {
 
         fileChooserSaveOutputFileTLS = new FileChooser();
         fileChooserSaveOutputFileTLS.setTitle("Save voxel file");
+        
+        fileChooserSaveTransmittanceTextFile = new FileChooser();
+        fileChooserSaveTransmittanceTextFile.setTitle("Save text file");
+        
+        fileChooserSaveTransmittanceBitmapFile = new FileChooser();
+        fileChooserSaveTransmittanceBitmapFile.setTitle("Save bitmap file");
 
         fileChooserOpenVoxelFile = new FileChooser();
         fileChooserOpenVoxelFile.setTitle("Open voxel file");
@@ -861,6 +742,12 @@ public class MainFrameController implements Initializable {
         fileChooserSaveGroundEnergyOutputFile = new FileChooser();
         fileChooserSaveGroundEnergyOutputFile.setTitle("Save ground energy file");
         
+        fileChooserOpenPointsPositionFile = new FileChooser();
+        fileChooserOpenPointsPositionFile.setTitle("Choose points file");
+        fileChooserOpenPointsPositionFile.getExtensionFilters().addAll(
+                new ExtensionFilter("All Files", "*"),
+                new ExtensionFilter("TXT Files", "*.txt"));
+        
         transformationFrame = new Stage();
         
         Parent root;
@@ -872,6 +759,18 @@ public class MainFrameController implements Initializable {
             transformationFrameController.setStage(transformationFrame);
             transformationFrameController.setParent(this);
             transformationFrame.setScene(new Scene(root));
+        } catch (IOException ex) {
+            logger.error(ex);
+        }
+        
+        dateChooserFrame = new Stage();
+                
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DateChooserFrame.fxml"));
+            root = loader.load();
+            dateChooserFrameController = loader.getController();
+            dateChooserFrame.setScene(new Scene(root));
+            dateChooserFrameController.setStage(dateChooserFrame);
         } catch (IOException ex) {
             logger.error(ex);
         }
@@ -1298,6 +1197,10 @@ public class MainFrameController implements Initializable {
         listViewMultiResVoxelFiles.setOnDragOver(dragOverEvent);
         listViewVoxelsFiles.setOnDragOver(dragOverEvent);
         textfieldRasterFilePath.setOnDragOver(dragOverEvent);
+        textfieldVoxelFilePathTransmittance.setOnDragOver(dragOverEvent);
+        textfieldScannerPointsPositionsFile.setOnDragOver(dragOverEvent);
+        textfieldOutputTextFilePath.setOnDragOver(dragOverEvent);
+        textfieldOutputBitmapFilePath.setOnDragOver(dragOverEvent);
 
         setDragDroppedSingleFileEvent(textFieldInputFileALS);
         setDragDroppedSingleFileEvent(textFieldTrajectoryFileALS);
@@ -1308,6 +1211,10 @@ public class MainFrameController implements Initializable {
         setDragDroppedSingleFileEvent(textfieldDTMPath);
         setDragDroppedSingleFileEvent(textFieldOutputFileGroundEnergy);
         setDragDroppedSingleFileEvent(textfieldRasterFilePath);
+        setDragDroppedSingleFileEvent(textfieldVoxelFilePathTransmittance);
+        setDragDroppedSingleFileEvent(textfieldScannerPointsPositionsFile);
+        setDragDroppedSingleFileEvent(textfieldOutputTextFilePath);
+        setDragDroppedSingleFileEvent(textfieldOutputBitmapFilePath);
 
         listViewTaskList.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
@@ -2542,7 +2449,7 @@ public class MainFrameController implements Initializable {
                         inputList.add(new Input(voxelParameters, file, voxFile, subList, new File(outputPathFile.getAbsolutePath() + "/" + file.getName() +"_multires_.vox")));
                     }
                     
-                    Configuration cfg = Configuration.createMultiFileVoxelisationConfiguration(it,
+                    VoxelisationConfiguration cfg = VoxelisationConfiguration.createMultiFileVoxelisationConfiguration(it,
                             inputList,
                             new File(textFieldTrajectoryFileALS.getText()),
                             outputPathFile,
@@ -2613,7 +2520,7 @@ public class MainFrameController implements Initializable {
                         it = InputType.LAS_FILE;
                 }
 
-                Configuration cfg = new Configuration(ProcessMode.VOXELISATION_ALS, it,
+                VoxelisationConfiguration cfg = new VoxelisationConfiguration(ProcessMode.VOXELISATION_ALS, it,
                         new File(textFieldInputFileALS.getText()),
                         new File(textFieldTrajectoryFileALS.getText()),
                         new File(textFieldOutputFileALS.getText()),
@@ -2670,7 +2577,7 @@ public class MainFrameController implements Initializable {
 
     private void executeProcess(final File file) {
 
-        final Configuration cfg = new Configuration();
+        final VoxelisationConfiguration cfg = new VoxelisationConfiguration();
 
         try {
             cfg.readConfiguration(file);
@@ -3121,7 +3028,7 @@ public class MainFrameController implements Initializable {
                     it = InputType.RSP_PROJECT;
             }
 
-            Configuration cfg = new Configuration(ProcessMode.VOXELISATION_TLS, it,
+            VoxelisationConfiguration cfg = new VoxelisationConfiguration(ProcessMode.VOXELISATION_TLS, it,
                     new File(textFieldInputFileTLS.getText()),
                     new File(textFieldTrajectoryFileALS.getText()),
                     new File(textFieldOutputPathTLS.getText()),
@@ -3187,7 +3094,7 @@ public class MainFrameController implements Initializable {
 
             lastFCSaveConfiguration = selectedFile;
 
-            Configuration cfg = new Configuration();
+            VoxelisationConfiguration cfg = new VoxelisationConfiguration();
             cfg.setProcessMode(ProcessMode.MULTI_RES);
             cfg.setOutputFile(new File(textFieldOutputFileMultiRes.getText()));
             cfg.setFiles(listViewMultiResVoxelFiles.getItems());
@@ -3251,7 +3158,7 @@ public class MainFrameController implements Initializable {
 
         if (selectedFile != null) {
 
-            Configuration cfg = new Configuration();
+            VoxelisationConfiguration cfg = new VoxelisationConfiguration();
             try {
                 cfg.readConfiguration(selectedFile);
 
@@ -3513,7 +3420,7 @@ public class MainFrameController implements Initializable {
 
             lastFCSaveConfiguration = selectedFile;
 
-            Configuration cfg = new Configuration();
+            VoxelisationConfiguration cfg = new VoxelisationConfiguration();
             cfg.setProcessMode(ProcessMode.MERGING);
 
             cfg.setOutputFile(new File(textFieldOutputFileMerging.getText()));
@@ -4275,6 +4182,314 @@ public class MainFrameController implements Initializable {
 
     public CalculateMatrixFrameController getCalculateMatrixFrameController() {
         return calculateMatrixFrameController;
+    }
+    
+    @FXML
+    private void onActionMenuItemUpdate(ActionEvent event) {
+                                    
+        Service<Void> service = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws InterruptedException {
+
+                            final Updater updater = new Updater();
+                            
+                            updater.update();
+                            
+                            Platform.runLater(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    Alert alert = new Alert(AlertType.INFORMATION);
+                                    alert.setTitle("Information");
+                                    alert.setHeaderText("About the Update");
+                                    alert.setContentText("AmapVox needs to be restarted in order to apply update!");
+                                    alert.show();
+                                }
+                            });
+                            
+                            return null;
+                    }
+                };
+            }
+        };
+
+        ProgressDialog d = new ProgressDialog(service);
+        d.initOwner(stage);
+        d.show();
+
+        service.start();
+        
+    }
+
+    @FXML
+    private void onActionMenuItemExportDartPlots(ActionEvent event) {
+        
+        final File voxelFile = listViewVoxelsFiles.getSelectionModel().getSelectedItem();
+        
+        if(checkVoxelFile(voxelFile)){
+            
+            fileChooserSaveDartFile.setInitialFileName("plots.xml");
+            fileChooserSaveDartFile.setInitialDirectory(voxelFile.getParentFile());
+            
+            final File plotFile = fileChooserSaveDartFile.showSaveDialog(stage);
+            
+            if(plotFile != null){
+                
+                Alert alert = new Alert(AlertType.CONFIRMATION);
+                
+                alert.setTitle("Coordinate system");
+                alert.setContentText("Choose your coordinate system");
+                
+                ButtonType buttonTypeGlobal = new ButtonType("Global");
+                ButtonType buttonTypeLocal = new ButtonType("Local");
+
+                alert.getButtonTypes().setAll(buttonTypeGlobal, buttonTypeLocal);
+                
+                Optional<ButtonType> result = alert.showAndWait();
+                
+                
+                final boolean global;
+                
+                if(result.get() == buttonTypeGlobal){
+                    global = true;
+                }else if(result.get() == buttonTypeLocal){
+                    global = false;
+                }else{
+                    return;
+                }
+                
+                final DartPlotsXMLWriter dartPlotsXML = new DartPlotsXMLWriter();
+                
+                Service service = new Service() {
+
+                    @Override
+                    protected Task createTask() {
+                        return new Task<Object>() {
+
+                            @Override
+                            protected Object call() throws Exception {
+                                
+                                
+                                dartPlotsXML.writeFromVoxelFile(voxelFile, plotFile, global);
+                                return null;
+                            }
+                        };
+                    }
+                };
+                
+                ProgressDialog progressDialog = new ProgressDialog(service);
+                progressDialog.show();
+                service.start();
+                
+                Button buttonCancel = new Button("cancel");
+                progressDialog.setGraphic(buttonCancel);
+
+                buttonCancel.setOnAction(new EventHandler<ActionEvent>() {
+
+                    @Override
+                    public void handle(ActionEvent event) {
+                        service.cancel();
+                        dartPlotsXML.setCancelled(true);
+                    }
+                });
+                
+            }
+        }
+        
+        
+        
+    }
+
+    @FXML
+    private void onActionCheckboxUseTransformationMatrix(ActionEvent event) {
+    }
+
+    private void onActionButtonOpenTransformationMatrixFile(ActionEvent event) {
+        
+        fileChooserOpenVopMatrixFile.setInitialDirectory(listViewVoxelsFiles.getSelectionModel().getSelectedItem().getParentFile());
+        
+        File selectedFile = fileChooserOpenVopMatrixFile.showOpenDialog(stage);
+        
+        if(selectedFile != null){
+            
+            Matrix4d mat = MatrixFileParser.getMatrixFromFile(selectedFile);
+            if (mat != null) {
+                
+                rasterTransfMatrix = MatrixFileParser.getMatrixFromFile(selectedFile);
+                if (rasterTransfMatrix == null) {
+                    rasterTransfMatrix = new Matrix4d();
+                    rasterTransfMatrix.setIdentity();
+                }
+                
+            } else {
+                showMatrixFormatErrorDialog();
+            }
+        }
+    }
+
+    @FXML
+    private void onActionButtonOpenRasterFile(ActionEvent event) {
+        
+        fileChooserOpenDTMFile.setInitialDirectory(listViewVoxelsFiles.getSelectionModel().getSelectedItem().getParentFile());
+        
+        File selectedFile = fileChooserOpenDTMFile.showOpenDialog(stage);
+        
+        if(selectedFile != null){
+            textfieldRasterFilePath.setText(selectedFile.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    private void onActionButtonSetTransformationMatrix(ActionEvent event) {
+                
+        transformationFrameController.reset();
+        
+        transformationFrame.setOnHidden(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+                
+                if(transformationFrameController.isConfirmed()){
+                    
+                    rasterTransfMatrix = transformationFrameController.getMatrix();
+                
+                    if (rasterTransfMatrix == null) {
+                        rasterTransfMatrix = new Matrix4d();
+                        rasterTransfMatrix.setIdentity();
+                    }
+                }
+                
+            }
+        });
+        
+        transformationFrame.show();
+    }
+
+    @FXML
+    private void onActionButtonOpenVoxelFileTransmittance(ActionEvent event) {
+        
+        if(lastFCOpenVoxelFile != null){
+            fileChooserOpenVoxelFile.setInitialDirectory(lastFCOpenVoxelFile.getParentFile());
+        }
+        
+        File selectedFile = fileChooserOpenVoxelFile.showOpenDialog(stage);
+        
+        if(selectedFile != null){
+            
+            lastFCOpenVoxelFile = selectedFile;
+            textfieldVoxelFilePathTransmittance.setText(selectedFile.getAbsolutePath());
+        }
+        
+    }
+
+    @FXML
+    private void onActionButtonOpenOutputTextFile(ActionEvent event) {
+        
+        if(lastFCSaveTransmittanceTextFile != null){
+            fileChooserSaveTransmittanceTextFile.setInitialFileName(lastFCSaveTransmittanceTextFile.getName());
+            fileChooserSaveTransmittanceTextFile.setInitialDirectory(lastFCSaveTransmittanceTextFile.getParentFile());
+        }
+        
+        File selectedFile = fileChooserSaveTransmittanceTextFile.showSaveDialog(stage);
+        
+        if(selectedFile != null){
+            
+            lastFCSaveTransmittanceTextFile = selectedFile;
+            textfieldOutputTextFilePath.setText(selectedFile.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    private void onActionButtonOpenScannerPointsPositionsFile(ActionEvent event) {
+        
+        if(lastFCOpenPointsPositionFile != null){
+            fileChooserOpenPointsPositionFile.setInitialDirectory(lastFCOpenPointsPositionFile.getParentFile());
+        }
+        
+        File selectedFile = fileChooserOpenPointsPositionFile.showOpenDialog(stage);
+        
+        if(selectedFile != null){
+            lastFCOpenPointsPositionFile = selectedFile;
+            
+            textfieldScannerPointsPositionsFile.setText(selectedFile.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    private void onActionButtonOpenOutputBitmapFile(ActionEvent event) {
+        
+        if(lastFCSaveTransmittanceBitmapFile != null){
+            fileChooserSaveTransmittanceBitmapFile.setInitialFileName(lastFCSaveTransmittanceBitmapFile.getName());
+            fileChooserSaveTransmittanceBitmapFile.setInitialDirectory(lastFCSaveTransmittanceBitmapFile.getParentFile());
+        }
+        
+        File selectedFile = fileChooserSaveTransmittanceBitmapFile.showSaveDialog(stage);
+        
+        if(selectedFile != null){
+            
+            lastFCSaveTransmittanceBitmapFile = selectedFile;
+            textfieldOutputBitmapFilePath.setText(selectedFile.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    private void onActionButtonAddPeriodToPeriodList(ActionEvent event) {
+        
+        dateChooserFrameController.reset();
+        
+        dateChooserFrame.setOnHidden(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+                
+                if(dateChooserFrameController.isConfirmed()){
+                    
+                    SimulationPeriod period = dateChooserFrameController.getDateRange();
+                    
+                    if(period != null){
+                        data.add(period);
+                    }                    
+                }
+                
+            }
+        });
+        
+        dateChooserFrame.show();
+    }
+
+    @FXML
+    private void onActionButtonRemovePeriodFromPeriodList(ActionEvent event) {
+        
+        tableViewSimulationPeriods.getItems().removeAll(tableViewSimulationPeriods.getSelectionModel().getSelectedItems());
+        
+    }
+
+    @FXML
+    private void onActionMenuItemSelectAllPeriods(ActionEvent event) {
+        tableViewSimulationPeriods.getSelectionModel().selectAll();
+    }
+
+    @FXML
+    private void onActionMenuItemUnselectAllPeriods(ActionEvent event) {
+        tableViewSimulationPeriods.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    private void onActionButtonTransmittanceAddToTaskList(ActionEvent event) {
+    }
+
+    public class MinMax {
+
+        public Point3d min;
+        public Point3d max;
+
+        public MinMax(Point3d min, Point3d max) {
+            this.min = min;
+            this.max = max;
+        }
     }
 
 }
