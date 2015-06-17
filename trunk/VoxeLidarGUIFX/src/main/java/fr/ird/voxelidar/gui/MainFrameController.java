@@ -6,6 +6,7 @@
 package fr.ird.voxelidar.gui;
 
 import com.jogamp.newt.event.WindowAdapter;
+import fr.ird.voxelidar.configuration.Configuration;
 import fr.ird.voxelidar.configuration.Configuration.InputType;
 import fr.ird.voxelidar.configuration.Configuration.ProcessMode;
 import static fr.ird.voxelidar.configuration.Configuration.ProcessMode.MERGING;
@@ -16,6 +17,7 @@ import static fr.ird.voxelidar.configuration.Configuration.ProcessMode.VOXELISAT
 import fr.ird.voxelidar.configuration.VoxelisationConfiguration;
 import fr.ird.voxelidar.configuration.Input;
 import fr.ird.voxelidar.configuration.MatrixAndFile;
+import fr.ird.voxelidar.configuration.TransmittanceConfiguration;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
@@ -35,6 +37,7 @@ import fr.ird.voxelidar.lidar.format.tls.Rsp;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.lidar.format.tls.Scans;
 import fr.ird.voxelidar.multires.ProcessingMultiRes;
+import fr.ird.voxelidar.transmittance.Parameters;
 import fr.ird.voxelidar.transmittance.SimulationPeriod;
 import fr.ird.voxelidar.update.Updater;
 import fr.ird.voxelidar.util.Filter;
@@ -45,7 +48,7 @@ import fr.ird.voxelidar.util.TimeCounter;
 import fr.ird.voxelidar.voxelisation.PointCloud;
 import fr.ird.voxelidar.voxelisation.PointcloudFilter;
 import fr.ird.voxelidar.voxelisation.VoxelParameters;
-import fr.ird.voxelidar.voxelisation.VoxelisationTool;
+import fr.ird.voxelidar.voxelisation.ProcessTool;
 import fr.ird.voxelidar.voxelisation.VoxelisationToolListener;
 import fr.ird.voxelidar.voxelisation.als.LasPoint;
 import fr.ird.voxelidar.voxelisation.extraction.als.LazExtraction;
@@ -66,6 +69,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -121,6 +125,7 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Point3d;
+import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.log4j.Logger;
@@ -178,7 +183,7 @@ public class MainFrameController implements Initializable {
     private File lastFCOpenPonderationFile;
     private File lastFCOpenPointsPositionFile;
     private File lastFCSaveTransmittanceTextFile;
-    private File lastFCSaveTransmittanceBitmapFile;
+    private File lastDCSaveTransmittanceBitmapFile;
 
     private FileChooser fileChooserOpenConfiguration;
     private FileChooser fileChooserSaveConfiguration;
@@ -203,7 +208,7 @@ public class MainFrameController implements Initializable {
     private FileChooser fileChooserSaveGroundEnergyOutputFile;
     private FileChooser fileChooserOpenPointsPositionFile;
     private FileChooser fileChooserSaveTransmittanceTextFile;
-    private FileChooser fileChooserSaveTransmittanceBitmapFile;
+    private DirectoryChooser directoryChooserSaveTransmittanceBitmapFile;
     
     private DirectoryChooser directoryChooserOpenOutputPathALS;
     private DirectoryChooser directoryChooserOpenOutputPathTLS;
@@ -454,8 +459,6 @@ public class MainFrameController implements Initializable {
     @FXML
     private TextField textfieldVoxelFilePathTransmittance;
     @FXML
-    private CheckBox comboboxGenerateTextFile;
-    @FXML
     private TextField textfieldOutputTextFilePath;
     @FXML
     private ComboBox<Integer> comboboxChooseDirectionsNumber;
@@ -477,8 +480,6 @@ public class MainFrameController implements Initializable {
     private TextField textfieldScannerWidthArea;
     @FXML
     private TextField textfieldLatitudeRadians;
-    @FXML
-    private CheckBox comboboxGenerateBitmapFile;
     @FXML
     private TextField textfieldOutputBitmapFilePath;
     @FXML
@@ -567,6 +568,10 @@ public class MainFrameController implements Initializable {
     private MenuItem menuItemExportDartPlots;
     @FXML
     private Button buttonTransmittanceAddToTaskList;
+    @FXML
+    private CheckBox checkboxGenerateTextFile;
+    @FXML
+    private CheckBox checkboxGenerateBitmapFile;
     /**
      * Initializes the controller class.
      */
@@ -590,7 +595,7 @@ public class MainFrameController implements Initializable {
 
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<SimulationPeriod, String> param) {
-                return param.getValue().getPeriod();
+                return new SimpleStringProperty(param.getValue().getPeriod().toString());
             }
         });
         
@@ -598,11 +603,11 @@ public class MainFrameController implements Initializable {
 
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<SimulationPeriod, String> param) {
-                return param.getValue().getClearnessCoefficient();
+                return new SimpleStringProperty(String.valueOf(param.getValue().getClearnessCoefficient()));
             }
         });
         
-        comboboxGenerateTextFile.selectedProperty().addListener(new ChangeListener<Boolean>() {
+        checkboxGenerateTextFile.selectedProperty().addListener(new ChangeListener<Boolean>() {
 
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -612,7 +617,7 @@ public class MainFrameController implements Initializable {
             }
         });
         
-        comboboxGenerateBitmapFile.selectedProperty().addListener(new ChangeListener<Boolean>() {
+        checkboxGenerateBitmapFile.selectedProperty().addListener(new ChangeListener<Boolean>() {
 
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -664,8 +669,8 @@ public class MainFrameController implements Initializable {
         fileChooserSaveTransmittanceTextFile = new FileChooser();
         fileChooserSaveTransmittanceTextFile.setTitle("Save text file");
         
-        fileChooserSaveTransmittanceBitmapFile = new FileChooser();
-        fileChooserSaveTransmittanceBitmapFile.setTitle("Save bitmap file");
+        directoryChooserSaveTransmittanceBitmapFile = new DirectoryChooser();
+        directoryChooserSaveTransmittanceBitmapFile.setTitle("Choose output directory");
 
         fileChooserOpenVoxelFile = new FileChooser();
         fileChooserOpenVoxelFile.setTitle("Open voxel file");
@@ -2577,10 +2582,335 @@ public class MainFrameController implements Initializable {
 
     private void executeProcess(final File file) {
 
-        final VoxelisationConfiguration cfg = new VoxelisationConfiguration();
+        
 
         try {
-            cfg.readConfiguration(file);
+            String type = Configuration.readType(file);
+            
+            ProgressDialog d;
+            final Service<Void> service;
+            final ProcessTool voxTool = new ProcessTool();
+                    
+            switch(type){
+                case "voxelisation":
+                    
+                    final VoxelisationConfiguration cfg = new VoxelisationConfiguration();
+                    cfg.readConfiguration(file);
+
+                    final int coreNumberToUse = (int) sliderRSPCoresToUse.getValue();
+
+                    final long start_time = System.currentTimeMillis();
+
+                    ProcessMode processMode = cfg.getProcessMode();
+
+                    service = new Service<Void>() {
+
+                        @Override
+                        protected Task<Void> createTask() {
+                            return new Task<Void>() {
+                                @Override
+                                protected Void call() throws InterruptedException {
+
+                                    final String msgTask = "Task " + taskID + "/" + taskNumber + " :" + file.getAbsolutePath();
+                                    updateMessage(msgTask);
+
+                                    switch (processMode) {
+
+                                        case MERGING:
+
+                                            voxTool.mergeVoxelsFileV2(cfg.getFiles(), cfg.getOutputFile(), 0, cfg.getVoxelParameters().getMaxPAD());
+
+                                            Platform.runLater(new Runnable() {
+
+                                                @Override
+                                                public void run() {
+                                                    addFileToVoxelList(cfg.getOutputFile());
+                                                    setOnSucceeded(null);
+                                                }
+                                            });
+
+                                            break;
+
+                                        case VOXELISATION_ALS:
+
+                                            voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
+
+                                                @Override
+                                                public void voxelisationProgress(String progress, int ratio) {
+                                                    Platform.runLater(new Runnable() {
+
+                                                        @Override
+                                                        public void run() {
+
+                                                            updateMessage(msgTask + "\n" + progress);
+                                                        }
+                                                    });
+
+                                                }
+
+                                                @Override
+                                                public void voxelisationFinished(float duration) {
+
+                                                    logger.info("las voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
+                                                }
+                                            });
+
+                                            voxTool.voxeliseFromAls(cfg.getOutputFile(), cfg.getInputFile(), cfg.getTrajectoryFile(), cfg.getVoxelParameters(), MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()), cfg.getFilters(), cfg.isRemoveLowPoint());
+
+                                            Platform.runLater(new Runnable() {
+
+                                                @Override
+                                                public void run() {
+
+                                                    addFileToVoxelList(cfg.getOutputFile());
+                                                }
+                                            });
+
+                                            break;
+
+                                        case VOXELISATION_TLS:
+
+                                            voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
+
+                                                @Override
+                                                public void voxelisationProgress(String progress, int ratio) {
+                                                    Platform.runLater(new Runnable() {
+
+                                                        @Override
+                                                        public void run() {
+
+                                                            updateMessage(msgTask + "\n" + progress);
+                                                        }
+                                                    });
+                                                }
+
+                                                @Override
+                                                public void voxelisationFinished(float duration) {
+
+                                                    logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
+                                                }
+                                            });
+
+                                            switch (cfg.getInputType()) {
+
+                                                case RSP_PROJECT:
+
+                                                    try {
+                                                        ArrayList<File> outputFiles = voxTool.voxeliseFromRsp(cfg.getOutputFile(), cfg.getInputFile(), cfg.getVoxelParameters(),
+                                                                MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()),
+                                                                MatrixConverter.convertMatrix4dToMat4D(cfg.getPopMatrix()),
+                                                                cfg.getMatricesAndFiles(), cfg.getFilters(), coreNumberToUse);
+
+                                                        if (cfg.getVoxelParameters().isMergingAfter()) {
+
+                                                            voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
+
+                                                                @Override
+                                                                public void voxelisationProgress(String progress, int ratio) {
+                                                                    Platform.runLater(new Runnable() {
+
+                                                                        @Override
+                                                                        public void run() {
+
+                                                                            updateMessage(msgTask + "\n" + progress);
+                                                                        }
+                                                                    });
+                                                                }
+
+                                                                @Override
+                                                                public void voxelisationFinished(float duration) {
+
+                                                                    logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
+                                                                }
+                                                            });
+                                                            //if(!voxTool.isCancelled()){
+                                                                voxTool.mergeVoxelsFileV2(outputFiles, cfg.getVoxelParameters().getMergedFile(), cfg.getVoxelParameters().getTransmittanceMode(), cfg.getVoxelParameters().getMaxPAD());
+                                                            //}
+
+                                                        }
+
+                                                        Platform.runLater(new Runnable() {
+
+                                                            @Override
+                                                            public void run() {
+
+                                                                if(!voxTool.isCancelled()){
+                                                                    for (File file : outputFiles) {
+                                                                        addFileToVoxelList(file);
+                                                                    }
+                                                                    if (cfg.getVoxelParameters().isMergingAfter()) {
+                                                                        addFileToVoxelList(cfg.getVoxelParameters().getMergedFile());
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+
+                                                    }catch (Exception e) {
+
+                                                    }
+
+                                                    break;
+
+                                                case RXP_SCAN:
+
+                                                    voxTool.voxeliseFromRxp(cfg.getOutputFile(), cfg.getInputFile(),
+                                                            cfg.getVoxelParameters().getDtmFile(),
+                                                            cfg.getVoxelParameters(),
+                                                            MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()),
+                                                            MatrixConverter.convertMatrix4dToMat4D(cfg.getPopMatrix()),
+                                                            MatrixConverter.convertMatrix4dToMat4D(cfg.getSopMatrix()),
+                                                            cfg.getFilters());
+
+                                                    Platform.runLater(new Runnable() {
+
+                                                        @Override
+                                                        public void run() {
+
+                                                            addFileToVoxelList(cfg.getOutputFile());
+                                                        }
+                                                    });
+
+                                                    break;
+                                            }
+
+                                            break;
+
+                                        case MULTI_RES:
+
+                                            ProcessingMultiRes process = new ProcessingMultiRes(cfg.getMultiResPadMax(), cfg.isMultiResUseDefaultMaxPad());
+
+                                            process.process(cfg.getFiles());
+                                            process.write(cfg.getOutputFile());
+
+                                            Platform.runLater(new Runnable() {
+
+                                                @Override
+                                                public void run() {
+
+                                                    addFileToVoxelList(cfg.getOutputFile());
+                                                }
+                                            });
+
+                                            break;
+
+                                        case MULTI_VOXELISATION_ALS_AND_MULTI_RES:
+
+                                            voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
+
+                                                @Override
+                                                public void voxelisationProgress(String progress, int ratio) {
+                                                    Platform.runLater(new Runnable() {
+
+                                                        @Override
+                                                        public void run() {
+
+                                                            updateMessage(msgTask + "\n" + progress);
+                                                        }
+                                                    });
+
+                                                }
+
+                                                @Override
+                                                public void voxelisationFinished(float duration) {
+
+                                                    logger.info("las voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
+                                                }
+                                            });
+                                            voxTool.multiVoxelisation(cfg);
+
+                                            break;
+
+                                    }
+
+                                    return null;
+                                }
+                            };
+                        }
+                    };
+                    break;
+                    
+                case "transmittance":
+                    
+                    service = new Service<Void>() {
+
+                        @Override
+                        protected Task<Void> createTask() {
+                            return new Task<Void>() {
+                                @Override
+                                protected Void call() throws InterruptedException {
+
+                                    final String msgTask = "Task " + taskID + "/" + taskNumber + " :" + file.getAbsolutePath();
+                                    updateMessage(msgTask);
+                                    
+                                    TransmittanceConfiguration cfg = new TransmittanceConfiguration();
+                                    cfg.readConfiguration(file);
+                                    voxTool.calculateTransmittance(cfg.getParameters());
+
+                                    return null;
+                                }
+                            };
+                        }
+                    };
+                    
+                    break;
+                    
+                default:
+                    return;
+            }
+            
+            d = new ProgressDialog(service);
+            d.initModality(Modality.NONE);
+            d.initOwner(stage);
+            d.setResizable(true);
+            d.show();
+            Button buttonCancel = new Button("cancel");
+            d.setGraphic(buttonCancel);
+
+            buttonCancel.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+                    service.cancel();
+                    voxTool.setCancelled(true);
+                }
+            });
+
+            service.exceptionProperty().addListener(new ChangeListener<Throwable>() {
+
+                @Override
+                public void changed(ObservableValue<? extends Throwable> observable, Throwable oldValue, Throwable newValue) {
+                    System.out.println("test");
+                }
+            });
+
+            service.stateProperty().addListener(new ChangeListener<Worker.State>() {
+
+                @Override
+                public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) {
+                    if (newValue == Worker.State.SUCCEEDED) {
+                        if (!queue.isEmpty()) {
+                            try {
+                                taskID++;
+                                executeProcess(queue.take());
+
+                            } catch (InterruptedException ex) {
+                                logger.error(ex);
+                            }
+                        }
+                    }
+                }
+            });
+
+            service.setOnFailed(new EventHandler<WorkerStateEvent>() {
+
+                @Override
+                public void handle(WorkerStateEvent event) {
+                    logger.error("Service failed : ",service.getException());
+                }
+            });
+
+            service.start();
+            
 
         } catch (Exception e) {
             logger.error(e);
@@ -2603,292 +2933,9 @@ public class MainFrameController implements Initializable {
             return;
         }
 
-        final int coreNumberToUse = (int) sliderRSPCoresToUse.getValue();
+        
 
-        final long start_time = System.currentTimeMillis();
-        ProgressDialog d;
-        final Service<Void> service;
-        final VoxelisationTool voxTool = new VoxelisationTool();
-
-        ProcessMode processMode = cfg.getProcessMode();
-
-        service = new Service<Void>() {
-
-            @Override
-            protected Task<Void> createTask() {
-                return new Task<Void>() {
-                    @Override
-                    protected Void call() throws InterruptedException {
-
-                        final String msgTask = "Task " + taskID + "/" + taskNumber + " :" + file.getAbsolutePath();
-                        updateMessage(msgTask);
-
-                        switch (processMode) {
-
-                            case MERGING:
-
-                                voxTool.mergeVoxelsFileV2(cfg.getFiles(), cfg.getOutputFile(), 0, cfg.getVoxelParameters().getMaxPAD());
-
-                                Platform.runLater(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        addFileToVoxelList(cfg.getOutputFile());
-                                        setOnSucceeded(null);
-                                    }
-                                });
-
-                                break;
-
-                            case VOXELISATION_ALS:
-
-                                voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
-
-                                    @Override
-                                    public void voxelisationProgress(String progress, int ratio) {
-                                        Platform.runLater(new Runnable() {
-
-                                            @Override
-                                            public void run() {
-
-                                                updateMessage(msgTask + "\n" + progress);
-                                            }
-                                        });
-
-                                    }
-
-                                    @Override
-                                    public void voxelisationFinished(float duration) {
-
-                                        logger.info("las voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
-                                    }
-                                });
-
-                                voxTool.voxeliseFromAls(cfg.getOutputFile(), cfg.getInputFile(), cfg.getTrajectoryFile(), cfg.getVoxelParameters(), MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()), cfg.getFilters(), cfg.isRemoveLowPoint());
-
-                                Platform.runLater(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-
-                                        addFileToVoxelList(cfg.getOutputFile());
-                                    }
-                                });
-
-                                break;
-
-                            case VOXELISATION_TLS:
-
-                                voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
-
-                                    @Override
-                                    public void voxelisationProgress(String progress, int ratio) {
-                                        Platform.runLater(new Runnable() {
-
-                                            @Override
-                                            public void run() {
-
-                                                updateMessage(msgTask + "\n" + progress);
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void voxelisationFinished(float duration) {
-
-                                        logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
-                                    }
-                                });
-
-                                switch (cfg.getInputType()) {
-
-                                    case RSP_PROJECT:
-
-                                        try {
-                                            ArrayList<File> outputFiles = voxTool.voxeliseFromRsp(cfg.getOutputFile(), cfg.getInputFile(), cfg.getVoxelParameters(),
-                                                    MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()),
-                                                    MatrixConverter.convertMatrix4dToMat4D(cfg.getPopMatrix()),
-                                                    cfg.getMatricesAndFiles(), cfg.getFilters(), coreNumberToUse);
-
-                                            if (cfg.getVoxelParameters().isMergingAfter()) {
-
-                                                voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
-
-                                                    @Override
-                                                    public void voxelisationProgress(String progress, int ratio) {
-                                                        Platform.runLater(new Runnable() {
-
-                                                            @Override
-                                                            public void run() {
-
-                                                                updateMessage(msgTask + "\n" + progress);
-                                                            }
-                                                        });
-                                                    }
-
-                                                    @Override
-                                                    public void voxelisationFinished(float duration) {
-
-                                                        logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
-                                                    }
-                                                });
-                                                //if(!voxTool.isCancelled()){
-                                                    voxTool.mergeVoxelsFileV2(outputFiles, cfg.getVoxelParameters().getMergedFile(), cfg.getVoxelParameters().getTransmittanceMode(), cfg.getVoxelParameters().getMaxPAD());
-                                                //}
-                                                
-                                            }
-
-                                            Platform.runLater(new Runnable() {
-
-                                                @Override
-                                                public void run() {
-
-                                                    if(!voxTool.isCancelled()){
-                                                        for (File file : outputFiles) {
-                                                            addFileToVoxelList(file);
-                                                        }
-                                                        if (cfg.getVoxelParameters().isMergingAfter()) {
-                                                            addFileToVoxelList(cfg.getVoxelParameters().getMergedFile());
-                                                        }
-                                                    }
-                                                }
-                                            });
-                                            
-                                        }catch (Exception e) {
-
-                                        }
-
-                                        break;
-
-                                    case RXP_SCAN:
-
-                                        voxTool.voxeliseFromRxp(cfg.getOutputFile(), cfg.getInputFile(),
-                                                cfg.getVoxelParameters().getDtmFile(),
-                                                cfg.getVoxelParameters(),
-                                                MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()),
-                                                MatrixConverter.convertMatrix4dToMat4D(cfg.getPopMatrix()),
-                                                MatrixConverter.convertMatrix4dToMat4D(cfg.getSopMatrix()),
-                                                cfg.getFilters());
-
-                                        Platform.runLater(new Runnable() {
-
-                                            @Override
-                                            public void run() {
-
-                                                addFileToVoxelList(cfg.getOutputFile());
-                                            }
-                                        });
-
-                                        break;
-                                }
-
-                                break;
-
-                            case MULTI_RES:
-
-                                ProcessingMultiRes process = new ProcessingMultiRes(cfg.getMultiResPadMax(), cfg.isMultiResUseDefaultMaxPad());
-
-                                process.process(cfg.getFiles());
-                                process.write(cfg.getOutputFile());
-
-                                Platform.runLater(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-
-                                        addFileToVoxelList(cfg.getOutputFile());
-                                    }
-                                });
-
-                                break;
-                                
-                            case MULTI_VOXELISATION_ALS_AND_MULTI_RES:
-                                
-                                voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
-
-                                    @Override
-                                    public void voxelisationProgress(String progress, int ratio) {
-                                        Platform.runLater(new Runnable() {
-
-                                            @Override
-                                            public void run() {
-
-                                                updateMessage(msgTask + "\n" + progress);
-                                            }
-                                        });
-
-                                    }
-
-                                    @Override
-                                    public void voxelisationFinished(float duration) {
-
-                                        logger.info("las voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
-                                    }
-                                });
-                                voxTool.multiVoxelisation(cfg);
-                                
-                                break;
-
-                        }
-
-                        return null;
-                    }
-                };
-            }
-        };
-
-        d = new ProgressDialog(service);
-        d.initModality(Modality.NONE);
-        d.initOwner(stage);
-        d.setResizable(true);
-        d.show();
-        Button buttonCancel = new Button("cancel");
-        d.setGraphic(buttonCancel);
-
-        buttonCancel.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                service.cancel();
-                voxTool.setCancelled(true);
-            }
-        });
-
-        service.exceptionProperty().addListener(new ChangeListener<Throwable>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Throwable> observable, Throwable oldValue, Throwable newValue) {
-                System.out.println("test");
-            }
-        });
-
-        service.stateProperty().addListener(new ChangeListener<Worker.State>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) {
-                if (newValue == Worker.State.SUCCEEDED) {
-                    if (!queue.isEmpty()) {
-                        try {
-                            taskID++;
-                            executeProcess(queue.take());
-
-                        } catch (InterruptedException ex) {
-                            logger.error(ex);
-                        }
-                    }
-                }
-            }
-        });
-
-        service.setOnFailed(new EventHandler<WorkerStateEvent>() {
-
-            @Override
-            public void handle(WorkerStateEvent event) {
-                logger.error("Service failed : ",service.getException());
-            }
-        });
-
-        service.start();
+        
 
     }
 
@@ -3155,209 +3202,282 @@ public class MainFrameController implements Initializable {
     private void onActionButtonLoadSelectedTask(ActionEvent event) {
 
         File selectedFile = listViewTaskList.getSelectionModel().getSelectedItem();
-
+        
         if (selectedFile != null) {
+            
+            String type = Configuration.readType(selectedFile);
+            
+            switch(type){
+                case "voxelisation":
+                    
+                    VoxelisationConfiguration cfg = new VoxelisationConfiguration();
+                    try {
+                        cfg.readConfiguration(selectedFile);
 
-            VoxelisationConfiguration cfg = new VoxelisationConfiguration();
-            try {
-                cfg.readConfiguration(selectedFile);
-
-            } catch (Exception e) {
-                logger.error(e);
-                Alert alert = new Alert(AlertType.CONFIRMATION);
-                alert.setHeaderText("Incorrect file");
-                alert.setContentText("File is corrupted or cannot be read!\n"
-                        + "Do you want to keep it?");
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.CANCEL) {
-                    listViewTaskList.getItems().remove(selectedFile);
-                }
-
-                return;
-            }
-
-            switch (cfg.getProcessMode()) {
-                case VOXELISATION_ALS:
-                case VOXELISATION_TLS:
-
-                    VoxelParameters voxelParameters = cfg.getVoxelParameters();
-                    textFieldEnterXMin.setText(String.valueOf(voxelParameters.bottomCorner.x));
-                    textFieldEnterYMin.setText(String.valueOf(voxelParameters.bottomCorner.y));
-                    textFieldEnterZMin.setText(String.valueOf(voxelParameters.bottomCorner.z));
-
-                    textFieldEnterXMax.setText(String.valueOf(voxelParameters.topCorner.x));
-                    textFieldEnterYMax.setText(String.valueOf(voxelParameters.topCorner.y));
-                    textFieldEnterZMax.setText(String.valueOf(voxelParameters.topCorner.z));
-
-                    textFieldXNumber.setText(String.valueOf(voxelParameters.split.x));
-                    textFieldYNumber.setText(String.valueOf(voxelParameters.split.y));
-                    textFieldZNumber.setText(String.valueOf(voxelParameters.split.z));
-
-                    textFieldResolution.setText(String.valueOf(voxelParameters.resolution));
-
-                    checkboxUseDTMFilter.setSelected(voxelParameters.useDTMCorrection());
-                    File tmpFile = voxelParameters.getDtmFile();
-                    if (tmpFile != null) {
-                        textfieldDTMPath.setText(tmpFile.getAbsolutePath());
-                        textfieldDTMValue.setText(String.valueOf(voxelParameters.minDTMDistance));
-                    }
-
-                    checkboxUsePointcloudFilter.setSelected(voxelParameters.isUsePointCloudFilter());
-                    List<PointcloudFilter> pointcloudFilters = voxelParameters.getPointcloudFilters();
-                    if (pointcloudFilters != null) {
-
-                        clearPointcloudFiltersPane();
-
-                        for (PointcloudFilter filter : pointcloudFilters) {
-                            PointCloudFilterPaneComponent pane = addPointcloudFilterComponent();
-                            pane.getTextfieldPointCloudPath().setText(filter.getPointcloudFile().getAbsolutePath());
-                            pane.getTextfieldPointCloudErrorMargin().setText(String.valueOf(filter.getPointcloudErrorMargin()));
-
-                            int index;
-                            if (filter.isKeep()) {
-                                index = 0;
-                            } else {
-                                index = 1;
-                            }
-                            pane.getComboboxPointCloudFilteringType().getSelectionModel().select(index);
+                    } catch (Exception e) {
+                        logger.error(e);
+                        Alert alert = new Alert(AlertType.CONFIRMATION);
+                        alert.setHeaderText("Incorrect file");
+                        alert.setContentText("File is corrupted or cannot be read!\n"
+                                + "Do you want to keep it?");
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if (result.get() == ButtonType.CANCEL) {
+                            listViewTaskList.getItems().remove(selectedFile);
                         }
-                    }
 
-                    checkboxUsePopMatrix.setSelected(cfg.isUsePopMatrix());
-                    checkboxUseSopMatrix.setSelected(cfg.isUseSopMatrix());
-                    checkboxUseVopMatrix.setSelected(cfg.isUseVopMatrix());
-                    checkboxRemoveLowPoint.setSelected(cfg.isRemoveLowPoint());
-
-                    textFieldPADMax.setText(String.valueOf(cfg.getVoxelParameters().getMaxPAD()));
-
-                    popMatrix = cfg.getPopMatrix();
-                    sopMatrix = cfg.getSopMatrix();
-                    vopMatrix = cfg.getVopMatrix();
-
-                    if (popMatrix == null) {
-                        popMatrix = new Matrix4d();
-                        popMatrix.setIdentity();
-                    }
-
-                    if (sopMatrix == null) {
-                        sopMatrix = new Matrix4d();
-                        sopMatrix.setIdentity();
-                    }
-
-                    if (vopMatrix == null) {
-                        vopMatrix = new Matrix4d();
-                        vopMatrix.setIdentity();
-                    }
-
-                    updateResultMatrix();
-
-                    List<Filter> filters = cfg.getFilters();
-                    if (filters != null) {
-                        listviewFilters.getItems().clear();
-                        listviewFilters.getItems().addAll(filters);
+                        return;
                     }
 
                     switch (cfg.getProcessMode()) {
-
                         case VOXELISATION_ALS:
-                            tabPaneVoxelisation.getSelectionModel().select(0);
-
-                            textFieldInputFileALS.setText(cfg.getInputFile().getAbsolutePath());
-                            textFieldTrajectoryFileALS.setText(cfg.getTrajectoryFile().getAbsolutePath());
-                            textFieldOutputFileALS.setText(cfg.getOutputFile().getAbsolutePath());
-
-                            switch (cfg.getInputType()) {
-                                case LAS_FILE:
-                                    comboboxModeALS.getSelectionModel().select(0);
-                                    break;
-                                case LAZ_FILE:
-                                    comboboxModeALS.getSelectionModel().select(1);
-                                    break;
-                                case POINTS_FILE:
-                                    comboboxModeALS.getSelectionModel().select(2);
-                                    break;
-                                case SHOTS_FILE:
-                                    comboboxModeALS.getSelectionModel().select(3);
-                                    break;
-                            }
-
-                            checkboxCalculateGroundEnergy.setSelected(cfg.getVoxelParameters().isCalculateGroundEnergy());
-                            if (cfg.getVoxelParameters().getGroundEnergyFile() != null) {
-                                comboboxGroundEnergyOutputFormat.getSelectionModel().select(cfg.getVoxelParameters().getGroundEnergyFileFormat());
-                                textFieldOutputFileGroundEnergy.setText(cfg.getVoxelParameters().getGroundEnergyFile().getAbsolutePath());
-                            }
-
-                            break;
                         case VOXELISATION_TLS:
 
-                            tabPaneVoxelisation.getSelectionModel().select(1);
+                            VoxelParameters voxelParameters = cfg.getVoxelParameters();
+                            textFieldEnterXMin.setText(String.valueOf(voxelParameters.bottomCorner.x));
+                            textFieldEnterYMin.setText(String.valueOf(voxelParameters.bottomCorner.y));
+                            textFieldEnterZMin.setText(String.valueOf(voxelParameters.bottomCorner.z));
 
-                            textFieldInputFileTLS.setText(cfg.getInputFile().getAbsolutePath());
-                            textFieldOutputPathTLS.setText(cfg.getOutputFile().getAbsolutePath());
+                            textFieldEnterXMax.setText(String.valueOf(voxelParameters.topCorner.x));
+                            textFieldEnterYMax.setText(String.valueOf(voxelParameters.topCorner.y));
+                            textFieldEnterZMax.setText(String.valueOf(voxelParameters.topCorner.z));
 
-                            switch (cfg.getInputType()) {
-                                case RSP_PROJECT:
-                                    comboboxModeTLS.getSelectionModel().select(1);
+                            textFieldXNumber.setText(String.valueOf(voxelParameters.split.x));
+                            textFieldYNumber.setText(String.valueOf(voxelParameters.split.y));
+                            textFieldZNumber.setText(String.valueOf(voxelParameters.split.z));
+
+                            textFieldResolution.setText(String.valueOf(voxelParameters.resolution));
+
+                            checkboxUseDTMFilter.setSelected(voxelParameters.useDTMCorrection());
+                            File tmpFile = voxelParameters.getDtmFile();
+                            if (tmpFile != null) {
+                                textfieldDTMPath.setText(tmpFile.getAbsolutePath());
+                                textfieldDTMValue.setText(String.valueOf(voxelParameters.minDTMDistance));
+                            }
+
+                            checkboxUsePointcloudFilter.setSelected(voxelParameters.isUsePointCloudFilter());
+                            List<PointcloudFilter> pointcloudFilters = voxelParameters.getPointcloudFilters();
+                            if (pointcloudFilters != null) {
+
+                                clearPointcloudFiltersPane();
+
+                                for (PointcloudFilter filter : pointcloudFilters) {
+                                    PointCloudFilterPaneComponent pane = addPointcloudFilterComponent();
+                                    pane.getTextfieldPointCloudPath().setText(filter.getPointcloudFile().getAbsolutePath());
+                                    pane.getTextfieldPointCloudErrorMargin().setText(String.valueOf(filter.getPointcloudErrorMargin()));
+
+                                    int index;
+                                    if (filter.isKeep()) {
+                                        index = 0;
+                                    } else {
+                                        index = 1;
+                                    }
+                                    pane.getComboboxPointCloudFilteringType().getSelectionModel().select(index);
+                                }
+                            }
+
+                            checkboxUsePopMatrix.setSelected(cfg.isUsePopMatrix());
+                            checkboxUseSopMatrix.setSelected(cfg.isUseSopMatrix());
+                            checkboxUseVopMatrix.setSelected(cfg.isUseVopMatrix());
+                            checkboxRemoveLowPoint.setSelected(cfg.isRemoveLowPoint());
+
+                            textFieldPADMax.setText(String.valueOf(cfg.getVoxelParameters().getMaxPAD()));
+
+                            popMatrix = cfg.getPopMatrix();
+                            sopMatrix = cfg.getSopMatrix();
+                            vopMatrix = cfg.getVopMatrix();
+
+                            if (popMatrix == null) {
+                                popMatrix = new Matrix4d();
+                                popMatrix.setIdentity();
+                            }
+
+                            if (sopMatrix == null) {
+                                sopMatrix = new Matrix4d();
+                                sopMatrix.setIdentity();
+                            }
+
+                            if (vopMatrix == null) {
+                                vopMatrix = new Matrix4d();
+                                vopMatrix.setIdentity();
+                            }
+
+                            updateResultMatrix();
+
+                            List<Filter> filters = cfg.getFilters();
+                            if (filters != null) {
+                                listviewFilters.getItems().clear();
+                                listviewFilters.getItems().addAll(filters);
+                            }
+
+                            switch (cfg.getProcessMode()) {
+
+                                case VOXELISATION_ALS:
+                                    tabPaneVoxelisation.getSelectionModel().select(0);
+
+                                    textFieldInputFileALS.setText(cfg.getInputFile().getAbsolutePath());
+                                    textFieldTrajectoryFileALS.setText(cfg.getTrajectoryFile().getAbsolutePath());
+                                    textFieldOutputFileALS.setText(cfg.getOutputFile().getAbsolutePath());
+
+                                    switch (cfg.getInputType()) {
+                                        case LAS_FILE:
+                                            comboboxModeALS.getSelectionModel().select(0);
+                                            break;
+                                        case LAZ_FILE:
+                                            comboboxModeALS.getSelectionModel().select(1);
+                                            break;
+                                        case POINTS_FILE:
+                                            comboboxModeALS.getSelectionModel().select(2);
+                                            break;
+                                        case SHOTS_FILE:
+                                            comboboxModeALS.getSelectionModel().select(3);
+                                            break;
+                                    }
+
+                                    checkboxCalculateGroundEnergy.setSelected(cfg.getVoxelParameters().isCalculateGroundEnergy());
+                                    if (cfg.getVoxelParameters().getGroundEnergyFile() != null) {
+                                        comboboxGroundEnergyOutputFormat.getSelectionModel().select(cfg.getVoxelParameters().getGroundEnergyFileFormat());
+                                        textFieldOutputFileGroundEnergy.setText(cfg.getVoxelParameters().getGroundEnergyFile().getAbsolutePath());
+                                    }
+
                                     break;
-                                case RXP_SCAN:
-                                    comboboxModeTLS.getSelectionModel().select(0);
-                                    break;
-                                case POINTS_FILE:
-                                    comboboxModeTLS.getSelectionModel().select(2);
-                                    break;
-                                case SHOTS_FILE:
-                                    comboboxModeTLS.getSelectionModel().select(3);
+                                case VOXELISATION_TLS:
+
+                                    tabPaneVoxelisation.getSelectionModel().select(1);
+
+                                    textFieldInputFileTLS.setText(cfg.getInputFile().getAbsolutePath());
+                                    textFieldOutputPathTLS.setText(cfg.getOutputFile().getAbsolutePath());
+
+                                    switch (cfg.getInputType()) {
+                                        case RSP_PROJECT:
+                                            comboboxModeTLS.getSelectionModel().select(1);
+                                            break;
+                                        case RXP_SCAN:
+                                            comboboxModeTLS.getSelectionModel().select(0);
+                                            break;
+                                        case POINTS_FILE:
+                                            comboboxModeTLS.getSelectionModel().select(2);
+                                            break;
+                                        case SHOTS_FILE:
+                                            comboboxModeTLS.getSelectionModel().select(3);
+                                            break;
+                                    }
+
+                                    checkboxMergeAfter.setSelected(cfg.getVoxelParameters().isMergingAfter());
+
+                                    if (cfg.getVoxelParameters().getMergedFile() != null) {
+                                        textFieldMergedFileName.setText(cfg.getVoxelParameters().getMergedFile().getName());
+                                    }
+
+                                    List<MatrixAndFile> matricesAndFiles = cfg.getMatricesAndFiles();
+                                    if (matricesAndFiles != null) {
+                                        items = matricesAndFiles;
+                                        doFilterOnScanListView();
+                                    }
                                     break;
                             }
 
-                            checkboxMergeAfter.setSelected(cfg.getVoxelParameters().isMergingAfter());
-
-                            if (cfg.getVoxelParameters().getMergedFile() != null) {
-                                textFieldMergedFileName.setText(cfg.getVoxelParameters().getMergedFile().getName());
+                            if (cfg.getVoxelParameters().getWeighting() == 0) {
+                                checkboxEnableWeighting.setSelected(false);
+                            } else {
+                                checkboxEnableWeighting.setSelected(true);
+                                comboboxWeighting.getSelectionModel().select(cfg.getVoxelParameters().getWeighting() - 1);
                             }
 
-                            List<MatrixAndFile> matricesAndFiles = cfg.getMatricesAndFiles();
-                            if (matricesAndFiles != null) {
-                                items = matricesAndFiles;
-                                doFilterOnScanListView();
-                            }
+                            comboboxFormulaTransmittance.getSelectionModel().select(cfg.getVoxelParameters().getTransmittanceMode());
+
                             break;
+
+                        case MULTI_RES:
+
+                            tabPaneVoxelisation.getSelectionModel().select(2);
+                            listViewMultiResVoxelFiles.getItems().addAll(cfg.getFiles());
+                            textFieldOutputFileMultiRes.setText(cfg.getOutputFile().getAbsolutePath());
+                            checkboxOverwritePadLimit.setSelected(!cfg.isMultiResUseDefaultMaxPad());
+                            break;
+
+                        case MERGING:
+
+                            tabPaneVoxelisation.getSelectionModel().select(3);
+
+                            List<File> files = cfg.getFiles();
+
+                            if (files != null) {
+                                listViewVoxelsFiles.getItems().addAll(files);
+                            }
+                            textFieldOutputFileMerging.setText(cfg.getOutputFile().getAbsolutePath());
+                            textFieldPADMax.setText(String.valueOf(cfg.getVoxelParameters().getMaxPAD()));
+
+                            break;
+
                     }
 
-                    if (cfg.getVoxelParameters().getWeighting() == 0) {
-                        checkboxEnableWeighting.setSelected(false);
-                    } else {
-                        checkboxEnableWeighting.setSelected(true);
-                        comboboxWeighting.getSelectionModel().select(cfg.getVoxelParameters().getWeighting() - 1);
+                    break;
+                    
+                case "transmittance":
+                    
+                    TransmittanceConfiguration transmConfiguration = new TransmittanceConfiguration();
+                    
+                    try{
+                        transmConfiguration.readConfiguration(selectedFile);
+                        Parameters params = transmConfiguration.getParameters();
+                        
+                        textfieldVoxelFilePathTransmittance.setText(params.getInputFile().getAbsolutePath());
+                        comboboxChooseDirectionsNumber.getSelectionModel().select(new Integer(params.getDirectionsNumber()));
+                        radiobuttonScannerPosFile.setSelected(params.isUseScanPositionsFile());
+                        radiobuttonScannerPosSquaredArea.setSelected(!params.isUseScanPositionsFile());
+                        
+                        if(params.isUseScanPositionsFile()){
+                            textfieldScannerPointsPositionsFile.setText(params.getPointsPositionsFile().getAbsolutePath());
+                        }else{
+                            
+                            if(params.getCenterPoint() != null){
+                                textfieldScannerPosCenterX.setText(String.valueOf(params.getCenterPoint().x));
+                                textfieldScannerPosCenterY.setText(String.valueOf(params.getCenterPoint().y));
+                                textfieldScannerPosCenterZ.setText(String.valueOf(params.getCenterPoint().z));
+                            }
+                            
+                            textfieldScannerWidthArea.setText(String.valueOf(params.getWidth()));
+                            textfieldScannerStepArea.setText(String.valueOf(params.getStep()));
+                        }
+                        
+                        textfieldLatitudeRadians.setText(String.valueOf(params.getLatitudeRadians()));
+                        data.clear();
+                        
+                        List<SimulationPeriod> simulationPeriods = params.getSimulationPeriods();
+                        
+                        if(simulationPeriods != null){
+                            data.addAll(simulationPeriods);
+                        }
+                        
+                        checkboxGenerateBitmapFile.setSelected(params.isGenerateBitmapFile());
+                        checkboxGenerateTextFile.setSelected(params.isGenerateTextFile());
+                        
+                        if(params.isGenerateBitmapFile() && params.getBitmapFile() != null){
+                            textfieldOutputBitmapFilePath.setText(params.getBitmapFile().getAbsolutePath());
+                        }
+                        
+                        if(params.isGenerateTextFile() && params.getTextFile() != null){
+                            textfieldOutputTextFilePath.setText(params.getTextFile().getAbsolutePath());
+                        }
+                        
+                        
+                    }catch(Exception e){
+                        
+                        logger.error(e);
+                        Alert alert = new Alert(AlertType.CONFIRMATION);
+                        alert.setHeaderText("Incorrect file");
+                        alert.setContentText("File is corrupted or cannot be read!\n"
+                                + "Do you want to keep it?");
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if (result.get() == ButtonType.CANCEL) {
+                            listViewTaskList.getItems().remove(selectedFile);
+                        }
                     }
-
-                    comboboxFormulaTransmittance.getSelectionModel().select(cfg.getVoxelParameters().getTransmittanceMode());
-
+                    
                     break;
-
-                case MULTI_RES:
-
-                    tabPaneVoxelisation.getSelectionModel().select(2);
-                    listViewMultiResVoxelFiles.getItems().addAll(cfg.getFiles());
-                    textFieldOutputFileMultiRes.setText(cfg.getOutputFile().getAbsolutePath());
-                    checkboxOverwritePadLimit.setSelected(!cfg.isMultiResUseDefaultMaxPad());
-                    break;
-
-                case MERGING:
-
-                    tabPaneVoxelisation.getSelectionModel().select(3);
-
-                    List<File> files = cfg.getFiles();
-
-                    if (files != null) {
-                        listViewVoxelsFiles.getItems().addAll(files);
-                    }
-                    textFieldOutputFileMerging.setText(cfg.getOutputFile().getAbsolutePath());
-                    textFieldPADMax.setText(String.valueOf(cfg.getVoxelParameters().getMaxPAD()));
-
-                    break;
-
             }
+            
+            
         }
 
     }
@@ -4421,16 +4541,15 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonOpenOutputBitmapFile(ActionEvent event) {
         
-        if(lastFCSaveTransmittanceBitmapFile != null){
-            fileChooserSaveTransmittanceBitmapFile.setInitialFileName(lastFCSaveTransmittanceBitmapFile.getName());
-            fileChooserSaveTransmittanceBitmapFile.setInitialDirectory(lastFCSaveTransmittanceBitmapFile.getParentFile());
+        if(lastDCSaveTransmittanceBitmapFile != null){
+            directoryChooserSaveTransmittanceBitmapFile.setInitialDirectory(lastDCSaveTransmittanceBitmapFile);
         }
         
-        File selectedFile = fileChooserSaveTransmittanceBitmapFile.showSaveDialog(stage);
+        File selectedFile = directoryChooserSaveTransmittanceBitmapFile.showDialog(stage);
         
         if(selectedFile != null){
             
-            lastFCSaveTransmittanceBitmapFile = selectedFile;
+            lastDCSaveTransmittanceBitmapFile = selectedFile;
             textfieldOutputBitmapFilePath.setText(selectedFile.getAbsolutePath());
         }
     }
@@ -4479,6 +4598,56 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionButtonTransmittanceAddToTaskList(ActionEvent event) {
+        
+        if(lastFCSaveConfiguration != null) {
+            fileChooserSaveConfiguration.setInitialDirectory(lastFCSaveConfiguration.getParentFile());
+            fileChooserSaveConfiguration.setInitialFileName(lastFCSaveConfiguration.getName());
+        }else {
+            fileChooserSaveConfiguration.setInitialDirectory(new File(textFieldOutputFileALS.getText()).getParentFile());
+            fileChooserSaveConfiguration.setInitialFileName(new File(textFieldOutputFileALS.getText()).getName() + "_cfg.xml");
+        }
+
+        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
+        if (selectedFile != null) {
+            
+            lastFCSaveConfiguration= selectedFile;
+            
+            Parameters transmParameters = new Parameters();
+        
+            transmParameters.setInputFile(new File(textfieldVoxelFilePathTransmittance.getText()));
+            transmParameters.setGenerateBitmapFile(checkboxGenerateBitmapFile.isSelected());
+            transmParameters.setGenerateTextFile(checkboxGenerateTextFile.isSelected());
+            
+            if(checkboxGenerateBitmapFile.isSelected()){
+                transmParameters.setBitmapFile(new File(textfieldOutputBitmapFilePath.getText()));
+            }
+            
+            if(checkboxGenerateTextFile.isSelected()){
+                transmParameters.setTextFile(new File(textfieldOutputTextFilePath.getText()));
+            }
+            
+            transmParameters.setDirectionsNumber(comboboxChooseDirectionsNumber.getSelectionModel().getSelectedItem());
+            transmParameters.setLatitudeRadians(Float.valueOf(textfieldLatitudeRadians.getText()));
+            transmParameters.setUseScanPositionsFile(radiobuttonScannerPosFile.isSelected());
+            
+            if(radiobuttonScannerPosFile.isSelected()){
+                transmParameters.setPointsPositionsFile(new File(textfieldScannerPointsPositionsFile.getText()));
+            }else{
+                transmParameters.setCenterPoint(new Point3f(Float.valueOf(textfieldScannerPosCenterX.getText()), 
+                                                            Float.valueOf(textfieldScannerPosCenterY.getText()),
+                                                            Float.valueOf(textfieldScannerPosCenterZ.getText())));
+                
+                transmParameters.setWidth(Float.valueOf(textfieldScannerWidthArea.getText()));
+                transmParameters.setStep(Float.valueOf(textfieldScannerStepArea.getText()));
+            }
+            
+            transmParameters.setSimulationPeriods(tableViewSimulationPeriods.getItems());
+            
+            TransmittanceConfiguration cfg = new TransmittanceConfiguration(transmParameters);
+            cfg.writeConfiguration(selectedFile);
+            addFileToTaskList(selectedFile);
+        }
+        
     }
 
     public class MinMax {

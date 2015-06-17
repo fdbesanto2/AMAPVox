@@ -3,6 +3,7 @@
  */
 package fr.ird.voxelidar.transmittance;
 
+import fr.ird.voxelidar.util.Period;
 import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -23,7 +24,10 @@ import javax.vecmath.Vector3d;
 
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelSpace;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.Scene;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Calendar;
+import java.util.logging.Level;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
 /**
@@ -39,64 +43,69 @@ public class PadTransmittance {
     private final Point3d vsMin;
     private final Point3d vsMax;
     private final Point3i splitting;
-    private double transmissionMonth[][][];
+    private double[][][] transmissionPeriod;
     private float mnt[][];
     private float mntZmax;
     private float mntZmin;
     private final Turtle turtle;
-    private static final boolean images = true;
-    private static final float latitudeRadian = (float) Math.toRadians(4);
 
     private ArrayList<Point3d> positions;
+    
+    private final Parameters parameters;
 
     private class TLSVoxel {
 
         float padBV;
     }
     
-    public PadTransmittance(){
+    public PadTransmittance(Parameters parameters){
+        
+        this.parameters = parameters;
         
         vsMin = new Point3d();
         vsMax = new Point3d();
         splitting = new Point3i();
         
-        int nbDirections = 4; // 2 => 46 directions; 3 => 136 directions
+        int nbDirections = parameters.getDirectionsNumber();
         
         turtle = new Turtle(nbDirections);
         logger.info("Turtle built with " + turtle.getNbDirections() + " sectors");
     }
     
-    public void processOneFile(File file){
+    public void process(){
             
-        logger.info("===== " + file.getAbsolutePath() + " =====");
+        logger.info("===== " + parameters.getInputFile().getAbsolutePath() + " =====");
 
         // read data
-        readData(file);
+        readData(parameters.getInputFile());
 
         getSensorPositions();
 
-        // Clearness coefficient
-        //
-        float kt[] = {0.356f, 0.312f, 0.394f, 0.389f, 0.331f, 0.349f, 0.443f, 0.470f, 0.490f, 0.508f, 0.454f, 0.383f};
-        ArrayList<Time> day1 = new ArrayList<>();
-        ArrayList<Time> day2 = new ArrayList<>();
         ArrayList<IncidentRadiation> solRad = new ArrayList<>();
-        for (int m = 0; m < 12; m++) {
-            day1.add(new Time(2015, 1 + (m * 30), 0, 0));
-            day2.add(new Time(2015, (m + 1) * 30, 24, 0));
-            solRad.add(SolarRadiation.globalTurtleIntegrate(turtle, latitudeRadian, kt[m], day1.get(m), day2.get(m)));
+        
+        List<SimulationPeriod> simulationPeriods = parameters.getSimulationPeriods();
+        
+        for(SimulationPeriod period : simulationPeriods){
+            
+            Calendar c1 = period.getPeriod().startDate;
+            Calendar c2 = period.getPeriod().endDate;
+            
+            Time time1 = new Time(c1.get(Calendar.YEAR), c1.get(Calendar.DAY_OF_YEAR), c1.get(Calendar.HOUR_OF_DAY), c1.get(Calendar.MINUTE));
+            Time time2 = new Time(c2.get(Calendar.YEAR), c2.get(Calendar.DAY_OF_YEAR), c2.get(Calendar.HOUR_OF_DAY), c2.get(Calendar.MINUTE));
+            
+            solRad.add(SolarRadiation.globalTurtleIntegrate(turtle, (float) Math.toRadians(parameters.getLatitudeRadians()), period.getClearnessCoefficient(), time1, time2));
         }
 
         int n = 0;
         double transmitted;
 
-        transmissionMonth = new double[splitting.x][][];
+        transmissionPeriod = new double[splitting.x][][];
         for (int x = 0; x < splitting.x; x++) {
-            transmissionMonth[x] = new double[splitting.y][];
+            transmissionPeriod[x] = new double[splitting.y][];
             for (int y = 0; y < splitting.y; y++) {
-                transmissionMonth[x][y] = new double[12];
-                for (int m = 0; m < 12; m++) {
-                    transmissionMonth[x][y][m] = 0;
+                transmissionPeriod[x][y] = new double[solRad.size()];
+                for (int m = 0; m < solRad.size(); m++) {
+                    transmissionPeriod[x][y][m] = 0;
                 }
             }
         }
@@ -108,63 +117,87 @@ public class PadTransmittance {
         IncidentRadiation ir = solRad.get(month);
         
         for (Point3d pos : positions) {
+            
             int i = (int) ((pos.x - vsMin.x) / voxSpace.getVoxelSize().x);
             int j = (int) ((pos.y - vsMin.y) / voxSpace.getVoxelSize().y);
-            //			transmission[i][j] = 0;
+            
             for (int t = 0; t < turtle.getNbDirections(); t++) {
+                
                 Vector3d dir = new Vector3d(ir.directions[t]);
                 dir.normalize();
 
                 List<Double> distances = distToVoxelWalls(new Point3d(pos), dir);
                 transmitted = directionalTransmittance(new Point3d(pos), distances, dir);
-                for (int m = 0; m < 12; m++) {
-                    ir = solRad.get(m);
-                    transmissionMonth[i][j][m] += transmitted * ir.directionalGlobals[t];
+                
+                int m = 0;
+                for(IncidentRadiation incidentRadiation : solRad){
+                    transmissionPeriod[i][j][m] += transmitted * incidentRadiation.directionalGlobals[t];
+                    m++;
                 }
             }
             
-            for (int m = 0; m < 12; m++) {
-                ir = solRad.get(m);
-                transmissionMonth[i][j][m] /= ir.global;
+            
+            for(int m = 0 ; m<solRad.size() ; m++){
+                transmissionPeriod[i][j][m] /= ir.global;
+                
             }
 
             n++;
 
             if (n % 1000 == 0) {
-                if (n % 10000 == 0) {
-                    logger.info(n + "/" + positions.size() + "\n");
-                } else {
-                    logger.info(".");
-                }
+                logger.info(n + "/" + positions.size());
             }
         }
+        
+    }
+    
+    
+    
+    public void writeBitmaps(){
+        
+        int zoom = 2;
+        
+        for(int k=0;k<transmissionPeriod[0][0].length;k++){
+            
+            File outputFile = new File(parameters.getBitmapFile()+File.separator+"period_"+(k+1)+".bmp");
+            logger.info("Writing file "+outputFile);
+            
+            BufferedImage bimg = new BufferedImage(splitting.x * zoom, splitting.y * zoom, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g = bimg.createGraphics();
 
-        File txtFile = new File(file.getAbsolutePath() + ".txt");
+            // background
+            g.setColor(new Color(80, 30, 0));
+            g.fillRect(0, 0, splitting.x * zoom, splitting.y * zoom);
 
-        try {
-            writeTransmittance(txtFile);
-        } catch (IOException ex) {
-            logger.error("Cannot write transmittance text file", ex);
-        }
+            for (int i = 0; i < splitting.x; i++) {
+                for (int j = 0; j < splitting.y; j++) {
 
-        if (images) {
-            BufferedImage bimg = imageTransmitted();
-            File imgFile = new File(file.getAbsolutePath() + ".bmp");
+                    float col = (float) (transmissionPeriod[i][j][k] / 0.1);
+                    col = Math.min(col, 1);
+                    g.setColor(Colouring.rainbow(col));
+                    int jj = splitting.y - j - 1;
+                    g.fillRect(i * zoom, jj * zoom, zoom, zoom);
+                }
+            }
 
             try {
-                ImageIO.write(bimg, "bmp", imgFile);
+                ImageIO.write(bimg, "bmp", outputFile);
+                logger.info("File "+outputFile+" written");
+
             } catch (IOException ex) {
                 logger.error("Cannot write transmittance bitmap image", ex);
             }
         }
+        
     }
     
+    /*
     public void processFileList(List<File> files){
         
         for (File file : files) {
-            processOneFile(file);
+            process(file);
         }
-    }
+    }*/
 
     private void readData(File inputFile) {
 
@@ -186,11 +219,7 @@ public class PadTransmittance {
                 parseLineData(line);
                 nbScans++;
                 if (nbScans % 100000 == 0) {
-                    if (nbScans % 1000000 == 0) {
-                        logger.info(" " + nbScans + " shots\n");
-                    } else {
-                        logger.info(".");
-                    }
+                    logger.info(" " + nbScans + " shots");
                 }
             }
             logger.info(nbScans + "scans\n");
@@ -371,31 +400,78 @@ public class PadTransmittance {
         
         positions = new ArrayList<>();
         
-        // Smaller plot at center
-        int size = 10;
-        
-        int middleX = (splitting.x / 2);
-        int middleY = (splitting.y / 2);
-        
-        int xMin = middleX - size;
-        int yMin = middleY - size;
-        
-        int xMax = middleX + size;
-        int yMax = middleY + size;
-        
-        
-        for (int i = xMin; i < xMax; i++) {
+        if(parameters.isUseScanPositionsFile()){
             
-            double tx = (0.5 + (double) i) * voxSpace.getVoxelSize().x;
+            File pointPositionsFile = parameters.getPointsPositionsFile();
             
-            for (int j = yMin; j < yMax; j++) {
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(pointPositionsFile));
                 
-                double ty = (0.5f + (double) j) * voxSpace.getVoxelSize().y;
-                Point3d pos = new Point3d(vsMin);
-                pos.add(new Point3d(tx, ty, mnt[i][j] + 0.1f));
-                positions.add(pos);
+                String line;
+                
+                while((line = reader.readLine()) != null){
+                    
+                    line = line.replaceAll(" ", ",");
+                    line = line.replaceAll("\t", ",");
+                    
+                    String[] split = line.split(",");
+                    
+                    positions.add(new Point3d(Double.valueOf(split[0]), Double.valueOf(split[1]), Double.valueOf(split[2])));
+                }
+                
+            } catch (FileNotFoundException ex) {
+                logger.error("File "+ parameters.getPointsPositionsFile()+" not found", ex);
+            } catch (IOException ex) {
+                logger.error("An error occured when reading file", ex);
+            }
+            
+        }else{
+            // Smaller plot at center
+            int size = (int)parameters.getWidth();
+
+            int middleX = (int)parameters.getCenterPoint().x;
+            int middleY = (int)parameters.getCenterPoint().y;
+            //int middleX = (splitting.x / 2);
+            //int middleY = (splitting.y / 2);
+
+            int xMin = middleX - size;
+            int yMin = middleY - size;
+
+            int xMax = middleX + size;
+            int yMax = middleY + size;
+            
+            if(xMin < 0){
+                xMin = 0;
+            }
+            
+            if(yMin < 0){
+                yMin = 0;
+            }
+            
+            if(xMax >= voxSpace.getSplitting().x){
+                xMax = voxSpace.getSplitting().x -1;
+            }
+            
+            if(yMax >= voxSpace.getSplitting().y){
+                yMax = voxSpace.getSplitting().y -1;
+            }
+
+            for (int i = xMin; i < xMax; i++) {
+
+                double tx = (0.5f + (double) i) * voxSpace.getVoxelSize().x;
+
+                for (int j = yMin; j < yMax; j++) {
+
+                    double ty = (0.5f + (double) j) * voxSpace.getVoxelSize().y;
+                    Point3d pos = new Point3d(vsMin);
+                    pos.add(new Point3d(tx, ty, mnt[i][j] + 0.1f));
+                    positions.add(pos);
+                }
             }
         }
+        
+        
+        
         
         logger.info("nb positions= " + positions.size());
     }
@@ -431,99 +507,69 @@ public class PadTransmittance {
         }
     }
 
-    private void writeTransmittance(File file) throws IOException {
+    public void writeTransmittance(){
 
-        FileWriter fw = new FileWriter(file.getAbsoluteFile());
-        BufferedWriter bw = new BufferedWriter(fw);
-        bw.write("Voxel space\n");
-        bw.write("  min corner:\t" + vsMin + "\n");
-        bw.write("  max corner:\t" + vsMax + "\n");
-        bw.write("  splitting:\t" + splitting + "\n\n");
-
-        bw.write("index X\tindex Y\tJanuary\tFebruary\tMarch\tApril\tMay\tJune\tJuly\tAugust\tSeptember\tOctober\tNovember\tDecember\n");
-        float mean[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        int size = 10;	// 
-        int n = 0;
-        for (int i = (splitting.x / 2) - size; i < (splitting.x / 2) + size; i++) {
-            for (int j = (splitting.y / 2) - size; j < (splitting.y / 2) + size; j++) {
-                bw.write(i + "\t" + j);
-                n++;
-                for (int m = 0; m < 12; m++) {
-                    bw.write("\t" + transmissionMonth[i][j][m]);
-                    mean[m] += transmissionMonth[i][j][m];
-                }
-                bw.write("\n");
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(parameters.getTextFile()))) {
+            
+            logger.info("Writing file "+parameters.getTextFile().getAbsolutePath());
+            
+            bw.write("Voxel space\n");
+            bw.write("  min corner:\t" + vsMin + "\n");
+            bw.write("  max corner:\t" + vsMax + "\n");
+            bw.write("  splitting:\t" + splitting + "\n\n");
+            
+            bw.write("latitude (degrees)\t"+parameters.getLatitudeRadians()+"\n\n");
+            
+            String header = "index X\tindex Y\t";
+            String periodsInfos = "";
+            String periodsInfosHeader = "period\tclearness coefficient";
+            
+            int count = 1;
+            for(SimulationPeriod period : parameters.getSimulationPeriods()){
+                
+                String periodTimeRange = Period.getDate(period.getPeriod().startDate)+"->"+Period.getDate(period.getPeriod().endDate)+"\t";
+                header += periodTimeRange;
+                periodsInfos += "Period "+count+" : "+periodTimeRange+period.getClearnessCoefficient()+"\n";
+                        
+                count++;
             }
-        }
-        float yearlyMean = 0;
-        bw.write("\nmonthly\tMEAN");
-        for (int m = 0; m < 12; m++) {
-            mean[m] /= (float) n;
-            bw.write("\t" + mean[m]);
-            yearlyMean += mean[m];
-        }
-        yearlyMean /= 12;
-        bw.write("\nYEARLY\tMEAN\t" + yearlyMean);
-        bw.write("\n");
-        bw.close();
-    }
-
-    public BufferedImage imageTransmitted() {
-
-        boolean test = false;
-        int zoom = 2;
-
-        BufferedImage bimg = new BufferedImage(splitting.x * zoom, splitting.y * zoom, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = bimg.createGraphics();
-
-        // background
-        g.setColor(new Color(80, 30, 0));
-        g.fillRect(0, 0, splitting.x * zoom, splitting.y * zoom);
-
-        if (!test) {
-            for (int i = 0; i < splitting.x; i++) {
-                for (int j = 0; j < splitting.y; j++) {
-                    float col = (float) (transmissionMonth[i][j][0] / 0.1);
-                    col = Math.min(col, 1);
-                    g.setColor(Colouring.rainbow(col));
-                    int jj = splitting.y - j - 1;
-                    g.fillRect(i * zoom, jj * zoom, zoom, zoom);
-                }
-            }
-        }
-
-        // test image PAD
-        if (test) {
-            double density[][] = new double[splitting.x][];
-            for (int i = 0; i < splitting.x; i++) {
-                density[i] = new double[splitting.y];
-            }
-            for (int i = 0; i < splitting.x; i++) {
-                for (int j = 0; j < splitting.y; j++) {
-                    for (int k = 0; k < splitting.z; k++) {
-                        density[i][j] += voxels[i][j][k].padBV;
+            
+            bw.write(periodsInfosHeader+"\n");
+            bw.write(periodsInfos+"\n");
+            bw.write(header+"\n");
+            //bw.write("index X\tindex Y\tJanuary\tFebruary\tMarch\tApril\tMay\tJune\tJuly\tAugust\tSeptember\tOctober\tNovember\tDecember\n");
+            
+            float mean[] = new float[transmissionPeriod[0][0].length];
+            int size = (int)parameters.getWidth();
+            int n = 0;
+            for (int i = (splitting.x / 2) - size; i < (splitting.x / 2) + size; i++) {
+                for (int j = (splitting.y / 2) - size; j < (splitting.y / 2) + size; j++) {
+                    bw.write(i + "\t" + j);
+                    n++;
+                    for (int m = 0; m < transmissionPeriod[i][j].length; m++) {
+                        bw.write("\t" + transmissionPeriod[i][j][m]);
+                        mean[m] += transmissionPeriod[i][j][m];
                     }
+                    bw.write("\n");
                 }
             }
-            double maxDensity = 0;
-            for (int i = 0; i < splitting.x; i++) {
-                for (int j = 0; j < splitting.y; j++) {
-                    maxDensity = Math.max(maxDensity, density[i][j]);
-                }
+            
+            float yearlyMean = 0;
+            bw.write("\nPERIOD\tMEAN");
+            for (int m = 0; m < transmissionPeriod[0][0].length; m++) {
+                mean[m] /= (float) n;
+                bw.write("\t" + mean[m]);
+                yearlyMean += mean[m];
             }
-            logger.info("max density: " + maxDensity);
-            for (int i = 0; i < splitting.x; i++) {
-                for (int j = 0; j < splitting.y; j++) {
-                    float col = (float) (density[i][j] / maxDensity);
-                    col = Math.min(col, 1);
-                    g.setColor(Colouring.rainbow(col));
-                    int jj = splitting.y - j - 1;
-                    g.fillRect(i * zoom, jj * zoom, zoom, zoom);
-                }
-            }
+            yearlyMean /= transmissionPeriod[0][0].length;
+            bw.write("\nTOTAL\tMEAN\t" + yearlyMean);
+            bw.write("\n");
+            
+            logger.info("File "+parameters.getTextFile().getAbsolutePath()+" written");
+            
+        }catch(IOException ex){
+            logger.error("Cannot write text file "+parameters.getTextFile().getAbsolutePath(), ex);
         }
-
-        return bimg;
     }
 
     public void imageMNT() {

@@ -17,7 +17,7 @@ For further information, please contact Gregoire Vincent.
 
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.util.MatrixFileParser;
-import fr.ird.voxelidar.voxelisation.VoxelisationTool;
+import fr.ird.voxelidar.voxelisation.ProcessTool;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -635,7 +635,7 @@ public class TransformationFrameController implements Initializable {
         try{
             Vector3d point1 = new Vector3d(Double.valueOf(textFieldPoint1X.getText()), Double.valueOf(textFieldPoint1Y.getText()), Double.valueOf(textFieldPoint1Z.getText()));
             Vector3d point2 = new Vector3d(Double.valueOf(textFieldPoint2X.getText()), Double.valueOf(textFieldPoint2Y.getText()), Double.valueOf(textFieldPoint2Z.getText()));
-            Matrix4d matrix = VoxelisationTool.getMatrixTransformation(point1, point2);
+            Matrix4d matrix = ProcessTool.getMatrixTransformation(point1, point2);
 
             if(matrix != null){
                 fillMatrix(matrix);

@@ -457,22 +457,22 @@
                                                 <TextField fx:id="textfieldVoxelFilePathTransmittance" layoutX="14.0" layoutY="35.0" prefHeight="25.0" prefWidth="240.0" />
                                                 <Label layoutX="14.0" layoutY="14.0" text="Voxel file" />
                                                 <Button fx:id="buttonOpenVoxelFileTransmittance" layoutX="254.0" layoutY="35.0" mnemonicParsing="false" onAction="#onActionButtonOpenVoxelFileTransmittance" text="Open" />
-                                                <GridPane layoutX="436.0" layoutY="217.0" prefHeight="57.0" prefWidth="336.0" AnchorPane.leftAnchor="436.0">
+                                                <GridPane layoutX="410.0" layoutY="217.0" prefHeight="57.0" prefWidth="359.0" AnchorPane.leftAnchor="410.0" AnchorPane.rightAnchor="18.0">
                                                    <children>
-                                                      <CheckBox fx:id="comboboxGenerateTextFile" mnemonicParsing="false" selected="true" text="Generate text file" />
+                                                      <CheckBox fx:id="checkboxGenerateTextFile" mnemonicParsing="false" selected="true" text="Generate text file" />
                                                       <TextField fx:id="textfieldOutputTextFilePath" prefHeight="25.0" prefWidth="251.0" GridPane.rowIndex="1" />
-                                                      <Button fx:id="buttonOpenOutputTextFile" mnemonicParsing="false" onAction="#onActionButtonOpenOutputTextFile" text="Open" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                      <Button fx:id="buttonOpenOutputTextFile" maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenOutputTextFile" text="Open" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                    </children>
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="289.0" minWidth="10.0" prefWidth="268.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="54.0" minWidth="10.0" prefWidth="40.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="10.0" prefWidth="40.0" />
                                                    </columnConstraints>
                                                    <rowConstraints>
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                 </GridPane>
-                                                <VBox layoutX="436.0" layoutY="14.0" minWidth="-Infinity" prefHeight="171.0" prefWidth="336.0">
+                                                <VBox layoutX="410.0" layoutY="14.0" minWidth="-Infinity" prefHeight="171.0" prefWidth="362.0" AnchorPane.leftAnchor="410.0" AnchorPane.rightAnchor="15.0">
                                                    <children>
                                                       <AnchorPane prefHeight="27.0" prefWidth="332.0">
                                                          <children>
@@ -505,7 +505,7 @@
                                                       </AnchorPane>
                                                       <TableView fx:id="tableViewSimulationPeriods" editable="true" layoutX="379.0" layoutY="14.0" prefHeight="157.0" prefWidth="336.0" AnchorPane.topAnchor="14.0">
                                                         <columns>
-                                                          <TableColumn fx:id="tableColumnPeriod" prefWidth="256.0" text="Period" />
+                                                          <TableColumn fx:id="tableColumnPeriod" prefWidth="282.0" text="Period" />
                                                             <TableColumn fx:id="tableColumnClearness" minWidth="0.0" prefWidth="79.0" text="Clearness" />
                                                         </columns>
                                                          <VBox.margin>
@@ -521,22 +521,22 @@
                                                 <Label layoutX="14.0" layoutY="98.0" text="Directions number" />
                                                 <AnchorPane layoutX="13.0" layoutY="140.0">
                                                    <children>
-                                                      <TextField fx:id="textfieldScannerPosCenterY" layoutX="150.0" layoutY="56.0" prefHeight="25.0" prefWidth="63.0" promptText="Y" />
                                                       <Label layoutX="161.0" layoutY="90.0" text="Step" />
                                                       <Button fx:id="buttonOpenScannerPointsPositionsFile" layoutX="285.0" layoutY="165.0" mnemonicParsing="false" onAction="#onActionButtonOpenScannerPointsPositionsFile" text="Open" />
                                                       <Label text="Scanners positions" />
-                                                      <Label layoutX="33.0" layoutY="61.0" text="Point" />
-                                                      <TextField fx:id="textfieldScannerPosCenterX" layoutX="79.0" layoutY="56.0" prefHeight="25.0" prefWidth="63.0" promptText="X" />
-                                                      <TextField fx:id="textfieldScannerPosCenterZ" layoutX="222.0" layoutY="56.0" prefHeight="25.0" prefWidth="63.0" promptText="Z" />
+                                                      <Label layoutX="33.0" layoutY="61.0" text="Point (relative)" />
+                                                      <TextField fx:id="textfieldScannerPosCenterX" layoutX="142.0" layoutY="56.0" prefHeight="25.0" prefWidth="63.0" promptText="X" />
+                                                      <TextField fx:id="textfieldScannerPosCenterY" layoutX="213.0" layoutY="56.0" prefHeight="25.0" prefWidth="63.0" promptText="Y" />
+                                                      <TextField fx:id="textfieldScannerPosCenterZ" layoutX="285.0" layoutY="56.0" prefHeight="25.0" prefWidth="63.0" promptText="Z" />
                                                       <TextField fx:id="textfieldScannerPointsPositionsFile" layoutX="33.0" layoutY="165.0" prefHeight="25.0" prefWidth="251.0" />
-                                                      <RadioButton fx:id="radiobuttonScannerPosSquaredArea" layoutX="18.0" layoutY="30.0" mnemonicParsing="false" selected="true" text="Squared area around a point" />
+                                                      <TextField fx:id="textfieldScannerWidthArea" layoutX="79.0" layoutY="85.0" prefHeight="25.0" prefWidth="63.0" text="10" />
                                                       <TextField fx:id="textfieldScannerStepArea" layoutX="202.0" layoutY="85.0" prefHeight="25.0" prefWidth="63.0" text="0.5" />
+                                                      <RadioButton fx:id="radiobuttonScannerPosSquaredArea" layoutX="18.0" layoutY="30.0" mnemonicParsing="false" selected="true" text="Squared area around a point" />
                                                       <Label layoutX="33.0" layoutY="90.0" text="Width" />
                                                       <RadioButton fx:id="radiobuttonScannerPosFile" layoutX="18.0" layoutY="137.0" mnemonicParsing="false" text="Points positions file" />
-                                                      <TextField fx:id="textfieldScannerWidthArea" layoutX="79.0" layoutY="85.0" prefHeight="25.0" prefWidth="63.0" text="10" />
                                                    </children>
                                                 </AnchorPane>
-                                                <Button fx:id="buttonTransmittanceAddToTaskList" layoutX="574.0" layoutY="366.0" mnemonicParsing="false" onAction="#onActionButtonTransmittanceAddToTaskList" text="Save and add to task list">
+                                                <Button fx:id="buttonTransmittanceAddToTaskList" layoutX="570.0" layoutY="367.0" mnemonicParsing="false" onAction="#onActionButtonTransmittanceAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="13.0" AnchorPane.rightAnchor="18.0">
                                                    <graphic>
                                                       <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -545,20 +545,20 @@
                                                       </ImageView>
                                                    </graphic>
                                                 </Button>
-                                                <Label layoutX="14.0" layoutY="359.0" text="Latitude (radians)" />
+                                                <Label layoutX="14.0" layoutY="359.0" text="Latitude (degrees)" />
                                                 <TextField fx:id="textfieldLatitudeRadians" layoutX="150.0" layoutY="354.0" prefHeight="25.0" prefWidth="87.0" />
                                                 <Separator layoutX="14.0" layoutY="124.0" prefHeight="8.0" prefWidth="336.0" />
                                                 <Separator layoutX="13.0" layoutY="339.0" prefHeight="8.0" prefWidth="336.0" />
-                                                <Separator layoutX="436.0" layoutY="198.0" prefHeight="8.0" prefWidth="336.0" />
-                                                <GridPane layoutX="436.0" layoutY="282.0" prefHeight="57.0" prefWidth="336.0">
+                                                <Separator layoutX="410.0" layoutY="198.0" prefHeight="8.0" prefWidth="359.0" />
+                                                <GridPane layoutX="410.0" layoutY="282.0" prefHeight="57.0" prefWidth="360.0" AnchorPane.leftAnchor="410.0" AnchorPane.rightAnchor="18.0">
                                                    <children>
-                                                      <CheckBox fx:id="comboboxGenerateBitmapFile" mnemonicParsing="false" text="Generate bitmap file" />
+                                                      <CheckBox fx:id="checkboxGenerateBitmapFile" mnemonicParsing="false" text="Generate bitmap files" />
                                                       <TextField fx:id="textfieldOutputBitmapFilePath" prefHeight="25.0" prefWidth="251.0" GridPane.rowIndex="1" />
-                                                      <Button fx:id="buttonOpenOutputBitmapFile" mnemonicParsing="false" onAction="#onActionButtonOpenOutputBitmapFile" text="Open" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                      <Button fx:id="buttonOpenOutputBitmapFile" maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenOutputBitmapFile" text="Open" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                    </children>
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="289.0" minWidth="10.0" prefWidth="268.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="54.0" minWidth="10.0" prefWidth="40.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="10.0" prefWidth="40.0" />
                                                    </columnConstraints>
                                                    <rowConstraints>
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />

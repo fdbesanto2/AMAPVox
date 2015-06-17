@@ -15,7 +15,6 @@ For further information, please contact Gregoire Vincent.
 package fr.ird.voxelidar.transmittance;
 
 import fr.ird.voxelidar.util.Period;
-import javafx.beans.property.SimpleStringProperty;
 
 /**
  *
@@ -25,20 +24,20 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class SimulationPeriod {
     
-    private final SimpleStringProperty period;
-    private final SimpleStringProperty clearnessCoefficient;
+    private final Period period;
+    private final float clearnessCoefficient;
 
     public SimulationPeriod(Period period, float clearnessCoefficient) {
         
-        this.period = new SimpleStringProperty(period.toString());
-        this.clearnessCoefficient = new SimpleStringProperty(String.valueOf(clearnessCoefficient));
+        this.period = period;
+        this.clearnessCoefficient = clearnessCoefficient;
     }
-
-    public SimpleStringProperty getPeriod() {
+    
+    public Period getPeriod() {
         return period;
     }
 
-    public SimpleStringProperty getClearnessCoefficient() {
+    public float getClearnessCoefficient() {
         return clearnessCoefficient;
     }
     

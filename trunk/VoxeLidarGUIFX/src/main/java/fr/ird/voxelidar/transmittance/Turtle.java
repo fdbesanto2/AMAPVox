@@ -21,9 +21,8 @@ public class Turtle {
     public Turtle(int nbDirections) {
 
         InputStreamReader pointsStream = new InputStreamReader(Turtle.class.getClassLoader().getResourceAsStream("misc/directions"));
-        int pointsNumber = 406;
         
-        directions = new Vector3f[pointsNumber];
+        directions = new Vector3f[nbDirections];
         
         try (BufferedReader reader = new BufferedReader(pointsStream)) {
 
@@ -32,17 +31,21 @@ public class Turtle {
 
             while ((line = reader.readLine()) != null) {
                 
-                String[] split = line.split("\t");
-                directions[count] = new Vector3f(Float.valueOf(split[0]), Float.valueOf(split[1]), Float.valueOf(split[2]));
-                count++;
+                if(count < nbDirections){
+                    String[] split = line.split("\t");
+                    directions[count] = new Vector3f(Float.valueOf(split[0]), Float.valueOf(split[1]), Float.valueOf(split[2]));
+                    count++;
+                }else{
+                    break;
+                }
             }
             
-            int nbSectors = pointsNumber;
+            int nbSectors = nbDirections;
             
             elevation = new float[nbSectors];
             azimuth = new float[nbSectors];
 
-            for (int p = 0, sector = 0; p < pointsNumber; p++) {
+            for (int p = 0, sector = 0; p < nbDirections; p++) {
                     
                 elevation[sector] = (float) Math.asin(directions[p].z);
                 Vector2f proj = new Vector2f(directions[p].x, directions[p].y);
@@ -63,9 +66,6 @@ public class Turtle {
         } catch (IOException ex) {
             logger.error("Cannot read file", ex);
         }
-
-        
-
         
     }
    

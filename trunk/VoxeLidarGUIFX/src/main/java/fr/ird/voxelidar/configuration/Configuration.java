@@ -15,6 +15,13 @@ For further information, please contact Gregoire Vincent.
 package fr.ird.voxelidar.configuration;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import org.apache.log4j.Logger;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 
 /**
  *
@@ -23,6 +30,8 @@ import java.io.File;
 
 
 public abstract class Configuration {
+    
+    protected final static Logger logger = Logger.getLogger(Configuration.class);
     
     protected ProcessMode processMode = ProcessMode.VOXELISATION_ALS;
     protected InputType inputType = InputType.LAS_FILE;
@@ -50,7 +59,8 @@ public abstract class Configuration {
         POINTS_FILE(2),
         SHOTS_FILE(3),
         RXP_SCAN(4),
-        RSP_PROJECT(5);
+        RSP_PROJECT(5),
+        VOXEL_FILE(6);
         
         public int type;
         
@@ -61,4 +71,23 @@ public abstract class Configuration {
     
     public abstract void readConfiguration(File inputParametersFile);
     public abstract void writeConfiguration(File outputParametersFile);
+    
+    public static String readType(File inputParametersFile){
+        
+        try {
+            SAXBuilder sxb = new SAXBuilder();
+            Document document = sxb.build(inputParametersFile);
+            Element root = document.getRootElement();
+            
+            Element processElement = root.getChild("process");
+            String mode = processElement.getAttributeValue("mode");
+            
+            return mode;
+            
+        } catch (JDOMException | IOException ex) {
+            logger.error(ex);
+        }
+        
+        return null;
+    }
 }

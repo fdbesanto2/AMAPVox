@@ -22,6 +22,8 @@ import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.multires.ProcessingMultiRes;
 import fr.ird.voxelidar.octree.Octree;
 import fr.ird.voxelidar.octree.OctreeFactory;
+import fr.ird.voxelidar.transmittance.PadTransmittance;
+import fr.ird.voxelidar.transmittance.Parameters;
 import fr.ird.voxelidar.util.Cancellable;
 import fr.ird.voxelidar.util.DataSet;
 import fr.ird.voxelidar.util.DataSet.Mode;
@@ -59,10 +61,10 @@ import org.apache.log4j.Logger;
  */
 
 
-public class VoxelisationTool implements Cancellable{
+public class ProcessTool implements Cancellable{
     
     
-    final static Logger logger = Logger.getLogger(VoxelisationTool.class);
+    final static Logger logger = Logger.getLogger(ProcessTool.class);
 
     private VoxelParameters parameters;
     private final EventListenerList listeners;
@@ -73,7 +75,7 @@ public class VoxelisationTool implements Cancellable{
     private boolean cancelled;
     private ExecutorService exec;
 
-    public VoxelisationTool() {
+    public ProcessTool() {
         listeners = new EventListenerList();
         cancelled = false;
     }
@@ -1095,6 +1097,20 @@ public class VoxelisationTool implements Cancellable{
         }
 
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
+    }
+    
+    public void calculateTransmittance(Parameters parameters){
+        
+        PadTransmittance padTransmittance = new PadTransmittance(parameters);
+        padTransmittance.process();
+        
+        if(parameters.isGenerateTextFile()){
+            padTransmittance.writeTransmittance();
+        }
+        
+        if(parameters.isGenerateBitmapFile()){
+            padTransmittance.writeBitmaps();
+        }
     }
 
     public static Matrix4d getMatrixTransformation(Vector3d point1, Vector3d point2) {

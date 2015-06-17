@@ -6,7 +6,7 @@ package fr.ird.voxelidar.gui;
  * and open the template in the editor.
  */
 
-import fr.ird.voxelidar.voxelisation.VoxelisationTool;
+import fr.ird.voxelidar.voxelisation.ProcessTool;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -65,7 +65,7 @@ public class CalculateMatrixFrameController implements Initializable {
         
         Vector3d point1 = new Vector3d(Double.valueOf(textFieldPoint1X.getText()), Double.valueOf(textFieldPoint1Y.getText()), Double.valueOf(textFieldPoint1Z.getText()));
         Vector3d point2 = new Vector3d(Double.valueOf(textFieldPoint2X.getText()), Double.valueOf(textFieldPoint2Y.getText()), Double.valueOf(textFieldPoint2Z.getText()));
-        matrix = VoxelisationTool.getMatrixTransformation(point1, point2);
+        matrix = ProcessTool.getMatrixTransformation(point1, point2);
         
         stage.close();
     }

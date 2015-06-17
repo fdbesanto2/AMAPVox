@@ -34,7 +34,7 @@ public class Period {
         return "From "+getDate(startDate)+" to "+getDate(endDate);
     }
     
-    private String getDate(Calendar c){
+    public static String getDate(Calendar c){
         DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
         return dateFormat.format(c.getTime());/*
         return c.get(Calendar.DAY_OF_MONTH) + "/"+c.get(Calendar.MONTH)+"/"+c.get(Calendar.YEAR)+
