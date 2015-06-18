@@ -31,8 +31,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.vecmath.Point3f;
 import org.jdom2.Attribute;
 import org.jdom2.Document;

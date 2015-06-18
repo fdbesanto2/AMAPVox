@@ -5,10 +5,13 @@
  */
 package fr.ird.voxelidar;
 
-import fr.ird.voxelidar.gui.DateChooserFrameController;
 import fr.ird.voxelidar.gui.MainFrameController;
-import fr.ird.voxelidar.transmittance.PadTransmittance;
-import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
+import fr.ird.voxelidar.lidar.format.raster.BCommon;
+import fr.ird.voxelidar.lidar.format.raster.BHeader;
+import fr.ird.voxelidar.lidar.format.raster.BSQ;
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
 import java.io.File;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +19,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -25,11 +29,31 @@ public class FXPrincipal extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-                
-        /*
-        PadTransmittance padTransmittance = new PadTransmittance();
-        padTransmittance.processOneFile(new File("/home/calcul/Documents/Julien/Projet_nouragues/output2/hobo_1_100m.laz_multires_.vox"));
         
+        
+        
+        /*
+        BufferedImage image = ImageIO.read(new File("/home/calcul/Images/Capture du 2015-06-12 08:42:09.png"));
+        
+        BHeader header = new BHeader(image.getWidth(), image.getHeight(), 4, BCommon.NumberOfBits.N_BITS_8);
+        BSQ raster = new BSQ(new File("/home/calcul/Documents/Julien/test.bsq"), header);
+        
+        Raster data = image.getData();
+        
+        for(int x = 0;x<image.getWidth();x++){
+            for(int y = 0;y<image.getHeight();y++){
+                int[] pixel = new int[3];
+                
+                data.getPixel(x, y, pixel);
+                raster.setPixel(x, y, 0, new Color(pixel[0], pixel[1], pixel[2], 255));
+                raster.setPixel(x, y, 1, new Color(pixel[1], pixel[1], pixel[2], 255));
+                raster.setPixel(x, y, 2, new Color(pixel[2], pixel[1], pixel[2], 255));
+                raster.setPixel(x, y, 3, new Color(255, pixel[1], pixel[2], 255));
+            }
+        }
+        
+        raster.writeImage();
+        raster.writeHeader();
         */
         
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainFrame.fxml"));

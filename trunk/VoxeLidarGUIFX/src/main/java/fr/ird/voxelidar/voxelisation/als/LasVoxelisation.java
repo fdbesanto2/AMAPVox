@@ -100,8 +100,12 @@ public class LasVoxelisation extends Processing {
             voxelAnalysis.processOneShot(shot);
         }
         
-
+        //test
+        
+        float[] altitudes = new float[]{0, 10, 20, 30, 40, 50, 60};
+        
         voxelAnalysis.calculatePADAndWrite(0);
+        //voxelAnalysis.generateMultiBandsRaster(null, altitudes, 10);
 
         if(parameters.isCalculateGroundEnergy() && !parameters.isTLS()){
             voxelAnalysis.writeGroundEnergy();

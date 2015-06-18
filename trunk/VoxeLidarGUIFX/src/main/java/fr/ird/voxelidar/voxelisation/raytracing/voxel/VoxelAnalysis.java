@@ -12,6 +12,9 @@ import fr.ird.voxelidar.voxelisation.raytracing.geometry.LineSegment;
 import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelManager.VoxelCrossingContext;
 import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
+import fr.ird.voxelidar.lidar.format.raster.BCommon;
+import fr.ird.voxelidar.lidar.format.raster.BHeader;
+import fr.ird.voxelidar.lidar.format.raster.BSQ;
 import fr.ird.voxelidar.octree.Octree;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.TimeCounter;
@@ -483,8 +486,84 @@ public class VoxelAnalysis {
             }
         }
 
-    
     }
+
+    private class Mean {
+
+        public float sum;
+        public int count;
+
+        public Mean() {
+            sum = 0;
+            count = 0;
+        }
+    }
+
+public void generateMultiBandsRaster(File outputFile, float[] altitudes, float height){
+    
+    BHeader header = new BHeader(voxSpace.getSplitting().x, voxSpace.getSplitting().y, altitudes.length, BCommon.NumberOfBits.N_BITS_8);
+    BSQ raster = new BSQ(new File("/home/calcul/Documents/Julien/test.bsq"), header);
+    
+    Mean[][][] padMean = new Mean[voxSpace.getSplitting().x][voxSpace.getSplitting().y][altitudes.length]; 
+    
+    if(terrain != null){
+        
+        if(altitudes.length > 0){
+            
+            float altitudeMin = altitudes[0];
+            
+            for (int i = 0; i < parameters.split.x; i++) {
+                for (int j = 0; j < parameters.split.y; j++) {
+                    for (int k = 0; k < parameters.split.z; k++) {
+
+                        Voxel vox = voxels[i][j][k];
+
+                        //on calcule l'indice de la couche auquel appartient le voxel
+                        if(vox != null && vox.ground_distance > altitudeMin){
+                            int layer = (int) ((vox.ground_distance - altitudeMin)/height);
+                            
+                            if(layer < altitudes.length && !Float.isNaN(vox.PadBVTotal)){
+                                
+                                if(padMean[i][j][layer] == null){
+                                    padMean[i][j][layer] = new Mean();
+                                }
+                                
+                                if(vox.PadBVTotal != 0){
+                                    //System.out.println(vox.PadBVTotal);
+                                }
+                                padMean[i][j][layer].sum += vox.PadBVTotal;
+                                padMean[i][j][layer].count++;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            //on écrit la moyenne
+            for (int i = 0; i < parameters.split.x; i++) {
+                for (int j = 0; j < parameters.split.y; j++) {
+                    for (int k = 0; k < altitudes.length; k++) {
+                        
+                        if(padMean[i][j][k] != null){
+                            float meanOfPAD = padMean[i][j][k].sum/padMean[i][j][k].count;
+
+                            float value = (meanOfPAD-0)/(MAX_PAD-0);
+                            Color color = new Color(value, 0, 0, 1);
+
+                            raster.setPixel(i, j, k, color);
+                        }
+                    }
+                }
+            }
+            
+            raster.writeImage();
+            raster.writeHeader();
+        }
+        
+        
+        
+    }
+}
 
 public void calculatePADAndWrite(double threshold) {
 
@@ -616,6 +695,8 @@ public void calculatePADAndWrite(double threshold) {
         } catch (Exception e) {
             logger.error("Error: " + e);
         }
+        
+        
 
     }
 
@@ -736,7 +817,7 @@ public void calculatePADAndWrite(double threshold) {
                 }
                 
             }catch(OutOfMemoryError ex){
-                throw new Exception("Unsufficient memory, you need to allocation more, change the Xmx value!", ex);
+                throw new Exception("Unsufficient memory, you need to allocate more, change the Xmx value!", ex);
             }catch(Exception ex){
                 throw new Exception("Error during instantiation of voxel space: ", ex);
             }

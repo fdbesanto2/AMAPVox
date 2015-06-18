@@ -5,8 +5,6 @@
  */
 package fr.ird.voxelidar.lidar.format.dtm;
 
-import fr.ird.voxelidar.io.file.FileAdapter;
-import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.util.delaunay.Delaunay_Triangulation;
 import fr.ird.voxelidar.util.delaunay.Point_dt;
@@ -16,8 +14,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import org.apache.log4j.Logger;
 
