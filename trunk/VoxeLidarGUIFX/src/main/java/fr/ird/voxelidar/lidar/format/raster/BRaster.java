@@ -46,6 +46,10 @@ public abstract class BRaster {
         this.header = header;
         this.outputFile = outputFile;
         
+        if(!outputFile.getName().endsWith(".bsq")){
+            this.outputFile = new File(outputFile.getAbsolutePath()+".bsq");
+        }
+        
         for(int i=0;i<header.getNbands();i++){
             bands.add(new Band(header.getNcols(), header.getNrows(), header.getNbits()));
         }

@@ -68,7 +68,7 @@ public class LasToTxt {
         listeners.add(LasToTxtListener.class, listener);
     }
     
-    private String writePoint(PointDataRecordFormat0 point){
+    private String writePoint(PointDataRecordFormat point){
         StringBuilder sb = new StringBuilder();
         
         return sb.toString();
@@ -144,10 +144,10 @@ public class LasToTxt {
 
                     }
                     
-                    ArrayList<? extends PointDataRecordFormat0> pointDataRecords = las.getPointDataRecords();
+                    ArrayList<? extends PointDataRecordFormat> pointDataRecords = las.getPointDataRecords();
                     
                     int compteur =0;
-                    for(PointDataRecordFormat0 point:pointDataRecords){
+                    for(PointDataRecordFormat point:pointDataRecords){
                         
                         short isEdgeOfFlightLine = (short)(point.isEdgeOfFlightLine()? 1 : 0);
                         short isScanDirectionFlag = (short)(point.isScanDirectionFlag()? 1 : 0);

@@ -53,7 +53,8 @@ public class VoxelisationConfiguration extends Configuration{
     private boolean correctNaNs;
     private List<MatrixAndFile> matricesAndFiles;
     private List<Filter> filters;
-    private boolean removeLowPoint = false;
+    private List<Integer> classifiedPointsToDiscard;
+    //private boolean removeLowPoint = false;
     private float[] multiResPadMax;
     private boolean multiResUseDefaultMaxPad = false;
     
@@ -305,7 +306,15 @@ public class VoxelisationConfiguration extends Configuration{
                 filtersElement.addContent(shotFilterElement);
             }
             Element pointsFilterElement = new Element("point-filters");
-            pointsFilterElement.addContent(new Element("low-point-filter").setAttribute("enabled", String.valueOf(removeLowPoint)));
+            
+            String classifiedPointsToDiscardString = "";
+            for(Integer i : classifiedPointsToDiscard){
+                classifiedPointsToDiscardString += i+" ";
+            }
+            
+            pointsFilterElement.setAttribute("classifications", classifiedPointsToDiscardString);
+            
+            //pointsFilterElement.addContent(new Element("low-point-filter").setAttribute("enabled", String.valueOf(removeLowPoint)));
             filtersElement.addContent(pointsFilterElement);
             
             processElement.addContent(filtersElement);
@@ -783,12 +792,20 @@ public class VoxelisationConfiguration extends Configuration{
                             }
                         }
                         
+                        classifiedPointsToDiscard = new ArrayList<>();
                         
                         Element pointFiltersElement = filtersElement.getChild("point-filters");
                         if(pointFiltersElement != null){
-                            Element lowPointFilterElement = pointFiltersElement.getChild("low-point-filter");
-                            if(lowPointFilterElement !=null){
-                                removeLowPoint = Boolean.valueOf(lowPointFilterElement.getAttributeValue("enabled"));
+                            
+                            String classifications = pointFiltersElement.getAttributeValue("classifications");
+                            
+                            if(classifications !=null){
+                                
+                                String[] classificationsArray = classifications.split(" ");
+                                
+                                for(String s : classificationsArray){
+                                    classifiedPointsToDiscard.add(Integer.valueOf(s));
+                                }
                             }
                         }
                         
@@ -1215,14 +1232,6 @@ public class VoxelisationConfiguration extends Configuration{
         this.multiResPadMax = multiResPadMax;
     }
 
-    public boolean isRemoveLowPoint() {
-        return removeLowPoint;
-    }
-
-    public void setRemoveLowPoint(boolean removeLowPoint) {
-        this.removeLowPoint = removeLowPoint;
-    }
-
     public boolean isMultiResUseDefaultMaxPad() {
         return multiResUseDefaultMaxPad;
     }
@@ -1245,6 +1254,14 @@ public class VoxelisationConfiguration extends Configuration{
 
     public void setCorrectNaNs(boolean correctNaNs) {
         this.correctNaNs = correctNaNs;
+    }
+
+    public List<Integer> getClassifiedPointsToDiscard() {
+        return classifiedPointsToDiscard;
+    }
+
+    public void setClassifiedPointsToDiscard(List<Integer> classifiedPointsToDiscard) {
+        this.classifiedPointsToDiscard = classifiedPointsToDiscard;
     }
     
 }

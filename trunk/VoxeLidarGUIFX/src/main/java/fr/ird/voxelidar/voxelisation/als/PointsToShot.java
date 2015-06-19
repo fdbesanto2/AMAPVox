@@ -10,7 +10,7 @@ import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.lidar.format.als.Las;
 import fr.ird.voxelidar.lidar.format.als.LasHeader;
 import fr.ird.voxelidar.lidar.format.als.LasReader;
-import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
+import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat;
 import fr.ird.voxelidar.lidar.format.als.QLineExtrabytes;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
@@ -39,17 +39,17 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
     private Las las;
     private final File alsFile;
     private final Mat4D vopMatrix;
-    private final boolean filterLowPoint;
+    List<Integer> classifiedPointsToDiscard;
     private List<Trajectory> trajectoryList;
     private boolean updateALS = true;
     private List<LasPoint> lasPointList;
     
-    public PointsToShot(List<Trajectory> trajectoryList, File alsFile, Mat4D vopMatrix, boolean filterLowPoint){
+    public PointsToShot(List<Trajectory> trajectoryList, File alsFile, Mat4D vopMatrix, List<Integer> classifiedPointsToDiscard){
 
         this.trajectoryList = trajectoryList;
         this.vopMatrix = vopMatrix;
         this.alsFile = alsFile;
-        this.filterLowPoint = filterLowPoint;
+        this.classifiedPointsToDiscard = classifiedPointsToDiscard;
     }
 
     public boolean isUpdateALS() {
@@ -89,7 +89,7 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
                     maxIterations = header.getNumberOfPointrecords();
                     step = (int) (maxIterations/10);
 
-                    for (PointDataRecordFormat0 p : lasReader) {
+                    for (PointDataRecordFormat p : lasReader) {
 
                         if(iterations % step == 0){
                             fireProgress("Reading *.las", (int) ((iterations*100)/(float)maxIterations));
@@ -100,8 +100,10 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
                             logger.info("QLineExtrabytes" + qLineExtrabytes.getAmplitude()+" "+qLineExtrabytes.getPulseWidth());
                         }
                         Vector3d location = new Vector3d((p.getX() * header.getxScaleFactor()) + header.getxOffset(), (p.getY() * header.getyScaleFactor()) + header.getyOffset(), (p.getZ() * header.getzScaleFactor()) + header.getzOffset());
-
-                        if((filterLowPoint && p.getClassification() == 7) || !filterLowPoint){
+                        
+                        
+                        if(!classifiedPointsToDiscard.contains(new Integer(p.getClassification()))){
+                            
                             LasPoint point = new LasPoint(location.x, location.y, location.z, p.getReturnNumber(), p.getNumberOfReturns(), p.getIntensity(), p.getClassification(), p.getGpsTime());
                             lasPointList.add(point);
                         }
@@ -124,7 +126,7 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
                         p.y = (p.y * header.getyScaleFactor()) + header.getyOffset();
                         p.z = (p.z * header.getzScaleFactor()) + header.getzOffset();
 
-                        if((filterLowPoint && p.classification == 7) || !filterLowPoint){
+                        if(!classifiedPointsToDiscard.contains(new Integer(p.classification))){
                             lasPointList.add(p);
                         }
 

@@ -64,11 +64,12 @@ public class LasPoint implements Comparable<LasPoint>{
      * @param z
      * @param returnNumber
      * @param numberOfReturns
+     * @param classification
      * @param intensity
      * @param gpsTime
      */
     
-    public LasPoint(int x, int y, int z, byte returnNumber, byte numberOfReturns, int intensity, double gpsTime){
+    public LasPoint(int x, int y, int z, byte returnNumber, byte numberOfReturns, int intensity, byte classification, double gpsTime){
 
         this.x = x;
         this.y = y;
@@ -77,6 +78,7 @@ public class LasPoint implements Comparable<LasPoint>{
         this.i = ByteConverter.unsignedShortToInteger(intensity);
         this.r = ByteConverter.unsignedByteToShort(returnNumber);
         this.n = ByteConverter.unsignedByteToShort(numberOfReturns);
+        this.classification = ByteConverter.unsignedByteToShort(classification);
         this.t = gpsTime;
     }    
         

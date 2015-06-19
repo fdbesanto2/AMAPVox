@@ -13,12 +13,16 @@ import fr.ird.voxelidar.voxelisation.tls.RxpVoxelisation;
 import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.vector.Vec2D;
+import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import fr.ird.voxelidar.engine3d.misc.Attribut;
 import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
 import fr.ird.voxelidar.lidar.format.dtm.DtmLoader;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceHeader;
 import fr.ird.voxelidar.io.file.FileManager;
+import fr.ird.voxelidar.lidar.format.als.LasHeader;
+import fr.ird.voxelidar.lidar.format.als.LasReader;
+import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat;
 import fr.ird.voxelidar.multires.ProcessingMultiRes;
 import fr.ird.voxelidar.octree.Octree;
 import fr.ird.voxelidar.octree.OctreeFactory;
@@ -30,9 +34,12 @@ import fr.ird.voxelidar.util.DataSet.Mode;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.MatrixConverter;
 import fr.ird.voxelidar.util.TimeCounter;
+import fr.ird.voxelidar.voxelisation.als.LasPoint;
 import fr.ird.voxelidar.voxelisation.als.LasVoxelisation;
 import fr.ird.voxelidar.voxelisation.als.Trajectory;
+import fr.ird.voxelidar.voxelisation.extraction.als.LazExtraction;
 import fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction;
+import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -42,6 +49,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -52,6 +60,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Matrix4d;
+import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
 
@@ -281,7 +290,7 @@ public class ProcessTool implements Cancellable{
 
     }
 
-    public void voxeliseFromAls(File output, File input, File trajectoryFile, VoxelParameters parameters, Mat4D vop, List<Filter> filters, boolean filterLowPoints) {
+    public void voxeliseFromAls(File output, File input, File trajectoryFile, VoxelParameters parameters, Mat4D vop, List<Filter> filters, List<Integer> classifiedPointsToDiscard) {
 
         startTime = System.currentTimeMillis();
 
@@ -345,7 +354,7 @@ public class ProcessTool implements Cancellable{
             return;
         }
         
-        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, parameters, filters, filterLowPoints, terrain, trajectoryList);
+        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, parameters, filters, classifiedPointsToDiscard, terrain, trajectoryList);
         
         voxelisation.addProcessingListener(new ProcessingListener() {
 
@@ -366,6 +375,200 @@ public class ProcessTool implements Cancellable{
 
     }
     
+    public BoundingBox3d getALSMinAndMax(File file){
+        
+        LasHeader header = null;
+
+        switch (FileManager.getExtension(file)) {
+            case ".las":
+                LasReader lasReader = new LasReader();
+                header = lasReader.readHeader(file);
+                break;
+
+            case ".laz":
+                LazExtraction laz = new LazExtraction();
+                laz.openLazFile(file);
+                header = laz.getHeader();
+                laz.close();
+                break;
+        }
+
+        if (header != null) {
+
+            double minX = header.getMinX();
+            double minY = header.getMinY();
+            double minZ = header.getMinZ();
+
+            double maxX = header.getMaxX();
+            double maxY = header.getMaxY();
+            double maxZ = header.getMaxZ();
+
+            return new BoundingBox3d(new Point3d(minX, minY, minZ), new Point3d(maxX, maxY, maxZ));
+        }
+        
+        return null;
+    }
+    /**
+     *
+     * @param pointFile
+     * @param resultMatrix
+     * @param quick don't use classification filters
+     * @param classificationsToDiscard list of point classification to skip during getting bounding box process
+     * @return 
+     */
+    public BoundingBox3d getBoundingBoxOfPoints(File pointFile, Matrix4d resultMatrix, boolean quick, List<Integer> classificationsToDiscard){
+        
+        BoundingBox3d boundingBox = new BoundingBox3d();
+        
+        Matrix4d identityMatrix = new Matrix4d();
+        identityMatrix.setIdentity();
+                
+        if (resultMatrix.equals(identityMatrix) && quick) {
+
+            boundingBox= getALSMinAndMax(pointFile);
+
+        } else {
+
+            int count = 0;
+            double xMin = 0, yMin = 0, zMin = 0;
+            double xMax = 0, yMax = 0, zMax = 0;
+
+            Mat4D mat = MatrixConverter.convertMatrix4dToMat4D(resultMatrix);
+            LasHeader lasHeader;
+
+
+            switch (FileManager.getExtension(pointFile)) {
+                case ".las":
+
+                    LasReader lasReader = new LasReader();
+                    lasReader.open(pointFile);
+
+                    lasHeader = lasReader.getHeader();
+                    Iterator<PointDataRecordFormat> iterator = lasReader.iterator();
+
+                    while (iterator.hasNext()) {
+
+                        PointDataRecordFormat point = iterator.next();
+
+                        if(classificationsToDiscard.contains(Integer.valueOf((int)point.getClassification()))){ //skip those
+
+                        }else{
+                            Vec4D pt = new Vec4D(((point.getX() * lasHeader.getxScaleFactor()) + lasHeader.getxOffset()),
+                                (point.getY() * lasHeader.getyScaleFactor()) + lasHeader.getyOffset(),
+                                (point.getZ() * lasHeader.getzScaleFactor()) + lasHeader.getzOffset(),
+                                1);
+
+                            pt = Mat4D.multiply(mat, pt);
+
+                            if (count != 0) {
+
+                                if (pt.x < xMin) {
+                                    xMin = pt.x;
+                                } else if (pt.x > xMax) {
+                                    xMax = pt.x;
+                                }
+
+                                if (pt.y < yMin) {
+                                    yMin = pt.y;
+                                } else if (pt.y > yMax) {
+                                    yMax = pt.y;
+                                }
+
+                                if (pt.z < zMin) {
+                                    zMin = pt.z;
+                                } else if (pt.z > zMax) {
+                                    zMax = pt.z;
+                                }
+
+                            } else {
+
+                                xMin = pt.x;
+                                yMin = pt.y;
+                                zMin = pt.z;
+
+                                xMax = pt.x;
+                                yMax = pt.y;
+                                zMax = pt.z;
+
+                                count++;
+                            }
+                        }                                                
+                    }
+                    
+                    boundingBox.min = new Point3d(xMin, yMin, zMin);
+                    boundingBox.max = new Point3d(xMax, yMax, zMax);
+
+                    break;
+
+                case ".laz":
+                    LazExtraction lazReader = new LazExtraction();
+                    lazReader.openLazFile(pointFile);
+
+                    lasHeader = lazReader.getHeader();
+                    Iterator<LasPoint> it = lazReader.iterator();
+
+                    while (it.hasNext()) {
+
+                        LasPoint point = it.next();
+
+                        if(classificationsToDiscard.contains(Integer.valueOf((int)point.classification))){ //skip those
+
+                        }else{
+                            Vec4D pt = new Vec4D(((point.x * lasHeader.getxScaleFactor()) + lasHeader.getxOffset()),
+                                (point.y * lasHeader.getyScaleFactor()) + lasHeader.getyOffset(),
+                                (point.z * lasHeader.getzScaleFactor()) + lasHeader.getzOffset(),
+                                1);
+
+                            pt = Mat4D.multiply(mat, pt);
+
+                            if (count != 0) {
+
+                                if (pt.x < xMin) {
+                                    xMin = pt.x;
+                                } else if (pt.x > xMax) {
+                                    xMax = pt.x;
+                                }
+
+                                if (pt.y < yMin) {
+                                    yMin = pt.y;
+                                } else if (pt.y > yMax) {
+                                    yMax = pt.y;
+                                }
+
+                                if (pt.z < zMin) {
+                                    zMin = pt.z;
+                                } else if (pt.z > zMax) {
+                                    zMax = pt.z;
+                                }
+
+                            } else {
+
+                                xMin = pt.x;
+                                yMin = pt.y;
+                                zMin = pt.z;
+
+                                xMax = pt.x;
+                                yMax = pt.y;
+                                zMax = pt.z;
+
+                                count++;
+                            }
+                        }
+
+                    }
+
+                    boundingBox.min = new Point3d(xMin, yMin, zMin);
+                    boundingBox.max = new Point3d(xMax, yMax, zMax);
+
+                    lazReader.close();
+
+                    break;
+            }
+
+        }
+        
+        return boundingBox;
+    }    
     
     public void mergeVoxelsFileV2(List<File> filesList, File output, int transmittanceMode, float maxPAD) {
         
@@ -764,7 +967,7 @@ public class ProcessTool implements Cancellable{
             params.setSplit(input.voxelParameters.getSplit());
             params.setResolution(input.voxelParameters.getResolution());
             
-            LasVoxelisation voxelisation = new LasVoxelisation(input.inputFile, input.outputFile, vopMatrix, params, configuration.getFilters(), configuration.isRemoveLowPoint(), terrain, trajectoryList);
+            LasVoxelisation voxelisation = new LasVoxelisation(input.inputFile, input.outputFile, vopMatrix, params, configuration.getFilters(), configuration.getClassifiedPointsToDiscard(), terrain, trajectoryList);
             
             voxelisation.process();
             

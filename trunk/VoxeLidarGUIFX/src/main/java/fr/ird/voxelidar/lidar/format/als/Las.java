@@ -15,9 +15,9 @@ public class Las {
     
     private LasHeader header;
     private ArrayList<VariableLengthRecord> variableLengthRecords;
-    private ArrayList<? extends PointDataRecordFormat0> pointDataRecords;
+    private ArrayList<? extends PointDataRecordFormat> pointDataRecords;
 
-    public Las(LasHeader header, ArrayList<VariableLengthRecord> variableLengthRecords, ArrayList<? extends PointDataRecordFormat0> pointDataRecords) {
+    public Las(LasHeader header, ArrayList<VariableLengthRecord> variableLengthRecords, ArrayList<? extends PointDataRecordFormat> pointDataRecords) {
         this.header = header;
         this.variableLengthRecords = variableLengthRecords;
         this.pointDataRecords = pointDataRecords;
@@ -27,7 +27,7 @@ public class Las {
         return header;
     }
 
-    public ArrayList<? extends PointDataRecordFormat0> getPointDataRecords() {
+    public ArrayList<? extends PointDataRecordFormat> getPointDataRecords() {
         return pointDataRecords;
     }
 

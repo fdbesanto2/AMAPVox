@@ -36,10 +36,10 @@ public class BHeader {
     private ByteOrder byteorder;
     private Layout layout;
     private int skipbytes;
-    private int ulxmap;
-    private int ulymap;
-    private short xdim;
-    private short ydim;
+    private double ulxmap;
+    private double ulymap;
+    private float xdim;
+    private float ydim;
     private int bandrowbytes;
     private int totalrowbytes;
     private int bandgapbytes;
@@ -149,19 +149,19 @@ public class BHeader {
         return skipbytes;
     }
 
-    public int getUlxmap() {
+    public double getUlxmap() {
         return ulxmap;
     }
 
-    public int getUlymap() {
+    public double getUlymap() {
         return ulymap;
     }
 
-    public short getXdim() {
+    public float getXdim() {
         return xdim;
     }
 
-    public short getYdim() {
+    public float getYdim() {
         return ydim;
     }
 
@@ -209,19 +209,19 @@ public class BHeader {
         this.skipbytes = skipbytes;
     }
 
-    public void setUlxmap(int ulxmap) {
+    public void setUlxmap(double ulxmap) {
         this.ulxmap = ulxmap;
     }
 
-    public void setUlymap(int ulymap) {
+    public void setUlymap(double ulymap) {
         this.ulymap = ulymap;
     }
 
-    public void setXdim(short xdim) {
+    public void setXdim(float xdim) {
         this.xdim = xdim;
     }
 
-    public void setYdim(short ydim) {
+    public void setYdim(float ydim) {
         this.ydim = ydim;
     }
 

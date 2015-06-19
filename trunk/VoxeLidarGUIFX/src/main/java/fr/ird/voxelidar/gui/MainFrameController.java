@@ -29,7 +29,8 @@ import fr.ird.voxelidar.engine3d.renderer.JoglListenerListener;
 import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.lidar.format.als.LasHeader;
 import fr.ird.voxelidar.lidar.format.als.LasReader;
-import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat0;
+import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat;
+import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat.Classification;
 import fr.ird.voxelidar.lidar.format.dart.DartPlotsXMLWriter;
 import fr.ird.voxelidar.lidar.format.dtm.DtmLoader;
 import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
@@ -53,6 +54,7 @@ import fr.ird.voxelidar.voxelisation.VoxelisationToolListener;
 import fr.ird.voxelidar.voxelisation.als.LasPoint;
 import fr.ird.voxelidar.voxelisation.extraction.als.LazExtraction;
 import fr.ird.voxelidar.voxelisation.raytracing.BoundingBox3F;
+import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -233,8 +235,6 @@ public class MainFrameController implements Initializable {
 
     private ObservableList<SimulationPeriod> data;
     
-    @FXML
-    private CheckBox checkboxRemoveLowPoint;
     @FXML
     private Slider sliderRSPCoresToUse;
     @FXML
@@ -513,8 +513,6 @@ public class MainFrameController implements Initializable {
     @FXML
     private Button buttonOpenOutputFileMerging;
     @FXML
-    private Button buttonAutomatic;
-    @FXML
     private Button buttonResetToIdentity;
     @FXML
     private Button buttonAddFilter;
@@ -572,11 +570,43 @@ public class MainFrameController implements Initializable {
     private CheckBox checkboxGenerateTextFile;
     @FXML
     private CheckBox checkboxGenerateBitmapFile;
+    @FXML
+    private ListView<CheckBox> listviewClassifications;
+    @FXML
+    private AnchorPane anchorpaneClassifications;
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        listviewClassifications.getItems().addAll(
+                createSelectedCheckbox(Classification.CREATED_NEVER_CLASSIFIED.getValue()+" - "+
+                        Classification.CREATED_NEVER_CLASSIFIED.getDescription()),
+                createSelectedCheckbox(Classification.UNCLASSIFIED.getValue()+" - "+
+                        Classification.UNCLASSIFIED.getDescription()),
+                createSelectedCheckbox(Classification.GROUND.getValue()+" - "+
+                        Classification.GROUND.getDescription()),
+                createSelectedCheckbox(Classification.LOW_VEGETATION.getValue()+" - "+
+                        Classification.LOW_VEGETATION.getDescription()),
+                createSelectedCheckbox(Classification.MEDIUM_VEGETATION.getValue()+" - "+
+                        Classification.MEDIUM_VEGETATION.getDescription()),
+                createSelectedCheckbox(Classification.HIGH_VEGETATION.getValue()+" - "+
+                        Classification.HIGH_VEGETATION.getDescription()),
+                createSelectedCheckbox(Classification.BUILDING.getValue()+" - "+
+                        Classification.BUILDING.getDescription()),
+                createSelectedCheckbox(Classification.LOW_POINT.getValue()+" - "+
+                        Classification.LOW_POINT.getDescription()),
+                createSelectedCheckbox(Classification.MODEL_KEY_POINT.getValue()+" - "+
+                        Classification.MODEL_KEY_POINT.getDescription()),
+                createSelectedCheckbox(Classification.WATER.getValue()+" - "+
+                        Classification.WATER.getDescription()),
+                createSelectedCheckbox(Classification.RESERVED_10.getValue()+" - "+
+                        Classification.RESERVED_10.getDescription()),
+                createSelectedCheckbox(Classification.RESERVED_11.getValue()+" - "+
+                        Classification.RESERVED_11.getDescription()),
+                createSelectedCheckbox(Classification.OVERLAP_POINTS.getValue()+" - "+
+                        Classification.OVERLAP_POINTS.getDescription()));
         
         data = FXCollections.observableArrayList();
         
@@ -1109,15 +1139,16 @@ public class MainFrameController implements Initializable {
                         if (checkboxCalculateGroundEnergy.isSelected()) {
                             anchorPaneGroundEnergyParameters.setDisable(true);
                             checkboxCalculateGroundEnergy.setDisable(false);
+                            anchorpaneClassifications.setVisible(true);
                         }
-                        checkboxRemoveLowPoint.setDisable(false);
+                        
                         break;
                     default:
                         disableSopMatrixChoice(true);
                         disablePopMatrixChoice(true);
                         anchorPaneGroundEnergyParameters.setDisable(true);
                         checkboxCalculateGroundEnergy.setDisable(true);
-                        checkboxRemoveLowPoint.setDisable(true);
+                        anchorpaneClassifications.setVisible(false);
                 }
 
                 comboboxFormulaTransmittance.getItems().clear();
@@ -1358,6 +1389,13 @@ public class MainFrameController implements Initializable {
         
     }
 
+    private CheckBox createSelectedCheckbox(String text){
+        
+        CheckBox c = new CheckBox(text);
+        c.setSelected(true);
+        return c;
+    }
+            
     private void resetComponents() throws Exception {
 
         Platform.runLater(new Runnable() {
@@ -2397,21 +2435,29 @@ public class MainFrameController implements Initializable {
 
                     
                     List<Input> inputList = new ArrayList<>();
+                    boolean quick = getListOfClassificationPointToDiscard().isEmpty();
 
+                    int size = selectedFiles.size();
+                    int count = 1;
+                    
                     for (File file : selectedFiles) {
 
-                        MinMax minMax = calculateAutomaticallyMinAndMax(file);
+                        logger.info("calculate bounding-box of file "+count+"/"+size);
+                        
+                        BoundingBox3d boundingBox = calculateAutomaticallyMinAndMax(file, quick);
+                        
+                        count++;
 
                         VoxelParameters voxelParameters = new VoxelParameters();
 
-                        voxelParameters.setBottomCorner(minMax.min);
-                        voxelParameters.setTopCorner(minMax.max);
+                        voxelParameters.setBottomCorner(boundingBox.min);
+                        voxelParameters.setTopCorner(boundingBox.max);
 
                         double resolution = Double.valueOf(textFieldResolution.getText());
 
-                        int splitX = (int) Math.ceil((minMax.max.x - minMax.min.x) / resolution);
-                        int splitY = (int) Math.ceil((minMax.max.y - minMax.min.y) / resolution);
-                        int splitZ = (int) Math.ceil((minMax.max.z - minMax.min.z) / resolution);
+                        int splitX = (int) Math.ceil((boundingBox.max.x - boundingBox.min.x) / resolution);
+                        int splitY = (int) Math.ceil((boundingBox.max.y - boundingBox.min.y) / resolution);
+                        int splitZ = (int) Math.ceil((boundingBox.max.z - boundingBox.min.z) / resolution);
 
                         voxelParameters.setSplit(new Point3i(splitX, splitY, splitZ));
                         voxelParameters.setResolution(resolution);
@@ -2430,12 +2476,12 @@ public class MainFrameController implements Initializable {
                             for(Float res: resList){
                                 VoxelParameters voxelParametersRes = new VoxelParameters();
 
-                                voxelParametersRes.setBottomCorner(minMax.min);
-                                voxelParametersRes.setTopCorner(minMax.max);
+                                voxelParametersRes.setBottomCorner(boundingBox.min);
+                                voxelParametersRes.setTopCorner(boundingBox.max);
 
-                                splitX = (int) Math.ceil((minMax.max.x - minMax.min.x) / res);
-                                splitY = (int) Math.ceil((minMax.max.y - minMax.min.y) / res);
-                                splitZ = (int) Math.ceil((minMax.max.z - minMax.min.z) / res);
+                                splitX = (int) Math.ceil((boundingBox.max.x - boundingBox.min.x) / res);
+                                splitY = (int) Math.ceil((boundingBox.max.y - boundingBox.min.y) / res);
+                                splitZ = (int) Math.ceil((boundingBox.max.z - boundingBox.min.z) / res);
 
                                 voxelParametersRes.setSplit(new Point3i(splitX, splitY, splitZ));
                                 voxelParametersRes.setResolution(res);
@@ -2476,6 +2522,7 @@ public class MainFrameController implements Initializable {
                     cfg.setMultiResUseDefaultMaxPad(!checkboxOverwritePadLimit.isSelected());
 
                     cfg.setMultiResPadMax(new float[]{padMax1m, padMax2m, padMax3m, padMax4m, padMax5m});
+                    cfg.setClassifiedPointsToDiscard(getListOfClassificationPointToDiscard());
 
                     cfg.writeConfiguration(selectedFile);
                     listViewTaskList.getItems().add(selectedFile);
@@ -2535,7 +2582,8 @@ public class MainFrameController implements Initializable {
                         checkboxUseVopMatrix.isSelected(), vopMatrix);
 
                 cfg.setFilters(listviewFilters.getItems());
-                cfg.setRemoveLowPoint(checkboxRemoveLowPoint.isSelected());
+                
+                cfg.setClassifiedPointsToDiscard(getListOfClassificationPointToDiscard());
 
                 cfg.writeConfiguration(selectedFile);
 
@@ -2543,6 +2591,22 @@ public class MainFrameController implements Initializable {
             }
             
         }
+    }
+    
+    private List<Integer> getListOfClassificationPointToDiscard(){
+        
+        List<Integer> pointClassificationsToDiscard = new ArrayList<>();
+        List<CheckBox> classifications = listviewClassifications.getItems();
+        
+        for(CheckBox checkBox : classifications){
+            if(!checkBox.isSelected()){
+
+                String s = checkBox.getText().substring(0, checkBox.getText().indexOf("-")-1);
+                pointClassificationsToDiscard.add(Integer.valueOf(s));
+            }
+        }
+        
+        return pointClassificationsToDiscard;
     }
 
     private void addFileToTaskList(File file) {
@@ -2655,7 +2719,7 @@ public class MainFrameController implements Initializable {
                                                 }
                                             });
 
-                                            voxTool.voxeliseFromAls(cfg.getOutputFile(), cfg.getInputFile(), cfg.getTrajectoryFile(), cfg.getVoxelParameters(), MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()), cfg.getFilters(), cfg.isRemoveLowPoint());
+                                            voxTool.voxeliseFromAls(cfg.getOutputFile(), cfg.getInputFile(), cfg.getTrajectoryFile(), cfg.getVoxelParameters(), MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()), cfg.getFilters(), cfg.getClassifiedPointsToDiscard());
 
                                             Platform.runLater(new Runnable() {
 
@@ -3278,7 +3342,12 @@ public class MainFrameController implements Initializable {
                             checkboxUsePopMatrix.setSelected(cfg.isUsePopMatrix());
                             checkboxUseSopMatrix.setSelected(cfg.isUseSopMatrix());
                             checkboxUseVopMatrix.setSelected(cfg.isUseVopMatrix());
-                            checkboxRemoveLowPoint.setSelected(cfg.isRemoveLowPoint());
+                            List<Integer> classifiedPointsToDiscard = cfg.getClassifiedPointsToDiscard();
+                            
+                            for(Integer i :classifiedPointsToDiscard){
+                                listviewClassifications.getItems().get(i).setSelected(false);
+                            }
+                            //checkboxRemoveLowPoint.setSelected(cfg.isRemoveLowPoint());
 
                             textFieldPADMax.setText(String.valueOf(cfg.getVoxelParameters().getMaxPAD()));
 
@@ -3609,162 +3678,21 @@ public class MainFrameController implements Initializable {
         }
     }
 
-    private MinMax calculateAutomaticallyMinAndMax(File file) {
+    private BoundingBox3d calculateAutomaticallyMinAndMax(File file, boolean quick) {
 
         Matrix4d identityMatrix = new Matrix4d();
         identityMatrix.setIdentity();
 
         ProgressDialog d;
-        final Point3d minPoint = new Point3d();
-        final Point3d maxPoint = new Point3d();
-        if (resultMatrix.equals(identityMatrix)) {
+        
+        ProcessTool processTool = new ProcessTool();
+        final BoundingBox3d boundingBox = processTool.getBoundingBoxOfPoints(file, resultMatrix, false, getListOfClassificationPointToDiscard());
 
-            Point3d[] minMax = getLasMinMax(file);
-
-            minPoint.set(minMax[0].x, minMax[0].y, minMax[0].z);
-            maxPoint.set(minMax[1].x, minMax[1].y, minMax[1].z);
-
-        } else {
-
-            int count = 0;
-            double xMin = 0, yMin = 0, zMin = 0;
-            double xMax = 0, yMax = 0, zMax = 0;
-
-            Mat4D mat = MatrixConverter.convertMatrix4dToMat4D(resultMatrix);
-            LasHeader lasHeader;
-
-            switch (FileManager.getExtension(file)) {
-                case ".las":
-
-                    LasReader lasReader = new LasReader();
-                    lasReader.open(file);
-
-                    lasHeader = lasReader.getHeader();
-                    Iterator<PointDataRecordFormat0> iterator = lasReader.iterator();
-
-                    while (iterator.hasNext()) {
-
-                        PointDataRecordFormat0 point = iterator.next();
-
-                        Vec4D pt = new Vec4D(((point.getX() * lasHeader.getxScaleFactor()) + lasHeader.getxOffset()),
-                                (point.getY() * lasHeader.getyScaleFactor()) + lasHeader.getyOffset(),
-                                (point.getZ() * lasHeader.getzScaleFactor()) + lasHeader.getzOffset(),
-                                1);
-
-                        pt = Mat4D.multiply(mat, pt);
-
-                        if (count != 0) {
-
-                            if (pt.x < xMin) {
-                                xMin = pt.x;
-                            } else if (pt.x > xMax) {
-                                xMax = pt.x;
-                            }
-
-                            if (pt.y < yMin) {
-                                yMin = pt.y;
-                            } else if (pt.y > yMax) {
-                                yMax = pt.y;
-                            }
-
-                            if (pt.z < zMin) {
-                                zMin = pt.z;
-                            } else if (pt.z > zMax) {
-                                zMax = pt.z;
-                            }
-
-                        } else {
-
-                            xMin = pt.x;
-                            yMin = pt.y;
-                            zMin = pt.z;
-
-                            xMax = pt.x;
-                            yMax = pt.y;
-                            zMax = pt.z;
-
-                            count++;
-                        }
-                    }
-
-                    minPoint.set(xMin, yMin, zMin);
-                    maxPoint.set(xMax, yMax, zMax);
-
-                    break;
-
-                case ".laz":
-                    LazExtraction lazReader = new LazExtraction();
-                    lazReader.openLazFile(file);
-
-                    lasHeader = lazReader.getHeader();
-                    Iterator<LasPoint> it = lazReader.iterator();
-
-                    while (it.hasNext()) {
-
-                        LasPoint point = it.next();
-
-                        Vec4D pt = new Vec4D(((point.x * lasHeader.getxScaleFactor()) + lasHeader.getxOffset()),
-                                (point.y * lasHeader.getyScaleFactor()) + lasHeader.getyOffset(),
-                                (point.z * lasHeader.getzScaleFactor()) + lasHeader.getzOffset(),
-                                1);
-
-                        pt = Mat4D.multiply(mat, pt);
-
-                        if (count != 0) {
-
-                            if (pt.x < xMin) {
-                                xMin = pt.x;
-                            } else if (pt.x > xMax) {
-                                xMax = pt.x;
-                            }
-
-                            if (pt.y < yMin) {
-                                yMin = pt.y;
-                            } else if (pt.y > yMax) {
-                                yMax = pt.y;
-                            }
-
-                            if (pt.z < zMin) {
-                                zMin = pt.z;
-                            } else if (pt.z > zMax) {
-                                zMax = pt.z;
-                            }
-
-                        } else {
-
-                            xMin = pt.x;
-                            yMin = pt.y;
-                            zMin = pt.z;
-
-                            xMax = pt.x;
-                            yMax = pt.y;
-                            zMax = pt.z;
-
-                            count++;
-                        }
-                    }
-
-                    minPoint.set(xMin, yMin, zMin);
-                    maxPoint.set(xMax, yMax, zMax);
-
-                    lazReader.close();
-
-                    textFieldEnterXMin.setText(String.valueOf(minPoint.x));
-                    textFieldEnterYMin.setText(String.valueOf(minPoint.y));
-                    textFieldEnterZMin.setText(String.valueOf(minPoint.z));
-
-                    textFieldEnterXMax.setText(String.valueOf(maxPoint.x));
-                    textFieldEnterYMax.setText(String.valueOf(maxPoint.y));
-                    textFieldEnterZMax.setText(String.valueOf(maxPoint.z));
-            }
-        }
-
-        return new MinMax(minPoint, maxPoint);
+        return boundingBox;
     }
-
-    @FXML
-    private void onActionButtonAutomatic(ActionEvent event) {
-
+    
+    private void getBoundingBoxOfPoints(final boolean quick){
+        
         if (textFieldInputFileALS.getText().equals("") && !removeWarnings) {
 
             Alert alert = new Alert(AlertType.INFORMATION);
@@ -3792,8 +3720,6 @@ public class MainFrameController implements Initializable {
                 identityMatrix.setIdentity();
 
                 ProgressDialog d;
-                final Point3d minPoint = new Point3d();
-                final Point3d maxPoint = new Point3d();
 
                 Service<Void> service = new Service<Void>() {
 
@@ -3804,143 +3730,12 @@ public class MainFrameController implements Initializable {
                             @Override
                             protected Void call() throws InterruptedException {
 
-                                if (resultMatrix.equals(identityMatrix)) {
-
-                                    Point3d[] minMax = getLasMinMax(new File(textFieldInputFileALS.getText()));
-
-                                    minPoint.set(minMax[0].x, minMax[0].y, minMax[0].z);
-                                    maxPoint.set(minMax[1].x, minMax[1].y, minMax[1].z);
-
-                                } else {
-
-                                    int count = 0;
-                                    double xMin = 0, yMin = 0, zMin = 0;
-                                    double xMax = 0, yMax = 0, zMax = 0;
-
-                                    Mat4D mat = MatrixConverter.convertMatrix4dToMat4D(resultMatrix);
-                                    LasHeader lasHeader;
-
-                                    switch (FileManager.getExtension(file)) {
-                                        case ".las":
-
-                                            LasReader lasReader = new LasReader();
-                                            lasReader.open(file);
-
-                                            lasHeader = lasReader.getHeader();
-                                            Iterator<PointDataRecordFormat0> iterator = lasReader.iterator();
-
-                                            while (iterator.hasNext()) {
-
-                                                PointDataRecordFormat0 point = iterator.next();
-
-                                                Vec4D pt = new Vec4D(((point.getX() * lasHeader.getxScaleFactor()) + lasHeader.getxOffset()),
-                                                        (point.getY() * lasHeader.getyScaleFactor()) + lasHeader.getyOffset(),
-                                                        (point.getZ() * lasHeader.getzScaleFactor()) + lasHeader.getzOffset(),
-                                                        1);
-
-                                                pt = Mat4D.multiply(mat, pt);
-
-                                                if (count != 0) {
-
-                                                    if (pt.x < xMin) {
-                                                        xMin = pt.x;
-                                                    } else if (pt.x > xMax) {
-                                                        xMax = pt.x;
-                                                    }
-
-                                                    if (pt.y < yMin) {
-                                                        yMin = pt.y;
-                                                    } else if (pt.y > yMax) {
-                                                        yMax = pt.y;
-                                                    }
-
-                                                    if (pt.z < zMin) {
-                                                        zMin = pt.z;
-                                                    } else if (pt.z > zMax) {
-                                                        zMax = pt.z;
-                                                    }
-
-                                                } else {
-
-                                                    xMin = pt.x;
-                                                    yMin = pt.y;
-                                                    zMin = pt.z;
-
-                                                    xMax = pt.x;
-                                                    yMax = pt.y;
-                                                    zMax = pt.z;
-
-                                                    count++;
-                                                }
-                                            }
-
-                                            minPoint.set(xMin, yMin, zMin);
-                                            maxPoint.set(xMax, yMax, zMax);
-
-                                            break;
-
-                                        case ".laz":
-                                            LazExtraction lazReader = new LazExtraction();
-                                            lazReader.openLazFile(file);
-
-                                            lasHeader = lazReader.getHeader();
-                                            Iterator<LasPoint> it = lazReader.iterator();
-
-                                            while (it.hasNext()) {
-
-                                                LasPoint point = it.next();
-
-                                                Vec4D pt = new Vec4D(((point.x * lasHeader.getxScaleFactor()) + lasHeader.getxOffset()),
-                                                        (point.y * lasHeader.getyScaleFactor()) + lasHeader.getyOffset(),
-                                                        (point.z * lasHeader.getzScaleFactor()) + lasHeader.getzOffset(),
-                                                        1);
-
-                                                pt = Mat4D.multiply(mat, pt);
-
-                                                if (count != 0) {
-
-                                                    if (pt.x < xMin) {
-                                                        xMin = pt.x;
-                                                    } else if (pt.x > xMax) {
-                                                        xMax = pt.x;
-                                                    }
-
-                                                    if (pt.y < yMin) {
-                                                        yMin = pt.y;
-                                                    } else if (pt.y > yMax) {
-                                                        yMax = pt.y;
-                                                    }
-
-                                                    if (pt.z < zMin) {
-                                                        zMin = pt.z;
-                                                    } else if (pt.z > zMax) {
-                                                        zMax = pt.z;
-                                                    }
-
-                                                } else {
-
-                                                    xMin = pt.x;
-                                                    yMin = pt.y;
-                                                    zMin = pt.z;
-
-                                                    xMax = pt.x;
-                                                    yMax = pt.y;
-                                                    zMax = pt.z;
-
-                                                    count++;
-                                                }
-                                            }
-
-                                            minPoint.set(xMin, yMin, zMin);
-                                            maxPoint.set(xMax, yMax, zMax);
-
-                                            lazReader.close();
-
-                                            break;
-                                    }
-
-                                }
-
+                                ProcessTool processTool = new ProcessTool();
+                                final BoundingBox3d boundingBox = processTool.getBoundingBoxOfPoints(new File(textFieldInputFileALS.getText()), resultMatrix, quick, getListOfClassificationPointToDiscard());
+                                
+                                Point3d minPoint = boundingBox.min;
+                                Point3d maxPoint = boundingBox.max;
+                                
                                 Platform.runLater(new Runnable() {
 
                                     @Override
@@ -3974,9 +3769,14 @@ public class MainFrameController implements Initializable {
 
             }
         }
-
     }
 
+    @FXML
+    private void onActionButtonAutomatic(ActionEvent event) {
+
+        getBoundingBoxOfPoints(true);
+    }
+/*
     private Point3d[] getLasMinMax(File file) {
 
         if (textFieldInputFileALS.getText().equals("") && !removeWarnings) {
@@ -4034,16 +3834,18 @@ public class MainFrameController implements Initializable {
         }
 
         return null;
-    }
+    }*/
 
     private void onActionButtonTransformationAutomatic(ActionEvent event) {
 
-        Point3d[] minAndMax = getLasMinMax(new File(textFieldInputFileALS.getText()));
+        ProcessTool processTool = new ProcessTool();
+        
+        BoundingBox3d boundingBox = processTool.getALSMinAndMax(new File(textFieldInputFileALS.getText()));
 
-        if (minAndMax != null) {
+        if (boundingBox != null) {
 
-            Point3d min = minAndMax[0];
-            Point3d max = minAndMax[1];
+            Point3d min = boundingBox.min;
+            Point3d max = boundingBox.max;
 
             checkboxUseVopMatrix.setDisable(false);
 
@@ -4650,15 +4452,9 @@ public class MainFrameController implements Initializable {
         
     }
 
-    public class MinMax {
-
-        public Point3d min;
-        public Point3d max;
-
-        public MinMax(Point3d min, Point3d max) {
-            this.min = min;
-            this.max = max;
-        }
+    @FXML
+    private void onActionButtonAutomaticDeepSearch(ActionEvent event) {
+        getBoundingBoxOfPoints(false);
     }
 
 }

@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class LasReader implements Iterable<PointDataRecordFormat0> {
+public class LasReader implements Iterable<PointDataRecordFormat> {
     
     private final Logger logger = Logger.getLogger(LasReader.class);
     private File file;
@@ -724,20 +724,20 @@ public class LasReader implements Iterable<PointDataRecordFormat0> {
     
 
     @Override
-    public Iterator<PointDataRecordFormat0> iterator() {
+    public Iterator<PointDataRecordFormat> iterator() {
 
         final DataInputStream dis;
         final int offset = header.getPointDataRecordLength();
         final long size = header.getNumberOfPointrecords();
         final long start = header.getOffsetToPointData();
         final int pointFormatID = header.getPointDataFormatID();
-        Iterator<PointDataRecordFormat0> it;
+        Iterator<PointDataRecordFormat> it;
         
         try {
             dis = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
             dis.skip(start);
 
-            it = new Iterator<PointDataRecordFormat0>() {
+            it = new Iterator<PointDataRecordFormat>() {
             
             int count = 0;
             
@@ -748,14 +748,14 @@ public class LasReader implements Iterable<PointDataRecordFormat0> {
             }
 
             @Override
-            public PointDataRecordFormat0 next() {
+            public PointDataRecordFormat next() {
 
-                PointDataRecordFormat0 pdr = null;
+                PointDataRecordFormat pdr = null;
 
                 switch (pointFormatID) {
 
                     case 0:
-                        pdr = new PointDataRecordFormat0();
+                        pdr = new PointDataRecordFormat();
                         break;
                     case 1:
                         pdr = new PointDataRecordFormat1();
@@ -916,14 +916,14 @@ public class LasReader implements Iterable<PointDataRecordFormat0> {
         return it;
     }
 
-    public static ArrayList<PointDataRecordFormat0> readPointDataRecords(File file, long start, short offset, long pointNumber, int pointFormatID) {
+    public static ArrayList<PointDataRecordFormat> readPointDataRecords(File file, long start, short offset, long pointNumber, int pointFormatID) {
 
-        ArrayList<PointDataRecordFormat0> pointDataRecords = new ArrayList<>();
+        ArrayList<PointDataRecordFormat> pointDataRecords = new ArrayList<>();
 
         try {
 
             DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
-            PointDataRecordFormat0 pdr = null;
+            PointDataRecordFormat pdr = null;
 
             dis.skip(start);
 
@@ -932,7 +932,7 @@ public class LasReader implements Iterable<PointDataRecordFormat0> {
                 switch (pointFormatID) {
 
                     case 0:
-                        pdr = new PointDataRecordFormat0();
+                        pdr = new PointDataRecordFormat();
                         break;
                     case 1:
                         pdr = new PointDataRecordFormat1();
@@ -1116,7 +1116,7 @@ public class LasReader implements Iterable<PointDataRecordFormat0> {
         LasReader reader = new LasReader();
         LasHeader header = reader.readHeader(file);
         ArrayList<VariableLengthRecord> variableLengthRecords = LasReader.readVariableLengthRecords(file, header.getHeaderSize(), header.getOffsetToPointData(), header.getNumberOfVariableLengthRecords());
-        ArrayList<PointDataRecordFormat0> pointDataRecords = LasReader.readPointDataRecords(file, header.getOffsetToPointData(), header.getPointDataRecordLength(), header.getNumberOfPointrecords(), header.getPointDataFormatID());
+        ArrayList<PointDataRecordFormat> pointDataRecords = LasReader.readPointDataRecords(file, header.getOffsetToPointData(), header.getPointDataRecordLength(), header.getNumberOfPointrecords(), header.getPointDataFormatID());
 
         Las las = new Las(header, variableLengthRecords, pointDataRecords);
 

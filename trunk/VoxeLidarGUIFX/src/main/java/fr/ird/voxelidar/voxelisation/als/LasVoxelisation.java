@@ -33,19 +33,19 @@ public class LasVoxelisation extends Processing {
     private File outputFile;
     private VoxelParameters parameters;
     private final List<Trajectory> trajectoryList;
-    private final boolean filterLowPoints;
+    private final List<Integer> classifiedPointsToDiscard;
     private final List<Filter> filters;
     private boolean updateALS;
     private PointsToShot conversion;
     private final RegularDtm terrain;
 
-    public LasVoxelisation(File alsFile, File outputFile, Mat4D transfMatrix, VoxelParameters parameters, List<Filter> filters, boolean filterLowPoints, RegularDtm terrain, List<Trajectory> trajectoryList) {
+    public LasVoxelisation(File alsFile, File outputFile, Mat4D transfMatrix, VoxelParameters parameters, List<Filter> filters, List<Integer> classifiedPointsToDiscard, RegularDtm terrain, List<Trajectory> trajectoryList) {
 
         this.alsFile = alsFile;
         this.outputFile = outputFile;
         this.transfMatrix = transfMatrix;
         this.parameters = parameters;
-        this.filterLowPoints = filterLowPoints;
+        this.classifiedPointsToDiscard = classifiedPointsToDiscard;
         this.filters = filters;
         this.terrain = terrain;
         this.trajectoryList = trajectoryList;
@@ -70,7 +70,7 @@ public class LasVoxelisation extends Processing {
         
         if(updateALS || conversion == null){
             
-            conversion = new PointsToShot(trajectoryList, alsFile, transfMatrix, filterLowPoints);
+            conversion = new PointsToShot(trajectoryList, alsFile, transfMatrix, classifiedPointsToDiscard);
             
             conversion.addProcessingListener(new ProcessingListener() {
 
@@ -105,7 +105,7 @@ public class LasVoxelisation extends Processing {
         float[] altitudes = new float[]{0, 10, 20, 30, 40, 50, 60};
         
         voxelAnalysis.calculatePADAndWrite(0);
-        //voxelAnalysis.generateMultiBandsRaster(null, altitudes, 10);
+        //voxelAnalysis.generateMultiBandsRaster(new File("/home/calcul/Documents/Julien/test.bsq"), altitudes, 10, 1);
 
         if(parameters.isCalculateGroundEnergy() && !parameters.isTLS()){
             voxelAnalysis.writeGroundEnergy();

@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import fr.ird.voxelidar.*?>
 
-<AnchorPane fx:id="anchorpaneRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="659.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ird.voxelidar.gui.MainFrameController">
+<AnchorPane fx:id="anchorpaneRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="659.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ird.voxelidar.gui.MainFrameController">
    <children>
       <MenuBar maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="25.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <menus>
@@ -192,7 +192,12 @@
                                                                   <Label layoutX="285.0" layoutY="77.0" text="Z number" />
                                                                   <TextField fx:id="textFieldZNumber" editable="false" layoutX="358.0" layoutY="72.0" prefHeight="3.0" prefWidth="70.0" />
                                                                   <Label layoutX="254.0" layoutY="111.0" text="Resolution (m)" />
-                                                                  <Button fx:id="buttonAutomatic" layoutX="16.0" layoutY="106.0" mnemonicParsing="false" onAction="#onActionButtonAutomatic" text="Automatic" />
+                                                                  <MenuButton layoutX="17.0" layoutY="114.0" mnemonicParsing="false" text="Automatic">
+                                                                    <items>
+                                                                      <MenuItem mnemonicParsing="false" onAction="#onActionButtonAutomatic" text="Fast" />
+                                                                      <MenuItem mnemonicParsing="false" onAction="#onActionButtonAutomaticDeepSearch" text="Deep search" />
+                                                                    </items>
+                                                                  </MenuButton>
                                                                </children>
                                                             </AnchorPane>
                                                       </content>
@@ -362,7 +367,12 @@
                                                                            <content>
                                                                               <AnchorPane>
                                                                                  <children>
-                                                                                    <CheckBox fx:id="checkboxRemoveLowPoint" layoutX="14.0" layoutY="20.0" mnemonicParsing="false" text="Remove low point (noise)" />
+                                                                                    <AnchorPane fx:id="anchorpaneClassifications" layoutX="14.0" layoutY="14.0">
+                                                                                       <children>
+                                                                                          <Label text="Classifications" />
+                                                                                          <ListView fx:id="listviewClassifications" layoutY="18.0" prefHeight="134.0" prefWidth="269.0" />
+                                                                                       </children>
+                                                                                    </AnchorPane>
                                                                                  </children>
                                                                               </AnchorPane>
                                                                            </content>

@@ -22,8 +22,8 @@ unix {
     INSTALLS += target
 }
 
-QMAKE_CFLAGS_RELEASE += /MT
-QMAKE_CXXFLAGS_RELEASE += /MT
+win32::QMAKE_CFLAGS_RELEASE += /MT
+win32::QMAKE_CXXFLAGS_RELEASE += /MT
 
 unix:!macx: LIBS += -L$$PWD/lib/ -lLasZip
 

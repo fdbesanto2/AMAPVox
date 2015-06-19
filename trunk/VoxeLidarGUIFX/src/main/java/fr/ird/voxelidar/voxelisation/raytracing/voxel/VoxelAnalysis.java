@@ -499,12 +499,21 @@ public class VoxelAnalysis {
         }
     }
 
-public void generateMultiBandsRaster(File outputFile, float[] altitudes, float height){
+public void generateMultiBandsRaster(File outputFile, float[] altitudes, float height, float resolution){
     
-    BHeader header = new BHeader(voxSpace.getSplitting().x, voxSpace.getSplitting().y, altitudes.length, BCommon.NumberOfBits.N_BITS_8);
-    BSQ raster = new BSQ(new File("/home/calcul/Documents/Julien/test.bsq"), header);
     
-    Mean[][][] padMean = new Mean[voxSpace.getSplitting().x][voxSpace.getSplitting().y][altitudes.length]; 
+    int rasterXSize = (int)(Math.ceil(voxSpace.getSplitting().x/resolution));
+    int rasterYSize = (int)(Math.ceil(voxSpace.getSplitting().y/resolution));
+    
+    BHeader header = new BHeader(rasterXSize, rasterYSize, altitudes.length, BCommon.NumberOfBits.N_BITS_8);
+    header.setUlxmap(voxSpace.getBoundingBox().getMin().x-(resolution/2.0f));
+    header.setUlymap(voxSpace.getBoundingBox().getMin().y-(parameters.split.y*parameters.resolution)-(resolution/2.0f));
+    header.setXdim(resolution);
+    header.setYdim(resolution);
+    
+    BSQ raster = new BSQ(outputFile, header);
+    
+    Mean[][][] padMean = new Mean[rasterXSize][rasterYSize][altitudes.length]; 
     
     if(terrain != null){
         
@@ -517,6 +526,8 @@ public void generateMultiBandsRaster(File outputFile, float[] altitudes, float h
                     for (int k = 0; k < parameters.split.z; k++) {
 
                         Voxel vox = voxels[i][j][k];
+                        
+                        calculatePAD(vox, i, j, k);
 
                         //on calcule l'indice de la couche auquel appartient le voxel
                         if(vox != null && vox.ground_distance > altitudeMin){
@@ -524,15 +535,15 @@ public void generateMultiBandsRaster(File outputFile, float[] altitudes, float h
                             
                             if(layer < altitudes.length && !Float.isNaN(vox.PadBVTotal)){
                                 
-                                if(padMean[i][j][layer] == null){
-                                    padMean[i][j][layer] = new Mean();
+                                int indiceI = (int)(i/resolution);
+                                int indiceJ = (int)(j/resolution);
+                                
+                                if(padMean[indiceI][indiceJ][layer] == null){
+                                    padMean[indiceI][indiceJ][layer] = new Mean();
                                 }
                                 
-                                if(vox.PadBVTotal != 0){
-                                    //System.out.println(vox.PadBVTotal);
-                                }
-                                padMean[i][j][layer].sum += vox.PadBVTotal;
-                                padMean[i][j][layer].count++;
+                                padMean[indiceI][indiceJ][layer].sum += vox.PadBVTotal;
+                                padMean[indiceI][indiceJ][layer].count++;
                             }
                         }
                     }
@@ -544,13 +555,17 @@ public void generateMultiBandsRaster(File outputFile, float[] altitudes, float h
                 for (int j = 0; j < parameters.split.y; j++) {
                     for (int k = 0; k < altitudes.length; k++) {
                         
-                        if(padMean[i][j][k] != null){
-                            float meanOfPAD = padMean[i][j][k].sum/padMean[i][j][k].count;
+                        int indiceI = (int)(i/resolution);
+                        int indiceJ = (int)(j/resolution);
+                            
+                        if(padMean[indiceI][indiceJ][k] != null){
+                                                        
+                            float meanOfPAD = padMean[indiceI][indiceJ][k].sum/padMean[indiceI][indiceJ][k].count;
 
                             float value = (meanOfPAD-0)/(MAX_PAD-0);
                             Color color = new Color(value, 0, 0, 1);
 
-                            raster.setPixel(i, j, k, color);
+                            raster.setPixel(indiceI, indiceJ, k, color);
                         }
                     }
                 }
@@ -563,6 +578,83 @@ public void generateMultiBandsRaster(File outputFile, float[] altitudes, float h
         
         
     }
+}
+
+public Voxel calculatePAD(Voxel voxel, int i, int j, int k){
+    
+    if (voxel == null) {
+
+        voxel = initVoxel(i, j, k);
+    }
+
+    float pad1/*, pad2*/;
+
+    voxel.angleMean = voxel.angleMean / voxel.nbSampling;
+
+    if (voxel.nbSampling >= voxel.nbEchos) {
+
+        voxel.lMeanTotal = voxel.lgTotal / (voxel.nbSampling);
+
+    }
+
+    /**
+     * *PADBV**
+     */
+    if (voxel.bvEntering <= 0) {
+
+        pad1 = Float.NaN;
+        //pad2 = pad1;
+        voxel.transmittance = Float.NaN;
+        //voxel._transmittance_v2 = Float.NaN;
+
+    } else if (voxel.bvIntercepted > voxel.bvEntering) {
+
+        logger.error("Voxel : " + voxel.$i + " " + voxel.$j + " " + voxel.$k + " -> bvInterceptes > bvEntering, NaN assigné, difference: " + (voxel.bvEntering - voxel.bvIntercepted));
+
+        pad1 = Float.NaN;
+        //pad2 = pad1;
+        voxel.transmittance = Float.NaN;
+        //voxel._transmittance_v2 = Float.NaN;
+
+    } else {
+
+        voxel.transmittance = (voxel.bvEntering - voxel.bvIntercepted) / voxel.bvEntering;
+        //voxel._transmittance_v2 = (voxel._transBeforeNorm) / voxel._sumSurfaceMultiplyLength ;
+
+        if (voxel.nbSampling > 1 && voxel.transmittance == 0 && voxel.nbSampling == voxel.nbEchos) {
+
+            pad1 = MAX_PAD;
+            //pad2 = pad1;
+
+        } else if (voxel.nbSampling <= 2 && voxel.transmittance == 0 && voxel.nbSampling == voxel.nbEchos) {
+
+            pad1 = Float.NaN;
+            //pad2 = pad1;
+
+        } else {
+
+            pad1 = (float) (Math.log(voxel.transmittance) / (-0.5 * voxel.lMeanTotal));
+            //pad2 = (float) (Math.log(voxel._transmittance_v2) / (-0.5 * voxel.lMeanTotal));
+
+            if (Float.isNaN(pad1)) {
+                pad1 = Float.NaN;
+            } else if (pad1 > MAX_PAD || Float.isInfinite(pad1)) {
+                pad1 = MAX_PAD;
+            }
+            /*
+             if (Float.isNaN(pad2)) {
+             pad2 = Float.NaN;
+             } else if (pad2 > MAX_PAD || Float.isInfinite(pad2)) {
+             pad2 = MAX_PAD;
+             }*/
+
+        }
+
+    }
+
+    voxel.PadBVTotal = pad1 + 0.0f; //set +0.0f to avoid -0.0f
+    
+    return voxel;
 }
 
 public void calculatePADAndWrite(double threshold) {
@@ -603,81 +695,9 @@ public void calculatePADAndWrite(double threshold) {
                 for (int j = 0; j < parameters.split.y; j++) {
                     for (int k = 0; k < parameters.split.z; k++) {
 
-                        Voxel vox = voxels[i][j][k];
+                        Voxel voxel = voxels[i][j][k];
                         
-                        if(vox == null){
-                            
-                            vox = initVoxel(i, j, k);
-                        }
-
-                        float pad1/*, pad2*/;
-
-                        vox.angleMean = vox.angleMean / vox.nbSampling;
-
-                        if (vox.nbSampling >= vox.nbEchos) {
-
-                            vox.lMeanTotal = vox.lgTotal / (vox.nbSampling);
-
-                        }
-                        
-                        Voxel voxel = vox;
-
-                        /**
-                         * *PADBV**
-                         */
-                        if (voxel.bvEntering <= threshold) {
-
-                            pad1 = Float.NaN;
-                            //pad2 = pad1;
-                            voxel.transmittance = Float.NaN;
-                            //voxel._transmittance_v2 = Float.NaN;
-
-                        } else if (voxel.bvIntercepted > voxel.bvEntering) {
-
-                            logger.error("Voxel : " + voxel.$i + " " + voxel.$j + " " + voxel.$k + " -> bvInterceptes > bvEntering, NaN assigné, difference: " + (voxel.bvEntering - voxel.bvIntercepted));
-
-                            pad1 = Float.NaN;
-                            //pad2 = pad1;
-                            voxel.transmittance = Float.NaN;
-                            //voxel._transmittance_v2 = Float.NaN;
-
-                        } else {
-
-                            voxel.transmittance = (voxel.bvEntering - voxel.bvIntercepted) / voxel.bvEntering;
-                            //voxel._transmittance_v2 = (voxel._transBeforeNorm) / voxel._sumSurfaceMultiplyLength ;
-
-                            if (voxel.nbSampling > 1 && voxel.transmittance == 0 && voxel.nbSampling == voxel.nbEchos) {
-
-                                pad1 = MAX_PAD;
-                                //pad2 = pad1;
-
-                            } else if (voxel.nbSampling <= 2 && voxel.transmittance == 0 && voxel.nbSampling == voxel.nbEchos) {
-
-                                pad1 = Float.NaN;
-                                //pad2 = pad1;
-
-                            } else {
-
-                                pad1 = (float) (Math.log(voxel.transmittance) / (-0.5 * voxel.lMeanTotal));
-                                //pad2 = (float) (Math.log(voxel._transmittance_v2) / (-0.5 * voxel.lMeanTotal));
-
-                                if (Float.isNaN(pad1)) {
-                                    pad1 = Float.NaN;
-                                } else if (pad1 > MAX_PAD || Float.isInfinite(pad1)) {
-                                    pad1 = MAX_PAD;
-                                }
-                                /*
-                                if (Float.isNaN(pad2)) {
-                                    pad2 = Float.NaN;
-                                } else if (pad2 > MAX_PAD || Float.isInfinite(pad2)) {
-                                    pad2 = MAX_PAD;
-                                }*/
-
-                            }
-
-                        }
-
-                        voxel.PadBVTotal = pad1 + 0.0f; //set +0.0f to avoid -0.0f
+                        voxel = calculatePAD(voxel, i, j, k);
                         //voxel._PadBVTotal_V2 = pad2 + 0.0f; //set +0.0f to avoid -0.0f
 
                         writer.write(voxel.toString() + "\n");

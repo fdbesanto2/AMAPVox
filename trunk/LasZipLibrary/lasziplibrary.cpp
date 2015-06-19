@@ -21,7 +21,7 @@ JNIEXPORT jlong JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExt
 
     lasPointFormat0Class = (jclass)env->NewGlobalRef(c);
 
-    lasPointFormat0Constructor = env->GetMethodID(lasPointFormat0Class, "<init>", "(IIIBBID)V");
+    lasPointFormat0Constructor = env->GetMethodID(lasPointFormat0Class, "<init>", "(IIIBBIBD)V");
     if (lasPointFormat0Constructor == NULL){
         return -1;
     }
@@ -746,7 +746,7 @@ JNIEXPORT jobject JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazE
                             laszip_dll->point.Y,
                             laszip_dll->point.Z,
                             laszip_dll->point.return_number, laszip_dll->point.number_of_returns_of_given_pulse,
-                            laszip_dll->point.intensity, laszip_dll->point.gps_time);
+                            laszip_dll->point.intensity, laszip_dll->point.classification, laszip_dll->point.gps_time);
 
         return lasPoint;
     }
