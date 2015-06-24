@@ -174,31 +174,31 @@ typedef struct laszip_dll {
     CHAR warning[1024];
 } laszip_dll_struct;
 
-#ifndef _Included_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction
-#define _Included_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction
+#ifndef _Included_fr_amap_lidar_als_laz_LazExtraction
+#define _Included_fr_amap_lidar_als_laz_LazExtraction
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-    JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_afficherBonjour
+    JNIEXPORT void JNICALL Java_fr_amap_lidar_als_laz_LazExtraction_afficherBonjour
         (JNIEnv *, jobject);
 
-    JNIEXPORT jlong JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_instantiateLasZip
+    JNIEXPORT jlong JNICALL Java_fr_amap_lidar_als_laz_LazExtraction_instantiateLasZip
         (JNIEnv *, jobject);
 
-    JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_deleteLasZip
+    JNIEXPORT void JNICALL Java_fr_amap_lidar_als_laz_LazExtraction_deleteLasZip
         (JNIEnv *, jobject, jlong pointer);
 
-    JNIEXPORT int JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_open
+    JNIEXPORT int JNICALL Java_fr_amap_lidar_als_laz_LazExtraction_open
     (JNIEnv *, jobject, jlong pointer, jstring file_name);
 
-    JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_readAllPoints
+    JNIEXPORT void JNICALL Java_fr_amap_lidar_als_laz_LazExtraction_readAllPoints
     (JNIEnv *, jobject, jlong pointer);
 
-    JNIEXPORT jobject JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_getNextPoint
+    JNIEXPORT jobject JNICALL Java_fr_amap_lidar_als_laz_LazExtraction_getNextPoint
     (JNIEnv *, jobject, jlong pointer);
 
-    JNIEXPORT jobject JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_getBasicHeader
+    JNIEXPORT jobject JNICALL Java_fr_amap_lidar_als_laz_LazExtraction_getBasicHeader
     (JNIEnv *, jobject, jlong pointer);
 
 #ifdef __cplusplus

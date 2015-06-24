@@ -3,18 +3,18 @@
 jclass lasPointFormat0Class;
 jmethodID lasPointFormat0Constructor;
 
-JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_afficherBonjour(JNIEnv *env, jobject obj)
+JNIEXPORT void JNICALL Java_fr_amap_lidar_als_laz_LazExtraction_afficherBonjour(JNIEnv *env, jobject obj)
 {
     printf(" Bonjour\n ");
     return;
 }
 
-JNIEXPORT jlong JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_instantiateLasZip(JNIEnv *env, jobject obj)
+JNIEXPORT jlong JNICALL Java_fr_amap_lidar_als_laz_LazExtraction_instantiateLasZip(JNIEnv *env, jobject obj)
 {
     laszip_dll_struct* laszip_dll = new laszip_dll_struct;
     memset(laszip_dll, 0, sizeof(laszip_dll_struct));
 
-    jclass c = env->FindClass("fr/ird/voxelidar/voxelisation/als/LasPoint");
+    jclass c = env->FindClass("fr/amap/lidar/als/LasPoint");
     if (c == NULL){
         return -1;
     }
@@ -30,7 +30,7 @@ JNIEXPORT jlong JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExt
     return (jlong)laszip_dll;
 }
 
-JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_deleteLasZip(JNIEnv *env, jobject obj, jlong pointer)
+JNIEXPORT void JNICALL Java_fr_amap_lidar_als_laz_LazExtraction_deleteLasZip(JNIEnv *env, jobject obj, jlong pointer)
 {
     long pointerAddress = pointer;
     laszip_dll_struct* laszip_dll = (laszip_dll_struct*)pointerAddress;
@@ -85,7 +85,7 @@ char* JNU_GetStringNativeChars(JNIEnv* env, jstring jstr) {
 }
 
 
-JNIEXPORT int JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_open(JNIEnv *env, jobject obj, jlong pointer, jstring file_name)
+JNIEXPORT int JNICALL Java_fr_amap_lidar_als_laz_LazExtraction_open(JNIEnv *env, jobject obj, jlong pointer, jstring file_name)
 {
     long pointerAddress = pointer;
 
@@ -707,7 +707,7 @@ JNIEXPORT int JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtra
 
 }
 
-JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_readAllPoints(JNIEnv *, jobject, jlong pointer)
+JNIEXPORT void JNICALL Java_fr_amap_lidar_als_laz_LazExtraction_readAllPoints(JNIEnv *, jobject, jlong pointer)
 {
     long pointerAddress = pointer;
     laszip_dll_struct* laszip_dll = (laszip_dll_struct*)pointerAddress;
@@ -728,7 +728,7 @@ JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtr
 
 }
 
-JNIEXPORT jobject JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_getNextPoint(JNIEnv *env, jobject obj, jlong pointer)
+JNIEXPORT jobject JNICALL Java_fr_amap_lidar_als_laz_LazExtraction_getNextPoint(JNIEnv *env, jobject obj, jlong pointer)
 {
     long pointerAddress = pointer;
     laszip_dll_struct* laszip_dll = (laszip_dll_struct*)pointerAddress;
@@ -739,7 +739,6 @@ JNIEXPORT jobject JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazE
         laszip_dll->p_count++;
 
         jobject lasPoint = env->NewObject(lasPointFormat0Class, lasPointFormat0Constructor);
-
 
         env->CallVoidMethod(lasPoint, lasPointFormat0Constructor,
                             laszip_dll->point.X,
@@ -754,13 +753,13 @@ JNIEXPORT jobject JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazE
     return NULL;
 }
 
-JNIEXPORT jobject JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_als_LazExtraction_getBasicHeader(JNIEnv *env, jobject obj, jlong pointer)
+JNIEXPORT jobject JNICALL Java_fr_amap_lidar_als_laz_LazExtraction_getBasicHeader(JNIEnv *env, jobject obj, jlong pointer)
 {
     long pointerAddress = pointer;
     laszip_dll_struct* laszip_dll = (laszip_dll_struct*)pointerAddress;
 
 
-    jclass lasHeaderClass = env->FindClass("fr/ird/voxelidar/lidar/format/als/LasHeader");
+    jclass lasHeaderClass = env->FindClass("fr/amap/lidar/als/LasHeader");
     if (lasHeaderClass == NULL){
         return NULL;
     }
