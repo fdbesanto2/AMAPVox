@@ -93,19 +93,23 @@ public class LasVoxelisation extends Processing {
                     
         Iterator<Shot> iterator = conversion.iterator();
         
+        int count = 0;
         Shot shot;
         
         while((shot = iterator.next()) != null){
                         
             voxelAnalysis.processOneShot(shot);
+            count++;
         }
+        
+        logger.info("Shots processed: "+count);
         
         //test
         
         float[] altitudes = new float[]{0, 10, 20, 30, 40, 50, 60};
         
-        voxelAnalysis.calculatePADAndWrite(0);
-        //voxelAnalysis.generateMultiBandsRaster(new File("/home/calcul/Documents/Julien/test.bsq"), altitudes, 10, 1);
+        //voxelAnalysis.calculatePADAndWrite(0);
+        voxelAnalysis.generateMultiBandsRaster(new File(outputFile.getAbsolutePath()+".bsq"), altitudes, 10, 5);
 
         if(parameters.isCalculateGroundEnergy() && !parameters.isTLS()){
             voxelAnalysis.writeGroundEnergy();

@@ -6,19 +6,21 @@
 package fr.ird.voxelidar.lidar.format.dtm;
 
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
-import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
 import fr.ird.voxelidar.engine3d.math.point.Point2F;
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec2F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
+import fr.ird.voxelidar.util.BoundingBox2F;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javax.vecmath.Point2d;
 import javax.vecmath.Point3d;
 import org.apache.commons.collections.map.MultiKeyMap;
@@ -62,6 +64,10 @@ public class RegularDtm {
     
     private Mat4D transformationMatrix;
     private Mat4D inverseTransfMat;
+    
+    public RegularDtm(){
+        
+    }
     
     public Point3d getNearest(Point3d position){
         
@@ -273,6 +279,119 @@ public class RegularDtm {
             indiceYMax = -1;
         }
         
+    }
+    
+    public RegularDtm subset(BoundingBox2F boundingBox2F, int offset){
+        
+        RegularDtm dtm = new RegularDtm();
+        
+        //calculate the 4 corners
+        Point2F min = boundingBox2F.min;
+        Point2F max = boundingBox2F.max;
+        
+        min.x -= (offset*cellSize);
+        min.y -= (offset*cellSize);
+        
+        max.x += (offset*cellSize);
+        max.y += (offset*cellSize);
+        
+        Vec4D corner1 = Mat4D.multiply(inverseTransfMat, new Vec4D(min.x, min.y, 0, 1));
+        Vec4D corner2 = Mat4D.multiply(inverseTransfMat,  new Vec4D(max.x, min.y, 0, 1));
+        Vec4D corner3 = Mat4D.multiply(inverseTransfMat, new Vec4D(max.x, max.y, 0, 1));
+        Vec4D corner4 = Mat4D.multiply(inverseTransfMat,  new Vec4D(min.x, max.y, 0, 1));
+        
+        float xMin = (float) corner1.x;
+        float yMin = (float) corner1.y;
+        float xMax = (float) corner3.x;
+        float yMax = (float) corner3.y;
+        
+        if(corner2.x < xMin){xMin = (float) corner2.x;}
+        if(corner2.x > xMax){xMax = (float) corner2.x;}
+        if(corner2.y < yMin){yMin = (float) corner2.y;}
+        if(corner2.y > yMax){yMax = (float) corner2.y;}
+        if(corner4.x < xMin){xMin = (float) corner4.x;}
+        if(corner4.x > xMax){xMax = (float) corner4.x;}
+        if(corner4.y < yMin){yMin = (float) corner4.y;}
+        if(corner4.y > yMax){yMax = (float) corner4.y;}
+        
+        
+        Point2F minPoint = new Point2F(xMin, yMin);
+        Point2F maxPoint = new Point2F(xMax, yMax);
+        
+        int minXId, minYId;
+        int maxXId, maxYId;  
+        
+                
+        minXId = (int)((minPoint.x-xLeftLowerCorner)/cellSize);
+        if(minXId < 0){
+            minXId = -1;
+        }
+        
+        minYId = (int)(rowNumber-(maxPoint.y-yLeftLowerCorner)/cellSize);
+        if(minYId < 0){
+            minYId = -1;
+        }
+        
+        maxXId = (int)((maxPoint.x-xLeftLowerCorner)/cellSize);
+        if(maxXId > zArray.length){
+            maxXId = -1;
+        }
+        
+        maxYId = (int)(rowNumber-(minPoint.y-yLeftLowerCorner)/cellSize);
+        if(maxYId > zArray[0].length){
+            maxYId = -1;
+        }
+        
+        dtm.xLeftLowerCorner = minPoint.x;
+        dtm.yLeftLowerCorner = minPoint.y;
+        dtm.cellSize = cellSize;
+        dtm.rowNumber = maxYId-minYId;
+        dtm.colNumber = maxXId-minXId;
+        
+        dtm.zArray = new float[dtm.colNumber][dtm.rowNumber];
+        for(int i = minXId, i2=0 ; i<maxXId ; i++, i2++){
+            for(int j = minYId, j2 = 0 ; j<maxYId ; j++, j2++){
+                dtm.zArray[i2][j2] = zArray[i][j];
+            }
+        }
+        
+        return dtm;
+    }
+    
+    public void write(File output){
+        
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))){
+            
+            float noDataValue = -9999.000000f;
+            writer.write("ncols "+colNumber+"\n");
+            writer.write("nrows "+rowNumber+"\n");
+            writer.write("xllcorner "+xLeftLowerCorner+"\n");
+            writer.write("yllcorner "+yLeftLowerCorner+"\n");
+            writer.write("cellsize "+cellSize+"\n");
+            writer.write("nodata_value "+noDataValue+"\n");
+            
+            for(int j = 0;j<rowNumber;j++){
+            
+                StringBuilder stringBuilder = new StringBuilder();
+
+                for(int i = 0 ; i<colNumber ; i++){
+
+                    if(Float.isNaN(zArray[i][j])){
+                        stringBuilder.append(noDataValue);
+                    }else{
+                        stringBuilder.append(zArray[i][j]);
+                    }
+                    
+                    stringBuilder.append(" ");
+                }
+
+                writer.write(stringBuilder.toString()+"\n");
+            }
+            
+            
+        } catch (IOException ex) {
+            logger.error("Cannot write dtm file "+output.getAbsolutePath(), ex);
+        }
     }
     
     public void buildMesh(){

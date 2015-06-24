@@ -43,6 +43,7 @@ public class BHeader {
     private int bandrowbytes;
     private int totalrowbytes;
     private int bandgapbytes;
+    private int byteNumber;
 
     public BHeader(int ncols, int nrows, int nbands, NumberOfBits numberOfBits) {
         
@@ -58,6 +59,8 @@ public class BHeader {
         this.ulymap = 0;
         this.xdim = 1;
         this.ydim = 1;
+        
+        this.byteNumber = (int) Math.ceil( nbits.getNumberOfBits()/8);
         this.bandrowbytes = (int) Math.ceil((ncols*nbits.getNumberOfBits())/8);
         
         switch(layout){
@@ -235,6 +238,10 @@ public class BHeader {
 
     public void setBandgapbytes(int bandgapbytes) {
         this.bandgapbytes = bandgapbytes;
+    }
+
+    public int getByteNumber() {
+        return byteNumber;
     }
     
 }

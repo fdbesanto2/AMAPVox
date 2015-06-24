@@ -24,11 +24,16 @@ import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3d;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 
 public class VoxelAnalysis {
@@ -284,7 +289,7 @@ public class VoxelAnalysis {
      * @param source shot origin
      */
     
-    private void propagate(Point3d origin, Point3d echo, short classification, double beamFraction, double residualEnergy, Point3d source, boolean lastEcho, double angle, int nbEchos, int indiceEcho, float reflectance) {
+    private void propagate(Point3d origin, Point3d echo, int classification, double beamFraction, double residualEnergy, Point3d source, boolean lastEcho, double angle, int nbEchos, int indiceEcho, float reflectance) {
 
         //get shot line
         LineElement lineElement = new LineSegment(origin, echo);
@@ -502,12 +507,14 @@ public class VoxelAnalysis {
 public void generateMultiBandsRaster(File outputFile, float[] altitudes, float height, float resolution){
     
     
-    int rasterXSize = (int)(Math.ceil(voxSpace.getSplitting().x/resolution));
-    int rasterYSize = (int)(Math.ceil(voxSpace.getSplitting().y/resolution));
+    int rasterXSize = (int)(Math.ceil(voxSpace.getSplitting().x));
+    int rasterYSize = (int)(Math.ceil(voxSpace.getSplitting().y));
     
-    BHeader header = new BHeader(rasterXSize, rasterYSize, altitudes.length, BCommon.NumberOfBits.N_BITS_8);
-    header.setUlxmap(voxSpace.getBoundingBox().getMin().x-(resolution/2.0f));
-    header.setUlymap(voxSpace.getBoundingBox().getMin().y-(parameters.split.y*parameters.resolution)-(resolution/2.0f));
+    float scale = (float) (resolution/parameters.resolution);
+    
+    BHeader header = new BHeader(rasterXSize, rasterYSize, altitudes.length, BCommon.NumberOfBits.N_BITS_32);
+    header.setUlxmap(voxSpace.getBoundingBox().getMin().x+(resolution/2.0f));
+    header.setUlymap(voxSpace.getBoundingBox().getMin().y + (voxSpace.getSplitting().y*parameters.resolution) + (resolution/2.0f));
     header.setXdim(resolution);
     header.setYdim(resolution);
     
@@ -524,7 +531,7 @@ public void generateMultiBandsRaster(File outputFile, float[] altitudes, float h
             for (int i = 0; i < parameters.split.x; i++) {
                 for (int j = 0; j < parameters.split.y; j++) {
                     for (int k = 0; k < parameters.split.z; k++) {
-
+                                
                         Voxel vox = voxels[i][j][k];
                         
                         calculatePAD(vox, i, j, k);
@@ -533,42 +540,65 @@ public void generateMultiBandsRaster(File outputFile, float[] altitudes, float h
                         if(vox != null && vox.ground_distance > altitudeMin){
                             int layer = (int) ((vox.ground_distance - altitudeMin)/height);
                             
-                            if(layer < altitudes.length && !Float.isNaN(vox.PadBVTotal)){
+                            
+                            if(layer < altitudes.length){
                                 
-                                int indiceI = (int)(i/resolution);
-                                int indiceJ = (int)(j/resolution);
-                                
+                                int indiceI = (int)(i/scale);
+                                int indiceJ = (int)(j/scale);
+                        
                                 if(padMean[indiceI][indiceJ][layer] == null){
                                     padMean[indiceI][indiceJ][layer] = new Mean();
                                 }
-                                
-                                padMean[indiceI][indiceJ][layer].sum += vox.PadBVTotal;
-                                padMean[indiceI][indiceJ][layer].count++;
+                                    
+                                if(!Float.isNaN(vox.PadBVTotal)){
+                                    padMean[indiceI][indiceJ][layer].sum += vox.PadBVTotal;
+                                    padMean[indiceI][indiceJ][layer].count++;
+                                }
                             }
                         }
                     }
                 }
             }
             
-            //on écrit la moyenne
-            for (int i = 0; i < parameters.split.x; i++) {
-                for (int j = 0; j < parameters.split.y; j++) {
-                    for (int k = 0; k < altitudes.length; k++) {
-                        
-                        int indiceI = (int)(i/resolution);
-                        int indiceJ = (int)(j/resolution);
+            long l = 4294967295L;
+            
+            try {
+                //on écrit la moyenne
+                for (int i = 0; i < rasterXSize; i++) {
+                    for (int j = rasterYSize - 1; j >= 0; j--) {
+                        for (int k = 0; k < altitudes.length; k++) {
                             
-                        if(padMean[indiceI][indiceJ][k] != null){
-                                                        
-                            float meanOfPAD = padMean[indiceI][indiceJ][k].sum/padMean[indiceI][indiceJ][k].count;
+                            if (padMean[i][j][k] != null) {
+                                
+                                float meanOfPAD = padMean[i][j][k].sum / padMean[i][j][k].count;
+                                //float value = (meanOfPAD-0)/(MAX_PAD-0);
 
-                            float value = (meanOfPAD-0)/(MAX_PAD-0);
-                            Color color = new Color(value, 0, 0, 1);
-
-                            raster.setPixel(indiceI, indiceJ, k, color);
+                                long value = (long) (((double) meanOfPAD / (double) MAX_PAD) * (l));
+                                String binaryString = Long.toBinaryString(value);
+                                byte[] bval = new BigInteger(binaryString, 2).toByteArray();
+                                ArrayUtils.reverse(bval);
+                                byte b0 = 0x0, b1 = 0x0, b2 = 0x0, b3 = 0x0;
+                                if (bval.length > 0) {
+                                    b0 = bval[0];
+                                }
+                                if (bval.length > 1) {
+                                    b1 = bval[1];
+                                }
+                                if (bval.length > 2) {
+                                    b2 = bval[2];
+                                }
+                                if (bval.length > 3) {
+                                    b3 = bval[3];
+                                }
+                                raster.setPixel(i, j, k, b0, b1, b2, b3);
+                                
+                            }
                         }
                     }
                 }
+                
+            } catch (Exception ex) {
+                logger.error(ex);
             }
             
             raster.writeImage();

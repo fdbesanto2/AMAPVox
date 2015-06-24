@@ -19,6 +19,7 @@ import fr.ird.voxelidar.configuration.Input;
 import fr.ird.voxelidar.configuration.MatrixAndFile;
 import fr.ird.voxelidar.configuration.TransmittanceConfiguration;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
+import fr.ird.voxelidar.engine3d.math.point.Point2F;
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
@@ -27,10 +28,10 @@ import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceHeader;
 import fr.ird.voxelidar.engine3d.renderer.JoglListenerListener;
 import fr.ird.voxelidar.io.file.FileManager;
-import fr.ird.voxelidar.lidar.format.als.LasHeader;
-import fr.ird.voxelidar.lidar.format.als.LasReader;
-import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat;
-import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat.Classification;
+import fr.amap.lidar.als.LasHeader;
+import fr.amap.lidar.als.las.LasReader;
+import fr.amap.lidar.als.las.PointDataRecordFormat;
+import fr.amap.lidar.als.las.PointDataRecordFormat.Classification;
 import fr.ird.voxelidar.lidar.format.dart.DartPlotsXMLWriter;
 import fr.ird.voxelidar.lidar.format.dtm.DtmLoader;
 import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
@@ -41,6 +42,7 @@ import fr.ird.voxelidar.multires.ProcessingMultiRes;
 import fr.ird.voxelidar.transmittance.Parameters;
 import fr.ird.voxelidar.transmittance.SimulationPeriod;
 import fr.ird.voxelidar.update.Updater;
+import fr.ird.voxelidar.util.BoundingBox2F;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.MatrixConverter;
 import fr.ird.voxelidar.util.MatrixFileParser;
@@ -51,9 +53,9 @@ import fr.ird.voxelidar.voxelisation.PointcloudFilter;
 import fr.ird.voxelidar.voxelisation.VoxelParameters;
 import fr.ird.voxelidar.voxelisation.ProcessTool;
 import fr.ird.voxelidar.voxelisation.VoxelisationToolListener;
-import fr.ird.voxelidar.voxelisation.als.LasPoint;
-import fr.ird.voxelidar.voxelisation.extraction.als.LazExtraction;
-import fr.ird.voxelidar.voxelisation.raytracing.BoundingBox3F;
+import fr.amap.lidar.als.LasPoint;
+import fr.amap.lidar.als.laz.LazExtraction;
+import fr.ird.voxelidar.util.BoundingBox3F;
 import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
 import java.io.File;
 import java.io.IOException;
@@ -2391,7 +2393,30 @@ public class MainFrameController implements Initializable {
                     VoxelParameters commonVoxelParameters = new VoxelParameters();
                     
                     commonVoxelParameters.setUseDTMCorrection(checkboxUseDTMFilter.isSelected());
+                    
+                    boolean generateRasters = false;
+                    
                     if (checkboxUseDTMFilter.isSelected()) {
+                        
+                        Alert alert = new Alert(AlertType.CONFIRMATION);
+                
+                        alert.setTitle("DTM");
+                        alert.setContentText("DTM filtering detected\n"
+                                + "Would you like to generate one DTM raster file for each point file?\n"
+                                +"This feature is advised to save memory but the process will be slower.");
+
+                        ButtonType buttonTypeGenerateRasters = new ButtonType("Yes, generate one raster by file");
+                        ButtonType buttonTypeNo = new ButtonType("No");
+
+                        alert.getButtonTypes().setAll(buttonTypeGenerateRasters, buttonTypeNo);
+
+                        Optional<ButtonType> result = alert.showAndWait();
+
+
+                        if(result.get() == buttonTypeGenerateRasters){
+                            generateRasters = true;
+                        }
+                        
                         commonVoxelParameters.minDTMDistance = Float.valueOf(textfieldDTMValue.getText());
                         commonVoxelParameters.setDtmFile(new File(textfieldDTMPath.getText()));
                     }
@@ -2439,6 +2464,18 @@ public class MainFrameController implements Initializable {
 
                     int size = selectedFiles.size();
                     int count = 1;
+                    
+                    RegularDtm dtm = null;
+                    
+                    if(generateRasters){
+                        
+                        logger.info("Loading DTM file "+commonVoxelParameters.getDtmFile().getAbsolutePath());
+                        try {
+                            dtm = DtmLoader.readFromAscFile(commonVoxelParameters.getDtmFile());
+                        } catch (Exception ex) {
+                            logger.error(ex);
+                        }
+                    }
                     
                     for (File file : selectedFiles) {
 
@@ -2489,15 +2526,26 @@ public class MainFrameController implements Initializable {
                                 voxelParametersRes.setCalculateGroundEnergy(checkboxMultiResAfter.isSelected());
                                 
                                 if(commonVoxelParameters.isCalculateGroundEnergy()){
-                                    voxelParametersRes.setGroundEnergyFile(new File(outputPathFile.getAbsolutePath() + "/" + file.getName() + extension));
+                                    voxelParametersRes.setGroundEnergyFile(new File(outputPathFile.getAbsolutePath() + File.separator + file.getName() + extension));
                                 }
                                 
-                                subList.add(new Input(voxelParametersRes, file, new File(outputPathFile.getAbsolutePath() + "/" + file.getName() +"_res_"+ res +"m.vox"), null, null));
+                                subList.add(new Input(voxelParametersRes, file, new File(outputPathFile.getAbsolutePath() + File.separator + file.getName() +"_res_"+ res +"m.vox"), null, null));
                             }
                         }
+                        
+                        if(generateRasters && dtm != null){
+                            
+                            logger.info("Generate DTM raster of file "+count+"/"+size);
+                            
+                            RegularDtm dtmSubset = dtm.subset(new BoundingBox2F(
+                                    new Point2F((float)voxelParameters.getBottomCorner().x, (float)voxelParameters.getBottomCorner().y), 
+                                    new Point2F((float)voxelParameters.getTopCorner().x, (float)voxelParameters.getTopCorner().y)), 0);
+                            
+                            dtmSubset.write(new File(outputPathFile.getAbsolutePath() + File.separator + file.getName() +".asc"));
+                        }
 
-                        File voxFile = new File(outputPathFile.getAbsolutePath() + "/" + file.getName() +".vox");
-                        inputList.add(new Input(voxelParameters, file, voxFile, subList, new File(outputPathFile.getAbsolutePath() + "/" + file.getName() +"_multires_.vox")));
+                        File voxFile = new File(outputPathFile.getAbsolutePath() + File.separator + file.getName() +".vox");
+                        inputList.add(new Input(voxelParameters, file, voxFile, subList, new File(outputPathFile.getAbsolutePath() + File.separator + file.getName() +"_multires_.vox")));
                     }
                     
                     VoxelisationConfiguration cfg = VoxelisationConfiguration.createMultiFileVoxelisationConfiguration(it,
@@ -2656,6 +2704,7 @@ public class MainFrameController implements Initializable {
             final ProcessTool voxTool = new ProcessTool();
                     
             switch(type){
+                case "multi-voxelisation":
                 case "voxelisation":
                     
                     final VoxelisationConfiguration cfg = new VoxelisationConfiguration();

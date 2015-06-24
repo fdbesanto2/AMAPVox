@@ -18,7 +18,7 @@ package fr.ird.voxelidar.voxelisation;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
-import fr.ird.voxelidar.voxelisation.raytracing.BoundingBox3F;
+import fr.ird.voxelidar.util.BoundingBox3F;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;

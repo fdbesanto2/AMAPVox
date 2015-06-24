@@ -69,33 +69,43 @@ public abstract class BRaster {
     
     
     
-    public void setPixel(int posX, int posY, int bandID, Color color){
+    public void setPixel(int posX, int posY, int bandID, byte... bytes) throws Exception{
         
         if(bandID > bands.size()){
-            logger.warn("Cannot set pixel to band "+bandID+" ; band doesn't exist");
-            return;
+            throw new Exception("Cannot set pixel to band "+bandID+" ; band doesn't exist");
+        }
+        
+        if(header.getByteNumber() != bytes.length){
+            throw new Exception("Cannot set pixel to band, bits number from header and byte array length doesn't match, header byte number: "+
+                    header.getByteNumber()+", byte array length: "+bytes.length);
         }
         
         boolean[] bits = new boolean[header.getNbits().getNumberOfBits()];
         
+        int[] unsignedByte = new int[bytes.length];
+        
+        for(int i = 0 ; i<unsignedByte.length ; i++){
+            unsignedByte[i] = bytes[i]&0xff;
+        }
+        
         switch(header.getNbits()){
             case N_BITS_1: //black or white
-                bits[0] = (color.getRed()/255) != 0;
+                //bits[0] = (color.getRed()/255) != 0;
                 break;
             case N_BITS_4: //16 differents colors
                 break;
             case N_BITS_8: //256 differents colors
-                bits = getBooleanBitsArray(color.getRed(), 8);
+                bits = getBooleanBitsArray(unsignedByte[0], 8);
                 break;
             case N_BITS_16: //65536 colors
                 
                 break;
             case N_BITS_32:
                 
-                boolean[] bitsRed = getBooleanBitsArray(color.getRed(), 8);
-                boolean[] bitsGreen = getBooleanBitsArray(color.getGreen(), 8);
-                boolean[] bitsBlue = getBooleanBitsArray(color.getBlue(), 8);
-                boolean[] bitsAlpha = getBooleanBitsArray(color.getAlpha(), 8);
+                boolean[] bitsRed = getBooleanBitsArray(unsignedByte[0], 8);
+                boolean[] bitsGreen = getBooleanBitsArray(unsignedByte[1], 8);
+                boolean[] bitsBlue = getBooleanBitsArray(unsignedByte[2], 8);
+                boolean[] bitsAlpha = getBooleanBitsArray(unsignedByte[3], 8);
                 
                 concatenateArrays(bits, bitsRed, bitsGreen, bitsBlue, bitsAlpha);
                 

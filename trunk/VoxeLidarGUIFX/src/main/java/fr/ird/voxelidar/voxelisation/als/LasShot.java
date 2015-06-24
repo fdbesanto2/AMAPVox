@@ -5,6 +5,8 @@
  */
 package fr.ird.voxelidar.voxelisation.als;
 
+import fr.amap.lidar.als.LasPoint;
+
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)

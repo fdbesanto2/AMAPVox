@@ -799,7 +799,7 @@ public class VoxelisationConfiguration extends Configuration{
                             
                             String classifications = pointFiltersElement.getAttributeValue("classifications");
                             
-                            if(classifications !=null){
+                            if(classifications !=null && !classifications.isEmpty()){
                                 
                                 String[] classificationsArray = classifications.split(" ");
                                 

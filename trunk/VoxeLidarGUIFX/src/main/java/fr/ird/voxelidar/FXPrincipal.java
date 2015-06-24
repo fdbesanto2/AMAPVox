@@ -5,8 +5,13 @@
  */
 package fr.ird.voxelidar;
 
+import fr.ird.voxelidar.engine3d.math.point.Point2F;
 import fr.ird.voxelidar.gui.MainFrameController;
-import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat;
+import fr.amap.lidar.als.las.PointDataRecordFormat;
+import fr.ird.voxelidar.lidar.format.dtm.DtmLoader;
+import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
+import fr.ird.voxelidar.util.BoundingBox2F;
+import java.io.File;
 import java.lang.reflect.Field;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

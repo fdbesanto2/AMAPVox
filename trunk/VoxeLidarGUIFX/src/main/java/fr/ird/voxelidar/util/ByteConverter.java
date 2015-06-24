@@ -19,8 +19,8 @@ public class ByteConverter {
         return (int)(unsignedShort & 0xffff);
     }
     
-    public static short unsignedByteToShort(byte unsignedByte){
-        return (short)(unsignedByte & 0xff);
+    public static int unsignedByteToShort(byte unsignedByte){
+        return (int)(unsignedByte & 0xff);
     }
     
     public static long unsignedIntegerToLong(int unsignedInteger){

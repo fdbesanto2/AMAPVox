@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.apache.log4j.Logger;
@@ -54,6 +55,7 @@ public class DtmLoader {
                 if(values.length != nbCols){
                     throw new Exception("nb columns different from ncols header value");
                 }
+                
                 for(int xIndex=0;xIndex<values.length;xIndex++){
                     
                     z = Float.valueOf(values[xIndex]);

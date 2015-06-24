@@ -5,17 +5,18 @@
  */
 package fr.ird.voxelidar.voxelisation.als;
 
+import fr.amap.lidar.als.LasPoint;
 import fr.ird.voxelidar.voxelisation.extraction.Shot;
 import fr.ird.voxelidar.io.file.FileManager;
-import fr.ird.voxelidar.lidar.format.als.Las;
-import fr.ird.voxelidar.lidar.format.als.LasHeader;
-import fr.ird.voxelidar.lidar.format.als.LasReader;
-import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat;
-import fr.ird.voxelidar.lidar.format.als.QLineExtrabytes;
+import fr.amap.lidar.als.las.Las;
+import fr.amap.lidar.als.LasHeader;
+import fr.amap.lidar.als.las.LasReader;
+import fr.amap.lidar.als.las.PointDataRecordFormat;
+import fr.amap.lidar.als.las.QLineExtrabytes;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import fr.ird.voxelidar.util.Processing;
-import fr.ird.voxelidar.voxelisation.extraction.als.LazExtraction;
+import fr.amap.lidar.als.laz.LazExtraction;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis;
 import java.io.File;
 import java.util.ArrayList;
@@ -240,12 +241,16 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
         Iterator it = new Iterator() {
 
             boolean isNewExp = false;
+            boolean wasReturned = false;
             double oldTime = -1;
             int oldN = -1;
             Shot shot = null;
             int count = 0;
             int currentLasPointIndex = 0;
             int index = 0;
+            LasShot mix;
+            int currentNbEchos = 0;
+            int currentEchoFound = 0;
             
             @Override
             public boolean hasNext() {
@@ -257,68 +262,72 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
                 
                 for (int i=currentLasPointIndex;i<lasPointList.size(); i++) {
 
-                    LasPoint lasPoint = lasPointList.get(i);
-                    /*
-                    if(iterations % step == 0){
-                        fireProgress("Voxelisation", (int) ((iterations*100)/(float)maxIterations));
-                    }*/
+                    if(!wasReturned){
+                        //System.out.println(i);
+                        LasPoint lasPoint = lasPointList.get(i);
+                        /*
+                        if(iterations % step == 0){
+                            fireProgress("Voxelisation", (int) ((iterations*100)/(float)maxIterations));
+                        }*/
 
-                    double targetTime = lasPoint.t;
+                        double targetTime = lasPoint.t;
 
-                    index = searchNearestMaxV2(targetTime, trajectoryList, index);
-                    if(index < 0){
-                        logger.error("Trajectory file is invalid, out of bounds exception.");
-                        return null;
+                        index = searchNearestMaxV2(targetTime, trajectoryList, index);
+                        if(index < 0){
+                            logger.error("Trajectory file is invalid, out of bounds exception.");
+                            return null;
+                        }
+
+                        int indexMax = index;
+                        int indexMin = index-1;
+
+                        double max = trajectoryList.get(index).t;
+                        double min = trajectoryList.get(index-1).t;
+                        double ratio = (lasPoint.t - min) / (max - min);
+
+                        //formule interpolation
+                        /*
+                        double xValue = trajectoryMap.get(min).x + ((trajectoryMap.get(max).x - trajectoryMap.get(min).x) * ratio);
+                        double yValue = trajectoryMap.get(min).y + ((trajectoryMap.get(max).y - trajectoryMap.get(min).y) * ratio);
+                        double zValue = trajectoryMap.get(min).z + ((trajectoryMap.get(max).z - trajectoryMap.get(min).z) * ratio);
+                        */
+                        double xValue = trajectoryList.get(indexMin).x + ((trajectoryList.get(indexMax).x - trajectoryList.get(indexMin).x) * ratio);
+                        double yValue = trajectoryList.get(indexMin).y + ((trajectoryList.get(indexMax).y - trajectoryList.get(indexMin).y) * ratio);
+                        double zValue = trajectoryList.get(indexMin).z + ((trajectoryList.get(indexMax).z - trajectoryList.get(indexMin).z) * ratio);
+
+                        //trajectoryInterpolate.add(new Vec3D(xValue, yValue, zValue));
+
+                        mix = new LasShot(lasPoint, 0, 0, 0);
+
+                        Vec4D trajTransform = Mat4D.multiply(vopMatrix, 
+                                new Vec4D(xValue, 
+                                        yValue, 
+                                        zValue, 1));
+
+                        Vec4D lasTransform = Mat4D.multiply(vopMatrix, 
+                                new Vec4D(lasPoint.x, 
+                                        lasPoint.y, 
+                                        lasPoint.z, 1));
+
+                        mix.xloc_s = trajTransform.x;
+                        mix.yloc_s = trajTransform.y;
+                        mix.zloc_s = trajTransform.z;
+
+                        mix.xloc = lasTransform.x;
+                        mix.yloc = lasTransform.y;
+                        mix.zloc = lasTransform.z;
+
+                        mix.range = dfdist(mix.xloc_s, mix.yloc_s, mix.zloc_s, mix.xloc, mix.yloc, mix.zloc);
+
+                        mix.x_u = (mix.xloc - mix.xloc_s) / mix.range;
+                        mix.y_u = (mix.yloc - mix.yloc_s) / mix.range;
+                        mix.z_u = (mix.zloc - mix.zloc_s) / mix.range;
                     }
-
-                    int indexMax = index;
-                    int indexMin = index-1;
-
-                    double max = trajectoryList.get(index).t;
-                    double min = trajectoryList.get(index-1).t;
-                    double ratio = (lasPoint.t - min) / (max - min);
-
-                    //formule interpolation
-                    /*
-                    double xValue = trajectoryMap.get(min).x + ((trajectoryMap.get(max).x - trajectoryMap.get(min).x) * ratio);
-                    double yValue = trajectoryMap.get(min).y + ((trajectoryMap.get(max).y - trajectoryMap.get(min).y) * ratio);
-                    double zValue = trajectoryMap.get(min).z + ((trajectoryMap.get(max).z - trajectoryMap.get(min).z) * ratio);
-                    */
-                    double xValue = trajectoryList.get(indexMin).x + ((trajectoryList.get(indexMax).x - trajectoryList.get(indexMin).x) * ratio);
-                    double yValue = trajectoryList.get(indexMin).y + ((trajectoryList.get(indexMax).y - trajectoryList.get(indexMin).y) * ratio);
-                    double zValue = trajectoryList.get(indexMin).z + ((trajectoryList.get(indexMax).z - trajectoryList.get(indexMin).z) * ratio);
-
-                    //trajectoryInterpolate.add(new Vec3D(xValue, yValue, zValue));
-
-                    LasShot mix = new LasShot(lasPoint, 0, 0, 0);
-
-                    Vec4D trajTransform = Mat4D.multiply(vopMatrix, 
-                            new Vec4D(xValue, 
-                                    yValue, 
-                                    zValue, 1));
-
-                    Vec4D lasTransform = Mat4D.multiply(vopMatrix, 
-                            new Vec4D(lasPoint.x, 
-                                    lasPoint.y, 
-                                    lasPoint.z, 1));
-
-                    mix.xloc_s = trajTransform.x;
-                    mix.yloc_s = trajTransform.y;
-                    mix.zloc_s = trajTransform.z;
-
-                    mix.xloc = lasTransform.x;
-                    mix.yloc = lasTransform.y;
-                    mix.zloc = lasTransform.z;
-
-                    mix.range = dfdist(mix.xloc_s, mix.yloc_s, mix.zloc_s, mix.xloc, mix.yloc, mix.zloc);
-
-                    mix.x_u = (mix.xloc - mix.xloc_s) / mix.range;
-                    mix.y_u = (mix.yloc - mix.yloc_s) / mix.range;
-                    mix.z_u = (mix.zloc - mix.zloc_s) / mix.range;
+                    
 
                     double time = mix.lasPoint.t;
 
-                    if (isNewExp && time != oldTime) {
+                    if (isNewExp && time != oldTime && !wasReturned) {
 
                         /**
                          * *vérifie que le nombre d'échos lus correspond bien au nombre
@@ -330,32 +339,48 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
                          */
                         if (oldN == count) {
                             
+                            //currentLasPointIndex++;
+                            count = 0;
+                            isNewExp = false;
+                            wasReturned = true;
+                            
                             return shot;
                         }
+                        
                         count = 0;
                         isNewExp = false;
 
                     }
                     
-                    currentLasPointIndex = i;
+                    //currentLasPointIndex = i;
 
                     if (time == oldTime || (!isNewExp && time != oldTime)) {
 
-                        if (!isNewExp && time != oldTime) {
+                        if ((!isNewExp && time != oldTime) || currentEchoFound == currentNbEchos) {
 
                             shot= new Shot(mix.lasPoint.n, new Point3d(mix.xloc_s, mix.yloc_s, mix.zloc_s), 
                                                         new Vector3d(mix.x_u, mix.y_u, mix.z_u), 
-                                                        new double[mix.lasPoint.n], new short[mix.lasPoint.n], new int[mix.lasPoint.n]);
+                                                        new double[mix.lasPoint.n], new int[mix.lasPoint.n], new int[mix.lasPoint.n]);
+                            
+                            currentNbEchos = mix.lasPoint.n;
+                            currentEchoFound = 0;
+                            
                             shot.calculateAngle();
 
                             isNewExp = true;
                         }
+                        
+                        currentEchoFound++;
 
                         if(mix.lasPoint.r - 1 < 0){
 
                         }else if(mix.lasPoint.r <= mix.lasPoint.n){
 
                             int currentEchoIndex = mix.lasPoint.r-1;
+                            
+                            if(currentEchoIndex == shot.ranges.length){
+                                System.out.println("test");
+                            }
 
                             shot.ranges[currentEchoIndex] = mix.range;
                             shot.classifications[currentEchoIndex] = mix.lasPoint.classification;
@@ -371,6 +396,9 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
 
                     oldTime = time;
                     oldN = mix.lasPoint.n;
+                    
+                    currentLasPointIndex++;
+                    wasReturned = false;
                 }
 
                 fireFinished();

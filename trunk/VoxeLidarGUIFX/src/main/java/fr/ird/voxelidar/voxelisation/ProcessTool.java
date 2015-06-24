@@ -20,9 +20,9 @@ import fr.ird.voxelidar.lidar.format.dtm.DtmLoader;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceHeader;
 import fr.ird.voxelidar.io.file.FileManager;
-import fr.ird.voxelidar.lidar.format.als.LasHeader;
-import fr.ird.voxelidar.lidar.format.als.LasReader;
-import fr.ird.voxelidar.lidar.format.als.PointDataRecordFormat;
+import fr.amap.lidar.als.LasHeader;
+import fr.amap.lidar.als.las.LasReader;
+import fr.amap.lidar.als.las.PointDataRecordFormat;
 import fr.ird.voxelidar.multires.ProcessingMultiRes;
 import fr.ird.voxelidar.octree.Octree;
 import fr.ird.voxelidar.octree.OctreeFactory;
@@ -34,10 +34,10 @@ import fr.ird.voxelidar.util.DataSet.Mode;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.MatrixConverter;
 import fr.ird.voxelidar.util.TimeCounter;
-import fr.ird.voxelidar.voxelisation.als.LasPoint;
+import fr.amap.lidar.als.LasPoint;
 import fr.ird.voxelidar.voxelisation.als.LasVoxelisation;
 import fr.ird.voxelidar.voxelisation.als.Trajectory;
-import fr.ird.voxelidar.voxelisation.extraction.als.LazExtraction;
+import fr.amap.lidar.als.laz.LazExtraction;
 import fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction;
 import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
 import java.io.BufferedReader;
@@ -505,13 +505,14 @@ public class ProcessTool implements Cancellable{
                     lazReader.openLazFile(pointFile);
 
                     lasHeader = lazReader.getHeader();
+                    
                     Iterator<LasPoint> it = lazReader.iterator();
 
                     while (it.hasNext()) {
 
                         LasPoint point = it.next();
 
-                        if(classificationsToDiscard.contains(Integer.valueOf((int)point.classification))){ //skip those
+                        if(classificationsToDiscard.contains(Integer.valueOf(point.classification))){ //skip those
 
                         }else{
                             Vec4D pt = new Vec4D(((point.x * lasHeader.getxScaleFactor()) + lasHeader.getxOffset()),

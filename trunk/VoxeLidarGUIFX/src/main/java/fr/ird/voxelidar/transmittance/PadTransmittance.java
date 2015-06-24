@@ -542,6 +542,14 @@ public class PadTransmittance {
             float mean[] = new float[transmissionPeriod[0][0].length];
             int size = (int)parameters.getWidth();
             int n = 0;
+            /*
+            for(int i = 0;i<positions.size();i++){
+                
+                int idI = 
+                bw.write("\t" + transmissionPeriod[i][j][m]);
+                (positions.get(i).x)/splitting.x;
+            }*/
+            
             for (int i = (splitting.x / 2) - size; i < (splitting.x / 2) + size; i++) {
                 for (int j = (splitting.y / 2) - size; j < (splitting.y / 2) + size; j++) {
                     bw.write(i + "\t" + j);

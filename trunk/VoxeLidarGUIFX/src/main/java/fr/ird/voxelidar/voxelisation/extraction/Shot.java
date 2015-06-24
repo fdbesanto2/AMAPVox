@@ -22,7 +22,7 @@ public class Shot {
     public Vector3d direction;
     public double ranges[];
     public int intensities[];
-    public short classifications[];
+    public int classifications[];
     
     /**
      *This is the ratio of the received power to the power that would
@@ -76,7 +76,7 @@ public class Shot {
         this.ranges = ranges;
     }
 
-    public Shot(int nbEchos, Point3d origin, Vector3d direction, double[] ranges, short[] classifications, int[] intensities) {
+    public Shot(int nbEchos, Point3d origin, Vector3d direction, double[] ranges, int[] classifications, int[] intensities) {
 
         this.origin = origin;
         this.nbEchos = nbEchos;
