@@ -9,7 +9,6 @@ import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis;
 import fr.ird.voxelidar.voxelisation.VoxelParameters;
 import fr.ird.voxelidar.voxelisation.extraction.Shot;
 import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
-import fr.ird.voxelidar.lidar.format.dtm.DtmLoader;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.Processing;
@@ -17,7 +16,6 @@ import fr.ird.voxelidar.util.ProcessingListener;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
 import org.apache.log4j.Logger;
 
 /**
@@ -108,8 +106,15 @@ public class LasVoxelisation extends Processing {
         
         float[] altitudes = new float[]{0, 10, 20, 30, 40, 50, 60};
         
-        //voxelAnalysis.calculatePADAndWrite(0);
-        voxelAnalysis.generateMultiBandsRaster(new File(outputFile.getAbsolutePath()+".bsq"), altitudes, 10, 5);
+        if(parameters.isGenerateMultiBandRaster()){
+            voxelAnalysis.generateMultiBandsRaster(new File(outputFile.getAbsolutePath()+".bsq"), 
+                    parameters.getRasterStartingHeight(), parameters.getRasterHeightStep(),
+                    parameters.getRasterBandNumber(), parameters.getRasterResolution());
+        }
+        
+        if((parameters.isGenerateMultiBandRaster() && !parameters.isShortcutVoxelFileWriting()) || !parameters.isGenerateMultiBandRaster()){
+            voxelAnalysis.calculatePADAndWrite(0);
+        }
 
         if(parameters.isCalculateGroundEnergy() && !parameters.isTLS()){
             voxelAnalysis.writeGroundEnergy();

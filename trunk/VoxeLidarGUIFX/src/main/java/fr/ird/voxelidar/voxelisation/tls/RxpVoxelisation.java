@@ -15,7 +15,6 @@ import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
 import fr.ird.voxelidar.octree.Octree;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.TimeCounter;
-import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysisData;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
@@ -36,6 +35,8 @@ public class RxpVoxelisation implements Callable{
     private VoxelAnalysis voxelAnalysis;
     final Mat4D transfMatrix;
     final Mat3D rotation;
+    private final VoxelParameters parameters;
+    private final File outputFile;
 
     public int getNbVoxelisationFinished() {
         return nbVoxelisationFinished;
@@ -49,6 +50,8 @@ public class RxpVoxelisation implements Callable{
                 
         nbVoxelisationFinished = 0;
         this.inputFile = inputFile;
+        this.parameters = parameters;
+        this.outputFile = outputFile;
         
         if(vopMatrix == null){
             vopMatrix = Mat4D.identity();
@@ -69,6 +72,7 @@ public class RxpVoxelisation implements Callable{
         
         voxelAnalysis = new VoxelAnalysis(terrain, pointcloud, filters);
         voxelAnalysis.init(parameters, outputFile);
+        
     }
 
     @Override
@@ -117,7 +121,16 @@ public class RxpVoxelisation implements Callable{
             logger.info("voxelisation is finished ( " + TimeCounter.getElapsedStringTimeInSeconds(startTime) + " )");
 
             rxpExtraction.close();
-            voxelAnalysis.calculatePADAndWrite(0);
+            
+            if(parameters.isGenerateMultiBandRaster()){
+                voxelAnalysis.generateMultiBandsRaster(new File(outputFile.getAbsolutePath()+".bsq"), 
+                        parameters.getRasterStartingHeight(), parameters.getRasterHeightStep(), 
+                        parameters.getRasterBandNumber(), parameters.getRasterResolution());
+            }
+
+            if((parameters.isGenerateMultiBandRaster() && !parameters.isShortcutVoxelFileWriting()) || !parameters.isGenerateMultiBandRaster()){
+                voxelAnalysis.calculatePADAndWrite(0);
+            }
             
 
             if(voxelAnalysis.parameters.isCalculateGroundEnergy() && !voxelAnalysis.parameters.isTLS()){

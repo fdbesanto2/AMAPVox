@@ -73,6 +73,8 @@ public class VoxelAnalysis {
     boolean shotChanged = false;
     Point3d lastEchotemp = new Point3d();
     
+    private boolean padWasCalculated;
+    
     int nbSamplingTotal = 0;
 
     /**
@@ -504,17 +506,23 @@ public class VoxelAnalysis {
         }
     }
 
-public void generateMultiBandsRaster(File outputFile, float[] altitudes, float height, float resolution){
+public void generateMultiBandsRaster(File outputFile, float startingHeight, float step, int bandNumber, int resolution){
     
     
-    int rasterXSize = (int)(Math.ceil(voxSpace.getSplitting().x));
-    int rasterYSize = (int)(Math.ceil(voxSpace.getSplitting().y));
+    float[] altitudes = new float[bandNumber];
+    for(int i=0;i<bandNumber;i++){
+        altitudes[i] = startingHeight+(i*step);
+    }
+    
     
     float scale = (float) (resolution/parameters.resolution);
     
+    int rasterXSize = (int)(Math.ceil(voxSpace.getSplitting().x/scale));
+    int rasterYSize = (int)(Math.ceil(voxSpace.getSplitting().y/scale));
+    
     BHeader header = new BHeader(rasterXSize, rasterYSize, altitudes.length, BCommon.NumberOfBits.N_BITS_32);
     header.setUlxmap(voxSpace.getBoundingBox().getMin().x+(resolution/2.0f));
-    header.setUlymap(voxSpace.getBoundingBox().getMin().y + (voxSpace.getSplitting().y*parameters.resolution) + (resolution/2.0f));
+    header.setUlymap(voxSpace.getBoundingBox().getMin().y - (parameters.resolution/2.0f) + (voxSpace.getSplitting().y*parameters.resolution));
     header.setXdim(resolution);
     header.setYdim(resolution);
     
@@ -528,17 +536,23 @@ public void generateMultiBandsRaster(File outputFile, float[] altitudes, float h
             
             float altitudeMin = altitudes[0];
             
+            
+            
             for (int i = 0; i < parameters.split.x; i++) {
-                for (int j = 0; j < parameters.split.y; j++) {
+                for (int j = parameters.split.y-1; j >= 0; j--) {
                     for (int k = 0; k < parameters.split.z; k++) {
-                                
-                        Voxel vox = voxels[i][j][k];
+                              
+                        Voxel vox;
                         
-                        calculatePAD(vox, i, j, k);
+                        if(!padWasCalculated){
+                            voxels[i][j][k] = calculatePAD(voxels[i][j][k], i, j, k);
+                        }
+                        
+                        vox = voxels[i][j][k];
 
                         //on calcule l'indice de la couche auquel appartient le voxel
                         if(vox != null && vox.ground_distance > altitudeMin){
-                            int layer = (int) ((vox.ground_distance - altitudeMin)/height);
+                            int layer = (int) ((vox.ground_distance - altitudeMin)/step);
                             
                             
                             if(layer < altitudes.length){
@@ -560,12 +574,14 @@ public void generateMultiBandsRaster(File outputFile, float[] altitudes, float h
                 }
             }
             
+            padWasCalculated = true;
+            
             long l = 4294967295L;
             
             try {
                 //on écrit la moyenne
                 for (int i = 0; i < rasterXSize; i++) {
-                    for (int j = rasterYSize - 1; j >= 0; j--) {
+                    for (int j = rasterYSize - 1, j2=0; j >= 0; j--, j2++) {
                         for (int k = 0; k < altitudes.length; k++) {
                             
                             if (padMean[i][j][k] != null) {
@@ -590,7 +606,7 @@ public void generateMultiBandsRaster(File outputFile, float[] altitudes, float h
                                 if (bval.length > 3) {
                                     b3 = bval[3];
                                 }
-                                raster.setPixel(i, j, k, b0, b1, b2, b3);
+                                raster.setPixel(i, j2, k, b0, b1, b2, b3);
                                 
                             }
                         }
@@ -727,7 +743,10 @@ public void calculatePADAndWrite(double threshold) {
 
                         Voxel voxel = voxels[i][j][k];
                         
-                        voxel = calculatePAD(voxel, i, j, k);
+                        if(!padWasCalculated){
+                            voxel = calculatePAD(voxel, i, j, k);
+                        }
+                        
                         //voxel._PadBVTotal_V2 = pad2 + 0.0f; //set +0.0f to avoid -0.0f
 
                         writer.write(voxel.toString() + "\n");
@@ -737,6 +756,8 @@ public void calculatePADAndWrite(double threshold) {
             }
 
             writer.close();
+            
+            padWasCalculated = true;
             
             logger.info("file written ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
 

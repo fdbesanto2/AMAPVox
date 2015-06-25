@@ -38,18 +38,24 @@ public class VoxelParameters {
     public float minDTMDistance = 1;
     
     private List<PointcloudFilter> pointcloudFilters;
-    private boolean usePointCloudFilter = false;
-    //private File pointcloudFile;
-    //private float pointcloudErrorMargin = 0.08f;
+    private boolean usePointCloudFilter;
     
     private boolean TLS;
     private float maxPAD = 5;
     private boolean mergingAfter = false;
     private File mergedFile;
     
-    private boolean calculateGroundEnergy = false;
+    private boolean calculateGroundEnergy;
     private File groundEnergyFile;
     private short groundEnergyFileFormat = FILE_FORMAT_TXT;
+    
+    private boolean generateMultiBandRaster;
+    private boolean shortcutVoxelFileWriting;
+    private int rasterResolution; //en pixels
+    private float rasterStartingHeight;
+    private float rasterHeightStep;
+    private int rasterBandNumber;
+    
     
     private int transmittanceMode = 0;
     
@@ -235,5 +241,52 @@ public class VoxelParameters {
     public void setPointcloudFilters(List<PointcloudFilter> pointcloudFilters) {
         this.pointcloudFilters = pointcloudFilters;
     }    
-    
+
+    public boolean isGenerateMultiBandRaster() {
+        return generateMultiBandRaster;
+    }
+
+    public void setGenerateMultiBandRaster(boolean generateMultiBandRaster) {
+        this.generateMultiBandRaster = generateMultiBandRaster;
+    }
+
+    public boolean isShortcutVoxelFileWriting() {
+        return shortcutVoxelFileWriting;
+    }
+
+    public void setShortcutVoxelFileWriting(boolean shortcutVoxelFileWriting) {
+        this.shortcutVoxelFileWriting = shortcutVoxelFileWriting;
+    }
+
+    public int getRasterResolution() {
+        return rasterResolution;
+    }
+
+    public void setRasterResolution(int rasterResolution) {
+        this.rasterResolution = rasterResolution;
+    }
+
+    public float getRasterStartingHeight() {
+        return rasterStartingHeight;
+    }
+
+    public void setRasterStartingHeight(float rasterStartingHeight) {
+        this.rasterStartingHeight = rasterStartingHeight;
+    }
+
+    public float getRasterHeightStep() {
+        return rasterHeightStep;
+    }
+
+    public void setRasterHeightStep(float rasterHeightStep) {
+        this.rasterHeightStep = rasterHeightStep;
+    }
+
+    public int getRasterBandNumber() {
+        return rasterBandNumber;
+    }
+
+    public void setRasterBandNumber(int rasterBandNumber) {
+        this.rasterBandNumber = rasterBandNumber;
+    }
 }

@@ -554,11 +554,13 @@ public class PadTransmittance {
                 for (int j = (splitting.y / 2) - size; j < (splitting.y / 2) + size; j++) {
                     bw.write(i + "\t" + j);
                     n++;
+                    
                     for (int m = 0; m < transmissionPeriod[i][j].length; m++) {
                         bw.write("\t" + transmissionPeriod[i][j][m]);
                         mean[m] += transmissionPeriod[i][j][m];
                     }
                     bw.write("\n");
+                    
                 }
             }
             

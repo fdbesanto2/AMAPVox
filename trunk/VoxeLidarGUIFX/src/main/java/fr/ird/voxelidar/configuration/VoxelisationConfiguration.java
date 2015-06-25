@@ -57,6 +57,7 @@ public class VoxelisationConfiguration extends Configuration{
     //private boolean removeLowPoint = false;
     private float[] multiResPadMax;
     private boolean multiResUseDefaultMaxPad = false;
+    private List<Input> multiResList;
     
     private Element voxelSpaceElement;
     private Element inputFileElement;
@@ -305,17 +306,21 @@ public class VoxelisationConfiguration extends Configuration{
                 
                 filtersElement.addContent(shotFilterElement);
             }
-            Element pointsFilterElement = new Element("point-filters");
             
-            String classifiedPointsToDiscardString = "";
-            for(Integer i : classifiedPointsToDiscard){
-                classifiedPointsToDiscardString += i+" ";
+            if(classifiedPointsToDiscard != null){
+                Element pointsFilterElement = new Element("point-filters");
+            
+                String classifiedPointsToDiscardString = "";
+                for(Integer i : classifiedPointsToDiscard){
+                    classifiedPointsToDiscardString += i+" ";
+                }
+
+                pointsFilterElement.setAttribute("classifications", classifiedPointsToDiscardString);
+
+                //pointsFilterElement.addContent(new Element("low-point-filter").setAttribute("enabled", String.valueOf(removeLowPoint)));
+                filtersElement.addContent(pointsFilterElement);
             }
             
-            pointsFilterElement.setAttribute("classifications", classifiedPointsToDiscardString);
-            
-            //pointsFilterElement.addContent(new Element("low-point-filter").setAttribute("enabled", String.valueOf(removeLowPoint)));
-            filtersElement.addContent(pointsFilterElement);
             
             processElement.addContent(filtersElement);
             
@@ -360,6 +365,13 @@ public class VoxelisationConfiguration extends Configuration{
                             inputElement.addContent(inputFileElement);
 
                         }
+                        
+                        if(input.dtmFile != null){
+                            Element dtmFileElement = new Element("dtm-filter");
+                            dtmFileElement.setAttribute(new Attribute("src",input.dtmFile.getAbsolutePath()));
+                            inputElement.addContent(dtmFileElement);
+                        }
+                        
                         if(input.outputFile != null){
                             outputFileElement = new Element("output_file");
                             outputFileElement.setAttribute(new Attribute("src",input.outputFile.getAbsolutePath()));
@@ -420,6 +432,20 @@ public class VoxelisationConfiguration extends Configuration{
                 }
 
                 processElement.addContent(inputsElement);
+            }
+            
+            if(voxelParameters.isGenerateMultiBandRaster()){
+                
+                Element generateMultiBandRasterElement = new Element("multi-band-raster");
+                generateMultiBandRasterElement.setAttribute("generate", String.valueOf(voxelParameters.isGenerateMultiBandRaster()));
+                generateMultiBandRasterElement.setAttribute("discard_voxel_file_writing", String.valueOf(voxelParameters.isShortcutVoxelFileWriting()));
+                
+                generateMultiBandRasterElement.setAttribute("starting-height", String.valueOf(voxelParameters.getRasterStartingHeight()));
+                generateMultiBandRasterElement.setAttribute("step", String.valueOf(voxelParameters.getRasterHeightStep()));
+                generateMultiBandRasterElement.setAttribute("band-number", String.valueOf(voxelParameters.getRasterBandNumber()));
+                generateMultiBandRasterElement.setAttribute("resolution", String.valueOf(voxelParameters.getRasterResolution()));
+                
+                processElement.addContent(generateMultiBandRasterElement);
             }
             
             
@@ -748,20 +774,17 @@ public class VoxelisationConfiguration extends Configuration{
                             if(limitChildrensElement.size() > 0){
                                 voxelParameters.setMaxPAD(Float.valueOf(limitChildrensElement.get(0).getAttributeValue("max")));
                             }
-                            if(mode.equals("multi-voxelisation")){
-                                if(limitChildrensElement.size() >= 6){
-                                    multiResPadMax = new float[5];
-                                    multiResPadMax[0] = Float.valueOf(limitChildrensElement.get(1).getAttributeValue("max"));
-                                    multiResPadMax[1] = Float.valueOf(limitChildrensElement.get(2).getAttributeValue("max"));
-                                    multiResPadMax[2] = Float.valueOf(limitChildrensElement.get(3).getAttributeValue("max"));
-                                    multiResPadMax[3] = Float.valueOf(limitChildrensElement.get(4).getAttributeValue("max"));
-                                    multiResPadMax[4] = Float.valueOf(limitChildrensElement.get(5).getAttributeValue("max"));
-                                    
-                                }
-                            }
                             
+                            if(limitChildrensElement.size() >= 6){
+                                multiResPadMax = new float[5];
+                                multiResPadMax[0] = Float.valueOf(limitChildrensElement.get(1).getAttributeValue("max"));
+                                multiResPadMax[1] = Float.valueOf(limitChildrensElement.get(2).getAttributeValue("max"));
+                                multiResPadMax[2] = Float.valueOf(limitChildrensElement.get(3).getAttributeValue("max"));
+                                multiResPadMax[3] = Float.valueOf(limitChildrensElement.get(4).getAttributeValue("max"));
+                                multiResPadMax[4] = Float.valueOf(limitChildrensElement.get(5).getAttributeValue("max"));
+
+                            }
                         }
-                        
                         
                     }
                     
@@ -861,6 +884,8 @@ public class VoxelisationConfiguration extends Configuration{
                             break;
                     }
                     
+                    
+                    
                     if(mode.equals("multi-voxelisation")){
                         
                         Element inputsElement = processElement.getChild("inputs");
@@ -915,6 +940,15 @@ public class VoxelisationConfiguration extends Configuration{
                                         inputFileChild = new File(inputFileChildElement.getAttributeValue("src"));
                                     }
                                     
+                                    File dtmFileChild = null;
+                                    Element dtmFileElement = child.getChild("dtm-filter");
+                                    
+                                    if(dtmFileElement != null){
+                                        
+                                        dtmFileChild = new File(dtmFileElement.getAttributeValue("src"));
+                                    }
+                                    
+                                    
                                     File outputFileChild = null;
                                     Element ouputFileChildElement = child.getChild("output_file");
                                     
@@ -958,7 +992,7 @@ public class VoxelisationConfiguration extends Configuration{
                                                     subOutputFile = new File(subSubOutputFileElement.getAttributeValue("src"));
                                                 }
                                                 
-                                                multiResInputs.add(new Input(subVoxelParameters, null, subOutputFile, null, null));
+                                                multiResInputs.add(new Input(subVoxelParameters, null, null, subOutputFile, null, null));
                                             }
                                             
                                             Element multiResOutputFileElement = multiResElement.getChild("output-file");
@@ -969,7 +1003,7 @@ public class VoxelisationConfiguration extends Configuration{
                                         }
                                     }
                                     
-                                    multiProcessInputs.add(new Input(multiProcessVoxelParameters, inputFileChild, outputFileChild, multiResInputs, multiResOutputFile));
+                                    multiProcessInputs.add(new Input(multiProcessVoxelParameters, inputFileChild, dtmFileChild, outputFileChild, multiResInputs, multiResOutputFile));
                                     
                                 }
                                 
@@ -1054,6 +1088,25 @@ public class VoxelisationConfiguration extends Configuration{
                     }
 
                     break;
+            }
+            
+            if(mode.equals("voxelisation") || mode.equals("multi-voxelisation")){
+                
+                Element generateMultiBandRasterElement = processElement.getChild("multi-band-raster");
+                
+                if(generateMultiBandRasterElement != null){
+                    
+                    boolean generateMultiBandRaster = Boolean.valueOf(generateMultiBandRasterElement.getAttributeValue("generate"));
+                    voxelParameters.setGenerateMultiBandRaster(generateMultiBandRaster);
+                    
+                    if(generateMultiBandRaster){
+                        voxelParameters.setShortcutVoxelFileWriting(Boolean.valueOf(generateMultiBandRasterElement.getAttributeValue("discard_voxel_file_writing")));
+                        voxelParameters.setRasterStartingHeight(Float.valueOf(generateMultiBandRasterElement.getAttributeValue("starting-height")));
+                        voxelParameters.setRasterHeightStep(Float.valueOf(generateMultiBandRasterElement.getAttributeValue("step")));
+                        voxelParameters.setRasterBandNumber(Integer.valueOf(generateMultiBandRasterElement.getAttributeValue("band-number")));
+                        voxelParameters.setRasterResolution(Integer.valueOf(generateMultiBandRasterElement.getAttributeValue("resolution")));
+                    }
+                }
             }
             
             Element formulaElement = processElement.getChild("formula");

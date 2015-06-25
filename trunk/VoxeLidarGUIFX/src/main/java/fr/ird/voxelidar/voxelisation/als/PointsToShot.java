@@ -17,12 +17,13 @@ import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
 import fr.ird.voxelidar.util.Processing;
 import fr.amap.lidar.als.laz.LazExtraction;
-import fr.ird.voxelidar.voxelisation.raytracing.voxel.VoxelAnalysis;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
@@ -138,6 +139,7 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
             }
 
             /***sort las by time***/
+            //lasPointList.sort(null);
             Collections.sort(lasPointList);
 
             double minTime = lasPointList.get(0).t;

@@ -410,7 +410,7 @@ public class TransformationFrameController implements Initializable {
         this.parent = controller;
     }
     
-    private void fillMatrix(Matrix4d matrix){
+    public void fillMatrix(Matrix4d matrix){
         
         matrixM00.setText(String.valueOf(matrix.m00));
         matrixM01.setText(String.valueOf(matrix.m01));

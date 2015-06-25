@@ -65,7 +65,7 @@
                                                                      </graphic>
                                                                   </Button>
                                                                   <TextField fx:id="textfieldResMultiRes" disable="true" layoutX="133.0" layoutY="299.0" prefHeight="25.0" prefWidth="175.0" promptText="Resolutions (ex: 1, 2, 3)" />
-                                                                  <CheckBox fx:id="checkboxMultiResAfter" layoutX="14.0" layoutY="302.0" mnemonicParsing="false" text="Correct NaNs" AnchorPane.leftAnchor="14.0" />
+                                                                  <CheckBox fx:id="checkboxMultiResAfter" disable="true" layoutX="14.0" layoutY="302.0" mnemonicParsing="false" text="Correct NaNs" AnchorPane.leftAnchor="14.0" />
                                                                </children></AnchorPane>
                                                       </content>
                                                     </Tab>
@@ -172,25 +172,29 @@
                                                       <content>
                                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                <children>
-                                                                  <TextField fx:id="textFieldEnterXMin" layoutX="65.0" layoutY="8.0" prefHeight="3.0" prefWidth="67.0" promptText="enter X" />
-                                                                  <TextField fx:id="textFieldEnterXMax" layoutX="202.0" layoutY="8.0" prefHeight="3.0" prefWidth="67.0" promptText="enter X" />
-                                                                  <Label layoutX="16.0" layoutY="13.0" text="X min" />
-                                                                  <Label layoutX="17.0" layoutY="46.0" text="Y min" />
-                                                                  <TextField fx:id="textFieldEnterYMin" layoutX="65.0" layoutY="41.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Y" />
-                                                                  <TextField fx:id="textFieldEnterYMax" layoutX="202.0" layoutY="41.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Y" />
-                                                                  <TextField fx:id="textFieldEnterZMin" layoutX="65.0" layoutY="72.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Z" />
-                                                                  <Label layoutX="16.0" layoutY="77.0" text="Z min" />
-                                                                  <Label layoutX="152.0" layoutY="77.0" text="Z max" />
-                                                                  <TextField fx:id="textFieldEnterZMax" layoutX="202.0" layoutY="72.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Z" />
+                                                                  <AnchorPane fx:id="anchorpaneBoundingBoxParameters" layoutX="16.0" layoutY="8.0">
+                                                                     <children>
+                                                                        <TextField fx:id="textFieldEnterXMin" layoutX="49.0" prefHeight="3.0" prefWidth="67.0" promptText="enter X" />
+                                                                        <TextField fx:id="textFieldEnterXMax" layoutX="186.0" prefHeight="3.0" prefWidth="67.0" promptText="enter X" />
+                                                                        <Label layoutY="5.0" text="X min" />
+                                                                        <Label layoutX="1.0" layoutY="38.0" text="Y min" />
+                                                                        <TextField fx:id="textFieldEnterYMin" layoutX="49.0" layoutY="33.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Y" />
+                                                                        <TextField fx:id="textFieldEnterYMax" layoutX="186.0" layoutY="33.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Y" />
+                                                                        <TextField fx:id="textFieldEnterZMin" layoutX="49.0" layoutY="64.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Z" />
+                                                                        <Label layoutY="69.0" text="Z min" />
+                                                                        <Label layoutX="136.0" layoutY="69.0" text="Z max" />
+                                                                        <TextField fx:id="textFieldEnterZMax" layoutX="186.0" layoutY="64.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Z" />
+                                                                        <Label layoutX="137.0" layoutY="38.0" text="Y max" />
+                                                                        <Label layoutX="136.0" layoutY="5.0" text="X max" />
+                                                                        <TextField fx:id="textFieldXNumber" editable="false" layoutX="342.0" prefHeight="3.0" prefWidth="70.0" />
+                                                                        <Label layoutX="269.0" layoutY="5.0" text="X number" />
+                                                                        <Label layoutX="270.0" layoutY="38.0" text="Y number" />
+                                                                        <TextField fx:id="textFieldYNumber" editable="false" layoutX="342.0" layoutY="33.0" prefHeight="3.0" prefWidth="70.0" />
+                                                                        <Label layoutX="269.0" layoutY="69.0" text="Z number" />
+                                                                        <TextField fx:id="textFieldZNumber" editable="false" layoutX="342.0" layoutY="64.0" prefHeight="3.0" prefWidth="70.0" />
+                                                                     </children>
+                                                                  </AnchorPane>
                                                                   <TextField fx:id="textFieldResolution" layoutX="358.0" layoutY="106.0" prefHeight="25.0" prefWidth="70.0" text="1" />
-                                                                  <Label layoutX="153.0" layoutY="46.0" text="Y max" />
-                                                                  <Label layoutX="152.0" layoutY="13.0" text="X max" />
-                                                                  <TextField fx:id="textFieldXNumber" editable="false" layoutX="358.0" layoutY="8.0" prefHeight="3.0" prefWidth="70.0" />
-                                                                  <Label layoutX="285.0" layoutY="13.0" text="X number" />
-                                                                  <Label layoutX="286.0" layoutY="46.0" text="Y number" />
-                                                                  <TextField fx:id="textFieldYNumber" editable="false" layoutX="358.0" layoutY="41.0" prefHeight="3.0" prefWidth="70.0" />
-                                                                  <Label layoutX="285.0" layoutY="77.0" text="Z number" />
-                                                                  <TextField fx:id="textFieldZNumber" editable="false" layoutX="358.0" layoutY="72.0" prefHeight="3.0" prefWidth="70.0" />
                                                                   <Label layoutX="254.0" layoutY="111.0" text="Resolution (m)" />
                                                                   <MenuButton layoutX="17.0" layoutY="114.0" mnemonicParsing="false" text="Automatic">
                                                                     <items>
@@ -219,7 +223,7 @@
                                                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                                      </rowConstraints>
                                                                      <children>
-                                                                        <Button fx:id="buttonOpenPopMatrixFile" mnemonicParsing="false" onAction="#onActionButtonOpenPopMatrixFile" text="Open file" GridPane.columnIndex="3">
+                                                                        <Button fx:id="buttonOpenPopMatrixFile" disable="true" mnemonicParsing="false" onAction="#onActionButtonOpenPopMatrixFile" text="Open file" GridPane.columnIndex="3">
                                                                            <tooltip>
                                                                               <Tooltip text="Matrix file or Rsp file allowed" />
                                                                            </tooltip></Button>
@@ -235,21 +239,24 @@
                                                                            <tooltip>
                                                                               <Tooltip text="Voxel Orientation and Position matrix" />
                                                                            </tooltip></CheckBox>
-                                                                        <Button fx:id="buttonEnterReferencePointsVop" disable="true" mnemonicParsing="false" onAction="#onActionButtonEnterReferencePointsVop" prefHeight="22.0" prefWidth="164.0" text="Enter reference points" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                                        <Label alignment="BOTTOM_CENTER" prefHeight="18.0" prefWidth="16.0" text="or" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                                                         <CheckBox fx:id="checkBoxUseDefaultSopMatrix" disable="true" mnemonicParsing="false" prefHeight="24.0" prefWidth="103.0" selected="true" text="Use default" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                                         <CheckBox fx:id="checkBoxUseDefaultPopMatrix" disable="true" mnemonicParsing="false" prefHeight="24.0" prefWidth="103.0" selected="true" text="Use default" GridPane.columnIndex="1" />
-                                                                        <Button fx:id="buttonOpenVopMatrixFile" disable="true" mnemonicParsing="false" onAction="#onActionButtonOpenVopMatrixFile" text="Open file" GridPane.columnIndex="3" GridPane.rowIndex="2">
-                                                                           <tooltip>
-                                                                              <Tooltip text="Matrix file allowed" />
-                                                                           </tooltip></Button>
                                                                         <Label alignment="BOTTOM_CENTER" prefHeight="18.0" prefWidth="16.0" text="or" GridPane.columnIndex="2" />
-                                                                        <Button fx:id="buttonOpenSopMatrixFile" mnemonicParsing="false" onAction="#onActionButtonOpenSopMatrixFile" text="Open file" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                                                        <Button fx:id="buttonOpenSopMatrixFile" disable="true" mnemonicParsing="false" onAction="#onActionButtonOpenSopMatrixFile" text="Open file" GridPane.columnIndex="3" GridPane.rowIndex="1">
                                                                            <tooltip>
                                                                               <Tooltip text="Matrix file or Rsp file allowed" />
                                                                            </tooltip>
                                                                         </Button>
                                                                         <Label alignment="BOTTOM_CENTER" prefHeight="18.0" prefWidth="16.0" text="or" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                                        <Button fx:id="buttonSetVOPMatrix" disable="true" mnemonicParsing="false" onAction="#onActionButtonSetVOPMatrix" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                                           <graphic>
+                                                                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@icons/Interaction_Transformation.png" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                           </graphic>
+                                                                        </Button>
                                                                      </children>
                                                                   </GridPane>
                                                                   <HBox layoutX="14.0" layoutY="171.0" prefHeight="101.0" prefWidth="314.0">
@@ -442,6 +449,21 @@
                                                                         <ComboBox fx:id="comboboxGroundEnergyOutputFormat" prefHeight="25.0" prefWidth="144.0" promptText="Choose format" AnchorPane.leftAnchor="14.0" />
                                                                      </children>
                                                                   </AnchorPane>
+                                                                  <CheckBox fx:id="checkboxGenerateMultiBandRaster" layoutX="18.0" layoutY="219.0" mnemonicParsing="false" text="Generate multi-band raster" />
+                                                                  <AnchorPane fx:id="anchorPaneMultiBandRasterParameters" disable="true" layoutX="18.0" layoutY="242.0" prefHeight="130.0" prefWidth="415.0">
+                                                                     <children>
+                                                                        <CheckBox fx:id="checkboxDiscardVoxelFileWriting" layoutX="14.0" layoutY="98.0" mnemonicParsing="false" text="Discard voxel file writing (save memory space)" AnchorPane.leftAnchor="14.0" />
+                                                                        <TextField fx:id="textfieldRasterStartingHeight" layoutX="121.0" layoutY="14.0" prefHeight="26.0" prefWidth="59.0" text="0" />
+                                                                        <Label layoutX="14.0" layoutY="19.0" text="Starting height" AnchorPane.leftAnchor="14.0" />
+                                                                        <Label layoutX="14.0" layoutY="57.0" text="Band number" />
+                                                                        <TextField fx:id="textfieldRasterBandNumber" editable="false" layoutX="121.0" layoutY="52.0" prefHeight="26.0" prefWidth="47.0" text="5" />
+                                                                        <Label layoutX="212.0" layoutY="57.0" text="Resolution (pixel)" />
+                                                                        <TextField fx:id="textfieldRasterResolution" layoutX="339.0" layoutY="52.0" prefHeight="26.0" prefWidth="47.0" text="1" />
+                                                                        <Label layoutX="212.0" layoutY="19.0" text="Step" />
+                                                                        <TextField fx:id="textfieldRasterHeightStep" layoutX="255.0" layoutY="14.0" prefHeight="26.0" prefWidth="59.0" text="10" />
+                                                                     </children>
+                                                                  </AnchorPane>
+                                                                  <Separator layoutX="14.0" layoutY="190.0" prefHeight="12.0" prefWidth="401.0" AnchorPane.rightAnchor="28.0" />
                                                                </children>
                                                             </AnchorPane>
                                                          </content>
@@ -688,8 +710,16 @@
                            <content>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <Slider fx:id="sliderRSPCoresToUse" blockIncrement="1.0" layoutX="22.0" layoutY="81.0" majorTickUnit="1.0" max="4.0" min="1.0" minorTickCount="0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="4.0" />
-                                    <Label layoutX="22.0" layoutY="55.0" text="TLS - Rsp project - cores to use" />
+                                    <TitledPane collapsible="false" layoutX="22.0" layoutY="55.0" prefHeight="146.0" prefWidth="265.0" text="Multi-threading">
+                                       <content>
+                                          <AnchorPane>
+                                             <children>
+                                                <Label layoutX="23.0" layoutY="37.0" text="TLS (Rsp project) - cores to use" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                                                <Slider fx:id="sliderRSPCoresToUse" blockIncrement="1.0" layoutX="23.0" layoutY="60.0" majorTickUnit="1.0" max="4.0" min="1.0" minorTickCount="0" prefHeight="38.0" prefWidth="202.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="4.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </TitledPane>
                                  </children>
                               </AnchorPane>
                            </content>

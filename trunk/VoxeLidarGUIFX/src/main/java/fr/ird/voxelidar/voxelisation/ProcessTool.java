@@ -58,6 +58,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Point3d;
@@ -872,14 +873,23 @@ public class ProcessTool implements Cancellable{
         startTime = System.currentTimeMillis();
         configuration.getVoxelParameters().setTLS(false);
         
+        List<Input> inputs = configuration.getMultiProcessInputs();
+        
+        if(inputs.isEmpty()){
+            return;
+        }
+        
         RegularDtm terrain = null;
         Mat4D vopMatrix = MatrixConverter.convertMatrix4dToMat4D(configuration.getVopMatrix());
         if(vopMatrix == null){
             vopMatrix = Mat4D.identity();
         }
         
-        
-        if(configuration.getVoxelParameters().getDtmFile() != null && configuration.getVoxelParameters().useDTMCorrection() ){
+        if(inputs.get(0).dtmFile != null){
+            
+            
+            
+        }else if(configuration.getVoxelParameters().getDtmFile() != null && configuration.getVoxelParameters().useDTMCorrection() ){
             
             fireProgress("Reading DTM file", 0);
             
@@ -946,7 +956,7 @@ public class ProcessTool implements Cancellable{
         
         
         
-        List<Input> inputs = configuration.getMultiProcessInputs();
+        
         
         //List<Callable<Object>> tasks = new ArrayList<>();
         //exec = Executors.newSingleThreadExecutor();
@@ -957,6 +967,18 @@ public class ProcessTool implements Cancellable{
             
             if(cancelled){
                 return;
+            }
+            
+            if(input.dtmFile != null){
+                
+                try {
+                    fireProgress("Reading DTM file : "+input.dtmFile.getAbsolutePath(), 0);
+                    terrain = DtmLoader.readFromAscFile(input.dtmFile);
+                    terrain.setTransformationMatrix(vopMatrix);
+                } catch (Exception ex) {
+                    logger.error(ex);
+                    return;
+                }                
             }
             
             List<Input> multiResInputs = input.multiResList;

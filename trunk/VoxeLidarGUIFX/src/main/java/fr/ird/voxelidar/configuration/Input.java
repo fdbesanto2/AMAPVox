@@ -29,14 +29,15 @@ public class Input {
     
     public VoxelParameters voxelParameters;
     public File inputFile;
+    public File dtmFile;
     public File outputFile;
-    
     public List<Input> multiResList;
     public File outputFileMultiRes;
 
-    public Input(VoxelParameters voxelParameters, File inputFile, File outputFile, List<Input> multiResList, File outputFileMultiRes) {
+    public Input(VoxelParameters voxelParameters, File inputFile, File dtmFile, File outputFile, List<Input> multiResList, File outputFileMultiRes) {
         this.voxelParameters = voxelParameters;
         this.inputFile = inputFile;
+        this.dtmFile = dtmFile;
         this.outputFile = outputFile;
         this.multiResList = multiResList;
         this.outputFileMultiRes = outputFileMultiRes;

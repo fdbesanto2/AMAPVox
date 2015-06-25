@@ -4,6 +4,7 @@ import fr.ird.voxelidar.util.Filter;
 import java.util.List;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
+import org.apache.commons.math3.util.FastMath;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -95,8 +96,7 @@ public class Shot {
     }
 
     public void calculateAngle() {
-
-        this.angle = Math.toDegrees(Math.acos(direction.z));
+        this.angle = FastMath.toDegrees(FastMath.acos(direction.z));
     }
 
     public boolean doFilter() {
