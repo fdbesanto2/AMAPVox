@@ -8,6 +8,7 @@ package fr.ird.voxelidar.engine3d.object.camera;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import javax.swing.event.EventListenerList;
+import javax.vecmath.Vector3f;
 
 /**
  *
@@ -176,22 +177,11 @@ public class TrackballCamera extends Camera{
         float radius = Vec3F.length(forwardVec);
         
         forwardVec = Vec3F.normalize(forwardVec);
-
+        
         rightVec = Vec3F.cross(forwardVec, up);
         
         if(Vec3F.length(rightVec) == 0){
-            rightVec.x = 1;
-        }
-        
-        boolean skipY = false;
-        
-        if(Vec3F.length(rightVec) < 0.2f) {
-
-            if(this.forwardVec.y < 0 && angle > 0){
-                skipY = true;  
-            }else if(this.forwardVec.y > 0 && angle < 0){
-                skipY = true;   
-            }
+            rightVec.y = 1;
         }
 
         upVec = getUpVector();
@@ -205,6 +195,18 @@ public class TrackballCamera extends Camera{
             //équation du cercle:
             //M = C + A* r * cos(t) + B * r *sin(t) avec M = position sur le cercle, C = centre du cercle, A = vecteur du cercle, B = vecteur du cercle orthogonal à A, r = rayon du cercle, t = angle
             //position = Vec3.add(pivot, Vec3.add(Vec3.multiply(viewXAxis, r* (float)Math.cos(angleX)), Vec3.multiply(viewYAxis, r* (float)Math.sin(angleX))));
+            
+            //pondération de l'angle par l'inclinaison
+            float n = Vec3F.dot(forwardVec, up);
+            float d = Vec3F.length(forwardVec)*Vec3F.length(up);
+
+            float tilt = (float) (Math.acos(Math.abs(n/d)));
+            if(tilt == 0){
+                tilt = 0.18f;
+            }
+
+            angle *= (tilt/(Math.PI/2.0d));
+        
             angle = -angle;
             float angleSinus = (float)Math.sin(angle);
             float angleCosinus = (float)Math.cos(angle);
@@ -215,16 +217,25 @@ public class TrackballCamera extends Camera{
 
         }
         if(axis.y != 0){
-            
-            if(skipY)
-                return;
-            
+                        
             float angleSinus = (float)Math.sin(angle);
             float angleCosinus = (float)Math.cos(angle);
+            
+            //copy
+            Vec3F oldLocation = new Vec3F(location.x, location.y, location.z);
             
             location.x = target.x + (-forwardVec.x * radius * angleCosinus) + (upVec.x * radius * angleSinus);
             location.y = target.y + (-forwardVec.y * radius * angleCosinus) + (upVec.y * radius * angleSinus);
             location.z = target.z + (-forwardVec.z * radius * angleCosinus) + (upVec.z * radius * angleSinus);
+            
+            Vec3F newForwardVec = getForwardVector();
+            newForwardVec = Vec3F.normalize(newForwardVec);
+            
+            Vec3F newRightVec = Vec3F.cross(newForwardVec, up);
+            
+            if((newRightVec.y < 0 && rightVec.y> 0)|| (newRightVec.y > 0 && rightVec.y < 0)){
+                location = oldLocation;
+            }
         }
 
         //target = pivot;
@@ -427,6 +438,7 @@ public class TrackballCamera extends Camera{
     }
     
     private Vec3F getUpVector(){
+        
         return Vec3F.cross(rightVec, forwardVec);
     }
     

@@ -40,6 +40,16 @@ public class Vec3F{
         return result;
     }
     
+    public static float angle(Vec3F vec1, Vec3F vec2){
+        
+        float n = Vec3F.dot(vec1, vec2);
+        float d = Vec3F.length(vec1)*Vec3F.length(vec2);
+        
+        float angle = (float) Math.acos(n/d);
+        
+        return angle;
+    }
+    
     public static Vec3F cross(Vec3F vec, Vec3F vec2){
         
         Vec3F dest = new Vec3F();

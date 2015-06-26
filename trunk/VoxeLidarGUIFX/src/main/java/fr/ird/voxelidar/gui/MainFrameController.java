@@ -1090,7 +1090,13 @@ public class MainFrameController implements Initializable {
             }
         });
         
-        textfieldResMultiRes.disableProperty().bind(checkboxMultiResAfter.selectedProperty().not());
+        checkboxMultiResAfter.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                textfieldResMultiRes.setDisable(!newValue);
+            }
+        });
 
         comboboxWeighting.disableProperty().bind(checkboxEnableWeighting.selectedProperty().not());
 
@@ -3269,142 +3275,134 @@ public class MainFrameController implements Initializable {
     private void onActionButtonLoadSelectedTask(ActionEvent event) {
 
         File selectedFile = listViewTaskList.getSelectionModel().getSelectedItem();
-        
+
         if (selectedFile != null) {
-            
-            String type = Configuration.readType(selectedFile);
-            
-            switch(type){
-                case "voxelisation":
-                    
-                    VoxelisationConfiguration cfg = new VoxelisationConfiguration();
-                    try {
-                        cfg.readConfiguration(selectedFile);
 
-                    } catch (Exception e) {
-                        logger.error(e);
-                        Alert alert = new Alert(AlertType.CONFIRMATION);
-                        alert.setHeaderText("Incorrect file");
-                        alert.setContentText("File is corrupted or cannot be read!\n"
-                                + "Do you want to keep it?");
-                        Optional<ButtonType> result = alert.showAndWait();
-                        if (result.get() == ButtonType.CANCEL) {
-                            listViewTaskList.getItems().remove(selectedFile);
-                        }
+            try {
 
-                        return;
-                    }
-                    
-                    if(cfg.getProcessMode() == VOXELISATION_ALS || 
-                            cfg.getProcessMode() == VOXELISATION_TLS ||
-                            cfg.getProcessMode() == MULTI_VOXELISATION_ALS_AND_MULTI_RES){
-                        
-                        VoxelParameters voxelParameters = cfg.getVoxelParameters();
-                        checkboxGenerateMultiBandRaster.setSelected(voxelParameters.isGenerateMultiBandRaster());
-                        
-                        if(voxelParameters.isGenerateMultiBandRaster()){
-                                                        
-                            textfieldRasterStartingHeight.setText(String.valueOf(voxelParameters.getRasterStartingHeight()));
-                            textfieldRasterHeightStep.setText(String.valueOf(voxelParameters.getRasterHeightStep()));
-                            textfieldRasterBandNumber.setText(String.valueOf(voxelParameters.getRasterBandNumber()));
-                            textfieldRasterResolution.setText(String.valueOf(voxelParameters.getRasterResolution()));
-                            checkboxDiscardVoxelFileWriting.setSelected(voxelParameters.isShortcutVoxelFileWriting());
-                        }
-                    }
+                String type = Configuration.readType(selectedFile);
 
-                    switch (cfg.getProcessMode()) {
-                        case VOXELISATION_ALS:
-                        case VOXELISATION_TLS:
+                switch (type) {
+                    case "multi-voxelisation":
+                    case "voxelisation":
 
-                            VoxelParameters voxelParameters = cfg.getVoxelParameters();
-                            textFieldEnterXMin.setText(String.valueOf(voxelParameters.bottomCorner.x));
-                            textFieldEnterYMin.setText(String.valueOf(voxelParameters.bottomCorner.y));
-                            textFieldEnterZMin.setText(String.valueOf(voxelParameters.bottomCorner.z));
+                        VoxelisationConfiguration cfg = new VoxelisationConfiguration();
+                        try {
+                            cfg.readConfiguration(selectedFile);
 
-                            textFieldEnterXMax.setText(String.valueOf(voxelParameters.topCorner.x));
-                            textFieldEnterYMax.setText(String.valueOf(voxelParameters.topCorner.y));
-                            textFieldEnterZMax.setText(String.valueOf(voxelParameters.topCorner.z));
-
-                            textFieldXNumber.setText(String.valueOf(voxelParameters.split.x));
-                            textFieldYNumber.setText(String.valueOf(voxelParameters.split.y));
-                            textFieldZNumber.setText(String.valueOf(voxelParameters.split.z));
-
-                            textFieldResolution.setText(String.valueOf(voxelParameters.resolution));
-
-                            checkboxUseDTMFilter.setSelected(voxelParameters.useDTMCorrection());
-                            File tmpFile = voxelParameters.getDtmFile();
-                            if (tmpFile != null) {
-                                textfieldDTMPath.setText(tmpFile.getAbsolutePath());
-                                textfieldDTMValue.setText(String.valueOf(voxelParameters.minDTMDistance));
+                        } catch (Exception e) {
+                            logger.error(e);
+                            Alert alert = new Alert(AlertType.CONFIRMATION);
+                            alert.setHeaderText("Incorrect file");
+                            alert.setContentText("File is corrupted or cannot be read!\n"
+                                    + "Do you want to keep it?");
+                            Optional<ButtonType> result = alert.showAndWait();
+                            if (result.get() == ButtonType.CANCEL) {
+                                listViewTaskList.getItems().remove(selectedFile);
                             }
 
-                            checkboxUsePointcloudFilter.setSelected(voxelParameters.isUsePointCloudFilter());
-                            List<PointcloudFilter> pointcloudFilters = voxelParameters.getPointcloudFilters();
-                            if (pointcloudFilters != null) {
+                            return;
+                        }
 
-                                clearPointcloudFiltersPane();
+                        switch (cfg.getProcessMode()) {
 
-                                for (PointcloudFilter filter : pointcloudFilters) {
-                                    PointCloudFilterPaneComponent pane = addPointcloudFilterComponent();
-                                    pane.getTextfieldPointCloudPath().setText(filter.getPointcloudFile().getAbsolutePath());
-                                    pane.getTextfieldPointCloudErrorMargin().setText(String.valueOf(filter.getPointcloudErrorMargin()));
+                            case VOXELISATION_ALS:
+                            case VOXELISATION_TLS:
+                            case MULTI_VOXELISATION_ALS_AND_MULTI_RES:
 
-                                    int index;
-                                    if (filter.isKeep()) {
-                                        index = 0;
-                                    } else {
-                                        index = 1;
-                                    }
-                                    pane.getComboboxPointCloudFilteringType().getSelectionModel().select(index);
+                                VoxelParameters voxelParameters = cfg.getVoxelParameters();
+                                checkboxGenerateMultiBandRaster.setSelected(voxelParameters.isGenerateMultiBandRaster());
+
+                                if (voxelParameters.isGenerateMultiBandRaster()) {
+
+                                    textfieldRasterStartingHeight.setText(String.valueOf(voxelParameters.getRasterStartingHeight()));
+                                    textfieldRasterHeightStep.setText(String.valueOf(voxelParameters.getRasterHeightStep()));
+                                    textfieldRasterBandNumber.setText(String.valueOf(voxelParameters.getRasterBandNumber()));
+                                    textfieldRasterResolution.setText(String.valueOf(voxelParameters.getRasterResolution()));
+                                    checkboxDiscardVoxelFileWriting.setSelected(voxelParameters.isShortcutVoxelFileWriting());
                                 }
-                            }
 
-                            checkboxUsePopMatrix.setSelected(cfg.isUsePopMatrix());
-                            checkboxUseSopMatrix.setSelected(cfg.isUseSopMatrix());
-                            checkboxUseVopMatrix.setSelected(cfg.isUseVopMatrix());
-                            List<Integer> classifiedPointsToDiscard = cfg.getClassifiedPointsToDiscard();
-                            
-                            for(Integer i :classifiedPointsToDiscard){
-                                listviewClassifications.getItems().get(i).setSelected(false);
-                            }
+                                textFieldResolution.setText(String.valueOf(voxelParameters.resolution));
 
-                            textFieldPADMax.setText(String.valueOf(cfg.getVoxelParameters().getMaxPAD()));
+                                checkboxUseDTMFilter.setSelected(voxelParameters.useDTMCorrection());
+                                File tmpFile = voxelParameters.getDtmFile();
+                                if (tmpFile != null) {
+                                    textfieldDTMPath.setText(tmpFile.getAbsolutePath());
+                                    textfieldDTMValue.setText(String.valueOf(voxelParameters.minDTMDistance));
+                                }
 
-                            popMatrix = cfg.getPopMatrix();
-                            sopMatrix = cfg.getSopMatrix();
-                            vopMatrix = cfg.getVopMatrix();
+                                checkboxUsePointcloudFilter.setSelected(voxelParameters.isUsePointCloudFilter());
+                                List<PointcloudFilter> pointcloudFilters = voxelParameters.getPointcloudFilters();
+                                if (pointcloudFilters != null) {
 
-                            if (popMatrix == null) {
-                                popMatrix = new Matrix4d();
-                                popMatrix.setIdentity();
-                            }
+                                    clearPointcloudFiltersPane();
 
-                            if (sopMatrix == null) {
-                                sopMatrix = new Matrix4d();
-                                sopMatrix.setIdentity();
-                            }
+                                    for (PointcloudFilter filter : pointcloudFilters) {
+                                        PointCloudFilterPaneComponent pane = addPointcloudFilterComponent();
+                                        pane.getTextfieldPointCloudPath().setText(filter.getPointcloudFile().getAbsolutePath());
+                                        pane.getTextfieldPointCloudErrorMargin().setText(String.valueOf(filter.getPointcloudErrorMargin()));
 
-                            if (vopMatrix == null) {
-                                vopMatrix = new Matrix4d();
-                                vopMatrix.setIdentity();
-                            }
+                                        int index;
+                                        if (filter.isKeep()) {
+                                            index = 0;
+                                        } else {
+                                            index = 1;
+                                        }
+                                        pane.getComboboxPointCloudFilteringType().getSelectionModel().select(index);
+                                    }
+                                }
 
-                            updateResultMatrix();
+                                checkboxUsePopMatrix.setSelected(cfg.isUsePopMatrix());
+                                checkboxUseSopMatrix.setSelected(cfg.isUseSopMatrix());
+                                checkboxUseVopMatrix.setSelected(cfg.isUseVopMatrix());
+                                List<Integer> classifiedPointsToDiscard = cfg.getClassifiedPointsToDiscard();
 
-                            List<Filter> filters = cfg.getFilters();
-                            if (filters != null) {
-                                listviewFilters.getItems().clear();
-                                listviewFilters.getItems().addAll(filters);
-                            }
+                                for (Integer i : classifiedPointsToDiscard) {
+                                    listviewClassifications.getItems().get(i).setSelected(false);
+                                }
 
-                            switch (cfg.getProcessMode()) {
+                                textFieldPADMax.setText(String.valueOf(cfg.getVoxelParameters().getMaxPAD()));
 
-                                case VOXELISATION_ALS:
+                                popMatrix = cfg.getPopMatrix();
+                                sopMatrix = cfg.getSopMatrix();
+                                vopMatrix = cfg.getVopMatrix();
+
+                                if (popMatrix == null) {
+                                    popMatrix = new Matrix4d();
+                                    popMatrix.setIdentity();
+                                }
+
+                                if (sopMatrix == null) {
+                                    sopMatrix = new Matrix4d();
+                                    sopMatrix.setIdentity();
+                                }
+
+                                if (vopMatrix == null) {
+                                    vopMatrix = new Matrix4d();
+                                    vopMatrix.setIdentity();
+                                }
+
+                                updateResultMatrix();
+
+                                List<Filter> filters = cfg.getFilters();
+                                if (filters != null) {
+                                    listviewFilters.getItems().clear();
+                                    listviewFilters.getItems().addAll(filters);
+                                }
+
+                                if (cfg.getVoxelParameters().getWeighting() == 0) {
+                                    checkboxEnableWeighting.setSelected(false);
+                                } else {
+                                    checkboxEnableWeighting.setSelected(true);
+                                    comboboxWeighting.getSelectionModel().select(cfg.getVoxelParameters().getWeighting() - 1);
+                                }
+
+                                comboboxFormulaTransmittance.getSelectionModel().select(cfg.getVoxelParameters().getTransmittanceMode());
+
+                                if (cfg.getProcessMode() == VOXELISATION_ALS || cfg.getProcessMode() == MULTI_VOXELISATION_ALS_AND_MULTI_RES) {
+
                                     tabPaneVoxelisation.getSelectionModel().select(0);
-
-                                    textFieldInputFileALS.setText(cfg.getInputFile().getAbsolutePath());
                                     textFieldTrajectoryFileALS.setText(cfg.getTrajectoryFile().getAbsolutePath());
-                                    textFieldOutputFileALS.setText(cfg.getOutputFile().getAbsolutePath());
 
                                     switch (cfg.getInputType()) {
                                         case LAS_FILE:
@@ -3427,8 +3425,29 @@ public class MainFrameController implements Initializable {
                                         textFieldOutputFileGroundEnergy.setText(cfg.getVoxelParameters().getGroundEnergyFile().getAbsolutePath());
                                     }
 
-                                    break;
-                                case VOXELISATION_TLS:
+                                    if (cfg.getProcessMode() == VOXELISATION_ALS) {
+
+                                        textFieldInputFileALS.setText(cfg.getInputFile().getAbsolutePath());
+                                        textFieldOutputFileALS.setText(cfg.getOutputFile().getAbsolutePath());
+
+                                    } else if (cfg.getProcessMode() == MULTI_VOXELISATION_ALS_AND_MULTI_RES) {
+
+                                        List<Input> inputs = cfg.getMultiProcessInputs();
+                                        StringBuilder inputFiles = new StringBuilder();
+
+                                        for (Input input : inputs) {
+                                            inputFiles.append(input.inputFile.getAbsolutePath()).append(";");
+                                        }
+
+                                        textFieldInputFileALS.setText(inputFiles.toString());
+
+                                        if (inputs.size() > 0) {
+                                            textFieldOutputFileALS.setText(inputs.get(0).outputFile.getParentFile().getAbsolutePath());
+                                            textFieldResolution.setText(String.valueOf(inputs.get(0).voxelParameters.resolution));
+                                        }
+                                    }
+
+                                } else if (cfg.getProcessMode() == VOXELISATION_TLS) {
 
                                     tabPaneVoxelisation.getSelectionModel().select(1);
 
@@ -3461,111 +3480,112 @@ public class MainFrameController implements Initializable {
                                         items = matricesAndFiles;
                                         doFilterOnScanListView();
                                     }
-                                    break;
-                            }
+                                }
 
-                            if (cfg.getVoxelParameters().getWeighting() == 0) {
-                                checkboxEnableWeighting.setSelected(false);
-                            } else {
-                                checkboxEnableWeighting.setSelected(true);
-                                comboboxWeighting.getSelectionModel().select(cfg.getVoxelParameters().getWeighting() - 1);
-                            }
+                                if (cfg.getProcessMode() == VOXELISATION_ALS || cfg.getProcessMode() == VOXELISATION_TLS) {
 
-                            comboboxFormulaTransmittance.getSelectionModel().select(cfg.getVoxelParameters().getTransmittanceMode());
+                                    textFieldEnterXMin.setText(String.valueOf(voxelParameters.bottomCorner.x));
+                                    textFieldEnterYMin.setText(String.valueOf(voxelParameters.bottomCorner.y));
+                                    textFieldEnterZMin.setText(String.valueOf(voxelParameters.bottomCorner.z));
 
-                            break;
+                                    textFieldEnterXMax.setText(String.valueOf(voxelParameters.topCorner.x));
+                                    textFieldEnterYMax.setText(String.valueOf(voxelParameters.topCorner.y));
+                                    textFieldEnterZMax.setText(String.valueOf(voxelParameters.topCorner.z));
 
-                        case MULTI_RES:
+                                    textFieldXNumber.setText(String.valueOf(voxelParameters.split.x));
+                                    textFieldYNumber.setText(String.valueOf(voxelParameters.split.y));
+                                    textFieldZNumber.setText(String.valueOf(voxelParameters.split.z));
 
-                            tabPaneVoxelisation.getSelectionModel().select(2);
-                            listViewMultiResVoxelFiles.getItems().addAll(cfg.getFiles());
-                            textFieldOutputFileMultiRes.setText(cfg.getOutputFile().getAbsolutePath());
-                            checkboxOverwritePadLimit.setSelected(!cfg.isMultiResUseDefaultMaxPad());
-                            break;
+                                }
 
-                        case MERGING:
+                                break;
 
-                            tabPaneVoxelisation.getSelectionModel().select(3);
+                            case MULTI_RES:
 
-                            List<File> files = cfg.getFiles();
+                                tabPaneVoxelisation.getSelectionModel().select(2);
+                                listViewMultiResVoxelFiles.getItems().addAll(cfg.getFiles());
+                                textFieldOutputFileMultiRes.setText(cfg.getOutputFile().getAbsolutePath());
+                                checkboxOverwritePadLimit.setSelected(!cfg.isMultiResUseDefaultMaxPad());
+                                break;
 
-                            if (files != null) {
-                                listViewVoxelsFiles.getItems().addAll(files);
-                            }
-                            textFieldOutputFileMerging.setText(cfg.getOutputFile().getAbsolutePath());
-                            textFieldPADMax.setText(String.valueOf(cfg.getVoxelParameters().getMaxPAD()));
+                            case MERGING:
 
-                            break;
+                                tabPaneVoxelisation.getSelectionModel().select(3);
 
-                    }
+                                List<File> files = cfg.getFiles();
 
-                    break;
-                    
-                case "transmittance":
-                    
-                    TransmittanceConfiguration transmConfiguration = new TransmittanceConfiguration();
-                    
-                    try{
+                                if (files != null) {
+                                    listViewVoxelsFiles.getItems().addAll(files);
+                                }
+                                textFieldOutputFileMerging.setText(cfg.getOutputFile().getAbsolutePath());
+                                textFieldPADMax.setText(String.valueOf(cfg.getVoxelParameters().getMaxPAD()));
+
+                                break;
+                        }
+
+                        break;
+
+                    case "transmittance":
+
+                        TransmittanceConfiguration transmConfiguration = new TransmittanceConfiguration();
+
                         transmConfiguration.readConfiguration(selectedFile);
                         Parameters params = transmConfiguration.getParameters();
-                        
+
                         textfieldVoxelFilePathTransmittance.setText(params.getInputFile().getAbsolutePath());
                         comboboxChooseDirectionsNumber.getSelectionModel().select(new Integer(params.getDirectionsNumber()));
                         radiobuttonScannerPosFile.setSelected(params.isUseScanPositionsFile());
                         radiobuttonScannerPosSquaredArea.setSelected(!params.isUseScanPositionsFile());
-                        
-                        if(params.isUseScanPositionsFile()){
+
+                        if (params.isUseScanPositionsFile()) {
                             textfieldScannerPointsPositionsFile.setText(params.getPointsPositionsFile().getAbsolutePath());
-                        }else{
-                            
-                            if(params.getCenterPoint() != null){
+                        } else {
+
+                            if (params.getCenterPoint() != null) {
                                 textfieldScannerPosCenterX.setText(String.valueOf(params.getCenterPoint().x));
                                 textfieldScannerPosCenterY.setText(String.valueOf(params.getCenterPoint().y));
                                 textfieldScannerPosCenterZ.setText(String.valueOf(params.getCenterPoint().z));
                             }
-                            
+
                             textfieldScannerWidthArea.setText(String.valueOf(params.getWidth()));
                             textfieldScannerStepArea.setText(String.valueOf(params.getStep()));
                         }
-                        
+
                         textfieldLatitudeRadians.setText(String.valueOf(params.getLatitudeRadians()));
                         data.clear();
-                        
+
                         List<SimulationPeriod> simulationPeriods = params.getSimulationPeriods();
-                        
-                        if(simulationPeriods != null){
+
+                        if (simulationPeriods != null) {
                             data.addAll(simulationPeriods);
                         }
-                        
+
                         checkboxGenerateBitmapFile.setSelected(params.isGenerateBitmapFile());
                         checkboxGenerateTextFile.setSelected(params.isGenerateTextFile());
-                        
-                        if(params.isGenerateBitmapFile() && params.getBitmapFile() != null){
+
+                        if (params.isGenerateBitmapFile() && params.getBitmapFile() != null) {
                             textfieldOutputBitmapFilePath.setText(params.getBitmapFile().getAbsolutePath());
                         }
-                        
-                        if(params.isGenerateTextFile() && params.getTextFile() != null){
+
+                        if (params.isGenerateTextFile() && params.getTextFile() != null) {
                             textfieldOutputTextFilePath.setText(params.getTextFile().getAbsolutePath());
                         }
-                        
-                        
-                    }catch(Exception e){
-                        
-                        logger.error(e);
-                        Alert alert = new Alert(AlertType.CONFIRMATION);
-                        alert.setHeaderText("Incorrect file");
-                        alert.setContentText("File is corrupted or cannot be read!\n"
-                                + "Do you want to keep it?");
-                        Optional<ButtonType> result = alert.showAndWait();
-                        if (result.get() == ButtonType.CANCEL) {
-                            listViewTaskList.getItems().remove(selectedFile);
-                        }
-                    }
-                    
-                    break;
+
+                        break;
+                }
+
+            } catch (Exception e) {
+
+                logger.error(e);
+                Alert alert = new Alert(AlertType.CONFIRMATION);
+                alert.setHeaderText("Incorrect file");
+                alert.setContentText("File is corrupted or cannot be read!\n"
+                        + "Do you want to keep it?");
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.CANCEL) {
+                    listViewTaskList.getItems().remove(selectedFile);
+                }
             }
-            
-            
         }
 
     }

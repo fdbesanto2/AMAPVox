@@ -19,19 +19,31 @@ For further information, please contact Gregoire Vincent.
 import fr.ird.voxelidar.transmittance.SimulationPeriod;
 import fr.ird.voxelidar.util.Period;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
+import java.util.function.UnaryOperator;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.ScheduledService;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import javafx.util.StringConverter;
 
 /**
  * FXML Controller class
@@ -41,34 +53,47 @@ import javafx.stage.Stage;
 
 
 public class DateChooserFrameController implements Initializable {
-    @FXML
-    private DatePicker datepickerStartDate;
-    @FXML
-    private TextField textfieldStartTime;
-    @FXML
-    private Button buttonIncreaseStartTime;
-    @FXML
-    private Button buttonDecreaseStartTime;
-    @FXML
-    private DatePicker datepickerEndDate;
-    @FXML
-    private TextField textfieldEndTime;
-    @FXML
-    private Button buttonIncreaseEndTime;
-    @FXML
-    private Button buttonAcceptDate;
     
     private boolean confirmed;
     private Stage stage;
+    private int currentStartHour;
+    private int currentStartMinute;
+    private int currentEndHour;
+    private int currentEndMinute;
+    
+    private NumberFormat numberFormat;
+    
+    @FXML
+    private DatePicker datepickerStartDate;
+    @FXML
+    private DatePicker datepickerEndDate;
     @FXML
     private TextField textfieldClearnessCoefficient;
+    @FXML
+    private TextField textfieldEndHour;
+    @FXML
+    private TextField textfieldEndMinute;
+    @FXML
+    private TextField textfieldStartHour;
+    @FXML
+    private TextField textfieldStartMinute;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
         confirmed = false;
+        
+        currentStartHour = Integer.valueOf(textfieldStartHour.getText());
+        currentStartMinute = Integer.valueOf(textfieldStartMinute.getText());
+        currentEndHour = Integer.valueOf(textfieldEndHour.getText());
+        currentEndMinute = Integer.valueOf(textfieldEndMinute.getText());
+        
+        numberFormat = NumberFormat.getInstance();
+        numberFormat.setMinimumIntegerDigits(2);
+        
     }    
 
     @FXML
@@ -77,17 +102,6 @@ public class DateChooserFrameController implements Initializable {
         stage.close();
     }
 
-    @FXML
-    private void onActionButtonIncreaseStartTime(ActionEvent event) {
-    }
-
-    @FXML
-    private void onActionButtonDecreaseStartTime(ActionEvent event) {
-    }
-
-    @FXML
-    private void onActionButtonIncreaseEndTime(ActionEvent event) {
-    }
     
     public void reset(){
         confirmed = false;
@@ -111,17 +125,15 @@ public class DateChooserFrameController implements Initializable {
 
             //start time
             startTime.setTime(date1);
-            String[] time = textfieldStartTime.getText().replaceAll(" ", "").split(":");
-            startTime.set(Calendar.HOUR, Integer.valueOf(time[0]));
-            startTime.set(Calendar.MINUTE, Integer.valueOf(time[1]));
+            startTime.set(Calendar.HOUR, currentStartHour);
+            startTime.set(Calendar.MINUTE, currentStartMinute);
             period.startDate = startTime;
 
             //end time
             Calendar endTime = Calendar.getInstance(TimeZone.getDefault());
             endTime.setTime(date2);
-            time = textfieldEndTime.getText().replaceAll(" ", "").split(":");
-            endTime.set(Calendar.HOUR, Integer.valueOf(time[0]));
-            endTime.set(Calendar.MINUTE, Integer.valueOf(time[1]));
+            endTime.set(Calendar.HOUR, currentEndHour);
+            endTime.set(Calendar.MINUTE, currentEndMinute);
             period.endDate = endTime;
 
             return new SimulationPeriod(period, Float.valueOf(textfieldClearnessCoefficient.getText()));
@@ -135,5 +147,103 @@ public class DateChooserFrameController implements Initializable {
     public void setStage(Stage stage){
         this.stage = stage;
     }
+
+    @FXML
+    private void onActionButtonIncreaseEndHour(ActionEvent event) {
+        
+        if(currentEndHour < 23){
+            currentEndHour++;
+        }else{
+            currentEndHour = 0;
+        }
+        
+        textfieldEndHour.setText(numberFormat.format(currentEndHour));
+    }
+
+    @FXML
+    private void onActionButtonDecreaseEndHour(ActionEvent event) {
+        
+        if(currentEndHour > 0){
+            currentEndHour--;
+        }else{
+            currentEndHour = 23;
+        }
+        
+        textfieldEndHour.setText(numberFormat.format(currentEndHour));
+    }
+
+    @FXML
+    private void onActionButtonIncreaseEndMinute(ActionEvent event) {
+        
+        if(currentEndMinute < 59){
+            currentEndMinute++;
+        }else{
+            currentEndMinute = 0;
+        }
+        
+        textfieldEndMinute.setText(numberFormat.format(currentEndMinute));
+    }
+
+    @FXML
+    private void onActionButtonDecreaseEndMinute(ActionEvent event) {
+        
+        if(currentEndMinute > 0){
+            currentEndMinute--;
+        }else{
+            currentEndMinute = 59;
+        }
+        
+        textfieldEndMinute.setText(numberFormat.format(currentEndMinute));
+    }
+
+    @FXML
+    private void onActionButtonIncreaseStartHour(ActionEvent event) {
+        
+        if(currentStartHour < 23){
+            currentStartHour++;
+        }else{
+            currentStartHour = 0;
+        }
+        
+        textfieldStartHour.setText(numberFormat.format(currentStartHour));
+    }
+
+    @FXML
+    private void onActionButtonDecreaseStartHour(ActionEvent event) {
+        
+        if(currentStartHour > 0){
+            currentStartHour--;
+        }else{
+            currentStartHour = 23;
+        }
+        
+        textfieldStartHour.setText(numberFormat.format(currentStartHour));
+    }
+
+    @FXML
+    private void onActionButtonIncreaseStartMinute(ActionEvent event) {
+        
+        if(currentStartMinute < 59){
+            currentStartMinute++;
+        }else{
+            currentStartMinute = 0;
+        }
+        
+        textfieldStartMinute.setText(numberFormat.format(currentStartMinute));
+    }
+
+    @FXML
+    private void onActionButtonDecreaseStartMinute(ActionEvent event) {
+        
+        if(currentStartMinute > 0){
+            currentStartMinute--;
+        }else{
+            currentStartMinute = 59;
+        }
+        
+        textfieldStartMinute.setText(numberFormat.format(currentStartMinute));
+    }
+
+    
     
 }

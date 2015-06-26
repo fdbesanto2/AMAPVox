@@ -27,7 +27,6 @@ import fr.ird.voxelidar.voxelisation.raytracing.voxel.Scene;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Calendar;
-import java.util.logging.Level;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
 /**
@@ -44,6 +43,7 @@ public class PadTransmittance {
     private final Point3d vsMax;
     private final Point3i splitting;
     private double[][][] transmissionPeriod;
+    private int nbPeriods;
     private float mnt[][];
     private float mntZmax;
     private float mntZmin;
@@ -66,9 +66,7 @@ public class PadTransmittance {
         vsMax = new Point3d();
         splitting = new Point3i();
         
-        int nbDirections = parameters.getDirectionsNumber();
-        
-        turtle = new Turtle(nbDirections);
+        turtle = new Turtle(parameters.getDirectionsNumber());
         logger.info("Turtle built with " + turtle.getNbDirections() + " sectors");
     }
     
@@ -94,10 +92,7 @@ public class PadTransmittance {
             Time time2 = new Time(c2.get(Calendar.YEAR), c2.get(Calendar.DAY_OF_YEAR), c2.get(Calendar.HOUR_OF_DAY), c2.get(Calendar.MINUTE));
             
             solRad.add(SolarRadiation.globalTurtleIntegrate(turtle, (float) Math.toRadians(parameters.getLatitudeRadians()), period.getClearnessCoefficient(), time1, time2));
-        }
-
-        int n = 0;
-        double transmitted;
+        }        
 
         transmissionPeriod = new double[splitting.x][][];
         for (int x = 0; x < splitting.x; x++) {
@@ -109,25 +104,29 @@ public class PadTransmittance {
                 }
             }
         }
+        
+        nbPeriods = solRad.size();
 
         // TRANSMITTANCE
         logger.info("Computation of transmittance");
-        int month = 0;
-
-        IncidentRadiation ir = solRad.get(month);
         
-        for (Point3d pos : positions) {
+        int n = 0;
+        double transmitted;
+
+        IncidentRadiation ir = solRad.get(0);
+        
+        for (Point3d position : positions) {
             
-            int i = (int) ((pos.x - vsMin.x) / voxSpace.getVoxelSize().x);
-            int j = (int) ((pos.y - vsMin.y) / voxSpace.getVoxelSize().y);
+            int i = (int) ((position.x - vsMin.x) / voxSpace.getVoxelSize().x);
+            int j = (int) ((position.y - vsMin.y) / voxSpace.getVoxelSize().y);
             
             for (int t = 0; t < turtle.getNbDirections(); t++) {
                 
                 Vector3d dir = new Vector3d(ir.directions[t]);
                 dir.normalize();
 
-                List<Double> distances = distToVoxelWalls(new Point3d(pos), dir);
-                transmitted = directionalTransmittance(new Point3d(pos), distances, dir);
+                List<Double> distances = distToVoxelWalls(position, dir);
+                transmitted = directionalTransmittance(position, distances, dir);
                 
                 int m = 0;
                 for(IncidentRadiation incidentRadiation : solRad){
@@ -139,7 +138,6 @@ public class PadTransmittance {
             
             for(int m = 0 ; m<solRad.size() ; m++){
                 transmissionPeriod[i][j][m] /= ir.global;
-                
             }
 
             n++;
@@ -157,7 +155,7 @@ public class PadTransmittance {
         
         int zoom = 2;
         
-        for(int k=0;k<transmissionPeriod[0][0].length;k++){
+        for(int k=0;k<nbPeriods;k++){
             
             File outputFile = new File(parameters.getBitmapFile()+File.separator+"period_"+(k+1)+".bmp");
             logger.info("Writing file "+outputFile);
@@ -168,7 +166,20 @@ public class PadTransmittance {
             // background
             g.setColor(new Color(80, 30, 0));
             g.fillRect(0, 0, splitting.x * zoom, splitting.y * zoom);
-
+            
+            for(Point3d position : positions){
+                                
+                int i = (int) ((position.x - vsMin.x) / voxSpace.getVoxelSize().x);
+                int j = (int) ((position.y - vsMin.y) / voxSpace.getVoxelSize().y);
+                
+                float col = (float) (transmissionPeriod[i][j][k] / 0.1);
+                col = Math.min(col, 1);
+                Color c = Colouring.rainbow(col);
+                g.setColor(c);
+                int jj = splitting.y - j - 1;
+                g.fillRect(i * zoom, jj * zoom, zoom, zoom);
+            }
+/*
             for (int i = 0; i < splitting.x; i++) {
                 for (int j = 0; j < splitting.y; j++) {
 
@@ -179,7 +190,7 @@ public class PadTransmittance {
                     g.fillRect(i * zoom, jj * zoom, zoom, zoom);
                 }
             }
-
+*/
             try {
                 ImageIO.write(bimg, "bmp", outputFile);
                 logger.info("File "+outputFile+" written");
@@ -513,61 +524,54 @@ public class PadTransmittance {
             
             logger.info("Writing file "+parameters.getTextFile().getAbsolutePath());
             
-            bw.write("Voxel space\n");
-            bw.write("  min corner:\t" + vsMin + "\n");
-            bw.write("  max corner:\t" + vsMax + "\n");
-            bw.write("  splitting:\t" + splitting + "\n\n");
+            String metadata = "Voxel space\n"+
+                              "  min corner:\t" + vsMin + "\n"+
+                              "  max corner:\t" + vsMax + "\n"+
+                              "  splitting:\t" + splitting + "\n\n"+
+                              "latitude (degrees)\t"+parameters.getLatitudeRadians()+"\n\n";
+                    
+            bw.write(metadata);
             
-            bw.write("latitude (degrees)\t"+parameters.getLatitudeRadians()+"\n\n");
-            
-            String header = "index X\tindex Y\t";
+            String header = "position X\tposition Y\tposition Z\t";
             String periodsInfos = "";
-            String periodsInfosHeader = "period\tclearness coefficient";
+            String periodsInfosHeader = "period ID\tstart\tend\tclearness";
             
             int count = 1;
             for(SimulationPeriod period : parameters.getSimulationPeriods()){
                 
-                String periodTimeRange = Period.getDate(period.getPeriod().startDate)+"->"+Period.getDate(period.getPeriod().endDate)+"\t";
-                header += periodTimeRange;
-                periodsInfos += "Period "+count+" : "+periodTimeRange+period.getClearnessCoefficient()+"\n";
+                String periodName = "Period "+count;
+                header += periodName+"\t";
+                periodsInfos += periodName+"\t"+Period.getDate(period.getPeriod().startDate)+"\t"+Period.getDate(period.getPeriod().endDate)+"\t"+period.getClearnessCoefficient()+"\n";
                         
                 count++;
             }
             
-            bw.write(periodsInfosHeader+"\n");
-            bw.write(periodsInfos+"\n");
+            bw.write(periodsInfosHeader+"\n"+
+                     periodsInfos+"\n");
+            
             bw.write(header+"\n");
-            //bw.write("index X\tindex Y\tJanuary\tFebruary\tMarch\tApril\tMay\tJune\tJuly\tAugust\tSeptember\tOctober\tNovember\tDecember\n");
             
             float mean[] = new float[transmissionPeriod[0][0].length];
-            int size = (int)parameters.getWidth();
-            int n = 0;
-            /*
-            for(int i = 0;i<positions.size();i++){
-                
-                int idI = 
-                bw.write("\t" + transmissionPeriod[i][j][m]);
-                (positions.get(i).x)/splitting.x;
-            }*/
             
-            for (int i = (splitting.x / 2) - size; i < (splitting.x / 2) + size; i++) {
-                for (int j = (splitting.y / 2) - size; j < (splitting.y / 2) + size; j++) {
-                    bw.write(i + "\t" + j);
-                    n++;
-                    
-                    for (int m = 0; m < transmissionPeriod[i][j].length; m++) {
-                        bw.write("\t" + transmissionPeriod[i][j][m]);
-                        mean[m] += transmissionPeriod[i][j][m];
-                    }
-                    bw.write("\n");
-                    
+            for(Point3d position : positions){
+                
+                bw.write(position.x + "\t" + position.y + "\t" + position.z);
+                
+                int i = (int) ((position.x - vsMin.x) / voxSpace.getVoxelSize().x);
+                int j = (int) ((position.y - vsMin.y) / voxSpace.getVoxelSize().y);
+                
+                for (int m = 0; m < transmissionPeriod[i][j].length; m++) {
+                    bw.write("\t" + transmissionPeriod[i][j][m]);
+                    mean[m] += transmissionPeriod[i][j][m];
                 }
+                
+                bw.write("\n");
             }
             
             float yearlyMean = 0;
             bw.write("\nPERIOD\tMEAN");
             for (int m = 0; m < transmissionPeriod[0][0].length; m++) {
-                mean[m] /= (float) n;
+                mean[m] /= (float) positions.size();
                 bw.write("\t" + mean[m]);
                 yearlyMean += mean[m];
             }

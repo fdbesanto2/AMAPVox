@@ -122,116 +122,16 @@ public class SolarRadiation {
 		}
 	}
 
-	// turtle rotated
-	// public void globalInTurtleNew (IncidentRadiation ir, Turtle turtle, Sun
-	// sun) {
-	// // Turtle turtle= new Turtle ();
-	// float[] turtleDirect = null;
-	// float[] turtleDiffuse = new float[46];
-	// ir.directionalGlobal = new float[46];
-	//
-	// if (ir.global > 0) {
-	// float directDir = (float) (ir.direct / Math.sin (sun.zenith));
-	// turtleDirect = sun.directInTurtle46 (turtle, directDir);
-	// float totalDirect = 0;
-	// float totalDiffuse = 0;
-	// for (int d = 0; d < 46; d++) {
-	// float zenith = (float) (Math.PI / 2f) - turtle.elev[d];
-	// float azim = turtle.azimut[d];
-	// // TODO: sampling around central direction
-	// turtleDiffuse[d] = Sky.brightnessNorm (ir.diffuse, ir.global, zenith,
-	// azim, sun.zenith, sun.azimuth);
-	// // "coeff" is applied to get radiation on a horizontal plane
-	// // float coeff= turtle.directions.get(d).getZ();
-	// float coeff = (float) Math.cos (zenith);
-	// totalDirect += turtleDirect[d] * coeff;
-	// totalDiffuse += turtleDiffuse[d] * coeff;
-	// }
-	// // System.out.println (totalDiffuse/this.diffuse);
-	// for (int d = 0; d < 46; d++) {
-	// turtleDiffuse[d] = turtleDiffuse[d] * ir.diffuse / totalDiffuse;
-	// if (totalDirect > 0) turtleDirect[d] = turtleDirect[d] * ir.direct /
-	// totalDirect;
-	//
-	// ir.directionalGlobal[d] = turtleDirect[d] + turtleDiffuse[d];
-	// }
-	// }
-	// }
-
 	/**
-	 * new method with subsampling within sectors
-	 * 
-	 * @param turtle
-	 * @param sun
-	 */
-	// public void globalInTurtle92 (Turtle92 turtle, Sun sun) {
-	// float[] turtleDirect = new float[46];
-	// directionalGlobal = new Float[46];
-	//
-	// if (this.global > 0) {
-	// float directDir = (float) (direct / Math.cos (sun.zenith));
-	// turtleDirect = sun.directInTurtle92 (turtle, directDir);
-	//
-	// /*
-	// * // calculation of sky brightness in sectors float sampleTotal= 0; for
-	// (int s=0; s<46;
-	// * s++) { float sectorBrightness= 0; directionalGlobal[s]= 0f; if
-	// * (turtle.sampling[s].pointList.get(0).z > 0) // upward { float
-	// sampleSolidAngle=
-	// * turtle.solidAngle[s]/turtle.sampling[s].pointList.size(); // Find sky
-	// brightness in
-	// * sampling directions for (int d=0;
-	// d<turtle.sampling[s].pointList.size(); d++) {
-	// * Point3D directionSky= turtle.sampling[s].pointList.get(d); if
-	// (directionSky.z > 0) {
-	// * float zenith= (float) Math.acos(directionSky.z); float azim=
-	// * PolarCoordinates.xyAzimuthTrigo(directionSky.x, directionSky.y); azim
-	// -= Math.PI / 2;
-	// * // azimuth 0 => North
-	// *
-	// * float sampleBrightness= Sky.brightness (this.diffuse, this.global,
-	// zenith, azim,
-	// * sun.zenith, sun.azimuth); // sampleBrightness*= directionSky.z;//XXX
-	// sampleTotal+=
-	// * sampleBrightness * sampleSolidAngle; sectorBrightness+=
-	// sampleBrightness; } }
-	// *
-	// * sectorBrightness /= turtle.sampling[s].pointList.size(); //
-	// sectorBrightness /=
-	// * turtle.directions[s].getZ(); // sectorBrightness /=
-	// * turtle.sampling[s].pointList.get(0).z;//XXX //
-	// System.out.println(sectorBrightness);
-	// * directionalGlobal[s] += sectorBrightness * turtle.solidAngle[s]; }
-	// directionalGlobal[s]+=
-	// * turtleDirect[s]; //System.out.println (directionalGlobal[s]); }
-	// */
-	// for (int s = 0; s < 46; s++) {
-	// directionalGlobal[s] = 0f;
-	// if (turtle.sampling[s].pointList.get (0).z > 0) // upward
-	// {
-	// float sectorBrightness = 0;
-	// float zenith = (float) Math.acos (turtle.sampling[s].pointList.get
-	// (0).z);
-	// float azim = PolarCoordinates.xyAzimuthTrigo
-	// (turtle.sampling[s].pointList.get (0).x,
-	// turtle.sampling[s].pointList.get (0).y);
-	// azim -= Math.PI / 2; // azimuth 0 => North
-	// sectorBrightness = Sky.brightness (this.diffuse, this.global, zenith,
-	// azim, sun.zenith,
-	// sun.azimuth);
-	// directionalGlobal[s] = sectorBrightness * turtle.solidAngle[s];
-	// }
-	// directionalGlobal[s] += turtleDirect[s];
-	// }
-	// }
-	// }
-
-	/**
-	 * Creates an IncidentRadiation object based on a turtle with 46 directions.
+	 * Creates an IncidentRadiation object based on a turtle with n directions.
 	 * Radiation is integrated over the period time1 to time2.
 	 * 
-	 * @param clearness
-	 *            in [0,1]
+     * @param t
+     * @param latitudeRadian
+     * @param clearness in [0,1]
+     * @param time1
+     * @param time2
+     * @return 
 	 */
 	static public IncidentRadiation globalTurtleIntegrate(Turtle t,
 			float latitudeRadian, float clearness, Time time1, Time time2) {
@@ -278,188 +178,7 @@ public class SolarRadiation {
 
 		return ir;
 	}
-
-	/**
-	 * Computes incident
-	 * 
-	 * @param turtle
-	 * @param latitude
-	 *            (degrees)
-	 * @param clearness
-	 *            : clearness index
-	 * @param time1
-	 * @param time2
-	 * @return cumulated radiation in MJ m-2
-	 */
-	// public static SolarRadiation globalInTurtle92Integrate (Turtle92 turtle,
-	// float latitude,
-	// float clearness, Time time1, Time time2) {
-	// Sun sun = new Sun ();
-	// boolean printDetails = false;
-	//
-	// SolarRadiation cumulatedRad = new SolarRadiation ();
-	// // System.out.println (cumulatedRad.toString());
-	//
-	// int doy;
-	// int doy1 = (time1.year * 365) + time1.doy;
-	// int doy2 = (time2.year * 365) + time2.doy;
-	// float hd1, hd2;
-	// // System.out.print("\nDOY ");
-	//
-	// for (doy = doy1; doy <= doy2; doy++) {
-	// // System.out.print(".");
-	// if (doy == time1.doy)
-	// hd1 = time1.hourDecimal;
-	// else
-	// hd1 = 0f;
-	// if (doy == time2.doy)
-	// hd2 = time2.hourDecimal;
-	// else
-	// hd2 = 24f;
-	//
-	// float timeStep = 0.1f;
-	// float duration = timeStep;
-	//
-	// if (printDetails)
-	// System.out.println ("\nFlux density along the period (W m2 s-1)");
-	// else
-	// System.out.print (".");
-	// for (float h = hd1; h < hd2; h += timeStep) {
-	// duration = Math.min (timeStep, hd2 - h);
-	// float hd = h + (duration / 2);
-	// sun.position (latitude, doy, hd);
-	// SolarRadiation radi = new SolarRadiation ();
-	// float globalMJ = clearness * SolarRadiation.extraTerrestrialHourly
-	// (latitude, doy, h, h +
-	// duration);
-	// if (globalMJ > 0) {
-	// if (duration > 0) {
-	// radi.global = globalMJ * 1000000 / (duration * 3600);
-	// }
-	// radi.globalPartitioningHourly (clearness, sun.elevation);
-	// radi.globalInTurtle92 (turtle, sun);
-	// float globalDir = 0;
-	// for (int s = 0; s < 46; s++) {
-	// double cosZenith = Math.cos (turtle.zenith[s]);
-	// if ((radi.global > 0) && (cosZenith > 0)) globalDir +=
-	// radi.directionalGlobal[s] * cosZenith;
-	// }
-	// cumulatedRad.globalCumulateMJ (radi, duration);
-	// } else {
-	// radi.global = radi.direct = radi.diffuse = 0;
-	// }
-	// if (printDetails) {
-	// // System.out.println (radi.toString());
-	// //
-	// System.out.print("D"+doy+" "+Time.hourMinute(h)+" to "+Time.hourMinute(h+duration));
-	// System.out.print ("D" + doy + " " + time1.toString () + " to " +
-	// time2.toString ());
-	// System.out.println ("\tGlobal= " + radi.global + "\t(direct=" +
-	// radi.direct + " diffuse=" +
-	// radi.diffuse + ")");
-	// }
-	//
-	// }
-	// }
-	// // System.out.println
-	// ("rrrrrrrrrrrrrrrrrrrrrrrrrrrrr"+cumulatedRad.toString());
-	//
-	// return cumulatedRad;
-	// }
-
-	/**
-	 * Computes incident
-	 * 
-	 * @param turtle
-	 * @param latitude
-	 *            (degrees)
-	 * @param clearness
-	 *            : clearness index
-	 * @param time1
-	 * @param time2
-	 * @return cumulated radiation in MJ m-2
-	 */
-	// public static SolarRadiation globalInTurtle92Yearly (Turtle92 turtle,
-	// float latitude, float
-	// clearness) {
-	// Time time1 = new Time (0, 0, 0);
-	// Time time2 = new Time (0, 365, 0);
-	// Sun sun = new Sun ();
-	//
-	// SolarRadiation cumulatedRad = new SolarRadiation ();
-	//
-	// int doy;
-	//
-	// float hd1;
-	// float hd2;
-	// // System.out.print("\nDOY ");
-	// int dayStep = 5;
-	// for (doy = time1.doy; doy <= time2.doy; doy += dayStep) {
-	// // System.out.print(".");
-	// if (doy == time1.doy)
-	// hd1 = time1.hourDecimal;
-	// else
-	// hd1 = 0f;
-	// if (doy == time2.doy)
-	// hd2 = time2.hourDecimal;
-	// else
-	// hd2 = 24f;
-	//
-	// float timeStep = 0.2f;
-	// for (float h = hd1; h < hd2; h += timeStep) {
-	// timeStep = Math.min (timeStep, hd2 - h);
-	// float hd = h + (timeStep / 2);
-	// sun.position (latitude, doy, hd);
-	//
-	// SolarRadiation radi = new SolarRadiation ();
-	// float duration = timeStep;
-	// float globalMJ = clearness * SolarRadiation.extraTerrestrialHourly
-	// (latitude, doy, h, h +
-	// duration);
-	// if (duration > 0) radi.global = globalMJ * 1000000 / (duration * 3600);
-	//
-	// radi.globalPartitioningHourly (clearness, sun.elevation);
-	//
-	// radi.globalInTurtle92 (turtle, sun);
-	//
-	// float globalDir = 0;
-	// for (int s = 0; s < 46; s++) {
-	// double cosZenith = Math.cos (turtle.zenith[s]);
-	// if ((radi.global > 0) && (cosZenith > 0)) globalDir +=
-	// radi.directionalGlobal[s] * cosZenith;
-	// }
-	//
-	// cumulatedRad.globalCumulateMJ (radi, duration * dayStep);
-	// }
-	// }
-	//
-	// return cumulatedRad;
-	// }
-
-	/**
-	 * Assess proportion of SOC in diffuse radiation by comparing
-	 * (diffuse/global) to diffuseGlobalHourlyClear (the ratio is between R, for
-	 * clear sky, and 1, for overcast sky (SOC)
-	 * 
-	 * @param sunElevation
-	 *            (radians)
-	 * @return ratio (diffuse SOC : diffuse total)
-	 */
-	// public static float socInDiffuseHourly (IncidentRadiation ir, float
-	// sunElevation) {
-	// float fractionSoc;
-	//
-	// if ((ir.global <= 0) || (sunElevation <= 0)) {
-	// fractionSoc = 0.5f;
-	// return fractionSoc;
-	// }
-	//
-	// float R = diffuseInGlobalHourlyClear (sunElevation);
-	//
-	// fractionSoc = ((ir.diffuse / ir.global) - R) / (1 - R);
-	//
-	// return fractionSoc;
-	// }
+	
 
 	/**
 	 * Assess proportion of SOC in diffuse radiation by comparing
@@ -521,36 +240,7 @@ public class SolarRadiation {
 		ir.global = clearness * extraTerrestrialDaily(latitude, doy);
 		globalPartitioningDaily(ir, clearness);
 	}
-
-	// public void globalDirectDiffusehourlyOld (float latitude, int doy, float
-	// sunElevation, float
-	// clearness)
-	// {
-	// global= clearness * extraTerrestrialHourlyOld (latitude, doy,
-	// sunElevation);
-	// globalPartitioningHourly (clearness, sunElevation);
-	// }
-
-	// public void globalDirectDiffusehourly (float clearness, float
-	// sunElevation)
-	// {
-	// globalPartitioningHourly (clearness, sunElevation);
-	// }
-
-	// /** Daily incident solar radiation above the atmosphere
-	// * @param doy: Day of Year
-	// * @return average incident flux in Watts m-2
-	// */
-	// static float extraTerrestrialDailyWm2 (int doy)
-	// {
-	// float ext_rad;
-	//
-	// ext_rad = 1370; // solar constant (I.E.A., 1978; in Spitters et al.,
-	// 1986)
-	// ext_rad *= 1.0 + 0.033* Math.cos (2*Math.PI*(float) doy/365);
-	//
-	// return (ext_rad);
-	// }
+	
 
 	/**
 	 * Daily incident solar radiation above the atmosphere
@@ -583,30 +273,7 @@ public class SolarRadiation {
 		return (float) extra_rad;
 	}
 
-	// /** Incident solar radiation above the atmosphere for a given sun
-	// elevation
-	// * @param doy: Day of Year
-	// * @param sunElevation: sun elevation in radians
-	// * @return incident flux in Watts m-2
-	// */
-	// float extraTerrestrialHourlyWm2 (int doy, float sunElevation)
-	// {
-	// return (float) (extraTerrestrialDailyWm2 (doy) * Math.sin
-	// (sunElevation));
-	// }
-
-	// /** Incident solar radiation above the atmosphere for a given sun
-	// elevation
-	// * @param doy: Day of Year
-	// * @param sunElevation: sun elevation in radians
-	// * @return incident flux in Watts m-2
-	// */
-	// float extraTerrestrialHourlyOld (float latitude, int doy, float
-	// sunElevation)
-	// {
-	// return (float) (extraTerrestrialDaily (latitude, doy) * Math.sin
-	// (sunElevation));
-	// }
+	
 
 	/**
 	 * Hourly (or shorter time laps) incident solar radiation above the
@@ -656,16 +323,6 @@ public class SolarRadiation {
 
 		return (float) extra_rad;
 	}
-
-	// public void turtleRadiation (Sun sun)
-	// {
-	// Turtle turtle= new Turtle ();
-	// for (int d=0; d<turtle.directions.size(); d++)
-	// {
-	// directionalFluxes= new Float [turtle.directions.size()];
-	// directionalFluxes[d]= 0f;
-	// }
-	// }
 
 	/**
 	 * Add ir2 components to ir1

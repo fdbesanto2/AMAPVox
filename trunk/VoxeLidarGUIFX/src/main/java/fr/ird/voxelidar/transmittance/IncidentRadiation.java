@@ -17,10 +17,11 @@ public class IncidentRadiation implements DirectionList {
 	public float[] directionalDiffuse;
 	public float[] directionalGlobals; // MJ
 	public Vector3f[] directions;
-	private int size;
+	private final int size;
 
 	/**
 	 * Constructor
+     * @param size
 	 */
 	public IncidentRadiation (int size) {
 		this.size = size;
