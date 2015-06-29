@@ -1,10 +1,8 @@
 package fr.ird.voxelidar.transmittance;
 
-import fr.ird.voxelidar.io.file.FileManager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import javax.vecmath.Point3f;
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 
@@ -15,8 +13,12 @@ public class Turtle {
     private final static Logger logger = Logger.getLogger(Turtle.class);
     
     public Vector3f[] directions;
-    public float[] elevation;
-    public float[] azimuth;
+    private float[] elevation;
+    private float[] azimuth;
+    
+    public Turtle(){
+        
+    }
 
     public Turtle(int nbDirections) {
 
@@ -84,6 +86,18 @@ public class Turtle {
 
     public int getNbDirections() {
         return directions.length;
+    }
+
+    public void setDirections(Vector3f[] directions) {
+        this.directions = directions;
+    }
+
+    public void setElevation(float[] elevation) {
+        this.elevation = elevation;
+    }
+
+    public void setAzimuth(float[] azimuth) {
+        this.azimuth = azimuth;
     }
 
     /**

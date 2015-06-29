@@ -17,10 +17,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import javax.vecmath.Point2d;
 import javax.vecmath.Point3d;
 import org.apache.commons.collections.map.MultiKeyMap;
@@ -225,75 +223,11 @@ public class RegularDtm {
         return z;
     }
     
-    public void setLimits(Point3F min, Point3F max, int offset){
-        
-        //calculate the 4 corners
-        
-        min.x -= (offset*cellSize);
-        min.y -= (offset*cellSize);
-        
-        max.x += (offset*cellSize);
-        max.y += (offset*cellSize);
-        
-        Vec4D corner1 = Mat4D.multiply(inverseTransfMat, new Vec4D(min.x, min.y, min.z, 1));
-        Vec4D corner2 = Mat4D.multiply(inverseTransfMat,  new Vec4D(max.x, min.y, min.z, 1));
-        Vec4D corner3 = Mat4D.multiply(inverseTransfMat, new Vec4D(max.x, max.y, max.z, 1));
-        Vec4D corner4 = Mat4D.multiply(inverseTransfMat,  new Vec4D(min.x, max.y, min.z, 1));
-        
-        float xMin = (float) corner1.x;
-        float yMin = (float) corner1.y;
-        float xMax = (float) corner3.x;
-        float yMax = (float) corner3.y;
-        
-        if(corner2.x < xMin){xMin = (float) corner2.x;}
-        if(corner2.x > xMax){xMax = (float) corner2.x;}
-        if(corner2.y < yMin){yMin = (float) corner2.y;}
-        if(corner2.y > yMax){yMax = (float) corner2.y;}
-        if(corner4.x < xMin){xMin = (float) corner4.x;}
-        if(corner4.x > xMax){xMax = (float) corner4.x;}
-        if(corner4.y < yMin){yMin = (float) corner4.y;}
-        if(corner4.y > yMax){yMax = (float) corner4.y;}
-        
-        
-        Point2F minPoint = new Point2F(xMin, yMin);
-        Point2F maxPoint = new Point2F(xMax, yMax);
-        
-                
-        indiceXMin = (int)((minPoint.x-xLeftLowerCorner)/cellSize);
-        if(indiceXMin < 0){
-            indiceXMin = -1;
-        }
-        
-        indiceYMin = (int)(rowNumber-(maxPoint.y-yLeftLowerCorner)/cellSize);
-        if(indiceYMin < 0){
-            indiceYMin = -1;
-        }
-        
-        indiceXMax = (int)((maxPoint.x-xLeftLowerCorner)/cellSize);
-        if(indiceXMax > zArray.length){
-            indiceXMax = -1;
-        }
-        
-        indiceYMax = (int)(rowNumber-(minPoint.y-yLeftLowerCorner)/cellSize);
-        if(indiceYMax > zArray[0].length){
-            indiceYMax = -1;
-        }
-        
-    }
-    
-    public RegularDtm subset(BoundingBox2F boundingBox2F, int offset){
-        
-        RegularDtm dtm = new RegularDtm();
+    private BoundingBox2F getLargestBoundingBox(BoundingBox2F boundingBox2F){
         
         //calculate the 4 corners
         Point2F min = boundingBox2F.min;
         Point2F max = boundingBox2F.max;
-        
-        min.x -= (offset*cellSize);
-        min.y -= (offset*cellSize);
-        
-        max.x += (offset*cellSize);
-        max.y += (offset*cellSize);
         
         Vec4D corner1 = Mat4D.multiply(inverseTransfMat, new Vec4D(min.x, min.y, 0, 1));
         Vec4D corner2 = Mat4D.multiply(inverseTransfMat,  new Vec4D(max.x, min.y, 0, 1));
@@ -305,45 +239,89 @@ public class RegularDtm {
         float xMax = (float) corner3.x;
         float yMax = (float) corner3.y;
         
-        if(corner2.x < xMin){xMin = (float) corner2.x;}
-        if(corner2.x > xMax){xMax = (float) corner2.x;}
-        if(corner2.y < yMin){yMin = (float) corner2.y;}
-        if(corner2.y > yMax){yMax = (float) corner2.y;}
-        if(corner4.x < xMin){xMin = (float) corner4.x;}
-        if(corner4.x > xMax){xMax = (float) corner4.x;}
-        if(corner4.y < yMin){yMin = (float) corner4.y;}
-        if(corner4.y > yMax){yMax = (float) corner4.y;}
+        xMin = Float.min(xMin, (float) Double.min(corner2.x, corner4.x));
+        yMin = Float.min(yMin, (float) Double.min(corner2.y, corner4.y));
         
+        xMax = Float.max(xMax, (float) Double.max(corner2.x, corner4.x));
+        yMax = Float.max(yMax, (float) Double.max(corner2.y, corner4.y));
         
-        Point2F minPoint = new Point2F(xMin, yMin);
-        Point2F maxPoint = new Point2F(xMax, yMax);
+        return new BoundingBox2F(new Point2F(xMin, yMin), new Point2F(xMax, yMax));
+    }
+    
+    public void setLimits(BoundingBox2F boundingBox, int offset){
+        
+        //calculate the 4 corners
+        
+        boundingBox.min.x -= (offset*cellSize);
+        boundingBox.min.y -= (offset*cellSize);
+        
+        boundingBox.max.x += (offset*cellSize);
+        boundingBox.max.y += (offset*cellSize);
+        
+        BoundingBox2F largestBoundingBox = getLargestBoundingBox(boundingBox);
+        
+        indiceXMin = (int)((largestBoundingBox.min.x-xLeftLowerCorner)/cellSize);
+        if(indiceXMin < 0){
+            indiceXMin = -1;
+        }
+        
+        indiceYMin = (int)(rowNumber-(largestBoundingBox.max.y-yLeftLowerCorner)/cellSize);
+        if(indiceYMin < 0){
+            indiceYMin = -1;
+        }
+        
+        indiceXMax = (int)((largestBoundingBox.max.x-xLeftLowerCorner)/cellSize);
+        if(indiceXMax > zArray.length){
+            indiceXMax = -1;
+        }
+        
+        indiceYMax = (int)(rowNumber-(largestBoundingBox.min.y-yLeftLowerCorner)/cellSize);
+        if(indiceYMax > zArray[0].length){
+            indiceYMax = -1;
+        }
+        
+    }
+    
+    public RegularDtm subset(BoundingBox2F boundingBox2F, int offset){
+        
+        RegularDtm dtm = new RegularDtm();
+        
+        //calculate the 4 corners
+        
+        boundingBox2F.min.x -= (offset*cellSize);
+        boundingBox2F.min.y -= (offset*cellSize);
+        
+        boundingBox2F.max.x += (offset*cellSize);
+        boundingBox2F.max.y += (offset*cellSize);
+        
+        BoundingBox2F largestBoundingBox = getLargestBoundingBox(boundingBox2F);
         
         int minXId, minYId;
         int maxXId, maxYId;  
         
                 
-        minXId = (int)((minPoint.x-xLeftLowerCorner)/cellSize);
+        minXId = (int)((largestBoundingBox.min.x-xLeftLowerCorner)/cellSize);
         if(minXId < 0){
             minXId = -1;
         }
         
-        minYId = (int)(rowNumber-(maxPoint.y-yLeftLowerCorner)/cellSize);
+        minYId = (int)(rowNumber-(largestBoundingBox.max.y-yLeftLowerCorner)/cellSize);
         if(minYId < 0){
             minYId = -1;
         }
         
-        maxXId = (int)((maxPoint.x-xLeftLowerCorner)/cellSize);
+        maxXId = (int)((largestBoundingBox.max.x-xLeftLowerCorner)/cellSize);
         if(maxXId > zArray.length){
             maxXId = -1;
         }
         
-        maxYId = (int)(rowNumber-(minPoint.y-yLeftLowerCorner)/cellSize);
+        maxYId = (int)(rowNumber-(largestBoundingBox.min.y-yLeftLowerCorner)/cellSize);
         if(maxYId > zArray[0].length){
             maxYId = -1;
         }
         
-        dtm.xLeftLowerCorner = minPoint.x;
-        dtm.yLeftLowerCorner = minPoint.y;
+        dtm.xLeftLowerCorner = largestBoundingBox.min.x;
+        dtm.yLeftLowerCorner = largestBoundingBox.min.y;
         dtm.cellSize = cellSize;
         dtm.rowNumber = maxYId-minYId;
         dtm.colNumber = maxXId-minXId;

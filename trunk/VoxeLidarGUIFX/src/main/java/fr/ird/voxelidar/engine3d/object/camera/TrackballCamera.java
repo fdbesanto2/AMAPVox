@@ -201,9 +201,10 @@ public class TrackballCamera extends Camera{
             float d = Vec3F.length(forwardVec)*Vec3F.length(up);
 
             float tilt = (float) (Math.acos(Math.abs(n/d)));
+            /*
             if(tilt == 0){
                 tilt = 0.18f;
-            }
+            }*/
 
             angle *= (tilt/(Math.PI/2.0d));
         

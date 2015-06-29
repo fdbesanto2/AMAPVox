@@ -146,7 +146,7 @@ public class TransmittanceConfiguration extends Configuration{
         processElement.addContent(scannersPositionsElement);
         
         //latitude (radians)
-        Element latitudeElement = new Element("latitude").setAttribute("value", String.valueOf(parameters.getLatitudeRadians()));
+        Element latitudeElement = new Element("latitude").setAttribute("value", String.valueOf(parameters.getLatitudeInDegrees()));
         processElement.addContent(latitudeElement);
         
         //simulation periods
@@ -283,7 +283,7 @@ public class TransmittanceConfiguration extends Configuration{
             
             String latitude = processElement.getChild("latitude").getAttributeValue("value");
             if(latitude != null){
-                parameters.setLatitudeRadians(Float.valueOf(latitude));
+                parameters.setLatitudeInDegrees(Float.valueOf(latitude));
             }
             
             Element simulationPeriodsElement = processElement.getChild("simulation-periods");

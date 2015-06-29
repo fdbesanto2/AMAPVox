@@ -26,7 +26,7 @@ import fr.amap.lidar.als.las.PointDataRecordFormat;
 import fr.ird.voxelidar.multires.ProcessingMultiRes;
 import fr.ird.voxelidar.octree.Octree;
 import fr.ird.voxelidar.octree.OctreeFactory;
-import fr.ird.voxelidar.transmittance.PadTransmittance;
+import fr.ird.voxelidar.transmittance.TransmittanceSim;
 import fr.ird.voxelidar.transmittance.Parameters;
 import fr.ird.voxelidar.util.Cancellable;
 import fr.ird.voxelidar.util.DataSet;
@@ -1327,7 +1327,7 @@ public class ProcessTool implements Cancellable{
     
     public void calculateTransmittance(Parameters parameters){
         
-        PadTransmittance padTransmittance = new PadTransmittance(parameters);
+        TransmittanceSim padTransmittance = new TransmittanceSim(parameters);
         padTransmittance.process();
         
         if(parameters.isGenerateTextFile()){

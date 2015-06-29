@@ -1675,8 +1675,9 @@ public class MainFrameController implements Initializable {
                                 if(fitDTMToVoxelSpace){
                                     
                                     VoxelSpaceHeader header = VoxelSpaceHeader.readVoxelFileHeader(voxelFile);
-                                    dtm.setLimits(new Point3F((float)header.bottomCorner.x, (float)header.bottomCorner.y, (float)header.bottomCorner.z), 
-                                                  new Point3F((float)header.topCorner.x, (float)header.topCorner.y, (float)header.topCorner.z), mntFittingMargin);
+                                    
+                                    dtm.setLimits(new BoundingBox2F(new Point2F((float)header.bottomCorner.x, (float)header.bottomCorner.y), 
+                                                                    new Point2F((float)header.topCorner.x, (float)header.topCorner.y)), mntFittingMargin);
                                 }
                                 
                                 updateMessage("Converting raster to mesh");
@@ -3551,7 +3552,7 @@ public class MainFrameController implements Initializable {
                             textfieldScannerStepArea.setText(String.valueOf(params.getStep()));
                         }
 
-                        textfieldLatitudeRadians.setText(String.valueOf(params.getLatitudeRadians()));
+                        textfieldLatitudeRadians.setText(String.valueOf(params.getLatitudeInDegrees()));
                         data.clear();
 
                         List<SimulationPeriod> simulationPeriods = params.getSimulationPeriods();
@@ -4468,7 +4469,7 @@ public class MainFrameController implements Initializable {
             }
             
             transmParameters.setDirectionsNumber(comboboxChooseDirectionsNumber.getSelectionModel().getSelectedItem());
-            transmParameters.setLatitudeRadians(Float.valueOf(textfieldLatitudeRadians.getText()));
+            transmParameters.setLatitudeInDegrees(Float.valueOf(textfieldLatitudeRadians.getText()));
             transmParameters.setUseScanPositionsFile(radiobuttonScannerPosFile.isSelected());
             
             if(radiobuttonScannerPosFile.isSelected()){

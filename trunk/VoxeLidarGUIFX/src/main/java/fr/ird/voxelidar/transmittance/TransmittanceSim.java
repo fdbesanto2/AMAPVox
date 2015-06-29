@@ -3,6 +3,11 @@
  */
 package fr.ird.voxelidar.transmittance;
 
+import fr.ird.voxelidar.transmittance.Parameters.Mode;
+import fr.ird.voxelidar.transmittance.lai2xxx.LAI2000;
+import fr.ird.voxelidar.transmittance.lai2xxx.LAI2200;
+import fr.ird.voxelidar.transmittance.lai2xxx.LAI2xxx;
+import static fr.ird.voxelidar.transmittance.lai2xxx.LAI2xxx.ViewCap.CAP_360;
 import fr.ird.voxelidar.util.Period;
 import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
 import java.awt.Color;
@@ -29,13 +34,14 @@ import java.io.FileReader;
 import java.util.Calendar;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
+
 /**
  * @author dauzat
  *
  */
-public class PadTransmittance {
+public class TransmittanceSim {
 
-    private final static Logger logger = Logger.getLogger(PadTransmittance.class);
+    private final static Logger logger = Logger.getLogger(TransmittanceSim.class);
     
     private VoxelSpace voxSpace;
     private TLSVoxel voxels[][][];
@@ -48,6 +54,7 @@ public class PadTransmittance {
     private float mntZmax;
     private float mntZmin;
     private final Turtle turtle;
+    private LAI2xxx lai2xxx;
 
     private ArrayList<Point3d> positions;
     
@@ -58,7 +65,7 @@ public class PadTransmittance {
         float padBV;
     }
     
-    public PadTransmittance(Parameters parameters){
+    public TransmittanceSim(Parameters parameters){
         
         this.parameters = parameters;
         
@@ -66,7 +73,29 @@ public class PadTransmittance {
         vsMax = new Point3d();
         splitting = new Point3i();
         
-        turtle = new Turtle(parameters.getDirectionsNumber());
+        parameters.setShotNumber(300);
+        parameters.setMode(Mode.LAI2200);
+        
+        if(parameters.getMode() == Mode.LAI2000 || parameters.getMode() == Mode.LAI2200){
+                        
+            if(parameters.getMode() == Mode.LAI2000){
+                lai2xxx = new LAI2000(parameters.getShotNumber(), CAP_360);
+            }else{
+                lai2xxx = new LAI2200(parameters.getShotNumber(), CAP_360);
+            }
+            
+            lai2xxx.computeDirections();
+
+            turtle = new Turtle();
+            turtle.setDirections(lai2xxx.getDirections());
+            turtle.setElevation(lai2xxx.getElevationAngles());
+            turtle.setAzimuth(lai2xxx.getAzimuthAngles());
+            
+            
+        }else{
+            turtle = new Turtle(parameters.getDirectionsNumber());
+        }
+        
         logger.info("Turtle built with " + turtle.getNbDirections() + " sectors");
     }
     
@@ -79,7 +108,7 @@ public class PadTransmittance {
 
         getSensorPositions();
 
-        ArrayList<IncidentRadiation> solRad = new ArrayList<>();
+        List<IncidentRadiation> solRad = new ArrayList<>();
         
         List<SimulationPeriod> simulationPeriods = parameters.getSimulationPeriods();
         
@@ -91,7 +120,7 @@ public class PadTransmittance {
             Time time1 = new Time(c1.get(Calendar.YEAR), c1.get(Calendar.DAY_OF_YEAR), c1.get(Calendar.HOUR_OF_DAY), c1.get(Calendar.MINUTE));
             Time time2 = new Time(c2.get(Calendar.YEAR), c2.get(Calendar.DAY_OF_YEAR), c2.get(Calendar.HOUR_OF_DAY), c2.get(Calendar.MINUTE));
             
-            solRad.add(SolarRadiation.globalTurtleIntegrate(turtle, (float) Math.toRadians(parameters.getLatitudeRadians()), period.getClearnessCoefficient(), time1, time2));
+            solRad.add(SolarRadiation.globalTurtleIntegrate(turtle, (float) Math.toRadians(parameters.getLatitudeInDegrees()), period.getClearnessCoefficient(), time1, time2));
         }        
 
         transmissionPeriod = new double[splitting.x][][];
@@ -128,15 +157,22 @@ public class PadTransmittance {
                 List<Double> distances = distToVoxelWalls(position, dir);
                 transmitted = directionalTransmittance(position, distances, dir);
                 
-                int m = 0;
-                for(IncidentRadiation incidentRadiation : solRad){
-                    transmissionPeriod[i][j][m] += transmitted * incidentRadiation.directionalGlobals[t];
-                    m++;
+                for(int m=0 ; m < solRad.size();m++){
+                    ir = solRad.get(m);
+                    transmissionPeriod[i][j][m] += transmitted * ir.directionalGlobals[t];
                 }
+                
+                if(lai2xxx != null){
+                    
+                    int ring = lai2xxx.getRingIDFromDirectionID(t);
+                    lai2xxx.getRing(ring).setTrans((float) (transmitted * solRad.get(0).directionalGlobals[t]));
+                }
+                
             }
             
             
             for(int m = 0 ; m<solRad.size() ; m++){
+                ir = solRad.get(m);
                 transmissionPeriod[i][j][m] /= ir.global;
             }
 
@@ -315,7 +351,8 @@ public class PadTransmittance {
         voxSize.y = (max.y - min.y) / (double) voxSpace.getSplitting().y;
         voxSize.z = (max.z - min.z) / (double) voxSpace.getSplitting().z;
 
-        // point where the ray exits form the top of the bounding box
+        // point where the ray exits from the top of the bounding box
+        
         Point3d exit = new Point3d(direction);
         double dist = (max.z - origin.z) / direction.z;
         exit.scale(dist);
@@ -442,30 +479,18 @@ public class PadTransmittance {
 
             int middleX = (int)parameters.getCenterPoint().x;
             int middleY = (int)parameters.getCenterPoint().y;
-            //int middleX = (splitting.x / 2);
-            //int middleY = (splitting.y / 2);
 
             int xMin = middleX - size;
             int yMin = middleY - size;
 
             int xMax = middleX + size;
             int yMax = middleY + size;
+                        
+            xMin = Integer.max(xMin, 0);
+            yMin = Integer.max(yMin, 0);
             
-            if(xMin < 0){
-                xMin = 0;
-            }
-            
-            if(yMin < 0){
-                yMin = 0;
-            }
-            
-            if(xMax >= voxSpace.getSplitting().x){
-                xMax = voxSpace.getSplitting().x -1;
-            }
-            
-            if(yMax >= voxSpace.getSplitting().y){
-                yMax = voxSpace.getSplitting().y -1;
-            }
+            xMax = Integer.min(xMax, voxSpace.getSplitting().x -1);
+            yMax = Integer.min(yMax, voxSpace.getSplitting().y -1);
 
             for (int i = xMin; i < xMax; i++) {
 
@@ -480,9 +505,6 @@ public class PadTransmittance {
                 }
             }
         }
-        
-        
-        
         
         logger.info("nb positions= " + positions.size());
     }
@@ -528,7 +550,7 @@ public class PadTransmittance {
                               "  min corner:\t" + vsMin + "\n"+
                               "  max corner:\t" + vsMax + "\n"+
                               "  splitting:\t" + splitting + "\n\n"+
-                              "latitude (degrees)\t"+parameters.getLatitudeRadians()+"\n\n";
+                              "latitude (degrees)\t"+parameters.getLatitudeInDegrees()+"\n\n";
                     
             bw.write(metadata);
             

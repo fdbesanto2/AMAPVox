@@ -1,9 +1,5 @@
 package fr.ird.voxelidar.transmittance;
 
-import javax.vecmath.Point2f;
-import javax.vecmath.Vector3f;
-
-
 /**
  * A utility class for computing the components of solar radiation.
  * 
@@ -133,8 +129,7 @@ public class SolarRadiation {
      * @param time2
      * @return 
 	 */
-	static public IncidentRadiation globalTurtleIntegrate(Turtle t,
-			float latitudeRadian, float clearness, Time time1, Time time2) {
+	static public IncidentRadiation globalTurtleIntegrate(Turtle t, float latitudeRadian, float clearness, Time time1, Time time2) {
 
 		IncidentRadiation ir = new IncidentRadiation(t.directions.length);
 		ir.setDirections(t.directions);

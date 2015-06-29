@@ -6,6 +6,7 @@
 package fr.ird.voxelidar.lidar.format.dart;
 
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
+import fr.ird.voxelidar.engine3d.math.point.Point2F;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceData;
 import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.math.point.Point3I;
@@ -14,6 +15,7 @@ import fr.ird.voxelidar.lidar.format.dtm.DTMPoint;
 import fr.ird.voxelidar.lidar.format.dtm.DtmLoader;
 import fr.ird.voxelidar.lidar.format.dtm.Face;
 import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
+import fr.ird.voxelidar.util.BoundingBox2F;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -172,8 +174,9 @@ public class DartWriter {
                 
                 dtm = DtmLoader.readFromAscFile(dtmFile);
                 dtm.setTransformationMatrix(transfMatrix);
-                dtm.setLimits(new Point3F((float)data.header.bottomCorner.x, (float)data.header.bottomCorner.y, (float)data.header.bottomCorner.z), 
-                                                  new Point3F((float)data.header.topCorner.x, (float)data.header.topCorner.y, (float)data.header.topCorner.z), 10);
+                
+                dtm.setLimits(new BoundingBox2F(new Point2F((float)data.header.bottomCorner.x, (float)data.header.bottomCorner.y), 
+                                                new Point2F((float)data.header.topCorner.x, (float)data.header.topCorner.y)), 10);
                 
                 logger.info("Building DTM");
                 dtm.buildMesh();

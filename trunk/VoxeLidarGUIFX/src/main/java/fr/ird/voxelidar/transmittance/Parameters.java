@@ -37,16 +37,33 @@ public class Parameters {
     private float step;
     private File pointsPositionsFile;
     
-    private float latitudeRadians;
+    private float latitudeInDegrees;
     
     private List<SimulationPeriod> simulationPeriods;
     private boolean generateTextFile;
     private boolean generateBitmapFile;
     private File textFile;
     private File bitmapFile;
+    
+    private Mode mode;
+    private int shotNumber;
+    
+    public enum Mode{
+        
+        TRANSMITTANCE((short)0),
+        LAI2000((short)1),
+        LAI2200((short)2);
+        
+        private short mode;
+        
+        private Mode(short mode){
+            this.mode = mode;
+        }
+    } 
 
     public Parameters(){
         simulationPeriods = new ArrayList<>();
+        mode = Mode.TRANSMITTANCE;
     }
     
     public File getInputFile() {
@@ -105,12 +122,12 @@ public class Parameters {
         this.pointsPositionsFile = pointsPositionsFile;
     }
 
-    public float getLatitudeRadians() {
-        return latitudeRadians;
+    public float getLatitudeInDegrees() {
+        return latitudeInDegrees;
     }
 
-    public void setLatitudeRadians(float latitudeRadians) {
-        this.latitudeRadians = latitudeRadians;
+    public void setLatitudeInDegrees(float latitudeInDegrees) {
+        this.latitudeInDegrees = latitudeInDegrees;
     }
 
     public List<SimulationPeriod> getSimulationPeriods() {
@@ -152,5 +169,20 @@ public class Parameters {
     public void setBitmapFile(File bitmapFile) {
         this.bitmapFile = bitmapFile;
     }
-    
+
+    public Mode getMode() {
+        return mode;
+    }
+
+    public int getShotNumber() {
+        return shotNumber;
+    }
+
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
+
+    public void setShotNumber(int shotNumber) {
+        this.shotNumber = shotNumber;
+    }    
 }
