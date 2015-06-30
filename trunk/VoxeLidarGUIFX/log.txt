@@ -1910,3 +1910,1020 @@ java.lang.ArithmeticException: / by zero
 
 2015-06-29 16:43:39 INFO  - nb positions= 12870
 2015-06-29 16:44:34 INFO  - Computation of transmittance
+2015-06-30 09:00:21 ERROR - Service failed : 
+java.lang.NullPointerException
+	at fr.ird.voxelidar.transmittance.lai2xxx.LAI2xxx.<init>(LAI2xxx.java:67)
+	at fr.ird.voxelidar.transmittance.lai2xxx.LAI2200.<init>(LAI2200.java:38)
+	at fr.ird.voxelidar.transmittance.TransmittanceSim.<init>(TransmittanceSim.java:84)
+	at fr.ird.voxelidar.voxelisation.ProcessTool.calculateTransmittance(ProcessTool.java:1330)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2921)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2912)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$451/418953917.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$449/445001799.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-30 09:01:41 ERROR - Service failed : 
+java.lang.NullPointerException
+	at fr.ird.voxelidar.transmittance.lai2xxx.LAI2xxx.computeDirections(LAI2xxx.java:120)
+	at fr.ird.voxelidar.transmittance.TransmittanceSim.<init>(TransmittanceSim.java:87)
+	at fr.ird.voxelidar.voxelisation.ProcessTool.calculateTransmittance(ProcessTool.java:1330)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2921)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2912)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$451/2076361235.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$449/998283919.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-30 09:03:04 INFO  - Turtle built with 303 sectors
+2015-06-30 09:03:04 INFO  - ===== /home/calcul/Documents/Julien/las_paracou_transmittance/las_1m.vox =====
+2015-06-30 09:03:04 INFO  - header: VOXEL SPACE
+2015-06-30 09:03:04 INFO  - VOXEL SPACE
+2015-06-30 09:03:04 INFO  - Min corner: (448095.5, 470899.3125, 9.210000038146973)
+2015-06-30 09:03:04 INFO  - Max corner: (448141.15625, 471186.0625, 68.9800033569336)
+2015-06-30 09:03:04 INFO  - Splitting: (46, 287, 60)
+2015-06-30 09:03:04 INFO  - allocate Voxels
+2015-06-30 09:03:04 INFO  - allocate MNT
+2015-06-30 09:03:04 INFO  - Data parsing
+2015-06-30 09:03:04 INFO  -  100000 shots
+2015-06-30 09:03:04 INFO  -  200000 shots
+2015-06-30 09:03:04 INFO  -  300000 shots
+2015-06-30 09:03:04 INFO  -  400000 shots
+2015-06-30 09:03:04 INFO  -  500000 shots
+2015-06-30 09:03:05 INFO  -  600000 shots
+2015-06-30 09:03:05 INFO  -  700000 shots
+2015-06-30 09:03:05 INFO  - 792120scans
+
+2015-06-30 09:03:05 INFO  - nb positions= 12870
+2015-06-30 09:03:07 INFO  - Computation of transmittance
+2015-06-30 09:03:07 ERROR - Service failed : 
+java.lang.ArrayIndexOutOfBoundsException: -1
+	at fr.ird.voxelidar.transmittance.lai2xxx.LAI2xxx.getRing(LAI2xxx.java:279)
+	at fr.ird.voxelidar.transmittance.TransmittanceSim.process(TransmittanceSim.java:174)
+	at fr.ird.voxelidar.voxelisation.ProcessTool.calculateTransmittance(ProcessTool.java:1331)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2921)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2912)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$451/2076361235.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$449/1890375755.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-30 09:03:33 INFO  - Turtle built with 303 sectors
+2015-06-30 09:03:33 INFO  - ===== /home/calcul/Documents/Julien/las_paracou_transmittance/las_1m.vox =====
+2015-06-30 09:03:33 INFO  - header: VOXEL SPACE
+2015-06-30 09:03:33 INFO  - VOXEL SPACE
+2015-06-30 09:03:33 INFO  - Min corner: (448095.5, 470899.3125, 9.210000038146973)
+2015-06-30 09:03:33 INFO  - Max corner: (448141.15625, 471186.0625, 68.9800033569336)
+2015-06-30 09:03:33 INFO  - Splitting: (46, 287, 60)
+2015-06-30 09:03:33 INFO  - allocate Voxels
+2015-06-30 09:03:33 INFO  - allocate MNT
+2015-06-30 09:03:33 INFO  - Data parsing
+2015-06-30 09:03:33 INFO  -  100000 shots
+2015-06-30 09:03:33 INFO  -  200000 shots
+2015-06-30 09:03:33 INFO  -  300000 shots
+2015-06-30 09:03:34 INFO  -  400000 shots
+2015-06-30 09:03:34 INFO  -  500000 shots
+2015-06-30 09:03:34 INFO  -  600000 shots
+2015-06-30 09:03:34 INFO  -  700000 shots
+2015-06-30 09:03:34 INFO  - 792120scans
+
+2015-06-30 09:03:34 INFO  - nb positions= 12870
+2015-06-30 09:03:36 INFO  - Computation of transmittance
+2015-06-30 09:05:34 INFO  - Turtle built with 303 sectors
+2015-06-30 09:05:34 INFO  - ===== /home/calcul/Documents/Julien/las_paracou_transmittance/las_1m.vox =====
+2015-06-30 09:05:34 INFO  - header: VOXEL SPACE
+2015-06-30 09:05:34 INFO  - VOXEL SPACE
+2015-06-30 09:05:34 INFO  - Min corner: (448095.5, 470899.3125, 9.210000038146973)
+2015-06-30 09:05:34 INFO  - Max corner: (448141.15625, 471186.0625, 68.9800033569336)
+2015-06-30 09:05:34 INFO  - Splitting: (46, 287, 60)
+2015-06-30 09:05:34 INFO  - allocate Voxels
+2015-06-30 09:05:34 INFO  - allocate MNT
+2015-06-30 09:05:34 INFO  - Data parsing
+2015-06-30 09:05:34 INFO  -  100000 shots
+2015-06-30 09:05:34 INFO  -  200000 shots
+2015-06-30 09:05:34 INFO  -  300000 shots
+2015-06-30 09:05:34 INFO  -  400000 shots
+2015-06-30 09:05:35 INFO  -  500000 shots
+2015-06-30 09:05:35 INFO  -  600000 shots
+2015-06-30 09:05:35 INFO  -  700000 shots
+2015-06-30 09:05:35 INFO  - 792120scans
+
+2015-06-30 09:05:35 INFO  - nb positions= 12870
+2015-06-30 09:05:37 INFO  - Computation of transmittance
+2015-06-30 09:05:37 ERROR - Service failed : 
+java.lang.ArrayIndexOutOfBoundsException: -1
+	at fr.ird.voxelidar.transmittance.lai2xxx.LAI2xxx.getRing(LAI2xxx.java:281)
+	at fr.ird.voxelidar.transmittance.TransmittanceSim.process(TransmittanceSim.java:174)
+	at fr.ird.voxelidar.voxelisation.ProcessTool.calculateTransmittance(ProcessTool.java:1331)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2921)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2912)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$451/2095016887.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$449/796270131.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-30 09:05:52 INFO  - Turtle built with 303 sectors
+2015-06-30 09:05:52 INFO  - ===== /home/calcul/Documents/Julien/las_paracou_transmittance/las_1m.vox =====
+2015-06-30 09:05:52 INFO  - header: VOXEL SPACE
+2015-06-30 09:05:52 INFO  - VOXEL SPACE
+2015-06-30 09:05:52 INFO  - Min corner: (448095.5, 470899.3125, 9.210000038146973)
+2015-06-30 09:05:52 INFO  - Max corner: (448141.15625, 471186.0625, 68.9800033569336)
+2015-06-30 09:05:52 INFO  - Splitting: (46, 287, 60)
+2015-06-30 09:05:52 INFO  - allocate Voxels
+2015-06-30 09:05:52 INFO  - allocate MNT
+2015-06-30 09:05:52 INFO  - Data parsing
+2015-06-30 09:05:52 INFO  -  100000 shots
+2015-06-30 09:05:52 INFO  -  200000 shots
+2015-06-30 09:05:52 INFO  -  300000 shots
+2015-06-30 09:05:52 INFO  -  400000 shots
+2015-06-30 09:05:53 INFO  -  500000 shots
+2015-06-30 09:05:53 INFO  -  600000 shots
+2015-06-30 09:05:53 INFO  -  700000 shots
+2015-06-30 09:05:53 INFO  - 792120scans
+
+2015-06-30 09:05:53 INFO  - nb positions= 12870
+2015-06-30 09:05:55 INFO  - Computation of transmittance
+2015-06-30 09:07:04 INFO  - Turtle built with 303 sectors
+2015-06-30 09:07:04 INFO  - ===== /home/calcul/Documents/Julien/las_paracou_transmittance/las_1m.vox =====
+2015-06-30 09:07:04 INFO  - header: VOXEL SPACE
+2015-06-30 09:07:04 INFO  - VOXEL SPACE
+2015-06-30 09:07:04 INFO  - Min corner: (448095.5, 470899.3125, 9.210000038146973)
+2015-06-30 09:07:04 INFO  - Max corner: (448141.15625, 471186.0625, 68.9800033569336)
+2015-06-30 09:07:04 INFO  - Splitting: (46, 287, 60)
+2015-06-30 09:07:04 INFO  - allocate Voxels
+2015-06-30 09:07:04 INFO  - allocate MNT
+2015-06-30 09:07:04 INFO  - Data parsing
+2015-06-30 09:07:04 INFO  -  100000 shots
+2015-06-30 09:07:04 INFO  -  200000 shots
+2015-06-30 09:07:04 INFO  -  300000 shots
+2015-06-30 09:07:05 INFO  -  400000 shots
+2015-06-30 09:07:05 INFO  -  500000 shots
+2015-06-30 09:07:05 INFO  -  600000 shots
+2015-06-30 09:07:05 INFO  -  700000 shots
+2015-06-30 09:07:05 INFO  - 792120scans
+
+2015-06-30 09:07:05 INFO  - nb positions= 12870
+2015-06-30 09:07:07 INFO  - Computation of transmittance
+2015-06-30 09:07:07 ERROR - Service failed : 
+java.lang.ArrayIndexOutOfBoundsException: 5
+	at fr.ird.voxelidar.transmittance.lai2xxx.LAI2xxx.getRing(LAI2xxx.java:283)
+	at fr.ird.voxelidar.transmittance.TransmittanceSim.process(TransmittanceSim.java:174)
+	at fr.ird.voxelidar.voxelisation.ProcessTool.calculateTransmittance(ProcessTool.java:1331)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2921)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2912)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$451/1288381519.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$449/667566684.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-30 09:07:22 INFO  - Turtle built with 303 sectors
+2015-06-30 09:07:22 INFO  - ===== /home/calcul/Documents/Julien/las_paracou_transmittance/las_1m.vox =====
+2015-06-30 09:07:22 INFO  - header: VOXEL SPACE
+2015-06-30 09:07:22 INFO  - VOXEL SPACE
+2015-06-30 09:07:22 INFO  - Min corner: (448095.5, 470899.3125, 9.210000038146973)
+2015-06-30 09:07:22 INFO  - Max corner: (448141.15625, 471186.0625, 68.9800033569336)
+2015-06-30 09:07:22 INFO  - Splitting: (46, 287, 60)
+2015-06-30 09:07:22 INFO  - allocate Voxels
+2015-06-30 09:07:22 INFO  - allocate MNT
+2015-06-30 09:07:22 INFO  - Data parsing
+2015-06-30 09:07:23 INFO  -  100000 shots
+2015-06-30 09:07:23 INFO  -  200000 shots
+2015-06-30 09:07:23 INFO  -  300000 shots
+2015-06-30 09:07:23 INFO  -  400000 shots
+2015-06-30 09:07:23 INFO  -  500000 shots
+2015-06-30 09:07:23 INFO  -  600000 shots
+2015-06-30 09:07:23 INFO  -  700000 shots
+2015-06-30 09:07:23 INFO  - 792120scans
+
+2015-06-30 09:07:23 INFO  - nb positions= 12870
+2015-06-30 09:07:25 INFO  - Computation of transmittance
+2015-06-30 09:08:12 INFO  - Turtle built with 303 sectors
+2015-06-30 09:08:12 INFO  - ===== /home/calcul/Documents/Julien/las_paracou_transmittance/las_1m.vox =====
+2015-06-30 09:08:12 INFO  - header: VOXEL SPACE
+2015-06-30 09:08:12 INFO  - VOXEL SPACE
+2015-06-30 09:08:12 INFO  - Min corner: (448095.5, 470899.3125, 9.210000038146973)
+2015-06-30 09:08:12 INFO  - Max corner: (448141.15625, 471186.0625, 68.9800033569336)
+2015-06-30 09:08:12 INFO  - Splitting: (46, 287, 60)
+2015-06-30 09:08:12 INFO  - allocate Voxels
+2015-06-30 09:08:12 INFO  - allocate MNT
+2015-06-30 09:08:12 INFO  - Data parsing
+2015-06-30 09:08:13 INFO  -  100000 shots
+2015-06-30 09:08:13 INFO  -  200000 shots
+2015-06-30 09:08:13 INFO  -  300000 shots
+2015-06-30 09:08:13 INFO  -  400000 shots
+2015-06-30 09:08:13 INFO  -  500000 shots
+2015-06-30 09:08:13 INFO  -  600000 shots
+2015-06-30 09:08:13 INFO  -  700000 shots
+2015-06-30 09:08:13 INFO  - 792120scans
+
+2015-06-30 09:08:13 INFO  - nb positions= 12870
+2015-06-30 09:08:15 INFO  - Computation of transmittance
+2015-06-30 09:08:20 INFO  - 1000/12870
+2015-06-30 09:08:25 INFO  - 2000/12870
+2015-06-30 09:08:32 INFO  - 3000/12870
+2015-06-30 09:08:37 INFO  - 4000/12870
+2015-06-30 09:08:42 INFO  - 5000/12870
+2015-06-30 09:08:47 INFO  - 6000/12870
+2015-06-30 09:08:51 INFO  - 7000/12870
+2015-06-30 09:08:56 INFO  - 8000/12870
+2015-06-30 09:09:01 INFO  - 9000/12870
+2015-06-30 09:09:06 INFO  - 10000/12870
+2015-06-30 09:09:10 INFO  - 11000/12870
+2015-06-30 09:09:14 INFO  - 12000/12870
+2015-06-30 09:09:18 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/output.txt
+2015-06-30 09:09:18 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/output.txt written
+2015-06-30 09:09:18 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/period_1.bmp
+2015-06-30 09:09:18 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/period_1.bmp written
+2015-06-30 09:09:18 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/period_2.bmp
+2015-06-30 09:09:18 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/period_2.bmp written
+2015-06-30 10:15:02 ERROR - org.jdom2.input.JDOMParseException: Error on line 1 of document file:/home/calcul/Documents/Julien/las_paracou_transmittance/las_1m.vox: Contenu non autorisé dans le prologue.
+2015-06-30 10:15:02 ERROR - java.lang.NullPointerException
+2015-06-30 10:32:05 INFO  - Turtle built with 303 sectors
+2015-06-30 10:32:05 INFO  - ===== /home/calcul/Documents/Julien/las_paracou_transmittance/las_1m.vox =====
+2015-06-30 10:32:05 INFO  - header: VOXEL SPACE
+2015-06-30 10:32:05 INFO  - VOXEL SPACE
+2015-06-30 10:32:05 INFO  - Min corner: (448095.5, 470899.3125, 9.210000038146973)
+2015-06-30 10:32:05 INFO  - Max corner: (448141.15625, 471186.0625, 68.9800033569336)
+2015-06-30 10:32:05 INFO  - Splitting: (46, 287, 60)
+2015-06-30 10:32:05 INFO  - allocate Voxels
+2015-06-30 10:32:05 INFO  - allocate MNT
+2015-06-30 10:32:05 INFO  - Data parsing
+2015-06-30 10:32:05 INFO  -  100000 shots
+2015-06-30 10:32:05 INFO  -  200000 shots
+2015-06-30 10:32:05 INFO  -  300000 shots
+2015-06-30 10:32:05 INFO  -  400000 shots
+2015-06-30 10:32:05 INFO  -  500000 shots
+2015-06-30 10:32:06 INFO  -  600000 shots
+2015-06-30 10:32:06 INFO  -  700000 shots
+2015-06-30 10:32:06 INFO  - 792120scans
+
+2015-06-30 10:32:06 INFO  - nb positions= 12870
+2015-06-30 10:32:08 INFO  - Computation of transmittance
+2015-06-30 10:32:12 INFO  - 1000/12870
+2015-06-30 10:32:17 INFO  - 2000/12870
+2015-06-30 10:32:22 INFO  - 3000/12870
+2015-06-30 10:32:27 INFO  - 4000/12870
+2015-06-30 10:32:32 INFO  - 5000/12870
+2015-06-30 10:32:37 INFO  - 6000/12870
+2015-06-30 10:32:42 INFO  - 7000/12870
+2015-06-30 10:32:46 INFO  - 8000/12870
+2015-06-30 10:32:51 INFO  - 9000/12870
+2015-06-30 10:32:56 INFO  - 10000/12870
+2015-06-30 10:33:00 INFO  - 11000/12870
+2015-06-30 10:33:05 INFO  - 12000/12870
+2015-06-30 10:33:08 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/output.txt
+2015-06-30 10:33:08 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/output.txt written
+2015-06-30 10:33:08 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/blabla/period_1.bmp
+2015-06-30 10:33:08 ERROR - Service failed : 
+java.lang.NullPointerException
+	at javax.imageio.ImageIO.write(ImageIO.java:1538)
+	at fr.ird.voxelidar.transmittance.TransmittanceSim.writeBitmaps(TransmittanceSim.java:237)
+	at fr.ird.voxelidar.voxelisation.ProcessTool.calculateTransmittance(ProcessTool.java:1338)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2921)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2912)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$483/1100703996.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$481/48577704.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-30 10:40:22 INFO  - Turtle built with 303 sectors
+2015-06-30 10:40:22 INFO  - ===== /home/calcul/Documents/Julien/las_paracou_transmittance/las_1m.vox =====
+2015-06-30 10:40:22 INFO  - header: VOXEL SPACE
+2015-06-30 10:40:22 INFO  - VOXEL SPACE
+2015-06-30 10:40:22 INFO  - Min corner: (448095.5, 470899.3125, 9.210000038146973)
+2015-06-30 10:40:22 INFO  - Max corner: (448141.15625, 471186.0625, 68.9800033569336)
+2015-06-30 10:40:22 INFO  - Splitting: (46, 287, 60)
+2015-06-30 10:40:22 INFO  - allocate Voxels
+2015-06-30 10:40:22 INFO  - allocate MNT
+2015-06-30 10:40:22 INFO  - Data parsing
+2015-06-30 10:40:22 INFO  -  100000 shots
+2015-06-30 10:40:22 INFO  -  200000 shots
+2015-06-30 10:40:22 INFO  -  300000 shots
+2015-06-30 10:40:22 INFO  -  400000 shots
+2015-06-30 10:40:22 INFO  -  500000 shots
+2015-06-30 10:40:23 INFO  -  600000 shots
+2015-06-30 10:40:23 INFO  -  700000 shots
+2015-06-30 10:40:23 INFO  - 792120scans
+
+2015-06-30 10:40:23 INFO  - nb positions= 12870
+2015-06-30 10:40:25 INFO  - Computation of transmittance
+2015-06-30 10:40:29 INFO  - 1000/12870
+2015-06-30 10:40:34 INFO  - 2000/12870
+2015-06-30 10:40:39 INFO  - 3000/12870
+2015-06-30 10:40:44 INFO  - 4000/12870
+2015-06-30 10:40:48 INFO  - 5000/12870
+2015-06-30 10:40:53 INFO  - 6000/12870
+2015-06-30 10:40:58 INFO  - 7000/12870
+2015-06-30 10:41:03 INFO  - 8000/12870
+2015-06-30 10:41:08 INFO  - 9000/12870
+2015-06-30 10:41:12 INFO  - 10000/12870
+2015-06-30 10:41:17 INFO  - 11000/12870
+2015-06-30 10:41:21 INFO  - 12000/12870
+2015-06-30 10:41:24 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/output.txt
+2015-06-30 10:41:25 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/output.txt written
+2015-06-30 10:41:25 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/period_1.bmp
+2015-06-30 10:41:25 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/period_1.bmp written
+2015-06-30 10:41:25 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/period_2.bmp
+2015-06-30 10:41:25 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/period_2.bmp written
+2015-06-30 10:46:57 INFO  - Nombre de valeurs correctes: 488791/792120
+2015-06-30 10:46:57 INFO  - Nombre de valeurs corrigées: 0/792120
+2015-06-30 10:46:57 INFO  - Nombre de valeurs mises à défaut: 303329/792120
+2015-06-30 10:47:57 INFO  - Turtle built with 46 sectors
+2015-06-30 10:47:57 INFO  - ===== /home/calcul/Documents/Julien/las_paracou_transmittance/las_1m.vox =====
+2015-06-30 10:47:57 INFO  - header: VOXEL SPACE
+2015-06-30 10:47:57 INFO  - VOXEL SPACE
+2015-06-30 10:47:57 INFO  - Min corner: (448095.5, 470899.3125, 9.210000038146973)
+2015-06-30 10:47:57 INFO  - Max corner: (448141.15625, 471186.0625, 68.9800033569336)
+2015-06-30 10:47:57 INFO  - Splitting: (46, 287, 60)
+2015-06-30 10:47:57 INFO  - allocate Voxels
+2015-06-30 10:47:57 INFO  - allocate MNT
+2015-06-30 10:47:57 INFO  - Data parsing
+2015-06-30 10:47:57 INFO  -  100000 shots
+2015-06-30 10:47:57 INFO  -  200000 shots
+2015-06-30 10:47:57 INFO  -  300000 shots
+2015-06-30 10:47:57 INFO  -  400000 shots
+2015-06-30 10:47:57 INFO  -  500000 shots
+2015-06-30 10:47:57 INFO  -  600000 shots
+2015-06-30 10:47:57 INFO  -  700000 shots
+2015-06-30 10:47:58 INFO  - 792120scans
+
+2015-06-30 10:47:58 INFO  - nb positions= 12870
+2015-06-30 10:47:58 INFO  - Computation of transmittance
+2015-06-30 10:47:59 INFO  - 1000/12870
+2015-06-30 10:48:00 INFO  - 2000/12870
+2015-06-30 10:48:01 INFO  - 3000/12870
+2015-06-30 10:48:02 INFO  - 4000/12870
+2015-06-30 10:48:03 INFO  - 5000/12870
+2015-06-30 10:48:04 INFO  - 6000/12870
+2015-06-30 10:48:05 INFO  - 7000/12870
+2015-06-30 10:48:06 INFO  - 8000/12870
+2015-06-30 10:48:07 INFO  - 9000/12870
+2015-06-30 10:48:08 INFO  - 10000/12870
+2015-06-30 10:48:08 INFO  - 11000/12870
+2015-06-30 10:48:09 INFO  - 12000/12870
+2015-06-30 10:48:10 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/output.txt
+2015-06-30 10:48:10 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/output.txt written
+2015-06-30 10:48:10 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/period_1.bmp
+2015-06-30 10:48:10 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/period_1.bmp written
+2015-06-30 10:48:10 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/period_2.bmp
+2015-06-30 10:48:10 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/period_2.bmp written
+2015-06-30 10:49:01 INFO  - allocate!!!!!!!!
+2015-06-30 10:49:01 INFO  - Voxel space informations:
+			Corner Inf	:	(448095.4917605496, 470899.3079434532, 9.21)
+			Corner Sup	:	(448141.16684763494, 471186.0631058712, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 10:49:01 INFO  - Saved libfile: /tmp/LasZipLibrary-4475940637510754982.tmp
+2015-06-30 10:49:01 INFO  - /tmp/LasZipLibrary-4475940637510754982.tmp
+2015-06-30 10:49:01 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-30 10:49:02 INFO  - Laz file is closed
+2015-06-30 10:49:03 INFO  - Shots processed: 141106
+2015-06-30 10:49:03 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-06-30 10:49:26 INFO  - file written ( 22.0 s )
+2015-06-30 10:49:26 INFO  - las voxelisation finished in 28.0 s
+2015-06-30 10:50:28 INFO  - allocate!!!!!!!!
+2015-06-30 10:50:28 INFO  - Voxel space informations:
+			Corner Inf	:	(448095.4917605496, 470899.3079434532, 9.21)
+			Corner Sup	:	(448141.16684763494, 471186.0631058712, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 10:50:28 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-30 10:50:29 INFO  - Laz file is closed
+2015-06-30 10:50:30 INFO  - Shots processed: 141106
+2015-06-30 10:50:30 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-06-30 10:50:53 INFO  - file written ( 23.0 s )
+2015-06-30 10:50:53 INFO  - las voxelisation finished in 28.0 s
+2015-06-30 12:18:55 INFO  - Turtle built with 46 sectors
+2015-06-30 12:18:55 INFO  - ===== /home/calcul/Documents/Julien/las_paracou_transmittance/las_1m.vox =====
+2015-06-30 12:18:55 INFO  - header: VOXEL SPACE
+2015-06-30 12:18:55 INFO  - VOXEL SPACE
+2015-06-30 12:18:55 INFO  - Min corner: (448095.5, 470899.3125, 9.210000038146973)
+2015-06-30 12:18:55 INFO  - Max corner: (448141.15625, 471186.0625, 68.9800033569336)
+2015-06-30 12:18:55 INFO  - Splitting: (46, 287, 60)
+2015-06-30 12:18:55 INFO  - allocate Voxels
+2015-06-30 12:18:55 INFO  - allocate MNT
+2015-06-30 12:18:55 INFO  - Data parsing
+2015-06-30 12:18:56 INFO  -  100000 shots
+2015-06-30 12:18:56 INFO  -  200000 shots
+2015-06-30 12:18:56 INFO  -  300000 shots
+2015-06-30 12:18:56 INFO  -  400000 shots
+2015-06-30 12:18:56 INFO  -  500000 shots
+2015-06-30 12:18:56 INFO  -  600000 shots
+2015-06-30 12:18:56 INFO  -  700000 shots
+2015-06-30 12:18:56 INFO  - 792120scans
+
+2015-06-30 12:18:56 INFO  - nb positions= 12870
+2015-06-30 12:18:57 INFO  - Computation of transmittance
+2015-06-30 12:18:58 INFO  - 1000/12870
+2015-06-30 12:18:59 INFO  - 2000/12870
+2015-06-30 12:19:00 INFO  - 3000/12870
+2015-06-30 12:19:01 INFO  - 4000/12870
+2015-06-30 12:19:02 INFO  - 5000/12870
+2015-06-30 12:19:03 INFO  - 6000/12870
+2015-06-30 12:19:04 INFO  - 7000/12870
+2015-06-30 12:19:05 INFO  - 8000/12870
+2015-06-30 12:19:05 INFO  - 9000/12870
+2015-06-30 12:19:06 INFO  - 10000/12870
+2015-06-30 12:19:07 INFO  - 11000/12870
+2015-06-30 12:19:08 INFO  - 12000/12870
+2015-06-30 12:19:09 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/output.txt
+2015-06-30 12:19:09 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/output.txt written
+2015-06-30 12:19:09 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/period_1.bmp
+2015-06-30 12:19:09 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/period_1.bmp written
+2015-06-30 12:19:09 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/period_2.bmp
+2015-06-30 12:19:09 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/period_2.bmp written
+2015-06-30 14:57:52 INFO  - Merging in progress, file 1 : 98
+2015-06-30 14:57:54 INFO  - Merging in progress, file 2 : 98
+2015-06-30 14:57:57 INFO  - Merging in progress, file 3 : 98
+2015-06-30 14:57:59 INFO  - Merging in progress, file 4 : 98
+2015-06-30 14:58:01 INFO  - Merging in progress, file 5 : 98
+2015-06-30 14:58:03 INFO  - Merging in progress, file 6 : 98
+2015-06-30 14:58:05 INFO  - Merging in progress, file 7 : 98
+2015-06-30 14:58:07 INFO  - Merging in progress, file 8 : 98
+2015-06-30 14:58:09 INFO  - Merging in progress, file 9 : 98
+2015-06-30 14:58:11 INFO  - Merging in progress, file 10 : 98
+2015-06-30 14:58:13 INFO  - Merging in progress, file 11 : 98
+2015-06-30 14:58:15 INFO  - Merging in progress, file 12 : 98
+2015-06-30 14:58:17 INFO  - Merging in progress, file 13 : 98
+2015-06-30 14:58:19 INFO  - Merging in progress, file 14 : 98
+2015-06-30 14:58:21 INFO  - Merging in progress, file 15 : 98
+2015-06-30 16:31:47 INFO  - calculate bounding-box of file 1/133
+2015-06-30 16:31:47 ERROR - java.io.FileNotFoundException: /media/calcul/IomegaHDD/BDLidar/ALS/Itoupe/points_classifies_dallage500m/itoupe000156.las (Aucun fichier ou dossier de ce type)
+2015-06-30 16:33:10 INFO  - calculate bounding-box of file 1/133
+2015-06-30 16:33:20 INFO  - calculate bounding-box of file 2/133
+2015-06-30 16:34:49 INFO  - Loading DTM file /media/calcul/IomegaHDD/BDLidar/ALS/Itoupe/MNT/MNT_1m_final.asc
+2015-06-30 16:35:03 INFO  - calculate bounding-box of file 1/1
+2015-06-30 16:35:05 INFO  - Generate DTM raster of file 1/1
+2015-06-30 16:36:45 INFO  - Loading DTM file /media/calcul/IomegaHDD/BDLidar/ALS/Itoupe/MNT/MNT_1m_final.asc
+2015-06-30 16:36:58 INFO  - calculate bounding-box of file 1/1
+2015-06-30 16:36:59 INFO  - Generate DTM raster of file 1/1
+2015-06-30 16:36:59 INFO  - Global bounding-box ignored.
+2015-06-30 16:38:24 INFO  - Loading DTM file /media/calcul/IomegaHDD/BDLidar/ALS/Itoupe/MNT/MNT_1m_final.asc
+2015-06-30 16:38:36 INFO  - calculate bounding-box of file 1/1
+2015-06-30 16:38:38 INFO  - Generate DTM raster of file 1/1
+2015-06-30 16:38:38 INFO  - Global bounding-box ignored.
+2015-06-30 16:39:55 INFO  - Loading DTM file /media/calcul/IomegaHDD/BDLidar/ALS/Itoupe/MNT/MNT_1m_final.asc
+2015-06-30 16:40:07 INFO  - calculate bounding-box of file 1/1
+2015-06-30 16:40:09 INFO  - Generate DTM raster of file 1/1
+2015-06-30 16:40:09 INFO  - Global bounding-box ignored.
+2015-06-30 16:42:36 INFO  - Loading DTM file /media/calcul/IomegaHDD/BDLidar/ALS/Itoupe/MNT/MNT_1m_final.asc
+2015-06-30 16:42:49 INFO  - calculate bounding-box of file 1/1
+2015-06-30 16:42:51 INFO  - Generate DTM raster of file 1/1
+2015-06-30 16:42:51 INFO  - Global bounding-box ignored.
+2015-06-30 16:46:27 INFO  - Loading DTM file /media/calcul/IomegaHDD/BDLidar/ALS/Itoupe/MNT/MNT_1m_final.asc
+2015-06-30 16:46:40 INFO  - calculate bounding-box of file 1/1
+2015-06-30 16:46:41 INFO  - Generate DTM raster of file 1/1
+2015-06-30 16:46:41 INFO  - Global bounding-box ignored.
+2015-06-30 16:47:54 INFO  - Loading DTM file /media/calcul/IomegaHDD/BDLidar/ALS/Itoupe/MNT/MNT_1m_final.asc
+2015-06-30 16:48:07 INFO  - calculate bounding-box of file 1/1
+2015-06-30 16:48:09 INFO  - Generate DTM raster of file 1/1
+2015-06-30 16:48:09 INFO  - Ignoring global input file
+2015-06-30 16:48:09 INFO  - Global bounding-box ignored.
+2015-06-30 16:49:58 INFO  - allocate!!!!!!!!
+2015-06-30 16:49:58 INFO  - Voxel space informations:
+			Corner Inf	:	(272369.9, 338729.33, 164.81)
+			Corner Sup	:	(272594.52, 339052.09, 244.54)
+			Dimensions	:	(225, 323, 80)
+			Toricity 	:	false
+
+2015-06-30 16:50:09 INFO  - Shots processed: 975500
+2015-06-30 16:50:09 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/test_itoupe/voxels/output/itoupe000288.las.vox
+2015-06-30 16:50:30 INFO  - file written ( 20.0 s )
+2015-06-30 16:50:30 INFO  - las voxelisation finished in 41.0 s
+2015-06-30 16:50:38 INFO  - allocate!!!!!!!!
+2015-06-30 16:50:38 INFO  - Voxel space informations:
+			Corner Inf	:	(272369.9, 338729.33, 164.81)
+			Corner Sup	:	(272594.52, 339052.09, 244.54)
+			Dimensions	:	(225, 323, 80)
+			Toricity 	:	false
+
+2015-06-30 16:50:48 INFO  - Shots processed: 975500
+2015-06-30 16:50:48 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/test_itoupe/voxels/output/itoupe000288.las.vox
+2015-06-30 16:51:11 INFO  - file written ( 22.0 s )
+2015-06-30 16:51:11 INFO  - las voxelisation finished in 40.0 s
+2015-06-30 16:51:56 INFO  - calculate bounding-box of file 1/1
+2015-06-30 16:51:57 INFO  - Ignoring global input file
+2015-06-30 16:51:57 INFO  - Global bounding-box ignored.
+2015-06-30 16:52:44 INFO  - allocate!!!!!!!!
+2015-06-30 16:52:44 INFO  - Voxel space informations:
+			Corner Inf	:	(272369.9, 338729.33, 164.81)
+			Corner Sup	:	(272594.52, 339052.09, 244.54)
+			Dimensions	:	(225, 323, 80)
+			Toricity 	:	false
+
+2015-06-30 16:52:57 INFO  - Shots processed: 975500
+2015-06-30 16:52:57 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/test_itoupe/voxels/output/itoupe000288.las.vox
+2015-06-30 16:53:17 INFO  - file written ( 20.0 s )
+2015-06-30 16:53:17 INFO  - las voxelisation finished in 54.0 s
+2015-06-30 16:53:48 INFO  - calculate bounding-box of file 1/1
+2015-06-30 16:53:49 INFO  - Ignoring global input file
+2015-06-30 16:53:49 INFO  - Global bounding-box ignored.
+2015-06-30 16:54:38 INFO  - allocate!!!!!!!!
+2015-06-30 16:54:38 INFO  - Voxel space informations:
+			Corner Inf	:	(272369.9, 338729.33, 164.81)
+			Corner Sup	:	(272594.52, 339052.09, 244.54)
+			Dimensions	:	(225, 323, 80)
+			Toricity 	:	false
+
+2015-06-30 16:54:52 INFO  - Shots processed: 975500
+2015-06-30 16:54:52 INFO  - las voxelisation finished in 34.0 s
+2015-06-30 17:08:57 ERROR - Service failed : 
+java.lang.NullPointerException
+	at fr.ird.voxelidar.configuration.VoxCfg.readConfiguration(VoxCfg.java:62)
+	at fr.ird.voxelidar.configuration.MultiVoxCfg.readConfiguration(MultiVoxCfg.java:40)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2913)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2713)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$451/1505150101.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$449/1978102703.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-30 17:10:55 INFO  - Cannot find input_file element
+2015-06-30 17:10:55 ERROR - Service failed : 
+java.lang.NullPointerException
+	at fr.ird.voxelidar.configuration.VoxCfg.readConfiguration(VoxCfg.java:79)
+	at fr.ird.voxelidar.configuration.MultiVoxCfg.readConfiguration(MultiVoxCfg.java:40)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2913)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2713)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$451/1505150101.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$449/1978102703.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-30 17:11:02 INFO  - Cannot find input_file element
+2015-06-30 17:11:02 ERROR - Service failed : 
+java.lang.NullPointerException
+	at fr.ird.voxelidar.configuration.VoxCfg.readConfiguration(VoxCfg.java:79)
+	at fr.ird.voxelidar.configuration.MultiVoxCfg.readConfiguration(MultiVoxCfg.java:40)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2913)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2713)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$451/1505150101.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$449/1978102703.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-30 17:11:10 INFO  - Cannot find input_file element
+2015-06-30 17:11:10 ERROR - Service failed : 
+java.lang.NullPointerException
+	at fr.ird.voxelidar.configuration.VoxCfg.readConfiguration(VoxCfg.java:79)
+	at fr.ird.voxelidar.configuration.MultiVoxCfg.readConfiguration(MultiVoxCfg.java:40)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2913)
+	at fr.ird.voxelidar.gui.MainFrameController$39$1.call(MainFrameController.java:2713)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$451/1505150101.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$449/1978102703.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-06-30 17:13:13 INFO  - Cannot find input_file element
+2015-06-30 17:13:13 INFO  - Cannot find bounding-box element
+2015-06-30 17:13:26 ERROR - Trajectory file is null
+2015-06-30 17:14:39 INFO  - Cannot find input_file element
+2015-06-30 17:14:39 INFO  - Cannot find bounding-box element
+2015-06-30 17:14:51 ERROR - Trajectory file is null
+2015-06-30 17:15:41 INFO  - Cannot find input_file element
+2015-06-30 17:15:41 INFO  - Cannot find bounding-box element
+2015-06-30 17:16:01 INFO  - allocate!!!!!!!!
+2015-06-30 17:16:01 INFO  - Voxel space informations:
+			Corner Inf	:	(272369.9, 338729.33, 164.81)
+			Corner Sup	:	(272594.52, 339052.09, 244.54)
+			Dimensions	:	(225, 323, 80)
+			Toricity 	:	false
+
+2015-06-30 17:16:13 INFO  - Shots processed: 975500
+2015-06-30 17:16:14 INFO  - las voxelisation finished in 33.0 s
+2015-06-30 17:18:26 INFO  - allocate!!!!!!!!
+2015-06-30 17:18:26 INFO  - Voxel space informations:
+			Corner Inf	:	(448095.4917605496, 470899.3079434532, 9.21)
+			Corner Sup	:	(448141.16684763494, 471186.0631058712, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:18:26 INFO  - Saved libfile: /tmp/LasZipLibrary-4396623852252576330.tmp
+2015-06-30 17:18:26 INFO  - /tmp/LasZipLibrary-4396623852252576330.tmp
+2015-06-30 17:18:26 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-06-30 17:18:27 INFO  - Laz file is closed
+2015-06-30 17:18:28 INFO  - Shots processed: 141106
+2015-06-30 17:18:28 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-06-30 17:18:31 INFO  - file written ( 3.0 s )
+2015-06-30 17:18:31 INFO  - las voxelisation finished in 8.0 s
+2015-06-30 17:21:53 INFO  - Turtle built with 46 sectors
+2015-06-30 17:21:53 INFO  - ===== /home/calcul/Documents/Julien/las_paracou_transmittance/las_1m.vox =====
+2015-06-30 17:21:53 INFO  - header: VOXEL SPACE
+2015-06-30 17:21:53 INFO  - VOXEL SPACE
+2015-06-30 17:21:53 INFO  - Min corner: (448095.5, 470899.3125, 9.210000038146973)
+2015-06-30 17:21:53 INFO  - Max corner: (448141.15625, 471186.0625, 68.9800033569336)
+2015-06-30 17:21:53 INFO  - Splitting: (46, 287, 60)
+2015-06-30 17:21:53 INFO  - allocate Voxels
+2015-06-30 17:21:53 INFO  - allocate MNT
+2015-06-30 17:21:53 INFO  - Data parsing
+2015-06-30 17:21:53 INFO  -  100000 shots
+2015-06-30 17:21:53 INFO  -  200000 shots
+2015-06-30 17:21:53 INFO  -  300000 shots
+2015-06-30 17:21:53 INFO  -  400000 shots
+2015-06-30 17:21:53 INFO  -  500000 shots
+2015-06-30 17:21:53 INFO  -  600000 shots
+2015-06-30 17:21:54 INFO  -  700000 shots
+2015-06-30 17:21:54 INFO  - 792120scans
+
+2015-06-30 17:21:54 INFO  - nb positions= 12870
+2015-06-30 17:21:54 INFO  - Computation of transmittance
+2015-06-30 17:21:55 INFO  - 1000/12870
+2015-06-30 17:21:56 INFO  - 2000/12870
+2015-06-30 17:21:57 INFO  - 3000/12870
+2015-06-30 17:21:58 INFO  - 4000/12870
+2015-06-30 17:21:59 INFO  - 5000/12870
+2015-06-30 17:22:00 INFO  - 6000/12870
+2015-06-30 17:22:01 INFO  - 7000/12870
+2015-06-30 17:22:02 INFO  - 8000/12870
+2015-06-30 17:22:03 INFO  - 9000/12870
+2015-06-30 17:22:04 INFO  - 10000/12870
+2015-06-30 17:22:05 INFO  - 11000/12870
+2015-06-30 17:22:05 INFO  - 12000/12870
+2015-06-30 17:22:06 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/output.txt
+2015-06-30 17:22:06 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/output.txt written
+2015-06-30 17:22:06 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/period_1.bmp
+2015-06-30 17:22:06 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/period_1.bmp written
+2015-06-30 17:22:06 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/period_2.bmp
+2015-06-30 17:22:06 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/period_2.bmp written
+2015-06-30 17:52:33 INFO  - Saved libfile: /tmp/RivLibLibrary-6690413839034955329.tmp
+2015-06-30 17:52:33 INFO  - /tmp/RivLibLibrary-6690413839034955329.tmp
+2015-06-30 17:52:33 INFO  - rxp extraction is started
+2015-06-30 17:52:33 INFO  - rxp extraction is started
+2015-06-30 17:52:33 INFO  - rxp extraction is started
+2015-06-30 17:52:33 INFO  - rxp extraction is started
+2015-06-30 17:52:33 INFO  - rxp extraction is started
+2015-06-30 17:52:33 INFO  - rxp extraction is started
+2015-06-30 17:52:33 INFO  - rxp extraction is started
+2015-06-30 17:52:33 INFO  - rxp extraction is started
+2015-06-30 17:52:33 INFO  - allocate!!!!!!!!
+2015-06-30 17:52:33 INFO  - allocate!!!!!!!!
+2015-06-30 17:52:33 INFO  - allocate!!!!!!!!
+2015-06-30 17:52:33 INFO  - allocate!!!!!!!!
+2015-06-30 17:52:33 INFO  - allocate!!!!!!!!
+2015-06-30 17:52:33 INFO  - allocate!!!!!!!!
+2015-06-30 17:52:33 INFO  - allocate!!!!!!!!
+2015-06-30 17:52:33 INFO  - allocate!!!!!!!!
+2015-06-30 17:52:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:52:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:52:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:52:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:52:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:52:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:52:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:52:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:52:35 INFO  - Voxelisation was stopped
+2015-06-30 17:52:43 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos001/SINGLESCANS/130917_153258.rxp is open
+2015-06-30 17:52:43 INFO  - Task cancelled
+2015-06-30 17:52:43 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos003/SINGLESCANS/130917_165102.rxp is open
+2015-06-30 17:52:43 INFO  - Task cancelled
+2015-06-30 17:52:43 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos008/SINGLESCANS/130917_180238.rxp is open
+2015-06-30 17:52:43 INFO  - Task cancelled
+2015-06-30 17:52:43 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos006/SINGLESCANS/130917_172354.rxp is open
+2015-06-30 17:52:43 INFO  - Task cancelled
+2015-06-30 17:52:43 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos007/SINGLESCANS/130917_173534.rxp is open
+2015-06-30 17:52:43 INFO  - Task cancelled
+2015-06-30 17:52:43 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos009/SINGLESCANS/130917_181314.rxp is open
+2015-06-30 17:52:43 INFO  - Task cancelled
+2015-06-30 17:52:43 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos002/SINGLESCANS/130917_155228.rxp is open
+2015-06-30 17:52:43 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos004/SINGLESCANS/130917_170323.rxp is open
+2015-06-30 17:52:43 INFO  - Task cancelled
+2015-06-30 17:52:43 INFO  - Task cancelled
+2015-06-30 17:53:02 INFO  - rxp extraction is started
+2015-06-30 17:53:02 INFO  - allocate!!!!!!!!
+2015-06-30 17:53:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:53:02 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos001/SINGLESCANS/130917_153258.rxp is open
+2015-06-30 17:53:02 INFO  - rxp extraction is started
+2015-06-30 17:53:02 INFO  - rxp extraction is started
+2015-06-30 17:53:02 INFO  - rxp extraction is started
+2015-06-30 17:53:02 INFO  - allocate!!!!!!!!
+2015-06-30 17:53:02 INFO  - rxp extraction is started
+2015-06-30 17:53:02 INFO  - rxp extraction is started
+2015-06-30 17:53:02 INFO  - allocate!!!!!!!!
+2015-06-30 17:53:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:53:02 INFO  - allocate!!!!!!!!
+2015-06-30 17:53:02 INFO  - allocate!!!!!!!!
+2015-06-30 17:53:02 INFO  - rxp extraction is started
+2015-06-30 17:53:02 INFO  - allocate!!!!!!!!
+2015-06-30 17:53:02 INFO  - rxp extraction is started
+2015-06-30 17:53:02 INFO  - allocate!!!!!!!!
+2015-06-30 17:53:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:53:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:53:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:53:02 INFO  - allocate!!!!!!!!
+2015-06-30 17:53:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:53:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:53:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:53:02 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos008/SINGLESCANS/130917_180238.rxp is open
+2015-06-30 17:53:02 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos002/SINGLESCANS/130917_155228.rxp is open
+2015-06-30 17:53:02 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos007/SINGLESCANS/130917_173534.rxp is open
+2015-06-30 17:53:02 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos006/SINGLESCANS/130917_172354.rxp is open
+2015-06-30 17:53:02 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos004/SINGLESCANS/130917_170323.rxp is open
+2015-06-30 17:53:02 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos003/SINGLESCANS/130917_165102.rxp is open
+2015-06-30 17:53:02 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos009/SINGLESCANS/130917_181314.rxp is open
+2015-06-30 17:53:11 INFO  - Shots processed: 1000000
+2015-06-30 17:53:12 INFO  - Shots processed: 1000000
+2015-06-30 17:53:12 INFO  - Shots processed: 1000000
+2015-06-30 17:53:12 INFO  - Shots processed: 1000000
+2015-06-30 17:53:12 INFO  - Shots processed: 1000000
+2015-06-30 17:53:13 INFO  - Shots processed: 1000000
+2015-06-30 17:53:13 INFO  - Shots processed: 1000000
+2015-06-30 17:53:14 INFO  - Shots processed: 1000000
+2015-06-30 17:53:20 INFO  - Shots processed: 2000000
+2015-06-30 17:53:20 INFO  - Shots processed: 2000000
+2015-06-30 17:53:21 INFO  - Shots processed: 2000000
+2015-06-30 17:53:21 INFO  - Shots processed: 2000000
+2015-06-30 17:53:21 INFO  - Shots processed: 2000000
+2015-06-30 17:53:22 INFO  - Shots processed: 2000000
+2015-06-30 17:53:23 INFO  - Shots processed: 2000000
+2015-06-30 17:53:23 INFO  - Shots processed: 2000000
+2015-06-30 17:53:26 INFO  - Task cancelled
+2015-06-30 17:53:26 INFO  - Task cancelled
+2015-06-30 17:53:26 INFO  - Task cancelled
+2015-06-30 17:53:26 INFO  - Task cancelled
+2015-06-30 17:53:26 INFO  - Task cancelled
+2015-06-30 17:53:26 INFO  - Task cancelled
+2015-06-30 17:53:26 INFO  - Task cancelled
+2015-06-30 17:53:26 INFO  - Voxelisation was stopped
+2015-06-30 17:53:26 INFO  - Task cancelled
+2015-06-30 17:56:46 ERROR - java.io.FileNotFoundException: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls2/cfg.xml (Aucun fichier ou dossier de ce type)
+2015-06-30 17:56:46 ERROR - java.lang.NullPointerException
+2015-06-30 17:56:53 INFO  - rxp extraction is started
+2015-06-30 17:56:53 INFO  - allocate!!!!!!!!
+2015-06-30 17:56:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:56:53 INFO  - rxp extraction is started
+2015-06-30 17:56:53 INFO  - allocate!!!!!!!!
+2015-06-30 17:56:53 INFO  - rxp extraction is started
+2015-06-30 17:56:53 INFO  - allocate!!!!!!!!
+2015-06-30 17:56:53 INFO  - rxp extraction is started
+2015-06-30 17:56:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:56:53 INFO  - rxp extraction is started
+2015-06-30 17:56:53 INFO  - allocate!!!!!!!!
+2015-06-30 17:56:53 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos002/SINGLESCANS/130917_155228.rxp is open
+2015-06-30 17:56:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:56:53 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos003/SINGLESCANS/130917_165102.rxp is open
+2015-06-30 17:56:53 INFO  - rxp extraction is started
+2015-06-30 17:56:53 INFO  - allocate!!!!!!!!
+2015-06-30 17:56:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:56:53 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos001/SINGLESCANS/130917_153258.rxp is open
+2015-06-30 17:56:53 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos006/SINGLESCANS/130917_172354.rxp is open
+2015-06-30 17:56:53 INFO  - allocate!!!!!!!!
+2015-06-30 17:56:53 INFO  - rxp extraction is started
+2015-06-30 17:56:53 INFO  - allocate!!!!!!!!
+2015-06-30 17:56:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:56:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:56:53 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos008/SINGLESCANS/130917_180238.rxp is open
+2015-06-30 17:56:53 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos007/SINGLESCANS/130917_173534.rxp is open
+2015-06-30 17:56:53 INFO  - rxp extraction is started
+2015-06-30 17:56:53 INFO  - allocate!!!!!!!!
+2015-06-30 17:56:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:56:53 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos004/SINGLESCANS/130917_170323.rxp is open
+2015-06-30 17:56:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-06-30 17:56:53 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos009/SINGLESCANS/130917_181314.rxp is open
+2015-06-30 17:57:01 INFO  - Shots processed: 1000000
+2015-06-30 17:57:01 INFO  - Shots processed: 1000000
+2015-06-30 17:57:02 INFO  - Shots processed: 1000000
+2015-06-30 17:57:02 INFO  - Shots processed: 1000000
+2015-06-30 17:57:02 INFO  - Shots processed: 1000000
+2015-06-30 17:57:03 INFO  - Shots processed: 1000000
+2015-06-30 17:57:03 INFO  - Shots processed: 1000000
+2015-06-30 17:57:03 INFO  - Shots processed: 1000000
+2015-06-30 17:57:10 INFO  - Shots processed: 2000000
+2015-06-30 17:57:10 INFO  - Shots processed: 2000000
+2015-06-30 17:57:10 INFO  - Shots processed: 2000000
+2015-06-30 17:57:10 INFO  - Shots processed: 2000000
+2015-06-30 17:57:11 INFO  - Shots processed: 2000000
+2015-06-30 17:57:11 INFO  - Shots processed: 2000000
+2015-06-30 17:57:11 INFO  - Shots processed: 2000000
+2015-06-30 17:57:13 INFO  - Shots processed: 2000000
+2015-06-30 17:57:19 INFO  - Shots processed: 3000000
+2015-06-30 17:57:19 INFO  - Shots processed: 3000000
+2015-06-30 17:57:19 INFO  - Shots processed: 3000000
+2015-06-30 17:57:19 INFO  - Shots processed: 3000000
+2015-06-30 17:57:20 INFO  - Shots processed: 3000000
+2015-06-30 17:57:20 INFO  - Shots processed: 3000000
+2015-06-30 17:57:20 INFO  - Shots processed: 3000000
+2015-06-30 17:57:22 INFO  - Shots processed: 3000000
+2015-06-30 17:57:27 INFO  - Shots processed: 4000000
+2015-06-30 17:57:28 INFO  - Shots processed: 4000000
+2015-06-30 17:57:28 INFO  - Shots processed: 4000000
+2015-06-30 17:57:28 INFO  - Shots processed: 4000000
+2015-06-30 17:57:29 INFO  - Task cancelled
+2015-06-30 17:57:29 INFO  - Task cancelled
+2015-06-30 17:57:29 INFO  - Task cancelled
+2015-06-30 17:57:29 INFO  - Task cancelled
+2015-06-30 17:57:29 INFO  - Task cancelled
+2015-06-30 17:57:29 INFO  - Voxelisation was stopped
+2015-06-30 17:57:29 INFO  - Task cancelled
+2015-06-30 17:57:29 INFO  - Task cancelled
+2015-06-30 17:57:29 INFO  - Task cancelled
+2015-06-30 18:01:49 INFO  - Turtle built with 46 sectors
+2015-06-30 18:01:49 INFO  - ===== /home/calcul/Documents/Julien/las_paracou_transmittance/las_1m.vox =====
+2015-06-30 18:01:49 INFO  - header: VOXEL SPACE
+2015-06-30 18:01:49 INFO  - VOXEL SPACE
+2015-06-30 18:01:49 INFO  - Min corner: (448095.5, 470899.3125, 9.210000038146973)
+2015-06-30 18:01:49 INFO  - Max corner: (448141.15625, 471186.0625, 68.9800033569336)
+2015-06-30 18:01:49 INFO  - Splitting: (46, 287, 60)
+2015-06-30 18:01:49 INFO  - allocate Voxels
+2015-06-30 18:01:49 INFO  - allocate MNT
+2015-06-30 18:01:49 INFO  - Data parsing
+2015-06-30 18:01:49 INFO  -  100000 shots
+2015-06-30 18:01:49 INFO  -  200000 shots
+2015-06-30 18:01:49 INFO  -  300000 shots
+2015-06-30 18:01:49 INFO  -  400000 shots
+2015-06-30 18:01:50 INFO  -  500000 shots
+2015-06-30 18:01:50 INFO  -  600000 shots
+2015-06-30 18:01:50 INFO  -  700000 shots
+2015-06-30 18:01:50 INFO  - 792120scans
+
+2015-06-30 18:01:50 INFO  - nb positions= 12870
+2015-06-30 18:01:50 INFO  - Computation of transmittance
+2015-06-30 18:01:51 INFO  - 1000/12870
+2015-06-30 18:01:52 INFO  - 2000/12870
+2015-06-30 18:01:53 INFO  - 3000/12870
+2015-06-30 18:01:54 INFO  - 4000/12870
+2015-06-30 18:01:55 INFO  - 5000/12870
+2015-06-30 18:01:56 INFO  - 6000/12870
+2015-06-30 18:01:57 INFO  - 7000/12870
+2015-06-30 18:01:58 INFO  - 8000/12870
+2015-06-30 18:01:59 INFO  - 9000/12870
+2015-06-30 18:02:00 INFO  - 10000/12870
+2015-06-30 18:02:00 INFO  - 11000/12870
+2015-06-30 18:02:01 INFO  - 12000/12870
+2015-06-30 18:02:02 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/output.txt
+2015-06-30 18:02:02 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/output.txt written
+2015-06-30 18:02:02 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/period_1.bmp
+2015-06-30 18:02:02 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/period_1.bmp written
+2015-06-30 18:02:02 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/period_2.bmp
+2015-06-30 18:02:02 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/period_2.bmp written

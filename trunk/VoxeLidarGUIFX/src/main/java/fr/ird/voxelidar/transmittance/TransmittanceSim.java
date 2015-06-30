@@ -73,8 +73,8 @@ public class TransmittanceSim {
         vsMax = new Point3d();
         splitting = new Point3i();
         
-        parameters.setShotNumber(300);
-        parameters.setMode(Mode.LAI2200);
+        //parameters.setShotNumber(300);
+        //parameters.setMode(Mode.LAI2200);
         
         if(parameters.getMode() == Mode.LAI2000 || parameters.getMode() == Mode.LAI2200){
                         
@@ -139,6 +139,11 @@ public class TransmittanceSim {
         // TRANSMITTANCE
         logger.info("Computation of transmittance");
         
+        
+        if(lai2xxx != null){
+            lai2xxx.initPositions(positions.size());
+        }
+        
         int n = 0;
         double transmitted;
 
@@ -165,6 +170,7 @@ public class TransmittanceSim {
                 if(lai2xxx != null){
                     
                     int ring = lai2xxx.getRingIDFromDirectionID(t);
+                    lai2xxx.addTransmittance(ring, (float) (transmitted * solRad.get(0).directionalGlobals[t]));
                     lai2xxx.getRing(ring).setTrans((float) (transmitted * solRad.get(0).directionalGlobals[t]));
                 }
                 
@@ -605,6 +611,10 @@ public class TransmittanceSim {
             
         }catch(IOException ex){
             logger.error("Cannot write text file "+parameters.getTextFile().getAbsolutePath(), ex);
+        }
+        
+        if(lai2xxx != null){
+            lai2xxx.writeOutput(new File("/home/calcul/Documents/Julien/lai_output.txt"));
         }
     }
 

@@ -6,10 +6,7 @@
 package fr.ird.voxelidar.gui;
 
 import com.jogamp.nativewindow.util.Point;
-import com.jogamp.newt.Window;
-import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.event.WindowListener;
-import com.jogamp.newt.event.WindowUpdateEvent;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLException;
 import com.jogamp.opengl.GLProfile;

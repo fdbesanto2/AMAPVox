@@ -34,12 +34,13 @@ public abstract class LAI2xxx {
     /**
      *
      */
-    protected final int shotNumber;
+    protected int directionNumber;
+    protected int positionNumber;
 
     /**
      *
      */
-    protected Ring[] rings;
+    protected final Ring[] rings;
 
     /**
      *
@@ -49,19 +50,28 @@ public abstract class LAI2xxx {
     protected float[] elevationAngles;
     protected int[] ringOffsetID;
     
-    //protected float[] transmittances;
     private int[] shotNumberByRing;
     
-    protected final ViewCap viewCap;
+    protected float[] avgTransByRing;
+    protected float[] meanContactNumber;
+    protected float[] gapsByRing;
+    
+    protected ViewCap viewCap;
     
     /**
      *
      * @param shotNumber
      * @param viewCap
+     * @param rings
      */
-    public LAI2xxx(int shotNumber, ViewCap viewCap){
-        this.shotNumber = shotNumber;
+    protected LAI2xxx(int shotNumber, ViewCap viewCap, Ring... rings){
+        
+        this.directionNumber = shotNumber;
         this.viewCap = viewCap;
+        this.rings = rings;
+        this.avgTransByRing = new float[rings.length];
+        this.gapsByRing = new float[rings.length];
+        this.meanContactNumber = new float[rings.length];
     }
     
     public enum ViewCap{
@@ -81,6 +91,53 @@ public abstract class LAI2xxx {
         public float getViewCap() {
             return viewCap;
         }
+    }
+    
+    public void initPositions(int positionNumber){
+        
+        this.positionNumber = positionNumber;
+    }
+    
+    public void addTransmittance(int ringID, float transmittance){
+        
+        if(!Float.isNaN(transmittance)){
+            avgTransByRing[ringID] += transmittance;
+            
+            float logTransmittance = (float) Math.log(transmittance);
+            gapsByRing[ringID] += logTransmittance;
+            /*
+            float pathLength = 0; // à déterminer
+            meanContactNumber[ringID] += logTransmittance/pathLength;*/
+        }
+    }
+    
+    public float getAVGTransByRing(int ringID){
+        
+        int count = positionNumber*directionNumber;
+        
+        return avgTransByRing[ringID] /= count;
+    }
+    
+    public float getGapsByRing(int ringID){
+        
+        int count = positionNumber*directionNumber;
+        
+        return (float) Math.exp(gapsByRing[ringID] /= count);
+    }
+    
+    public float getLAI(){
+        
+        float sum = 0;
+        /*
+        for(int i=0;i<rings.length;i++){
+            
+            float ki = 
+            float wi = rings[i].getWeightingFactor();
+            
+            sum += ki * wi;
+        }*/
+        
+        return 2*sum;
     }
     
     /**
@@ -103,7 +160,7 @@ public abstract class LAI2xxx {
             //pourcentage d'angle solide
             float solidAnglePercentage = rings[i].getSolidAngle()/solidAngleSum;
             
-            shotNumberByRing[i] = (int) Math.ceil(solidAnglePercentage * shotNumber);
+            shotNumberByRing[i] = (int) Math.ceil(solidAnglePercentage * directionNumber);
             rings[i].setNbDirections(shotNumberByRing[i]);
         }
         
@@ -205,7 +262,11 @@ public abstract class LAI2xxx {
         
         for(int i=0;i<ringOffsetID.length;i++){
             
-            if(directionID >= ringOffsetID[i] && directionID <= ringOffsetID[i]){
+            if(i+1 < ringOffsetID.length){
+                if(directionID >= ringOffsetID[i] && directionID <= ringOffsetID[i+1]){
+                    return i;
+                }
+            }else{
                 return i;
             }
         }
@@ -253,10 +314,5 @@ public abstract class LAI2xxx {
         return rings[ringID];
     }
     
-    
-    /**
-     *
-     */
-    protected abstract void initRings();
-    protected abstract void writeOutput(File outputFile);
+    public abstract void writeOutput(File outputFile);
 }

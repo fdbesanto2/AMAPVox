@@ -21,9 +21,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -35,24 +32,19 @@ public class LAI2200 extends LAI2xxx{
 
     public LAI2200(int shotNumber, ViewCap viewCap){
         
-        super(shotNumber, viewCap);
-    }
-    
-    @Override
-    protected void initRings() {
-        
+         super(shotNumber, viewCap, new Ring(12.3f, 0),
+                                    new Ring(28.6f, 16.7f),
+                                    new Ring(43.4f, 32.4f),
+                                    new Ring(58.1f, 47.3f),
+                                    new Ring(74.1f, 62.3f));
+     
         //le lai2200 a 5 plages angulaires
-        rings = new Ring[5];
         
-        rings[0] = new Ring(12.3f, 0);
-        rings[1] = new Ring(28.6f, 16.7f);
-        rings[2] = new Ring(43.4f, 32.4f);
-        rings[3] = new Ring(58.1f, 47.3f);
-        rings[4] = new Ring(74.1f, 62.3f);
+       
     }
 
     @Override
-    protected void writeOutput(File outputFile) {
+    public void writeOutput(File outputFile) {
         
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))){
             
@@ -101,12 +93,12 @@ public class LAI2200 extends LAI2xxx{
                     
                     maskLine += "1"+"\t";
                     anglesLine += rings[i].getMeanAngle()+"\t";
-                    avgTransLine += rings[i].getAvgtrans()+"\t";
+                    avgTransLine += getAVGTransByRing(i)+"\t";
                     acfsLine += rings[i].getAcfs()+"\t";
                     cntcLine += rings[i].getCntct()+"\t";
                     stddevLine += rings[i].getStdev()+"\t";
                     distsLine += rings[i].getDist()+"\t";
-                    gapsLine += rings[i].getGap()+"\t";
+                    gapsLine += getGapsByRing(i)+"\t";
                 }
                 
                 writer.write("MASK\t"+maskLine+"\n");

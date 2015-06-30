@@ -25,6 +25,8 @@ public class Ring {
     private final float lowerZenithalAngle;
     private final float upperZenithalAngle;
     private final float meanAngle;
+    private final float width;
+    private final float weightingFactor;
     private final float solidAngle;
     private int nbDirections;
     private float sumTrans;
@@ -41,6 +43,8 @@ public class Ring {
         this.upperZenithalAngle = upperZenithalAngle;
         
         this.meanAngle = (lowerZenithalAngle+upperZenithalAngle) / 2.0f;
+        this.width = lowerZenithalAngle - upperZenithalAngle;
+        this.weightingFactor = (float) (this.width * this.meanAngle);
         
         //calcul de l'angle solide
         solidAngle = (float) (2* Math.PI * (Math.cos(Math.toRadians(upperZenithalAngle)) - Math.cos(Math.toRadians(lowerZenithalAngle))));
@@ -117,6 +121,12 @@ public class Ring {
     public void setNbDirections(int nbDirections) {
         this.nbDirections = nbDirections;
     }
-    
-    
+
+    public float getWidth() {
+        return width;
+    }    
+
+    public float getWeightingFactor() {
+        return weightingFactor;
+    }
 }

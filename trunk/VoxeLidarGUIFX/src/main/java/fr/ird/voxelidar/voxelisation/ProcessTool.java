@@ -38,6 +38,10 @@ import fr.amap.lidar.als.LasPoint;
 import fr.ird.voxelidar.voxelisation.als.LasVoxelisation;
 import fr.ird.voxelidar.voxelisation.als.Trajectory;
 import fr.amap.lidar.als.laz.LazExtraction;
+import fr.ird.voxelidar.configuration.Configuration;
+import fr.ird.voxelidar.configuration.MultiVoxCfg;
+import fr.ird.voxelidar.configuration.TransmittanceCfg;
+import fr.ird.voxelidar.configuration.VoxMergingCfg;
 import fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction;
 import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
 import java.io.BufferedReader;
@@ -572,8 +576,8 @@ public class ProcessTool implements Cancellable{
         return boundingBox;
     }    
     
-    public void mergeVoxelsFileV2(List<File> filesList, File output, int transmittanceMode, float maxPAD) {
-        
+    public void mergeVoxelFiles(VoxMergingCfg cfg/*List<File> filesList, File output, int transmittanceMode, float maxPAD*/) {
+                
         cancelled = false;
         
         startTime = System.currentTimeMillis();
@@ -595,9 +599,9 @@ public class ProcessTool implements Cancellable{
         int nbSamplingColumnIndex = -1;
         int transmittanceColumnIndex = -1;
         
-        if(filesList.size() > 0){
+        if(cfg.getFiles().size() > 0){
             
-            voxelSpaceHeader = VoxelSpaceHeader.readVoxelFileHeader(filesList.get(0));
+            voxelSpaceHeader = VoxelSpaceHeader.readVoxelFileHeader(cfg.getFiles().get(0));
             size = voxelSpaceHeader.split.x * voxelSpaceHeader.split.y * voxelSpaceHeader.split.z;
             columnNumber = voxelSpaceHeader.attributsNames.size();
             resultingFile = new float[size][columnNumber];
@@ -660,7 +664,7 @@ public class ProcessTool implements Cancellable{
                 }
             }
             
-            nbSamplingMultiplyAngleMean = new float[filesList.size()][size];
+            nbSamplingMultiplyAngleMean = new float[cfg.getFiles().size()][size];
             
             
             
@@ -669,17 +673,17 @@ public class ProcessTool implements Cancellable{
             return;
         }
 
-        for (int i = 0; i < filesList.size(); i++) {
+        for (int i = 0; i < cfg.getFiles().size(); i++) {
 
             if (cancelled) {
                 return;
             }
 
-            String msg = "Merging in progress, file " + (i + 1) + " : " + filesList.size();
+            String msg = "Merging in progress, file " + (i + 1) + " : " + cfg.getFiles().size();
             logger.info(msg);
             fireProgress(msg, i);
             
-            try (BufferedReader reader = new BufferedReader(new FileReader(filesList.get(i)))){
+            try (BufferedReader reader = new BufferedReader(new FileReader(cfg.getFiles().get(i)))){
                 
                 
                 int count = 0;
@@ -750,7 +754,7 @@ public class ProcessTool implements Cancellable{
                 
                 float sum = 0;
                 
-                for (int j = 0; j < filesList.size(); j++) {
+                for (int j = 0; j < cfg.getFiles().size(); j++) {
                     if (!Float.isNaN(nbSamplingMultiplyAngleMean[j][i])) {
                         sum += nbSamplingMultiplyAngleMean[j][i];
                     } 
@@ -795,7 +799,7 @@ public class ProcessTool implements Cancellable{
 
                 if (resultingFile[i][nbSamplingColumnIndex] > 1 && resultingFile[i][transmittanceColumnIndex] == 0 && Objects.equals(resultingFile[i][nbSamplingColumnIndex], resultingFile[i][nbEchosColumnIndex])) {
 
-                    pad1 = maxPAD;
+                    pad1 = cfg.getVoxelParameters().getMaxPAD();
 
                 } else if (resultingFile[i][nbSamplingColumnIndex] <= 2 && resultingFile[i][transmittanceColumnIndex] == 0 && Objects.equals(resultingFile[i][nbSamplingColumnIndex], resultingFile[i][nbEchosColumnIndex])) {
 
@@ -807,8 +811,8 @@ public class ProcessTool implements Cancellable{
 
                     if (Float.isNaN(pad1)) {
                         pad1 = Float.NaN;
-                    } else if (pad1 > maxPAD || Float.isInfinite(pad1)) {
-                        pad1 = maxPAD;
+                    } else if (pad1 > cfg.getVoxelParameters().getMaxPAD() || Float.isInfinite(pad1)) {
+                        pad1 = cfg.getVoxelParameters().getMaxPAD();
                     }
                 }
             }
@@ -816,17 +820,17 @@ public class ProcessTool implements Cancellable{
             resultingFile[i][padBVTotalColumnIndex] = pad1 + 0.0f;
         }
         
-        logger.info("writing output file: " + output.getAbsolutePath());
+        logger.info("writing output file: " + cfg.getOutputFile().getAbsolutePath());
         long start_time = System.currentTimeMillis();
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(cfg.getOutputFile()))) {
 
             writer.write("VOXEL SPACE" + "\n");
             writer.write("#min_corner: " + (float) voxelSpaceHeader.bottomCorner.x + " " + (float) voxelSpaceHeader.bottomCorner.y + " " + (float) voxelSpaceHeader.bottomCorner.z + "\n");
             writer.write("#max_corner: " + (float) voxelSpaceHeader.topCorner.x + " " + (float) voxelSpaceHeader.topCorner.y + " " + (float) voxelSpaceHeader.topCorner.z + "\n");
             writer.write("#split: " + voxelSpaceHeader.split.x + " " + voxelSpaceHeader.split.y + " " + voxelSpaceHeader.split.z + "\n");
 
-            writer.write("#type: TLS" + " #res: "+voxelSpaceHeader.res+" "+"#MAX_PAD: "+maxPAD+"\n");
+            writer.write("#type: TLS" + " #res: "+voxelSpaceHeader.res+" "+"#MAX_PAD: "+cfg.getVoxelParameters().getMaxPAD()+"\n");
 
             String header = "";
             
@@ -868,7 +872,7 @@ public class ProcessTool implements Cancellable{
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
     }
     
-    public void multiVoxelisation(VoxelisationConfiguration configuration){
+    public void multiVoxelisation(MultiVoxCfg configuration){
         
         startTime = System.currentTimeMillis();
         configuration.getVoxelParameters().setTLS(false);
@@ -954,12 +958,6 @@ public class ProcessTool implements Cancellable{
             return;
         }
         
-        
-        
-        
-        
-        //List<Callable<Object>> tasks = new ArrayList<>();
-        //exec = Executors.newSingleThreadExecutor();
         VoxelParameters params = configuration.getVoxelParameters();
         
         int count = 1;
@@ -1019,309 +1017,7 @@ public class ProcessTool implements Cancellable{
             
             count++;
         }
-        /*
-        try {
-            exec.invokeAll(tasks);
-        } catch (InterruptedException ex) {
-            logger.error("Cannot launch executor service", ex);
-        }finally{
-            exec.shutdown();
-        }
-        */
-        fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
-    }
-
-    public void mergeVoxelsFile(List<File> filesList, File output, int transmittanceMode, float maxPAD) {
-
-        startTime = System.currentTimeMillis();
-        Mode[] toMerge = null;
-        Map<String, Float[]> map1, map2 = null, result = null;
-        int size = 0;
-        double bottomCornerX = 0, bottomCornerY = 0, bottomCornerZ = 0;
-        double topCornerX = 0, topCornerY = 0, topCornerZ = 0;
-        int splitX = 0, splitY = 0, splitZ = 0;
-        float resolution = 0;
-
-        float[][] nbSamplingMultiplyAngleMean = null;
-        //float[] sumTransmittanceMultiplyLgTotal = null;
-
-        for (int i = 0; i < filesList.size(); i++) {
-
-            if (cancelled) {
-                return;
-            }
-
-            String msg = "Merging in progress, file " + (i + 1) + " : " + filesList.size();
-            logger.info(msg);
-            fireProgress(msg, i);
-
-            VoxelSpace voxelSpace1 = new VoxelSpace(filesList.get(i));
-            voxelSpace1.load();
-
-            size = voxelSpace1.data.header.split.x * voxelSpace1.data.header.split.y * voxelSpace1.data.header.split.z;
-            map1 = voxelSpace1.data.getVoxelMap();
-
-            bottomCornerX = voxelSpace1.data.header.bottomCorner.x;
-            bottomCornerY = voxelSpace1.data.header.bottomCorner.y;
-            bottomCornerZ = voxelSpace1.data.header.bottomCorner.z;
-
-            topCornerX = voxelSpace1.data.header.topCorner.x;
-            topCornerY = voxelSpace1.data.header.topCorner.y;
-            topCornerZ = voxelSpace1.data.header.topCorner.z;
-
-            splitX = voxelSpace1.data.header.split.x;
-            splitY = voxelSpace1.data.header.split.y;
-            splitZ = voxelSpace1.data.header.split.z;
-            
-            resolution = voxelSpace1.data.header.res;
-            
-
-            if (i == 0) {
-                Map<String, Attribut> mapAttributs = voxelSpace1.getMapAttributs();
-                toMerge = new Mode[mapAttributs.size()];
-
-                int count = 0;
-                for (Entry entry : mapAttributs.entrySet()) {
-
-                    String key = entry.getKey().toString();
-                    Mode m;
-
-                    switch (key) {
-
-                        case "i":
-                        case "j":
-                        case "k":
-                        case "ground_distance":
-
-                        //discard but recalculate after
-                        case "PadBVTotal":
-                        case "PadBVTotal_V2":
-                        case "angleMean":
-                        case "lMeanTotal":
-                        case "transmittance":
-                        case "transmittance_v2":
-
-                            m = Mode.DISCARD;
-                            break;
-
-                        case "nbSampling":
-                        case "nbEchos":
-                        case "lgTotal":
-                        case "bvEntering":
-                        case "bvIntercepted":
-
-                            m = Mode.SUM;
-                            break;
-
-                        default:
-                            m = Mode.DISCARD;
-                    }
-
-                    toMerge[count] = m;
-
-                    count++;
-                }
-                
-                nbSamplingMultiplyAngleMean = new float[filesList.size()][size];
-                //sumTransmittanceMultiplyLgTotal = new float[size];
-
-                result = map1;
-                map2 = result;
-
-            } else {
-
-                result = DataSet.mergeTwoDataSet(map1, map2, toMerge);
-                map2 = result;
-            }
-            
-            Float[] nbTemp1 = map1.get("nbSampling");
-            Float[] nbTemp2 = map1.get("angleMean");
-            //Float[] nbTemp3 = map1.get("transmittance_v2");
-            //Float[] nbTemp4 = map1.get("lgTotal");
-            
-            for(int j=0;j<nbTemp1.length;j++){
-                nbSamplingMultiplyAngleMean[i][j] = nbTemp1[j] * nbTemp2[j];
-                /*
-                if(!Float.isNaN(nbTemp3[j]) && !Float.isNaN(nbTemp4[j])){
-                    sumTransmittanceMultiplyLgTotal[j] += (nbTemp3[j] * nbTemp4[j]);
-                }
-                */
-            }
-            
-        }
-
-        logger.info("Recalculate lMeanTotal, angleMean, transmittance, PadBVTotal");
-        /*recalculate PadBF, angleMean, LMean_Exiting, LMean_NoInterception*/
-        if (result != null) {
-            
-            try{
-                result.remove("PadBVTotal_V2");
-                result.remove("transmittance_v2");
-            }catch(Exception e){}
-            
-
-            /*recalculate lMeanOutgoing, LMean_NoInterception*/
-            Float[] nbSamplingArray = result.get("nbSampling");
-            Float[] nbEchosArray = result.get("nbEchos");
-            Float[] lgTotalArray = result.get("lgTotal");
-            Float[] lMeanTotalArray = result.get("lMeanTotal");
-
-            for (int i = 0; i < lMeanTotalArray.length; i++) {
-
-                lMeanTotalArray[i] = lgTotalArray[i] / nbSamplingArray[i];
-            }
-
-            /*recalculate Pad*/
-            Float[] transmittanceArray = result.get("transmittance");
-            //Float[] transmittance2Array = result.get("transmittance_v2");
-            Float[] PadBVTotalArray = result.get("PadBVTotal");
-            //Float[] PadBVTotal2Array = result.get("PadBVTotal_V2");
-            Float[] bVEnteringArray = result.get("bvEntering");
-            Float[] bVInterceptedArray = result.get("bvIntercepted");
-
-            if (transmittanceArray == null /*|| transmittance2Array == null*/ || PadBVTotalArray == null
-                    /*|| PadBVTotal2Array == null*/ || bVEnteringArray == null || bVInterceptedArray == null
-                    || nbSamplingArray == null || nbEchosArray == null) {
-
-                logger.error("Arguments are missing");
-                return;
-            }
-
-            for (int i = 0; i < PadBVTotalArray.length; i++) {
-
-                transmittanceArray[i] = (bVEnteringArray[i] - bVInterceptedArray[i]) / bVEnteringArray[i];
-                //transmittance2Array[i] = sumTransmittanceMultiplyLgTotal[i]/lgTotalArray[i];
-                
-                float pad1/*, pad2*/;
-
-                if (bVEnteringArray[i] <= 0) {
-
-                    pad1 = Float.NaN;
-                    //pad2 = pad1;
-                    
-                    transmittanceArray[i] = Float.NaN;
-                    //transmittance2Array[i] = Float.NaN;
-
-                } else if (bVInterceptedArray[i] > bVEnteringArray[i]) {
-
-                    logger.error("BFInterceptes > BFEntering, NaN assigné");
-                    
-                    pad1 = Float.NaN;
-                    //pad2 = pad1;
-                    
-                    transmittanceArray[i] = Float.NaN;
-                    //transmittance2Array[i] = Float.NaN;
-
-                } else {
-
-                    if (nbSamplingArray[i] > 1 && transmittanceArray[i] == 0 && Objects.equals(nbSamplingArray[i], nbEchosArray[i])) {
-
-                        pad1 = maxPAD;
-                        //pad2 = pad1;
-
-                    } else if (nbSamplingArray[i] <= 2 && transmittanceArray[i] == 0 && Objects.equals(nbSamplingArray[i], nbEchosArray[i])) {
-
-                        pad1 = Float.NaN;
-                        //pad2 = pad1;
-
-                    } else {
-
-                        pad1 = (float) (Math.log(transmittanceArray[i]) / (-0.5 * lMeanTotalArray[i]));
-                        //pad2 = (float) (Math.log(transmittance2Array[i]) / (-0.5 * lMeanTotalArray[i]));
-
-                        if (Float.isNaN(pad1)) {
-                            pad1 = Float.NaN;
-                        } else if (pad1 > maxPAD || Float.isInfinite(pad1)) {
-                            pad1 = maxPAD;
-                        }
-                        /*
-                        if (Float.isNaN(pad2)) {
-                            pad2 = Float.NaN;
-                        } else if (pad2 > maxPAD || Float.isInfinite(pad2)) {
-                            pad2 = maxPAD;
-                        }*/
-                    }
-                }
-
-                PadBVTotalArray[i] = pad1 + 0.0f;
-                //PadBVTotal2Array[i] = pad2 + 0.0f;
-            }
-
-            /*recalculate angleMean*/
-            Float[] angleMeanArray = result.get("angleMean");
-
-            if (angleMeanArray == null) {
-                logger.error("Argument angleMean is missing");
-                return;
-            }
-
-            for (int i = 0; i < size; i++) {
-
-                float sum = 0;
-                for (int j = 0; j < filesList.size(); j++) {
-
-                    if (!Float.isNaN(nbSamplingMultiplyAngleMean[j][i])) {
-                        sum += nbSamplingMultiplyAngleMean[j][i];
-                    }
-
-                }
-
-                angleMeanArray[i] = sum / nbSamplingArray[i];
-            }
-
-            logger.info("writing output file: " + output.getAbsolutePath());
-
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))) {
-
-                writer.write("VOXEL SPACE" + "\n");
-                writer.write("#min_corner: " + (float) bottomCornerX + " " + (float) bottomCornerY + " " + (float) bottomCornerZ + "\n");
-                writer.write("#max_corner: " + (float) topCornerX + " " + (float) topCornerY + " " + (float) topCornerZ + "\n");
-                writer.write("#split: " + splitX + " " + splitY + " " + splitZ + "\n");
-
-                writer.write("#type: TLS" + " #res: "+resolution+" "+"#MAX_PAD: "+maxPAD+"\n");
-
-                String header = "";
-
-                for (Entry entry : result.entrySet()) {
-                    String columnName = (String) entry.getKey();
-                    
-                    header += columnName + " ";
-                }
-                header = header.trim();
-                writer.write(header + "\n");
-
-                for (int i = 0; i < size; i++) {
-
-                    String voxel = "";
-
-                    int count = 0;
-                    for (Entry entry : result.entrySet()) {
-
-                        Float[] values = (Float[]) entry.getValue();
-
-                        if (count < 3) {
-
-                            voxel += values[i].intValue() + " ";
-                        } else {
-                            voxel += values[i] + " ";
-                        }
-
-                        count++;
-                    }
-
-                    voxel = voxel.trim();
-
-                    writer.write(voxel + "\n");
-
-                }
-
-            } catch (IOException ex) {
-                logger.error(ex);
-            }
-            
-            
-        }
-
+        
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
     }
     
@@ -1376,5 +1072,175 @@ public class ProcessTool implements Cancellable{
     public void addVoxelisationToolListener(ProcessingListener processingListener) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    /*
+    public void executeTask(File configurationFile){
+        
+        String type = Configuration.readType(configurationFile);
+        
+                    
+        switch(type){
+            case "transmittance":
+
+                TransmittanceCfg cfg = new TransmittanceCfg();
+                cfg.readConfiguration(configurationFile);
+                voxTool.calculateTransmittance(cfg.getParameters());
+
+                break;
+
+            default:
+
+
+                final int coreNumberToUse = (int) sliderRSPCoresToUse.getValue();
+
+                final long start_time = System.currentTimeMillis();
+
+                String processMode = Configuration.readType(file);
+
+                                final String msgTask = "Task " + taskID + "/" + taskNumber + " :" + file.getAbsolutePath();
+
+                                switch (processMode) {
+
+                                    case "merging":
+                                        final VoxMergingCfg voxMergingCfg = new VoxMergingCfg();
+                                        voxMergingCfg.readConfiguration(file);
+
+                                        voxTool.mergeVoxelsFileV2(voxMergingCfg.getFiles(), voxMergingCfg.getOutputFile(), 0, voxMergingCfg.getVoxelParameters().getMaxPAD());
+
+                                        Platform.runLater(new Runnable() {
+
+                                            @Override
+                                            public void run() {
+                                                addFileToVoxelList(voxMergingCfg.getOutputFile());
+                                                setOnSucceeded(null);
+                                            }
+                                        });
+
+                                        break;
+
+                                    case "voxelisation-ALS":
+
+                                        final ALSVoxCfg aLSVoxCfg = new ALSVoxCfg();
+                                        aLSVoxCfg.readConfiguration(file);
+
+                                        voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
+
+                                            @Override
+                                            public void voxelisationProgress(String progress, int ratio) {
+                                                Platform.runLater(new Runnable() {
+
+                                                    @Override
+                                                    public void run() {
+
+                                                        updateMessage(msgTask + "\n" + progress);
+                                                    }
+                                                });
+
+                                            }
+
+                                            @Override
+                                            public void voxelisationFinished(float duration) {
+
+                                                logger.info("las voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
+                                            }
+                                        });
+
+                                        voxTool.voxeliseFromAls(aLSVoxCfg.getOutputFile(), aLSVoxCfg.getInputFile(), aLSVoxCfg.getTrajectoryFile(), aLSVoxCfg.getVoxelParameters(), MatrixConverter.convertMatrix4dToMat4D(aLSVoxCfg.getVopMatrix()), aLSVoxCfg.getFilters(), aLSVoxCfg.getClassifiedPointsToDiscard());
+
+                                        Platform.runLater(new Runnable() {
+
+                                            @Override
+                                            public void run() {
+
+                                                addFileToVoxelList(aLSVoxCfg.getOutputFile());
+                                            }
+                                        });
+
+                                        break;
+
+                                    case "voxelisation-TLS":
+
+                                        final TLSVoxCfg cfg = new TLSVoxCfg();
+                                        cfg.readConfiguration(file);
+                                        //final VoxelisationConfiguration cfg1 = new VoxelisationConfiguration();
+                                        //cfg1.readConfiguration(file);
+
+                                        switch (cfg.getInputType()) {
+
+                                            case RSP_PROJECT:
+
+                                                try {
+                                                    ArrayList<File> outputFiles = voxTool.voxeliseFromRsp(cfg.getOutputFile(), cfg.getInputFile(), cfg.getVoxelParameters(),
+                                                            MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()),
+                                                            MatrixConverter.convertMatrix4dToMat4D(cfg.getPopMatrix()),
+                                                            cfg.getMatricesAndFiles(), cfg.getFilters(), coreNumberToUse);
+
+                                                    if (cfg.getVoxelParameters().isMergingAfter()) {
+
+                                                        //if(!voxTool.isCancelled()){
+                                                            mergeVoxelsFileV2(outputFiles, cfg.getVoxelParameters().getMergedFile(), cfg.getVoxelParameters().getTransmittanceMode(), cfg.getVoxelParameters().getMaxPAD());
+                                                        //}
+
+                                                    }
+
+
+                                                }catch (Exception e) {
+
+                                                }
+
+                                                break;
+
+                                            case RXP_SCAN:
+
+                                                voxTool.voxeliseFromRxp(cfg.getOutputFile(), cfg.getInputFile(),
+                                                        cfg.getVoxelParameters().getDtmFile(),
+                                                        cfg.getVoxelParameters(),
+                                                        MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()),
+                                                        MatrixConverter.convertMatrix4dToMat4D(cfg.getPopMatrix()),
+                                                        MatrixConverter.convertMatrix4dToMat4D(cfg.getSopMatrix()),
+                                                        cfg.getFilters());
+
+                                                Platform.runLater(new Runnable() {
+
+                                                    @Override
+                                                    public void run() {
+
+                                                        addFileToVoxelList(cfg.getOutputFile());
+                                                    }
+                                                });
+
+                                                break;
+                                        }
+
+                                        break;
+
+                                    case "multi-resolutions":
+
+                                        final MultiResCfg multiResCfg = new MultiResCfg();
+                                        multiResCfg.readConfiguration(file);
+
+                                        ProcessingMultiRes process = new ProcessingMultiRes(multiResCfg.getMultiResPadMax(), multiResCfg.isMultiResUseDefaultMaxPad());
+
+                                        process.process(multiResCfg.getFiles());
+                                        process.write(multiResCfg.getOutputFile());
+
+                                        break;
+
+                                    case "multi-voxelisation":
+
+                                        MultiVoxCfg multiVoxCfg = new MultiVoxCfg();
+                                        multiVoxCfg.readConfiguration(file);
+                                        voxTool.multiVoxelisation(multiVoxCfg);
+
+                                        break;
+
+                                }
+                            }
+                        };
+                    }
+                };
+
+                break;
+        }
+    }*/
 
 }

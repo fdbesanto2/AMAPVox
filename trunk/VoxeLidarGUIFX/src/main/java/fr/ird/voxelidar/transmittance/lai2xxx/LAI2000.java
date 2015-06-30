@@ -31,27 +31,16 @@ public class LAI2000 extends LAI2xxx{
     
     public LAI2000(int shotNumber, ViewCap viewCap){
         
-        super(shotNumber, viewCap);
-        
-        initRings();
+        super(shotNumber, viewCap, new Ring(13, 0),
+                                    new Ring(28, 16),
+                                    new Ring(43, 32),
+                                    new Ring(58, 47),
+                                    new Ring(74, 61));
         
     }
 
     @Override
-    protected final void initRings() {
-        
-        //le lai2000 a 5 plages angulaires
-        rings = new Ring[5];
-        
-        rings[0] = new Ring(13, 0);
-        rings[1] = new Ring(28, 16);
-        rings[2] = new Ring(43, 32);
-        rings[3] = new Ring(58, 47);
-        rings[4] = new Ring(74, 61);
-    }
-
-    @Override
-    protected void writeOutput(File outputFile) {
+    public void writeOutput(File outputFile) {
         
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))){
             

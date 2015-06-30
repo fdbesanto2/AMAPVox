@@ -487,48 +487,6 @@ public class VoxelisationConfiguration extends Configuration{
                 processElement.addContent(filesElement);
             }
             
-        }else if(processMode == ProcessMode.MULTI_RES){
-            
-            processElement.setAttribute(new Attribute("mode","multi-resolutions"));
-            processElement.setAttribute(new Attribute("type","ALS"));
-                        
-            /***FILE LIST TO PROCESS***/
-            
-            processElement.addContent(createFilesElement(files));
-            
-            outputFileElement = new Element("output_file");
-            outputFileElement.setAttribute(new Attribute("src",outputFile.getAbsolutePath()));
-            processElement.addContent(outputFileElement);
-            
-            Element limitsElement = new Element("limits");
-            
-            limitsElement.setAttribute("use-default", String.valueOf(multiResUseDefaultMaxPad));
-            
-            limitsElement.addContent(createLimitElement("PAD_1m", "", String.valueOf(multiResPadMax[0])));
-            limitsElement.addContent(createLimitElement("PAD_2m", "", String.valueOf(multiResPadMax[1])));
-            limitsElement.addContent(createLimitElement("PAD_3m", "", String.valueOf(multiResPadMax[2])));
-            limitsElement.addContent(createLimitElement("PAD_4m", "", String.valueOf(multiResPadMax[3])));
-            limitsElement.addContent(createLimitElement("PAD_5m", "", String.valueOf(multiResPadMax[4])));
-            
-            processElement.addContent(limitsElement);
-            
-        }else if(processMode == ProcessMode.MERGING){
-            
-            processElement.setAttribute(new Attribute("mode","merging"));
-            
-            outputFileElement = new Element("output_file");
-            outputFileElement.setAttribute(new Attribute("src",outputFile.getAbsolutePath()));
-            processElement.addContent(outputFileElement);
-            
-            Element limitsElement = new Element("limits");
-            Element limitElement = new Element("limit");
-            limitElement.setAttribute("name", "PAD");
-            limitElement.setAttribute("min", "");
-            limitElement.setAttribute("max", String.valueOf(voxelParameters.getMaxPAD()));
-            limitsElement.addContent(limitElement);
-            processElement.addContent(limitsElement);
-            
-            processElement.addContent(createFilesElement(files));
         }
         
         //Element transmittanceFormula = new Element("transmittance");
@@ -545,46 +503,7 @@ public class VoxelisationConfiguration extends Configuration{
         }
     }
     
-    private Element createLimitElement(String name, String min, String max){
-        
-        Element limitElement = new Element("limit");
-        limitElement.setAttribute("name", name);
-        limitElement.setAttribute("min", min);
-        limitElement.setAttribute("max", max);
-        
-        return limitElement;
-    }
     
-    private Element createFilesElement(List<File> files){
-        
-        Element filesElement = new Element("files");
-            
-        for(File f : files){
-            filesElement.addContent(new Element("file").setAttribute("src", f.getAbsolutePath()));
-        }
-        
-        return filesElement;
-    }
-    
-    private InputType getInputFileType(int type){
-        
-        switch(type){
-            case 0:
-                return InputType.LAS_FILE;
-            case 1:
-                return InputType.LAZ_FILE;
-            case 2:
-                return InputType.POINTS_FILE;
-            case 3:
-                return InputType.LAS_FILE;
-            case 4:
-                return InputType.RXP_SCAN;
-            case 5:
-                return InputType.RSP_PROJECT;
-        }
-        
-        return null;
-    }
     
     @Override
     public void readConfiguration(File inputParametersFile){
@@ -1014,80 +933,6 @@ public class VoxelisationConfiguration extends Configuration{
                     }
 
                     break;
-
-                case "merging":
-                    processMode = ProcessMode.MERGING;
-
-                    outputFile = new File(processElement.getChild("output_file").getAttributeValue("src"));
-
-                    filesElement = processElement.getChild("files");
-                    List<Element> childrens = filesElement.getChildren("file");
-
-                    files = new ArrayList<>();
-
-                    for (Element e : childrens) {
-                        files.add(new File(e.getAttributeValue("src")));
-                    }
-                    
-                    voxelParameters = new VoxelParameters();
-                    
-                    limitsElement = processElement.getChild("limits");
-                    
-                    if(limitsElement != null){
-                        Element limitElement = limitsElement.getChild("limit");
-                        voxelParameters.setMaxPAD(Float.valueOf(limitElement.getAttributeValue("max")));
-                    }
-
-                    break;
-
-                case "multi-process":
-
-                    processMode = ProcessMode.MULTI_VOXELISATION_ALS_AND_MULTI_RES;
-                    /*
-                     filesElement = processElement.getChildren("files");
-                    
-                     files = new ArrayList<>();
-                    
-                     for(Element e : filesElement){
-                     files.add(new File(e.getAttributeValue("src")));
-                     }
-                     */
-                    break;
-
-                case "multi-resolutions":
-                    processMode = ProcessMode.MULTI_RES;
-
-                    filesElement = processElement.getChild("files");
-
-                    List<Element> fileElementList = filesElement.getChildren("file");
-
-                    files = new ArrayList<>();
-
-                    for (Element e : fileElementList) {
-                        files.add(new File(e.getAttributeValue("src")));
-                    }
-
-                    outputFile = new File(processElement.getChild("output_file").getAttributeValue("src"));
-
-                    limitsElement = processElement.getChild("limits");
-                    
-                    String tmp = limitsElement.getAttributeValue("use-default");
-                    if(tmp != null){
-                        multiResUseDefaultMaxPad = Boolean.valueOf(tmp);
-                    }
-                    
-                    List<Element> limitElementList = limitsElement.getChildren("limit");
-
-                    if (limitElementList != null) {
-                        multiResPadMax = new float[5];
-                        multiResPadMax[0] = Float.valueOf(limitElementList.get(0).getAttributeValue("max"));
-                        multiResPadMax[1] = Float.valueOf(limitElementList.get(1).getAttributeValue("max"));
-                        multiResPadMax[2] = Float.valueOf(limitElementList.get(2).getAttributeValue("max"));
-                        multiResPadMax[3] = Float.valueOf(limitElementList.get(3).getAttributeValue("max"));
-                        multiResPadMax[4] = Float.valueOf(limitElementList.get(4).getAttributeValue("max"));
-                    }
-
-                    break;
             }
             
             if(mode.equals("voxelisation") || mode.equals("multi-voxelisation")){
@@ -1123,39 +968,6 @@ public class VoxelisationConfiguration extends Configuration{
         }
 
     }
-    
-    private Element createMatrixElement(String id, String data){
-        
-        Element matrixElement = new Element("matrix");
-        matrixElement.setAttribute("type_id", id);
-        matrixElement.setText(data);
-        
-        return matrixElement;
-    }
-    
-    private Matrix4d getMatrixFromData(String data){
-        
-        data = data.replaceAll("\n", ",");
-        data = data.replaceAll(" ", "");
-        String[] datas = data.split(",");
-        
-        Matrix4d mat = new Matrix4d();
-        int i = 0;
-        int j = 0;
-        for(int k=0;k<datas.length;k++){
-
-            mat.setElement(j, i, Double.valueOf(datas[k]));
-            if(i%3 == 0 && i!=0){
-                j++;
-                i = 0; 
-            }else{
-                i++;
-            }
-        }
-        
-        return mat;
-    }
-    
 
     public ProcessMode getProcessMode() {
         return processMode;
