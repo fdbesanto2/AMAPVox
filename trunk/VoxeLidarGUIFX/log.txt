@@ -2927,3 +2927,972 @@ java.lang.NullPointerException
 2015-06-30 18:02:02 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/period_1.bmp written
 2015-06-30 18:02:02 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/period_2.bmp
 2015-06-30 18:02:02 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/period_2.bmp written
+2015-07-01 08:08:35 INFO  - Global input file ignored.
+2015-07-01 08:12:27 INFO  - Saved libfile: /tmp/RivLibLibrary-8079368553380767798.tmp
+2015-07-01 08:12:27 INFO  - /tmp/RivLibLibrary-8079368553380767798.tmp
+2015-07-01 08:12:27 INFO  - rxp extraction is started
+2015-07-01 08:12:27 INFO  - rxp extraction is started
+2015-07-01 08:12:27 INFO  - rxp extraction is started
+2015-07-01 08:12:27 INFO  - rxp extraction is started
+2015-07-01 08:12:27 INFO  - rxp extraction is started
+2015-07-01 08:12:27 INFO  - rxp extraction is started
+2015-07-01 08:12:27 INFO  - rxp extraction is started
+2015-07-01 08:12:27 INFO  - rxp extraction is started
+2015-07-01 08:12:27 INFO  - allocate!!!!!!!!
+2015-07-01 08:12:27 INFO  - allocate!!!!!!!!
+2015-07-01 08:12:27 INFO  - allocate!!!!!!!!
+2015-07-01 08:12:27 INFO  - allocate!!!!!!!!
+2015-07-01 08:12:27 INFO  - allocate!!!!!!!!
+2015-07-01 08:12:27 INFO  - allocate!!!!!!!!
+2015-07-01 08:12:27 INFO  - allocate!!!!!!!!
+2015-07-01 08:12:27 INFO  - allocate!!!!!!!!
+2015-07-01 08:12:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 08:12:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 08:12:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 08:12:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 08:12:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 08:12:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 08:12:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 08:12:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 08:12:27 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos007/SINGLESCANS/130917_173534.rxp is open
+2015-07-01 08:12:27 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos008/SINGLESCANS/130917_180238.rxp is open
+2015-07-01 08:12:28 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos004/SINGLESCANS/130917_170323.rxp is open
+2015-07-01 08:12:28 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos002/SINGLESCANS/130917_155228.rxp is open
+2015-07-01 08:12:28 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos003/SINGLESCANS/130917_165102.rxp is open
+2015-07-01 08:12:28 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos009/SINGLESCANS/130917_181314.rxp is open
+2015-07-01 08:12:28 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos001/SINGLESCANS/130917_153258.rxp is open
+2015-07-01 08:12:28 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos006/SINGLESCANS/130917_172354.rxp is open
+2015-07-01 08:12:36 INFO  - Shots processed: 1000000
+2015-07-01 08:12:37 INFO  - Shots processed: 1000000
+2015-07-01 08:12:37 INFO  - Shots processed: 1000000
+2015-07-01 08:12:37 INFO  - Shots processed: 1000000
+2015-07-01 08:12:37 INFO  - Shots processed: 1000000
+2015-07-01 08:12:37 INFO  - Shots processed: 1000000
+2015-07-01 08:12:38 INFO  - Shots processed: 1000000
+2015-07-01 08:12:38 INFO  - Shots processed: 1000000
+2015-07-01 08:12:45 INFO  - Shots processed: 2000000
+2015-07-01 08:12:46 INFO  - Shots processed: 2000000
+2015-07-01 08:12:46 INFO  - Shots processed: 2000000
+2015-07-01 08:12:46 INFO  - Shots processed: 2000000
+2015-07-01 08:12:46 INFO  - Shots processed: 2000000
+2015-07-01 08:12:46 INFO  - Shots processed: 2000000
+2015-07-01 08:12:46 INFO  - Shots processed: 2000000
+2015-07-01 08:12:47 INFO  - Shots processed: 2000000
+2015-07-01 08:12:54 INFO  - Shots processed: 3000000
+2015-07-01 08:12:54 INFO  - Shots processed: 3000000
+2015-07-01 08:12:54 INFO  - Shots processed: 3000000
+2015-07-01 08:12:54 INFO  - Shots processed: 3000000
+2015-07-01 08:12:55 INFO  - Shots processed: 3000000
+2015-07-01 08:12:55 INFO  - Shots processed: 3000000
+2015-07-01 08:12:55 INFO  - Shots processed: 3000000
+2015-07-01 08:12:57 INFO  - Shots processed: 3000000
+2015-07-01 08:13:03 INFO  - Shots processed: 4000000
+2015-07-01 08:13:03 INFO  - Shots processed: 4000000
+2015-07-01 08:13:03 INFO  - Shots processed: 4000000
+2015-07-01 08:13:04 INFO  - Shots processed: 4000000
+2015-07-01 08:13:04 INFO  - Shots processed: 4000000
+2015-07-01 08:13:04 INFO  - Shots processed: 4000000
+2015-07-01 08:13:04 INFO  - Shots processed: 4000000
+2015-07-01 08:13:07 INFO  - Shots processed: 4000000
+2015-07-01 08:13:11 INFO  - Shots processed: 5000000
+2015-07-01 08:13:11 INFO  - Shots processed: 5000000
+2015-07-01 08:13:12 INFO  - Shots processed: 5000000
+2015-07-01 08:13:12 INFO  - Shots processed: 5000000
+2015-07-01 08:13:13 INFO  - Shots processed: 5000000
+2015-07-01 08:13:14 INFO  - Shots processed: 5000000
+2015-07-01 08:13:14 INFO  - Shots processed: 5000000
+2015-07-01 08:13:17 INFO  - Shots processed: 5000000
+2015-07-01 08:13:19 INFO  - Shots processed: 6000000
+2015-07-01 08:13:19 INFO  - Shots processed: 6000000
+2015-07-01 08:13:20 INFO  - Shots processed: 6000000
+2015-07-01 08:13:20 INFO  - Shots processed: 6000000
+2015-07-01 08:13:21 INFO  - Shots processed: 6000000
+2015-07-01 08:13:23 INFO  - Shots processed: 6000000
+2015-07-01 08:13:23 INFO  - Shots processed: 6000000
+2015-07-01 08:13:27 INFO  - Shots processed: 7000000
+2015-07-01 08:13:27 INFO  - Shots processed: 6000000
+2015-07-01 08:13:27 INFO  - Shots processed: 7000000
+2015-07-01 08:13:28 INFO  - Shots processed: 7000000
+2015-07-01 08:13:28 INFO  - Shots processed: 7000000
+2015-07-01 08:13:29 INFO  - Shots processed: 7000000
+2015-07-01 08:13:30 INFO  - Shots processed: 7000000
+2015-07-01 08:13:31 INFO  - Shots processed: 7000000
+2015-07-01 08:13:34 INFO  - Shots processed: 8000000
+2015-07-01 08:13:35 INFO  - Shots processed: 8000000
+2015-07-01 08:13:35 INFO  - Shots processed: 7000000
+2015-07-01 08:13:36 INFO  - Shots processed: 8000000
+2015-07-01 08:13:36 INFO  - Shots processed: 8000000
+2015-07-01 08:13:37 INFO  - Shots processed: 8000000
+2015-07-01 08:13:38 INFO  - Shots processed: 8000000
+2015-07-01 08:13:40 INFO  - Shots processed: 8000000
+2015-07-01 08:13:41 INFO  - Shots processed: 9000000
+2015-07-01 08:13:42 INFO  - Shots processed: 9000000
+2015-07-01 08:13:42 INFO  - Shots processed: 8000000
+2015-07-01 08:13:43 INFO  - Shots processed: 9000000
+2015-07-01 08:13:44 INFO  - Shots processed: 9000000
+2015-07-01 08:13:44 INFO  - Shots processed: 9000000
+2015-07-01 08:13:46 INFO  - Shots processed: 9000000
+2015-07-01 08:13:47 INFO  - Shots processed: 10000000
+2015-07-01 08:13:48 INFO  - Shots processed: 10000000
+2015-07-01 08:13:49 INFO  - Shots processed: 9000000
+2015-07-01 08:13:50 INFO  - Shots processed: 10000000
+2015-07-01 08:13:50 INFO  - Shots processed: 9000000
+2015-07-01 08:13:53 INFO  - Shots processed: 10000000
+2015-07-01 08:13:53 INFO  - Shots processed: 10000000
+2015-07-01 08:13:54 INFO  - Shots processed: 11000000
+2015-07-01 08:13:54 INFO  - Shots processed: 11000000
+2015-07-01 08:13:55 INFO  - Shots processed: 10000000
+2015-07-01 08:13:56 INFO  - Shots processed: 11000000
+2015-07-01 08:13:57 INFO  - Shots processed: 10000000
+2015-07-01 08:13:59 INFO  - Shots processed: 10000000
+2015-07-01 08:14:01 INFO  - Shots processed: 12000000
+2015-07-01 08:14:01 INFO  - Voxelisation was stopped
+2015-07-01 08:14:01 INFO  - Task cancelled
+2015-07-01 08:14:01 INFO  - Task cancelled
+2015-07-01 08:14:01 INFO  - Task cancelled
+2015-07-01 08:14:01 INFO  - Task cancelled
+2015-07-01 08:14:01 INFO  - Task cancelled
+2015-07-01 08:14:01 INFO  - Task cancelled
+2015-07-01 08:14:01 INFO  - Task cancelled
+2015-07-01 08:14:01 INFO  - Task cancelled
+2015-07-01 08:21:11 INFO  - Cannot find input_file element
+2015-07-01 08:21:11 ERROR - java.lang.NullPointerException
+2015-07-01 08:21:35 INFO  - Cannot find input_file element
+2015-07-01 08:21:35 ERROR - java.lang.NullPointerException
+2015-07-01 08:22:00 INFO  - Cannot find input_file element
+2015-07-01 08:22:04 ERROR - java.lang.NullPointerException
+2015-07-01 08:22:37 INFO  - Cannot find input_file element
+2015-07-01 08:22:39 ERROR - java.lang.NullPointerException
+2015-07-01 08:22:59 INFO  - Cannot find input_file element
+2015-07-01 08:23:01 ERROR - java.lang.NullPointerException
+2015-07-01 08:23:40 INFO  - Cannot find input_file element
+2015-07-01 08:24:30 ERROR - java.lang.NullPointerException
+2015-07-01 08:25:16 INFO  - Cannot find input_file element
+2015-07-01 08:25:16 INFO  - Cannot find output_file element
+2015-07-01 08:25:16 INFO  - Cannot find bounding-box element
+2015-07-01 08:25:23 INFO  - Cannot find input_file element
+2015-07-01 08:25:23 INFO  - Cannot find output_file element
+2015-07-01 08:25:23 INFO  - Cannot find bounding-box element
+2015-07-01 08:26:19 INFO  - Cannot find input_file element
+2015-07-01 08:26:19 INFO  - Cannot find output_file element
+2015-07-01 08:26:19 INFO  - Cannot find bounding-box element
+2015-07-01 08:26:19 INFO  - Cannot find input_file element
+2015-07-01 08:26:19 INFO  - Cannot find output_file element
+2015-07-01 08:26:19 INFO  - Cannot find bounding-box element
+2015-07-01 08:26:25 INFO  - Cannot find input_file element
+2015-07-01 08:26:25 INFO  - Cannot find output_file element
+2015-07-01 08:26:25 INFO  - Cannot find bounding-box element
+2015-07-01 08:26:25 INFO  - Cannot find input_file element
+2015-07-01 08:26:25 INFO  - Cannot find output_file element
+2015-07-01 08:26:25 INFO  - Cannot find bounding-box element
+2015-07-01 08:26:54 INFO  - Cannot find input_file element
+2015-07-01 08:26:54 INFO  - Cannot find output_file element
+2015-07-01 08:26:54 INFO  - Cannot find bounding-box element
+2015-07-01 08:26:54 INFO  - Cannot find input_file element
+2015-07-01 08:26:54 INFO  - Cannot find output_file element
+2015-07-01 08:26:54 INFO  - Cannot find bounding-box element
+2015-07-01 08:27:13 INFO  - Cannot find input_file element
+2015-07-01 08:27:13 INFO  - Cannot find output_file element
+2015-07-01 08:27:13 INFO  - Cannot find bounding-box element
+2015-07-01 08:27:13 INFO  - Cannot find input_file element
+2015-07-01 08:27:13 INFO  - Cannot find output_file element
+2015-07-01 08:27:13 INFO  - Cannot find bounding-box element
+2015-07-01 08:28:10 INFO  - Cannot find input_file element
+2015-07-01 08:28:10 INFO  - Cannot find output_file element
+2015-07-01 08:28:10 INFO  - Cannot find bounding-box element
+2015-07-01 08:33:20 INFO  - allocate!!!!!!!!
+2015-07-01 08:33:20 INFO  - Voxel space informations:
+			Corner Inf	:	(448095.4917605496, 470899.3079434532, 9.21)
+			Corner Sup	:	(448141.16684763494, 471186.0631058712, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 08:33:20 INFO  - Saved libfile: /tmp/LasZipLibrary-1017666393451847713.tmp
+2015-07-01 08:33:20 INFO  - /tmp/LasZipLibrary-1017666393451847713.tmp
+2015-07-01 08:33:20 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 08:33:21 INFO  - Laz file is closed
+2015-07-01 08:33:22 INFO  - Shots processed: 141106
+2015-07-01 08:33:22 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-07-01 08:33:26 INFO  - file written ( 3.0 s )
+2015-07-01 08:33:26 INFO  - las voxelisation finished in 9.0 s
+2015-07-01 08:44:26 INFO  - allocate!!!!!!!!
+2015-07-01 08:44:26 INFO  - Voxel space informations:
+			Corner Inf	:	(448095.4917605496, 470899.3079434532, 9.21)
+			Corner Sup	:	(448141.16684763494, 471186.0631058712, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 08:44:26 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 08:44:27 INFO  - Laz file is closed
+2015-07-01 08:44:28 INFO  - Shots processed: 141106
+2015-07-01 08:44:28 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-07-01 08:44:31 INFO  - file written ( 3.0 s )
+2015-07-01 08:44:31 INFO  - las voxelisation finished in 8.0 s
+2015-07-01 08:44:52 INFO  - allocate!!!!!!!!
+2015-07-01 08:44:52 INFO  - Voxel space informations:
+			Corner Inf	:	(448095.4917605496, 470899.3079434532, 9.21)
+			Corner Sup	:	(448141.16684763494, 471186.0631058712, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 08:44:52 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 08:44:53 INFO  - Laz file is closed
+2015-07-01 08:44:53 INFO  - Shots processed: 214
+2015-07-01 08:44:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-07-01 08:44:56 INFO  - file written ( 2.0 s )
+2015-07-01 08:44:56 INFO  - las voxelisation finished in 6.0 s
+2015-07-01 08:48:14 INFO  - allocate!!!!!!!!
+2015-07-01 08:48:14 INFO  - Voxel space informations:
+			Corner Inf	:	(448095.4917605496, 470899.3079434532, 9.21)
+			Corner Sup	:	(448141.16684763494, 471186.0631058712, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 08:48:14 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 08:48:15 INFO  - Laz file is closed
+2015-07-01 08:48:16 INFO  - Shots processed: 141106
+2015-07-01 08:48:16 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-07-01 08:48:19 INFO  - file written ( 2.0 s )
+2015-07-01 08:48:19 INFO  - las voxelisation finished in 8.0 s
+2015-07-01 08:52:57 INFO  - allocate!!!!!!!!
+2015-07-01 08:52:57 INFO  - Voxel space informations:
+			Corner Inf	:	(448095.4917605496, 470899.3079434532, 9.21)
+			Corner Sup	:	(448141.16684763494, 471186.0631058712, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 08:52:57 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 08:52:58 INFO  - Laz file is closed
+2015-07-01 08:52:59 INFO  - Shots processed: 141106
+2015-07-01 08:52:59 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-07-01 08:53:03 INFO  - file written ( 3.0 s )
+2015-07-01 08:53:03 INFO  - las voxelisation finished in 9.0 s
+2015-07-01 08:54:55 INFO  - allocate!!!!!!!!
+2015-07-01 08:54:55 INFO  - Voxel space informations:
+			Corner Inf	:	(448095.4917605496, 470899.3079434532, 9.21)
+			Corner Sup	:	(448141.16684763494, 471186.0631058712, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 08:54:55 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 08:54:56 INFO  - Laz file is closed
+2015-07-01 08:57:09 INFO  - Shots processed: 141106
+2015-07-01 08:57:09 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-07-01 08:57:12 INFO  - file written ( 2.0 s )
+2015-07-01 08:57:12 INFO  - las voxelisation finished in 140.0 s
+2015-07-01 08:58:40 INFO  - allocate!!!!!!!!
+2015-07-01 08:58:40 INFO  - Voxel space informations:
+			Corner Inf	:	(448095.4917605496, 470899.3079434532, 9.21)
+			Corner Sup	:	(448141.16684763494, 471186.0631058712, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 08:58:40 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 08:58:41 INFO  - Laz file is closed
+2015-07-01 08:58:42 INFO  - Shots processed: 141106
+2015-07-01 08:58:42 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-07-01 08:58:45 INFO  - file written ( 3.0 s )
+2015-07-01 08:58:45 INFO  - las voxelisation finished in 8.0 s
+2015-07-01 09:00:25 INFO  - Cannot find input_file element
+2015-07-01 09:00:25 INFO  - Cannot find output_file element
+2015-07-01 09:00:25 INFO  - Cannot find bounding-box element
+2015-07-01 09:01:19 INFO  - calculate bounding-box of file 1/288
+2015-07-01 09:01:30 INFO  - calculate bounding-box of file 2/288
+2015-07-01 09:01:33 INFO  - calculate bounding-box of file 3/288
+2015-07-01 09:01:34 INFO  - calculate bounding-box of file 4/288
+2015-07-01 09:01:36 INFO  - calculate bounding-box of file 5/288
+2015-07-01 09:01:38 INFO  - calculate bounding-box of file 6/288
+2015-07-01 09:01:39 INFO  - calculate bounding-box of file 7/288
+2015-07-01 09:01:41 INFO  - calculate bounding-box of file 8/288
+2015-07-01 09:01:42 INFO  - calculate bounding-box of file 9/288
+2015-07-01 09:01:44 INFO  - calculate bounding-box of file 10/288
+2015-07-01 09:01:46 INFO  - calculate bounding-box of file 11/288
+2015-07-01 09:01:47 INFO  - calculate bounding-box of file 12/288
+2015-07-01 09:01:49 INFO  - calculate bounding-box of file 13/288
+2015-07-01 09:01:50 INFO  - calculate bounding-box of file 14/288
+2015-07-01 09:01:52 INFO  - calculate bounding-box of file 15/288
+2015-07-01 09:01:54 INFO  - calculate bounding-box of file 16/288
+2015-07-01 09:01:55 INFO  - calculate bounding-box of file 17/288
+2015-07-01 09:11:30 INFO  - allocate!!!!!!!!
+2015-07-01 09:11:30 INFO  - Voxel space informations:
+			Corner Inf	:	(448095.4917605496, 470899.3079434532, 9.21)
+			Corner Sup	:	(448141.16684763494, 471186.0631058712, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 09:11:30 INFO  - Saved libfile: /tmp/LasZipLibrary-895020201236708616.tmp
+2015-07-01 09:11:30 INFO  - /tmp/LasZipLibrary-895020201236708616.tmp
+2015-07-01 09:11:30 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 09:11:30 INFO  - Laz file is closed
+2015-07-01 09:11:32 INFO  - Shots processed: 141106
+2015-07-01 09:11:32 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-07-01 09:11:35 INFO  - file written ( 3.0 s )
+2015-07-01 09:11:35 INFO  - las voxelisation finished in 9.0 s
+2015-07-01 09:15:16 INFO  - allocate!!!!!!!!
+2015-07-01 09:15:16 INFO  - Voxel space informations:
+			Corner Inf	:	(448095.4917605496, 470899.3079434532, 9.21)
+			Corner Sup	:	(448141.16684763494, 471186.0631058712, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 09:15:16 INFO  - Saved libfile: /tmp/LasZipLibrary-5261468626749157702.tmp
+2015-07-01 09:15:16 INFO  - /tmp/LasZipLibrary-5261468626749157702.tmp
+2015-07-01 09:15:16 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 09:15:17 INFO  - Laz file is closed
+2015-07-01 09:15:18 INFO  - Shots processed: 141106
+2015-07-01 09:15:18 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-07-01 09:15:20 INFO  - file written ( 2.0 s )
+2015-07-01 09:15:20 INFO  - las voxelisation finished in 7.0 s
+2015-07-01 09:15:35 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 09:15:36 INFO  - Laz file is closed
+2015-07-01 09:15:53 INFO  - allocate!!!!!!!!
+2015-07-01 09:15:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.21)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 09:15:53 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 09:15:54 INFO  - Laz file is closed
+2015-07-01 09:15:55 INFO  - Shots processed: 141106
+2015-07-01 09:15:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-07-01 09:15:58 INFO  - file written ( 3.0 s )
+2015-07-01 09:15:58 INFO  - las voxelisation finished in 8.0 s
+2015-07-01 09:19:36 INFO  - Turtle built with 46 sectors
+2015-07-01 09:19:36 INFO  - ===== /home/calcul/Documents/Julien/las_paracou_transmittance/las_1m.vox =====
+2015-07-01 09:19:36 INFO  - header: VOXEL SPACE
+2015-07-01 09:19:36 INFO  - VOXEL SPACE
+2015-07-01 09:19:36 INFO  - Min corner: (448095.5, 470899.3125, 9.210000038146973)
+2015-07-01 09:19:36 INFO  - Max corner: (448141.15625, 471186.0625, 68.9800033569336)
+2015-07-01 09:19:36 INFO  - Splitting: (46, 287, 60)
+2015-07-01 09:19:36 INFO  - allocate Voxels
+2015-07-01 09:19:36 INFO  - allocate MNT
+2015-07-01 09:19:36 INFO  - Data parsing
+2015-07-01 09:19:36 INFO  -  100000 shots
+2015-07-01 09:19:36 INFO  -  200000 shots
+2015-07-01 09:19:36 INFO  -  300000 shots
+2015-07-01 09:19:36 INFO  -  400000 shots
+2015-07-01 09:19:36 INFO  -  500000 shots
+2015-07-01 09:19:37 INFO  -  600000 shots
+2015-07-01 09:19:37 INFO  -  700000 shots
+2015-07-01 09:19:37 INFO  - 792120scans
+
+2015-07-01 09:19:37 INFO  - nb positions= 12870
+2015-07-01 09:19:37 INFO  - Computation of transmittance
+2015-07-01 09:19:38 INFO  - 1000/12870
+2015-07-01 09:19:39 INFO  - 2000/12870
+2015-07-01 09:19:40 INFO  - 3000/12870
+2015-07-01 09:19:41 INFO  - 4000/12870
+2015-07-01 09:19:42 INFO  - 5000/12870
+2015-07-01 09:19:43 INFO  - 6000/12870
+2015-07-01 09:19:44 INFO  - 7000/12870
+2015-07-01 09:19:45 INFO  - 8000/12870
+2015-07-01 09:19:46 INFO  - 9000/12870
+2015-07-01 09:19:47 INFO  - 10000/12870
+2015-07-01 09:19:48 INFO  - 11000/12870
+2015-07-01 09:19:49 INFO  - 12000/12870
+2015-07-01 09:19:49 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/output.txt
+2015-07-01 09:19:50 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/output.txt written
+2015-07-01 09:19:50 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/period_1.bmp
+2015-07-01 09:19:50 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/period_1.bmp written
+2015-07-01 09:19:50 INFO  - Writing file /home/calcul/Documents/Julien/las_paracou_transmittance/period_2.bmp
+2015-07-01 09:19:50 INFO  - File /home/calcul/Documents/Julien/las_paracou_transmittance/period_2.bmp written
+2015-07-01 09:23:30 INFO  - rxp extraction is started
+2015-07-01 09:23:30 INFO  - allocate!!!!!!!!
+2015-07-01 09:23:30 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -2.0)
+			Corner Sup	:	(50.0, 50.0, 60.0)
+			Dimensions	:	(100, 100, 62)
+			Toricity 	:	false
+
+2015-07-01 09:23:30 INFO  - Saved libfile: /tmp/RivLibLibrary-5805299994361519204.tmp
+2015-07-01 09:23:30 INFO  - /tmp/RivLibLibrary-5805299994361519204.tmp
+2015-07-01 09:23:30 INFO  - Rxp file /media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos001/SINGLESCANS/130917_153258.rxp is open
+2015-07-01 09:23:36 INFO  - Shots processed: 1000000
+2015-07-01 09:23:43 INFO  - Shots processed: 2000000
+2015-07-01 09:23:50 INFO  - Shots processed: 3000000
+2015-07-01 09:23:57 INFO  - Shots processed: 4000000
+2015-07-01 09:24:04 INFO  - Shots processed: 5000000
+2015-07-01 09:24:10 INFO  - Shots processed: 6000000
+2015-07-01 09:24:17 INFO  - Shots processed: 7000000
+2015-07-01 09:24:23 INFO  - Shots processed: 8000000
+2015-07-01 09:24:30 INFO  - Shots processed: 9000000
+2015-07-01 09:24:36 INFO  - Shots processed: 10000000
+2015-07-01 09:24:43 INFO  - Shots processed: 11000000
+2015-07-01 09:24:50 INFO  - Shots processed: 12000000
+2015-07-01 09:24:57 INFO  - Shots processed: 13000000
+2015-07-01 09:25:04 INFO  - Shots processed: 14000000
+2015-07-01 09:25:10 INFO  - Shots processed: 15000000
+2015-07-01 09:25:16 INFO  - Shots processed: 16000000
+2015-07-01 09:25:22 INFO  - Shots processed: 17000000
+2015-07-01 09:25:28 INFO  - Shots processed: 18000000
+2015-07-01 09:25:34 INFO  - Shots processed: 19000000
+2015-07-01 09:25:41 INFO  - Shots processed: 20000000
+2015-07-01 09:25:48 INFO  - Shots processed: 21000000
+2015-07-01 09:25:54 INFO  - Shots processed: 22000000
+2015-07-01 09:25:57 INFO  - Shots processed: 22520922
+2015-07-01 09:25:57 INFO  - voxelisation is finished ( 147.0 s )
+2015-07-01 09:25:57 INFO  - writing file: /home/calcul/Documents/Julien/test.vox
+2015-07-01 09:25:59 INFO  - file written ( 2.0 s )
+2015-07-01 09:25:59 INFO  - Voxelisation finished in 149.0 s
+2015-07-01 09:45:15 INFO  - Nombre de valeurs correctes: 488791/792120
+2015-07-01 09:45:15 INFO  - Nombre de valeurs corrigées: 0/792120
+2015-07-01 09:45:15 INFO  - Nombre de valeurs mises à défaut: 303329/792120
+2015-07-01 11:11:42 INFO  - Loading point cloud file...
+2015-07-01 11:11:52 INFO  - Point file contains more columns than necessary, parsing the three first
+2015-07-01 11:12:00 INFO  - Point cloud file loaded
+2015-07-01 11:12:00 INFO  - rxp extraction is started
+2015-07-01 11:12:00 INFO  - rxp extraction is started
+2015-07-01 11:12:00 INFO  - rxp extraction is started
+2015-07-01 11:12:00 INFO  - rxp extraction is started
+2015-07-01 11:12:00 INFO  - rxp extraction is started
+2015-07-01 11:12:00 INFO  - rxp extraction is started
+2015-07-01 11:12:00 INFO  - allocate!!!!!!!!
+2015-07-01 11:12:00 INFO  - allocate!!!!!!!!
+2015-07-01 11:12:00 INFO  - allocate!!!!!!!!
+2015-07-01 11:12:00 INFO  - allocate!!!!!!!!
+2015-07-01 11:12:00 INFO  - allocate!!!!!!!!
+2015-07-01 11:12:00 INFO  - allocate!!!!!!!!
+2015-07-01 11:12:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-21.51608, -5.657139, -1.9879286)
+			Corner Sup	:	(7.9040527, 24.302492, 44.113934)
+			Dimensions	:	(30, 30, 47)
+			Toricity 	:	false
+
+2015-07-01 11:12:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-21.51608, -5.657139, -1.9879286)
+			Corner Sup	:	(7.9040527, 24.302492, 44.113934)
+			Dimensions	:	(30, 30, 47)
+			Toricity 	:	false
+
+2015-07-01 11:12:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-21.51608, -5.657139, -1.9879286)
+			Corner Sup	:	(7.9040527, 24.302492, 44.113934)
+			Dimensions	:	(30, 30, 47)
+			Toricity 	:	false
+
+2015-07-01 11:12:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-21.51608, -5.657139, -1.9879286)
+			Corner Sup	:	(7.9040527, 24.302492, 44.113934)
+			Dimensions	:	(30, 30, 47)
+			Toricity 	:	false
+
+2015-07-01 11:12:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-21.51608, -5.657139, -1.9879286)
+			Corner Sup	:	(7.9040527, 24.302492, 44.113934)
+			Dimensions	:	(30, 30, 47)
+			Toricity 	:	false
+
+2015-07-01 11:12:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-21.51608, -5.657139, -1.9879286)
+			Corner Sup	:	(7.9040527, 24.302492, 44.113934)
+			Dimensions	:	(30, 30, 47)
+			Toricity 	:	false
+
+2015-07-01 11:12:00 INFO  - Saved libfile: /tmp/RivLibLibrary-2146187930010222494.tmp
+2015-07-01 11:12:00 INFO  - /tmp/RivLibLibrary-2146187930010222494.tmp
+2015-07-01 11:12:01 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_112953.rxp is open
+2015-07-01 11:12:01 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos001/SINGLESCANS/140331_101534.rxp is open
+2015-07-01 11:12:01 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos004/SINGLESCANS/140331_113724.rxp is open
+2015-07-01 11:12:01 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos002/SINGLESCANS/140331_101944.rxp is open
+2015-07-01 11:12:01 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos005/SINGLESCANS/140331_115917.rxp is open
+2015-07-01 11:12:01 INFO  - Rxp file /media/calcul/IomegaHDD/2014-03-31.ID2-3.RISCAN/SCANS/ScanPos003/SINGLESCANS/140331_110207.rxp is open
+2015-07-01 11:12:07 INFO  - Shots processed: 1000000
+2015-07-01 11:12:07 INFO  - Shots processed: 1000000
+2015-07-01 11:12:07 INFO  - Shots processed: 1000000
+2015-07-01 11:12:07 INFO  - Shots processed: 1000000
+2015-07-01 11:12:08 INFO  - Shots processed: 1000000
+2015-07-01 11:12:10 INFO  - Shots processed: 1000000
+2015-07-01 11:12:12 INFO  - Shots processed: 2000000
+2015-07-01 11:12:13 INFO  - Shots processed: 2000000
+2015-07-01 11:12:13 INFO  - Shots processed: 2000000
+2015-07-01 11:12:14 INFO  - Shots processed: 2000000
+2015-07-01 11:12:15 INFO  - Shots processed: 2000000
+2015-07-01 11:12:18 INFO  - Shots processed: 3000000
+2015-07-01 11:12:18 INFO  - Shots processed: 2000000
+2015-07-01 11:12:20 INFO  - Shots processed: 3000000
+2015-07-01 11:12:20 INFO  - Shots processed: 3000000
+2015-07-01 11:12:21 INFO  - Shots processed: 3000000
+2015-07-01 11:12:23 INFO  - Shots processed: 3000000
+2015-07-01 11:12:24 INFO  - Shots processed: 4000000
+2015-07-01 11:12:26 INFO  - Shots processed: 3000000
+2015-07-01 11:12:28 INFO  - Shots processed: 4000000
+2015-07-01 11:12:28 INFO  - Shots processed: 4000000
+2015-07-01 11:12:28 INFO  - Shots processed: 4000000
+2015-07-01 11:12:31 INFO  - Shots processed: 5000000
+2015-07-01 11:12:32 INFO  - Shots processed: 4000000
+2015-07-01 11:12:33 INFO  - Shots processed: 4000000
+2015-07-01 11:12:35 INFO  - Shots processed: 5000000
+2015-07-01 11:12:35 INFO  - Shots processed: 5000000
+2015-07-01 11:12:38 INFO  - Shots processed: 6000000
+2015-07-01 11:12:38 INFO  - Shots processed: 5000000
+2015-07-01 11:12:39 INFO  - Shots processed: 4810881
+2015-07-01 11:12:39 INFO  - voxelisation is finished ( 38.0 s )
+2015-07-01 11:12:39 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/Projet_pierre/test_tls_pierre/140331_101534.rxp.vox
+2015-07-01 11:12:39 INFO  - file written ( 0.0 s )
+2015-07-01 11:12:41 INFO  - Shots processed: 6000000
+2015-07-01 11:12:41 INFO  - Shots processed: 6000000
+2015-07-01 11:12:43 INFO  - Shots processed: 5000000
+2015-07-01 11:12:44 INFO  - Shots processed: 7000000
+2015-07-01 11:12:46 INFO  - Shots processed: 7000000
+2015-07-01 11:12:47 INFO  - Shots processed: 7000000
+2015-07-01 11:12:48 INFO  - Shots processed: 6000000
+2015-07-01 11:12:52 INFO  - Shots processed: 8000000
+2015-07-01 11:12:52 INFO  - Shots processed: 8000000
+2015-07-01 11:12:52 INFO  - Shots processed: 8000000
+2015-07-01 11:12:54 INFO  - Shots processed: 6000000
+2015-07-01 11:12:56 INFO  - Shots processed: 7000000
+2015-07-01 11:12:58 INFO  - Shots processed: 9000000
+2015-07-01 11:12:58 INFO  - Shots processed: 9000000
+2015-07-01 11:12:58 INFO  - Shots processed: 9000000
+2015-07-01 11:13:03 INFO  - Shots processed: 10000000
+2015-07-01 11:13:03 INFO  - Shots processed: 10000000
+2015-07-01 11:13:03 INFO  - Shots processed: 8000000
+2015-07-01 11:13:03 INFO  - Shots processed: 10000000
+2015-07-01 11:13:04 INFO  - Shots processed: 7000000
+2015-07-01 11:13:09 INFO  - Shots processed: 11000000
+2015-07-01 11:13:09 INFO  - Shots processed: 11000000
+2015-07-01 11:13:09 INFO  - Shots processed: 11000000
+2015-07-01 11:13:10 INFO  - Shots processed: 9000000
+2015-07-01 11:13:10 INFO  - Shots processed: 11293701
+2015-07-01 11:13:10 INFO  - voxelisation is finished ( 70.0 s )
+2015-07-01 11:13:10 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/Projet_pierre/test_tls_pierre/140331_113724.rxp.vox
+2015-07-01 11:13:11 INFO  - Shots processed: 11295629
+2015-07-01 11:13:11 INFO  - voxelisation is finished ( 70.0 s )
+2015-07-01 11:13:11 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/Projet_pierre/test_tls_pierre/140331_112953.rxp.vox
+2015-07-01 11:13:11 INFO  - Shots processed: 11295489
+2015-07-01 11:13:11 INFO  - voxelisation is finished ( 70.0 s )
+2015-07-01 11:13:11 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/Projet_pierre/test_tls_pierre/140331_115917.rxp.vox
+2015-07-01 11:13:11 INFO  - file written ( 0.0 s )
+2015-07-01 11:13:11 INFO  - file written ( 0.0 s )
+2015-07-01 11:13:11 INFO  - file written ( 0.0 s )
+2015-07-01 11:13:12 INFO  - Shots processed: 8000000
+2015-07-01 11:13:15 INFO  - Shots processed: 10000000
+2015-07-01 11:13:19 INFO  - Shots processed: 9000000
+2015-07-01 11:13:20 INFO  - Shots processed: 11000000
+2015-07-01 11:13:22 INFO  - Shots processed: 11295882
+2015-07-01 11:13:22 INFO  - voxelisation is finished ( 81.0 s )
+2015-07-01 11:13:22 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/Projet_pierre/test_tls_pierre/140331_110207.rxp.vox
+2015-07-01 11:13:22 INFO  - file written ( 0.0 s )
+2015-07-01 11:13:26 INFO  - Shots processed: 10000000
+2015-07-01 11:13:33 INFO  - Shots processed: 11000000
+2015-07-01 11:13:39 INFO  - Shots processed: 12000000
+2015-07-01 11:13:45 INFO  - Shots processed: 13000000
+2015-07-01 11:13:46 INFO  - Shots processed: 13166931
+2015-07-01 11:13:46 INFO  - voxelisation is finished ( 105.0 s )
+2015-07-01 11:13:46 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/Projet_pierre/test_tls_pierre/140331_101944.rxp.vox
+2015-07-01 11:13:46 INFO  - file written ( 0.0 s )
+2015-07-01 11:13:46 INFO  - Voxelisation finished in 124.0 s
+2015-07-01 11:13:46 INFO  - Merging in progress, file 1 : 6
+2015-07-01 11:13:47 INFO  - Merging in progress, file 2 : 6
+2015-07-01 11:13:47 INFO  - Merging in progress, file 3 : 6
+2015-07-01 11:13:47 INFO  - Merging in progress, file 4 : 6
+2015-07-01 11:13:47 INFO  - Merging in progress, file 5 : 6
+2015-07-01 11:13:47 INFO  - Merging in progress, file 6 : 6
+2015-07-01 11:13:47 INFO  - Compute angleMean
+2015-07-01 11:13:47 INFO  - Compute lMeanTotal
+2015-07-01 11:13:47 INFO  - Compute transmittance and PAD
+2015-07-01 11:13:47 INFO  - writing output file: /home/calcul/Documents/Julien/Sortie voxels/Projet_pierre/test_tls_pierre/merged_1m_sans_transfo.vox
+2015-07-01 11:13:47 INFO  - file written ( 0.0 s )
+2015-07-01 11:13:47 INFO  - Voxelisation finished in 125.0 s
+2015-07-01 11:13:47 INFO  - Voxelisation finished in 125.0 s
+2015-07-01 11:15:42 INFO  - Nombre de valeurs correctes: 42300/42300
+2015-07-01 11:15:42 INFO  - Nombre de valeurs corrigées: 0/42300
+2015-07-01 11:15:42 INFO  - Nombre de valeurs mises à défaut: 0/42300
+2015-07-01 11:18:53 INFO  - Merging in progress, file 1 : 1
+2015-07-01 11:18:53 INFO  - Compute angleMean
+2015-07-01 11:18:53 INFO  - Compute lMeanTotal
+2015-07-01 11:18:53 INFO  - Compute transmittance and PAD
+2015-07-01 11:18:53 INFO  - writing output file: /home/calcul/Documents/Julien/test.vox
+2015-07-01 11:18:54 INFO  - file written ( 0.0 s )
+2015-07-01 11:20:06 INFO  - Merging in progress, file 1 : 5
+2015-07-01 11:20:06 INFO  - Merging in progress, file 2 : 5
+2015-07-01 11:20:06 INFO  - Merging in progress, file 3 : 5
+2015-07-01 11:20:06 INFO  - Merging in progress, file 4 : 5
+2015-07-01 11:20:07 INFO  - Merging in progress, file 5 : 5
+2015-07-01 11:20:07 INFO  - Compute angleMean
+2015-07-01 11:20:07 INFO  - Compute lMeanTotal
+2015-07-01 11:20:07 INFO  - Compute transmittance and PAD
+2015-07-01 11:20:07 INFO  - writing output file: /home/calcul/Documents/Julien/test.vox
+2015-07-01 11:20:07 INFO  - file written ( 0.0 s )
+2015-07-01 12:55:58 ERROR -  (Aucun fichier ou dossier de ce type)
+java.io.FileNotFoundException:  (Aucun fichier ou dossier de ce type)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at java.io.FileReader.<init>(FileReader.java:72)
+	at fr.ird.voxelidar.lidar.format.dtm.DtmLoader.readFromAscFile(DtmLoader.java:36)
+	at fr.ird.voxelidar.gui.MainFrameController$37$1.call(MainFrameController.java:1669)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$462/1264457176.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$460/89816970.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-01 12:55:58 ERROR - 
+java.lang.NullPointerException
+	at fr.ird.voxelidar.gui.MainFrameController$37$1.call(MainFrameController.java:1672)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$462/1264457176.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$460/89816970.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-01 12:56:20 INFO  - Computing dtm normals
+2015-07-01 13:02:24 INFO  - Computing dtm normals
+2015-07-01 13:02:44 INFO  - Computing dtm normals
+2015-07-01 13:04:26 INFO  - Computing dtm normals
+2015-07-01 13:10:54 INFO  - Computing dtm normals
+2015-07-01 13:19:10 INFO  - Computing dtm normals
+2015-07-01 14:08:14 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:300)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-01 14:10:27 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:305)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-01 14:12:24 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:394)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-01 14:15:52 ERROR - File is not a voxel file: /home/calcul/Documents/Julien/AMAPVox/trunk/VoxeLidarGUIFX/src/main/resources/mesh/axis.x3d
+2015-07-01 14:16:18 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:394)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-01 14:17:55 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:394)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-01 14:20:16 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:394)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-01 14:23:50 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:394)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-01 14:43:02 INFO  - Computing dtm normals
+2015-07-01 14:49:17 INFO  - Saved libfile: /tmp/LasZipLibrary-7753661643309262163.tmp
+2015-07-01 14:49:17 INFO  - /tmp/LasZipLibrary-7753661643309262163.tmp
+2015-07-01 14:49:17 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 14:49:18 INFO  - Laz file is closed
+2015-07-01 14:49:42 INFO  - allocate!!!!!!!!
+2015-07-01 14:49:42 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 9.21)
+			Corner Sup	:	(15.0, 250.0, 68.98)
+			Dimensions	:	(30, 260, 60)
+			Toricity 	:	false
+
+2015-07-01 14:49:42 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 14:49:42 INFO  - Laz file is closed
+2015-07-01 14:49:44 INFO  - Shots processed: 141106
+2015-07-01 14:49:44 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-07-01 14:49:46 INFO  - file written ( 2.0 s )
+2015-07-01 14:49:46 INFO  - las voxelisation finished in 7.0 s
+2015-07-01 14:50:05 INFO  - Computing dtm normals
+2015-07-01 14:54:30 INFO  - Nombre de valeurs correctes: 287914/468000
+2015-07-01 14:54:30 INFO  - Nombre de valeurs corrigées: 0/468000
+2015-07-01 14:54:30 INFO  - Nombre de valeurs mises à défaut: 180086/468000
+2015-07-01 14:55:38 INFO  - Computing dtm normals
+2015-07-01 15:13:19 INFO  - Computing dtm normals
+2015-07-01 15:16:27 INFO  - Nombre de valeurs correctes: 287914/468000
+2015-07-01 15:16:27 INFO  - Nombre de valeurs corrigées: 0/468000
+2015-07-01 15:16:27 INFO  - Nombre de valeurs mises à défaut: 180086/468000
+2015-07-01 15:16:42 INFO  - Computing dtm normals
+2015-07-01 15:33:59 ERROR - Service failed : 
+java.lang.NoSuchFieldError: transmittanceNorm
+	at fr.ird.voxelidar.multires.ProcessingMultiRes.calculatePAD(ProcessingMultiRes.java:366)
+	at fr.ird.voxelidar.multires.ProcessingMultiRes.process(ProcessingMultiRes.java:214)
+	at fr.ird.voxelidar.gui.MainFrameController$38$1.call(MainFrameController.java:2869)
+	at fr.ird.voxelidar.gui.MainFrameController$38$1.call(MainFrameController.java:2683)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$462/1287609472.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$460/1073378639.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-01 15:35:02 INFO  - allocate!!!!!!!!
+2015-07-01 15:35:02 INFO  - Voxel space informations:
+			Corner Inf	:	(448095.4917605496, 470899.3079434532, 9.21)
+			Corner Sup	:	(448141.16684763494, 471186.0631058712, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2015-07-01 15:35:02 INFO  - Saved libfile: /tmp/LasZipLibrary-648720214507183919.tmp
+2015-07-01 15:35:02 INFO  - /tmp/LasZipLibrary-648720214507183919.tmp
+2015-07-01 15:35:02 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 15:35:03 INFO  - Laz file is closed
+2015-07-01 15:35:05 INFO  - Shots processed: 141106
+2015-07-01 15:35:05 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-07-01 15:35:08 INFO  - file written ( 3.0 s )
+2015-07-01 15:35:08 INFO  - las voxelisation finished in 9.0 s
+2015-07-01 15:35:29 INFO  - Nombre de valeurs correctes: 488791/792120
+2015-07-01 15:35:29 INFO  - Nombre de valeurs corrigées: 0/792120
+2015-07-01 15:35:29 INFO  - Nombre de valeurs mises à défaut: 303329/792120
+2015-07-01 15:38:25 INFO  - Nombre de valeurs correctes: 488791/792120
+2015-07-01 15:38:25 INFO  - Nombre de valeurs corrigées: 0/792120
+2015-07-01 15:38:25 INFO  - Nombre de valeurs mises à défaut: 303329/792120
+2015-07-01 15:39:53 INFO  - Nombre de valeurs correctes: 488791/792120
+2015-07-01 15:39:53 INFO  - Nombre de valeurs corrigées: 0/792120
+2015-07-01 15:39:53 INFO  - Nombre de valeurs mises à défaut: 303329/792120
+2015-07-01 15:43:05 INFO  - Nombre de valeurs correctes: 488791/792120
+2015-07-01 15:43:05 INFO  - Nombre de valeurs corrigées: 0/792120
+2015-07-01 15:43:05 INFO  - Nombre de valeurs mises à défaut: 303329/792120
+2015-07-01 15:49:32 INFO  - Nombre de valeurs correctes: 488791/792120
+2015-07-01 15:49:32 INFO  - Nombre de valeurs corrigées: 0/792120
+2015-07-01 15:49:32 INFO  - Nombre de valeurs mises à défaut: 303329/792120
+2015-07-01 15:52:05 INFO  - allocate!!!!!!!!
+2015-07-01 15:52:05 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 9.21)
+			Corner Sup	:	(15.0, 250.0, 68.98)
+			Dimensions	:	(15, 130, 30)
+			Toricity 	:	false
+
+2015-07-01 15:52:05 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 15:52:06 INFO  - Laz file is closed
+2015-07-01 15:52:07 INFO  - Shots processed: 141106
+2015-07-01 15:52:07 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_2m.vox
+2015-07-01 15:52:10 INFO  - file written ( 3.0 s )
+2015-07-01 15:52:10 INFO  - las voxelisation finished in 8.0 s
+2015-07-01 15:52:13 INFO  - allocate!!!!!!!!
+2015-07-01 15:52:13 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 9.21)
+			Corner Sup	:	(15.0, 250.0, 68.98)
+			Dimensions	:	(10, 87, 20)
+			Toricity 	:	false
+
+2015-07-01 15:52:13 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 15:52:14 INFO  - Laz file is closed
+2015-07-01 15:52:14 INFO  - Shots processed: 141106
+2015-07-01 15:52:14 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_3m.vox
+2015-07-01 15:52:15 INFO  - file written ( 0.0 s )
+2015-07-01 15:52:15 INFO  - las voxelisation finished in 5.0 s
+2015-07-01 15:52:19 INFO  - allocate!!!!!!!!
+2015-07-01 15:52:19 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 9.21)
+			Corner Sup	:	(15.0, 250.0, 68.98)
+			Dimensions	:	(8, 65, 15)
+			Toricity 	:	false
+
+2015-07-01 15:52:19 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 15:52:20 INFO  - Laz file is closed
+2015-07-01 15:52:20 INFO  - Shots processed: 141106
+2015-07-01 15:52:20 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_4m.vox
+2015-07-01 15:52:20 INFO  - file written ( 0.0 s )
+2015-07-01 15:52:20 INFO  - las voxelisation finished in 5.0 s
+2015-07-01 15:53:18 INFO  - Nombre de valeurs correctes: 488791/792120
+2015-07-01 15:53:18 INFO  - Nombre de valeurs corrigées: 87000/792120
+2015-07-01 15:53:18 INFO  - Nombre de valeurs mises à défaut: 216329/792120
+2015-07-01 15:56:39 INFO  - allocate!!!!!!!!
+2015-07-01 15:56:39 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 9.21)
+			Corner Sup	:	(15.0, 250.0, 68.98)
+			Dimensions	:	(30, 260, 60)
+			Toricity 	:	false
+
+2015-07-01 15:56:39 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 15:56:40 INFO  - Laz file is closed
+2015-07-01 15:56:40 INFO  - Shots processed: 141106
+2015-07-01 15:56:40 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-07-01 15:57:04 INFO  - file written ( 23.0 s )
+2015-07-01 15:57:04 INFO  - las voxelisation finished in 32.0 s
+2015-07-01 15:59:49 INFO  - allocate!!!!!!!!
+2015-07-01 15:59:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 9.21)
+			Corner Sup	:	(15.0, 250.0, 68.98)
+			Dimensions	:	(15, 130, 30)
+			Toricity 	:	false
+
+2015-07-01 15:59:49 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 15:59:49 INFO  - Laz file is closed
+2015-07-01 15:59:50 INFO  - Shots processed: 141106
+2015-07-01 15:59:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_2m.vox
+2015-07-01 15:59:53 INFO  - file written ( 2.0 s )
+2015-07-01 15:59:53 INFO  - las voxelisation finished in 10.0 s
+2015-07-01 16:00:00 INFO  - allocate!!!!!!!!
+2015-07-01 16:00:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 9.21)
+			Corner Sup	:	(15.0, 250.0, 68.98)
+			Dimensions	:	(10, 87, 20)
+			Toricity 	:	false
+
+2015-07-01 16:00:00 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 16:00:01 INFO  - Laz file is closed
+2015-07-01 16:00:01 INFO  - Shots processed: 141106
+2015-07-01 16:00:01 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_3m.vox
+2015-07-01 16:00:02 INFO  - file written ( 0.0 s )
+2015-07-01 16:00:02 INFO  - las voxelisation finished in 8.0 s
+2015-07-01 16:00:09 INFO  - allocate!!!!!!!!
+2015-07-01 16:00:09 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 9.21)
+			Corner Sup	:	(15.0, 250.0, 68.98)
+			Dimensions	:	(8, 65, 15)
+			Toricity 	:	false
+
+2015-07-01 16:00:09 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-01 16:00:09 INFO  - Laz file is closed
+2015-07-01 16:00:10 INFO  - Shots processed: 141106
+2015-07-01 16:00:10 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_4m.vox
+2015-07-01 16:00:10 INFO  - file written ( 0.0 s )
+2015-07-01 16:00:10 INFO  - las voxelisation finished in 8.0 s
+2015-07-01 16:00:16 INFO  - Nombre de valeurs correctes: 287914/468000
+2015-07-01 16:00:16 INFO  - Nombre de valeurs corrigées: 77616/468000
+2015-07-01 16:00:16 INFO  - Nombre de valeurs mises à défaut: 102470/468000
+2015-07-01 16:14:09 INFO  - Computing dtm normals
+2015-07-01 16:52:45 INFO  - Computing dtm normals
+2015-07-01 16:54:57 INFO  - Computing dtm normals
+2015-07-01 16:56:43 ERROR - For input string: "SPACE"
+java.lang.NumberFormatException: For input string: "SPACE"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:580)
+	at java.lang.Integer.valueOf(Integer.java:766)
+	at fr.ird.voxelidar.lidar.format.dtm.DtmLoader.readFromAscFile(DtmLoader.java:38)
+	at fr.ird.voxelidar.gui.MainFrameController$37$1.call(MainFrameController.java:1669)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$451/1235453301.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$449/539472622.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)

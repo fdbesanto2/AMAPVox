@@ -15,6 +15,8 @@ For further information, please contact Gregoire Vincent.
 package fr.ird.voxelidar.configuration;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import org.jdom2.Attribute;
 import org.jdom2.Element;
 
@@ -27,6 +29,7 @@ import org.jdom2.Element;
 public class ALSVoxCfg extends VoxCfg{
 
     private File trajectoryFile;
+    private List<Integer> classifiedPointsToDiscard;
     
     @Override
     public void readConfiguration(File inputParametersFile) {
@@ -45,6 +48,23 @@ public class ALSVoxCfg extends VoxCfg{
             if(voxelParameters.isCalculateGroundEnergy()){
                 voxelParameters.setGroundEnergyFileFormat(Short.valueOf(groundEnergyElement.getAttributeValue("type")));
                 voxelParameters.setGroundEnergyFile(new File(groundEnergyElement.getAttributeValue("src")));
+            }
+        }
+        
+        classifiedPointsToDiscard = new ArrayList<>();
+
+        Element pointFiltersElement = filtersElement.getChild("point-filters");
+        if(pointFiltersElement != null){
+
+            String classifications = pointFiltersElement.getAttributeValue("classifications");
+
+            if(classifications !=null && !classifications.isEmpty()){
+
+                String[] classificationsArray = classifications.split(" ");
+
+                for(String s : classificationsArray){
+                    classifiedPointsToDiscard.add(Integer.valueOf(s));
+                }
             }
         }
     }
@@ -69,7 +89,22 @@ public class ALSVoxCfg extends VoxCfg{
         if(voxelParameters.getGroundEnergyFile() != null){
             groundEnergyElement.setAttribute("src", voxelParameters.getGroundEnergyFile().getAbsolutePath());
             groundEnergyElement.setAttribute("type", String.valueOf(voxelParameters.getGroundEnergyFileFormat()));
-        }                
+        }    
+        
+        if(classifiedPointsToDiscard != null){
+            
+            Element pointsFilterElement = new Element("point-filters");
+
+            String classifiedPointsToDiscardString = "";
+            for(Integer i : classifiedPointsToDiscard){
+                classifiedPointsToDiscardString += i+" ";
+            }
+
+            pointsFilterElement.setAttribute("classifications", classifiedPointsToDiscardString);
+
+            //pointsFilterElement.addContent(new Element("low-point-filter").setAttribute("enabled", String.valueOf(removeLowPoint)));
+            filtersElement.addContent(pointsFilterElement);
+        }
 
         processElement.addContent(groundEnergyElement);
         
@@ -82,5 +117,13 @@ public class ALSVoxCfg extends VoxCfg{
 
     public void setTrajectoryFile(File trajectoryFile) {
         this.trajectoryFile = trajectoryFile;
+    }
+    
+    public List<Integer> getClassifiedPointsToDiscard() {
+        return classifiedPointsToDiscard;
+    }
+
+    public void setClassifiedPointsToDiscard(List<Integer> classifiedPointsToDiscard) {
+        this.classifiedPointsToDiscard = classifiedPointsToDiscard;
     }
 }

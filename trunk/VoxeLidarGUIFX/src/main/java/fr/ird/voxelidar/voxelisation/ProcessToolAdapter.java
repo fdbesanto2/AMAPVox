@@ -5,14 +5,16 @@
  */
 package fr.ird.voxelidar.voxelisation;
 
-import java.util.EventListener;
-
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public interface VoxelisationToolListener extends EventListener{
+public abstract class ProcessToolAdapter implements ProcessToolListener{
+
+    @Override
+    public void processProgress(String progress, int ratio) {}
+
+    @Override
+    public void processFinished(float duration) {}
     
-    void voxelisationProgress(String progress, int ratio);
-    void voxelisationFinished(float duration);
 }

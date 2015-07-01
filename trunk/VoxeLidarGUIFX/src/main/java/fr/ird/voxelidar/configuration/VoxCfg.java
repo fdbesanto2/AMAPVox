@@ -44,12 +44,12 @@ public class VoxCfg extends Configuration{
     protected Matrix4d vopMatrix;
     protected VoxelParameters voxelParameters;
     protected float[] multiResPadMax;
-    protected List<Integer> classifiedPointsToDiscard;
     protected List<Filter> filters;
     protected boolean correctNaNs;
     protected boolean multiResUseDefaultMaxPad;
     
     protected Element limitsElement;
+    protected Element filtersElement;
     
     @Override
     public void readConfiguration(File inputParametersFile) {
@@ -69,7 +69,11 @@ public class VoxCfg extends Configuration{
         }
         
         Element outputFileElement = processElement.getChild("output_file");
-        outputFile = new File(outputFileElement.getAttributeValue("src"));
+        if(inputFileElement != null){
+            outputFile = new File(outputFileElement.getAttributeValue("src"));
+        }else{
+            logger.info("Cannot find output_file element");
+        }
 
         Element voxelSpaceElement = processElement.getChild("voxelspace");
 
@@ -195,7 +199,7 @@ public class VoxCfg extends Configuration{
             }
         }
 
-        Element limitsElement = processElement.getChild("limits");
+        limitsElement = processElement.getChild("limits");
 
         if(limitsElement != null){
             List<Element> limitChildrensElement = limitsElement.getChildren("limit");
@@ -220,7 +224,7 @@ public class VoxCfg extends Configuration{
         }
 
 
-        Element filtersElement = processElement.getChild("filters");
+        filtersElement = processElement.getChild("filters");
         filters = new ArrayList<>();
 
         if(filtersElement != null){
@@ -246,22 +250,7 @@ public class VoxCfg extends Configuration{
                 }
             }
 
-            classifiedPointsToDiscard = new ArrayList<>();
-
-            Element pointFiltersElement = filtersElement.getChild("point-filters");
-            if(pointFiltersElement != null){
-
-                String classifications = pointFiltersElement.getAttributeValue("classifications");
-
-                if(classifications !=null && !classifications.isEmpty()){
-
-                    String[] classificationsArray = classifications.split(" ");
-
-                    for(String s : classificationsArray){
-                        classifiedPointsToDiscard.add(Integer.valueOf(s));
-                    }
-                }
-            }
+            
             
             
             Element generateMultiBandRasterElement = processElement.getChild("multi-band-raster");
@@ -426,7 +415,7 @@ public class VoxCfg extends Configuration{
 
         processElement.addContent(limitsElement);
 
-        Element filtersElement = new Element("filters");
+        filtersElement = new Element("filters");
 
         if(filters != null && !filters.isEmpty()){
 
@@ -443,19 +432,7 @@ public class VoxCfg extends Configuration{
             filtersElement.addContent(shotFilterElement);
         }
 
-        if(classifiedPointsToDiscard != null){
-            Element pointsFilterElement = new Element("point-filters");
-
-            String classifiedPointsToDiscardString = "";
-            for(Integer i : classifiedPointsToDiscard){
-                classifiedPointsToDiscardString += i+" ";
-            }
-
-            pointsFilterElement.setAttribute("classifications", classifiedPointsToDiscardString);
-
-            //pointsFilterElement.addContent(new Element("low-point-filter").setAttribute("enabled", String.valueOf(removeLowPoint)));
-            filtersElement.addContent(pointsFilterElement);
-        }
+        
 
 
         processElement.addContent(filtersElement);
@@ -569,15 +546,6 @@ public class VoxCfg extends Configuration{
 
     public void setMultiResPadMax(float[] multiResPadMax) {
         this.multiResPadMax = multiResPadMax;
-    }
-
-    public List<Integer> getClassifiedPointsToDiscard() {
-        return classifiedPointsToDiscard;
-    }
-
-    public void setClassifiedPointsToDiscard(List<Integer> classifiedPointsToDiscard) {
-        this.classifiedPointsToDiscard = classifiedPointsToDiscard;
-    }
-    
+    }    
     
 }

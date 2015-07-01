@@ -2,6 +2,7 @@
 
 uniform mat4 viewMatrix;
 
+
 in vec3 fragPosition;
 flat in vec3 fragColor;
 flat in vec3 fragNormal;
@@ -10,7 +11,7 @@ out vec4 outColor;
  
 void main()
 {
-    vec3 mambient = vec3(0.2, 0.2, 0.2);
+    vec3 mambient = vec3(0.6, 0.6, 0.6);
     vec3 mdiffuse = fragColor.rgb;
     vec3 mspecular = vec3(0.35, 0.35, 0.35);
 
@@ -22,11 +23,11 @@ void main()
 
     vec3 ambient = mambient*lambient;
 
-    vec3 lightPosition = vec3(0.01, 0.01, 0);
+    vec3 lightPosition = vec3(0.01, 0.01, 0.01);
 
     vec3 surf2light = normalize(lightPosition-fragPosition);
     vec3 norm = normalize(fragNormal);
-    float dcont = max(0.0, dot(norm, surf2light));
+    float dcont = max(0.1, dot(norm, surf2light));
     vec3 diffuse=dcont*mdiffuse*ldiffuse;
     
     vec3 surface2view = normalize(-fragPosition);

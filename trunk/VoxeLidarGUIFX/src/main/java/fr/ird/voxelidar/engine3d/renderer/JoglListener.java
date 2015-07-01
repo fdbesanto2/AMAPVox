@@ -418,14 +418,14 @@ public class JoglListener implements GLEventListener {
             scene.addShader(instanceShader);
             scene.addShader(texturedShader);
             scene.addShader(lightedShader);
-            
-            GLMesh axisMesh = GLMeshFactory.createMeshFromX3D(new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("mesh/axis.x3d")));
+            /*
+            GLMesh axisMesh = GLMeshFactory.createMeshFromX3D(new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("mesh/axis2.x3d")));
             axisMesh.setGlobalScale(0.03f);
             
             SceneObject axis = new SimpleSceneObject(axisMesh, noTranslationShader.getProgramId(), false);
             
             axis.setDrawType(GL3.GL_TRIANGLES);
-            scene.addObject(axis, gl);
+            scene.addObject(axis, gl);*/
             /*
             RegularDtm dtm = DtmLoader.readFromAscFile(new File("C:\\Users\\Julien\\Desktop\\samples\\dtm\\ALSbuf_xyzirncapt_dtm.asc"));
             

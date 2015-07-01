@@ -48,7 +48,7 @@ import fr.ird.voxelidar.voxelisation.PointCloud;
 import fr.ird.voxelidar.voxelisation.PointcloudFilter;
 import fr.ird.voxelidar.voxelisation.VoxelParameters;
 import fr.ird.voxelidar.voxelisation.ProcessTool;
-import fr.ird.voxelidar.voxelisation.VoxelisationToolListener;
+import fr.ird.voxelidar.voxelisation.ProcessToolListener;
 import fr.ird.voxelidar.util.BoundingBox3F;
 import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
 import java.io.File;
@@ -2377,8 +2377,14 @@ public class MainFrameController implements Initializable {
             voxelParameters.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
             voxelParameters.setTransmittanceMode(comboboxFormulaTransmittance.getSelectionModel().getSelectedIndex());
 
-            voxelParameters.setWeighting(comboboxWeighting.getSelectionModel().getSelectedIndex() + 1);
+            if(checkboxEnableWeighting.isSelected()){
+                voxelParameters.setWeighting(comboboxWeighting.getSelectionModel().getSelectedIndex() + 1);
+            }else{
+                voxelParameters.setWeighting(0);
+            }
+            
             voxelParameters.setWeightingData(VoxelParameters.DEFAULT_ALS_WEIGHTING);
+            
             voxelParameters.setCalculateGroundEnergy(checkboxCalculateGroundEnergy.isSelected());
             voxelParameters.setGenerateMultiBandRaster(checkboxGenerateMultiBandRaster.isSelected());
 
@@ -2585,8 +2591,8 @@ public class MainFrameController implements Initializable {
                     
                 cfg.setOutputFile(new File(textFieldOutputFileALS.getText()));
 
-                cfg.setUsePopMatrix(checkboxUsePopMatrix.isSelected());
-                cfg.setUseSopMatrix(checkboxUseSopMatrix.isSelected());
+                cfg.setUsePopMatrix(false);
+                cfg.setUseSopMatrix(false);
                 cfg.setUseVopMatrix(checkboxUseVopMatrix.isSelected());
 
                 cfg.setPopMatrix(popMatrix);
@@ -2595,7 +2601,7 @@ public class MainFrameController implements Initializable {
 
                 cfg.setVoxelParameters(voxelParameters);
 
-                cfg.setClassifiedPointsToDiscard(getListOfClassificationPointToDiscard());
+                ((ALSVoxCfg)cfg).setClassifiedPointsToDiscard(getListOfClassificationPointToDiscard());
                 cfg.setFilters(listviewFilters.getItems());
                 
                 cfg.writeConfiguration(selectedFile);
@@ -2665,8 +2671,7 @@ public class MainFrameController implements Initializable {
             ProgressDialog d;
             final Service<Void> service;
             final ProcessTool voxTool = new ProcessTool();
-            
-            final int coreNumberToUse = (int) sliderRSPCoresToUse.getValue();
+            voxTool.setCoresNumber((int) sliderRSPCoresToUse.getValue());
 
             final long start_time = System.currentTimeMillis();
                     
@@ -2687,7 +2692,7 @@ public class MainFrameController implements Initializable {
                                 case "transmittance":                                    
                                     TransmittanceCfg cfg = new TransmittanceCfg();
                                     cfg.readConfiguration(file);
-                                    voxTool.calculateTransmittance(cfg.getParameters());
+                                    voxTool.calculateTransmittance(cfg);
                                 break;
 
                                 case "merging":
@@ -2712,10 +2717,10 @@ public class MainFrameController implements Initializable {
                                     final ALSVoxCfg aLSVoxCfg = new ALSVoxCfg();
                                     aLSVoxCfg.readConfiguration(file);
 
-                                    voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
+                                    voxTool.addProcessToolListener(new ProcessToolListener() {
 
                                         @Override
-                                        public void voxelisationProgress(String progress, int ratio) {
+                                        public void processProgress(String progress, int ratio) {
                                             Platform.runLater(new Runnable() {
 
                                                 @Override
@@ -2728,13 +2733,13 @@ public class MainFrameController implements Initializable {
                                         }
 
                                         @Override
-                                        public void voxelisationFinished(float duration) {
+                                        public void processFinished(float duration) {
 
                                             logger.info("las voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
                                         }
                                     });
 
-                                    voxTool.voxeliseFromAls(aLSVoxCfg.getOutputFile(), aLSVoxCfg.getInputFile(), aLSVoxCfg.getTrajectoryFile(), aLSVoxCfg.getVoxelParameters(), MatrixConverter.convertMatrix4dToMat4D(aLSVoxCfg.getVopMatrix()), aLSVoxCfg.getFilters(), aLSVoxCfg.getClassifiedPointsToDiscard());
+                                    voxTool.voxeliseFromAls(aLSVoxCfg);
 
                                     Platform.runLater(new Runnable() {
 
@@ -2754,10 +2759,10 @@ public class MainFrameController implements Initializable {
                                     //final VoxelisationConfiguration cfg1 = new VoxelisationConfiguration();
                                     //cfg1.readConfiguration(file);
 
-                                    voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
+                                    voxTool.addProcessToolListener(new ProcessToolListener() {
 
                                         @Override
-                                        public void voxelisationProgress(String progress, int ratio) {
+                                        public void processProgress(String progress, int ratio) {
                                             Platform.runLater(new Runnable() {
 
                                                 @Override
@@ -2769,7 +2774,7 @@ public class MainFrameController implements Initializable {
                                         }
 
                                         @Override
-                                        public void voxelisationFinished(float duration) {
+                                        public void processFinished(float duration) {
 
                                             logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
                                         }
@@ -2780,17 +2785,14 @@ public class MainFrameController implements Initializable {
                                         case RSP_PROJECT:
 
                                             try {
-                                                ArrayList<File> outputFiles = voxTool.voxeliseFromRsp(tLSVoxCfg.getOutputFile(), tLSVoxCfg.getInputFile(), tLSVoxCfg.getVoxelParameters(),
-                                                        MatrixConverter.convertMatrix4dToMat4D(tLSVoxCfg.getVopMatrix()),
-                                                        MatrixConverter.convertMatrix4dToMat4D(tLSVoxCfg.getPopMatrix()),
-                                                        tLSVoxCfg.getMatricesAndFiles(), tLSVoxCfg.getFilters(), coreNumberToUse);
+                                                ArrayList<File> outputFiles = voxTool.voxeliseFromRsp(tLSVoxCfg);
 
                                                 if (tLSVoxCfg.getVoxelParameters().isMergingAfter()) {
 
-                                                    voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
+                                                    voxTool.addProcessToolListener(new ProcessToolListener() {
 
                                                         @Override
-                                                        public void voxelisationProgress(String progress, int ratio) {
+                                                        public void processProgress(String progress, int ratio) {
                                                             Platform.runLater(new Runnable() {
 
                                                                 @Override
@@ -2802,7 +2804,7 @@ public class MainFrameController implements Initializable {
                                                         }
 
                                                         @Override
-                                                        public void voxelisationFinished(float duration) {
+                                                        public void processFinished(float duration) {
 
                                                             logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
                                                         }
@@ -2840,13 +2842,8 @@ public class MainFrameController implements Initializable {
 
                                         case RXP_SCAN:
 
-                                            voxTool.voxeliseFromRxp(tLSVoxCfg.getOutputFile(), tLSVoxCfg.getInputFile(),
-                                                    tLSVoxCfg.getVoxelParameters().getDtmFile(),
-                                                    tLSVoxCfg.getVoxelParameters(),
-                                                    MatrixConverter.convertMatrix4dToMat4D(tLSVoxCfg.getVopMatrix()),
-                                                    MatrixConverter.convertMatrix4dToMat4D(tLSVoxCfg.getPopMatrix()),
-                                                    MatrixConverter.convertMatrix4dToMat4D(tLSVoxCfg.getSopMatrix()),
-                                                    tLSVoxCfg.getFilters());
+                                            
+                                            voxTool.voxeliseFromRxp(tLSVoxCfg);
 
                                             Platform.runLater(new Runnable() {
 
@@ -2888,10 +2885,10 @@ public class MainFrameController implements Initializable {
                                     MultiVoxCfg multiVoxCfg = new MultiVoxCfg();
                                     multiVoxCfg.readConfiguration(file);
 
-                                    voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
+                                    voxTool.addProcessToolListener(new ProcessToolListener() {
 
                                         @Override
-                                        public void voxelisationProgress(String progress, int ratio) {
+                                        public void processProgress(String progress, int ratio) {
                                             Platform.runLater(new Runnable() {
 
                                                 @Override
@@ -2904,7 +2901,7 @@ public class MainFrameController implements Initializable {
                                         }
 
                                         @Override
-                                        public void voxelisationFinished(float duration) {
+                                        public void processFinished(float duration) {
 
                                             logger.info("las voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
                                         }
@@ -3137,7 +3134,9 @@ public class MainFrameController implements Initializable {
                 default:
                     it = InputType.RSP_PROJECT;
             }
-
+            
+            TLSVoxCfg cfg = new TLSVoxCfg();
+            /*
             VoxelisationConfiguration cfg = new VoxelisationConfiguration(ProcessMode.VOXELISATION_TLS, it,
                     new File(textFieldInputFileTLS.getText()),
                     new File(textFieldTrajectoryFileALS.getText()),
@@ -3145,15 +3144,27 @@ public class MainFrameController implements Initializable {
                     voxelParameters,
                     checkboxUsePopMatrix.isSelected(), popMatrix,
                     checkboxUseSopMatrix.isSelected(), sopMatrix,
-                    checkboxUseVopMatrix.isSelected(), vopMatrix);
+                    checkboxUseVopMatrix.isSelected(), vopMatrix);*/
+            
+            cfg.setInputFile(new File(textFieldInputFileTLS.getText()));
+            cfg.setOutputFile(new File(textFieldOutputPathTLS.getText()));
+            cfg.setInputType(it);
 
-            if (it == InputType.RSP_PROJECT) {
-                List<MatrixAndFile> items = listviewRxpScans.getItems();
+            cfg.setUsePopMatrix(checkboxUsePopMatrix.isSelected());
+            cfg.setUseSopMatrix(checkboxUseSopMatrix.isSelected());
+            cfg.setUseVopMatrix(checkboxUseVopMatrix.isSelected());
 
-                cfg.setMatricesAndFiles(items);
-            }
+            cfg.setPopMatrix(popMatrix);
+            cfg.setSopMatrix(sopMatrix);
+            cfg.setVopMatrix(vopMatrix);
+
+            cfg.setVoxelParameters(voxelParameters);
 
             cfg.setFilters(listviewFilters.getItems());
+
+            if (it == InputType.RSP_PROJECT) {
+                cfg.setMatricesAndFiles(listviewRxpScans.getItems());
+            }
 
             cfg.writeConfiguration(selectedFile);
 
@@ -3357,7 +3368,6 @@ public class MainFrameController implements Initializable {
                     cfg.readConfiguration(selectedFile);
                     
                     //VoxelisationConfiguration cfg = new VoxelisationConfiguration();
-                    cfg.readConfiguration(selectedFile);
                                 
                     VoxelParameters voxelParameters = ((VoxCfg)cfg).getVoxelParameters();
                     checkboxGenerateMultiBandRaster.setSelected(voxelParameters.isGenerateMultiBandRaster());
@@ -3404,10 +3414,14 @@ public class MainFrameController implements Initializable {
                     checkboxUsePopMatrix.setSelected(((VoxCfg)cfg).isUsePopMatrix());
                     checkboxUseSopMatrix.setSelected(((VoxCfg)cfg).isUseSopMatrix());
                     checkboxUseVopMatrix.setSelected(((VoxCfg)cfg).isUseVopMatrix());
-                    List<Integer> classifiedPointsToDiscard = ((VoxCfg)cfg).getClassifiedPointsToDiscard();
+                    
+                    if(type.equals("voxelisation-ALS") || type.equals("multi-voxelisation")){
+                        
+                        List<Integer> classifiedPointsToDiscard = ((ALSVoxCfg)cfg).getClassifiedPointsToDiscard();
 
-                    for (Integer i : classifiedPointsToDiscard) {
-                        listviewClassifications.getItems().get(i).setSelected(false);
+                        for (Integer i : classifiedPointsToDiscard) {
+                            listviewClassifications.getItems().get(i).setSelected(false);
+                        }
                     }
 
                     textFieldPADMax.setText(String.valueOf(((VoxCfg)cfg).getVoxelParameters().getMaxPAD()));

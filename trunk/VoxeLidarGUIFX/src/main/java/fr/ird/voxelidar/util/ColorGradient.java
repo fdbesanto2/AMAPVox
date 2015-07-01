@@ -59,6 +59,14 @@ public class ColorGradient {
     public final static Color[] GRADIENT_RAINBOW = createMultiGradient(
                     new Color[] { new Color(181, 32, 255), Color.blue, Color.green,
                                     Color.yellow, Color.orange, Color.red }, 500);
+    
+    public final static Color[] GRADIENT_RAINBOW2 = createMultiGradient(
+                    new Color[] { Color.blue, Color.green,
+                                    Color.yellow, Color.orange, Color.red, Color.pink}, 500);
+    
+    public final static Color[] GRADIENT_RAINBOW3 = createMultiGradient(
+                    new Color[] { Color.blue, Color.cyan, Color.green,
+                                    Color.yellow, Color.orange, Color.red }, 500);
 
     /**
      * Produces a gradient for hot things (black, red, orange, yellow, white)
@@ -82,12 +90,7 @@ public class ColorGradient {
     public final static Color[] GRADIENT_ROY = createMultiGradient(new Color[] {
                     Color.red, Color.orange, Color.yellow }, 500);
 
-    /**
-     *
-     */
-    public final static Color[] GRADIENT_RAINBOW2 = createMultiGradient(
-                    new Color[] { Color.blue, Color.green,
-                                    Color.yellow, Color.orange, Color.red, Color.pink}, 2000);
+    
     
     public final static Color[] GRADIENT_TREE = createMultiGradient(
                     new Color[] {  new Color(125, 129, 0), new Color(90, 164, 0), new Color(173, 81, 0)}, 500);

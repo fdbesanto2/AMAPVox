@@ -5,7 +5,6 @@
  */
 package fr.ird.voxelidar.voxelisation;
 
-import fr.ird.voxelidar.configuration.VoxelisationConfiguration;
 import fr.ird.voxelidar.configuration.Input;
 import fr.ird.voxelidar.configuration.MatrixAndFile;
 import fr.ird.voxelidar.util.ProcessingListener;
@@ -14,10 +13,8 @@ import fr.ird.voxelidar.lidar.format.tls.RxpScan;
 import fr.ird.voxelidar.engine3d.math.matrix.Mat4D;
 import fr.ird.voxelidar.engine3d.math.vector.Vec2D;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4D;
-import fr.ird.voxelidar.engine3d.misc.Attribut;
 import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
 import fr.ird.voxelidar.lidar.format.dtm.DtmLoader;
-import fr.ird.voxelidar.engine3d.object.scene.VoxelSpace;
 import fr.ird.voxelidar.engine3d.object.scene.VoxelSpaceHeader;
 import fr.ird.voxelidar.io.file.FileManager;
 import fr.amap.lidar.als.LasHeader;
@@ -29,7 +26,6 @@ import fr.ird.voxelidar.octree.OctreeFactory;
 import fr.ird.voxelidar.transmittance.TransmittanceSim;
 import fr.ird.voxelidar.transmittance.Parameters;
 import fr.ird.voxelidar.util.Cancellable;
-import fr.ird.voxelidar.util.DataSet;
 import fr.ird.voxelidar.util.DataSet.Mode;
 import fr.ird.voxelidar.util.Filter;
 import fr.ird.voxelidar.util.MatrixConverter;
@@ -38,10 +34,12 @@ import fr.amap.lidar.als.LasPoint;
 import fr.ird.voxelidar.voxelisation.als.LasVoxelisation;
 import fr.ird.voxelidar.voxelisation.als.Trajectory;
 import fr.amap.lidar.als.laz.LazExtraction;
-import fr.ird.voxelidar.configuration.Configuration;
+import fr.ird.voxelidar.configuration.ALSVoxCfg;
 import fr.ird.voxelidar.configuration.MultiVoxCfg;
+import fr.ird.voxelidar.configuration.TLSVoxCfg;
 import fr.ird.voxelidar.configuration.TransmittanceCfg;
 import fr.ird.voxelidar.configuration.VoxMergingCfg;
+import fr.ird.voxelidar.lidar.format.tls.Rsp;
 import fr.ird.voxelidar.voxelisation.extraction.tls.RxpExtraction;
 import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
 import java.io.BufferedReader;
@@ -55,14 +53,11 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Point3d;
@@ -80,34 +75,31 @@ public class ProcessTool implements Cancellable{
     
     final static Logger logger = Logger.getLogger(ProcessTool.class);
 
-    private VoxelParameters parameters;
     private final EventListenerList listeners;
     private long startTime;
-    private RegularDtm dtm;
-    private List<Octree> pointcloudList;
-    //private PointCloud pointcloud;
     private boolean cancelled;
     private ExecutorService exec;
+    private int coresNumber;
 
     public ProcessTool() {
         listeners = new EventListenerList();
         cancelled = false;
     }
 
-    public void addVoxelisationToolListener(VoxelisationToolListener listener) {
-        listeners.add(VoxelisationToolListener.class, listener);
+    public void addProcessToolListener(ProcessToolListener listener) {
+        listeners.add(ProcessToolListener.class, listener);
     }
 
     public void fireProgress(String progress, int ratio) {
-        for (VoxelisationToolListener voxelisationToolListener : listeners.getListeners(VoxelisationToolListener.class)) {
-            voxelisationToolListener.voxelisationProgress(progress, ratio);
+        for (ProcessToolListener processToolListener : listeners.getListeners(ProcessToolListener.class)) {
+            processToolListener.processProgress(progress, ratio);
         }
     }
 
     public void fireFinished(float duration) {
 
-        for (VoxelisationToolListener voxelisationToolListener : listeners.getListeners(VoxelisationToolListener.class)) {
-            voxelisationToolListener.voxelisationFinished(duration);
+        for (ProcessToolListener processToolListener : listeners.getListeners(ProcessToolListener.class)) {
+            processToolListener.processFinished(duration);
         }
     }
 
@@ -129,7 +121,7 @@ public class ProcessTool implements Cancellable{
 
         RegularDtm terrain = null;
 
-        if (dtmFile != null && parameters.useDTMCorrection()) {
+        if (dtmFile != null) {
 
             try {
                 terrain = DtmLoader.readFromAscFile(dtmFile);
@@ -145,7 +137,7 @@ public class ProcessTool implements Cancellable{
 
         Octree octree = null;
         
-        if (pointcloudFile != null && parameters.isUsePointCloudFilter()) {
+        if (pointcloudFile != null) {
 
             try {
                 logger.info("Loading point cloud file...");
@@ -160,30 +152,19 @@ public class ProcessTool implements Cancellable{
 
         return octree;
     }
-    
-    private PointCloud loadPointcloud(File pointcloudFile, Mat4D transfMatrix) {
 
-        PointCloud ptCloud = null;
+    public ArrayList<File> voxeliseFromRsp(TLSVoxCfg cfg){
 
-        if (pointcloudFile != null && parameters.isUsePointCloudFilter()) {
-
-            try {
-                ptCloud = new PointCloud();
-                
-                logger.info("Loading point cloud file...");
-                ptCloud.readFromFile(pointcloudFile, transfMatrix);
-                logger.info("Point cloud file loaded");
-                
-            } catch (Exception ex) {
-                logger.error(ex);
-            }
-        }
-
-        return ptCloud;
-    }
-
-    public ArrayList<File> voxeliseFromRsp(File output, File input, VoxelParameters parameters, Mat4D vop, Mat4D pop, List<MatrixAndFile> matricesAndFiles, List<Filter> filters, int coresNumber){
-
+        
+        File output = cfg.getOutputFile();
+        File input = cfg.getInputFile();
+        VoxelParameters parameters = cfg.getVoxelParameters();
+        Mat4D vop = MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix());
+        Mat4D pop = MatrixConverter.convertMatrix4dToMat4D(cfg.getPopMatrix());
+        List<MatrixAndFile> matricesAndFiles = cfg.getMatricesAndFiles();
+        List<Filter> filters = cfg.getFilters();
+        
+        
         if (!Files.isReadable(output.toPath())) {
             logger.error("File " + output.getAbsolutePath() + " not reachable");
         }
@@ -194,24 +175,28 @@ public class ProcessTool implements Cancellable{
 
         startTime = System.currentTimeMillis();
 
-        this.parameters = parameters;
-        this.parameters.setTLS(true);
+        parameters.setTLS(true);
         
-        dtm = loadDTM(parameters.getDtmFile());
+        RegularDtm dtm = null;
+        if (parameters.useDTMCorrection()) {
+            dtm = loadDTM(parameters.getDtmFile());
+        }
         
         List<PointcloudFilter> pointcloudFilters = parameters.getPointcloudFilters();
+        List<Octree> pointcloudList = null;
         
         if(pointcloudFilters != null){
             
             if(vop == null){ vop = Mat4D.identity();}
             
             pointcloudList = new ArrayList<>();
-            for(PointcloudFilter filter : pointcloudFilters){
-                pointcloudList.add(loadOctree(filter.getPointcloudFile(), vop));
+            
+            if(parameters.isUsePointCloudFilter()){
+                for(PointcloudFilter filter : pointcloudFilters){
+                    pointcloudList.add(loadOctree(filter.getPointcloudFile(), vop));
+                }
             }
         }
-        
-        //pointcloud = loadPointcloud(parameters.getPointcloudFile());
         
         ArrayList<File> files = new ArrayList<>();
         exec = Executors.newFixedThreadPool(coresNumber);
@@ -224,30 +209,14 @@ public class ProcessTool implements Cancellable{
             for (MatrixAndFile file : matricesAndFiles) {
 
                 File outputFile = new File(output.getAbsolutePath() + "/" + file.file.getName() + ".vox");
-                tasks.put(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixConverter.convertMatrix4dToMat4D(file.matrix), this.parameters, dtm, pointcloudList, filters));
+                tasks.put(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixConverter.convertMatrix4dToMat4D(file.matrix), parameters, dtm, pointcloudList, filters));
                 files.add(outputFile);
                 count++;
             }
             
-            //test pour savoir si le chargemen tardif de la librairie est en cause
-            RxpExtraction rxpExtraction = new RxpExtraction();
-            rxpExtraction = null;
-            
-            /*List<Future<RxpVoxelisation>> results = */exec.invokeAll(tasks);
+            exec.invokeAll(tasks);
             
             exec.shutdown();
-            /*
-            if(parameters.isUsePointCloudFilter() && pointcloudList != null){
-                
-                int filteredPointsCount = 0;
-                for (Future f : results) {
-                    VoxelAnalysisData resultData = (VoxelAnalysisData) f.get();
-                    filteredPointsCount += resultData.filteredPointsCount;
-                }
-                
-                //logger.info("Number of echos filtered : "+filteredPointsCount);
-                //logger.info("Number of points in point cloud: "+pointcloudList.getPoints().length);
-            }*/
             
             
         }catch (InterruptedException ex){
@@ -268,20 +237,44 @@ public class ProcessTool implements Cancellable{
         return files;
     }
 
-    public void voxeliseFromRxp(File output, File input, File dtmFile, VoxelParameters parameters, Mat4D vop, Mat4D pop, Mat4D sop, List<Filter> filters) {
+    public void voxeliseFromRxp(TLSVoxCfg cfg) {
 
         startTime = System.currentTimeMillis();
-
-        this.parameters = parameters;
-        this.parameters.setTLS(true);
+        
+        File output = cfg.getOutputFile();
+        File input = cfg.getInputFile();
+        VoxelParameters parameters = cfg.getVoxelParameters();
+        Mat4D vop = MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix());
+        Mat4D pop = MatrixConverter.convertMatrix4dToMat4D(cfg.getPopMatrix());
+        Mat4D sop = MatrixConverter.convertMatrix4dToMat4D(cfg.getSopMatrix());
+        List<Filter> filters = cfg.getFilters();        
+        
+        parameters.setTLS(true);
 
         RxpScan scan = new RxpScan();
         scan.setFile(input);
 
         fireProgress(output.getAbsolutePath(), 1);
 
-        if (dtm == null && dtmFile != null) {
-            dtm = loadDTM(dtmFile);
+        RegularDtm dtm = null;
+        if (parameters.useDTMCorrection()) {
+            dtm = loadDTM(parameters.getDtmFile());
+        }
+        
+        List<PointcloudFilter> pointcloudFilters = parameters.getPointcloudFilters();
+        List<Octree> pointcloudList = null;
+        
+        if(pointcloudFilters != null){
+            
+            if(vop == null){ vop = Mat4D.identity();}
+            
+            pointcloudList = new ArrayList<>();
+            
+            if(parameters.isUsePointCloudFilter()){
+                for(PointcloudFilter filter : pointcloudFilters){
+                    pointcloudList.add(loadOctree(filter.getPointcloudFile(), vop));
+                }
+            }
         }
         
         if(pop == null){ pop = Mat4D.identity();}
@@ -295,19 +288,24 @@ public class ProcessTool implements Cancellable{
 
     }
 
-    public void voxeliseFromAls(File output, File input, File trajectoryFile, VoxelParameters parameters, Mat4D vop, List<Filter> filters, List<Integer> classifiedPointsToDiscard) {
+    public void voxeliseFromAls(ALSVoxCfg cfg) {
 
+        File output = cfg.getOutputFile();
+        File input = cfg.getInputFile();
+        File trajectoryFile = cfg.getTrajectoryFile();
+        VoxelParameters parameters = cfg.getVoxelParameters();
+        Mat4D vop = MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix());
+        List<Filter> filters = cfg.getFilters();
+        List<Integer> classifiedPointsToDiscard = cfg.getClassifiedPointsToDiscard();
+                
         startTime = System.currentTimeMillis();
 
-        this.parameters = parameters;
-        this.parameters.setTLS(false);
+        parameters.setTLS(false);
 
         if (vop == null) {
             vop = Mat4D.identity();
         }
 
-        
-        
         RegularDtm terrain = null;
         
         if(parameters.getDtmFile() != null && parameters.useDTMCorrection() ){
@@ -576,7 +574,7 @@ public class ProcessTool implements Cancellable{
         return boundingBox;
     }    
     
-    public void mergeVoxelFiles(VoxMergingCfg cfg/*List<File> filesList, File output, int transmittanceMode, float maxPAD*/) {
+    public void mergeVoxelFiles(VoxMergingCfg cfg) {
                 
         cancelled = false;
         
@@ -1021,7 +1019,9 @@ public class ProcessTool implements Cancellable{
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
     }
     
-    public void calculateTransmittance(Parameters parameters){
+    public void calculateTransmittance(TransmittanceCfg cfg){
+        
+        Parameters parameters = cfg.getParameters();
         
         TransmittanceSim padTransmittance = new TransmittanceSim(parameters);
         padTransmittance.process();
@@ -1072,175 +1072,8 @@ public class ProcessTool implements Cancellable{
     public void addVoxelisationToolListener(ProcessingListener processingListener) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    /*
-    public void executeTask(File configurationFile){
-        
-        String type = Configuration.readType(configurationFile);
-        
-                    
-        switch(type){
-            case "transmittance":
 
-                TransmittanceCfg cfg = new TransmittanceCfg();
-                cfg.readConfiguration(configurationFile);
-                voxTool.calculateTransmittance(cfg.getParameters());
-
-                break;
-
-            default:
-
-
-                final int coreNumberToUse = (int) sliderRSPCoresToUse.getValue();
-
-                final long start_time = System.currentTimeMillis();
-
-                String processMode = Configuration.readType(file);
-
-                                final String msgTask = "Task " + taskID + "/" + taskNumber + " :" + file.getAbsolutePath();
-
-                                switch (processMode) {
-
-                                    case "merging":
-                                        final VoxMergingCfg voxMergingCfg = new VoxMergingCfg();
-                                        voxMergingCfg.readConfiguration(file);
-
-                                        voxTool.mergeVoxelsFileV2(voxMergingCfg.getFiles(), voxMergingCfg.getOutputFile(), 0, voxMergingCfg.getVoxelParameters().getMaxPAD());
-
-                                        Platform.runLater(new Runnable() {
-
-                                            @Override
-                                            public void run() {
-                                                addFileToVoxelList(voxMergingCfg.getOutputFile());
-                                                setOnSucceeded(null);
-                                            }
-                                        });
-
-                                        break;
-
-                                    case "voxelisation-ALS":
-
-                                        final ALSVoxCfg aLSVoxCfg = new ALSVoxCfg();
-                                        aLSVoxCfg.readConfiguration(file);
-
-                                        voxTool.addVoxelisationToolListener(new VoxelisationToolListener() {
-
-                                            @Override
-                                            public void voxelisationProgress(String progress, int ratio) {
-                                                Platform.runLater(new Runnable() {
-
-                                                    @Override
-                                                    public void run() {
-
-                                                        updateMessage(msgTask + "\n" + progress);
-                                                    }
-                                                });
-
-                                            }
-
-                                            @Override
-                                            public void voxelisationFinished(float duration) {
-
-                                                logger.info("las voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
-                                            }
-                                        });
-
-                                        voxTool.voxeliseFromAls(aLSVoxCfg.getOutputFile(), aLSVoxCfg.getInputFile(), aLSVoxCfg.getTrajectoryFile(), aLSVoxCfg.getVoxelParameters(), MatrixConverter.convertMatrix4dToMat4D(aLSVoxCfg.getVopMatrix()), aLSVoxCfg.getFilters(), aLSVoxCfg.getClassifiedPointsToDiscard());
-
-                                        Platform.runLater(new Runnable() {
-
-                                            @Override
-                                            public void run() {
-
-                                                addFileToVoxelList(aLSVoxCfg.getOutputFile());
-                                            }
-                                        });
-
-                                        break;
-
-                                    case "voxelisation-TLS":
-
-                                        final TLSVoxCfg cfg = new TLSVoxCfg();
-                                        cfg.readConfiguration(file);
-                                        //final VoxelisationConfiguration cfg1 = new VoxelisationConfiguration();
-                                        //cfg1.readConfiguration(file);
-
-                                        switch (cfg.getInputType()) {
-
-                                            case RSP_PROJECT:
-
-                                                try {
-                                                    ArrayList<File> outputFiles = voxTool.voxeliseFromRsp(cfg.getOutputFile(), cfg.getInputFile(), cfg.getVoxelParameters(),
-                                                            MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()),
-                                                            MatrixConverter.convertMatrix4dToMat4D(cfg.getPopMatrix()),
-                                                            cfg.getMatricesAndFiles(), cfg.getFilters(), coreNumberToUse);
-
-                                                    if (cfg.getVoxelParameters().isMergingAfter()) {
-
-                                                        //if(!voxTool.isCancelled()){
-                                                            mergeVoxelsFileV2(outputFiles, cfg.getVoxelParameters().getMergedFile(), cfg.getVoxelParameters().getTransmittanceMode(), cfg.getVoxelParameters().getMaxPAD());
-                                                        //}
-
-                                                    }
-
-
-                                                }catch (Exception e) {
-
-                                                }
-
-                                                break;
-
-                                            case RXP_SCAN:
-
-                                                voxTool.voxeliseFromRxp(cfg.getOutputFile(), cfg.getInputFile(),
-                                                        cfg.getVoxelParameters().getDtmFile(),
-                                                        cfg.getVoxelParameters(),
-                                                        MatrixConverter.convertMatrix4dToMat4D(cfg.getVopMatrix()),
-                                                        MatrixConverter.convertMatrix4dToMat4D(cfg.getPopMatrix()),
-                                                        MatrixConverter.convertMatrix4dToMat4D(cfg.getSopMatrix()),
-                                                        cfg.getFilters());
-
-                                                Platform.runLater(new Runnable() {
-
-                                                    @Override
-                                                    public void run() {
-
-                                                        addFileToVoxelList(cfg.getOutputFile());
-                                                    }
-                                                });
-
-                                                break;
-                                        }
-
-                                        break;
-
-                                    case "multi-resolutions":
-
-                                        final MultiResCfg multiResCfg = new MultiResCfg();
-                                        multiResCfg.readConfiguration(file);
-
-                                        ProcessingMultiRes process = new ProcessingMultiRes(multiResCfg.getMultiResPadMax(), multiResCfg.isMultiResUseDefaultMaxPad());
-
-                                        process.process(multiResCfg.getFiles());
-                                        process.write(multiResCfg.getOutputFile());
-
-                                        break;
-
-                                    case "multi-voxelisation":
-
-                                        MultiVoxCfg multiVoxCfg = new MultiVoxCfg();
-                                        multiVoxCfg.readConfiguration(file);
-                                        voxTool.multiVoxelisation(multiVoxCfg);
-
-                                        break;
-
-                                }
-                            }
-                        };
-                    }
-                };
-
-                break;
-        }
-    }*/
-
+    public void setCoresNumber(int coresNumber) {
+        this.coresNumber = coresNumber;
+    }
 }

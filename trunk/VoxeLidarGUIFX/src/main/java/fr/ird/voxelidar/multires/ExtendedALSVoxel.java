@@ -15,6 +15,7 @@ import fr.ird.voxelidar.voxelisation.raytracing.voxel.ALSVoxel;
 public class ExtendedALSVoxel extends ALSVoxel {
 
     public float resolution;
+    public float transmittanceNorm;
     
     public ExtendedALSVoxel(int i, int j, int k, Class c) {
         

@@ -8,8 +8,6 @@ package fr.ird.voxelidar.multires;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.ALSVoxel;
 import fr.ird.voxelidar.voxelisation.raytracing.voxel.Voxel;
 import java.io.File;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -137,6 +135,11 @@ public class ProcessingMultiRes {
         //calcul des intervalles
         float[] padMeanZ = new float[vs.data.split.z];
         int[] padMeanZCount = new int[vs.data.split.z];
+        
+        float[] transmittanceMeanZ = new float[vs.data.split.z];
+        int[] transmittanceMeanZCount = new int[vs.data.split.z];
+        
+        
 
         for (int i = 0; i < vs.data.split.x; i++) {
             for (int j = 0; j < vs.data.split.y; j++) {
@@ -155,6 +158,13 @@ public class ProcessingMultiRes {
                         padMeanZ[k] += pad;
                         padMeanZCount[k]++;
                     }
+                    
+                    double transmittance = ((ALSVoxel) vox).transmittance;
+                    if (!Double.isNaN(transmittance)) {
+                        transmittanceMeanZ[k] += transmittance;
+                        transmittanceMeanZCount[k]++;
+                    }
+                    
                 }
             }
         }
@@ -192,6 +202,9 @@ public class ProcessingMultiRes {
             padMeanZ[x] = padMeanZ[x] / padMeanZCount[x];
         }
         
+        for (int x = 0; x < transmittanceMeanZ.length; x++) {
+            transmittanceMeanZ[x] = transmittanceMeanZ[x] / transmittanceMeanZCount[x];
+        }
 
         for (int n = 0; n < vs.data.voxels.size(); n++) {
 
@@ -259,6 +272,7 @@ public class ProcessingMultiRes {
                             voxel.PadBVTotal = vs.data.maxPad;
                         }else{
                             voxel.PadBVTotal = padMeanZ[indice];
+                            voxel.transmittance = transmittanceMeanZ[indice];
                         }
                         
                     }
@@ -349,6 +363,7 @@ public class ProcessingMultiRes {
         } else {
 
             vox.transmittance = (vox.bvEntering - vox.bvIntercepted) / vox.bvEntering;
+                        
 
             if (vox.nbSampling > 1 && vox.transmittance == 0) {
 
@@ -369,6 +384,12 @@ public class ProcessingMultiRes {
                 }
             }
 
+        }
+        
+        if(Double.isNaN(vox.lMeanTotal) || vox.lMeanTotal == 0){
+            vox.transmittanceNorm = Float.NaN;
+        }else{
+            vox.transmittanceNorm = (float) Math.pow(vox.transmittance, 1/vox.lMeanTotal);
         }
         
         vox.PadBVTotal = pad + 0.0f; //set +0.0f to avoid -0.0f

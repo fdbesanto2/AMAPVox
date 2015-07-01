@@ -289,15 +289,25 @@ public class GLMeshFactory {
             List<Vec3F> normales = new ArrayList<>();
             Map<Integer, Vec3F> colors = new HashMap<>();
             
+            int vertexIndex = 0;
+            
             for(Element shape : shapes){
                 
                 Element indexedFaceSetElement = shape.getChild("IndexedFaceSet");
+                
+                if(indexedFaceSetElement == null){
+                    indexedFaceSetElement = shape.getChild("IndexedTriangleSet");
+                }
                 Element appearanceElement = shape.getChild("Appearance");
                 String diffuseColorString = appearanceElement.getChild("Material").getAttributeValue("diffuseColor");
                 String[] split = diffuseColorString.split(" ");
                 Vec3F currentColor = new Vec3F(Float.valueOf(split[0]), Float.valueOf(split[1]), Float.valueOf(split[2]));
                 
                 String coordinatesIndices = indexedFaceSetElement.getAttributeValue("coordIndex");
+                
+                if(coordinatesIndices == null){
+                    coordinatesIndices = indexedFaceSetElement.getAttributeValue("index");
+                }
                 String[] coordinatesIndicesArray = coordinatesIndices.split(" ");
                 
                 
@@ -306,7 +316,8 @@ public class GLMeshFactory {
                     
                     if(indice != -1){
                         faces.add(indice);
-                        colors.put((int)indice, currentColor);
+                        colors.put(vertexIndex, currentColor);
+                        vertexIndex++;
                     }
                 }
                 
@@ -590,7 +601,7 @@ public class GLMeshFactory {
         mesh.vertexCount = indexData.length;
         
         ColorGradient gradient = new ColorGradient(dtm.getzMin(), dtm.getzMax());
-        gradient.setGradientColor(ColorGradient.GRADIENT_RAINBOW);
+        gradient.setGradientColor(ColorGradient.GRADIENT_RAINBOW3);
         
         float colorData[] = new float[points.size()*3];
         for(int i=0, j=0;i<points.size();i++,j+=3){

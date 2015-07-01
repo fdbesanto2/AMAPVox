@@ -105,4 +105,8 @@ public class TLSVoxCfg extends VoxCfg{
     public List<MatrixAndFile> getMatricesAndFiles() {
         return matricesAndFiles;
     }
+
+    public void setMatricesAndFiles(List<MatrixAndFile> matricesAndFiles) {
+        this.matricesAndFiles = matricesAndFiles;
+    }    
 }
