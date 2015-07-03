@@ -2,26 +2,34 @@
 
 uniform mat4 viewMatrix, projMatrix, normalMatrix;
 
+uniform vec3 eye;
+
 in vec3 position;
 in vec3 normal;
 in vec3 color;
 
 
-out vec3 fragPosition;
+flat out vec3 fragPosition;
 flat out vec3 fragColor;
 flat out vec3 fragNormal;
  
 void main()
 {
-    
-    mat4 rotation = mat4(vec4(viewMatrix[0][0],viewMatrix[1][0],viewMatrix[2][0],0.8),
-                        vec4(viewMatrix[0][1],viewMatrix[1][1],viewMatrix[2][1],0.8),
-                        vec4(viewMatrix[0][2],viewMatrix[1][2],viewMatrix[2][2],0),
-                        vec4(viewMatrix[0][3],viewMatrix[1][3],viewMatrix[2][3],1));
+
+    vec3 test = vec3(0, 100, 8);
+
+    vec3 right = normalize(vec3(viewMatrix[0][0],viewMatrix[1][0],viewMatrix[2][0]));
+    vec3 up = normalize(vec3(viewMatrix[0][1],viewMatrix[1][1],viewMatrix[2][1]));
+    vec3 forward = normalize(vec3(viewMatrix[0][2],viewMatrix[1][2],viewMatrix[2][2]));
+
+    mat4 transf = mat4(vec4(right, -dot(right, normalize(eye))),
+                        vec4(up, -dot(up, normalize(eye))),
+                        vec4(forward, -dot(forward, normalize(eye))),
+                        vec4(0,0,0,1));
 
     fragPosition = position;
     fragColor = color;
     fragNormal = normal;
 
-    gl_Position = vec4(position, 1.0) * rotation;
+    gl_Position = vec4(position, 1.0) * transf;
 }

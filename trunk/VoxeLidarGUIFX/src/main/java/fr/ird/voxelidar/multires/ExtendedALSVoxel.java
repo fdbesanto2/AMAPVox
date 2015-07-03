@@ -15,7 +15,10 @@ import fr.ird.voxelidar.voxelisation.raytracing.voxel.ALSVoxel;
 public class ExtendedALSVoxel extends ALSVoxel {
 
     public float resolution;
-    public float transmittanceNorm;
+    public float type; //0 = below ground, 1 = ground, 2 = below canopy, 3 = canopy, 4 = above canopy
+    public float canopy_relative_layer;
+    public float patch_type; //0 = none, 1 = mean value, 2 = higher resolution
+    //public float transmittanceNorm;
     
     public ExtendedALSVoxel(int i, int j, int k, Class c) {
         

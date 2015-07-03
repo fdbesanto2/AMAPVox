@@ -338,6 +338,14 @@ public class TrackballCamera extends Camera{
     public void updateViewMatrix(){
         
         viewMatrix = Mat4F.lookAt(location, target, up);
+        /*
+        System.out.println(viewMatrix.mat[0]+" "+viewMatrix.mat[1]+" "+viewMatrix.mat[2]+" "+viewMatrix.mat[3]+"\n"+
+                            viewMatrix.mat[4]+" "+viewMatrix.mat[5]+" "+viewMatrix.mat[6]+" "+viewMatrix.mat[7]+"\n"+
+                            viewMatrix.mat[8]+" "+viewMatrix.mat[9]+" "+viewMatrix.mat[10]+" "+viewMatrix.mat[11]+"\n"+
+                            viewMatrix.mat[12]+" "+viewMatrix.mat[13]+" "+viewMatrix.mat[14]+" "+viewMatrix.mat[15]+"\n");
+        */
+        
+        //System.out.println("position: "+location.x+" "+location.y+ " "+location.z+"\t"+"target: "+target.x+" "+target.y+ " "+target.z);
         
         notifyViewMatrixChanged();
         

@@ -325,6 +325,7 @@ public class JoglListener implements GLEventListener {
             Shader s = scene.getShadersList().get(id);
             gl.glUseProgram(id);
                 gl.glUniformMatrix4fv(s.uniformMap.get("normalMatrix"), 1, false, normalMatrixBuffer);
+                gl.glUniform3f(s.uniformMap.get("eye"), camera.getLocation().x, camera.getLocation().y, camera.getLocation().z);
             gl.glUseProgram(0);
             
             FloatBuffer viewMatrixBuffer = Buffers.newDirectFloatBuffer(camera.getViewMatrix().mat);
@@ -378,7 +379,7 @@ public class JoglListener implements GLEventListener {
             InputStreamReader noTranslationFragmentShader = new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("shaders/NoTranslationFragmentShader.txt"));
             Shader noTranslationShader = new Shader(gl, noTranslationFragmentShader, noTranslationVertexShader, "noTranslationShader");
             noTranslationShader.setAttributeLocations(Shader.composeShaderAttributes(Shader.MINIMAL_SHADER_ATTRIBUTES, Shader.LIGHT_SHADER_ATTRIBUTES));
-            noTranslationShader.setUniformLocations(Shader.composeShaderUniforms(Shader.MINIMAL_SHADER_UNIFORMS, Shader.LIGHT_SHADER_UNIFORMS));
+            noTranslationShader.setUniformLocations(Shader.composeShaderUniforms(Shader.composeShaderUniforms(Shader.MINIMAL_SHADER_UNIFORMS, Shader.LIGHT_SHADER_UNIFORMS), new String[]{"eye"}));
             
             logger.debug("shader compiled: "+noTranslationShader.name);
             
@@ -418,32 +419,17 @@ public class JoglListener implements GLEventListener {
             scene.addShader(instanceShader);
             scene.addShader(texturedShader);
             scene.addShader(lightedShader);
-            /*
-            GLMesh axisMesh = GLMeshFactory.createMeshFromX3D(new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("mesh/axis2.x3d")));
+            
+            GLMesh axisMesh = GLMeshFactory.createMeshFromObj(new InputStreamReader(SceneManager.class.getClassLoader().getResourceAsStream("mesh/axis.obj")),
+                                            new InputStreamReader(SceneManager.class.getClassLoader().getResourceAsStream("mesh/axis.mtl")));
+            
+            //GLMesh axisMesh = GLMeshFactory.createMeshFromX3D(new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("mesh/axis2.x3d")));
             axisMesh.setGlobalScale(0.03f);
             
             SceneObject axis = new SimpleSceneObject(axisMesh, noTranslationShader.getProgramId(), false);
             
             axis.setDrawType(GL3.GL_TRIANGLES);
-            scene.addObject(axis, gl);*/
-            /*
-            RegularDtm dtm = DtmLoader.readFromAscFile(new File("C:\\Users\\Julien\\Desktop\\samples\\dtm\\ALSbuf_xyzirncapt_dtm.asc"));
-            
-            Mat4D transfMatrix = new Mat4D();
-            transfMatrix.mat=new double[]{0.9540688863574789, 0.29958731629459895, 0.0, -448120.0441687209,
-                                        -0.29958731629459895, 0.9540688863574789, 0.0, -470918.3928060016,
-                                        0.0, 0.0, 1.0, 0.0,
-                                        0.0, 0.0, 0.0, 1.0
-                                        };
-            
-            dtm.setTransformationMatrix(transfMatrix);
-            dtm.buildMesh();
-            
-            GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormales(dtm.getPoints(), dtm.getFaces());
-            SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, lightedShader.getProgramId(), false);
-            
-            scene.addObject(dtmSceneObject, gl);
-            */
+            scene.addObject(axis, gl);
             
             if(scene.getDtm() != null){
                 

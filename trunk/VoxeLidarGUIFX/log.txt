@@ -3896,3 +3896,781 @@ java.lang.NumberFormatException: For input string: "SPACE"
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
 	at java.lang.Thread.run(Thread.java:745)
+2015-07-02 08:36:11 INFO  - allocate!!!!!!!!
+2015-07-02 08:36:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 9.21)
+			Corner Sup	:	(15.0, 250.0, 68.98)
+			Dimensions	:	(30, 260, 60)
+			Toricity 	:	false
+
+2015-07-02 08:36:11 INFO  - Saved libfile: /tmp/LasZipLibrary-2978789311677778466.tmp
+2015-07-02 08:36:11 INFO  - /tmp/LasZipLibrary-2978789311677778466.tmp
+2015-07-02 08:36:11 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-02 08:36:11 INFO  - Laz file is closed
+2015-07-02 08:36:13 INFO  - Shots processed: 141106
+2015-07-02 08:36:13 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-07-02 08:36:15 INFO  - file written ( 2.0 s )
+2015-07-02 08:36:15 INFO  - las voxelisation finished in 12.0 s
+2015-07-02 08:36:48 INFO  - allocate!!!!!!!!
+2015-07-02 08:36:48 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 9.21)
+			Corner Sup	:	(15.0, 250.0, 68.98)
+			Dimensions	:	(30, 260, 60)
+			Toricity 	:	false
+
+2015-07-02 08:36:48 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-02 08:36:49 INFO  - Laz file is closed
+2015-07-02 08:36:50 INFO  - Shots processed: 141106
+2015-07-02 08:36:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-07-02 08:36:52 INFO  - file written ( 2.0 s )
+2015-07-02 08:36:52 INFO  - las voxelisation finished in 10.0 s
+2015-07-02 08:38:10 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-02 08:38:10 INFO  - Nombre de valeurs corrigées: 0/468000
+2015-07-02 08:38:10 INFO  - Nombre de valeurs mises à défaut: 180088/468000
+2015-07-02 08:39:28 INFO  - allocate!!!!!!!!
+2015-07-02 08:39:28 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 9.21)
+			Corner Sup	:	(15.0, 250.0, 68.98)
+			Dimensions	:	(15, 130, 30)
+			Toricity 	:	false
+
+2015-07-02 08:39:28 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-02 08:39:28 INFO  - Laz file is closed
+2015-07-02 08:39:29 INFO  - Shots processed: 141106
+2015-07-02 08:39:29 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_2m.vox
+2015-07-02 08:39:31 INFO  - file written ( 1.0 s )
+2015-07-02 08:39:31 INFO  - las voxelisation finished in 10.0 s
+2015-07-02 08:39:38 INFO  - allocate!!!!!!!!
+2015-07-02 08:39:38 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 9.21)
+			Corner Sup	:	(15.0, 250.0, 68.98)
+			Dimensions	:	(10, 87, 20)
+			Toricity 	:	false
+
+2015-07-02 08:39:38 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-02 08:39:39 INFO  - Laz file is closed
+2015-07-02 08:39:39 INFO  - Shots processed: 141106
+2015-07-02 08:39:39 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_3m.vox
+2015-07-02 08:39:40 INFO  - file written ( 0.0 s )
+2015-07-02 08:39:40 INFO  - las voxelisation finished in 8.0 s
+2015-07-02 08:39:47 INFO  - allocate!!!!!!!!
+2015-07-02 08:39:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 9.21)
+			Corner Sup	:	(15.0, 250.0, 68.98)
+			Dimensions	:	(8, 65, 15)
+			Toricity 	:	false
+
+2015-07-02 08:39:47 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-02 08:39:48 INFO  - Laz file is closed
+2015-07-02 08:39:48 INFO  - Shots processed: 141106
+2015-07-02 08:39:48 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_4m.vox
+2015-07-02 08:39:48 INFO  - file written ( 0.0 s )
+2015-07-02 08:39:48 INFO  - las voxelisation finished in 8.0 s
+2015-07-02 08:40:29 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-02 08:40:29 INFO  - Nombre de valeurs corrigées: 77618/468000
+2015-07-02 08:40:29 INFO  - Nombre de valeurs mises à défaut: 102470/468000
+2015-07-02 10:03:11 INFO  - allocate!!!!!!!!
+2015-07-02 10:03:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 9.21)
+			Corner Sup	:	(15.0, 250.0, 68.98)
+			Dimensions	:	(6, 52, 12)
+			Toricity 	:	false
+
+2015-07-02 10:03:11 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-02 10:03:12 INFO  - Laz file is closed
+2015-07-02 10:03:13 INFO  - Shots processed: 141106
+2015-07-02 10:03:13 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_5m.vox
+2015-07-02 10:03:13 INFO  - file written ( 0.0 s )
+2015-07-02 10:03:13 INFO  - las voxelisation finished in 9.0 s
+2015-07-02 10:04:05 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-02 10:04:05 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-02 10:04:05 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-02 10:07:12 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-02 10:07:12 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-02 10:07:12 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-02 10:21:05 INFO  - Computing dtm normals
+2015-07-02 10:21:36 INFO  - Computing dtm normals
+2015-07-02 11:19:58 INFO  - Computing dtm normals
+2015-07-02 11:22:14 INFO  - Computing dtm normals
+2015-07-02 14:03:36 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:284)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 14:04:19 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:284)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 14:04:30 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:284)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 14:04:40 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:284)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 14:05:54 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:406)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 14:06:44 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:406)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 14:07:40 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:406)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 14:10:14 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:406)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 14:13:06 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:406)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 14:13:46 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:406)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 14:59:18 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromX3D(GLMeshFactory.java:406)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 15:01:25 ERROR - java.io.IOException: Stream closed
+2015-07-02 15:14:38 ERROR - java.io.IOException: Stream closed
+2015-07-02 15:14:50 ERROR - java.io.IOException: Stream closed
+2015-07-02 15:16:19 ERROR - java.io.IOException: Stream closed
+2015-07-02 15:17:10 ERROR - java.io.IOException: Stream closed
+2015-07-02 15:18:13 ERROR - java.io.IOException: Stream closed
+2015-07-02 15:19:04 ERROR - java.io.IOException: Stream closed
+2015-07-02 15:21:06 ERROR - java.io.IOException: Stream closed
+2015-07-02 15:22:01 ERROR - java.io.IOException: Stream closed
+2015-07-02 15:22:45 ERROR - java.io.IOException: Stream closed
+2015-07-02 15:25:21 ERROR - error in scene initialization
+java.lang.IndexOutOfBoundsException: Index: 1322, Size: 1322
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromObj(GLMeshFactory.java:494)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 15:26:18 ERROR - error in scene initialization
+java.lang.IndexOutOfBoundsException: Index: 1322, Size: 1322
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromObj(GLMeshFactory.java:494)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 15:26:40 ERROR - error in scene initialization
+java.lang.IndexOutOfBoundsException: Index: 1322, Size: 1322
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromObj(GLMeshFactory.java:494)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 15:27:34 ERROR - error in scene initialization
+java.lang.IndexOutOfBoundsException: Index: 1322, Size: 1322
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromObj(GLMeshFactory.java:494)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 15:28:15 ERROR - java.io.IOException: Stream closed
+2015-07-02 15:29:29 ERROR - java.io.IOException: Stream closed
+2015-07-02 15:33:15 ERROR - error in scene initialization
+java.lang.IndexOutOfBoundsException: Index: 1322, Size: 1322
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromObj(GLMeshFactory.java:495)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 15:34:34 ERROR - error in scene initialization
+java.lang.IndexOutOfBoundsException: Index: 1322, Size: 1322
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromObj(GLMeshFactory.java:495)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 15:34:43 ERROR - error in scene initialization
+java.lang.IndexOutOfBoundsException: Index: 1322, Size: 1322
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromObj(GLMeshFactory.java:495)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 15:38:13 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshWithNormales(GLMeshFactory.java:668)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromObj(GLMeshFactory.java:528)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 17:04:46 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshWithNormales(GLMeshFactory.java:668)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromObj(GLMeshFactory.java:528)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 17:11:09 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshWithNormales(GLMeshFactory.java:668)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromObj(GLMeshFactory.java:528)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 17:12:11 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshWithNormales(GLMeshFactory.java:668)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromObj(GLMeshFactory.java:528)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 17:12:37 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshWithNormales(GLMeshFactory.java:668)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromObj(GLMeshFactory.java:528)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 17:13:18 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshWithNormales(GLMeshFactory.java:668)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromObj(GLMeshFactory.java:528)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 17:15:58 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshWithNormales(GLMeshFactory.java:668)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromObj(GLMeshFactory.java:528)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 17:18:31 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshWithNormales(GLMeshFactory.java:668)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromObj(GLMeshFactory.java:528)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 17:18:50 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshWithNormales(GLMeshFactory.java:668)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromObj(GLMeshFactory.java:528)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-02 17:19:17 ERROR - error in scene initialization
+java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshWithNormales(GLMeshFactory.java:668)
+	at fr.ird.voxelidar.engine3d.mesh.GLMeshFactory.createMeshFromObj(GLMeshFactory.java:528)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:422)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+2015-07-03 08:30:14 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 08:30:14 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 08:30:14 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 08:30:25 ERROR - error in scene initialization
+com.jogamp.opengl.GLException: Caught NullPointerException: null on thread Thread-4-FPSAWTAnimator#00-Timer0
+	at com.jogamp.opengl.GLException.newGLException(GLException.java:76)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1311)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at jogamp.opengl.GLAutoDrawableBase.defaultWindowResizedOp(GLAutoDrawableBase.java:259)
+	at com.jogamp.newt.opengl.GLWindow.access$200(GLWindow.java:119)
+	at com.jogamp.newt.opengl.GLWindow$2.windowResized(GLWindow.java:141)
+	at jogamp.newt.WindowImpl.consumeWindowEvent(WindowImpl.java:3682)
+	at jogamp.newt.WindowImpl.sendWindowEvent(WindowImpl.java:3616)
+	at jogamp.newt.WindowImpl$AlwaysOnTopAction.run(WindowImpl.java:1708)
+	at jogamp.newt.WindowImpl.runOnEDTIfAvail(WindowImpl.java:2131)
+	at jogamp.newt.WindowImpl.setAlwaysOnTop(WindowImpl.java:1717)
+	at com.jogamp.newt.opengl.GLWindow.setAlwaysOnTop(GLWindow.java:320)
+	at fr.ird.voxelidar.gui.JOGLWindow.setOnTop(JOGLWindow.java:90)
+	at fr.ird.voxelidar.gui.MainFrameController$37$1$2$2.sceneInitialized(MainFrameController.java:1761)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.fireSceneInitialized(JoglListener.java:130)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.initScene(JoglListener.java:478)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.init(JoglListener.java:158)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:641)
+	at jogamp.opengl.GLDrawableHelper.init(GLDrawableHelper.java:663)
+	at jogamp.opengl.GLAutoDrawableBase$1.run(GLAutoDrawableBase.java:430)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1275)
+	at jogamp.opengl.GLDrawableHelper.invokeGL(GLDrawableHelper.java:1131)
+	at com.jogamp.newt.opengl.GLWindow.display(GLWindow.java:680)
+	at com.jogamp.opengl.util.AWTAnimatorImpl.display(AWTAnimatorImpl.java:77)
+	at com.jogamp.opengl.util.AnimatorBase.display(AnimatorBase.java:451)
+	at com.jogamp.opengl.util.FPSAnimator$MainTask.run(FPSAnimator.java:178)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+Caused by: java.lang.NullPointerException
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.render(JoglListener.java:328)
+	at fr.ird.voxelidar.engine3d.renderer.JoglListener.display(JoglListener.java:195)
+	at jogamp.opengl.GLDrawableHelper.displayImpl(GLDrawableHelper.java:691)
+	at jogamp.opengl.GLDrawableHelper.display(GLDrawableHelper.java:673)
+	at jogamp.opengl.GLAutoDrawableBase$2.run(GLAutoDrawableBase.java:442)
+	at jogamp.opengl.GLDrawableHelper.invokeGLImpl(GLDrawableHelper.java:1277)
+	... 27 more
+2015-07-03 08:48:06 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 08:48:06 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 08:48:06 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 09:10:38 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 09:10:38 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 09:10:38 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 09:13:47 INFO  - Computing dtm normals
+2015-07-03 09:18:11 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 09:18:11 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 09:18:11 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 09:18:23 INFO  - Computing dtm normals
+2015-07-03 09:20:48 INFO  - Computing dtm normals
+2015-07-03 09:33:40 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 09:33:40 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 09:33:40 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 09:34:08 INFO  - Computing dtm normals
+2015-07-03 09:37:40 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 09:37:40 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 09:37:40 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 09:37:48 INFO  - Computing dtm normals
+2015-07-03 09:39:54 INFO  - Computing dtm normals
+2015-07-03 09:40:34 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 09:40:34 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 09:40:34 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 09:40:42 INFO  - Computing dtm normals
+2015-07-03 09:51:54 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 09:51:54 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 09:51:54 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 09:52:02 INFO  - Computing dtm normals
+2015-07-03 09:55:39 INFO  - Computing dtm normals
+2015-07-03 10:25:59 INFO  - Computing dtm normals
+2015-07-03 10:26:23 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 10:26:23 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 10:26:23 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 10:26:29 INFO  - Computing dtm normals
+2015-07-03 10:29:09 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 10:29:09 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 10:29:09 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 10:29:19 INFO  - Computing dtm normals
+2015-07-03 10:43:26 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 10:43:26 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 10:43:26 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 10:43:35 INFO  - Computing dtm normals
+2015-07-03 10:49:20 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 10:49:20 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 10:49:20 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 10:49:28 INFO  - Computing dtm normals
+2015-07-03 10:51:36 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 10:51:36 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 10:51:36 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 10:51:44 INFO  - Computing dtm normals
+2015-07-03 10:52:11 INFO  - Computing dtm normals
+2015-07-03 11:13:55 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 11:13:55 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 11:13:55 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 11:14:02 INFO  - Computing dtm normals
+2015-07-03 11:21:08 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 11:21:08 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 11:21:08 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 11:25:23 ERROR - Service failed : 
+java.lang.NoSuchFieldError: patch_type
+	at fr.ird.voxelidar.multires.ProcessingMultiRes.process(ProcessingMultiRes.java:243)
+	at fr.ird.voxelidar.gui.MainFrameController$38$1.call(MainFrameController.java:2869)
+	at fr.ird.voxelidar.gui.MainFrameController$38$1.call(MainFrameController.java:2683)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$451/1570855057.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$449/1500743252.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-03 11:26:01 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 11:26:01 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 11:26:01 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 11:30:06 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 11:30:06 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 11:30:06 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 11:32:38 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 11:32:38 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 11:32:38 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 11:33:30 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 11:33:30 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 11:33:30 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 11:34:18 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 11:34:18 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 11:34:18 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 11:35:31 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 11:35:31 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 11:35:31 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 11:36:19 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 11:36:19 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 11:36:19 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 11:41:46 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 11:41:46 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 11:41:46 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 11:48:54 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 11:48:54 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 11:48:54 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 11:50:32 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 11:50:32 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 11:50:32 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 11:53:01 INFO  - Nombre de valeurs correctes: 287912/468000
+2015-07-03 11:53:01 INFO  - Nombre de valeurs corrigées: 82504/468000
+2015-07-03 11:53:01 INFO  - Nombre de valeurs mises à défaut: 97584/468000
+2015-07-03 13:20:12 INFO  - allocate!!!!!!!!
+2015-07-03 13:20:12 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 9.21)
+			Corner Sup	:	(15.0, 250.0, 68.98)
+			Dimensions	:	(60, 520, 120)
+			Toricity 	:	false
+
+2015-07-03 13:20:12 INFO  - Saved libfile: /tmp/LasZipLibrary-84659632942811251.tmp
+2015-07-03 13:20:12 INFO  - /tmp/LasZipLibrary-84659632942811251.tmp
+2015-07-03 13:20:12 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-03 13:20:13 INFO  - Laz file is closed
+2015-07-03 13:20:15 INFO  - Shots processed: 141106
+2015-07-03 13:20:15 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_50cm.vox
+2015-07-03 13:23:26 INFO  - allocate!!!!!!!!
+2015-07-03 13:23:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-15.0, -10.0, 9.21)
+			Corner Sup	:	(15.0, 250.0, 68.98)
+			Dimensions	:	(60, 520, 120)
+			Toricity 	:	false
+
+2015-07-03 13:23:26 INFO  - Saved libfile: /tmp/LasZipLibrary-2021983651417883775.tmp
+2015-07-03 13:23:26 INFO  - /tmp/LasZipLibrary-2021983651417883775.tmp
+2015-07-03 13:23:26 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-03 13:23:27 INFO  - Laz file is closed
+2015-07-03 13:23:28 INFO  - Shots processed: 141106
+2015-07-03 13:23:28 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_50cm.vox
+2015-07-03 13:23:42 INFO  - file written ( 13.0 s )
+2015-07-03 13:23:42 INFO  - las voxelisation finished in 23.0 s
+2015-07-03 16:12:50 ERROR - Failed compile vertex shader: 0(24) : error C0000: syntax error, unexpected type identifier, expecting ',' or ')' at token "vec4"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+2015-07-03 16:12:50 ERROR - Fail reading shaders files
+2015-07-03 16:13:44 ERROR - Failed compile vertex shader: 0(24) : error C7532: global function inverse requires "#version 150" or later
+0(24) : error C0000: ... or #extension GL_ARB_gpu_shader5 : enable
+0(24) : error C7011: implicit cast from "mat4" to "mat3"
+0(35) : error C1101: ambiguous overloaded function reference "mul(vec4, mat3)"
+    (0) : mat3x1 mul(mat3, mat3x1)
+    (0) : vec1 mul(mat1x4, vec4)
+    (0) : vec2 mul(mat2x4, vec4)
+    (0) : vec3 mul(mat3, vec3)
+    (0) : vec3 mul(mat3x4, vec4)
+    (0) : vec4 mul(mat4, vec4)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+2015-07-03 16:13:44 ERROR - Fail reading shaders files
+2015-07-03 16:20:19 ERROR - Failed compile vertex shader: 0(26) : error C1067: too little data in type constructor
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+2015-07-03 16:20:19 ERROR - Fail reading shaders files
+2015-07-03 16:58:05 ERROR - Failed compile vertex shader: 0(34) : error C1008: undefined variable "tvec4"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+2015-07-03 16:58:05 ERROR - Fail reading shaders files

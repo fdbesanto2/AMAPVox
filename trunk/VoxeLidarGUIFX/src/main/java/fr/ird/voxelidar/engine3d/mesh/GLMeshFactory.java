@@ -11,6 +11,7 @@ import fr.ird.voxelidar.engine3d.math.point.Point3F;
 import fr.ird.voxelidar.engine3d.object.mesh.Grid;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3i;
+import fr.ird.voxelidar.io.file.FileManager;
 import fr.ird.voxelidar.lidar.format.dtm.DTMPoint;
 import fr.ird.voxelidar.lidar.format.dtm.Face;
 import fr.ird.voxelidar.lidar.format.dtm.RegularDtm;
@@ -22,8 +23,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -280,7 +283,6 @@ public class GLMeshFactory {
             Element root = document.getRootElement();
             List<Element> shapes = root.getChild("Scene")
                                         .getChild("Transform")
-                                        .getChild("Transform")
                                         .getChild("Group")
                                         .getChildren("Shape");
             
@@ -289,7 +291,8 @@ public class GLMeshFactory {
             List<Vec3F> normales = new ArrayList<>();
             Map<Integer, Vec3F> colors = new HashMap<>();
             
-            int vertexIndex = 0;
+            int facesOffset = 0;
+            int verticesOffset = 0;
             
             for(Element shape : shapes){
                 
@@ -310,16 +313,21 @@ public class GLMeshFactory {
                 }
                 String[] coordinatesIndicesArray = coordinatesIndices.split(" ");
                 
+                int tmp = 0;
                 
                 for(String s : coordinatesIndicesArray){
                     int indice = Integer.valueOf(s);
                     
                     if(indice != -1){
-                        faces.add(indice);
-                        colors.put(vertexIndex, currentColor);
-                        vertexIndex++;
+                        faces.add(indice + facesOffset);
+                        colors.put(indice + facesOffset, currentColor);
+                        tmp++;
                     }
                 }
+                
+                facesOffset += tmp; 
+                
+                tmp = 0;
                 
                 Element coordinateElement = indexedFaceSetElement.getChild("Coordinate");
                 if(coordinateElement != null){
@@ -347,6 +355,7 @@ public class GLMeshFactory {
                                     z = value;
                                     vertices.add(new Vec3F(x, y, z));
                                     count = -1;
+                                    tmp++;
                                     break;
                             }
 
@@ -354,6 +363,8 @@ public class GLMeshFactory {
                     }
                     
                 }
+                
+                verticesOffset += tmp;
                 
                 Element normalElement = indexedFaceSetElement.getChild("Normal");
                 if(normalElement != null){
@@ -387,6 +398,7 @@ public class GLMeshFactory {
                         }
                     }
                 }
+                
             }
             
             GLMesh mesh = GLMeshFactory.createMeshWithNormales(vertices, normales, faces);
@@ -422,6 +434,11 @@ public class GLMeshFactory {
         ArrayList<Integer> faces = new ArrayList<>();
         Map<String, Vec3F> materials = new HashMap<>();
         
+        
+        int lineNumber = 100000;
+        
+        Vec3F[] normalesArray = new Vec3F[lineNumber];
+        
         try {
             BufferedReader reader = new BufferedReader(objMaterial);
             
@@ -448,9 +465,12 @@ public class GLMeshFactory {
             logger.error(ex);
         }
         
-        try {
-            BufferedReader reader = new BufferedReader(objFile);
+        int count = 0;
+        
+        try{
                         
+            BufferedReader reader = new BufferedReader(objFile);
+            
             String line;
             
             Vec3F currentColor = new Vec3F();
@@ -469,8 +489,14 @@ public class GLMeshFactory {
                     
                 }else if(line.startsWith("f ")){
                     
-                    String[] faceSplit = line.split(" ");
-                    Vec3i face = new Vec3i(Integer.valueOf(faceSplit[1].split("/")[0]), Integer.valueOf(faceSplit[2].split("/")[0]), Integer.valueOf(faceSplit[3].split("/")[0]));
+                    String[] faceSplit = line.replaceAll("//", " ").split(" ");
+                    
+                    Vec3i face = new Vec3i(Integer.valueOf(faceSplit[1]), Integer.valueOf(faceSplit[3]), Integer.valueOf(faceSplit[5]));
+                    
+                    normalesArray[face.x-1] = normales.get(Integer.valueOf(faceSplit[2])-1);
+                    normalesArray[face.y-1] = normales.get(Integer.valueOf(faceSplit[4])-1);
+                    normalesArray[face.z-1] = normales.get(Integer.valueOf(faceSplit[6])-1);
+                    count ++;
                     
                     colors.put(face.x-1, currentColor);
                     colors.put(face.y-1, currentColor);
@@ -493,6 +519,11 @@ public class GLMeshFactory {
             logger.error(ex);
         }
         
+        normales = new ArrayList<>();
+        
+        for (int i=0;i<vertices.size();i++){
+            normales.add(normalesArray[i]);
+        }
         
         mesh = GLMeshFactory.createMeshWithNormales(vertices, normales, faces);
         

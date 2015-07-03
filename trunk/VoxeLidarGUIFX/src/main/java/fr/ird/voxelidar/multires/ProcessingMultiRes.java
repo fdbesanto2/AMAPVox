@@ -93,17 +93,15 @@ public class ProcessingMultiRes {
          * Calcul de la valeur moyenne de Pad de la scène (sous canopée et au
          * dessus du sol)*
          */
-        int nb = 0;
-        float sumPad = 0;
 
-        int[][] tabTemp = new int[vs.data.split.x][vs.data.split.y];
+        int[][] canopeeArray = new int[vs.data.split.x][vs.data.split.y];
 
         //initialisation
-        for (int[] tabTemp1 : tabTemp) {
+        /*for (int[] tabTemp1 : canopeeArray) {
             for (int j = 0; j < tabTemp1.length; j++) {
                 tabTemp1[j] = -1;
             }
-        }
+        }*/
 
         //on cherche les voxels non vide les plus haut
         
@@ -113,93 +111,54 @@ public class ProcessingMultiRes {
                     
                     Voxel v= vs.data.getVoxel(i, j, k);
                     
-                    if (v.nbSampling > 0 && v.nbEchos > 0 && k > tabTemp[v.$i][v.$j]) {
-                        tabTemp[v.$i][v.$j] = k;
+                    if (v.nbSampling > 0 && v.nbEchos > 0) {
+                        canopeeArray[i][j] = k;
                         break;
                     }
                 }
             }
         }
-        /*
-        for (Voxel v : vs.data.voxels) {
-            
-            int k = v.$k;
-
-            if (v.nbSampling > 0 && v.nbEchos > 0 && k > tabTemp[v.$i][v.$j]) {
-                tabTemp[v.$i][v.$j] = k;
-            }
-        }
-        */
         
         //on calcule la valeur moyenne de chaque couche
         //calcul des intervalles
-        float[] padMeanZ = new float[vs.data.split.z];
+        float[] padMeanByCanopyLayer = new float[vs.data.split.z];
         int[] padMeanZCount = new int[vs.data.split.z];
         
         float[] transmittanceMeanZ = new float[vs.data.split.z];
         int[] transmittanceMeanZCount = new int[vs.data.split.z];
         
-        
 
         for (int i = 0; i < vs.data.split.x; i++) {
             for (int j = 0; j < vs.data.split.y; j++) {
                 
-                int indiceMaxZ = tabTemp[i][j];
+                int indiceMaxZ = canopeeArray[i][j];
                 
                 /*on calcul le PAD moyen par couche
                     pour cela on parcours chaque couche
                 */
                 for (int k = indiceMaxZ; k >= 0; k--) {
-                    
-                    Voxel vox = vs.data.getVoxel(i, j, k);
+
+                    Voxel vox = vs.data.getVoxel(i, j, indiceMaxZ-k);
                     double pad = ((ALSVoxel) vox).PadBVTotal;
-                    
+
                     if (!Double.isNaN(pad)) {
-                        padMeanZ[k] += pad;
+                        padMeanByCanopyLayer[k] += pad;
                         padMeanZCount[k]++;
                     }
-                    
+
                     double transmittance = ((ALSVoxel) vox).transmittance;
                     if (!Double.isNaN(transmittance)) {
                         transmittanceMeanZ[k] += transmittance;
                         transmittanceMeanZCount[k]++;
                     }
-                    
+
                 }
+                
             }
         }
-        /*
-        for (int i = 0; i < vs.data.split.x; i++) {
-            for (int j = 0; j < vs.data.split.y; j++) {
-                for (int k = 0; k < vs.data.split.z; k++) {
-
-                    //on vérifie qu'on est sous la canopée
-                    if (k <= tabTemp[i][j]) {
-
-                        Voxel vox = vs.data.getVoxel(i, j, k);
-
-                        for (int t = 0; t < vs.data.split.z; t++) {
-                            int min = t;
-                            int max = t + 1;
-
-                            if (vox.ground_distance >= min && vox.ground_distance < max && vox.nbSampling > 1) {
-                                double pad = ((ALSVoxel) vox).PadBVTotal;
-                                if (!Double.isNaN(pad) && pad < 3) {
-                                    padMeanZ[t] += pad;
-                                    padMeanZCount[t]++;
-                                }
-
-                                break;
-                            }
-
-                        }
-                    }
-                }
-            }
-        }
-        */
-        for (int x = 0; x < padMeanZ.length; x++) {
-            padMeanZ[x] = padMeanZ[x] / padMeanZCount[x];
+        
+        for (int x = 0; x < padMeanByCanopyLayer.length; x++) {
+            padMeanByCanopyLayer[x] = padMeanByCanopyLayer[x] / padMeanZCount[x];
         }
         
         for (int x = 0; x < transmittanceMeanZ.length; x++) {
@@ -244,14 +203,16 @@ public class ProcessingMultiRes {
                 Point3i indices = getIndicesFromIndices(new Point3i(voxel.$i, voxel.$j, voxel.$k), currentResolution);
                 voxTemp = vsTemp.data.getVoxel(indices.x, indices.y, indices.z);
                 
-                if(voxTemp != null  && voxTemp.$i == indices.x && voxTemp.$j == indices.y && voxTemp.$k == indices.z){
-                    
+                if(voxTemp != null && voxTemp.$i == indices.x && voxTemp.$j == indices.y && voxTemp.$k == indices.z){
+                                        
                     if(voxTemp.ground_distance > 1){
                         calculatePAD(voxTemp, currentResolution, useDefaultMaxPad, vs.data.maxPad);
 
                         currentNbSampling = voxTemp.nbSampling;
                         currentTransmittance = voxTemp.transmittance;
                     }
+                }else{
+                    logger.error("A line is missing in voxel file");
                 }
                 
             }
@@ -261,21 +222,22 @@ public class ProcessingMultiRes {
 
                 if (voxel.ground_distance > 1) {
                     currentResolution = 0;
-                    int indice = vs.data.split.z - tabTemp[voxel.$i][voxel.$j] + voxel.$k;
+                    int indice = vs.data.split.z - canopeeArray[voxel.$i][voxel.$j] + voxel.$k;
                     
-                    if(indice >= padMeanZ.length){
+                    if(indice >= padMeanByCanopyLayer.length){
                         voxel.PadBVTotal = 0;
                     }else if(indice < 0){
                         voxel.PadBVTotal = Float.NaN;
                     }else{
-                        if(useDefaultMaxPad && padMeanZ[indice]>vs.data.maxPad){
+                        if(useDefaultMaxPad && padMeanByCanopyLayer[indice]>vs.data.maxPad){
                             voxel.PadBVTotal = vs.data.maxPad;
                         }else{
-                            voxel.PadBVTotal = padMeanZ[indice];
+                            voxel.PadBVTotal = padMeanByCanopyLayer[indice];
                             voxel.transmittance = transmittanceMeanZ[indice];
                         }
-                        
                     }
+                    
+                    voxel.patch_type = 1;
                     
                 } else {
                     currentResolution = Float.NaN;
@@ -294,17 +256,42 @@ public class ProcessingMultiRes {
                 }
 
                 voxel.PadBVTotal = newValue;
-
+                voxel.transmittance = voxTemp.transmittance;
+                
+                voxel.patch_type = 2;
                 correctedValues++;
 
             } else {
                 correctValues++;
+                voxel.patch_type = 0;
             }
 
 
             voxel.resolution = currentResolution;
             
+            if((voxel.ground_distance > -vs.data.res/2.0f) && voxel.ground_distance < (vs.data.res/2.0f)){ 
+                
+                voxel.type = 1; //contains ground
+                    
+            }else if(voxel.ground_distance < -(vs.data.res/2.0f)){
+                
+                voxel.type = 0; //below ground
+                
+            }else if(voxel.$k == canopeeArray[voxel.$i][voxel.$j]){ 
+                
+                voxel.type = 3; //canopy
+                
+            }else if(voxel.$k < canopeeArray[voxel.$i][voxel.$j]){ // below canopy
+                
+                voxel.type = 2;
+                
+            }else{ //above canopy
+                voxel.type = 4;
+            }
             
+            int indice =  voxel.$k - canopeeArray[voxel.$i][voxel.$j];
+            voxel.canopy_relative_layer = indice;
+             
             vs.data.voxels.set(n, voxel);
         }
         
@@ -321,6 +308,32 @@ public class ProcessingMultiRes {
         vs.write(outputFile);
     }
     
+    private void calculatePAD(ExtendedALSVoxel vox, double resolution, boolean useDefault, float defaultMaxPad) {
+        
+        if(useDefault){
+            maxPAD = defaultMaxPad;
+        }else{
+            if(resolution <= 1.0){
+                maxPAD = max_pad_1m;
+            }else if(resolution <= 2.0){
+                maxPAD = max_pad_2m;
+            }else if(resolution <= 3.0){
+                maxPAD = max_pad_3m;
+            }else if(resolution <= 4.0){
+                maxPAD = max_pad_4m;
+            }else if(resolution <= 5.0){
+                maxPAD = max_pad_5m;
+            }else{
+                maxPAD = max_pad_5m;
+            }
+        }
+        
+        if(vox.PadBVTotal > maxPAD){
+            vox.PadBVTotal = maxPAD;
+        }
+        
+    }
+    /*
     private void calculatePAD(ExtendedALSVoxel vox, double resolution, boolean useDefault, float defaultMaxPad) {
         
         if(useDefault){
@@ -386,15 +399,9 @@ public class ProcessingMultiRes {
 
         }
         
-        if(Double.isNaN(vox.lMeanTotal) || vox.lMeanTotal == 0){
-            vox.transmittanceNorm = Float.NaN;
-        }else{
-            vox.transmittanceNorm = (float) Math.pow(vox.transmittance, 1/vox.lMeanTotal);
-        }
-        
         vox.PadBVTotal = pad + 0.0f; //set +0.0f to avoid -0.0f
 
-    }
+    }*/
     
     private Point3i getIndicesFromIndices(Point3i indices, double resolution){
         

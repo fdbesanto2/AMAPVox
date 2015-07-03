@@ -202,7 +202,10 @@ public class SceneManager {
             scene.addShader(instanceShader);
             scene.addShader(texturedShader);
             
-            GLMesh axisMesh = GLMeshFactory.createMeshFromX3D(new InputStreamReader(SceneManager.class.getClassLoader().getResourceAsStream("mesh/axis.x3d")));
+            GLMesh axisMesh = GLMeshFactory.createMeshFromObj(new InputStreamReader(SceneManager.class.getClassLoader().getResourceAsStream("mesh/axis.obj")),
+                                            new InputStreamReader(SceneManager.class.getClassLoader().getResourceAsStream("mesh/axis.mtl")));
+            
+            //GLMesh axisMesh = GLMeshFactory.createMeshFromX3D(new InputStreamReader(SceneManager.class.getClassLoader().getResourceAsStream("mesh/axis.x3d")));
             axisMesh.setGlobalScale(0.03f);
             
             SceneObject axis = new SimpleSceneObject(axisMesh, noTranslationShader.getProgramId(), false);

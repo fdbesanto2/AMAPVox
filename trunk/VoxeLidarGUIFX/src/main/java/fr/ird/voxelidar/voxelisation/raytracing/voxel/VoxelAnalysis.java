@@ -665,6 +665,7 @@ public Voxel calculatePAD(Voxel voxel, int i, int j, int k){
     } else {
 
         voxel.transmittance = (voxel.bvEntering - voxel.bvIntercepted) / voxel.bvEntering;
+        voxel.transmittance = (float) Math.pow(voxel.transmittance, 1/voxel.lMeanTotal);
         //voxel._transmittance_v2 = (voxel._transBeforeNorm) / voxel._sumSurfaceMultiplyLength ;
 
         if (voxel.nbSampling > 1 && voxel.transmittance == 0 && voxel.nbSampling == voxel.nbEchos) {
@@ -679,7 +680,8 @@ public Voxel calculatePAD(Voxel voxel, int i, int j, int k){
 
         } else {
 
-            pad1 = (float) (Math.log(voxel.transmittance) / (-0.5 * voxel.lMeanTotal));
+            pad1 = (float) (Math.log(voxel.transmittance) / (-0.5f));
+            //pad1 = (float) (Math.log(voxel.transmittance) / (-0.5 * voxel.lMeanTotal));
             //pad2 = (float) (Math.log(voxel._transmittance_v2) / (-0.5 * voxel.lMeanTotal));
 
             if (Float.isNaN(pad1)) {
@@ -921,8 +923,9 @@ public void calculatePADAndWrite(double threshold) {
         float dist;
 
         if (terrain != null && parameters.useDTMCorrection()) {
+            
             float dtmHeightXY = terrain.getSimpleHeight((float) position.x, (float) position.y);
-            if (dtmHeightXY == Float.NaN) {
+            if(Float.isNaN(dtmHeightXY)) {
                 dist = (float) (position.z);
             } else {
                 dist = (float) (position.z - dtmHeightXY);

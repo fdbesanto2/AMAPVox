@@ -76,14 +76,18 @@ public class FileManager {
         
         int count = 0;
         
-        try (BufferedReader reader = new BufferedReader(stream)) {
+        try{
 
-
+            BufferedReader reader = new BufferedReader(stream);
+                    
             while ((reader.readLine()) != null) {
                 count++;
             }
             
+            //reader.close();
+            
             return count;
+            
 
         } catch (IOException ex) {
             logger.error("Cannot read file", ex);

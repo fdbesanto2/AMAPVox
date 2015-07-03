@@ -1,6 +1,7 @@
 #version 140
 
 uniform mat4 viewMatrix;
+
 uniform vec3 lightPosition;
 uniform vec3 lambient;
 uniform vec3 ldiffuse;

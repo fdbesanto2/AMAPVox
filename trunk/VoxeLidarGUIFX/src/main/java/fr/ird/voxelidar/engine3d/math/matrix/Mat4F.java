@@ -5,7 +5,6 @@
  */
 package fr.ird.voxelidar.engine3d.math.matrix;
 
-import com.jogamp.opengl.math.Quaternion;
 import fr.ird.voxelidar.engine3d.math.vector.Vec3F;
 import fr.ird.voxelidar.engine3d.math.vector.Vec4;
 
