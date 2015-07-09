@@ -28,8 +28,8 @@ using namespace scanlib;
 using namespace mpc;
 
 
-#ifndef _Included_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction
-#define _Included_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction
+#ifndef _Included_fr_amap_amapvox_io_tls_rxp_RxpExtraction
+#define _Included_fr_amap_amapvox_io_tls_rxp_RxpExtraction
 #ifdef __cplusplus
 
 typedef struct rpx_extraction {
@@ -44,25 +44,25 @@ typedef struct rpx_extraction {
 extern "C" {
 #endif
 
-    JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_afficherBonjour
+    JNIEXPORT void JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_afficherBonjour
         (JNIEnv *, jobject);
 
-    JNIEXPORT jlong JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_instantiate
+    JNIEXPORT jlong JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_instantiate
         (JNIEnv *, jobject);
 
-    JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_delete
+    JNIEXPORT void JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_delete
         (JNIEnv *, jobject, jlong pointer);
 
-    JNIEXPORT int JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_open
+    JNIEXPORT int JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_open
     (JNIEnv *, jobject, jlong pointer, jstring file_name, jint shotType);
 
-    JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_closeConnexion
+    JNIEXPORT void JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_closeConnexion
     (JNIEnv *, jobject, jlong pointer);
 
-    JNIEXPORT jobject JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_getNextShot
+    JNIEXPORT jobject JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_getNextShot
     (JNIEnv *, jobject, jlong pointer);
 
-    JNIEXPORT jboolean JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_hasShot
+    JNIEXPORT jboolean JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_hasShot
     (JNIEnv *, jobject, jlong pointer);
 
 #ifdef __cplusplus

@@ -39,13 +39,13 @@ char* JNU_GetStringNativeChars(JNIEnv* env, jstring jstr) {
     return result;
 }
 
-JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_afficherBonjour(JNIEnv , jobject){
+JNIEXPORT void JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_afficherBonjour(JNIEnv , jobject){
 
     printf(" Bonjour\n ");
     return;
 }
 
-JNIEXPORT jlong JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_instantiate(JNIEnv *, jobject){
+JNIEXPORT jlong JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_instantiate(JNIEnv *, jobject){
 
     rpx_extraction_struct* extraction_dll = new rpx_extraction_struct;
     memset(extraction_dll, 0, sizeof(rpx_extraction_struct));
@@ -56,7 +56,7 @@ JNIEXPORT jlong JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExt
     return (jlong)extraction_dll;
 }
 
-JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_delete(JNIEnv *, jobject, jlong pointer){
+JNIEXPORT void JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_delete(JNIEnv *, jobject, jlong pointer){
 
 
 
@@ -74,7 +74,7 @@ JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtr
     delete extraction_dll;
 }
 
-JNIEXPORT int JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_open(JNIEnv *env, jobject, jlong pointer, jstring file_name, jint shotType){
+JNIEXPORT int JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_open(JNIEnv *env, jobject, jlong pointer, jstring file_name, jint shotType){
 
     try
     {
@@ -116,7 +116,7 @@ JNIEXPORT int JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtra
     return 0;
 }
 
-JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_closeConnexion(JNIEnv *, jobject, jlong pointer){
+JNIEXPORT void JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_closeConnexion(JNIEnv *, jobject, jlong pointer){
 
     try
     {
@@ -131,7 +131,7 @@ JNIEXPORT void JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtr
 
 }
 
-JNIEXPORT jboolean JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_hasShot(JNIEnv *, jobject, jlong pointer){
+JNIEXPORT jboolean JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_hasShot(JNIEnv *, jobject, jlong pointer){
 
     long pointerAddress = (long)pointer;
     rpx_extraction_struct *extraction_dll  = (rpx_extraction_struct*)pointerAddress;
@@ -139,7 +139,7 @@ JNIEXPORT jboolean JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_Rxp
     return (jboolean)!extraction_dll->decoder->eoi();
 }
 
-JNIEXPORT jobject JNICALL Java_fr_ird_voxelidar_voxelisation_extraction_tls_RxpExtraction_getNextShot(JNIEnv *, jobject, jlong pointer){
+JNIEXPORT jobject JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_getNextShot(JNIEnv *, jobject, jlong pointer){
 
     long pointerAddress = (long)pointer;
     rpx_extraction_struct *extraction_dll  = (rpx_extraction_struct*)pointerAddress;

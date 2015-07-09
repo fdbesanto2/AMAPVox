@@ -8,6 +8,7 @@ import fr.ird.voxelidar.transmittance.lai2xxx.LAI2000;
 import fr.ird.voxelidar.transmittance.lai2xxx.LAI2200;
 import fr.ird.voxelidar.transmittance.lai2xxx.LAI2xxx;
 import static fr.ird.voxelidar.transmittance.lai2xxx.LAI2xxx.ViewCap.CAP_360;
+import fr.ird.voxelidar.util.ColorGradient;
 import fr.ird.voxelidar.util.Period;
 import fr.ird.voxelidar.voxelisation.raytracing.util.BoundingBox3d;
 import java.awt.Color;
@@ -117,6 +118,8 @@ public class TransmittanceSim {
             Calendar c1 = period.getPeriod().startDate;
             Calendar c2 = period.getPeriod().endDate;
             
+            
+            
             Time time1 = new Time(c1.get(Calendar.YEAR), c1.get(Calendar.DAY_OF_YEAR), c1.get(Calendar.HOUR_OF_DAY), c1.get(Calendar.MINUTE));
             Time time2 = new Time(c2.get(Calendar.YEAR), c2.get(Calendar.DAY_OF_YEAR), c2.get(Calendar.HOUR_OF_DAY), c2.get(Calendar.MINUTE));
             
@@ -209,6 +212,9 @@ public class TransmittanceSim {
             g.setColor(new Color(80, 30, 0));
             g.fillRect(0, 0, splitting.x * zoom, splitting.y * zoom);
             
+            ColorGradient gradient = new ColorGradient(0, 1);
+            gradient.setGradientColor(ColorGradient.GRADIENT_BLACK_TO_WHITE);
+            
             for(Point3d position : positions){
                                 
                 int i = (int) ((position.x - vsMin.x) / voxSpace.getVoxelSize().x);
@@ -216,7 +222,8 @@ public class TransmittanceSim {
                 
                 float col = (float) (transmissionPeriod[i][j][k] / 0.1);
                 col = Math.min(col, 1);
-                Color c = Colouring.rainbow(col);
+                Color c = gradient.getColor(col);
+                //Color c = Colouring.rainbow(col);
                 g.setColor(c);
                 int jj = splitting.y - j - 1;
                 g.fillRect(i * zoom, jj * zoom, zoom, zoom);
@@ -506,7 +513,7 @@ public class TransmittanceSim {
 
                     double ty = (0.5f + (double) j) * voxSpace.getVoxelSize().y;
                     Point3d pos = new Point3d(vsMin);
-                    pos.add(new Point3d(tx, ty, mnt[i][j] + 0.1f));
+                    pos.add(new Point3d(tx, ty, mnt[i][j] + 1.5f/*40.0f*/));
                     positions.add(pos);
                 }
             }

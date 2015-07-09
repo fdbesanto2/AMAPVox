@@ -61,7 +61,7 @@ void mypointcloud::on_shot_end() {
     }
 
     jobject* shotTemp = new jobject();
-    jclass shotClass = env->FindClass("fr/ird/voxelidar/voxelisation/extraction/Shot");
+    jclass shotClass = env->FindClass("fr/amap/amapvox/io/tls/rxp/Shot");
 
     if(shotType == SIMPLE){
 

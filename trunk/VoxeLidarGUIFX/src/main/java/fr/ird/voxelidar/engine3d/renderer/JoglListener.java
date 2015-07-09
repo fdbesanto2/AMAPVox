@@ -419,7 +419,7 @@ public class JoglListener implements GLEventListener {
             scene.addShader(instanceShader);
             scene.addShader(texturedShader);
             scene.addShader(lightedShader);
-            
+            /*
             GLMesh axisMesh = GLMeshFactory.createMeshFromObj(new InputStreamReader(SceneManager.class.getClassLoader().getResourceAsStream("mesh/axis.obj")),
                                             new InputStreamReader(SceneManager.class.getClassLoader().getResourceAsStream("mesh/axis.mtl")));
             
@@ -430,7 +430,7 @@ public class JoglListener implements GLEventListener {
             
             axis.setDrawType(GL3.GL_TRIANGLES);
             scene.addObject(axis, gl);
-            
+            */
             if(scene.getDtm() != null){
                 
                 logger.info("Computing dtm normals");

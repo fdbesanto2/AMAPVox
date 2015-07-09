@@ -1,0 +1,1355 @@
+2015-07-09 08:51:02 ERROR - Cannot load fxml file
+javafx.fxml.LoadException: Invalid resource: /styles/calculatematrixframe.css not found on the classpath
+file:/home/calcul/NetBeansProjects/AMAPVox/AMAPVoxGUI/target/release/AMAPVoxGUI-1.0.jar!/fxml/CalculateMatrixFrame.fxml:12
+
+	at javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2601)
+	at javafx.fxml.FXMLLoader.access$100(FXMLLoader.java:104)
+	at javafx.fxml.FXMLLoader$Element.resolvePrefixedValue(FXMLLoader.java:394)
+	at javafx.fxml.FXMLLoader$Element.processValue(FXMLLoader.java:359)
+	at javafx.fxml.FXMLLoader$Element.processPropertyAttribute(FXMLLoader.java:321)
+	at javafx.fxml.FXMLLoader$Element.processInstancePropertyAttributes(FXMLLoader.java:231)
+	at javafx.fxml.FXMLLoader$ValueElement.processStartElement(FXMLLoader.java:745)
+	at javafx.fxml.FXMLLoader.processStartElement(FXMLLoader.java:2711)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2531)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2445)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:2413)
+	at fr.amap.amapvox.gui.MainFrameController.initialize(MainFrameController.java:928)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2552)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2445)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:2413)
+	at fr.amap.amapvox.gui.MainApp.start(MainApp.java:20)
+	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$159(LauncherImpl.java:863)
+	at com.sun.javafx.application.LauncherImpl$$Lambda$58/1069199453.run(Unknown Source)
+	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$172(PlatformImpl.java:326)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$51/1345636186.run(Unknown Source)
+	at com.sun.javafx.application.PlatformImpl.lambda$null$170(PlatformImpl.java:295)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$53/718173277.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.application.PlatformImpl.lambda$runLater$171(PlatformImpl.java:294)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$52/963269035.run(Unknown Source)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$48(GtkApplication.java:139)
+	at com.sun.glass.ui.gtk.GtkApplication$$Lambda$41/787867107.run(Unknown Source)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-09 08:51:02 ERROR - Cannot load fxml file
+javafx.fxml.LoadException: Invalid resource: /styles/filterframe.css not found on the classpath
+file:/home/calcul/NetBeansProjects/AMAPVox/AMAPVoxGUI/target/release/AMAPVoxGUI-1.0.jar!/fxml/FilterFrame.fxml:12
+
+	at javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2601)
+	at javafx.fxml.FXMLLoader.access$100(FXMLLoader.java:104)
+	at javafx.fxml.FXMLLoader$Element.resolvePrefixedValue(FXMLLoader.java:394)
+	at javafx.fxml.FXMLLoader$Element.processValue(FXMLLoader.java:359)
+	at javafx.fxml.FXMLLoader$Element.processPropertyAttribute(FXMLLoader.java:321)
+	at javafx.fxml.FXMLLoader$Element.processInstancePropertyAttributes(FXMLLoader.java:231)
+	at javafx.fxml.FXMLLoader$ValueElement.processStartElement(FXMLLoader.java:745)
+	at javafx.fxml.FXMLLoader.processStartElement(FXMLLoader.java:2711)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2531)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2445)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:2413)
+	at fr.amap.amapvox.gui.MainFrameController.initialize(MainFrameController.java:941)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2552)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2445)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:2413)
+	at fr.amap.amapvox.gui.MainApp.start(MainApp.java:20)
+	at com.sun.javafx.application.LauncherImpl.lambda$launchApplication1$159(LauncherImpl.java:863)
+	at com.sun.javafx.application.LauncherImpl$$Lambda$58/1069199453.run(Unknown Source)
+	at com.sun.javafx.application.PlatformImpl.lambda$runAndWait$172(PlatformImpl.java:326)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$51/1345636186.run(Unknown Source)
+	at com.sun.javafx.application.PlatformImpl.lambda$null$170(PlatformImpl.java:295)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$53/718173277.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.application.PlatformImpl.lambda$runLater$171(PlatformImpl.java:294)
+	at com.sun.javafx.application.PlatformImpl$$Lambda$52/963269035.run(Unknown Source)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$48(GtkApplication.java:139)
+	at com.sun.glass.ui.gtk.GtkApplication$$Lambda$41/787867107.run(Unknown Source)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-09 09:18:33 INFO  - MainFrameControllerLoaded
+2015-07-09 09:22:50 INFO  - MainFrameControllerLoaded
+2015-07-09 09:50:07 INFO  - MainFrameControllerLoaded
+2015-07-09 09:50:21 ERROR - Service failed : 
+java.lang.NullPointerException
+	at java.io.Reader.<init>(Reader.java:78)
+	at java.io.InputStreamReader.<init>(InputStreamReader.java:72)
+	at fr.amap.amapvox.jeeb.workspace.sunrapp.light.Turtle.<init>(Turtle.java:23)
+	at fr.amap.amapvox.simulation.transmittance.TransmittanceSim.<init>(TransmittanceSim.java:117)
+	at fr.amap.amapvox.simulation.transmittance.TransmittanceSim.simulationProcess(TransmittanceSim.java:77)
+	at fr.amap.amapvox.gui.MainFrameController$38$1.call(MainFrameController.java:2540)
+	at fr.amap.amapvox.gui.MainFrameController$38$1.call(MainFrameController.java:2526)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$464/1141854275.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$462/1100889704.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-09 10:22:09 INFO  - MainFrameControllerLoaded
+2015-07-09 10:22:22 INFO  - Turtle built with 46 sectors
+2015-07-09 10:22:22 INFO  - ===== /home/calcul/Documents/Julien/test2.vox =====
+2015-07-09 10:22:22 INFO  - header: VOXEL SPACE
+2015-07-09 10:22:22 INFO  - VOXEL SPACE
+2015-07-09 10:22:22 INFO  - Min corner: (0.0, 0.0, 0.0)
+2015-07-09 10:22:22 INFO  - Max corner: (100.0, 100.0, 50.0)
+2015-07-09 10:22:22 INFO  - Splitting: (100, 100, 50)
+2015-07-09 10:22:22 INFO  - allocate Voxels
+2015-07-09 10:22:22 INFO  - allocate MNT
+2015-07-09 10:22:22 INFO  - Data parsing
+2015-07-09 10:22:22 INFO  -  100000 shots
+2015-07-09 10:22:22 INFO  -  200000 shots
+2015-07-09 10:22:22 INFO  -  300000 shots
+2015-07-09 10:22:22 INFO  -  400000 shots
+2015-07-09 10:22:23 INFO  -  500000 shots
+2015-07-09 10:22:23 INFO  - 500000scans
+
+2015-07-09 10:22:23 INFO  - nb positions= 9801
+2015-07-09 10:22:23 INFO  - Computation of transmittance
+2015-07-09 10:22:24 INFO  - 1000/9801
+2015-07-09 10:22:25 INFO  - 2000/9801
+2015-07-09 10:22:26 INFO  - 3000/9801
+2015-07-09 10:22:27 INFO  - 4000/9801
+2015-07-09 10:22:28 INFO  - 5000/9801
+2015-07-09 10:22:29 INFO  - 6000/9801
+2015-07-09 10:22:31 INFO  - 7000/9801
+2015-07-09 10:22:32 INFO  - 8000/9801
+2015-07-09 10:22:32 INFO  - 9000/9801
+2015-07-09 10:22:33 INFO  - Writing file /home/calcul/Documents/Julien/tmp.txt
+2015-07-09 10:22:33 INFO  - File /home/calcul/Documents/Julien/tmp.txt written
+2015-07-09 10:22:33 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_1.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_1.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_2.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_2.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_3.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_3.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_4.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_4.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_5.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_5.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_6.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_6.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_7.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_7.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_8.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_8.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_9.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_9.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_10.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_10.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_11.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_11.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_12.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_12.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_13.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_13.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_14.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_14.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_15.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_15.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_16.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_16.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_17.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_17.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_18.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_18.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_19.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_19.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_20.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_20.bmp written
+2015-07-09 10:22:34 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_21.bmp
+2015-07-09 10:22:34 INFO  - File /home/calcul/Documents/Julien/tmp3/period_21.bmp written
+2015-07-09 10:26:35 INFO  - Turtle built with 46 sectors
+2015-07-09 10:26:35 INFO  - ===== /home/calcul/Documents/Julien/test2.vox =====
+2015-07-09 10:26:35 INFO  - header: VOXEL SPACE
+2015-07-09 10:26:35 INFO  - VOXEL SPACE
+2015-07-09 10:26:35 INFO  - Min corner: (0.0, 0.0, 0.0)
+2015-07-09 10:26:35 INFO  - Max corner: (100.0, 100.0, 50.0)
+2015-07-09 10:26:35 INFO  - Splitting: (100, 100, 50)
+2015-07-09 10:26:35 INFO  - allocate Voxels
+2015-07-09 10:26:35 INFO  - allocate MNT
+2015-07-09 10:26:35 INFO  - Data parsing
+2015-07-09 10:26:35 INFO  -  100000 shots
+2015-07-09 10:26:35 INFO  -  200000 shots
+2015-07-09 10:26:35 INFO  -  300000 shots
+2015-07-09 10:26:36 INFO  -  400000 shots
+2015-07-09 10:26:36 INFO  -  500000 shots
+2015-07-09 10:26:36 INFO  - 500000scans
+
+2015-07-09 10:26:36 INFO  - nb positions= 9801
+2015-07-09 10:26:36 INFO  - Computation of transmittance
+2015-07-09 10:26:37 INFO  - 1000/9801
+2015-07-09 10:26:38 INFO  - 2000/9801
+2015-07-09 10:26:39 INFO  - 3000/9801
+2015-07-09 10:26:40 INFO  - 4000/9801
+2015-07-09 10:26:41 INFO  - 5000/9801
+2015-07-09 10:26:42 INFO  - 6000/9801
+2015-07-09 10:26:43 INFO  - 7000/9801
+2015-07-09 10:26:44 INFO  - 8000/9801
+2015-07-09 10:26:45 INFO  - 9000/9801
+2015-07-09 10:26:46 INFO  - Writing file /home/calcul/Documents/Julien/tmp.txt
+2015-07-09 10:26:46 INFO  - File /home/calcul/Documents/Julien/tmp.txt written
+2015-07-09 10:26:46 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_1.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_1.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_2.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_2.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_3.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_3.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_4.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_4.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_5.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_5.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_6.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_6.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_7.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_7.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_8.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_8.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_9.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_9.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_10.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_10.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_11.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_11.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_12.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_12.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_13.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_13.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_14.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_14.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_15.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_15.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_16.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_16.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_17.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_17.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_18.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_18.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_19.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_19.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_20.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_20.bmp written
+2015-07-09 10:26:47 INFO  - Writing file /home/calcul/Documents/Julien/tmp3/period_21.bmp
+2015-07-09 10:26:47 INFO  - File /home/calcul/Documents/Julien/tmp3/period_21.bmp written
+2015-07-09 10:30:18 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/test2.vox --attribut=PadBVTotal 
+2015-07-09 10:33:15 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/test2.vox --attribut=PadBVTotal 
+2015-07-09 11:08:26 ERROR - Configuration file cannot be load
+java.lang.Exception: Cannot find input_file element
+	at fr.amap.amapvox.commons.configuration.VoxCfg.readConfiguration(VoxCfg.java:67)
+	at fr.amap.amapvox.commons.configuration.ALSVoxCfg.readConfiguration(ALSVoxCfg.java:37)
+	at fr.amap.amapvox.commons.configuration.MultiVoxCfg.readConfiguration(MultiVoxCfg.java:38)
+	at fr.amap.amapvox.gui.MainFrameController.onActionButtonLoadSelectedTask(MainFrameController.java:3259)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.Trampoline.invoke(MethodUtil.java:71)
+	at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.MethodUtil.invoke(MethodUtil.java:275)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1765)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1653)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Node.fireEvent(Node.java:8390)
+	at javafx.scene.control.Button.fire(Button.java:185)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:182)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:96)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:89)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:218)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:3758)
+	at javafx.scene.Scene$MouseHandler.access$1500(Scene.java:3486)
+	at javafx.scene.Scene.impl_processMouseEvent(Scene.java:1762)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2495)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:350)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:275)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$350(GlassViewEventHandler.java:385)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$$Lambda$414/1013775595.get(Unknown Source)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:404)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:384)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:555)
+	at com.sun.glass.ui.View.notifyMouse(View.java:927)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$48(GtkApplication.java:139)
+	at com.sun.glass.ui.gtk.GtkApplication$$Lambda$41/787867107.run(Unknown Source)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-09 11:08:38 ERROR - Configuration file cannot be load
+java.lang.Exception: Cannot find input_file element
+	at fr.amap.amapvox.commons.configuration.VoxCfg.readConfiguration(VoxCfg.java:67)
+	at fr.amap.amapvox.commons.configuration.ALSVoxCfg.readConfiguration(ALSVoxCfg.java:37)
+	at fr.amap.amapvox.commons.configuration.MultiVoxCfg.readConfiguration(MultiVoxCfg.java:38)
+	at fr.amap.amapvox.gui.MainFrameController.onActionButtonLoadSelectedTask(MainFrameController.java:3259)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.Trampoline.invoke(MethodUtil.java:71)
+	at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.MethodUtil.invoke(MethodUtil.java:275)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1765)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1653)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Node.fireEvent(Node.java:8390)
+	at javafx.scene.control.Button.fire(Button.java:185)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:182)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:96)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:89)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:218)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:3758)
+	at javafx.scene.Scene$MouseHandler.access$1500(Scene.java:3486)
+	at javafx.scene.Scene.impl_processMouseEvent(Scene.java:1762)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2495)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:350)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:275)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$350(GlassViewEventHandler.java:385)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$$Lambda$414/1013775595.get(Unknown Source)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:404)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:384)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:555)
+	at com.sun.glass.ui.View.notifyMouse(View.java:927)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$48(GtkApplication.java:139)
+	at com.sun.glass.ui.gtk.GtkApplication$$Lambda$41/787867107.run(Unknown Source)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-09 11:11:42 WARN  - Cannot find input_file element
+2015-07-09 11:11:42 WARN  - Cannot find output_file element
+2015-07-09 11:12:53 ERROR - Service failed : 
+java.lang.UnsatisfiedLinkError: no LasZipLibrary in java.library.path
+	at java.lang.ClassLoader.loadLibrary(ClassLoader.java:1865)
+	at java.lang.Runtime.loadLibrary0(Runtime.java:870)
+	at java.lang.System.loadLibrary(System.java:1122)
+	at fr.amap.amapvox.commons.util.NativeLoader.loadLibrary(NativeLoader.java:39)
+	at fr.amap.amapvox.als.laz.LazExtraction.<clinit>(LazExtraction.java:44)
+	at fr.amap.amapvox.voxelisation.als.PointsToShot.init(PointsToShot.java:122)
+	at fr.amap.amapvox.voxelisation.als.LasVoxelisation.process(LasVoxelisation.java:88)
+	at fr.amap.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:370)
+	at fr.amap.amapvox.gui.MainFrameController$38$1.call(MainFrameController.java:2609)
+	at fr.amap.amapvox.gui.MainFrameController$38$1.call(MainFrameController.java:2530)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$461/772124226.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$459/1795688080.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-09 11:18:40 ERROR - Service failed : 
+java.lang.UnsatisfiedLinkError: no LasZipLibrary in java.library.path
+	at java.lang.ClassLoader.loadLibrary(ClassLoader.java:1865)
+	at java.lang.Runtime.loadLibrary0(Runtime.java:870)
+	at java.lang.System.loadLibrary(System.java:1122)
+	at fr.amap.amapvox.commons.util.NativeLoader.loadLibrary(NativeLoader.java:39)
+	at fr.amap.amapvox.als.laz.LazExtraction.<clinit>(LazExtraction.java:44)
+	at fr.amap.amapvox.voxelisation.als.PointsToShot.init(PointsToShot.java:122)
+	at fr.amap.amapvox.voxelisation.als.LasVoxelisation.process(LasVoxelisation.java:88)
+	at fr.amap.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:370)
+	at fr.amap.amapvox.gui.MainFrameController$38$1.call(MainFrameController.java:2609)
+	at fr.amap.amapvox.gui.MainFrameController$38$1.call(MainFrameController.java:2530)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$451/1554329820.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$449/1892259377.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-09 11:19:08 ERROR - Service failed : 
+java.lang.NoClassDefFoundError: Could not initialize class fr.amap.amapvox.als.laz.LazExtraction
+	at fr.amap.amapvox.voxelisation.als.PointsToShot.init(PointsToShot.java:122)
+	at fr.amap.amapvox.voxelisation.als.LasVoxelisation.process(LasVoxelisation.java:88)
+	at fr.amap.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:370)
+	at fr.amap.amapvox.gui.MainFrameController$38$1.call(MainFrameController.java:2609)
+	at fr.amap.amapvox.gui.MainFrameController$38$1.call(MainFrameController.java:2530)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$451/1554329820.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$449/1892259377.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-09 11:19:24 ERROR - Service failed : 
+java.lang.NoClassDefFoundError: Could not initialize class fr.amap.amapvox.als.laz.LazExtraction
+	at fr.amap.amapvox.voxelisation.als.PointsToShot.init(PointsToShot.java:122)
+	at fr.amap.amapvox.voxelisation.als.LasVoxelisation.process(LasVoxelisation.java:88)
+	at fr.amap.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:370)
+	at fr.amap.amapvox.gui.MainFrameController$38$1.call(MainFrameController.java:2609)
+	at fr.amap.amapvox.gui.MainFrameController$38$1.call(MainFrameController.java:2530)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$451/1554329820.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$449/1892259377.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-09 11:22:02 ERROR - Service failed : 
+java.lang.UnsatisfiedLinkError: no LasZipLibrary in java.library.path
+	at java.lang.ClassLoader.loadLibrary(ClassLoader.java:1865)
+	at java.lang.Runtime.loadLibrary0(Runtime.java:870)
+	at java.lang.System.loadLibrary(System.java:1122)
+	at fr.amap.amapvox.commons.util.NativeLoader.loadLibrary(NativeLoader.java:39)
+	at fr.amap.amapvox.als.laz.LazExtraction.<clinit>(LazExtraction.java:44)
+	at fr.amap.amapvox.voxelisation.als.PointsToShot.init(PointsToShot.java:122)
+	at fr.amap.amapvox.voxelisation.als.LasVoxelisation.process(LasVoxelisation.java:88)
+	at fr.amap.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:370)
+	at fr.amap.amapvox.gui.MainFrameController$38$1.call(MainFrameController.java:2609)
+	at fr.amap.amapvox.gui.MainFrameController$38$1.call(MainFrameController.java:2530)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$451/937709592.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$449/1952545222.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-09 11:23:30 ERROR - Service failed : 
+java.lang.UnsatisfiedLinkError: fr.amap.amapvox.als.laz.LazExtraction.instantiateLasZip()J
+	at fr.amap.amapvox.als.laz.LazExtraction.instantiateLasZip(Native Method)
+	at fr.amap.amapvox.als.laz.LazExtraction.openLazFile(LazExtraction.java:54)
+	at fr.amap.amapvox.voxelisation.als.PointsToShot.init(PointsToShot.java:124)
+	at fr.amap.amapvox.voxelisation.als.LasVoxelisation.process(LasVoxelisation.java:88)
+	at fr.amap.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:370)
+	at fr.amap.amapvox.gui.MainFrameController$38$1.call(MainFrameController.java:2609)
+	at fr.amap.amapvox.gui.MainFrameController$38$1.call(MainFrameController.java:2530)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$451/1687808947.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$449/1125504627.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-09 11:29:41 ERROR - Service failed : 
+java.lang.UnsatisfiedLinkError: fr.amap.amapvox.als.laz.LazExtraction.getBasicHeader(J)Lfr/amap/amapvox/als/LasHeader;
+	at fr.amap.amapvox.als.laz.LazExtraction.getBasicHeader(Native Method)
+	at fr.amap.amapvox.als.laz.LazExtraction.openLazFile(LazExtraction.java:74)
+	at fr.amap.amapvox.voxelisation.als.PointsToShot.init(PointsToShot.java:124)
+	at fr.amap.amapvox.voxelisation.als.LasVoxelisation.process(LasVoxelisation.java:88)
+	at fr.amap.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:370)
+	at fr.amap.amapvox.gui.MainFrameController$38$1.call(MainFrameController.java:2609)
+	at fr.amap.amapvox.gui.MainFrameController$38$1.call(MainFrameController.java:2530)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$451/809187057.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$449/1564327617.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-09 11:33:09 INFO  - las voxelisation finished in 7.0 s
+2015-07-09 11:33:42 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox --attribut=PadBVTotal 
+2015-07-09 11:36:29 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-09 11:36:30 INFO  - Laz file is closed
+2015-07-09 11:36:33 INFO  - las voxelisation finished in 7.0 s
+2015-07-09 11:37:10 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox --attribut=PadBVTotal 
+2015-07-09 11:38:45 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-09 11:38:46 INFO  - Laz file is closed
+2015-07-09 11:41:57 INFO  - las voxelisation finished in 195.0 s
+2015-07-09 11:44:01 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-09 11:44:02 INFO  - Laz file is closed
+2015-07-09 11:44:05 INFO  - las voxelisation finished in 12.0 s
+2015-07-09 11:44:07 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox --attribut=PadBVTotal 
+2015-07-09 11:44:27 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-09 11:44:28 INFO  - Laz file is closed
+2015-07-09 11:44:30 INFO  - las voxelisation finished in 11.0 s
+2015-07-09 11:59:35 INFO  - allocate!!!!!!!!
+2015-07-09 11:59:35 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-09 11:59:35 INFO  - Laz file is closed
+2015-07-09 11:59:37 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox
+2015-07-09 11:59:39 INFO  - file written ( 2.0 s )
+2015-07-09 11:59:39 INFO  - las voxelisation finished in 11.0 s
+2015-07-09 12:00:07 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox --attribut=PadBVTotal 
+2015-07-09 12:01:29 INFO  - Loading point cloud file...
+2015-07-09 12:01:47 INFO  - Point cloud file loaded
+2015-07-09 12:01:47 INFO  - allocate!!!!!!!!
+2015-07-09 12:01:47 INFO  - allocate!!!!!!!!
+2015-07-09 12:01:47 INFO  - allocate!!!!!!!!
+2015-07-09 12:01:47 INFO  - allocate!!!!!!!!
+2015-07-09 12:01:47 INFO  - allocate!!!!!!!!
+2015-07-09 12:01:47 INFO  - allocate!!!!!!!!
+2015-07-09 12:01:53 INFO  - Shots processed: 1000000
+2015-07-09 12:01:54 INFO  - Shots processed: 1000000
+2015-07-09 12:01:54 INFO  - Shots processed: 1000000
+2015-07-09 12:01:54 INFO  - Shots processed: 1000000
+2015-07-09 12:01:55 INFO  - Shots processed: 1000000
+2015-07-09 12:01:57 INFO  - Shots processed: 1000000
+2015-07-09 12:01:59 INFO  - Shots processed: 2000000
+2015-07-09 12:01:59 INFO  - Shots processed: 2000000
+2015-07-09 12:02:00 INFO  - Shots processed: 2000000
+2015-07-09 12:02:00 INFO  - Shots processed: 2000000
+2015-07-09 12:02:02 INFO  - Shots processed: 2000000
+2015-07-09 12:02:04 INFO  - Shots processed: 3000000
+2015-07-09 12:02:05 INFO  - Shots processed: 2000000
+2015-07-09 12:02:06 INFO  - Shots processed: 3000000
+2015-07-09 12:02:06 INFO  - Shots processed: 3000000
+2015-07-09 12:02:07 INFO  - Shots processed: 3000000
+2015-07-09 12:02:10 INFO  - Shots processed: 4000000
+2015-07-09 12:02:10 INFO  - Shots processed: 3000000
+2015-07-09 12:02:12 INFO  - Shots processed: 3000000
+2015-07-09 12:02:14 INFO  - Shots processed: 4000000
+2015-07-09 12:02:14 INFO  - Shots processed: 4000000
+2015-07-09 12:02:14 INFO  - Shots processed: 4000000
+2015-07-09 12:02:16 INFO  - Shots processed: 5000000
+2015-07-09 12:02:19 INFO  - Shots processed: 4000000
+2015-07-09 12:02:20 INFO  - Shots processed: 4000000
+2015-07-09 12:02:20 INFO  - Shots processed: 5000000
+2015-07-09 12:02:20 INFO  - Shots processed: 5000000
+2015-07-09 12:02:23 INFO  - Shots processed: 6000000
+2015-07-09 12:02:24 INFO  - Shots processed: 5000000
+2015-07-09 12:02:24 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/Projet_pierre/test_tls_pierre/140331_101534.rxp.vox
+2015-07-09 12:02:24 INFO  - file written ( 0.0 s )
+2015-07-09 12:02:26 INFO  - Shots processed: 6000000
+2015-07-09 12:02:26 INFO  - Shots processed: 6000000
+2015-07-09 12:02:29 INFO  - Shots processed: 7000000
+2015-07-09 12:02:30 INFO  - Shots processed: 5000000
+2015-07-09 12:02:31 INFO  - Shots processed: 7000000
+2015-07-09 12:02:31 INFO  - Shots processed: 7000000
+2015-07-09 12:02:33 INFO  - Shots processed: 6000000
+2015-07-09 12:02:36 INFO  - Shots processed: 8000000
+2015-07-09 12:02:36 INFO  - Shots processed: 8000000
+2015-07-09 12:02:37 INFO  - Shots processed: 8000000
+2015-07-09 12:02:41 INFO  - Shots processed: 6000000
+2015-07-09 12:02:41 INFO  - Shots processed: 9000000
+2015-07-09 12:02:42 INFO  - Shots processed: 9000000
+2015-07-09 12:02:42 INFO  - Shots processed: 7000000
+2015-07-09 12:02:42 INFO  - Shots processed: 9000000
+2015-07-09 12:02:47 INFO  - Shots processed: 10000000
+2015-07-09 12:02:47 INFO  - Shots processed: 10000000
+2015-07-09 12:02:48 INFO  - Shots processed: 10000000
+2015-07-09 12:02:48 INFO  - Shots processed: 8000000
+2015-07-09 12:02:51 INFO  - Shots processed: 7000000
+2015-07-09 12:02:52 INFO  - Shots processed: 11000000
+2015-07-09 12:02:52 INFO  - Shots processed: 11000000
+2015-07-09 12:02:53 INFO  - Shots processed: 11000000
+2015-07-09 12:02:54 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/Projet_pierre/test_tls_pierre/140331_112953.rxp.vox
+2015-07-09 12:02:54 INFO  - file written ( 0.0 s )
+2015-07-09 12:02:54 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/Projet_pierre/test_tls_pierre/140331_113724.rxp.vox
+2015-07-09 12:02:54 INFO  - file written ( 0.0 s )
+2015-07-09 12:02:54 INFO  - Shots processed: 9000000
+2015-07-09 12:02:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/Projet_pierre/test_tls_pierre/140331_115917.rxp.vox
+2015-07-09 12:02:55 INFO  - file written ( 0.0 s )
+2015-07-09 12:02:59 INFO  - Shots processed: 8000000
+2015-07-09 12:03:00 INFO  - Shots processed: 10000000
+2015-07-09 12:03:05 INFO  - Shots processed: 11000000
+2015-07-09 12:03:06 INFO  - Shots processed: 9000000
+2015-07-09 12:03:06 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/Projet_pierre/test_tls_pierre/140331_110207.rxp.vox
+2015-07-09 12:03:06 INFO  - file written ( 0.0 s )
+2015-07-09 12:03:13 INFO  - Shots processed: 10000000
+2015-07-09 12:03:19 INFO  - Shots processed: 11000000
+2015-07-09 12:03:25 INFO  - Shots processed: 12000000
+2015-07-09 12:03:31 INFO  - Shots processed: 13000000
+2015-07-09 12:03:32 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/Projet_pierre/test_tls_pierre/140331_101944.rxp.vox
+2015-07-09 12:03:32 INFO  - file written ( 0.0 s )
+2015-07-09 12:03:32 INFO  - Voxelisation finished in 124.0 s
+2015-07-09 12:03:32 INFO  - Merging in progress, file 1 : 6
+2015-07-09 12:03:33 INFO  - Merging in progress, file 2 : 6
+2015-07-09 12:03:33 INFO  - Merging in progress, file 3 : 6
+2015-07-09 12:03:33 INFO  - Merging in progress, file 4 : 6
+2015-07-09 12:03:33 INFO  - Merging in progress, file 5 : 6
+2015-07-09 12:03:33 INFO  - Merging in progress, file 6 : 6
+2015-07-09 12:03:33 INFO  - Compute angleMean
+2015-07-09 12:03:33 INFO  - Compute lMeanTotal
+2015-07-09 12:03:33 INFO  - Compute transmittance and PAD
+2015-07-09 12:03:33 INFO  - writing output file: /home/calcul/Documents/Julien/Sortie voxels/Projet_pierre/test_tls_pierre/merged_1m_sans_transfo.vox
+2015-07-09 12:03:33 INFO  - file written ( 0.0 s )
+2015-07-09 12:03:33 INFO  - Voxelisation finished in 125.0 s
+2015-07-09 12:03:33 INFO  - Voxelisation finished in 125.0 s
+2015-07-09 12:07:51 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/Sortie voxels/Projet_pierre/test_tls_pierre/merged_1m_sans_transfo.vox --attribut=PadBVTotal 
+2015-07-09 18:17:23 INFO  - rxp extraction is started
+2015-07-09 18:17:23 INFO  - rxp extraction is started
+2015-07-09 18:17:23 INFO  - rxp extraction is started
+2015-07-09 18:17:23 INFO  - rxp extraction is started
+2015-07-09 18:17:23 INFO  - rxp extraction is started
+2015-07-09 18:17:23 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:23 INFO  - rxp extraction is started
+2015-07-09 18:17:23 INFO  - rxp extraction is started
+2015-07-09 18:17:23 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:23 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:23 INFO  - rxp extraction is started
+2015-07-09 18:17:23 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:23 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:23 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:23 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:23 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:25 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_175219.mon.rxp.vox
+2015-07-09 18:17:26 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_172246.mon.rxp.vox
+2015-07-09 18:17:26 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_174021.mon.rxp.vox
+2015-07-09 18:17:26 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_171442.mon.rxp.vox
+2015-07-09 18:17:26 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_181318.mon.rxp.vox
+2015-07-09 18:17:26 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_175855.mon.rxp.vox
+2015-07-09 18:17:26 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_182037.mon.rxp.vox
+2015-07-09 18:17:26 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_172959.mon.rxp.vox
+2015-07-09 18:17:29 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:29 INFO  - rxp extraction is started
+2015-07-09 18:17:29 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:29 INFO  - file written ( 3.0 s )
+2015-07-09 18:17:29 INFO  - rxp extraction is started
+2015-07-09 18:17:29 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:29 INFO  - file written ( 3.0 s )
+2015-07-09 18:17:29 INFO  - rxp extraction is started
+2015-07-09 18:17:29 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:29 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:29 INFO  - rxp extraction is started
+2015-07-09 18:17:29 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:29 INFO  - file written ( 3.0 s )
+2015-07-09 18:17:29 INFO  - rxp extraction is started
+2015-07-09 18:17:29 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:29 INFO  - file written ( 3.0 s )
+2015-07-09 18:17:29 INFO  - rxp extraction is started
+2015-07-09 18:17:29 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:29 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:29 INFO  - rxp extraction is started
+2015-07-09 18:17:29 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:29 INFO  - file written ( 3.0 s )
+2015-07-09 18:17:29 INFO  - rxp extraction is started
+2015-07-09 18:17:29 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:30 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_183617.mon.rxp.vox
+2015-07-09 18:17:30 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_184242.mon.rxp.vox
+2015-07-09 18:17:30 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_172007.mon.rxp.vox
+2015-07-09 18:17:31 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_173954.mon.rxp.vox
+2015-07-09 18:17:31 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_172710.mon.rxp.vox
+2015-07-09 18:17:31 INFO  - file written ( 1.0 s )
+2015-07-09 18:17:31 INFO  - rxp extraction is started
+2015-07-09 18:17:31 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:31 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_174633.mon.rxp.vox
+2015-07-09 18:17:31 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_180004.mon.rxp.vox
+2015-07-09 18:17:32 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_180631.mon.rxp.vox
+2015-07-09 18:17:32 INFO  - file written ( 1.0 s )
+2015-07-09 18:17:32 INFO  - rxp extraction is started
+2015-07-09 18:17:32 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:33 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_182922.mon.rxp.vox
+2015-07-09 18:17:33 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_182138.mon.rxp.vox
+2015-07-09 18:17:33 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:33 INFO  - rxp extraction is started
+2015-07-09 18:17:33 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:34 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_184434.mon.rxp.vox
+2015-07-09 18:17:34 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:34 INFO  - rxp extraction is started
+2015-07-09 18:17:34 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:34 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:34 INFO  - rxp extraction is started
+2015-07-09 18:17:34 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:34 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:34 INFO  - rxp extraction is started
+2015-07-09 18:17:34 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:34 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:34 INFO  - rxp extraction is started
+2015-07-09 18:17:34 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:34 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:34 INFO  - rxp extraction is started
+2015-07-09 18:17:34 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:35 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:35 INFO  - rxp extraction is started
+2015-07-09 18:17:35 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:35 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:35 INFO  - rxp extraction is started
+2015-07-09 18:17:35 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:35 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_185135.mon.rxp.vox
+2015-07-09 18:17:35 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_190854.mon.rxp.vox
+2015-07-09 18:17:36 INFO  - file written ( 1.0 s )
+2015-07-09 18:17:36 INFO  - rxp extraction is started
+2015-07-09 18:17:36 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:36 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_171244.mon.rxp.vox
+2015-07-09 18:17:36 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_172050.mon.rxp.vox
+2015-07-09 18:17:36 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_173552.mon.rxp.vox
+2015-07-09 18:17:36 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_174327.mon.rxp.vox
+2015-07-09 18:17:37 INFO  - file written ( 1.0 s )
+2015-07-09 18:17:37 INFO  - rxp extraction is started
+2015-07-09 18:17:37 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:37 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/801220_010757.mon.rxp.vox
+2015-07-09 18:17:37 INFO  - file written ( 1.0 s )
+2015-07-09 18:17:37 INFO  - rxp extraction is started
+2015-07-09 18:17:37 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/801220_011714.mon.rxp.vox
+2015-07-09 18:17:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/801220_013101.mon.rxp.vox
+2015-07-09 18:17:38 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:38 INFO  - rxp extraction is started
+2015-07-09 18:17:38 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:38 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:38 INFO  - rxp extraction is started
+2015-07-09 18:17:38 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/801220_013734.mon.rxp.vox
+2015-07-09 18:17:39 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:39 INFO  - rxp extraction is started
+2015-07-09 18:17:39 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:39 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:39 INFO  - rxp extraction is started
+2015-07-09 18:17:39 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:39 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:39 INFO  - rxp extraction is started
+2015-07-09 18:17:39 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:39 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/801220_015404.mon.rxp.vox
+2015-07-09 18:17:39 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/801220_020040.mon.rxp.vox
+2015-07-09 18:17:40 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:40 INFO  - rxp extraction is started
+2015-07-09 18:17:40 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:40 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:40 INFO  - rxp extraction is started
+2015-07-09 18:17:40 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:40 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_171204.mon.rxp.vox
+2015-07-09 18:17:40 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_171822.mon.rxp.vox
+2015-07-09 18:17:40 ERROR - Error: java.lang.NullPointerException
+2015-07-09 18:17:40 INFO  - rxp extraction is started
+2015-07-09 18:17:40 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:40 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:40 INFO  - rxp extraction is started
+2015-07-09 18:17:40 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:41 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_171350.mon.rxp.vox
+2015-07-09 18:17:41 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_172133.mon.rxp.vox
+2015-07-09 18:17:41 INFO  - file written ( 1.0 s )
+2015-07-09 18:17:41 INFO  - rxp extraction is started
+2015-07-09 18:17:41 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:42 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:42 INFO  - rxp extraction is started
+2015-07-09 18:17:42 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:42 INFO  - file written ( 1.0 s )
+2015-07-09 18:17:42 INFO  - rxp extraction is started
+2015-07-09 18:17:42 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:42 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_174308.mon.rxp.vox
+2015-07-09 18:17:42 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_173632.mon.rxp.vox
+2015-07-09 18:17:42 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_175819.mon.rxp.vox
+2015-07-09 18:17:43 INFO  - file written ( 1.0 s )
+2015-07-09 18:17:43 INFO  - rxp extraction is started
+2015-07-09 18:17:43 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:43 INFO  - file written ( 1.0 s )
+2015-07-09 18:17:43 INFO  - rxp extraction is started
+2015-07-09 18:17:43 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:43 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_175922.mon.rxp.vox
+2015-07-09 18:17:43 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_180612.mon.rxp.vox
+2015-07-09 18:17:44 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_180921.mon.rxp.vox
+2015-07-09 18:17:44 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_182636.mon.rxp.vox
+2015-07-09 18:17:44 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:44 INFO  - rxp extraction is started
+2015-07-09 18:17:44 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:44 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:44 INFO  - rxp extraction is started
+2015-07-09 18:17:44 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:44 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:44 INFO  - rxp extraction is started
+2015-07-09 18:17:44 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:45 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_183327.mon.rxp.vox
+2015-07-09 18:17:45 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_185222.mon.rxp.vox
+2015-07-09 18:17:45 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_185929.mon.rxp.vox
+2015-07-09 18:17:45 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:45 INFO  - rxp extraction is started
+2015-07-09 18:17:45 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:46 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:46 INFO  - rxp extraction is started
+2015-07-09 18:17:46 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:46 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:46 INFO  - rxp extraction is started
+2015-07-09 18:17:46 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:46 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750113_100155.mon.rxp.vox
+2015-07-09 18:17:46 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:46 INFO  - rxp extraction is started
+2015-07-09 18:17:46 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:46 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750113_101027.mon.rxp.vox
+2015-07-09 18:17:47 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:47 INFO  - rxp extraction is started
+2015-07-09 18:17:47 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750113_102506.mon.rxp.vox
+2015-07-09 18:17:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750113_103235.mon.rxp.vox
+2015-07-09 18:17:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750113_095908.mon.rxp.vox
+2015-07-09 18:17:47 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:47 INFO  - rxp extraction is started
+2015-07-09 18:17:47 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:48 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:48 INFO  - rxp extraction is started
+2015-07-09 18:17:48 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:48 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750113_100710.mon.rxp.vox
+2015-07-09 18:17:48 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:48 INFO  - rxp extraction is started
+2015-07-09 18:17:48 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:49 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_172706.mon.rxp.vox
+2015-07-09 18:17:49 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:49 INFO  - rxp extraction is started
+2015-07-09 18:17:49 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:49 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_171157.mon.rxp.vox
+2015-07-09 18:17:49 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_173342.mon.rxp.vox
+2015-07-09 18:17:49 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:49 INFO  - rxp extraction is started
+2015-07-09 18:17:49 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:50 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:50 INFO  - rxp extraction is started
+2015-07-09 18:17:50 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:50 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:50 INFO  - rxp extraction is started
+2015-07-09 18:17:50 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_174737.mon.rxp.vox
+2015-07-09 18:17:50 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:50 INFO  - rxp extraction is started
+2015-07-09 18:17:50 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:51 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_175532.mon.rxp.vox
+2015-07-09 18:17:51 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:51 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_181006.mon.rxp.vox
+2015-07-09 18:17:51 INFO  - rxp extraction is started
+2015-07-09 18:17:51 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:51 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_172341.mon.rxp.vox
+2015-07-09 18:17:51 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:51 INFO  - rxp extraction is started
+2015-07-09 18:17:51 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:52 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:52 INFO  - rxp extraction is started
+2015-07-09 18:17:52 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:52 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_174032.mon.rxp.vox
+2015-07-09 18:17:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_174856.mon.rxp.vox
+2015-07-09 18:17:53 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:53 INFO  - rxp extraction is started
+2015-07-09 18:17:53 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_181148.mon.rxp.vox
+2015-07-09 18:17:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_180401.mon.rxp.vox
+2015-07-09 18:17:53 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:53 INFO  - rxp extraction is started
+2015-07-09 18:17:53 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:54 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:54 INFO  - rxp extraction is started
+2015-07-09 18:17:54 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:54 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_182442.mon.rxp.vox
+2015-07-09 18:17:54 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:54 INFO  - rxp extraction is started
+2015-07-09 18:17:54 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:54 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_183235.mon.rxp.vox
+2015-07-09 18:17:54 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:54 INFO  - rxp extraction is started
+2015-07-09 18:17:54 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:55 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:55 INFO  - rxp extraction is started
+2015-07-09 18:17:55 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_184720.mon.rxp.vox
+2015-07-09 18:17:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_185617.mon.rxp.vox
+2015-07-09 18:17:55 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:55 INFO  - rxp extraction is started
+2015-07-09 18:17:55 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750113_100015.mon.rxp.vox
+2015-07-09 18:17:55 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:55 INFO  - rxp extraction is started
+2015-07-09 18:17:55 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:56 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750113_100829.mon.rxp.vox
+2015-07-09 18:17:56 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:56 INFO  - rxp extraction is started
+2015-07-09 18:17:56 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:56 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750113_102050.mon.rxp.vox
+2015-07-09 18:17:56 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:56 INFO  - rxp extraction is started
+2015-07-09 18:17:56 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:57 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750113_102926.mon.rxp.vox
+2015-07-09 18:17:57 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:57 INFO  - rxp extraction is started
+2015-07-09 18:17:57 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:57 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:57 INFO  - rxp extraction is started
+2015-07-09 18:17:57 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:57 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750113_104318.mon.rxp.vox
+2015-07-09 18:17:57 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750113_105300.mon.rxp.vox
+2015-07-09 18:17:58 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:58 INFO  - rxp extraction is started
+2015-07-09 18:17:58 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:58 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750113_112334.mon.rxp.vox
+2015-07-09 18:17:58 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750113_113028.mon.rxp.vox
+2015-07-09 18:17:59 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:59 INFO  - rxp extraction is started
+2015-07-09 18:17:59 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:59 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:59 INFO  - rxp extraction is started
+2015-07-09 18:17:59 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:59 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850420_030709.mon.rxp.vox
+2015-07-09 18:17:59 INFO  - file written ( 2.0 s )
+2015-07-09 18:17:59 INFO  - rxp extraction is started
+2015-07-09 18:17:59 INFO  - allocate!!!!!!!!
+2015-07-09 18:17:59 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850420_031456.mon.rxp.vox
+2015-07-09 18:18:00 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:00 INFO  - rxp extraction is started
+2015-07-09 18:18:00 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:00 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:00 INFO  - rxp extraction is started
+2015-07-09 18:18:00 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:00 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850420_032805.mon.rxp.vox
+2015-07-09 18:18:00 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:00 INFO  - rxp extraction is started
+2015-07-09 18:18:00 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:00 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:00 INFO  - rxp extraction is started
+2015-07-09 18:18:00 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:01 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850420_033514.mon.rxp.vox
+2015-07-09 18:18:01 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850420_034818.mon.rxp.vox
+2015-07-09 18:18:01 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850420_035548.mon.rxp.vox
+2015-07-09 18:18:01 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:01 INFO  - rxp extraction is started
+2015-07-09 18:18:01 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:02 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_095741.mon.rxp.vox
+2015-07-09 18:18:02 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:02 INFO  - rxp extraction is started
+2015-07-09 18:18:02 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:02 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:02 INFO  - rxp extraction is started
+2015-07-09 18:18:02 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:02 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_101753.mon.rxp.vox
+2015-07-09 18:18:03 INFO  - file written ( 1.0 s )
+2015-07-09 18:18:03 INFO  - rxp extraction is started
+2015-07-09 18:18:03 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:03 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_103202.mon.rxp.vox
+2015-07-09 18:18:03 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_104245.mon.rxp.vox
+2015-07-09 18:18:03 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:03 INFO  - rxp extraction is started
+2015-07-09 18:18:03 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:03 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:03 INFO  - rxp extraction is started
+2015-07-09 18:18:03 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:04 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_110107.mon.rxp.vox
+2015-07-09 18:18:04 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:04 INFO  - rxp extraction is started
+2015-07-09 18:18:04 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:04 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_111300.mon.rxp.vox
+2015-07-09 18:18:04 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:04 INFO  - rxp extraction is started
+2015-07-09 18:18:04 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:04 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_112017.mon.rxp.vox
+2015-07-09 18:18:05 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_175257.mon.rxp.vox
+2015-07-09 18:18:05 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:05 INFO  - rxp extraction is started
+2015-07-09 18:18:05 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:05 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:05 INFO  - rxp extraction is started
+2015-07-09 18:18:05 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:06 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:06 INFO  - rxp extraction is started
+2015-07-09 18:18:06 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:06 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_180047.mon.rxp.vox
+2015-07-09 18:18:06 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_181428.mon.rxp.vox
+2015-07-09 18:18:06 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:06 INFO  - rxp extraction is started
+2015-07-09 18:18:06 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:06 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_182219.mon.rxp.vox
+2015-07-09 18:18:06 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_183404.mon.rxp.vox
+2015-07-09 18:18:07 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:07 INFO  - rxp extraction is started
+2015-07-09 18:18:07 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:07 INFO  - file written ( 1.0 s )
+2015-07-09 18:18:07 INFO  - rxp extraction is started
+2015-07-09 18:18:07 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:07 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_184100.mon.rxp.vox
+2015-07-09 18:18:07 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_171241.mon.rxp.vox
+2015-07-09 18:18:08 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:08 INFO  - rxp extraction is started
+2015-07-09 18:18:08 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:08 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_173730.mon.rxp.vox
+2015-07-09 18:18:08 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:08 INFO  - rxp extraction is started
+2015-07-09 18:18:08 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:08 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_172107.mon.rxp.vox
+2015-07-09 18:18:08 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:08 INFO  - rxp extraction is started
+2015-07-09 18:18:08 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:08 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:09 INFO  - rxp extraction is started
+2015-07-09 18:18:09 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:09 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_174611.mon.rxp.vox
+2015-07-09 18:18:09 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_175255.mon.rxp.vox
+2015-07-09 18:18:09 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:09 INFO  - rxp extraction is started
+2015-07-09 18:18:09 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:09 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:09 INFO  - rxp extraction is started
+2015-07-09 18:18:09 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:10 INFO  - file written ( 1.0 s )
+2015-07-09 18:18:10 INFO  - rxp extraction is started
+2015-07-09 18:18:10 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:10 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_180319.mon.rxp.vox
+2015-07-09 18:18:10 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_181210.mon.rxp.vox
+2015-07-09 18:18:11 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:11 INFO  - rxp extraction is started
+2015-07-09 18:18:11 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:11 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_180843.mon.rxp.vox
+2015-07-09 18:18:11 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_180110.mon.rxp.vox
+2015-07-09 18:18:11 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:11 INFO  - rxp extraction is started
+2015-07-09 18:18:11 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:12 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_182009.mon.rxp.vox
+2015-07-09 18:18:12 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_182856.mon.rxp.vox
+2015-07-09 18:18:12 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:12 INFO  - rxp extraction is started
+2015-07-09 18:18:12 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:12 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:12 INFO  - rxp extraction is started
+2015-07-09 18:18:12 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:12 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:12 INFO  - rxp extraction is started
+2015-07-09 18:18:12 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:13 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_191113.mon.rxp.vox
+2015-07-09 18:18:13 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:13 INFO  - rxp extraction is started
+2015-07-09 18:18:13 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:13 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_192051.mon.rxp.vox
+2015-07-09 18:18:13 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:13 INFO  - rxp extraction is started
+2015-07-09 18:18:13 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:13 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_193406.mon.rxp.vox
+2015-07-09 18:18:14 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:14 INFO  - rxp extraction is started
+2015-07-09 18:18:14 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:14 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:14 INFO  - rxp extraction is started
+2015-07-09 18:18:14 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:15 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_194237.mon.rxp.vox
+2015-07-09 18:18:15 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_171525.mon.rxp.vox
+2015-07-09 18:18:15 INFO  - file written ( 1.0 s )
+2015-07-09 18:18:15 INFO  - rxp extraction is started
+2015-07-09 18:18:15 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:15 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_172548.mon.rxp.vox
+2015-07-09 18:18:15 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:15 INFO  - rxp extraction is started
+2015-07-09 18:18:15 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:15 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:15 INFO  - rxp extraction is started
+2015-07-09 18:18:15 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:16 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_174512.mon.rxp.vox
+2015-07-09 18:18:16 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_171211.mon.rxp.vox
+2015-07-09 18:18:16 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_175316.mon.rxp.vox
+2015-07-09 18:18:17 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:17 INFO  - rxp extraction is started
+2015-07-09 18:18:17 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:17 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_180312.mon.rxp.vox
+2015-07-09 18:18:17 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:17 INFO  - rxp extraction is started
+2015-07-09 18:18:17 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:17 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:17 INFO  - rxp extraction is started
+2015-07-09 18:18:17 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:17 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_181244.mon.rxp.vox
+2015-07-09 18:18:18 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_175641.mon.rxp.vox
+2015-07-09 18:18:18 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:18 INFO  - rxp extraction is started
+2015-07-09 18:18:18 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:18 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_182005.mon.rxp.vox
+2015-07-09 18:18:18 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:18 INFO  - rxp extraction is started
+2015-07-09 18:18:18 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:18 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_173504.mon.rxp.vox
+2015-07-09 18:18:19 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:19 INFO  - rxp extraction is started
+2015-07-09 18:18:19 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:19 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:19 INFO  - rxp extraction is started
+2015-07-09 18:18:19 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:19 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_172503.mon.rxp.vox
+2015-07-09 18:18:20 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:20 INFO  - rxp extraction is started
+2015-07-09 18:18:20 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:20 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:20 INFO  - rxp extraction is started
+2015-07-09 18:18:20 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:20 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_191151.mon.rxp.vox
+2015-07-09 18:18:20 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:20 INFO  - rxp extraction is started
+2015-07-09 18:18:20 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:20 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_174224.mon.rxp.vox
+2015-07-09 18:18:20 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_185741.mon.rxp.vox
+2015-07-09 18:18:21 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:21 INFO  - rxp extraction is started
+2015-07-09 18:18:21 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:21 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_185024.mon.rxp.vox
+2015-07-09 18:18:21 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:21 INFO  - rxp extraction is started
+2015-07-09 18:18:21 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:21 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_183332.mon.rxp.vox
+2015-07-09 18:18:22 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_191842.mon.rxp.vox
+2015-07-09 18:18:22 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:22 INFO  - rxp extraction is started
+2015-07-09 18:18:22 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:22 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:22 INFO  - rxp extraction is started
+2015-07-09 18:18:22 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:23 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_183952.mon.rxp.vox
+2015-07-09 18:18:23 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:23 INFO  - rxp extraction is started
+2015-07-09 18:18:23 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:23 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_180722.mon.rxp.vox
+2015-07-09 18:18:23 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:23 INFO  - rxp extraction is started
+2015-07-09 18:18:23 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:23 INFO  - file written ( 1.0 s )
+2015-07-09 18:18:23 INFO  - rxp extraction is started
+2015-07-09 18:18:23 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:24 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:24 INFO  - rxp extraction is started
+2015-07-09 18:18:24 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:24 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_182521.mon.rxp.vox
+2015-07-09 18:18:24 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_181653.mon.rxp.vox
+2015-07-09 18:18:24 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_180006.mon.rxp.vox
+2015-07-09 18:18:24 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_171356.mon.rxp.vox
+2015-07-09 18:18:24 INFO  - file written ( 1.0 s )
+2015-07-09 18:18:24 INFO  - rxp extraction is started
+2015-07-09 18:18:24 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:25 INFO  - file written ( 1.0 s )
+2015-07-09 18:18:25 INFO  - rxp extraction is started
+2015-07-09 18:18:25 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:25 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/750213_183253.mon.rxp.vox
+2015-07-09 18:18:25 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_172457.mon.rxp.vox
+2015-07-09 18:18:26 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:26 INFO  - rxp extraction is started
+2015-07-09 18:18:26 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:26 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:26 INFO  - rxp extraction is started
+2015-07-09 18:18:26 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:26 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_173139.mon.rxp.vox
+2015-07-09 18:18:26 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:26 INFO  - rxp extraction is started
+2015-07-09 18:18:26 INFO  - allocate!!!!!!!!
+2015-07-09 18:18:27 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_174233.mon.rxp.vox
+2015-07-09 18:18:27 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:27 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_180402.mon.rxp.vox
+2015-07-09 18:18:27 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_174916.mon.rxp.vox
+2015-07-09 18:18:27 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:27 INFO  - file written ( 2.0 s )
+2015-07-09 18:18:28 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/paracou_tls_2014_v2/850215_181258.mon.rxp.vox
+2015-07-09 18:18:28 INFO  - file written ( 1.0 s )
+2015-07-09 18:18:28 INFO  - file written ( 1.0 s )
+2015-07-09 18:18:29 INFO  - file written ( 1.0 s )
+2015-07-09 18:18:29 INFO  - file written ( 1.0 s )
+2015-07-09 18:18:29 INFO  - file written ( 1.0 s )
+2015-07-09 18:18:30 INFO  - Merging in progress, file 1 : 138
+2015-07-09 18:18:31 INFO  - Merging in progress, file 2 : 138
+2015-07-09 18:18:32 INFO  - Merging in progress, file 3 : 138
+2015-07-09 18:18:34 INFO  - Merging in progress, file 4 : 138
+2015-07-09 18:18:35 INFO  - Merging in progress, file 5 : 138
+2015-07-09 18:18:37 INFO  - Merging in progress, file 6 : 138
+2015-07-09 18:18:38 INFO  - Merging in progress, file 7 : 138
+2015-07-09 18:18:39 INFO  - Merging in progress, file 8 : 138
+2015-07-09 18:18:41 INFO  - Merging in progress, file 9 : 138
+2015-07-09 18:18:42 INFO  - Merging in progress, file 10 : 138
+2015-07-09 18:18:44 INFO  - Merging in progress, file 11 : 138
+2015-07-09 18:18:45 INFO  - Merging in progress, file 12 : 138
+2015-07-09 18:18:46 INFO  - Merging in progress, file 13 : 138
+2015-07-09 18:18:48 INFO  - Merging in progress, file 14 : 138
+2015-07-09 18:18:49 INFO  - Merging in progress, file 15 : 138
+2015-07-09 18:18:50 INFO  - Merging in progress, file 16 : 138
+2015-07-09 18:18:51 INFO  - Merging in progress, file 17 : 138
+2015-07-09 18:18:53 INFO  - Merging in progress, file 18 : 138
+2015-07-09 18:18:54 INFO  - Merging in progress, file 19 : 138
+2015-07-09 18:18:55 INFO  - Merging in progress, file 20 : 138
+2015-07-09 18:18:57 INFO  - Merging in progress, file 21 : 138
+2015-07-09 18:18:58 INFO  - Merging in progress, file 22 : 138
+2015-07-09 18:18:59 INFO  - Merging in progress, file 23 : 138
+2015-07-09 18:19:01 INFO  - Merging in progress, file 24 : 138
+2015-07-09 18:19:02 INFO  - Merging in progress, file 25 : 138
+2015-07-09 18:19:03 INFO  - Merging in progress, file 26 : 138
+2015-07-09 18:19:05 INFO  - Merging in progress, file 27 : 138
+2015-07-09 18:19:06 INFO  - Merging in progress, file 28 : 138
+2015-07-09 18:19:07 INFO  - Merging in progress, file 29 : 138
+2015-07-09 18:19:09 INFO  - Merging in progress, file 30 : 138
+2015-07-09 18:19:10 INFO  - Merging in progress, file 31 : 138
+2015-07-09 18:19:11 INFO  - Merging in progress, file 32 : 138
+2015-07-09 18:19:11 INFO  - Merging in progress, file 33 : 138
+2015-07-09 18:19:13 INFO  - Merging in progress, file 34 : 138
+2015-07-09 18:19:14 INFO  - Merging in progress, file 35 : 138
+2015-07-09 18:19:15 INFO  - Merging in progress, file 36 : 138
+2015-07-09 18:19:17 INFO  - Merging in progress, file 37 : 138
+2015-07-09 18:19:18 INFO  - Merging in progress, file 38 : 138
+2015-07-09 18:19:19 INFO  - Merging in progress, file 39 : 138
+2015-07-09 18:19:21 INFO  - Merging in progress, file 40 : 138
+2015-07-09 18:19:22 INFO  - Merging in progress, file 41 : 138
+2015-07-09 18:19:23 INFO  - Merging in progress, file 42 : 138
+2015-07-09 18:19:25 INFO  - Merging in progress, file 43 : 138
+2015-07-09 18:19:26 INFO  - Merging in progress, file 44 : 138
+2015-07-09 18:19:27 INFO  - Merging in progress, file 45 : 138
+2015-07-09 18:19:29 INFO  - Merging in progress, file 46 : 138
+2015-07-09 18:19:30 INFO  - Merging in progress, file 47 : 138
+2015-07-09 18:19:31 INFO  - Merging in progress, file 48 : 138
+2015-07-09 18:19:33 INFO  - Merging in progress, file 49 : 138
+2015-07-09 18:19:34 INFO  - Merging in progress, file 50 : 138
+2015-07-09 18:19:35 INFO  - Merging in progress, file 51 : 138
+2015-07-09 18:19:37 INFO  - Merging in progress, file 52 : 138
+2015-07-09 18:19:38 INFO  - Merging in progress, file 53 : 138
+2015-07-09 18:19:39 INFO  - Merging in progress, file 54 : 138
+2015-07-09 18:19:41 INFO  - Merging in progress, file 55 : 138
+2015-07-09 18:19:42 INFO  - Merging in progress, file 56 : 138
+2015-07-09 18:19:43 INFO  - Merging in progress, file 57 : 138
+2015-07-09 18:19:45 INFO  - Merging in progress, file 58 : 138
+2015-07-09 18:19:46 INFO  - Merging in progress, file 59 : 138
+2015-07-09 18:19:47 INFO  - Merging in progress, file 60 : 138
+2015-07-09 18:19:49 INFO  - Merging in progress, file 61 : 138
+2015-07-09 18:19:50 INFO  - Merging in progress, file 62 : 138
+2015-07-09 18:19:51 INFO  - Merging in progress, file 63 : 138
+2015-07-09 18:19:53 INFO  - Merging in progress, file 64 : 138
+2015-07-09 18:19:54 INFO  - Merging in progress, file 65 : 138
+2015-07-09 18:19:55 INFO  - Merging in progress, file 66 : 138
+2015-07-09 18:19:57 INFO  - Merging in progress, file 67 : 138
+2015-07-09 18:19:58 INFO  - Merging in progress, file 68 : 138
+2015-07-09 18:19:59 INFO  - Merging in progress, file 69 : 138
+2015-07-09 18:20:01 INFO  - Merging in progress, file 70 : 138
+2015-07-09 18:20:02 INFO  - Merging in progress, file 71 : 138
+2015-07-09 18:20:03 INFO  - Merging in progress, file 72 : 138
+2015-07-09 18:20:05 INFO  - Merging in progress, file 73 : 138
+2015-07-09 18:20:06 INFO  - Merging in progress, file 74 : 138
+2015-07-09 18:20:07 INFO  - Merging in progress, file 75 : 138
+2015-07-09 18:20:09 INFO  - Merging in progress, file 76 : 138
+2015-07-09 18:20:10 INFO  - Merging in progress, file 77 : 138
+2015-07-09 18:20:11 INFO  - Merging in progress, file 78 : 138
+2015-07-09 18:20:13 INFO  - Merging in progress, file 79 : 138
+2015-07-09 18:20:14 INFO  - Merging in progress, file 80 : 138
+2015-07-09 18:20:15 INFO  - Merging in progress, file 81 : 138
+2015-07-09 18:20:17 INFO  - Merging in progress, file 82 : 138
+2015-07-09 18:20:18 INFO  - Merging in progress, file 83 : 138
+2015-07-09 18:20:19 INFO  - Merging in progress, file 84 : 138
+2015-07-09 18:20:21 INFO  - Merging in progress, file 85 : 138
+2015-07-09 18:20:22 INFO  - Merging in progress, file 86 : 138
+2015-07-09 18:20:23 INFO  - Merging in progress, file 87 : 138
+2015-07-09 18:20:25 INFO  - Merging in progress, file 88 : 138
+2015-07-09 18:20:26 INFO  - Merging in progress, file 89 : 138
+2015-07-09 18:20:27 INFO  - Merging in progress, file 90 : 138
+2015-07-09 18:20:29 INFO  - Merging in progress, file 91 : 138
+2015-07-09 18:20:30 INFO  - Merging in progress, file 92 : 138
+2015-07-09 18:20:31 INFO  - Merging in progress, file 93 : 138
+2015-07-09 18:20:33 INFO  - Merging in progress, file 94 : 138
+2015-07-09 18:20:34 INFO  - Merging in progress, file 95 : 138
+2015-07-09 18:20:35 INFO  - Merging in progress, file 96 : 138
+2015-07-09 18:20:37 INFO  - Merging in progress, file 97 : 138
+2015-07-09 18:20:38 INFO  - Merging in progress, file 98 : 138
+2015-07-09 18:20:39 INFO  - Merging in progress, file 99 : 138
+2015-07-09 18:20:41 INFO  - Merging in progress, file 100 : 138
+2015-07-09 18:20:42 INFO  - Merging in progress, file 101 : 138
+2015-07-09 18:20:43 INFO  - Merging in progress, file 102 : 138
+2015-07-09 18:20:45 INFO  - Merging in progress, file 103 : 138
+2015-07-09 18:20:46 INFO  - Merging in progress, file 104 : 138
+2015-07-09 18:20:47 INFO  - Merging in progress, file 105 : 138
+2015-07-09 18:20:49 INFO  - Merging in progress, file 106 : 138
+2015-07-09 18:20:50 INFO  - Merging in progress, file 107 : 138
+2015-07-09 18:20:51 INFO  - Merging in progress, file 108 : 138
+2015-07-09 18:20:53 INFO  - Merging in progress, file 109 : 138
+2015-07-09 18:20:54 INFO  - Merging in progress, file 110 : 138
+2015-07-09 18:20:56 INFO  - Merging in progress, file 111 : 138
+2015-07-09 18:20:57 INFO  - Merging in progress, file 112 : 138
+2015-07-09 18:20:58 INFO  - Merging in progress, file 113 : 138
+2015-07-09 18:21:00 INFO  - Merging in progress, file 114 : 138
+2015-07-09 18:21:01 INFO  - Merging in progress, file 115 : 138
+2015-07-09 18:21:02 INFO  - Merging in progress, file 116 : 138
+2015-07-09 18:21:04 INFO  - Merging in progress, file 117 : 138
+2015-07-09 18:21:05 INFO  - Merging in progress, file 118 : 138
+2015-07-09 18:21:06 INFO  - Merging in progress, file 119 : 138
+2015-07-09 18:21:08 INFO  - Merging in progress, file 120 : 138
+2015-07-09 18:21:09 INFO  - Merging in progress, file 121 : 138
+2015-07-09 18:21:10 INFO  - Merging in progress, file 122 : 138
+2015-07-09 18:21:12 INFO  - Merging in progress, file 123 : 138
+2015-07-09 18:21:13 INFO  - Merging in progress, file 124 : 138
+2015-07-09 18:21:14 INFO  - Merging in progress, file 125 : 138
+2015-07-09 18:21:15 INFO  - Merging in progress, file 126 : 138
+2015-07-09 18:21:17 INFO  - Merging in progress, file 127 : 138
+2015-07-09 18:21:18 INFO  - Merging in progress, file 128 : 138
+2015-07-09 18:21:19 INFO  - Merging in progress, file 129 : 138
+2015-07-09 18:21:21 INFO  - Merging in progress, file 130 : 138
+2015-07-09 18:21:22 INFO  - Merging in progress, file 131 : 138
+2015-07-09 18:21:23 INFO  - Merging in progress, file 132 : 138
+2015-07-09 18:21:25 INFO  - Merging in progress, file 133 : 138
+2015-07-09 18:21:26 INFO  - Merging in progress, file 134 : 138
+2015-07-09 18:21:27 INFO  - Merging in progress, file 135 : 138
+2015-07-09 18:21:29 INFO  - Merging in progress, file 136 : 138
+2015-07-09 18:21:30 INFO  - Merging in progress, file 137 : 138
+2015-07-09 18:21:31 INFO  - Merging in progress, file 138 : 138
+2015-07-09 18:21:33 INFO  - Compute angleMean
+2015-07-09 18:21:35 INFO  - Compute lMeanTotal
+2015-07-09 18:21:35 INFO  - Compute transmittance and PAD
+2015-07-09 18:30:47 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-09 18:30:47 INFO  - Laz file is closed
+2015-07-09 18:30:51 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-09 18:30:51 INFO  - Laz file is closed
+2015-07-09 18:30:55 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-09 18:30:55 INFO  - Laz file is closed
+2015-07-09 18:31:13 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-09 18:31:13 INFO  - Laz file is closed
+2015-07-09 18:31:16 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-09 18:31:17 INFO  - Laz file is closed
