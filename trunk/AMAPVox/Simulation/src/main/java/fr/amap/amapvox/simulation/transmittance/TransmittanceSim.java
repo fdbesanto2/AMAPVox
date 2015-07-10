@@ -540,7 +540,7 @@ public class TransmittanceSim {
 
                     double ty = (0.5f + (double) j) * voxSpace.getVoxelSize().y;
                     Point3d pos = new Point3d(vsMin);
-                    pos.add(new Point3d(tx, ty, mnt[i][j] + 0.1f));
+                    pos.add(new Point3d(tx, ty, mnt[i][j] + 0.5f));
                     positions.add(pos);
                 }
             }

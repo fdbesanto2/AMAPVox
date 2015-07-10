@@ -18,12 +18,14 @@
         <mainClass>fr.amap.amapvox.gui.MainApp</mainClass>
     </properties>
 
-    <organization>
-        <!-- Used as the 'Vendor' for JNLP generation -->
-        <name>Your Organisation</name>
-    </organization>
+    <scm>
+        <connection>scm:git:voxeidar.git</connection>
+    </scm>
 
     <build>
+        <finalName>
+            ${project.artifactId}-${project.version}-r${buildNumber}
+        </finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -107,6 +109,73 @@
                     <additionalClasspathElements>
                         <additionalClasspathElement>${java.home}/lib/jfxrt.jar</additionalClasspathElement>
                     </additionalClasspathElements>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/release/</outputDirectory>
+                            <resources>          
+                                <resource>
+                                    <directory>${basedir}/src/main/resources/launcher/</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>              
+                        </configuration>            
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.3</version>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>                    
+                    </execution>
+                </executions>
+                <configuration>
+                    <basedir>${basedir}/target/release/</basedir>
+                    <includes>
+                        <include>click_me.sh</include>
+                        <include>click_me.bat</include>
+                    </includes>
+                    <regex>false</regex>
+                    <outputDir>/</outputDir>
+                    <token>$BUILD_NUMBER$</token>
+                    <value>${buildNumber}</value>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.3</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                
+                <configuration>
+                    <shortRevisionLength>8</shortRevisionLength>
+                    <revisiononscmfailure>
+                        <doCheck>true</doCheck>
+                        <doUpdate>true</doUpdate>
+                    </revisiononscmfailure>
                 </configuration>
             </plugin>
         </plugins>

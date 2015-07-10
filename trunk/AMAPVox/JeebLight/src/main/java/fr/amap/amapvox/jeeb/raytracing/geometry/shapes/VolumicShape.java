@@ -1,11 +1,10 @@
 package fr.amap.amapvox.jeeb.raytracing.geometry.shapes;
 
+import fr.amap.amapvox.jeeb.raytracing.geometry.Intersection;
+import fr.amap.amapvox.jeeb.raytracing.geometry.LineElement;
 import java.util.ArrayList;
 
-import javax.vecmath.Point3f;
 
-import fr.ird.voxelidar.voxelisation.raytracing.geometry.Intersection;
-import fr.ird.voxelidar.voxelisation.raytracing.geometry.LineElement;
 import javax.vecmath.Point3d;
 
 /**

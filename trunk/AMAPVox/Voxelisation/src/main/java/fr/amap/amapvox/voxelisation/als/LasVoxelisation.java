@@ -5,7 +5,6 @@
  */
 package fr.amap.amapvox.voxelisation.als;
 
-import fr.amap.amapvox.commons.configuration.VoxelParameters;
 import fr.amap.amapvox.commons.math.matrix.Mat4D;
 import fr.amap.amapvox.commons.util.Filter;
 import fr.amap.amapvox.commons.util.Processing;
@@ -13,6 +12,7 @@ import fr.amap.amapvox.commons.util.ProcessingListener;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
 import fr.amap.amapvox.voxelisation.VoxelAnalysis;
+import fr.amap.amapvox.voxelisation.configuration.VoxelParameters;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
@@ -102,9 +102,6 @@ public class LasVoxelisation extends Processing {
         
         logger.info("Shots processed: "+count);
         
-        //test
-        
-        float[] altitudes = new float[]{0, 10, 20, 30, 40, 50, 60};
         
         if(parameters.isGenerateMultiBandRaster()){
             voxelAnalysis.generateMultiBandsRaster(new File(outputFile.getAbsolutePath()+".bsq"), 
@@ -113,7 +110,10 @@ public class LasVoxelisation extends Processing {
         }
         
         if((parameters.isGenerateMultiBandRaster() && !parameters.isShortcutVoxelFileWriting()) || !parameters.isGenerateMultiBandRaster()){
-            voxelAnalysis.calculatePADAndWrite(0);
+            voxelAnalysis.computePADs();
+            //voxelAnalysis.correctNaNs();
+            voxelAnalysis.write();
+            //voxelAnalysis.calculatePADAndWrite(0);
         }
 
         if(parameters.isCalculateGroundEnergy() && !parameters.isTLS()){

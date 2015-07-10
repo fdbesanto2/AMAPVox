@@ -1,15 +1,14 @@
 package fr.amap.amapvox.jeeb.raytracing.geometry.shapes;
 
+import fr.amap.amapvox.jeeb.raytracing.geometry.HalfLine;
+import fr.amap.amapvox.jeeb.raytracing.geometry.Intersection;
+import fr.amap.amapvox.jeeb.raytracing.geometry.Line;
+import fr.amap.amapvox.jeeb.raytracing.geometry.LineElement;
+import fr.amap.amapvox.jeeb.raytracing.geometry.LineSegment;
 import java.util.ArrayList;
 
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
-
-import fr.ird.voxelidar.voxelisation.raytracing.geometry.HalfLine;
-import fr.ird.voxelidar.voxelisation.raytracing.geometry.Intersection;
-import fr.ird.voxelidar.voxelisation.raytracing.geometry.Line;
-import fr.ird.voxelidar.voxelisation.raytracing.geometry.LineElement;
-import fr.ird.voxelidar.voxelisation.raytracing.geometry.LineSegment;
 
 /**
  * Triangle-fashioned mesh

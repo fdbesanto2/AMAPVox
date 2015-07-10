@@ -5,7 +5,6 @@
  */
 package fr.amap.amapvox.voxelisation.tls;
 
-import fr.amap.amapvox.commons.configuration.VoxelParameters;
 import fr.amap.amapvox.commons.math.matrix.Mat3D;
 import fr.amap.amapvox.commons.math.matrix.Mat4D;
 import fr.amap.amapvox.commons.math.vector.Vec3D;
@@ -16,6 +15,7 @@ import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
 import fr.amap.amapvox.voxelisation.VoxelAnalysis;
+import fr.amap.amapvox.voxelisation.configuration.VoxelParameters;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;

@@ -1,4 +1,4 @@
 /**
  * Geometric elements used by raytracing process.
  */
-package fr.ird.voxelidar.voxelisation.raytracing.geometry;
+package fr.amap.amapvox.jeeb.raytracing.geometry;

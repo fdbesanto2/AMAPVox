@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.amap.amapvox.commons.configuration;
+package fr.amap.amapvox.voxelisation.configuration;
 
+import fr.amap.amapvox.commons.configuration.Configuration;
 import fr.amap.amapvox.commons.util.Filter;
 import fr.amap.amapvox.commons.util.MatrixAndFile;
 import fr.amap.amapvox.commons.util.PointcloudFilter;

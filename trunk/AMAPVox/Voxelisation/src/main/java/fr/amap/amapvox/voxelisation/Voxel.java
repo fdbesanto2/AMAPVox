@@ -140,6 +140,9 @@ public class Voxel implements Serializable {
         //public float _PadBVTotal_V2;
         //public double _sumSurfaceMultiplyLength;
         
+        public float passNumber;
+        public float neighboursNumber;
+        
 
         protected static Set<String> fieldsNames;
         protected static Set<Field> _fields;

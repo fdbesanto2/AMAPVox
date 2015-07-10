@@ -325,19 +325,19 @@ public class VoxelSpaceLoader{
             metadata += "#res: "+data.res+" ";
             metadata += "#MAX_PAD: "+data.maxPad;
             
-            if (data.type.equals(Type.TLS)) {
+            /*if (data.type.equals(Type.TLS)) {
                 type += "#type: " +"TLS"+ " ";
                 type += metadata+"\n";
                 writer.write(type);
                 
                 writer.write(Voxel.getHeader(ExtendedTLSVoxel.class) + "\n");
-            } else {
+            } else {*/
                 type += "#type: " +"ALS"+ " ";
                 type += metadata+"\n";
                 writer.write(type);
                 
                 writer.write(Voxel.getHeader(ExtendedALSVoxel.class) + "\n");
-            }
+            //}
 
             for (int i = 0; i < data.split.x; i++) {
                 for (int j = 0; j < data.split.y; j++) {

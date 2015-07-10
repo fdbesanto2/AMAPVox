@@ -12,8 +12,9 @@ Authors:
 For further information, please contact Gregoire Vincent.
  */
 
-package fr.amap.amapvox.commons.configuration;
+package fr.amap.amapvox.voxelisation.configuration;
 
+import fr.amap.amapvox.commons.configuration.Configuration;
 import fr.amap.amapvox.commons.util.Filter;
 import fr.amap.amapvox.commons.util.PointcloudFilter;
 import java.io.File;

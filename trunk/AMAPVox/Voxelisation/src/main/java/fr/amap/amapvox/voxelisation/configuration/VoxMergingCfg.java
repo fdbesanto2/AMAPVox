@@ -13,8 +13,9 @@ Authors:
 For further information, please contact Gregoire Vincent.
  */
 
-package fr.amap.amapvox.commons.configuration;
+package fr.amap.amapvox.voxelisation.configuration;
 
+import fr.amap.amapvox.commons.configuration.Configuration;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

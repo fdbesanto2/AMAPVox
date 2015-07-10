@@ -12,7 +12,7 @@ Authors:
 For further information, please contact Gregoire Vincent.
  */
 
-package fr.amap.amapvox.commons.configuration;
+package fr.amap.amapvox.voxelisation.configuration;
 
 import fr.amap.amapvox.commons.util.MatrixAndFile;
 import java.io.File;

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.vecmath.Point3i;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -20,6 +21,7 @@ import javax.vecmath.Point3i;
  */
 public class ProcessingMultiRes {
     
+    private final static Logger logger = Logger.getLogger(ProcessingMultiRes.class);
     
     private float maxPAD;
     private boolean useDefaultMaxPad = false;
@@ -66,7 +68,7 @@ public class ProcessingMultiRes {
             try {
                 voxelSpaces.put(resolution, voxelSpace);
             } catch (Exception e) {
-                //logger.error(e);
+                logger.error(e);
             }
 
             if (count == 0) {
@@ -210,7 +212,7 @@ public class ProcessingMultiRes {
                         currentTransmittance = voxTemp.transmittance;
                     }
                 }else{
-                    //logger.error("A line is missing in voxel file");
+                    logger.error("A line is missing in voxel file");
                 }
                 
             }
@@ -250,7 +252,7 @@ public class ProcessingMultiRes {
                 float newValue = voxTemp.PadBVTotal;
                 
                 if(Double.isNaN(newValue)){
-                    //logger.error("incorrect Pad value");
+                    logger.error("incorrect Pad value");
                 }
 
                 voxel.PadBVTotal = newValue;
@@ -293,11 +295,11 @@ public class ProcessingMultiRes {
             vs.data.voxels.set(n, voxel);
         }
         
-        /*
+        
         logger.info("Nombre de valeurs correctes: " + correctValues + "/" + totalValues);
         logger.info("Nombre de valeurs corrigées: " + correctedValues + "/" + totalValues);
         logger.info("Nombre de valeurs mises à défaut: " + setToDefault + "/" + totalValues);
-        */
+        
         
 
     }

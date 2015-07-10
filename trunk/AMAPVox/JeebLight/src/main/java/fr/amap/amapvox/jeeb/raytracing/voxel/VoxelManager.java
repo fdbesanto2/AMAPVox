@@ -1,12 +1,12 @@
 package fr.amap.amapvox.jeeb.raytracing.voxel;
 
 
+import fr.amap.amapvox.jeeb.raytracing.geometry.Intersection;
+import fr.amap.amapvox.jeeb.raytracing.geometry.LineElement;
+import fr.amap.amapvox.jeeb.raytracing.geometry.LineSegment;
 import fr.amap.amapvox.jeeb.raytracing.geometry.shapes.ShapeUtils;
 import fr.amap.amapvox.jeeb.raytracing.geometry.shapes.VolumicShape;
 import fr.amap.amapvox.jeeb.raytracing.util.BoundingBox3d;
-import fr.ird.voxelidar.voxelisation.raytracing.geometry.Intersection;
-import fr.ird.voxelidar.voxelisation.raytracing.geometry.LineElement;
-import fr.ird.voxelidar.voxelisation.raytracing.geometry.LineSegment;
 import javax.vecmath.Point3i;
 import javax.vecmath.Vector3d;
 
