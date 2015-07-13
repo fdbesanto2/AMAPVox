@@ -160,7 +160,7 @@ public class VoxelAnalysis {
 
                 LineSegment seg = new LineSegment(shot.origin, shot.direction, 999999);
                 Point3d echo = new Point3d(seg.getEnd());
-                propagate(origin, echo, (short) 0, 1, 1, shot.origin, false, shot.angle, shot.nbEchos, 0, -1, -1/*, false*/);
+                propagate(origin, echo, (short) 0, 1, 1, shot.origin, false, shot.angle, shot.nbEchos, 0, -1/*, -1, false*/);
 
             } else {
 
@@ -246,9 +246,9 @@ public class VoxelAnalysis {
 
                         // propagate
                         if (parameters.isTLS()) {
-                            propagate(origin, echo, (short) 0, beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i, shot.reflectances[i], shot.deviations[i]/*, isFakeEcho*/);
+                            propagate(origin, echo, (short) 0, beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i, shot.reflectances[i]/*, shot.deviations[i], isFakeEcho*/);
                         } else {
-                            propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i, -1.0f, -1.0f/*, isFakeEcho*/);
+                            propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i, -1.0f/*, -1.0f, isFakeEcho*/);
                         }
 
                         if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
@@ -301,7 +301,7 @@ public class VoxelAnalysis {
      * @param beamFraction
      * @param source shot origin
      */
-    private void propagate(Point3d origin, Point3d echo, int classification, double beamFraction, double residualEnergy, Point3d source, boolean lastEcho, double angle, int nbEchos, int indiceEcho, float reflectance, float deviation/*, boolean isFakeEcho*/) {
+    private void propagate(Point3d origin, Point3d echo, int classification, double beamFraction, double residualEnergy, Point3d source, boolean lastEcho, double angle, int nbEchos, int indiceEcho, float reflectance/*, float deviation, boolean isFakeEcho*/) {
 
         //get shot line
         LineElement lineElement = new LineSegment(origin, echo);
