@@ -75,6 +75,7 @@ public class VoxelAnalysis {
     private boolean padWasCalculated;
 
     int nbSamplingTotal = 0;
+    //private double maxEchoDist = 65;
 
     /**
      *
@@ -159,7 +160,7 @@ public class VoxelAnalysis {
 
                 LineSegment seg = new LineSegment(shot.origin, shot.direction, 999999);
                 Point3d echo = new Point3d(seg.getEnd());
-                propagate(origin, echo, (short) 0, 1, 1, shot.origin, false, shot.angle, shot.nbEchos, 0, -1);
+                propagate(origin, echo, (short) 0, 1, 1, shot.origin, false, shot.angle, shot.nbEchos, 0, -1, -1/*, false*/);
 
             } else {
 
@@ -178,9 +179,15 @@ public class VoxelAnalysis {
                 isSet = false;
 
                 double residualEnergy = 1;
+                
+                //boolean isFakeEcho = false;
 
                 for (int i = 0; i < shot.nbEchos; i++) {
-
+                    /*
+                    if(isFakeEcho){
+                        break;
+                    }*/
+                    
                     Point3d nextEcho = null;
 
                     if (i < shot.nbEchos - 1) {
@@ -227,12 +234,21 @@ public class VoxelAnalysis {
                         boolean lastEcho;
 
                         lastEcho = i == shot.nbEchos - 1;
+                        
+                        
+                        
+                        /*double distFromSource = new LineSegment(shot.origin, echo).getLength();
+                        if(distFromSource > maxEchoDist){
+                            Point3d fakeEcho = new LineSegment(shot.origin, shot.direction, distFromSource).getEnd();
+                            echo = fakeEcho;
+                            isFakeEcho = true;
+                        }*/
 
                         // propagate
                         if (parameters.isTLS()) {
-                            propagate(origin, echo, (short) 0, beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i, shot.reflectances[i]);
+                            propagate(origin, echo, (short) 0, beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i, shot.reflectances[i], shot.deviations[i]/*, isFakeEcho*/);
                         } else {
-                            propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i, -1.0f);
+                            propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, shot.nbEchos, i, -1.0f, -1.0f/*, isFakeEcho*/);
                         }
 
                         if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
@@ -285,7 +301,7 @@ public class VoxelAnalysis {
      * @param beamFraction
      * @param source shot origin
      */
-    private void propagate(Point3d origin, Point3d echo, int classification, double beamFraction, double residualEnergy, Point3d source, boolean lastEcho, double angle, int nbEchos, int indiceEcho, float reflectance) {
+    private void propagate(Point3d origin, Point3d echo, int classification, double beamFraction, double residualEnergy, Point3d source, boolean lastEcho, double angle, int nbEchos, int indiceEcho, float reflectance, float deviation/*, boolean isFakeEcho*/) {
 
         //get shot line
         LineElement lineElement = new LineSegment(origin, echo);
@@ -449,7 +465,9 @@ public class VoxelAnalysis {
 
                 if (((classification != 2 && !parameters.isTLS()) || parameters.isTLS())
                         && ((echoDistance >= parameters.minDTMDistance && echoDistance != Float.NaN && parameters.useDTMCorrection()) || !parameters.useDTMCorrection())
-                        && keepEcho) {
+                        && keepEcho 
+                        /*&& !isFakeEcho*/
+                        /*&& (deviation <= 10 || !parameters.isTLS())*/) {
 
                     vox.nbEchos++;
 
@@ -884,18 +902,22 @@ public class VoxelAnalysis {
 
                             float meanNbSampling = 0;
                             float meanTransmittance = 0;
+                            
+                            int count = 0;
 
                             for(Voxel neighbour : neighbours){
-
-                                if(!Float.isNaN(neighbour.transmittance)){
+                                
+                                if(!Float.isNaN(neighbour.transmittance) || neighbour.transmittance == 0){
                                     meanNbSampling += neighbour.nbSampling;
-                                    meanTransmittance += neighbour.transmittance;
+                                    meanTransmittance *= neighbour.transmittance;
+                                    count++;
                                 }
                             }
 
+                            double factor = 1/count;
                             if(neighbours.size() > 0){
                                 meanNbSampling /= (float)neighbours.size();
-                                meanTransmittance /= neighbours.size();
+                                meanTransmittance = (float) Math.pow(meanTransmittance, factor);
                             }else{
                                 break;
                             }

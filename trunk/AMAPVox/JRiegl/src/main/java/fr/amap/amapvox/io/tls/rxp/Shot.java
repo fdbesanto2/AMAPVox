@@ -33,6 +33,8 @@ public class Shot {
     to be in parallel to the laser beam direction.
      */
     public float reflectances[];
+    
+    public float deviations[];
 
     public double angle;
     private static List<Filter> filters;
@@ -59,13 +61,14 @@ public class Shot {
     public Shot(int nbEchos,
             double originX, double originY, double originZ,
             double directionX, double directionY, double directionZ,
-            double[] ranges, float[] reflectances) {
+            double[] ranges, float[] reflectances, float[] deviations) {
 
         this.origin = new Point3d(originX, originY, originZ);
         this.nbEchos = nbEchos;
         this.direction = new Vector3d(directionX, directionY, directionZ);
         this.ranges = ranges;
         this.reflectances = reflectances;
+        this.deviations = deviations;
     }
 
 

@@ -2231,6 +2231,27 @@ public class MainFrameController implements Initializable {
             voxelParameters.setWeightingData(VoxelParameters.DEFAULT_ALS_WEIGHTING);
             
             voxelParameters.setCalculateGroundEnergy(checkboxCalculateGroundEnergy.isSelected());
+            String extension = "";
+            
+            if(checkboxCalculateGroundEnergy.isSelected()){
+                
+                    voxelParameters.setGroundEnergyFile(new File(textFieldOutputFileGroundEnergy.getText()));
+
+                    switch (comboboxGroundEnergyOutputFormat.getSelectionModel().getSelectedIndex()) {
+                    case 0:
+                        voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_TXT);
+                        extension = ".txt";
+                        break;
+                    case 1:
+                        voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_PNG);
+                        extension = ".png";
+                        break;
+                    default:
+                        voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_TXT);
+                        extension = ".png";
+                }
+            }
+            
             voxelParameters.setGenerateMultiBandRaster(checkboxGenerateMultiBandRaster.isSelected());
 
             if(checkboxGenerateMultiBandRaster.isSelected()){
@@ -2253,22 +2274,6 @@ public class MainFrameController implements Initializable {
                         resList.add(Float.valueOf(s));
                     }catch(Exception e){}
                 }
-            }
-
-            String extension;
-
-            switch (comboboxGroundEnergyOutputFormat.getSelectionModel().getSelectedIndex()) {
-                case 0:
-                    voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_TXT);
-                    extension = ".txt";
-                    break;
-                case 1:
-                    voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_PNG);
-                    extension = ".png";
-                    break;
-                default:
-                    voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_TXT);
-                    extension = ".png";
             }
             
             VoxCfg cfg = null;
@@ -2369,7 +2374,7 @@ public class MainFrameController implements Initializable {
                         individualVoxelParameters.setSplit(new Point3i(splitX, splitY, splitZ));
                         individualVoxelParameters.setResolution(resolution);
                         
-                        individualVoxelParameters.setCalculateGroundEnergy(checkboxMultiResAfter.isSelected());
+                        individualVoxelParameters.setCalculateGroundEnergy(checkboxCalculateGroundEnergy.isSelected());
                         if(voxelParameters.isCalculateGroundEnergy()){
                             individualVoxelParameters.setGroundEnergyFile(new File(outputPathFile.getAbsolutePath() + "/" + file.getName() + extension));
                         }
