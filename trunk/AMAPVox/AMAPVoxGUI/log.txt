@@ -14083,3 +14083,518 @@ Caused by: org.xml.sax.SAXParseException; systemId: file:/home/calcul/Documents/
 2015-07-13 19:00:07 INFO  - las voxelisation finished in 11.0 s
 2015-07-13 19:00:19 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/comparaisons ALS_multires_TLS_paracou_2013/als.vox --attribut=PadBVTotal 
 2015-07-13 19:03:36 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/comparaisons ALS_multires_TLS_paracou_2013/als.vox --attribut=PadBVTotal 
+2015-07-13 19:46:17 INFO  - rxp extraction is started
+2015-07-13 19:46:17 INFO  - rxp extraction is started
+2015-07-13 19:46:17 INFO  - allocate!!!!!!!!
+2015-07-13 19:46:17 INFO  - allocate!!!!!!!!
+2015-07-13 19:46:17 INFO  - rxp extraction is started
+2015-07-13 19:46:17 INFO  - allocate!!!!!!!!
+2015-07-13 19:46:17 INFO  - rxp extraction is started
+2015-07-13 19:46:17 INFO  - rxp extraction is started
+2015-07-13 19:46:17 INFO  - allocate!!!!!!!!
+2015-07-13 19:46:17 INFO  - allocate!!!!!!!!
+2015-07-13 19:46:17 INFO  - rxp extraction is started
+2015-07-13 19:46:17 INFO  - allocate!!!!!!!!
+2015-07-13 19:46:17 INFO  - rxp extraction is started
+2015-07-13 19:46:17 INFO  - allocate!!!!!!!!
+2015-07-13 19:46:17 INFO  - rxp extraction is started
+2015-07-13 19:46:17 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:36 INFO  - rxp extraction is started
+2015-07-13 19:49:36 INFO  - rxp extraction is started
+2015-07-13 19:49:36 INFO  - rxp extraction is started
+2015-07-13 19:49:36 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:36 INFO  - rxp extraction is started
+2015-07-13 19:49:36 INFO  - rxp extraction is started
+2015-07-13 19:49:36 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:36 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:36 INFO  - rxp extraction is started
+2015-07-13 19:49:36 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:36 INFO  - rxp extraction is started
+2015-07-13 19:49:36 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:36 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:36 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:36 INFO  - rxp extraction is started
+2015-07-13 19:49:36 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130917_172354.mon.rxp.vox
+2015-07-13 19:49:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130917_173534.mon.rxp.vox
+2015-07-13 19:49:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130917_155228.mon.rxp.vox
+2015-07-13 19:49:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130917_153258.mon.rxp.vox
+2015-07-13 19:49:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130917_181314.mon.rxp.vox
+2015-07-13 19:49:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130917_170323.mon.rxp.vox
+2015-07-13 19:49:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130917_180238.mon.rxp.vox
+2015-07-13 19:49:38 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130917_165102.mon.rxp.vox
+2015-07-13 19:49:40 INFO  - file written ( 2.0 s )
+2015-07-13 19:49:40 INFO  - rxp extraction is started
+2015-07-13 19:49:40 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:40 INFO  - file written ( 2.0 s )
+2015-07-13 19:49:40 INFO  - rxp extraction is started
+2015-07-13 19:49:40 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:40 INFO  - file written ( 2.0 s )
+2015-07-13 19:49:40 INFO  - rxp extraction is started
+2015-07-13 19:49:40 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:40 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:40 INFO  - rxp extraction is started
+2015-07-13 19:49:40 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:40 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:40 INFO  - rxp extraction is started
+2015-07-13 19:49:40 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:40 INFO  - file written ( 2.0 s )
+2015-07-13 19:49:40 INFO  - rxp extraction is started
+2015-07-13 19:49:40 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:40 INFO  - file written ( 2.0 s )
+2015-07-13 19:49:40 INFO  - rxp extraction is started
+2015-07-13 19:49:40 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:40 INFO  - file written ( 2.0 s )
+2015-07-13 19:49:40 INFO  - rxp extraction is started
+2015-07-13 19:49:40 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:41 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130917_191522.mon.rxp.vox
+2015-07-13 19:49:41 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130917_184509.mon.rxp.vox
+2015-07-13 19:49:41 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_123449.mon.rxp.vox
+2015-07-13 19:49:42 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130917_183042.mon.rxp.vox
+2015-07-13 19:49:42 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_122225.mon.rxp.vox
+2015-07-13 19:49:42 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_131257.mon.rxp.vox
+2015-07-13 19:49:42 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_133920.mon.rxp.vox
+2015-07-13 19:49:42 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_125837.mon.rxp.vox
+2015-07-13 19:49:42 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:42 INFO  - rxp extraction is started
+2015-07-13 19:49:42 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:43 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:43 INFO  - rxp extraction is started
+2015-07-13 19:49:43 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:43 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:43 INFO  - rxp extraction is started
+2015-07-13 19:49:43 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:43 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:43 INFO  - rxp extraction is started
+2015-07-13 19:49:43 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:43 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:43 INFO  - rxp extraction is started
+2015-07-13 19:49:43 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:43 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:43 INFO  - rxp extraction is started
+2015-07-13 19:49:43 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:43 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:43 INFO  - rxp extraction is started
+2015-07-13 19:49:43 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:43 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:43 INFO  - rxp extraction is started
+2015-07-13 19:49:43 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:44 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_134826.mon.rxp.vox
+2015-07-13 19:49:44 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_141612.mon.rxp.vox
+2015-07-13 19:49:44 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_171803.mon.rxp.vox
+2015-07-13 19:49:44 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_150855.mon.rxp.vox
+2015-07-13 19:49:44 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_145611.mon.rxp.vox
+2015-07-13 19:49:44 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_172740.mon.rxp.vox
+2015-07-13 19:49:44 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_142830.mon.rxp.vox
+2015-07-13 19:49:45 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_180026.mon.rxp.vox
+2015-07-13 19:49:45 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:45 INFO  - rxp extraction is started
+2015-07-13 19:49:45 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:45 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:45 INFO  - rxp extraction is started
+2015-07-13 19:49:45 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:46 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_181513.mon.rxp.vox
+2015-07-13 19:49:46 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:46 INFO  - rxp extraction is started
+2015-07-13 19:49:46 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:46 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:46 INFO  - rxp extraction is started
+2015-07-13 19:49:46 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:46 INFO  - file written ( 2.0 s )
+2015-07-13 19:49:46 INFO  - rxp extraction is started
+2015-07-13 19:49:46 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:46 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:46 INFO  - rxp extraction is started
+2015-07-13 19:49:46 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:46 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:46 INFO  - rxp extraction is started
+2015-07-13 19:49:46 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:47 INFO  - file written ( 2.0 s )
+2015-07-13 19:49:47 INFO  - rxp extraction is started
+2015-07-13 19:49:47 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:47 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:47 INFO  - rxp extraction is started
+2015-07-13 19:49:47 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_182424.mon.rxp.vox
+2015-07-13 19:49:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_121750.mon.rxp.vox
+2015-07-13 19:49:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_191943.mon.rxp.vox
+2015-07-13 19:49:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_184530.mon.rxp.vox
+2015-07-13 19:49:47 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_193024.mon.rxp.vox
+2015-07-13 19:49:48 INFO  - file written ( 0.0 s )
+2015-07-13 19:49:48 INFO  - rxp extraction is started
+2015-07-13 19:49:48 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:48 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130918_185857.mon.rxp.vox
+2015-07-13 19:49:48 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_123017.mon.rxp.vox
+2015-07-13 19:49:48 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:48 INFO  - rxp extraction is started
+2015-07-13 19:49:48 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:48 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:48 INFO  - rxp extraction is started
+2015-07-13 19:49:48 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:49 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_125428.mon.rxp.vox
+2015-07-13 19:49:49 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:49 INFO  - rxp extraction is started
+2015-07-13 19:49:49 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:49 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:49 INFO  - rxp extraction is started
+2015-07-13 19:49:49 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:49 INFO  - file written ( 0.0 s )
+2015-07-13 19:49:49 INFO  - rxp extraction is started
+2015-07-13 19:49:49 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:49 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_130556.mon.rxp.vox
+2015-07-13 19:49:49 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:49 INFO  - rxp extraction is started
+2015-07-13 19:49:49 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:49 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_133226.mon.rxp.vox
+2015-07-13 19:49:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_142431.mon.rxp.vox
+2015-07-13 19:49:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_133940.mon.rxp.vox
+2015-07-13 19:49:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_143440.mon.rxp.vox
+2015-07-13 19:49:50 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:50 INFO  - rxp extraction is started
+2015-07-13 19:49:50 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:50 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_145456.mon.rxp.vox
+2015-07-13 19:49:50 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:50 INFO  - rxp extraction is started
+2015-07-13 19:49:50 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:51 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:51 INFO  - rxp extraction is started
+2015-07-13 19:49:51 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:51 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:51 INFO  - rxp extraction is started
+2015-07-13 19:49:51 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:51 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_150850.mon.rxp.vox
+2015-07-13 19:49:51 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:51 INFO  - rxp extraction is started
+2015-07-13 19:49:51 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:51 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_165901.mon.rxp.vox
+2015-07-13 19:49:51 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_171419.mon.rxp.vox
+2015-07-13 19:49:51 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:51 INFO  - rxp extraction is started
+2015-07-13 19:49:51 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:51 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:51 INFO  - rxp extraction is started
+2015-07-13 19:49:51 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:52 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_175252.mon.rxp.vox
+2015-07-13 19:49:52 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_183508.mon.rxp.vox
+2015-07-13 19:49:52 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:52 INFO  - rxp extraction is started
+2015-07-13 19:49:52 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:52 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_180303.mon.rxp.vox
+2015-07-13 19:49:52 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:52 INFO  - rxp extraction is started
+2015-07-13 19:49:52 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:52 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:52 INFO  - rxp extraction is started
+2015-07-13 19:49:52 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:52 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_185149.mon.rxp.vox
+2015-07-13 19:49:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_191227.mon.rxp.vox
+2015-07-13 19:49:53 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:53 INFO  - rxp extraction is started
+2015-07-13 19:49:53 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:53 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:53 INFO  - rxp extraction is started
+2015-07-13 19:49:53 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130919_192322.mon.rxp.vox
+2015-07-13 19:49:53 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:53 INFO  - rxp extraction is started
+2015-07-13 19:49:53 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_135046.mon.rxp.vox
+2015-07-13 19:49:53 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:53 INFO  - rxp extraction is started
+2015-07-13 19:49:53 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:53 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_140008.mon.rxp.vox
+2015-07-13 19:49:54 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:54 INFO  - rxp extraction is started
+2015-07-13 19:49:54 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:54 INFO  - file written ( 0.0 s )
+2015-07-13 19:49:54 INFO  - rxp extraction is started
+2015-07-13 19:49:54 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:54 INFO  - file written ( 0.0 s )
+2015-07-13 19:49:54 INFO  - rxp extraction is started
+2015-07-13 19:49:54 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:54 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_142302.mon.rxp.vox
+2015-07-13 19:49:54 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:54 INFO  - rxp extraction is started
+2015-07-13 19:49:54 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_151122.mon.rxp.vox
+2015-07-13 19:49:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_143618.mon.rxp.vox
+2015-07-13 19:49:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_160832.mon.rxp.vox
+2015-07-13 19:49:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_150134.mon.rxp.vox
+2015-07-13 19:49:55 INFO  - file written ( 0.0 s )
+2015-07-13 19:49:55 INFO  - rxp extraction is started
+2015-07-13 19:49:55 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_165830.mon.rxp.vox
+2015-07-13 19:49:55 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_164048.mon.rxp.vox
+2015-07-13 19:49:56 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:56 INFO  - rxp extraction is started
+2015-07-13 19:49:56 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:56 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:56 INFO  - rxp extraction is started
+2015-07-13 19:49:56 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:56 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_171823.mon.rxp.vox
+2015-07-13 19:49:56 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:56 INFO  - rxp extraction is started
+2015-07-13 19:49:56 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:56 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:56 INFO  - rxp extraction is started
+2015-07-13 19:49:56 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:56 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_174121.mon.rxp.vox
+2015-07-13 19:49:57 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:57 INFO  - rxp extraction is started
+2015-07-13 19:49:57 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:57 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:57 INFO  - rxp extraction is started
+2015-07-13 19:49:57 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:57 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_175132.mon.rxp.vox
+2015-07-13 19:49:57 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:57 INFO  - rxp extraction is started
+2015-07-13 19:49:57 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:57 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_184325.mon.rxp.vox
+2015-07-13 19:49:57 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_182814.mon.rxp.vox
+2015-07-13 19:49:57 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:57 INFO  - rxp extraction is started
+2015-07-13 19:49:57 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:57 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_181739.mon.rxp.vox
+2015-07-13 19:49:58 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_185532.mon.rxp.vox
+2015-07-13 19:49:58 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_191453.mon.rxp.vox
+2015-07-13 19:49:58 INFO  - file written ( 0.0 s )
+2015-07-13 19:49:58 INFO  - rxp extraction is started
+2015-07-13 19:49:58 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:58 INFO  - file written ( 0.0 s )
+2015-07-13 19:49:58 INFO  - rxp extraction is started
+2015-07-13 19:49:58 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:58 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:58 INFO  - rxp extraction is started
+2015-07-13 19:49:58 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:58 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130920_192355.mon.rxp.vox
+2015-07-13 19:49:58 INFO  - file written ( 0.0 s )
+2015-07-13 19:49:58 INFO  - rxp extraction is started
+2015-07-13 19:49:58 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:59 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_133336.mon.rxp.vox
+2015-07-13 19:49:59 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:59 INFO  - rxp extraction is started
+2015-07-13 19:49:59 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:59 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:59 INFO  - rxp extraction is started
+2015-07-13 19:49:59 INFO  - allocate!!!!!!!!
+2015-07-13 19:49:59 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_134352.mon.rxp.vox
+2015-07-13 19:49:59 INFO  - file written ( 1.0 s )
+2015-07-13 19:49:59 INFO  - rxp extraction is started
+2015-07-13 19:49:59 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:00 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_141436.mon.rxp.vox
+2015-07-13 19:50:00 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:00 INFO  - rxp extraction is started
+2015-07-13 19:50:00 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:00 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_143835.mon.rxp.vox
+2015-07-13 19:50:00 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_140251.mon.rxp.vox
+2015-07-13 19:50:00 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:00 INFO  - rxp extraction is started
+2015-07-13 19:50:00 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:00 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_151714.mon.rxp.vox
+2015-07-13 19:50:00 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_144829.mon.rxp.vox
+2015-07-13 19:50:01 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_152642.mon.rxp.vox
+2015-07-13 19:50:01 INFO  - file written ( 1.0 s )
+2015-07-13 19:50:01 INFO  - rxp extraction is started
+2015-07-13 19:50:01 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:01 INFO  - file written ( 1.0 s )
+2015-07-13 19:50:01 INFO  - rxp extraction is started
+2015-07-13 19:50:01 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:01 INFO  - file written ( 1.0 s )
+2015-07-13 19:50:01 INFO  - rxp extraction is started
+2015-07-13 19:50:01 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:01 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_161029.mon.rxp.vox
+2015-07-13 19:50:01 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:01 INFO  - rxp extraction is started
+2015-07-13 19:50:01 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:01 INFO  - file written ( 1.0 s )
+2015-07-13 19:50:01 INFO  - rxp extraction is started
+2015-07-13 19:50:01 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:02 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_155553.mon.rxp.vox
+2015-07-13 19:50:02 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_162929.mon.rxp.vox
+2015-07-13 19:50:02 INFO  - file written ( 1.0 s )
+2015-07-13 19:50:02 INFO  - rxp extraction is started
+2015-07-13 19:50:02 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:02 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_163726.mon.rxp.vox
+2015-07-13 19:50:02 INFO  - file written ( 1.0 s )
+2015-07-13 19:50:02 INFO  - rxp extraction is started
+2015-07-13 19:50:02 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:02 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_170129.mon.rxp.vox
+2015-07-13 19:50:03 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:03 INFO  - rxp extraction is started
+2015-07-13 19:50:03 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:03 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_171242.mon.rxp.vox
+2015-07-13 19:50:03 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_173036.mon.rxp.vox
+2015-07-13 19:50:03 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:03 INFO  - rxp extraction is started
+2015-07-13 19:50:03 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:03 INFO  - file written ( 1.0 s )
+2015-07-13 19:50:03 INFO  - rxp extraction is started
+2015-07-13 19:50:03 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:03 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_174226.mon.rxp.vox
+2015-07-13 19:50:03 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:03 INFO  - rxp extraction is started
+2015-07-13 19:50:03 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:03 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_175925.mon.rxp.vox
+2015-07-13 19:50:04 INFO  - file written ( 1.0 s )
+2015-07-13 19:50:04 INFO  - rxp extraction is started
+2015-07-13 19:50:04 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:04 INFO  - file written ( 1.0 s )
+2015-07-13 19:50:04 INFO  - rxp extraction is started
+2015-07-13 19:50:04 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:04 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_181003.mon.rxp.vox
+2015-07-13 19:50:04 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_190642.mon.rxp.vox
+2015-07-13 19:50:05 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_183037.mon.rxp.vox
+2015-07-13 19:50:05 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_185618.mon.rxp.vox
+2015-07-13 19:50:05 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_193411.mon.rxp.vox
+2015-07-13 19:50:05 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130923_192239.mon.rxp.vox
+2015-07-13 19:50:05 INFO  - file written ( 1.0 s )
+2015-07-13 19:50:05 INFO  - rxp extraction is started
+2015-07-13 19:50:05 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:05 INFO  - file written ( 1.0 s )
+2015-07-13 19:50:05 INFO  - rxp extraction is started
+2015-07-13 19:50:05 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:05 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:05 INFO  - rxp extraction is started
+2015-07-13 19:50:05 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:05 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:05 INFO  - rxp extraction is started
+2015-07-13 19:50:05 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:05 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:05 INFO  - rxp extraction is started
+2015-07-13 19:50:05 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:06 INFO  - file written ( 1.0 s )
+2015-07-13 19:50:06 INFO  - rxp extraction is started
+2015-07-13 19:50:06 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:06 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130924_115122.mon.rxp.vox
+2015-07-13 19:50:06 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130924_124133.mon.rxp.vox
+2015-07-13 19:50:06 INFO  - file written ( 1.0 s )
+2015-07-13 19:50:06 INFO  - rxp extraction is started
+2015-07-13 19:50:06 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:06 INFO  - file written ( 1.0 s )
+2015-07-13 19:50:06 INFO  - rxp extraction is started
+2015-07-13 19:50:06 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:06 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130924_123314.mon.rxp.vox
+2015-07-13 19:50:06 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130924_120013.mon.rxp.vox
+2015-07-13 19:50:07 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130924_130322.mon.rxp.vox
+2015-07-13 19:50:07 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130924_131430.mon.rxp.vox
+2015-07-13 19:50:07 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:07 INFO  - rxp extraction is started
+2015-07-13 19:50:07 INFO  - allocate!!!!!!!!
+2015-07-13 19:50:07 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:07 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:07 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130924_134326.mon.rxp.vox
+2015-07-13 19:50:07 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130924_135249.mon.rxp.vox
+2015-07-13 19:50:07 INFO  - file written ( 1.0 s )
+2015-07-13 19:50:07 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:08 INFO  - writing file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/130917_190353.mon.rxp.vox
+2015-07-13 19:50:08 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:08 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:08 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:08 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:08 INFO  - Voxelisation finished in 32.0 s
+2015-07-13 19:50:08 INFO  - Merging in progress, file 1 : 98
+2015-07-13 19:50:09 INFO  - Merging in progress, file 2 : 98
+2015-07-13 19:50:10 INFO  - Merging in progress, file 3 : 98
+2015-07-13 19:50:10 INFO  - Merging in progress, file 4 : 98
+2015-07-13 19:50:10 INFO  - Merging in progress, file 5 : 98
+2015-07-13 19:50:11 INFO  - Merging in progress, file 6 : 98
+2015-07-13 19:50:11 INFO  - Merging in progress, file 7 : 98
+2015-07-13 19:50:12 INFO  - Merging in progress, file 8 : 98
+2015-07-13 19:50:12 INFO  - Merging in progress, file 9 : 98
+2015-07-13 19:50:13 INFO  - Merging in progress, file 10 : 98
+2015-07-13 19:50:13 INFO  - Merging in progress, file 11 : 98
+2015-07-13 19:50:14 INFO  - Merging in progress, file 12 : 98
+2015-07-13 19:50:14 INFO  - Merging in progress, file 13 : 98
+2015-07-13 19:50:15 INFO  - Merging in progress, file 14 : 98
+2015-07-13 19:50:15 INFO  - Merging in progress, file 15 : 98
+2015-07-13 19:50:16 INFO  - Merging in progress, file 16 : 98
+2015-07-13 19:50:16 INFO  - Merging in progress, file 17 : 98
+2015-07-13 19:50:17 INFO  - Merging in progress, file 18 : 98
+2015-07-13 19:50:17 INFO  - Merging in progress, file 19 : 98
+2015-07-13 19:50:18 INFO  - Merging in progress, file 20 : 98
+2015-07-13 19:50:18 INFO  - Merging in progress, file 21 : 98
+2015-07-13 19:50:19 INFO  - Merging in progress, file 22 : 98
+2015-07-13 19:50:19 INFO  - Merging in progress, file 23 : 98
+2015-07-13 19:50:20 INFO  - Merging in progress, file 24 : 98
+2015-07-13 19:50:21 INFO  - Merging in progress, file 25 : 98
+2015-07-13 19:50:21 INFO  - Merging in progress, file 26 : 98
+2015-07-13 19:50:21 INFO  - Merging in progress, file 27 : 98
+2015-07-13 19:50:22 INFO  - Merging in progress, file 28 : 98
+2015-07-13 19:50:22 INFO  - Merging in progress, file 29 : 98
+2015-07-13 19:50:23 INFO  - Merging in progress, file 30 : 98
+2015-07-13 19:50:23 INFO  - Merging in progress, file 31 : 98
+2015-07-13 19:50:24 INFO  - Merging in progress, file 32 : 98
+2015-07-13 19:50:25 INFO  - Merging in progress, file 33 : 98
+2015-07-13 19:50:25 INFO  - Merging in progress, file 34 : 98
+2015-07-13 19:50:26 INFO  - Merging in progress, file 35 : 98
+2015-07-13 19:50:26 INFO  - Merging in progress, file 36 : 98
+2015-07-13 19:50:27 INFO  - Merging in progress, file 37 : 98
+2015-07-13 19:50:27 INFO  - Merging in progress, file 38 : 98
+2015-07-13 19:50:28 INFO  - Merging in progress, file 39 : 98
+2015-07-13 19:50:28 INFO  - Merging in progress, file 40 : 98
+2015-07-13 19:50:29 INFO  - Merging in progress, file 41 : 98
+2015-07-13 19:50:29 INFO  - Merging in progress, file 42 : 98
+2015-07-13 19:50:30 INFO  - Merging in progress, file 43 : 98
+2015-07-13 19:50:30 INFO  - Merging in progress, file 44 : 98
+2015-07-13 19:50:31 INFO  - Merging in progress, file 45 : 98
+2015-07-13 19:50:31 INFO  - Merging in progress, file 46 : 98
+2015-07-13 19:50:32 INFO  - Merging in progress, file 47 : 98
+2015-07-13 19:50:32 INFO  - Merging in progress, file 48 : 98
+2015-07-13 19:50:33 INFO  - Merging in progress, file 49 : 98
+2015-07-13 19:50:33 INFO  - Merging in progress, file 50 : 98
+2015-07-13 19:50:34 INFO  - Merging in progress, file 51 : 98
+2015-07-13 19:50:34 INFO  - Merging in progress, file 52 : 98
+2015-07-13 19:50:35 INFO  - Merging in progress, file 53 : 98
+2015-07-13 19:50:35 INFO  - Merging in progress, file 54 : 98
+2015-07-13 19:50:36 INFO  - Merging in progress, file 55 : 98
+2015-07-13 19:50:36 INFO  - Merging in progress, file 56 : 98
+2015-07-13 19:50:37 INFO  - Merging in progress, file 57 : 98
+2015-07-13 19:50:37 INFO  - Merging in progress, file 58 : 98
+2015-07-13 19:50:38 INFO  - Merging in progress, file 59 : 98
+2015-07-13 19:50:38 INFO  - Merging in progress, file 60 : 98
+2015-07-13 19:50:39 INFO  - Merging in progress, file 61 : 98
+2015-07-13 19:50:39 INFO  - Merging in progress, file 62 : 98
+2015-07-13 19:50:40 INFO  - Merging in progress, file 63 : 98
+2015-07-13 19:50:40 INFO  - Merging in progress, file 64 : 98
+2015-07-13 19:50:41 INFO  - Merging in progress, file 65 : 98
+2015-07-13 19:50:41 INFO  - Merging in progress, file 66 : 98
+2015-07-13 19:50:42 INFO  - Merging in progress, file 67 : 98
+2015-07-13 19:50:42 INFO  - Merging in progress, file 68 : 98
+2015-07-13 19:50:43 INFO  - Merging in progress, file 69 : 98
+2015-07-13 19:50:43 INFO  - Merging in progress, file 70 : 98
+2015-07-13 19:50:44 INFO  - Merging in progress, file 71 : 98
+2015-07-13 19:50:44 INFO  - Merging in progress, file 72 : 98
+2015-07-13 19:50:45 INFO  - Merging in progress, file 73 : 98
+2015-07-13 19:50:45 INFO  - Merging in progress, file 74 : 98
+2015-07-13 19:50:46 INFO  - Merging in progress, file 75 : 98
+2015-07-13 19:50:46 INFO  - Merging in progress, file 76 : 98
+2015-07-13 19:50:47 INFO  - Merging in progress, file 77 : 98
+2015-07-13 19:50:47 INFO  - Merging in progress, file 78 : 98
+2015-07-13 19:50:48 INFO  - Merging in progress, file 79 : 98
+2015-07-13 19:50:48 INFO  - Merging in progress, file 80 : 98
+2015-07-13 19:50:49 INFO  - Merging in progress, file 81 : 98
+2015-07-13 19:50:49 INFO  - Merging in progress, file 82 : 98
+2015-07-13 19:50:50 INFO  - Merging in progress, file 83 : 98
+2015-07-13 19:50:50 INFO  - Merging in progress, file 84 : 98
+2015-07-13 19:50:50 INFO  - Merging in progress, file 85 : 98
+2015-07-13 19:50:51 INFO  - Merging in progress, file 86 : 98
+2015-07-13 19:50:51 INFO  - Merging in progress, file 87 : 98
+2015-07-13 19:50:52 INFO  - Merging in progress, file 88 : 98
+2015-07-13 19:50:52 INFO  - Merging in progress, file 89 : 98
+2015-07-13 19:50:53 INFO  - Merging in progress, file 90 : 98
+2015-07-13 19:50:53 INFO  - Merging in progress, file 91 : 98
+2015-07-13 19:50:54 INFO  - Merging in progress, file 92 : 98
+2015-07-13 19:50:54 INFO  - Merging in progress, file 93 : 98
+2015-07-13 19:50:55 INFO  - Merging in progress, file 94 : 98
+2015-07-13 19:50:55 INFO  - Merging in progress, file 95 : 98
+2015-07-13 19:50:56 INFO  - Merging in progress, file 96 : 98
+2015-07-13 19:50:56 INFO  - Merging in progress, file 97 : 98
+2015-07-13 19:50:57 INFO  - Merging in progress, file 98 : 98
+2015-07-13 19:50:57 INFO  - Compute angleMean
+2015-07-13 19:50:58 INFO  - Compute lMeanTotal
+2015-07-13 19:50:58 INFO  - Compute transmittance and PAD
+2015-07-13 19:50:58 INFO  - writing output file: /home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/merged.vox
+2015-07-13 19:50:58 INFO  - file written ( 0.0 s )
+2015-07-13 19:50:58 INFO  - Voxelisation finished in 82.0 s
+2015-07-13 19:50:58 INFO  - Voxelisation finished in 82.0 s
+2015-07-13 19:51:04 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/tls_temp/merged.vox --attribut=PadBVTotal 
