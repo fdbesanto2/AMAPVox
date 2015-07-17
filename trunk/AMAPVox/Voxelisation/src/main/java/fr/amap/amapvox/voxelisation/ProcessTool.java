@@ -791,6 +791,8 @@ public class ProcessTool implements Cancellable{
             resultingFile[i][transmittanceColumnIndex] = (resultingFile[i][bvEnteringColumnIndex] - resultingFile[i][bvInterceptedColumnIndex])/
                                                         resultingFile[i][bvEnteringColumnIndex];
 
+            resultingFile[i][transmittanceColumnIndex] = (float) Math.pow(resultingFile[i][transmittanceColumnIndex], 1 / resultingFile[i][lMeanTotalColumnIndex]);
+            
             float pad1;
 
             if (resultingFile[i][bvEnteringColumnIndex] <= 0) {
@@ -817,7 +819,7 @@ public class ProcessTool implements Cancellable{
 
                 } else {
 
-                    pad1 = (float) (Math.log(resultingFile[i][transmittanceColumnIndex]) / (-0.5 * resultingFile[i][lMeanTotalColumnIndex]));
+                    pad1 = (float) (Math.log(resultingFile[i][transmittanceColumnIndex]) / (-0.5f /** resultingFile[i][lMeanTotalColumnIndex]*/));
 
                     if (Float.isNaN(pad1)) {
                         pad1 = Float.NaN;

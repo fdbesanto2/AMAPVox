@@ -11,18 +11,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class Shader {
+public abstract class Shader {
+    
+    private final static Logger logger = Logger.getLogger(Shader.class);
     
     public final static String[] MINIMAL_SHADER_UNIFORMS = new String[]{"viewMatrix","projMatrix"};
     public final static String[] LIGHT_SHADER_UNIFORMS = new String[]{"normalMatrix", "Material", "Light"};
     public final static String[] TEXTURE_SHADER_UNIFORMS = new String[]{"texture"};
     
-    public final static String[] MINIMAL_SHADER_ATTRIBUTES = new String[]{"position","color"};
+    public final static String[] MINIMAL_SHADER_ATTRIBUTES = new String[]{"position"};
     public final static String[] LIGHT_SHADER_ATTRIBUTES = new String[]{"normal"};
     public final static String[] INSTANCE_SHADER_ATTRIBUTES = new String[]{"instance_position", "instance_color"};
     public final static String[] TEXTURE_SHADER_ATTRIBUTES = new String[]{"textureCoordinates"};
@@ -38,12 +41,13 @@ public class Shader {
         return programId;
     }
     
-    public Map<String,Integer> attributeMap;
-    public Map<String,Integer> uniformMap;
+    public final Map<String,Integer> attributeMap;
+    public final Map<String,Integer> uniformMap;
     
     private final GL3 gl;
     
-    public Shader(GL3 m_gl, InputStreamReader fragmentShaderStream, InputStreamReader vertexShaderStream, String name) throws Exception{
+    
+    public Shader(GL3 m_gl, String name){
         
         this.name = name;
         vertexShaderId=0;
@@ -51,25 +55,20 @@ public class Shader {
         isOrtho = false;
         this.gl=m_gl;
         
-        String[] vertexShaderCode = readFromInputStreamReader(vertexShaderStream);
-        String[] fragmenthaderCode = readFromInputStreamReader(fragmentShaderStream);
+        attributeMap = new HashMap<>();
+        uniformMap = new HashMap<>();
+    }
+    
+    
+    protected void load(String vertexShaderStreamPath, String fragmentShaderStreamPath){
+        
+        String[] vertexShaderCode = readFromInputStreamReader(getStream(vertexShaderStreamPath));
+        String[] fragmenthaderCode = readFromInputStreamReader(getStream(fragmentShaderStreamPath));
         
         linkProgram(vertexShaderCode, fragmenthaderCode);
-        
     }
     
-    public Shader(GL3 m_gl, String[] vertexShaderCode, String[] fragmentShaderCode, String name) throws Exception{
-        
-        this.name = name;
-        vertexShaderId=0;
-        fragmentShaderId=0;
-        isOrtho = false;
-        this.gl=m_gl;
-        
-        linkProgram(vertexShaderCode, fragmentShaderCode);
-    }
-    
-    private void linkProgram(String[] vertexShaderCode, String[] fragmentShaderCode) throws Exception{
+    private void linkProgram(String[] vertexShaderCode, String[] fragmentShaderCode){
         
         if(this.compile(vertexShaderCode, fragmentShaderCode)){
             
@@ -82,15 +81,15 @@ public class Shader {
             gl.glGetProgramiv(programId, GL3.GL_LINK_STATUS, params, 0);
             
             if(params[0] == GL3.GL_FALSE){
-                throw new Exception("Fail link program");
+                logger.error("Fail link program: "+this.name);
             }
             
         }else{
-            throw new Exception("Fail reading shaders files");
+            logger.error("Fail compile shaders files");
         }
     }
     
-    private String[] readFromInputStreamReader(InputStreamReader stream) throws IOException{
+    private String[] readFromInputStreamReader(InputStreamReader stream){
         
         BufferedReader reader;
         String line;
@@ -107,13 +106,13 @@ public class Shader {
             }
             
         } catch (IOException ex) {
-            throw new IOException("vertex shader reading error not found", ex);
+            logger.error("Error reading shader stream", ex);
         }
         
         return shaderCode;
     }
     
-    private boolean compile(String[] vertexShaderCode, String[] fragmentShaderCode) throws Exception{
+    private boolean compile(String[] vertexShaderCode, String[] fragmentShaderCode){
         
         /*****vertex shader*****/
         
@@ -140,7 +139,7 @@ public class Shader {
             gl.glGetShaderInfoLog(vertexShaderId, 1024, null, 0, infoLog, 0);
             String error=new String(infoLog);
             
-            throw new Exception("Failed compile vertex shader: "+error);
+            logger.error("Failed compile vertex shader: "+error);
         }
         
         /*****fragment shader*****/
@@ -165,7 +164,7 @@ public class Shader {
             gl.glGetShaderInfoLog(fragmentShaderId, 1024, null, 0, infoLog, 0);
             String error=new String(infoLog);
             
-            throw new Exception("Failed compile fragment shader: "+error);
+            logger.error("Failed compile fragment shader: "+error);
         }
         
         return true;
@@ -176,18 +175,14 @@ public class Shader {
         gl.glUseProgram(programId);
     }
     
-    public void setAttributeLocations(String[] attributeList){
+    public void setAttributeLocations(String... attributeList){
                 
-        attributeMap = new HashMap<>();
-        
         for (String attribute : attributeList) {
             attributeMap.put(attribute, gl.glGetAttribLocation(programId, attribute));
         }
     }
     
-    public void setUniformLocations(String[] uniformList){
-        
-        uniformMap = new HashMap<>();
+    public void setUniformLocations(String... uniformList){
         
         for (String uniform : uniformList) {
             uniformMap.put(uniform,gl.glGetUniformLocation(programId, uniform));
@@ -234,5 +229,10 @@ public class Shader {
         }
         
         return globalAttributeArray;
+    }
+    
+    private InputStreamReader getStream(String path){
+        
+        return new InputStreamReader(Shader.class.getClassLoader().getResourceAsStream(path));
     }
 }

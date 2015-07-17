@@ -47,14 +47,18 @@ public class SimpleSceneObject extends SceneObject{
                 }
             
                 gl.glEnableVertexAttribArray(shader.attributeMap.get("position"));
-                gl.glVertexAttribPointer(shader.attributeMap.get("position"), 3, GL3.GL_FLOAT, false, 0, 0);
+                gl.glVertexAttribPointer(shader.attributeMap.get("position"), mesh.dimensions, GL3.GL_FLOAT, false, 0, 0);
                 
                 if(mesh.colorBuffer != null){
-                    gl.glEnableVertexAttribArray(shader.attributeMap.get("color"));
-                    gl.glVertexAttribPointer(shader.attributeMap.get("color"), 3, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE);
-                    
-                    gl.glEnableVertexAttribArray(shader.attributeMap.get("normal"));
-                    gl.glVertexAttribPointer(shader.attributeMap.get("normal"), 3, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE+mesh.normalBuffer.capacity()*FLOAT_SIZE);
+                    try{
+                        gl.glEnableVertexAttribArray(shader.attributeMap.get("color"));
+                        gl.glVertexAttribPointer(shader.attributeMap.get("color"), mesh.dimensions, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE);
+                        
+                    }catch(Exception e){}
+                    try{
+                        gl.glEnableVertexAttribArray(shader.attributeMap.get("normal"));
+                        gl.glVertexAttribPointer(shader.attributeMap.get("normal"), mesh.dimensions, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE+mesh.normalBuffer.capacity()*FLOAT_SIZE);
+                    }catch(Exception e){}
                 }else if(mesh instanceof TexturedGLMesh){
                     gl.glEnableVertexAttribArray(shader.attributeMap.get("textureCoordinates"));
                     gl.glVertexAttribPointer(shader.attributeMap.get("textureCoordinates"), 2, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE);

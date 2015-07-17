@@ -198,6 +198,10 @@ public class TransmittanceSim {
                 
                 for(int m=0 ; m < solRad.size();m++){
                     ir = solRad.get(m);
+                    
+                    /*if(i>= transmissionPeriod.length){
+                        throw new Exception("Indice i cannot be ");
+                    }*/
                     transmissionPeriod[i][j][m] += transmitted * ir.directionalGlobals[t];
                 }
                 
@@ -540,7 +544,7 @@ public class TransmittanceSim {
 
                     double ty = (0.5f + (double) j) * voxSpace.getVoxelSize().y;
                     Point3d pos = new Point3d(vsMin);
-                    pos.add(new Point3d(tx, ty, mnt[i][j] + 0.5f));
+                    pos.add(new Point3d(tx, ty, mnt[i][j] + parameters.getCenterPoint().z));
                     positions.add(pos);
                 }
             }

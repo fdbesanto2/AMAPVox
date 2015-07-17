@@ -530,7 +530,7 @@ public class Mat4D {
         StringBuilder result = new StringBuilder();
         
         for(double d : mat){
-            result.append(d).append(",");
+            result.append(d).append(" ");
         }
         
         return result.subSequence(0, result.length()-1).toString();

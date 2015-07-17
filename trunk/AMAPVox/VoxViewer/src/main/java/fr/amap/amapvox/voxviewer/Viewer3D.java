@@ -61,9 +61,7 @@ public class Viewer3D extends Application {
             cmd += "--dtm="+dtmFile.getAbsolutePath()+",";
             
             if(transformDtm){
-                cmd += "--dtm-transform="+"true"+",";
-            }else{
-                cmd += "--dtm-transform="+"false"+",";
+                cmd += "--dtm-transform"+",";
             }
             
             if(dtmTransform == null){
@@ -72,9 +70,7 @@ public class Viewer3D extends Application {
             cmd += "--dtm-transf-matrix="+dtmTransform.toString()+",";
             
             if(fitDTMToVoxelSpace){
-                cmd += "--dtm-fit="+"true"+",";
-            }else{
-                cmd += "--dtm-fit="+"false"+",";
+                cmd += "--dtm-fit"+",";
             }
         }
         

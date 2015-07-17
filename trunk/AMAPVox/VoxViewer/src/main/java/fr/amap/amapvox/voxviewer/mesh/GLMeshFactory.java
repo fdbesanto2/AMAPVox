@@ -102,9 +102,9 @@ public class GLMeshFactory {
         
         float vertexData[] = new float[]
         {startPoint.x, startPoint.y, startPoint.z,
-         startPoint.x+width, startPoint.y, 0,
-         startPoint.x, startPoint.y+height, 0,
-         startPoint.x+width, startPoint.y+height, 0};
+         startPoint.x+width, startPoint.y, startPoint.z,
+         startPoint.x, startPoint.y+height, startPoint.z,
+         startPoint.x+width, startPoint.y+height, startPoint.z};
         
         float textCoordData[] = new float[]
         {0, 1,
@@ -413,6 +413,41 @@ public class GLMeshFactory {
         } catch (JDOMException | IOException ex) {
             throw ex;
         }
+    }
+    
+    public static GLMesh createBoundingBox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ){
+        
+        GLMesh mesh = new SimpleGLMesh();
+        
+        float vertexData[] = new float[]
+        {maxX, maxY, minZ,
+        maxX, minY, minZ,
+        minX, minY, minZ,
+        minX, maxY, minZ,
+        maxX, maxY, maxZ,
+        maxX, minY, maxZ,
+        minX, minY, maxZ,
+        minX, maxY, maxZ};
+        
+        int indexData[] = new int[]
+        {0, 1,
+        5, 4,
+        4, 0,
+        1, 5,
+        5, 6,
+        4, 7,
+        1, 2,
+        2, 6,
+        7, 6,
+        2, 3,
+        3, 7,
+        0, 3};
+        
+        mesh.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
+        mesh.indexBuffer = Buffers.newDirectIntBuffer(indexData);
+        mesh.vertexCount = indexData.length;
+        
+        return mesh;
     }
     
     public static GLMesh createMeshFromObj(InputStreamReader objFile, InputStreamReader objMaterial) throws FileNotFoundException, IOException{

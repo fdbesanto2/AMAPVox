@@ -6,7 +6,9 @@
 package fr.amap.amapvox.voxviewer.object.scene;
 
 import com.jogamp.opengl.GL3;
+import fr.amap.amapvox.commons.math.matrix.Mat4F;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
+import fr.amap.amapvox.commons.math.vector.Vec4;
 import fr.amap.amapvox.voxviewer.loading.shader.Shader;
 import fr.amap.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh;
@@ -60,6 +62,7 @@ public abstract class SceneObject{
 
     public void setDrawType(int drawType) {
         this.drawType = drawType;
+        this.mesh.drawType = drawType;
     }
 
     public int getDrawType() {
@@ -72,20 +75,37 @@ public abstract class SceneObject{
         textureId = texture.getId();
     }
     
-    public void translate(Vec3F position){
+    public void translate(Vec3F translation){
         
-        for(int i=0;i<mesh.vertexBuffer.capacity();i++){
+        for(int j = 0 ; j<mesh.vertexBuffer.capacity(); j+=3){
             
-            float vertex = mesh.vertexBuffer.get(i);
-            if(i%3 == 0){
-                mesh.vertexBuffer.put(i, vertex+=position.y);
-            }
-            if(i%2 == 0){
-                mesh.vertexBuffer.put(i, vertex+=position.z);
-            }
-            if(i%1 == 0){
-                mesh.vertexBuffer.put(i, vertex+=position.x);
-            }
+            
+            float x = mesh.vertexBuffer.get(j);
+            float y = mesh.vertexBuffer.get(j+1);
+            float z = mesh.vertexBuffer.get(j+2);
+            
+            mesh.vertexBuffer.put(j, x+translation.x);
+            mesh.vertexBuffer.put(j+1, y+translation.y);
+            mesh.vertexBuffer.put(j+2, z+translation.z);
+            
+        }
+    }
+    
+    public void rotate(Mat4F rotation){
+        
+        for(int j = 0 ; j<mesh.vertexBuffer.capacity(); j+=3){
+            
+            
+            float x = mesh.vertexBuffer.get(j);
+            float y = mesh.vertexBuffer.get(j+1);
+            float z = mesh.vertexBuffer.get(j+2);
+            
+                
+            Vec4 result = Mat4F.multiply(rotation, new Vec4(x, y, z, 1));
+            mesh.vertexBuffer.put(j, result.x);
+            mesh.vertexBuffer.put(j+1, result.y);
+            mesh.vertexBuffer.put(j+2, result.z);
+            
         }
     }
     

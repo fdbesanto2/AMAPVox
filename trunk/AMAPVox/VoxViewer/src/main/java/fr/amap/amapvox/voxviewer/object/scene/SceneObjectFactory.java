@@ -24,4 +24,12 @@ public class SceneObjectFactory {
         
         return sceneObject;
     }
+    
+    public static SceneObject createTexturedPlane(Vec3F startPoint, Texture texture, int shaderId){
+        
+        SceneObject sceneObject = new SimpleSceneObject(GLMeshFactory.createPlaneFromTexture(startPoint, texture, texture.getWidth(), texture.getHeight()), shaderId, true);
+        sceneObject.attachTexture(texture);
+        
+        return sceneObject;
+    }
 }

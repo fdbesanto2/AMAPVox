@@ -133,20 +133,10 @@ public class Mat4F {
         Vec4 dest = new Vec4();
         float[] mat = mat4F.mat;
         
-        float a00 = mat[0], a01 = mat[1], a02 = mat[2], a03 = mat[3];
-        float a10 = mat[4], a11 = mat[5], a12 = mat[6], a13 = mat[7];
-        float a20 = mat[8], a21 = mat[9], a22 = mat[10], a23 = mat[11];
-        float a30 = mat[12], a31 = mat[13], a32 = mat[14], a33 = mat[15];
-        
-        float v00 = vec4.x;
-        float v10 = vec4.y;
-        float v20 = vec4.z;
-        float v30 = vec4.w;
-        
-        dest.x = a00 * v00 + a01 * v10 + a02 * v20 + a03 * v30;
-        dest.y = a10 * v00 + a11 * v10 + a12 * v20 + a13 * v30;
-        dest.z = a20 * v00 + a21 * v10 + a22 * v20 + a23 * v30;
-        dest.w = a30 * v00 + a31 * v10 + a32 * v20 + a33 * v30;
+        dest.x = mat[0] * vec4.x + mat[1] * vec4.y + mat[2] * vec4.z + mat[3] * vec4.w;
+        dest.y = mat[4] * vec4.x + mat[5] * vec4.y + mat[6] * vec4.z + mat[7] * vec4.w;
+        dest.z = mat[8] * vec4.x + mat[9] * vec4.y + mat[10] * vec4.z + mat[11] * vec4.w;
+        dest.w = mat[12] * vec4.x + mat[13] * vec4.y + mat[14] * vec4.z + mat[15] * vec4.w;
         
         return dest;
     }

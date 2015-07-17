@@ -38,10 +38,11 @@ public class JOGLWindow{
     public JOGLWindow(int posX, int posY, int width, int height, String title, VoxelSpace voxelSpace) throws GLException, Exception{
         
         try{
+            
             GLProfile glp = GLProfile.getGL2GL3();
             GLCapabilities caps = new GLCapabilities(glp);
             caps.setDoubleBuffered(true);
-
+            
             this.width = width;
             this.height = height;
             

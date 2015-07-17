@@ -558,7 +558,7 @@
                                                       <Label layoutX="33.0" layoutY="61.0" text="Point (relative)" />
                                                       <TextField fx:id="textfieldScannerPosCenterX" layoutX="142.0" layoutY="56.0" prefHeight="25.0" prefWidth="63.0" promptText="X" />
                                                       <TextField fx:id="textfieldScannerPosCenterY" layoutX="213.0" layoutY="56.0" prefHeight="25.0" prefWidth="63.0" promptText="Y" />
-                                                      <TextField fx:id="textfieldScannerPosCenterZ" layoutX="285.0" layoutY="56.0" prefHeight="25.0" prefWidth="63.0" promptText="Z" />
+                                                      <TextField fx:id="textfieldScannerPosCenterZ" layoutX="285.0" layoutY="56.0" prefHeight="25.0" prefWidth="63.0" promptText="Z offset" />
                                                       <TextField fx:id="textfieldScannerPointsPositionsFile" layoutX="33.0" layoutY="165.0" prefHeight="25.0" prefWidth="251.0" />
                                                       <TextField fx:id="textfieldScannerWidthArea" layoutX="79.0" layoutY="85.0" prefHeight="25.0" prefWidth="63.0" text="10" />
                                                       <TextField fx:id="textfieldScannerStepArea" layoutX="202.0" layoutY="85.0" prefHeight="25.0" prefWidth="63.0" text="0.5" />

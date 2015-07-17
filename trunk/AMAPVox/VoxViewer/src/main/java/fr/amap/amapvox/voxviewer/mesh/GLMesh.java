@@ -25,12 +25,14 @@ public abstract class GLMesh {
     
     long offset = 0;
     long totalBuffersSize;
+    public int drawType = GL3.GL_TRIANGLES;
     
     public FloatBuffer vertexBuffer;
     public FloatBuffer normalBuffer;
     public IntBuffer indexBuffer;
     public FloatBuffer colorBuffer;
     public int vertexCount;
+    public int dimensions = 3;
     
     
     /**

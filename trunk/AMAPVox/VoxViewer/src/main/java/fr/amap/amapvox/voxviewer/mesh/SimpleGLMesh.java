@@ -17,6 +17,7 @@ package fr.amap.amapvox.voxviewer.mesh;
 import com.jogamp.opengl.GL3;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -45,11 +46,22 @@ public class SimpleGLMesh extends GLMesh{
         
         bindBuffer(gl);
         
-        FloatBuffer[] floatBuffers = new FloatBuffer[]{vertexBuffer, colorBuffer, normalBuffer};
+        List<FloatBuffer> floatBuffers = new ArrayList<>();
+        floatBuffers.add(vertexBuffer);
+        if(colorBuffer != null){
+            floatBuffers.add(colorBuffer);
+        }
+        if(normalBuffer != null){
+            floatBuffers.add(normalBuffer);
+        }
         
         if(maximumTotalBufferSize == DEFAULT_SIZE){
             for (FloatBuffer buffer : floatBuffers) {
-                totalBuffersSize += buffer.capacity()*FLOAT_SIZE;
+                
+                if(buffer != null){
+                    totalBuffersSize += buffer.capacity()*FLOAT_SIZE;
+                }
+                
             }
         }else{
             totalBuffersSize = maximumTotalBufferSize;
@@ -68,7 +80,7 @@ public class SimpleGLMesh extends GLMesh{
 
     @Override
     public void draw(GL3 gl) {
-        gl.glDrawElements(GL3.GL_TRIANGLES, vertexCount, GL3.GL_UNSIGNED_INT, 0);
+        gl.glDrawElements(drawType, vertexCount, GL3.GL_UNSIGNED_INT, 0);
     }
     
 }

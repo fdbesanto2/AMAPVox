@@ -169,7 +169,7 @@ public class SceneManager {
     public void initScene(GL3 gl) throws Exception{
                 
         try{
-                        
+                    /*    
             InputStreamReader noTranslationVertexShader = new InputStreamReader(SceneManager.class.getClassLoader().getResourceAsStream("shaders/NoTranslationVertexShader.txt"));
             InputStreamReader noTranslationFragmentShader = new InputStreamReader(SceneManager.class.getClassLoader().getResourceAsStream("shaders/NoTranslationFragmentShader.txt"));
             Shader noTranslationShader = new Shader(gl, noTranslationFragmentShader, noTranslationVertexShader, "noTranslationShader");
