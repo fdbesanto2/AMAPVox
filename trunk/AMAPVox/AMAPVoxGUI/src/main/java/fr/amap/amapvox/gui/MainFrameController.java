@@ -102,6 +102,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
@@ -111,6 +112,8 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -2519,6 +2522,43 @@ public class MainFrameController implements Initializable {
             logger.error("Process interrupted", ex);
         }
     }
+    
+    private void showErrorDialog(final Exception e){
+        
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setContentText(e.getMessage());
+                alert.setResizable(true);
+                alert.getDialogPane().setPrefSize(500, 200);
+                alert.initOwner(stage);
+                
+                TextArea textArea = new TextArea(e.toString());
+                textArea.setEditable(false);
+                textArea.setWrapText(true);
+                
+                Label label = new Label("The exception stacktrace was:");
+
+                textArea.setMaxWidth(Double.MAX_VALUE);
+                textArea.setMaxHeight(Double.MAX_VALUE);
+                GridPane.setVgrow(textArea, Priority.ALWAYS);
+                GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+                GridPane expContent = new GridPane();
+                expContent.setMaxWidth(Double.MAX_VALUE);
+                expContent.add(label, 0, 0);
+                expContent.add(textArea, 0, 1);
+
+                // Set expandable Exception into the dialog pane.
+                alert.getDialogPane().setExpandableContent(expContent);
+
+                alert.showAndWait();
+            }
+        });
+        
+    }
 
     private void executeProcess(final File file) {
 
@@ -2553,11 +2593,16 @@ public class MainFrameController implements Initializable {
                                     TransmittanceCfg cfg;
                                     try {
                                         cfg = TransmittanceCfg.readCfg(file);
-                                        TransmittanceSim.simulationProcess(cfg);
-                                    } catch (IOException ex) {
+                                        try {
+                                            TransmittanceSim.simulationProcess(cfg);
+                                        }catch(IOException ex){
+                                            logger.error(ex.getMessage());
+                                            showErrorDialog(ex);
+                                        }
+                                        
+                                    } catch (IOException | JDOMException ex) {
                                         logger.error("Cannot read configuration file", ex);
-                                    } catch (JDOMException ex) {
-                                        logger.error("Cannot parse configuration file", ex);
+                                        showErrorDialog(ex);
                                     }
                                     
                                     

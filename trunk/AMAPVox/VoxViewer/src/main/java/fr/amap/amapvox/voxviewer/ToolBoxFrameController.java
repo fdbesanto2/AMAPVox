@@ -6,7 +6,11 @@ package fr.amap.amapvox.voxviewer;
  * and open the template in the editor.
  */
 
+import fr.amap.amapvox.commons.math.geometry.AABB;
+import fr.amap.amapvox.commons.math.geometry.Plane;
+import fr.amap.amapvox.commons.math.point.Point3F;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
+import fr.amap.amapvox.commons.util.BoundingBox3F;
 import fr.amap.amapvox.commons.util.ColorGradient;
 import fr.amap.amapvox.commons.util.CombinedFilter;
 import fr.amap.amapvox.commons.util.Filter;
@@ -41,6 +45,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
 
 /**
@@ -64,6 +69,9 @@ public class ToolBoxFrameController implements Initializable {
     private boolean isHidden;
     
     public double maxHeight;
+    private float currentCuttingFactor =-1;
+    private boolean isCuttingInit;
+    Vec3F loc;
     
     @FXML
     private ComboBox<String> comboBoxAttributeToShow;
@@ -134,6 +142,14 @@ public class ToolBoxFrameController implements Initializable {
     private ColorPicker colorPickerBackgroundColor;
     @FXML
     private CheckBox checkboxEnableLighting;
+    @FXML
+    private CheckBox checkboxEnableSectionalViewTool;
+    @FXML
+    private Button buttonIncreaseCutting;
+    @FXML
+    private Button buttonDecreaseCutting;
+    @FXML
+    private TextField textfieldIncrementValue;
     
     /**
      * Initializes the controller class.
@@ -724,6 +740,52 @@ public class ToolBoxFrameController implements Initializable {
     @FXML
     private void onActionButtonOKValidationFilter(ActionEvent event) {
         updateValuesFilter();
+    }
+
+    @FXML
+    private void onActionButtonIncreaseCutting(ActionEvent event) {
+        
+        Vec3F vector1 = joglContext.getCamera().getRightVector();
+        Vec3F vector2 = joglContext.getCamera().getUpVector();
+        vector1 = Vec3F.normalize(vector1);
+        vector2 = Vec3F.normalize(vector2);
+        
+        //Vec3F loc = joglContext.getCamera().getLocation();
+        Vec3F forward = joglContext.getCamera().getForwardVector();
+        Vec3F direction = Vec3F.normalize(forward);
+                
+        //init
+        if(!isCuttingInit){
+            
+            loc = joglContext.getCamera().getLocation();
+            Point3d bottomCorner = joglContext.getScene().getVoxelSpace().data.header.bottomCorner;
+            Point3d topCorner = joglContext.getScene().getVoxelSpace().data.header.topCorner;
+            AABB aabb = new AABB(new BoundingBox3F(new Point3F((float)bottomCorner.x,(float)bottomCorner.y,(float)bottomCorner.z),
+                                               new Point3F((float)topCorner.x,(float)topCorner.y,(float)topCorner.z)));
+            
+            Point3F nearestPoint = aabb.getNearestPoint(new Point3F(loc.x, loc.y, loc.z));
+            loc = new Vec3F(nearestPoint.x, nearestPoint.y, nearestPoint.z);
+            isCuttingInit = true;
+        }else{
+            float incrementFactor = Float.valueOf(textfieldIncrementValue.getText());
+            loc = Vec3F.add(Vec3F.multiply(direction, incrementFactor), loc);
+        }
+        
+        
+        //currentCuttingFactor += incrementFactor;
+        
+        
+        Plane plane = new Plane(vector1, vector2, new Point3F(loc.x, loc.y, loc.z));
+        System.out.println(loc.x+" "+loc.y+" "+loc.z);
+        
+        
+        joglContext.getScene().getVoxelSpace().setCuttingPlane(plane);
+        joglContext.getScene().getVoxelSpace().updateVao();
+        joglContext.drawNextFrame();
+    }
+
+    @FXML
+    private void onActionButtonDecreaseCutting(ActionEvent event) {
     }
     
 }

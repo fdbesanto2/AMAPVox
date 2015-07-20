@@ -20,6 +20,7 @@ fr/amap/amapvox/commons/util/TimeCounter.class
 fr/amap/amapvox/commons/math/matrix/Mat4D.class
 fr/amap/amapvox/commons/math/point/Point2D.class
 fr/amap/amapvox/commons/math/matrix/Mat.class
+fr/amap/amapvox/commons/math/geometry/AABB.class
 fr/amap/amapvox/commons/math/point/Point3I.class
 fr/amap/amapvox/commons/util/VoxelFilter.class
 fr/amap/amapvox/commons/util/delaunay/Delaunay_Triangulation.class
@@ -41,6 +42,7 @@ fr/amap/amapvox/commons/util/FilterInterface.class
 fr/amap/amapvox/commons/util/CsvLine.class
 fr/amap/amapvox/commons/math/vector/Vec2F.class
 fr/amap/amapvox/commons/util/StandardDeviation.class
+fr/amap/amapvox/commons/math/geometry/Rectangle.class
 fr/amap/amapvox/commons/util/SimpleFilter.class
 fr/amap/amapvox/commons/util/delaunay/BoundingBox.class
 fr/amap/amapvox/commons/util/delaunay/Point_dt.class
@@ -51,6 +53,7 @@ fr/amap/amapvox/commons/util/BoundingBox3d.class
 fr/amap/amapvox/commons/math/point/Point2F.class
 fr/amap/amapvox/commons/util/image/ImageUtility.class
 fr/amap/amapvox/commons/math/matrix/Mat3D.class
+fr/amap/amapvox/commons/math/geometry/Plane.class
 fr/amap/amapvox/commons/util/PointcloudFilter.class
 fr/amap/amapvox/commons/io/file/FileAdapter.class
 fr/amap/amapvox/commons/util/delaunay/Circle_dt.class

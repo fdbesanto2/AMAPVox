@@ -441,16 +441,16 @@ public class TrackballCamera extends Camera{
         updateProjMatrix();
     }
     
-    private Vec3F getForwardVector(){
+    public Vec3F getForwardVector(){
         return Vec3F.substract(target, location);
     }
     
-    private Vec3F getUpVector(){
+    public Vec3F getUpVector(){
         
         return Vec3F.cross(rightVec, forwardVec);
     }
     
-    private Vec3F getRightVector(){
+    public Vec3F getRightVector(){
         
         Vec3F result = Vec3F.cross(forwardVec, up);
         

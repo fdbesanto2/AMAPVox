@@ -71,7 +71,7 @@ public class TransmittanceSim {
         float padBV;
     }
     
-    public static void simulationProcess(TransmittanceCfg cfg){
+    public static void simulationProcess(TransmittanceCfg cfg) throws IOException{
         
         Parameters parameters = cfg.getParameters();
         
@@ -89,7 +89,7 @@ public class TransmittanceSim {
             }
             
         } catch (IOException ex) {
-            logger.error(ex.getMessage(), ex);
+            throw ex;
         }
         
     }
@@ -133,12 +133,16 @@ public class TransmittanceSim {
         
     }
     
-    public void process(){
+    public void process() throws IOException{
             
         logger.info("===== " + parameters.getInputFile().getAbsolutePath() + " =====");
 
-        // read data
-        readData(parameters.getInputFile());
+        try {
+            // read data
+            readData(parameters.getInputFile());
+        } catch (IOException ex) {
+            throw ex;
+        }
 
         getSensorPositions();
 
@@ -231,13 +235,20 @@ public class TransmittanceSim {
     
     
     
-    public void writeBitmaps(){
+    public void writeBitmaps() throws IOException{
         
         int zoom = 2;
         
+        parameters.getBitmapFile().mkdirs();
+        
         for(int k=0;k<nbPeriods;k++){
             
-            File outputFile = new File(parameters.getBitmapFile()+File.separator+"period_"+(k+1)+".bmp");
+            SimulationPeriod period = parameters.getSimulationPeriods().get(k);
+            
+            String periodString = period.getPeriod().toString().replaceAll(" ", "_");
+            periodString = periodString.replaceAll("/", "-");
+            
+            File outputFile = new File(parameters.getBitmapFile()+File.separator+"period_"+periodString+".bmp");
             logger.info("Writing file "+outputFile);
             
             BufferedImage bimg = new BufferedImage(splitting.x * zoom, splitting.y * zoom, BufferedImage.TYPE_INT_RGB);
@@ -247,6 +258,17 @@ public class TransmittanceSim {
             g.setColor(new Color(80, 30, 0));
             g.fillRect(0, 0, splitting.x * zoom, splitting.y * zoom);
             
+            for(int i = 0;i<splitting.x;i++){
+                for(int j=0;j<splitting.y;j++){
+                    float col = (float) (transmissionPeriod[i][j][k] / 0.1);
+                    col = Math.min(col, 1);
+                    Color c = Colouring.rainbow(col);
+                    g.setColor(c);
+                    int jj = splitting.y - j - 1;
+                    g.fillRect(i * zoom, jj * zoom, zoom, zoom);
+                }
+            }
+            /*
             for(Point3d position : positions){
                                 
                 int i = (int) ((position.x - vsMin.x) / voxSpace.getVoxelSize().x);
@@ -258,7 +280,7 @@ public class TransmittanceSim {
                 g.setColor(c);
                 int jj = splitting.y - j - 1;
                 g.fillRect(i * zoom, jj * zoom, zoom, zoom);
-            }
+            }*/
 /*
             for (int i = 0; i < splitting.x; i++) {
                 for (int j = 0; j < splitting.y; j++) {
@@ -276,7 +298,7 @@ public class TransmittanceSim {
                 logger.info("File "+outputFile+" written");
 
             } catch (IOException ex) {
-                logger.error("Cannot write transmittance bitmap image", ex);
+                throw ex;
             }
         }
         
@@ -290,7 +312,7 @@ public class TransmittanceSim {
         }
     }*/
 
-    private void readData(File inputFile) {
+    private void readData(File inputFile) throws IOException {
 
 
         try(BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
@@ -316,9 +338,9 @@ public class TransmittanceSim {
             logger.info(nbScans + "scans\n");
             
         }catch (IOException e) {
-            logger.error("Can't open file: " + inputFile.getAbsolutePath(), e);
+            throw e;
         }catch (Exception e) {
-            logger.error("Error happened when reading file : "+inputFile.getAbsolutePath(), e);
+            throw e;
         }
     }
 
@@ -584,9 +606,12 @@ public class TransmittanceSim {
         }
     }
 
-    public void writeTransmittance(){
+    public void writeTransmittance() throws IOException{
 
+        parameters.getTextFile().getParentFile().mkdirs();
+        
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(parameters.getTextFile()))) {
+            
             
             logger.info("Writing file "+parameters.getTextFile().getAbsolutePath());
             
@@ -648,7 +673,7 @@ public class TransmittanceSim {
             logger.info("File "+parameters.getTextFile().getAbsolutePath()+" written");
             
         }catch(IOException ex){
-            logger.error("Cannot write text file "+parameters.getTextFile().getAbsolutePath(), ex);
+            throw ex;
         }
         
         if(lai2xxx != null){

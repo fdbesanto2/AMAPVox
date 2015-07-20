@@ -8,7 +8,11 @@ package fr.amap.amapvox.voxviewer.object.scene;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL3;
 import fr.amap.amapvox.commons.io.file.FileManager;
+import fr.amap.amapvox.commons.math.geometry.AABB;
+import fr.amap.amapvox.commons.math.geometry.Plane;
+import fr.amap.amapvox.commons.math.point.Point3F;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
+import fr.amap.amapvox.commons.util.BoundingBox3F;
 import fr.amap.amapvox.commons.util.ColorGradient;
 import fr.amap.amapvox.commons.util.CombinedFilter;
 import fr.amap.amapvox.commons.util.CombinedFilters;
@@ -31,8 +35,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
@@ -792,20 +794,6 @@ public class VoxelSpace extends SceneObject{
         gradientUpdated = false;
         
     }
-    /*
-    public BufferedImage createScaleImage(int width, int height){
-        
-        if(stretched){
-            return ScaleGradient.generateScale(gradient, min, max, width, height, ScaleGradient.HORIZONTAL);
-        }else{
-            if(useClippedRangeValue){
-                return ScaleGradient.generateScale(gradient, attributValueMinClipped, attributValueMaxClipped, width, height, ScaleGradient.HORIZONTAL);
-            }else{
-                return ScaleGradient.generateScale(gradient, attributValueMin, attributValueMax, width, height, ScaleGradient.HORIZONTAL);
-            }
-        }
-        
-    }*/
     
     public void updateCubeSize(GL3 gl, float size){
         
@@ -813,11 +801,38 @@ public class VoxelSpace extends SceneObject{
         cubeSizeUpdated = false;
     }
     
-    public void switchLightOn(){
+    
+    public void setCuttingPlane(Plane plane){
+        
+        Vec3F normale = plane.getNormale();
+        Vec3F point = new Vec3F(plane.getPoint().x, plane.getPoint().y, plane.getPoint().z);
+        
+        for (VoxelObject voxel : data.voxels) {
+            
+            Point3f pt = getVoxelPosition(voxel.$i, voxel.$j, voxel.$k);
+            Vec3F position = new Vec3F(pt.x, pt.y, pt.z);
+            
+            float side = Vec3F.dot(Vec3F.substract(position, point), normale);
+            
+            if(side > 0){
+                voxel.setAlpha(0);
+            }else{
+                if(voxel.getAlpha() != 0){
+                    voxel.setAlpha(1);
+                }
+            }
+        }
         
     }
     
-    public void switchLightOff(){
+    public static void main(String[] args){
+        
+        VoxelSpace voxelSpace = new VoxelSpace();
+        voxelSpace.setCuttingPlane(new Plane(new Vec3F(1, 0, 0), new Vec3F(0, 0, 1), new Point3F(0, 0, 0)));
+    }
+    
+    public void clearCuttingPlane(){
+        
         
     }
 

@@ -20,6 +20,7 @@
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/util/CommandLineParser.java
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/util/Misc.java
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/math/vector/Vec4.java
+/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/math/geometry/Plane.java
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/util/package-info.java
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/math/matrix/Mat3F.java
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/math/vector/package-info.java
@@ -45,6 +46,7 @@
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/util/delaunay/Delaunay_Triangulation.java
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/math/point/Point2D.java
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/math/matrix/Mat4F.java
+/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/math/geometry/AABB.java
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/util/MatrixUtility.java
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/util/Cancellable.java
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/math/quaternion/QuaternionUtility.java
@@ -65,6 +67,7 @@
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/util/NativeLoader.java
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/util/SimpleFilter.java
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/io/file/FileAdapter.java
+/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/math/geometry/Rectangle.java
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/math/point/package-info.java
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/math/package-info.java
 /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/Commons/src/main/java/fr/amap/amapvox/commons/util/BoundingBox2F.java

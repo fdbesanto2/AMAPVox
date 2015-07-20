@@ -180,7 +180,7 @@ public class Texture {
         graphics.setPaint(Color.red);
         graphics.drawString(texte, x, y);
         
-        ImageIO.write(image, "png", new File("/home/calcul/Documents/Julien/test_texture.png"));
+        //ImageIO.write(image, "png", new File("/home/calcul/Documents/Julien/test_texture.png"));
         
         //texture openGL
         

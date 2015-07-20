@@ -5,6 +5,8 @@
  */
 package fr.amap.amapvox.commons.math.vector;
 
+import fr.amap.amapvox.commons.math.point.Point3F;
+
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
@@ -27,6 +29,13 @@ public class Vec3F{
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+    
+    public Vec3F(Point3F point1, Point3F point2){
+        
+        this.x = point2.x - point1.x;
+        this.y = point2.y - point1.y;
+        this.z = point2.z - point1.z;
     }
     
     public static Vec3F createVec3FromPoints(Vec3F point1, Vec3F point2){
@@ -62,6 +71,13 @@ public class Vec3F{
         dest.z = x*y2 - y*x2;
         
         return dest;
+    }
+    
+    public static void main(String[] args){
+        
+        float result = Vec3F.angle(new Vec3F(0, 0, 1), new Vec3F(0, 1, 0));
+        result = (float) Math.toDegrees(result);
+        System.out.println("test");
     }
     
     public static Vec3F normalize(Vec3F vec){
