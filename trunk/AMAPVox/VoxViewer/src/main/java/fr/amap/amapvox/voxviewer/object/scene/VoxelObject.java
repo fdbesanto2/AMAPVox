@@ -24,6 +24,7 @@ public class VoxelObject{
     public int type;
     
     public float attributValue;
+    public boolean isHidden;
     
     private Color color;
     //public Map<String, Point2f> minMax;

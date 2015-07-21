@@ -284,7 +284,7 @@ public class ProcessTool implements Cancellable{
 
     }
 
-    public void voxeliseFromAls(ALSVoxCfg cfg) {
+    public void voxeliseFromAls(ALSVoxCfg cfg) throws IOException, Exception {
 
         File output = cfg.getOutputFile();
         File input = cfg.getInputFile();
@@ -312,7 +312,7 @@ public class ProcessTool implements Cancellable{
                 terrain = DtmLoader.readFromAscFile(parameters.getDtmFile());
                 terrain.setTransformationMatrix(vop);
             } catch (Exception ex) {
-                logger.error(ex);
+                throw ex;
             }
         } 
         
@@ -346,11 +346,9 @@ public class ProcessTool implements Cancellable{
             }
 
         } catch (FileNotFoundException ex) {
-            logger.error(ex);
-            return;
+            throw ex;
         } catch (IOException ex) {
-            logger.error(ex);
-            return;
+            throw ex;
         }
         
         LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, parameters, filters, classifiedPointsToDiscard, terrain, trajectoryList);

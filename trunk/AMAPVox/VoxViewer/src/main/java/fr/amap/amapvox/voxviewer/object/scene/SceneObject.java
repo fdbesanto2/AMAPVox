@@ -24,6 +24,7 @@ public abstract class SceneObject{
     protected int vaoId, shaderId, textureId;
     private int drawType;
     public boolean isAlphaRequired;
+    public boolean depthTest;
     public Texture texture;
     private int id;
 
@@ -58,6 +59,7 @@ public abstract class SceneObject{
         this.shaderId = shaderId;
         this.drawType = GL3.GL_TRIANGLES;
         this.isAlphaRequired = isAlphaRequired;
+        this.depthTest = true;
     }
 
     public void setDrawType(int drawType) {

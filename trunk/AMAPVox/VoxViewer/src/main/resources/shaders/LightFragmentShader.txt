@@ -16,8 +16,8 @@ void main()
     vec3 mspecular = vec3(1.0, 1.0, 1.0);
     float shininess = 32.0;
 
-    vec3 lambient = vec3(0.2, 0.2, 0.2);
-    vec3 ldiffuse = vec3(0.6, 0.6, 0.6);
+    vec3 lambient = vec3(1.0, 1.0, 1.0);
+    vec3 ldiffuse = vec3(1.0, 1.0, 1.0);
     vec3 lspecular = vec3(1.0, 1.0, 1.0);
 
 

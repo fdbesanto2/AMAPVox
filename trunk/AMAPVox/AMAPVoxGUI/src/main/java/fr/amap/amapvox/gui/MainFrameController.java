@@ -589,6 +589,8 @@ public class MainFrameController implements Initializable {
     private TextField textfieldRasterBandNumber;
     @FXML
     private Button buttonSetVOPMatrix;
+    @FXML
+    private CheckBox checkboxMultiResAfterMode2;
     /**
      * Initializes the controller class.
      */
@@ -2185,17 +2187,17 @@ public class MainFrameController implements Initializable {
         File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
         
         if (selectedFile != null) {
-
-            //VoxelisationConfiguration cfg = null;
             
             lastFCSaveConfiguration = selectedFile;
             
-            boolean correctNaNs = checkboxMultiResAfter.isSelected();
             VoxelParameters voxelParameters = new VoxelParameters();
             
             if(!alsMultiFile){ 
                 voxelParameters = getVoxelParametersFromUI();
             }
+            
+            boolean correctNaNs = checkboxMultiResAfterMode2.isSelected();
+            voxelParameters.setCorrectNaNsMode2(correctNaNs);
             
             InputType it;
 
@@ -2401,7 +2403,7 @@ public class MainFrameController implements Initializable {
                                 voxelParametersRes.setSplit(new Point3i(splitX, splitY, splitZ));
                                 voxelParametersRes.setResolution(res);
 
-                                voxelParametersRes.setCalculateGroundEnergy(checkboxMultiResAfter.isSelected());
+                                voxelParametersRes.setCalculateGroundEnergy(checkboxCalculateGroundEnergy.isSelected());
                                 
                                 if(voxelParameters.isCalculateGroundEnergy()){
                                     voxelParametersRes.setGroundEnergyFile(new File(outputPathFile.getAbsolutePath() + File.separator + file.getName() + extension));
@@ -2663,16 +2665,26 @@ public class MainFrameController implements Initializable {
                                             }
                                         });
 
-                                        voxTool.voxeliseFromAls(aLSVoxCfg);
+                                        try{
+                                            voxTool.voxeliseFromAls(aLSVoxCfg);
 
-                                        Platform.runLater(new Runnable() {
+                                            Platform.runLater(new Runnable() {
 
-                                            @Override
-                                            public void run() {
+                                                @Override
+                                                public void run() {
 
-                                                addFileToVoxelList(aLSVoxCfg.getOutputFile());
-                                            }
-                                        });
+                                                    addFileToVoxelList(aLSVoxCfg.getOutputFile());
+                                                }
+                                            });
+                                            
+                                        }catch(IOException ex){
+                                            logger.error(ex.getMessage(), ex);
+                                            showErrorDialog(ex);
+                                        }catch(Exception ex){
+                                            logger.error(ex.getMessage(), ex);
+                                            showErrorDialog(ex);
+                                        }
+                                        
                                         
                                     } catch (Exception ex) {
                                         logger.error(ex.getLocalizedMessage());
@@ -3439,6 +3451,7 @@ public class MainFrameController implements Initializable {
                             
                             textFieldInputFileALS.setText(((ALSVoxCfg)cfg).getInputFile().getAbsolutePath());
                             textFieldOutputFileALS.setText(((ALSVoxCfg)cfg).getOutputFile().getAbsolutePath());
+                            checkboxMultiResAfterMode2.setSelected(((ALSVoxCfg)cfg).getVoxelParameters().isCorrectNaNsMode2());
                             
                         }else if(type.equals("multi-voxelisation")){
                             

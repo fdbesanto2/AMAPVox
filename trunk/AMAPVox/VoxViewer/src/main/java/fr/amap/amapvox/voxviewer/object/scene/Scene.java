@@ -190,17 +190,30 @@ public class Scene {
             
             /***draw scene objects***/
             
+            gl.glEnable(GL3.GL_BLEND);
+            
             for(SceneObject object : objectsList){
                 
                 //if(object.isAlphaRequired){
-                    gl.glEnable(GL3.GL_BLEND);
+                    
                 //}else{
                     //gl.glDisable(GL3.GL_BLEND);
                 //}
+                    
+                if(!object.depthTest){
+                    gl.glClear(GL3.GL_DEPTH_BUFFER_BIT);
+                    //gl.glDisable(GL3.GL_DEPTH_TEST);
+                    //gl.glEnable(GL3.GL_CULL_FACE);
+                }
                 
                 gl.glUseProgram(object.getShaderId());
                     object.draw(gl);
                 gl.glUseProgram(0);
+                
+                if(!object.depthTest){
+                    //gl.glEnable(GL3.GL_DEPTH_TEST);
+                    //gl.glDisable(GL3.GL_CULL_FACE);
+                }
                 
             }
             

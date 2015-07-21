@@ -71,8 +71,11 @@ public class Viewer3D extends Application {
             
             if(fitDTMToVoxelSpace){
                 cmd += "--dtm-fit"+",";
+                cmd += "--dtm-fitting-margin="+fittingMargin+",";
             }
         }
+        
+        
         
         cmd = cmd.substring(0, cmd.length()-1);
                      
@@ -104,7 +107,7 @@ public class Viewer3D extends Application {
     }
     
     @Override
-    public void start(Stage stage){
+    public void start(final Stage stage){
         
         List<String> args;
         Parameters p;
@@ -305,7 +308,7 @@ public class Viewer3D extends Application {
                                 Parent root;
                                 try {
                                     stage.setAlwaysOnTop(false);
-                                    ToolBoxFrameController toolBarFrameController;
+                                    final ToolBoxFrameController toolBarFrameController;
                                     
                                     
                                     root = loader.load();

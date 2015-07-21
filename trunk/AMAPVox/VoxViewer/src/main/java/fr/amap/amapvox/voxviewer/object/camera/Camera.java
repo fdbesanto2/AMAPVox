@@ -21,8 +21,8 @@ public abstract class Camera {
     protected float aspect;
     protected float nearPersp;
     protected float farPersp;
-    protected float nearOrtho;
-    protected float farOrtho;
+    protected float nearOrtho = 1;
+    protected float farOrtho = 1000;
     protected float left;
     protected float right;
     protected float bottom;
@@ -32,7 +32,7 @@ public abstract class Camera {
     protected Vec3F up;
     protected boolean isUpdated;
     protected float phi,theta;
-    protected boolean isPerspective = true;
+    protected boolean perspective = true;
     protected float angleX = 0.0f;
     protected float angleY = 0.0f;
     protected float angleZ = 0.0f;
@@ -145,7 +145,7 @@ public abstract class Camera {
     }
 
     public void setIsPerspective(boolean isPerspective) {
-        this.isPerspective = isPerspective;
+        this.perspective = isPerspective;
     }
     
     public void setRotation(Vec3F axis, float angle){

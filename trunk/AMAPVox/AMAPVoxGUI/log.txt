@@ -20806,3 +20806,204 @@ java.lang.NullPointerException
 2015-07-20 17:35:51 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
 2015-07-20 17:40:46 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/Sortie voxels/ALS/Nouragues/Projet_nouragues/output/hobo_1_100m.laz.vox --attribut=PadBVTotal 
 2015-07-20 17:43:51 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/Sortie voxels/ALS/Nouragues/Projet_nouragues/output/hobo_1_100m.laz.vox --attribut=PadBVTotal 
+2015-07-21 08:49:30 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 08:52:11 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 08:54:50 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 08:57:45 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 08:59:16 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 09:10:39 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 09:17:26 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 09:27:38 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 09:29:46 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 09:31:28 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 09:32:23 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 09:33:44 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 09:39:13 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 09:43:17 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 09:46:23 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 09:50:02 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 09:50:53 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 09:54:31 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 09:56:03 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 09:58:09 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 09:59:13 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 10:02:46 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 10:05:24 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 10:08:24 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 10:10:42 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 10:11:47 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 10:13:54 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal --dtm=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc --dtm-transform --dtm-transf-matrix=0.9540688863574789 0.29958731629459895 0.0 -448120.0441687209 -0.29958731629459895 0.9540688863574789 0.0 -470918.3928060016 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 --dtm-fit 
+2015-07-21 10:15:37 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal --dtm=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc --dtm-transform --dtm-transf-matrix=0.9540688863574789 0.29958731629459895 0.0 -448120.0441687209 -0.29958731629459895 0.9540688863574789 0.0 -470918.3928060016 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 --dtm-fit 
+2015-07-21 10:24:09 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 10:25:08 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 10:26:01 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 10:29:03 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 10:34:32 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 10:38:45 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 10:40:57 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 10:46:05 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 10:48:40 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 10:51:14 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 10:53:21 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 11:08:11 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 11:11:35 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 11:25:19 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 11:29:55 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 11:34:18 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 11:37:20 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 11:43:09 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 11:49:12 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 12:08:10 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 12:11:08 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 12:14:10 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 12:16:38 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 12:18:16 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 12:20:26 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 14:30:11 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 14:36:41 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 14:41:45 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 14:42:58 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 14:46:15 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 14:47:39 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 14:49:27 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 15:04:23 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 15:06:11 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 15:09:44 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 15:12:03 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 15:18:40 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 15:22:12 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 15:23:17 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 15:23:40 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/Sortie voxels/ALS/Nouragues/Projet_nouragues/output/hobo_1_100m.laz.vox --attribut=PadBVTotal 
+2015-07-21 15:25:57 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/Sortie voxels/ALS/Nouragues/Projet_nouragues/output/hobo_1_100m.laz.vox --attribut=PadBVTotal 
+2015-07-21 15:45:11 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 15:47:24 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 15:54:15 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 15:55:28 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 16:18:12 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox --attribut=PadBVTotal 
+2015-07-21 16:31:54 INFO  - Turtle built with 136 sectors
+2015-07-21 16:31:54 INFO  - ===== /media/forestview01/partageLidar/Julien/merged.vox =====
+2015-07-21 16:31:54 INFO  - header: VOXEL SPACE
+2015-07-21 16:31:54 INFO  - VOXEL SPACE
+2015-07-21 16:31:54 INFO  - Min corner: (-10.0, -10.0, 0.0)
+2015-07-21 16:31:54 INFO  - Max corner: (70.0, 70.0, 80.0)
+2015-07-21 16:31:54 INFO  - Splitting: (80, 80, 80)
+2015-07-21 16:31:54 INFO  - allocate Voxels
+2015-07-21 16:31:54 INFO  - allocate MNT
+2015-07-21 16:31:54 INFO  - Data parsing
+2015-07-21 16:31:55 INFO  -  100000 shots
+2015-07-21 16:31:55 INFO  -  200000 shots
+2015-07-21 16:31:56 INFO  -  300000 shots
+2015-07-21 16:31:57 INFO  -  400000 shots
+2015-07-21 16:31:58 INFO  -  500000 shots
+2015-07-21 16:31:58 INFO  - 512000scans
+
+2015-07-21 16:31:58 WARN  - Position (50.0, 70.0, 23.841) ignored because out of voxel space!
+2015-07-21 16:31:58 WARN  - Position (70.0, 70.0, 23.841) ignored because out of voxel space!
+2015-07-21 16:31:58 ERROR - Service failed : 
+java.lang.NumberFormatException: empty String
+	at sun.misc.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:1842)
+	at sun.misc.FloatingDecimal.parseDouble(FloatingDecimal.java:110)
+	at java.lang.Double.parseDouble(Double.java:538)
+	at java.lang.Double.valueOf(Double.java:502)
+	at fr.amap.amapvox.simulation.transmittance.TransmittanceSim.getSensorPositions(TransmittanceSim.java:533)
+	at fr.amap.amapvox.simulation.transmittance.TransmittanceSim.process(TransmittanceSim.java:147)
+	at fr.amap.amapvox.simulation.transmittance.TransmittanceSim.simulationProcess(TransmittanceSim.java:81)
+	at fr.amap.amapvox.gui.MainFrameController$39$1.call(MainFrameController.java:2597)
+	at fr.amap.amapvox.gui.MainFrameController$39$1.call(MainFrameController.java:2582)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$464/312226296.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$462/703608160.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-21 16:34:13 INFO  - Turtle built with 136 sectors
+2015-07-21 16:34:13 INFO  - ===== /media/forestview01/partageLidar/Julien/merged.vox =====
+2015-07-21 16:34:13 INFO  - header: VOXEL SPACE
+2015-07-21 16:34:13 INFO  - VOXEL SPACE
+2015-07-21 16:34:13 INFO  - Min corner: (-10.0, -10.0, 0.0)
+2015-07-21 16:34:13 INFO  - Max corner: (70.0, 70.0, 80.0)
+2015-07-21 16:34:13 INFO  - Splitting: (80, 80, 80)
+2015-07-21 16:34:13 INFO  - allocate Voxels
+2015-07-21 16:34:13 INFO  - allocate MNT
+2015-07-21 16:34:13 INFO  - Data parsing
+2015-07-21 16:34:13 INFO  -  100000 shots
+2015-07-21 16:34:14 INFO  -  200000 shots
+2015-07-21 16:34:15 INFO  -  300000 shots
+2015-07-21 16:34:16 INFO  -  400000 shots
+2015-07-21 16:34:16 INFO  -  500000 shots
+2015-07-21 16:34:16 INFO  - 512000scans
+
+2015-07-21 16:34:16 WARN  - Position (50.0, 70.0, 23.841) ignored because out of voxel space!
+2015-07-21 16:34:16 WARN  - Position (70.0, 70.0, 23.841) ignored because out of voxel space!
+2015-07-21 16:34:16 INFO  - nb positions= 42
+2015-07-21 16:34:17 INFO  - Computation of transmittance
+2015-07-21 16:34:17 INFO  - Writing file /home/calcul/Documents/Julien/tmp5/tmp.txt
+2015-07-21 16:34:17 INFO  - File /home/calcul/Documents/Julien/tmp5/tmp.txt written
+2015-07-21 16:34:17 INFO  - Writing file /home/calcul/Documents/Julien/tmp5/period_From_01-09-14_00:01_to_20-09-14_23:59.bmp
+2015-07-21 16:34:17 INFO  - File /home/calcul/Documents/Julien/tmp5/period_From_01-09-14_00:01_to_20-09-14_23:59.bmp written
+2015-07-21 17:01:20 ERROR - java.io.FileNotFoundException: /media/calcul/IomegaHDD/BDLidar/ALS/Paracou/2013/MNT1m.asc (Aucun fichier ou dossier de ce type)
+2015-07-21 17:01:23 INFO  - allocate!!!!!!!!
+2015-07-21 17:01:23 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-21 17:01:24 INFO  - Laz file is closed
+2015-07-21 17:01:26 INFO  - Shots processed: 141106
+2015-07-21 17:01:26 INFO  - writing file: /home/calcul/Documents/Julien/tmp4/las.vox
+2015-07-21 17:01:28 INFO  - file written ( 2.0 s )
+2015-07-21 17:01:28 INFO  - writing file: /home/calcul/Documents/Julien/tmp4/test.png
+2015-07-21 17:01:29 INFO  - file written ( 0.0 s )
+2015-07-21 17:01:29 INFO  - las voxelisation finished in 9.0 s
+2015-07-21 17:06:14 ERROR - /media/calcul/IomegaHDD/BDLidar/ALS/Paracou/2013/MNT1m.asc (Aucun fichier ou dossier de ce type)
+java.io.FileNotFoundException: /media/calcul/IomegaHDD/BDLidar/ALS/Paracou/2013/MNT1m.asc (Aucun fichier ou dossier de ce type)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at java.io.FileReader.<init>(FileReader.java:72)
+	at fr.amap.amapvox.jraster.asc.DtmLoader.readFromAscFile(DtmLoader.java:33)
+	at fr.amap.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:312)
+	at fr.amap.amapvox.gui.MainFrameController$39$1.call(MainFrameController.java:2669)
+	at fr.amap.amapvox.gui.MainFrameController$39$1.call(MainFrameController.java:2584)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$448/1395806875.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$446/881658821.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-21 17:07:10 INFO  - allocate!!!!!!!!
+2015-07-21 17:07:10 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-21 17:07:11 INFO  - Laz file is closed
+2015-07-21 17:07:12 INFO  - Shots processed: 141106
+2015-07-21 17:07:13 INFO  - writing file: /home/calcul/Documents/Julien/tmp4/las.vox
+2015-07-21 17:07:15 INFO  - file written ( 2.0 s )
+2015-07-21 17:07:15 INFO  - writing file: /home/calcul/Documents/Julien/tmp4/test.png
+2015-07-21 17:07:15 INFO  - file written ( 0.0 s )
+2015-07-21 17:07:15 INFO  - las voxelisation finished in 13.0 s
+2015-07-21 17:07:18 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/tmp4/las.vox --attribut=PadBVTotal 
+2015-07-21 17:07:52 INFO  - allocate!!!!!!!!
+2015-07-21 17:07:52 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-21 17:07:53 INFO  - Laz file is closed
+2015-07-21 17:07:54 INFO  - Shots processed: 141106
+2015-07-21 17:08:20 INFO  - writing file: /home/calcul/Documents/Julien/tmp4/las.vox
+2015-07-21 17:08:22 INFO  - file written ( 2.0 s )
+2015-07-21 17:08:22 INFO  - writing file: /home/calcul/Documents/Julien/tmp4/test.png
+2015-07-21 17:08:22 INFO  - file written ( 0.0 s )
+2015-07-21 17:08:22 INFO  - las voxelisation finished in 37.0 s
+2015-07-21 17:09:25 INFO  - allocate!!!!!!!!
+2015-07-21 17:09:25 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-07-21 17:09:26 INFO  - Laz file is closed
+2015-07-21 17:09:28 INFO  - Shots processed: 141106
+2015-07-21 17:09:36 INFO  - writing file: /home/calcul/Documents/Julien/tmp4/las.vox
+2015-07-21 17:09:39 INFO  - file written ( 2.0 s )
+2015-07-21 17:09:39 INFO  - writing file: /home/calcul/Documents/Julien/tmp4/test.png
+2015-07-21 17:09:39 INFO  - file written ( 0.0 s )
+2015-07-21 17:09:39 INFO  - las voxelisation finished in 22.0 s
+2015-07-21 17:09:43 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/tmp4/las.vox --attribut=PadBVTotal 
+2015-07-21 17:21:25 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/tmp4/las.vox --attribut=PadBVTotal --dtm=/media/calcul/IomegaHDD/BDLidar/ALS/Paracou/2013/MNT1m.asc --dtm-transform --dtm-transf-matrix=0.9540688863574789 0.29958731629459895 0.0 -448120.0441687209 -0.29958731629459895 0.9540688863574789 0.0 -470918.3928060016 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 --dtm-fit 
+2015-07-21 17:23:14 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/tmp4/las.vox --attribut=PadBVTotal --dtm=/media/calcul/IomegaHDD/BDLidar/ALS/Paracou/2013/MNT1m.asc --dtm-transform --dtm-transf-matrix=0.9540688863574789 0.29958731629459895 0.0 -448120.0441687209 -0.29958731629459895 0.9540688863574789 0.0 -470918.3928060016 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 --dtm-fit 
+2015-07-21 17:28:03 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/tmp4/las.vox --attribut=PadBVTotal --dtm=/media/calcul/IomegaHDD/BDLidar/ALS/Paracou/2013/MNT1m.asc --dtm-transform --dtm-transf-matrix=0.9540688863574789 0.29958731629459895 0.0 -448120.0441687209 -0.29958731629459895 0.9540688863574789 0.0 -470918.3928060016 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 --dtm-fit --dtm-fitting-margin=1000 

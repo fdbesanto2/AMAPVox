@@ -81,7 +81,7 @@ public class TrackballCamera extends Camera{
         this.nearPersp = near;
         this.farPersp = far;
         
-        this.isPerspective = true;
+        this.perspective = true;
         
         updateProjMatrix();
         
@@ -97,7 +97,7 @@ public class TrackballCamera extends Camera{
         this.nearOrtho = near;
         this.farOrtho = far;
         
-        this.isPerspective = false;
+        this.perspective = false;
         
         updateProjMatrix();
         
@@ -285,7 +285,7 @@ public class TrackballCamera extends Camera{
         }
         if(translation.z !=0.0f){
             
-            if(isPerspective){
+            if(perspective){
                 location = Vec3F.add(location, Vec3F.multiply(forwardVec, translation.z));
                 //target = Vec3F.add(target, Vec3F.multiply(orientation, translation.z)); //use for not reaching the target
                 //setPerspective(70.0f, (1.0f*640)/480, near-translation.z, far-translation.z);
@@ -311,7 +311,7 @@ public class TrackballCamera extends Camera{
         forwardVec = getForwardVector();
         
         //slow down relatively from the length of the forward vector
-        if(isPerspective){
+        if(perspective){
             translation = Vec3F.multiply(translation, (Vec3F.length(forwardVec)/(float)Math.tan(fovy))*0.001f);
         }else{
             translation = Vec3F.multiply(translation, Vec3F.length(forwardVec)*0.0025f);
@@ -336,6 +336,7 @@ public class TrackballCamera extends Camera{
     @Override
     public void updateViewMatrix(){
         
+        forwardVec = getForwardVector();
         viewMatrix = Mat4F.lookAt(location, target, up);
         /*
         System.out.println(viewMatrix.mat[0]+" "+viewMatrix.mat[1]+" "+viewMatrix.mat[2]+" "+viewMatrix.mat[3]+"\n"+
@@ -359,7 +360,7 @@ public class TrackballCamera extends Camera{
     
     public void updateProjMatrix(){
         
-        if(isPerspective){
+        if(perspective){
             
             projectionMatrix = Mat4F.perspective(fovy, aspect, nearPersp, farPersp);
             
@@ -427,8 +428,8 @@ public class TrackballCamera extends Camera{
         }
     }
 
-    public boolean isIsPerspective() {
-        return isPerspective;
+    public boolean isPerspective() {
+        return perspective;
     }
 
     public void setOrthographic(float near, float far) {
@@ -436,7 +437,7 @@ public class TrackballCamera extends Camera{
         this.nearOrtho = near;
         this.farOrtho = far;
         
-        this.isPerspective = false;
+        this.perspective = false;
         
         updateProjMatrix();
     }
@@ -457,6 +458,9 @@ public class TrackballCamera extends Camera{
         if(Vec3F.length(result) == 0){
             result.x = 1;
         }
+        
+        rightVec = result;
+        
         return result;
     }
 

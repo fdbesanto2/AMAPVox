@@ -33,7 +33,7 @@ public class Light {
     
     public Light(){
         
-        ambient = new Vec3F(0.2f, 0.2f, 0.2f);
+        ambient = new Vec3F(1.0f, 1.0f, 1.0f);
         diffuse = new Vec3F(1.0f, 1.0f, 1.0f);
         specular = new Vec3F(1.0f, 1.0f, 1.0f);
         position = new Point3F(0, 0, 100);

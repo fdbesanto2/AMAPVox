@@ -66,7 +66,7 @@ public class GLRenderWindowListener extends WindowAdapter{
                 
         Window window = (Window)we.getSource();
         
-        Point locationOnScreen = new Point(window.getX(), window.getY());
+        final Point locationOnScreen = new Point(window.getX(), window.getY());
         
         Platform.runLater(new Runnable() {
 

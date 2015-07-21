@@ -32,6 +32,16 @@ public class BasicEvent extends EventManager{
     public boolean qKeyPressed;
     public boolean dKeyPressed;
     
+    public boolean plusKeyPressed;
+    public boolean minusKeyPressed;
+    
+    public boolean number1KeyPressed;
+    public boolean number3KeyPressed;
+    public boolean number5KeyPressed;
+    public boolean number7KeyPressed;
+    
+    public boolean ctrlPressed;
+    
     public boolean leftMousePressed;
     public boolean rightMousePressed;
     public boolean leftMouseDragged;
@@ -241,27 +251,50 @@ public class BasicEvent extends EventManager{
         
         if(spaceKeyPressed){
             
-            //joglContext.getCamera().target.z--;
-            //joglContext.getCamera().updateViewMatrix();
             joglContext.getCamera().rotateAroundPoint(new Vec3F(0.0f,1.0f,0.0f), new Vec3F(0.0f,0.0f,0.0f), (float) Math.toRadians(5));
-        }
-        
-        if(relativeMouseMode){
-            
-            /*
-            try {
-                robot = new Robot();
-                //robot.mouseMove(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getWidth()/2, 
-                //GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getHeight()/2);
-            } catch (AWTException ex) {
-                Logger.getLogger(EventListener.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            */
         }
         
         if(!animator.isPaused() && !leftMousePressed){
             animator.pause();
-            //System.out.println("animator paused");
+        }
+        
+        if(plusKeyPressed){
+            joglContext.cuttingPlane(true);
+        }
+        
+        if(minusKeyPressed){
+            joglContext.cuttingPlane(false);
+        }
+        
+        if(number1KeyPressed){
+            
+            if(ctrlPressed){
+                joglContext.setViewToBack();
+            }else{
+                joglContext.setViewToFront();
+            }
+        }
+        
+        if(number3KeyPressed){
+            
+            if(ctrlPressed){
+                joglContext.setViewToLeft();
+            }else{
+                joglContext.setViewToRight();
+            }
+        }
+        
+        if(number7KeyPressed){
+            
+            if(ctrlPressed){
+                joglContext.setViewToBottom();
+            }else{
+                joglContext.setViewToTop();
+            }
+        }
+        
+        if(number5KeyPressed){
+            joglContext.switchPerspective();
         }
         
         mouseWheelRotateUp = false;

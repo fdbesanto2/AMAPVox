@@ -814,13 +814,7 @@ public class VoxelSpace extends SceneObject{
             
             float side = Vec3F.dot(Vec3F.substract(position, point), normale);
             
-            if(side > 0){
-                voxel.setAlpha(0);
-            }else{
-                if(voxel.getAlpha() != 0){
-                    voxel.setAlpha(1);
-                }
-            }
+            voxel.isHidden = side > 0;
         }
         
     }
@@ -833,7 +827,9 @@ public class VoxelSpace extends SceneObject{
     
     public void clearCuttingPlane(){
         
-        
+        for (VoxelObject voxel : data.voxels) {
+            voxel.isHidden = false;
+        }
     }
 
     public boolean isInstancesUpdated() {
@@ -889,7 +885,7 @@ public class VoxelSpace extends SceneObject{
         
         for (VoxelObject voxel : data.voxels) {
             
-            if(voxel.getAlpha() != 0){
+            if(voxel.getAlpha() != 0 && !voxel.isHidden){
                 
                 if(positionCount < instancePositions.length && colorCount < instanceColors.length){
                     
@@ -1012,7 +1008,7 @@ public class VoxelSpace extends SceneObject{
                 
                 VoxelObject voxel = (VoxelObject) data.voxels.get(i);
 
-                if(voxel.getAlpha() != 0){
+                if(voxel.getAlpha() != 0 && !voxel.isHidden){
                 
                     instanceColors[count0] = voxel.getRed();
                     instanceColors[count0+1] = voxel.getGreen();

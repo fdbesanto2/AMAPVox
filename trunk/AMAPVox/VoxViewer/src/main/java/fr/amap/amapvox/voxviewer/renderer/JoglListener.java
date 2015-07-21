@@ -10,9 +10,12 @@ import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.util.FPSAnimator;
+import fr.amap.amapvox.commons.math.geometry.AABB;
+import fr.amap.amapvox.commons.math.geometry.Plane;
 import fr.amap.amapvox.commons.math.matrix.Mat4F;
 import fr.amap.amapvox.commons.math.point.Point3F;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
+import fr.amap.amapvox.commons.util.BoundingBox3F;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
 import fr.amap.amapvox.voxviewer.event.BasicEvent;
 import fr.amap.amapvox.voxviewer.loading.shader.AxisShader;
@@ -40,6 +43,7 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
+import javax.vecmath.Point3d;
 
 /**
  *
@@ -68,6 +72,10 @@ public class JoglListener implements GLEventListener {
     private boolean projectionMatrixChanged = false;
     private boolean isInit;
     
+    private boolean isCuttingInit;
+    private Vec3F lastRightVector = new Vec3F();
+    private Vec3F loc;
+    private float cuttingIncrementFactor = 1.0f;
     
     
     private final EventListenerList listeners;
@@ -233,7 +241,7 @@ public class JoglListener implements GLEventListener {
     
     public void updateCamera(){
         
-        if(camera.isIsPerspective()){
+        if(camera.isPerspective()){
             camera.setPerspective(60.0f, (1.0f*this.width-startX)/height, camera.getNearPersp(), camera.getFarPersp());
         }else{
             camera.initOrtho(-((this.width-startX)/100), (this.width-startX)/100, this.height/100, -(this.height)/100, camera.getNearOrtho(), camera.getFarOrtho());
@@ -412,16 +420,7 @@ public class JoglListener implements GLEventListener {
             scene.addShader(lightedShader);
             scene.addShader(labelShader);
             
-            GLMesh axisMesh = GLMeshFactory.createMeshFromObj(new InputStreamReader(SceneManager.class.getClassLoader().getResourceAsStream("mesh/axis.obj")),
-                                            new InputStreamReader(SceneManager.class.getClassLoader().getResourceAsStream("mesh/axis.mtl")));
             
-            //GLMesh axisMesh = GLMeshFactory.createMeshFromX3D(new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("mesh/axis2.x3d")));
-            axisMesh.setGlobalScale(0.03f);
-            
-            SceneObject axis = new SimpleSceneObject(axisMesh, noTranslationShader.getProgramId(), false);
-            
-            axis.setDrawType(GL3.GL_TRIANGLES);
-            //scene.addObject(axis, gl);
             
             if(scene.getDtm() != null){
                 
@@ -446,14 +445,38 @@ public class JoglListener implements GLEventListener {
             boundingBox.setDrawType(GL3.GL_LINES);
             scene.addObject(boundingBox, gl);
             
+            GLMesh axisMesh = GLMeshFactory.createMeshFromObj(new InputStreamReader(SceneManager.class.getClassLoader().getResourceAsStream("mesh/axis2.obj")),
+                                            new InputStreamReader(SceneManager.class.getClassLoader().getResourceAsStream("mesh/axis2.mtl")));
+            
+            //GLMesh axisMesh = GLMeshFactory.createMeshFromX3D(new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("mesh/axis2.x3d")));
+            axisMesh.setGlobalScale(2.0f);
+            
+            SceneObject axis = new SimpleSceneObject(axisMesh, lightedShader.getProgramId(), false);
+            axis.depthTest = false;
+            Mat4F rotationMatrix = new Mat4F();
+            
+            float theta = (float) Math.toRadians(180);
+            rotationMatrix.mat = new float[]{(float)Math.cos(theta), (float)-Math.sin(theta), 0, 0,
+                                            (float)Math.sin(theta), (float)Math.cos(theta), 0, 0,
+                                            0, 0, 1, 0,
+                                            0, 0, 0, 1,
+                                            };
+            //axis.rotate(rotationMatrix);
+            axis.translate(new Vec3F((float)voxelSpace.data.header.bottomCorner.x, 
+                                     (float)voxelSpace.data.header.bottomCorner.y,
+                                     (float)voxelSpace.data.header.bottomCorner.z));
+            
+            axis.setDrawType(GL3.GL_TRIANGLES);
+            scene.addObject(axis, gl);
+            
             //génération des labels sur la bounding-box
             Texture textureLabel1 = Texture.createTextTexture(gl, "label 1");
             SceneObject label1 = SceneObjectFactory.createTexturedPlane(new Vec3F(0, 0, 0), textureLabel1, labelShader.getProgramId());
             label1.attachTexture(textureLabel1);
             
-            Mat4F rotationMatrix = new Mat4F();
+            rotationMatrix = new Mat4F();
             
-            float theta = (float) Math.toRadians(90);
+            theta = (float) Math.toRadians(90);
             rotationMatrix.mat = new float[]{1, 0, 0, 0,
                                             0, (float)Math.cos(theta), (float)-Math.sin(theta), 0,
                                             0, (float)Math.sin(theta), (float)Math.cos(theta), 0,
@@ -515,6 +538,236 @@ public class JoglListener implements GLEventListener {
             throw new Exception("error in scene initialization", e);
         }
         
+    }
+
+    public void setCuttingIncrementFactor(float cuttingIncrementFactor) {
+        this.cuttingIncrementFactor = cuttingIncrementFactor;
+    }
+    
+    
+    public void cuttingPlane(boolean increase){
+        
+        Vec3F rightVector = camera.getRightVector();
+        Vec3F upVector = camera.getUpVector();
+        rightVector = Vec3F.normalize(rightVector);
+        upVector = Vec3F.normalize(upVector);
+        
+        if(lastRightVector.x != rightVector.x || lastRightVector.y != rightVector.y || lastRightVector.z != rightVector.z){
+            isCuttingInit = false;
+        }
+        
+        lastRightVector = rightVector;
+        
+        //init
+        if(!isCuttingInit){
+            
+            loc = camera.getLocation();
+            Point3d bottomCorner = scene.getVoxelSpace().data.header.bottomCorner;
+            Point3d topCorner = scene.getVoxelSpace().data.header.topCorner;
+            AABB aabb = new AABB(new BoundingBox3F(new Point3F((float)bottomCorner.x,(float)bottomCorner.y,(float)bottomCorner.z),
+                                               new Point3F((float)topCorner.x,(float)topCorner.y,(float)topCorner.z)));
+            
+            Point3F nearestPoint = aabb.getNearestPoint(new Point3F(loc.x, loc.y, loc.z));
+            loc = new Vec3F(nearestPoint.x, nearestPoint.y, nearestPoint.z);
+            isCuttingInit = true;
+            
+        }else{
+            Vec3F forward = camera.getForwardVector();
+            Vec3F direction = Vec3F.normalize(forward);
+            
+            if(increase){
+                loc = Vec3F.add(loc, Vec3F.multiply(direction, cuttingIncrementFactor));
+            }else{
+                loc = Vec3F.substract(loc, Vec3F.multiply(direction, cuttingIncrementFactor));
+            }
+            
+        }
+        
+        
+        Plane plane = new Plane(rightVector, upVector, new Point3F(loc.x, loc.y, loc.z));
+        //System.out.println(loc.x+" "+loc.y+" "+loc.z);
+        
+        
+        scene.getVoxelSpace().setCuttingPlane(plane);
+        scene.getVoxelSpace().updateVao();
+        drawNextFrame();
+    }
+    
+    public void resetCuttingPlane(){
+        
+        scene.getVoxelSpace().clearCuttingPlane();
+        scene.getVoxelSpace().updateVao();
+        drawNextFrame();
+        
+        isCuttingInit = false;
+        lastRightVector = new Vec3F();
+    }
+    
+    private void resetMouseLocation(){
+        
+        eventListener.mouseXOldLocation = eventListener.mouseXCurrentLocation;
+        eventListener.mouseYOldLocation = eventListener.mouseYCurrentLocation;
+    }
+    
+    public void setViewToBack(){
+        
+        camera.project(new Vec3F(scene.getVoxelSpace().getCenterX(),
+                                 scene.getVoxelSpace().getCenterY() + getTargetDistance(),
+                                 scene.getVoxelSpace().getCenterZ()),
+                       new Vec3F(scene.getVoxelSpace().getCenterX(),
+                                 scene.getVoxelSpace().getCenterY(),
+                                 scene.getVoxelSpace().getCenterZ()));
+        
+        camera.updateViewMatrix();
+        
+        resetMouseLocation();
+        camera.notifyViewMatrixChanged();
+        drawNextFrame();
+    }
+    
+    public void setViewToFront(){
+        
+        camera.project(new Vec3F(scene.getVoxelSpace().getCenterX(), 
+                                                      scene.getVoxelSpace().getCenterY()-getTargetDistance(),
+                                                      scene.getVoxelSpace().getCenterZ()), 
+                        new Vec3F(scene.getVoxelSpace().getCenterX(), 
+                                      scene.getVoxelSpace().getCenterY(),
+                                      scene.getVoxelSpace().getCenterZ()));
+        
+        camera.updateViewMatrix();
+        
+        resetMouseLocation();
+        camera.notifyViewMatrixChanged();
+        drawNextFrame();
+    }
+    
+    public void setViewToLeft(){
+        
+        Vec3F location = camera.getLocation();
+        
+        //if(location.x > 0){
+            camera.setLocation(new Vec3F(
+                    scene.getVoxelSpace().getCenterX()-getTargetDistance(), 
+                    scene.getVoxelSpace().getCenterY(), 
+                    scene.getVoxelSpace().getCenterZ()));
+        //}
+        
+        camera.setTarget(new Vec3F(scene.getVoxelSpace().getCenterX(), 
+                                                      camera.getLocation().y,
+                                                      camera.getLocation().z));
+        
+        camera.updateViewMatrix();
+        
+        resetMouseLocation();
+        camera.notifyViewMatrixChanged();
+        drawNextFrame();
+    }
+    
+    public void setViewToBottom(){
+        
+        camera.project(new Vec3F(scene.getVoxelSpace().getCenterX(), 
+                                    scene.getVoxelSpace().getCenterY(),
+                                    scene.getVoxelSpace().getCenterZ()-getTargetDistance()), 
+                      new Vec3F(scene.getVoxelSpace().getCenterX(), 
+                                    scene.getVoxelSpace().getCenterY(),
+                                    scene.getVoxelSpace().getCenterZ()));
+        
+        camera.updateViewMatrix();
+        
+        resetMouseLocation();
+        camera.notifyViewMatrixChanged();
+        drawNextFrame();
+    }
+    
+    public void setViewToRight(){
+        
+        Vec3F location = camera.getLocation();
+        
+        /*if(location.x < 0){
+            camera.setLocation(new Vec3F(
+                    scene.getVoxelSpace().getCenterX()+getTargetDistance(), 
+                    scene.getVoxelSpace().getCenterY(),
+                    scene.getVoxelSpace().getCenterZ()));
+            
+        }else if(location.x == 0){*/
+            camera.setLocation(new Vec3F(
+                    scene.getVoxelSpace().getCenterX()+getTargetDistance(),
+                    scene.getVoxelSpace().getCenterY(),
+                    scene.getVoxelSpace().getCenterZ()));
+        //}
+        
+        camera.setTarget(new Vec3F(scene.getVoxelSpace().getCenterX(), 
+                                                      camera.getLocation().y,
+                                                      camera.getLocation().z));
+        
+        camera.updateViewMatrix();
+        
+        resetMouseLocation();
+        camera.notifyViewMatrixChanged();
+        drawNextFrame();
+    }
+    
+    public void setViewToTop(){
+        
+        camera.project(new Vec3F(scene.getVoxelSpace().getCenterX(), 
+                                                      scene.getVoxelSpace().getCenterY(),
+                                                      scene.getVoxelSpace().getCenterZ()+getTargetDistance()), 
+                                        new Vec3F(scene.getVoxelSpace().getCenterX(), 
+                                                      scene.getVoxelSpace().getCenterY(),
+                                                      scene.getVoxelSpace().getCenterZ()));
+        
+        camera.updateViewMatrix();
+        
+        resetMouseLocation();
+        camera.notifyViewMatrixChanged();
+        drawNextFrame();
+    }
+    
+    public void setViewToOrthographic(){
+        
+        camera.setOrthographic(camera.getLeft(), camera.getRight(), camera.getTop(), camera.getBottom(), camera.getNearOrtho(), camera.getFarOrtho());
+        updateCamera();
+        drawNextFrame();
+    }
+    
+    public void setViewToOrthographic(float left, float right, float top, float bottom, float near, float far){
+        
+        camera.setOrthographic(left, right, top, bottom, near, far);
+        updateCamera();
+        drawNextFrame();
+    }
+    
+    public void setViewToPerspective(){
+        
+        camera.setPerspective(camera.getFovy(), camera.getAspect(), camera.getNearPersp(), camera.getFarPersp());
+        updateCamera();
+        drawNextFrame();
+    }
+    
+    public void setViewToPerspective(float fov, float near, float far){
+        
+        camera.setPerspective(fov, camera.getAspect(), near, far);
+        updateCamera();
+        drawNextFrame();
+    }
+    
+    public void switchPerspective(){
+        
+        if(camera.isPerspective()){
+            setViewToOrthographic();
+        }else{
+            setViewToPerspective();
+        }
+    }
+    
+    private float getTargetDistance(){
+        
+        Vec3F location = camera.getLocation();
+        Vec3F center = new Vec3F(scene.getVoxelSpace().getCenterX(), 
+                                scene.getVoxelSpace().getCenterY(),
+                                scene.getVoxelSpace().getCenterZ());
+        
+        return Vec3F.length(Vec3F.substract(location, center));
     }
     
 }

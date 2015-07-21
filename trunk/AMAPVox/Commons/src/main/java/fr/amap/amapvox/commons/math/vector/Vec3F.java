@@ -171,6 +171,5 @@ public class Vec3F{
         
         return array;
     }
-
     
 }

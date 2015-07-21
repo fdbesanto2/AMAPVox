@@ -530,7 +530,19 @@ public class TransmittanceSim {
                     
                     String[] split = line.split(",");
                     
-                    positions.add(new Point3d(Double.valueOf(split[0]), Double.valueOf(split[1]), Double.valueOf(split[2])));
+                    if(split != null && split.length == 3){
+                        
+                        Point3d position = new Point3d(Double.valueOf(split[0]), Double.valueOf(split[1]), Double.valueOf(split[2]));
+                    
+                        int i = (int) ((position.x - vsMin.x) / voxSpace.getVoxelSize().x);
+                        int j = (int) ((position.y - vsMin.y) / voxSpace.getVoxelSize().y);
+
+                        if(i < splitting.x && i >= 0 && j < splitting.y && j >= 0){
+                            positions.add(position);
+                        }else{
+                            logger.warn("Position "+position.toString() +" ignored because out of voxel space!");
+                        }
+                    }                 
                 }
                 
             } catch (FileNotFoundException ex) {

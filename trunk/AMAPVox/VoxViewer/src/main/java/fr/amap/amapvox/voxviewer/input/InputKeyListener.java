@@ -33,6 +33,8 @@ public class InputKeyListener implements KeyListener{
             animator.resume();
         }
         
+        listener.ctrlPressed = ke.isControlDown();
+        
         switch(ke.getKeyCode()){
             
             case KeyEvent.VK_LEFT:
@@ -65,6 +67,30 @@ public class InputKeyListener implements KeyListener{
             case KeyEvent.VK_D:
                 listener.dKeyPressed = true;
                 break;
+            case KeyEvent.VK_ADD:
+            case KeyEvent.VK_EQUALS:    
+                listener.plusKeyPressed = true;
+                break;
+            case KeyEvent.VK_SUBTRACT:
+            case KeyEvent.VK_MINUS:
+                listener.minusKeyPressed = true;
+                break;
+            case KeyEvent.VK_NUMPAD1:
+            case KeyEvent.VK_AMPERSAND:
+                listener.number1KeyPressed = true;
+                break;
+            case KeyEvent.VK_NUMPAD3:
+            case KeyEvent.VK_QUOTEDBL:
+                listener.number3KeyPressed = true;
+                break;
+            case KeyEvent.VK_NUMPAD7:
+            case 232:
+                listener.number7KeyPressed = true;
+                break;
+            case KeyEvent.VK_NUMPAD5:
+            case KeyEvent.VK_LEFT_PARENTHESIS:
+                listener.number5KeyPressed = true;
+                break;
         }
     }
 
@@ -74,6 +100,8 @@ public class InputKeyListener implements KeyListener{
         if(  ke.isAutoRepeat() ) {
             return;
         }
+        
+        listener.ctrlPressed = ke.isControlDown();
         
         switch(ke.getKeyCode()){
             
@@ -103,6 +131,30 @@ public class InputKeyListener implements KeyListener{
                 break;
             case KeyEvent.VK_D:
                 listener.dKeyPressed = false;
+                break;
+            case KeyEvent.VK_ADD:
+            case KeyEvent.VK_EQUALS:  
+                listener.plusKeyPressed = false;
+                break;
+            case KeyEvent.VK_SUBTRACT:
+            case KeyEvent.VK_MINUS:
+                listener.minusKeyPressed = false;
+                break;
+            case KeyEvent.VK_NUMPAD1:
+            case KeyEvent.VK_AMPERSAND:
+                listener.number1KeyPressed = false;
+                break;
+            case KeyEvent.VK_NUMPAD3:
+            case KeyEvent.VK_QUOTEDBL:
+                listener.number3KeyPressed = false;
+                break;
+            case KeyEvent.VK_NUMPAD7:
+            case 232:
+                listener.number7KeyPressed = false;
+                break;
+            case KeyEvent.VK_NUMPAD5:
+            case KeyEvent.VK_LEFT_PARENTHESIS:
+                listener.number5KeyPressed = false;
                 break;
         }
     }

@@ -31,6 +31,7 @@ public class ALSVoxCfg extends VoxCfg{
     private File trajectoryFile;
     private List<Integer> classifiedPointsToDiscard;
     
+    
     @Override
     public void readConfiguration(File inputParametersFile) throws Exception {
         
@@ -67,6 +68,11 @@ public class ALSVoxCfg extends VoxCfg{
                 }
             }
         }
+        
+        Element correctNaNsElement = processElement.getChild("correct-NaNs");
+        if(correctNaNsElement != null){
+            voxelParameters.setCorrectNaNsMode2(Boolean.valueOf(correctNaNsElement.getAttributeValue("enabled")));
+        }
     }
 
     @Override
@@ -91,6 +97,8 @@ public class ALSVoxCfg extends VoxCfg{
             groundEnergyElement.setAttribute("type", String.valueOf(voxelParameters.getGroundEnergyFileFormat()));
         }    
         
+        processElement.addContent(groundEnergyElement);
+        
         if(classifiedPointsToDiscard != null){
             
             Element pointsFilterElement = new Element("point-filters");
@@ -105,8 +113,12 @@ public class ALSVoxCfg extends VoxCfg{
             //pointsFilterElement.addContent(new Element("low-point-filter").setAttribute("enabled", String.valueOf(removeLowPoint)));
             filtersElement.addContent(pointsFilterElement);
         }
-
-        processElement.addContent(groundEnergyElement);
+        
+        
+        
+        Element correctNaNsElement = new Element("correct-NaNs");
+        correctNaNsElement.setAttribute("enabled", String.valueOf(voxelParameters.isCorrectNaNsMode2()));
+        processElement.addContent(correctNaNsElement);
         
         writeDocument(outputParametersFile);
     }
@@ -126,4 +138,6 @@ public class ALSVoxCfg extends VoxCfg{
     public void setClassifiedPointsToDiscard(List<Integer> classifiedPointsToDiscard) {
         this.classifiedPointsToDiscard = classifiedPointsToDiscard;
     }
+
+    
 }

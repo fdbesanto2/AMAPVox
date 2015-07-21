@@ -110,8 +110,12 @@ public class LasVoxelisation extends Processing {
         }
         
         if((parameters.isGenerateMultiBandRaster() && !parameters.isShortcutVoxelFileWriting()) || !parameters.isGenerateMultiBandRaster()){
+            
             voxelAnalysis.computePADs();
-            voxelAnalysis.correctNaNs();
+            if(parameters.isCorrectNaNsMode2()){
+                voxelAnalysis.correctNaNs();
+            }
+            
             voxelAnalysis.write();
             //voxelAnalysis.calculatePADAndWrite(0);
         }

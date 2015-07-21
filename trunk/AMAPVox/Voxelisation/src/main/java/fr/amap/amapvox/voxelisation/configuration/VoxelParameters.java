@@ -57,6 +57,8 @@ public class VoxelParameters {
     private float rasterHeightStep;
     private int rasterBandNumber;
     
+    private boolean correctNaNsMode2;
+    
     
     private int transmittanceMode = 0;
     
@@ -289,5 +291,13 @@ public class VoxelParameters {
 
     public void setRasterBandNumber(int rasterBandNumber) {
         this.rasterBandNumber = rasterBandNumber;
+    }
+    
+    public boolean isCorrectNaNsMode2() {
+        return correctNaNsMode2;
+    }
+
+    public void setCorrectNaNsMode2(boolean correctNaNsMode2) {
+        this.correctNaNsMode2 = correctNaNsMode2;
     }
 }
