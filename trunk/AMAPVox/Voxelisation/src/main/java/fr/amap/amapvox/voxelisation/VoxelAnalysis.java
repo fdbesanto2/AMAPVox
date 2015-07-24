@@ -914,18 +914,25 @@ public class VoxelAnalysis {
                                 }
                             }
 
-                            double factor = 1/count;
-                            if(neighbours.size() > 0){
-                                meanNbSampling /= (float)neighbours.size();
-                                meanTransmittance = (float) Math.pow(meanTransmittance, factor);
+                            if(count > 0){
+                                double factor = 1/count;
+                                if(neighbours.size() > 0){
+                                    meanNbSampling /= (float)neighbours.size();
+                                    meanTransmittance = (float) Math.pow(meanTransmittance, factor);
+                                }else{
+                                    break;
+                                }
+                                currentNbSampling = meanNbSampling;
+                                currentTransmittance = meanTransmittance;
+
+                            
                             }else{
-                                break;
+                                currentTransmittance = 0;
+                                currentNbSampling = 0;
                             }
-
-                            currentNbSampling = meanNbSampling;
-                            currentTransmittance = meanTransmittance;
-
+                            
                             passID++;
+                            
                         }
 
                         if(passID > passMax){

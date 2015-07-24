@@ -42,11 +42,13 @@ public class ProcessingMultiRes {
     
     public ProcessingMultiRes(float[] padLimits, boolean useDefaultMaxPad){
         
-        max_pad_1m = padLimits[0];
-        max_pad_2m = padLimits[1];
-        max_pad_3m = padLimits[2];
-        max_pad_4m = padLimits[3];
-        max_pad_5m = padLimits[4];
+        if(padLimits != null){
+            max_pad_1m = padLimits[0];
+            max_pad_2m = padLimits[1];
+            max_pad_3m = padLimits[2];
+            max_pad_4m = padLimits[3];
+            max_pad_5m = padLimits[4];
+        }
         
         this.useDefaultMaxPad = useDefaultMaxPad;
     }

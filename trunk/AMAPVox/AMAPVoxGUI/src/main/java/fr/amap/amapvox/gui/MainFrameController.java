@@ -221,7 +221,7 @@ public class MainFrameController implements Initializable {
     
     private Matrix4d rasterTransfMatrix;
     
-    private boolean alsMultiFile;
+    //private boolean alsMultiFile;
 
     private String scanFilter;
     private boolean filterScan;
@@ -591,6 +591,8 @@ public class MainFrameController implements Initializable {
     private Button buttonSetVOPMatrix;
     @FXML
     private CheckBox checkboxMultiResAfterMode2;
+    @FXML
+    private CheckBox checkboxMultiFiles;
     /**
      * Initializes the controller class.
      */
@@ -653,7 +655,7 @@ public class MainFrameController implements Initializable {
                 return new SimpleStringProperty(String.valueOf(param.getValue().getClearnessCoefficient()));
             }
         });
-        
+        /*
         textFieldInputFileALS.textProperty().addListener(new ChangeListener<String>() {
 
             @Override
@@ -661,8 +663,20 @@ public class MainFrameController implements Initializable {
                 
                 alsMultiFile = newValue.contains(";");
                 anchorpaneBoundingBoxParameters.setDisable(alsMultiFile);
-                checkboxMultiResAfter.setDisable(!alsMultiFile);
-                textfieldResMultiRes.setDisable(!alsMultiFile);
+                //checkboxMultiResAfter.setDisable(!alsMultiFile);
+                //textfieldResMultiRes.setDisable(!alsMultiFile);
+            }
+        });*/
+        
+        checkboxMultiFiles.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                anchorpaneBoundingBoxParameters.setDisable(newValue);
+                if(!newValue){
+                    checkboxMultiResAfter.setSelected(false);
+                }
+                checkboxMultiResAfter.setDisable(!newValue);
             }
         });
         
@@ -1100,9 +1114,20 @@ public class MainFrameController implements Initializable {
 
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                textfieldResMultiRes.setDisable(!newValue);
+                textfieldResMultiRes.setDisable(!newValue);                
+                checkboxMultiResAfterMode2.setSelected(false);
             }
         });
+        
+        checkboxMultiResAfterMode2.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                checkboxMultiResAfter.setSelected(false);
+            }
+        });
+        
+        
 
         comboboxWeighting.disableProperty().bind(checkboxEnableWeighting.selectedProperty().not());
 
@@ -1180,7 +1205,7 @@ public class MainFrameController implements Initializable {
                         }
                         
                         anchorpaneClassifications.setVisible(true);
-                        anchorpaneBoundingBoxParameters.setDisable(alsMultiFile);
+                        anchorpaneBoundingBoxParameters.setDisable(checkboxMultiFiles.isSelected());
                         
                         break;
                     default:
@@ -1695,6 +1720,12 @@ public class MainFrameController implements Initializable {
                 }
             }
             textFieldInputFileALS.setText(sb.toString());
+            
+            if(selectedFiles.size() > 1){
+                checkboxMultiFiles.setSelected(true);
+            }else{
+                checkboxMultiFiles.setSelected(false);
+            }
         }
     }
 
@@ -2147,13 +2178,13 @@ public class MainFrameController implements Initializable {
                 textFieldResolution);
 
         boolean check2;
-        if(alsMultiFile){
+        if(checkboxMultiFiles.isSelected()){
             check2 = checkEntriesAsFile(textFieldInputFileALS, textFieldTrajectoryFileALS, textFieldOutputFileALS);
         }else{
             check2 = checkEntriesAsFile(textFieldTrajectoryFileALS, textFieldOutputFileALS);
         }
 
-        if ((!check1 && !alsMultiFile)  || !check2) {
+        if ((!check1 && !checkboxMultiFiles.isSelected())  || !check2) {
 
             Alert alert = new Alert(AlertType.WARNING);
             alert.setTitle("Warning");
@@ -2192,7 +2223,7 @@ public class MainFrameController implements Initializable {
             
             VoxelParameters voxelParameters = new VoxelParameters();
             
-            if(!alsMultiFile){ 
+            if(!checkboxMultiFiles.isSelected()){ 
                 voxelParameters = getVoxelParametersFromUI();
             }
             
@@ -2283,7 +2314,7 @@ public class MainFrameController implements Initializable {
             
             VoxCfg cfg = null;
             
-            if(!alsMultiFile){
+            if(!checkboxMultiFiles.isSelected()){
                 
                 cfg = new ALSVoxCfg();
                 ((ALSVoxCfg)cfg).setTrajectoryFile(new File(textFieldTrajectoryFileALS.getText()));
@@ -2354,6 +2385,7 @@ public class MainFrameController implements Initializable {
                         logger.info("Loading DTM file "+voxelParameters.getDtmFile().getAbsolutePath());
                         try {
                             dtm = DtmLoader.readFromAscFile(voxelParameters.getDtmFile());
+                            dtm.setTransformationMatrix(MatrixUtility.convertMatrix4dToMat4D(vopMatrix));
                         } catch (Exception ex) {
                             logger.error("Cannot read dtm file", ex);
                         }
@@ -2441,6 +2473,20 @@ public class MainFrameController implements Initializable {
                     
                     ((MultiVoxCfg)cfg).setMultiProcessInputs(inputList);
                     ((MultiVoxCfg)cfg).setTrajectoryFile(new File(textFieldTrajectoryFileALS.getText()));
+                    cfg.setCorrectNaNs(checkboxMultiResAfter.isSelected());
+                    
+                    try{
+                        float padMax1m = Float.valueOf(textFieldPadMax1m.getText());
+                        float padMax2m = Float.valueOf(textFieldPadMax2m.getText());
+                        float padMax3m = Float.valueOf(textFieldPadMax3m.getText());
+                        float padMax4m = Float.valueOf(textFieldPadMax4m.getText());
+                        float padMax5m = Float.valueOf(textFieldPadMax5m.getText());
+                        cfg.setMultiResPadMax(new float[]{padMax1m, padMax2m, padMax3m, padMax4m, padMax5m});
+                    }catch(Exception e){
+                        logger.warn("Cannot get PAD limits for each resolution");
+                    }
+
+                    cfg.setMultiResUseDefaultMaxPad(!checkboxOverwritePadLimit.isSelected());
                 }
                 
                 removeWarnings = false;
@@ -2465,11 +2511,10 @@ public class MainFrameController implements Initializable {
                 
                 try {
                     cfg.writeConfiguration(selectedFile);
+                    addFileToTaskList(selectedFile);
                 } catch (Exception ex) {
                     logger.error("Cannot write configuration file", ex);
                 }
-                
-                addFileToTaskList(selectedFile);
             }
         }
     }
@@ -3452,6 +3497,7 @@ public class MainFrameController implements Initializable {
                             textFieldInputFileALS.setText(((ALSVoxCfg)cfg).getInputFile().getAbsolutePath());
                             textFieldOutputFileALS.setText(((ALSVoxCfg)cfg).getOutputFile().getAbsolutePath());
                             checkboxMultiResAfterMode2.setSelected(((ALSVoxCfg)cfg).getVoxelParameters().isCorrectNaNsMode2());
+                            checkboxMultiFiles.setSelected(false);
                             
                         }else if(type.equals("multi-voxelisation")){
                             
@@ -3468,6 +3514,8 @@ public class MainFrameController implements Initializable {
                                 textFieldOutputFileALS.setText(inputs.get(0).outputFile.getParentFile().getAbsolutePath());
                                 textFieldResolution.setText(String.valueOf(inputs.get(0).voxelParameters.resolution));
                             }
+                            
+                            checkboxMultiFiles.setSelected(true);
                         }
                     }else{
                         

@@ -8,7 +8,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
-<AnchorPane fx:id="anchorpaneRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="659.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.amapvox.gui.MainFrameController">
+<AnchorPane fx:id="anchorpaneRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="659.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.amapvox.gui.MainFrameController">
    <children>
       <MenuBar maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="25.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <menus>
@@ -66,6 +66,7 @@
                                                                   </Button>
                                                                   <TextField fx:id="textfieldResMultiRes" disable="true" layoutX="133.0" layoutY="299.0" prefHeight="25.0" prefWidth="175.0" promptText="Resolutions (ex: 1, 2, 3)" />
                                                                   <CheckBox fx:id="checkboxMultiResAfter" disable="true" layoutX="14.0" layoutY="302.0" mnemonicParsing="false" text="Correct NaNs" AnchorPane.leftAnchor="14.0" />
+                                                                  <CheckBox fx:id="checkboxMultiFiles" layoutX="188.0" layoutY="18.0" mnemonicParsing="false" text="Multi-files" />
                                                                </children></AnchorPane>
                                                       </content>
                                                     </Tab>

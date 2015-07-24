@@ -292,7 +292,7 @@ public class VoxCfg extends Configuration{
             inputFileElement.setAttribute(new Attribute("src",inputFile.getAbsolutePath()));
             processElement.addContent(inputFileElement);
         }else{
-            //logger.info("Global input file ignored.");
+            logger.info("Global input file ignored.");
         }
         
 
@@ -300,7 +300,7 @@ public class VoxCfg extends Configuration{
         outputFileElement.setAttribute(new Attribute("src",outputFile.getAbsolutePath()));
         processElement.addContent(outputFileElement);
         
-        if(voxelParameters != null){
+        if(voxelParameters != null && voxelParameters.bottomCorner !=null && voxelParameters.topCorner != null){
             Element voxelSpaceElement = new Element("voxelspace");
             voxelSpaceElement.setAttribute("xmin", String.valueOf(voxelParameters.bottomCorner.x));
             voxelSpaceElement.setAttribute("ymin", String.valueOf(voxelParameters.bottomCorner.y));
@@ -315,7 +315,7 @@ public class VoxCfg extends Configuration{
             processElement.addContent(voxelSpaceElement);
             
         }else{
-            //logger.info("Global bounding-box ignored.");
+            logger.info("Global bounding-box ignored.");
         }
         
         
@@ -549,6 +549,14 @@ public class VoxCfg extends Configuration{
 
     public void setMultiResPadMax(float[] multiResPadMax) {
         this.multiResPadMax = multiResPadMax;
-    }    
+    }   
+
+    public void setCorrectNaNs(boolean correctNaNs) {
+        this.correctNaNs = correctNaNs;
+    }
+
+    public void setMultiResUseDefaultMaxPad(boolean multiResUseDefaultMaxPad) {
+        this.multiResUseDefaultMaxPad = multiResUseDefaultMaxPad;
+    }
     
 }

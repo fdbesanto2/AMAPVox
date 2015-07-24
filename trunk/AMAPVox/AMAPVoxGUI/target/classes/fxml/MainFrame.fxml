@@ -66,6 +66,7 @@
                                                                   </Button>
                                                                   <TextField fx:id="textfieldResMultiRes" disable="true" layoutX="133.0" layoutY="299.0" prefHeight="25.0" prefWidth="175.0" promptText="Resolutions (ex: 1, 2, 3)" />
                                                                   <CheckBox fx:id="checkboxMultiResAfter" disable="true" layoutX="14.0" layoutY="302.0" mnemonicParsing="false" text="Correct NaNs" AnchorPane.leftAnchor="14.0" />
+                                                                  <CheckBox fx:id="checkboxMultiFiles" layoutX="188.0" layoutY="18.0" mnemonicParsing="false" text="Multi-files" />
                                                                </children></AnchorPane>
                                                       </content>
                                                     </Tab>
@@ -814,7 +815,7 @@
                                     <MenuButton fx:id="menuButtonExport" disable="true" layoutX="227.0" layoutY="128.0" mnemonicParsing="false" text="Export" AnchorPane.bottomAnchor="0.0">
                                       <items>
                                         <MenuItem fx:id="menuItemExportDart" mnemonicParsing="false" onAction="#onActionMenuItemExportDart" text="Dart (maket.txt)" />
-                                          <MenuItem fx:id="menuItemExportDartPlots" mnemonicParsing="false" onAction="#onActionMenuItemExportDartPlots" text="Dart (plots.txt)" />
+                                          <MenuItem fx:id="menuItemExportDartPlots" mnemonicParsing="false" onAction="#onActionMenuItemExportDartPlots" text="Dart (plots.xml)" />
                                       </items>
                                     </MenuButton>
                                  </children>

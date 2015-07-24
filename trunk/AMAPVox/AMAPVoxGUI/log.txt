@@ -21010,3 +21010,867 @@ java.io.FileNotFoundException: /media/calcul/IomegaHDD/BDLidar/ALS/Paracou/2013/
 2015-07-24 08:59:50 INFO  - Launching command: --width=1120 --height=525 --input=C:\Users\Julien\Desktop\test.vox --attribut=PadBVTotal 
 2015-07-24 09:02:32 INFO  - Launching command: --width=1120 --height=525 --input=C:\Users\Julien\Desktop\test.vox --attribut=PadBVTotal 
 2015-07-24 09:47:24 INFO  - Launching command: --width=1120 --height=525 --input=C:\Users\Julien\Desktop\las.vox --attribut=PadBVTotal 
+2015-07-24 16:48:03 INFO  - calculate bounding-box of file 1/1
+2015-07-24 16:48:03 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 16:48:04 INFO  - Laz file is closed
+2015-07-24 16:48:43 ERROR - Cannot write configuration file
+java.lang.NullPointerException
+	at fr.amap.amapvox.voxelisation.configuration.VoxCfg.writeConfiguration(VoxCfg.java:305)
+	at fr.amap.amapvox.voxelisation.configuration.ALSVoxCfg.writeConfiguration(ALSVoxCfg.java:83)
+	at fr.amap.amapvox.voxelisation.configuration.MultiVoxCfg.writeConfiguration(MultiVoxCfg.java:172)
+	at fr.amap.amapvox.gui.MainFrameController.onActionButtonALSAddToTaskList(MainFrameController.java:2467)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.Trampoline.invoke(MethodUtil.java:71)
+	at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.MethodUtil.invoke(MethodUtil.java:275)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1765)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1653)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Node.fireEvent(Node.java:8390)
+	at javafx.scene.control.Button.fire(Button.java:185)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:182)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:96)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:89)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:218)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:3758)
+	at javafx.scene.Scene$MouseHandler.access$1500(Scene.java:3486)
+	at javafx.scene.Scene.impl_processMouseEvent(Scene.java:1762)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2495)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:350)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:275)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$350(GlassViewEventHandler.java:385)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$$Lambda$414/1686621203.get(Unknown Source)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:404)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:384)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:555)
+	at com.sun.glass.ui.View.notifyMouse(View.java:927)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$48(GtkApplication.java:139)
+	at com.sun.glass.ui.gtk.GtkApplication$$Lambda$41/787867107.run(Unknown Source)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-24 16:48:54 INFO  - calculate bounding-box of file 1/1
+2015-07-24 16:48:54 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 16:48:54 INFO  - Laz file is closed
+2015-07-24 16:49:43 ERROR - Cannot write configuration file
+java.lang.NullPointerException
+	at fr.amap.amapvox.voxelisation.configuration.VoxCfg.writeConfiguration(VoxCfg.java:305)
+	at fr.amap.amapvox.voxelisation.configuration.ALSVoxCfg.writeConfiguration(ALSVoxCfg.java:83)
+	at fr.amap.amapvox.voxelisation.configuration.MultiVoxCfg.writeConfiguration(MultiVoxCfg.java:172)
+	at fr.amap.amapvox.gui.MainFrameController.onActionButtonALSAddToTaskList(MainFrameController.java:2467)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.Trampoline.invoke(MethodUtil.java:71)
+	at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.MethodUtil.invoke(MethodUtil.java:275)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1765)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1653)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Node.fireEvent(Node.java:8390)
+	at javafx.scene.control.Button.fire(Button.java:185)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:182)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:96)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:89)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:218)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:3758)
+	at javafx.scene.Scene$MouseHandler.access$1500(Scene.java:3486)
+	at javafx.scene.Scene.impl_processMouseEvent(Scene.java:1762)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2495)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:350)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:275)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$350(GlassViewEventHandler.java:385)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$$Lambda$414/1686621203.get(Unknown Source)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:404)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:384)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:555)
+	at com.sun.glass.ui.View.notifyMouse(View.java:927)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$48(GtkApplication.java:139)
+	at com.sun.glass.ui.gtk.GtkApplication$$Lambda$41/787867107.run(Unknown Source)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-24 16:50:07 INFO  - calculate bounding-box of file 1/1
+2015-07-24 16:50:07 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 16:50:08 INFO  - Laz file is closed
+2015-07-24 16:52:07 ERROR - Cannot write configuration file
+java.lang.NullPointerException
+	at fr.amap.amapvox.voxelisation.configuration.VoxCfg.writeConfiguration(VoxCfg.java:305)
+	at fr.amap.amapvox.voxelisation.configuration.ALSVoxCfg.writeConfiguration(ALSVoxCfg.java:83)
+	at fr.amap.amapvox.voxelisation.configuration.MultiVoxCfg.writeConfiguration(MultiVoxCfg.java:172)
+	at fr.amap.amapvox.gui.MainFrameController.onActionButtonALSAddToTaskList(MainFrameController.java:2467)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.Trampoline.invoke(MethodUtil.java:71)
+	at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.MethodUtil.invoke(MethodUtil.java:275)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1765)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1653)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Node.fireEvent(Node.java:8390)
+	at javafx.scene.control.Button.fire(Button.java:185)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:182)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:96)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:89)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:218)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:3758)
+	at javafx.scene.Scene$MouseHandler.access$1500(Scene.java:3486)
+	at javafx.scene.Scene.impl_processMouseEvent(Scene.java:1762)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2495)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:350)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:275)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$350(GlassViewEventHandler.java:385)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$$Lambda$414/1686621203.get(Unknown Source)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:404)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:384)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:555)
+	at com.sun.glass.ui.View.notifyMouse(View.java:927)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$48(GtkApplication.java:139)
+	at com.sun.glass.ui.gtk.GtkApplication$$Lambda$41/787867107.run(Unknown Source)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-24 16:52:14 INFO  - calculate bounding-box of file 1/1
+2015-07-24 16:52:14 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 16:52:19 INFO  - Laz file is closed
+2015-07-24 16:54:14 ERROR - Cannot write configuration file
+java.lang.NullPointerException
+	at fr.amap.amapvox.voxelisation.configuration.VoxCfg.writeConfiguration(VoxCfg.java:305)
+	at fr.amap.amapvox.voxelisation.configuration.ALSVoxCfg.writeConfiguration(ALSVoxCfg.java:83)
+	at fr.amap.amapvox.voxelisation.configuration.MultiVoxCfg.writeConfiguration(MultiVoxCfg.java:172)
+	at fr.amap.amapvox.gui.MainFrameController.onActionButtonALSAddToTaskList(MainFrameController.java:2467)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.Trampoline.invoke(MethodUtil.java:71)
+	at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.MethodUtil.invoke(MethodUtil.java:275)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1765)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1653)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Node.fireEvent(Node.java:8390)
+	at javafx.scene.control.Button.fire(Button.java:185)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:182)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:96)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:89)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:218)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:3758)
+	at javafx.scene.Scene$MouseHandler.access$1500(Scene.java:3486)
+	at javafx.scene.Scene.impl_processMouseEvent(Scene.java:1762)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2495)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:350)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:275)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$350(GlassViewEventHandler.java:385)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$$Lambda$414/1686621203.get(Unknown Source)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:404)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:384)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:555)
+	at com.sun.glass.ui.View.notifyMouse(View.java:927)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$48(GtkApplication.java:139)
+	at com.sun.glass.ui.gtk.GtkApplication$$Lambda$41/787867107.run(Unknown Source)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-24 16:56:48 INFO  - calculate bounding-box of file 1/1
+2015-07-24 16:56:48 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 16:56:49 INFO  - Laz file is closed
+2015-07-24 16:56:51 INFO  - Global input file ignored.
+2015-07-24 16:56:51 INFO  - Global bounding-box ignored.
+2015-07-24 16:57:17 INFO  - calculate bounding-box of file 1/1
+2015-07-24 16:57:17 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 16:57:17 INFO  - Laz file is closed
+2015-07-24 16:57:17 INFO  - Global input file ignored.
+2015-07-24 16:57:17 INFO  - Global bounding-box ignored.
+2015-07-24 16:57:43 WARN  - Cannot find input_file element
+2015-07-24 16:57:50 INFO  - allocate!!!!!!!!
+2015-07-24 16:57:50 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 16:57:51 INFO  - Laz file is closed
+2015-07-24 16:57:54 INFO  - Shots processed: 141106
+2015-07-24 16:57:54 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.vox
+2015-07-24 16:57:58 INFO  - file written ( 3.0 s )
+2015-07-24 16:57:58 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 16:57:58 INFO  - file written ( 0.0 s )
+2015-07-24 16:57:58 INFO  - las voxelisation finished in 14.0 s
+2015-07-24 17:04:27 WARN  - Cannot find input_file element
+2015-07-24 17:04:59 INFO  - calculate bounding-box of file 1/1
+2015-07-24 17:04:59 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 17:04:59 INFO  - Laz file is closed
+2015-07-24 17:04:59 INFO  - Global input file ignored.
+2015-07-24 17:04:59 INFO  - Global bounding-box ignored.
+2015-07-24 17:05:10 WARN  - Cannot find input_file element
+2015-07-24 17:05:17 INFO  - allocate!!!!!!!!
+2015-07-24 17:05:17 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 17:05:18 INFO  - Laz file is closed
+2015-07-24 17:05:20 INFO  - Shots processed: 141106
+2015-07-24 17:05:21 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.vox
+2015-07-24 17:05:25 INFO  - file written ( 3.0 s )
+2015-07-24 17:05:25 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:05:25 INFO  - file written ( 0.0 s )
+2015-07-24 17:05:25 INFO  - allocate!!!!!!!!
+2015-07-24 17:05:26 INFO  - Shots processed: 141106
+2015-07-24 17:05:26 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_2.0m.vox
+2015-07-24 17:05:26 INFO  - file written ( 0.0 s )
+2015-07-24 17:05:26 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:05:26 INFO  - file written ( 0.0 s )
+2015-07-24 17:05:26 INFO  - allocate!!!!!!!!
+2015-07-24 17:05:27 INFO  - Shots processed: 141106
+2015-07-24 17:05:27 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_3.0m.vox
+2015-07-24 17:05:27 INFO  - file written ( 0.0 s )
+2015-07-24 17:05:27 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:05:27 INFO  - file written ( 0.0 s )
+2015-07-24 17:05:27 INFO  - allocate!!!!!!!!
+2015-07-24 17:05:28 INFO  - Shots processed: 141106
+2015-07-24 17:05:28 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_4.0m.vox
+2015-07-24 17:05:28 INFO  - file written ( 0.0 s )
+2015-07-24 17:05:28 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:05:28 INFO  - file written ( 0.0 s )
+2015-07-24 17:05:28 ERROR - Cannot load configuration file
+2015-07-24 17:05:56 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.vox --attribut=PadBVTotal 
+2015-07-24 17:06:30 WARN  - Cannot find input_file element
+2015-07-24 17:06:37 INFO  - allocate!!!!!!!!
+2015-07-24 17:06:37 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 17:06:38 INFO  - Laz file is closed
+2015-07-24 17:06:40 INFO  - Shots processed: 141106
+2015-07-24 17:06:40 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.vox
+2015-07-24 17:06:44 INFO  - file written ( 3.0 s )
+2015-07-24 17:06:44 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:06:44 INFO  - file written ( 0.0 s )
+2015-07-24 17:06:44 INFO  - allocate!!!!!!!!
+2015-07-24 17:06:45 INFO  - Shots processed: 141106
+2015-07-24 17:06:45 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_2.0m.vox
+2015-07-24 17:06:45 INFO  - file written ( 0.0 s )
+2015-07-24 17:06:45 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:06:45 INFO  - file written ( 0.0 s )
+2015-07-24 17:06:45 INFO  - allocate!!!!!!!!
+2015-07-24 17:06:46 INFO  - Shots processed: 141106
+2015-07-24 17:06:46 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_3.0m.vox
+2015-07-24 17:06:46 INFO  - file written ( 0.0 s )
+2015-07-24 17:06:46 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:06:46 INFO  - file written ( 0.0 s )
+2015-07-24 17:06:46 INFO  - allocate!!!!!!!!
+2015-07-24 17:06:46 INFO  - Shots processed: 141106
+2015-07-24 17:06:46 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_4.0m.vox
+2015-07-24 17:06:46 INFO  - file written ( 0.0 s )
+2015-07-24 17:06:46 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:06:46 INFO  - file written ( 0.0 s )
+2015-07-24 17:06:46 ERROR - Cannot load configuration file
+2015-07-24 17:07:47 WARN  - Cannot find input_file element
+2015-07-24 17:08:20 INFO  - allocate!!!!!!!!
+2015-07-24 17:08:20 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 17:08:21 INFO  - Laz file is closed
+2015-07-24 17:08:23 INFO  - Shots processed: 141106
+2015-07-24 17:08:24 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.vox
+2015-07-24 17:08:27 INFO  - file written ( 3.0 s )
+2015-07-24 17:08:27 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:08:27 INFO  - file written ( 0.0 s )
+2015-07-24 17:08:31 INFO  - allocate!!!!!!!!
+2015-07-24 17:08:32 INFO  - Shots processed: 141106
+2015-07-24 17:08:32 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_2.0m.vox
+2015-07-24 17:08:33 INFO  - file written ( 0.0 s )
+2015-07-24 17:08:33 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:08:33 INFO  - file written ( 0.0 s )
+2015-07-24 17:08:36 INFO  - allocate!!!!!!!!
+2015-07-24 17:08:36 INFO  - Shots processed: 141106
+2015-07-24 17:08:36 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_3.0m.vox
+2015-07-24 17:08:36 INFO  - file written ( 0.0 s )
+2015-07-24 17:08:36 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:08:36 INFO  - file written ( 0.0 s )
+2015-07-24 17:08:40 INFO  - allocate!!!!!!!!
+2015-07-24 17:08:41 INFO  - Shots processed: 141106
+2015-07-24 17:08:41 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_4.0m.vox
+2015-07-24 17:08:41 INFO  - file written ( 0.0 s )
+2015-07-24 17:08:41 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:08:41 INFO  - file written ( 0.0 s )
+2015-07-24 17:08:41 ERROR - Cannot load configuration file
+2015-07-24 17:10:25 WARN  - Cannot find input_file element
+2015-07-24 17:10:54 INFO  - allocate!!!!!!!!
+2015-07-24 17:10:54 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 17:10:55 INFO  - Laz file is closed
+2015-07-24 17:10:57 INFO  - Shots processed: 141106
+2015-07-24 17:10:57 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.vox
+2015-07-24 17:11:01 INFO  - file written ( 3.0 s )
+2015-07-24 17:11:01 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:11:01 INFO  - file written ( 0.0 s )
+2015-07-24 17:11:01 INFO  - allocate!!!!!!!!
+2015-07-24 17:11:01 INFO  - Shots processed: 141106
+2015-07-24 17:11:02 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_2.0m.vox
+2015-07-24 17:11:02 INFO  - file written ( 0.0 s )
+2015-07-24 17:11:02 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:11:02 INFO  - file written ( 0.0 s )
+2015-07-24 17:11:02 INFO  - allocate!!!!!!!!
+2015-07-24 17:11:03 INFO  - Shots processed: 141106
+2015-07-24 17:11:03 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_3.0m.vox
+2015-07-24 17:11:03 INFO  - file written ( 0.0 s )
+2015-07-24 17:11:03 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:11:03 INFO  - file written ( 0.0 s )
+2015-07-24 17:11:03 INFO  - allocate!!!!!!!!
+2015-07-24 17:11:03 INFO  - Shots processed: 141106
+2015-07-24 17:11:03 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_4.0m.vox
+2015-07-24 17:11:03 INFO  - file written ( 0.0 s )
+2015-07-24 17:11:03 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:11:03 INFO  - file written ( 0.0 s )
+2015-07-24 17:11:50 ERROR - Cannot load configuration file
+2015-07-24 17:12:03 WARN  - Cannot find input_file element
+2015-07-24 17:12:15 INFO  - allocate!!!!!!!!
+2015-07-24 17:12:15 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 17:12:16 INFO  - Laz file is closed
+2015-07-24 17:12:18 INFO  - Shots processed: 141106
+2015-07-24 17:12:18 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.vox
+2015-07-24 17:12:21 INFO  - file written ( 3.0 s )
+2015-07-24 17:12:21 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:12:21 INFO  - file written ( 0.0 s )
+2015-07-24 17:12:21 INFO  - allocate!!!!!!!!
+2015-07-24 17:12:22 INFO  - Shots processed: 141106
+2015-07-24 17:12:22 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_2.0m.vox
+2015-07-24 17:12:23 INFO  - file written ( 0.0 s )
+2015-07-24 17:12:23 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:12:23 INFO  - file written ( 0.0 s )
+2015-07-24 17:12:23 INFO  - allocate!!!!!!!!
+2015-07-24 17:12:23 INFO  - Shots processed: 141106
+2015-07-24 17:12:23 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_3.0m.vox
+2015-07-24 17:12:24 INFO  - file written ( 0.0 s )
+2015-07-24 17:12:24 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:12:24 INFO  - file written ( 0.0 s )
+2015-07-24 17:12:24 INFO  - allocate!!!!!!!!
+2015-07-24 17:12:24 INFO  - Shots processed: 141106
+2015-07-24 17:12:24 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_4.0m.vox
+2015-07-24 17:12:24 INFO  - file written ( 0.0 s )
+2015-07-24 17:12:24 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:12:24 INFO  - file written ( 0.0 s )
+2015-07-24 17:12:36 ERROR - Cannot load configuration file
+2015-07-24 17:16:18 WARN  - Cannot find input_file element
+2015-07-24 17:16:45 INFO  - calculate bounding-box of file 1/1
+2015-07-24 17:16:45 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 17:16:45 INFO  - Laz file is closed
+2015-07-24 17:16:45 WARN  - Cannot get PAD limits for each resolution
+2015-07-24 17:16:45 INFO  - Global input file ignored.
+2015-07-24 17:16:45 INFO  - Global bounding-box ignored.
+2015-07-24 17:16:49 WARN  - Cannot find input_file element
+2015-07-24 17:16:56 INFO  - allocate!!!!!!!!
+2015-07-24 17:16:56 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 17:16:57 INFO  - Laz file is closed
+2015-07-24 17:17:00 INFO  - Shots processed: 141106
+2015-07-24 17:17:00 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.vox
+2015-07-24 17:17:04 INFO  - file written ( 3.0 s )
+2015-07-24 17:17:04 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:17:04 INFO  - file written ( 0.0 s )
+2015-07-24 17:17:04 INFO  - allocate!!!!!!!!
+2015-07-24 17:17:05 INFO  - Shots processed: 141106
+2015-07-24 17:17:05 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_2.0m.vox
+2015-07-24 17:17:06 INFO  - file written ( 0.0 s )
+2015-07-24 17:17:06 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:17:06 INFO  - file written ( 0.0 s )
+2015-07-24 17:17:06 INFO  - allocate!!!!!!!!
+2015-07-24 17:17:06 INFO  - Shots processed: 141106
+2015-07-24 17:17:06 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_3.0m.vox
+2015-07-24 17:17:07 INFO  - file written ( 0.0 s )
+2015-07-24 17:17:07 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:17:07 INFO  - file written ( 0.0 s )
+2015-07-24 17:17:07 INFO  - allocate!!!!!!!!
+2015-07-24 17:17:07 INFO  - Shots processed: 141106
+2015-07-24 17:17:07 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_4.0m.vox
+2015-07-24 17:17:07 INFO  - file written ( 0.0 s )
+2015-07-24 17:17:07 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:17:07 INFO  - file written ( 0.0 s )
+2015-07-24 17:17:07 INFO  - allocate!!!!!!!!
+2015-07-24 17:17:08 INFO  - Shots processed: 141106
+2015-07-24 17:17:08 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_5.0m.vox
+2015-07-24 17:17:08 INFO  - file written ( 0.0 s )
+2015-07-24 17:17:08 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:17:08 INFO  - file written ( 0.0 s )
+2015-07-24 17:17:19 INFO  - Nombre de valeurs correctes: 488613/792120
+2015-07-24 17:17:19 INFO  - Nombre de valeurs corrigées: 148935/792120
+2015-07-24 17:17:19 INFO  - Nombre de valeurs mises à défaut: 154572/792120
+2015-07-24 17:17:23 INFO  - las voxelisation finished in 34.0 s
+2015-07-24 17:17:52 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_multires_.vox --attribut=PadBVTotal 
+2015-07-24 17:28:32 WARN  - Cannot find input_file element
+2015-07-24 17:29:33 WARN  - Cannot find input_file element
+2015-07-24 17:30:53 WARN  - Cannot find input_file element
+2015-07-24 17:44:47 WARN  - Cannot find input_file element
+2015-07-24 17:45:04 WARN  - Cannot find input_file element
+2015-07-24 17:49:38 WARN  - Cannot find input_file element
+2015-07-24 17:50:43 WARN  - Cannot find input_file element
+2015-07-24 17:51:13 INFO  - calculate bounding-box of file 1/1
+2015-07-24 17:51:13 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 17:51:13 INFO  - Laz file is closed
+2015-07-24 17:51:13 WARN  - Cannot get PAD limits for each resolution
+2015-07-24 17:51:13 INFO  - Global input file ignored.
+2015-07-24 17:51:13 INFO  - Global bounding-box ignored.
+2015-07-24 17:51:16 WARN  - Cannot find input_file element
+2015-07-24 17:51:23 INFO  - allocate!!!!!!!!
+2015-07-24 17:51:23 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 17:51:24 INFO  - Laz file is closed
+2015-07-24 17:51:26 INFO  - Shots processed: 141106
+2015-07-24 17:51:26 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.vox
+2015-07-24 17:51:30 INFO  - file written ( 3.0 s )
+2015-07-24 17:51:30 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:51:30 INFO  - file written ( 0.0 s )
+2015-07-24 17:51:30 INFO  - allocate!!!!!!!!
+2015-07-24 17:51:31 INFO  - Shots processed: 141106
+2015-07-24 17:51:32 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_2.0m.vox
+2015-07-24 17:51:32 INFO  - file written ( 0.0 s )
+2015-07-24 17:51:32 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:51:32 INFO  - file written ( 0.0 s )
+2015-07-24 17:51:32 INFO  - allocate!!!!!!!!
+2015-07-24 17:51:33 INFO  - Shots processed: 141106
+2015-07-24 17:51:33 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_3.0m.vox
+2015-07-24 17:51:33 INFO  - file written ( 0.0 s )
+2015-07-24 17:51:33 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:51:33 INFO  - file written ( 0.0 s )
+2015-07-24 17:51:33 INFO  - allocate!!!!!!!!
+2015-07-24 17:51:33 INFO  - Shots processed: 141106
+2015-07-24 17:51:33 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_4.0m.vox
+2015-07-24 17:51:34 INFO  - file written ( 0.0 s )
+2015-07-24 17:51:34 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:51:34 INFO  - file written ( 0.0 s )
+2015-07-24 17:51:34 INFO  - allocate!!!!!!!!
+2015-07-24 17:51:34 INFO  - Shots processed: 141106
+2015-07-24 17:51:34 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_5.0m.vox
+2015-07-24 17:51:34 INFO  - file written ( 0.0 s )
+2015-07-24 17:51:34 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 17:51:34 INFO  - file written ( 0.0 s )
+2015-07-24 17:51:45 INFO  - Nombre de valeurs correctes: 488613/792120
+2015-07-24 17:51:45 INFO  - Nombre de valeurs corrigées: 148935/792120
+2015-07-24 17:51:45 INFO  - Nombre de valeurs mises à défaut: 154572/792120
+2015-07-24 17:51:49 INFO  - las voxelisation finished in 33.0 s
+2015-07-24 17:52:08 INFO  - calculate bounding-box of file 1/1
+2015-07-24 17:52:08 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 17:52:08 INFO  - Laz file is closed
+2015-07-24 17:52:08 WARN  - Cannot get PAD limits for each resolution
+2015-07-24 17:52:08 INFO  - Global input file ignored.
+2015-07-24 17:52:08 INFO  - Global bounding-box ignored.
+2015-07-24 17:52:13 WARN  - Cannot find input_file element
+2015-07-24 17:52:19 INFO  - allocate!!!!!!!!
+2015-07-24 17:52:19 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 17:52:20 INFO  - Laz file is closed
+2015-07-24 17:52:22 INFO  - Shots processed: 141106
+2015-07-24 17:52:22 ERROR - Cannot load configuration file
+2015-07-24 18:03:40 WARN  - Cannot find input_file element
+2015-07-24 18:04:06 INFO  - calculate bounding-box of file 1/1
+2015-07-24 18:04:06 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 18:04:07 INFO  - Laz file is closed
+2015-07-24 18:04:07 WARN  - Cannot get PAD limits for each resolution
+2015-07-24 18:04:07 INFO  - Global input file ignored.
+2015-07-24 18:04:07 INFO  - Global bounding-box ignored.
+2015-07-24 18:04:10 WARN  - Cannot find input_file element
+2015-07-24 18:04:17 INFO  - allocate!!!!!!!!
+2015-07-24 18:04:17 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 18:04:18 INFO  - Laz file is closed
+2015-07-24 18:04:20 INFO  - Shots processed: 141106
+2015-07-24 18:04:20 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.vox
+2015-07-24 18:04:24 INFO  - file written ( 4.0 s )
+2015-07-24 18:04:24 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 18:04:24 INFO  - file written ( 0.0 s )
+2015-07-24 18:04:24 INFO  - allocate!!!!!!!!
+2015-07-24 18:04:25 INFO  - Shots processed: 141106
+2015-07-24 18:04:26 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_2.0m.vox
+2015-07-24 18:04:26 INFO  - file written ( 0.0 s )
+2015-07-24 18:04:26 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 18:04:26 INFO  - file written ( 0.0 s )
+2015-07-24 18:04:26 INFO  - allocate!!!!!!!!
+2015-07-24 18:04:27 INFO  - Shots processed: 141106
+2015-07-24 18:04:27 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_3.0m.vox
+2015-07-24 18:04:27 INFO  - file written ( 0.0 s )
+2015-07-24 18:04:27 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 18:04:27 INFO  - file written ( 0.0 s )
+2015-07-24 18:04:27 INFO  - allocate!!!!!!!!
+2015-07-24 18:04:28 INFO  - Shots processed: 141106
+2015-07-24 18:04:28 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_4.0m.vox
+2015-07-24 18:04:28 INFO  - file written ( 0.0 s )
+2015-07-24 18:04:28 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 18:04:28 INFO  - file written ( 0.0 s )
+2015-07-24 18:04:28 INFO  - allocate!!!!!!!!
+2015-07-24 18:04:28 INFO  - Shots processed: 141106
+2015-07-24 18:04:28 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_5.0m.vox
+2015-07-24 18:04:28 INFO  - file written ( 0.0 s )
+2015-07-24 18:04:28 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ground_energy.png
+2015-07-24 18:04:28 INFO  - file written ( 0.0 s )
+2015-07-24 18:04:39 INFO  - Nombre de valeurs correctes: 488613/792120
+2015-07-24 18:04:39 INFO  - Nombre de valeurs corrigées: 148935/792120
+2015-07-24 18:04:39 INFO  - Nombre de valeurs mises à défaut: 154572/792120
+2015-07-24 18:04:43 INFO  - las voxelisation finished in 33.0 s
+2015-07-24 18:04:52 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_multires_.vox --attribut=PadBVTotal 
+2015-07-24 18:05:40 INFO  - calculate bounding-box of file 1/1
+2015-07-24 18:05:40 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 18:05:41 INFO  - Laz file is closed
+2015-07-24 18:05:41 WARN  - Cannot get PAD limits for each resolution
+2015-07-24 18:05:41 INFO  - Global input file ignored.
+2015-07-24 18:05:41 INFO  - Global bounding-box ignored.
+2015-07-24 18:05:42 WARN  - Cannot find input_file element
+2015-07-24 18:05:50 INFO  - allocate!!!!!!!!
+2015-07-24 18:05:50 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 18:05:51 INFO  - Laz file is closed
+2015-07-24 18:05:52 INFO  - Shots processed: 141106
+2015-07-24 18:05:52 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.vox
+2015-07-24 18:06:09 WARN  - Cannot find input_file element
+2015-07-24 18:06:17 INFO  - allocate!!!!!!!!
+2015-07-24 18:06:17 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 18:06:17 INFO  - Laz file is closed
+2015-07-24 18:06:19 INFO  - Shots processed: 141106
+2015-07-24 18:06:19 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.vox
+2015-07-24 18:07:07 INFO  - file written ( 74.0 s )
+2015-07-24 18:07:07 INFO  - allocate!!!!!!!!
+2015-07-24 18:07:07 INFO  - Shots processed: 141106
+2015-07-24 18:07:07 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_2.0m.vox
+2015-07-24 18:07:17 INFO  - file written ( 9.0 s )
+2015-07-24 18:07:17 INFO  - allocate!!!!!!!!
+2015-07-24 18:07:17 INFO  - Shots processed: 141106
+2015-07-24 18:07:17 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_3.0m.vox
+2015-07-24 18:07:20 INFO  - file written ( 2.0 s )
+2015-07-24 18:07:20 INFO  - allocate!!!!!!!!
+2015-07-24 18:07:20 INFO  - Shots processed: 141106
+2015-07-24 18:07:20 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_4.0m.vox
+2015-07-24 18:07:22 INFO  - file written ( 1.0 s )
+2015-07-24 18:07:22 INFO  - allocate!!!!!!!!
+2015-07-24 18:07:22 INFO  - Shots processed: 141106
+2015-07-24 18:07:22 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_5.0m.vox
+2015-07-24 18:07:23 INFO  - file written ( 0.0 s )
+2015-07-24 18:07:32 ERROR - Cannot load configuration file
+2015-07-24 18:07:33 INFO  - file written ( 73.0 s )
+2015-07-24 18:07:33 INFO  - allocate!!!!!!!!
+2015-07-24 18:07:33 INFO  - Shots processed: 141106
+2015-07-24 18:07:33 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_2.0m.vox
+2015-07-24 18:07:42 INFO  - file written ( 8.0 s )
+2015-07-24 18:07:42 INFO  - allocate!!!!!!!!
+2015-07-24 18:07:43 INFO  - Shots processed: 141106
+2015-07-24 18:07:43 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_3.0m.vox
+2015-07-24 18:07:46 INFO  - file written ( 2.0 s )
+2015-07-24 18:07:46 INFO  - allocate!!!!!!!!
+2015-07-24 18:07:46 INFO  - Shots processed: 141106
+2015-07-24 18:07:46 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_4.0m.vox
+2015-07-24 18:07:47 INFO  - file written ( 1.0 s )
+2015-07-24 18:07:47 INFO  - allocate!!!!!!!!
+2015-07-24 18:07:47 INFO  - Shots processed: 141106
+2015-07-24 18:07:47 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_res_5.0m.vox
+2015-07-24 18:07:48 INFO  - file written ( 0.0 s )
+2015-07-24 18:07:58 INFO  - Nombre de valeurs correctes: 488613/792120
+2015-07-24 18:07:58 INFO  - Nombre de valeurs corrigées: 148935/792120
+2015-07-24 18:07:58 INFO  - Nombre de valeurs mises à défaut: 154572/792120
+2015-07-24 18:08:02 INFO  - las voxelisation finished in 113.0 s
+2015-07-24 18:08:14 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz_multires_.vox --attribut=PadBVTotal 
+2015-07-24 18:08:55 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 18:08:56 INFO  - Laz file is closed
+2015-07-24 18:09:13 INFO  - allocate!!!!!!!!
+2015-07-24 18:09:13 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 18:09:14 INFO  - Laz file is closed
+2015-07-24 18:09:15 INFO  - Shots processed: 141106
+2015-07-24 18:09:15 ERROR - / by zero
+java.lang.ArithmeticException: / by zero
+	at fr.amap.amapvox.voxelisation.VoxelAnalysis.correctNaNs(VoxelAnalysis.java:917)
+	at fr.amap.amapvox.voxelisation.als.LasVoxelisation.process(LasVoxelisation.java:116)
+	at fr.amap.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:369)
+	at fr.amap.amapvox.gui.MainFrameController$40$1.call(MainFrameController.java:2713)
+	at fr.amap.amapvox.gui.MainFrameController$40$1.call(MainFrameController.java:2628)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$467/326890025.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$465/1988775786.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-24 18:09:35 INFO  - allocate!!!!!!!!
+2015-07-24 18:09:35 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 18:09:36 INFO  - Laz file is closed
+2015-07-24 18:09:37 INFO  - Shots processed: 141106
+2015-07-24 18:09:57 ERROR - / by zero
+java.lang.ArithmeticException: / by zero
+	at fr.amap.amapvox.voxelisation.VoxelAnalysis.correctNaNs(VoxelAnalysis.java:917)
+	at fr.amap.amapvox.voxelisation.als.LasVoxelisation.process(LasVoxelisation.java:116)
+	at fr.amap.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:369)
+	at fr.amap.amapvox.gui.MainFrameController$40$1.call(MainFrameController.java:2713)
+	at fr.amap.amapvox.gui.MainFrameController$40$1.call(MainFrameController.java:2628)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$467/326890025.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$465/1988775786.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-24 18:10:08 INFO  - allocate!!!!!!!!
+2015-07-24 18:10:08 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 18:10:09 INFO  - Laz file is closed
+2015-07-24 18:10:10 INFO  - Shots processed: 141106
+2015-07-24 18:13:38 ERROR - / by zero
+java.lang.ArithmeticException: / by zero
+	at fr.amap.amapvox.voxelisation.VoxelAnalysis.correctNaNs(VoxelAnalysis.java:917)
+	at fr.amap.amapvox.voxelisation.als.LasVoxelisation.process(LasVoxelisation.java:116)
+	at fr.amap.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:369)
+	at fr.amap.amapvox.gui.MainFrameController$40$1.call(MainFrameController.java:2713)
+	at fr.amap.amapvox.gui.MainFrameController$40$1.call(MainFrameController.java:2628)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$488(Service.java:725)
+	at javafx.concurrent.Service$$Lambda$467/326890025.run(Unknown Source)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$489(Service.java:724)
+	at javafx.concurrent.Service$$Lambda$465/1988775786.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-07-24 18:15:39 INFO  - allocate!!!!!!!!
+2015-07-24 18:15:39 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 18:15:39 INFO  - Laz file is closed
+2015-07-24 18:15:41 INFO  - Shots processed: 141106
+2015-07-24 18:15:43 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output
+2015-07-24 18:15:43 ERROR - Error: java.io.FileNotFoundException: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output (est un dossier)
+2015-07-24 18:15:43 INFO  - las voxelisation finished in 11.0 s
+2015-07-24 18:16:28 INFO  - allocate!!!!!!!!
+2015-07-24 18:16:28 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 18:16:29 INFO  - Laz file is closed
+2015-07-24 18:16:30 INFO  - Shots processed: 141106
+2015-07-24 18:16:31 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/multires_mode2/las_multires_mode2.vox
+2015-07-24 18:16:35 INFO  - file written ( 4.0 s )
+2015-07-24 18:16:35 INFO  - las voxelisation finished in 13.0 s
+2015-07-24 18:16:43 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/multires_mode2/las_multires_mode2.vox --attribut=PadBVTotal 
+2015-07-24 18:18:36 INFO  - Loading DTM file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/MNT/MNT1m.asc
+2015-07-24 18:18:39 INFO  - calculate bounding-box of file 1/1
+2015-07-24 18:18:39 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 18:18:40 INFO  - Laz file is closed
+2015-07-24 18:18:40 INFO  - Generate DTM raster of file 1/1
+2015-07-24 18:18:58 INFO  - allocate!!!!!!!!
+2015-07-24 18:18:58 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 18:18:59 INFO  - Laz file is closed
+2015-07-24 18:19:01 INFO  - Shots processed: 141106
+2015-07-24 18:19:02 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output
+2015-07-24 18:19:02 ERROR - Error: java.io.FileNotFoundException: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output (est un dossier)
+2015-07-24 18:19:02 INFO  - las voxelisation finished in 11.0 s
+2015-07-24 18:19:08 INFO  - Loading DTM file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/MNT/MNT1m.asc
+2015-07-24 18:19:12 INFO  - calculate bounding-box of file 1/1
+2015-07-24 18:19:12 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 18:19:12 INFO  - Laz file is closed
+2015-07-24 18:19:12 INFO  - Generate DTM raster of file 1/1
+2015-07-24 18:25:24 INFO  - Loading DTM file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/MNT/MNT1m.asc
+2015-07-24 18:25:28 INFO  - calculate bounding-box of file 1/1
+2015-07-24 18:25:28 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 18:25:28 INFO  - Laz file is closed
+2015-07-24 18:25:28 INFO  - Generate DTM raster of file 1/1
+2015-07-24 18:25:34 WARN  - Cannot get PAD limits for each resolution
+2015-07-24 18:25:34 INFO  - Global input file ignored.
+2015-07-24 18:25:34 INFO  - Global bounding-box ignored.
+2015-07-24 18:26:11 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/las.vox --attribut=PadBVTotal --dtm=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.asc --dtm-transf-matrix=1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 --dtm-fit --dtm-fitting-margin=0 
+2015-07-24 18:26:56 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/las.vox --attribut=PadBVTotal --dtm=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.asc --dtm-transform --dtm-transf-matrix=0.9540688863574789 0.29958731629459895 0.0 -448120.0441687209 -0.29958731629459895 0.9540688863574789 0.0 -470918.3928060016 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 --dtm-fit --dtm-fitting-margin=0 
+2015-07-24 18:27:19 WARN  - Cannot find input_file element
+2015-07-24 18:27:23 INFO  - allocate!!!!!!!!
+2015-07-24 18:27:23 INFO  - Laz file /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/las/ALSbuf_xyzirncapt.laz is opened
+2015-07-24 18:27:23 INFO  - Laz file is closed
+2015-07-24 18:27:25 INFO  - Shots processed: 141106
+2015-07-24 18:27:25 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.vox
+2015-07-24 18:27:29 INFO  - file written ( 3.0 s )
+2015-07-24 18:27:29 INFO  - las voxelisation finished in 10.0 s
+2015-07-24 18:27:47 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.vox --attribut=PadBVTotal --dtm=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.asc --dtm-transform --dtm-transf-matrix=0.9540688863574789 0.29958731629459895 0.0 -448120.0441687209 -0.29958731629459895 0.9540688863574789 0.0 -470918.3928060016 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 --dtm-fit --dtm-fitting-margin=0 
+2015-07-24 18:32:11 INFO  - rxp extraction is started
+2015-07-24 18:32:11 INFO  - allocate!!!!!!!!
+2015-07-24 18:32:18 INFO  - Shots processed: 1000000
+2015-07-24 18:32:25 INFO  - Shots processed: 2000000
+2015-07-24 18:32:32 INFO  - Shots processed: 3000000
+2015-07-24 18:32:38 INFO  - Shots processed: 4000000
+2015-07-24 18:32:44 INFO  - Shots processed: 5000000
+2015-07-24 18:32:52 INFO  - Shots processed: 6000000
+2015-07-24 18:32:59 INFO  - Shots processed: 7000000
+2015-07-24 18:33:06 INFO  - Shots processed: 8000000
+2015-07-24 18:33:13 INFO  - Shots processed: 9000000
+2015-07-24 18:33:19 INFO  - Shots processed: 10000000
+2015-07-24 18:33:25 INFO  - Shots processed: 11000000
+2015-07-24 18:33:32 INFO  - Shots processed: 12000000
+2015-07-24 18:33:39 INFO  - Shots processed: 13000000
+2015-07-24 18:33:46 INFO  - Shots processed: 14000000
+2015-07-24 18:33:53 INFO  - Shots processed: 15000000
+2015-07-24 18:33:59 INFO  - Shots processed: 16000000
+2015-07-24 18:34:06 INFO  - Shots processed: 17000000
+2015-07-24 18:34:12 INFO  - Shots processed: 18000000
+2015-07-24 18:34:19 INFO  - Shots processed: 19000000
+2015-07-24 18:34:26 INFO  - Shots processed: 20000000
+2015-07-24 18:34:33 INFO  - Shots processed: 21000000
+2015-07-24 18:34:39 INFO  - Shots processed: 22000000
+2015-07-24 18:34:43 INFO  - writing file: /home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/TLS/output/tls.vox
+2015-07-24 18:34:46 INFO  - file written ( 2.0 s )
+2015-07-24 18:34:46 INFO  - Voxelisation finished in 158.0 s
+2015-07-24 18:34:55 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/TLS/output/tls.vox --attribut=PadBVTotal --dtm=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.asc --dtm-transform --dtm-transf-matrix=0.9540688863574789 0.29958731629459895 0.0 -448120.0441687209 -0.29958731629459895 0.9540688863574789 0.0 -470918.3928060016 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 --dtm-fit --dtm-fitting-margin=0 
+2015-07-24 18:35:07 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/TLS/output/tls.vox --attribut=PadBVTotal --dtm=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.asc --dtm-transform --dtm-transf-matrix=0.9540688863574789 0.29958731629459895 0.0 -448120.0441687209 -0.29958731629459895 0.9540688863574789 0.0 -470918.3928060016 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 --dtm-fit --dtm-fitting-margin=0 
+2015-07-24 18:35:11 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/TLS/output/tls.vox --attribut=PadBVTotal --dtm=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/ALS/Paracou 2013/output/ALSbuf_xyzirncapt.laz.asc --dtm-transform --dtm-transf-matrix=0.9540688863574789 0.29958731629459895 0.0 -448120.0441687209 -0.29958731629459895 0.9540688863574789 0.0 -470918.3928060016 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 --dtm-fit --dtm-fitting-margin=0 
+2015-07-24 18:35:45 INFO  - Launching command: --width=853 --height=512 --input=/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/samples/TLS/output/tls.vox --attribut=PadBVTotal 
