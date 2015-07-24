@@ -8,7 +8,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
-<AnchorPane fx:id="anchorpaneRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="659.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.amapvox.gui.MainFrameController">
+<AnchorPane fx:id="anchorpaneRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="659.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.amapvox.gui.MainFrameController">
    <children>
       <MenuBar maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="25.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <menus>
@@ -814,7 +814,7 @@
                                     <MenuButton fx:id="menuButtonExport" disable="true" layoutX="227.0" layoutY="128.0" mnemonicParsing="false" text="Export" AnchorPane.bottomAnchor="0.0">
                                       <items>
                                         <MenuItem fx:id="menuItemExportDart" mnemonicParsing="false" onAction="#onActionMenuItemExportDart" text="Dart (maket.txt)" />
-                                          <MenuItem fx:id="menuItemExportDartPlots" mnemonicParsing="false" onAction="#onActionMenuItemExportDartPlots" text="Dart (plots.txt)" />
+                                          <MenuItem fx:id="menuItemExportDartPlots" mnemonicParsing="false" onAction="#onActionMenuItemExportDartPlots" text="Dart (plots.xml)" />
                                       </items>
                                     </MenuButton>
                                  </children>

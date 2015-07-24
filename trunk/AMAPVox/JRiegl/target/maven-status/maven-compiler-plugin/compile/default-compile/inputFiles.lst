@@ -1,6 +1,6 @@
-/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/JRiegl/src/main/java/fr/amap/amapvox/io/tls/rsp/Rsp.java
-/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/JRiegl/src/main/java/fr/amap/amapvox/io/tls/rxp/RxpExtraction.java
-/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/JRiegl/src/main/java/fr/amap/amapvox/io/tls/rsp/Scans.java
-/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/JRiegl/src/main/java/fr/amap/amapvox/io/tls/rsp/RxpScan.java
-/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/JRiegl/src/main/java/fr/amap/amapvox/io/tls/rxp/Shot.java
-/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/JRiegl/src/main/java/fr/amap/amapvox/io/tls/rsp/package-info.java
+E:\Programmation\VoxeLidar\trunk\AMAPVox\JRiegl\src\main\java\fr\amap\amapvox\io\tls\rsp\package-info.java
+E:\Programmation\VoxeLidar\trunk\AMAPVox\JRiegl\src\main\java\fr\amap\amapvox\io\tls\rsp\Rsp.java
+E:\Programmation\VoxeLidar\trunk\AMAPVox\JRiegl\src\main\java\fr\amap\amapvox\io\tls\rsp\RxpScan.java
+E:\Programmation\VoxeLidar\trunk\AMAPVox\JRiegl\src\main\java\fr\amap\amapvox\io\tls\rxp\Shot.java
+E:\Programmation\VoxeLidar\trunk\AMAPVox\JRiegl\src\main\java\fr\amap\amapvox\io\tls\rxp\RxpExtraction.java
+E:\Programmation\VoxeLidar\trunk\AMAPVox\JRiegl\src\main\java\fr\amap\amapvox\io\tls\rsp\Scans.java
