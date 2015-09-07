@@ -46,6 +46,7 @@ public abstract class Configuration {
     protected Element racine;
     protected Document document;
     protected Element processElement;
+    protected String processModeValue;
     
     public enum ProcessMode{
         
@@ -144,7 +145,7 @@ public abstract class Configuration {
             Element root = document.getRootElement();
 
             processElement = root.getChild("process");
-            String mode = processElement.getAttributeValue("mode");
+            processModeValue = processElement.getAttributeValue("mode");
             String type = processElement.getAttributeValue("type");
         
         } catch (JDOMException | IOException ex) {

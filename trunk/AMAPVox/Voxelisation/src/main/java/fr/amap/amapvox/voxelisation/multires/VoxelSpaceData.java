@@ -66,6 +66,10 @@ public class VoxelSpaceData{
     
     public ExtendedALSVoxel getVoxel(int i, int j, int k){
         
+        if(i > split.x -1 || j > split.y -1 || k > split.z -1){
+            return null;
+        }
+        
         int index = get1DFrom3D(i, j, k);
         
         if(index>voxels.size()-1){

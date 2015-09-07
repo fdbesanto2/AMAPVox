@@ -1,5 +1,11 @@
 package fr.amap.amapvox.gui;
 
+import fr.amap.amapvox.chart.ChartViewer;
+import fr.amap.amapvox.chart.VoxelsToChart;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
@@ -16,25 +22,58 @@ public class MainApp extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-                
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainFrame.fxml"));
+        
+        
+        
+        ChartViewer chartViewer = new ChartViewer("Hello world chart", 1200, 500);
+        
+        chartViewer.setChart(VoxelsToChart.createVegetationProfileChart(new File("/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox")));
+        
+        chartViewer.show();
+        
+        /*FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/RingsMaskingSetupFrame.fxml"));
+        Parent root = loader.load();
+        loader.getController();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+
+        stage.show();*/
+        
+        
+        /*FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainFrame.fxml"));
         Parent root = loader.load();
         MainFrameController controller = loader.getController();
+                
+        Parameters parameters = getParameters();
         
-        Scene scene = new Scene(root);
+        Map<String, String> namedParameters = parameters.getNamed();
+        if(!namedParameters.isEmpty()){
+            String cfgFileList = namedParameters.get("execute-cfg");
+            String[] cfgFileArray = cfgFileList.split(";");
+            List<File> taskList = new ArrayList<>();
+            for(String filePath : cfgFileArray){
+                taskList.add(new File(filePath));
+            }
+            //controller.addTasksToTaskList(taskList);
+            controller.executeTaskList(taskList);
             
-        scene.getStylesheets().add("/styles/Styles.css");
-        
-        stage.setTitle("AMAPVox");
-        stage.setScene(scene);
-        stage.getIcons().addAll(new Image("/icons/icon_512x512.png"), 
-                        new Image("/icons/icon_256x256.png"), 
-                        new Image("/icons/icon_128x128.png"),
-                        new Image("/icons/icon_64x64.png"));
-        
-        controller.setStage(stage);
-        
-        stage.show();
+        }else{
+            
+            Scene scene = new Scene(root);
+            
+            scene.getStylesheets().add("/styles/Styles.css");
+
+            stage.setTitle("AMAPVox");
+            stage.setScene(scene);
+            stage.getIcons().addAll(new Image("/icons/icon_512x512.png"), 
+                            new Image("/icons/icon_256x256.png"), 
+                            new Image("/icons/icon_128x128.png"),
+                            new Image("/icons/icon_64x64.png"));
+
+            controller.setStage(stage);
+
+            stage.show();
+        }*/
     }
 
     /**
@@ -46,7 +85,8 @@ public class MainApp extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        launch(args);
+        
+        launch(args);    
     }
 
 }

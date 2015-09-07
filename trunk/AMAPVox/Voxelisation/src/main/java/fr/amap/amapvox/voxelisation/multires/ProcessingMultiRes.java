@@ -185,6 +185,10 @@ public class ProcessingMultiRes {
 
             VoxelSpaceLoader vsTemp;
             ExtendedALSVoxel voxTemp = null;
+            
+            if(voxel.$i == 175 && voxel.$j == 0 && voxel.$k == 69){
+                System.out.println("test");
+            }
 
             //while(currentNbSampling < Math.pow(currentResolution, 2)+1 || currentTransmittance == 0){
             //while (currentNbSampling < Math.pow(currentResolution, 2) * 2 + 1 || currentTransmittance == 0) {
@@ -202,19 +206,25 @@ public class ProcessingMultiRes {
                 currentResolution = entry.getKey();
 
                 //il faudra utiliser la vraie position 
-                Point3i indices = getIndicesFromIndices(new Point3i(voxel.$i, voxel.$j, voxel.$k), currentResolution);
+                Point3i indices = getIndicesFromIndices(new Point3i(voxel.$i, voxel.$j, voxel.$k), currentResolution, vs.data.res);
                 voxTemp = vsTemp.data.getVoxel(indices.x, indices.y, indices.z);
                 
-                if(voxTemp != null && voxTemp.$i == indices.x && voxTemp.$j == indices.y && voxTemp.$k == indices.z){
-                                        
-                    if(voxTemp.ground_distance > 1){
-                        calculatePAD(voxTemp, currentResolution, useDefaultMaxPad, vs.data.maxPad);
+                if(voxTemp != null){
+                                 
+                    if(voxTemp.$i == indices.x && voxTemp.$j == indices.y && voxTemp.$k == indices.z){
+                        
+                        if(voxTemp.ground_distance > 1){
+                            calculatePAD(voxTemp, currentResolution, useDefaultMaxPad, vs.data.maxPad);
 
-                        currentNbSampling = voxTemp.nbSampling;
-                        currentTransmittance = voxTemp.transmittance;
+                            currentNbSampling = voxTemp.nbSampling;
+                            currentTransmittance = voxTemp.transmittance;
+                        }
+                    }else{
+                        logger.error("A line is missing in voxel file");
                     }
+                    
                 }else{
-                    logger.error("A line is missing in voxel file");
+                    //out of bounds
                 }
                 
             }
@@ -405,9 +415,9 @@ public class ProcessingMultiRes {
 
     }*/
     
-    private Point3i getIndicesFromIndices(Point3i indices, double resolution){
+    private Point3i getIndicesFromIndices(Point3i indices, double newResolution, double currentResolution){
         
-        return new Point3i((int)(indices.x/resolution), (int)(indices.y/resolution), (int)(indices.z/resolution));
+        return new Point3i((int)(indices.x/(newResolution/currentResolution)), (int)(indices.y/(newResolution/currentResolution)), (int)(indices.z/(newResolution/currentResolution)));
     }
 
 }

@@ -43,9 +43,9 @@ public class Ring {
         this.upperZenithalAngle = upperZenithalAngle;
         
         this.meanAngle = (lowerZenithalAngle+upperZenithalAngle) / 2.0f;
-        this.width = lowerZenithalAngle - upperZenithalAngle;
-        this.weightingFactor = (float) (this.width * this.meanAngle);
-        
+        this.width = (float) (Math.toRadians(lowerZenithalAngle) - Math.toRadians(upperZenithalAngle));
+        this.weightingFactor = (float) (this.width * Math.toRadians(this.meanAngle));
+        this.dist = (float) (1/Math.cos(Math.toRadians(meanAngle)));
         //calcul de l'angle solide
         solidAngle = (float) (2* Math.PI * (Math.cos(Math.toRadians(upperZenithalAngle)) - Math.cos(Math.toRadians(lowerZenithalAngle))));
     }   
@@ -94,7 +94,7 @@ public class Ring {
     public void setTrans(float transmittance) {
         
         if(!Float.isNaN(transmittance)){
-            this.sumTrans = transmittance;
+            this.sumTrans += transmittance;
         }
     }
 

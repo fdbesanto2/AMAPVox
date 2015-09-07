@@ -426,9 +426,15 @@ public class VoxelSpace extends SceneObject{
     
     private Point3f getVoxelPosition(int i, int j, int k){
         
-        return new Point3f((float) (data.header.bottomCorner.x+(i*(data.header.resolution.x))),
+        double posX = data.header.bottomCorner.x + (data.header.resolution.x / 2.0d) + (i * data.header.resolution.x);
+        double posY = data.header.bottomCorner.y + (data.header.resolution.y / 2.0d) + (j * data.header.resolution.y);
+        double posZ = data.header.bottomCorner.z + (data.header.resolution.z / 2.0d) + (k * data.header.resolution.z);
+        
+        return new Point3f((float)posX, (float)posY, (float)posZ);
+        
+        /*return new Point3f((float) (data.header.bottomCorner.x+(i*(data.header.resolution.x))),
                                                     (float) (data.header.bottomCorner.y+(j*(data.header.resolution.y))),
-                                                    (float) (data.header.bottomCorner.z+(k*(data.header.resolution.z))));
+                                                    (float) (data.header.bottomCorner.z+(k*(data.header.resolution.z))));*/
     }
     
 //    private void readVoxelFormat2(File f){

@@ -37,7 +37,6 @@ import javax.vecmath.Vector3d;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Calendar;
-import java.util.logging.Level;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
 
@@ -71,7 +70,7 @@ public class TransmittanceSim {
         float padBV;
     }
     
-    public static void simulationProcess(TransmittanceCfg cfg) throws IOException{
+    public static void simulationProcess(VirtualMeasuresCfg cfg) throws IOException{
         
         Parameters parameters = cfg.getParameters();
         
@@ -108,11 +107,12 @@ public class TransmittanceSim {
         if(parameters.getMode() == Mode.LAI2000 || parameters.getMode() == Mode.LAI2200){
                         
             if(parameters.getMode() == Mode.LAI2000){
-                lai2xxx = new LAI2000(parameters.getShotNumber(), CAP_360);
+                lai2xxx = new LAI2000(parameters.getDirectionsNumber(), CAP_360);
             }else{
-                lai2xxx = new LAI2200(parameters.getShotNumber(), CAP_360);
+                lai2xxx = new LAI2200(parameters.getDirectionsNumber(), CAP_360);
             }
             
+            logger.info("Computing directions...");
             lai2xxx.computeDirections();
 
             turtle = new Turtle();
@@ -129,7 +129,7 @@ public class TransmittanceSim {
             }
         }
         
-        logger.info("Turtle built with " + turtle.getNbDirections() + " sectors");
+        logger.info("Turtle built with " + turtle.getNbDirections() + " directions");
         
     }
     
@@ -182,7 +182,7 @@ public class TransmittanceSim {
             lai2xxx.initPositions(positions.size());
         }
         
-        int n = 0;
+        int positionID = 0;
         double transmitted;
 
         IncidentRadiation ir = solRad.get(0);
@@ -212,8 +212,11 @@ public class TransmittanceSim {
                 if(lai2xxx != null){
                     
                     int ring = lai2xxx.getRingIDFromDirectionID(t);
-                    lai2xxx.addTransmittance(ring, (float) (transmitted * solRad.get(0).directionalGlobals[t]));
-                    lai2xxx.getRing(ring).setTrans((float) (transmitted * solRad.get(0).directionalGlobals[t]));
+                    
+                    // on récupère la première période, normalement il y en a une seule pour une simulation de lai2000
+                    IncidentRadiation incidentRadiation = solRad.get(0); 
+                    lai2xxx.addTransmittanceV2(ring, positionID, (float) (transmitted * incidentRadiation.directionalGlobals[t]));
+                    lai2xxx.getRing(ring).setTrans((float) (transmitted * incidentRadiation.directionalGlobals[t]));
                 }
                 
             }
@@ -224,10 +227,10 @@ public class TransmittanceSim {
                 transmissionPeriod[i][j][m] /= ir.global;
             }
 
-            n++;
+            positionID++;
 
-            if (n % 1000 == 0) {
-                logger.info(n + "/" + positions.size());
+            if (positionID % 1000 == 0) {
+                logger.info(positionID + "/" + positions.size());
             }
         }
         
@@ -325,11 +328,40 @@ public class TransmittanceSim {
             logger.info("Data parsing");
             
             //columns names
-            reader.readLine();
+            String[] columnNames = reader.readLine().split(" ");
+            List<String> columnNamesList = new ArrayList<>(columnNames.length);
+            
+            for(String s : columnNames){
+                columnNamesList.add(s);
+            }
+            
+            //columns indices
+            int iIndex = columnNamesList.indexOf("i");
+            int jIndex = columnNamesList.indexOf("j");
+            int kIndex = columnNamesList.indexOf("k");
+            
+            int groundDistanceIndex = columnNamesList.indexOf("ground_distance");
+            int padIndex = columnNamesList.indexOf("PadBVTotal");
             
             while ((line = reader.readLine()) != null) {
+                
+                String[] temps = line.split(" ");
 
-                parseLineData(line);
+                int i = Integer.valueOf(temps[iIndex]);
+                int j = Integer.valueOf(temps[jIndex]);
+                int k = Integer.valueOf(temps[kIndex]);
+
+                if (k == 0) {
+                    mnt[i][j] = mntZmin - Float.valueOf(temps[groundDistanceIndex]);
+                }
+
+                if (temps[3].contains("NaN")) {
+                    voxels[i][j][k].padBV = 0;
+                } else {
+                    voxels[i][j][k].padBV = Float.valueOf(temps[padIndex]);
+                }
+        
+                //parseLineData(line);
                 nbScans++;
                 if (nbScans % 100000 == 0) {
                     logger.info(" " + nbScans + " shots");
@@ -346,20 +378,7 @@ public class TransmittanceSim {
 
     private void parseLineData(String line) throws IOException {
 
-        String[] temps = line.split(" ");
-
-        int i = Integer.valueOf(temps[0]);
-        int j = Integer.valueOf(temps[1]);
-        int k = Integer.valueOf(temps[2]);
-        if (k == 0) {
-            mnt[i][j] = mntZmin - Float.valueOf(temps[7]);
-        }
-
-        if (temps[3].contains("NaN")) {
-            voxels[i][j][k].padBV = 0;
-        } else {
-            voxels[i][j][k].padBV = Float.valueOf(temps[3]);
-        }
+        
     }
 
     private VoxelSpace parseHeader(BufferedReader reader) throws IOException {
@@ -522,6 +541,7 @@ public class TransmittanceSim {
                 BufferedReader reader = new BufferedReader(new FileReader(pointPositionsFile));
                 
                 String line;
+                boolean firstLineParsed = false;
                 
                 while((line = reader.readLine()) != null){
                     
@@ -530,7 +550,11 @@ public class TransmittanceSim {
                     
                     String[] split = line.split(",");
                     
-                    if(split != null && split.length == 3){
+                    if(split != null && split.length >= 3){
+                        
+                        if(split.length > 3 && !firstLineParsed){
+                            logger.info("Sensor position file contains more than three columns, parsing the three first");
+                        }
                         
                         Point3d position = new Point3d(Double.valueOf(split[0]), Double.valueOf(split[1]), Double.valueOf(split[2]));
                     
@@ -542,7 +566,11 @@ public class TransmittanceSim {
                         }else{
                             logger.warn("Position "+position.toString() +" ignored because out of voxel space!");
                         }
-                    }                 
+                    }
+                    
+                    if(!firstLineParsed){
+                        firstLineParsed = true;
+                    }
                 }
                 
             } catch (FileNotFoundException ex) {
@@ -622,75 +650,76 @@ public class TransmittanceSim {
 
         parameters.getTextFile().getParentFile().mkdirs();
         
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(parameters.getTextFile()))) {
+        logger.info("Writing file "+parameters.getTextFile().getAbsolutePath());
+        
+        if(lai2xxx == null){
             
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(parameters.getTextFile()))) {
             
-            logger.info("Writing file "+parameters.getTextFile().getAbsolutePath());
-            
-            String metadata = "Voxel space\n"+
-                              "  min corner:\t" + vsMin + "\n"+
-                              "  max corner:\t" + vsMax + "\n"+
-                              "  splitting:\t" + splitting + "\n\n"+
-                              "latitude (degrees)\t"+parameters.getLatitudeInDegrees()+"\n\n";
-                    
-            bw.write(metadata);
-            
-            String header = "position X\tposition Y\tposition Z\t";
-            String periodsInfos = "";
-            String periodsInfosHeader = "period ID\tstart\tend\tclearness";
-            
-            int count = 1;
-            for(SimulationPeriod period : parameters.getSimulationPeriods()){
-                
-                String periodName = "Period "+count;
-                header += periodName+"\t";
-                periodsInfos += periodName+"\t"+Period.getDate(period.getPeriod().startDate)+"\t"+Period.getDate(period.getPeriod().endDate)+"\t"+period.getClearnessCoefficient()+"\n";
-                        
-                count++;
-            }
-            
-            bw.write(periodsInfosHeader+"\n"+
-                     periodsInfos+"\n");
-            
-            bw.write(header+"\n");
-            
-            float mean[] = new float[transmissionPeriod[0][0].length];
-            
-            for(Point3d position : positions){
-                
-                bw.write(position.x + "\t" + position.y + "\t" + position.z);
-                
-                int i = (int) ((position.x - vsMin.x) / voxSpace.getVoxelSize().x);
-                int j = (int) ((position.y - vsMin.y) / voxSpace.getVoxelSize().y);
-                
-                for (int m = 0; m < transmissionPeriod[i][j].length; m++) {
-                    bw.write("\t" + transmissionPeriod[i][j][m]);
-                    mean[m] += transmissionPeriod[i][j][m];
+                String metadata = "Voxel space\n"+
+                                  "  min corner:\t" + vsMin + "\n"+
+                                  "  max corner:\t" + vsMax + "\n"+
+                                  "  splitting:\t" + splitting + "\n\n"+
+                                  "latitude (degrees)\t"+parameters.getLatitudeInDegrees()+"\n\n";
+
+                bw.write(metadata);
+
+                String header = "position X\tposition Y\tposition Z\t";
+                String periodsInfos = "";
+                String periodsInfosHeader = "period ID\tstart\tend\tclearness";
+
+                int count = 1;
+                for(SimulationPeriod period : parameters.getSimulationPeriods()){
+
+                    String periodName = "Period "+count;
+                    header += periodName+"\t";
+                    periodsInfos += periodName+"\t"+Period.getDate(period.getPeriod().startDate)+"\t"+Period.getDate(period.getPeriod().endDate)+"\t"+period.getClearnessCoefficient()+"\n";
+
+                    count++;
                 }
-                
+
+                bw.write(periodsInfosHeader+"\n"+
+                         periodsInfos+"\n");
+
+                bw.write(header+"\n");
+
+                float mean[] = new float[transmissionPeriod[0][0].length];
+
+                for(Point3d position : positions){
+
+                    bw.write(position.x + "\t" + position.y + "\t" + position.z);
+
+                    int i = (int) ((position.x - vsMin.x) / voxSpace.getVoxelSize().x);
+                    int j = (int) ((position.y - vsMin.y) / voxSpace.getVoxelSize().y);
+
+                    for (int m = 0; m < transmissionPeriod[i][j].length; m++) {
+                        bw.write("\t" + transmissionPeriod[i][j][m]);
+                        mean[m] += transmissionPeriod[i][j][m];
+                    }
+
+                    bw.write("\n");
+                }
+
+                float yearlyMean = 0;
+                bw.write("\nPERIOD\tMEAN");
+                for (int m = 0; m < transmissionPeriod[0][0].length; m++) {
+                    mean[m] /= (float) positions.size();
+                    bw.write("\t" + mean[m]);
+                    yearlyMean += mean[m];
+                }
+                yearlyMean /= transmissionPeriod[0][0].length;
+                bw.write("\nTOTAL\tMEAN\t" + yearlyMean);
                 bw.write("\n");
+
+            }catch(IOException ex){
+                throw ex;
             }
             
-            float yearlyMean = 0;
-            bw.write("\nPERIOD\tMEAN");
-            for (int m = 0; m < transmissionPeriod[0][0].length; m++) {
-                mean[m] /= (float) positions.size();
-                bw.write("\t" + mean[m]);
-                yearlyMean += mean[m];
-            }
-            yearlyMean /= transmissionPeriod[0][0].length;
-            bw.write("\nTOTAL\tMEAN\t" + yearlyMean);
-            bw.write("\n");
-            
-            logger.info("File "+parameters.getTextFile().getAbsolutePath()+" written");
-            
-        }catch(IOException ex){
-            throw ex;
+        }else{
+            lai2xxx.writeOutput(parameters.getTextFile());
         }
         
-        if(lai2xxx != null){
-            lai2xxx.writeOutput(new File("/home/calcul/Documents/Julien/lai_output.txt"));
-        }
+        logger.info("File "+parameters.getTextFile().getAbsolutePath()+" written");
     }
 
     public void imageMNT() {

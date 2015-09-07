@@ -176,6 +176,7 @@ public class Sun {
 		}
 		for (int dir = 0; dir < turtle.directions.length; dir++) {
 			weights[dir] *= direct / weightSum;
+                        weights[dir] += 0.0f;
 		}
 
 		return weights;

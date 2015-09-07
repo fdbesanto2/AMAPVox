@@ -126,8 +126,10 @@ public class FileManager {
         try {
             
             BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
+            String line = reader.readLine();
+            reader.close();
             
-            return reader.readLine();
+            return line;
             
         } catch (FileNotFoundException ex) {
             return null;

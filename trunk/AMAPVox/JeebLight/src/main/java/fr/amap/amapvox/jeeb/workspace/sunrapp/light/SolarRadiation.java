@@ -84,40 +84,44 @@ public class SolarRadiation {
 	/**
 	 * Computes directional global fluxes in turtle sectors
 	 * 
+     * @param ir
 	 * @param sun
+     * @param turtle
 	 */
-	static public void globalInTurtle(IncidentRadiation ir, Sun sun,
-			Turtle turtle) {
-		float[] turtleDirect = new float[turtle.directions.length];
-		float[] turtleDiffuse = new float[turtle.directions.length];
-		ir.directionalGlobals = new float[turtle.directions.length];
+	static public void globalInTurtle(IncidentRadiation ir, Sun sun, Turtle turtle) {
+            
+            float[] turtleDirect;
+            float[] turtleDiffuse = new float[turtle.directions.length];
+            ir.directionalGlobals = new float[turtle.directions.length];
 
-		if (ir.global > 0) {
-			float directDir = (float) (ir.direct / Math.cos(sun.zenith));
-			turtleDirect = Sun.directInTurtle(directDir, sun.direction, turtle); // TODO
-			float totalDirect = 0;
-			float totalDiffuse = 0;
-			for (int d = 0; d < turtle.directions.length; d++) {
-				float zenith = (float) turtle.getZenithAngle(d);
-				float azim = (float) turtle.getAzimuthAngle(d);
-				turtleDiffuse[d] = Sky.brightnessNorm(ir.diffuse, ir.global,
-						zenith, azim, sun.zenith, sun.azimuth);
-				float coeff = (float) Math.cos(zenith);
-				// convert to flux as measured on horizontal plane
-				turtleDirect[d] *= coeff;
-				turtleDiffuse[d] *= coeff;
-				totalDirect += turtleDirect[d];
-				totalDiffuse += turtleDiffuse[d];
-			}
+            if (ir.global > 0) {
+                
+                float directDir = (float) (ir.direct / Math.cos(sun.zenith));
+                turtleDirect = Sun.directInTurtle(directDir, sun.direction, turtle); // TODO
+                float totalDirect = 0;
+                float totalDiffuse = 0;
+                
+                for (int d = 0; d < turtle.directions.length; d++) {
+                        float zenith = (float) turtle.getZenithAngle(d);
+                        float azim = (float) turtle.getAzimuthAngle(d);
+                        turtleDiffuse[d] = Sky.brightnessNorm(ir.diffuse, ir.global,
+                                        zenith, azim, sun.zenith, sun.azimuth);
+                        float coeff = (float) Math.cos(zenith);
+                        // convert to flux as measured on horizontal plane
+                        turtleDirect[d] *= coeff;
+                        turtleDiffuse[d] *= coeff;
+                        totalDirect += turtleDirect[d];
+                        totalDiffuse += turtleDiffuse[d];
+                }
 
-			for (int d = 0; d < turtle.directions.length; d++) {
-				turtleDiffuse[d] *= ir.diffuse / totalDiffuse;
-				if (totalDirect > 0)
-					turtleDirect[d] *= ir.direct / totalDirect;
+                for (int d = 0; d < turtle.directions.length; d++) {
+                    turtleDiffuse[d] *= ir.diffuse / totalDiffuse;
+                    if (totalDirect > 0)
+                            turtleDirect[d] *= ir.direct / totalDirect;
 
-				ir.directionalGlobals[d] = turtleDirect[d] + turtleDiffuse[d];
-			}
-		}
+                    ir.directionalGlobals[d] = turtleDirect[d] + 0.0f + turtleDiffuse[d];
+                }
+            }
 	}
 
 	/**
@@ -333,9 +337,12 @@ public class SolarRadiation {
 		ir1.diffuse += factor * ir2.diffuse;
 
 		if (ir2.global > 0) {
-			for (int dir = 0; dir < ir1.directionalGlobals.length; dir++)
-				ir1.directionalGlobals[dir] += factor
-						* ir2.directionalGlobals[dir];
+                    
+                    for (int dir = 0; dir < ir1.directionalGlobals.length; dir++){
+                        ir1.directionalGlobals[dir] += factor * ir2.directionalGlobals[dir];
+                        ir1.directionalGlobals[dir] += 0.0f;
+                    } 
+                        
 		}
 
 		// if (ir2.globalTurtle[0] != null)

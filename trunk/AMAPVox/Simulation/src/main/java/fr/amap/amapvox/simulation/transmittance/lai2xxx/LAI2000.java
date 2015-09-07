@@ -18,6 +18,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  *
@@ -43,13 +46,54 @@ public class LAI2000 extends LAI2xxx{
         
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))){
             
-            //write header
-            //write statistics
-            //write sensor information
+            /*****write header*****/
+            writer.write("FILE\tDATE\tTIME\tCROP\tPLOT\tLAI\tSEL\tDIFN\tMTA\tSEM\tSMP\n");
+
+            DateFormat dateFormat = new SimpleDateFormat("dd M\tHH:mm:ss");
+            String file = "19";
+            String dateAndTime = dateFormat.format(Calendar.getInstance().getTime());
+            String crop = "WHEAT";
+            String plot = "5";
+            float sel = Float.NaN;
+            float difn = Float.NaN;
+            float mta = Float.NaN;
+            float sem = Float.NaN;
+            float smp = Float.NaN;
+
+            computeValues();
+
+            writer.write(file+"\t"+dateAndTime+"\t"+crop+"\t"+plot+"\t"+LAI+"\t"+sel+"\t"+difn+"\t"+mta+"\t"+sem+"\t"+smp+"\n");
+            
+            /*****write statistics*****/
+                
+            String anglesLine = "",
+                   cntcLine = "",
+                   stddevLine = "",
+                   distsLine = "",
+                   gapsLine = "";
+
+            for(int i=0;i<rings.length;i++){
+
+                anglesLine += rings[i].getMeanAngle()+"\t";
+                cntcLine += contactNumberByRing[i]+"\t";
+                stddevLine += stdevByRing[i]+"\t";
+                distsLine += rings[i].getDist()+"\t";
+                gapsLine += gapsByRing[i]+"\t";
+            }
+
+            String statistics = "ANGLES"+   "\t"+   anglesLine+     "\n"+
+                                "CNTCT#"+   "\t"+   cntcLine+       "\n"+
+                                "STDDEV"+   "\t"+   stddevLine+     "\n"+
+                                "DISTS"+    "\t"+   distsLine+      "\n"+
+                                "GAPS"+     "\t"+   gapsLine+       "\n";
+
+            writer.write(statistics);
+                                
             //write observations
+                 
             
         } catch (IOException ex) {
-            //logger.error("Cannot write LAI2000 output file", ex);
+            //logger.error("Cannot write LAI2200 output file", ex);
         }
     }
     

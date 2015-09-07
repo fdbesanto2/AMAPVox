@@ -18,8 +18,8 @@ import fr.amap.amapvox.simulation.transmittance.util.SphericalCoordinates;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.vecmath.Vector3f;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -29,13 +29,15 @@ import javax.vecmath.Vector3f;
 
 public abstract class LAI2xxx {
     
-    //protected final static Logger logger = Logger.getLogger(LAI2xxx.class);
+    protected final static Logger logger = Logger.getLogger(LAI2xxx.class);
     
     /**
      *
      */
     protected int directionNumber;
     protected int positionNumber;
+    
+    protected int nbObservations;
 
     /**
      *
@@ -51,10 +53,25 @@ public abstract class LAI2xxx {
     protected int[] ringOffsetID;
     
     private int[] shotNumberByRing;
-    
     protected float[] avgTransByRing;
     protected float[] meanContactNumber;
     protected float[] gapsByRing;
+    protected float[] contactNumberByRing;
+    
+    /**
+     * standard deviation of the contact numbers for each ring
+     */
+    protected float[] stdevByRing;
+    
+    /**
+     * apparent clumping factor for each ring
+     */
+    protected float[] acfsByRing;
+    
+    protected float[][] transmittances;
+    
+    protected float LAI;
+    protected float acf;
     
     protected ViewCap viewCap;
     
@@ -96,6 +113,8 @@ public abstract class LAI2xxx {
     public void initPositions(int positionNumber){
         
         this.positionNumber = positionNumber;
+        
+        transmittances = new float[rings.length][positionNumber];
     }
     
     public void addTransmittance(int ringID, float transmittance){
@@ -111,33 +130,19 @@ public abstract class LAI2xxx {
         }
     }
     
-    public float getAVGTransByRing(int ringID){
+    public void addTransmittanceV2(int ringID, int position, float transmittance){
         
-        int count = positionNumber*directionNumber;
-        
-        return avgTransByRing[ringID] /= count;
-    }
-    
-    public float getGapsByRing(int ringID){
-        
-        int count = positionNumber*directionNumber;
-        
-        return (float) Math.exp(gapsByRing[ringID] /= count);
-    }
-    
-    public float getLAI(){
-        
-        float sum = 0;
-        /*
-        for(int i=0;i<rings.length;i++){
+        if(ringID < rings.length && position < positionNumber){
+            transmittances[ringID][position] = transmittance;
             
-            float ki = 
-            float wi = rings[i].getWeightingFactor();
-            
-            sum += ki * wi;
+            if(!Float.isNaN(transmittance)){
+                nbObservations++;
+            }
+        }
+        
+        /*if(!Float.isNaN(transmittance)){
+            avgTransByRing[ringID] += transmittance;
         }*/
-        
-        return 2*sum;
     }
     
     /**
@@ -236,8 +241,8 @@ public abstract class LAI2xxx {
         for(int i=0;i<directionList.size();i++){
             
             directions[i] = directionList.get(i);
-            azimuthAngles[i] = azimuthAnglesList.get(i);
-            elevationAngles[i] = elevationAnglesList.get(i);
+            azimuthAngles[i] = (float) Math.toRadians(azimuthAnglesList.get(i));
+            elevationAngles[i] = (float) Math.toRadians(elevationAnglesList.get(i));
         }
         
     }
@@ -256,6 +261,152 @@ public abstract class LAI2xxx {
     
     public int getRingNumber(){
         return rings.length;
+    }
+    
+    public void computeValues(){
+        
+        /*computeContactNumbers();
+        computeLAI();
+        computeGapsFraction();*/
+        
+        //compute avgtrans
+        logger.info("Computation of AVGTRANS...");
+        int[] countByRing = new int[rings.length];
+        avgTransByRing = new float[rings.length];
+            
+        for(int j=0;j<positionNumber;j++){
+            for(int d=0;d<directionNumber;d++){
+
+                //on détermine ici quel est le ring concerné
+                int i = getRingIDFromDirectionID(d);
+                
+                if(!Float.isNaN(transmittances[i][j])){
+                    avgTransByRing[i] += transmittances[i][j];
+                    countByRing[i]++;
+                }
+                
+            }
+        }
+        
+        //moyenne
+        for(int i=0;i<rings.length;i++){
+            avgTransByRing[i] /= countByRing[i];
+        }
+        
+        //compute contact numbers (CNTC#)
+        logger.info("Computation of CNTC#...");
+        contactNumberByRing = new float[rings.length]; //Ki
+        
+        //contact value for the pair for each ring (Kij)
+        float[][] contactValueForPairByRing = new float[rings.length][positionNumber];
+
+        countByRing = new int[rings.length];
+
+        //calcul des indices K
+        for(int j=0;j<positionNumber;j++){
+            for(int d=0;d<directionNumber;d++){
+
+                //on détermine ici quel est le ring concerné
+                int i = getRingIDFromDirectionID(d);
+
+                float pathLength = rings[i].getDist();
+                
+                if(transmittances[i][j] != 0){
+                    
+                    contactValueForPairByRing[i][j] = (float) (-Math.log(transmittances[i][j]) / pathLength);
+                    contactNumberByRing[i] += -Math.log(transmittances[i][j]) / pathLength;
+                    countByRing[i]++;
+                }else{
+                    contactValueForPairByRing[i][j] = Float.NaN;
+                }
+            }
+        }
+        
+        for(int i=0;i<rings.length;i++){
+            contactNumberByRing[i] /= countByRing[i];
+        }
+        
+        //compute LAI
+        logger.info("Computation of LAI...");
+        LAI = 0.0f;
+
+        for(int i=0;i<rings.length;i++){
+            LAI += contactNumberByRing[i] * rings[i].getWeightingFactor();
+        }
+
+        LAI *= 2;
+        
+        //compute Gaps
+        logger.info("Computation of GAPS...");
+        gapsByRing = new float[rings.length]; //Ki
+
+        countByRing = new int[rings.length];
+
+        //calcul des indices K
+        for(int j=0;j<positionNumber;j++){
+            for(int d=0;d<directionNumber;d++){
+
+                //on détermine ici quel est le ring concerné
+                int i = getRingIDFromDirectionID(d);
+                
+                if(transmittances[i][j] != 0){
+                    gapsByRing[i] += Math.log(transmittances[i][j]);
+                    countByRing[i]++;
+                }
+            }
+        }
+        
+        //moyenne des ln des transmittances pour chaque ring
+        float[] meanLnTransByring = new float[rings.length];
+        
+        for(int i=0;i<rings.length;i++){
+            gapsByRing[i] /= countByRing[i];
+            meanLnTransByring[i] = gapsByRing[i];
+            gapsByRing[i] = (float) Math.exp(gapsByRing[i]);
+        }
+        
+        //compute acfs
+        logger.info("Computation of ACFS...");
+        acfsByRing = new float[rings.length];
+        for(int i=0;i<rings.length;i++){
+            acfsByRing[i] = (float) (Math.log(avgTransByRing[i]) / meanLnTransByring[i]);
+        }
+        
+        //compute acf
+        logger.info("Computation of ACF...");
+        
+        float numerateur = 0;
+        float denominateur = 0;
+        
+        for(int i=0;i<rings.length;i++){
+            numerateur += -(Math.log(avgTransByRing[i])/rings[i].getDist()) * rings[i].getWeightingFactor();
+            denominateur += contactNumberByRing[i] * rings[i].getWeightingFactor();
+        }
+        
+        numerateur *= 2;
+        denominateur *= 2;
+        
+        acf = numerateur/denominateur;
+        
+        //compute STDEV
+        logger.info("Computation of STDEV...");
+        
+        stdevByRing = new float[rings.length];
+        countByRing = new int[rings.length];
+        
+        for(int i=0;i<rings.length;i++){
+            for(int j=0;j<positionNumber;j++){
+                if(!Float.isNaN(contactValueForPairByRing[i][j])){
+                    stdevByRing[i] += Math.pow(contactValueForPairByRing[i][j] - contactNumberByRing[i], 2);
+                    countByRing[i]++;
+                }
+            }
+        }
+        
+        for(int i=0;i<rings.length;i++){
+            stdevByRing[i] = (float) Math.sqrt((1/(float)(countByRing[i]-1))*stdevByRing[i]);
+        }
+        
     }
     
     public int getRingIDFromDirectionID(int directionID){

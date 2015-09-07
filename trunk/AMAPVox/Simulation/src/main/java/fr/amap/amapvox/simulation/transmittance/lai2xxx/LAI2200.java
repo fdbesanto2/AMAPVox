@@ -55,67 +55,69 @@ public class LAI2200 extends LAI2xxx{
                 DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
                 writer.write("Date\t"+dateFormat.format(Calendar.getInstance().getTime())+"\n");
 
-                float lai = 0.0f;
+                computeValues();
 
                 //leaf area index
-                writer.write("LAI\t"+lai+"\n");
+                writer.write("LAI\t"+LAI+"\n");
 
                 //standard error lai
-                writer.write("SEL\t"+lai+"\n");
+                writer.write("SEL\t"+Float.NaN+"\n");
 
                 //apparent clumping factor
-                writer.write("ACF\t"+lai+"\n");
+                writer.write("ACF\t"+acf+"\n");
 
                 //diffuse non-interceptance
-                writer.write("DIFN\t"+lai+"\n");
+                writer.write("DIFN\t"+Float.NaN+"\n");
 
                 //mean tilt angle
-                writer.write("MTA\t"+lai+"\n");
+                writer.write("MTA\t"+Float.NaN+"\n");
 
                 //standard error MTA
-                writer.write("SEM\t"+lai+"\n");
+                writer.write("SEM\t"+Float.NaN+"\n");
 
                 //number of pairs of above and below observations that were included in the calculation
-                writer.write("SMP\t"+lai+"\n");
+                writer.write("SMP\t"+Float.NaN+"\n");
             
             /*****write statistics*****/
                 
-                String maskLine = "",
-                       anglesLine = "",
-                       avgTransLine = "",
-                       acfsLine = "",
-                       cntcLine = "",
-                       stddevLine = "",
-                       distsLine = "",
-                       gapsLine = "";
-                
-                for(int i=0;i<rings.length;i++){
-                    
-                    maskLine += "1"+"\t";
-                    anglesLine += rings[i].getMeanAngle()+"\t";
-                    avgTransLine += getAVGTransByRing(i)+"\t";
-                    acfsLine += rings[i].getAcfs()+"\t";
-                    cntcLine += rings[i].getCntct()+"\t";
-                    stddevLine += rings[i].getStdev()+"\t";
-                    distsLine += rings[i].getDist()+"\t";
-                    gapsLine += getGapsByRing(i)+"\t";
-                }
-                
-                writer.write("MASK\t"+maskLine+"\n");
-                writer.write("ANGLES\t"+anglesLine+"\n");
-                writer.write("AVGTRANS\t"+avgTransLine+"\n");
-                writer.write("ACFS\t"+acfsLine+"\n");
-                writer.write("CNTCT#\t"+cntcLine+"\n");
-                writer.write("STDDEV\t"+stddevLine+"\n");
-                writer.write("DISTS\t"+distsLine+"\n");
-                writer.write("GAPS\t"+gapsLine+"\n");
+            String maskLine = "",
+                   anglesLine = "",
+                   avgTransLine = "",
+                   acfsLine = "",
+                   cntcLine = "",
+                   stddevLine = "",
+                   distsLine = "",
+                   gapsLine = "";
+
+            for(int i=0;i<rings.length;i++){
+
+                maskLine += "1"+"\t";
+                anglesLine += rings[i].getMeanAngle()+"\t";
+                avgTransLine += avgTransByRing[i]+"\t";
+                acfsLine += acfsByRing[i]+"\t";
+                cntcLine += contactNumberByRing[i]+"\t";
+                stddevLine += stdevByRing[i]+"\t";
+                distsLine += rings[i].getDist()+"\t";
+                gapsLine += gapsByRing[i]+"\t";
+            }
+
+            String statistics = "MASK"+     "\t"+   maskLine+       "\n"+
+                                "ANGLES"+   "\t"+   anglesLine+     "\n"+
+                                "AVGTRANS"+ "\t"+   avgTransLine+   "\n"+
+                                "ACFS"+     "\t"+   acfsLine+       "\n"+
+                                "CNTCT#"+   "\t"+   cntcLine+       "\n"+
+                                "STDDEV"+   "\t"+   stddevLine+     "\n"+
+                                "DISTS"+    "\t"+   distsLine+      "\n"+
+                                "GAPS"+     "\t"+   gapsLine+       "\n";
+
+            writer.write(statistics);
                 
             //write sensor information
-                writer.write("### Contributing Sensors\n");
-                writer.write("Sensor\tW1\tPCH2516\t3978\t1244\t1000\t1004\t1289\n"); //fake values
+            writer.write("### Contributing Sensors\n");
+            writer.write("Sensor\tW1\tPCH2516\t3978\t1244\t1000\t1004\t1289\n"); //fake values
                 
             //write observations
-                 writer.write("### Data\n");
+            writer.write("### Data\n");
                  
             
         } catch (IOException ex) {

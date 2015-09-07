@@ -35,7 +35,7 @@ import fr.amap.amapvox.jraster.asc.DtmLoader;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
 import fr.amap.amapvox.simulation.transmittance.Parameters;
 import fr.amap.amapvox.simulation.transmittance.SimulationPeriod;
-import fr.amap.amapvox.simulation.transmittance.TransmittanceCfg;
+import fr.amap.amapvox.simulation.transmittance.VirtualMeasuresCfg;
 import fr.amap.amapvox.simulation.transmittance.TransmittanceSim;
 import fr.amap.amapvox.update.Updater;
 import fr.amap.amapvox.voxelisation.ProcessTool;
@@ -104,6 +104,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -149,9 +150,11 @@ public class MainFrameController implements Initializable {
     private Stage filterFrame;
     private Stage transformationFrame;
     private Stage dateChooserFrame;
+    private Stage viewCapsSetupFrame;
     
     private TransformationFrameController transformationFrameController;
     private DateChooserFrameController dateChooserFrameController;
+    private ViewCapsSetupFrameController viewCapsSetupFrameController;
 
     private BlockingQueue<File> queue = new ArrayBlockingQueue<>(100);
     private int taskNumber = 0;
@@ -593,11 +596,49 @@ public class MainFrameController implements Initializable {
     private CheckBox checkboxMultiResAfterMode2;
     @FXML
     private CheckBox checkboxMultiFiles;
+    @FXML
+    private ToggleButton toggleButtonTransmittance;
+    @FXML
+    private ToggleButton toggleButtonLAI2000;
+    @FXML
+    private ToggleButton toggleButtonLAI2200;
+    @FXML
+    private GridPane gridPaneGenerateBitmapFiles;
+    @FXML
+    private Label labelDirectionsNumber;
+    @FXML
+    private Button buttonSetupViewCap;
+    @FXML
+    private TextField textFieldViewCapAngle;
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        ToggleGroup virtualMeasuresChoiceGroup = new ToggleGroup();
+        
+        toggleButtonTransmittance.setToggleGroup(virtualMeasuresChoiceGroup);
+        toggleButtonLAI2000.setToggleGroup(virtualMeasuresChoiceGroup);
+        toggleButtonLAI2200.setToggleGroup(virtualMeasuresChoiceGroup);
+        
+        ChangeListener toggleButtonLAI2xxxSelectedListener = new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                gridPaneGenerateBitmapFiles.setDisable(newValue);
+                comboboxChooseDirectionsNumber.setEditable(newValue);
+                buttonSetupViewCap.setVisible(newValue);
+                if(newValue){
+                    labelDirectionsNumber.setText("Shot number");
+                }else{
+                    labelDirectionsNumber.setText("Directions number");
+                }
+            }
+        };
+        
+        toggleButtonLAI2000.selectedProperty().addListener(toggleButtonLAI2xxxSelectedListener);
+        toggleButtonLAI2200.selectedProperty().addListener(toggleButtonLAI2xxxSelectedListener);
         
         listviewClassifications.getItems().addAll(
                 createSelectedCheckbox(Classification.CREATED_NEVER_CLASSIFIED.getValue()+" - "+
@@ -834,13 +875,20 @@ public class MainFrameController implements Initializable {
                 new ExtensionFilter("All Files", "*"),
                 new ExtensionFilter("TXT Files", "*.txt"));
         
-        transformationFrame = new Stage();
-        
-        Parent root;
-            
         try {
+            viewCapsSetupFrame = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ViewCapsSetupFrame.fxml"));
+            Parent root = loader.load();
+            viewCapsSetupFrameController = loader.getController();
+            viewCapsSetupFrame.setScene(new Scene(root));
+        } catch (IOException ex) {
+            logger.error("Cannot load fxml file", ex);
+        }
+        
+        try {
+            transformationFrame = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TransformationFrame.fxml"));
-            root = loader.load();
+            Parent root = loader.load();
             transformationFrameController = loader.getController();
             transformationFrameController.setStage(transformationFrame);
             transformationFrameController.setParent(this);
@@ -853,7 +901,7 @@ public class MainFrameController implements Initializable {
                 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DateChooserFrame.fxml"));
-            root = loader.load();
+            Parent root = loader.load();
             dateChooserFrameController = loader.getController();
             dateChooserFrame.setScene(new Scene(root));
             dateChooserFrameController.setStage(dateChooserFrame);
@@ -954,7 +1002,7 @@ public class MainFrameController implements Initializable {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CalculateMatrixFrame.fxml"));
-            root = loader.load();
+            Parent root = loader.load();
             calculateMatrixFrameController = loader.getController();
             calculateMatrixFrameController.setStage(calculateMatrixFrame);
             Scene scene = new Scene(root);
@@ -967,7 +1015,7 @@ public class MainFrameController implements Initializable {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/FilterFrame.fxml"));
-            root = loader.load();
+            Parent root = loader.load();
             filterFrameController = loader.getController();
             filterFrameController.setStage(filterFrame);
             filterFrame.setScene(new Scene(root));
@@ -2549,12 +2597,16 @@ public class MainFrameController implements Initializable {
             listViewVoxelsFiles.getSelectionModel().select(file);
         }
     }
-
-    @FXML
-    private void onActionButtonExecute(ActionEvent event) {
-
-        List<File> tasks = listViewTaskList.getItems();
-
+    
+    public void addTasksToTaskList(List<File> tasks){
+        
+        for(File f : tasks){
+            addFileToTaskList(f);
+        }
+    }
+    
+    public void executeTaskList(List<File> tasks){
+        
         queue = new ArrayBlockingQueue<>(tasks.size());
         queue.addAll(tasks);
         taskNumber = tasks.size();
@@ -2568,6 +2620,12 @@ public class MainFrameController implements Initializable {
         } catch (InterruptedException ex) {
             logger.error("Process interrupted", ex);
         }
+    }
+
+    @FXML
+    private void onActionButtonExecute(ActionEvent event) {
+
+        executeTaskList(listViewTaskList.getItems());
     }
     
     private void showErrorDialog(final Exception e){
@@ -2635,11 +2693,13 @@ public class MainFrameController implements Initializable {
 
                             switch (type) {
                                 
-                                case "transmittance":               
+                                case "transmittance":  
+                                case "LAI2000":
+                                case "LAI2200":
                                     
-                                    TransmittanceCfg cfg;
+                                    VirtualMeasuresCfg cfg;
                                     try {
-                                        cfg = TransmittanceCfg.readCfg(file);
+                                        cfg = VirtualMeasuresCfg.readCfg(file);
                                         try {
                                             TransmittanceSim.simulationProcess(cfg);
                                         }catch(IOException ex){
@@ -3296,15 +3356,29 @@ public class MainFrameController implements Initializable {
                     textFieldOutputFileMultiRes.setText(cfg1.getOutputFile().getAbsolutePath());
                     checkboxOverwritePadLimit.setSelected(!cfg1.isMultiResUseDefaultMaxPad());
                     
-                }else if(type.equals("transmittance")){
+                }else if(type.equals("transmittance") || type.equals("LAI2000") || type.equals("LAI2200")){
                     
-                    TransmittanceCfg cfg = TransmittanceCfg.readCfg(selectedFile);
+                    VirtualMeasuresCfg cfg = VirtualMeasuresCfg.readCfg(selectedFile);
 
                     //cfg.readConfiguration(selectedFile);
                     Parameters params = cfg.getParameters();
 
                     textfieldVoxelFilePathTransmittance.setText(params.getInputFile().getAbsolutePath());
-                    comboboxChooseDirectionsNumber.getSelectionModel().select(new Integer(params.getDirectionsNumber()));
+                    
+                    if(type.equals("transmittance")){
+                        toggleButtonTransmittance.setSelected(true);
+                        comboboxChooseDirectionsNumber.getSelectionModel().select(new Integer(params.getDirectionsNumber()));
+                    }else{
+                        
+                        if(type.equals("LAI2000")){
+                            toggleButtonLAI2000.setSelected(true);
+                        }else if(type.equals("LAI2200")){
+                            toggleButtonLAI2200.setSelected(true);
+                        }
+                        
+                        comboboxChooseDirectionsNumber.getEditor().setText(String.valueOf(params.getDirectionsNumber()));
+                    }
+                    
                     radiobuttonScannerPosFile.setSelected(params.isUseScanPositionsFile());
                     radiobuttonScannerPosSquaredArea.setSelected(!params.isUseScanPositionsFile());
 
@@ -4304,7 +4378,11 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonOpenRasterFile(ActionEvent event) {
         
-        fileChooserOpenDTMFile.setInitialDirectory(listViewVoxelsFiles.getSelectionModel().getSelectedItem().getParentFile());
+        File selectedVoxelFile = listViewVoxelsFiles.getSelectionModel().getSelectedItem();
+        if(selectedVoxelFile != null){
+            fileChooserOpenDTMFile.setInitialDirectory(selectedVoxelFile.getParentFile());
+        }
+        
         
         File selectedFile = fileChooserOpenDTMFile.showOpenDialog(stage);
         
@@ -4465,6 +4543,17 @@ public class MainFrameController implements Initializable {
             
             Parameters transmParameters = new Parameters();
         
+            if(toggleButtonLAI2000.isSelected() || toggleButtonLAI2200.isSelected()){
+                
+                transmParameters.setShotNumber(Integer.valueOf(comboboxChooseDirectionsNumber.getEditor().getText()));
+                
+                if(toggleButtonLAI2000.isSelected()){
+                    transmParameters.setMode(Parameters.Mode.LAI2000);
+                }else{
+                    transmParameters.setMode(Parameters.Mode.LAI2200);
+                }
+            }
+            
             transmParameters.setInputFile(new File(textfieldVoxelFilePathTransmittance.getText()));
             transmParameters.setGenerateBitmapFile(checkboxGenerateBitmapFile.isSelected());
             transmParameters.setGenerateTextFile(checkboxGenerateTextFile.isSelected());
@@ -4476,8 +4565,12 @@ public class MainFrameController implements Initializable {
             if(checkboxGenerateTextFile.isSelected()){
                 transmParameters.setTextFile(new File(textfieldOutputTextFilePath.getText()));
             }
+            if(comboboxChooseDirectionsNumber.isEditable()){
+                transmParameters.setDirectionsNumber(Integer.valueOf(comboboxChooseDirectionsNumber.getEditor().getText()));
+            }else{
+                transmParameters.setDirectionsNumber(comboboxChooseDirectionsNumber.getSelectionModel().getSelectedItem());
+            }
             
-            transmParameters.setDirectionsNumber(comboboxChooseDirectionsNumber.getSelectionModel().getSelectedItem());
             transmParameters.setLatitudeInDegrees(Float.valueOf(textfieldLatitudeRadians.getText()));
             transmParameters.setUseScanPositionsFile(radiobuttonScannerPosFile.isSelected());
             
@@ -4494,7 +4587,7 @@ public class MainFrameController implements Initializable {
             
             transmParameters.setSimulationPeriods(tableViewSimulationPeriods.getItems());
             
-            TransmittanceCfg cfg = new TransmittanceCfg(transmParameters);
+            VirtualMeasuresCfg cfg = new VirtualMeasuresCfg(transmParameters);
             try {
                 cfg.writeConfiguration(selectedFile);
                 addFileToTaskList(selectedFile);
@@ -4537,6 +4630,30 @@ public class MainFrameController implements Initializable {
         });
         
         transformationFrame.show();
+    }
+
+    @FXML
+    private void onActionButtonSetupViewCap(ActionEvent event) {
+        
+        if(toggleButtonLAI2000.isSelected()){
+            viewCapsSetupFrameController.setViewCapAngles(ViewCapsSetupFrameController.ViewCaps.LAI_2000);
+        }else if(toggleButtonLAI2200.isSelected()){
+            viewCapsSetupFrameController.setViewCapAngles(ViewCapsSetupFrameController.ViewCaps.LAI_2200);
+        }
+        
+        viewCapsSetupFrame.setOnHidden(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+                if(viewCapsSetupFrameController.isConfirmed()){
+                    textFieldViewCapAngle.setText(String.valueOf(viewCapsSetupFrameController.getAngle()));
+                }
+            }
+        });
+        
+        viewCapsSetupFrame.show();
+        
+        
     }
 
 }

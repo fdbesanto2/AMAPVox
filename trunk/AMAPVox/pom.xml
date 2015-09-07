@@ -21,6 +21,8 @@
         <module>Voxelisation</module>
         <module>JeebLight</module>
         <module>Commons</module>
+        <module>Chart</module>
+        <module>VoxReader</module>
     </modules>
     
     <distributionManagement>        
