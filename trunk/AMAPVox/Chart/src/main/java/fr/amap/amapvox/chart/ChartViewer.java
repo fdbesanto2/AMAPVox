@@ -5,37 +5,70 @@
  */
 package fr.amap.amapvox.chart;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
-import javafx.scene.Group;
+import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.layout.StackPane;
+import javafx.scene.control.Control;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.jfree.chart.ChartFactory;
+import javax.imageio.ImageIO;
+import org.apache.pdfbox.exceptions.COSVisitorException;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.graphics.xobject.PDPixelMap;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.block.BlockBorder;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.chart.title.TextTitle;
-import org.jfree.data.time.Month;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.chart.util.ExportUtils;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.fx.FXGraphics2D;
-import org.jfree.ui.HorizontalAlignment;
+import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
+import org.jfree.graphics2d.svg.SVGGraphics2D;
+import org.jfree.graphics2d.svg.SVGUtils;
+import org.jfree.ui.Drawable;
 /**
  *
  * @author calcul
  */
-public class ChartViewer {
+public class ChartViewer extends Control{
     
-    private Stage stage;
-    private XYDataset dataset;
+    private final Stage stage;
+    private ContextMenu menu;
+    private List<ChartCanvas> chartCanvasList;
+    //private HBox hBoxPane;
+    private ScrollPane scrollPane ;
+    private VBox vBoxPane;
+    private int maxChartNumberInARow;
+    private int currentRowIndex;
     
     static class ChartCanvas extends Canvas { 
         
@@ -45,7 +78,10 @@ public class ChartViewer {
         
         public ChartCanvas(JFreeChart chart) {
             this.chart = chart;
-            this.g2 = new FXGraphics2D(getGraphicsContext2D());
+            
+            GraphicsContext graphicsContext2D = getGraphicsContext2D();
+            this.g2 = new FXGraphics2D(graphicsContext2D);
+            
             // Redraw canvas when size changes. 
             widthProperty().addListener(evt -> draw()); 
             heightProperty().addListener(evt -> draw()); 
@@ -71,410 +107,377 @@ public class ChartViewer {
         public double prefHeight(double width) { return getHeight(); } 
     } 
     
-    public void setChart(JFreeChart chart){
+    private class CanvasPositionsAndSize{
         
-        ChartCanvas canvas = new ChartCanvas(chart);
-        
-        StackPane stackPane = new StackPane(); 
-        stackPane.getChildren().add(canvas);  
-        
-        // Bind canvas size to stack pane size. 
-        canvas.widthProperty().bind(stackPane.widthProperty()); 
-        canvas.heightProperty().bind(stackPane.heightProperty());
-        
-        stage.setScene(new Scene(stackPane)); 
-    }
-    
-    
-    private static JFreeChart createChart(XYDataset dataset) {
+        public List<Rectangle2D> positionsAndSizes;
+        public double totalWidth;
+        public double totalHeight;
 
-        JFreeChart chart = ChartFactory.createTimeSeriesChart(
-            "International Coffee Organisation : Coffee Prices",    // title
-            null,             // x-axis label
-            "US cents/lb",      // y-axis label
-            dataset);
-
-        String fontName = "Palatino";
-        chart.getTitle().setFont(new Font(fontName, Font.BOLD, 18));
-        chart.addSubtitle(new TextTitle("Source: http://www.ico.org/historical/2010-19/PDF/HIST-PRICES.pdf", new Font(fontName, Font.PLAIN, 14)));
-
-        XYPlot plot = (XYPlot) chart.getPlot();
-        plot.setDomainPannable(true);
-        plot.setRangePannable(false);
-        plot.setDomainCrosshairVisible(true);
-        plot.setRangeCrosshairVisible(true);
-        plot.getDomainAxis().setLowerMargin(0.0);
-        plot.getDomainAxis().setLabelFont(new Font(fontName, Font.BOLD, 14));
-        plot.getDomainAxis().setTickLabelFont(new Font(fontName, Font.PLAIN, 12));
-        plot.getRangeAxis().setLabelFont(new Font(fontName, Font.BOLD, 14));
-        plot.getRangeAxis().setTickLabelFont(new Font(fontName, Font.PLAIN, 12));
-        chart.getLegend().setItemFont(new Font(fontName, Font.PLAIN, 14));
-        chart.getLegend().setFrame(BlockBorder.NONE);
-        chart.getLegend().setHorizontalAlignment(HorizontalAlignment.CENTER);
-        XYItemRenderer r = plot.getRenderer();
-        if (r instanceof XYLineAndShapeRenderer) {
-            XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) r;
-            renderer.setBaseShapesVisible(false);
-            renderer.setDrawSeriesLineAsPath(true);
-            // set the default stroke for all series
-            renderer.setAutoPopulateSeriesStroke(false);
-            /*renderer.setDefaultStroke(new BasicStroke(3.0f, 
-                    BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL), false);*/
-            renderer.setSeriesPaint(0, Color.RED);
-            renderer.setSeriesPaint(1, new Color(24, 123, 58));
-            renderer.setSeriesPaint(2, new Color(149, 201, 136));
-            renderer.setSeriesPaint(3, new Color(1, 62, 29));
-            renderer.setSeriesPaint(4, new Color(81, 176, 86));
-            renderer.setSeriesPaint(5, new Color(0, 55, 122));
-            renderer.setSeriesPaint(6, new Color(0, 92, 165));
+        public CanvasPositionsAndSize(List<Rectangle2D> positionsAndSizes, double totalWidth, double totalHeight) {
+            this.positionsAndSizes = positionsAndSizes;
+            this.totalWidth = totalWidth;
+            this.totalHeight = totalHeight;
         }
-
-        return chart;
-
-    }
-    
-    public static XYDataset createDataset() {
-
-        TimeSeries s1 = new TimeSeries("Indicator Price");
-        s1.add(new Month(1, 2010), 126.80);
-        s1.add(new Month(2, 2010), 123.37);
-        s1.add(new Month(3, 2010), 125.30);
-        s1.add(new Month(4, 2010), 126.89);
-        s1.add(new Month(5, 2010), 128.10);
-        s1.add(new Month(6, 2010), 142.20);
-        s1.add(new Month(7, 2010), 153.41);
-        s1.add(new Month(8, 2010), 157.46);
-        s1.add(new Month(9, 2010), 163.61);
-        s1.add(new Month(10, 2010), 161.56);
-        s1.add(new Month(11, 2010), 173.90);
-        s1.add(new Month(12, 2010), 184.26);
-        s1.add(new Month(1, 2011), 197.35);
-        s1.add(new Month(2, 2011), 216.03);
-        s1.add(new Month(3, 2011), 224.33);
-        s1.add(new Month(4, 2011), 231.24);
-        s1.add(new Month(5, 2011), 227.97);
-        s1.add(new Month(6, 2011), 215.58);
-        s1.add(new Month(7, 2011), 210.36);
-        s1.add(new Month(8, 2011), 212.19);
-        s1.add(new Month(9, 2011), 213.04);
-        s1.add(new Month(10, 2011), 193.90);
-        s1.add(new Month(11, 2011), 193.66);
-        s1.add(new Month(12, 2011), 189.02);
-        s1.add(new Month(1, 2012), 188.90);
-        s1.add(new Month(2, 2012), 182.29);
-        s1.add(new Month(3, 2012), 167.77);
-        s1.add(new Month(4, 2012), 160.46);
-        s1.add(new Month(5, 2012), 157.68);
-        s1.add(new Month(6, 2012), 145.31);
-        s1.add(new Month(7, 2012), 159.07);
-        s1.add(new Month(8, 2012), 148.50);
-        s1.add(new Month(9, 2012), 151.28);
-        s1.add(new Month(10, 2012), 147.12);
-        s1.add(new Month(11, 2012), 136.35);
-        s1.add(new Month(12, 2012), 131.31);
-        s1.add(new Month(1, 2013), 135.38);
-        s1.add(new Month(2, 2013), 131.51);
-        s1.add(new Month(3, 2013), 131.38);
-
-        TimeSeries s2 = new TimeSeries("Columbian Milds");
-        s2.add(new Month(1, 2010), 207.51);
-        s2.add(new Month(2, 2010), 204.71);
-        s2.add(new Month(3, 2010), 205.71);
-        s2.add(new Month(4, 2010), 200.00);
-        s2.add(new Month(5, 2010), 200.54);
-        s2.add(new Month(6, 2010), 224.49);
-        s2.add(new Month(7, 2010), 235.52);
-        s2.add(new Month(8, 2010), 243.98);
-        s2.add(new Month(9, 2010), 247.77);
-        s2.add(new Month(10, 2010), 230.02);
-        s2.add(new Month(11, 2010), 244.02);
-        s2.add(new Month(12, 2010), 261.97);
-        s2.add(new Month(1, 2011), 279.88);
-        s2.add(new Month(2, 2011), 296.44);
-        s2.add(new Month(3, 2011), 300.68);
-        s2.add(new Month(4, 2011), 312.95);
-        s2.add(new Month(5, 2011), 302.17);
-        s2.add(new Month(6, 2011), 287.95);
-        s2.add(new Month(7, 2011), 285.21);
-        s2.add(new Month(8, 2011), 286.97);
-        s2.add(new Month(9, 2011), 287.54);
-        s2.add(new Month(10, 2011), 257.66);
-        s2.add(new Month(11, 2011), 256.99);
-        s2.add(new Month(12, 2011), 251.60);
-        s2.add(new Month(1, 2012), 255.91);
-        s2.add(new Month(2, 2012), 244.14);
-        s2.add(new Month(3, 2012), 222.84);
-        s2.add(new Month(4, 2012), 214.46);
-        s2.add(new Month(5, 2012), 207.32);
-        s2.add(new Month(6, 2012), 184.67);
-        s2.add(new Month(7, 2012), 202.56);
-        s2.add(new Month(8, 2012), 187.14);
-        s2.add(new Month(9, 2012), 190.10);
-        s2.add(new Month(10, 2012), 181.39);
-        s2.add(new Month(11, 2012), 170.08);
-        s2.add(new Month(12, 2012), 164.40);
-        s2.add(new Month(1, 2013), 169.19);
-        s2.add(new Month(2, 2013), 161.70);
-        s2.add(new Month(3, 2013), 161.53);
-        
-        TimeSeries s3 = new TimeSeries("Other Milds");
-        s3.add(new Month(1, 2010), 158.90);
-        s3.add(new Month(2, 2010), 157.86);
-        s3.add(new Month(3, 2010), 164.50);
-        s3.add(new Month(4, 2010), 169.55);
-        s3.add(new Month(5, 2010), 173.38);
-        s3.add(new Month(6, 2010), 190.90);
-        s3.add(new Month(7, 2010), 203.21);
-        s3.add(new Month(8, 2010), 211.59);
-        s3.add(new Month(9, 2010), 222.71);
-        s3.add(new Month(10, 2010), 217.64);
-        s3.add(new Month(11, 2010), 233.48);
-        s3.add(new Month(12, 2010), 248.17);
-        s3.add(new Month(1, 2011), 263.77);
-        s3.add(new Month(2, 2011), 287.89);
-        s3.add(new Month(3, 2011), 292.07);
-        s3.add(new Month(4, 2011), 300.12);
-        s3.add(new Month(5, 2011), 291.09);
-        s3.add(new Month(6, 2011), 274.98);
-        s3.add(new Month(7, 2011), 268.02);
-        s3.add(new Month(8, 2011), 270.44);
-        s3.add(new Month(9, 2011), 274.88);
-        s3.add(new Month(10, 2011), 247.82);
-        s3.add(new Month(11, 2011), 245.09);
-        s3.add(new Month(12, 2011), 236.71);
-        s3.add(new Month(1, 2012), 237.21);
-        s3.add(new Month(2, 2012), 224.16);
-        s3.add(new Month(3, 2012), 201.26);
-        s3.add(new Month(4, 2012), 191.45);
-        s3.add(new Month(5, 2012), 184.65);
-        s3.add(new Month(6, 2012), 168.69);
-        s3.add(new Month(7, 2012), 190.45);
-        s3.add(new Month(8, 2012), 174.82);
-        s3.add(new Month(9, 2012), 178.98);
-        s3.add(new Month(10, 2012), 173.32);
-        s3.add(new Month(11, 2012), 159.91);
-        s3.add(new Month(12, 2012), 152.74);
-        s3.add(new Month(1, 2013), 157.29);
-        s3.add(new Month(2, 2013), 149.46);
-        s3.add(new Month(3, 2013), 149.78);
-        
-        TimeSeries s4 = new TimeSeries("Brazilian Naturals");
-        s4.add(new Month(1, 2010), 131.67);
-        s4.add(new Month(2, 2010), 124.57);
-        s4.add(new Month(3, 2010), 126.21);
-        s4.add(new Month(4, 2010), 126.07);
-        s4.add(new Month(5, 2010), 127.45);
-        s4.add(new Month(6, 2010), 143.20);
-        s4.add(new Month(7, 2010), 156.87);
-        s4.add(new Month(8, 2010), 163.21);
-        s4.add(new Month(9, 2010), 175.15);
-        s4.add(new Month(10, 2010), 175.38);
-        s4.add(new Month(11, 2010), 190.62);
-        s4.add(new Month(12, 2010), 204.25);
-        s4.add(new Month(1, 2011), 219.77);
-        s4.add(new Month(2, 2011), 247.00);
-        s4.add(new Month(3, 2011), 260.98);
-        s4.add(new Month(4, 2011), 273.40);
-        s4.add(new Month(5, 2011), 268.66);
-        s4.add(new Month(6, 2011), 250.59);
-        s4.add(new Month(7, 2011), 245.69);
-        s4.add(new Month(8, 2011), 249.83);
-        s4.add(new Month(9, 2011), 255.64);
-        s4.add(new Month(10, 2011), 234.28);
-        s4.add(new Month(11, 2011), 236.75);
-        s4.add(new Month(12, 2011), 228.79);
-        s4.add(new Month(1, 2012), 228.21);
-        s4.add(new Month(2, 2012), 215.40);
-        s4.add(new Month(3, 2012), 192.03);
-        s4.add(new Month(4, 2012), 180.90);
-        s4.add(new Month(5, 2012), 174.17);
-        s4.add(new Month(6, 2012), 156.17);
-        s4.add(new Month(7, 2012), 175.98);
-        s4.add(new Month(8, 2012), 160.05);
-        s4.add(new Month(9, 2012), 166.53);
-        s4.add(new Month(10, 2012), 161.20);
-        s4.add(new Month(11, 2012), 148.25);
-        s4.add(new Month(12, 2012), 140.69);
-        s4.add(new Month(1, 2013), 145.17);
-        s4.add(new Month(2, 2013), 136.63);
-        s4.add(new Month(3, 2013), 133.61);
-        
-        TimeSeries s5 = new TimeSeries("Robustas");
-        s5.add(new Month(1, 2010), 69.92);
-        s5.add(new Month(2, 2010), 67.88);
-        s5.add(new Month(3, 2010), 67.25);
-        s5.add(new Month(4, 2010), 71.59);
-        s5.add(new Month(5, 2010), 70.70);
-        s5.add(new Month(6, 2010), 76.92);
-        s5.add(new Month(7, 2010), 85.27);
-        s5.add(new Month(8, 2010), 82.68);
-        s5.add(new Month(9, 2010), 81.28);
-        s5.add(new Month(10, 2010), 85.27);
-        s5.add(new Month(11, 2010), 92.04);
-        s5.add(new Month(12, 2010), 94.09);
-        s5.add(new Month(1, 2011), 101.09);
-        s5.add(new Month(2, 2011), 109.35);
-        s5.add(new Month(3, 2011), 118.13);
-        s5.add(new Month(4, 2011), 117.37);
-        s5.add(new Month(5, 2011), 121.98);
-        s5.add(new Month(6, 2011), 117.95);
-        s5.add(new Month(7, 2011), 112.73);
-        s5.add(new Month(8, 2011), 112.07);
-        s5.add(new Month(9, 2011), 106.06);
-        s5.add(new Month(10, 2011), 98.10);
-        s5.add(new Month(11, 2011), 97.24);
-        s5.add(new Month(12, 2011), 98.41);
-        s5.add(new Month(1, 2012), 96.72);
-        s5.add(new Month(2, 2012), 101.93);
-        s5.add(new Month(3, 2012), 103.57);
-        s5.add(new Month(4, 2012), 101.80);
-        s5.add(new Month(5, 2012), 106.88);
-        s5.add(new Month(6, 2012), 105.70);
-        s5.add(new Month(7, 2012), 107.06);
-        s5.add(new Month(8, 2012), 106.52);
-        s5.add(new Month(9, 2012), 104.95);
-        s5.add(new Month(10, 2012), 104.47);
-        s5.add(new Month(11, 2012), 97.67);
-        s5.add(new Month(12, 2012), 96.59);
-        s5.add(new Month(1, 2013), 99.69);
-        s5.add(new Month(2, 2013), 104.03);
-        s5.add(new Month(3, 2013), 106.26);
-       
-        TimeSeries s6 = new TimeSeries("Futures (London)");
-        s6.add(new Month(1, 2010), 62.66);
-        s6.add(new Month(2, 2010), 60.37);
-        s6.add(new Month(3, 2010), 58.64);
-        s6.add(new Month(4, 2010), 62.21);
-        s6.add(new Month(5, 2010), 62.46);
-        s6.add(new Month(6, 2010), 69.72);
-        s6.add(new Month(7, 2010), 78.17);
-        s6.add(new Month(8, 2010), 78.42);
-        s6.add(new Month(9, 2010), 75.87);
-        s6.add(new Month(10, 2010), 80.08);
-        s6.add(new Month(11, 2010), 86.40);
-        s6.add(new Month(12, 2010), 88.70);
-        s6.add(new Month(1, 2011), 96.02);
-        s6.add(new Month(2, 2011), 104.53);
-        s6.add(new Month(3, 2011), 111.36);
-        s6.add(new Month(4, 2011), 111.34);
-        s6.add(new Month(5, 2011), 116.76);
-        s6.add(new Month(6, 2011), 110.51);
-        s6.add(new Month(7, 2011), 103.36);
-        s6.add(new Month(8, 2011), 102.71);
-        s6.add(new Month(9, 2011), 96.10);
-        s6.add(new Month(10, 2011), 88.64);
-        s6.add(new Month(11, 2011), 85.78);
-        s6.add(new Month(12, 2011), 87.65);
-        s6.add(new Month(1, 2012), 84.19);
-        s6.add(new Month(2, 2012), 88.69);
-        s6.add(new Month(3, 2012), 91.37);
-        s6.add(new Month(4, 2012), 91.81);
-        s6.add(new Month(5, 2012), 96.82);
-        s6.add(new Month(6, 2012), 94.75);
-        s6.add(new Month(7, 2012), 96.14);
-        s6.add(new Month(8, 2012), 96.12);
-        s6.add(new Month(9, 2012), 94.65);
-        s6.add(new Month(10, 2012), 94.66);
-        s6.add(new Month(11, 2012), 87.32);
-        s6.add(new Month(12, 2012), 85.94);
-        s6.add(new Month(1, 2013), 88.85);
-        s6.add(new Month(2, 2013), 94.41);
-        s6.add(new Month(3, 2013), 97.22);
-        
-        TimeSeries s7 = new TimeSeries("Futures (New York)");
-        s7.add(new Month(1, 2010), 142.76);
-        s7.add(new Month(2, 2010), 134.35);
-        s7.add(new Month(3, 2010), 134.97);
-        s7.add(new Month(4, 2010), 135.12);
-        s7.add(new Month(5, 2010), 135.81);
-        s7.add(new Month(6, 2010), 152.36);
-        s7.add(new Month(7, 2010), 165.23);
-        s7.add(new Month(8, 2010), 175.10);
-        s7.add(new Month(9, 2010), 187.80);
-        s7.add(new Month(10, 2010), 190.43);
-        s7.add(new Month(11, 2010), 206.92);
-        s7.add(new Month(12, 2010), 221.51);
-        s7.add(new Month(1, 2011), 238.05);
-        s7.add(new Month(2, 2011), 261.41);
-        s7.add(new Month(3, 2011), 274.10);
-        s7.add(new Month(4, 2011), 285.58);
-        s7.add(new Month(5, 2011), 277.72);
-        s7.add(new Month(6, 2011), 262.52);
-        s7.add(new Month(7, 2011), 255.90);
-        s7.add(new Month(8, 2011), 260.39);
-        s7.add(new Month(9, 2011), 261.39);
-        s7.add(new Month(10, 2011), 236.74);
-        s7.add(new Month(11, 2011), 235.25);
-        s7.add(new Month(12, 2011), 227.23);
-        s7.add(new Month(1, 2012), 227.50);
-        s7.add(new Month(2, 2012), 212.09);
-        s7.add(new Month(3, 2012), 188.78);
-        s7.add(new Month(4, 2012), 181.75);
-        s7.add(new Month(5, 2012), 176.50);
-        s7.add(new Month(6, 2012), 159.93);
-        s7.add(new Month(7, 2012), 183.20);
-        s7.add(new Month(8, 2012), 169.77);
-        s7.add(new Month(9, 2012), 175.36);
-        s7.add(new Month(10, 2012), 170.43);
-        s7.add(new Month(11, 2012), 155.72);
-        s7.add(new Month(12, 2012), 149.58);
-        s7.add(new Month(1, 2013), 154.28);
-        s7.add(new Month(2, 2013), 144.89);
-        s7.add(new Month(3, 2013), 141.43);
-       
-        TimeSeriesCollection timeDataset = new TimeSeriesCollection();
-        timeDataset.addSeries(s1);
-        timeDataset.addSeries(s2);
-        timeDataset.addSeries(s3);        
-        timeDataset.addSeries(s4);
-        timeDataset.addSeries(s5);
-        timeDataset.addSeries(s6);
-        timeDataset.addSeries(s7);
-        
-        return timeDataset;
-    }
-    
-    public ChartViewer(){
-        
-        stage = new Stage();
-        dataset = createDataset();
-        
-        stage.setWidth(500);
-        stage.setHeight(500);
-        stage.setTitle("Chart");
         
     }
     
-    public ChartViewer(String title){
+    public void insertChart(JFreeChart chart){
         
-        stage = new Stage();
-        stage.setTitle(title); 
+        final ChartCanvas chartCanvas = new ChartCanvas(chart);
+        
+        if((chartCanvasList.size() / (vBoxPane.getChildren().size())) >= maxChartNumberInARow){
+            currentRowIndex++;
+            vBoxPane.getChildren().add(new HBox());
+        }
+        
+        ((HBox)vBoxPane.getChildren().get(currentRowIndex)).getChildren().add(chartCanvas);
+        ((HBox)vBoxPane.getChildren().get(currentRowIndex)).setAlignment(Pos.CENTER_LEFT);
+        
+        chartCanvasList.add(chartCanvas);
+        
+        refreshChartPositionAndSize();
+
     }
     
-    public ChartViewer(String title, int width, int height){
+    private void refreshChartPositionAndSize(){
+        
+        int index = 0;
+        int chartWidth = 0;
+        
+        ObservableList<Node> children = vBoxPane.getChildren();
+        for(Node hBoxNode : children){
+            
+            if(index == 0){
+                chartWidth = ((HBox)hBoxNode).getChildren().size();
+            }
+            
+            for(Node canvasNode : ((HBox)hBoxNode).getChildren()){
+                
+                ChartCanvas chartCanvas = (ChartCanvas) canvasNode;
+                chartCanvas.setWidth(scrollPane.getWidth()/chartWidth);
+                chartCanvas.setHeight(scrollPane.getHeight());
+            }
+            
+            index++;
+        }
+    }
+    
+    private ContextMenu createContextMenu() {
+        
+        menu = new ContextMenu();
+
+        Menu export = new Menu("Export As");
+
+        MenuItem pngItem = new MenuItem("PNG...");
+        pngItem.setOnAction((ActionEvent e) -> {
+            handleExportToPNG();
+        });
+        export.getItems().add(pngItem);
+
+        MenuItem jpegItem = new MenuItem("JPEG...");
+        jpegItem.setOnAction((ActionEvent e) -> {
+            handleExportToJPEG();
+        });
+        export.getItems().add(jpegItem);
+        
+        
+        MenuItem pdfItem = new MenuItem("PDF...");
+        pdfItem.setOnAction((ActionEvent e) -> {
+            handleExportToPDF();
+        });
+        export.getItems().add(pdfItem);
+        
+        if (ExportUtils.isJFreeSVGAvailable()) {
+            MenuItem svgItem = new MenuItem("SVG...");
+            svgItem.setOnAction((ActionEvent e) -> {
+                handleExportToSVG();
+            });
+            export.getItems().add(svgItem);
+        }
+        menu.getItems().add(export);
+        return menu;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+    
+    
+    public ChartViewer(String title, int width, int height, int maxChartNumberInARow){
         
         stage = new Stage();
         stage.setTitle(title); 
         stage.setWidth(width);
         stage.setHeight(height);
-    }
-    
-    public void setDataset(XYDataset dataset){
         
-        this.dataset = dataset;
+        this.maxChartNumberInARow = maxChartNumberInARow;
         
-        JFreeChart chart = createChart(this.dataset); 
-        ChartCanvas canvas = new ChartCanvas(chart);
-        StackPane stackPane = new StackPane(); 
-        stackPane.getChildren().add(canvas);  
-        // Bind canvas size to stack pane size. 
-        canvas.widthProperty().bind( stackPane.widthProperty()); 
-        canvas.heightProperty().bind( stackPane.heightProperty());  
-        stage.setScene(new Scene(stackPane)); 
+        this.setContextMenu(createContextMenu());
+        
+        vBoxPane = new VBox();
+        scrollPane = new ScrollPane();
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPannable(true);
+        
+        scrollPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                MouseButton button = event.getButton();
+                if(button == MouseButton.SECONDARY){
+                    menu.show(stage, event.getScreenX(), event.getScreenY());
+                }
+            }
+        });
+        
+        scrollPane.widthProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                refreshChartPositionAndSize();
+            }
+        });
+        
+        scrollPane.heightProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                refreshChartPositionAndSize();
+            }
+        });
+        
+        vBoxPane.getChildren().add(new HBox());
+        scrollPane.setContent(vBoxPane);
+        
+        chartCanvasList = new ArrayList<>();
+        stage.setScene(new Scene(scrollPane));
+        
     }
     
     public void show(){
         
         stage.show();
+    }
+    
+    private CanvasPositionsAndSize getCanvasPositionAndSize(){
+        
+        List<Rectangle2D> positionsAndSizes = new ArrayList<>();
+        
+        double totalWidth = 0;
+        double totalHeight = 0;
+
+        double canvasHeight = 0;
+
+        int index = 0;
+        for(ChartCanvas canvas : chartCanvasList){
+
+            if(index == 0){
+                canvasHeight = canvas.getHeight();
+            }
+            if(index > maxChartNumberInARow-1){
+                break;
+            }
+
+            totalWidth += canvas.getWidth();
+            index++;
+        }
+
+        totalHeight = canvasHeight * Math.ceil(chartCanvasList.size()/(double)maxChartNumberInARow);
+
+        index = 0;
+        double posY = 0;
+
+        ObservableList<Node> children = vBoxPane.getChildren();
+
+        for(Node hBoxNode : children){
+
+            for(Node canvasNode : ((HBox)hBoxNode).getChildren()){
+
+                ChartCanvas chartCanvas = (ChartCanvas) canvasNode;
+
+                if(index > maxChartNumberInARow-1){
+                    index = 0;
+                    posY += chartCanvas.getHeight();
+                }
+
+                double posX = index * chartCanvas.getWidth();
+
+                Rectangle2D drawArea = new Rectangle2D.Double(posX, posY, chartCanvas.getWidth(), chartCanvas.getHeight());
+                positionsAndSizes.add(drawArea);
+                index++;
+            }
+        }
+        
+        CanvasPositionsAndSize canvasPositionsAndSize = new CanvasPositionsAndSize(positionsAndSizes, totalWidth, totalHeight);
+        return canvasPositionsAndSize;
+    }
+    
+        /**
+     * A handler for the export to SVG option in the context menu.
+     */
+    private void handleExportToSVG() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export to SVG");
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter(
+                "Scalable Vector Graphics (SVG)", "svg"));
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            
+            CanvasPositionsAndSize canvasPositionAndSize = getCanvasPositionAndSize();
+            
+            SVGGraphics2D sVGGraphics2D = new SVGGraphics2D((int)canvasPositionAndSize.totalWidth, (int)canvasPositionAndSize.totalHeight);
+            
+            Graphics2D graphics2D = (Graphics2D) sVGGraphics2D.create();
+            
+            int index = 0;
+            for(ChartCanvas canvas : chartCanvasList){
+                
+                ((Drawable)canvas.chart).draw(graphics2D, canvasPositionAndSize.positionsAndSizes.get(index));
+                index++;
+            }
+            
+            try {
+                SVGUtils.writeToSVG(file, sVGGraphics2D.getSVGElement());
+            } catch (IOException ex) {
+                Logger.getLogger(ChartViewer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    /**
+     * A handler for the export to PDF option in the context menu.
+     */
+    private void handleExportToPDF() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter(
+                "Portable Document Format (PDF)", "pdf"));
+        fileChooser.setTitle("Export to PDF");
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            
+            
+            
+            try {
+                
+                CanvasPositionsAndSize canvasPositionAndSize = getCanvasPositionAndSize();
+
+                PDDocument doc = new PDDocument();
+            
+                PDPage page = new PDPage(new PDRectangle((float) canvasPositionAndSize.totalWidth, (float) canvasPositionAndSize.totalHeight));
+                doc.addPage(page);
+            
+                BufferedImage image = new BufferedImage((int) canvasPositionAndSize.totalWidth, (int) canvasPositionAndSize.totalHeight, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2 = image.createGraphics();
+
+                int index = 0;
+                for (ChartCanvas canvas : chartCanvasList) {
+
+                    Rectangle2D rectangle2D = canvasPositionAndSize.positionsAndSizes.get(index);
+
+                    ((Drawable) canvas.chart).draw(g2, new Rectangle((int) rectangle2D.getX(), (int) rectangle2D.getY(),
+                            (int) rectangle2D.getWidth(), (int) rectangle2D.getHeight()));
+                    index++;
+                }
+                
+                PDPageContentStream contentStream = new PDPageContentStream(doc, page, true, false);
+                PDXObjectImage pdImage = new PDPixelMap(doc, image);
+                contentStream.drawImage(pdImage, 0, 0);
+                
+                PDPageContentStream cos = new PDPageContentStream(doc, page);
+                cos.drawXObject(pdImage, 0, 0, pdImage.getWidth(), pdImage.getHeight());
+                cos.close();
+                
+                doc.save(file);
+                
+            } catch (IOException | COSVisitorException ex) {
+                Logger.getLogger(ChartViewer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            /*ExportUtils.writeAsPDF(this.chart, (int)canvas.getWidth(),
+            (int)canvas.getHeight(), file);*/ 
+            
+            
+            
+            /*ExportUtils.writeAsPDF(this.chart, (int)canvas.getWidth(),
+                        (int)canvas.getHeight(), file);*/
+        } 
+    }
+    
+    /**
+     * A handler for the export to PNG option in the context menu.
+     */
+    private void handleExportToPNG() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export to PNG");
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter(
+                "Portable Network Graphics (PNG)", "png"));
+        File file = fileChooser.showSaveDialog(stage);
+        
+        if (file != null) {
+            try {
+
+                CanvasPositionsAndSize canvasPositionAndSize = getCanvasPositionAndSize();
+
+                BufferedImage image = new BufferedImage((int) canvasPositionAndSize.totalWidth, (int) canvasPositionAndSize.totalHeight, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2 = image.createGraphics();
+
+                int index = 0;
+                for (ChartCanvas canvas : chartCanvasList) {
+
+                    Rectangle2D rectangle2D = canvasPositionAndSize.positionsAndSizes.get(index);
+
+                    ((Drawable) canvas.chart).draw(g2, new Rectangle((int) rectangle2D.getX(), (int) rectangle2D.getY(),
+                            (int) rectangle2D.getWidth(), (int) rectangle2D.getHeight()));
+                    index++;
+                }
+
+                try (OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
+                    ImageIO.write(image, "png", out);
+                }
+                
+            } catch (IOException ex) {
+                // FIXME: show a dialog with the error
+            }
+        }  
+    }
+
+    /**
+     * A handler for the export to JPEG option in the context menu.
+     */
+    private void handleExportToJPEG() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export to JPEG");
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter(
+                "JPEG", "jpg"));
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            try {
+                CanvasPositionsAndSize canvasPositionAndSize = getCanvasPositionAndSize();
+
+                BufferedImage image = new BufferedImage((int) canvasPositionAndSize.totalWidth, (int) canvasPositionAndSize.totalHeight, BufferedImage.TYPE_INT_RGB);
+                Graphics2D g2 = image.createGraphics();
+
+                int index = 0;
+                for (ChartCanvas canvas : chartCanvasList) {
+
+                    Rectangle2D rectangle2D = canvasPositionAndSize.positionsAndSizes.get(index);
+
+                    ((Drawable) canvas.chart).draw(g2, new Rectangle((int) rectangle2D.getX(), (int) rectangle2D.getY(),
+                            (int) rectangle2D.getWidth(), (int) rectangle2D.getHeight()));
+                    index++;
+                }
+
+                try (OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
+                    ImageIO.write(image, "jpg", out);
+                }
+                
+                /*ExportUtils.writeAsJPEG(chartCanvasList.get(0).chart, (int)chartCanvasList.get(0).getWidth(),
+                        (int)chartCanvasList.get(0).getHeight(), file);*/
+            } catch (IOException ex) {
+                // FIXME: show a dialog with the error
+            }
+        }        
     }
 }

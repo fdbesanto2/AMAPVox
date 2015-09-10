@@ -10,7 +10,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
 import org.apache.log4j.Logger;
@@ -29,31 +31,45 @@ public class VoxelFileReader implements Iterable<Voxel>{
     
     private final VoxelSpaceInfos voxelSpaceInfos;
     
-    public VoxelFileReader(File voxelFile){
+    private final boolean keepInMemory;
+    private List<Voxel> voxels = null;
+    private int currentVoxelIndex;
+    
+    private boolean wasRead;
+    
+    public VoxelFileReader(File voxelFile, boolean keepInMemory){
         
         this.voxelFile = voxelFile;
+        this.keepInMemory = keepInMemory;
         
         voxelSpaceInfos= new VoxelSpaceInfos();
         voxelSpaceInfos.readFromVoxelFile(voxelFile);
+        
+        if(keepInMemory){
+            voxels = new ArrayList<>();
+        }
     }
     
     @Override
     public Iterator<Voxel> iterator() {
         
-        try {
-            reader = new BufferedReader(new FileReader(voxelFile));
+        currentVoxelIndex = -1;
+        
+        if((!wasRead && keepInMemory) || !keepInMemory){
             
-            for(int i=0;i<6;i++){
-                reader.readLine();
+            try {
+                reader = new BufferedReader(new FileReader(voxelFile));
+
+                for(int i=0;i<6;i++){
+                    reader.readLine();
+                }
+
+            } catch (FileNotFoundException ex) {
+                logger.error("Cannot find file", ex);
+            } catch (IOException ex) {
+                logger.error("Cannot read file", ex);
             }
-            
-        } catch (FileNotFoundException ex) {
-            logger.error("Cannot find file", ex);
-        } catch (IOException ex) {
-            logger.error("Cannot read file", ex);
         }
-        
-        
         
         Iterator<Voxel> it;
         
@@ -62,10 +78,21 @@ public class VoxelFileReader implements Iterable<Voxel>{
             @Override
             public boolean hasNext() {
                 
-                try {
-                    return ((currentLine = reader.readLine()) != null);
-                } catch (IOException ex) {
-                    return false;
+                if((!wasRead && keepInMemory) || !keepInMemory){
+                    try {
+                        boolean isNextExist = ((currentLine = reader.readLine()) != null);
+
+                        if(!isNextExist){
+                            wasRead = true;
+                        }
+
+                        return isNextExist;
+                    } catch (IOException ex) {
+                        return false;
+                    }
+                    
+                }else{
+                    return voxels != null && currentVoxelIndex+1 < voxels.size();     
                 }
             }
 
@@ -73,7 +100,25 @@ public class VoxelFileReader implements Iterable<Voxel>{
             public Voxel next() {
                 
                 //on parse la ligne
-                return parseVoxelFileLine(currentLine);
+                currentVoxelIndex++;
+                
+                Voxel voxel;
+                
+                if(wasRead){
+                    if(keepInMemory){
+                        return voxels.get(currentVoxelIndex);
+                    }else{
+                        voxel = parseVoxelFileLine(currentLine);
+                    }
+                }else{
+                    voxel = parseVoxelFileLine(currentLine);
+                    
+                    if(keepInMemory){
+                        voxels.add(voxel);
+                    }
+                }
+                
+                return voxel;
             }
         };
         
@@ -97,13 +142,13 @@ public class VoxelFileReader implements Iterable<Voxel>{
             mapAttrs[i] = value;
         }
 
-        Voxel vox = new Voxel(indice.x, indice.y, indice.z, ExtendedALSVoxel.class);
+        Voxel vox = new Voxel(indice.x, indice.y, indice.z, Voxel.class);
 
         for(int i=3;i<mapAttrs.length;i++){
             try {
                 vox.setFieldValue(vox.getClass(), voxelSpaceInfos.getColumnNames()[i], vox, mapAttrs[i]);
             } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
-               logger.error("Cannot set field value",ex);
+               //logger.error("Cannot set field value",ex);
             }
         }
         

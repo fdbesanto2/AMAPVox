@@ -24,12 +24,14 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
         
         
+        /*File alsParacou2013 = new File("/home/calcul/Documents/Julien/comparaisons ALS_multires_TLS_paracou_2013/als_multires.vox");
+        File tlsParacou2013 = new File("/home/calcul/Documents/Julien/comparaisons ALS_multires_TLS_paracou_2013/tls_non_pondere.vox");
         
         ChartViewer chartViewer = new ChartViewer("Hello world chart", 1200, 500);
         
-        chartViewer.setChart(VoxelsToChart.createVegetationProfileChart(new File("/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox")));
+        chartViewer.setChart(VoxelsToChart.createVegetationProfileChartMulti(alsParacou2013, tlsParacou2013));
         
-        chartViewer.show();
+        chartViewer.show();*/
         
         /*FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/RingsMaskingSetupFrame.fxml"));
         Parent root = loader.load();
@@ -40,7 +42,7 @@ public class MainApp extends Application {
         stage.show();*/
         
         
-        /*FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainFrame.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainFrame.fxml"));
         Parent root = loader.load();
         MainFrameController controller = loader.getController();
                 
@@ -73,7 +75,7 @@ public class MainApp extends Application {
             controller.setStage(stage);
 
             stage.show();
-        }*/
+        }
     }
 
     /**

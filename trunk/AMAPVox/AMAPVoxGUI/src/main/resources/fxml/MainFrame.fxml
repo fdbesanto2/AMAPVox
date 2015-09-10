@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.*?>
 <?import org.controlsfx.control.textfield.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
@@ -724,17 +725,182 @@
                                                 </AnchorPane>
                                           </content>
                                         </Tab>
+                                          <Tab text="Chart">
+                                             <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                   <children>
+                                                      <SplitPane dividerPositions="0.5" prefHeight="414.0" prefWidth="765.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                        <items>
+                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                                               <children>
+                                                                  <TabPane fx:id="tabpaneChart" prefHeight="414.0" prefWidth="765.0" tabClosingPolicy="UNAVAILABLE">
+                                                                    <tabs>
+                                                                      <Tab text="Profile">
+                                                                           <content>
+                                                                              <AnchorPane>
+                                                                                 <children>
+                                                                                    <ComboBox fx:id="comboboxPreDefinedProfile" layoutX="181.0" layoutY="14.0" prefHeight="26.0" prefWidth="150.0" />
+                                                                                    <VBox layoutX="14.0" layoutY="119.0" spacing="3.0">
+                                                                                       <children>
+                                                                                          <RadioButton fx:id="radiobuttonHeightFromAboveGround" mnemonicParsing="false" selected="true" text="Height from above ground" />
+                                                                                          <Label text="or" />
+                                                                                          <RadioButton fx:id="radiobuttonHeightFromBelowCanopy" mnemonicParsing="false" text="Height from below canopy" />
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <HBox fx:id="hboxMaxPADVegetationProfile" layoutX="23.0" layoutY="208.0" spacing="5.0">
+                                                                                       <children>
+                                                                                          <Label text="Max PAD">
+                                                                                             <padding>
+                                                                                                <Insets top="5.0" />
+                                                                                             </padding>
+                                                                                          </Label>
+                                                                                          <TextField fx:id="textfieldVegetationProfileMaxPAD" prefHeight="26.0" prefWidth="72.0" text="5" />
+                                                                                       </children>
+                                                                                    </HBox>
+                                                                                    <RadioButton fx:id="radiobuttonPreDefinedProfile" layoutX="14.0" layoutY="18.0" mnemonicParsing="false" selected="true" text="Pre-defined profile" />
+                                                                                    <Label layoutX="16.0" layoutY="40.0" text="or" />
+                                                                                    <ComboBox fx:id="comboboxFromVariableProfile" disable="true" layoutX="181.0" layoutY="56.0" prefHeight="26.0" prefWidth="150.0" />
+                                                                                    <RadioButton fx:id="radiobuttonFromVariableProfile" layoutX="14.0" layoutY="60.0" mnemonicParsing="false" text="From variable profile" />
+                                                                                    <Separator layoutX="16.0" layoutY="101.0" prefHeight="4.0" prefWidth="315.0" />
+                                                                                    <Separator layoutX="16.0" layoutY="189.0" prefHeight="0.0" prefWidth="315.0" />
+                                                                                 </children>
+                                                                              </AnchorPane>
+                                                                           </content>
+                                                                        </Tab>
+                                                                      <Tab text="Two Variable Statistics" />
+                                                                    </tabs>
+                                                                  </TabPane>
+                                                               </children>
+                                                            </AnchorPane>
+                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0" prefWidth="343.0">
+                                                               <children>
+                                                                  <VBox prefHeight="361.0" prefWidth="377.0" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                     <children>
+                                                                        <TitledPane collapsible="false" prefHeight="160.0" prefWidth="334.0" text="Voxels files - comparison">
+                                                                           <content>
+                                                                              <VBox spacing="2.0">
+                                                                                 <children>
+                                                                                    <ListView fx:id="listViewVoxelsFilesChart" prefHeight="85.0" prefWidth="306.0" />
+                                                                                    <HBox spacing="20.0">
+                                                                                       <children>
+                                                                                          <HBox spacing="5.0">
+                                                                                             <children>
+                                                                                                <Button fx:id="buttonRemoveVoxelFileFromListView1" mnemonicParsing="false" onAction="#onActionButtonRemoveVoxelFileFromListViewForChart">
+                                                                                                   <graphic>
+                                                                                                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                         <image>
+                                                                                                            <Image url="@icons/gnome_list_remove.png" />
+                                                                                                         </image>
+                                                                                                      </ImageView>
+                                                                                                   </graphic>
+                                                                                                </Button>
+                                                                                                <Button fx:id="buttonAddVoxelFileToListViewForChart" mnemonicParsing="false" onAction="#onActionButtonAddVoxelFileToListViewForChart">
+                                                                                                   <graphic>
+                                                                                                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                         <image>
+                                                                                                            <Image url="@icons/gnome_list_add.png" />
+                                                                                                         </image>
+                                                                                                      </ImageView>
+                                                                                                   </graphic>
+                                                                                                </Button>
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                          <HBox prefHeight="26.0" prefWidth="145.0" spacing="5.0">
+                                                                                             <children>
+                                                                                                <Label text="Label">
+                                                                                                   <padding>
+                                                                                                      <Insets top="4.0" />
+                                                                                                   </padding>
+                                                                                                </Label>
+                                                                                                <TextField fx:id="textfieldLabelVoxelFileChart" prefHeight="26.0" prefWidth="103.0" />
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                       </children>
+                                                                                    </HBox>
+                                                                                 </children>
+                                                                              </VBox>
+                                                                           </content>
+                                                                        </TitledPane>
+                                                                        <TitledPane collapsible="false" prefHeight="102.0" prefWidth="343.0" text="Filtering">
+                                                                           <content>
+                                                                              <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                                                                           </content>
+                                                                        </TitledPane>
+                                                                        <TitledPane collapsible="false" prefHeight="131.0" prefWidth="377.0">
+                                                                           <content>
+                                                                              <AnchorPane fx:id="anchorpaneQuadrats" disable="true" prefHeight="90.0" prefWidth="375.0">
+                                                                                 <children>
+                                                                                    <HBox layoutX="20.399999618530273" layoutY="17.0" spacing="15.0">
+                                                                                       <children>
+                                                                                          <HBox spacing="5.0">
+                                                                                             <children>
+                                                                                                <Label text="Axis">
+                                                                                                   <padding>
+                                                                                                      <Insets top="4.0" />
+                                                                                                   </padding>
+                                                                                                </Label>
+                                                                                                <ComboBox fx:id="comboboxSelectAxisForQuadrats" prefHeight="26.0" prefWidth="60.0" />
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                          <HBox spacing="5.0">
+                                                                                             <children>
+                                                                                                <Label text="Min">
+                                                                                                   <padding>
+                                                                                                      <Insets top="4.0" />
+                                                                                                   </padding>
+                                                                                                </Label>
+                                                                                                <TextField fx:id="textFieldEnterYMinForQuadrats" prefHeight="3.0" prefWidth="67.0" />
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                       </children>
+                                                                                    </HBox>
+                                                                                    <HBox layoutX="10.0" layoutY="64.0" spacing="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.799999999999955">
+                                                                                       <children>
+                                                                                          <HBox spacing="2.0">
+                                                                                             <children>
+                                                                                                <RadioButton fx:id="radiobuttonSplitCountForQuadrats" mnemonicParsing="false" selected="true" text="Split count">
+                                                                                                   <padding>
+                                                                                                      <Insets top="4.0" />
+                                                                                                   </padding>
+                                                                                                </RadioButton>
+                                                                                                <TextField fx:id="textFieldSplitCountForQuadrats" prefHeight="26.0" prefWidth="71.0" />
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                          <HBox spacing="2.0">
+                                                                                             <children>
+                                                                                                <RadioButton fx:id="radiobuttonLengthForQuadrats" mnemonicParsing="false" text="Length">
+                                                                                                   <padding>
+                                                                                                      <Insets top="4.0" />
+                                                                                                   </padding>
+                                                                                                </RadioButton>
+                                                                                                <TextField fx:id="textFieldLengthForQuadrats" disable="true" prefHeight="26.0" prefWidth="71.0" />
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                       </children>
+                                                                                    </HBox>
+                                                                                 </children>
+                                                                              </AnchorPane>
+                                                                           </content>
+                                                                           <graphic>
+                                                                              <CheckBox fx:id="checkboxMakeQuadrats" mnemonicParsing="false" text="Quadrats" />
+                                                                           </graphic>
+                                                                        </TitledPane>
+                                                                     </children>
+                                                                  </VBox>
+                                                                  <Button layoutX="256.0" layoutY="372.0" mnemonicParsing="false" onAction="#onActionButtonDrawChart" text="Draw chart(s)" />
+                                                               </children>
+                                                            </AnchorPane>
+                                                        </items>
+                                                      </SplitPane>
+                                                   </children></AnchorPane>
+                                             </content>
+                                          </Tab>
                                         <Tab text="2D projection">
                                           <content>
                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                           </content>
                                         </Tab>
                                           <Tab text="Histogram">
-                                             <content>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                             </content>
-                                          </Tab>
-                                          <Tab text="Chart">
                                              <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                              </content>

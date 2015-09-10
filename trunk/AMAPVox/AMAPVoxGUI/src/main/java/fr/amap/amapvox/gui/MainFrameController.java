@@ -6,6 +6,9 @@
 package fr.amap.amapvox.gui;
 
 import fr.amap.amapvox.als.las.PointDataRecordFormat.Classification;
+import fr.amap.amapvox.chart.ChartViewer;
+import fr.amap.amapvox.chart.VoxelFileChart;
+import fr.amap.amapvox.chart.VoxelsToChart;
 import fr.amap.amapvox.commons.configuration.Configuration;
 import fr.amap.amapvox.commons.configuration.Configuration.InputType;
 import static fr.amap.amapvox.commons.configuration.Configuration.InputType.LAS_FILE;
@@ -114,6 +117,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -131,6 +135,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.controlsfx.control.RangeSlider;
 import org.controlsfx.dialog.ProgressDialog;
 import org.jdom2.JDOMException;
+import org.jfree.chart.JFreeChart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -238,7 +243,8 @@ public class MainFrameController implements Initializable {
     private final static String MATRIX_FORMAT_ERROR_MSG = "Matrix file has to look like this: \n\n\t1.0 0.0 0.0 0.0\n\t0.0 1.0 0.0 0.0\n\t0.0 0.0 1.0 0.0\n\t0.0 0.0 0.0 1.0\n";
 
     private ObservableList<SimulationPeriod> data;
-    
+    @FXML
+    private TabPane tabpaneChart;
     @FXML
     private Slider sliderRSPCoresToUse;
     @FXML
@@ -610,11 +616,111 @@ public class MainFrameController implements Initializable {
     private Button buttonSetupViewCap;
     @FXML
     private TextField textFieldViewCapAngle;
+    @FXML
+    private ComboBox<String> comboboxPreDefinedProfile;
+    @FXML
+    private RadioButton radiobuttonHeightFromAboveGround;
+    @FXML
+    private RadioButton radiobuttonHeightFromBelowCanopy;
+    @FXML
+    private TextField textfieldVegetationProfileMaxPAD;
+    @FXML
+    private RadioButton radiobuttonPreDefinedProfile;
+    @FXML
+    private ComboBox<?> comboboxFromVariableProfile;
+    @FXML
+    private RadioButton radiobuttonFromVariableProfile;
+    @FXML
+    private ListView<VoxelFileChart> listViewVoxelsFilesChart;
+    @FXML
+    private Button buttonRemoveVoxelFileFromListView1;
+    @FXML
+    private Button buttonAddVoxelFileToListViewForChart;
+    @FXML
+    private TextField textfieldLabelVoxelFileChart;
+    @FXML
+    private CheckBox checkboxMakeQuadrats;
+    @FXML
+    private ComboBox<String> comboboxSelectAxisForQuadrats;
+    @FXML
+    private TextField textFieldEnterYMinForQuadrats;
+    @FXML
+    private RadioButton radiobuttonSplitCountForQuadrats;
+    @FXML
+    private TextField textFieldSplitCountForQuadrats;
+    @FXML
+    private RadioButton radiobuttonLengthForQuadrats;
+    @FXML
+    private TextField textFieldLengthForQuadrats;
+    @FXML
+    private AnchorPane anchorpaneQuadrats;
+    @FXML
+    private HBox hboxMaxPADVegetationProfile;
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        /**CHART panel initialization**/
+        
+        ToggleGroup profileChartType = new ToggleGroup();
+        radiobuttonPreDefinedProfile.setToggleGroup(profileChartType);
+        radiobuttonFromVariableProfile.setToggleGroup(profileChartType);
+        
+        ToggleGroup profileChartRelativeHeightType = new ToggleGroup();
+        radiobuttonHeightFromAboveGround.setToggleGroup(profileChartRelativeHeightType);
+        radiobuttonHeightFromBelowCanopy.setToggleGroup(profileChartRelativeHeightType);
+        
+        comboboxFromVariableProfile.disableProperty().bind(radiobuttonPreDefinedProfile.selectedProperty());
+        comboboxPreDefinedProfile.disableProperty().bind(radiobuttonFromVariableProfile.selectedProperty());
+        
+        hboxMaxPADVegetationProfile.visibleProperty().bind(radiobuttonPreDefinedProfile.selectedProperty());
+        
+        listViewVoxelsFilesChart.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                
+                if(newValue.intValue() >= 0){
+                    textfieldLabelVoxelFileChart.setText(listViewVoxelsFilesChart.getItems().get(newValue.intValue()).label);
+                }
+            }
+        });
+        
+        textfieldLabelVoxelFileChart.textProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                
+                if(listViewVoxelsFilesChart.getSelectionModel().getSelectedIndex() >= 0){
+                    listViewVoxelsFilesChart.getSelectionModel().getSelectedItem().label = newValue;
+                }
+            }
+        });
+        
+        anchorpaneQuadrats.disableProperty().bind(checkboxMakeQuadrats.selectedProperty().not());
+        
+        comboboxSelectAxisForQuadrats.getItems().addAll("X", "Y", "Z");
+        comboboxSelectAxisForQuadrats.getSelectionModel().select(1);
+        
+        comboboxPreDefinedProfile.getItems().addAll("Vegetation (PAD)");
+        comboboxPreDefinedProfile.getSelectionModel().selectFirst();
+        
+        radiobuttonSplitCountForQuadrats.selectedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                textFieldSplitCountForQuadrats.setDisable(!newValue);
+                textFieldLengthForQuadrats.setDisable(newValue);
+            }
+        });
+        
+        ToggleGroup chartMakeQuadratsSplitType = new ToggleGroup();
+        radiobuttonLengthForQuadrats.setToggleGroup(chartMakeQuadratsSplitType);
+        radiobuttonSplitCountForQuadrats.setToggleGroup(chartMakeQuadratsSplitType);
+        
+        /**Virtual measures panel initialization**/
         
         ToggleGroup virtualMeasuresChoiceGroup = new ToggleGroup();
         
@@ -4654,6 +4760,103 @@ public class MainFrameController implements Initializable {
         viewCapsSetupFrame.show();
         
         
+    }
+
+    @FXML
+    private void onActionButtonAddVoxelFileToListViewForChart(ActionEvent event) {
+        
+        if (lastFCOpenVoxelFile != null) {
+            fileChooserOpenVoxelFile.setInitialDirectory(lastFCOpenVoxelFile.getParentFile());
+        }
+
+        List<File> selectedFiles = fileChooserOpenVoxelFile.showOpenMultipleDialog(stage);
+        if (selectedFiles != null) {
+            lastFCOpenVoxelFile = selectedFiles.get(0);
+            
+            for(File file : selectedFiles){
+                listViewVoxelsFilesChart.getItems().add(new VoxelFileChart(file, file.getName()));
+            }
+            
+            if(selectedFiles.size() > 0){
+                listViewVoxelsFilesChart.getSelectionModel().selectFirst();
+            }
+        }
+    }
+
+    @FXML
+    private void onActionButtonDrawChart(ActionEvent event) {
+        
+        String chartWindowTitle;
+        
+        int tabIndex = tabpaneChart.getSelectionModel().getSelectedIndex();
+        
+        if(tabIndex == 0){
+            chartWindowTitle = "Profile chart";
+        }else if(tabIndex == 1){
+            chartWindowTitle = "Two variables statistics chart";
+        }else{
+            chartWindowTitle = "Chart";
+        }
+        
+        ChartViewer chartViewer = new ChartViewer(chartWindowTitle, 270, 600, 6);
+        
+        VoxelFileChart[] voxelFileChartArray = new VoxelFileChart[listViewVoxelsFilesChart.getItems().size()];
+        listViewVoxelsFilesChart.getItems().toArray(voxelFileChartArray);
+        
+        VoxelsToChart voxelsToChart = new VoxelsToChart(voxelFileChartArray);
+        
+        final int chartWidth = 200;
+        
+        if(checkboxMakeQuadrats.isSelected()){
+            
+            int splitCount = -1;
+            try{
+                splitCount = Integer.valueOf(textFieldSplitCountForQuadrats.getText());
+            }catch(Exception e){ }
+            
+            int length = -1;
+            try{
+                length = Integer.valueOf(textFieldLengthForQuadrats.getText());
+            }catch(Exception e){ }
+            
+            VoxelsToChart.QuadratAxis axis;
+            switch(comboboxSelectAxisForQuadrats.getSelectionModel().getSelectedIndex()){
+                case 0: axis = VoxelsToChart.QuadratAxis.X_AXIS;
+                    break;
+                case 1: axis = VoxelsToChart.QuadratAxis.Y_AXIS;
+                    break;
+                case 2: axis = VoxelsToChart.QuadratAxis.Z_AXIS;
+                    break;
+                default: axis = VoxelsToChart.QuadratAxis.Y_AXIS;
+            }
+            
+            voxelsToChart.configureQuadrats(axis, -1, splitCount, length);
+            
+            JFreeChart[] charts = voxelsToChart.getVegetationProfileChartByQuadrats();
+            
+            int stageWidth = charts.length*chartWidth;
+            if(stageWidth > SCREEN_WIDTH){
+                chartViewer.getStage().setWidth(SCREEN_WIDTH);
+            }else{
+                chartViewer.getStage().setWidth(stageWidth);
+            }
+            
+            for(JFreeChart chart : charts){
+                chartViewer.insertChart(chart);
+            }
+        }else{
+            chartViewer.insertChart(voxelsToChart.getVegetationProfileChart());
+        }
+        
+        
+        chartViewer.show();
+    }
+
+    @FXML
+    private void onActionButtonRemoveVoxelFileFromListViewForChart(ActionEvent event) {
+        
+        ObservableList<VoxelFileChart> selectedItems = listViewVoxelsFilesChart.getSelectionModel().getSelectedItems();
+        listViewVoxelsFilesChart.getItems().removeAll(selectedItems);
     }
 
 }
