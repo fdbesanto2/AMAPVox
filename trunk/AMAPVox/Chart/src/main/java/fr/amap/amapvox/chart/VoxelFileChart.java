@@ -17,10 +17,12 @@ public class VoxelFileChart{
     public File file;
     public VoxelFileReader reader;
     public String label;
+    public boolean loaded;
 
     public VoxelFileChart(File file, String label) {
         this.file = file;
         this.label = label;
+        this.loaded = false;
     }
 
     @Override

@@ -5,18 +5,19 @@
  */
 package fr.amap.amapvox.voxreader;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.vecmath.Point3d;
 
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class Voxel implements Serializable {
+public class Voxel{
 
         /**
          * indice du voxel, position en x
@@ -218,6 +219,22 @@ public class Voxel implements Serializable {
             }
         }
         
+        public double getFieldValue(Class< ? extends Voxel> c, String fieldName, Object o) 
+                throws SecurityException, NoSuchFieldException, IllegalAccessException{
+            
+            Field f;
+            try {
+                f = c.getField(fieldName);
+                
+                return f.getDouble(o);
+                
+            } catch (NoSuchFieldException | SecurityException ex) {
+                throw ex;
+            } catch (IllegalArgumentException | IllegalAccessException ex) {
+                throw ex;
+            }
+        }
+        
         public static String getHeader(Class c){
             
             Voxel.getFields(c);
@@ -289,5 +306,77 @@ public class Voxel implements Serializable {
             
             voxelString = voxelString.trim();
             return voxelString;
+        }
+        
+        public float calculatePAD(float maxPAD) {
+
+            float pad1/*, pad2*/;
+
+            angleMean = angleMean / nbSampling;
+
+            if (nbSampling >= nbEchos) {
+
+                lMeanTotal = lgTotal / (nbSampling);
+
+            }
+
+            /**
+             * *PADBV**
+             */
+            if (bvEntering <= 0) {
+
+                pad1 = Float.NaN;
+                //pad2 = pad1;
+                transmittance = Float.NaN;
+                //voxel._transmittance_v2 = Float.NaN;
+
+            } else if (bvIntercepted > bvEntering) {
+
+                pad1 = Float.NaN;
+                //pad2 = pad1;
+                transmittance = Float.NaN;
+                //voxel._transmittance_v2 = Float.NaN;
+
+            } else {
+
+                transmittance = (bvEntering - bvIntercepted) / bvEntering;
+                transmittance = (float) Math.pow(transmittance, 1 / lMeanTotal);
+                //voxel._transmittance_v2 = (voxel._transBeforeNorm) / voxel._sumSurfaceMultiplyLength ;
+
+                if (nbSampling > 1 && transmittance == 0 && nbSampling == nbEchos) {
+
+                    pad1 = maxPAD;
+                    //pad2 = pad1;
+
+                } else if (nbSampling <= 2 && transmittance == 0 && nbSampling == nbEchos) {
+
+                    pad1 = Float.NaN;
+                    //pad2 = pad1;
+
+                } else {
+
+                    pad1 = (float) (Math.log(transmittance) / (-0.5f));
+                    //pad1 = (float) (Math.log(voxel.transmittance) / (-0.5 * voxel.lMeanTotal));
+                    //pad2 = (float) (Math.log(voxel._transmittance_v2) / (-0.5 * voxel.lMeanTotal));
+
+                    if (Float.isNaN(pad1)) {
+                        pad1 = Float.NaN;
+                    } else if (pad1 > maxPAD || Float.isInfinite(pad1)) {
+                        pad1 = maxPAD;
+                    }
+                    /*
+                     if (Float.isNaN(pad2)) {
+                     pad2 = Float.NaN;
+                     } else if (pad2 > MAX_PAD || Float.isInfinite(pad2)) {
+                     pad2 = MAX_PAD;
+                     }*/
+
+                }
+
+            }
+
+            PadBVTotal = pad1 + 0.0f; //set +0.0f to avoid -0.0f
+
+            return PadBVTotal;
         }
     }

@@ -52,6 +52,7 @@ import fr.amap.amapvox.voxelisation.configuration.VoxCfg;
 import fr.amap.amapvox.voxelisation.configuration.VoxMergingCfg;
 import fr.amap.amapvox.voxelisation.configuration.VoxelParameters;
 import fr.amap.amapvox.voxelisation.multires.ProcessingMultiRes;
+import fr.amap.amapvox.voxreader.VoxelFileReader;
 import fr.amap.amapvox.voxviewer.Viewer3D;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceData;
 import java.io.File;
@@ -79,6 +80,7 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -119,6 +121,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -241,7 +245,20 @@ public class MainFrameController implements Initializable {
     static double SCREEN_HEIGHT;
 
     private final static String MATRIX_FORMAT_ERROR_MSG = "Matrix file has to look like this: \n\n\t1.0 0.0 0.0 0.0\n\t0.0 1.0 0.0 0.0\n\t0.0 0.0 1.0 0.0\n\t0.0 0.0 0.0 1.0\n";
+    private static PseudoClass loadedPseudoClass = PseudoClass.getPseudoClass("loaded");
+    static class ColorRectCell extends ListCell<VoxelFileChart> {
 
+        @Override
+        public void updateItem(VoxelFileChart item, boolean empty) {
+            super.updateItem(item, empty);
+            
+            if (item != null/* && !item.loaded*/) {
+                pseudoClassStateChanged(loadedPseudoClass, item.loaded);
+                setText(item.label);
+            }
+        }
+    }
+    
     private ObservableList<SimulationPeriod> data;
     @FXML
     private TabPane tabpaneChart;
@@ -627,7 +644,7 @@ public class MainFrameController implements Initializable {
     @FXML
     private RadioButton radiobuttonPreDefinedProfile;
     @FXML
-    private ComboBox<?> comboboxFromVariableProfile;
+    private ComboBox<String> comboboxFromVariableProfile;
     @FXML
     private RadioButton radiobuttonFromVariableProfile;
     @FXML
@@ -698,6 +715,36 @@ public class MainFrameController implements Initializable {
                 }
             }
         });
+        
+        listViewVoxelsFilesChart.getItems().addListener(new ListChangeListener<VoxelFileChart>() {
+
+            @Override
+            public void onChanged(ListChangeListener.Change<? extends VoxelFileChart> c) {
+                              
+                while(c.next()){}
+                
+                if(c.wasAdded() && c.getAddedSize() == c.getList().size()){
+
+                    VoxelFileReader reader = new VoxelFileReader(c.getList().get(0).file);
+                    String[] columnNames = reader.getVoxelSpaceInfos().getColumnNames();
+                    comboboxFromVariableProfile.getItems().clear();
+                    comboboxFromVariableProfile.getItems().addAll(columnNames);
+                    comboboxFromVariableProfile.getSelectionModel().selectFirst();
+                    
+                }
+                
+            }
+        });
+        
+        listViewVoxelsFilesChart.setCellFactory(new Callback<ListView<VoxelFileChart>, ListCell<VoxelFileChart>>() {
+
+            @Override
+            public ListCell<VoxelFileChart> call(ListView<VoxelFileChart> param) {
+                
+                return new ColorRectCell();
+            }
+        });
+        
         
         anchorpaneQuadrats.disableProperty().bind(checkboxMakeQuadrats.selectedProperty().not());
         
@@ -4781,6 +4828,8 @@ public class MainFrameController implements Initializable {
                 listViewVoxelsFilesChart.getSelectionModel().selectFirst();
             }
         }
+        
+        
     }
 
     @FXML
@@ -4800,12 +4849,33 @@ public class MainFrameController implements Initializable {
         
         ChartViewer chartViewer = new ChartViewer(chartWindowTitle, 270, 600, 6);
         
+        for(VoxelFileChart voxelFileChart : listViewVoxelsFilesChart.getItems()){
+            voxelFileChart.loaded = true;
+        }
+        forceListRefreshOn(listViewVoxelsFilesChart);
+        
         VoxelFileChart[] voxelFileChartArray = new VoxelFileChart[listViewVoxelsFilesChart.getItems().size()];
         listViewVoxelsFilesChart.getItems().toArray(voxelFileChartArray);
         
         VoxelsToChart voxelsToChart = new VoxelsToChart(voxelFileChartArray);
         
         final int chartWidth = 200;
+        
+        VoxelsToChart.LayerReference reference;
+        if(radiobuttonHeightFromAboveGround.isSelected()){
+            reference = VoxelsToChart.LayerReference.FROM_ABOVE_GROUND;
+        }else{
+            reference = VoxelsToChart.LayerReference.FROM_BELOW_CANOPEE;
+        }
+        
+        float maxPAD;
+        try{
+            maxPAD = Integer.valueOf(textfieldVegetationProfileMaxPAD.getText());
+        }catch(Exception e){
+            maxPAD = 5;
+            textfieldVegetationProfileMaxPAD.setText("5");
+        }
+        
         
         if(checkboxMakeQuadrats.isSelected()){
             
@@ -4832,20 +4902,39 @@ public class MainFrameController implements Initializable {
             
             voxelsToChart.configureQuadrats(axis, -1, splitCount, length);
             
-            JFreeChart[] charts = voxelsToChart.getVegetationProfileChartByQuadrats();
+            if(radiobuttonPreDefinedProfile.isSelected()){
+                
+                if(comboboxPreDefinedProfile.getSelectionModel().getSelectedIndex() == 0){
+                    JFreeChart[] charts = voxelsToChart.getVegetationProfileChartByQuadrats(reference, maxPAD);
             
-            int stageWidth = charts.length*chartWidth;
-            if(stageWidth > SCREEN_WIDTH){
-                chartViewer.getStage().setWidth(SCREEN_WIDTH);
+                    int stageWidth = charts.length*chartWidth;
+                    if(stageWidth > SCREEN_WIDTH){
+                        chartViewer.getStage().setWidth(SCREEN_WIDTH);
+                    }else{
+                        chartViewer.getStage().setWidth(stageWidth);
+                    }
+
+                    for(JFreeChart chart : charts){
+                        chartViewer.insertChart(chart);
+                    }
+                }
+                
             }else{
-                chartViewer.getStage().setWidth(stageWidth);
+                
             }
             
-            for(JFreeChart chart : charts){
-                chartViewer.insertChart(chart);
-            }
         }else{
-            chartViewer.insertChart(voxelsToChart.getVegetationProfileChart());
+            
+            if(radiobuttonPreDefinedProfile.isSelected()){
+                
+                if(comboboxPreDefinedProfile.getSelectionModel().getSelectedIndex() == 0){
+                    chartViewer.insertChart(voxelsToChart.getVegetationProfileChart(reference, maxPAD));
+                }
+            }else{
+                chartViewer.insertChart(voxelsToChart.getAttributProfileChart(
+                        comboboxFromVariableProfile.getSelectionModel().getSelectedItem(), reference));
+            }
+            
         }
         
         
@@ -4859,4 +4948,9 @@ public class MainFrameController implements Initializable {
         listViewVoxelsFilesChart.getItems().removeAll(selectedItems);
     }
 
+    private <T> void forceListRefreshOn(ListView<T> lsv) {
+        ObservableList<T> items = lsv.<T>getItems();
+        lsv.<T>setItems(null);
+        lsv.<T>setItems(items);
+    }
 }

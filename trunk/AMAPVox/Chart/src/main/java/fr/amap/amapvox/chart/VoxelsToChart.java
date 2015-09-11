@@ -19,6 +19,8 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.block.BlockBorder;
@@ -66,6 +68,18 @@ public class VoxelsToChart {
         }
     }
     
+    public enum LayerReference{
+        
+        FROM_ABOVE_GROUND(0),
+        FROM_BELOW_CANOPEE(1);
+        
+        private final int reference;
+
+        private LayerReference(int reference) {
+            this.reference = reference;
+        }
+    }
+    
     public VoxelsToChart(VoxelFileChart voxelFile){
         voxelFiles = new VoxelFileChart[]{voxelFile};
     }
@@ -87,7 +101,7 @@ public class VoxelsToChart {
         this.length = length;
     }
     
-    public JFreeChart[] getVegetationProfileChartByQuadrats(){
+    public JFreeChart[] getVegetationProfileChartByQuadrats(LayerReference reference, float maxPAD){
         
         if(voxelFiles.length > 0){
             
@@ -120,7 +134,7 @@ public class VoxelsToChart {
                 
                 JFreeChart[] charts = new JFreeChart[splitCount];
                 for(int i = 0;i<splitCount;i++){
-                    charts[i] = getVegetationProfileChart(i, axis, i*length, (i+1)*length);
+                    charts[i] = getVegetationProfileChart(i, axis, i*length, (i+1)*length, reference, maxPAD);
                 }
                 
                 return charts;
@@ -130,14 +144,33 @@ public class VoxelsToChart {
         return null;
     }
     
-    public JFreeChart getVegetationProfileChart(){
-        return getVegetationProfileChart(-1, null, -1, -1);
+    public JFreeChart getAttributProfileChart(String attribut, LayerReference reference, QuadratAxis axis, int indiceMin, int indiceMax){
+        
+        final XYSeriesCollection dataset = new XYSeriesCollection();
+        
+        for(VoxelFileChart voxelFile : voxelFiles){
+            
+            dataset.addSeries(createAttributeProfileSerie(voxelFile.reader, attribut, voxelFile.label, indiceMin, indiceMax, reference));
+        }
+        
+        JFreeChart chart = getProfileChart(dataset, reference, attribut);
+        chart.setTitle(attribut+" profile");
+        
+        return chart;
+    }
+    
+    public JFreeChart getAttributProfileChart(String attribut, LayerReference reference){
+        return getAttributProfileChart(attribut, reference, null, -1, -1);
+    }
+            
+    public JFreeChart getVegetationProfileChart(LayerReference reference, float maxPAD){
+        return getVegetationProfileChart(-1, null, -1, -1, reference, maxPAD);
     }
     
     public JFreeChart createChart(String title, XYSeriesCollection dataset, String xAxisLabel, String yAxisLabel){
         
         JFreeChart chart = ChartFactory.createXYLineChart(
-            title,  xAxisLabel,yAxisLabel, dataset, PlotOrientation.VERTICAL, true, true, false);
+            title,  xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, true, true, false);
 
         String fontName = "Palatino";
         chart.getTitle().setFont(new Font(fontName, Font.BOLD, 18));
@@ -152,8 +185,10 @@ public class VoxelsToChart {
         plot.getDomainAxis().setTickLabelFont(new Font(fontName, Font.PLAIN, 12));
         plot.getRangeAxis().setLabelFont(new Font(fontName, Font.BOLD, 14));
         plot.getRangeAxis().setTickLabelFont(new Font(fontName, Font.PLAIN, 12));
+        
         chart.getLegend().setItemFont(new Font(fontName, Font.PLAIN, 14));
         chart.getLegend().setFrame(BlockBorder.NONE);
+        
         
         LegendTitle subtitle = (LegendTitle) chart.getSubtitles().get(0);
         subtitle.setHorizontalAlignment(HorizontalAlignment.LEFT);
@@ -173,12 +208,33 @@ public class VoxelsToChart {
         return chart;
     }
     
-    public JFreeChart getVegetationProfileChart(int quadratIndex, QuadratAxis axis, int indiceMin, int indiceMax){
+    public JFreeChart getProfileChart(XYSeriesCollection dataset, LayerReference reference, String attribut){
+        
+        String layerReferenceString;
+        boolean inverseRangeAxis;
+        
+        if(reference == LayerReference.FROM_ABOVE_GROUND){
+            layerReferenceString = "Height from above ground";
+            inverseRangeAxis = false;
+        }else{
+            layerReferenceString = "Height from below canopy";
+            inverseRangeAxis = true;
+        }
+        
+        JFreeChart chart = createChart("", dataset, attribut, layerReferenceString);
+        XYPlot plot = (XYPlot) chart.getPlot();
+        plot.getRangeAxis().setInverted(inverseRangeAxis);
+        
+        return chart;
+    }
+    
+    public JFreeChart getVegetationProfileChart(int quadratIndex, QuadratAxis axis, int indiceMin, int indiceMax, LayerReference reference, float maxPAD){
         
         final XYSeriesCollection dataset = new XYSeriesCollection();
         
         for(VoxelFileChart voxelFile : voxelFiles){
-            dataset.addSeries(createVegetationProfileSerie(voxelFile.reader, voxelFile.label, indiceMin, indiceMax));
+            
+            dataset.addSeries(createVegetationProfileSerie(voxelFile.reader, voxelFile.label, indiceMin, indiceMax, reference, maxPAD));
         }
         
         String title = "Vegetation profile";
@@ -187,7 +243,22 @@ public class VoxelsToChart {
             title += " - quadrat "+(quadratIndex+1);
         }
         
-        return createChart(title, dataset,"PAD", "Height above ground");
+        String layerReferenceString;
+        boolean inverseRangeAxis;
+        
+        if(reference == LayerReference.FROM_ABOVE_GROUND){
+            layerReferenceString = "Height from above ground";
+            inverseRangeAxis = false;
+        }else{
+            layerReferenceString = "Height from below canopy";
+            inverseRangeAxis = true;
+        }
+        
+        JFreeChart chart = createChart(title, dataset,"PAD", layerReferenceString);
+        XYPlot plot = (XYPlot) chart.getPlot();
+        plot.getRangeAxis().setInverted(inverseRangeAxis);
+        
+        return chart;
     }
     
     private boolean doQuadratFiltering(Voxel voxel, int indiceMin, int indiceMax){
@@ -217,7 +288,95 @@ public class VoxelsToChart {
         return false;
     }
     
-    private XYSeries createVegetationProfileSerie(VoxelFileReader reader, String key, int indiceMin, int indiceMax){
+    private XYSeries createAttributeProfileSerie(VoxelFileReader reader, String attributName, String key, int indiceMin, int indiceMax, LayerReference reference){
+        
+        float resolution = reader.getVoxelSpaceInfos().getResolution();
+        int layersNumber = (int)(reader.getVoxelSpaceInfos().getSplit().z * resolution);
+        
+        float[] meanValueByLayer = new float[layersNumber];
+        int[] valuesNumberByLayer = new int[layersNumber];
+        
+        //calcul de la couche sol ou canopée
+        Iterator<Voxel> iterator;
+        int[][] canopeeArray = null;
+        if(reference == LayerReference.FROM_BELOW_CANOPEE){
+            
+            canopeeArray = new int[reader.getVoxelSpaceInfos().getSplit().x][reader.getVoxelSpaceInfos().getSplit().y];
+            iterator = reader.iterator();
+            while(iterator.hasNext()){
+
+                Voxel voxel = iterator.next();
+
+                if (voxel.nbSampling > 0 && voxel.nbEchos > 0) {
+
+                    if(voxel.$k > canopeeArray[voxel.$i][voxel.$j]){
+                        canopeeArray[voxel.$i][voxel.$j] = voxel.$k;
+                    }
+                }
+            }
+        }
+        
+        iterator = reader.iterator();
+        
+        while(iterator.hasNext()){
+            
+            Voxel voxel = iterator.next();
+            
+            double value;
+            try {
+                value = voxel.getFieldValue(Voxel.class, attributName, voxel);
+            } catch (SecurityException | NoSuchFieldException | IllegalAccessException ex) {
+                Logger.getLogger(VoxelsToChart.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
+            }
+            
+            if(!Double.isNaN(value)){
+                                
+                if(!doQuadratFiltering(voxel, indiceMin, indiceMax)){
+                    
+                    int layerIndex;
+                    
+                    if(reference == LayerReference.FROM_BELOW_CANOPEE){
+                        layerIndex = canopeeArray[voxel.$i][voxel.$j] - voxel.$k;
+                    }else{
+                        layerIndex = (int)voxel.ground_distance;
+                    }
+                
+                    if(layerIndex > 0){
+
+                        meanValueByLayer[layerIndex] += value;
+                        valuesNumberByLayer[layerIndex]++;
+                    }
+                }
+            }        
+        }
+        
+        final XYSeries series1 = new XYSeries(key, false);
+        
+        int maxHeight = layersNumber-1;
+        for(int i = layersNumber-1; i>=0 ; i--){
+            
+            if(meanValueByLayer[i] != 0){
+                maxHeight = i;
+                break;
+            }
+        }
+        
+        for(int i=0;i<layersNumber;i++){
+            
+            meanValueByLayer[i] = meanValueByLayer[i] / valuesNumberByLayer[i];
+            
+            if(i <= maxHeight){
+                series1.add(meanValueByLayer[i], i);
+            }
+        }
+        
+        series1.setKey(key);
+        
+        return series1;
+    }
+    
+    private XYSeries createVegetationProfileSerie(VoxelFileReader reader, String key, int indiceMin, int indiceMax, LayerReference reference, float maxPAD){
         
         float resolution = reader.getVoxelSpaceInfos().getResolution();
         int layersNumber = (int)(reader.getVoxelSpaceInfos().getSplit().z * resolution);
@@ -225,24 +384,50 @@ public class VoxelsToChart {
         float[] padMeanByLayer = new float[layersNumber];
         int[] valuesNumberByLayer = new int[layersNumber];
         
-        Iterator<Voxel> iterator = reader.iterator();
+        //calcul de la couche sol ou canopée
+        Iterator<Voxel> iterator;
+        int[][] canopeeArray = null;
+        if(reference == LayerReference.FROM_BELOW_CANOPEE){
+            
+            canopeeArray = new int[reader.getVoxelSpaceInfos().getSplit().x][reader.getVoxelSpaceInfos().getSplit().y];
+            iterator = reader.iterator();
+            while(iterator.hasNext()){
+
+                Voxel voxel = iterator.next();
+
+                if (voxel.nbSampling > 0 && voxel.nbEchos > 0) {
+
+                    if(voxel.$k > canopeeArray[voxel.$i][voxel.$j]){
+                        canopeeArray[voxel.$i][voxel.$j] = voxel.$k;
+                    }
+                }
+            }
+        }
+        
+        iterator = reader.iterator();
         
         while(iterator.hasNext()){
             
             Voxel voxel = iterator.next();
             
-            if(!Float.isNaN(voxel.PadBVTotal)){
+            //float pad = voxel.calculatePAD(maxPAD);
+            float pad = voxel.PadBVTotal;
+            
+            if(!Float.isNaN(pad)){
                                 
                 if(!doQuadratFiltering(voxel, indiceMin, indiceMax)){
                     
-                    int layerIndex = (int)voxel.ground_distance;
+                    int layerIndex;
+                    
+                    if(reference == LayerReference.FROM_BELOW_CANOPEE){
+                        layerIndex = canopeeArray[voxel.$i][voxel.$j] - voxel.$k;
+                    }else{
+                        layerIndex = (int)voxel.ground_distance;
+                    }
                 
                     if(layerIndex > 0){
 
-                        if(voxel.PadBVTotal > 3){
-                            voxel.PadBVTotal = 3;
-                        }
-                        padMeanByLayer[layerIndex] += voxel.PadBVTotal;
+                        padMeanByLayer[layerIndex] += pad;
                         valuesNumberByLayer[layerIndex]++;
                     }
                 }

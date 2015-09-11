@@ -23,6 +23,7 @@
         <module>Commons</module>
         <module>Chart</module>
         <module>VoxReader</module>
+        <module>VoxTool</module>
     </modules>
     
     <distributionManagement>        

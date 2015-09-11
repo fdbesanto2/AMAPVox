@@ -12,8 +12,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
 import org.apache.log4j.Logger;
 
@@ -25,16 +23,12 @@ public class VoxelFileReader implements Iterable<Voxel>{
 
     private final static Logger logger = Logger.getLogger(VoxelFileReader.class);
     
-    private File voxelFile;
+    private final File voxelFile;
     private BufferedReader reader;
     private String currentLine = null;
-    
-    private final VoxelSpaceInfos voxelSpaceInfos;
-    
+    public final VoxelSpace voxelSpace;
     private final boolean keepInMemory;
-    private List<Voxel> voxels = null;
     private int currentVoxelIndex;
-    
     private boolean wasRead;
     
     public VoxelFileReader(File voxelFile, boolean keepInMemory){
@@ -42,12 +36,24 @@ public class VoxelFileReader implements Iterable<Voxel>{
         this.voxelFile = voxelFile;
         this.keepInMemory = keepInMemory;
         
-        voxelSpaceInfos= new VoxelSpaceInfos();
+        VoxelSpaceInfos voxelSpaceInfos= new VoxelSpaceInfos();
         voxelSpaceInfos.readFromVoxelFile(voxelFile);
+        voxelSpace = new VoxelSpace(voxelSpaceInfos);
         
         if(keepInMemory){
-            voxels = new ArrayList<>();
+            voxelSpace.voxels = new ArrayList<>();
         }
+    }
+    
+    public VoxelFileReader(File voxelFile){
+        
+        this.voxelFile = voxelFile;
+        this.keepInMemory = true;
+        
+        VoxelSpaceInfos voxelSpaceInfos= new VoxelSpaceInfos();
+        voxelSpaceInfos.readFromVoxelFile(voxelFile);
+        voxelSpace = new VoxelSpace(voxelSpaceInfos);
+        voxelSpace.voxels = new ArrayList<>();
     }
     
     @Override
@@ -92,7 +98,7 @@ public class VoxelFileReader implements Iterable<Voxel>{
                     }
                     
                 }else{
-                    return voxels != null && currentVoxelIndex+1 < voxels.size();     
+                    return voxelSpace.voxels != null && currentVoxelIndex+1 < voxelSpace.voxels.size();     
                 }
             }
 
@@ -106,7 +112,7 @@ public class VoxelFileReader implements Iterable<Voxel>{
                 
                 if(wasRead){
                     if(keepInMemory){
-                        return voxels.get(currentVoxelIndex);
+                        return voxelSpace.voxels.get(currentVoxelIndex);
                     }else{
                         voxel = parseVoxelFileLine(currentLine);
                     }
@@ -114,7 +120,7 @@ public class VoxelFileReader implements Iterable<Voxel>{
                     voxel = parseVoxelFileLine(currentLine);
                     
                     if(keepInMemory){
-                        voxels.add(voxel);
+                        voxelSpace.voxels.add(voxel);
                     }
                 }
                 
@@ -133,7 +139,7 @@ public class VoxelFileReader implements Iterable<Voxel>{
                 Integer.valueOf(voxelLine[1]),
                 Integer.valueOf(voxelLine[2]));
 
-        float[] mapAttrs = new float[voxelSpaceInfos.getColumnNames().length];
+        float[] mapAttrs = new float[voxelSpace.voxelSpaceInfos.getColumnNames().length];
 
         for (int i=0;i<voxelLine.length;i++) {
 
@@ -146,7 +152,7 @@ public class VoxelFileReader implements Iterable<Voxel>{
 
         for(int i=3;i<mapAttrs.length;i++){
             try {
-                vox.setFieldValue(vox.getClass(), voxelSpaceInfos.getColumnNames()[i], vox, mapAttrs[i]);
+                vox.setFieldValue(vox.getClass(), voxelSpace.voxelSpaceInfos.getColumnNames()[i], vox, mapAttrs[i]);
             } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
                //logger.error("Cannot set field value",ex);
             }
@@ -172,6 +178,6 @@ public class VoxelFileReader implements Iterable<Voxel>{
     }
 
     public VoxelSpaceInfos getVoxelSpaceInfos() {
-        return voxelSpaceInfos;
+        return voxelSpace.voxelSpaceInfos;
     }
 }
