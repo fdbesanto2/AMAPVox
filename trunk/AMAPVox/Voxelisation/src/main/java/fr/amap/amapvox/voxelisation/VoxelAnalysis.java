@@ -244,6 +244,8 @@ public class VoxelAnalysis {
 
                     }*/
                     
+                    /*vérifie que le dernier écho n'était pas un écho "multiple",
+                    c'est à dire le premier écho du tir dans le voxel*/
                     boolean wasMultiple = false;
                     if(lastEchoBeamFraction != 0){
                         wasMultiple = true;
@@ -690,51 +692,59 @@ public class VoxelAnalysis {
             voxel.transmittance = Float.NaN;
             //voxel._transmittance_v2 = Float.NaN;
 
-        } else if (voxel.bvIntercepted > voxel.bvEntering) {
+        }else {
 
-            logger.error("Voxel : " + voxel.$i + " " + voxel.$j + " " + voxel.$k + " -> bvInterceptes > bvEntering, NaN assigné, difference: " + (voxel.bvEntering - voxel.bvIntercepted));
+            if ((voxel.bvEntering - voxel.bvIntercepted) < -0.00001) {
+                
+                logger.error("Voxel : " + voxel.$i + " " + voxel.$j + " " + voxel.$k + " -> bvInterceptes > bvEntering, NaN assigné, difference: " + (voxel.bvEntering - voxel.bvIntercepted));
 
-            pad1 = Float.NaN;
-            //pad2 = pad1;
-            voxel.transmittance = Float.NaN;
-            //voxel._transmittance_v2 = Float.NaN;
-
-        } else {
-
-            voxel.transmittance = (voxel.bvEntering - voxel.bvIntercepted) / voxel.bvEntering;
-            voxel.transmittance = (float) Math.pow(voxel.transmittance, 1 / voxel.lMeanTotal);
-            //voxel._transmittance_v2 = (voxel._transBeforeNorm) / voxel._sumSurfaceMultiplyLength ;
-
-            if (voxel.nbSampling > 1 && voxel.transmittance == 0 && voxel.nbSampling == voxel.nbEchos) {
-
-                pad1 = MAX_PAD;
-                //pad2 = pad1;
-
-            } else if (voxel.nbSampling <= 2 && voxel.transmittance == 0 && voxel.nbSampling == voxel.nbEchos) {
-
+                if (voxel.nbSampling != voxel.nbEchos) {
+                    System.out.println("test");
+                }
                 pad1 = Float.NaN;
-                //pad2 = pad1;
+                voxel.transmittance = Float.NaN;
 
             } else {
 
-                float coefficientGTheta = (float) direcTransmittance.getTransmittanceFromAngle(voxel.angleMean, true);
-                
-                pad1 = (float) (Math.log(voxel.transmittance) / (-coefficientGTheta));
-            //pad1 = (float) (Math.log(voxel.transmittance) / (-0.5 * voxel.lMeanTotal));
-                //pad2 = (float) (Math.log(voxel._transmittance_v2) / (-0.5 * voxel.lMeanTotal));
-
-                if (Float.isNaN(pad1)) {
-                    pad1 = Float.NaN;
-                } else if (pad1 > MAX_PAD || Float.isInfinite(pad1)) {
-                    pad1 = MAX_PAD;
+                if(voxel.bvIntercepted > voxel.bvEntering){
+                    voxel.bvIntercepted = voxel.bvEntering;
                 }
-                /*
-                 if (Float.isNaN(pad2)) {
-                 pad2 = Float.NaN;
-                 } else if (pad2 > MAX_PAD || Float.isInfinite(pad2)) {
-                 pad2 = MAX_PAD;
-                 }*/
+                
+                voxel.transmittance = (voxel.bvEntering - voxel.bvIntercepted) / voxel.bvEntering;
+                voxel.transmittance = (float) Math.pow(voxel.transmittance, 1 / voxel.lMeanTotal);
+                //voxel._transmittance_v2 = (voxel._transBeforeNorm) / voxel._sumSurfaceMultiplyLength ;
 
+                if (voxel.nbSampling > 1 && voxel.transmittance == 0 && voxel.nbSampling == voxel.nbEchos) {
+
+                    pad1 = MAX_PAD;
+                    //pad2 = pad1;
+
+                } else if (voxel.nbSampling <= 2 && voxel.transmittance == 0 && voxel.nbSampling == voxel.nbEchos) {
+
+                    pad1 = Float.NaN;
+                    //pad2 = pad1;
+
+                } else {
+
+                    float coefficientGTheta = (float) direcTransmittance.getTransmittanceFromAngle(voxel.angleMean, true);
+
+                    pad1 = (float) (Math.log(voxel.transmittance) / (-coefficientGTheta));
+                    //pad1 = (float) (Math.log(voxel.transmittance) / (-0.5 * voxel.lMeanTotal));
+                    //pad2 = (float) (Math.log(voxel._transmittance_v2) / (-0.5 * voxel.lMeanTotal));
+
+                    if (Float.isNaN(pad1)) {
+                        pad1 = Float.NaN;
+                    } else if (pad1 > MAX_PAD || Float.isInfinite(pad1)) {
+                        pad1 = MAX_PAD;
+                    }
+                    /*
+                     if (Float.isNaN(pad2)) {
+                     pad2 = Float.NaN;
+                     } else if (pad2 > MAX_PAD || Float.isInfinite(pad2)) {
+                     pad2 = MAX_PAD;
+                     }*/
+
+                }
             }
 
         }

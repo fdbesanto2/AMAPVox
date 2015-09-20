@@ -420,7 +420,7 @@ public class VoxelsToChart {
     private XYSeries createVegetationProfileSerie(VoxelFileReader reader, String key, int indiceMin, int indiceMax, LayerReference reference, float maxPAD){
         
         float resolution = reader.getVoxelSpaceInfos().getResolution();
-        int layersNumber = (int)(reader.getVoxelSpaceInfos().getSplit().z * resolution);
+        int layersNumber = (int)(reader.getVoxelSpaceInfos().getSplit().z * resolution)*2; //attention , la multiplication par 2 est un patch, doit être modifié!!
         
         float[] padMeanByLayer = new float[layersNumber];
         int[] valuesNumberByLayer = new int[layersNumber];

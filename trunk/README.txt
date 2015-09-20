@@ -1,0 +1,1 @@
+Créer un dossier par projet dans le trunk, on branchera si nécessaire. 
