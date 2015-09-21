@@ -1,9 +1,0 @@
-fr/amap/amapvox/datastructure/voxel/VoxelObject.class
-fr/amap/amapvox/datastructure/octree/Sphere.class
-fr/amap/amapvox/datastructure/voxel/VoxelSpaceData$Type.class
-fr/amap/amapvox/datastructure/octree/Octree.class
-fr/amap/amapvox/datastructure/octree/Node.class
-fr/amap/amapvox/datastructure/pointcloud/PointCloud.class
-fr/amap/amapvox/datastructure/voxel/VoxelSpaceData.class
-fr/amap/amapvox/datastructure/voxel/VoxelSpaceHeader.class
-fr/amap/amapvox/datastructure/octree/OctreeFactory.class
