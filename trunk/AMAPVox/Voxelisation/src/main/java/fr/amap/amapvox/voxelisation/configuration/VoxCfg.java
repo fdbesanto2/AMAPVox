@@ -119,12 +119,12 @@ public class VoxCfg extends Configuration{
                 int colNumber = 7;
                 String data = matrixElement.getText();
                 String[] datas = data.split(" ");
-                float[][] weightingData = new float[rowNumber][colNumber];
+                double[][] weightingData = new double[rowNumber][colNumber];
 
                 int count = 0;
                 for(int i=0;i<weightingData.length;i++){
                     for(int j=0;j<weightingData[0].length;j++){
-                        weightingData[i][j] = Float.valueOf(datas[count]);
+                        weightingData[i][j] = Double.valueOf(datas[count]);
                         count++;
                     }
                 }
@@ -341,7 +341,7 @@ public class VoxCfg extends Configuration{
 
         if(voxelParameters.getWeighting() > 0){
             StringBuilder weightingDataString = new StringBuilder();
-            float[][] weightingData = voxelParameters.getWeightingData();
+            double[][] weightingData = voxelParameters.getWeightingData();
             for(int i=0;i<weightingData.length;i++){
                 for(int j=0;j<weightingData[0].length;j++){
                     weightingDataString.append(weightingData[i][j]).append(" ");

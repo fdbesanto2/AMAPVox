@@ -33,7 +33,7 @@ public class VoxelParameters {
     
     private int weighting;
     private File weightingFile;
-    private float[][] weightingData;
+    private double[][] weightingData;
     
     private boolean useDTMCorrection;
     private File dtmFile;
@@ -67,23 +67,23 @@ public class VoxelParameters {
     
     private int transmittanceMode = 0;
     
-    public static float[][] DEFAULT_ALS_WEIGHTING = new float[][]{
-                        {1.00f, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
-                        {0.62f, 0.38f, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
-                        {0.40f, 0.35f, 0.25f, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
-                        {0.28f, 0.29f, 0.24f, 0.19f, Float.NaN, Float.NaN, Float.NaN},
-                        {0.21f, 0.24f, 0.21f, 0.19f, 0.15f, Float.NaN, Float.NaN},
-                        {0.16f, 0.21f, 0.19f, 0.18f, 0.14f, 0.12f, Float.NaN},
-                        {0.15f, 0.17f, 0.15f, 0.16f, 0.12f, 0.19f, 0.06f}};
+    public static double[][] DEFAULT_ALS_WEIGHTING = new double[][]{
+                        {1.00, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {0.62, 0.38, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {0.40, 0.35, 0.25, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {0.28, 0.29, 0.24, 0.19, Double.NaN, Double.NaN, Double.NaN},
+                        {0.21, 0.24, 0.21, 0.19, 0.15, Double.NaN, Double.NaN},
+                        {0.16, 0.21, 0.19, 0.18, 0.14, 0.12, Double.NaN},
+                        {0.15, 0.17, 0.15, 0.16, 0.12, 0.19, 0.06}};
     
-    public static float[][] DEFAULT_TLS_WEIGHTING = new float[][]{
-                        {1.00f, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
-                        {0.50f, 0.50f, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
-                        {1/3f, 1/3f, 1/3f, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
-                        {0.25f, 0.25f, 0.25f, 0.25f, Float.NaN, Float.NaN, Float.NaN},
-                        {0.20f, 0.20f, 0.20f, 0.20f, 0.20f, Float.NaN, Float.NaN},
-                        {1/6f, 1/6f, 1/6f, 1/6f, 1/6f, 1/6f, Float.NaN},
-                        {1/7f, 1/7f, 1/7f, 1/7f, 1/7f, 1/7f, 1/7f}};
+    public static double[][] DEFAULT_TLS_WEIGHTING = new double[][]{
+                        {1.00, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {0.50, 0.50, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {0.34, 0.33, 0.33, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {0.25, 0.25, 0.25, 0.25, Double.NaN, Double.NaN, Double.NaN},
+                        {0.20, 0.20, 0.20, 0.20, 0.20, Double.NaN, Double.NaN},
+                        {0.17, 0.17, 0.165, 0.165, 0.165, 0.165, Double.NaN},
+                        {0.15, 0.15, 0.14, 0.14, 0.14, 0.14, 0.14}};
     
     
     public VoxelParameters() {
@@ -109,11 +109,11 @@ public class VoxelParameters {
         this.dtmFile = dtmFile;
     }
 
-    public float[][] getWeightingData() {
+    public double[][] getWeightingData() {
         return weightingData;
     }
 
-    public void setWeightingData(float[][] weightingData) {
+    public void setWeightingData(double[][] weightingData) {
         this.weightingData = weightingData;
     }
     
