@@ -76,6 +76,15 @@ public class VoxelParameters {
                         {0.16, 0.21, 0.19, 0.18, 0.14, 0.12, Double.NaN},
                         {0.15, 0.17, 0.15, 0.16, 0.12, 0.19, 0.06}};
     
+   /* public static double[][] DEFAULT_TLS_WEIGHTING = new double[][]{
+                        {1.00, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {0.50, 0.50, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {1/3.0, 1/3.0, 1/3.0, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+                        {0.25, 0.25, 0.25, 0.25, Double.NaN, Double.NaN, Double.NaN},
+                        {0.20, 0.20, 0.20, 0.20, 0.20, Double.NaN, Double.NaN},
+                        {1/6.0, 1/6.0, 1/6.0, 1/6.0, 1/6.0, 1/6.0, Double.NaN},
+                        {1/7.0, 1/7.0, 1/7.0, 1/7.0, 1/7.0, 1/7.0, 1/7.0}};*/
+    
     public static double[][] DEFAULT_TLS_WEIGHTING = new double[][]{
                         {1.00, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
                         {0.50, 0.50, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},

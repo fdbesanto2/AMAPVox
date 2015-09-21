@@ -440,7 +440,8 @@ public class VoxelAnalysis {
                 nbSamplingTotal++;
 
                 vox.angleMean += angle;
-                vox.bvEntering += surface * (Math.round(residualEnergy*10000)/10000) * longueur;
+                vox.bvEntering += surface * (Math.round(residualEnergy*10000)/10000.0) * longueur;
+                //vox.bvEntering += surface * (Math.round(residualEnergy*10000)/10000) * longueur;
                 //vox._transBeforeNorm += (surface * longueur);
                 //vox._sumSurfaceMultiplyLength += (surface*longueur);
 
@@ -505,7 +506,8 @@ public class VoxelAnalysis {
                 vox.angleMean += angle;
 
                 double entering;
-                entering = surface * (Math.round(residualEnergy*10000)/10000) * longueur;
+                //entering = surface * residualEnergy * longueur;
+                entering = surface * (Math.round(residualEnergy*10000)/10000.0) * longueur;
                 vox.bvEntering += entering;
 
                 double intercepted = 0;
@@ -521,7 +523,8 @@ public class VoxelAnalysis {
                     }
                     vox.nbEchos++;
 
-                    intercepted = surface * (Math.round(beamFraction*10000)/10000) * longueur;
+                    //intercepted = surface * beamFraction * longueur;
+                    intercepted = surface * (Math.round(beamFraction*10000)/10000.0) * longueur;
                     vox.bvIntercepted += intercepted;
 
                 } else {
@@ -714,10 +717,6 @@ public class VoxelAnalysis {
             
         }else {
             
-            if(voxel.bvIntercepted > voxel.bvEntering){
-                voxel.bvIntercepted = voxel.bvEntering;
-            }
-
             voxel.transmittance = (voxel.bvEntering - voxel.bvIntercepted) / voxel.bvEntering;
             voxel.transmittance = (float) Math.pow(voxel.transmittance, 1 / voxel.lMeanTotal);
             //voxel._transmittance_v2 = (voxel._transBeforeNorm) / voxel._sumSurfaceMultiplyLength ;
