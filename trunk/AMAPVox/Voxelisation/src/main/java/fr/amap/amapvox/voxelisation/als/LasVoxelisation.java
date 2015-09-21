@@ -91,16 +91,14 @@ public class LasVoxelisation extends Processing {
                     
         Iterator<Shot> iterator = conversion.iterator();
         
-        int count = 0;
         Shot shot;
         
         while((shot = iterator.next()) != null){
                         
             voxelAnalysis.processOneShot(shot);
-            count++;
         }
         
-        logger.info("Shots processed: "+count);
+        logger.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());
         
         
         if(parameters.isGenerateMultiBandRaster()){

@@ -116,11 +116,13 @@ public class RxpVoxelisation implements Callable{
                     Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
 
                     shot.setOriginAndDirection(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z));
+                    
                     voxelAnalysis.processOneShot(shot);
-
                 }
 
             }
+            
+            logger.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());
             
             //logger.info("Shots processed: " + voxelAnalysis.nbShotsTreated);
             //logger.info("voxelisation is finished ( " + TimeCounter.getElapsedStringTimeInSeconds(startTime) + " )");
