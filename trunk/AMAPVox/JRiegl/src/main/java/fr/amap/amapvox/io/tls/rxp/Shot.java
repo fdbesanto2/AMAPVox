@@ -103,7 +103,7 @@ public class Shot {
     }
 
     public boolean doFilter() {
-
+        
         if (filters != null) {
 
             for (Filter f : filters) {

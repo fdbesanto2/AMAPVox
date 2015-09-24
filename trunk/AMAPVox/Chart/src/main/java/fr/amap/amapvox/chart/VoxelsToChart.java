@@ -10,9 +10,14 @@ import fr.amap.amapvox.voxreader.VoxelFileReader;
 import java.awt.Font;
 import java.awt.geom.Ellipse2D;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.block.BlockBorder;
@@ -21,6 +26,7 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.title.LegendTitle;
+import org.jfree.chart.title.TextTitle;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.HorizontalAlignment;
@@ -47,9 +53,8 @@ public class VoxelsToChart {
     //quadrats
     private boolean makeQuadrats;
     private QuadratAxis axis;
-    private float min;
-    private int splitCount;
-    private int length;
+    private int split = 1;
+    private int length = -1;
     
     public enum QuadratAxis{
         
@@ -66,13 +71,19 @@ public class VoxelsToChart {
     
     public enum LayerReference{
         
-        FROM_ABOVE_GROUND(0),
-        FROM_BELOW_CANOPEE(1);
+        FROM_ABOVE_GROUND(0, "Height from above ground"),
+        FROM_BELOW_CANOPEE(1, "Height from below canopy");
         
         private final int reference;
+        private String label;
+        
+        public String getLabel(){
+            return label;
+        }
 
-        private LayerReference(int reference) {
+        private LayerReference(int reference, String label) {
             this.reference = reference;
+            this.label = label;
         }
     }
     
@@ -88,112 +99,207 @@ public class VoxelsToChart {
         }
     }
     
-    public void configureQuadrats(QuadratAxis axis, float min, int splitCount, int length){
+    public void configureQuadrats(QuadratAxis axis, int split, int length){
         
         makeQuadrats = true;
         this.axis = axis;
-        this.min = min;
-        this.splitCount = splitCount;
+        this.split = split;
         this.length = length;
-        
     }
     
-    public JFreeChart[] getVegetationProfileChartByQuadrats(LayerReference reference, float maxPAD){
+    private int getSplitCount(int length){
         
-        if(voxelFiles.length > 0){
+        if(makeQuadrats){
             
-            VoxelFileReader reader = new VoxelFileReader(voxelFiles[0].file, true);
+            int maxSplitCount = 0;
+            int currentSplitCount = 0;
             
-            if(makeQuadrats){
+            for(VoxelFileChart file : voxelFiles){
+            
                 switch(axis){
                     case X_AXIS:
-                        if(length == -1 && splitCount != -1){
-                            length = reader.getVoxelSpaceInfos().getSplit().x / splitCount;
-                        }else if(length != -1 && splitCount == -1){
-                            splitCount = reader.getVoxelSpaceInfos().getSplit().x/length;
-                        }
+                        currentSplitCount = (int) (file.reader.getVoxelSpaceInfos().getSplit().x/length);
                         break;
                     case Y_AXIS: 
-                        if(length == -1 && splitCount != -1){
-                            length = reader.getVoxelSpaceInfos().getSplit().y / splitCount;
-                        }else if(length != -1 && splitCount == -1){
-                            splitCount = reader.getVoxelSpaceInfos().getSplit().y/length;
-                        }
+                        currentSplitCount = (int) (file.reader.getVoxelSpaceInfos().getSplit().y/length);
                         break;
                     case Z_AXIS:
-                        if(length == -1 && splitCount != -1){
-                            length = reader.getVoxelSpaceInfos().getSplit().z / splitCount;
-                        }else if(length != -1 && splitCount == -1){
-                            splitCount = reader.getVoxelSpaceInfos().getSplit().z/length;
-                        }
+                        currentSplitCount = (int) (file.reader.getVoxelSpaceInfos().getSplit().z/length);
                         break;
                 }
                 
-                JFreeChart[] charts = new JFreeChart[splitCount];
-                for(int i = 0;i<splitCount;i++){
-                    charts[i] = getVegetationProfileChart(i*length, (i+1)*length, reference, maxPAD);
-                    charts[i].setTitle(charts[i].getTitle().getText()+" - quadrat "+(i+1));
+                if(currentSplitCount > maxSplitCount){
+                    maxSplitCount = currentSplitCount;
                 }
-                
-                return charts;
             }
+            
+            return maxSplitCount;
+            
+        }else{
+            return 0;
+        }
+    }
+    
+    private int[] getIndiceRange(VoxelFileChart voxelFile, int quadratIndex){
+        
+        int quadLength = 0; //longueur en voxels
+        float resolution = voxelFile.reader.getVoxelSpaceInfos().getResolution();
+                
+        switch(axis){
+            case X_AXIS:
+                if( split != -1){
+                    quadLength = voxelFile.reader.getVoxelSpaceInfos().getSplit().x / split;
+                }else if(length != -1){
+                    quadLength = (int) (length/resolution);
+                }
+                break;
+            case Y_AXIS: 
+                if(split != -1){
+                    quadLength = voxelFile.reader.getVoxelSpaceInfos().getSplit().y / split;
+                }else if(length != -1){
+                    quadLength = (int) (length/resolution);
+                }
+                break;
+            case Z_AXIS:
+                if(split != -1){
+                    quadLength = voxelFile.reader.getVoxelSpaceInfos().getSplit().z / split;
+                }else if(length != -1){
+                    quadLength = (int) (length/resolution);
+                }
+                break;
+        }
+
+        int indiceMin = (int) (quadratIndex * (quadLength-1));
+        int indiceMax = (int) ((quadratIndex+1) * (quadLength-1));
+        
+        return new int[]{indiceMin, indiceMax};
+    }
+    
+    private int getQuadratNumber(int split, int length){
+        
+        if(split == -1){
+            return getSplitCount(length);
+        }else{
+            return split;
+        }
+    }
+    
+    public JFreeChart[] getVegetationProfileCharts(LayerReference reference, float maxPAD){
+        
+        boolean inverseRangeAxis;
+
+        inverseRangeAxis = !(reference == LayerReference.FROM_ABOVE_GROUND);
+            
+        int quadratNumber = getQuadratNumber(split, length);
+        
+        JFreeChart[] charts = new JFreeChart[quadratNumber];
+        
+        for(int i=0;i<quadratNumber;i++){
+            
+            XYSeriesCollection dataset = new XYSeriesCollection();
+            
+            for(VoxelFileChart voxelFile : voxelFiles){
+                
+                int[] indices = getIndiceRange(voxelFile, i);
+                
+                XYSeries serie = createVegetationProfileSerie(voxelFile.reader, voxelFile.label, indices[0], indices[1], reference, maxPAD);
+                dataset.addSeries(serie);
+            }
+            
+            List<XYSeries> series = dataset.getSeries();
+        
+            double correlationValue = Double.NaN;
+
+            if(series.size() == 2){
+
+                XYSeries firstSerie = series.get(0);
+                XYSeries secondSerie = series.get(1);
+
+                Map<Double, Double[]> valuesMap = new HashMap<>();
+
+                for(int j=0;j<firstSerie.getItemCount() ;j++){
+
+                    Double[] value = new Double[]{firstSerie.getDataItem(j).getXValue(), Double.NaN};
+                    valuesMap.put(firstSerie.getDataItem(j).getYValue(), value);
+                }
+
+                for(int j=0;j<secondSerie.getItemCount() ;j++){
+
+                    Double[] value = valuesMap.get(Double.valueOf(secondSerie.getDataItem(j).getYValue()));
+                    if(value == null){
+                        valuesMap.put(secondSerie.getDataItem(j).getYValue(), new Double[]{Double.NaN, secondSerie.getDataItem(j).getXValue()});
+                    }else if(Double.isNaN(value[1])){
+                        value[1] = secondSerie.getDataItem(j).getXValue();
+                        valuesMap.put(secondSerie.getDataItem(j).getYValue(), value);
+                    }
+                }
+
+
+                List<Double> firstList = new ArrayList<>();
+                List<Double> secondList = new ArrayList<>();
+
+                Iterator<Map.Entry<Double, Double[]>> iterator = valuesMap.entrySet().iterator();
+                while(iterator.hasNext()){
+                    Map.Entry<Double, Double[]> next = iterator.next();
+                    Double[] value = next.getValue();
+
+                    if(!Double.isNaN(value[0]) && !Double.isNaN(value[1])){
+                        firstList.add(value[0]);
+                        secondList.add(value[1]);
+                    }
+                }
+
+                double[] firstArray = new double[firstList.size()];
+                double[] secondArray = new double[secondList.size()];
+
+                for(int j=0;j<firstList.size();j++){
+                    firstArray[j] = firstList.get(j);
+                    secondArray[j] = secondList.get(j);
+                }
+
+                PearsonsCorrelation correlation = new PearsonsCorrelation();
+                correlationValue = correlation.correlation(firstArray, secondArray);
+            }
+            
+            charts[i] = createChart("Vegetation profile"+" - quadrat "+(i+1), dataset, "PAD", reference.getLabel());
+            if(!Double.isNaN(correlationValue)){
+                charts[i].addSubtitle(new TextTitle("R2 = "+(Math.round(Math.pow(correlationValue, 2)*100))/100.0));
+            }
+            
+            ((XYPlot) charts[i].getPlot()).getRangeAxis().setInverted(inverseRangeAxis);
         }
         
-        return null;
+        return charts;
     }
     
-    public JFreeChart[] getAttributProfileChartByQuadrats(String attribut, LayerReference reference){
+    public JFreeChart[] getAttributProfileCharts(String attribut, LayerReference reference){
         
-        if(voxelFiles.length > 0){
+        boolean inverseRangeAxis;
+
+        inverseRangeAxis = !(reference == LayerReference.FROM_ABOVE_GROUND);
             
-            VoxelFileReader reader = new VoxelFileReader(voxelFiles[0].file, true);
+        int quadratNumber = getQuadratNumber(split, length);
+        
+        JFreeChart[] charts = new JFreeChart[quadratNumber];
+        
+        for(int i=0;i<quadratNumber;i++){
             
-            if(makeQuadrats){
-                switch(axis){
-                    case X_AXIS:
-                        if(length == -1 && splitCount != -1){
-                            length = reader.getVoxelSpaceInfos().getSplit().x / splitCount;
-                        }else if(length != -1 && splitCount == -1){
-                            splitCount = reader.getVoxelSpaceInfos().getSplit().x/length;
-                        }
-                        break;
-                    case Y_AXIS: 
-                        if(length == -1 && splitCount != -1){
-                            length = reader.getVoxelSpaceInfos().getSplit().y / splitCount;
-                        }else if(length != -1 && splitCount == -1){
-                            splitCount = reader.getVoxelSpaceInfos().getSplit().y/length;
-                        }
-                        break;
-                    case Z_AXIS:
-                        if(length == -1 && splitCount != -1){
-                            length = reader.getVoxelSpaceInfos().getSplit().z / splitCount;
-                        }else if(length != -1 && splitCount == -1){
-                            splitCount = reader.getVoxelSpaceInfos().getSplit().z/length;
-                        }
-                        break;
-                }
+            XYSeriesCollection dataset = new XYSeriesCollection();
+            
+            for(VoxelFileChart voxelFile : voxelFiles){
                 
-                JFreeChart[] charts = new JFreeChart[splitCount];
-                for(int i = 0;i<splitCount;i++){
-                    charts[i] = getAttributProfileChart(attribut, reference, axis, i*length, (i+1)*length);
-                    charts[i].setTitle(charts[i].getTitle().getText()+" - quadrat "+(i+1));
-                }
+                int[] indices = getIndiceRange(voxelFile, i);
                 
-                return charts;
+                XYSeries serie = createAttributeProfileSerie(voxelFile.reader, attribut, voxelFile.label, indices[0], indices[1], reference);
+                dataset.addSeries(serie);
             }
+                        
+            charts[i] = createChart("Attribut profile"+" - quadrat "+(i+1), dataset, attribut, reference.getLabel());
+            ((XYPlot) charts[i].getPlot()).getRangeAxis().setInverted(inverseRangeAxis);
+            
         }
         
-        return null;
-    }
-    
-    
-    
-    public JFreeChart getAttributProfileChart(String attribut, LayerReference reference){
-        return getAttributProfileChart(attribut, reference, null, -1, -1);
-    }
-            
-    public JFreeChart getVegetationProfileChart(LayerReference reference, float maxPAD){
-        return getVegetationProfileChart(-1, -1, reference, maxPAD);
+        return charts;
     }
     
     public JFreeChart createChart(String title, XYSeriesCollection dataset, String xAxisLabel, String yAxisLabel){
@@ -235,72 +341,7 @@ public class VoxelsToChart {
         }
 
         return chart;
-    }
-    
-    public JFreeChart getProfileChart(XYSeriesCollection dataset, LayerReference reference, String attribut){
-        
-        String layerReferenceString;
-        boolean inverseRangeAxis;
-        
-        if(reference == LayerReference.FROM_ABOVE_GROUND){
-            layerReferenceString = "Height from above ground";
-            inverseRangeAxis = false;
-        }else{
-            layerReferenceString = "Height from below canopy";
-            inverseRangeAxis = true;
-        }
-        
-        JFreeChart chart = createChart("", dataset, attribut, layerReferenceString);
-        XYPlot plot = (XYPlot) chart.getPlot();
-        plot.getRangeAxis().setInverted(inverseRangeAxis);
-        
-        return chart;
-    }
-    
-    public JFreeChart getAttributProfileChart(String attribut, LayerReference reference, QuadratAxis axis, int indiceMin, int indiceMax){
-        
-        final XYSeriesCollection dataset = new XYSeriesCollection();
-        
-        for(VoxelFileChart voxelFile : voxelFiles){
-            float res = voxelFile.reader.getVoxelSpaceInfos().getResolution();
-            dataset.addSeries(createAttributeProfileSerie(voxelFile.reader, attribut, voxelFile.label, (int)(indiceMin/res), (int)(indiceMax/res), reference));
-            
-        }
-        
-        JFreeChart chart = getProfileChart(dataset, reference, attribut);
-        chart.setTitle(attribut+" profile");
-        
-        return chart;
-    }
-    
-    public JFreeChart getVegetationProfileChart(int indiceMin, int indiceMax, LayerReference reference, float maxPAD){
-        
-        final XYSeriesCollection dataset = new XYSeriesCollection();
-        
-        for (VoxelFileChart voxelFile : voxelFiles) {
-            float res = voxelFile.reader.getVoxelSpaceInfos().getResolution();
-            dataset.addSeries(createVegetationProfileSerie(voxelFile.reader, voxelFile.label, (int)(indiceMin/res), (int)(indiceMax/res), reference, maxPAD));
-        }
-        
-        String title = "Vegetation profile";
-        
-        String layerReferenceString;
-        boolean inverseRangeAxis;
-        
-        if(reference == LayerReference.FROM_ABOVE_GROUND){
-            layerReferenceString = "Height from above ground";
-            inverseRangeAxis = false;
-        }else{
-            layerReferenceString = "Height from below canopy";
-            inverseRangeAxis = true;
-        }
-        
-        JFreeChart chart = createChart(title, dataset,"PAD", layerReferenceString);
-        XYPlot plot = (XYPlot) chart.getPlot();
-        plot.getRangeAxis().setInverted(inverseRangeAxis);
-        
-        return chart;
-    }
+    }    
     
     private boolean doQuadratFiltering(Voxel voxel, int indiceMin, int indiceMax){
         
@@ -332,7 +373,7 @@ public class VoxelsToChart {
     private XYSeries createAttributeProfileSerie(VoxelFileReader reader, String attributName, String key, int indiceMin, int indiceMax, LayerReference reference){
         
         float resolution = reader.getVoxelSpaceInfos().getResolution();
-        int layersNumber = (int)(reader.getVoxelSpaceInfos().getSplit().z * resolution);
+        int layersNumber = (int)(reader.getVoxelSpaceInfos().getSplit().z * resolution)*2;
         
         float[] meanValueByLayer = new float[layersNumber];
         int[] valuesNumberByLayer = new int[layersNumber];
@@ -420,7 +461,7 @@ public class VoxelsToChart {
     private XYSeries createVegetationProfileSerie(VoxelFileReader reader, String key, int indiceMin, int indiceMax, LayerReference reference, float maxPAD){
         
         float resolution = reader.getVoxelSpaceInfos().getResolution();
-        int layersNumber = (int)(reader.getVoxelSpaceInfos().getSplit().z * resolution)*2; //attention , la multiplication par 2 est un patch, doit être modifié!!
+        int layersNumber = (int)(reader.getVoxelSpaceInfos().getSplit().z);
         
         float[] padMeanByLayer = new float[layersNumber];
         int[] valuesNumberByLayer = new int[layersNumber];
@@ -428,6 +469,8 @@ public class VoxelsToChart {
         //calcul de la couche sol ou canopée
         Iterator<Voxel> iterator;
         int[][] canopeeArray = null;
+        int[][] groundArray = null;
+        
         if(reference == LayerReference.FROM_BELOW_CANOPEE){
             
             canopeeArray = new int[reader.getVoxelSpaceInfos().getSplit().x][reader.getVoxelSpaceInfos().getSplit().y];
@@ -440,6 +483,27 @@ public class VoxelsToChart {
 
                     if(voxel.$k > canopeeArray[voxel.$i][voxel.$j]){
                         canopeeArray[voxel.$i][voxel.$j] = voxel.$k;
+                    }
+                }
+            }
+        }else if(reference == LayerReference.FROM_ABOVE_GROUND){
+            groundArray = new int[reader.getVoxelSpaceInfos().getSplit().x][reader.getVoxelSpaceInfos().getSplit().y];
+            
+            for(int i=0;i<groundArray.length;i++){
+                for(int j=0;j<groundArray[0].length;j++){
+                    groundArray[i][j] = reader.getVoxelSpaceInfos().getSplit().z -1 ;
+                }
+            }
+            
+            iterator = reader.iterator();
+            while(iterator.hasNext()){
+
+                Voxel voxel = iterator.next();
+
+                if (voxel.ground_distance > 0) {
+
+                    if(voxel.$k < groundArray[voxel.$i][voxel.$j]){
+                        groundArray[voxel.$i][voxel.$j] = voxel.$k;
                     }
                 }
             }
@@ -467,7 +531,8 @@ public class VoxelsToChart {
                     if(reference == LayerReference.FROM_BELOW_CANOPEE){
                         layerIndex = canopeeArray[voxel.$i][voxel.$j] - (int)((voxel.$k)/resolution);
                     }else{
-                        layerIndex = (int)voxel.ground_distance;
+                        //layerIndex = (int)((voxel.$k)/resolution) - groundArray[voxel.$i][voxel.$j];
+                        layerIndex = (int) (voxel.ground_distance/resolution);
                     }
                 
                     if(layerIndex > 0){
@@ -479,7 +544,7 @@ public class VoxelsToChart {
             }        
         }
         
-        final XYSeries series1 = new XYSeries(key, false);
+        final XYSeries serie = new XYSeries(key, false);
         
         float lai = 0;
         
@@ -497,18 +562,19 @@ public class VoxelsToChart {
             padMeanByLayer[i] = padMeanByLayer[i] / valuesNumberByLayer[i];
             
             if(i <= maxHeight){
-                series1.add(padMeanByLayer[i], i);
+                serie.add(padMeanByLayer[i], i*resolution);
             }
             
             if(!Float.isNaN(padMeanByLayer[i]) ){
                 lai += padMeanByLayer[i];
             }
         }
-        DecimalFormat df = new DecimalFormat("0.0000");
         
-        series1.setKey(key+'\n'+"LAI = "+df.format(lai));
+        lai *= resolution;
         
-        return series1;
+        serie.setKey(key+'\n'+"LAI = "+(Math.round(lai*10))/10.0);
+        
+        return serie;
     }
     
 }

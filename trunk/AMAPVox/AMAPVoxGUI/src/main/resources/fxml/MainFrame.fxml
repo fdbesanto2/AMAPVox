@@ -46,7 +46,7 @@
                                                       <content>
                                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                <children>
-                                                                  <CheckBox fx:id="checkboxMultiResAfterMode2" layoutX="14.0" layoutY="320.0" mnemonicParsing="false" text="Correct NaNs (mode 2)" />
+                                                                  <CheckBox fx:id="checkboxMultiResAfterMode2" layoutX="14.0" layoutY="325.0" mnemonicParsing="false" text="Correct NaNs (mode 2)" />
                                                                   <Button fx:id="buttonOpenInputFileALS" layoutX="14.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="100.0" />
                                                                   <ComboBox fx:id="comboboxModeALS" layoutX="14.0" layoutY="14.0" prefWidth="150.0" promptText="Choose mode..." />
                                                                   <Label layoutX="14.0" layoutY="58.0" text="Input file(s)" />
@@ -57,7 +57,7 @@
                                                                   <TextField fx:id="textFieldOutputFileALS" layoutX="14.0" layoutY="233.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
                                                                   <Label layoutX="14.0" layoutY="218.0" text="Output file/path" AnchorPane.leftAnchor="14.0" />
                                                                   <Button fx:id="buttonOpenOutputFileALS" layoutX="14.0" layoutY="260.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="260.0" />
-                                                                  <Button fx:id="buttonALSAddToTaskList" layoutX="210.0" layoutY="349.0" mnemonicParsing="false" onAction="#onActionButtonALSAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                                  <Button fx:id="buttonALSAddToTaskList" layoutX="210.0" layoutY="349.0" mnemonicParsing="false" onAction="#onActionButtonALSAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                                      <graphic>
                                                                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                                            <image>
@@ -66,9 +66,11 @@
                                                                         </ImageView>
                                                                      </graphic>
                                                                   </Button>
-                                                                  <TextField fx:id="textfieldResMultiRes" disable="true" layoutX="133.0" layoutY="299.0" prefHeight="25.0" prefWidth="175.0" promptText="Resolutions (ex: 1, 2, 3)" />
-                                                                  <CheckBox fx:id="checkboxMultiResAfter" disable="true" layoutX="14.0" layoutY="302.0" mnemonicParsing="false" text="Correct NaNs" AnchorPane.leftAnchor="14.0" />
+                                                                  <TextField fx:id="textfieldResMultiRes" disable="true" layoutX="133.0" layoutY="295.0" prefHeight="25.0" prefWidth="175.0" promptText="Resolutions (ex: 1, 2, 3)" />
+                                                                  <CheckBox fx:id="checkboxMultiResAfter" disable="true" layoutX="14.0" layoutY="298.0" mnemonicParsing="false" text="Correct NaNs" AnchorPane.leftAnchor="14.0" />
                                                                   <CheckBox fx:id="checkboxMultiFiles" layoutX="188.0" layoutY="18.0" mnemonicParsing="false" text="Multi-files" />
+                                                                  <TextField fx:id="textfieldNbSamplingThresholdMultires" layoutX="268.0" layoutY="321.0" prefHeight="26.0" prefWidth="60.0" text="2" />
+                                                                  <Label layoutX="200.0" layoutY="326.0" text="Threshold" />
                                                                </children></AnchorPane>
                                                       </content>
                                                     </Tab>
@@ -85,7 +87,7 @@
                                                                   <Label layoutX="14.0" layoutY="58.0" text="Input file" />
                                                                   <Button fx:id="buttonOpenInputFileTLS" layoutX="14.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileTLS" text="Open" AnchorPane.topAnchor="100.0" />
                                                                   <ListView fx:id="listviewRxpScans" layoutX="14.0" layoutY="129.0" maxWidth="1.7976931348623157E308" prefHeight="91.0" prefWidth="300.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
-                                                                  <Button fx:id="buttonTLSAddToTaskList" layoutX="210.0" layoutY="349.0" mnemonicParsing="false" onAction="#onActionButtonTLSAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                                  <Button fx:id="buttonTLSAddToTaskList" layoutX="210.0" layoutY="349.0" mnemonicParsing="false" onAction="#onActionButtonTLSAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                                      <graphic>
                                                                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                                            <image>
@@ -129,7 +131,7 @@
                                                                         </ImageView>
                                                                      </graphic>
                                                                   </Button>
-                                                                  <Button fx:id="buttonMultiResAddToTaskList" layoutX="191.0" layoutY="340.0" mnemonicParsing="false" onAction="#onActionButtonMultiResAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                                  <Button fx:id="buttonMultiResAddToTaskList" layoutX="191.0" layoutY="340.0" mnemonicParsing="false" onAction="#onActionButtonMultiResAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                                      <graphic>
                                                                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                                            <image>
@@ -148,7 +150,7 @@
                                                          <content>
                                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                <children>
-                                                                  <Button fx:id="buttonMergingAddToTaskList" layoutX="189.0" layoutY="340.0" mnemonicParsing="false" onAction="#onActionButtonMergingAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                                  <Button fx:id="buttonMergingAddToTaskList" layoutX="189.0" layoutY="340.0" mnemonicParsing="false" onAction="#onActionButtonMergingAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                                      <graphic>
                                                                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                                            <image>
@@ -853,7 +855,7 @@
                                                                            <content>
                                                                               <AnchorPane fx:id="anchorpaneQuadrats" disable="true" prefHeight="90.0" prefWidth="375.0">
                                                                                  <children>
-                                                                                    <HBox layoutX="20.399999618530273" layoutY="17.0" spacing="15.0">
+                                                                                    <HBox layoutX="20.399999618530273" layoutY="17.0" spacing="15.0" AnchorPane.leftAnchor="5.0">
                                                                                        <children>
                                                                                           <HBox spacing="5.0">
                                                                                              <children>
@@ -865,19 +867,10 @@
                                                                                                 <ComboBox fx:id="comboboxSelectAxisForQuadrats" prefHeight="26.0" prefWidth="60.0" />
                                                                                              </children>
                                                                                           </HBox>
-                                                                                          <HBox spacing="5.0">
-                                                                                             <children>
-                                                                                                <Label text="Min">
-                                                                                                   <padding>
-                                                                                                      <Insets top="4.0" />
-                                                                                                   </padding>
-                                                                                                </Label>
-                                                                                                <TextField fx:id="textFieldEnterYMinForQuadrats" prefHeight="3.0" prefWidth="67.0" />
-                                                                                             </children>
-                                                                                          </HBox>
+                                                                                          <HBox spacing="5.0" />
                                                                                        </children>
                                                                                     </HBox>
-                                                                                    <HBox layoutX="10.0" layoutY="64.0" spacing="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.799999999999955">
+                                                                                    <HBox layoutX="20.0" layoutY="64.0" prefHeight="26.0" prefWidth="371.0" spacing="15.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
                                                                                        <children>
                                                                                           <HBox spacing="2.0">
                                                                                              <children>
@@ -891,7 +884,7 @@
                                                                                           </HBox>
                                                                                           <HBox spacing="2.0">
                                                                                              <children>
-                                                                                                <RadioButton fx:id="radiobuttonLengthForQuadrats" mnemonicParsing="false" text="Length">
+                                                                                                <RadioButton fx:id="radiobuttonLengthForQuadrats" mnemonicParsing="false" text="Length (m)">
                                                                                                    <padding>
                                                                                                       <Insets top="4.0" />
                                                                                                    </padding>
@@ -911,6 +904,8 @@
                                                                      </children>
                                                                   </VBox>
                                                                   <Button layoutX="256.0" layoutY="372.0" mnemonicParsing="false" onAction="#onActionButtonDrawChart" text="Draw chart(s)" />
+                                                                  <Label layoutX="14.0" layoutY="377.0" text="Max chart number in a row" />
+                                                                  <TextField fx:id="textfieldMaxChartNumberInARow" layoutX="197.0" layoutY="372.0" prefHeight="26.0" prefWidth="45.0" text="6" />
                                                                </children>
                                                             </AnchorPane>
                                                         </items>

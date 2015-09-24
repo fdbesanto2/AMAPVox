@@ -9,6 +9,7 @@ import fr.amap.amapvox.als.las.PointDataRecordFormat.Classification;
 import fr.amap.amapvox.chart.ChartViewer;
 import fr.amap.amapvox.chart.VoxelFileChart;
 import fr.amap.amapvox.chart.VoxelsToChart;
+import fr.amap.amapvox.chart.VoxelsToChart.QuadratAxis;
 import fr.amap.amapvox.commons.configuration.Configuration;
 import fr.amap.amapvox.commons.configuration.Configuration.InputType;
 import static fr.amap.amapvox.commons.configuration.Configuration.InputType.LAS_FILE;
@@ -259,6 +260,10 @@ public class MainFrameController implements Initializable {
     private TextField textFieldTwoBetaAlphaParameter;
     @FXML
     private TextField textFieldTwoBetaBetaParameter;
+    @FXML
+    private TextField textfieldNbSamplingThresholdMultires;
+    @FXML
+    private TextField textfieldMaxChartNumberInARow;
     
     static class ColorRectCell extends ListCell<VoxelFileChart> {
 
@@ -674,8 +679,6 @@ public class MainFrameController implements Initializable {
     private CheckBox checkboxMakeQuadrats;
     @FXML
     private ComboBox<String> comboboxSelectAxisForQuadrats;
-    @FXML
-    private TextField textFieldEnterYMinForQuadrats;
     @FXML
     private RadioButton radiobuttonSplitCountForQuadrats;
     @FXML
@@ -2409,7 +2412,9 @@ public class MainFrameController implements Initializable {
             }
             
             boolean correctNaNs = checkboxMultiResAfterMode2.isSelected();
+            
             voxelParameters.setCorrectNaNsMode2(correctNaNs);
+            voxelParameters.setCorrectNaNsNbSamplingThreshold(Integer.valueOf(textfieldNbSamplingThresholdMultires.getText()));
             
             InputType it;
 
@@ -3726,6 +3731,7 @@ public class MainFrameController implements Initializable {
                             textFieldInputFileALS.setText(((ALSVoxCfg)cfg).getInputFile().getAbsolutePath());
                             textFieldOutputFileALS.setText(((ALSVoxCfg)cfg).getOutputFile().getAbsolutePath());
                             checkboxMultiResAfterMode2.setSelected(((ALSVoxCfg)cfg).getVoxelParameters().isCorrectNaNsMode2());
+                            textfieldNbSamplingThresholdMultires.setText(String.valueOf(((ALSVoxCfg)cfg).getVoxelParameters().getCorrectNaNsNbSamplingThreshold()));
                             checkboxMultiFiles.setSelected(false);
                             
                         }else if(type.equals("multi-voxelisation")){
@@ -4849,7 +4855,13 @@ public class MainFrameController implements Initializable {
             chartWindowTitle = "Chart";
         }
         
-        ChartViewer chartViewer = new ChartViewer(chartWindowTitle, 270, 600, 6);
+        int maxChartNumberInARow;
+        try{
+            maxChartNumberInARow = Integer.valueOf(textfieldMaxChartNumberInARow.getText());
+        }catch(Exception e){
+            maxChartNumberInARow = 6;
+        }
+        ChartViewer chartViewer = new ChartViewer(chartWindowTitle, 270, 600, maxChartNumberInARow);
         
         for(VoxelFileChart voxelFileChart : listViewVoxelsFilesChart.getItems()){
             voxelFileChart.loaded = true;
@@ -4878,19 +4890,21 @@ public class MainFrameController implements Initializable {
             textfieldVegetationProfileMaxPAD.setText("5");
         }
         
-        
         if (checkboxMakeQuadrats.isSelected()) {
-
+            
             int splitCount = -1;
-            try {
-                splitCount = Integer.valueOf(textFieldSplitCountForQuadrats.getText());
-            } catch (Exception e) {
-            }
-
             int length = -1;
-            try {
-                length = Integer.valueOf(textFieldLengthForQuadrats.getText());
-            } catch (Exception e) {
+            
+            if(radiobuttonSplitCountForQuadrats.isSelected()){
+                try {
+                    splitCount = Integer.valueOf(textFieldSplitCountForQuadrats.getText());
+                } catch (Exception e) {
+                }
+            }else{
+                try {
+                    length = Integer.valueOf(textFieldLengthForQuadrats.getText());
+                } catch (Exception e) {
+                }
             }
             
             int stageWidth = voxelFileChartArray.length * chartWidth;
@@ -4915,40 +4929,30 @@ public class MainFrameController implements Initializable {
                     axis = VoxelsToChart.QuadratAxis.Y_AXIS;
             }
 
-            voxelsToChart.configureQuadrats(axis, -1, splitCount, length);
+            voxelsToChart.configureQuadrats(axis, splitCount, length);
             
-            JFreeChart[] charts = null;
+        }else{
+            voxelsToChart.configureQuadrats(QuadratAxis.Y_AXIS, 1, -1);
+        }
+        
+        JFreeChart[] charts = null;
 
-            if (radiobuttonPreDefinedProfile.isSelected()) { 
+        if (radiobuttonPreDefinedProfile.isSelected()) { 
 
-                if (comboboxPreDefinedProfile.getSelectionModel().getSelectedIndex() == 0) { //vegetation profile
-                    charts = voxelsToChart.getVegetationProfileChartByQuadrats(reference, maxPAD);
-                }
-
-            } else { //from variable profile
-
-                charts = voxelsToChart.getAttributProfileChartByQuadrats(
-                        comboboxFromVariableProfile.getSelectionModel().getSelectedItem(), reference);
-            }
-            
-            if(charts != null){
-                for (JFreeChart chart : charts) {
-                    chartViewer.insertChart(chart);
-                }
+            if (comboboxPreDefinedProfile.getSelectionModel().getSelectedIndex() == 0) { //vegetation profile
+                charts = voxelsToChart.getVegetationProfileCharts(reference, maxPAD);
             }
 
-        } else {
+        } else { //from variable profile
 
-            if (radiobuttonPreDefinedProfile.isSelected()) {
+            charts = voxelsToChart.getAttributProfileCharts(
+                    comboboxFromVariableProfile.getSelectionModel().getSelectedItem(), reference);
+        }
 
-                if (comboboxPreDefinedProfile.getSelectionModel().getSelectedIndex() == 0) {
-                    chartViewer.insertChart(voxelsToChart.getVegetationProfileChart(reference, maxPAD));
-                }
-            } else {
-                chartViewer.insertChart(voxelsToChart.getAttributProfileChart(
-                        comboboxFromVariableProfile.getSelectionModel().getSelectedItem(), reference));
+        if(charts != null){
+            for (JFreeChart chart : charts) {
+                chartViewer.insertChart(chart);
             }
-
         }
 
         

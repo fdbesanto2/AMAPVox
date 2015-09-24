@@ -82,6 +82,13 @@ public class VoxelAnalysis {
      */
     public class GroundEnergy {
 
+        /*ATTENTION : le calcul de l'énergie arrivant au sol est incorrect actuellement,
+         en effet, la prolongation d'un tir après son dernier écho jusqu'au sol ne se fait
+         pas pour les tirs ayant le dernier écho en dehors de l'espace voxel.
+         En correction, il faudrait faire un pré-calcul pour déterminer la taille de la 
+        bounding-box pour inclure les tirs correspondants.
+        Donc créer deux espaces voxels en l'occurence.*/
+        
         public int groundEnergyPotential;
         public float groundEnergyActual;
 
@@ -102,6 +109,35 @@ public class VoxelAnalysis {
             for(int j=0;j<i+1;j++){
                 residualEnergyTable[i][j] = startEnergy;
                 startEnergy -= weighting[i][j];
+            }
+        }
+    }
+    
+    private void generateNoPonderationTables(){
+        
+        weighting = new float[7][7];
+        
+        for(int i=0;i<weighting.length;i++){
+                        
+            for(int j=0;j<i+1;j++){
+                weighting[i][j] = 1;
+            }
+            
+            for(int j=i+1;j<7;j++){
+                weighting[i][j] = Float.NaN;
+            }
+        }
+        
+        residualEnergyTable = new float[7][7];
+        
+        for(int i=0;i<weighting.length;i++){
+                        
+            for(int j=0;j<i+1;j++){
+                residualEnergyTable[i][j] = 1;
+            }
+            
+            for(int j=i+1;j<7;j++){
+                residualEnergyTable[i][j] = Float.NaN;
             }
         }
     }
@@ -150,8 +186,16 @@ public class VoxelAnalysis {
 
         this.parameters = parameters;
         this.outputFile = outputFile;
-        weighting = parameters.getWeightingData();
-        generateResidualEnergyTable();
+        
+        if(parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE){
+            weighting = parameters.getWeightingData();
+            generateResidualEnergyTable();
+        }else{
+            
+            //pas de pondération
+            generateNoPonderationTables();
+        }
+        
         MAX_PAD = parameters.getMaxPAD();
 
         LeafAngleDistribution distribution = new LeafAngleDistribution(parameters.getLadType(), 
@@ -667,7 +711,7 @@ public class VoxelAnalysis {
         /**
          * *PADBV**
          */
-        if (voxel.bvEntering <= 0) {
+        if (voxel.nbSampling == 0) {
 
             pad1 = Float.NaN;
             voxel.transmittance = Float.NaN;
@@ -684,18 +728,22 @@ public class VoxelAnalysis {
             voxel.transmittance = (voxel.bvEntering - voxel.bvIntercepted) / voxel.bvEntering;
             voxel.transmittance = (float) Math.pow(voxel.transmittance, 1 / voxel.lMeanTotal);
 
-            if (voxel.nbSampling > 1 && voxel.transmittance == 0 && voxel.nbSampling == voxel.nbEchos) {
+            if (/*voxel.nbSampling > 1 && */voxel.transmittance == 0) { // nbSampling == nbEchos
 
                 pad1 = MAX_PAD;
 
-            } else if (voxel.nbSampling <= 2 && voxel.transmittance == 0 && voxel.nbSampling == voxel.nbEchos) {
+            }/* else if (voxel.nbSampling == 1 && voxel.transmittance == 0 ) { // nbSampling == nbEchos
 
                 pad1 = Float.NaN;
 
-            } else {
+            } */else {
 
                 float coefficientGTheta = (float) direcTransmittance.getTransmittanceFromAngle(voxel.angleMean, true);
 
+                if(coefficientGTheta == 0){
+                    logger.error("Voxel : " + voxel.$i + " " + voxel.$j + " " + voxel.$k + " -> coefficient GTheta nul, angle = "+voxel.angleMean);
+                }
+                
                 pad1 = (float) (Math.log(voxel.transmittance) / (-coefficientGTheta));
 
                 if (Float.isNaN(pad1)) {
@@ -846,6 +894,7 @@ public class VoxelAnalysis {
     
     public void correctNaNs(){
         
+        /**A faire : corriger de manière parallèle**/
         
         int[][] canopeeArray = new int[parameters.split.x][parameters.split.y];
         for (int x = 0; x < parameters.split.x; x++) {
@@ -879,7 +928,9 @@ public class VoxelAnalysis {
 
                         int passID = 0;
 
-                        while(currentNbSampling == 0 || currentTransmittance == 0 || Float.isNaN(currentTransmittance)){
+                        while(currentNbSampling <= parameters.getCorrectNaNsNbSamplingThreshold()){
+                            
+                        //while(currentNbSampling <= 0 || currentTransmittance == 0 || Float.isNaN(currentTransmittance)){
 
                             //on parcours les voxels voisins
                             for(int i = -1+x-passID ; i< 2+x+passID ; i++){
@@ -913,15 +964,18 @@ public class VoxelAnalysis {
                                 }
                             }
 
-                            float meanNbSampling = 0;
+                            float meanEffectiveNbSampling = 0;
                             float meanTransmittance = 0;
                             
                             int count = 0;
 
                             for(Voxel neighbour : neighbours){
                                 
-                                if(!Float.isNaN(neighbour.transmittance) || neighbour.transmittance == 0){
-                                    meanNbSampling += neighbour.nbSampling;
+                                /*les voxels de transmittance nuls sont traités comme étant non échantillonné,
+                                tous les voisins sont considérés indépendamment de l'échantillonnage*/
+                                
+                                if(!Float.isNaN(neighbour.transmittance) && neighbour.transmittance != 0){
+                                    meanEffectiveNbSampling += neighbour.nbSampling;
                                     meanTransmittance *= neighbour.transmittance;
                                     count++;
                                 }
@@ -930,12 +984,12 @@ public class VoxelAnalysis {
                             if(count > 0){
                                 double factor = 1/count;
                                 if(neighbours.size() > 0){
-                                    meanNbSampling /= (float)neighbours.size();
+                                    meanEffectiveNbSampling /= (float)count;
                                     meanTransmittance = (float) Math.pow(meanTransmittance, factor);
                                 }else{
                                     break;
                                 }
-                                currentNbSampling = meanNbSampling;
+                                currentNbSampling = meanEffectiveNbSampling;
                                 currentTransmittance = meanTransmittance;
 
                             
@@ -960,14 +1014,13 @@ public class VoxelAnalysis {
                             int count = 0;
                             for(Voxel neighbour : neighbours){
 
-                                if(!Float.isNaN(neighbour.PadBVTotal)){
+                                if(!Float.isNaN(neighbour.transmittance) && neighbour.transmittance != 0){
                                     meanPAD += neighbour.PadBVTotal;
                                     count++;
                                 }
-
                             }
                             
-                            voxels[x][y][z].neighboursNumber = neighbours.size();
+                            voxels[x][y][z].neighboursNumber = count;
                             voxels[x][y][z].passNumber = passID;
                             voxels[x][y][z].PadBVTotal = meanPAD /count/* /ponderationCoeffSum*/;
                             voxels[x][y][z].nbSampling = (int)currentNbSampling;

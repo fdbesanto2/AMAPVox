@@ -785,6 +785,7 @@ public class ProcessTool implements Cancellable{
         
         logger.info("Compute transmittance and PAD");
         
+        //LeafAngleDistribution distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.PLANOPHILE);
         LeafAngleDistribution distribution = new LeafAngleDistribution(cfg.getVoxelParameters().getLadType());
         DirectionalTransmittance direcTransmittance = new DirectionalTransmittance(distribution);
         
@@ -801,7 +802,7 @@ public class ProcessTool implements Cancellable{
             
             float pad1;
 
-            if (resultingFile[i][bvEnteringColumnIndex] <= 0) {
+            if (resultingFile[i][nbSamplingColumnIndex] == 0) {
 
                 pad1 = Float.NaN;
                 resultingFile[i][transmittanceColumnIndex] = Float.NaN;
@@ -815,18 +816,23 @@ public class ProcessTool implements Cancellable{
 
             } else {
 
-                if (resultingFile[i][nbSamplingColumnIndex] > 1 && resultingFile[i][transmittanceColumnIndex] == 0 && Objects.equals(resultingFile[i][nbSamplingColumnIndex], resultingFile[i][nbEchosColumnIndex])) {
+                if (/*resultingFile[i][nbSamplingColumnIndex] > 1 && */resultingFile[i][transmittanceColumnIndex] == 0) {
 
                     pad1 = cfg.getVoxelParameters().getMaxPAD();
 
-                } else if (resultingFile[i][nbSamplingColumnIndex] <= 2 && resultingFile[i][transmittanceColumnIndex] == 0 && Objects.equals(resultingFile[i][nbSamplingColumnIndex], resultingFile[i][nbEchosColumnIndex])) {
+                }/* else if (resultingFile[i][nbSamplingColumnIndex] <= 2 && resultingFile[i][transmittanceColumnIndex] == 0 && Objects.equals(resultingFile[i][nbSamplingColumnIndex], resultingFile[i][nbEchosColumnIndex])) {
 
                     pad1 = Float.NaN;
 
-                } else {
+                } */else {
 
-                    double coefficient = direcTransmittance.getTransmittanceFromAngle(resultingFile[i][angleMeanColumnIndex], true);
-                    pad1 = (float) (Math.log(resultingFile[i][transmittanceColumnIndex]) / (-coefficient));
+                    double coefficientGTheta = direcTransmittance.getTransmittanceFromAngle(resultingFile[i][angleMeanColumnIndex], true);
+                    
+                    if(coefficientGTheta == 0){
+                        logger.error("Voxel : " + resultingFile[i][0] + " " + resultingFile[i][1] + " " + resultingFile[i][2] + " -> coefficient GTheta nul, angle = "+resultingFile[i][angleMeanColumnIndex]);
+                    }
+                    
+                    pad1 = (float) (Math.log(resultingFile[i][transmittanceColumnIndex]) / (-coefficientGTheta));
 
                     if (Float.isNaN(pad1)) {
                         pad1 = Float.NaN;

@@ -72,6 +72,11 @@ public class ALSVoxCfg extends VoxCfg{
         Element correctNaNsElement = processElement.getChild("correct-NaNs");
         if(correctNaNsElement != null){
             voxelParameters.setCorrectNaNsMode2(Boolean.valueOf(correctNaNsElement.getAttributeValue("enabled")));
+            
+            try{
+                voxelParameters.setCorrectNaNsNbSamplingThreshold( Integer.valueOf(correctNaNsElement.getAttributeValue("threshold")));
+            }catch(Exception e){ }
+            
         }
     }
 
@@ -118,7 +123,9 @@ public class ALSVoxCfg extends VoxCfg{
         
         Element correctNaNsElement = new Element("correct-NaNs");
         correctNaNsElement.setAttribute("enabled", String.valueOf(voxelParameters.isCorrectNaNsMode2()));
+        correctNaNsElement.setAttribute("threshold", String.valueOf(voxelParameters.getCorrectNaNsNbSamplingThreshold()));
         processElement.addContent(correctNaNsElement);
+        
         
         writeDocument(outputParametersFile);
     }
