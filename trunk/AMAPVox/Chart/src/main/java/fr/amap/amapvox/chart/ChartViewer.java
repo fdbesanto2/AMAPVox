@@ -5,8 +5,10 @@
  */
 package fr.amap.amapvox.chart;
 
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
@@ -52,9 +54,18 @@ import org.jfree.chart.util.ExportUtils;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.fx.FXGraphics2D;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.block.BlockBorder;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.title.LegendTitle;
+import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUtils;
 import org.jfree.ui.Drawable;
+import org.jfree.ui.HorizontalAlignment;
 /**
  *
  * @author calcul
@@ -479,5 +490,44 @@ public class ChartViewer extends Control{
                 // FIXME: show a dialog with the error
             }
         }        
+    }
+    
+    public static JFreeChart createBasicChart(String title, XYSeriesCollection dataset, String xAxisLabel, String yAxisLabel){
+        
+        JFreeChart chart = ChartFactory.createXYLineChart(
+            title,  xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, true, true, false);
+
+        String fontName = "Palatino";
+        chart.getTitle().setFont(new Font(fontName, Font.BOLD, 18));
+        XYPlot plot = (XYPlot) chart.getPlot();
+        
+        plot.setDomainPannable(true);
+        plot.setRangePannable(true);
+        plot.setDomainCrosshairVisible(true);
+        plot.setRangeCrosshairVisible(true);
+        plot.getDomainAxis().setLowerMargin(0.0);
+        
+        plot.getDomainAxis().setLabelFont(new Font(fontName, Font.BOLD, 14));
+        plot.getDomainAxis().setTickLabelFont(new Font(fontName, Font.PLAIN, 12));
+        plot.getRangeAxis().setLabelFont(new Font(fontName, Font.BOLD, 14));
+        plot.getRangeAxis().setTickLabelFont(new Font(fontName, Font.PLAIN, 12));
+        
+        chart.getLegend().setItemFont(new Font(fontName, Font.PLAIN, 14));
+        chart.getLegend().setFrame(BlockBorder.NONE);
+        
+        
+        LegendTitle subtitle = (LegendTitle) chart.getSubtitles().get(0);
+        subtitle.setHorizontalAlignment(HorizontalAlignment.LEFT);
+        
+        XYItemRenderer r = plot.getRenderer();
+        if (r instanceof XYLineAndShapeRenderer) {
+            XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) r;
+            renderer.setBaseShapesVisible(true);
+
+            Ellipse2D.Float shape = new Ellipse2D.Float(-2.5f, -2.5f, 5.0f, 5.0f);
+            renderer.setSeriesShape(0, shape);
+        }
+
+        return chart;
     }
 }

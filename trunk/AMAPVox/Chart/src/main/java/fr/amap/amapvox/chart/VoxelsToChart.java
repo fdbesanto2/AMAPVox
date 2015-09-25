@@ -5,9 +5,10 @@
  */
 package fr.amap.amapvox.chart;
 
-import fr.amap.amapvox.voxreader.Voxel;
+import fr.amap.amapvox.voxcommons.Voxel;
 import fr.amap.amapvox.voxreader.VoxelFileReader;
 import java.awt.Font;
+import java.awt.Paint;
 import java.awt.geom.Ellipse2D;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.logging.Logger;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
@@ -27,6 +29,7 @@ import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.chart.title.TextTitle;
+import org.jfree.data.Range;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.HorizontalAlignment;
@@ -71,8 +74,8 @@ public class VoxelsToChart {
     
     public enum LayerReference{
         
-        FROM_ABOVE_GROUND(0, "Height from above ground"),
-        FROM_BELOW_CANOPEE(1, "Height from below canopy");
+        FROM_ABOVE_GROUND(0, "Height above ground"),
+        FROM_BELOW_CANOPEE(1, "Height below canopy");
         
         private final int reference;
         private String label;
@@ -269,6 +272,50 @@ public class VoxelsToChart {
             ((XYPlot) charts[i].getPlot()).getRangeAxis().setInverted(inverseRangeAxis);
         }
         
+        
+        //set quadrats ranges
+        
+        double minX = 0;
+        double maxX = 0;
+        double minY = 0;
+        double maxY = 0;
+        
+        int id = 0;
+        for(JFreeChart chart : charts){
+            
+            XYPlot plot = (XYPlot) chart.getPlot();
+            Range rangeOfRangeAxis = plot.getDataRange(plot.getRangeAxis());
+            Range rangeOfDomainAxis = plot.getDataRange(plot.getDomainAxis());
+            
+            double currentMinY = rangeOfRangeAxis.getLowerBound();
+            double currentMaxY = rangeOfRangeAxis.getUpperBound();
+            double currentMinX = rangeOfDomainAxis.getLowerBound();
+            double currentMaxX = rangeOfDomainAxis.getUpperBound();
+                
+            if(id == 0){
+                minX = currentMinX;
+                maxX = currentMaxX;
+                minY = currentMinY;
+                maxY = currentMaxY;
+            }else{
+            
+                if(currentMinX < minX){minX = currentMinX;}
+                if(currentMaxX > maxX){maxX = currentMaxX;}
+                if(currentMinY < minY){minY = currentMinY;}
+                if(currentMaxY > maxY){maxY = currentMaxY;}
+            }
+            
+            id++;
+        }
+        
+        for(JFreeChart chart : charts){
+            
+            XYPlot plot = (XYPlot) chart.getPlot();
+            
+            plot.getDomainAxis().setRange(minX, maxX);
+            plot.getRangeAxis().setRange(minY, maxY);
+        }
+        
         return charts;
     }
     
@@ -316,6 +363,9 @@ public class VoxelsToChart {
         plot.setDomainCrosshairVisible(true);
         plot.setRangeCrosshairVisible(true);
         plot.getDomainAxis().setLowerMargin(0.0);
+        
+        
+        
         plot.getDomainAxis().setLabelFont(new Font(fontName, Font.BOLD, 14));
         plot.getDomainAxis().setTickLabelFont(new Font(fontName, Font.PLAIN, 12));
         plot.getRangeAxis().setLabelFont(new Font(fontName, Font.BOLD, 14));
@@ -337,6 +387,8 @@ public class VoxelsToChart {
 
             for (int i = 0; i < voxelFiles.length; i++) {
                 renderer.setSeriesShape(i, shape);
+                Paint seriesPaint = renderer.lookupSeriesPaint(i);
+                renderer.setLegendTextPaint(i, seriesPaint);
             }
         }
 
@@ -572,7 +624,7 @@ public class VoxelsToChart {
         
         lai *= resolution;
         
-        serie.setKey(key+'\n'+"LAI = "+(Math.round(lai*10))/10.0);
+        serie.setKey(key+'\n'+"PAI = "+(Math.round(lai*10))/10.0);
         
         return serie;
     }

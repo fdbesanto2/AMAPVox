@@ -1,9 +1,11 @@
+package fr.amap.amapvox.voxcommons;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.amap.amapvox.voxreader;
+
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -112,5 +114,25 @@ public class VoxelSpaceInfos {
 
     public String[] getColumnNames() {
         return columnNames;
+    }
+    
+    @Override
+    public String toString(){
+        
+        String columns = "";
+        for(String column : columnNames){
+            columns += column + " ";
+        }
+        
+        columns = columns.substring(0, columns.length()-1);
+        
+        String result = "VOXEL SPACE\n"+
+                        "#min_corner: "+minCorner.x+" "+minCorner.y+" "+minCorner.z+"\n"+
+                        "#max_corner: "+maxCorner.x+" "+maxCorner.y+" "+maxCorner.z+"\n"+
+                        "#split: "+split.x+" "+split.y+" "+split.z+"\n"+
+                        "#type: "+type+" #res: "+resolution+" #MAX_PAD: "+maxPAD+"\n"+
+                        columns;
+        
+        return result;
     }
 }

@@ -42,8 +42,10 @@ import fr.amap.amapvox.simulation.transmittance.SimulationPeriod;
 import fr.amap.amapvox.simulation.transmittance.VirtualMeasuresCfg;
 import fr.amap.amapvox.simulation.transmittance.TransmittanceSim;
 import fr.amap.amapvox.update.Updater;
+import fr.amap.amapvox.voxelisation.DirectionalTransmittance;
 import fr.amap.amapvox.voxelisation.LeafAngleDistribution;
 import static fr.amap.amapvox.voxelisation.LeafAngleDistribution.Type.TWO_PARAMETER_BETA;
+import static fr.amap.amapvox.voxelisation.LeafAngleDistribution.Type.ELLIPSOIDAL;
 import fr.amap.amapvox.voxelisation.ProcessTool;
 import fr.amap.amapvox.voxelisation.ProcessToolListener;
 import fr.amap.amapvox.voxelisation.configuration.ALSVoxCfg;
@@ -144,6 +146,8 @@ import org.controlsfx.control.RangeSlider;
 import org.controlsfx.dialog.ProgressDialog;
 import org.jdom2.JDOMException;
 import org.jfree.chart.JFreeChart;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -264,6 +268,91 @@ public class MainFrameController implements Initializable {
     private TextField textfieldNbSamplingThresholdMultires;
     @FXML
     private TextField textfieldMaxChartNumberInARow;
+    @FXML
+    private Button buttonDisplayPdf;
+    @FXML
+    private Button buttonDisplayGTheta;
+    @FXML
+    private Label labelLADBeta;
+    @FXML
+    private Label labelLADAlpha;
+
+    @FXML
+    private void onActionButtonDisplayPdf(ActionEvent event) {
+        
+        LeafAngleDistribution distribution = getLeafAngleDistribution();
+        
+        XYSeries serie = new XYSeries(distribution.getType(), false);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double pdf = distribution.getDensityProbability(Math.toRadians(angleInDegrees));
+            
+            serie.add(angleInDegrees, pdf);
+        }
+        
+        XYSeriesCollection dataset = new XYSeriesCollection(serie);
+            
+        ChartViewer viewer = new ChartViewer("PDF function", 500, 500, 1);
+        viewer.insertChart(ChartViewer.createBasicChart("PDF ~ angles", dataset, "Angle (degrees)", "PDF"));
+        viewer.show();
+        
+    }
+    
+    private LeafAngleDistribution getLeafAngleDistribution(){
+        
+        LeafAngleDistribution.Type type = comboboxLADChoice.getSelectionModel().getSelectedItem();
+        
+        double param1 = 0;
+        double param2 = 0;
+        
+        if(type == ELLIPSOIDAL){
+            try{
+                param1 = Double.valueOf(textFieldTwoBetaAlphaParameter.getText());
+            }catch(Exception e){}
+        }
+        
+        if(type == TWO_PARAMETER_BETA){
+        
+            try{
+                param1 = Double.valueOf(textFieldTwoBetaAlphaParameter.getText());
+            }catch(Exception e){}
+            
+            try{
+                param2 = Double.valueOf(textFieldTwoBetaBetaParameter.getText());
+            }catch(Exception e){}
+            
+        }
+        
+        LeafAngleDistribution distribution = new LeafAngleDistribution(type, param1, param2);
+        
+        return distribution;
+    }
+
+    @FXML
+    private void onActionButtonDisplayGTheta(ActionEvent event) {
+        
+        LeafAngleDistribution distribution = getLeafAngleDistribution();
+        
+        XYSeries serie = new XYSeries(distribution.getType(), false);
+        
+        DirectionalTransmittance m = new DirectionalTransmittance(distribution);
+        m.buildTable(180);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            serie.add(angleInDegrees, GTheta);
+        }
+        
+        XYSeriesCollection dataset = new XYSeriesCollection(serie);
+            
+        ChartViewer viewer = new ChartViewer("GTheta", 500, 500, 1);
+        viewer.insertChart(ChartViewer.createBasicChart("GTheta ~ inclinaison angle", dataset, "Angle (degrees)", "GTheta"));
+        viewer.show();
+    }
     
     static class ColorRectCell extends ListCell<VoxelFileChart> {
 
@@ -715,7 +804,19 @@ public class MainFrameController implements Initializable {
 
             @Override
             public void changed(ObservableValue<? extends LeafAngleDistribution.Type> observable, LeafAngleDistribution.Type oldValue, LeafAngleDistribution.Type newValue) {
-                hboxTwoBetaParameters.setVisible(newValue == LeafAngleDistribution.Type.TWO_PARAMETER_BETA);
+                
+                if(newValue == LeafAngleDistribution.Type.TWO_PARAMETER_BETA || newValue == LeafAngleDistribution.Type.ELLIPSOIDAL){
+                    
+                    hboxTwoBetaParameters.setVisible(true);
+                    
+                    if(newValue == LeafAngleDistribution.Type.ELLIPSOIDAL){
+                        labelLADBeta.setVisible(false);
+                    }else{
+                        labelLADBeta.setVisible(true);
+                    }
+                }else{
+                    hboxTwoBetaParameters.setVisible(false);
+                }
             }
         });
         

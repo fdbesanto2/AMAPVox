@@ -441,7 +441,7 @@
                                                                   <ComboBox fx:id="comboboxLADChoice" layoutX="43.0" layoutY="126.0" prefHeight="26.0" prefWidth="170.0" />
                                                                   <HBox fx:id="hboxTwoBetaParameters" layoutX="264.0" layoutY="126.0" spacing="15.0" visible="false">
                                                                      <children>
-                                                                        <Label text="α">
+                                                                        <Label fx:id="labelLADAlpha" text="α">
                                                                            <font>
                                                                               <Font size="15.0" />
                                                                            </font>
@@ -449,7 +449,7 @@
                                                                               <TextField fx:id="textFieldTwoBetaAlphaParameter" prefHeight="26.0" prefWidth="60.0" />
                                                                            </graphic>
                                                                         </Label>
-                                                                        <Label text="β">
+                                                                        <Label fx:id="labelLADBeta" text="β">
                                                                            <font>
                                                                               <Font size="15.0" />
                                                                            </font>
@@ -459,6 +459,8 @@
                                                                         </Label>
                                                                      </children>
                                                                   </HBox>
+                                                                  <Button fx:id="buttonDisplayPdf" layoutX="43.0" layoutY="177.0" mnemonicParsing="false" onAction="#onActionButtonDisplayPdf" text="Display PDF" />
+                                                                  <Button fx:id="buttonDisplayGTheta" layoutX="43.0" layoutY="215.0" mnemonicParsing="false" onAction="#onActionButtonDisplayGTheta" text="Display GTheta" />
                                                                </children>
                                                             </AnchorPane>
                                                          </content>

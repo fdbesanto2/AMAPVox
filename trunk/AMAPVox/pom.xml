@@ -22,8 +22,10 @@
         <module>JeebLight</module>
         <module>Commons</module>
         <module>Chart</module>
+        <module>VoxCommons</module>
         <module>VoxReader</module>
-        <module>VoxTool</module>
+        <module>VoxWriter</module>
+        
     </modules>
     
     <distributionManagement>        

@@ -97,7 +97,9 @@ public class LeafAngleDistribution {
     
     
     private Type type;
-    private BetaDistribution distribution;
+    private BetaDistribution distribution; //needed for two-beta type
+    private double x; //needed for ellipsoidal type
+    
 
     public LeafAngleDistribution(Type type, double... params) {
 
@@ -110,7 +112,11 @@ public class LeafAngleDistribution {
                 if (params.length > 1) {
                     setupBetaDistribution(params[0], params[1]);
                 }
-
+                
+            case ELLIPSOIDAL:
+                if (params.length > 0) {
+                    x = params[0];
+                }
                 break;
         }
 
@@ -143,6 +149,8 @@ public class LeafAngleDistribution {
             angle = tmp-0.000001;
         }
         
+        //angle = Math.PI/2.0 - angle; ??inversion des coefficients
+        
         switch(type){
             
             case PLANOPHILE:
@@ -170,9 +178,32 @@ public class LeafAngleDistribution {
             case ELLIPTICAL:
                 break;
             case ELLIPSOIDAL:
-                break;
+                
+                double res;
+                
+                if(x == 1){
+                    res = Math.sin(angle);
+		} else {
+		
+                    double eps, lambda = 0;
+                    
+                    if(x < 1){
+                        eps = Math.sqrt(1-(x*x));
+                        lambda = x + (Math.asin(eps) / eps);
+                    }
+                    if(x > 1){
+                        eps = Math.sqrt(1 - Math.pow(x, -2));
+                        lambda = x + Math.log((1+eps)/(1+eps))/(2*eps*x);
+                    }                    
+                    
+                    res = (2 * Math.pow(x, 3) * Math.sin(angle)) / (lambda * Math.pow((Math.pow(Math.cos(angle), 2)) + (x * x * Math.pow(Math.sin(angle), 2)), 2));
+                }
+                
+    		return res;
+                
             case TWO_PARAMETER_BETA:
                 
+                //angle = Math.PI/2.0 - angle;
                 double te = angle / (Math.PI / 2.0);
                 density = distribution.density(te);
         

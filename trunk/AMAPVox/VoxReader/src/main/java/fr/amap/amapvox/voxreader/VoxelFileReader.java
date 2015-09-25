@@ -5,6 +5,9 @@
  */
 package fr.amap.amapvox.voxreader;
 
+import fr.amap.amapvox.voxcommons.Voxel;
+import fr.amap.amapvox.voxcommons.VoxelSpace;
+import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,7 +29,7 @@ public class VoxelFileReader implements Iterable<Voxel>{
     private final File voxelFile;
     private BufferedReader reader;
     private String currentLine = null;
-    public final VoxelSpace voxelSpace;
+    private final VoxelSpace voxelSpace;
     private final boolean keepInMemory;
     private int currentVoxelIndex;
     private boolean wasRead;
@@ -179,5 +182,9 @@ public class VoxelFileReader implements Iterable<Voxel>{
 
     public VoxelSpaceInfos getVoxelSpaceInfos() {
         return voxelSpace.voxelSpaceInfos;
+    }
+
+    public VoxelSpace getVoxelSpace() {
+        return voxelSpace;
     }
 }

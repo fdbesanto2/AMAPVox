@@ -113,7 +113,7 @@ public class DirectionalTransmittance {
         
         nbIntervals = serie_angulaire.length-1;
         
-        //calcul ddu tableau de densités ou probabilités
+        //calcul du tableau de densités ou probabilités
         pdfArray = new double[serie_angulaire.length];
         for(int i = 0 ; i < pdfArray.length ; i++){
             
@@ -209,7 +209,7 @@ public class DirectionalTransmittance {
                 for (int j = 0; j < nbIntervals - 1; j++) {
 
                     double thetaL = (serie_angulaire[j] + serie_angulaire[j + 1]) / 2.0d;
-                    double Fi = (pdfArray[nbIntervals - 1 - j]) / SOM;
+                    double Fi = (pdfArray[j]) / SOM;
 
                     double cotcot = Math.abs(1 / (Math.tan(theta) * Math.tan(thetaL)));
 
@@ -235,16 +235,16 @@ public class DirectionalTransmittance {
     public static void main(String[] args) {
      
         //LeafAngleDistribution distribution = new LeafAngleDistribution(TWO_PARAMETER_BETA, Math.toRadians(60), 0.03);
-        LeafAngleDistribution distribution = new LeafAngleDistribution(TWO_PARAMETER_BETA, Math.toRadians(60), 0.03);
+        LeafAngleDistribution distribution = new LeafAngleDistribution(TWO_PARAMETER_BETA, 60, 0.03);
         DirectionalTransmittance m = new DirectionalTransmittance(distribution);
-        m.buildTable(100);
+        m.buildTable(181);
         
         //DirectionalTransmittance m = new DirectionalTransmittance(distribution);
         
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/home/calcul/DART/user_data/database/LADFile.txt")));
             writer.write("Thetaf g_sinThetaf\n");
-            for(int i=0;i<m.pdfArray.length;i++){
+            for(int i=0;i<181;i++){
                 writer.write((Math.round(Math.toDegrees(m.serie_angulaire[i])*1000)/1000.0)+" "+m.pdfArray[i]+"\n");
             }
             writer.close();

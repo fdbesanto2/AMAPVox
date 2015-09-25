@@ -786,7 +786,10 @@ public class ProcessTool implements Cancellable{
         logger.info("Compute transmittance and PAD");
         
         //LeafAngleDistribution distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.PLANOPHILE);
-        LeafAngleDistribution distribution = new LeafAngleDistribution(cfg.getVoxelParameters().getLadType());
+        LeafAngleDistribution distribution = new LeafAngleDistribution(cfg.getVoxelParameters().getLadType(), 
+                cfg.getVoxelParameters().getLadBetaFunctionAlphaParameter(),
+                cfg.getVoxelParameters().getLadBetaFunctionBetaParameter());
+        
         DirectionalTransmittance direcTransmittance = new DirectionalTransmittance(distribution);
         
         logger.info("Building transmittance functions table");
@@ -843,6 +846,286 @@ public class ProcessTool implements Cancellable{
             }
 
             resultingFile[i][padBVTotalColumnIndex] = pad1 + 0.0f;
+        }
+        
+        logger.info("writing output file: " + cfg.getOutputFile().getAbsolutePath());
+        long start_time = System.currentTimeMillis();
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(cfg.getOutputFile()))) {
+
+            writer.write("VOXEL SPACE" + "\n");
+            writer.write("#min_corner: " + (float) voxelSpaceHeader.bottomCorner.x + " " + (float) voxelSpaceHeader.bottomCorner.y + " " + (float) voxelSpaceHeader.bottomCorner.z + "\n");
+            writer.write("#max_corner: " + (float) voxelSpaceHeader.topCorner.x + " " + (float) voxelSpaceHeader.topCorner.y + " " + (float) voxelSpaceHeader.topCorner.z + "\n");
+            writer.write("#split: " + voxelSpaceHeader.split.x + " " + voxelSpaceHeader.split.y + " " + voxelSpaceHeader.split.z + "\n");
+
+            writer.write("#type: TLS" + " #res: "+voxelSpaceHeader.res+" "+"#MAX_PAD: "+cfg.getVoxelParameters().getMaxPAD()+"\n");
+
+            String header = "";
+            
+            for (String columnName : voxelSpaceHeader.attributsNames) {
+                header += columnName + " ";
+            }
+            header = header.trim();
+            writer.write(header + "\n");
+
+            for (int i = 0; i < size; i++) {
+
+                StringBuilder voxel = new StringBuilder();
+                
+                for (int j = 0;j<columnNumber;j++){
+                    
+                    if (j < 3) {
+                        voxel.append((int)resultingFile[i][j]);
+                    }else{
+                        voxel.append(resultingFile[i][j]);
+                    }
+                    
+                    if(j < columnNumber-1){
+                        voxel.append(" ");
+                    }
+                }
+
+                writer.write(voxel.toString() + "\n");
+
+            }
+            
+            logger.info("file written ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
+
+        } catch (IOException ex) {
+            logger.error(ex);
+        }
+        
+        
+
+        fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
+    }
+    
+    //cette méthode sert uniquement à fusionner plusieurs fichiers TLS sans recalculer le PAD mais en faisant la moyenne du PAD
+    public void mergeVoxelFilesV2(VoxMergingCfg cfg) {
+                
+        cancelled = false;
+        
+        startTime = System.currentTimeMillis();
+        Mode[] toMerge;
+        int size;
+        VoxelSpaceHeader voxelSpaceHeader;
+
+        float[][] nbSamplingMultiplyAngleMean;
+        float[][] resultingFile;
+        float[][] padMean;
+        
+        
+        int columnNumber;
+        
+        int padBVTotalColumnIndex = -1;
+        int angleMeanColumnIndex = -1;
+        int bvEnteringColumnIndex = -1;
+        int bvInterceptedColumnIndex = -1;
+        int lMeanTotalColumnIndex = -1;
+        int lgTotalColumnIndex = -1;
+        int nbEchosColumnIndex = -1;
+        int nbSamplingColumnIndex = -1;
+        int transmittanceColumnIndex = -1;
+        
+        if(cfg.getFiles().size() > 0){
+            
+            voxelSpaceHeader = VoxelSpaceHeader.readVoxelFileHeader(cfg.getFiles().get(0));
+            size = voxelSpaceHeader.split.x * voxelSpaceHeader.split.y * voxelSpaceHeader.split.z;
+            columnNumber = voxelSpaceHeader.attributsNames.size();
+            resultingFile = new float[size][columnNumber];
+            toMerge = new Mode[columnNumber];
+            
+            for(int i=0;i<toMerge.length;i++){
+                
+                String columnName = voxelSpaceHeader.attributsNames.get(i);
+                                
+                switch(columnName){
+                    case "i":
+                    case "j":
+                    case "k":
+                        toMerge[i] = Mode.DISCARD;
+                        break;
+                    case "ground_distance":
+                        toMerge[i] = Mode.DISCARD;
+                        break;
+                    //discard but recalculate after
+                    case "PadBVTotal":
+                        padBVTotalColumnIndex = i;
+                        toMerge[i] = Mode.SUM;
+                        break;
+                    case "angleMean":
+                        angleMeanColumnIndex = i;
+                        toMerge[i] = Mode.DISCARD;
+                        break;
+                    case "lMeanTotal":
+                        lMeanTotalColumnIndex = i;
+                        toMerge[i] = Mode.DISCARD;
+                        break;
+                    case "transmittance":
+                        transmittanceColumnIndex = i;
+                        toMerge[i] = Mode.DISCARD;
+                        break;
+
+                    case "nbSampling":
+                        nbSamplingColumnIndex = i;
+                        toMerge[i] = Mode.SUM;
+                        break;
+                    case "nbEchos":
+                        nbEchosColumnIndex = i;
+                        toMerge[i] = Mode.SUM;
+                        break;
+                    case "lgTotal":
+                        lgTotalColumnIndex = i;
+                        toMerge[i] = Mode.SUM;
+                        break;
+                    case "bvEntering":
+                        bvEnteringColumnIndex = i;
+                        toMerge[i] = Mode.SUM;
+                        break;
+                    case "bvIntercepted":
+                        bvInterceptedColumnIndex = i;
+                        toMerge[i] = Mode.SUM;
+                        break;
+
+                    default:
+                        toMerge[i] = Mode.DISCARD;
+                }
+            }
+            
+            nbSamplingMultiplyAngleMean = new float[cfg.getFiles().size()][size];
+            padMean = new float[cfg.getFiles().size()][size];
+            
+            
+        }else{
+            logger.info("No file to merge");
+            return;
+        }
+        
+        int count = 0;
+
+        for (int i = 0; i < cfg.getFiles().size(); i++) {
+
+            if (cancelled) {
+                return;
+            }
+
+            String msg = "Merging in progress, file " + (i + 1) + " : " + cfg.getFiles().size();
+            logger.info(msg);
+            fireProgress(msg, i);
+            
+            try (BufferedReader reader = new BufferedReader(new FileReader(cfg.getFiles().get(i)))){
+                
+                
+                count = 0;
+                FileManager.skipLines(reader, 6);
+                
+                String currentFileLine;
+                while((currentFileLine = reader.readLine()) != null){
+                    
+                    String[] lineSplittedFile = currentFileLine.split(" ");
+                    
+                    if(lineSplittedFile.length != columnNumber){
+                        logger.error("Columns number doesn't match!");
+                        return;
+                    }
+                    
+                    float[] voxelLine = new float[columnNumber];
+                    float nbSampling = 0;
+                    float angleMean = 0;
+                    float pad = 0;
+                    
+                    for(int j=0;j<lineSplittedFile.length;j++){
+                        
+                        float currentValue = Float.valueOf(lineSplittedFile[j]);
+                        float resultValue;
+                        
+                        if(i == 0){
+                            resultValue = currentValue;
+                        }else{
+                            resultValue = resultingFile[count][j];
+                            switch(toMerge[j]){
+                                case SUM:
+                                    if(Float.isNaN(resultValue)){
+                                        resultValue = Float.valueOf(lineSplittedFile[j]);
+                                    }else if(!Float.isNaN(currentValue)){
+                                        resultValue += currentValue;
+                                    }
+                                    break;
+                                default:
+                                    resultValue = currentValue;
+                            }
+                        } 
+                        
+                        if(j == nbSamplingColumnIndex){
+                            nbSampling =  Float.valueOf(lineSplittedFile[j]);
+                        }else if(j == angleMeanColumnIndex){
+                            angleMean =  Float.valueOf(lineSplittedFile[j]);
+                        }else if(j == padBVTotalColumnIndex){
+                            pad =  Float.valueOf(lineSplittedFile[j]);
+                        }
+                        
+                        voxelLine[j] = resultValue;
+                    }
+                    
+                    resultingFile[count] = voxelLine;
+                    nbSamplingMultiplyAngleMean[i][count] = nbSampling * angleMean;
+                    padMean[i][count] = pad;
+                    
+                    count++;
+                    
+                }
+                
+            } catch (FileNotFoundException ex) {
+                logger.error(ex);
+            } catch (IOException ex) {
+                logger.error(ex);
+            }
+        }
+
+        logger.info("Compute angleMean");
+        if(nbSamplingColumnIndex != -1 && angleMeanColumnIndex !=-1){
+            
+            for (int i = 0; i < size; i++) {
+                
+                float sum = 0;
+                
+                for (int j = 0; j < cfg.getFiles().size(); j++) {
+                    if (!Float.isNaN(nbSamplingMultiplyAngleMean[j][i])) {
+                        sum += nbSamplingMultiplyAngleMean[j][i];
+                    } 
+                }
+
+                resultingFile[i][angleMeanColumnIndex] = sum/(resultingFile[i][nbSamplingColumnIndex]);
+            }
+
+                
+            
+        }else{
+            logger.error("nbSampling or angleMean columns are missing, cannot re-compute angleMean");
+        }
+        
+        logger.info("Compute lMeanTotal");
+        for (int i = 0; i < size; i++) {
+            
+            resultingFile[i][lMeanTotalColumnIndex] = resultingFile[i][lgTotalColumnIndex] / resultingFile[i][nbSamplingColumnIndex];
+        }
+        
+        logger.info("Compute transmittance and PAD");
+        
+        
+        for (int i = 0; i < size; i++) {
+                
+            float sum = 0;
+            int count2 = 0;
+
+            for (int j = 0; j < cfg.getFiles().size(); j++) {
+                if (!Float.isNaN(padMean[j][i])) {
+                    sum += padMean[j][i];
+                    count2++;
+                } 
+            }
+
+            resultingFile[i][padBVTotalColumnIndex] = sum/count2;
         }
         
         logger.info("writing output file: " + cfg.getOutputFile().getAbsolutePath());
