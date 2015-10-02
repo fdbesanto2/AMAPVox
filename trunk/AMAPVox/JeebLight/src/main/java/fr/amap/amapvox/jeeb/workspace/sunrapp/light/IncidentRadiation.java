@@ -22,7 +22,7 @@ public class IncidentRadiation implements DirectionList {
 
 	/**
 	 * Constructor
-     * @param size
+         * @param size size
 	 */
 	public IncidentRadiation (int size) {
 		this.size = size;
@@ -31,6 +31,7 @@ public class IncidentRadiation implements DirectionList {
 		directions = new Vector3f[size];
 	}
 
+        @Override
 	public int getSize () {
 		return size;
 	}
@@ -59,9 +60,6 @@ public class IncidentRadiation implements DirectionList {
 		this.diffuse = diffuse;
 	}
 
-	/**
-	 * Correspond to light sources intensity
-	 */
 	public float[] getDirectionalGlobals () {
 		return directionalGlobals;
 	}
@@ -74,9 +72,6 @@ public class IncidentRadiation implements DirectionList {
 		return directionalDiffuse;
 	}
 
-	/**
-	 * Correspond to light sources direction
-	 */
 	public Vector3f[] getDirections () {
 		return directions;
 	}

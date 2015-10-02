@@ -9,7 +9,8 @@ import fr.amap.amapvox.commons.util.ByteConverter;
 
 
 /**
- *
+ * Represents the structure of a las point, with the following basics informations:<br>
+ * x, y, z, echo range, echo number, recorded time (gps), intensity, classification
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class LasPoint implements Comparable<LasPoint>{
@@ -58,20 +59,6 @@ public class LasPoint implements Comparable<LasPoint>{
      */
     public int classification;
     
-    /**
-     *
-     * @param x
-     * @param y
-     * @param z
-     * @param returnNumber
-     * @param numberOfReturns
-     * @param classification
-     * @param intensity
-     * @param gpsTime
-     */
-    
-    
-    
     public LasPoint(int x, int y, int z, byte returnNumber, byte numberOfReturns, int intensity, byte classification, double gpsTime){
 
         this.x = x;
@@ -99,12 +86,16 @@ public class LasPoint implements Comparable<LasPoint>{
         this.t = t;
     }    
 
+    /**
+     * Compare gps time values
+     * @param point point to compare
+     */
     @Override
-    public int compareTo(LasPoint o) {
+    public int compareTo(LasPoint point) {
         
-        if(o.t > this.t){
+        if(point.t > this.t){
             return -1;
-        }else if(o.t < this.t){
+        }else if(point.t < this.t){
             return 1;
         }else{
             return 0;

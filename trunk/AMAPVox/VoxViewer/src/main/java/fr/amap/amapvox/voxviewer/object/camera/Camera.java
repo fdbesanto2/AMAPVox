@@ -23,10 +23,10 @@ public abstract class Camera {
     protected float farPersp;
     protected float nearOrtho = 1;
     protected float farOrtho = 1000;
-    protected float left;
-    protected float right;
-    protected float bottom;
-    protected float top;
+    protected float left = Float.NaN;
+    protected float right = Float.NaN;
+    protected float bottom = Float.NaN;
+    protected float top = Float.NaN;
     protected Vec3F location;
     protected Vec3F target;
     protected Vec3F up;

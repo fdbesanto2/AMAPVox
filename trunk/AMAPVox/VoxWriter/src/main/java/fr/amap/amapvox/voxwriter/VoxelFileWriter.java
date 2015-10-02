@@ -11,6 +11,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Iterator;
 
 /**
  *
@@ -23,7 +24,8 @@ public class VoxelFileWriter {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
             writer.write(voxelspace.toString()+"\n");
             
-            for(Voxel voxel : voxelspace.voxels){
+            for (Iterator it = voxelspace.voxels.iterator(); it.hasNext();) {
+                Voxel voxel = (Voxel) it.next();
                 writer.write(voxel+"\n");
             }
         }

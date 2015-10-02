@@ -18,6 +18,12 @@ public class TrackballCamera extends Camera{
     private Vec3F forwardVec;
     private Vec3F rightVec;
     private Vec3F upVec;
+    
+    private float viewportWidth;
+    private float viewportHeight;
+    
+    private float width;
+    private float height;
 
     public float getAngleX() {
         return angleX;
@@ -291,12 +297,17 @@ public class TrackballCamera extends Camera{
                 //setPerspective(70.0f, (1.0f*640)/480, near-translation.z, far-translation.z);
             }else{
                 
-                if((left < -20.0f && right > 20.0f) || translation.z < 0){
-                    left = left+translation.z*2;
-                    right = right-translation.z*2;
-                    bottom = bottom+translation.z*1.5f;
-                    top = top-translation.z*1.5f;
+                if((left < -5.0f && right > 5.0f) || translation.z < 0){
+                    
+                    float widthCoeff = viewportWidth/1000.0f;
+                    float heightCoeff = viewportHeight/1000.0f;
+                    
+                    left = left+translation.z*(widthCoeff);
+                    right = right-translation.z*(widthCoeff);
+                    bottom = bottom+translation.z*(heightCoeff);
+                    top = top-translation.z*(heightCoeff);
                 }
+                
                 
                 updateProjMatrix();
             }
@@ -473,7 +484,29 @@ public class TrackballCamera extends Camera{
     public Vec3F getLocation() {
         return location;
     }
-    
-    
+
+    public void setViewportWidth(float viewportWidth) {
+        this.viewportWidth = viewportWidth;
+    }
+
+    public void setViewportHeight(float viewportHeight) {
+        this.viewportHeight = viewportHeight;
+    }    
+
+    public float getWidth() {
+        return width;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
     
 }

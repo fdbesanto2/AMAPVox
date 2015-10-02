@@ -14,6 +14,7 @@ import fr.amap.amapvox.jraster.asc.DTMPoint;
 import fr.amap.amapvox.jraster.asc.DtmLoader;
 import fr.amap.amapvox.jraster.asc.Face;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
+import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelObject;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpace;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceData;
@@ -21,6 +22,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -151,21 +153,15 @@ public class DartWriter {
         }
     }
     
-    public void writeFromVoxelFile(File voxelFile, File outputFile) throws IOException, Exception{
+    /*public void writeFromVoxelFile(File voxelFile, File outputFile) throws IOException, Exception{
         
-        VoxelSpace voxelSpace = new VoxelSpace();
-        voxelSpace.loadFromFile(voxelFile);
-        writeFromVoxelSpace(voxelSpace.data, outputFile);
-    }
-    
-    public void writeFromVoxelSpace(VoxelSpaceData data, File outputFile) throws Exception{
+        VoxelFileReader reader = new VoxelFileReader(voxelFile);
+        VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
         
         Dart dart = new Dart(
-                new Point3I(data.header.split.x,data.header.split.y,data.header.split.z),
-                new Point3F(data.header.res, data.header.res, data.header.res),
-                data.header.split.x*data.header.split.y);
-        
-        List<String> attributsNames = data.header.attributsNames;
+                new Point3I(infos.getSplit().x, infos.getSplit().y, infos.getSplit().z),
+                new Point3F(infos.getResolution(), infos.getResolution(), infos.getResolution()),
+                infos.getSplit().x*infos.getSplit().y);
         
         RegularDtm dtm = null;
         
@@ -179,16 +175,17 @@ public class DartWriter {
                 dtm = DtmLoader.readFromAscFile(dtmFile);
                 dtm.setTransformationMatrix(transfMatrix);
                 
-                dtm.setLimits(new BoundingBox2F(new Point2F((float)data.header.bottomCorner.x, (float)data.header.bottomCorner.y), 
-                                                new Point2F((float)data.header.topCorner.x, (float)data.header.topCorner.y)), 10);
+                dtm.setLimits(new BoundingBox2F(new Point2F((float)infos.getMinCorner().x, (float)infos.getMinCorner().y), 
+                                                new Point2F((float)infos.getMaxCorner().x, (float)infos.getMaxCorner().y)), 10);
                 
                 //logger.info("Building DTM");
                 dtm.buildMesh();
                 //dtm.exportObj(new File("/home/calcul/Documents/Julien/test.obj"));
                 
-                faces = new HashSet[data.header.split.x][data.header.split.y][data.header.split.z];
+                faces = new HashSet[infos.getSplit().x][infos.getSplit().y][infos.getSplit().z];
                 List<DTMPoint> points = dtm.getPoints();
                 
+                //VoxelSpaceData data = new VoxelSpaceData();
                 for(DTMPoint point : points){
                     
                     Point3I voxelIndice = data.getIndicesFromPoint(point.x, point.y-1, point.z);
@@ -208,18 +205,15 @@ public class DartWriter {
             }
         }
         
-        for (VoxelObject voxel : data.voxels) {
+        Iterator<Voxel> iterator = reader.iterator();
+        
+        while(iterator.hasNext()){
             
-            float[] attributs = voxel.attributs;
+            Voxel voxel = iterator.next();
             
-            float densite;
-            try{
-                densite = attributs[attributsNames.indexOf("PadBVTotal")];
-            }catch(Exception e){ 
-                throw new Exception("could not find attribut PadBflTotal or PadBVTotal", e);
-            }
+            float densite = voxel.PadBVTotal;
             
-            densite *= data.header.res;
+            densite *= infos.getResolution();
             
             int indiceX = voxel.$i;
             int indiceY = voxel.$j;
@@ -262,20 +256,187 @@ public class DartWriter {
                 }
                 
             }
-            /*
-            if(densite == 0){
-                //dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(0);
-                densite = 0.001f;
-            }*/
-            
-            //densite = ((int)(densite*1000))/1000.0f;
-            
-            //test
-            //dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_TURBID_CROWN);
-            //densite = 0.5f;
             
             dart.cells[indiceX][indiceY][indiceZ].setTurbids(new Turbid[]{new Turbid(densite, 0)});
             
+            if(faces != null){
+                
+                if(faces[indiceX][indiceY][indiceZ] != null){
+                    
+                    int[] figureIndices = new int[faces[indiceX][indiceY][indiceZ].size()];
+                
+                    Iterator<Integer> facesIterator = faces[indiceX][indiceY][indiceZ].iterator();
+                    int count = 0;
+                    while (facesIterator.hasNext()) {
+                        Integer next = facesIterator.next();
+                        figureIndices[count] = next;
+                        count++;
+                    }
+
+                    dart.cells[indiceX][indiceY][indiceZ].setFigureIndex(figureIndices);
+                }
+            }
+        }
+        
+        if(generateTrianglesFile && dtmFile != null){
+            
+            //logger.info("Writing triangles file");
+            
+            if(dtm != null){
+                
+                List<Face> faceList = dtm.getFaces();
+                List<DTMPoint> pointList = dtm.getPoints();
+                
+                int shapeType = 0; //triangle = 0 and parallelogram = 1
+                int scattererType = 0;
+                int scattererPropertyIndex = 0;
+                int temperaturePropertyIndex = 0;
+                int simpleOrDoubleFace = 0;
+                int typeOfSurface = 2; //ground
+                
+                try(BufferedWriter writer = new BufferedWriter(new FileWriter(trianglesFile))) {
+                    
+                    for(Face face : faceList){
+                                                
+                        DTMPoint point1 = pointList.get(face.getPoint3());
+                        DTMPoint point2 = pointList.get(face.getPoint2());
+                        DTMPoint point3 = pointList.get(face.getPoint1());
+                        
+                        writer.write(shapeType+" "+(float)(point1.x-infos.getMinCorner().x)+" "+(float)(point1.y-infos.getMinCorner().y)+" "+(float)(point1.z-infos.getMinCorner().z)+" "+
+                                                    (float)(point2.x-infos.getMinCorner().x)+" "+(float)(point2.y-infos.getMinCorner().y)+" "+(float)(point2.z-infos.getMinCorner().z)+" "+
+                                                    (float)(point3.x-infos.getMinCorner().x)+" "+(float)(point3.y-infos.getMinCorner().y)+" "+(float)(point3.z-infos.getMinCorner().z)+" "+
+                                                    scattererType+" "+
+                                                    scattererPropertyIndex+" "+
+                                                    temperaturePropertyIndex+" "+
+                                                    simpleOrDoubleFace+" "+
+                                                    scattererType+" "+
+                                                    scattererPropertyIndex+" "+
+                                                    temperaturePropertyIndex+" "+
+                                                    typeOfSurface+"\n");
+                    }
+                    
+                } catch (IOException ex) {
+                    throw new IOException("Cannot write triangles file : "+trianglesFile.getAbsolutePath(), ex);
+                }
+                
+            }
+        }
+        
+        //logger.info("Writing dart file "+outputFile.getAbsolutePath());
+        writeFromDart(dart, outputFile);
+        
+        
+    }*/
+    
+    public void writeFromVoxelFile(File voxelFile, File outputFile) throws IOException, Exception{
+        
+        VoxelSpace voxelSpace = new VoxelSpace();
+        voxelSpace.loadFromFile(voxelFile);
+        writeFromVoxelSpace(voxelSpace.data, outputFile);
+    }
+    
+    public void writeFromVoxelSpace(VoxelSpaceData data, File outputFile) throws Exception{
+        
+        VoxelSpaceInfos infos = data.getVoxelSpaceInfos();
+        
+        Dart dart = new Dart(
+                new Point3I(infos.getSplit().x, infos.getSplit().y, infos.getSplit().z),
+                new Point3F(infos.getResolution(), infos.getResolution(), infos.getResolution()),
+                infos.getSplit().x * infos.getSplit().y);
+        
+        List<String> attributsNames = new ArrayList<>();
+        
+        for(String s : infos.getColumnNames()){
+            attributsNames.add(s);
+        }
+        
+        RegularDtm dtm = null;
+        
+        Set<Integer>[][][] faces = null;
+        
+        if(generateTrianglesFile && dtmFile != null){
+            
+            try {
+                //logger.info("Reading DTM : "+dtmFile.getAbsolutePath());
+                
+                dtm = DtmLoader.readFromAscFile(dtmFile);
+                dtm.setTransformationMatrix(transfMatrix);
+                
+                dtm.setLimits(new BoundingBox2F(new Point2F((float)infos.getMinCorner().x, (float)infos.getMinCorner().y), 
+                                                new Point2F((float)infos.getMaxCorner().x, (float)infos.getMaxCorner().y)), 10);
+                
+                //logger.info("Building DTM");
+                dtm.buildMesh();
+                //dtm.exportObj(new File("/home/calcul/Documents/Julien/test.obj"));
+                
+                faces = new HashSet[infos.getSplit().x][infos.getSplit().y][infos.getSplit().z];
+                List<DTMPoint> points = dtm.getPoints();
+                
+                for(DTMPoint point : points){
+                    
+                    Point3I voxelIndice = data.getIndicesFromPoint(point.x, point.y-1, point.z);
+                    if(voxelIndice != null){
+                        
+                        if(faces[voxelIndice.x][voxelIndice.y][voxelIndice.z] == null){
+                            faces[voxelIndice.x][voxelIndice.y][voxelIndice.z] = new HashSet<>();
+                        }
+                        
+                        faces[voxelIndice.x][voxelIndice.y][voxelIndice.z].addAll(point.faces);
+                    }
+                }
+                
+            } catch (Exception ex) {
+                dtm = null;
+                throw new Exception("Cannot read dtm file "+dtmFile.getAbsolutePath(), ex);
+            }
+        }
+        
+        for (Iterator it = data.voxels.iterator(); it.hasNext();) {
+            
+            VoxelObject voxel = (VoxelObject) it.next();
+            float[] attributs = voxel.attributs;
+            float densite;
+            try{
+                densite = attributs[attributsNames.indexOf("PadBVTotal")];
+            }catch(Exception e){ 
+                throw new Exception("could not find attribut PadBflTotal or PadBVTotal", e);
+            }
+            densite *= infos.getResolution();
+            int indiceX = voxel.$i;
+            int indiceY = voxel.$j;
+            int indiceZ = voxel.$k;
+            dart.cells[indiceX][indiceY][indiceZ] = new DartCell();
+            int nbFigures = 0;
+            if(faces != null){
+                
+                if(faces[indiceX][indiceY][indiceZ] == null){
+                    nbFigures = 0;
+                }else{
+                    nbFigures = faces[indiceX][indiceY][indiceZ].size();
+                }
+            }
+            dart.cells[indiceX][indiceY][indiceZ].setNbFigures(nbFigures);
+            dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(1);
+            if(Float.isNaN(densite) || densite == 0){
+                
+                if(nbFigures == 0){
+                    dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_EMPTY);
+                }else{
+                    dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_OPAQUE_GROUND);
+                    dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(0);
+                }
+                
+                densite = 0f;
+            }else{
+                if(nbFigures > 0){
+                    dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_OPAQUE_GROUND);
+                    dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(0);
+                }else{
+                    dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_TURBID_CROWN);
+                }
+                
+            }
+            dart.cells[indiceX][indiceY][indiceZ].setTurbids(new Turbid[]{new Turbid(densite, 0)});
             if(faces != null){
                 
                 if(faces[indiceX][indiceY][indiceZ] != null){
@@ -319,9 +480,9 @@ public class DartWriter {
                         DTMPoint point2 = pointList.get(face.getPoint2());
                         DTMPoint point3 = pointList.get(face.getPoint1());
                         
-                        writer.write(shapeType+" "+(float)(point1.x-data.header.bottomCorner.x)+" "+(float)(point1.y-data.header.bottomCorner.y)+" "+(float)(point1.z-data.header.bottomCorner.z)+" "+
-                                                    (float)(point2.x-data.header.bottomCorner.x)+" "+(float)(point2.y-data.header.bottomCorner.y)+" "+(float)(point2.z-data.header.bottomCorner.z)+" "+
-                                                    (float)(point3.x-data.header.bottomCorner.x)+" "+(float)(point3.y-data.header.bottomCorner.y)+" "+(float)(point3.z-data.header.bottomCorner.z)+" "+
+                        writer.write(shapeType+" "+(float)(point1.x-infos.getMinCorner().x)+" "+(float)(point1.y-infos.getMinCorner().y)+" "+(float)(point1.z-infos.getMinCorner().z)+" "+
+                                                    (float)(point2.x-infos.getMinCorner().x)+" "+(float)(point2.y-infos.getMinCorner().y)+" "+(float)(point2.z-infos.getMinCorner().z)+" "+
+                                                    (float)(point3.x-infos.getMinCorner().x)+" "+(float)(point3.y-infos.getMinCorner().y)+" "+(float)(point3.z-infos.getMinCorner().z)+" "+
                                                     scattererType+" "+
                                                     scattererPropertyIndex+" "+
                                                     temperaturePropertyIndex+" "+

@@ -46,7 +46,7 @@ public class TriangulatedMesh extends Shape{
 	 * Constructor with points array, paths and culling option
 	 * @param points	points array
 	 * @param paths		paths
-	 * @param culling	culling opt. When sets to true, the intersection happens only when face_normal[dot]ray >0
+	 * @param culling	culling opt. When sets to true, the intersection happens only when face_normal[dot]ray greater than 0
 	 */
 	public TriangulatedMesh(Point3d[] points, int[][] paths, boolean culling) {
 		this.points		= points;
@@ -149,91 +149,96 @@ public class TriangulatedMesh extends Shape{
 			Link: http://www.graphics.cornell.edu/pubs/1997/MT97.html
 		****************************************************************************************************/
 		
-		// default length
-		double length = Float.MAX_VALUE;
-		
-		// find triangle vertex
-		Point3d point0 = points[paths[tri][0]];
-		Point3d point1 = points[paths[tri][1]];
-		Point3d point2 = points[paths[tri][2]];
-		
-		// find vectors for two edges sharing vertex0
-		Vector3d edge1 = new Vector3d(	point1.x-point0.x,
-										point1.y-point0.y,
-										point1.z-point0.z);
-		Vector3d edge2 = new Vector3d(	point2.x-point0.x,
-										point2.y-point0.y,
-										point2.z-point0.z);
+		          // default length
+            double length = Float.MAX_VALUE;
 
-		// begin computing determinant - also used to calculate u
-		Vector3d pvec  = new Vector3d();
-		pvec.cross(direction, edge2);
+            // find triangle vertex
+            Point3d point0 = points[paths[tri][0]];
+            Point3d point1 = points[paths[tri][1]];
+            Point3d point2 = points[paths[tri][2]];
 
-		// if determinant is zero, ray lies in plane of triangle
-		double det = edge1.dot (pvec);
-		if (cullingDesired == true) { // if culling is desired
-			if (det<0)
-				return new IntersectionContext(false,length);
+            // find vectors for two edges sharing vertex0
+            Vector3d edge1 = new Vector3d(point1.x - point0.x,
+                    point1.y - point0.y,
+                    point1.z - point0.z);
+            Vector3d edge2 = new Vector3d(point2.x - point0.x,
+                    point2.y - point0.y,
+                    point2.z - point0.z);
 
-			// calculate distance from vert0 to ray origin
-			Vector3d tvec = new Vector3d();
-			tvec.sub (origin, point0);
+            // begin computing determinant - also used to calculate u
+            Vector3d pvec = new Vector3d();
+            pvec.cross(direction, edge2);
 
-			// calculate u and test bounds
-			double u = tvec.dot (pvec);
-			if (u<0 | u>det)
-				return new IntersectionContext(false,length);
+            // if determinant is zero, ray lies in plane of triangle
+            double det = edge1.dot(pvec);
+            if (cullingDesired == true) { // if culling is desired
+                if (det < 0) {
+                    return new IntersectionContext(false, length);
+                }
 
-			// prepare to test v
-			Vector3d qvec = new Vector3d();
-			qvec.cross (tvec, edge1);
+                // calculate distance from vert0 to ray origin
+                Vector3d tvec = new Vector3d();
+                tvec.sub(origin, point0);
 
-			// computing v and test bounds
-			double v = qvec.dot (direction);
-			if (v<0 | u+v>det)
-				return new IntersectionContext(false,length);
+                // calculate u and test bounds
+                double u = tvec.dot(pvec);
+                if (u < 0 | u > det) {
+                    return new IntersectionContext(false, length);
+                }
 
-			// calculate length, ray intersects triangle
-			length  = edge2.dot (qvec);
-			length /= det;
-		}
-		else { // the non-culling branch
-			if (det==0)
-				return new IntersectionContext(false,length);
+                // prepare to test v
+                Vector3d qvec = new Vector3d();
+                qvec.cross(tvec, edge1);
 
-			// invert of determinant
-			double inv_det = 1.0f/det;
+                // computing v and test bounds
+                double v = qvec.dot(direction);
+                if (v < 0 | u + v > det) {
+                    return new IntersectionContext(false, length);
+                }
 
-			// calculate distance from vert0 to ray origin
-			Vector3d tvec = new Vector3d();
-			tvec.sub (origin, point0);
+                // calculate length, ray intersects triangle
+                length = edge2.dot(qvec);
+                length /= det;
+            } else { // the non-culling branch
+                if (det == 0) {
+                    return new IntersectionContext(false, length);
+                }
 
-			// calculate u and test bounds
-			double u = tvec.dot (pvec);
-			u *= inv_det;
-			if (u<0.0f | u>1.0f)
-				return new IntersectionContext(false,length);
+                // invert of determinant
+                double inv_det = 1.0 / det;
 
-			// prepare to test v
-			Vector3d qvec = new Vector3d();
-			qvec.cross (tvec, edge1);
+                // calculate distance from vert0 to ray origin
+                Vector3d tvec = new Vector3d();
+                tvec.sub(origin, point0);
 
-			// calculate v and test bounds
-			double v = qvec.dot (direction);
-			v *= inv_det;
-			if (v<0.0f | u+v>1.0f)
-				return new IntersectionContext(false,length);
+                // calculate u and test bounds
+                double u = tvec.dot(pvec);
+                u *= inv_det;
+                if (u < 0.0 | u > 1.0) {
+                    return new IntersectionContext(false, length);
+                }
 
-			// calculate length, ray intersects triangle
-			length = edge2.dot (qvec);
-			length *= inv_det;
-		}
-		if (allowNegativeLengths==true)
-			return new IntersectionContext(true,length);
-		else
-			if (length>0.0f)
-				return new IntersectionContext(true,length);
-		return new IntersectionContext(false,length);
+                // prepare to test v
+                Vector3d qvec = new Vector3d();
+                qvec.cross(tvec, edge1);
+
+                // calculate v and test bounds
+                double v = qvec.dot(direction);
+                v *= inv_det;
+                if (v < 0.0 | u + v > 1.0) {
+                    return new IntersectionContext(false, length);
+                }
+
+                // calculate length, ray intersects triangle
+                length = edge2.dot(qvec);
+                length *= inv_det;
+            }
+            if (allowNegativeLengths == true) {
+                return new IntersectionContext(true, length);
+            } else if (length > 0.0) {
+                return new IntersectionContext(true, length);
+            }
+            return new IntersectionContext(false, length);
 		
 	}
 	

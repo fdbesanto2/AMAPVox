@@ -11,8 +11,6 @@ import java.lang.reflect.Field;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.vecmath.Point3d;
 
 /**

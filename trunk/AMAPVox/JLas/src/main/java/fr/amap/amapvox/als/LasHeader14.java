@@ -17,7 +17,7 @@ package fr.amap.amapvox.als;
 import java.math.BigInteger;
 
 /**
- *
+ * Represents the structure of a las file header version 1.4
  * @author calcul
  */
 

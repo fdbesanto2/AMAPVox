@@ -17,7 +17,9 @@ import java.util.logging.Logger;
 
 
 /**
- *
+ * <p>This class is an utility to open and read rxp Riegl proprietary format</p>
+ * <p>The idea of this reader is to get an iterator on those files and getting shot + echos (with reflectance)</p>
+ * <p>This class call a native JNI library using Riegl RivLib library.</p>
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class RxpExtraction implements Iterable<Shot>{
@@ -48,6 +50,15 @@ public class RxpExtraction implements Iterable<Shot>{
         
     }
     
+    /**
+     * Open a rxp file and instantiate a pointer
+     * @param file Rxp file to read
+     * @param shotType <p>Type of shot, can be RxpExtraction.SIMPLE_SHOT or RxpExtraction.SHOT_WITH_REFLECTANCE</p>
+     * <p>One having simple informations and the other having reflectance value for each echo</p>
+     * @return -1 if an exception has occured, 0 if everything if fine and other value for unknown exception
+     * @throws IOException if path of the file is invalid
+     * @throws Exception if an unknown exception occured when trying to open the file 
+     */
     public int openRxpFile(File file, int shotType) throws IOException, Exception{
                 
         rxpPointer = instantiate();
@@ -79,6 +90,9 @@ public class RxpExtraction implements Iterable<Shot>{
         
     }
     
+    /**
+     * Close rxp file and delete pointer
+     */
     public void close(){
         closeConnexion(rxpPointer);
         delete(rxpPointer);
@@ -87,16 +101,29 @@ public class RxpExtraction implements Iterable<Shot>{
     @Override
     public Iterator<Shot> iterator() {
         
+        
+        
         Iterator<Shot> it = new Iterator<Shot>() {
+            
+            Shot shot;
             
             @Override
             public boolean hasNext() {
-                return hasShot(rxpPointer);
+                
+                if(hasShot(rxpPointer)){
+                    
+                    shot = getNextShot(rxpPointer);
+                    return shot != null;
+                    
+                }else{
+                    return false;
+                }
             }
 
             @Override
             public Shot next() {
-                return getNextShot(rxpPointer);
+                
+                return shot;
             }
         };
         

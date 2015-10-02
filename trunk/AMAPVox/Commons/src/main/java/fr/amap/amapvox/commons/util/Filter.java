@@ -156,7 +156,6 @@ public class Filter implements Serializable{
     /**
      *
      * @param filterString string to be convert to Filter object <br>
-     * It is represented for example like this: myVariable > 3
      * @return
      */
     public static Filter getFilterFromString(String filterString){

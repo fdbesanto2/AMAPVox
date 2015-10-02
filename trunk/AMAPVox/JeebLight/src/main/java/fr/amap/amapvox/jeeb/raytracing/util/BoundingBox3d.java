@@ -8,7 +8,7 @@ import javax.vecmath.Vector3d;
 /**
  * Class to create a bounding box
  * 
- *@author GRIFFON Sebastien & STEFAS Mickael
+ * @author GRIFFON Sebastien and STEFAS Mickael
  */
 public class BoundingBox3d implements Serializable {
 	public Point3d min;
@@ -156,9 +156,9 @@ public class BoundingBox3d implements Serializable {
 	/**
 	 * method used to translate a bounding box
 	 * 
-	 * @param x
-	 * @param y
-	 * @param z
+	 * @param x x
+	 * @param y y
+	 * @param z z
 	 */
 	public void translateBB(float x, float y, float z) {
 		getMax().add(new Vector3d(x, y, z));

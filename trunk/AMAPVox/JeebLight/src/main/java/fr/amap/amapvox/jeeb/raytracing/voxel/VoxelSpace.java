@@ -58,10 +58,7 @@ public class VoxelSpace {
 			case VoxelManagerSettings.TORIC_INFINITE_BOX_TOPOLOGY	: toric = true ; finite = false; break;
 		}
 	}
-	/**
-	 * Calculates the splitting of the voxel space in order to get more or less cubic voxels.
-	 * Note that the final number of voxels is close but generally different from the input number
-	 */
+        
 	public void setDefaultSpliting (int numberOfVoxels) {
 
 		double volumeVoxel = (boundingBoxSize.x*boundingBoxSize.y*boundingBoxSize.z) / numberOfVoxels;
@@ -76,7 +73,7 @@ public class VoxelSpace {
 	
 	/**
 	 * Return scene indices of a given point
-	 * @param point
+	 * @param point 3d point
 	 * @return scene indices
 	 */
 	public Point3i getSceneIndices (Point3d point) {
@@ -90,7 +87,7 @@ public class VoxelSpace {
 	}
 	
 	/**
-     * @param point
+         * @param point 3d point
 	 * @return the x, y and z indices of the voxel including the point under the Point3i format
 	 * or null if the point is outside the voxel space except if the voxel space is toric.
 	 * In such case the returned index is modulo the number of splitting along each coordinate 
@@ -133,6 +130,7 @@ public class VoxelSpace {
 		indices.x = (int) Math.floor ((double) (pt.x % splitting.x)); if (indices.x<0) indices.x += splitting.x;
 		indices.y = (int) Math.floor ((double) (pt.y % splitting.y)); if (indices.y<0) indices.y += splitting.y;
 		indices.z = (int) Math.min (pt.z, splitting.z-1);
+                
 		return indices;
 
 	}
@@ -233,11 +231,20 @@ public class VoxelSpace {
 		return voxelSize;
 	}
 	
-	/**
-	 * Get the topology
-	 * @return
-	 */
 	public int getTopology() {
 		return topology;
 	}
+        
+        public static void main(String[] args) {
+            
+            VoxelSpace voxelSpace = new VoxelSpace(
+                    new BoundingBox3d(new Point3d(-20, -20, -20), new Point3d(0, 0, 0)), 
+                    new Point3i(20, 20, 20), VoxelManagerSettings.NON_TORIC_FINITE_BOX_TOPOLOGY);
+            
+            Point3i indice1 = voxelSpace.getVoxelIndices(new Point3d(0, 0, 0));
+            //Point3i indice2 = voxelSpace.getVoxelIndices(new Point3d(20, 20, 19));
+            
+            System.out.println("test");
+            
+        }
 }

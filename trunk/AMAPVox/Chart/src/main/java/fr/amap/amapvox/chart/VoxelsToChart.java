@@ -16,12 +16,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
+import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
@@ -39,6 +37,8 @@ import org.jfree.ui.HorizontalAlignment;
  * @author calcul
  */
 public class VoxelsToChart {
+    
+    private final static Logger logger = Logger.getLogger(VoxelsToChart.class);
     
     private class QuadratInfo{
         
@@ -98,7 +98,11 @@ public class VoxelsToChart {
         this.voxelFiles = voxelFiles;
         
         for(VoxelFileChart voxelFileChart : this.voxelFiles){
-            voxelFileChart.reader = new VoxelFileReader(voxelFileChart.file, true);
+            try {
+                voxelFileChart.reader = new VoxelFileReader(voxelFileChart.file, true);
+            } catch (Exception ex) {
+                logger.error(ex);
+            }
         }
     }
     
@@ -460,7 +464,7 @@ public class VoxelsToChart {
             try {
                 value = voxel.getFieldValue(Voxel.class, attributName, voxel);
             } catch (SecurityException | NoSuchFieldException | IllegalAccessException ex) {
-                Logger.getLogger(VoxelsToChart.class.getName()).log(Level.SEVERE, null, ex);
+                logger.error(ex);
                 return null;
             }
             

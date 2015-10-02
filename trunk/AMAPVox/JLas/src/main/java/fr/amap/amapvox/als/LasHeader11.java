@@ -15,30 +15,21 @@ For further information, please contact Gregoire Vincent.
 package fr.amap.amapvox.als;
 
 /**
- *
+ * Represents the structure of a las file header version 1.1
  * @author calcul
  */
 
 public class LasHeader11 extends LasHeader {
 
-    private int globalEncoding;
     private int fileSourceId;
-
-    public int getGlobalEncoding() {
-        return globalEncoding;
-    }
-
-    public void setGlobalEncoding(int globalEncoding) {
-        this.globalEncoding = globalEncoding;
-    }
 
     /**
      * 
-     * @return This field is a value between 1 and 65,535, inclusive. A value of zero (0) is interpreted to 
-    mean that an ID has not been assigned. In this case, processing software is free to assign any valid number.<br/>
-    Note that this scheme allows a LIDAR project to contain up to 65,535 unique 
+     * @return <p>This field is a value between 1 and 65,535, inclusive. A value of zero (0) is interpreted to 
+    mean that an ID has not been assigned. In this case, processing software is free to assign any valid number.</p>
+    <p>Note that this scheme allows a LIDAR project to contain up to 65,535 unique 
     sources. A source can be considered an original flight line or it can be the result of merge and/or 
-    extract operations. 
+    extract operations. </p>
      */
     @Override
     public int getFileSourceId() {
@@ -55,10 +46,6 @@ public class LasHeader11 extends LasHeader {
         return super.getFileCreationDayOfYear();
     }
 
-    /**
-     * 
-     * @param fileSourceId
-     */
     public void setFileSourceId(int fileSourceId) {
         this.fileSourceId = fileSourceId;
     }

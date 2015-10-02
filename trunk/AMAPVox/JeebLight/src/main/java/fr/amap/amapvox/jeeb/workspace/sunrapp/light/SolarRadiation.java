@@ -14,7 +14,7 @@ public class SolarRadiation {
 	 * for periods of one hour or shorter (from de Jong 1980, cited by Spitters
 	 * et al., 1986)
 	 * 
-	 * @param global
+	 * @param ir
 	 *            in Wm-2
 	 * @param clearness
 	 *            index: global / extra-terrestrial radiation;
@@ -64,6 +64,7 @@ public class SolarRadiation {
 	 * for periods of one day or more (from de Jong 1980, cited by Spitters et
 	 * al., 1986)
 	 * 
+         * @param ir ir
 	 * @param clearness
 	 *            index: daily global:daily extra-terrestrial radiation
 	 */
@@ -84,9 +85,9 @@ public class SolarRadiation {
 	/**
 	 * Computes directional global fluxes in turtle sectors
 	 * 
-     * @param ir
-	 * @param sun
-     * @param turtle
+         * @param ir ir
+         * @param sun sun
+         * @param turtle turtle
 	 */
 	static public void globalInTurtle(IncidentRadiation ir, Sun sun, Turtle turtle) {
             
@@ -124,17 +125,6 @@ public class SolarRadiation {
             }
 	}
 
-	/**
-	 * Creates an IncidentRadiation object based on a turtle with n directions.
-	 * Radiation is integrated over the period time1 to time2.
-	 * 
-     * @param t
-     * @param latitudeRadian
-     * @param clearness in [0,1]
-     * @param time1
-     * @param time2
-     * @return 
-	 */
 	static public IncidentRadiation globalTurtleIntegrate(Turtle t, float latitudeRadian, float clearness, Time time1, Time time2) {
 
 		IncidentRadiation ir = new IncidentRadiation(t.directions.length);
@@ -186,8 +176,8 @@ public class SolarRadiation {
 	 * (diffuse/global) to diffuseGlobalHourlyClear (the ratio is between R, for
 	 * clear sky, and 1, for overcast sky (SOC)
 	 * 
-	 * @param sunElevation
-	 *            (radians)
+         * @param diffuseGlobalRatio diffuse global ratio
+	 * @param sunElevation (radians)
 	 * @return ratio (diffuse SOC : diffuse total)
 	 */
 	public static float socInDiffuseHourly(float diffuseGlobalRatio,
@@ -213,6 +203,7 @@ public class SolarRadiation {
 	 * (diffuse/global) to diffuseGlobalDailyClear ((diffuse/global) is 0.23 for
 	 * clear sky and 1 for overcast sky (SOC)
 	 * 
+         * @param ir ir
 	 * @return ratio (diffuse SOC : diffuse total)
 	 */
 	public static float socInDiffuseDaily(IncidentRadiation ir) {
@@ -226,8 +217,7 @@ public class SolarRadiation {
 	 * R is the the ratio (diffuse:global) under clear sky conditions (from de
 	 * Jong 1980, cited by Spitters et al., 1986)
 	 * 
-	 * @param sunElevation
-	 *            (radians)
+	 * @param sunElevation (radians)
 	 * @return R= diffuse / global
 	 */
 	private static float diffuseInGlobalHourlyClear(float sunElevation) {
@@ -246,8 +236,8 @@ public class SolarRadiation {
 	/**
 	 * Daily incident solar radiation above the atmosphere
 	 * 
-	 * @param doy
-	 *            : Day of Year
+         * @param latitude latitude
+	 * @param doy Day of Year
 	 * @return incident flux in MJ m-2
 	 */
 	public static float extraTerrestrialDaily(float latitude, int doy) {
@@ -280,12 +270,10 @@ public class SolarRadiation {
 	 * Hourly (or shorter time laps) incident solar radiation above the
 	 * atmosphere
 	 * 
-	 * @param latitude
-	 *            (degrees)
-	 * @param doy
-	 *            : Day of Year
-	 * @param time1
-	 *            , time2: begin && end of period in decimal hour
+	 * @param latitudeRadian (degrees)
+	 * @param doy Day of Year
+	 * @param time1 begin of period in decimal hour
+	 * @param time2 : end of period in decimal hour
 	 * @return incident flux in MJ m-2
 	 */
 	public static float extraTerrestrialHourly(float latitudeRadian, int doy,
@@ -325,9 +313,6 @@ public class SolarRadiation {
 		return (float) extra_rad;
 	}
 
-	/**
-	 * Add ir2 components to ir1
-	 */
 	static public void globalCumulateMJ(IncidentRadiation ir1,
 			IncidentRadiation ir2, float durationHd) {
 		// transform Watt s-1 m-2 to MJ m-2 (note: Watt= Joule s-1)
@@ -368,9 +353,9 @@ public class SolarRadiation {
 	 * This method computes irradiances of 46 directions of diffuse light. The
 	 * direct irradiance is stored in 47 directions of turtle
 	 * 
-	 * @param ir
-	 * @param sun
-	 * @param turtle
+	 * @param ir ir
+	 * @param sun sun
+	 * @param turtle turtle
 	 */
 	static public void diffuseDirectInTurtle(IncidentRadiation ir, Sun sun,
 			Turtle turtle) {
@@ -416,14 +401,6 @@ public class SolarRadiation {
 		return k;
 	}
 
-	/**
-	 * @deprecated Skartveit A. and Olseth J.A. 1986 This model tended to
-	 *             overestimate the diffuse fraction in under cloudnless sky
-	 * @param kt
-	 * @param sunA
-	 * @param sunB
-	 * @param sunC
-	 */
 	private static float skartveitOlsethModel(float kt, Sun sunA, Sun sunB,
 			Sun sunC) {
 		double kd = 0;
@@ -456,21 +433,6 @@ public class SolarRadiation {
 
 	}
 
-	/**
-	 * <i>An Hourly Diffuse Fraction Model With Correction for Variability and
-	 * Surface Albedo</i></br> Skartveit A. and Olseth J.A. and Tuft
-	 * M.E.</br></br> This model tended to overestimate the diffuse fraction in
-	 * under cloudnless sky </br> </br>
-	 * 
-	 * It's composed of four cases. </br> 1 - No significant beam irradiance
-	 * </br> 2 - Brocken clouds</br> 3 - Cloudless skies</br> 4 - Cloudless
-	 * skies</br>
-	 * 
-	 * @param kt
-	 * @param sunA
-	 * @param sunB
-	 * @param sunC
-	 */
 	public static float skartveitAndOlseth1998(float kt, Sun sunB) {
 		// double frac = ();
 		// double sigma3 = Math.sqrt(frac );
@@ -538,26 +500,7 @@ public class SolarRadiation {
 		return result;
 	}
 
-	/**
-	 * <i>Diffuse fraction correlations</i></br> Reindl D.T., Beckman W.A. and
-	 * Duffie J.A. 1990 </br></br> Based on Liu and Jordan</br> It's composed of
-	 * three cases. </br> 1 - cloudy sky (low clearness index) Constraint kd <=
-	 * 1.0 (to verify) </br> 2 - partly cloudy sky</br> 3 - clear sky weather
-	 * (high clearness index) Constraint kd >= 0.1 (to verify)</br>
-	 * 
-	 * 
-	 * 
-	 * @param kt
-	 *            the portion of horizontal extraterrestrial radiation (= I/(I0
-	 *            cos (Zenith)) clearness index
-	 * @param zenith
-	 *            in radian
-	 * @param phi
-	 *            relative humidity (fraction)
-	 * @param tA
-	 *            ambient temperature
-	 * @return kd the diffuse fraction (the portion of diffuse radiation)
-	 */
+
 	static public float reindlMethod(float kt, float zenith, float phi, float tA) {
 		double kd = 0;
 		if (kt <= 0.3) {
@@ -576,22 +519,6 @@ public class SolarRadiation {
 		return (float) kd;
 	}
 
-	/**
-	 * <i>Diffuse fraction correlations</i></br> Reindl D.T., Beckman W.A. and
-	 * Duffie J.A. 1990 </br></br> Based on Liu and Jordan</br> It's composed of
-	 * three cases. </br> 1 - cloudy sky (low clearness index) Constraint kd <=
-	 * 1.0 (to verify) </br> 2 - partly cloudy sky</br> 3 - clear sky weather
-	 * (high clearness index) Constraint kd >= 0.1 (to verify)</br>
-	 * 
-	 * 
-	 * 
-	 * @param kt
-	 *            the portion of horizontal extraterrestrial radiation (= I/(I0
-	 *            cos (Zenith)) clearness index
-	 * @param zenith
-	 *            in radian
-	 * @return kd the diffuse fraction (the portion of diffuse radiation)
-	 */
 	static public float reindlMethod(float kt, float zenith) {
 		double kd = 0;
 		if (kt <= 0.3) {
@@ -606,23 +533,6 @@ public class SolarRadiation {
 		return (float) kd;
 	}
 
-	/**
-	 * <i> Application of the Radiosity Approach to the radiation balance in
-	 * Complex terrain - Phd</i></br> Helbig</br></br> Based on Reindl D.T.,
-	 * Beckman W.A. and Duffie J.A. 1990</br> It's composed of three cases.
-	 * </br> 1 - cloudy sky (low clearness index) Constraint kd <= 1.0 (to
-	 * verify) </br> 2 - partly cloudy sky</br> 3 - clear sky weather (high
-	 * clearness index) Constraint kd >= 0.1 (to verify)</br>
-	 * 
-	 * 
-	 * 
-	 * @param kt
-	 *            the portion of horizontal extraterrestrial radiation (= I/(I0
-	 *            cos (Zenith)) clearness index
-	 * @param zenith
-	 *            in radian
-	 * @return kd the diffuse fraction (the portion of diffuse radiation)
-	 */
 	static public float helbigMethod(float kt, float zenith) {
 		double kd = 0;
 		if (kt <= 0.3) {
@@ -637,20 +547,6 @@ public class SolarRadiation {
 		return (float) kd;
 	}
 
-	/**
-	 * <i>Diffuse fraction correlations</i></br> Reindl D.T., Beckman W.A. and
-	 * Duffie J.A. 1990 </br></br> Based on Liu and Jordan</br> It's composed of
-	 * three cases. </br> 1 - cloudy sky (low clearness index) Constraint kd <=
-	 * 1.0 (to verify) </br> 2 - partly cloudy sky</br> 3 - clear sky weather
-	 * (high clearness index) Constraint kd >= 0.1 (to verify)</br>
-	 * 
-	 * 
-	 * 
-	 * @param kt
-	 *            the portion of horizontal extraterrestrial radiation (= I/(I0
-	 *            cos (Zenith)) clearness index
-	 * @return kd the diffuse fraction (the portion of diffuse radiation)
-	 */
 	static public float reindlMethod(float kt) {
 		double kd = 0;
 		if (kt <= 0.3) {
@@ -668,13 +564,7 @@ public class SolarRadiation {
 		return (float) kd;
 	}
         
-	/**
-	 * Boland J, Ridley BH, Brown BM. Model of diffuse solar diation Simplified
-	 * model
-	 * 
-	 * @param kt
-	 * @return
-	 */
+
 	static public float bolandRidleyLauret(float kt) {
 		double result = 0;
 		result = 1 + Math.exp(-5.0033 + 8.6025 * kt);
@@ -682,19 +572,6 @@ public class SolarRadiation {
 		return (float) result;
 	}
 
-	/**
-	 * <i> A Quasi-Physical Model for Converting Hourly Global Horizontal to Direct Normal Insolation</i></br>
-	 * Maxwell Eugene L.</br>
-	 * 
-	 * Exponential Model
-	 * @param kt
-	 * @param sun
-	 * @return direct beam from extraterrestrial radiation. </br> In = Kn * I0
-	 *         </br> where In (direct normal irradiance), I0(Extraterrestrial
-	 *         radiation)</br> To get the diffuse fraction just compute kt = 1 -
-	 *         I0 * Kn/I
-	 * 
-	 */
 	static public float maxwellMethod(float kt, Sun sun) {
 		double a, b, c;
 		if (kt <= 0.6) {

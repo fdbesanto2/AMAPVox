@@ -31,11 +31,6 @@ public class Time {
 		this.hourDecimal = decimalHour (hour, minutes);
 	}
 
-	/**
-	 * Constructor from a String: "year/doy/hd".
-	 * fc-21.5.2012, for convenience.
-	 * @param codedString: 2 ints and a float separated by 3 '/' like in constructor 1.
-	 */
 	public Time (String codedString) throws Exception {
 		String[] tokens = codedString.split ("/");
                 

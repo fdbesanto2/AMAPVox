@@ -87,6 +87,8 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
                         lasReader.open(alsFile);
                     } catch (IOException ex) {
                         Logger.getLogger(PointsToShot.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (Exception ex) {
+                        Logger.getLogger(PointsToShot.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     header = lasReader.getHeader();
 

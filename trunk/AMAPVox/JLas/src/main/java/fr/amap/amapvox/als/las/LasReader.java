@@ -9,7 +9,6 @@ import fr.amap.amapvox.als.LasHeader;
 import fr.amap.amapvox.als.LasHeader11;
 import fr.amap.amapvox.als.LasHeader12;
 import fr.amap.amapvox.als.LasHeader13;
-import fr.amap.amapvox.als.LasHeader14;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -24,7 +23,13 @@ import java.util.Iterator;
 import org.apache.commons.lang3.ArrayUtils;
 
 /**
- *
+ * This class is devoted to read a LASer (*.las) file.
+ * It allows to get the header in a simple basic format (V1.0) and get an iterator on the points of the file.<br>
+ * It uses a native library compiled for 64 bits systems, Linux and Windows.<br><br>
+ * 
+ * @see <a href="http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html">ASPRS Specification</a><br>
+ * 
+ * 
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class LasReader implements Iterable<PointDataRecordFormat> {
@@ -608,7 +613,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
         return header;
     }
 
-    public LasHeader readHeader(File file) throws IOException {
+    public LasHeader readHeader(File file) throws IOException, UnsupportedOperationException {
 
         try (DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(file)))) {
 
@@ -622,6 +627,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
             dis.reset();
 
             LasHeader header = null;
+            String errorMsg = "";
 
             if (vM == 1) {
                 switch (vm) {
@@ -642,10 +648,15 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
                         header = readHeader13(dis, (LasHeader13) header);
                         break;
                     case 4:
-                        header = new LasHeader14();
+                        //header = new LasHeader14();
+                        errorMsg = "1.4 format not supported yet";
+                        //throw new Exception("1.4 format not supported yet");
                         //header = readHeader14(dis, (LasHeader14)header);
-                        break;
                 }
+            }
+            
+            if(header == null){
+                throw new UnsupportedOperationException(errorMsg);
             }
 
             return header;
@@ -711,9 +722,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
         return variableLengthRecords;
     }
     
-    
-    
-    public void open(File file) throws IOException{
+    public void open(File file) throws IOException, Exception{
         
         LasReader reader = new LasReader();
         this.file = file;
@@ -723,7 +732,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
     
 
     @Override
-    public Iterator<PointDataRecordFormat> iterator() {
+    public Iterator<PointDataRecordFormat> iterator(){
 
         final DataInputStream dis;
         final int offset = header.getPointDataRecordLength();
@@ -747,7 +756,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
             }
 
             @Override
-            public PointDataRecordFormat next() {
+            public PointDataRecordFormat next(){
 
                 PointDataRecordFormat pdr = null;
 
@@ -893,18 +902,12 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
                     }
                 
                 } catch (IOException ex) {
-                    
                 }
                 
                 count++;
                 
                 return pdr;
             }
-
-                @Override
-                public void remove() {
-                    
-                }
         };
         
         } catch (FileNotFoundException ex) {
@@ -1108,8 +1111,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
 
     }
     
-
-    public static Las read(File file) throws IOException {
+    public static Las read(File file) throws IOException, Exception {
 
         LasReader reader = new LasReader();
         LasHeader header = reader.readHeader(file);

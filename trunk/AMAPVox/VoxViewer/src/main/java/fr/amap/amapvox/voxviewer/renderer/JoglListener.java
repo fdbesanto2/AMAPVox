@@ -17,6 +17,7 @@ import fr.amap.amapvox.commons.math.point.Point3F;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
 import fr.amap.amapvox.commons.util.BoundingBox3F;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
+import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
 import fr.amap.amapvox.voxviewer.event.BasicEvent;
 import fr.amap.amapvox.voxviewer.loading.shader.AxisShader;
 import fr.amap.amapvox.voxviewer.loading.shader.InstanceLightedShader;
@@ -60,6 +61,9 @@ public class JoglListener implements GLEventListener {
     
     public int width;
     public int height;
+    
+    public int viewportWidth;
+    public int viewportHeight;
     
     public int startX = 0;
     public int startY = 0;
@@ -161,7 +165,7 @@ public class JoglListener implements GLEventListener {
         
         camera = new TrackballCamera();
         camera.init(eye, target, up);
-        camera.initOrtho(-((this.width-startX)/100), (this.width-startX)/100, this.height/100, -(this.height)/100, camera.getNearOrtho(), camera.getFarOrtho());
+        //camera.initOrtho(-((this.width-startX)/100), (this.width-startX)/100, this.height/100, -(this.height)/100, camera.getNearOrtho(), camera.getFarOrtho());
         
         try {
             initScene(gl);
@@ -227,7 +231,11 @@ public class JoglListener implements GLEventListener {
         this.height = height;
         
         GL3 gl=drawable.getGL().getGL3();
-        gl.glViewport(startX, startY, this.width-startX, this.height);        
+        
+        viewportWidth = this.width-startX;
+        viewportHeight = this.height;
+        
+        gl.glViewport(startX, startY, viewportWidth, viewportHeight);        
         
         scene.setWidth(width-startX);
         scene.setHeight(height);
@@ -244,7 +252,15 @@ public class JoglListener implements GLEventListener {
         if(camera.isPerspective()){
             camera.setPerspective(60.0f, (1.0f*this.width-startX)/height, camera.getNearPersp(), camera.getFarPersp());
         }else{
-            camera.initOrtho(-((this.width-startX)/100), (this.width-startX)/100, this.height/100, -(this.height)/100, camera.getNearOrtho(), camera.getFarOrtho());
+            //camera.initOrtho(0, width, height, 0, camera.getNearOrtho(), camera.getFarOrtho());
+        
+            camera.setViewportWidth(viewportWidth);
+            camera.setViewportHeight(viewportHeight);
+            
+            //camera.initOrtho(-camera.getWidth()*0.5f, camera.getWidth()*0.5f, camera.getHeight()*0.5f, -camera.getHeight()*0.5f, camera.getNearOrtho(), camera.getFarOrtho());
+            camera.initOrtho(-((viewportWidth)/100), (viewportWidth)/100, viewportHeight/100, -(viewportHeight)/100, camera.getNearOrtho(), camera.getFarOrtho());
+
+            
             camera.setOrthographic(camera.getNearOrtho(), camera.getFarOrtho());
         }
         
@@ -373,6 +389,7 @@ public class JoglListener implements GLEventListener {
         
         if(projectionMatrixChanged || isInit){
             
+            
             FloatBuffer projMatrixBuffer = Buffers.newDirectFloatBuffer(camera.getProjectionMatrix().mat);
 
             for(Entry<Integer, Shader> shader : scene.getShadersList().entrySet()) {
@@ -385,6 +402,8 @@ public class JoglListener implements GLEventListener {
             }
             
             projectionMatrixChanged = false;
+            
+            
         }
         
         isInit = false;
@@ -432,13 +451,15 @@ public class JoglListener implements GLEventListener {
                 scene.addObject(dtmSceneObject, gl);
             }
             
+            VoxelSpaceInfos infos = voxelSpace.data.getVoxelSpaceInfos();
+            
             //bounding-box
-            GLMesh boundingBoxMesh = GLMeshFactory.createBoundingBox((float)voxelSpace.data.header.bottomCorner.x, 
-                                                                    (float)voxelSpace.data.header.bottomCorner.y,
-                                                                    (float)voxelSpace.data.header.bottomCorner.z,
-                                                                    (float)voxelSpace.data.header.topCorner.x, 
-                                                                    (float)voxelSpace.data.header.topCorner.y,
-                                                                    (float)voxelSpace.data.header.topCorner.z);
+            GLMesh boundingBoxMesh = GLMeshFactory.createBoundingBox((float)infos.getMinCorner().x, 
+                                                                    (float)infos.getMinCorner().y,
+                                                                    (float)infos.getMinCorner().z,
+                                                                    (float)infos.getMaxCorner().x, 
+                                                                    (float)infos.getMaxCorner().y,
+                                                                    (float)infos.getMaxCorner().z);
                                                                     
             SceneObject boundingBox = new SimpleSceneObject2(boundingBoxMesh, simpleShader.getProgramId(), false);
             
@@ -449,7 +470,9 @@ public class JoglListener implements GLEventListener {
                                             new InputStreamReader(SceneManager.class.getClassLoader().getResourceAsStream("mesh/axis2.mtl")));
             
             //GLMesh axisMesh = GLMeshFactory.createMeshFromX3D(new InputStreamReader(JoglListener.class.getClassLoader().getResourceAsStream("mesh/axis2.x3d")));
-            axisMesh.setGlobalScale(2.0f);
+            
+            float volume = (int) (infos.getSplit().z * infos.getResolution());
+            axisMesh.setGlobalScale(0.03f*volume);
             
             SceneObject axis = new SimpleSceneObject(axisMesh, lightedShader.getProgramId(), false);
             axis.depthTest = false;
@@ -462,9 +485,9 @@ public class JoglListener implements GLEventListener {
                                             0, 0, 0, 1,
                                             };
             //axis.rotate(rotationMatrix);
-            axis.translate(new Vec3F((float)voxelSpace.data.header.bottomCorner.x, 
-                                     (float)voxelSpace.data.header.bottomCorner.y,
-                                     (float)voxelSpace.data.header.bottomCorner.z));
+            axis.translate(new Vec3F((float)voxelSpace.data.getVoxelSpaceInfos().getMinCorner().x, 
+                                     (float)voxelSpace.data.getVoxelSpaceInfos().getMinCorner().y,
+                                     (float)voxelSpace.data.getVoxelSpaceInfos().getMinCorner().z));
             
             axis.setDrawType(GL3.GL_TRIANGLES);
             scene.addObject(axis, gl);
@@ -562,8 +585,8 @@ public class JoglListener implements GLEventListener {
         if(!isCuttingInit){
             
             loc = camera.getLocation();
-            Point3d bottomCorner = scene.getVoxelSpace().data.header.bottomCorner;
-            Point3d topCorner = scene.getVoxelSpace().data.header.topCorner;
+            Point3d bottomCorner = scene.getVoxelSpace().data.getVoxelSpaceInfos().getMinCorner();
+            Point3d topCorner = scene.getVoxelSpace().data.getVoxelSpaceInfos().getMaxCorner();
             AABB aabb = new AABB(new BoundingBox3F(new Point3F((float)bottomCorner.x,(float)bottomCorner.y,(float)bottomCorner.z),
                                                new Point3F((float)topCorner.x,(float)topCorner.y,(float)topCorner.z)));
             
@@ -725,6 +748,22 @@ public class JoglListener implements GLEventListener {
     
     public void setViewToOrthographic(){
         
+        /*float objectDepth = Vec3F.dot(
+                Vec3F.substract(
+                        new Vec3F(voxelSpace.getCenterX(), voxelSpace.getCenterY(), voxelSpace.getCenterZ()),
+                        camera.getLocation()),
+                camera.getForwardVector());
+
+        float cameraWidth = (2.0f / camera.getProjectionMatrix().mat[0]) * objectDepth;
+        float cameraHeight = (2.0f / camera.getProjectionMatrix().mat[5]) * objectDepth;
+            
+        float ymax = (float) Math.tan(camera.getFovy() * Math.PI / 360.0f);
+        float xmax = ymax * camera.getAspect();
+        cameraWidth = objectDepth * xmax;
+        cameraHeight = objectDepth * ymax;
+        
+        camera.setWidth(width);
+        camera.setHeight(height);*/
         camera.setOrthographic(camera.getLeft(), camera.getRight(), camera.getTop(), camera.getBottom(), camera.getNearOrtho(), camera.getFarOrtho());
         updateCamera();
         drawNextFrame();

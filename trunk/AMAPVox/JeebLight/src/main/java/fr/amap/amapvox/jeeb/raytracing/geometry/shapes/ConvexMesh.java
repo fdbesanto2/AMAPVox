@@ -21,9 +21,7 @@ public class ConvexMesh extends TriangulatedMesh implements VolumicShape{
 	public boolean contains(Point3d point) {
 		for (int i = 0 ; i < paths.length ; i++) {
 			Point3d p = new Point3d(points[paths[i][0]]);
-			Vector3d v = new Vector3d(	point.x - p.x,
-										point.y - p.y,
-										point.z - p.z);
+			Vector3d v = new Vector3d(point.x - p.x, point.y - p.y, point.z - p.z);
 
 			if (normals[i].dot (v) >= 0)
 				return false;

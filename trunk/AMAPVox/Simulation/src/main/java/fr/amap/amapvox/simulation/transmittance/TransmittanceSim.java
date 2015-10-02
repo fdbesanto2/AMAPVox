@@ -17,6 +17,9 @@ import fr.amap.amapvox.simulation.transmittance.lai2xxx.LAI2200;
 import fr.amap.amapvox.simulation.transmittance.lai2xxx.LAI2xxx;
 import static fr.amap.amapvox.simulation.transmittance.lai2xxx.LAI2xxx.ViewCap.CAP_360;
 import fr.amap.amapvox.simulation.transmittance.util.Period;
+import fr.amap.amapvox.voxcommons.Voxel;
+import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
+import fr.amap.amapvox.voxreader.VoxelFileReader;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -37,7 +40,7 @@ import javax.vecmath.Vector3d;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Calendar;
-import java.util.logging.Level;
+import java.util.Iterator;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
 
@@ -51,9 +54,9 @@ public class TransmittanceSim {
     
     private VoxelSpace voxSpace;
     private TLSVoxel voxels[][][];
-    private final Point3d vsMin;
-    private final Point3d vsMax;
-    private final Point3i splitting;
+    private Point3d vsMin;
+    private Point3d vsMax;
+    private Point3i splitting;
     private float res;
     private double[][][] transmissionPeriod;
     private int nbPeriods;
@@ -72,7 +75,7 @@ public class TransmittanceSim {
         float padBV;
     }
     
-    public static void simulationProcess(VirtualMeasuresCfg cfg) throws IOException{
+    public static void simulationProcess(VirtualMeasuresCfg cfg) throws IOException, Exception{
         
         Parameters parameters = cfg.getParameters();
         
@@ -135,7 +138,7 @@ public class TransmittanceSim {
         
     }
     
-    public void process() throws IOException{
+    public void process() throws IOException, Exception{
             
         logger.info("===== " + parameters.getInputFile().getAbsolutePath() + " =====");
 
@@ -317,10 +320,53 @@ public class TransmittanceSim {
         }
     }*/
 
-    private void readData(File inputFile) throws IOException {
+    private void readData(File inputFile) throws IOException, Exception {
 
 
-        try(BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
+        VoxelFileReader reader = new VoxelFileReader(inputFile);
+        VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
+        
+        vsMin = infos.getMinCorner();
+        vsMax = infos.getMaxCorner();
+        splitting = infos.getSplit();
+        res = infos.getResolution();
+        
+        voxSpace = new VoxelSpace(new BoundingBox3d(vsMin, vsMax), splitting, 0);
+        
+        logger.info(infos.toString()+"\n");
+
+        createVoxelTable();
+        allocateMNT();
+
+        Scene scene = new Scene();
+        scene.setBoundingBox(new BoundingBox3d(vsMin, vsMax));
+        
+        Iterator<Voxel> iterator = reader.iterator();
+        int count = 0;
+        
+        while(iterator.hasNext()){
+            
+            Voxel voxel = iterator.next();
+            
+            if (voxel.$k == 0) {
+                mnt[voxel.$i][voxel.$j] = mntZmin - voxel.ground_distance;
+            }
+            
+            if (Float.isNaN(voxel.PadBVTotal)) {
+                voxels[voxel.$i][voxel.$j][voxel.$k].padBV = 0;
+            } else {
+                voxels[voxel.$i][voxel.$j][voxel.$k].padBV = voxel.PadBVTotal;
+            }
+            
+            count++;
+            if (count % 100000 == 0) {
+                logger.info(" " + count + " shots");
+            }
+        }
+        
+        
+        
+        /*try(BufferedReader reader = new BufferedReader(new FileReader(inputFile))) {
             
             logger.info("header: " + reader.readLine());
             voxSpace = parseHeader(reader);
@@ -375,15 +421,15 @@ public class TransmittanceSim {
             throw e;
         }catch (Exception e) {
             throw e;
-        }
+        }*/
     }
 
-    private void parseLineData(String line) throws IOException {
+    /*private void parseLineData(String line) throws IOException {
 
         
-    }
+    }*/
 
-    private VoxelSpace parseHeader(BufferedReader reader) throws IOException {
+    /*private VoxelSpace parseHeader(BufferedReader reader) throws IOException {
 
         String line;
         StringTokenizer str;
@@ -429,7 +475,7 @@ public class TransmittanceSim {
         scene.setBoundingBox(new BoundingBox3d(vsMin, vsMax));
 
         return new VoxelSpace(new BoundingBox3d(vsMin, vsMax), splitting, 0);
-    }
+    }*/
 
     public List<Double> distToVoxelWalls(Point3d origin, Vector3d direction) {
 

@@ -32,16 +32,15 @@ public class VoxelSpaceInfos {
     private float maxPAD;
     private String[] columnNames;
     
-    public void readFromVoxelFile(File voxelFile){
+    public void readFromVoxelFile(File voxelFile) throws Exception{
         
         try (BufferedReader reader = new BufferedReader(new FileReader(voxelFile))){
             
             String identifier = reader.readLine();
             
             if(!identifier.equals("VOXEL SPACE")){
-                logger.error("Voxel file is invalid, VOXEL SPACE identifier is missing");
                 reader.close();
-                return;
+                throw new Exception("Voxel file is invalid, VOXEL SPACE identifier is missing");
             }
             
             try{
@@ -73,8 +72,8 @@ public class VoxelSpaceInfos {
                 
             }catch(IOException | NumberFormatException e){
                 
-                logger.error("Header is invalid",e);
                 reader.close();
+                throw new Exception("Header is invalid",e);
             }
             
             columnNames = reader.readLine().split(" ");
@@ -82,9 +81,9 @@ public class VoxelSpaceInfos {
             reader.close();
             
         } catch (FileNotFoundException ex) {
-            logger.error("Cannot find voxel file",ex);
+            throw new Exception("Cannot find voxel file",ex);
         } catch (IOException ex) {
-            logger.error("Cannot read voxel file",ex);
+            throw new Exception("Cannot read voxel file",ex);
         }
     }
 

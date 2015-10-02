@@ -7,7 +7,6 @@ package fr.amap.amapvox.jraster.asc;
 
 import fr.amap.amapvox.commons.math.matrix.Mat4D;
 import fr.amap.amapvox.commons.math.point.Point2F;
-import fr.amap.amapvox.commons.math.vector.Vec2F;
 import fr.amap.amapvox.commons.math.vector.Vec4D;
 import fr.amap.amapvox.commons.util.BoundingBox2F;
 import java.io.BufferedWriter;
@@ -17,10 +16,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import javax.vecmath.Point2d;
-import javax.vecmath.Point3d;
-import org.apache.commons.collections.map.MultiKeyMap;
 
 /**
  *
@@ -40,60 +35,58 @@ public class RegularDtm {
     private int indiceYMax = -1;
     
     private String path;
-    private MultiKeyMap map;
     
     private float[][] zArray;
-    float xLeftLowerCorner;
-    float yLeftLowerCorner;
-    float cellSize;
-    public int rowNumber;
-    public int colNumber;
-    
-    private Map m;
-    
-    private Point2d minCorner = new Point2d();
-    private Point2d maxCorner = new Point2d();
-    private Point2d resolution;
-    private float splitting;
+    private float xLeftLowerCorner;
+    private float yLeftLowerCorner;
+    private float cellSize;
+    private int rowNumber;
+    private int colNumber;
     
     private Mat4D transformationMatrix;
     private Mat4D inverseTransfMat;
     
+    /**
+     *
+     */
     public RegularDtm(){
         
     }
     
-    public Point3d getNearest(Point3d position){
-        
-        
-        float x = (float) (minCorner.x+position.x /(resolution.x));
-        float y = (float) (position.y /(resolution.y));
-        
-        return new Point3d(x, y, 0);
-    }
-    
+    /**
+     *
+     * @return
+     */
     public String getPath() {
         return path;
     }
     
+    /**
+     *
+     * @return
+     */
     public List<DTMPoint> getPoints() {
         return points;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Face> getFaces() {
         return faces;
-    }    
-        
-    public RegularDtm(String path, ArrayList<DTMPoint> points, ArrayList<Face> faces){
-        
-        this.transformationMatrix = Mat4D.identity();
-        this.inverseTransfMat = Mat4D.identity();
-        
-        this.points = points;
-        this.faces = faces;
-        this.path = path;
     }
     
+    /**
+     * Instantiate a grid raster type
+     * @param path Absolute path of the file
+     * @param zArray Two-dimensional array representing the 2d grid and containing z values
+     * @param xLeftLowerCorner X left lower corner
+     * @param yLeftLowerCorner Y left lower corner
+     * @param cellSize Size of a cell, in meters (m)
+     * @param nbCols Column number
+     * @param nbRows Row number
+     */
     public RegularDtm(String path, float[][] zArray, float xLeftLowerCorner, float yLeftLowerCorner, float cellSize, int nbCols, int nbRows){
         
         this.transformationMatrix = Mat4D.identity();
@@ -108,54 +101,13 @@ public class RegularDtm {
         this.colNumber = nbCols;
     }
     
-    
-    public MultiKeyMap getXYStructure(){
-        
-        
-        map = new MultiKeyMap();
-        
-        if(points.size()>2){
-            
-            minCorner.x = points.get(0).x;
-            minCorner.y = points.get(0).z;
-            
-            maxCorner.x = points.get(0).x;
-            maxCorner.y = points.get(0).z;
-            
-            splitting = Math.abs(points.get(0).x - points.get(1).x);
-        }
-        
-        for(int i=1;i<points.size();i++){
-            
-            float x = points.get(i).x;
-            float y = points.get(i).z;
-            
-            if(minCorner.x > x){
-                minCorner.x = x;
-            }
-            if(maxCorner.x < x){
-                maxCorner.x = x;
-            }
-            
-            if(minCorner.y > y){
-                minCorner.y = y;
-            }
-            if(maxCorner.y < y){
-                maxCorner.y = y;
-            }
-        }
-        
-        resolution = new Point2d(maxCorner.x-minCorner.x/splitting, maxCorner.y-minCorner.y);
-       
-        
-        for (DTMPoint point : points) {
-            
-            map.put(point.x+0.0f, point.z+0.0f, point.y+0.0f);
-        }
-        
-        return map;
-    }
-    
+    /**
+     * Get corresponding height from a x,y couple of points<br>
+     * This method doesn't perform interpolation, it gets nearest cell and return corresponding value.<br>
+     * @param posX position x
+     * @param posY position y
+     * @return height from x,y position
+     */
     public float getSimpleHeight(float posX, float posY){
         
         Vec4D multiply = Mat4D.multiply(inverseTransfMat, new Vec4D(posX, posY, 1, 1));
@@ -181,42 +133,15 @@ public class RegularDtm {
         return z;
     }
     
+    /**
+     * Not implemented
+     * @param posX
+     * @param posY
+     * @return
+     */
     public float getInterpolatedHeight(float posX, float posY){
         
-        if(map == null){
-            map = getXYStructure();
-        }
-        
-        int x1 = (int)posX;
-        int x2 = ((int)posX)+1;
-        int y1 = (int)posY;
-        int y2 = ((int)posY)+1;
-        
-        float z1 =0, z2=0, z3=0, z4=0;
-        
-        try{
-            z3 = (float) map.get((float)x1, (float)y1);
-        }catch(Exception e){}
-        
-        try{
-            z4 = (float) map.get((float)x2, (float)y1);
-        }catch(Exception e){}
-        
-        try{
-            z2 = (float) map.get((float)x2, (float)y2);
-        }catch(Exception e){}
-        try{
-            z1 = (float) map.get((float)x1, (float)y2);
-        }catch(Exception e){}
-        
-        
-        //interpolation
-        float lambda = (x1-posX)/(x2 - x1);
-        float mu = (y1-posY) / (y2 -y1);
-        
-        float z = (1-lambda)*((1-mu)*z1+mu*z3)+lambda*((1-mu)*z2+(mu*z4));
-             
-        return z;
+        return 0; // not implemented
     }
     
     private BoundingBox2F getLargestBoundingBox(BoundingBox2F boundingBox2F){
@@ -244,6 +169,11 @@ public class RegularDtm {
         return new BoundingBox2F(new Point2F(xMin, yMin), new Point2F(xMax, yMax));
     }
     
+    /**
+     *
+     * @param boundingBox
+     * @param offset
+     */
     public void setLimits(BoundingBox2F boundingBox, int offset){
         
         //calculate the 4 corners
@@ -278,6 +208,12 @@ public class RegularDtm {
         
     }
     
+    /**
+     *
+     * @param boundingBox2F
+     * @param offset
+     * @return
+     */
     public RegularDtm subset(BoundingBox2F boundingBox2F, int offset){
         
         RegularDtm dtm = new RegularDtm();
@@ -332,6 +268,11 @@ public class RegularDtm {
         return dtm;
     }
     
+    /**
+     * Write the raster in ascii grid format (*.asc)
+     * @param output Output file
+     * @throws IOException Throws an IOException when output path is invalid or other
+     */
     public void write(File output) throws IOException{
         
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))){
@@ -368,6 +309,9 @@ public class RegularDtm {
         }
     }
     
+    /**
+     * Build a 3d mesh from the raster, creating points, faces (as indices)
+     */
     public void buildMesh(){
         
         
@@ -479,6 +423,12 @@ public class RegularDtm {
         return ((indiceYMax-indiceYMin)*(i-indiceXMin)) + (j-indiceYMin);
     }
     
+    /**
+     *
+     * @param outputFile
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public void exportObj(File outputFile) throws FileNotFoundException, IOException{
         
         BufferedWriter writer;
@@ -503,51 +453,36 @@ public class RegularDtm {
             throw ex;
         }
     }
-    
-    public Face getFaceContainingPoint(float x, float y){
-        
-        for (Face triangle : faces) {
-            
-            DTMPoint pointA = points.get(triangle.getPoint1());
-            DTMPoint pointB = points.get(triangle.getPoint2());
-            DTMPoint pointC = points.get(triangle.getPoint3());
-            
-            Vec2F vecAB = Vec2F.createVec2FromPoints(new Vec2F(pointA.x, pointA.z), new Vec2F(pointB.x, pointB.z));
-            Vec2F vecBC = Vec2F.createVec2FromPoints(new Vec2F(pointB.x, pointB.z), new Vec2F(pointC.x, pointC.z));
-            Vec2F vecCA = Vec2F.createVec2FromPoints(new Vec2F(pointC.x, pointC.z), new Vec2F(pointA.x, pointA.z));
-            
-            
-            Vec2F vecAM = Vec2F.createVec2FromPoints(new Vec2F(pointA.x, pointA.z), new Vec2F(x, y));
-            Vec2F vecBM = Vec2F.createVec2FromPoints(new Vec2F(pointB.x, pointB.z), new Vec2F(x, y));
-            Vec2F vecCM = Vec2F.createVec2FromPoints(new Vec2F(pointC.x, pointC.z), new Vec2F(x, y));
-            
-            float detABAM = Vec2F.determinant(vecAB, vecAM);
-            float detBCBM = Vec2F.determinant(vecBC, vecBM);
-            float detCACM = Vec2F.determinant(vecCA, vecCM);
-            
-            if(detABAM<=0 && detBCBM<=0 && detCACM<=0){
-                return triangle;
-            }else if(detABAM>0 && detBCBM>0 && detCACM>0){
-                return triangle;
-            }
-        }
-        
-        return null;
-    }
 
+    /**
+     *
+     * @param transformationMatrix
+     */
     public void setTransformationMatrix(Mat4D transformationMatrix) {
         this.transformationMatrix = transformationMatrix;
         this.inverseTransfMat = Mat4D.inverse(transformationMatrix);
     }
 
+    /**
+     *
+     * @return
+     */
     public Mat4D getTransformationMatrix() {
         return transformationMatrix;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getzMin() {
         return zMin;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getzMax() {
         return zMax;
     }

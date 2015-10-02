@@ -17,10 +17,6 @@ public class VoxelManagerSettings {
 	private	Point3i			splitting;
 	private int				topology;
 	
-	/**
-	 * Constructor for toric scenes
-	 * @param splitting
-	 */
 	public VoxelManagerSettings(Point3i splitting) {
 		this.splitting	= splitting;
 		this.topology	= TORIC_INFINITE_BOX_TOPOLOGY;

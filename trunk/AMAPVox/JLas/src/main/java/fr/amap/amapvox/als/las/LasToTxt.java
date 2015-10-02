@@ -5,7 +5,7 @@
 package fr.amap.amapvox.als.las;
 
 import fr.amap.amapvox.als.LasHeader;
-import fr.amap.amapvox.als.LasHeader11;
+import fr.amap.amapvox.als.LasHeader12;
 import fr.amap.amapvox.commons.math.matrix.Mat4D;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 import javax.swing.SwingWorker;
 import javax.swing.event.EventListenerList;
 import org.apache.commons.lang3.ArrayUtils;
@@ -122,7 +121,7 @@ public class LasToTxt {
                         if(version == 0){
                             writer.write("# reserved (global encoding):"+header.getReserved()+"\n");
                         }else{
-                            writer.write("# reserved (global encoding):"+((LasHeader11)header).getGlobalEncoding()+"\n");
+                            writer.write("# reserved (global encoding):"+((LasHeader12)header).getGlobalEncoding()+"\n");
                         }
 
                         writer.write("# project ID GUID data 1-4:  "+header.getProjectIdGuidData1()+" "+header.getProjectIdGuidData2()+" "+header.getProjectIdGuidData3()+" "+header.getProjectIdGuidData4()+"\n");  

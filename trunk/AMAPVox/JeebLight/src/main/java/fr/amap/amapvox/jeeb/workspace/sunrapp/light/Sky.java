@@ -19,13 +19,6 @@ public class Sky {
 		return (float) ((1f + 2f * Math.sin (elevation)) / 3f);
 	}
 
-	/**
-	 * Brightness per solid angle of Standard OverCast sky (SOC) at a given elevation The sum for
-	 * the entire sky vault is diffuse / 2PI (ref. Anderson...)
-	 * 
-	 * @param elevation over the horizon (radians)
-	 * @return brightness at elevation / brightness at zenith
-	 */
 	public static float brightnessSOC (float diffuse, float elevation) {
 		if (elevation < 0.01) return 0;
 		float brightness = (float) ((1f + 2f * Math.sin (elevation)) / 3f);
@@ -41,7 +34,7 @@ public class Sky {
 	 * 
 	 * @param zenith zenith angle in sky [radians]
 	 * @param azim azimuth in sky [radians]
-	 * @param sun_el sun elevation [radians]
+	 * @param sun_zen sun elevation [radians]
 	 * @param sun_az sun azimuth [radians]
 	 * @return brightness at sky position / brightness at zenith
 	 */
@@ -64,15 +57,6 @@ public class Sky {
 		return brightness;
 	}
 
-	/**
-	 * Brightness of Clear Sky (normalized over brightness at zenith)
-	 * 
-	 * @param zenith zenith angle in sky [radians]
-	 * @param azimuth azimuth in sky [radians]
-	 * @param sun_el sun elevation [radians]
-	 * @param sunAzimuth sun azimuth [radians]
-	 * @return brightness at sky position / brightness at zenith
-	 */
 	public static float brightnessClear (float diffuse, float zenith, float azimuth, float sunElevation, float sunAzimuth) {
 		if (diffuse == 0) return 0;
 		float brightness = brightnessNormClear (zenith, azimuth, sunElevation, sunAzimuth);
@@ -105,16 +89,6 @@ public class Sky {
 		return brightness;
 	}
 
-	/**
-	 * Interpolation between brightnessNormClear and brightnessNormSOC according to clearness index
-	 * 
-	 * @param clearness
-	 * @param zenith
-	 * @param azim
-	 * @param sun_zen
-	 * @param sun_az
-	 * @return sky brightness in the direction (zenith, azim)
-	 */
 	public static float brightnessNorm (float diffuse, float global, float zenith, float azim, float sun_zen, float sun_az) {
 		float elevation = (float) ((Math.PI / 2f) - zenith);
 
@@ -126,17 +100,6 @@ public class Sky {
 		return brightness;
 	}
 
-	/**
-	 * Brightness per solid angle (interpolated between brightnessNormClear and brightnessNormSOC
-	 * according to clearness index)
-	 * 
-	 * @param clearness
-	 * @param zenith
-	 * @param azim
-	 * @param sun_zen
-	 * @param sun_az
-	 * @return sky brightness in the direction (zenith, azim)
-	 */
 	public static float brightness (float diffuse, float global, float zenith, float azim, float sun_zen, float sun_az) {
 		if (zenith > Math.PI * 0.499) return 0;
 

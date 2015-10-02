@@ -5,6 +5,7 @@ import fr.amap.amapvox.commons.util.Filter;
 import fr.amap.amapvox.commons.util.TimeCounter;
 import fr.amap.amapvox.datastructure.octree.Octree;
 import fr.amap.amapvox.io.tls.rxp.Shot;
+import fr.amap.amapvox.jeeb.raytracing.geometry.Intersection;
 import fr.amap.amapvox.jeeb.raytracing.geometry.LineElement;
 import fr.amap.amapvox.jeeb.raytracing.geometry.LineSegment;
 import fr.amap.amapvox.jeeb.raytracing.util.BoundingBox3d;
@@ -31,21 +32,43 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 
 public class VoxelAnalysis {
 
+    public enum LaserSpecification{
+        
+        DEFAULT_ALS(0.0003, 0.0005),
+        VZ_400(0.007, 0.00035);
+    
+        private final double beamDiameterAtExit;
+        private final double beamDivergence;
+    
+        private LaserSpecification(double beamDiameterAtExit, double beamDivergence){
+            this.beamDiameterAtExit = beamDiameterAtExit;
+            this.beamDivergence = beamDivergence;
+        }
+
+        public double getBeamDiameterAtExit() {
+            return beamDiameterAtExit;
+        }
+
+        public double getBeamDivergence() {
+            return beamDivergence;
+        }
+        
+    }
+    
     private final static Logger logger = Logger.getLogger(VoxelAnalysis.class);
 
     private VoxelSpace voxSpace;
     private Voxel voxels[][][];
     private VoxelManager voxelManager;
-
-    private static final float LASER_BEAM_DIVERGENCE_ALS = 0.0005f;
-    private static final float LASER_BEAM_DIVERGENCE_TLS = 0.00035f;
 
     private float MAX_PAD = 3;
 
@@ -67,9 +90,15 @@ public class VoxelAnalysis {
     private RegularDtm terrain;
     private List<Octree> pointcloudList;
 
-    int lastShot = 0;
-    boolean shotChanged = false;
-    Point3d lastEchotemp = new Point3d();
+    private int lastShot = 0;
+    private boolean shotChanged = false;
+    private Point3d lastEchotemp = new Point3d();
+    private Voxel lastVoxelSampled;
+    private int lastShotId;
+    
+    private LaserSpecification laserSpec;
+    private static final double ONE_THIRD_OF_PI = Math.PI/3.0;
+    
 
     private boolean padWasCalculated;
 
@@ -175,6 +204,7 @@ public class VoxelAnalysis {
          resolution.y = (maxCorner.y - minCorner.y) / splitting.y;
          resolution.z = (maxCorner.z - minCorner.z) / splitting.z;
          */
+        
         double posX = minCorner.x + (parameters.resolution / 2.0d) + (indices.x * parameters.resolution);
         double posY = minCorner.y + (parameters.resolution / 2.0d) + (indices.y * parameters.resolution);
         double posZ = minCorner.z + (parameters.resolution / 2.0d) + (indices.z * parameters.resolution);
@@ -197,6 +227,12 @@ public class VoxelAnalysis {
         }
         
         MAX_PAD = parameters.getMaxPAD();
+        
+        if(parameters.isTLS()){
+            laserSpec = LaserSpecification.VZ_400;
+        }else{
+            laserSpec = LaserSpecification.DEFAULT_ALS;
+        }
 
         LeafAngleDistribution distribution = new LeafAngleDistribution(parameters.getLadType(), 
                                                                         parameters.getLadBetaFunctionAlphaParameter(),
@@ -231,7 +267,7 @@ public class VoxelAnalysis {
 
                 LineSegment seg = new LineSegment(shot.origin, shot.direction, 999999);
                 Point3d echo = new Point3d(seg.getEnd());
-                propagate(origin, echo, (short) 0, 1, 1, shot.origin, false, shot.angle);
+                propagate(origin, echo, (short) 0, 1, 1, shot.origin, false, shot.angle, nbShotsProcessed);
 
             } else {
 
@@ -325,9 +361,9 @@ public class VoxelAnalysis {
                         
                         // propagate
                         if (parameters.isTLS()) {
-                            propagate(origin, echo, (short) 0, beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle);
+                            propagate(origin, echo, (short) 0, beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, nbShotsProcessed);
                         } else {
-                            propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle);
+                            propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, nbShotsProcessed);
                         }
 
                         origin = new Point3d(echo);
@@ -375,13 +411,13 @@ public class VoxelAnalysis {
      * @param beamFraction
      * @param source shot origin
      */
-    private void propagate(Point3d origin, Point3d echo, int classification, double beamFraction, double residualEnergy, Point3d source, boolean lastEcho, double angle) {
+    private void propagate(Point3d origin, Point3d echo, int classification, double beamFraction, double residualEnergy, Point3d source, boolean lastEcho, double angle, int shotID) {
 
         //get shot line
         LineElement lineElement = new LineSegment(origin, echo);
 
         //get the first voxel cross by the line
-        VoxelCrossingContext context = voxelManager.getFirstVoxel(lineElement);
+        VoxelCrossingContext context = voxelManager.getFirstVoxelV2(lineElement);
 
         double distanceToHit = lineElement.getLength();
 
@@ -424,34 +460,32 @@ public class VoxelAnalysis {
             //distance from the last origin to the point in which the ray exit the voxel
             double d2 = context.length;
             
+            
             if (voxels[indices.x][indices.y][indices.z] == null) {
                 voxels[indices.x][indices.y][indices.z] = initVoxel(indices.x, indices.y, indices.z);
             }
 
             Voxel vox = voxels[indices.x][indices.y][indices.z];
 
-            //distance de l'écho à la source
-            /**
-             * ****************A verifier si il vaut mieux prendre la distance
-             * du centre du voxel à la source ou de l'écho à la
-             * source*********************
-             */
             double surface;
 
-            //recalculé pour éviter le stockage de trois doubles (24 octets) par voxel
+            //recalculé pour éviter le stockage de trois doubles (24 octets) par voxel.
             double distance = getPosition(new Point3i(indices.x, indices.y, indices.z), parameters.split, parameters.bottomCorner).distance(source);
-
+            
             //surface de la section du faisceau à la distance de la source
             if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
-                if (!parameters.isTLS()) {
-                    surface = Math.pow(Math.tan(LASER_BEAM_DIVERGENCE_ALS / 2) * distance, 2) * Math.PI;
-                } else {
-                    surface = Math.pow(Math.tan(LASER_BEAM_DIVERGENCE_TLS / 2) * distance, 2) * Math.PI;
-                }
+                surface = Math.pow((Math.tan(laserSpec.getBeamDivergence() / 2.0) * distance) + laserSpec.getBeamDiameterAtExit(), 2) * Math.PI; //TODO: récupérer taille faisceau sortie
             } else {
                 surface = 1;
             }
+            
+            /*double distance1 = 1;
+            double distance2 = 2;
+            double tanBeamDivergence = Math.tan(laserSpec.getBeamDivergence() / 2.0);
+            double r = (tanBeamDivergence * distance1) + laserSpec.getBeamDiameterAtExit();
+            double R = (tanBeamDivergence * distance2) + laserSpec.getBeamDiameterAtExit();*/
 
+            
             // voxel sampled without hit
             /*Si un écho est positionné sur une face du voxel alors il est considéré
              comme étant à l'extérieur du dernier voxel traversé*/
@@ -461,25 +495,36 @@ public class VoxelAnalysis {
              /*
              * Si d2 < distanceToHit le voxel est traversé sans interceptions
              */
-            if (d2 <= distanceToHit) {
+            if (d2 < distanceToHit) {
 
-                double longueur = d2 - d1;
+                if(shotID == lastShotId && lastVoxelSampled != null && lastVoxelSampled == vox){
+                    //pour n'échantillonner qu'une fois le voxel pour un tir
+                }else{
+                    double longueur = d2 - d1;
+                    
+                    vox.lgTotal += longueur;
+                
+                    vox.nbSampling++;
+                    nbSamplingTotal++;
 
-                vox.lgTotal += longueur;
+                    vox.angleMean += angle;
+                    
+                    //double volume = longueur * ONE_THIRD_OF_PI * ((r*r)+(R*R)+(r*R));
+                    //vox.bvEntering += volume * (Math.round(residualEnergy*10000)/10000.0);
+                    
+                    vox.bvEntering += surface * (Math.round(residualEnergy*10000)/10000.0) * longueur;
 
-                vox.nbSampling++;
-                nbSamplingTotal++;
-
-                vox.angleMean += angle;
-                vox.bvEntering += surface * (Math.round(residualEnergy*10000)/10000.0) * longueur;
-
+                    lastVoxelSampled = vox;
+                    lastShotId = shotID;
+                }
+                
                 /*
                  Si l'écho est sur la face sortante du voxel, 
                  on n'incrémente pas le compteur d'échos
                  */
             } /*
              Poursuite du trajet optique jusqu'à sortie de la bounding box
-             */ else if (d1 > distanceToHit) {
+             */ else if (d1 >= distanceToHit) {
 
                 /*
                  la distance actuelle d1 est supérieure à la distance à l'écho
@@ -513,10 +558,7 @@ public class VoxelAnalysis {
                 /*
                  * Si distanceToHit == d1,on incrémente le compteur d'échos
                  */
-                vox.nbSampling++;
-
-                nbSamplingTotal++;
-
+                 
                 double longueur;
 
                 if (lastEcho) {
@@ -524,14 +566,27 @@ public class VoxelAnalysis {
                 } else {
                     longueur = (d2 - d1);
                 }
+                    
+                if(shotID == lastShotId && lastVoxelSampled != null && lastVoxelSampled == vox){
+                    //pour n'échantillonner qu'une fois le voxel pour un tir
+                }else{
+                    vox.nbSampling++;
 
-                vox.lgTotal += longueur;
+                    nbSamplingTotal++;
 
-                vox.angleMean += angle;
+                    vox.lgTotal += longueur;
 
-                double entering;
-                entering = surface * (Math.round(residualEnergy*10000)/10000.0) * longueur;
-                vox.bvEntering += entering;
+                    vox.angleMean += angle;
+
+                    double entering;
+                    //entering = (surface/(Math.round(residualEnergy*10000)/10000.0)) * longueur;
+                    entering = surface * (Math.round(residualEnergy*10000)/10000.0) * longueur;
+                    vox.bvEntering += entering;
+                    
+                    lastVoxelSampled = vox;
+                    lastShotId = shotID;
+                }
+                
 
                 double intercepted = 0;
 
@@ -1172,6 +1227,40 @@ public class VoxelAnalysis {
 
     public int getNbShotsProcessed() {
         return nbShotsProcessed;
+    }
+    
+    public static void main(String[] args) {
+        
+        VoxelAnalysis voxelAnalysis = new VoxelAnalysis(null, null, null);
+        VoxelParameters parameters = new VoxelParameters(new Point3d(0, 0, 0),
+                                                        new Point3d(20, 20, 20),
+                                                        new Point3i(20, 20, 20));
+        
+        parameters.setResolution(1.0);
+        parameters.setMaxPAD(3.5f);
+        parameters.setTLS(true);
+        parameters.setWeighting(VoxelParameters.WEIGHTING_ECHOS_NUMBER);
+        parameters.setWeightingData(VoxelParameters.DEFAULT_ALS_WEIGHTING);
+        parameters.setLadType(LeafAngleDistribution.Type.SPHERIC);
+        
+        
+        voxelAnalysis.init(parameters, new File("/home/calcul/Documents/Julien/test.vox"));
+        voxelAnalysis.createVoxelSpace();
+        
+        List<Shot> shots = new ArrayList<>();
+        //shots.add(new Shot(4, new Point3d(10, 10, 15), new Vector3d(0, 0, -1), new double[]{6, 14, 18, 21}, new int[4], new int[4]));
+        
+        //shots.add(new Shot(1, new Point3d(10.5, 10.5, 10.99), new Vector3d(0, 0, -1), new double[]{8}, new int[1], new int[1]));
+        //shots.add(new Shot(4, new Point3d(10.5, 10.5, 10.99), new Vector3d(0, 0, -1), new double[]{2, 4, 6, 8}, new int[4], new int[4]));
+        //shots.add(new Shot(4, new Point3d(10, 10, 24), new Vector3d(0, 0, -1), new double[]{6.1, 6.2, 6.3, 10}, new int[1], new int[1]));
+        shots.add(new Shot(1, new Point3d(0.5, 0.01, 19.9), new Vector3d(1, 0, -1), new double[]{100}, new int[1], new int[1]));
+        
+        for(Shot shot : shots){
+            voxelAnalysis.processOneShot(shot);
+        }
+        
+        voxelAnalysis.computePADs();
+        voxelAnalysis.write();
     }
     
 }

@@ -81,10 +81,6 @@ public abstract class GLMesh {
     /**
      *
      * @param gl opengl context
-     * @param maxSize size to reserve to the gpu
-     * @param indexBuffer Short buffer containing indices to link vertices, faces, texture coordinates
-     * @see <a href="https://www.opengl.org/wiki/Vertex_Specification#Index_buffers">https://www.opengl.org/wiki/Vertex_Specification#Index_buffers</a>
-     * @param floatBuffers Float buffer to set to the GPU, can be vertices positions, texture coordinates, color values
      */
     public abstract void draw(GL3 gl);
     public abstract void initBuffers(GL3 gl, long maximumTotalBufferSize);

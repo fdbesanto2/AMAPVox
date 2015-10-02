@@ -5,21 +5,21 @@
  */
 package fr.amap.amapvox.voxviewer.object.scene;
 
+import fr.amap.amapvox.voxcommons.RawVoxel;
 import java.awt.Color;
-import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
 
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class VoxelObject{
+public class VoxelObject extends RawVoxel{
     
-    public int $i;
+    /*public int $i;
     public int $j;
     public int $k;
-    //public final Point3f position;
-    public float[] attributs;
+    
+    public float[] attributs;*/
     
     public int type;
     
@@ -27,33 +27,16 @@ public class VoxelObject{
     public boolean isHidden;
     
     private Color color;
-    //public Map<String, Point2f> minMax;
 
     public float[] getAttributs() {
         return attributs;
     }
     
-    public VoxelObject(Point3i indice/*, Point3f position*/, float attributValue){
+    public VoxelObject(Point3i indice, float[] attributs, float alpha){
         
         this.$i = indice.x;
         this.$j = indice.y;
         this.$k = indice.z;
-        
-        //this.position = position;
-        this.color = new Color(0, 0, 0, 1.0f);
-        
-        this.attributValue = attributValue;
-        
-        this.type = 6;
-    }
-    
-    public VoxelObject(Point3i indice/*, Point3f position*/, float[] attributs, float alpha){
-        
-        this.$i = indice.x;
-        this.$j = indice.y;
-        this.$k = indice.z;
-        
-        //this.position = position;
         
         this.color = new Color(0, 0, 0, 1.0f);
         this.attributs = attributs;

@@ -55,6 +55,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Level;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Point3d;
@@ -449,6 +450,8 @@ public class ProcessTool implements Cancellable{
                     try {
                         lasReader.open(pointFile);
                     } catch (IOException ex) {
+                        logger.error(ex);
+                    } catch (Exception ex) {
                         logger.error(ex);
                     }
 

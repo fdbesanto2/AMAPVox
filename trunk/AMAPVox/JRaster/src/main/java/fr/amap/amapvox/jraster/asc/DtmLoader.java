@@ -5,16 +5,10 @@
  */
 package fr.amap.amapvox.jraster.asc;
 
-import fr.amap.amapvox.commons.math.vector.Vec3F;
-import fr.amap.amapvox.commons.util.delaunay.Delaunay_Triangulation;
-import fr.amap.amapvox.commons.util.delaunay.Point_dt;
-import fr.amap.amapvox.commons.util.delaunay.Triangle_dt;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  *
@@ -74,30 +68,5 @@ public class DtmLoader {
             throw ex;
         }
     }
-    
-    public static ArrayList<Face> delaunaytriangulate(ArrayList<Vec3F> points){
-        
-        ArrayList<Face> faces = new ArrayList<>();
-        Delaunay_Triangulation triangulation = new Delaunay_Triangulation();
-        
-        int count = 0;
-        for(Vec3F pt : points){
-            Point_dt point_dt = new Point_dt(pt.x, pt.z);
-            point_dt.index = count;
-            triangulation.insertPoint(point_dt);
-            
-            count++;
-        }
-        
-        Iterator<Triangle_dt> trianglesIterator = triangulation.trianglesIterator();
-        
-        while(trianglesIterator.hasNext()){
-            Triangle_dt triangle = trianglesIterator.next();
-            if(triangle.p1() != null && triangle.p2() != null && triangle.p3() != null && !triangle.isHalfplane()){
-                faces.add(new Face(triangle.p1().index, triangle.p2().index, triangle.p3().index));
-            }
-        }
-        
-        return faces;
-    }
+   
 }

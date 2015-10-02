@@ -76,7 +76,7 @@ public class Sun {
 	 * 
 	 * @param latitudeRadian (in radians)
 	 * @param doy (day of year)
-	 * @param hourDecimal
+	 * @param hourDecimal hourDecimal
 	 * @return boolean (true:day/false:night)
 	 */
 	public boolean position (float latitudeRadian, int doy, float hourDecimal) {
@@ -119,8 +119,8 @@ public class Sun {
 
 	/**
 	 * Calculates the hours of sunrise and sunset for the given day and latitude
-	 * @param latit
-	 * @param DOY
+	 * @param latit latitude
+	 * @param DOY day of year
 	 * @return sunrise and sunset
 	 */
 	public static Point2f sunriseSunsetHours (float latit, int DOY) {
@@ -141,20 +141,8 @@ public class Sun {
 
 		return new Point2f (sunRise, sunSet);
 	}
+        
 
-	/**
-	 * Computes the direct radiation incoming from the turtle sectors.
-	 * @param direct
-	 * @return
-	 */
-
-	/**
-	 * Distributes direct radiation in turtle sectors (based on calculation of intersection between
-	 * sun halo and turtle sectors)
-	 * 
-	 * @param sunDirection
-	 * @return direct radiation in turtle sectors
-	 */
 	public static float[] directInTurtle (float direct, Vector3f sunDirection, Turtle turtle) { // TODO to be moved in Turtle class
 		float[] weights = new float[turtle.directions.length];
 

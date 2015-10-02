@@ -103,6 +103,10 @@ public class LeafAngleDistribution {
 
     public LeafAngleDistribution(Type type, double... params) {
 
+        if(type == null){
+            type = Type.SPHERIC;
+        }
+        
         this.type = type;
         
         switch (type) {

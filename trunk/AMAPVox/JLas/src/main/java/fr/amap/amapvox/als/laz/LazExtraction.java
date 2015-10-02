@@ -14,7 +14,10 @@ import java.util.Iterator;
 import org.apache.log4j.Logger;
 
 /**
- *
+ * This class is devoted to read a LASzip file (*.laz), it allows to get the header, <br>
+ * in a simple basic format (V1.0) and get an iterator on the points of the file.<br>
+ * It uses a native library compiled for 64 bits systems, Linux and Windows.
+ * 
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class LazExtraction implements Iterable<LasPoint>{
@@ -34,6 +37,9 @@ public class LazExtraction implements Iterable<LasPoint>{
     private long lasZipPointer;
     private LasHeader header;
     
+    /**
+     * Instantiate the laz reader
+     */
     public LazExtraction(){
         
     }
@@ -49,6 +55,12 @@ public class LazExtraction implements Iterable<LasPoint>{
         
     }
     
+    /**
+     * Open laz file, instantiate a pointer on this file
+     * @param file Laz file to read
+     * @throws IOException throws an IOException happen when path of the file is invalid
+     * @throws Exception This error can occured when trying to open the file or read the header
+     */
     public void openLazFile(File file) throws IOException, Exception{
         
         try{
@@ -83,11 +95,18 @@ public class LazExtraction implements Iterable<LasPoint>{
         
     }
     
+    /**
+     * Close laz file, destroy the pointer
+     */
     public void close(){
         deleteLasZip(lasZipPointer);
         logger.info("Laz file is closed");
     }
 
+    /**
+     *
+     * @return The header of laz file, the basic version of it (V1.0)
+     */
     public LasHeader getHeader() {
         return header;
     }

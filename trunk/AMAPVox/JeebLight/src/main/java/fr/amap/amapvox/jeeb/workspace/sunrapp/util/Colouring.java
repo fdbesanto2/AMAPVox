@@ -13,17 +13,11 @@ import javax.vecmath.Point3i;
 public class Colouring {
 
 
-	/**
-	 * Grey intensity
-	 */
 	static public Color grey (float value) {
 		int rgb = (int) (value * 255);
 		return new Color (rgb, rgb, rgb);
 	}
 
-	/**
-	 * Blue intensity
-	 */
 	static public Color blue (float value) {
 		int b = (int) (value * 255);
 		return new Color (0, 0, b);
@@ -80,7 +74,7 @@ public class Colouring {
 	}
 
 	/**
-	 * @param rainbow color (see {@link #rainbow(float)})
+	 * @param rainbowColor color (see {@link #rainbow(float)})
 	 * @return value in range (0,1)
 	 */
 	public static float getValue (Color rainbowColor) {
@@ -92,10 +86,6 @@ public class Colouring {
 	}
 	
 	
-	/**
-	 * @param rgb components (in range 0-255 for each) of {@link #rainbow(float)}
-	 * @return value in range (0,1)
-	 */
 	public static float getValue (float r, float g, float b) {
 		Point3i rgb = new Point3i ((int)r, (int)g, (int)b);
 		int m4 = 1020; // 255 * 4

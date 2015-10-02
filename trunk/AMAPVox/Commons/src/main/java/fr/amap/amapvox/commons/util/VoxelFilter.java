@@ -33,7 +33,7 @@ public class VoxelFilter implements FilterInterface{
      *
      * @param attributs Map which associate the attribute name (the key) 
      * and the attribute value
-     * @return return true if all conditions ({@link fr.ird.voxelidar.util.Filter}) are respected and false 
+     * @return return true if all conditions ({@link fr.amap.amapvox.commons.util.Filter}) are respected and false 
      * if one condition is not
      */
     @Override

@@ -16,7 +16,7 @@ For further information, please contact Gregoire Vincent.
 package fr.amap.amapvox.als;
 
 /**
- *
+ * Represents the structure of a las file header version 1.2
  * @author calcul
  */
 
@@ -26,12 +26,11 @@ public class LasHeader12 extends LasHeader11 {
     
     private int globalEncoding;
 
-    @Override
+    
     public int getGlobalEncoding() {
         return globalEncoding;
     }
 
-    @Override
     public void setGlobalEncoding(int globalEncoding) {
         this.globalEncoding = globalEncoding;
     }

@@ -44,7 +44,7 @@ public class PointDataRecordFormat {
         }        
 }
     
-    public static final short LENGTH = 20;
+    public static short LENGTH = 20;
             
     private int x;
     private int y;

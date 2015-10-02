@@ -186,10 +186,6 @@ public class ProcessingMultiRes {
             VoxelSpaceLoader vsTemp;
             ExtendedALSVoxel voxTemp = null;
             
-            if(voxel.$i == 175 && voxel.$j == 0 && voxel.$k == 69){
-                System.out.println("test");
-            }
-
             //while(currentNbSampling < Math.pow(currentResolution, 2)+1 || currentTransmittance == 0){
             //while (currentNbSampling < Math.pow(currentResolution, 2) * 2 + 1 || currentTransmittance == 0) {
             while(currentNbSampling == 0 || currentTransmittance == 0 || Double.isNaN(currentTransmittance)){  

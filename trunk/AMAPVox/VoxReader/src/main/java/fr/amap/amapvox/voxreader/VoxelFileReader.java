@@ -6,14 +6,11 @@
 package fr.amap.amapvox.voxreader;
 
 import fr.amap.amapvox.voxcommons.Voxel;
-import fr.amap.amapvox.voxcommons.VoxelSpace;
-import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import javax.vecmath.Point3i;
 import org.apache.log4j.Logger;
@@ -22,41 +19,18 @@ import org.apache.log4j.Logger;
  *
  * @author calcul
  */
-public class VoxelFileReader implements Iterable<Voxel>{
+public class VoxelFileReader extends AbstractReader implements Iterable<Voxel>{
 
     private final static Logger logger = Logger.getLogger(VoxelFileReader.class);
     
-    private final File voxelFile;
-    private BufferedReader reader;
-    private String currentLine = null;
-    private final VoxelSpace voxelSpace;
-    private final boolean keepInMemory;
-    private int currentVoxelIndex;
-    private boolean wasRead;
-    
-    public VoxelFileReader(File voxelFile, boolean keepInMemory){
+    public VoxelFileReader(File voxelFile, boolean keepInMemory) throws Exception{
         
-        this.voxelFile = voxelFile;
-        this.keepInMemory = keepInMemory;
-        
-        VoxelSpaceInfos voxelSpaceInfos= new VoxelSpaceInfos();
-        voxelSpaceInfos.readFromVoxelFile(voxelFile);
-        voxelSpace = new VoxelSpace(voxelSpaceInfos);
-        
-        if(keepInMemory){
-            voxelSpace.voxels = new ArrayList<>();
-        }
+        super(voxelFile, keepInMemory);
     }
     
-    public VoxelFileReader(File voxelFile){
+    public VoxelFileReader(File voxelFile) throws Exception{
         
-        this.voxelFile = voxelFile;
-        this.keepInMemory = true;
-        
-        VoxelSpaceInfos voxelSpaceInfos= new VoxelSpaceInfos();
-        voxelSpaceInfos.readFromVoxelFile(voxelFile);
-        voxelSpace = new VoxelSpace(voxelSpaceInfos);
-        voxelSpace.voxels = new ArrayList<>();
+        super(voxelFile);
     }
     
     @Override
@@ -115,7 +89,7 @@ public class VoxelFileReader implements Iterable<Voxel>{
                 
                 if(wasRead){
                     if(keepInMemory){
-                        return voxelSpace.voxels.get(currentVoxelIndex);
+                        return (Voxel) voxelSpace.voxels.get(currentVoxelIndex);
                     }else{
                         voxel = parseVoxelFileLine(currentLine);
                     }
@@ -142,7 +116,7 @@ public class VoxelFileReader implements Iterable<Voxel>{
                 Integer.valueOf(voxelLine[1]),
                 Integer.valueOf(voxelLine[2]));
 
-        float[] mapAttrs = new float[voxelSpace.voxelSpaceInfos.getColumnNames().length];
+        float[] mapAttrs = new float[voxelSpace.getVoxelSpaceInfos().getColumnNames().length];
 
         for (int i=0;i<voxelLine.length;i++) {
 
@@ -155,36 +129,12 @@ public class VoxelFileReader implements Iterable<Voxel>{
 
         for(int i=3;i<mapAttrs.length;i++){
             try {
-                vox.setFieldValue(vox.getClass(), voxelSpace.voxelSpaceInfos.getColumnNames()[i], vox, mapAttrs[i]);
+                vox.setFieldValue(vox.getClass(), voxelSpace.getVoxelSpaceInfos().getColumnNames()[i], vox, mapAttrs[i]);
             } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
                //logger.error("Cannot set field value",ex);
             }
         }
         
         return vox;
-    }
-
-    public static Logger getLogger() {
-        return logger;
-    }
-
-    public File getVoxelFile() {
-        return voxelFile;
-    }
-
-    public BufferedReader getReader() {
-        return reader;
-    }
-
-    public String getCurrentLine() {
-        return currentLine;
-    }
-
-    public VoxelSpaceInfos getVoxelSpaceInfos() {
-        return voxelSpace.voxelSpaceInfos;
-    }
-
-    public VoxelSpace getVoxelSpace() {
-        return voxelSpace;
     }
 }

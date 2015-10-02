@@ -12,9 +12,7 @@ public class Circle implements Cloneable {
 	private float radius;
 	private Point2f center;
 
-	/**
-	 * Constructor
-	 */
+        
 	public Circle (float radius, Point2f center) {
 		this.radius = radius;
 		this.center = new Point2f (center);
@@ -24,7 +22,7 @@ public class Circle implements Cloneable {
 	 * Calculates the area of the intersection (lumen) with circle2
 	 * (http://mathworld.wolfram.com/Circle-CircleIntersection.html)
 	 * 
-	 * @param circle2
+	 * @param circle2 circle
 	 * @return lumen area
 	 */
 	public float intersectionCircleArea (Circle circle2) {

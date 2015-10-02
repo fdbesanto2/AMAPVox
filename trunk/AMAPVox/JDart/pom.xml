@@ -39,5 +39,10 @@
             <artifactId>Saxon-HE</artifactId>
             <version>9.6.0-6</version>
         </dependency>
+        <dependency>
+            <groupId>fr.amap.amapvox</groupId>
+            <artifactId>VoxReader</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 </project>

@@ -13,8 +13,8 @@ public class CoordinatesConversion {
 
 	/**
 	 * Converts polar to cartesian coordinates
-	 * @param zenith
-	 * @param azimuth
+	 * @param zenith zenith
+	 * @param azimuth azimuth
 	 * @return cartesian coordinates
 	 */
 	static public Vector3f polarToCartesian (float zenith, float azimuth) {
@@ -32,17 +32,14 @@ public class CoordinatesConversion {
 		Vector3f direction = new Vector3f (dir);
 		return direction;
 	}
-	/**
-	 * Converts cartesian to polar coordinates.
-	 * @return zenith and azimuth in radians
-	 */
+        
 	static public Point2f cartesianToPolar (Vector3f normalizedDirection) {
-		float zenith = (float) Math.acos (normalizedDirection.z);
-		Vector2f projection= new Vector2f (normalizedDirection.x, normalizedDirection.y);
-		projection.normalize();
-		float azimuth = projection.angle (new Vector2f (0, 1)); 
-		
-		return new Point2f (zenith, azimuth);
+            float zenith = (float) Math.acos (normalizedDirection.z);
+            Vector2f projection= new Vector2f (normalizedDirection.x, normalizedDirection.y);
+            projection.normalize();
+            float azimuth = projection.angle (new Vector2f (0, 1)); 
+
+            return new Point2f (zenith, azimuth);
 	}
 	
 }

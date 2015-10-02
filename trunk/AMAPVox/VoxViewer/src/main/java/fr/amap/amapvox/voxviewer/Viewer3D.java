@@ -7,9 +7,10 @@ import fr.amap.amapvox.commons.math.point.Point2F;
 import fr.amap.amapvox.commons.util.BoundingBox2F;
 import fr.amap.amapvox.jraster.asc.DtmLoader;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
+import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
+import fr.amap.amapvox.voxreader.VoxelFileReader;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpace;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceAdapter;
-import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceHeader;
 import fr.amap.amapvox.voxviewer.renderer.GLRenderWindowListener;
 import fr.amap.amapvox.voxviewer.renderer.JoglListenerListener;
 import java.io.File;
@@ -263,10 +264,11 @@ public class Viewer3D extends Application {
                                 
                                 if(fitDTMToVoxelSpace){
                                     
-                                    VoxelSpaceHeader header = VoxelSpaceHeader.readVoxelFileHeader(voxelFile);
+                                    VoxelFileReader reader = new VoxelFileReader(voxelFile, false);
+                                    VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
                                     
-                                    dtm.setLimits(new BoundingBox2F(new Point2F((float)header.bottomCorner.x, (float)header.bottomCorner.y), 
-                                                                    new Point2F((float)header.topCorner.x, (float)header.topCorner.y)), dtmFittingMargin);
+                                    dtm.setLimits(new BoundingBox2F(new Point2F((float)infos.getMinCorner().x, (float)infos.getMinCorner().y), 
+                                                                    new Point2F((float)infos.getMaxCorner().x, (float)infos.getMaxCorner().y)), dtmFittingMargin);
                                 }
                                 
                                 updateMessage("Converting raster to mesh");
@@ -277,7 +279,7 @@ public class Viewer3D extends Application {
                             }
                             
                         } catch (Exception ex) {
-                            //logger.error(ex.getMessage(), ex);
+                            logger.error(ex.getMessage(), ex);
                             return null;
                         }
 
@@ -338,7 +340,7 @@ public class Viewer3D extends Application {
                                     
                                     toolBarFrameController.setStage(toolBarFrameStage);
                                     
-                                    toolBarFrameController.setAttributes(attributeToView, voxelSpace.data.header.attributsNames);
+                                    toolBarFrameController.setAttributes(attributeToView, voxelSpace.data.getVoxelSpaceInfos().getColumnNames());
                                     
                                     toolBarFrameStage.setX(posX);
                                     toolBarFrameStage.setY(posY);
@@ -405,9 +407,9 @@ public class Viewer3D extends Application {
 
 
                                 } catch (IOException e) {
-                                    //logger.error("Loading ToolBarFrame.fxml failed", e);
+                                    logger.error("Loading ToolBarFrame.fxml failed", e);
                                 } catch (Exception e) {
-                                    //logger.error("Error during toolbar init", e);
+                                    logger.error("Error during toolbar init", e);
                                 }
                             }
                         });
@@ -461,7 +463,7 @@ public class Viewer3D extends Application {
      */
     public static void main(String[] args) {
         
-        launch(args);
+        //launch(args);
         //launch("--help");
         //MainApp.usage();
         /*
@@ -469,12 +471,10 @@ public class Viewer3D extends Application {
         mat.mat = new double[]{0.9540688863574789,0.29958731629459895,0.0,-448120.0441687209,
                 -0.29958731629459895,0.9540688863574789,0.0,-470918.3928060016,
                 0.0,0.0,1.0,0.0,
-                0.0,0.0,0.0,1.0};
+                0.0,0.0,0.0,1.0};*/
         
         
-        launch("--input=/home/calcul/Documents/Julien/Sortie voxels/comparaison_als_tls_transect_paracou_2013/las_1m.vox",
-                "--dtm=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc","--dtm-fit","--dtm-transform",
-                "--dtm-transf-matrix="+mat.toString());*/
+        launch("--width=853", "--height=512", "--input=/home/calcul/Documents/Julien/test.vox" ,"--attribut=PadBVTotal");
         //launch("--width=500","--height=200","--input=/home/calcul/Documents/Julien/las_paracou_transmittance/las_1m.vox", "--attribut=bvEntering");
     }
 

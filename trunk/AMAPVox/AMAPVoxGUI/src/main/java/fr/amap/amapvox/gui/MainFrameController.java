@@ -870,12 +870,15 @@ public class MainFrameController implements Initializable {
                 
                 if(c.wasAdded() && c.getAddedSize() == c.getList().size()){
 
-                    VoxelFileReader reader = new VoxelFileReader(c.getList().get(0).file);
-                    String[] columnNames = reader.getVoxelSpaceInfos().getColumnNames();
-                    comboboxFromVariableProfile.getItems().clear();
-                    comboboxFromVariableProfile.getItems().addAll(columnNames);
-                    comboboxFromVariableProfile.getSelectionModel().selectFirst();
-                    
+                    try {
+                        VoxelFileReader reader = new VoxelFileReader(c.getList().get(0).file);
+                        String[] columnNames = reader.getVoxelSpaceInfos().getColumnNames();
+                        comboboxFromVariableProfile.getItems().clear();
+                        comboboxFromVariableProfile.getItems().addAll(columnNames);
+                        comboboxFromVariableProfile.getSelectionModel().selectFirst();
+                    } catch (Exception ex) {
+                        logger.error("Cannot read voxel file", ex);
+                    }
                 }
                 
             }
@@ -2205,9 +2208,11 @@ public class MainFrameController implements Initializable {
             return;
         }
         
+        VoxelFileReader reader;
         try {
-            String[] parameters = VoxelSpaceData.readAttributs(listViewVoxelsFiles.getSelectionModel().getSelectedItem());
-            
+            reader = new VoxelFileReader(listViewVoxelsFiles.getSelectionModel().getSelectedItem());
+            String[] parameters = reader.getVoxelSpaceInfos().getColumnNames();
+
             for (int i = 0; i < parameters.length; i++) {
 
                 parameters[i] = parameters[i].replaceAll(" ", "");
@@ -2223,10 +2228,10 @@ public class MainFrameController implements Initializable {
 
             buttonOpen3DView.setDisable(false);
             tabPaneMain.getSelectionModel().select(2);
-
-        } catch (IOException ex) {
-            logger.error("Cannot read attributs from voxel space file", ex);
+        } catch (Exception ex) {
+            logger.error("Cannot read voxel file", ex);
         }
+        
     }
 
     @FXML
@@ -2925,7 +2930,7 @@ public class MainFrameController implements Initializable {
                 protected Task<Void> createTask() {
                     return new Task<Void>() {
                         @Override
-                        protected Void call() throws InterruptedException {
+                        protected Void call() throws InterruptedException, Exception {
 
                             final String msgTask = "Task " + taskID + "/" + taskNumber + " :" + file.getAbsolutePath();
                             updateMessage(msgTask);

@@ -19,18 +19,19 @@ public interface LineElement {
 
 	
 	/**
-	 * @param a Shape object (polygon, mesh, sphere...)
+	 * @param shape Shape object (polygon, mesh, sphere...)
+         * @return is intersecting
 	 */
 	public boolean doesIntersect (Shape shape);
 	
 	/**
-	 * @param a Shape object (polygon, mesh, sphere...)
+	 * @param shape Shape object (polygon, mesh, sphere...)
 	 * @return a List of intersections (empty list if no intersection)
 	 */
 	public ArrayList<Intersection> getIntersections (Shape shape);
 
 	/**
-	 * @param a Shape object (polygon, mesh, sphere...)
+	 * @param shape Shape object (polygon, mesh, sphere...)
 	 * @return the nearest intersection from the point "origin" in the line element direction
 	 */
 	public Intersection getNearestIntersection (Shape shape);

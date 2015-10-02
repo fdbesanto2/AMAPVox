@@ -147,8 +147,6 @@ public class Shot {
                         break;
                 }
             }
-        }else{
-            System.err.println("shot filters not initialized");
         }
 
         return true;

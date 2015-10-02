@@ -7,123 +7,27 @@ package fr.amap.amapvox.voxviewer.object.scene;
 
 import fr.amap.amapvox.commons.math.point.Point3F;
 import fr.amap.amapvox.commons.math.point.Point3I;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import javax.vecmath.Point2f;
 
 
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class VoxelSpaceData{
-    
-    private Map<String, Point2f> minMax;
-    
-    public float minY, maxY;
-    
-    public ArrayList<VoxelObject> voxels;
-    //public Type type;
-    
-    //public float res;
-    //public float maxPad = 5.0f;
-    
-    public VoxelSpaceHeader header;
-    /*
-    public Point3i split;
-    public Point3d resolution;
-    public Point3d bottomCorner;
-    public Point3d topCorner;
-    
-    public ArrayList<String> attributsNames;
-    */
-   
-    
-    public enum Type{
-        ALS(1),
-        TLS(2);
+public class VoxelSpaceData extends fr.amap.amapvox.voxcommons.VoxelSpace{
+
+    public VoxelSpaceData(VoxelSpaceInfos voxelSpaceInfos) {
         
-        private final int type;
-        Type(int type){
-            this.type = type;
-        }
-    }
-    
-    public VoxelSpaceData(){
+        super(voxelSpaceInfos);
         
         voxels = new ArrayList<>();
-        /*
-        attributsNames = new ArrayList<>();
-        
-        split = new Point3i();
-        resolution = new Point3d();
-        bottomCorner = new Point3d();
-        topCorner = new Point3d();
-        */
-        header = new VoxelSpaceHeader();
-        minMax = new HashMap<>();
-        
-    }
-
-    public Map<String, Point2f> getMinMax() {
-        return minMax;
-    }
-
-    public void setMinMax(Map<String, Point2f> minMax) {
-        this.minMax = minMax;
-    }
-    
-    public Map<String, Float[]> getVoxelMap() {
-        
-        Map<String, Float[]> voxelMap = new LinkedHashMap<>();
-        
-        for (String attribut : header.attributsNames) {
-            
-            voxelMap.put(attribut, new Float[voxels.size()]);
-        }
-        
-        for (int j=0;j<voxels.size();j++) {
-            
-            float[] attributsValues = ((VoxelObject)voxels.get(j)).attributs;
-            
-            for(int i=0;i<attributsValues.length;i++){
-                voxelMap.get(header.attributsNames.get(i))[j] = attributsValues[i];
-            }
-        }
-        
-        return voxelMap;
-    }
-    
-    public VoxelObject getVoxel(int indice){
-        return voxels.get(indice);
-    }
-    
-    public VoxelObject getVoxel(int i, int j, int k){
-        
-        int index = get1DFrom3D(i, j, k);
-        
-        if(index>voxels.size()-1){
-            return null;
-        }
-        
-        return voxels.get(index);
-    }
-    
-    private int get1DFrom3D(int i, int j, int k){
-        return (i*header.split.y*header.split.z) + (j*header.split.z) +  k;
     }
     
     public VoxelObject getLastVoxel(){
         
         if(voxels != null && !voxels.isEmpty()){
-            return voxels.get(voxels.size()-1);
+            return (VoxelObject) voxels.get(voxels.size()-1);
         }
         
         return null;
@@ -132,7 +36,7 @@ public class VoxelSpaceData{
     public VoxelObject getFirstVoxel(){
         
         if(voxels != null && !voxels.isEmpty()){
-            return voxels.get(0);
+            return (VoxelObject) voxels.get(0);
         }
         
         return null;
@@ -142,22 +46,22 @@ public class VoxelSpaceData{
         
         // shift to scene Min
         Point3F pt =new Point3F (x, y, z);
-        pt.x -= header.bottomCorner.x;
-        pt.y -= header.bottomCorner.y;
-        pt.z -= header.bottomCorner.z;
+        pt.x -= voxelSpaceInfos.getMinCorner().x;
+        pt.y -= voxelSpaceInfos.getMinCorner().y;
+        pt.z -= voxelSpaceInfos.getMinCorner().z;
 
-        if ((pt.z < 0) || (pt.z >= header.split.z)){
+        if ((pt.z < 0) || (pt.z >= voxelSpaceInfos.getSplit().z)){
             return null;
         }
-        if ((pt.x < 0) || (pt.x >= header.split.x)){
+        if ((pt.x < 0) || (pt.x >= voxelSpaceInfos.getSplit().x)){
             return null;
         }
-        if ((pt.y < 0) || (pt.y >= header.split.y)){
+        if ((pt.y < 0) || (pt.y >= voxelSpaceInfos.getSplit().y)){
             return null;
         }
-        pt.x /= header.res;
-        pt.y /= header.res;
-        pt.z /= header.res;
+        pt.x /= voxelSpaceInfos.getResolution();
+        pt.y /= voxelSpaceInfos.getResolution();
+        pt.z /= voxelSpaceInfos.getResolution();
 
         Point3I indices = new Point3I();
         
@@ -171,62 +75,6 @@ public class VoxelSpaceData{
                 
         return indices;
     }
-
     
-    public static String[] readAttributs(File f) throws FileNotFoundException, IOException{
-        
-        String[] header = null;
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(f));
-            reader.readLine();
-            reader.readLine();
-            reader.readLine();
-            reader.readLine();
-            reader.readLine();
-            header = reader.readLine().split(" ");
-            
-            
-            reader.close();
-        } catch (FileNotFoundException ex) {
-            throw ex;
-        } catch (IOException ex) {
-            throw ex;
-        }
-        
-        return header;
-        
-    }
     
-    public void calculateAttributsLimits(){
-        
-        
-        for(int i=0;i<header.attributsNames.size();i++){
-            
-            float min, max;
-            
-            if(!voxels.isEmpty()){
-                min = ((VoxelObject)voxels.get(0)).attributs[i];
-                max = ((VoxelObject)voxels.get(0)).attributs[i];
-            }else{
-                return;
-            }
-            
-            for(int j=1;j<voxels.size();j++){
-                
-                if(min > ((VoxelObject)voxels.get(j)).attributs[i]){
-                    min = ((VoxelObject)voxels.get(j)).attributs[i];
-                }
-                
-                
-                if(max < ((VoxelObject)voxels.get(j)).attributs[i]){
-                    max = ((VoxelObject)voxels.get(j)).attributs[i];
-                }
-
-            }
-            
-            minMax.put(header.attributsNames.get(i), new Point2f(min, max));
-        }
-        
-        
-    }
 }

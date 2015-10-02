@@ -135,7 +135,7 @@ public class ColorGradient {
      */
     public Color getColor(float value) {
     	
-    	float colorIdx = ((value - minValue) / (maxValue-minValue));  
+        float colorIdx = ((value - minValue) / (maxValue-minValue));  
     	
     	int index = (int) ((gradientColor.length-1)*colorIdx); 
     	if(index<0) {

@@ -28,13 +28,13 @@ public class VoxelManager {
         private static final double 				MARGIN	= 0.0000000001;
         
 	private final VoxelSpace						voxelSpace;
-	private VolumicShape					sceneCanvas;
+	public VolumicShape					sceneCanvas;
         int count = 0;
 	/**
 	 * Used for returning voxel crossing context
-	 * 	-Estimation of the line segment length to set, during the current voxel crossing ("length")
-	 * 	-Prediction of the next voxel encountered (after the current voxel) ("indices")
-	 * 	-Calculation of the translation to perform on the line segment (when exit the scene bounding box & toric voxel space) ("translation")
+	 * 	Estimation of the line segment length to set, during the current voxel crossing (length)
+	 * 	Prediction of the next voxel encountered (after the current voxel) (indices)
+	 * 	Calculation of the translation to perform on the line segment (when exit the scene bounding box and toric voxel space) (translation)
 	 * @author cresson
 	 *
 	 */
@@ -48,17 +48,6 @@ public class VoxelManager {
 			this.translation	= t;
 		}
 	}
-		
-	
-	/**
-	 * Used for returning test results, between two bounding boxes (i.e. inclusion/exclusion/location context)
-	 * 	-Total inclusion (when "null" is returned)
-	 * 	-Total exclusion (when "outside" = true)
-	 * 	-Exceed location (list of indices. e.g. a box can exceed another to the left & to the top: two indices are returned) 
-	 * @author cresson
-	 *
-	 */
-	
 	
 	
 	/**
@@ -244,6 +233,66 @@ public class VoxelManager {
             
             return end;
         }
+        
+        //alternative à sceneCanvas.contains() pour une bounding-box de type rectangle (@author: Julien Heurtebize)
+        public boolean isPointInsideBoundingBox(Point3d point){
+            
+            Point3d min = voxelSpace.getBoundingBox().min;
+            Point3d max = voxelSpace.getBoundingBox().max;
+            
+            return (point.x > min.x && point.y > min.y && point.z > min.z  && 
+               point.x < max.x && point.y < max.y && point.z < max.z);
+        }
+        
+        //alternative à sceneCanvas.getNearestIntersection(), devrait être plus rapide (algorithme de smit)
+        public Point3d getIntersectionLineBoundingBox(LineElement lineElement) {
+                        
+            double tmin, tmax, tymin, tymax, tzmin, tzmax;
+            
+            Point3d[] bounds = new Point3d[]{voxelSpace.getBoundingBox().min, voxelSpace.getBoundingBox().max};
+            
+            Vector3d direction = lineElement.getDirection();
+            Vector3d invDirection = new Vector3d(1.0/direction.x, 1.0/direction.y, 1.0/direction.z);
+            int sign[] = new int[]{(invDirection.x < 0)? 1 : 0, (invDirection.y < 0)? 1 : 0 , (invDirection.z < 0)? 1 : 0};
+            
+            tmin = (bounds[sign[0]].x - lineElement.getOrigin().x) * invDirection.x;
+            tmax = (bounds[1 - sign[0]].x - lineElement.getOrigin().x) * invDirection.x;
+            tymin = (bounds[sign[1]].y - lineElement.getOrigin().y) * invDirection.y;
+            tymax = (bounds[1 - sign[1]].y - lineElement.getOrigin().y) * invDirection.y;
+            
+            if ((tmin > tymax) || (tymin > tmax)) {
+                return null;
+            }
+            if (tymin > tmin || Double.isNaN(tmin)) {
+                tmin = tymin;
+            }
+            if (tymax < tmax || Double.isNaN(tmax)) {
+                tmax = tymax;
+            }
+            
+            tzmin = (bounds[sign[2]].z - lineElement.getOrigin().z) * invDirection.z;
+            tzmax = (bounds[1 - sign[2]].z - lineElement.getOrigin().z) * invDirection.z;
+            
+            if ((tmin > tzmax) || (tzmin > tmax)) {
+                return null;
+            }
+            if (tzmin > tmin || Double.isNaN(tmin)) {
+                tmin = tzmin;
+            }
+            if (tzmax < tmax || Double.isNaN(tmax)) {
+                tmax = tzmax;
+            }
+            
+            if(tmax<tmin){
+                System.out.println("test");
+            }
+            
+            
+            LineSegment segment = new LineSegment(lineElement.getOrigin(), lineElement.getDirection(), tmin);
+            Point3d point =  segment.getEnd();
+            
+            return point;
+        }
 
 	/**
 	 *  Returns the voxel context of the first entry in the scene canvas
@@ -333,13 +382,52 @@ public class VoxelManager {
  
 	}
         
+        public VoxelCrossingContext getFirstVoxelV2(LineElement lineElement) {
+                
+                Point3d intersectionPointV2  = new Point3d();
+                
+                if (isPointInsideBoundingBox(lineElement.getOrigin())) {
+			// If the line origin is already in the scene canvas, just get its origin point
+			intersectionPointV2.add (lineElement.getOrigin ());
+		}else{
+                    // Computes intersection with the scene canvas
+                    
+                    Intersection intersection = sceneCanvas.getNearestIntersection (lineElement);
+		
+                    if (intersection!=null) {
+                        
+                        // If the intersection exists, get the intersection point
+                        LineElement e = new LineSegment(lineElement.getOrigin (), lineElement.getDirection (), intersection.distance);
+                        intersectionPointV2 = recalculateIntersection(e, intersection);
+                    }else {
+                        // Else (no intersection & no inside), bye bye.
+                        return null;
+                    }
+                }
+                
+
+		Point3i intersectionPointVoxelIndices = voxelSpace.getVoxelIndices (intersectionPointV2);
+		if (intersectionPointVoxelIndices==null) {
+
+                    return null;
+		}
+
+		// Computes the 1st translation (from line origin, to intersection point with the scene canvas)
+		Vector3d translation = new Vector3d (intersectionPointV2);
+		translation.sub (lineElement.getOrigin ());
+                
+		// Careful: Length is the length of the 1st translation !
+		double l = translation.length ();
+                
+		// Return the voxel indices, the line length, and the translation
+		return new VoxelCrossingContext(intersectionPointVoxelIndices,l,translation);
+ 
+	}
+        
         public Point3i getVoxelIndicesFromPoint(Point3d point){
             return voxelSpace.getVoxelIndices(point);
         }
 	
-	/**
-	 * Display voxel space properties
-	 */
 	public String getInformations() {
             
                 StringBuilder sb = new StringBuilder();

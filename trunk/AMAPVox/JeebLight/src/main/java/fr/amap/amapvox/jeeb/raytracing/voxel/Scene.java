@@ -16,9 +16,6 @@ public class Scene {
 	//TODO added Dauzat Feb 2013
 	private BoundingBox3d bbox = null;
 	
-	/**
-	 * Computes the global bounding box of artNodes
-	 */
 	public BoundingBox3d getBoundingBox() {
 		// added Dauzat Feb. 2013
                 return bbox;

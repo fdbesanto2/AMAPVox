@@ -398,8 +398,6 @@ public class ToolBoxFrameController implements Initializable {
                         float near = Float.valueOf(textfieldCameraNear.getText());
                         float far = Float.valueOf(textfieldCameraFar.getText());
                         joglContext.setViewToOrthographic(near, far, far, far, near, far);
-                        joglContext.getCamera().setOrthographic(near, far);
-                        joglContext.updateCamera();
                         joglContext.drawNextFrame();
                     }catch(Exception e){}
                     
@@ -529,10 +527,10 @@ public class ToolBoxFrameController implements Initializable {
         this.joglContext = joglContext;
     }
     
-    public void setAttributes(String attributeToVisualize, List<String> attributes){
+    public void setAttributes(String attributeToVisualize, String[] attributes){
                 
-        if(attributeToVisualize == null && attributes.size() > 0){
-            attributeToVisualize = attributes.get(0);
+        if(attributeToVisualize == null && attributes.length> 0){
+            attributeToVisualize = attributes[0];
         }
         
         comboBoxAttributeToShow.getItems().addAll(attributes);

@@ -7,30 +7,26 @@ package fr.amap.amapvox.voxviewer.object.scene;
 
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL3;
-import fr.amap.amapvox.commons.io.file.FileManager;
-import fr.amap.amapvox.commons.math.geometry.AABB;
 import fr.amap.amapvox.commons.math.geometry.Plane;
 import fr.amap.amapvox.commons.math.point.Point3F;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
-import fr.amap.amapvox.commons.util.BoundingBox3F;
 import fr.amap.amapvox.commons.util.ColorGradient;
 import fr.amap.amapvox.commons.util.CombinedFilter;
 import fr.amap.amapvox.commons.util.CombinedFilters;
 import fr.amap.amapvox.commons.util.Filter;
 import fr.amap.amapvox.commons.util.StandardDeviation;
+import fr.amap.amapvox.voxcommons.RawVoxel;
+import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
+import fr.amap.amapvox.voxreader.VoxelFileRawReader;
 import fr.amap.amapvox.voxviewer.loading.shader.Shader;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh;
 import fr.amap.amapvox.voxviewer.mesh.GLMeshFactory;
 import fr.amap.amapvox.voxviewer.mesh.InstancedGLMesh;
 import fr.amap.amapvox.voxviewer.misc.Attribut;
 import java.awt.Color;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -109,7 +105,6 @@ public class VoxelSpace extends SceneObject{
     
     public VoxelSpace(){
         
-        data = new VoxelSpaceData();
         //filteredValues = new TreeSet<>();
         //filteredValues.add(new Filter("x", Float.NaN, Filter.EQUAL));
         //filteredValues.add(new Filter("x", 0.0f, Filter.EQUAL));
@@ -124,7 +119,6 @@ public class VoxelSpace extends SceneObject{
     
     public VoxelSpace(File voxelSpace){
         
-        data = new VoxelSpaceData();
         //filteredValues = new TreeSet<>();
         //filteredValues.add(new Filter("x", Float.NaN, Filter.EQUAL));
         //filteredValues.add(new Filter("x", 0.0f, Filter.EQUAL));
@@ -165,7 +159,7 @@ public class VoxelSpace extends SceneObject{
         this.currentAttribut = attributToVisualize;
     }
     
-    public void load() throws IOException{
+    public void load() throws IOException, Exception{
         loadFromFile(voxelsFile);
     }
 
@@ -293,21 +287,7 @@ public class VoxelSpace extends SceneObject{
         
     }
     
-    private void readVoxelFormat(File f) throws IOException{
-        
-        String header = FileManager.readHeader(f.getAbsolutePath());
-        
-        if(header.equals("VOXEL SPACE")){
-            
-            readVoxelFormat1(f);
-            
-        }else if(header.split(" ").length == 10){
-            
-            //readVoxelFormat2(f);
-        }
-    }
-    
-    public void initAttributs(List<String> columnsNames){
+    public void initAttributs(String[] columnsNames){
         
         for(String name : columnsNames){
             variables.add(name);
@@ -321,222 +301,58 @@ public class VoxelSpace extends SceneObject{
     
     
     
-    private void readVoxelFormat1(File f) throws IOException{
+    private void readVoxelFormat(File f) throws IOException, Exception{
         
-        String header = FileManager.readHeader(f.getAbsolutePath());
-        
-        
-        if(header.equals("VOXEL SPACE")){
+        try {
             
-            data = new VoxelSpaceData();
-            data.header = VoxelSpaceHeader.readVoxelFileHeader(f);
-            initAttributs(data.header.attributsNames);
+            VoxelFileRawReader reader = new VoxelFileRawReader(f, false);
             
-            int count = FileManager.getLineNumber(file.getAbsolutePath());
+            VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
             
-            /******read file*****/
+            data = new VoxelSpaceData(infos);
+            initAttributs(infos.getColumnNames());
 
-            BufferedReader reader;
-            try {
-                reader = new BufferedReader(new FileReader(file));
-                
-                //Map<String, Point2F> minMax = new HashMap<>();
-                
-                //header
-                FileManager.skipLines(reader, 6);
-                
-                int lineNumber = 0;
-                String line;                
-                
-                //start reading voxels
-                while ((line = reader.readLine())!= null) {
+            int count = infos.getSplit().x * infos.getSplit().y * infos.getSplit().z;
 
-                    String[] voxelLine = line.split(" ");
-                    
-                    
-                    Point3i indice = new Point3i(Integer.valueOf(voxelLine[0]), 
-                            Integer.valueOf(voxelLine[1]),
-                            Integer.valueOf(voxelLine[2]));
+            int lineNumber = 0;
 
-                    float[] mapAttrs = new float[data.header.attributsNames.size()];
+            for(RawVoxel voxel : reader){
 
-                    for (int i=0;i<voxelLine.length;i++) {
-                        
-                        float value = Float.valueOf(voxelLine[i]);
-                        
-                        mapAttrs[i] = value;
-                        
-                        //Point2F minMaxPoint;
-                        /*
-                        if((minMaxPoint = minMax.get(data.header.attributsNames.get(i)))!=null){
-                            
-                            float min = minMaxPoint.x;
-                            float max = minMaxPoint.y;
-                            
-                            if(value < min){
-                                min = value;
-                            }
-                            
-                            if(value > max){
-                                max = value;
-                            }
-                            
-                            minMaxPoint = new Point2F(min, max);
-                            minMax.put(data.header.attributsNames.get(i), minMaxPoint);
-                            
-                        }else{
-                            minMax.put(data.header.attributsNames.get(i), new Point2F(value, value));
-                        }*/
-                    }
-                    
-                    Point3f position = getVoxelPosition(indice.x, indice.y, indice.z);
-                    
-                    if(lineNumber == 0){
-                        data.minY = position.y;
-                        data.maxY = position.y;
-                    }else{
-                        if(data.minY > position.y){
-                            data.minY = position.y;
-                        }
+                float[] mapAttrs = new float[voxel.attributs.length+3];
+                mapAttrs[0] = voxel.$i;
+                mapAttrs[1] = voxel.$j;
+                mapAttrs[2] = voxel.$k;
 
-                        if(data.maxY < position.y){
-                            data.maxY = position.y;
-                        }
-                    }                    
-                    
-                    data.voxels.add(new VoxelObject(indice, mapAttrs, 1.0f));
+                for (int i=3;i<mapAttrs.length;i++) {
 
-                    lineNumber++;
-
-                    setReadFileProgress((lineNumber * 100) / count);
+                    mapAttrs[i] = voxel.attributs[i-3];
                 }
-                
-                //data.calculateAttributsLimits();
-                
-                reader.close();
 
-            } catch (FileNotFoundException ex) {
-                throw ex;
-            } catch (IOException ex) {
-                throw ex;
+                Point3i indice = new Point3i(voxel.$i, voxel.$j, voxel.$k);               
+
+                data.voxels.add(new VoxelObject(indice, mapAttrs, 1.0f));
+
+                lineNumber++;
+
+                setReadFileProgress((lineNumber * 100) / count);
             }
             
+        } catch (Exception ex) {
+            throw ex;
         }
     }
     
     private Point3f getVoxelPosition(int i, int j, int k){
         
-        double posX = data.header.bottomCorner.x + (data.header.resolution.x / 2.0d) + (i * data.header.resolution.x);
-        double posY = data.header.bottomCorner.y + (data.header.resolution.y / 2.0d) + (j * data.header.resolution.y);
-        double posZ = data.header.bottomCorner.z + (data.header.resolution.z / 2.0d) + (k * data.header.resolution.z);
+        VoxelSpaceInfos infos = data.getVoxelSpaceInfos();
+        double posX = infos.getMinCorner().x + (infos.getResolution() / 2.0d) + (i * infos.getResolution());
+        double posY = infos.getMinCorner().y + (infos.getResolution() / 2.0d) + (j * infos.getResolution());
+        double posZ = infos.getMinCorner().z + (infos.getResolution() / 2.0d) + (k * infos.getResolution());
         
         return new Point3f((float)posX, (float)posY, (float)posZ);
-        
-        /*return new Point3f((float) (data.header.bottomCorner.x+(i*(data.header.resolution.x))),
-                                                    (float) (data.header.bottomCorner.y+(j*(data.header.resolution.y))),
-                                                    (float) (data.header.bottomCorner.z+(k*(data.header.resolution.z))));*/
     }
     
-//    private void readVoxelFormat2(File f){
-//        
-//        String header = FileManager.readHeader(f.getAbsolutePath());
-//        
-//        if(header.split(" ").length == 10){
-//            
-//            data = new VoxelSpaceData();
-//            
-//            int count = FileManager.getLineNumber(file.getAbsolutePath());
-//
-//            /******read file*****/
-//
-//            BufferedReader reader;
-//            try {
-//                reader = new BufferedReader(new FileReader(file));
-//                
-//                Map<String, Point2F> minMax = new HashMap<>();
-//                
-//                String[] columnsNames = reader.readLine().split(" ");
-//                
-//                String[] infos = reader.readLine().split(" ");
-//                data.split = new Point3i(Integer.valueOf(infos[0]), Integer.valueOf(infos[1]), Integer.valueOf(infos[2]));
-//                //data.resolution = Float.valueOf(infos[3]);
-//                
-//                int lineNumber = 0;
-//                String line;                
-//                
-//                //start reading voxels
-//                while ((line = reader.readLine())!= null) {
-//
-//                    String[] voxel = line.split(" ");
-//                    
-//                    int indiceX = Integer.valueOf(voxel[0]);
-//                    int indiceZ = Integer.valueOf(voxel[1]);
-//                    int indiceY = Integer.valueOf(voxel[2]);
-//
-//                    Map<String,Float> mapAttributs = new HashMap<>();
-//
-//                    for (int i=0;i<voxel.length;i++) {
-//                        
-//                        float value = Float.valueOf(voxel[i]);
-//                        
-//                        mapAttributs.put(columnsNames[i], value);
-//                        
-//                        Point2F minMaxPoint;
-//                        
-//                        if((minMaxPoint = minMax.get(columnsNames[i]))!=null){
-//                            
-//                            float min = minMaxPoint.x;
-//                            float max = minMaxPoint.y;
-//                            
-//                            if(value < min){
-//                                min = value;
-//                            }
-//                            
-//                            if(value > max){
-//                                max = value;
-//                            }
-//                            
-//                            minMaxPoint = new Point2F(min, max);
-//                            minMax.put(columnsNames[i], minMaxPoint);
-//                            
-//                        }else{
-//                            minMax.put(columnsNames[i], new Point2F(value, value));
-//                        }
-//                    }
-//                    /*
-//                    float offsetX = -12;
-//                    float offsetY = -2;
-//                    float offsetZ = 8;
-//                    */
-//                    float offsetX = 0;
-//                    float offsetY = 0;
-//                    float offsetZ = 0;
-//                    
-//                    float posX = offsetX+(indiceX)*(resolution.x);
-//                    float posY = offsetZ+(indiceY)*(resolution.y);
-//                    float posZ = offsetY+(indiceZ)*(resolution.z);
-//
-//                    data.voxels.add(new Voxel(indiceX, indiceY, indiceZ, posX, posY, posZ, mapAttributs, 1.0f));
-//
-//                    lineNumber++;
-//
-//                    setReadFileProgress((lineNumber * 100) / count);
-//                }
-//                
-//                data.setMinMax(minMax);
-//                
-//                reader.close();
-//
-//            } catch (FileNotFoundException ex) {
-//                logger.error(null, ex);
-//            } catch (IOException ex) {
-//                logger.error(null, ex);
-//            }
-//            
-//        }
-//    }
-    
-    public final void loadFromFile(File f) throws IOException{
+    public final void loadFromFile(File f) throws IOException, Exception{
         
         setFileLoaded(false);
         
@@ -546,8 +362,6 @@ public class VoxelSpace extends SceneObject{
         this.file =f;
         
         readVoxelFormat(file);
-
-
         //updateValue();
 
         setCenter();
@@ -571,37 +385,6 @@ public class VoxelSpace extends SceneObject{
         return useClippedRangeValue;
     }
     
-    /*
-    public final void loadFromFile(File f){
-        
-            
-        setFileLoaded(false);
-
-        this.file =f;
-
-        SwingWorker sw = new SwingWorker() {
-
-
-            @Override
-            protected Object doInBackground() {
-
-                readVoxelFormat(file);
-
-                setFileLoaded(true);
-
-                setCenter();
-                setWidth();
-                
-
-                return null;
-
-            }
-        };
-
-        sw.execute();   
-    }
-    */
-    
     public void updateValue(){
         
         if(currentAttribut == null){
@@ -617,8 +400,9 @@ public class VoxelSpace extends SceneObject{
         
         StandardDeviation sd = new StandardDeviation();
         
-        for(VoxelObject voxel:data.voxels){
+        for(int v=0;v<data.voxels.size();v++){
             
+            VoxelObject voxel = (VoxelObject)data.voxels.get(v);
             
             float attributValue;
             
@@ -626,7 +410,7 @@ public class VoxelSpace extends SceneObject{
             
             for(int i=0; i< attributs.length;i++){
                 
-                String name = data.header.attributsNames.get(i);
+                String name = data.getVoxelSpaceInfos().getColumnNames()[i];
                 double value = attributs[i];
                 attribut.getExpression().setVariable(name, value);
             }
@@ -763,7 +547,9 @@ public class VoxelSpace extends SceneObject{
         //ArrayList<Float> values = new ArrayList<>();
         voxelNumberToDraw = 0;
         
-        for (VoxelObject voxel : data.voxels) {
+        for(int i=0;i<data.voxels.size();i++){
+            
+            VoxelObject voxel = (VoxelObject)data.voxels.get(i);
             
             //float ratio = voxel.attributValue/(attributValueMax-attributValueMin);
             //float value = valMin+ratio*(valMax-valMin);
@@ -813,7 +599,9 @@ public class VoxelSpace extends SceneObject{
         Vec3F normale = plane.getNormale();
         Vec3F point = new Vec3F(plane.getPoint().x, plane.getPoint().y, plane.getPoint().z);
         
-        for (VoxelObject voxel : data.voxels) {
+        for(int i=0;i<data.voxels.size();i++){
+            
+            VoxelObject voxel = (VoxelObject)data.voxels.get(i);
             
             Point3f pt = getVoxelPosition(voxel.$i, voxel.$j, voxel.$k);
             Vec3F position = new Vec3F(pt.x, pt.y, pt.z);
@@ -825,15 +613,12 @@ public class VoxelSpace extends SceneObject{
         
     }
     
-    public static void main(String[] args){
-        
-        VoxelSpace voxelSpace = new VoxelSpace();
-        voxelSpace.setCuttingPlane(new Plane(new Vec3F(1, 0, 0), new Vec3F(0, 0, 1), new Point3F(0, 0, 0)));
-    }
-    
     public void clearCuttingPlane(){
         
-        for (VoxelObject voxel : data.voxels) {
+        for(int i=0;i<data.voxels.size();i++){
+            
+            VoxelObject voxel = (VoxelObject)data.voxels.get(i);
+            
             voxel.isHidden = false;
         }
     }
@@ -889,7 +674,9 @@ public class VoxelSpace extends SceneObject{
         int positionCount = 0;
         int colorCount = 0;
         
-        for (VoxelObject voxel : data.voxels) {
+        for(int i=0;i<data.voxels.size();i++){
+            
+            VoxelObject voxel = (VoxelObject)data.voxels.get(i);
             
             if(voxel.getAlpha() != 0 && !voxel.isHidden){
                 
@@ -946,7 +733,7 @@ public class VoxelSpace extends SceneObject{
     @Override
     public void initBuffers(GL3 gl){
         
-        cubeSize = (float) (data.header.resolution.x/2.0f);
+        cubeSize = (float) (data.getVoxelSpaceInfos().getResolution()/2.0f);
         
         int instanceNumber = data.voxels.size();    
         mesh = new InstancedGLMesh(gl, GLMeshFactory.createCube(cubeSize), instanceNumber);

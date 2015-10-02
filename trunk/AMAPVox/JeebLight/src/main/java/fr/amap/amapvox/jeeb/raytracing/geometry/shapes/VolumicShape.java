@@ -13,9 +13,7 @@ import javax.vecmath.Point3d;
  *
  */
 public interface VolumicShape {
-	/**
-	 * Return true when the given point is inside the volumic shape
-	 */
+    
 	boolean contains(Point3d point);
 	
 	/* Shape methods */
