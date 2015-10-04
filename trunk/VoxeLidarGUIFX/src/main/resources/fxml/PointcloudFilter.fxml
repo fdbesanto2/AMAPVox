@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<fx:root fx:id="anchorpanePointCloudFilterParameters" layoutX="9.0" layoutY="49.0" prefHeight="82.0" prefWidth="427.0" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <TextField fx:id="textfieldPointCloudPath" disable="true" layoutX="173.0" layoutY="15.0" prefHeight="25.0" prefWidth="201.0" AnchorPane.leftAnchor="173.0" />
+        <Label fx:id="labelPointCloudErrorMarginValue" disable="true" layoutX="173.0" layoutY="55.0" text="Error's margin" AnchorPane.leftAnchor="173.0" />
+        <TextField fx:id="textfieldPointCloudErrorMargin" disable="true" layoutX="273.0" layoutY="50.0" prefHeight="25.0" prefWidth="67.0" text="0.0025" />
+        <Label fx:id="labelPointCloudPath" disable="true" layoutX="28.0" layoutY="19.0" text="Point cloud path (.txt)" AnchorPane.leftAnchor="28.0" />
+        <Button fx:id="buttonOpenPointCloudFile" disable="true" layoutX="374.0" layoutY="14.0" mnemonicParsing="false" text="Open" />
+        <ComboBox fx:id="comboboxPointCloudFilteringType" disable="true" layoutX="28.0" layoutY="50.0" prefHeight="25.0" prefWidth="116.0" />
+        <Button fx:id="buttonRemovePointCloudFilter" disable="true" layoutX="-2.0" layoutY="28.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="22.0" prefWidth="22.0">
+           <graphic>
+              <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                 <image>
+                    <Image url="@icons/gnome_delete_element.png" />
+                 </image>
+              </ImageView>
+           </graphic>
+        </Button>
+    </children>
+</fx:root>

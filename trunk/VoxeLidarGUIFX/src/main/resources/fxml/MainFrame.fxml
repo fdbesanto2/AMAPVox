@@ -1,0 +1,831 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import org.controlsfx.control.textfield.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import fr.ird.voxelidar.*?>
+
+<AnchorPane fx:id="anchorpaneRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="659.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ird.voxelidar.gui.MainFrameController">
+   <children>
+      <MenuBar maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="25.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File" />
+          <Menu mnemonicParsing="false" text="Edit">
+               <items>
+                  <MenuItem fx:id="menuitemClearWindow" mnemonicParsing="false" onAction="#onActionMenuitemClearWindow" text="Clear window" />
+               </items></Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem fx:id="menuItemUpdate" mnemonicParsing="false" onAction="#onActionMenuItemUpdate" text="Update" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <SplitPane dividerPositions="0.7175843694493783" layoutY="29.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" prefHeight="565.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <TabPane fx:id="tabPaneMain" prefHeight="400.0" prefWidth="798.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <tabs>
+                      <Tab text="Voxelisation">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <SplitPane dividerPositions="0.4296482412060301" layoutX="63.0" layoutY="52.0" prefHeight="367.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <items>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                             <children>
+                                                <TabPane fx:id="tabPaneVoxelisation" layoutX="76.0" layoutY="42.0" prefHeight="365.0" prefWidth="495.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                  <tabs>
+                                                    <Tab text="ALS">
+                                                      <content>
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <Button fx:id="buttonOpenInputFileALS" layoutX="14.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="100.0" />
+                                                                  <ComboBox fx:id="comboboxModeALS" layoutX="14.0" layoutY="14.0" prefWidth="150.0" promptText="Choose mode..." />
+                                                                  <Label layoutX="14.0" layoutY="58.0" text="Input file(s)" />
+                                                                  <TextField fx:id="textFieldInputFileALS" layoutX="14.0" layoutY="73.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                                  <TextField fx:id="textFieldTrajectoryFileALS" layoutX="14.0" layoutY="155.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                                  <Label layoutX="14.0" layoutY="138.0" text="Trajectory file" AnchorPane.leftAnchor="14.0" />
+                                                                  <Button fx:id="buttonOpenTrajectoryFileALS" layoutX="14.0" layoutY="183.0" mnemonicParsing="false" onAction="#onActionButtonOpenTrajectoryFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="183.0" />
+                                                                  <TextField fx:id="textFieldOutputFileALS" layoutX="14.0" layoutY="233.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                                  <Label layoutX="14.0" layoutY="218.0" text="Output file/path" AnchorPane.leftAnchor="14.0" />
+                                                                  <Button fx:id="buttonOpenOutputFileALS" layoutX="14.0" layoutY="260.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="260.0" />
+                                                                  <Button fx:id="buttonALSAddToTaskList" layoutX="210.0" layoutY="349.0" mnemonicParsing="false" onAction="#onActionButtonALSAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                                     <graphic>
+                                                                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                           <image>
+                                                                              <Image url="@icons/gnome_list_add.png" />
+                                                                           </image>
+                                                                        </ImageView>
+                                                                     </graphic>
+                                                                  </Button>
+                                                                  <TextField fx:id="textfieldResMultiRes" disable="true" layoutX="133.0" layoutY="299.0" prefHeight="25.0" prefWidth="175.0" promptText="Resolutions (ex: 1, 2, 3)" />
+                                                                  <CheckBox fx:id="checkboxMultiResAfter" disable="true" layoutX="14.0" layoutY="302.0" mnemonicParsing="false" text="Correct NaNs" AnchorPane.leftAnchor="14.0" />
+                                                               </children></AnchorPane>
+                                                      </content>
+                                                    </Tab>
+                                                    <Tab text="TLS">
+                                                      <content>
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <TextField fx:id="textFieldTLSFilter" layoutX="230.0" layoutY="229.0" prefHeight="25.0" prefWidth="69.0" text=".mon" />
+                                                                  <Button fx:id="buttonOpenOutputPathTLS" layoutX="14.0" layoutY="294.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputPathTLS" text="Open" AnchorPane.topAnchor="296.0" />
+                                                                  <Label fx:id="labelTLSOutputPath" layoutX="14.0" layoutY="254.0" text="Output path" />
+                                                                  <TextField fx:id="textFieldOutputPathTLS" layoutX="14.0" layoutY="269.0" prefHeight="25.0" prefWidth="300.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                                  <ComboBox fx:id="comboboxModeTLS" layoutX="14.0" layoutY="14.0" prefWidth="150.0" promptText="Choose mode..." />
+                                                                  <TextField fx:id="textFieldInputFileTLS" layoutX="14.0" layoutY="73.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                                  <Label layoutX="14.0" layoutY="58.0" text="Input file" />
+                                                                  <Button fx:id="buttonOpenInputFileTLS" layoutX="14.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileTLS" text="Open" AnchorPane.topAnchor="100.0" />
+                                                                  <ListView fx:id="listviewRxpScans" layoutX="14.0" layoutY="129.0" maxWidth="1.7976931348623157E308" prefHeight="91.0" prefWidth="300.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                                  <Button fx:id="buttonTLSAddToTaskList" layoutX="210.0" layoutY="349.0" mnemonicParsing="false" onAction="#onActionButtonTLSAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                                     <graphic>
+                                                                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                           <image>
+                                                                              <Image url="@icons/gnome_list_add.png" />
+                                                                           </image>
+                                                                        </ImageView>
+                                                                     </graphic>
+                                                                  </Button>
+                                                                  <CheckBox fx:id="checkboxFilter" layoutX="159.0" layoutY="227.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="61.0" selected="true" text="Filter" />
+                                                                  <CheckBox fx:id="checkboxMergeAfter" layoutX="99.0" layoutY="309.0" mnemonicParsing="false" text="Merge after" />
+                                                                  <TextField fx:id="textFieldMergedFileName" layoutX="230.0" layoutY="305.0" prefHeight="25.0" prefWidth="103.0" text="merged.vox" AnchorPane.rightAnchor="24.0" />
+                                                               </children></AnchorPane>
+                                                      </content>
+                                                    </Tab>
+                                                      <Tab text="Multi-resolutions">
+                                                         <content>
+                                                            <AnchorPane minHeight="0.0" minWidth="300.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <ListView fx:id="listViewMultiResVoxelFiles" layoutX="14.0" layoutY="14.0" prefHeight="141.0" prefWidth="308.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                                                                  <Button fx:id="buttonAddVoxelFileToMultiResListView" layoutX="159.0" layoutY="161.0" mnemonicParsing="false" onAction="#onActionButtonAddVoxelFileToMultiResListView" text="Add" AnchorPane.rightAnchor="116.0">
+                                                                     <graphic>
+                                                                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                           <image>
+                                                                              <Image url="@icons/gnome_list_add.png" />
+                                                                           </image>
+                                                                        </ImageView>
+                                                                     </graphic>
+                                                                  </Button>
+                                                                  <MenuButton layoutX="14.0" layoutY="161.0" mnemonicParsing="false" text="Selection">
+                                                                     <items>
+                                                                        <MenuItem fx:id="menuItemSelectionAllMultiRes" mnemonicParsing="false" onAction="#onActionMenuItemSelectionAllMultiRes" text="All" />
+                                                                        <MenuItem fx:id="menuItemSelectionNoneMultiRes" mnemonicParsing="false" onAction="#onActionMenuItemSelectionNoneMultiRes" text="None" />
+                                                                     </items>
+                                                                  </MenuButton>
+                                                                  <Button fx:id="buttonRemoveVoxelFileFromMultiResListView" layoutX="233.0" layoutY="161.0" mnemonicParsing="false" onAction="#onActionButtonRemoveVoxelFileFromMultiResListView" text="Remove" AnchorPane.rightAnchor="14.0">
+                                                                     <graphic>
+                                                                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                           <image>
+                                                                              <Image url="@icons/gnome_list_remove.png" />
+                                                                           </image>
+                                                                        </ImageView>
+                                                                     </graphic>
+                                                                  </Button>
+                                                                  <Button fx:id="buttonMultiResAddToTaskList" layoutX="191.0" layoutY="340.0" mnemonicParsing="false" onAction="#onActionButtonMultiResAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                                     <graphic>
+                                                                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                           <image>
+                                                                              <Image url="@icons/gnome_list_add.png" />
+                                                                           </image>
+                                                                        </ImageView>
+                                                                     </graphic>
+                                                                  </Button>
+                                                                  <Button fx:id="buttonOpenOutputFileMultiRes" layoutX="14.0" layoutY="275.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileMultiRes" text="Open" />
+                                                                  <Label layoutX="14.0" layoutY="235.0" text="Output file" />
+                                                                  <TextField fx:id="textFieldOutputFileMultiRes" editable="false" layoutX="14.0" layoutY="250.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                               </children></AnchorPane>
+                                                         </content>
+                                                      </Tab>
+                                                      <Tab text="Merging">
+                                                         <content>
+                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <Button fx:id="buttonMergingAddToTaskList" layoutX="189.0" layoutY="340.0" mnemonicParsing="false" onAction="#onActionButtonMergingAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                                     <graphic>
+                                                                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                           <image>
+                                                                              <Image url="@icons/gnome_list_add.png" />
+                                                                           </image>
+                                                                        </ImageView>
+                                                                     </graphic>
+                                                                  </Button>
+                                                                  <Button fx:id="buttonOpenOutputFileMerging" layoutX="15.0" layoutY="275.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileMerging" text="Open" AnchorPane.leftAnchor="14.0" />
+                                                                  <Label layoutX="23.0" layoutY="235.0" text="Output file" AnchorPane.leftAnchor="14.0" />
+                                                                  <TextField fx:id="textFieldOutputFileMerging" editable="false" layoutX="20.0" layoutY="250.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                               </children></AnchorPane>
+                                                         </content>
+                                                      </Tab>
+                                                  </tabs>
+                                                </TabPane>
+                                             </children>
+                                          </AnchorPane>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                             <children>
+                                                <TabPane prefHeight="365.0" prefWidth="451.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                  <tabs>
+                                                    <Tab text="Voxel space">
+                                                      <content>
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <AnchorPane fx:id="anchorpaneBoundingBoxParameters" layoutX="16.0" layoutY="8.0">
+                                                                     <children>
+                                                                        <TextField fx:id="textFieldEnterXMin" layoutX="49.0" prefHeight="3.0" prefWidth="67.0" promptText="enter X" />
+                                                                        <TextField fx:id="textFieldEnterXMax" layoutX="186.0" prefHeight="3.0" prefWidth="67.0" promptText="enter X" />
+                                                                        <Label layoutY="5.0" text="X min" />
+                                                                        <Label layoutX="1.0" layoutY="38.0" text="Y min" />
+                                                                        <TextField fx:id="textFieldEnterYMin" layoutX="49.0" layoutY="33.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Y" />
+                                                                        <TextField fx:id="textFieldEnterYMax" layoutX="186.0" layoutY="33.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Y" />
+                                                                        <TextField fx:id="textFieldEnterZMin" layoutX="49.0" layoutY="64.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Z" />
+                                                                        <Label layoutY="69.0" text="Z min" />
+                                                                        <Label layoutX="136.0" layoutY="69.0" text="Z max" />
+                                                                        <TextField fx:id="textFieldEnterZMax" layoutX="186.0" layoutY="64.0" prefHeight="3.0" prefWidth="67.0" promptText="enter Z" />
+                                                                        <Label layoutX="137.0" layoutY="38.0" text="Y max" />
+                                                                        <Label layoutX="136.0" layoutY="5.0" text="X max" />
+                                                                        <TextField fx:id="textFieldXNumber" editable="false" layoutX="342.0" prefHeight="3.0" prefWidth="70.0" />
+                                                                        <Label layoutX="269.0" layoutY="5.0" text="X number" />
+                                                                        <Label layoutX="270.0" layoutY="38.0" text="Y number" />
+                                                                        <TextField fx:id="textFieldYNumber" editable="false" layoutX="342.0" layoutY="33.0" prefHeight="3.0" prefWidth="70.0" />
+                                                                        <Label layoutX="269.0" layoutY="69.0" text="Z number" />
+                                                                        <TextField fx:id="textFieldZNumber" editable="false" layoutX="342.0" layoutY="64.0" prefHeight="3.0" prefWidth="70.0" />
+                                                                     </children>
+                                                                  </AnchorPane>
+                                                                  <TextField fx:id="textFieldResolution" layoutX="358.0" layoutY="106.0" prefHeight="25.0" prefWidth="70.0" text="1" />
+                                                                  <Label layoutX="254.0" layoutY="111.0" text="Resolution (m)" />
+                                                                  <MenuButton layoutX="17.0" layoutY="114.0" mnemonicParsing="false" text="Automatic">
+                                                                    <items>
+                                                                      <MenuItem mnemonicParsing="false" onAction="#onActionButtonAutomatic" text="Fast" />
+                                                                      <MenuItem mnemonicParsing="false" onAction="#onActionButtonAutomaticDeepSearch" text="Deep search" />
+                                                                    </items>
+                                                                  </MenuButton>
+                                                               </children>
+                                                            </AnchorPane>
+                                                      </content>
+                                                    </Tab>
+                                                    <Tab text="Transformation">
+                                                      <content>
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <GridPane hgap="5.0" layoutX="14.0" layoutY="14.0">
+                                                                     <columnConstraints>
+                                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="170.0" />
+                                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="20.0" />
+                                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                     </columnConstraints>
+                                                                     <rowConstraints>
+                                                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                     </rowConstraints>
+                                                                     <children>
+                                                                        <Button fx:id="buttonOpenPopMatrixFile" disable="true" mnemonicParsing="false" onAction="#onActionButtonOpenPopMatrixFile" text="Open file" GridPane.columnIndex="3">
+                                                                           <tooltip>
+                                                                              <Tooltip text="Matrix file or Rsp file allowed" />
+                                                                           </tooltip></Button>
+                                                                        <CheckBox fx:id="checkboxUsePopMatrix" disable="true" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onActionCheckboxUsePopMatrix" selected="true" text="Use POP matrix">
+                                                                           <tooltip>
+                                                                              <Tooltip text="Project Orientation and Position matrix" />
+                                                                           </tooltip></CheckBox>
+                                                                        <CheckBox fx:id="checkboxUseSopMatrix" disable="true" mnemonicParsing="false" onAction="#onActionCheckboxUseSopMatrix" prefHeight="24.0" prefWidth="126.0" selected="true" text="Use SOP matrix" GridPane.rowIndex="1">
+                                                                           <tooltip>
+                                                                              <Tooltip text="System Orientation and Position matrix" />
+                                                                           </tooltip></CheckBox>
+                                                                        <CheckBox fx:id="checkboxUseVopMatrix" mnemonicParsing="false" onAction="#onActionCheckboxUseVopMatrix" prefHeight="24.0" prefWidth="126.0" text="Use VOP matrix" GridPane.rowIndex="2">
+                                                                           <tooltip>
+                                                                              <Tooltip text="Voxel Orientation and Position matrix" />
+                                                                           </tooltip></CheckBox>
+                                                                        <CheckBox fx:id="checkBoxUseDefaultSopMatrix" disable="true" mnemonicParsing="false" prefHeight="24.0" prefWidth="103.0" selected="true" text="Use default" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                                        <CheckBox fx:id="checkBoxUseDefaultPopMatrix" disable="true" mnemonicParsing="false" prefHeight="24.0" prefWidth="103.0" selected="true" text="Use default" GridPane.columnIndex="1" />
+                                                                        <Label alignment="BOTTOM_CENTER" prefHeight="18.0" prefWidth="16.0" text="or" GridPane.columnIndex="2" />
+                                                                        <Button fx:id="buttonOpenSopMatrixFile" disable="true" mnemonicParsing="false" onAction="#onActionButtonOpenSopMatrixFile" text="Open file" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                                                           <tooltip>
+                                                                              <Tooltip text="Matrix file or Rsp file allowed" />
+                                                                           </tooltip>
+                                                                        </Button>
+                                                                        <Label alignment="BOTTOM_CENTER" prefHeight="18.0" prefWidth="16.0" text="or" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                                        <Button fx:id="buttonSetVOPMatrix" disable="true" mnemonicParsing="false" onAction="#onActionButtonSetVOPMatrix" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                                           <graphic>
+                                                                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@icons/Interaction_Transformation.png" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                           </graphic>
+                                                                        </Button>
+                                                                     </children>
+                                                                  </GridPane>
+                                                                  <HBox layoutX="14.0" layoutY="171.0" prefHeight="101.0" prefWidth="314.0">
+                                                                     <children>
+                                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                                           <children>
+                                                                              <TextField fx:id="labelM00" prefHeight="25.0" prefWidth="94.0" promptText="m00" />
+                                                                              <TextField fx:id="labelM10" promptText="m10" />
+                                                                              <TextField fx:id="labelM20" promptText="m20" />
+                                                                              <TextField fx:id="labelM30" promptText="m30" />
+                                                                           </children>
+                                                                        </VBox>
+                                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                                           <children>
+                                                                              <TextField fx:id="labelM01" promptText="m01" />
+                                                                              <TextField fx:id="labelM11" promptText="m11" />
+                                                                              <TextField fx:id="labelM21" promptText="m21" />
+                                                                              <TextField fx:id="labelM31" promptText="m31" />
+                                                                           </children>
+                                                                        </VBox>
+                                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                                           <children>
+                                                                              <TextField fx:id="labelM02" promptText="m02" />
+                                                                              <TextField fx:id="labelM12" promptText="m12" />
+                                                                              <TextField fx:id="labelM22" promptText="m22" />
+                                                                              <TextField fx:id="labelM32" promptText="m32" />
+                                                                           </children>
+                                                                        </VBox>
+                                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                                           <children>
+                                                                              <TextField fx:id="labelM03" promptText="m03" />
+                                                                              <TextField fx:id="labelM13" promptText="m13" />
+                                                                              <TextField fx:id="labelM23" promptText="m23" />
+                                                                              <TextField fx:id="labelM33" promptText="m33" />
+                                                                           </children>
+                                                                        </VBox>
+                                                                     </children>
+                                                                  </HBox>
+                                                                  <Button fx:id="buttonResetToIdentity" layoutX="14.0" layoutY="272.0" mnemonicParsing="false" onAction="#onActionButtonResetToIdentity" text="Reset to identity" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="272.0" />
+                                                               </children>
+                                                            </AnchorPane>
+                                                      </content>
+                                                    </Tab>
+                                                      <Tab text="Filters">
+                                                         <content>
+                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="332.0" prefWidth="420.0">
+                                                               <children>
+                                                                  <Accordion layoutX="12.0" layoutY="4.0" prefHeight="388.0" prefWidth="451.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                    <panes>
+                                                                      <TitledPane prefHeight="281.0" prefWidth="457.0" text="DTM">
+                                                                           <content>
+                                                                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                                                 <children>
+                                                                                    <CheckBox fx:id="checkboxUseDTMFilter" layoutX="14.0" layoutY="23.0" mnemonicParsing="false" onAction="#onActionCheckboxUseDTMFilter" text="DTM filter" AnchorPane.leftAnchor="10.0" />
+                                                                                    <TextField fx:id="textfieldDTMPath" disable="true" layoutX="124.0" layoutY="54.0" prefHeight="25.0" prefWidth="227.0" AnchorPane.leftAnchor="124.0" />
+                                                                                    <Label fx:id="labelDTMPath" disable="true" layoutX="14.0" layoutY="59.0" text="DTM path (.asc)" AnchorPane.leftAnchor="10.0" />
+                                                                                    <Button fx:id="buttonOpenDTMFile" disable="true" layoutX="361.0" layoutY="54.0" mnemonicParsing="false" onAction="#onActionButtonOpenDTMFile" text="Open" AnchorPane.leftAnchor="361.0" />
+                                                                                    <Label fx:id="labelDTMValue" disable="true" layoutX="108.0" layoutY="101.0" text="Offset (distance above ground)" AnchorPane.leftAnchor="108.0" />
+                                                                                    <TextField fx:id="textfieldDTMValue" disable="true" layoutX="324.0" layoutY="96.0" prefHeight="25.0" prefWidth="55.0" text="1" />
+                                                                                 </children>
+                                                                              </AnchorPane>
+                                                                           </content>
+                                                                        </TitledPane>
+                                                                      <TitledPane expanded="false" text="Shots">
+                                                                           <content>
+                                                                              <AnchorPane prefHeight="189.0" prefWidth="427.0">
+                                                                                 <children>
+                                                                                    <ListView fx:id="listviewFilters" layoutX="7.0" layoutY="19.0" prefHeight="123.0" prefWidth="343.0" />
+                                                                                    <Button fx:id="buttonAddFilter" layoutX="7.0" layoutY="153.0" mnemonicParsing="false" onAction="#onActionButtonAddFilter" text="Add filter">
+                                                                                       <graphic>
+                                                                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                             <image>
+                                                                                                <Image url="@icons/gnome_list_add.png" />
+                                                                                             </image>
+                                                                                          </ImageView>
+                                                                                       </graphic>
+                                                                                    </Button>
+                                                                                    <Button fx:id="buttonRemoveFilter" layoutX="222.0" layoutY="153.0" mnemonicParsing="false" onAction="#onActionButtonRemoveFilter" prefHeight="25.0" prefWidth="128.0" text="Remove filter">
+                                                                                       <graphic>
+                                                                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                             <image>
+                                                                                                <Image url="@icons/gnome_list_remove.png" />
+                                                                                             </image>
+                                                                                          </ImageView>
+                                                                                       </graphic>
+                                                                                    </Button>
+                                                                                 </children>
+                                                                              </AnchorPane>
+                                                                           </content>
+                                                                        </TitledPane>
+                                                                        <TitledPane expanded="false" prefHeight="200.0" prefWidth="200.0" text="Point cloud">
+                                                                           <content>
+                                                                              <ScrollPane prefViewportHeight="278.0" prefViewportWidth="457.0">
+                                                                                 <content>
+                                                                                    <AnchorPane fx:id="anchorpanePointCloudFiltering" prefHeight="200.0" prefWidth="424.0">
+                                                                                       <children>
+                                                                                          <CheckBox fx:id="checkboxUsePointcloudFilter" layoutX="7.0" layoutY="21.0" mnemonicParsing="false" onAction="#onActionCheckboxUsePointcloudFilter" text="Point cloud filter" AnchorPane.leftAnchor="10.0" />
+                                                                                          <Button fx:id="buttonAddPointcloudFilter" disable="true" layoutX="167.0" layoutY="18.0" mnemonicParsing="false" onAction="#onActionButtonAddPointcloudFilter" text="Add">
+                                                                                             <graphic>
+                                                                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                   <image>
+                                                                                                      <Image url="@icons/gnome_list_add.png" />
+                                                                                                   </image>
+                                                                                                </ImageView>
+                                                                                             </graphic>
+                                                                                          </Button>
+                                                                                          <Button fx:id="buttonGetBoundingBox" layoutX="242.0" layoutY="18.0" mnemonicParsing="false" onAction="#onActionButtonGetBoundingBox" text="Get bounding-box" />
+                                                                                       </children>
+                                                                                    </AnchorPane>
+                                                                                 </content>
+                                                                              </ScrollPane>
+                                                                           </content>
+                                                                        </TitledPane>
+                                                                        <TitledPane expanded="false" prefHeight="200.0" prefWidth="200.0" text="Other">
+                                                                           <content>
+                                                                              <AnchorPane>
+                                                                                 <children>
+                                                                                    <AnchorPane fx:id="anchorpaneClassifications" layoutX="14.0" layoutY="14.0">
+                                                                                       <children>
+                                                                                          <Label text="Classifications" />
+                                                                                          <ListView fx:id="listviewClassifications" layoutY="18.0" prefHeight="134.0" prefWidth="269.0" />
+                                                                                       </children>
+                                                                                    </AnchorPane>
+                                                                                 </children>
+                                                                              </AnchorPane>
+                                                                           </content>
+                                                                        </TitledPane>
+                                                                    </panes>
+                                                                  </Accordion>
+                                                               </children>
+                                                            </AnchorPane>
+                                                         </content>
+                                                      </Tab>
+                                                      <Tab text="Weighting">
+                                                         <content>
+                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <ComboBox fx:id="comboboxWeighting" layoutX="14.0" layoutY="55.0" prefHeight="25.0" prefWidth="180.0" promptText="Mode" />
+                                                                  <CheckBox fx:id="checkboxEnableWeighting" layoutX="14.0" layoutY="25.0" mnemonicParsing="false" text="Enable weighting" />
+                                                                  <Button fx:id="buttonOpenPonderationFile" layoutX="225.0" layoutY="55.0" mnemonicParsing="false" onAction="#onActionButtonOpenPonderationFile" text="Open file" visible="false" />
+                                                               </children></AnchorPane>
+                                                         </content>
+                                                      </Tab>
+                                                      <Tab text="Limits">
+                                                        <content>
+                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <Label layoutX="16.0" layoutY="13.0" text="PAD max" />
+                                                                  <TextField fx:id="textFieldPADMax" layoutX="88.0" layoutY="8.0" prefHeight="25.0" prefWidth="72.0" text="5" />
+                                                                  <CheckBox fx:id="checkboxOverwritePadLimit" layoutX="16.0" layoutY="48.0" mnemonicParsing="false" selected="true" text="Overwrite default maximums" visible="false" />
+                                                                  <AnchorPane fx:id="anchorpanePadLimits" layoutX="16.0" layoutY="82.0" visible="false">
+                                                                     <children>
+                                                                        <Label fx:id="labelPadMax4m" layoutY="125.0" text="PAD max 4m" AnchorPane.leftAnchor="16.0" />
+                                                                        <TextField fx:id="textFieldPadMax2m" layoutX="97.0" layoutY="40.0" prefHeight="25.0" prefWidth="82.0" AnchorPane.leftAnchor="113.0" />
+                                                                        <Label fx:id="labelPadMax1m" layoutX="1.0" layoutY="5.0" text="PAD max 1m" AnchorPane.leftAnchor="16.0" />
+                                                                        <TextField fx:id="textFieldPadMax3m" layoutX="97.0" layoutY="80.0" prefHeight="25.0" prefWidth="82.0" AnchorPane.leftAnchor="113.0" />
+                                                                        <Label fx:id="labelPadMax5m" layoutY="162.0" text="PAD max 5m" AnchorPane.leftAnchor="16.0" />
+                                                                        <Label fx:id="labelPadMax3m" layoutY="85.0" text="PAD max 3m" AnchorPane.leftAnchor="16.0" />
+                                                                        <TextField fx:id="textFieldPadMax5m" layoutX="97.0" layoutY="160.0" prefHeight="25.0" prefWidth="82.0" AnchorPane.leftAnchor="113.0" />
+                                                                        <Label fx:id="labelPadMax2m" layoutY="45.0" text="PAD max 2m" AnchorPane.leftAnchor="16.0" />
+                                                                        <TextField fx:id="textFieldPadMax4m" layoutX="97.0" layoutY="120.0" prefHeight="25.0" prefWidth="82.0" AnchorPane.leftAnchor="113.0" />
+                                                                        <TextField fx:id="textFieldPadMax1m" layoutX="97.0" prefHeight="25.0" prefWidth="82.0" AnchorPane.leftAnchor="113.0" />
+                                                                     </children>
+                                                                  </AnchorPane>
+                                                                  <Button fx:id="buttonResetPadLimitsToDefault" layoutX="14.0" layoutY="279.0" mnemonicParsing="false" onAction="#onActionButtonResetPadLimitsToDefault" text="Reset to default" />
+                                                               </children>
+                                                            </AnchorPane>
+                                                        </content>
+                                                      </Tab>
+                                                      <Tab text="Formula">
+                                                         <content>
+                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <Label layoutX="14.0" layoutY="14.0" text="Transmittance" />
+                                                                  <ComboBox fx:id="comboboxFormulaTransmittance" layoutX="128.0" layoutY="9.0" prefHeight="25.0" prefWidth="281.0" />
+                                                               </children>
+                                                            </AnchorPane>
+                                                         </content>
+                                                      </Tab>
+                                                      <Tab text="Other">
+                                                         <content>
+                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <CheckBox fx:id="checkboxCalculateGroundEnergy" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Calculate ground energy" AnchorPane.leftAnchor="14.0" />
+                                                                  <AnchorPane fx:id="anchorPaneGroundEnergyParameters" disable="true" layoutX="14.0" layoutY="52.0" prefHeight="123.0" prefWidth="415.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                                     <children>
+                                                                        <TextField fx:id="textFieldOutputFileGroundEnergy" layoutY="66.0" prefHeight="25.0" prefWidth="408.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                                                                        <Button fx:id="buttonOpenOutputFileGroundEnergy" layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileGroundEnergy" text="Open" AnchorPane.leftAnchor="14.0" />
+                                                                        <Label fx:id="labelOutputFileGroundEnergy" layoutY="51.0" text="Output file" AnchorPane.leftAnchor="14.0" />
+                                                                        <ComboBox fx:id="comboboxGroundEnergyOutputFormat" prefHeight="25.0" prefWidth="144.0" promptText="Choose format" AnchorPane.leftAnchor="14.0" />
+                                                                     </children>
+                                                                  </AnchorPane>
+                                                                  <CheckBox fx:id="checkboxGenerateMultiBandRaster" layoutX="18.0" layoutY="219.0" mnemonicParsing="false" text="Generate multi-band raster" />
+                                                                  <AnchorPane fx:id="anchorPaneMultiBandRasterParameters" disable="true" layoutX="18.0" layoutY="242.0" prefHeight="130.0" prefWidth="415.0">
+                                                                     <children>
+                                                                        <CheckBox fx:id="checkboxDiscardVoxelFileWriting" layoutX="14.0" layoutY="98.0" mnemonicParsing="false" text="Discard voxel file writing (save memory space)" AnchorPane.leftAnchor="14.0" />
+                                                                        <TextField fx:id="textfieldRasterStartingHeight" layoutX="121.0" layoutY="14.0" prefHeight="26.0" prefWidth="59.0" text="0" />
+                                                                        <Label layoutX="14.0" layoutY="19.0" text="Starting height" AnchorPane.leftAnchor="14.0" />
+                                                                        <Label layoutX="14.0" layoutY="57.0" text="Band number" />
+                                                                        <TextField fx:id="textfieldRasterBandNumber" editable="false" layoutX="121.0" layoutY="52.0" prefHeight="26.0" prefWidth="47.0" text="5" />
+                                                                        <Label layoutX="212.0" layoutY="57.0" text="Resolution (pixel)" />
+                                                                        <TextField fx:id="textfieldRasterResolution" layoutX="339.0" layoutY="52.0" prefHeight="26.0" prefWidth="47.0" text="1" />
+                                                                        <Label layoutX="212.0" layoutY="19.0" text="Step" />
+                                                                        <TextField fx:id="textfieldRasterHeightStep" layoutX="255.0" layoutY="14.0" prefHeight="26.0" prefWidth="59.0" text="10" />
+                                                                     </children>
+                                                                  </AnchorPane>
+                                                                  <Separator layoutX="14.0" layoutY="190.0" prefHeight="12.0" prefWidth="401.0" AnchorPane.rightAnchor="28.0" />
+                                                               </children>
+                                                            </AnchorPane>
+                                                         </content>
+                                                      </Tab>
+                                                  </tabs>
+                                                </TabPane>
+                                             </children>
+                                          </AnchorPane>
+                                      </items>
+                                    </SplitPane>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab text="Transmittance">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <ScrollPane prefViewportHeight="339.0" prefViewportWidth="314.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <content>
+                                          <AnchorPane prefHeight="405.0" prefWidth="787.0">
+                                             <children>
+                                                <TextField fx:id="textfieldVoxelFilePathTransmittance" layoutX="14.0" layoutY="35.0" prefHeight="25.0" prefWidth="240.0" />
+                                                <Label layoutX="14.0" layoutY="14.0" text="Voxel file" />
+                                                <Button fx:id="buttonOpenVoxelFileTransmittance" layoutX="254.0" layoutY="35.0" mnemonicParsing="false" onAction="#onActionButtonOpenVoxelFileTransmittance" text="Open" />
+                                                <GridPane layoutX="410.0" layoutY="217.0" prefHeight="57.0" prefWidth="359.0" AnchorPane.leftAnchor="410.0" AnchorPane.rightAnchor="18.0">
+                                                   <children>
+                                                      <CheckBox fx:id="checkboxGenerateTextFile" mnemonicParsing="false" selected="true" text="Generate text file" />
+                                                      <TextField fx:id="textfieldOutputTextFilePath" prefHeight="25.0" prefWidth="251.0" GridPane.rowIndex="1" />
+                                                      <Button fx:id="buttonOpenOutputTextFile" maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenOutputTextFile" text="Open" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                   </children>
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="289.0" minWidth="10.0" prefWidth="268.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="10.0" prefWidth="40.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                </GridPane>
+                                                <VBox layoutX="410.0" layoutY="14.0" minWidth="-Infinity" prefHeight="171.0" prefWidth="362.0" AnchorPane.leftAnchor="410.0" AnchorPane.rightAnchor="15.0">
+                                                   <children>
+                                                      <AnchorPane prefHeight="27.0" prefWidth="332.0">
+                                                         <children>
+                                                            <Label layoutY="6.0" text="Simulation periods" />
+                                                            <Button fx:id="buttonAddPeriodToPeriodList" layoutX="303.0" mnemonicParsing="false" onAction="#onActionButtonAddPeriodToPeriodList">
+                                                               <graphic>
+                                                                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@icons/gnome_list_add.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                            </Button>
+                                                            <Button fx:id="buttonRemovePeriodFromPeriodList" layoutX="263.0" mnemonicParsing="false" onAction="#onActionButtonRemovePeriodFromPeriodList">
+                                                               <graphic>
+                                                                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@icons/gnome_list_remove.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                            </Button>
+                                                            <MenuButton fx:id="menuButtonSelectionPeriodsList" layoutX="142.0" layoutY="1.0" mnemonicParsing="false" text="Selection">
+                                                               <items>
+                                                                  <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemSelectAllPeriods" text="All" />
+                                                                  <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemUnselectAllPeriods" text="None" />
+                                                               </items>
+                                                            </MenuButton>
+                                                         </children>
+                                                      </AnchorPane>
+                                                      <TableView fx:id="tableViewSimulationPeriods" editable="true" layoutX="379.0" layoutY="14.0" prefHeight="157.0" prefWidth="336.0" AnchorPane.topAnchor="14.0">
+                                                        <columns>
+                                                          <TableColumn fx:id="tableColumnPeriod" prefWidth="282.0" text="Period" />
+                                                            <TableColumn fx:id="tableColumnClearness" minWidth="0.0" prefWidth="79.0" text="Clearness" />
+                                                        </columns>
+                                                         <VBox.margin>
+                                                            <Insets top="1.0" />
+                                                         </VBox.margin>
+                                                      </TableView>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets top="2.0" />
+                                                   </padding>
+                                                </VBox>
+                                                <ComboBox fx:id="comboboxChooseDirectionsNumber" layoutX="146.0" layoutY="93.0" prefHeight="25.0" prefWidth="90.0" />
+                                                <Label layoutX="14.0" layoutY="98.0" text="Directions number" />
+                                                <AnchorPane layoutX="13.0" layoutY="140.0">
+                                                   <children>
+                                                      <Label layoutX="161.0" layoutY="90.0" text="Step" />
+                                                      <Button fx:id="buttonOpenScannerPointsPositionsFile" layoutX="285.0" layoutY="165.0" mnemonicParsing="false" onAction="#onActionButtonOpenScannerPointsPositionsFile" text="Open" />
+                                                      <Label text="Scanners positions" />
+                                                      <Label layoutX="33.0" layoutY="61.0" text="Point (relative)" />
+                                                      <TextField fx:id="textfieldScannerPosCenterX" layoutX="142.0" layoutY="56.0" prefHeight="25.0" prefWidth="63.0" promptText="X" />
+                                                      <TextField fx:id="textfieldScannerPosCenterY" layoutX="213.0" layoutY="56.0" prefHeight="25.0" prefWidth="63.0" promptText="Y" />
+                                                      <TextField fx:id="textfieldScannerPosCenterZ" layoutX="285.0" layoutY="56.0" prefHeight="25.0" prefWidth="63.0" promptText="Z" />
+                                                      <TextField fx:id="textfieldScannerPointsPositionsFile" layoutX="33.0" layoutY="165.0" prefHeight="25.0" prefWidth="251.0" />
+                                                      <TextField fx:id="textfieldScannerWidthArea" layoutX="79.0" layoutY="85.0" prefHeight="25.0" prefWidth="63.0" text="10" />
+                                                      <TextField fx:id="textfieldScannerStepArea" layoutX="202.0" layoutY="85.0" prefHeight="25.0" prefWidth="63.0" text="0.5" />
+                                                      <RadioButton fx:id="radiobuttonScannerPosSquaredArea" layoutX="18.0" layoutY="30.0" mnemonicParsing="false" selected="true" text="Squared area around a point" />
+                                                      <Label layoutX="33.0" layoutY="90.0" text="Width" />
+                                                      <RadioButton fx:id="radiobuttonScannerPosFile" layoutX="18.0" layoutY="137.0" mnemonicParsing="false" text="Points positions file" />
+                                                   </children>
+                                                </AnchorPane>
+                                                <Button fx:id="buttonTransmittanceAddToTaskList" layoutX="570.0" layoutY="367.0" mnemonicParsing="false" onAction="#onActionButtonTransmittanceAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="13.0" AnchorPane.rightAnchor="18.0">
+                                                   <graphic>
+                                                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@icons/gnome_list_add.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </Button>
+                                                <Label layoutX="14.0" layoutY="359.0" text="Latitude (degrees)" />
+                                                <TextField fx:id="textfieldLatitudeRadians" layoutX="150.0" layoutY="354.0" prefHeight="25.0" prefWidth="87.0" />
+                                                <Separator layoutX="14.0" layoutY="124.0" prefHeight="8.0" prefWidth="336.0" />
+                                                <Separator layoutX="13.0" layoutY="339.0" prefHeight="8.0" prefWidth="336.0" />
+                                                <Separator layoutX="410.0" layoutY="198.0" prefHeight="8.0" prefWidth="359.0" />
+                                                <GridPane layoutX="410.0" layoutY="282.0" prefHeight="57.0" prefWidth="360.0" AnchorPane.leftAnchor="410.0" AnchorPane.rightAnchor="18.0">
+                                                   <children>
+                                                      <CheckBox fx:id="checkboxGenerateBitmapFile" mnemonicParsing="false" text="Generate bitmap files" />
+                                                      <TextField fx:id="textfieldOutputBitmapFilePath" prefHeight="25.0" prefWidth="251.0" GridPane.rowIndex="1" />
+                                                      <Button fx:id="buttonOpenOutputBitmapFile" maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenOutputBitmapFile" text="Open" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                   </children>
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="289.0" minWidth="10.0" prefWidth="268.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="60.0" minWidth="10.0" prefWidth="40.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                </GridPane>
+                                                <Separator layoutX="14.0" layoutY="67.0" prefHeight="8.0" prefWidth="336.0" />
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </ScrollPane>
+                                 </children></AnchorPane>
+                        </content>
+                      </Tab>
+                        <Tab text="Vizualisation">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TabPane layoutX="56.0" layoutY="42.0" prefHeight="414.0" prefWidth="798.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <tabs>
+                                        <Tab text="3D view">
+                                          <content>
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                   <children>
+                                                      <SplitPane dividerPositions="0.6618610747051114" layoutX="33.0" layoutY="50.0" prefHeight="414.0" prefWidth="765.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                         <items>
+                                                            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <ComboBox fx:id="comboboxAttributeToView" layoutX="230.0" layoutY="90.0" prefWidth="150.0" />
+                                                                  <Label layoutX="109.0" layoutY="94.0" text="Attribute to view" />
+                                                                  <Button fx:id="buttonOpen3DView" disable="true" layoutX="207.0" layoutY="373.0" mnemonicParsing="false" onAction="#onActionButtonVizualize" text="Open display window" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                                                                  <CheckBox fx:id="checkboxRaster" layoutX="32.0" layoutY="144.0" mnemonicParsing="false" text="Raster" />
+                                                                  <AnchorPane fx:id="anchorPaneRasterParameters" disable="true" layoutX="109.0" layoutY="138.0" prefHeight="135.0" prefWidth="375.0">
+                                                                     <children>
+                                                                        <TextField fx:id="textfieldRasterFilePath" layoutX="6.0" prefHeight="25.0" prefWidth="316.0" AnchorPane.leftAnchor="0.0" />
+                                                                        <HBox layoutY="39.0" />
+                                                                        <Button fx:id="buttonOpenRasterFile" layoutX="322.0" mnemonicParsing="false" onAction="#onActionButtonOpenRasterFile" text="Open" />
+                                                                        <CheckBox fx:id="checkboxUseTransformationMatrix" layoutX="63.0" layoutY="31.0" mnemonicParsing="false" onAction="#onActionCheckboxUseTransformationMatrix" prefHeight="30.0" prefWidth="184.0" AnchorPane.leftAnchor="0.0">
+                                                                           <graphic>
+                                                                              <HBox alignment="CENTER" spacing="10.0">
+                                                                                 <children>
+                                                                                    <Label text="Transformation" />
+                                                                                    <Button fx:id="buttonSetTransformationMatrix" mnemonicParsing="false" onAction="#onActionButtonSetTransformationMatrix">
+                                                                                       <graphic>
+                                                                                          <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                                                             <image>
+                                                                                                <Image url="@icons/Interaction_Transformation.png" />
+                                                                                             </image>
+                                                                                          </ImageView>
+                                                                                       </graphic>
+                                                                                    </Button>
+                                                                                 </children>
+                                                                              </HBox>
+                                                                           </graphic>
+                                                                        </CheckBox>
+                                                                        <CheckBox fx:id="checkboxFitRasterToVoxelSpace" layoutX="11.0" layoutY="72.0" mnemonicParsing="false" selected="true" text="Fit to voxel space" AnchorPane.leftAnchor="0.0" />
+                                                                        <Label layoutX="166.0" layoutY="74.0" text="Margin (cell number)" />
+                                                                        <TextField fx:id="textfieldRasterFittingMargin" layoutX="309.0" layoutY="69.0" prefHeight="25.0" prefWidth="60.0" text="0" />
+                                                                     </children>
+                                                                  </AnchorPane>
+                                                                  <CheckBox fx:id="checkboxRaster1" disable="true" layoutX="32.0" layoutY="94.0" mnemonicParsing="false" selected="true" text="Voxels" />
+                                                               </children>
+                                                            </AnchorPane>
+                                                            <TabPane prefHeight="412.0" prefWidth="395.0" tabClosingPolicy="UNAVAILABLE">
+                                                              <tabs>
+                                                                <Tab text="Filters">
+                                                                     <content>
+                                                                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                                           <children>
+                                                                              <AnchorPane fx:id="anchorpanePreFiltering" disable="true" layoutX="27.0" layoutY="66.0" />
+                                                                           </children></AnchorPane>
+                                                                     </content>
+                                                                  </Tab>
+                                                                <Tab text="Attributs">
+                                                                     <content>
+                                                                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                                           <children>
+                                                                              <Button fx:id="buttonCreateAttribut" layoutX="61.0" layoutY="120.0" mnemonicParsing="false" text="Create attribut" />
+                                                                           </children>
+                                                                        </AnchorPane>
+                                                                     </content>
+                                                                  </Tab>
+                                                              </tabs>
+                                                            </TabPane>
+                                                         </items>
+                                                      </SplitPane>
+                                                   </children>
+                                                </AnchorPane>
+                                          </content>
+                                        </Tab>
+                                        <Tab text="2D projection">
+                                          <content>
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                          </content>
+                                        </Tab>
+                                          <Tab text="Histogram">
+                                             <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                             </content>
+                                          </Tab>
+                                          <Tab text="Chart">
+                                             <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                             </content>
+                                          </Tab>
+                                          <Tab text="Vegetation's profile">
+                                             <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                             </content>
+                                          </Tab>
+                                      </tabs>
+                                    </TabPane>
+                                 </children></AnchorPane>
+                           </content>
+                        </Tab>
+                        <Tab text="Parameters">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <TitledPane collapsible="false" layoutX="22.0" layoutY="55.0" prefHeight="146.0" prefWidth="265.0" text="Multi-threading">
+                                       <content>
+                                          <AnchorPane>
+                                             <children>
+                                                <Label layoutX="23.0" layoutY="37.0" text="TLS (Rsp project) - cores to use" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                                                <Slider fx:id="sliderRSPCoresToUse" blockIncrement="1.0" layoutX="23.0" layoutY="60.0" majorTickUnit="1.0" max="4.0" min="1.0" minorTickCount="0" prefHeight="38.0" prefWidth="202.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="4.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </TitledPane>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="798.0">
+               <children>
+                  <SplitPane dividerPositions="0.5201005025125628" prefHeight="155.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <items>
+                        <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" minWidth="325.0" pickOnBounds="false" text="Tasks">
+                           <content>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <ListView fx:id="listViewTaskList" layoutX="32.4" layoutY="30.4" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <MenuButton layoutX="5.0" layoutY="93.0" mnemonicParsing="false" text="Selection" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+                                      <items>
+                                        <MenuItem fx:id="menuItemTaskSelectionAll" mnemonicParsing="false" onAction="#onActionMenuItemTaskSelectionAll" text="All" />
+                                        <MenuItem fx:id="menuItemTaskSelectionNone" mnemonicParsing="false" onAction="#onActionMenuItemTaskSelectionNone" text="None" />
+                                      </items>
+                                    </MenuButton>
+                                    <Button fx:id="buttonRemoveTaskFromListView" layoutX="125.0" layoutY="108.0" mnemonicParsing="false" onAction="#onActionButtonRemoveTaskFromListView" AnchorPane.bottomAnchor="0.0">
+                                       <graphic>
+                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@icons/gnome_list_remove.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <Button fx:id="buttonExecute" layoutX="286.0" layoutY="92.0" mnemonicParsing="false" onAction="#onActionButtonExecute" text="Execute" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                       <graphic>
+                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@icons/gnome-run.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <Button fx:id="buttonAddTaskToListView" layoutX="165.0" layoutY="110.0" mnemonicParsing="false" onAction="#onActionButtonAddTaskToListView" AnchorPane.bottomAnchor="0.0">
+                                       <graphic>
+                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@icons/gnome_list_add.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <Button fx:id="buttonLoadSelectedTask" disable="true" layoutX="235.0" layoutY="109.0" mnemonicParsing="false" onAction="#onActionButtonLoadSelectedTask" text="Load" AnchorPane.bottomAnchor="0.0">
+                                       <tooltip>
+                                          <Tooltip text="Load the selected task parameters into the frame" />
+                                       </tooltip></Button>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>
+                        <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" minWidth="380.0" text="Voxels files">
+                           <content>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <ListView fx:id="listViewVoxelsFiles" layoutX="32.4" layoutY="30.4" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Button fx:id="buttonLoadSelectedVoxelFile" disable="true" layoutX="316.0" layoutY="88.0" mnemonicParsing="false" onAction="#onActionButtonLoadSelectedVoxelFile" text="Load" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                       <tooltip>
+                                          <Tooltip text="Load header of selected voxel file " />
+                                       </tooltip></Button>
+                                    <Button fx:id="buttonRemoveVoxelFileFromListView" layoutX="125.0" layoutY="108.0" mnemonicParsing="false" onAction="#onActionButtonRemoveVoxelFileFromListView" AnchorPane.bottomAnchor="0.0">
+                                       <graphic>
+                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@icons/gnome_list_remove.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <MenuButton layoutX="5.0" layoutY="93.0" mnemonicParsing="false" text="Selection" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+                                       <items>
+                                          <MenuItem fx:id="menuItemSelectionAll" mnemonicParsing="false" onAction="#onActionMenuItemSelectionAll" text="All" />
+                                          <MenuItem fx:id="menuItemSelectionNone" mnemonicParsing="false" onAction="#onActionMenuItemSelectionNone" text="None" />
+                                       </items>
+                                    </MenuButton>
+                                    <Button fx:id="buttonAddVoxelFileToListView" layoutX="165.0" layoutY="110.0" mnemonicParsing="false" onAction="#onActionButtonAddVoxelFileToListView" AnchorPane.bottomAnchor="0.0">
+                                       <graphic>
+                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@icons/gnome_list_add.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <MenuButton fx:id="menuButtonExport" disable="true" layoutX="227.0" layoutY="128.0" mnemonicParsing="false" text="Export" AnchorPane.bottomAnchor="0.0">
+                                      <items>
+                                        <MenuItem fx:id="menuItemExportDart" mnemonicParsing="false" onAction="#onActionMenuItemExportDart" text="Dart (maket.txt)" />
+                                          <MenuItem fx:id="menuItemExportDartPlots" mnemonicParsing="false" onAction="#onActionMenuItemExportDartPlots" text="Dart (plots.txt)" />
+                                      </items>
+                                    </MenuButton>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>
+                     </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
