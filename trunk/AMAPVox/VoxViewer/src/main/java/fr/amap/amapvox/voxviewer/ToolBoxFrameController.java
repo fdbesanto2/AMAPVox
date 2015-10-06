@@ -15,6 +15,7 @@ import fr.amap.amapvox.commons.util.ColorGradient;
 import fr.amap.amapvox.commons.util.CombinedFilter;
 import fr.amap.amapvox.commons.util.Filter;
 import fr.amap.amapvox.voxviewer.object.camera.TrackballCamera;
+import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import fr.amap.amapvox.voxviewer.renderer.JoglListener;
 import java.awt.Color;
 import java.lang.reflect.Field;
@@ -69,6 +70,8 @@ public class ToolBoxFrameController implements Initializable {
     private boolean isHidden;
     
     public double maxHeight;
+    
+    private VoxelSpaceSceneObject voxelSpace;
     
     @FXML
     private ComboBox<String> comboBoxAttributeToShow;
@@ -200,10 +203,10 @@ public class ToolBoxFrameController implements Initializable {
                 }
 
                 //recalculate voxel color with the new gradient
-                joglContext.getScene().getVoxelSpace().updateColorValue(gradientColor);
+                voxelSpace.updateColorValue(gradientColor);
 
                 //update instance color buffer to gpu
-                joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
+                voxelSpace.updateInstanceColorBuffer();
 
                 joglContext.drawNextFrame();
         
@@ -252,13 +255,14 @@ public class ToolBoxFrameController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 try{
-                    joglContext.getScene().getVoxelSpace().resetAttributValueRange();
-                    joglContext.getScene().getVoxelSpace().changeCurrentAttribut(newValue);
-                    joglContext.getScene().getVoxelSpace().updateVao();
-                    //joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
+                    voxelSpace.resetAttributValueRange();
+                    voxelSpace.changeCurrentAttribut(newValue);
+                    voxelSpace.updateVao();
+                    voxelSpace.updateInstanceColorBuffer();
                     joglContext.drawNextFrame();
-                    textFieldMinValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMin));
-                    textFieldMaxValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMax));
+                    textFieldMinValue.setText(String.valueOf(voxelSpace.getRealAttributValueMin()));
+                    textFieldMaxValue.setText(String.valueOf(voxelSpace.getRealAttributValueMax()));
+                    
                     
                 }catch(Exception e){}
                 
@@ -271,9 +275,9 @@ public class ToolBoxFrameController implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 
                 if(newValue){
-                    joglContext.getScene().getVoxelSpace().setShaderId(joglContext.getScene().getShaderByName("instanceLightedShader"));
+                    voxelSpace.setShaderId(joglContext.getScene().getShaderByName("instanceLightedShader"));
                 }else{
-                    joglContext.getScene().getVoxelSpace().setShaderId(joglContext.getScene().getShaderByName("instanceShader"));
+                    voxelSpace.setShaderId(joglContext.getScene().getShaderByName("instanceShader"));
                 }
                 
                 joglContext.drawNextFrame();
@@ -296,16 +300,16 @@ public class ToolBoxFrameController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if(newValue){
-                    joglContext.getScene().getVoxelSpace().setStretched(true);
-                    joglContext.getScene().getVoxelSpace().updateValue();
-                    joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
+                    voxelSpace.setStretched(true);
+                    voxelSpace.updateValue();
+                    voxelSpace.updateInstanceColorBuffer();
                     
                     
                     joglContext.drawNextFrame();
                 }else{
-                    joglContext.getScene().getVoxelSpace().setStretched(false);
-                    joglContext.getScene().getVoxelSpace().updateValue();
-                    joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
+                    voxelSpace.setStretched(false);
+                    voxelSpace.updateValue();
+                    voxelSpace.updateInstanceColorBuffer();
                     
                     
                     joglContext.drawNextFrame();
@@ -338,8 +342,8 @@ public class ToolBoxFrameController implements Initializable {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 try{
                     float fov = Float.valueOf(newValue);
-                    TrackballCamera camera = joglContext.getCamera();
-                    joglContext.getCamera().setPerspective(fov, camera.getAspect(), camera.getNearPersp(), camera.getFarPersp());
+                    TrackballCamera camera = joglContext.getScene().getCamera();
+                    joglContext.getScene().getCamera().setPerspective(fov, camera.getAspect(), camera.getNearPersp(), camera.getFarPersp());
                     joglContext.drawNextFrame();
                     
                 }catch(Exception e){}
@@ -352,11 +356,11 @@ public class ToolBoxFrameController implements Initializable {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 try{
                     float near = Float.valueOf(newValue);
-                    TrackballCamera camera = joglContext.getCamera();
+                    TrackballCamera camera = joglContext.getScene().getCamera();
                     if(radiobuttonOrthographicCamera.isSelected()){
-                        joglContext.getCamera().setOrthographic(camera.getLeft(), camera.getRight(), camera.getTop(), camera.getBottom(), near, camera.getFarOrtho());
+                        joglContext.getScene().getCamera().setOrthographic(camera.getLeft(), camera.getRight(), camera.getTop(), camera.getBottom(), near, camera.getFarOrtho());
                     }else{
-                        joglContext.getCamera().setPerspective(camera.getFovy(), camera.getAspect(), near, camera.getFarPersp());
+                        joglContext.getScene().getCamera().setPerspective(camera.getFovy(), camera.getAspect(), near, camera.getFarPersp());
                     }
                     
                     joglContext.drawNextFrame();
@@ -371,11 +375,11 @@ public class ToolBoxFrameController implements Initializable {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 try{
                     float far = Float.valueOf(newValue);
-                    TrackballCamera camera = joglContext.getCamera();
+                    TrackballCamera camera = joglContext.getScene().getCamera();
                     if(radiobuttonOrthographicCamera.isSelected()){
-                        joglContext.getCamera().setOrthographic(camera.getLeft(), camera.getRight(), camera.getTop(), camera.getBottom(), camera.getNearOrtho(), far);
+                        camera.setOrthographic(camera.getLeft(), camera.getRight(), camera.getTop(), camera.getBottom(), camera.getNearOrtho(), far);
                     }else{
-                        joglContext.getCamera().setPerspective(camera.getFovy(), camera.getAspect(), camera.getNearPersp(), far);
+                        camera.setPerspective(camera.getFovy(), camera.getAspect(), camera.getNearPersp(), far);
                     }
                     
                     joglContext.drawNextFrame();
@@ -434,15 +438,17 @@ public class ToolBoxFrameController implements Initializable {
         
     }
     
-    public void initContent(){
+    public void initContent(VoxelSpaceSceneObject voxelSpace){
+        
+        this.voxelSpace = voxelSpace;
         
         Platform.runLater(new Runnable() {
             
             @Override
             public void run() {
-                textFieldVoxelSize.setText(String.valueOf(joglContext.getScene().getVoxelSpace().getCubeSize()));
-                textFieldMinValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMin));
-                textFieldMaxValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMax));
+                textFieldVoxelSize.setText(String.valueOf(voxelSpace.getCubeSize()));
+                textFieldMinValue.setText(String.valueOf(voxelSpace.getRealAttributValueMin()));
+                textFieldMaxValue.setText(String.valueOf(voxelSpace.getRealAttributValueMax()));
             }
         });
     }
@@ -509,10 +515,9 @@ public class ToolBoxFrameController implements Initializable {
                     }catch(Exception e){}
                 }
 
-                joglContext.getScene().getVoxelSpace().setFilterValues(filterValues, radiobuttonDisplayValues.isSelected());
-                joglContext.getScene().getVoxelSpace().updateColorValue(joglContext.getScene().getVoxelSpace().getGradient());
-                //joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
-                joglContext.getScene().getVoxelSpace().updateVao();
+                voxelSpace.setFilterValues(filterValues, radiobuttonDisplayValues.isSelected());
+                voxelSpace.updateColorValue(voxelSpace.getGradient());
+                voxelSpace.updateVao();
                 joglContext.drawNextFrame();
                 
                 return null;
@@ -554,7 +559,7 @@ public class ToolBoxFrameController implements Initializable {
                 try{
                     Float voxelSize = Float.valueOf(textFieldVoxelSize.getText());
 
-                    joglContext.getScene().getVoxelSpace().updateCubeSize(null, voxelSize);
+                    voxelSpace.updateCubeSize(null, voxelSize);
                     joglContext.drawNextFrame();
 
                 }catch(NumberFormatException e){
@@ -573,13 +578,13 @@ public class ToolBoxFrameController implements Initializable {
     @FXML
     private void onActionButtonResetMinMax(ActionEvent event) {
         
-        textFieldMinValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMin));
-        textFieldMaxValue.setText(String.valueOf(joglContext.getScene().getVoxelSpace().attributValueMax));
+        textFieldMinValue.setText(String.valueOf(voxelSpace.getRealAttributValueMin()));
+        textFieldMaxValue.setText(String.valueOf(voxelSpace.getRealAttributValueMax()));
         
-        joglContext.getScene().getVoxelSpace().resetAttributValueRange();
-        joglContext.getScene().getVoxelSpace().updateValue();
-        joglContext.getScene().getVoxelSpace().updateColorValue(joglContext.getScene().getVoxelSpace().getGradient());
-        joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
+        voxelSpace.resetAttributValueRange();
+        voxelSpace.updateValue();
+        voxelSpace.updateColorValue(voxelSpace.getGradient());
+        voxelSpace.updateInstanceColorBuffer();
         joglContext.drawNextFrame();
     }
 
@@ -590,10 +595,10 @@ public class ToolBoxFrameController implements Initializable {
             float min = Float.valueOf(textFieldMinValue.getText());
             float max = Float.valueOf(textFieldMaxValue.getText());
             
-            joglContext.getScene().getVoxelSpace().setAttributValueRange(min, max);
-            joglContext.getScene().getVoxelSpace().updateValue();
-            joglContext.getScene().getVoxelSpace().updateColorValue(joglContext.getScene().getVoxelSpace().getGradient());
-            joglContext.getScene().getVoxelSpace().updateInstanceColorBuffer();
+            voxelSpace.setAttributValueRange(min, max);
+            voxelSpace.updateValue();
+            voxelSpace.updateColorValue(voxelSpace.getGradient());
+            voxelSpace.updateInstanceColorBuffer();
             joglContext.drawNextFrame();
             
         }catch(NumberFormatException e){
@@ -639,12 +644,12 @@ public class ToolBoxFrameController implements Initializable {
     private void onActionButtonViewTop(ActionEvent event) {
         
         joglContext.setViewToTop();
-        /*joglContext.getCamera().project(new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
-                                                      joglContext.getScene().getVoxelSpace().getCenterY(),
-                                                      joglContext.getScene().getVoxelSpace().getCenterZ()+getTargetDistance()), 
-                                        new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
-                                                      joglContext.getScene().getVoxelSpace().getCenterY(),
-                                                      joglContext.getScene().getVoxelSpace().getCenterZ()));
+        /*joglContext.getCamera().project(new Vec3F(voxelSpace.getCenterX(), 
+                                                      voxelSpace.getCenterY(),
+                                                      voxelSpace.getCenterZ()+getTargetDistance()), 
+                                        new Vec3F(voxelSpace.getCenterX(), 
+                                                      voxelSpace.getCenterY(),
+                                                      voxelSpace.getCenterZ()));
         
         joglContext.getCamera().updateViewMatrix();
         
@@ -661,18 +666,18 @@ public class ToolBoxFrameController implements Initializable {
         
         if(location.x < 0){
             joglContext.getCamera().setLocation(new Vec3F(
-                    joglContext.getScene().getVoxelSpace().getCenterX()+getTargetDistance(), 
-                    joglContext.getScene().getVoxelSpace().getCenterY(),
-                    joglContext.getScene().getVoxelSpace().getCenterZ()));
+                    voxelSpace.getCenterX()+getTargetDistance(), 
+                    voxelSpace.getCenterY(),
+                    voxelSpace.getCenterZ()));
             
         }else if(location.x == 0){
             joglContext.getCamera().setLocation(new Vec3F(
-                    joglContext.getScene().getVoxelSpace().getCenterX()+getTargetDistance(),
-                    joglContext.getScene().getVoxelSpace().getCenterY(),
-                    joglContext.getScene().getVoxelSpace().getCenterZ()));
+                    voxelSpace.getCenterX()+getTargetDistance(),
+                    voxelSpace.getCenterY(),
+                    voxelSpace.getCenterZ()));
         }
         
-        joglContext.getCamera().setTarget(new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
+        joglContext.getCamera().setTarget(new Vec3F(voxelSpace.getCenterX(), 
                                                       joglContext.getCamera().getLocation().y,
                                                       joglContext.getCamera().getLocation().z));
         
@@ -687,12 +692,12 @@ public class ToolBoxFrameController implements Initializable {
     private void onActionButtonViewBottom(ActionEvent event) {
                 
         joglContext.setViewToBottom();
-        /*joglContext.getCamera().project(new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
-                                                      joglContext.getScene().getVoxelSpace().getCenterY(),
-                                                      joglContext.getScene().getVoxelSpace().getCenterZ()-getTargetDistance()), 
-                                        new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
-                                                      joglContext.getScene().getVoxelSpace().getCenterY(),
-                                                      joglContext.getScene().getVoxelSpace().getCenterZ()));
+        /*joglContext.getCamera().project(new Vec3F(voxelSpace.getCenterX(), 
+                                                      voxelSpace.getCenterY(),
+                                                      voxelSpace.getCenterZ()-getTargetDistance()), 
+                                        new Vec3F(voxelSpace.getCenterX(), 
+                                                      voxelSpace.getCenterY(),
+                                                      voxelSpace.getCenterZ()));
         
         joglContext.getCamera().updateViewMatrix();
         
@@ -709,12 +714,12 @@ public class ToolBoxFrameController implements Initializable {
         
         if(location.x > 0){
             joglContext.getCamera().setLocation(new Vec3F(
-                    joglContext.getScene().getVoxelSpace().getCenterX()-getTargetDistance(), 
-                    joglContext.getScene().getVoxelSpace().getCenterY(), 
-                    joglContext.getScene().getVoxelSpace().getCenterZ()));
+                    voxelSpace.getCenterX()-getTargetDistance(), 
+                    voxelSpace.getCenterY(), 
+                    voxelSpace.getCenterZ()));
         }
         
-        joglContext.getCamera().setTarget(new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
+        joglContext.getCamera().setTarget(new Vec3F(voxelSpace.getCenterX(), 
                                                       joglContext.getCamera().getLocation().y,
                                                       joglContext.getCamera().getLocation().z));
         
@@ -729,12 +734,12 @@ public class ToolBoxFrameController implements Initializable {
     private void onActionButtonViewFront(ActionEvent event) {
         
         joglContext.setViewToFront();
-        /*joglContext.getCamera().project(new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
-                                                      joglContext.getScene().getVoxelSpace().getCenterY()-getTargetDistance(),
-                                                      joglContext.getScene().getVoxelSpace().getCenterZ()), 
-                                        new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
-                                                      joglContext.getScene().getVoxelSpace().getCenterY(),
-                                                      joglContext.getScene().getVoxelSpace().getCenterZ()));
+        /*joglContext.getCamera().project(new Vec3F(voxelSpace.getCenterX(), 
+                                                      voxelSpace.getCenterY()-getTargetDistance(),
+                                                      voxelSpace.getCenterZ()), 
+                                        new Vec3F(voxelSpace.getCenterX(), 
+                                                      voxelSpace.getCenterY(),
+                                                      voxelSpace.getCenterZ()));
         
         joglContext.getCamera().updateViewMatrix();
         
@@ -746,12 +751,12 @@ public class ToolBoxFrameController implements Initializable {
     private void onActionButtonViewBack(ActionEvent event) {
         
         joglContext.setViewToBack();
-        /*joglContext.getCamera().project(new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
-                                                      joglContext.getScene().getVoxelSpace().getCenterY()+getTargetDistance(),
-                                                      joglContext.getScene().getVoxelSpace().getCenterZ()), 
-                                        new Vec3F(joglContext.getScene().getVoxelSpace().getCenterX(), 
-                                                      joglContext.getScene().getVoxelSpace().getCenterY(),
-                                                      joglContext.getScene().getVoxelSpace().getCenterZ()));
+        /*joglContext.getCamera().project(new Vec3F(voxelSpace.getCenterX(), 
+                                                      voxelSpace.getCenterY()+getTargetDistance(),
+                                                      voxelSpace.getCenterZ()), 
+                                        new Vec3F(voxelSpace.getCenterX(), 
+                                                      voxelSpace.getCenterY(),
+                                                      voxelSpace.getCenterZ()));
         
         joglContext.getCamera().updateViewMatrix();
         

@@ -12,12 +12,17 @@ import com.jogamp.opengl.GL3;
  * @author calcul
  */
 public class LightedShader extends Shader{
+
     
-    private static final String vertexShaderStreamPath = "shaders/LightVertexShader.txt";
-    private static final String fragmentShaderStreamPath = "shaders/LightFragmentShader.txt";
-    
-    private static final String[] attributes = {"position", "color", "normal"};
-    private static final String[] uniforms = {"viewMatrix","projMatrix", "normalMatrix", "Material", "Light", "eyeCoordinates", "lightPosition"};
+    public LightedShader(String name){
+        
+        super(name);
+        
+        vertexShaderStreamPath = "shaders/LightVertexShader.txt";
+        fragmentShaderStreamPath = "shaders/LightFragmentShader.txt";
+        attributes = new String[] {"position", "color", "normal"};
+        //uniforms = new String[]{"viewMatrix","projMatrix", "normalMatrix", "Material", "Light", "eyeCoordinates", "lightPosition"};
+    }
     
     public LightedShader(GL3 m_gl, String name){
         

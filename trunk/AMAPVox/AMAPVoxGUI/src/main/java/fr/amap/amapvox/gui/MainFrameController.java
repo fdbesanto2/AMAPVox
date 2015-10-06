@@ -1972,7 +1972,7 @@ public class MainFrameController implements Initializable {
                     voxelFile, attributeToView, drawDTM, dtmFile, transform, 
                     MatrixUtility.convertMatrix4dToMat4D(dtmTransfMatrix), fitDTMToVoxelSpace, mntFittingMargin);*/
                 } catch (Exception ex) {
-                    java.util.logging.Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
+                    logger.error("Cannot instantiate 3d viewer", ex);
                 }
             }
         });

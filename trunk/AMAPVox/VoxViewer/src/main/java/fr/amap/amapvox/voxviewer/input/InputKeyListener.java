@@ -9,6 +9,7 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.opengl.util.FPSAnimator;
 import fr.amap.amapvox.voxviewer.event.BasicEvent;
+import fr.amap.amapvox.voxviewer.event.EventManager;
 
 
 /**
@@ -17,10 +18,10 @@ import fr.amap.amapvox.voxviewer.event.BasicEvent;
  */
 public class InputKeyListener implements KeyListener{
     
-    private final BasicEvent listener;
+    private final EventManager listener;
     private final FPSAnimator animator;
     
-    public InputKeyListener(BasicEvent listener, FPSAnimator animator){
+    public InputKeyListener(EventManager listener, FPSAnimator animator){
         
         this.listener = listener;
         this.animator = animator;

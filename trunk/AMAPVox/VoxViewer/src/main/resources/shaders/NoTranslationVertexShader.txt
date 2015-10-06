@@ -1,6 +1,6 @@
 #version 140
 
-uniform mat4 viewMatrix, projMatrix, normalMatrix;
+uniform mat4 viewMatrix;
 
 uniform vec3 eye;
 

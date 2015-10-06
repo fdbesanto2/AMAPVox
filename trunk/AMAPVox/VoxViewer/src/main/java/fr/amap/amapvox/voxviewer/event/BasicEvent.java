@@ -17,88 +17,13 @@ import java.awt.Robot;
  */
 public class BasicEvent extends EventManager{
     
-    public boolean mouseMoved;
-    public boolean mouseMiddleButtonClicked;
-    public boolean mouseWheelRotateUp;
-    public boolean mouseWheelRotateDown;
-    
-    public boolean leftKeyPressed;
-    public boolean rightKeyPressed;
-    public boolean upKeyPressed;
-    public boolean downKeyPressed;
-    
-    public boolean zKeyPressed;
-    public boolean sKeyPressed;
-    public boolean qKeyPressed;
-    public boolean dKeyPressed;
-    
-    public boolean plusKeyPressed;
-    public boolean minusKeyPressed;
-    
-    public boolean number1KeyPressed;
-    public boolean number3KeyPressed;
-    public boolean number5KeyPressed;
-    public boolean number7KeyPressed;
-    
-    public boolean ctrlPressed;
-    
-    public boolean leftMousePressed;
-    public boolean rightMousePressed;
-    public boolean leftMouseDragged;
-    public boolean rightMouseDragged;
-    public boolean spaceKeyPressed;
-    public boolean escapeKeyPressed;
-    public int mouseXCurrentLocation;
-    public int mouseYCurrentLocation;
-    public int xrel, yrel;
-    
-    public boolean relativeMouseMode;
-    private Robot robot;
-    
-    public int mouseXOldLocation;
-    public int mouseYOldLocation;
-    
-    
-    public int xOffsetOld;
-    public int yOffsetOld;
-    
-    public int xOffset;
-    public int yOffset;
-    
-    private Vec3F center;
-    
-    private int i=0;
-    private final float mouseSpeed = 2.0f;
-    
-    public boolean leftMouseWasReleased;
-    public boolean rightMouseWasReleased;
-    public boolean isMouseLocationUpdated;
-
-    public void setMouseXCurrentLocation(int mouseXCurrentLocation) {
-        mouseXOldLocation = this.mouseXCurrentLocation;
-        this.mouseXCurrentLocation = mouseXCurrentLocation;
-        isMouseLocationUpdated = true;
-    }
-
-    public void setMouseYCurrentLocation(int mouseYCurrentLocation) {
-        mouseYOldLocation = this.mouseYCurrentLocation;
-        this.mouseYCurrentLocation = mouseYCurrentLocation;
-        isMouseLocationUpdated = true;
-    }
-
-    public int getMouseXCurrentLocation() {
-        return mouseXCurrentLocation;
-    }
-
-    public int getMouseYCurrentLocation() {
-        return mouseYCurrentLocation;
-    }
-    
-    
+    private final JoglListener joglContext;    
     
     public BasicEvent(FPSAnimator animator, JoglListener context){
         
-        super(animator, context);
+        super(animator);
+        
+        this.joglContext = context;
         
         mouseMoved = false;
         mouseMiddleButtonClicked = false;
@@ -110,12 +35,9 @@ public class BasicEvent extends EventManager{
         leftMouseDragged = false;
         rightMouseDragged = false;
         spaceKeyPressed = false;
-        relativeMouseMode = true;
         leftMouseWasReleased = false;
         escapeKeyPressed = false;
         isMouseLocationUpdated = false;
-        
-        center = new Vec3F();
     }
     
     
@@ -123,7 +45,7 @@ public class BasicEvent extends EventManager{
     public void updateEvents(){
         
         if(escapeKeyPressed){
-            joglContext.getCamera().setLocation(new Vec3F(0, 0, 0));
+            joglContext.getScene().getCamera().setLocation(new Vec3F(0, 0, 0));
         }
         
         if(leftMousePressed){
@@ -181,10 +103,10 @@ public class BasicEvent extends EventManager{
             Vec3F.normalize(new Vec3F(xOffset, yOffset, mouseSpeed));
             
             if(xOffset != 0){
-                joglContext.getCamera().rotateFromOrientation(new Vec3F(1.0f, 0.0f, 0.0f), null, (float) Math.toRadians(xOffset)*mouseSpeed);
+                joglContext.getScene().getCamera().rotateFromOrientation(new Vec3F(1.0f, 0.0f, 0.0f), null, (float) Math.toRadians(xOffset)*mouseSpeed);
             }
             if(yOffset != 0){
-                joglContext.getCamera().rotateFromOrientation(new Vec3F(0.0f, 1.0f, 0.0f), null, (float) Math.toRadians(yOffset)*mouseSpeed);
+                joglContext.getScene().getCamera().rotateFromOrientation(new Vec3F(0.0f, 1.0f, 0.0f), null, (float) Math.toRadians(yOffset)*mouseSpeed);
             }
         }
         
@@ -193,36 +115,36 @@ public class BasicEvent extends EventManager{
             
             xOffset = mouseXCurrentLocation - mouseXOldLocation;
             yOffset = mouseYCurrentLocation - mouseYOldLocation;
-            joglContext.getCamera().translateV2(new Vec3F(xOffset, yOffset, 0.0f));
+            joglContext.getScene().getCamera().translateV2(new Vec3F(xOffset, yOffset, 0.0f));
         }
         
         if(mouseWheelRotateUp){
             
-            joglContext.getCamera().translate(new Vec3F(0.0f, 0.0f, 10.0f));
+            joglContext.getScene().getCamera().translate(new Vec3F(0.0f, 0.0f, 10.0f));
         }
         if(mouseWheelRotateDown){
             
-            joglContext.getCamera().translate(new Vec3F(0.0f, 0.0f, -10.0f));
+            joglContext.getScene().getCamera().translate(new Vec3F(0.0f, 0.0f, -10.0f));
         }
         
         if(rightKeyPressed){
             
-            joglContext.getCamera().translate(new Vec3F(4.0f, 0.0f, 0.0f));
+            joglContext.getScene().getCamera().translate(new Vec3F(4.0f, 0.0f, 0.0f));
         }
         
         if(leftKeyPressed){
             
-            joglContext.getCamera().translate(new Vec3F(-4.0f, 0.0f, 0.0f));
+            joglContext.getScene().getCamera().translate(new Vec3F(-4.0f, 0.0f, 0.0f));
         }
         
         if(upKeyPressed){
             
-            joglContext.getCamera().translate(new Vec3F(0.0f, 4.0f, 0.0f));
+            joglContext.getScene().getCamera().translate(new Vec3F(0.0f, 4.0f, 0.0f));
         }
         
         if(downKeyPressed){
             
-            joglContext.getCamera().translate(new Vec3F(0.0f, -4.0f, 0.0f));
+            joglContext.getScene().getCamera().translate(new Vec3F(0.0f, -4.0f, 0.0f));
         }
         
         if(dKeyPressed){
@@ -251,7 +173,8 @@ public class BasicEvent extends EventManager{
         
         if(spaceKeyPressed){
             
-            joglContext.getCamera().rotateAroundPoint(new Vec3F(0.0f,1.0f,0.0f), new Vec3F(0.0f,0.0f,0.0f), (float) Math.toRadians(5));
+            
+            //joglContext.getScene().getCamera().rotateAroundPoint(new Vec3F(0.0f,1.0f,0.0f), new Vec3F(0.0f,0.0f,0.0f), (float) Math.toRadians(5));
         }
         
         if(!animator.isPaused() && !leftMousePressed){
@@ -303,9 +226,5 @@ public class BasicEvent extends EventManager{
         rightMouseDragged = false;
         escapeKeyPressed = false;
         isMouseLocationUpdated = false;
-    }
-
-    public void setCenter(Vec3F center) {
-        this.center = center;
     }
 }

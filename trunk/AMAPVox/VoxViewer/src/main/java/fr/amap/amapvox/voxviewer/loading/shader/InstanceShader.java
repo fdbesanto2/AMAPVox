@@ -13,11 +13,16 @@ import com.jogamp.opengl.GL3;
  */
 public class InstanceShader extends Shader{
     
-    private static final String vertexShaderStreamPath = "shaders/InstanceVertexShader.txt";
-    private static final String fragmentShaderStreamPath = "shaders/InstanceFragmentShader.txt";
     
-    private static final String[] attributes = {"position", "instance_position", "instance_color"};
-    private static final String[] uniforms = {"viewMatrix","projMatrix"};
+    public InstanceShader(String name){
+        
+        super(name);
+        
+        vertexShaderStreamPath = "shaders/InstanceVertexShader.txt";
+        fragmentShaderStreamPath = "shaders/InstanceFragmentShader.txt";
+        attributes = new String[] {"position", "instance_position", "instance_color"};
+        //uniforms = new String[]{"viewMatrix","projMatrix"};
+    }
     
     public InstanceShader(GL3 m_gl, String name){
         

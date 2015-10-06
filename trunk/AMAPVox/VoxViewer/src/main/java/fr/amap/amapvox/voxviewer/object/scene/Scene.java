@@ -10,17 +10,33 @@ import com.jogamp.opengl.GL3;
 import fr.amap.amapvox.commons.math.matrix.Mat4F;
 import fr.amap.amapvox.commons.math.point.Point3F;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
-import fr.amap.amapvox.commons.util.image.ScaleGradient;
-import fr.amap.amapvox.jraster.asc.RegularDtm;
+import fr.amap.amapvox.voxviewer.loading.shader.AxisShader;
+import fr.amap.amapvox.voxviewer.loading.shader.InstanceLightedShader;
+import fr.amap.amapvox.voxviewer.loading.shader.InstanceShader;
+import fr.amap.amapvox.voxviewer.loading.shader.LightedShader;
 import fr.amap.amapvox.voxviewer.loading.shader.Shader;
+import fr.amap.amapvox.voxviewer.loading.shader.SimpleShader;
+import fr.amap.amapvox.voxviewer.loading.shader.TextureShader;
+import fr.amap.amapvox.voxviewer.loading.shader.Uniform;
+import fr.amap.amapvox.voxviewer.loading.shader.Uniform1I;
+import fr.amap.amapvox.voxviewer.loading.shader.Uniform3F;
+import fr.amap.amapvox.voxviewer.loading.shader.UniformMat4F;
 import fr.amap.amapvox.voxviewer.loading.texture.Texture;
-import fr.amap.amapvox.voxviewer.object.camera.Camera;
+import fr.amap.amapvox.voxviewer.object.camera.TrackballCamera;
 import fr.amap.amapvox.voxviewer.object.lighting.Light;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.Stack;
+import java.util.logging.Level;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -28,17 +44,19 @@ import java.util.Map.Entry;
  */
 public class Scene {
     
+    private final static Logger logger = Logger.getLogger(Scene.class);
     /*
         contient une liste de shaders, une liste de buffers, une liste de lumières et un VoxelSpace
         ??optimisation 
     */
     
-    public final ArrayList<SceneObject> objectsList;
-    public final ArrayList<Camera> cameraList;
-    private Light light;
+    public final List<SceneObject> objectsList;
     public final Map<Integer, Shader> shadersList;
-    private VoxelSpace voxelSpace;
-    private RegularDtm dtm;
+    public final List<Texture> textureList;
+    
+    public TrackballCamera camera;
+    private Light light;
+    
     public boolean canDraw;
     private SceneObject scalePlane;
     private int width;
@@ -49,13 +67,161 @@ public class Scene {
     private boolean lightDiffuseColorChanged = true;
     private boolean lightSpecularColorChanged = true;
     
+    public Shader noTranslationShader;
+    public Shader instanceLightedShader;
+    public Shader instanceShader;
+    public Shader texturedShader;
+    public Shader labelShader;
+    public Shader lightedShader;
+    public Shader simpleShader;
+    
+    public UniformMat4F viewMatrixUniform;
+    public UniformMat4F projMatrixUniform;
+    public UniformMat4F normalMatrixUniform;
+    public Uniform3F lightPositionUniform;
+    public Uniform3F lambientUniform;
+    public Uniform3F ldiffuseUniform;
+    public Uniform3F lspecularUniform;
+    
+    public UniformMat4F projMatrixOrthoUniform;
+    public UniformMat4F viewMatrixOrthoUniform;
+    
+    public Uniform1I textureUniform;
+    
+    private final Map<String, Uniform> uniforms = new HashMap<>();
+    
     public Scene(){
         
         objectsList = new ArrayList<>();
-        cameraList = new ArrayList<>();
         shadersList = new HashMap<>();
+        textureList = new ArrayList<>();
         canDraw = false;
         light = new Light();
+        
+        noTranslationShader = new AxisShader("noTranslationShader");
+        instanceLightedShader = new InstanceLightedShader("instanceLightedShader");
+        instanceShader = new InstanceShader("instanceShader");
+        texturedShader = new TextureShader("textureShader");
+        texturedShader.isOrtho = true;
+        labelShader = new TextureShader("labelShader");
+        lightedShader = new LightedShader("lightShader");
+        simpleShader = new SimpleShader("simpleShader");
+        
+        viewMatrixUniform = new UniformMat4F("viewMatrix");
+        uniforms.put("viewMatrix", viewMatrixUniform);
+        
+        projMatrixUniform = new UniformMat4F("projMatrix");
+        uniforms.put("projMatrix", projMatrixUniform);
+        
+        projMatrixOrthoUniform = new UniformMat4F("projMatrixOrtho");
+        uniforms.put("projMatrixOrtho", projMatrixOrthoUniform);
+        
+        viewMatrixOrthoUniform = new UniformMat4F("viewMatrixOrtho");
+        uniforms.put("viewMatrixOrtho", viewMatrixOrthoUniform);
+        
+        textureUniform = new Uniform1I("texture");
+        uniforms.put("texture", textureUniform);
+        
+        lambientUniform = new Uniform3F("lambient");
+        uniforms.put("lambient", lambientUniform);
+        
+        ldiffuseUniform = new Uniform3F("ldiffuse");
+        uniforms.put("ldiffuse", ldiffuseUniform);
+        
+        lspecularUniform = new Uniform3F("lspecular");
+        uniforms.put("lspecular", lspecularUniform);
+        
+        lightPositionUniform = new Uniform3F("lightPosition");
+        uniforms.put("lightPosition", lightPositionUniform);
+        
+    }
+    
+    private void initUniforms(){
+        
+        Iterator<Entry<Integer, Shader>> iterator = shadersList.entrySet().iterator();
+        
+        while(iterator.hasNext()){ //pour tous les shaders
+            Entry<Integer, Shader> shaderEntry = iterator.next();
+            
+            Iterator<Entry<String, Integer>> iterator2 = shaderEntry.getValue().uniformMap.entrySet().iterator();
+            
+            while(iterator2.hasNext()){ //pour chaque uniform d'un shader
+                Entry<String, Integer> uniformEntry = iterator2.next();
+                        
+                //on ajout la variable uniform à la map uniforms
+                if(uniforms.containsKey(uniformEntry.getKey())){
+                    uniforms.get(uniformEntry.getKey()).addOwner(shaderEntry.getValue(), uniformEntry.getValue());
+                }
+            }
+        }
+    }
+    
+    public void init(GL3 gl){
+        
+        try {
+            noTranslationShader.init(gl);
+            instanceLightedShader.init(gl);
+            instanceShader.init(gl);
+            texturedShader.init(gl);
+            labelShader.init(gl);
+            lightedShader.init(gl);
+            simpleShader.init(gl);
+            
+            addShader(noTranslationShader);
+            addShader(instanceLightedShader);
+            addShader(instanceShader);
+            addShader(texturedShader);
+            addShader(simpleShader);
+            addShader(lightedShader);
+            addShader(labelShader);
+            
+            initUniforms();
+            
+            projMatrixOrthoUniform.setValue(Mat4F.ortho(0, 640, 0, 480, -10, 1000));
+            viewMatrixOrthoUniform.setValue(Mat4F.lookAt(new Vec3F(0,0,0), new Vec3F(0,0,0), new Vec3F(0,1,0)));
+            
+            textureUniform.setValue(0);
+            
+            //binding de la caméra avec les variables uniforms des shaders
+            camera.addPropertyChangeListener("projMatrix", new PropertyChangeListener() {
+
+                @Override
+                public void propertyChange(PropertyChangeEvent evt) {
+                    projMatrixUniform.setValue((Mat4F) evt.getNewValue());
+                }
+            });
+            
+            camera.addPropertyChangeListener("viewMatrix", new PropertyChangeListener() {
+
+                @Override
+                public void propertyChange(PropertyChangeEvent evt) {
+                    viewMatrixUniform.setValue((Mat4F) evt.getNewValue());
+                }
+            });
+            
+        } catch (Exception ex) {
+            logger.error("Cannot generate shader", ex);
+        }
+        
+        for(Texture texture : textureList){
+            try {
+                texture.init(gl);
+            } catch (Exception ex) {
+                logger.error("Cannot generate texture", ex);
+            }
+        }
+            
+        for(SceneObject sceneObject : objectsList){
+            sceneObject.initBuffers(gl);
+            sceneObject.initVao(gl);
+            sceneObject.setId(objectsList.size());
+            
+        }
+        
+        setLightAmbientValue(getLight().ambient);
+        setLightDiffuseValue(getLight().diffuse);
+        setLightSpecularValue(getLight().specular);
+        
     }
 
     public void setWidth(int width) {
@@ -65,23 +231,23 @@ public class Scene {
     public void setHeight(int height) {
         this.height = height;
     }
-    
-    public VoxelSpace getVoxelSpace() {
-        return voxelSpace;
-    }
 
     public Map<Integer, Shader> getShadersList() {
         return shadersList;
     }
-
-    public void setVoxelSpace(VoxelSpace voxelSpace) {
-        this.voxelSpace = voxelSpace;
+    
+    public void addSceneObject(SceneObject sceneObject){
+        
+        objectsList.add(sceneObject);
+        if(sceneObject.texture != null){
+            addTexture(sceneObject.texture);
+        }
     }
     
     public void addObject(SceneObject sceneObject, GL3 gl){
         
         sceneObject.initBuffers(gl);
-        sceneObject.initVao(gl, shadersList.get(sceneObject.getShaderId()));
+        sceneObject.initVao(gl);
         sceneObject.setId(objectsList.size());
         objectsList.add(sceneObject);
     }
@@ -94,6 +260,10 @@ public class Scene {
     public void addShader(Shader shader) {
         
         shadersList.put(shader.getProgramId(),shader);
+    }
+    
+    public void addTexture(Texture texture){
+        textureList.add(texture);
     }
     
     public int getShaderByName(String name){
@@ -109,116 +279,46 @@ public class Scene {
         return -1;
     }
     
-    public void updateColorScale(){
+    public void draw(final GL3 gl){
         
-        
-    }
-    
-    private Texture createColorScaleTexture(GL3 gl) throws Exception{
-        
-        Texture texture;
-        
-        if(voxelSpace.isStretched()){
-            texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.min, voxelSpace.max, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
-        }else{
-            if(voxelSpace.isUseClippedRangeValue()){
-                texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMinClipped, voxelSpace.attributValueMaxClipped, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMinClipped, voxelSpace.attributValueMaxClipped);
-            }else{
-                texture = Texture.createColorScaleTexture(gl, ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMin, voxelSpace.attributValueMax, width-80, (int)(height/20), ScaleGradient.HORIZONTAL), voxelSpace.attributValueMin, voxelSpace.attributValueMax);
-            }
+        //update shader variables
+        Iterator<Entry<Integer, Shader>> iterator = shadersList.entrySet().iterator();
 
+        while(iterator.hasNext()){
+            Entry<Integer, Shader> next = iterator.next();
+            Shader shader = next.getValue();
+            shader.updateProgram(gl);
         }
         
-        return texture;
-    }
-    
-    public void draw(final GL3 gl, Camera camera) throws Exception{
-        
-        if(canDraw){
-            
-            if(!voxelSpace.arrayLoaded){
-                
-                Texture texture= createColorScaleTexture(gl);
-                
-                scalePlane = SceneObjectFactory.createTexturedPlane(new Vec3F(40, 20, 0), width-80, (int)(height/20), texture, getShaderByName("textureShader"));
-                scalePlane.setDrawType(GL3.GL_TRIANGLES);
-                
-                this.addObject(scalePlane, gl);
-        
-                voxelSpace.initBuffers(gl);
-                voxelSpace.initVao(gl, shadersList.get(voxelSpace.getShaderId()));
-                voxelSpace.arrayLoaded = true;
-                //camera.location = new Vec3F(voxelSpace.centerX, voxelSpace.centerY, voxelSpace.centerZ+voxelSpace.widthZ);
-                camera.setLocation(new Vec3F(voxelSpace.centerX+voxelSpace.widthX, voxelSpace.centerY+voxelSpace.widthY, voxelSpace.centerZ+voxelSpace.widthZ));
-                camera.setTarget(new Vec3F(voxelSpace.centerX,voxelSpace.centerY,voxelSpace.centerZ));
-                camera.updateViewMatrix();
-                
-                int textureShaderId = getShaderByName("textureShader");
-                gl.glUseProgram(textureShaderId);
-                    FloatBuffer projectionMatrix = Buffers.newDirectFloatBuffer(Mat4F.ortho(0, width, 0, height, -10, 1000).mat);
-                    FloatBuffer viewMatrix = Buffers.newDirectFloatBuffer(Mat4F.lookAt(new Vec3F(0,0,0), new Vec3F(0,0,0), new Vec3F(0,1,0)).mat);
-                    Shader shader = shadersList.get(textureShaderId);
-                    gl.glUniformMatrix4fv(shader.uniformMap.get("viewMatrix"), 1, false, viewMatrix);
-                    gl.glUniformMatrix4fv(shader.uniformMap.get("projMatrix"), 1, false, projectionMatrix);
-                    
-                    gl.glUniform1i(shader.uniformMap.get("texture"),0);
-                gl.glUseProgram(0);
-
-            }  
-            
-            boolean wasInstancesNotUpdated = !voxelSpace.isInstancesUpdated();
-            
-            if(!voxelSpace.isGradientUpdated()){
-                
-                Texture texture= createColorScaleTexture(gl);
-                
-                changeObjectTexture(scalePlane.getId(), texture);
+        //update textures
+        for(Texture texture : textureList){
+            if(texture.isDirty()){
+                try {
+                    texture.update(gl);
+                } catch (Exception ex) {
+                    logger.error("Failed to update texture", ex);
+                }
             }
-            
-            /***draw voxel space***/
-            //gl.glEnable(GL3.GL_BLEND);
-            gl.glUseProgram(voxelSpace.getShaderId());
-                voxelSpace.render(gl,shadersList.get(voxelSpace.getShaderId()));
+        }
+        
+        camera.updateViewMatrix();
+
+        /***draw scene objects***/
+
+        gl.glEnable(GL3.GL_BLEND);
+
+        for(SceneObject object : objectsList){
+
+
+            if(!object.depthTest){
+                gl.glClear(GL3.GL_DEPTH_BUFFER_BIT);
+            }
+
+            gl.glUseProgram(object.getShaderId());
+                object.draw(gl);
             gl.glUseProgram(0);
-            //gl.glDisable(GL3.GL_BLEND);
-            
-            if(!voxelSpace.isGradientUpdated() || wasInstancesNotUpdated){
-                
-                Texture texture= createColorScaleTexture(gl);
-                changeObjectTexture(scalePlane.getId(), texture);
-            }
-            
-            /***draw scene objects***/
-            
-            gl.glEnable(GL3.GL_BLEND);
-            
-            for(SceneObject object : objectsList){
-                
-                //if(object.isAlphaRequired){
-                    
-                //}else{
-                    //gl.glDisable(GL3.GL_BLEND);
-                //}
-                    
-                if(!object.depthTest){
-                    gl.glClear(GL3.GL_DEPTH_BUFFER_BIT);
-                    //gl.glDisable(GL3.GL_DEPTH_TEST);
-                    //gl.glEnable(GL3.GL_CULL_FACE);
-                }
-                
-                gl.glUseProgram(object.getShaderId());
-                    object.draw(gl);
-                gl.glUseProgram(0);
-                
-                if(!object.depthTest){
-                    //gl.glEnable(GL3.GL_DEPTH_TEST);
-                    //gl.glDisable(GL3.GL_CULL_FACE);
-                }
-                
-            }
-            
+
         }
-        
     }
 
     public Light getLight() {
@@ -231,17 +331,17 @@ public class Scene {
     
     public void setLightAmbientValue(Vec3F ambient){
         light.ambient = ambient;
-        lightAmbientColorChanged = true;
+        lambientUniform.setValue(ambient);
     }
     
     public void setLightDiffuseValue(Vec3F diffuse){
         light.diffuse = diffuse;
-        lightDiffuseColorChanged = true;
+        ldiffuseUniform.setValue(diffuse);
     }
     
     public void setLightSpecularValue(Vec3F specular){
         light.specular = specular;
-        lightSpecularColorChanged = true;
+        lspecularUniform.setValue(specular);
     }
     
     public Point3F getLightPosition() {
@@ -250,47 +350,16 @@ public class Scene {
 
     public void setLightPosition(Point3F position) {
         this.light.position = position;
-        lightPositionChanged = true;
-        
+        lightPositionUniform.setValue(new Vec3F(position.x, position.y, position.z));
+    }
+    
+
+    public void setCamera(TrackballCamera camera) {
+        this.camera = camera;
     }
 
-    public boolean isLightPositionChanged() {
-        return lightPositionChanged;
+    public TrackballCamera getCamera() {
+        return camera;
     }
-
-    public void setLightPositionChanged(boolean lightPositionChanged) {
-        this.lightPositionChanged = lightPositionChanged;
-    }
-
-    public boolean isLightAmbientColorChanged() {
-        return lightAmbientColorChanged;
-    }
-
-    public void setLightAmbientColorChanged(boolean lightAmbientColorChanged) {
-        this.lightAmbientColorChanged = lightAmbientColorChanged;
-    }
-
-    public boolean isLightDiffuseColorChanged() {
-        return lightDiffuseColorChanged;
-    }
-
-    public void setLightDiffuseColorChanged(boolean lightDiffuseColorChanged) {
-        this.lightDiffuseColorChanged = lightDiffuseColorChanged;
-    }
-
-    public boolean isLightSpecularColorChanged() {
-        return lightSpecularColorChanged;
-    }
-
-    public void setLightSpecularColorChanged(boolean lightSpecularColorChanged) {
-        this.lightSpecularColorChanged = lightSpecularColorChanged;
-    }
-
-    public RegularDtm getDtm() {
-        return dtm;
-    }
-
-    public void setDtm(RegularDtm dtm) {
-        this.dtm = dtm;
-    }
+    
 }

@@ -18,9 +18,9 @@ import java.nio.IntBuffer;
  */
 public class SimpleSceneObject extends SceneObject{
     
-    public SimpleSceneObject(GLMesh mesh, int shaderId, boolean isAlphaRequired){
+    public SimpleSceneObject(GLMesh mesh, boolean isAlphaRequired){
         
-        super(mesh, shaderId, isAlphaRequired);
+        super(mesh, isAlphaRequired);
     }
     
     @Override
@@ -30,7 +30,7 @@ public class SimpleSceneObject extends SceneObject{
     }
     
     @Override
-    public void initVao(GL3 gl, Shader shader){
+    public void initVao(GL3 gl){
         
         //generate vao
         IntBuffer tmp = IntBuffer.allocate(1);
@@ -80,7 +80,7 @@ public class SimpleSceneObject extends SceneObject{
         
         gl.glBindVertexArray(vaoId);
             if(texture != null){
-                gl.glBindTexture(GL3.GL_TEXTURE_2D, textureId);
+                gl.glBindTexture(GL3.GL_TEXTURE_2D, texture.getId());
             }
             
             mesh.draw(gl);

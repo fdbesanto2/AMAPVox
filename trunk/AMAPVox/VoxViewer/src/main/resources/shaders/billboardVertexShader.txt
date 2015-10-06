@@ -1,7 +1,6 @@
 #version 140
 
-uniform mat4 viewMatrix, projMatrix;
-uniform vec3 eye;
+uniform mat4 viewMatrixOrtho, projMatrixOrtho;
 
 in vec4 position;
 
@@ -12,7 +11,7 @@ void main()
 {
     texCoordinates = textureCoordinates;
 
-    mat4 newModelView = viewMatrix;
+    mat4 newModelView = viewMatrixOrtho;
 
     
     // First column.
@@ -41,10 +40,10 @@ void main()
     
 
     //vec4 origin = (position+vec4(10, 0, 0,0.0));
-    //gl_Position = projMatrix * (newModelView * vec4(0, 0, 0, 1)) + vec4(origin.xy, 0, 0);
-    //gl_Position = projMatrix * position;
+    //gl_Position = projMatrixOrtho * (newModelView * vec4(0, 0, 0, 1)) + vec4(origin.xy, 0, 0);
+    //gl_Position = projMatrixOrtho * position;
 
    
 
-    gl_Position = projMatrix * viewMatrix * position ;
+    gl_Position = projMatrixOrtho * viewMatrixOrtho * position ;
 }

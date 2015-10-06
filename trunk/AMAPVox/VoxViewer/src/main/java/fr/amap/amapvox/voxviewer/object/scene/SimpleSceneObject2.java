@@ -16,9 +16,9 @@ import java.nio.IntBuffer;
  */
 public class SimpleSceneObject2 extends SceneObject{
     
-    public SimpleSceneObject2(GLMesh mesh, int shaderId, boolean isAlphaRequired){
+    public SimpleSceneObject2(GLMesh mesh, boolean isAlphaRequired){
         
-        super(mesh, shaderId, isAlphaRequired);
+        super(mesh, isAlphaRequired);
     }
     
     @Override
@@ -28,7 +28,7 @@ public class SimpleSceneObject2 extends SceneObject{
     }
     
     @Override
-    public void initVao(GL3 gl, Shader shader){
+    public void initVao(GL3 gl){
         
         //generate vao
         IntBuffer tmp = IntBuffer.allocate(1);

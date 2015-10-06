@@ -13,11 +13,15 @@ import com.jogamp.opengl.GL3;
  */
 public class TextureShader extends Shader{
     
-    private static final String vertexShaderStreamPath = "shaders/billboardVertexShader.txt";
-    private static final String fragmentShaderStreamPath = "shaders/TextureFragmentShader.txt";
-    
-    private static final String[] attributes = {"position", "textureCoordinates"};
-    private static final String[] uniforms = {"viewMatrix","projMatrix", "texture", "eye"};
+    public TextureShader(String name){
+        
+        super(name);
+        
+        vertexShaderStreamPath = "shaders/billboardVertexShader.txt";
+        fragmentShaderStreamPath = "shaders/TextureFragmentShader.txt";
+        attributes = new String[] {"position", "textureCoordinates"};
+        //uniforms = new String[]{"viewMatrix","projMatrix", "texture", "eye"};
+    }
     
     public TextureShader(GL3 m_gl, String name) throws Exception {
         

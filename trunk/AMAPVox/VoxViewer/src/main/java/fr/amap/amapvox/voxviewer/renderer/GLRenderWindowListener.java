@@ -28,7 +28,10 @@ public class GLRenderWindowListener extends WindowAdapter{
     public GLRenderWindowListener(Stage stage, FPSAnimator animator){
         
         this.toolboxStage = stage;
-        maxToolBoxHeight = toolboxStage.getHeight();
+        
+        if(toolboxStage != null){
+            maxToolBoxHeight = toolboxStage.getHeight();
+        }
         
         this.animator = animator;
         this.isToolBoxFocused = false;
@@ -41,19 +44,22 @@ public class GLRenderWindowListener extends WindowAdapter{
         Window window = (Window)we.getSource();
         final int height = window.getHeight();
         
-        Platform.runLater(new Runnable() {
+        if(toolboxStage != null){
+            
+            Platform.runLater(new Runnable() {
 
-            @Override
-            public void run() {
-                
-                if(height < maxToolBoxHeight){
-                    toolboxStage.setHeight(height);
-                }else{
-                    toolboxStage.setHeight(maxToolBoxHeight);
+                @Override
+                public void run() {
+
+                    if(height < maxToolBoxHeight){
+                        toolboxStage.setHeight(height);
+                    }else{
+                        toolboxStage.setHeight(maxToolBoxHeight);
+                    }
+
                 }
-                
-            }
-        });
+            });
+        }
         
         if(animator.isPaused()){
             animator.resume();
@@ -68,16 +74,18 @@ public class GLRenderWindowListener extends WindowAdapter{
         
         final Point locationOnScreen = new Point(window.getX(), window.getY());
         
-        Platform.runLater(new Runnable() {
+        if(toolboxStage != null){
+            Platform.runLater(new Runnable() {
 
-            @Override
-            public void run() {
-                //stage.toFront();
-                toolboxStage.setX((int)locationOnScreen.getX());
-                //toolboxStage.setX((int)locationOnScreen.getX()-toolboxStage.getWidth());
-                toolboxStage.setY((int)locationOnScreen.getY());
-            }
-        });
+                @Override
+                public void run() {
+                    //stage.toFront();
+                    toolboxStage.setX((int)locationOnScreen.getX());
+                    //toolboxStage.setX((int)locationOnScreen.getX()-toolboxStage.getWidth());
+                    toolboxStage.setY((int)locationOnScreen.getY());
+                }
+            });
+        }
         
     }
     
@@ -85,14 +93,16 @@ public class GLRenderWindowListener extends WindowAdapter{
     public void windowDestroyed(WindowEvent we) {
         
         animator.stop();
-        Platform.runLater(new Runnable() {
-
-            @Override
-            public void run() {
-                toolboxStage.close();
-            }
-        });
         
+        if(toolboxStage != null){
+            Platform.runLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    toolboxStage.close();
+                }
+            });
+        }
     }  
     
     @Override

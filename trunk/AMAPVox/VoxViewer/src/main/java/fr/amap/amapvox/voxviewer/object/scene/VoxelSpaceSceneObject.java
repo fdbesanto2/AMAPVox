@@ -24,6 +24,8 @@ import fr.amap.amapvox.voxviewer.mesh.GLMeshFactory;
 import fr.amap.amapvox.voxviewer.mesh.InstancedGLMesh;
 import fr.amap.amapvox.voxviewer.misc.Attribut;
 import java.awt.Color;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -39,7 +41,7 @@ import javax.vecmath.Point3i;
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class VoxelSpace extends SceneObject{
+public class VoxelSpaceSceneObject extends SceneObject{
     
     public static final int FLOAT_SIZE = Buffers.SIZEOF_FLOAT;
     public static final int INT_SIZE = Buffers.SIZEOF_INT;
@@ -58,12 +60,12 @@ public class VoxelSpace extends SceneObject{
         }
     }
     
-    private float cubeSize;
+    private float cubeSize = 1.0f;
     
     public float widthX, widthY, widthZ;
     private boolean fileLoaded;
-    public float attributValueMax;
-    public float attributValueMin;
+    private float attributValueMax;
+    private float attributValueMin;
     public float attributValueMaxClipped;
     public float attributValueMinClipped;
     private boolean useClippedRangeValue;
@@ -103,7 +105,9 @@ public class VoxelSpace extends SceneObject{
     float sdValue;
     float average;
     
-    public VoxelSpace(){
+    private final PropertyChangeSupport props = new PropertyChangeSupport(this);
+    
+    public VoxelSpaceSceneObject(){
         
         //filteredValues = new TreeSet<>();
         //filteredValues.add(new Filter("x", Float.NaN, Filter.EQUAL));
@@ -117,7 +121,7 @@ public class VoxelSpace extends SceneObject{
         fileLoaded = false;
     }
     
-    public VoxelSpace(File voxelSpace){
+    public VoxelSpaceSceneObject(File voxelSpace){
         
         //filteredValues = new TreeSet<>();
         //filteredValues.add(new Filter("x", Float.NaN, Filter.EQUAL));
@@ -131,6 +135,10 @@ public class VoxelSpace extends SceneObject{
         fileLoaded = false;
         
         this.voxelsFile = voxelSpace;
+    }
+    
+    public void addPropertyChangeListener(String propName, PropertyChangeListener l) {
+        props.addPropertyChangeListener(propName, l);
     }
 
     public void setMapAttributs(Map<String, Attribut> mapAttributs) {
@@ -219,11 +227,6 @@ public class VoxelSpace extends SceneObject{
         listeners.add(VoxelSpaceListener.class, listener);
     }
     
-    @Override
-    public int getShaderId() {
-        return shaderId;
-    }
-    
     public File file;
 
     public float getCenterX() {
@@ -240,6 +243,11 @@ public class VoxelSpace extends SceneObject{
 
     public boolean isGradientUpdated() {
         return gradientUpdated;
+    }
+    
+    public void setGradientUpdated(boolean value){
+        props.firePropertyChange("gradientUpdated", gradientUpdated, value);
+        gradientUpdated = value;
     }
 
     public void changeCurrentAttribut(String attributToVisualize) {
@@ -272,6 +280,7 @@ public class VoxelSpace extends SceneObject{
     
     private void setCenter(){
         
+        
         if(data.voxels.size() > 0){
             
             VoxelObject firstVoxel = (VoxelObject) data.getFirstVoxel();
@@ -283,6 +292,9 @@ public class VoxelSpace extends SceneObject{
             centerX = (firstVoxelPosition.x + lastVoxelPosition.x)/2.0f;
             centerY = (firstVoxelPosition.y + lastVoxelPosition.y)/2.0f;
             centerZ = (firstVoxelPosition.z + lastVoxelPosition.z)/2.0f;
+            
+            position = new Point3F(centerX, centerY, centerZ);
+            
         }
         
     }
@@ -583,7 +595,7 @@ public class VoxelSpace extends SceneObject{
     
     public void updateInstanceColorBuffer(){
         
-        gradientUpdated = false;
+        setGradientUpdated(false);
         
     }
     
@@ -632,7 +644,7 @@ public class VoxelSpace extends SceneObject{
     }
     
     @Override
-    public void initVao(GL3 gl, Shader shader){
+    public void initVao(GL3 gl){
         
         //generate vao
         int[] tmp2 = new int[1];
@@ -660,7 +672,7 @@ public class VoxelSpace extends SceneObject{
             
         gl.glBindVertexArray(0);
         
-        gradientUpdated = true;
+        setGradientUpdated(true);
     }
     
     public void updateVao(){
@@ -748,20 +760,6 @@ public class VoxelSpace extends SceneObject{
     @Override
     public void draw(GL3 gl) {
         
-        gl.glBindVertexArray(vaoId);
-            if(texture != null){
-                gl.glBindTexture(GL3.GL_TEXTURE_2D, textureId);
-            }
-            mesh.draw(gl);
-
-            if(texture != null){
-                gl.glBindTexture(GL3.GL_TEXTURE_2D, 0);
-            }
-        gl.glBindVertexArray(0);
-    }
-    
-    public void render(GL3 gl, Shader shader){
-        
         if(!instancesUpdated){
             
             mesh.updateBuffer(gl, 1, ((InstancedGLMesh)mesh).instancePositionsBuffer);
@@ -815,7 +813,7 @@ public class VoxelSpace extends SceneObject{
             
             mesh.updateBuffer(gl, 2, ((InstancedGLMesh)mesh).instanceColorsBuffer);
             
-            gradientUpdated = true;
+            setGradientUpdated(true);
         }
         
         if(!cubeSizeUpdated){
@@ -825,13 +823,47 @@ public class VoxelSpace extends SceneObject{
             
             cubeSizeUpdated = true;
         }
-        //gl.glDisable(GL3.GL_DEPTH_TEST);
-        draw(gl);
-        //gl.glEnable(GL3.GL_DEPTH_TEST);
+        
+        gl.glBindVertexArray(vaoId);
+            if(texture != null){
+                gl.glBindTexture(GL3.GL_TEXTURE_2D, textureId);
+            }
+            mesh.draw(gl);
+
+            if(texture != null){
+                gl.glBindTexture(GL3.GL_TEXTURE_2D, 0);
+            }
+        gl.glBindVertexArray(0);
     }
 
     public Set<String> getVariables() {
         return variables;
+    }
+    
+    public float getRealAttributValueMax() {
+        return attributValueMax;
+    }
+    
+    public float getRealAttributValueMin() {
+        return attributValueMin;
+    }
+
+    public float getAttributValueMax() {
+        
+        if(useClippedRangeValue){
+            return attributValueMaxClipped;
+        }else{
+            return attributValueMax;
+        }
+        
+    }
+
+    public float getAttributValueMin() {
+        if(useClippedRangeValue){
+            return attributValueMinClipped;
+        }else{
+            return attributValueMin;
+        }
     }
     
 }

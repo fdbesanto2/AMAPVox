@@ -12,13 +12,16 @@ import com.jogamp.opengl.GL3;
  * @author calcul
  */
 public class AxisShader extends Shader{
-
-    private static final String vertexShaderStreamPath = "shaders/NoTranslationVertexShader.txt";
-    private static final String fragmentShaderStreamPath = "shaders/NoTranslationFragmentShader.txt";
     
-    private static final String[] attributes = {"position", "normal"};
-    private static final String[] uniforms = {"viewMatrix","projMatrix", "normalMatrix", "Material", "Light", "eye"};
-    
+    public AxisShader(String name){
+        
+        super(name);
+        
+        vertexShaderStreamPath = "shaders/NoTranslationVertexShader.txt";
+        fragmentShaderStreamPath = "shaders/NoTranslationFragmentShader.txt";
+        attributes = new String[] {"position", "normal"};
+        //uniforms = new String[]{"viewMatrix","projMatrix", "normalMatrix", "Material", "Light", "eye"};
+    }
     
     public AxisShader(GL3 m_gl, String name) throws Exception {
         

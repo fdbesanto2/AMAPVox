@@ -13,13 +13,18 @@ import com.jogamp.opengl.GL3;
  */
 public class InstanceLightedShader extends Shader{
 
-    private static final String vertexShaderStreamPath = "shaders/InstanceLightedVertexShader.txt";
-    private static final String fragmentShaderStreamPath = "shaders/InstanceLightedFragmentShader.txt";
     
-    private static final String[] attributes = {"position", "instance_position", "instance_color"};
-    private static final String[] uniforms = {"viewMatrix","projMatrix", "lightPosition", "lambient", "ldiffuse", "lspecular"};
+    public InstanceLightedShader(String name){
+        
+        super(name);
+        
+        vertexShaderStreamPath = "shaders/InstanceLightedVertexShader.txt";
+        fragmentShaderStreamPath = "shaders/InstanceLightedFragmentShader.txt";
+        attributes = new String[]{"position", "instance_position", "instance_color"};
+        //uniforms = new String[]{"viewMatrix","projMatrix", "lightPosition", "lambient", "ldiffuse", "lspecular"};
+    }
     
-    public InstanceLightedShader(GL3 m_gl, String name) throws Exception {
+    /*public InstanceLightedShader(GL3 m_gl, String name) throws Exception {
         
         super(m_gl, name);
         
@@ -27,6 +32,6 @@ public class InstanceLightedShader extends Shader{
         setAttributeLocations(attributes);
         setUniformLocations(uniforms);
         
-    }
+    }*/
     
 }

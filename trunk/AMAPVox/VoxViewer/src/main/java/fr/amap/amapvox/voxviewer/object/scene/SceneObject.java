@@ -7,6 +7,7 @@ package fr.amap.amapvox.voxviewer.object.scene;
 
 import com.jogamp.opengl.GL3;
 import fr.amap.amapvox.commons.math.matrix.Mat4F;
+import fr.amap.amapvox.commons.math.point.Point3F;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
 import fr.amap.amapvox.commons.math.vector.Vec4;
 import fr.amap.amapvox.voxviewer.loading.shader.Shader;
@@ -21,19 +22,22 @@ public abstract class SceneObject{
     
     //public Mesh mesh ;
     protected GLMesh mesh;
-    protected int vaoId, shaderId, textureId;
+    protected int vaoId = -1, shaderId = -1, textureId = -1;
     private int drawType;
     public boolean isAlphaRequired;
-    public boolean depthTest;
+    public boolean depthTest = true;
     public Texture texture;
+    protected Shader shader;
+    protected Point3F position;
     private int id;
+    private boolean needUpdate;
 
     public void setId(int id) {
         this.id = id;
     }
     
     public int getShaderId() {
-        return shaderId;
+        return shader.getProgramId();
     }
 
     public void setShaderId(int shaderId) {
@@ -53,13 +57,11 @@ public abstract class SceneObject{
         
     }
     
-    public SceneObject(GLMesh mesh, int shaderId, boolean isAlphaRequired){
+    public SceneObject(GLMesh mesh, boolean isAlphaRequired){
         
         this.mesh = mesh;
-        this.shaderId = shaderId;
         this.drawType = GL3.GL_TRIANGLES;
         this.isAlphaRequired = isAlphaRequired;
-        this.depthTest = true;
     }
 
     public void setDrawType(int drawType) {
@@ -70,11 +72,32 @@ public abstract class SceneObject{
     public int getDrawType() {
         return drawType;
     }
+
+    public Shader getShader() {
+        return shader;
+    }
+
+    public void setShader(Shader shader) {
+        this.shader = shader;
+    }
+    
+    public void attachTexture(int textureId){
+        
+        this.textureId = textureId;
+    }
     
     public void attachTexture(Texture texture){
         
         this.texture = texture;
         textureId = texture.getId();
+    }
+
+    public Point3F getPosition() {
+        return position;
+    }
+
+    public void setPosition(Point3F position) {
+        this.position = position;
     }
     
     public void translate(Vec3F translation){
@@ -113,7 +136,7 @@ public abstract class SceneObject{
     
     public abstract void initBuffers(GL3 gl);
     
-    public abstract void initVao(GL3 gl, Shader shader);
+    public abstract void initVao(GL3 gl);
     
     public abstract void draw(GL3 gl);
 

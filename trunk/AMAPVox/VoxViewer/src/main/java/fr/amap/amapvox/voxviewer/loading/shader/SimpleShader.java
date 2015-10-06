@@ -6,6 +6,7 @@
 package fr.amap.amapvox.voxviewer.loading.shader;
 
 import com.jogamp.opengl.GL3;
+import fr.amap.amapvox.commons.math.vector.Vec3F;
 
 /**
  *
@@ -13,12 +14,15 @@ import com.jogamp.opengl.GL3;
  */
 public class SimpleShader extends Shader{
     
-    private static final String vertexShaderStreamPath = "shaders/SimpleVertexShader.txt";
-    private static final String fragmentShaderStreamPath = "shaders/SimpleFragmentShader.txt";
-    
-    private static final String[] attributes = {"position"};
-    private static final String[] uniforms = {"viewMatrix","projMatrix", "color"};
-    
+    public SimpleShader(String name){
+        
+        super(name);
+        
+        vertexShaderStreamPath = "shaders/SimpleVertexShader.txt";
+        fragmentShaderStreamPath = "shaders/SimpleFragmentShader.txt";
+        attributes = new String[] {"position"};
+        //uniforms = new String[]{"viewMatrix","projMatrix", "color"};
+    }
     
     public SimpleShader(GL3 m_gl, String name){
         
@@ -27,5 +31,9 @@ public class SimpleShader extends Shader{
         load(vertexShaderStreamPath, fragmentShaderStreamPath);
         setAttributeLocations(attributes);
         setUniformLocations(uniforms);
+    }
+    
+    public void setColor(Vec3F color){
+        
     }
 }

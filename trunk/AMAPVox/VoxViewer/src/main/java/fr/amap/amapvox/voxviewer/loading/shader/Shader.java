@@ -9,8 +9,12 @@ import com.jogamp.opengl.GL3;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -30,22 +34,47 @@ public abstract class Shader {
     public final static String[] INSTANCE_SHADER_ATTRIBUTES = new String[]{"instance_position", "instance_color"};
     public final static String[] TEXTURE_SHADER_ATTRIBUTES = new String[]{"textureCoordinates"};
     
+    protected String vertexShaderStreamPath;
+    protected String fragmentShaderStreamPath;
+    
+    protected String[] attributes;
+    protected String[] uniforms;
     
     private int vertexShaderId;
     private int fragmentShaderId;
     private int programId;
     public boolean isOrtho;
     public String name;
+    
+    private final Stack<Uniform> dirtyUniforms = new Stack();
+    
 
     public int getProgramId() {
         return programId;
     }
     
-    public final Map<String,Integer> attributeMap;
-    public final Map<String,Integer> uniformMap;
+    public Map<String,Integer> attributeMap;
+    public Map<String,Integer> uniformMap;
     
-    private final GL3 gl;
+    protected GL3 gl;
     
+    public Shader(String name){
+        
+        this.name = name;
+        attributeMap = new HashMap<>();
+        uniformMap = new HashMap<>();
+        vertexShaderId=0;
+        fragmentShaderId=0;
+    }
+    
+    public void init(GL3 m_gl){
+        
+        this.gl=m_gl;
+        
+        load(vertexShaderStreamPath, fragmentShaderStreamPath);
+        setAttributeLocations(attributes);
+        //setUniformLocations(uniforms);        
+    }
     
     public Shader(GL3 m_gl, String name){
         
@@ -84,9 +113,31 @@ public abstract class Shader {
                 logger.error("Fail link program: "+this.name);
             }
             
+            IntBuffer buf = IntBuffer.allocate(1);
+            gl.glGetProgramiv(programId, GL3.GL_ACTIVE_UNIFORMS, buf);
+            
+            IntBuffer size = IntBuffer.allocate(40);
+            IntBuffer length = IntBuffer.allocate(40);
+            ByteBuffer nm = ByteBuffer.allocate(256);
+            IntBuffer type = IntBuffer.allocate(1);
+            
+            uniforms = new String[buf.get(0)];
+            
+            for(int i = 0;i< buf.get(0);i++){
+                gl.glGetActiveUniform(programId, i, 40, length, size, type, nm);
+                String uniformName = new String(ArrayUtils.subarray(nm.array(), 0, length.get(0)));
+                
+                uniforms[i] = uniformName;
+            }
+            
         }else{
             logger.error("Fail compile shaders files");
         }
+        
+        for(String uniformName : uniforms){
+            uniformMap.put(uniformName, gl.glGetUniformLocation(programId, uniformName));
+        }
+        
     }
     
     private String[] readFromInputStreamReader(InputStreamReader stream){
@@ -234,5 +285,26 @@ public abstract class Shader {
     private InputStreamReader getStream(String path){
         
         return new InputStreamReader(Shader.class.getClassLoader().getResourceAsStream(path));
+    }
+    
+    protected void notifyDirty(Uniform uniform, int location){
+        
+        dirtyUniforms.addElement(uniform);
+    }
+    
+    public void updateProgram(GL3 gl){
+        
+        if(!dirtyUniforms.empty()){
+            
+            gl.glUseProgram(programId);
+        
+            while(!dirtyUniforms.empty() ){
+
+                Uniform uniform = dirtyUniforms.pop();
+                uniform.update(gl, uniformMap.get(uniform.getName()));
+            }
+
+            gl.glUseProgram(0);
+        }
     }
 }

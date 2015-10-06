@@ -9,6 +9,7 @@ import com.jogamp.newt.event.MouseAdapter;
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.opengl.util.FPSAnimator;
 import fr.amap.amapvox.voxviewer.event.BasicEvent;
+import fr.amap.amapvox.voxviewer.event.EventManager;
 
 /**
  * Class to handle mouse states
@@ -16,13 +17,13 @@ import fr.amap.amapvox.voxviewer.event.BasicEvent;
  */
 public class InputMouseAdapter extends MouseAdapter{
     
-    private final BasicEvent listener;
+    private final EventManager listener;
     private final FPSAnimator animator;
     
     private int lastPositionX, lastPositionY;
     
     
-    public InputMouseAdapter(BasicEvent listener , FPSAnimator animator){
+    public InputMouseAdapter(EventManager listener , FPSAnimator animator){
         
         this.listener = listener;
         this.animator = animator;

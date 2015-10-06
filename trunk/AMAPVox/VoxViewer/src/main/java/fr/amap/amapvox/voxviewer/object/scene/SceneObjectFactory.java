@@ -8,6 +8,8 @@ package fr.amap.amapvox.voxviewer.object.scene;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
 import fr.amap.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.amapvox.voxviewer.mesh.GLMeshFactory;
+import java.io.File;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -16,9 +18,11 @@ import fr.amap.amapvox.voxviewer.mesh.GLMeshFactory;
  */
 public class SceneObjectFactory {
     
-    public static SceneObject createTexturedPlane(Vec3F startPoint, int width, int height, Texture texture, int shaderId){
+    private final static Logger logger = Logger.getLogger(SceneObjectFactory.class);
+    
+    public static SceneObject createTexturedPlane(Vec3F startPoint, int width, int height, Texture texture){
         
-        SceneObject sceneObject = new SimpleSceneObject(GLMeshFactory.createPlaneFromTexture(startPoint, texture, width, height), shaderId, true);
+        SceneObject sceneObject = new SimpleSceneObject(GLMeshFactory.createPlaneFromTexture(startPoint, texture, width, height), true);
         
         sceneObject.attachTexture(texture);
         
@@ -27,9 +31,26 @@ public class SceneObjectFactory {
     
     public static SceneObject createTexturedPlane(Vec3F startPoint, Texture texture, int shaderId){
         
-        SceneObject sceneObject = new SimpleSceneObject(GLMeshFactory.createPlaneFromTexture(startPoint, texture, texture.getWidth(), texture.getHeight()), shaderId, true);
+        SceneObject sceneObject = new SimpleSceneObject(GLMeshFactory.createPlaneFromTexture(startPoint, texture, texture.getWidth(), texture.getHeight()), true);
         sceneObject.attachTexture(texture);
         
         return sceneObject;
     }
+    
+    public static VoxelSpaceSceneObject createVoxelSpace(File voxelSpaceFile){
+        
+        VoxelSpaceSceneObject voxelSpace = new VoxelSpaceSceneObject(voxelSpaceFile);
+        
+        try {
+            voxelSpace.load();
+            
+            return voxelSpace;
+            
+        } catch (Exception ex) {
+            logger.error("Cannot load voxel space", ex);
+        }
+        
+        return null;
+    }
+    
 }

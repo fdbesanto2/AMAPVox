@@ -7,6 +7,8 @@ package fr.amap.amapvox.voxviewer.object.camera;
 
 import fr.amap.amapvox.commons.math.matrix.Mat4F;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import javax.swing.event.EventListenerList;
 
 /**
@@ -14,6 +16,8 @@ import javax.swing.event.EventListenerList;
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public abstract class Camera {
+    
+    protected final PropertyChangeSupport props = new PropertyChangeSupport(this);
     
     protected Mat4F projectionMatrix;
     protected Mat4F viewMatrix;
@@ -54,6 +58,10 @@ public abstract class Camera {
     public abstract void setLocation(Vec3F location);
     public abstract Vec3F getTarget();
     public abstract Vec3F getLocation();
+    
+    public void addPropertyChangeListener(String propName, PropertyChangeListener l) {
+        props.addPropertyChangeListener(propName, l);
+    }
     
     
     public void project(Vec3F location, Vec3F target){
@@ -151,6 +159,25 @@ public abstract class Camera {
     public void setRotation(Vec3F axis, float angle){
         
         viewMatrix = Mat4F.setRotation(viewMatrix, axis, angle);
+    }
+    
+    public void updateProjMatrix(){
+        
+        
+        
+        Mat4F oldValue = projectionMatrix;
+        
+        if(perspective){
+            
+            projectionMatrix = Mat4F.perspective(fovy, aspect, nearPersp, farPersp);
+            
+        }else{
+            
+            projectionMatrix = Mat4F.ortho(left, right, bottom, top, nearOrtho, farOrtho);
+        }
+        
+        fireProjectionMatrixChanged(projectionMatrix);
+        props.firePropertyChange("projMatrix", oldValue, projectionMatrix);
     }
     
     /**

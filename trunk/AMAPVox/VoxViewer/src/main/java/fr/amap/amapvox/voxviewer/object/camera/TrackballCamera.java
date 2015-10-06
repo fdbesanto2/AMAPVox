@@ -7,6 +7,7 @@ package fr.amap.amapvox.voxviewer.object.camera;
 
 import fr.amap.amapvox.commons.math.matrix.Mat4F;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
+import fr.amap.amapvox.voxviewer.object.scene.SceneObject;
 import javax.swing.event.EventListenerList;
 
 /**
@@ -24,6 +25,8 @@ public class TrackballCamera extends Camera{
     
     private float width;
     private float height;
+    
+    private SceneObject pivot;
 
     public float getAngleX() {
         return angleX;
@@ -44,7 +47,7 @@ public class TrackballCamera extends Camera{
         viewMatrix = Mat4F.identity();
         location = new Vec3F();
         target = new Vec3F();
-        
+        up = new Vec3F(0, 0, 1);
     }
     
     @Override
@@ -168,6 +171,12 @@ public class TrackballCamera extends Camera{
         target = pivot;
         
         updateViewMatrix();
+    }
+    
+    public void setPivot(SceneObject sceneObject){
+        
+        this.target = new Vec3F(sceneObject.getPosition().x, sceneObject.getPosition().y, sceneObject.getPosition().z);
+        this.pivot = sceneObject;
     }
     
     public void setPivot(Vec3F pivot){
@@ -347,18 +356,11 @@ public class TrackballCamera extends Camera{
     @Override
     public void updateViewMatrix(){
         
+        Mat4F oldValue = viewMatrix;
         forwardVec = getForwardVector();
         viewMatrix = Mat4F.lookAt(location, target, up);
-        /*
-        System.out.println(viewMatrix.mat[0]+" "+viewMatrix.mat[1]+" "+viewMatrix.mat[2]+" "+viewMatrix.mat[3]+"\n"+
-                            viewMatrix.mat[4]+" "+viewMatrix.mat[5]+" "+viewMatrix.mat[6]+" "+viewMatrix.mat[7]+"\n"+
-                            viewMatrix.mat[8]+" "+viewMatrix.mat[9]+" "+viewMatrix.mat[10]+" "+viewMatrix.mat[11]+"\n"+
-                            viewMatrix.mat[12]+" "+viewMatrix.mat[13]+" "+viewMatrix.mat[14]+" "+viewMatrix.mat[15]+"\n");
-        */
-        
-        //System.out.println("position: "+location.x+" "+location.y+ " "+location.z+"\t"+"target: "+target.x+" "+target.y+ " "+target.z);
-        
         notifyViewMatrixChanged();
+        props.firePropertyChange("viewMatrix", oldValue, viewMatrix);
         
     }
     
@@ -369,19 +371,7 @@ public class TrackballCamera extends Camera{
         fireViewMatrixChanged(viewMatrix);
     }
     
-    public void updateProjMatrix(){
-        
-        if(perspective){
-            
-            projectionMatrix = Mat4F.perspective(fovy, aspect, nearPersp, farPersp);
-            
-        }else{
-            
-            projectionMatrix = Mat4F.ortho(left, right, bottom, top, nearOrtho, farOrtho);
-        }
-        
-        fireProjectionMatrixChanged(projectionMatrix);
-    }
+    
 
     @Override
     public void addCameraListener(CameraListener listener) {
@@ -508,5 +498,8 @@ public class TrackballCamera extends Camera{
     public void setHeight(float height) {
         this.height = height;
     }
-    
+
+    public SceneObject getPivot() {
+        return pivot;
+    }
 }
