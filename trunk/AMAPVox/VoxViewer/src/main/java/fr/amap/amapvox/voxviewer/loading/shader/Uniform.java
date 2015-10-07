@@ -15,10 +15,10 @@ import java.util.List;
  */
 public abstract class Uniform {
     
-    
     protected final String name;
     protected final List<Shader> owners;
     protected final List<Integer> locations;
+    protected boolean dirty; //if true it means no shaders has updated the uniform
     
     public Uniform(String name){
         
@@ -46,13 +46,27 @@ public abstract class Uniform {
     }
     
     public void notifyOwners(){
-        for(int i=0;i<owners.size();i++){
-            owners.get(i).notifyDirty(this, locations.get(i));
+        
+        if(!owners.isEmpty()){
+            
+            dirty = false;
+            
+            for (Shader owner : owners) {
+                owner.notifyDirty(this);
+            }
+            
+        }else{
+            dirty = true;
         }
+        
     }
 
     public String getName() {
         return name;
+    }
+
+    public boolean isDirty() {
+        return dirty;
     }
     
     public abstract void update(GL3 gl, int location); 

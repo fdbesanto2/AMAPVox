@@ -18,10 +18,6 @@ public class TexturedGLMesh extends GLMesh{
 
     public TexturedGLMesh() {
     }
-    
-    public TexturedGLMesh(GL3 gl) {
-        super(gl);
-    }
 
     @Override
     public void initBuffers(GL3 gl, long maximumTotalBufferSize) {
@@ -57,6 +53,6 @@ public class TexturedGLMesh extends GLMesh{
     @Override
     public void draw(GL3 gl) {
                 
-        gl.glDrawElements(GL3.GL_TRIANGLES, vertexCount, GL3.GL_UNSIGNED_INT, 0);
+        gl.glDrawElements(drawType.get(), vertexCount, GL3.GL_UNSIGNED_INT, 0);
     }
 }

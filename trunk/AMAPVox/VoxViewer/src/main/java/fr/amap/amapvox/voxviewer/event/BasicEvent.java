@@ -111,7 +111,7 @@ public class BasicEvent extends EventManager{
         }
         
         //translate the world
-        if(rightMouseDragged){
+        if(isMouseLocationUpdated && rightMousePressed){
             
             xOffset = mouseXCurrentLocation - mouseXOldLocation;
             yOffset = mouseYCurrentLocation - mouseYOldLocation;
@@ -182,11 +182,11 @@ public class BasicEvent extends EventManager{
         }
         
         if(plusKeyPressed){
-            joglContext.cuttingPlane(true);
+            //joglContext.cuttingPlane(true);
         }
         
         if(minusKeyPressed){
-            joglContext.cuttingPlane(false);
+            //joglContext.cuttingPlane(false);
         }
         
         if(number1KeyPressed){

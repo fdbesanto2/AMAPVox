@@ -8,10 +8,14 @@ package fr.amap.amapvox.voxviewer;
 import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.opengl.GL3;
 import com.sun.javafx.application.ParametersImpl;
+import fr.amap.amapvox.als.LasHeader;
+import fr.amap.amapvox.als.las.LasReader;
+import fr.amap.amapvox.als.las.PointDataRecordFormat;
 import fr.amap.amapvox.commons.math.matrix.Mat4D;
 import fr.amap.amapvox.commons.math.point.Point2F;
 import fr.amap.amapvox.commons.math.point.Point3F;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
+import fr.amap.amapvox.commons.math.vector.Vec4D;
 import fr.amap.amapvox.commons.util.BoundingBox2F;
 import fr.amap.amapvox.commons.util.image.ScaleGradient;
 import fr.amap.amapvox.jraster.asc.DtmLoader;
@@ -19,10 +23,14 @@ import fr.amap.amapvox.jraster.asc.RegularDtm;
 import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
 import fr.amap.amapvox.voxreader.VoxelFileReader;
 import fr.amap.amapvox.voxviewer.event.BasicEvent;
+import fr.amap.amapvox.voxviewer.loading.shader.Shader;
+import fr.amap.amapvox.voxviewer.loading.shader.SimpleShader;
 import fr.amap.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh;
 import fr.amap.amapvox.voxviewer.mesh.GLMeshFactory;
+import fr.amap.amapvox.voxviewer.mesh.PointCloudGLMesh;
 import fr.amap.amapvox.voxviewer.object.camera.TrackballCamera;
+import fr.amap.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.SceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.SceneObjectFactory;
 import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject;
@@ -37,6 +45,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import static java.lang.System.exit;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javafx.application.Application;
@@ -208,17 +217,63 @@ public class FXViewer3D extends Application {
 
                             fr.amap.amapvox.voxviewer.object.scene.Scene scene = viewer3D.getScene();
                             
+                            LasReader lasReader = new LasReader();
+                            lasReader.open(new File("/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.las"));
+                            LasHeader header = lasReader.getHeader();
+                            int numberOfPointrecords = (int) header.getNumberOfPointrecords();
+                            
+                            float[] vertexData = new float[numberOfPointrecords*3];
+                            float[] colorData = new float[numberOfPointrecords*3];
+                            
+                            Iterator<PointDataRecordFormat> iterator = lasReader.iterator();
+                            Mat4D transfMatrix = new Mat4D();
+                            transfMatrix.mat = new double[]{0.9540688863574789,0.29958731629459895,0.0,-448120.0441687209,
+                            -0.29958731629459895,0.9540688863574789,0.0,-470918.3928060016,
+                            0.0,0.0,1.0,0.0,
+                            0.0,0.0,0.0,1.0};
+                            
+                            int i=0;
+                            while(iterator.hasNext()){
+                                
+                                PointDataRecordFormat point = iterator.next();
+                                float x = (float) ((header.getxOffset()) + point.getX() * header.getxScaleFactor());
+                                float y = (float) ((header.getyOffset()) + point.getY() * header.getyScaleFactor());
+                                float z = (float) ((header.getzOffset()) + point.getZ() * header.getzScaleFactor());
+                                
+                                Vec4D pointTransformed = Mat4D.multiply(transfMatrix, new Vec4D(x, y, z, 1));
+                                vertexData[i] = (float) pointTransformed.x;
+                                vertexData[i+1] = (float) pointTransformed.y;
+                                vertexData[i+2] = (float) pointTransformed.z;
+                                
+                                colorData[i] = 1;
+                                colorData[i+1] = 0;
+                                colorData[i+2] = 0;
+                                
+                                i+=3;
+                            }
+                            
+                            PointCloudGLMesh pointcloudMesh = (PointCloudGLMesh) GLMeshFactory.createPointCloud(vertexData,colorData);
+                            
+                            PointCloudSceneObject pointCloud = new PointCloudSceneObject(pointcloudMesh, false);
+                            pointCloud.setShader(scene.simpleShader);
+                            scene.addSceneObject(pointCloud);
+                            
+                            
                             /**
                              * *VOXEL SPACE**
                              */
+                            File voxelFile = new File("/home/calcul/Documents/Julien/test_lad/als_spherical_new.vox");
                             updateMessage("Loading voxel space: " + voxelFile.getAbsolutePath());
                             VoxelSpaceSceneObject voxelSpace = SceneObjectFactory.createVoxelSpace(voxelFile);
                             voxelSpace.changeCurrentAttribut(attributeToView);
                             voxelSpace.setShader(scene.instanceLightedShader);
                             scene.addSceneObject(voxelSpace);
                             
+                            VoxelFileReader reader = new VoxelFileReader(voxelFile);
+                            VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
+                            
                             /***DTM***/
-                            RegularDtm dtm = DtmLoader.readFromAscFile(new File("/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc"));
+                            /*RegularDtm dtm = DtmLoader.readFromAscFile(new File("/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc"));
                             Mat4D transfMatrix = new Mat4D();
                             transfMatrix.mat = new double[]{0.9540688863574789,0.29958731629459895,0.0,-448120.0441687209,
                             -0.29958731629459895,0.9540688863574789,0.0,-470918.3928060016,
@@ -230,12 +285,12 @@ public class FXViewer3D extends Application {
                             GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormalesFromDTM(dtm);
                             SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, false);
                             dtmSceneObject.setShader(scene.lightedShader);
-                            scene.addSceneObject(dtmSceneObject);
+                            scene.addSceneObject(dtmSceneObject);*/
                             
                             /**
                              * *DTM**
                              */
-                            /*if (drawDTM && dtmFile != null) {
+                            if (drawDTM && dtmFile != null) {
 
                                 updateMessage("Loading DTM");
                                 RegularDtm dtm = DtmLoader.readFromAscFile(dtmFile);
@@ -258,7 +313,7 @@ public class FXViewer3D extends Application {
                                 dtmSceneObject.setShader(scene.lightedShader);
                                 scene.addSceneObject(dtmSceneObject);
 
-                            }*/
+                            }
                             
                             /**
                              * *scale**
@@ -267,15 +322,14 @@ public class FXViewer3D extends Application {
                             final Texture scaleTexture = new Texture(ScaleGradient.createColorScaleBufferedImage(voxelSpace.getGradient(),
                                     voxelSpace.getAttributValueMin(), voxelSpace.getAttributValueMax(),
                                     viewer3D.getWidth() - 80, (int) (viewer3D.getHeight() / 20),
-                                    ScaleGradient.HORIZONTAL, 5));
+                                    ScaleGradient.Orientation.HORIZONTAL, 5, 8));
 
                             SceneObject scalePlane = SceneObjectFactory.createTexturedPlane(new Vec3F(40, 20, 0), (int) (viewer3D.getWidth() - 80 - 200), (int) (viewer3D.getHeight() / 20), scaleTexture);
                             scalePlane.setShader(scene.texturedShader);
-                            scalePlane.setDrawType(GL3.GL_TRIANGLES);
+                            scalePlane.setDrawType(GLMesh.DrawType.TRIANGLES);
                             scene.addSceneObject(scalePlane);
                             
-                            VoxelFileReader reader = new VoxelFileReader(voxelFile);
-                            VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
+                            
                             GLMesh boundingBoxMesh = GLMeshFactory.createBoundingBox((float)infos.getMinCorner().x, 
                                                                     (float)infos.getMinCorner().y,
                                                                     (float)infos.getMinCorner().z,
@@ -284,8 +338,11 @@ public class FXViewer3D extends Application {
                                                                     (float)infos.getMaxCorner().z);
                                                                     
                             SceneObject boundingBox = new SimpleSceneObject2(boundingBoxMesh, false);
-                            boundingBox.setShader(scene.simpleShader);
-                            boundingBox.setDrawType(GL3.GL_LINES);
+                            
+                            SimpleShader s = (SimpleShader) scene.simpleShader;
+                            s.setColor(new Vec3F(1, 0, 0));
+                            boundingBox.setShader(s);
+                            boundingBox.setDrawType(GLMesh.DrawType.LINES);
                             scene.addSceneObject(boundingBox);
                             
                             voxelSpace.addPropertyChangeListener("gradientUpdated", new PropertyChangeListener() {
@@ -296,7 +353,7 @@ public class FXViewer3D extends Application {
                                     BufferedImage image = ScaleGradient.createColorScaleBufferedImage(voxelSpace.getGradient(),
                                                                 voxelSpace.getAttributValueMin(), voxelSpace.getAttributValueMax(),
                                                                 viewer3D.getWidth() - 80, (int) (viewer3D.getHeight() / 20),
-                                                                ScaleGradient.HORIZONTAL, 5);
+                                                                ScaleGradient.Orientation.HORIZONTAL, 5, 8);
                                     
                                     scaleTexture.setBufferedImage(image);
                                 }

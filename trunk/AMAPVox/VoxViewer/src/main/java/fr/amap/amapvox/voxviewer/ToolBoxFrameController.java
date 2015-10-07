@@ -146,6 +146,8 @@ public class ToolBoxFrameController implements Initializable {
     private Button buttonDecreaseCutting;
     @FXML
     private TextField textfieldIncrementValue;
+    @FXML
+    private Button buttonViewBack;
     
     /**
      * Initializes the controller class.
@@ -275,9 +277,9 @@ public class ToolBoxFrameController implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 
                 if(newValue){
-                    voxelSpace.setShaderId(joglContext.getScene().getShaderByName("instanceLightedShader"));
+                    voxelSpace.setShader(joglContext.getScene().instanceLightedShader);
                 }else{
-                    voxelSpace.setShaderId(joglContext.getScene().getShaderByName("instanceShader"));
+                    voxelSpace.setShader(joglContext.getScene().instanceShader);
                 }
                 
                 joglContext.drawNextFrame();
@@ -644,125 +646,36 @@ public class ToolBoxFrameController implements Initializable {
     private void onActionButtonViewTop(ActionEvent event) {
         
         joglContext.setViewToTop();
-        /*joglContext.getCamera().project(new Vec3F(voxelSpace.getCenterX(), 
-                                                      voxelSpace.getCenterY(),
-                                                      voxelSpace.getCenterZ()+getTargetDistance()), 
-                                        new Vec3F(voxelSpace.getCenterX(), 
-                                                      voxelSpace.getCenterY(),
-                                                      voxelSpace.getCenterZ()));
-        
-        joglContext.getCamera().updateViewMatrix();
-        
-        resetMouseLocation();
-        joglContext.getCamera().notifyViewMatrixChanged();
-        joglContext.drawNextFrame();*/
     }
 
     @FXML
     private void onActionButtonViewRight(ActionEvent event) {
         
         joglContext.setViewToRight();
-        /*Vec3F location = joglContext.getCamera().getLocation();
-        
-        if(location.x < 0){
-            joglContext.getCamera().setLocation(new Vec3F(
-                    voxelSpace.getCenterX()+getTargetDistance(), 
-                    voxelSpace.getCenterY(),
-                    voxelSpace.getCenterZ()));
-            
-        }else if(location.x == 0){
-            joglContext.getCamera().setLocation(new Vec3F(
-                    voxelSpace.getCenterX()+getTargetDistance(),
-                    voxelSpace.getCenterY(),
-                    voxelSpace.getCenterZ()));
-        }
-        
-        joglContext.getCamera().setTarget(new Vec3F(voxelSpace.getCenterX(), 
-                                                      joglContext.getCamera().getLocation().y,
-                                                      joglContext.getCamera().getLocation().z));
-        
-        joglContext.getCamera().updateViewMatrix();
-        
-        resetMouseLocation();
-        joglContext.getCamera().notifyViewMatrixChanged();
-        joglContext.drawNextFrame();*/
     }
 
     @FXML
     private void onActionButtonViewBottom(ActionEvent event) {
                 
         joglContext.setViewToBottom();
-        /*joglContext.getCamera().project(new Vec3F(voxelSpace.getCenterX(), 
-                                                      voxelSpace.getCenterY(),
-                                                      voxelSpace.getCenterZ()-getTargetDistance()), 
-                                        new Vec3F(voxelSpace.getCenterX(), 
-                                                      voxelSpace.getCenterY(),
-                                                      voxelSpace.getCenterZ()));
-        
-        joglContext.getCamera().updateViewMatrix();
-        
-        resetMouseLocation();
-        joglContext.getCamera().notifyViewMatrixChanged();
-        joglContext.drawNextFrame();*/
     }
 
     @FXML
     private void onActionButtonViewLeft(ActionEvent event) {
         
         joglContext.setViewToLeft();
-        /*Vec3F location = joglContext.getCamera().getLocation();
-        
-        if(location.x > 0){
-            joglContext.getCamera().setLocation(new Vec3F(
-                    voxelSpace.getCenterX()-getTargetDistance(), 
-                    voxelSpace.getCenterY(), 
-                    voxelSpace.getCenterZ()));
-        }
-        
-        joglContext.getCamera().setTarget(new Vec3F(voxelSpace.getCenterX(), 
-                                                      joglContext.getCamera().getLocation().y,
-                                                      joglContext.getCamera().getLocation().z));
-        
-        joglContext.getCamera().updateViewMatrix();
-        
-        resetMouseLocation();
-        joglContext.getCamera().notifyViewMatrixChanged();
-        joglContext.drawNextFrame();*/
     }
 
     @FXML
     private void onActionButtonViewFront(ActionEvent event) {
         
         joglContext.setViewToFront();
-        /*joglContext.getCamera().project(new Vec3F(voxelSpace.getCenterX(), 
-                                                      voxelSpace.getCenterY()-getTargetDistance(),
-                                                      voxelSpace.getCenterZ()), 
-                                        new Vec3F(voxelSpace.getCenterX(), 
-                                                      voxelSpace.getCenterY(),
-                                                      voxelSpace.getCenterZ()));
-        
-        joglContext.getCamera().updateViewMatrix();
-        
-        resetMouseLocation();
-        joglContext.getCamera().notifyViewMatrixChanged();
-        joglContext.drawNextFrame();*/
     }
 
+    @FXML
     private void onActionButtonViewBack(ActionEvent event) {
         
         joglContext.setViewToBack();
-        /*joglContext.getCamera().project(new Vec3F(voxelSpace.getCenterX(), 
-                                                      voxelSpace.getCenterY()+getTargetDistance(),
-                                                      voxelSpace.getCenterZ()), 
-                                        new Vec3F(voxelSpace.getCenterX(), 
-                                                      voxelSpace.getCenterY(),
-                                                      voxelSpace.getCenterZ()));
-        
-        joglContext.getCamera().updateViewMatrix();
-        
-        resetMouseLocation();
-        joglContext.getCamera().notifyViewMatrixChanged();
-        joglContext.drawNextFrame();*/
     }
 
     @FXML
@@ -783,21 +696,32 @@ public class ToolBoxFrameController implements Initializable {
     @FXML
     private void onActionButtonIncreaseCutting(ActionEvent event) {
         
-        joglContext.setCuttingIncrementFactor(Float.valueOf(textfieldIncrementValue.getText()));
-        joglContext.cuttingPlane(true);
+        cutting(true);
     }
-
     @FXML
     private void onActionButtonDecreaseCutting(ActionEvent event) {
         
-        joglContext.setCuttingIncrementFactor(Float.valueOf(textfieldIncrementValue.getText()));
-        joglContext.cuttingPlane(false);
+        cutting(false);
     }
 
     @FXML
     private void onActionButtonResetCuttingPlane(ActionEvent event) {
         
-        joglContext.resetCuttingPlane();
+        voxelSpace.resetCuttingPlane();
+        joglContext.drawNextFrame();
+    }
+    
+    private void cutting(boolean increase){
+        
+        voxelSpace.setCuttingIncrementFactor(Float.valueOf(textfieldIncrementValue.getText()));
+        voxelSpace.setCuttingPlane(increase, 
+                joglContext.getScene().getCamera().getForwardVector(),
+                joglContext.getScene().getCamera().getRightVector(), 
+                joglContext.getScene().getCamera().getUpVector(),
+                joglContext.getScene().getCamera().getLocation());
+        
+        
+        joglContext.drawNextFrame();
     }
     
 }

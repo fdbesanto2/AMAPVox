@@ -34,10 +34,6 @@ public class SimpleGLMesh extends GLMesh{
         offsets = new ArrayList<>();
         buffersSizes = new ArrayList<>();
     }
-    
-    public SimpleGLMesh(GL3 gl) {
-        super(gl);
-    }
 
     @Override
     public void initBuffers(GL3 gl, long maximumTotalBufferSize) {
@@ -80,7 +76,7 @@ public class SimpleGLMesh extends GLMesh{
 
     @Override
     public void draw(GL3 gl) {
-        gl.glDrawElements(drawType, vertexCount, GL3.GL_UNSIGNED_INT, 0);
+        gl.glDrawElements(drawType.get(), vertexCount, GL3.GL_UNSIGNED_INT, 0);
     }
     
 }

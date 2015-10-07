@@ -966,6 +966,8 @@ public class VoxelAnalysis {
             }
         }
         
+        int passLimit = Integer.max(Integer.max(parameters.split.x, parameters.split.y), parameters.split.z);
+        
         int passMax = 0;
         
         for (int x = 0; x < parameters.split.x; x++) {
@@ -983,8 +985,12 @@ public class VoxelAnalysis {
 
                         int passID = 0;
 
-                        while(currentNbSampling <= parameters.getCorrectNaNsNbSamplingThreshold()){
+                        //testloop:
+                        while(currentNbSampling <= parameters.getCorrectNaNsNbSamplingThreshold() || currentTransmittance == 0 ){
                             
+                        if(passID > passLimit){
+                            break;
+                        }
                         //while(currentNbSampling <= 0 || currentTransmittance == 0 || Float.isNaN(currentTransmittance)){
 
                             //on parcours les voxels voisins
@@ -1012,7 +1018,9 @@ public class VoxelAnalysis {
                                                             neighbours.add(neighbour);
                                                         }
                                                     }
-                                                }
+                                                }/*else{
+                                                    break testloop;
+                                                }*/
                                             }
                                         }
                                     }
@@ -1022,6 +1030,10 @@ public class VoxelAnalysis {
                             float meanEffectiveNbSampling = 0;
                             float meanTransmittance = 0;
                             
+                            float sumBVEntering = 0;
+                            float sumBVIntercepted = 0;
+                            float sumLgTotal = 0;
+                            
                             int count = 0;
 
                             for(Voxel neighbour : neighbours){
@@ -1029,21 +1041,29 @@ public class VoxelAnalysis {
                                 /*les voxels de transmittance nuls sont traités comme étant non échantillonné,
                                 tous les voisins sont considérés indépendamment de l'échantillonnage*/
                                 
+                                sumBVEntering += neighbour.bvEntering;
+                                sumBVIntercepted += neighbour.bvIntercepted;
+                                sumLgTotal += neighbour.lgTotal;
+                                meanEffectiveNbSampling += neighbour.nbSampling;
                                 if(!Float.isNaN(neighbour.transmittance) && neighbour.transmittance != 0){
-                                    meanEffectiveNbSampling += neighbour.nbSampling;
-                                    meanTransmittance *= neighbour.transmittance;
+                                    //meanEffectiveNbSampling += neighbour.nbSampling;
+                                    //meanTransmittance *= neighbour.transmittance;
                                     count++;
                                 }
                             }
 
-                            if(count > 0){
-                                double factor = 1/count;
-                                if(neighbours.size() > 0){
-                                    meanEffectiveNbSampling /= (float)count;
+                            if(count > 0 && sumBVEntering > 0 && neighbours.size() > 0){
+                                
+                                //double factor = 1/count;
+                                meanTransmittance = (float) Math.pow((sumBVEntering-sumBVIntercepted)/sumBVEntering, sumBVEntering/sumLgTotal);
+                                meanEffectiveNbSampling /= (float)neighbours.size();
+                                
+                                /*if(neighbours.size() > 0){
+                                    meanEffectiveNbSampling /= (float)neighbours.size();
                                     meanTransmittance = (float) Math.pow(meanTransmittance, factor);
                                 }else{
                                     break;
-                                }
+                                }*/
                                 currentNbSampling = meanEffectiveNbSampling;
                                 currentTransmittance = meanTransmittance;
 
@@ -1075,11 +1095,15 @@ public class VoxelAnalysis {
                                 }
                             }
                             
-                            voxels[x][y][z].neighboursNumber = count;
-                            voxels[x][y][z].passNumber = passID;
-                            voxels[x][y][z].PadBVTotal = meanPAD /count/* /ponderationCoeffSum*/;
-                            voxels[x][y][z].nbSampling = (int)currentNbSampling;
-                            voxels[x][y][z].transmittance = currentTransmittance;
+                            if(count != 0){
+                                voxels[x][y][z].neighboursNumber = count;
+                                voxels[x][y][z].passNumber = passID;
+                                voxels[x][y][z].PadBVTotal = meanPAD /count/* /ponderationCoeffSum*/;
+                                voxels[x][y][z].nbSampling = (int)currentNbSampling;
+                                voxels[x][y][z].transmittance = currentTransmittance;
+                            }
+                            
+                            
                         }
                     }
                     

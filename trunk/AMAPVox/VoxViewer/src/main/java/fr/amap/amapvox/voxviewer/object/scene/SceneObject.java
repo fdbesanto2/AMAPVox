@@ -13,6 +13,7 @@ import fr.amap.amapvox.commons.math.vector.Vec4;
 import fr.amap.amapvox.voxviewer.loading.shader.Shader;
 import fr.amap.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh;
+import fr.amap.amapvox.voxviewer.mesh.GLMesh.DrawType;
 
 /**
  *
@@ -22,8 +23,8 @@ public abstract class SceneObject{
     
     //public Mesh mesh ;
     protected GLMesh mesh;
-    protected int vaoId = -1, shaderId = -1, textureId = -1;
-    private int drawType;
+    protected int vaoId = -1, textureId = -1;
+    private DrawType drawType;
     public boolean isAlphaRequired;
     public boolean depthTest = true;
     public Texture texture;
@@ -38,10 +39,6 @@ public abstract class SceneObject{
     
     public int getShaderId() {
         return shader.getProgramId();
-    }
-
-    public void setShaderId(int shaderId) {
-        this.shaderId = shaderId;
     }
 
     public int getTextureId() {
@@ -60,16 +57,16 @@ public abstract class SceneObject{
     public SceneObject(GLMesh mesh, boolean isAlphaRequired){
         
         this.mesh = mesh;
-        this.drawType = GL3.GL_TRIANGLES;
+        this.drawType = DrawType.TRIANGLES;
         this.isAlphaRequired = isAlphaRequired;
     }
 
-    public void setDrawType(int drawType) {
+    public void setDrawType(DrawType drawType) {
         this.drawType = drawType;
         this.mesh.drawType = drawType;
     }
 
-    public int getDrawType() {
+    public DrawType getDrawType() {
         return drawType;
     }
 

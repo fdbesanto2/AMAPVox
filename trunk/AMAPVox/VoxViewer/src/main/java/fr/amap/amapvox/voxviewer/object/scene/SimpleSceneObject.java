@@ -6,7 +6,6 @@
 package fr.amap.amapvox.voxviewer.object.scene;
 
 import com.jogamp.opengl.GL3;
-import fr.amap.amapvox.voxviewer.loading.shader.Shader;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh;
 import static fr.amap.amapvox.voxviewer.mesh.GLMesh.FLOAT_SIZE;
 import fr.amap.amapvox.voxviewer.mesh.TexturedGLMesh;

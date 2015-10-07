@@ -7,9 +7,11 @@ package fr.amap.amapvox.voxviewer.object.scene;
 
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL3;
+import fr.amap.amapvox.commons.math.geometry.AABB;
 import fr.amap.amapvox.commons.math.geometry.Plane;
 import fr.amap.amapvox.commons.math.point.Point3F;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
+import fr.amap.amapvox.commons.util.BoundingBox3F;
 import fr.amap.amapvox.commons.util.ColorGradient;
 import fr.amap.amapvox.commons.util.CombinedFilter;
 import fr.amap.amapvox.commons.util.CombinedFilters;
@@ -18,7 +20,6 @@ import fr.amap.amapvox.commons.util.StandardDeviation;
 import fr.amap.amapvox.voxcommons.RawVoxel;
 import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
 import fr.amap.amapvox.voxreader.VoxelFileRawReader;
-import fr.amap.amapvox.voxviewer.loading.shader.Shader;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh;
 import fr.amap.amapvox.voxviewer.mesh.GLMeshFactory;
 import fr.amap.amapvox.voxviewer.mesh.InstancedGLMesh;
@@ -34,6 +35,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.swing.event.EventListenerList;
+import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
 
@@ -105,6 +107,12 @@ public class VoxelSpaceSceneObject extends SceneObject{
     float sdValue;
     float average;
     
+    //handle cutting plane
+    private boolean isCuttingInit;
+    private Vec3F lastRightVector = new Vec3F();
+    private Vec3F loc;
+    private float cuttingIncrementFactor = 1.0f;
+    
     private final PropertyChangeSupport props = new PropertyChangeSupport(this);
     
     public VoxelSpaceSceneObject(){
@@ -168,7 +176,13 @@ public class VoxelSpaceSceneObject extends SceneObject{
     }
     
     public void load() throws IOException, Exception{
+        
         loadFromFile(voxelsFile);
+        
+        cubeSize = (float) (data.getVoxelSpaceInfos().getResolution()/2.0f);
+        
+        int instanceNumber = data.voxels.size();    
+        mesh = new InstancedGLMesh(GLMeshFactory.createCube(cubeSize), instanceNumber);
     }
 
     public Map<String, Attribut> getMapAttributs() {
@@ -634,6 +648,64 @@ public class VoxelSpaceSceneObject extends SceneObject{
             voxel.isHidden = false;
         }
     }
+    
+    public void resetCuttingPlane(){
+        
+        clearCuttingPlane();
+        updateVao();
+        
+        isCuttingInit = false;
+        lastRightVector = new Vec3F();
+    }
+    
+    public void setCuttingIncrementFactor(float cuttingIncrementFactor) {
+        this.cuttingIncrementFactor = cuttingIncrementFactor;
+    }
+    
+    public void setCuttingPlane(boolean increase, Vec3F forwardVector, Vec3F rightVector, Vec3F upVector, Vec3F cameraLocation){
+        
+        rightVector = Vec3F.normalize(rightVector);
+        upVector = Vec3F.normalize(upVector);
+        
+        if(lastRightVector.x != rightVector.x || lastRightVector.y != rightVector.y || lastRightVector.z != rightVector.z){
+            isCuttingInit = false;
+        }
+        
+        lastRightVector = rightVector;
+        
+        //init
+        if(!isCuttingInit){
+            
+            loc = cameraLocation;
+            Point3d bottomCorner = data.getVoxelSpaceInfos().getMinCorner();
+            Point3d topCorner = data.getVoxelSpaceInfos().getMaxCorner();
+            AABB aabb = new AABB(new BoundingBox3F(new Point3F((float)bottomCorner.x,(float)bottomCorner.y,(float)bottomCorner.z),
+                                               new Point3F((float)topCorner.x,(float)topCorner.y,(float)topCorner.z)));
+            
+            Point3F nearestPoint = aabb.getNearestPoint(new Point3F(loc.x, loc.y, loc.z));
+            loc = new Vec3F(nearestPoint.x, nearestPoint.y, nearestPoint.z);
+            isCuttingInit = true;
+            
+        }else{
+            Vec3F forward = forwardVector;
+            Vec3F direction = Vec3F.normalize(forward);
+            
+            if(increase){
+                loc = Vec3F.add(loc, Vec3F.multiply(direction, cuttingIncrementFactor));
+            }else{
+                loc = Vec3F.substract(loc, Vec3F.multiply(direction, cuttingIncrementFactor));
+            }
+            
+        }
+        
+        
+        Plane plane = new Plane(rightVector, upVector, new Point3F(loc.x, loc.y, loc.z));
+        //System.out.println(loc.x+" "+loc.y+" "+loc.z);
+        
+        
+        setCuttingPlane(plane);
+        updateVao();
+    }
 
     public boolean isInstancesUpdated() {
         return instancesUpdated;
@@ -745,10 +817,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
     @Override
     public void initBuffers(GL3 gl){
         
-        cubeSize = (float) (data.getVoxelSpaceInfos().getResolution()/2.0f);
         
-        int instanceNumber = data.voxels.size();    
-        mesh = new InstancedGLMesh(gl, GLMeshFactory.createCube(cubeSize), instanceNumber);
         //mesh = new SimpleGLMesh(gl);
         
         int maxSize = (mesh.vertexBuffer.capacity()*GLMesh.FLOAT_SIZE)+(data.voxels.size()*3*GLMesh.FLOAT_SIZE)+(data.voxels.size()*4*GLMesh.FLOAT_SIZE);

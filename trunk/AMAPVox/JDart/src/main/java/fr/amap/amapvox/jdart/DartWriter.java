@@ -16,7 +16,7 @@ import fr.amap.amapvox.jraster.asc.Face;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
 import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelObject;
-import fr.amap.amapvox.voxviewer.object.scene.VoxelSpace;
+import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceData;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -330,7 +330,7 @@ public class DartWriter {
     
     public void writeFromVoxelFile(File voxelFile, File outputFile) throws IOException, Exception{
         
-        VoxelSpace voxelSpace = new VoxelSpace();
+        VoxelSpaceSceneObject voxelSpace = new VoxelSpaceSceneObject();
         voxelSpace.loadFromFile(voxelFile);
         writeFromVoxelSpace(voxelSpace.data, outputFile);
     }

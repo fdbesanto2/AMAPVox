@@ -19,16 +19,10 @@ public class InstancedGLMesh extends GLMesh{
     private int instanceNumber;
     
     
-    public InstancedGLMesh(int instanceNumber){
+    public InstancedGLMesh(GLMesh glMesh, int instanceNumber){
         
         super();
         this.instanceNumber = instanceNumber;
-    }
-    
-    public InstancedGLMesh(GL3 gl, GLMesh glMesh , int instanceNumber){
-        
-        super(gl);
-        
         this.vertexBuffer = glMesh.vertexBuffer;
         this.indexBuffer = glMesh.indexBuffer;
         this.colorBuffer = glMesh.colorBuffer;
@@ -38,7 +32,7 @@ public class InstancedGLMesh extends GLMesh{
 
     @Override
     public void draw(GL3 gl) {
-        gl.glDrawElementsInstanced(GL3.GL_TRIANGLES, vertexCount, GL3.GL_UNSIGNED_INT, 0, instanceNumber);
+        gl.glDrawElementsInstanced(drawType.get(), vertexCount, GL3.GL_UNSIGNED_INT, 0, instanceNumber);
     }
 
     @Override

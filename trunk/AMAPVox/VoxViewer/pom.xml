@@ -84,5 +84,10 @@
             <artifactId>VoxReader</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>fr.amap.amapvox</groupId>
+            <artifactId>JLas</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 </project>

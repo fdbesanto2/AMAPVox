@@ -91,7 +91,7 @@
                                                 <Button fx:id="buttonViewRight" layoutX="114.0" layoutY="51.0" mnemonicParsing="false" onAction="#onActionButtonViewRight" text="Right (3)" AnchorPane.rightAnchor="5.0" />
                                                 <Button fx:id="buttonViewBottom" layoutX="42.0" layoutY="88.0" mnemonicParsing="false" onAction="#onActionButtonViewBottom" text="Bottom (Ctrl-7)" />
                                                 <Button fx:id="buttonViewLeft" layoutX="6.0" layoutY="51.0" mnemonicParsing="false" onAction="#onActionButtonViewLeft" text="Left (Ctrl-3)" AnchorPane.leftAnchor="5.0" />
-                                                <Button fx:id="buttonViewFront" layoutX="3.0" layoutY="169.0" mnemonicParsing="false" onAction="#onActionButtonViewFront" text="Back (Ctrl-1)" AnchorPane.leftAnchor="5.0" />
+                                                <Button fx:id="buttonViewBack" layoutX="3.0" layoutY="169.0" mnemonicParsing="false" onAction="#onActionButtonViewBack" text="Back (Ctrl-1)" AnchorPane.leftAnchor="5.0" />
                                                 <Button fx:id="buttonViewFront" layoutX="5.0" layoutY="136.0" mnemonicParsing="false" onAction="#onActionButtonViewFront" text="Front (1)" AnchorPane.leftAnchor="5.0" />
                                                 <Button fx:id="buttonViewIsometric" layoutX="6.0" layoutY="225.0" mnemonicParsing="false" onAction="#onActionButtonViewIsometric" prefHeight="25.0" prefWidth="94.0" text="Isometric" AnchorPane.leftAnchor="5.0" />
                                              </children>

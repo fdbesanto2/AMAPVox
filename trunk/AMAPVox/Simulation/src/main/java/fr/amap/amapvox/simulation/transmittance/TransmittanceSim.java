@@ -268,7 +268,7 @@ public class TransmittanceSim {
             
             for(int i = 0;i<splitting.x;i++){
                 for(int j=0;j<splitting.y;j++){
-                    float col = (float) (transmissionPeriod[i][j][k] / 0.1);
+                    float col = (float) (transmissionPeriod[i][j][k]/* / 0.1*/);
                     col = Math.min(col, 1);
                     Color c = Colouring.rainbow(col);
                     g.setColor(c);
@@ -359,9 +359,9 @@ public class TransmittanceSim {
             }
             
             count++;
-            if (count % 100000 == 0) {
+            /*if (count % 100000 == 0) {
                 logger.info(" " + count + " shots");
-            }
+            }*/
         }
         
         

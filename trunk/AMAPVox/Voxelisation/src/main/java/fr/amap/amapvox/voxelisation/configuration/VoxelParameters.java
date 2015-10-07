@@ -59,7 +59,7 @@ public class VoxelParameters {
     private int rasterBandNumber;
     
     private boolean correctNaNsMode2;
-    private int correctNaNsNbSamplingThreshold;
+    private float correctNaNsNbSamplingThreshold;
     
     private int ladEstimationMode;
     private Type ladType;
@@ -309,11 +309,11 @@ public class VoxelParameters {
         this.correctNaNsMode2 = correctNaNsMode2;
     }
 
-    public int getCorrectNaNsNbSamplingThreshold() {
+    public float getCorrectNaNsNbSamplingThreshold() {
         return correctNaNsNbSamplingThreshold;
     }
 
-    public void setCorrectNaNsNbSamplingThreshold(int correctNaNsNbSamplingThreshold) {
+    public void setCorrectNaNsNbSamplingThreshold(float correctNaNsNbSamplingThreshold) {
         this.correctNaNsNbSamplingThreshold = correctNaNsNbSamplingThreshold;
     }
 

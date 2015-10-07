@@ -386,7 +386,7 @@ public class VoxelManager {
                 
                 Point3d intersectionPointV2  = new Point3d();
                 
-                if (isPointInsideBoundingBox(lineElement.getOrigin())) {
+                if (sceneCanvas.contains (lineElement.getOrigin ())) {
 			// If the line origin is already in the scene canvas, just get its origin point
 			intersectionPointV2.add (lineElement.getOrigin ());
 		}else{

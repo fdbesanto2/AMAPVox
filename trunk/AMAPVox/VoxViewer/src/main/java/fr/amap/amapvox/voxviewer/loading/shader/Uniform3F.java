@@ -5,10 +5,8 @@
  */
 package fr.amap.amapvox.voxviewer.loading.shader;
 
-import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL3;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
-import java.nio.FloatBuffer;
 
 /**
  *

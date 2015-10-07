@@ -12,8 +12,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.text.DecimalFormat;
-import java.text.FieldPosition;
 
 /**
  *
@@ -21,10 +19,40 @@ import java.text.FieldPosition;
  */
 public class ScaleGradient {
     
-    public static final short HORIZONTAL = 1;
-    public static final short VERTICAL = 2;
+    /**
+     * Gradient orientation, can be either HORIZONTAL or VERTICAL
+     */
+    public enum Orientation{
+        
+        /**
+         * horizontal drawing
+         */
+        HORIZONTAL(1),
+
+        /**
+         * vertical drawing
+         */
+        VERTICAL(2);
+        
+        private int value;
+
+        private Orientation(int value) {
+            this.value = value;
+        }
+    }
     
-    public static BufferedImage generateColorGradientImage(Color[] gradientColor, float min, float max, int width, int height, short orientation){
+    /**
+     * @see fr.amap.amapvox.commons.util.ColorGradient
+     * @see fr.amap.amapvox.commons.util.image.ScaleGradient.Orientation
+     * @param gradientColor array of color values
+     * @param min min value
+     * @param max max value
+     * @param width output image width
+     * @param height output image height
+     * @param orientation gradient orientation
+     * @return a buffered image filled with gradient
+     */
+    public static BufferedImage generateColorGradientImage(Color[] gradientColor, float min, float max, int width, int height, Orientation orientation){
         
         BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         ColorGradient gradient = new ColorGradient(min, max);
@@ -58,10 +86,23 @@ public class ScaleGradient {
         return bi;
     }
     
-    public static BufferedImage createColorScaleBufferedImage(Color[] gradientColor, float minValue, float maxValue, int width, int height, short orientation, int tickNumber){
+    /**
+     * @see fr.amap.amapvox.commons.util.ColorGradient
+     * @see fr.amap.amapvox.commons.util.image.ScaleGradient.Orientation
+     * @param gradientColor array of color values
+     * @param minValue min scale value
+     * @param maxValue max scale value
+     * @param width output image width
+     * @param height output image height
+     * @param orientation gradient orientation
+     * @param majorTickNumber major tick number to draw into image, major ticks have values associated
+     * @param minorTickNumber minor tick number to draw into image between major ticks
+     * @return a buffered image filled with gradient, with ticks and values (with intermediates values) drawn into
+     */
+    public static BufferedImage createColorScaleBufferedImage(Color[] gradientColor, float minValue, float maxValue, int width, int height, Orientation orientation, int majorTickNumber, int minorTickNumber){
         
-        if(tickNumber < 2){
-            tickNumber = 2;
+        if(majorTickNumber < 2){
+            majorTickNumber = 2;
         }
         
         BufferedImage image = generateColorGradientImage(gradientColor, minValue, maxValue, width, height, orientation);
@@ -84,14 +125,14 @@ public class ScaleGradient {
         FontMetrics fm = graphics.getFontMetrics();
         
         //calcul des valeurs intermédiaires
-        float step = (maxValue - minValue)/(float)(tickNumber-1);
+        float step = (maxValue - minValue)/(float)(majorTickNumber-1);
         
-        float[] tickValues = new float[tickNumber];
+        float[] tickValues = new float[majorTickNumber];
         tickValues[0] = minValue;
-        tickValues[tickNumber-1] = maxValue;
+        tickValues[majorTickNumber-1] = maxValue;
         
         float currentValue = step;
-        for(int i=1;i<tickNumber-1;i++){
+        for(int i=1;i<majorTickNumber-1;i++){
             
             tickValues[i] = currentValue;
             currentValue += step;
@@ -101,10 +142,9 @@ public class ScaleGradient {
         int y = imageWithTextcaption.getHeight();
         
         //génération des ticks (sous forme de lignes)
-        float majorTickSpace = (image.getWidth())/(float)(tickNumber-1);
+        float majorTickSpace = (image.getWidth())/(float)(majorTickNumber-1);
         
         float currentTickRectXOffset = 0 + leftXMargin;
-        int minorTickNumber = 8;
         
         int majorTickWidth = 1;
         int majorTickHeight = (int) (image.getHeight()*0.75f);
@@ -116,11 +156,11 @@ public class ScaleGradient {
         
         float minorTickSpace = (majorTickSpace) / (float)(minorTickNumber+1);
         
-        for(int i=0;i<tickNumber;i++){
+        for(int i=0;i<majorTickNumber;i++){
             
             graphics.fillRect((int)currentTickRectXOffset, majorTickPosY, majorTickWidth, majorTickHeight);
             
-            if(i<tickNumber -1){
+            if(i<majorTickNumber -1){
                 
                 for(int j=0;j<minorTickNumber;j++){
 
@@ -138,7 +178,7 @@ public class ScaleGradient {
         
         //scale labels (values)
         currentTickRectXOffset = 0 + leftXMargin;
-        for(int i=0;i<tickNumber;i++){
+        for(int i=0;i<majorTickNumber;i++){
             
             String text = format.format(tickValues[i]);
             int textWidth = fm.stringWidth(text);

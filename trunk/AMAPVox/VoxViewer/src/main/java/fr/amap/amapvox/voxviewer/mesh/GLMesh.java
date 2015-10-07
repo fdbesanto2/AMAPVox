@@ -18,6 +18,23 @@ import java.util.List;
  */
 public abstract class GLMesh {
     
+    public enum DrawType{
+        
+        TRIANGLES(GL3.GL_TRIANGLES),
+        POINTS(GL3.GL_POINTS),
+        LINES(GL3.GL_LINES);
+        
+        private int type;
+
+        private DrawType(int type) {
+            this.type = type;
+        }
+
+        public int get() {
+            return type;
+        }
+    }
+    
     public static final int FLOAT_SIZE = Buffers.SIZEOF_FLOAT;
     public static final int INTEGER_SIZE = Buffers.SIZEOF_INT;
     //public static final int SHORT_SIZE = Buffers.SIZEOF_SHORT;
@@ -25,7 +42,7 @@ public abstract class GLMesh {
     
     long offset = 0;
     long totalBuffersSize;
-    public int drawType = GL3.GL_TRIANGLES;
+    public DrawType drawType = DrawType.TRIANGLES;
     
     public FloatBuffer vertexBuffer;
     public FloatBuffer normalBuffer;
@@ -58,25 +75,6 @@ public abstract class GLMesh {
         buffersSizes = new ArrayList<>();
     }
     
-    /**
-     *
-     * @param gl opengl context
-     */
-    public GLMesh(GL3 gl){
-        
-        totalBuffersSize = 0;
-        offset = 0;
-        offsets = new ArrayList<>();
-        buffersSizes = new ArrayList<>();
-        
-        //offsets.add(0l);
-        
-        IntBuffer tmp = IntBuffer.allocate(2);
-        gl.glGenBuffers(2, tmp);
-        
-        vboId=tmp.get(0);
-        iboId=tmp.get(1);
-    }
     
     /**
      *

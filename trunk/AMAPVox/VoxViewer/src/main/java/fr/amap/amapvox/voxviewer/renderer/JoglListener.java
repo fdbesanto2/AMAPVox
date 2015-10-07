@@ -64,10 +64,10 @@ public class JoglListener implements GLEventListener {
     private boolean projectionMatrixChanged = false;
     private boolean isInit;
     
-    private boolean isCuttingInit;
+    /*private boolean isCuttingInit;
     private Vec3F lastRightVector = new Vec3F();
     private Vec3F loc;
-    private float cuttingIncrementFactor = 1.0f;
+    private float cuttingIncrementFactor = 1.0f;*/
     
     
     private final EventListenerList listeners;
@@ -180,32 +180,11 @@ public class JoglListener implements GLEventListener {
             eventListener.updateEvents();
         }
         
-        if(isInit){
-            
-            //scene.getCamera().setPivot(new Vec3F(scene.getVoxelSpace().centerX, scene.getVoxelSpace().centerY, scene.getVoxelSpace().centerZ));
-            //scene.setLightPosition(new Point3F(scene.getVoxelSpace().centerX, scene.getVoxelSpace().centerY, scene.getVoxelSpace().centerZ+scene.getVoxelSpace().widthZ+100));
-            
-            /*int id = scene.getShaderByName("instanceLightedShader");
-            Shader s = scene.getShadersList().get(id);
-            gl.glUseProgram(id);
-                gl.glUniform3f(s.uniformMap.get("lambient"), scene.getLight().ambient.x, scene.getLight().ambient.y, scene.getLight().ambient.z);
-                gl.glUniform3f(s.uniformMap.get("ldiffuse"), scene.getLight().diffuse.x, scene.getLight().diffuse.y, scene.getLight().diffuse.z);
-                gl.glUniform3f(s.uniformMap.get("lspecular"), scene.getLight().specular.x, scene.getLight().specular.y, scene.getLight().specular.z);
-                gl.glUniform3f(s.uniformMap.get("lightPosition"), scene.getLight().position.x, scene.getLight().position.y, scene.getLight().position.z);
-            gl.glUseProgram(0);*/
-            
-            int id2 = scene.getShaderByName("simpleShader");
-            Shader s2 = scene.getShadersList().get(id2);
-            gl.glUseProgram(id2);
-                gl.glUniform3f(s2.uniformMap.get("color"), 1, 0, 0);
-            gl.glUseProgram(0);
-        }
-        
         isInit = false;
         
         scene.draw(gl);
         
-        if(justOnce){
+        if(justOnce){ //drawn one frame only
             animator.pause();
             justOnce = false;
         }
@@ -227,10 +206,7 @@ public class JoglListener implements GLEventListener {
         viewportWidth = this.width-startX;
         viewportHeight = this.height;
         
-        gl.glViewport(startX, startY, viewportWidth, viewportHeight);        
-        
-        scene.setWidth(width-startX);
-        scene.setHeight(height);
+        gl.glViewport(startX, startY, viewportWidth, viewportHeight);
         
         if(isInit){
             scene.getCamera().setPerspective(60.0f, (1.0f*this.width-startX)/height, 1.0f, 1000.0f);
@@ -344,69 +320,6 @@ public class JoglListener implements GLEventListener {
         }
         
     }
-
-    public void setCuttingIncrementFactor(float cuttingIncrementFactor) {
-        this.cuttingIncrementFactor = cuttingIncrementFactor;
-    }
-    
-    
-    public void cuttingPlane(boolean increase){
-        
-        Vec3F rightVector = scene.getCamera().getRightVector();
-        Vec3F upVector = scene.getCamera().getUpVector();
-        rightVector = Vec3F.normalize(rightVector);
-        upVector = Vec3F.normalize(upVector);
-        
-        if(lastRightVector.x != rightVector.x || lastRightVector.y != rightVector.y || lastRightVector.z != rightVector.z){
-            isCuttingInit = false;
-        }
-        
-        lastRightVector = rightVector;
-        
-        //init
-        if(!isCuttingInit){
-            
-            /*loc = scene.getCamera().getLocation();
-            Point3d bottomCorner = scene.getVoxelSpace().data.getVoxelSpaceInfos().getMinCorner();
-            Point3d topCorner = scene.getVoxelSpace().data.getVoxelSpaceInfos().getMaxCorner();
-            AABB aabb = new AABB(new BoundingBox3F(new Point3F((float)bottomCorner.x,(float)bottomCorner.y,(float)bottomCorner.z),
-                                               new Point3F((float)topCorner.x,(float)topCorner.y,(float)topCorner.z)));
-            
-            Point3F nearestPoint = aabb.getNearestPoint(new Point3F(loc.x, loc.y, loc.z));
-            loc = new Vec3F(nearestPoint.x, nearestPoint.y, nearestPoint.z);
-            isCuttingInit = true;*/
-            
-        }else{
-            Vec3F forward = scene.getCamera().getForwardVector();
-            Vec3F direction = Vec3F.normalize(forward);
-            
-            if(increase){
-                loc = Vec3F.add(loc, Vec3F.multiply(direction, cuttingIncrementFactor));
-            }else{
-                loc = Vec3F.substract(loc, Vec3F.multiply(direction, cuttingIncrementFactor));
-            }
-            
-        }
-        
-        
-        Plane plane = new Plane(rightVector, upVector, new Point3F(loc.x, loc.y, loc.z));
-        //System.out.println(loc.x+" "+loc.y+" "+loc.z);
-        
-        
-        /*scene.getVoxelSpace().setCuttingPlane(plane);
-        scene.getVoxelSpace().updateVao();*/
-        drawNextFrame();
-    }
-    
-    public void resetCuttingPlane(){
-        
-        /*scene.getVoxelSpace().clearCuttingPlane();
-        scene.getVoxelSpace().updateVao();*/
-        drawNextFrame();
-        
-        isCuttingInit = false;
-        lastRightVector = new Vec3F();
-    }
     
     private void resetMouseLocation(){
         
@@ -416,25 +329,26 @@ public class JoglListener implements GLEventListener {
     
     public void setViewToBack(){
         
-        scene.getCamera().project(new Vec3F(scene.getCamera().getPivot().getPosition().x,
+        scene.getCamera().project(
+                        new Vec3F(scene.getCamera().getPivot().getPosition().x,
                                  scene.getCamera().getPivot().getPosition().y + getTargetDistance(),
                                  scene.getCamera().getPivot().getPosition().z),
-                       new Vec3F(scene.getCamera().getPivot().getPosition().x,
+                        new Vec3F(scene.getCamera().getPivot().getPosition().x,
                                  scene.getCamera().getPivot().getPosition().y,
                                  scene.getCamera().getPivot().getPosition().z));
         
         scene.getCamera().updateViewMatrix();
         
         resetMouseLocation();
-        //scene.getCamera().notifyViewMatrixChanged();
         drawNextFrame();
     }
     
     public void setViewToFront(){
         
-        scene.getCamera().project(new Vec3F(scene.getCamera().getPivot().getPosition().x, 
-                                            scene.getCamera().getPivot().getPosition().y-getTargetDistance(),
-                                            scene.getCamera().getPivot().getPosition().z), 
+        scene.getCamera().project(
+                        new Vec3F(scene.getCamera().getPivot().getPosition().x, 
+                                scene.getCamera().getPivot().getPosition().y-getTargetDistance(),
+                                scene.getCamera().getPivot().getPosition().z), 
                 
                         new Vec3F(scene.getCamera().getPivot().getPosition().x, 
                                 scene.getCamera().getPivot().getPosition().y,
@@ -443,29 +357,40 @@ public class JoglListener implements GLEventListener {
         scene.getCamera().updateViewMatrix();
         
         resetMouseLocation();
-        //scene.getCamera().notifyViewMatrixChanged();
         drawNextFrame();
     }
     
     public void setViewToLeft(){
         
-        Vec3F location = scene.getCamera().getLocation();
+        scene.getCamera().setLocation(new Vec3F(
+                scene.getCamera().getPivot().getPosition().x-getTargetDistance(), 
+                scene.getCamera().getPivot().getPosition().y, 
+                scene.getCamera().getPivot().getPosition().z));
         
-        //if(location.x > 0){
-            scene.getCamera().setLocation(new Vec3F(
-                    scene.getCamera().getPivot().getPosition().x-getTargetDistance(), 
-                    scene.getCamera().getPivot().getPosition().y, 
-                    scene.getCamera().getPivot().getPosition().x));
-        //}
-        
-        scene.getCamera().setTarget(new Vec3F(scene.getCamera().getLocation().x, 
+        scene.getCamera().setTarget(new Vec3F(scene.getCamera().getPivot().getPosition().x, 
                                             scene.getCamera().getLocation().y,
                                             scene.getCamera().getLocation().z));
         
         scene.getCamera().updateViewMatrix();
         
         resetMouseLocation();
-        //scene.getCamera().notifyViewMatrixChanged();
+        drawNextFrame();
+    }
+    
+        public void setViewToRight(){
+        
+        scene.getCamera().setLocation(new Vec3F(
+                scene.getCamera().getPivot().getPosition().x+getTargetDistance(),
+                scene.getCamera().getPivot().getPosition().y,
+                scene.getCamera().getPivot().getPosition().z));
+        
+        scene.getCamera().setTarget(new Vec3F(scene.getCamera().getPivot().getPosition().x, 
+                                                      scene.getCamera().getLocation().y,
+                                                      scene.getCamera().getLocation().z));
+        
+        scene.getCamera().updateViewMatrix();
+        
+        resetMouseLocation();
         drawNextFrame();
     }
     
@@ -481,35 +406,6 @@ public class JoglListener implements GLEventListener {
         scene.getCamera().updateViewMatrix();
         
         resetMouseLocation();
-        //scene.getCamera().notifyViewMatrixChanged();
-        drawNextFrame();
-    }
-    
-    public void setViewToRight(){
-        
-        Vec3F location = scene.getCamera().getLocation();
-        
-        /*if(location.x < 0){
-            camera.setLocation(new Vec3F(
-                    scene.getVoxelSpace().getCenterX()+getTargetDistance(), 
-                    scene.getVoxelSpace().getCenterY(),
-                    scene.getVoxelSpace().getCenterZ()));
-            
-        }else if(location.x == 0){*/
-            scene.getCamera().setLocation(new Vec3F(
-                    scene.getCamera().getPivot().getPosition().x+getTargetDistance(),
-                    scene.getCamera().getPivot().getPosition().y,
-                    scene.getCamera().getPivot().getPosition().z));
-        //}
-        
-        scene.getCamera().setTarget(new Vec3F(scene.getCamera().getPivot().getPosition().x, 
-                                                      scene.getCamera().getLocation().y,
-                                                      scene.getCamera().getLocation().z));
-        
-        scene.getCamera().updateViewMatrix();
-        
-        resetMouseLocation();
-        //scene.getCamera().notifyViewMatrixChanged();
         drawNextFrame();
     }
     
@@ -525,7 +421,6 @@ public class JoglListener implements GLEventListener {
         scene.getCamera().updateViewMatrix();
         
         resetMouseLocation();
-        //scene.getCamera().notifyViewMatrixChanged();
         drawNextFrame();
     }
     

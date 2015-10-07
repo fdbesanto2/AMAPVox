@@ -287,7 +287,7 @@ public abstract class Shader {
         return new InputStreamReader(Shader.class.getClassLoader().getResourceAsStream(path));
     }
     
-    protected void notifyDirty(Uniform uniform, int location){
+    public void notifyDirty(Uniform uniform){
         
         dirtyUniforms.addElement(uniform);
     }

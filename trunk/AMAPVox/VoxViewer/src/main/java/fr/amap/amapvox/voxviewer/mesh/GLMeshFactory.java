@@ -48,6 +48,17 @@ public class GLMeshFactory {
         
         return texturedMesh;
     }
+    
+    public static GLMesh createPointCloud(float[] vertexData, float[] colorData){
+        
+        GLMesh pointcloud = new PointCloudGLMesh();
+        pointcloud.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
+        pointcloud.vertexCount = vertexData.length/3;
+        pointcloud.colorBuffer = Buffers.newDirectFloatBuffer(colorData);
+        
+        return pointcloud;
+    }
+    
     public static GLMesh createCube(float size){
         
         float vertexData[] = new float[]

@@ -5,7 +5,6 @@
  */
 package fr.amap.amapvox.voxviewer.object.scene;
 
-import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL3;
 import fr.amap.amapvox.commons.math.matrix.Mat4F;
 import fr.amap.amapvox.commons.math.point.Point3F;
@@ -26,16 +25,12 @@ import fr.amap.amapvox.voxviewer.object.camera.TrackballCamera;
 import fr.amap.amapvox.voxviewer.object.lighting.Light;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.Stack;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -58,35 +53,27 @@ public class Scene {
     private Light light;
     
     public boolean canDraw;
-    private SceneObject scalePlane;
-    private int width;
-    private int height;
     
-    private boolean lightPositionChanged = true;
-    private boolean lightAmbientColorChanged = true;
-    private boolean lightDiffuseColorChanged = true;
-    private boolean lightSpecularColorChanged = true;
+    //default shaders
+    public Shader noTranslationShader = new AxisShader("noTranslationShader");
+    public Shader instanceLightedShader = new InstanceLightedShader("instanceLightedShader");
+    public Shader instanceShader = new InstanceShader("instanceShader");
+    public Shader texturedShader = new TextureShader("textureShader");
+    public Shader labelShader = new TextureShader("labelShader");
+    public Shader lightedShader = new LightedShader("lightShader");
+    public Shader simpleShader = new SimpleShader("simpleShader");
     
-    public Shader noTranslationShader;
-    public Shader instanceLightedShader;
-    public Shader instanceShader;
-    public Shader texturedShader;
-    public Shader labelShader;
-    public Shader lightedShader;
-    public Shader simpleShader;
-    
-    public UniformMat4F viewMatrixUniform;
-    public UniformMat4F projMatrixUniform;
+    //global uniforms, can be used inside shaders files
+    public UniformMat4F viewMatrixUniform = new UniformMat4F("viewMatrix");
+    public UniformMat4F projMatrixUniform = new UniformMat4F("projMatrix");
     public UniformMat4F normalMatrixUniform;
-    public Uniform3F lightPositionUniform;
-    public Uniform3F lambientUniform;
-    public Uniform3F ldiffuseUniform;
-    public Uniform3F lspecularUniform;
-    
-    public UniformMat4F projMatrixOrthoUniform;
-    public UniformMat4F viewMatrixOrthoUniform;
-    
-    public Uniform1I textureUniform;
+    public Uniform3F lightPositionUniform = new Uniform3F("lightPosition");
+    public Uniform3F lambientUniform = new Uniform3F("lambient");
+    public Uniform3F ldiffuseUniform = new Uniform3F("ldiffuse");
+    public Uniform3F lspecularUniform = new Uniform3F("lspecular");
+    public UniformMat4F projMatrixOrthoUniform = new UniformMat4F("projMatrixOrtho");
+    public UniformMat4F viewMatrixOrthoUniform = new UniformMat4F("viewMatrixOrtho");
+    public Uniform1I textureUniform = new Uniform1I("texture");
     
     private final Map<String, Uniform> uniforms = new HashMap<>();
     
@@ -98,41 +85,15 @@ public class Scene {
         canDraw = false;
         light = new Light();
         
-        noTranslationShader = new AxisShader("noTranslationShader");
-        instanceLightedShader = new InstanceLightedShader("instanceLightedShader");
-        instanceShader = new InstanceShader("instanceShader");
-        texturedShader = new TextureShader("textureShader");
-        texturedShader.isOrtho = true;
-        labelShader = new TextureShader("labelShader");
-        lightedShader = new LightedShader("lightShader");
-        simpleShader = new SimpleShader("simpleShader");
-        
-        viewMatrixUniform = new UniformMat4F("viewMatrix");
-        uniforms.put("viewMatrix", viewMatrixUniform);
-        
-        projMatrixUniform = new UniformMat4F("projMatrix");
-        uniforms.put("projMatrix", projMatrixUniform);
-        
-        projMatrixOrthoUniform = new UniformMat4F("projMatrixOrtho");
-        uniforms.put("projMatrixOrtho", projMatrixOrthoUniform);
-        
-        viewMatrixOrthoUniform = new UniformMat4F("viewMatrixOrtho");
-        uniforms.put("viewMatrixOrtho", viewMatrixOrthoUniform);
-        
-        textureUniform = new Uniform1I("texture");
-        uniforms.put("texture", textureUniform);
-        
-        lambientUniform = new Uniform3F("lambient");
-        uniforms.put("lambient", lambientUniform);
-        
-        ldiffuseUniform = new Uniform3F("ldiffuse");
-        uniforms.put("ldiffuse", ldiffuseUniform);
-        
-        lspecularUniform = new Uniform3F("lspecular");
-        uniforms.put("lspecular", lspecularUniform);
-        
-        lightPositionUniform = new Uniform3F("lightPosition");
-        uniforms.put("lightPosition", lightPositionUniform);
+        uniforms.put(viewMatrixUniform.getName(), viewMatrixUniform);
+        uniforms.put(projMatrixUniform.getName(), projMatrixUniform);
+        uniforms.put(projMatrixOrthoUniform.getName(), projMatrixOrthoUniform);
+        uniforms.put(viewMatrixOrthoUniform.getName(), viewMatrixOrthoUniform);
+        uniforms.put(textureUniform.getName(), textureUniform);
+        uniforms.put(lambientUniform.getName(), lambientUniform);
+        uniforms.put(ldiffuseUniform.getName(), ldiffuseUniform);
+        uniforms.put(lspecularUniform.getName(), lspecularUniform);
+        uniforms.put(lightPositionUniform.getName(), lightPositionUniform);
         
     }
     
@@ -151,6 +112,11 @@ public class Scene {
                 //on ajout la variable uniform à la map uniforms
                 if(uniforms.containsKey(uniformEntry.getKey())){
                     uniforms.get(uniformEntry.getKey()).addOwner(shaderEntry.getValue(), uniformEntry.getValue());
+                    
+                    //handle the case when uniform has been updated before shader has been initialized
+                    if(uniforms.get(uniformEntry.getKey()).isDirty()){
+                        shaderEntry.getValue().notifyDirty(uniforms.get(uniformEntry.getKey()));
+                    }
                 }
             }
         }
@@ -175,7 +141,7 @@ public class Scene {
             addShader(lightedShader);
             addShader(labelShader);
             
-            initUniforms();
+            initUniforms(); //assign owners to uniforms (shaders using the uniforms)
             
             projMatrixOrthoUniform.setValue(Mat4F.ortho(0, 640, 0, 480, -10, 1000));
             viewMatrixOrthoUniform.setValue(Mat4F.lookAt(new Vec3F(0,0,0), new Vec3F(0,0,0), new Vec3F(0,1,0)));
@@ -222,14 +188,6 @@ public class Scene {
         setLightDiffuseValue(getLight().diffuse);
         setLightSpecularValue(getLight().specular);
         
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
     }
 
     public Map<Integer, Shader> getShadersList() {
@@ -281,6 +239,8 @@ public class Scene {
     
     public void draw(final GL3 gl){
         
+        camera.updateViewMatrix();
+        
         //update shader variables
         Iterator<Entry<Integer, Shader>> iterator = shadersList.entrySet().iterator();
 
@@ -300,8 +260,6 @@ public class Scene {
                 }
             }
         }
-        
-        camera.updateViewMatrix();
 
         /***draw scene objects***/
 

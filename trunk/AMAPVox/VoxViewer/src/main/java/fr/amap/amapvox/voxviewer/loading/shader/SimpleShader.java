@@ -14,6 +14,8 @@ import fr.amap.amapvox.commons.math.vector.Vec3F;
  */
 public class SimpleShader extends Shader{
     
+    private Uniform3F colorUniform;
+    
     public SimpleShader(String name){
         
         super(name);
@@ -22,6 +24,8 @@ public class SimpleShader extends Shader{
         fragmentShaderStreamPath = "shaders/SimpleFragmentShader.txt";
         attributes = new String[] {"position"};
         //uniforms = new String[]{"viewMatrix","projMatrix", "color"};
+        
+        colorUniform = new Uniform3F("color");
     }
     
     public SimpleShader(GL3 m_gl, String name){
@@ -34,6 +38,7 @@ public class SimpleShader extends Shader{
     }
     
     public void setColor(Vec3F color){
-        
+        colorUniform.setValue(color);
+        notifyDirty(colorUniform);
     }
 }
