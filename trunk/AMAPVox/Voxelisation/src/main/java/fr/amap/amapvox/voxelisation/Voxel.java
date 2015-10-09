@@ -140,7 +140,7 @@ public class Voxel implements Serializable {
         //public float _PadBVTotal_V2;
         //public double _sumSurfaceMultiplyLength;
         public boolean _lastEcho = true;
-        public float passNumber;
+        public float passNumber = -1;
         public float neighboursNumber;
         
 

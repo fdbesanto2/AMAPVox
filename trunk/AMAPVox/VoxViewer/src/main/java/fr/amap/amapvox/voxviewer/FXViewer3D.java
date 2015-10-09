@@ -5,25 +5,23 @@
  */
 package fr.amap.amapvox.voxviewer;
 
+import com.jogamp.newt.awt.NewtCanvasAWT;
 import com.jogamp.newt.event.WindowAdapter;
-import com.jogamp.opengl.GL3;
 import com.sun.javafx.application.ParametersImpl;
+import com.sun.javafx.tk.TKStage;
 import fr.amap.amapvox.als.LasHeader;
 import fr.amap.amapvox.als.las.LasReader;
 import fr.amap.amapvox.als.las.PointDataRecordFormat;
 import fr.amap.amapvox.commons.math.matrix.Mat4D;
-import fr.amap.amapvox.commons.math.point.Point2F;
 import fr.amap.amapvox.commons.math.point.Point3F;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
 import fr.amap.amapvox.commons.math.vector.Vec4D;
-import fr.amap.amapvox.commons.util.BoundingBox2F;
 import fr.amap.amapvox.commons.util.image.ScaleGradient;
 import fr.amap.amapvox.jraster.asc.DtmLoader;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
 import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
 import fr.amap.amapvox.voxreader.VoxelFileReader;
 import fr.amap.amapvox.voxviewer.event.BasicEvent;
-import fr.amap.amapvox.voxviewer.loading.shader.Shader;
 import fr.amap.amapvox.voxviewer.loading.shader.SimpleShader;
 import fr.amap.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh;
@@ -35,7 +33,6 @@ import fr.amap.amapvox.voxviewer.object.scene.SceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.SceneObjectFactory;
 import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject2;
-import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceListener;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import fr.amap.amapvox.voxviewer.renderer.GLRenderWindowListener;
 import fr.amap.amapvox.voxviewer.renderer.JoglListenerListener;
@@ -45,6 +42,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import static java.lang.System.exit;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +76,7 @@ public class FXViewer3D extends Application {
     private String attributeToView;
 
     private final static Logger logger = Logger.getLogger(FXViewer3D.class);
-
+    
     @Override
     public void start(final Stage stage) {
         
@@ -199,7 +197,6 @@ public class FXViewer3D extends Application {
                 }
             }
         }
-        
 
         try {
 
@@ -226,11 +223,11 @@ public class FXViewer3D extends Application {
                             float[] colorData = new float[numberOfPointrecords*3];
                             
                             Iterator<PointDataRecordFormat> iterator = lasReader.iterator();
-                            Mat4D transfMatrix = new Mat4D();
-                            transfMatrix.mat = new double[]{0.9540688863574789,0.29958731629459895,0.0,-448120.0441687209,
+                            Mat4D transfMatrix = Mat4D.identity();
+                            /*transfMatrix.mat = new double[]{0.9540688863574789,0.29958731629459895,0.0,-448120.0441687209,
                             -0.29958731629459895,0.9540688863574789,0.0,-470918.3928060016,
                             0.0,0.0,1.0,0.0,
-                            0.0,0.0,0.0,1.0};
+                            0.0,0.0,0.0,1.0};*/
                             
                             int i=0;
                             while(iterator.hasNext()){
@@ -245,9 +242,16 @@ public class FXViewer3D extends Application {
                                 vertexData[i+1] = (float) pointTransformed.y;
                                 vertexData[i+2] = (float) pointTransformed.z;
                                 
-                                colorData[i] = 1;
+                                if(point.getClassification() == 2){
+                                    colorData[i] = 1;
+                                    colorData[i+2] = 0;
+                                }else{
+                                    colorData[i] = 0;
+                                    colorData[i+2] = 1;
+                                }
+                                
                                 colorData[i+1] = 0;
-                                colorData[i+2] = 0;
+                                
                                 
                                 i+=3;
                             }
@@ -255,7 +259,7 @@ public class FXViewer3D extends Application {
                             PointCloudGLMesh pointcloudMesh = (PointCloudGLMesh) GLMeshFactory.createPointCloud(vertexData,colorData);
                             
                             PointCloudSceneObject pointCloud = new PointCloudSceneObject(pointcloudMesh, false);
-                            pointCloud.setShader(scene.simpleShader);
+                            pointCloud.setShader(scene.colorShader);
                             scene.addSceneObject(pointCloud);
                             
                             
@@ -273,24 +277,24 @@ public class FXViewer3D extends Application {
                             VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
                             
                             /***DTM***/
-                            /*RegularDtm dtm = DtmLoader.readFromAscFile(new File("/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc"));
-                            Mat4D transfMatrix = new Mat4D();
-                            transfMatrix.mat = new double[]{0.9540688863574789,0.29958731629459895,0.0,-448120.0441687209,
-                            -0.29958731629459895,0.9540688863574789,0.0,-470918.3928060016,
-                            0.0,0.0,1.0,0.0,
-                            0.0,0.0,0.0,1.0};
+                            RegularDtm dtm = DtmLoader.readFromAscFile(new File("/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc"));
 
-                            dtm.setTransformationMatrix(transfMatrix);
+                            //dtm.setTransformationMatrix(transfMatrix);
                             dtm.buildMesh();
                             GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormalesFromDTM(dtm);
-                            SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, false);
+                            
+                            Point3F position = new Point3F((float)((dtm.getLowerCorner().getX()+dtm.getUpperCorner().getX())/2.0d),
+                                                            (float)((dtm.getLowerCorner().getY()+dtm.getUpperCorner().getY())/2.0d), 
+                                                            (float)((dtm.getLowerCorner().getZ()+dtm.getUpperCorner().getZ())/2.0d));
+                            
+                            SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, false, position);
                             dtmSceneObject.setShader(scene.lightedShader);
-                            scene.addSceneObject(dtmSceneObject);*/
+                            scene.addSceneObject(dtmSceneObject);
                             
                             /**
                              * *DTM**
                              */
-                            if (drawDTM && dtmFile != null) {
+                            /*if (drawDTM && dtmFile != null) {
 
                                 updateMessage("Loading DTM");
                                 RegularDtm dtm = DtmLoader.readFromAscFile(dtmFile);
@@ -313,7 +317,7 @@ public class FXViewer3D extends Application {
                                 dtmSceneObject.setShader(scene.lightedShader);
                                 scene.addSceneObject(dtmSceneObject);
 
-                            }
+                            }*/
                             
                             /**
                              * *scale**
@@ -329,18 +333,17 @@ public class FXViewer3D extends Application {
                             scalePlane.setDrawType(GLMesh.DrawType.TRIANGLES);
                             scene.addSceneObject(scalePlane);
                             
-                            
-                            GLMesh boundingBoxMesh = GLMeshFactory.createBoundingBox((float)infos.getMinCorner().x, 
-                                                                    (float)infos.getMinCorner().y,
-                                                                    (float)infos.getMinCorner().z,
-                                                                    (float)infos.getMaxCorner().x, 
-                                                                    (float)infos.getMaxCorner().y,
-                                                                    (float)infos.getMaxCorner().z);
+                            GLMesh boundingBoxMesh = GLMeshFactory.createBoundingBox((float)header.getMinX(), 
+                                                                    (float)header.getMinY(),
+                                                                    (float)header.getMinZ(),
+                                                                    (float)header.getMaxX(), 
+                                                                    (float)header.getMaxY(),
+                                                                    (float)header.getMaxZ());
                                                                     
                             SceneObject boundingBox = new SimpleSceneObject2(boundingBoxMesh, false);
                             
                             SimpleShader s = (SimpleShader) scene.simpleShader;
-                            s.setColor(new Vec3F(1, 0, 0));
+                            s.setColor(new Vec3F(1, 1, 0));
                             boundingBox.setShader(s);
                             boundingBox.setDrawType(GLMesh.DrawType.LINES);
                             scene.addSceneObject(boundingBox);
@@ -368,8 +371,8 @@ public class FXViewer3D extends Application {
                              * *camera**
                              */
                             TrackballCamera trackballCamera = new TrackballCamera();
-                            trackballCamera.setPivot(voxelSpace);
-                            trackballCamera.setLocation(new Vec3F(voxelSpace.getPosition().x + voxelSpace.widthX, voxelSpace.getPosition().y + voxelSpace.widthY, voxelSpace.getPosition().z + voxelSpace.widthZ));
+                            trackballCamera.setPivot(dtmSceneObject);
+                            trackballCamera.setLocation(new Vec3F(dtmSceneObject.getPosition().x-50, dtmSceneObject.getPosition().y, dtmSceneObject.getPosition().z+50));
                             viewer3D.getScene().setCamera(trackballCamera);
                             
                             
@@ -434,12 +437,16 @@ public class FXViewer3D extends Application {
 
                                                 }
                                             });
+                                            
 
                                             viewer3D.addWindowListener(new WindowAdapter() {
 
                                                 @Override
                                                 public void windowGainedFocus(com.jogamp.newt.event.WindowEvent e) {
 
+                                                    System.out.println("3d window gained focus");
+                                                    System.out.println("is 3d window visible? " + Boolean.toString(!viewer3D.getRenderFrame().isVisible()));
+                                                    
                                                     viewer3D.setIsFocused(true);
                                                     Platform.runLater(new Runnable() {
 
@@ -454,17 +461,23 @@ public class FXViewer3D extends Application {
                                                 @Override
                                                 public void windowLostFocus(com.jogamp.newt.event.WindowEvent e) {
 
-                                                    viewer3D.setIsFocused(false);
-                                                    Platform.runLater(new Runnable() {
+                                                    System.out.println("3d window lose focus");
+                                                    System.out.println("is 3d window visible? " + Boolean.toString(!viewer3D.getRenderFrame().isVisible()));
+                                                    
+                                                    if(!viewer3D.getRenderFrame().isVisible()){
+                                                        viewer3D.setIsFocused(false);
+                                                        Platform.runLater(new Runnable() {
 
-                                                        @Override
-                                                        public void run() {
-                                                            if (!toolBarFrameStage.focusedProperty().get()) {
-                                                                toolBarFrameStage.setIconified(true);
-                                                                toolBarFrameStage.setAlwaysOnTop(false);
+                                                            @Override
+                                                            public void run() {
+                                                                if (!toolBarFrameStage.focusedProperty().get()) {
+                                                                    toolBarFrameStage.setIconified(true);
+                                                                    toolBarFrameStage.setAlwaysOnTop(false);
+                                                                }
                                                             }
-                                                        }
-                                                    });
+                                                        });
+                                                    }
+                                                   
                                                 }
                                             });
 

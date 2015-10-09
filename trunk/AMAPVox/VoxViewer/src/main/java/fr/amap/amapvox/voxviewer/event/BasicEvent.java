@@ -8,6 +8,7 @@ package fr.amap.amapvox.voxviewer.event;
 import com.jogamp.opengl.util.FPSAnimator;
 import fr.amap.amapvox.commons.math.point.Point3F;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
+import fr.amap.amapvox.voxviewer.object.scene.SceneObject;
 import fr.amap.amapvox.voxviewer.renderer.JoglListener;
 import java.awt.Robot;
 
@@ -99,7 +100,10 @@ public class BasicEvent extends EventManager{
             }
             
             joglContext.getCamera().rotateFromOrientation(new Vec3F(x, y, 0.0f), null, (float) Math.toRadians(xOffset)*mouseSpeed);*/
-            
+            //reset target
+            //SceneObject pivot = joglContext.getScene().getCamera().getPivot();
+            //joglContext.getScene().getCamera().setTarget(new Vec3F(pivot.getPosition().x, pivot.getPosition().y, pivot.getPosition().z));
+        
             Vec3F.normalize(new Vec3F(xOffset, yOffset, mouseSpeed));
             
             if(xOffset != 0){
@@ -116,6 +120,7 @@ public class BasicEvent extends EventManager{
             xOffset = mouseXCurrentLocation - mouseXOldLocation;
             yOffset = mouseYCurrentLocation - mouseYOldLocation;
             joglContext.getScene().getCamera().translateV2(new Vec3F(xOffset, yOffset, 0.0f));
+            
         }
         
         if(mouseWheelRotateUp){
@@ -226,5 +231,6 @@ public class BasicEvent extends EventManager{
         rightMouseDragged = false;
         escapeKeyPressed = false;
         isMouseLocationUpdated = false;
+        
     }
 }

@@ -58,7 +58,7 @@ public class TransmittanceSim {
     private Point3d vsMax;
     private Point3i splitting;
     private float res;
-    private double[][][] transmissionPeriod;
+    private double[][] transmissionPeriod;
     private int nbPeriods;
     private float mnt[][];
     private float mntZmax;
@@ -165,15 +165,11 @@ public class TransmittanceSim {
             
             solRad.add(SolarRadiation.globalTurtleIntegrate(turtle, (float) Math.toRadians(parameters.getLatitudeInDegrees()), period.getClearnessCoefficient(), time1, time2));
         }        
-
-        transmissionPeriod = new double[splitting.x][][];
-        for (int x = 0; x < splitting.x; x++) {
-            transmissionPeriod[x] = new double[splitting.y][];
-            for (int y = 0; y < splitting.y; y++) {
-                transmissionPeriod[x][y] = new double[solRad.size()];
-                for (int m = 0; m < solRad.size(); m++) {
-                    transmissionPeriod[x][y][m] = 0;
-                }
+        
+        transmissionPeriod = new double[positions.size()][solRad.size()];
+        for (int i = 0; i < positions.size(); i++) {
+            for (int m = 0; m < solRad.size(); m++) {
+                transmissionPeriod[i][m] = 0;
             }
         }
         
@@ -194,9 +190,6 @@ public class TransmittanceSim {
         
         for (Point3d position : positions) {
             
-            int i = (int) ((position.x - vsMin.x) / voxSpace.getVoxelSize().x);
-            int j = (int) ((position.y - vsMin.y) / voxSpace.getVoxelSize().y);
-            
             for (int t = 0; t < turtle.getNbDirections(); t++) {
                 
                 Vector3d dir = new Vector3d(ir.directions[t]);
@@ -208,10 +201,7 @@ public class TransmittanceSim {
                 for(int m=0 ; m < solRad.size();m++){
                     ir = solRad.get(m);
                     
-                    /*if(i>= transmissionPeriod.length){
-                        throw new Exception("Indice i cannot be ");
-                    }*/
-                    transmissionPeriod[i][j][m] += transmitted * ir.directionalGlobals[t];
+                    transmissionPeriod[positionID][m] += transmitted * ir.directionalGlobals[t];
                 }
                 
                 if(lai2xxx != null){
@@ -226,11 +216,10 @@ public class TransmittanceSim {
                 
             }
             
-            
-            for(int m = 0 ; m<solRad.size() ; m++){
+            for(int m=0 ; m < solRad.size();m++){
                 ir = solRad.get(m);
-                transmissionPeriod[i][j][m] /= ir.global;
-            }
+                transmissionPeriod[positionID][m] /= ir.global;
+            }            
 
             positionID++;
 
@@ -266,15 +255,17 @@ public class TransmittanceSim {
             g.setColor(new Color(80, 30, 0));
             g.fillRect(0, 0, splitting.x * zoom, splitting.y * zoom);
             
-            for(int i = 0;i<splitting.x;i++){
-                for(int j=0;j<splitting.y;j++){
-                    float col = (float) (transmissionPeriod[i][j][k]/* / 0.1*/);
-                    col = Math.min(col, 1);
-                    Color c = Colouring.rainbow(col);
-                    g.setColor(c);
-                    int jj = splitting.y - j - 1;
-                    g.fillRect(i * zoom, jj * zoom, zoom, zoom);
-                }
+            for(int p = 0;p<positions.size();p++){
+                
+                int i = (int) ((positions.get(p).x - vsMin.x) / voxSpace.getVoxelSize().x);
+                int j = (int) ((positions.get(p).y - vsMin.y) / voxSpace.getVoxelSize().y);
+            
+                float col = (float) (transmissionPeriod[p][k]/* / 0.1*/);
+                col = Math.min(col, 1);
+                Color c = Colouring.rainbow(col);
+                g.setColor(c);
+                int jj = splitting.y - j - 1;
+                g.fillRect(i * zoom, jj * zoom, zoom, zoom);
             }
             /*
             for(Point3d position : positions){
@@ -745,31 +736,30 @@ public class TransmittanceSim {
 
                 bw.write(header+"\n");
 
-                float mean[] = new float[transmissionPeriod[0][0].length];
+                float mean[] = new float[transmissionPeriod[0].length];
 
+                int i =0;
                 for(Point3d position : positions){
 
                     bw.write(position.x + "\t" + position.y + "\t" + position.z);
 
-                    int i = (int) ((position.x - vsMin.x) / res);
-                    int j = (int) ((position.y - vsMin.y) / res);
-
-                    for (int m = 0; m < transmissionPeriod[i][j].length; m++) {
-                        bw.write("\t" + transmissionPeriod[i][j][m]);
-                        mean[m] += transmissionPeriod[i][j][m];
+                    for (int m = 0; m < transmissionPeriod[i].length; m++) {
+                        bw.write("\t" + transmissionPeriod[i][m]);
+                        mean[m] += transmissionPeriod[i][m];
                     }
 
                     bw.write("\n");
+                    i++;
                 }
 
                 float yearlyMean = 0;
                 bw.write("\nPERIOD\tMEAN");
-                for (int m = 0; m < transmissionPeriod[0][0].length; m++) {
+                for (int m = 0; m < transmissionPeriod[0].length; m++) {
                     mean[m] /= (float) positions.size();
                     bw.write("\t" + mean[m]);
                     yearlyMean += mean[m];
                 }
-                yearlyMean /= transmissionPeriod[0][0].length;
+                yearlyMean /= transmissionPeriod[0].length;
                 bw.write("\nTOTAL\tMEAN\t" + yearlyMean);
                 bw.write("\n");
 

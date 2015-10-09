@@ -6,6 +6,7 @@
 package fr.amap.amapvox.voxviewer.object.scene;
 
 import com.jogamp.opengl.GL3;
+import fr.amap.amapvox.commons.math.point.Point3F;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh;
 import static fr.amap.amapvox.voxviewer.mesh.GLMesh.FLOAT_SIZE;
 import fr.amap.amapvox.voxviewer.mesh.TexturedGLMesh;
@@ -16,6 +17,12 @@ import java.nio.IntBuffer;
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class SimpleSceneObject extends SceneObject{
+    
+    public SimpleSceneObject(GLMesh mesh, boolean isAlphaRequired, Point3F position){
+        
+        super(mesh, isAlphaRequired);
+        this.position = position;
+    }
     
     public SimpleSceneObject(GLMesh mesh, boolean isAlphaRequired){
         

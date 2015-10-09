@@ -74,8 +74,10 @@ public class ALSVoxCfg extends VoxCfg{
             voxelParameters.setCorrectNaNsMode2(Boolean.valueOf(correctNaNsElement.getAttributeValue("enabled")));
             
             try{
-                voxelParameters.setCorrectNaNsNbSamplingThreshold( Integer.valueOf(correctNaNsElement.getAttributeValue("threshold")));
-            }catch(Exception e){ }
+                voxelParameters.setCorrectNaNsNbSamplingThreshold(Float.valueOf(correctNaNsElement.getAttributeValue("threshold")));
+            }catch(Exception e){ 
+                System.err.println(e.fillInStackTrace());
+            }
             
         }
     }

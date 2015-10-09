@@ -7,6 +7,7 @@ package fr.amap.amapvox.commons.util.image;
 
 import fr.amap.amapvox.commons.util.ColorGradient;
 import fr.amap.amapvox.commons.util.DecimalScientificFormat;
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -112,17 +113,27 @@ public class ScaleGradient {
         int borderX = 60;
         int borderY = 30;
         
+        //calcul de la marge
+        Font font = new Font("Comic Sans MS",Font.PLAIN,20);
+        Canvas c = new Canvas();
+        FontMetrics fm = c.getFontMetrics(font);
+        int minValueTextWidth = fm.stringWidth(format.format(minValue));
+        int maxValueTextWidth = fm.stringWidth(format.format(maxValue));
+        
+        borderX = Integer.max(minValueTextWidth, maxValueTextWidth);
+        
         /***Génération de l'image avec BufferedImage***/
         BufferedImage imageWithTextcaption = new BufferedImage(image.getWidth()+borderX, image.getHeight()+borderY, image.getType());
         Graphics2D graphics = (Graphics2D)imageWithTextcaption.createGraphics();
+        
+        
+        //FontMetrics fm = graphics.getFontMetrics();
+        graphics.setFont(font);  
         
         int leftXMargin = borderX/2;
         graphics.drawImage(image, leftXMargin, 0, null);
         graphics.setPaint(Color.BLACK);
         
-        graphics.setFont(new Font("Comic Sans MS",Font.PLAIN,20));        
-        
-        FontMetrics fm = graphics.getFontMetrics();
         
         //calcul des valeurs intermédiaires
         float step = (maxValue - minValue)/(float)(majorTickNumber-1);
@@ -131,7 +142,7 @@ public class ScaleGradient {
         tickValues[0] = minValue;
         tickValues[majorTickNumber-1] = maxValue;
         
-        float currentValue = step;
+        float currentValue = minValue+step;
         for(int i=1;i<majorTickNumber-1;i++){
             
             tickValues[i] = currentValue;

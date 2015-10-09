@@ -200,7 +200,7 @@ public class TrackballCamera extends Camera{
 
         upVec = getUpVector();
         
-        forwardVec = Vec3F.normalize(forwardVec);
+        //forwardVec = Vec3F.normalize(forwardVec);
         rightVec = Vec3F.normalize(rightVec);
         upVec = Vec3F.normalize(upVec);
 

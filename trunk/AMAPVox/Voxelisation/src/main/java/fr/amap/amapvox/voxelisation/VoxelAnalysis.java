@@ -1,6 +1,7 @@
 package fr.amap.amapvox.voxelisation;
 
 import fr.amap.amapvox.commons.math.point.Point3F;
+import fr.amap.amapvox.commons.math.point.Point3I;
 import fr.amap.amapvox.commons.util.Filter;
 import fr.amap.amapvox.commons.util.TimeCounter;
 import fr.amap.amapvox.datastructure.octree.Octree;
@@ -947,6 +948,79 @@ public class VoxelAnalysis {
 
     }
     
+    //moore neighborhood
+    private List<Point3I> getIndicesFromPassID(Point3I middleID, int passID, Point3I minLimit, Point3I maxLimit){
+        
+        
+        List<Point3I> indices = new ArrayList<>();
+        
+        int minI = Math.max(middleID.x - passID, minLimit.x);
+        int maxI = Math.min(middleID.x + passID, maxLimit.x);
+        int minJ = Math.max(middleID.y - passID, minLimit.y);
+        int maxJ = Math.min(middleID.y + passID, maxLimit.y);
+        int minK = Math.max(middleID.z - passID, minLimit.z);
+        int maxK = Math.min(middleID.z + passID, maxLimit.z);
+        
+        for (int i = minI; i <= maxI; i++) {
+            for (int j = minJ; j <= maxJ; j++) {
+                indices.add(new Point3I(i, j, minK));
+                indices.add(new Point3I(i, j, maxK));
+            }
+        }
+
+        for (int k = minK; k <= maxK; k++) {
+            for (int j = minJ+1; j <= maxJ-1; j++) {
+
+                indices.add(new Point3I(minI, j, k));
+                indices.add(new Point3I(maxI, j, k));
+            }
+        }
+
+        for (int k = minK+1; k <= maxK-1; k++) {
+            for (int i = minI + 1; i <= maxI - 1; i++) {
+                indices.add(new Point3I(i, minJ, k));
+                indices.add(new Point3I(i, maxJ, k));
+            }
+        }
+        
+        for (int k = minK+1; k <= maxK-1; k++) {
+            for (int i = minI; i <= maxI; i++) {
+                for (int j = minJ+1; j <= maxJ-1; j++) {
+                   indices.add(new Point3I(i, j, k));
+                   indices.add(new Point3I(i, j, k));
+                }
+            }
+        }
+        
+        return indices;
+    }
+    
+    //moore neighborhood
+    private List<Point3I> getIndicesFromPassIDV2(Point3I middleID, int passID, Point3I minLimit, Point3I maxLimit){
+        
+        
+        List<Point3I> indices = new ArrayList<>();
+        
+        int minI = Math.max(middleID.x - passID, minLimit.x);
+        int maxI = Math.min(middleID.x + passID, maxLimit.x);
+        int minJ = Math.max(middleID.y - passID, minLimit.y);
+        int maxJ = Math.min(middleID.y + passID, maxLimit.y);
+        int minK = Math.max(middleID.z - passID, minLimit.z);
+        int maxK = Math.min(middleID.z + passID, maxLimit.z);
+                
+        for (int x = -passID; x <= passID; ++x) {
+            int r_x = passID - Math.abs(x);
+            for (int y = -r_x; y <= r_x; ++y) {
+                int r_y = r_x - Math.abs(y);
+                for (int z = -r_y; z <= r_y; ++z) {
+                    System.out.println(x + " " + y + " " + z);
+                }
+            }
+        }
+        
+        return indices;
+    }
+    
     public void correctNaNs(){
         
         /**A faire : corriger de manière parallèle**/
@@ -981,6 +1055,7 @@ public class VoxelAnalysis {
                         float currentNbSampling = voxel.nbSampling;
                         float currentTransmittance = voxel.transmittance;
 
+                        //List<Voxel> neighboursNew = new ArrayList<>();
                         List<Voxel> neighbours = new ArrayList<>();
 
                         int passID = 0;
@@ -988,25 +1063,49 @@ public class VoxelAnalysis {
                         //testloop:
                         while(currentNbSampling <= parameters.getCorrectNaNsNbSamplingThreshold() || currentTransmittance == 0 ){
                             
-                        if(passID > passLimit){
-                            break;
-                        }
+                            if(passID > passLimit){
+                                break;
+                            }
                         //while(currentNbSampling <= 0 || currentTransmittance == 0 || Float.isNaN(currentTransmittance)){
 
+//                            List<Point3I> indices = getIndicesFromPassID(new Point3I(x, y, z), 
+//                                                    passID+1,
+//                                                    new Point3I(0, 0, 0), //min boundaries
+//                                                    new Point3I(parameters.getSplit().x-1, parameters.getSplit().y-1, parameters.getSplit().z-1)); //max boundaries
+//                            
+//                            for(Point3I indice : indices){
+//                                
+//                                if (passID == 0 && indice.x == x && indice.y == y && indice.z == z) {
+//
+//                                } else {
+//
+//                                    //if (indice.z <= canopeeArray[indice.x][indice.y]) {
+//
+//                                        Voxel neighbour = voxels[indice.x][indice.y][indice.z];
+//
+//                                        //if (neighbour.ground_distance >= -(parameters.resolution / 2.0f)) {
+//                                            neighboursNew.add(neighbour);
+//                                        //}
+//                                    //}
+//                                }
+//                            }
                             //on parcours les voxels voisins
                             for(int i = -1+x-passID ; i< 2+x+passID ; i++){
                                 for(int j = -1+y-passID ; j< 2+y+passID ; j++){
                                     for(int k = -1+z-passID ; k< 2+z+passID ; k++){
 
-                                        //on n'ajoute pas les voxels de la passe précédente
-                                        if(passID != 0 && (i > -1+x-passID+1 && i < 2+x+passID-1)){
+                                            //on n'ajoute pas les voxels de la passe précédente
+                                        if(passID != 0 && (i >= -1+x-passID+1 && i < 2+x+passID-1)
+                                                && (j >= -1+y-passID+1 && j < 2+y+passID-1)
+                                                && (k >= -1+z-passID+1 && k < 2+z+passID-1)){
 
                                         } else {
 
-                                            if (passID == 0 && i == 0 && j == 0 && k == 0) {
+                                            if (passID == 0 && i == x && j == y && k == z) {
 
                                             } else {
-                                                if (i >= 0 && i < parameters.split.x
+
+                                                 if (i >= 0 && i < parameters.split.x
                                                         && j >= 0 && j < parameters.split.y
                                                         && k >= 0 && k < parameters.split.z) {
 
@@ -1018,11 +1117,12 @@ public class VoxelAnalysis {
                                                             neighbours.add(neighbour);
                                                         }
                                                     }
-                                                }/*else{
-                                                    break testloop;
-                                                }*/
+                                                }
+
                                             }
                                         }
+                                        //}
+                                        
                                     }
                                 }
                             }
@@ -1055,7 +1155,12 @@ public class VoxelAnalysis {
                             if(count > 0 && sumBVEntering > 0 && neighbours.size() > 0){
                                 
                                 //double factor = 1/count;
-                                meanTransmittance = (float) Math.pow((sumBVEntering-sumBVIntercepted)/sumBVEntering, sumBVEntering/sumLgTotal);
+                                //if(voxel.transmittance == 0){
+                                    meanTransmittance = (float) Math.pow((sumBVEntering-sumBVIntercepted)/sumBVEntering, sumBVEntering/sumLgTotal);
+                                //}else{
+                                  //  meanTransmittance = voxel.transmittance;
+                                //}
+                                
                                 meanEffectiveNbSampling /= (float)neighbours.size();
                                 
                                 /*if(neighbours.size() > 0){
@@ -1069,7 +1174,6 @@ public class VoxelAnalysis {
 
                             
                             }else{
-                                currentTransmittance = 0;
                                 currentNbSampling = 0;
                             }
                             

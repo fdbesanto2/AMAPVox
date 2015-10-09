@@ -7,6 +7,7 @@ package fr.amap.amapvox.jraster.asc;
 
 import fr.amap.amapvox.commons.math.matrix.Mat4D;
 import fr.amap.amapvox.commons.math.point.Point2F;
+import fr.amap.amapvox.commons.math.point.Point3F;
 import fr.amap.amapvox.commons.math.vector.Vec4D;
 import fr.amap.amapvox.commons.util.BoundingBox2F;
 import java.io.BufferedWriter;
@@ -16,6 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Point3D;
 
 /**
  *
@@ -67,6 +69,21 @@ public class RegularDtm {
      */
     public List<DTMPoint> getPoints() {
         return points;
+    }
+    
+    public Point3D getLowerCorner(){
+        
+        Vec4D result = Mat4D.multiply(transformationMatrix, new Vec4D(xLeftLowerCorner, yLeftLowerCorner, zMin, 1));
+        
+        return new Point3D(result.x, result.y, result.z);
+    }
+    
+    public Point3D getUpperCorner(){
+        
+        Vec4D result = Mat4D.multiply(transformationMatrix, 
+                new Vec4D(xLeftLowerCorner+colNumber*cellSize, yLeftLowerCorner+rowNumber*cellSize, zMax, 1));
+        
+        return new Point3D(result.x, result.y, result.z);
     }
 
     /**

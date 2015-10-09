@@ -10,6 +10,7 @@ import fr.amap.amapvox.commons.math.matrix.Mat4F;
 import fr.amap.amapvox.commons.math.point.Point3F;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
 import fr.amap.amapvox.voxviewer.loading.shader.AxisShader;
+import fr.amap.amapvox.voxviewer.loading.shader.ColorShader;
 import fr.amap.amapvox.voxviewer.loading.shader.InstanceLightedShader;
 import fr.amap.amapvox.voxviewer.loading.shader.InstanceShader;
 import fr.amap.amapvox.voxviewer.loading.shader.LightedShader;
@@ -62,6 +63,7 @@ public class Scene {
     public Shader labelShader = new TextureShader("labelShader");
     public Shader lightedShader = new LightedShader("lightShader");
     public Shader simpleShader = new SimpleShader("simpleShader");
+    public Shader colorShader = new ColorShader("colorShader");
     
     //global uniforms, can be used inside shaders files
     public UniformMat4F viewMatrixUniform = new UniformMat4F("viewMatrix");
@@ -132,6 +134,7 @@ public class Scene {
             labelShader.init(gl);
             lightedShader.init(gl);
             simpleShader.init(gl);
+            colorShader.init(gl);
             
             addShader(noTranslationShader);
             addShader(instanceLightedShader);
@@ -140,6 +143,7 @@ public class Scene {
             addShader(simpleShader);
             addShader(lightedShader);
             addShader(labelShader);
+            addShader(colorShader);
             
             initUniforms(); //assign owners to uniforms (shaders using the uniforms)
             

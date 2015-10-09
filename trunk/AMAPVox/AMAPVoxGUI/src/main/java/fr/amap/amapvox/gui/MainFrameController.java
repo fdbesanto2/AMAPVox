@@ -5245,7 +5245,7 @@ public class MainFrameController implements Initializable {
         
         float maxPAD;
         try{
-            maxPAD = Integer.valueOf(textfieldVegetationProfileMaxPAD.getText());
+            maxPAD = Float.valueOf(textfieldVegetationProfileMaxPAD.getText());
         }catch(Exception e){
             maxPAD = 5;
             textfieldVegetationProfileMaxPAD.setText("5");

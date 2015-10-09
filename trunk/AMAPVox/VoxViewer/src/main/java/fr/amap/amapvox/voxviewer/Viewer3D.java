@@ -1,7 +1,9 @@
 package fr.amap.amapvox.voxviewer;
 
 import com.jogamp.nativewindow.util.Point;
+import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.event.WindowListener;
+import com.jogamp.newt.event.WindowUpdateEvent;
 import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLException;
@@ -596,7 +598,12 @@ public class Viewer3D extends Application {
     }
     
     public void addWindowListener(WindowListener listener){
+        
         renderFrame.addWindowListener(listener);
+    }
+
+    public GLRenderFrame getRenderFrame() {
+        return renderFrame;
     }
     
     
