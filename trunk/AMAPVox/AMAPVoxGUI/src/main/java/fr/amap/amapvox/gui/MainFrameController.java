@@ -79,7 +79,6 @@ import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject2;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceData;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import fr.amap.amapvox.voxviewer.renderer.GLRenderWindowListener;
-import fr.amap.amapvox.voxviewer.renderer.JoglListenerListener;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -2057,7 +2056,7 @@ public class MainFrameController implements Initializable {
                                     ScaleGradient.Orientation.HORIZONTAL, 5, 8));
 
                             SceneObject scalePlane = SceneObjectFactory.createTexturedPlane(new Vec3F(40, 20, 0), 
-                                                                                            (int) (viewer3D.getWidth() - 80 - 200), 
+                                                                                            (int) (viewer3D.getWidth() - 80), 
                                                                                             (int) (viewer3D.getHeight() / 20),
                                                                                             scaleTexture);
                             
@@ -2148,28 +2147,14 @@ public class MainFrameController implements Initializable {
                                                     }
                                                 }
                                             });
+                                            
+                                            toolBarFrameController.initContent(voxelSpace);
+                                            toolBarFrameStage.setAlwaysOnTop(true);
 
                                             toolBarFrameStage.show();
 
                                             //toolBarFrameStage.setHeight(joglWindow.getHeight() / 2);
                                             viewer3D.getJoglContext().startX = (int) toolBarFrameStage.getWidth();
-
-                                            viewer3D.getJoglContext().addListener(new JoglListenerListener() {
-
-                                                @Override
-                                                public void sceneInitialized() {
-                                                    viewer3D.setOnTop();
-                                                    toolBarFrameController.initContent(voxelSpace);
-                                                    Platform.runLater(new Runnable() {
-
-                                                        @Override
-                                                        public void run() {
-                                                            toolBarFrameStage.setAlwaysOnTop(true);
-                                                        }
-                                                    });
-
-                                                }
-                                            });
 
                                             viewer3D.addWindowListener(new WindowAdapter() {
 

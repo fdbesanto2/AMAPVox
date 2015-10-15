@@ -4019,3 +4019,12 @@ i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal l
 2015-10-09 17:21:15 INFO  - writing file: /home/calcul/Documents/Julien/Test_transmittance_paracou/transect/als_1m.vox
 2015-10-09 17:21:17 INFO  - file written ( 1.0 s )
 2015-10-09 17:21:17 INFO  - las voxelisation finished in 6.0 s
+2015-10-12 08:25:48 INFO  - Building transmittance functions table
+2015-10-12 08:25:48 INFO  - Transmittance functions table is built
+2015-10-12 08:25:48 INFO  - allocate!!!!!!!!
+2015-10-12 08:25:48 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-10-12 08:25:49 INFO  - Laz file is closed
+2015-10-12 08:25:50 INFO  - Shots processed: 141106
+2015-10-12 08:25:50 INFO  - writing file: /home/calcul/Documents/Julien/test_lad/als_spherical_new.vox
+2015-10-12 08:25:52 INFO  - file written ( 1.0 s )
+2015-10-12 08:25:52 INFO  - las voxelisation finished in 8.0 s

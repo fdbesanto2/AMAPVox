@@ -110,7 +110,6 @@ public class RxpVoxelisation implements Callable{
 
                 shot = iterator.next();
                 if(shot != null){
-                    
                     Vec4D locVector = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
 
                     Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));

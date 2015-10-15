@@ -5,6 +5,7 @@
  */
 package fr.amap.amapvox.voxviewer.object.scene;
 
+import fr.amap.amapvox.commons.math.point.Point3F;
 import fr.amap.amapvox.voxviewer.mesh.PointCloudGLMesh;
 
 /**
@@ -14,7 +15,7 @@ import fr.amap.amapvox.voxviewer.mesh.PointCloudGLMesh;
 public class PointCloudSceneObject extends SimpleSceneObject{
 
     public PointCloudSceneObject(PointCloudGLMesh mesh, boolean isAlphaRequired){
-        super(mesh, isAlphaRequired);
+        super(mesh, isAlphaRequired, new Point3F());
     }
     
 }

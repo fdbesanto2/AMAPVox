@@ -55,6 +55,9 @@ public class Scene {
     
     public boolean canDraw;
     
+    private int width;
+    private int height;
+    
     //default shaders
     public Shader noTranslationShader = new AxisShader("noTranslationShader");
     public Shader instanceLightedShader = new InstanceLightedShader("instanceLightedShader");
@@ -147,7 +150,7 @@ public class Scene {
             
             initUniforms(); //assign owners to uniforms (shaders using the uniforms)
             
-            projMatrixOrthoUniform.setValue(Mat4F.ortho(0, 640, 0, 480, -10, 1000));
+            projMatrixOrthoUniform.setValue(Mat4F.ortho(0, width, 0, height, -10, 1000));
             viewMatrixOrthoUniform.setValue(Mat4F.lookAt(new Vec3F(0,0,0), new Vec3F(0,0,0), new Vec3F(0,1,0)));
             
             textureUniform.setValue(0);
@@ -322,6 +325,14 @@ public class Scene {
 
     public TrackballCamera getCamera() {
         return camera;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
     
 }

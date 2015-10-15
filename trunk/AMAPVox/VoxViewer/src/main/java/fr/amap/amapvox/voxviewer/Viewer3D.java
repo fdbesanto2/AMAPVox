@@ -1,39 +1,35 @@
 package fr.amap.amapvox.voxviewer;
 
 import com.jogamp.nativewindow.util.Point;
-import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.event.WindowListener;
-import com.jogamp.newt.event.WindowUpdateEvent;
-import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLException;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.FPSAnimator;
-import fr.amap.amapvox.commons.math.matrix.Mat4D;
 import fr.amap.amapvox.commons.math.point.Point3F;
 import fr.amap.amapvox.commons.math.vector.Vec3F;
-import fr.amap.amapvox.commons.util.image.ScaleGradient;
-import fr.amap.amapvox.jraster.asc.DtmLoader;
-import fr.amap.amapvox.jraster.asc.RegularDtm;
+import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
+import fr.amap.amapvox.io.tls.rxp.Shot;
+import fr.amap.amapvox.jeeb.workspace.sunrapp.util.Colouring;
 import fr.amap.amapvox.voxviewer.event.BasicEvent;
 import fr.amap.amapvox.voxviewer.event.EventManager;
 import fr.amap.amapvox.voxviewer.input.InputKeyListener;
 import fr.amap.amapvox.voxviewer.input.InputMouseAdapter;
-import fr.amap.amapvox.voxviewer.loading.texture.Texture;
-import fr.amap.amapvox.voxviewer.mesh.GLMesh;
 import fr.amap.amapvox.voxviewer.mesh.GLMeshFactory;
+import fr.amap.amapvox.voxviewer.mesh.PointCloudGLMesh;
 import fr.amap.amapvox.voxviewer.object.camera.TrackballCamera;
-import fr.amap.amapvox.voxviewer.object.scene.SceneObject;
-import fr.amap.amapvox.voxviewer.object.scene.SceneObjectFactory;
-import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject;
-import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
+import fr.amap.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.amapvox.voxviewer.renderer.GLRenderFrame;
+import fr.amap.amapvox.voxviewer.renderer.GLRenderWindowListener;
 import fr.amap.amapvox.voxviewer.renderer.JoglListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javax.vecmath.Point3f;
 import org.apache.log4j.Logger;
 
 public class Viewer3D extends Application {
@@ -69,10 +65,8 @@ public class Viewer3D extends Application {
             animator = new FPSAnimator(renderFrame, 60);
 
             joglContext = new JoglListener(animator);
-            
-            
-            joglContext.width = width;
-            joglContext.height = height;
+            joglContext.getScene().setWidth(width);
+            joglContext.getScene().setHeight(height);
 
             renderFrame.addGLEventListener(joglContext);
             
@@ -516,77 +510,136 @@ public class Viewer3D extends Application {
      */
     public static void main(String[] args) {
         
-        
         //Application.launch(FXViewer3D.class, "--width=853", "--height=512", "--input=/home/calcul/Documents/Julien/Sortie voxels/ALS/Paracou/2013/dalle9/las_2m.vox" ,"--attribut=PadBVTotal");
-        Application.launch(FXViewer3D.class, "--width=853", "--height=512", "--input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox" ,"--attribut=PadBVTotal");
+        //Application.launch(FXViewer3D.class, "--width=853", "--height=512", "--input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox" ,"--attribut=PadBVTotal");
         
-//        try {
-//            Viewer3D viewer3D = new Viewer3D(0, 0, 640, 480, "Test");
-//            viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
-//        
-//            fr.amap.amapvox.voxviewer.object.scene.Scene scene = viewer3D.getScene();
-//
-//            /***VOXEL SPACE***/
-//            VoxelSpaceSceneObject voxelSpace = SceneObjectFactory.createVoxelSpace(new File("/home/calcul/Documents/Julien/test.vox"));
-//            voxelSpace.setShader(scene.instanceLightedShader);
-//            scene.addSceneObject(voxelSpace);
-//
-//            /***scale***/
-//            Texture scaleTexture = Texture.createColorScaleTexture(
-//                    ScaleGradient.generateScale(voxelSpace.getGradient(), voxelSpace.attributValueMin, voxelSpace.attributValueMax, viewer3D.getWidth()-80, (int)(viewer3D.getHeight()/20), ScaleGradient.HORIZONTAL), 
-//                    voxelSpace.attributValueMin, voxelSpace.attributValueMax);
-//
-//            scene.addTexture(scaleTexture);
-//
-//            SceneObject scalePlane = SceneObjectFactory.createTexturedPlane(new Vec3F(40, 20, 0), viewer3D.getWidth()-80, (int)(viewer3D.getHeight()/20), scaleTexture, scene.getShaderByName("textureShader"));
-//            scalePlane.setShader(scene.texturedShader);
-//            scalePlane.setDrawType(GL3.GL_TRIANGLES);
-//            scene.addTexture(scaleTexture);
-//            scene.addSceneObject(scalePlane);
+        try {
+            
+            Viewer3D viewer3D = new Viewer3D(((int) 640 / 4), (int) 480 / 4, 640, 480, "");
+            viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
+            
+            fr.amap.amapvox.voxviewer.object.scene.Scene scene = viewer3D.getScene();
+            
+            long startTime = System.currentTimeMillis();
+            
+            RxpExtraction reader = new RxpExtraction();
+            reader.openRxpFile(new File("/media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos001/SINGLESCANS/130917_153258.rxp"), RxpExtraction.SHOT_WITH_REFLECTANCE);
+            Iterator<Shot> iterator = reader.iterator();
+            
+            List<Float> vertexDataList = new ArrayList<>(81547452);
+            List<Float> colorDataList = new ArrayList<>(81547452);
+            
+            int count = 0;
+            
+            while(iterator.hasNext()){
+                
+                Shot shot = iterator.next();
+                
+                for(int i=0;i<shot.ranges.length;i++){
+                    
+                    double range = shot.ranges[i];
+                    
+                    float x = (float) (shot.origin.x + shot.direction.x * range);
+                    float y = (float) (shot.origin.y + shot.direction.y * range);
+                    float z = (float) (shot.origin.z + shot.direction.z * range);
+                    
+                    vertexDataList.add(x);
+                    vertexDataList.add(y);
+                    vertexDataList.add(z);
+                    
+                    double reflectance = shot.reflectances[i];
+                    
+                    float colorValue = (float) ((reflectance+38)/69.0f);
+                    
+                    colorDataList.add(colorValue);
+                    colorDataList.add(colorValue);
+                    colorDataList.add(colorValue);
+                }
+                
+                count++;
+                
+            }
+            
+            long endTime = System.currentTimeMillis();
+            System.out.println("Temps de lecture du fichier : "+(endTime-startTime)+" ms");
+            System.out.println("Nombre de tirs : "+count);
+            System.out.println("Nombre de points : "+vertexDataList.size()/3);
+            
+            float[] vertexData = new float[vertexDataList.size()];
+            float[] colorData = new float[colorDataList.size()];
+            
+            for(int i=0;i<vertexDataList.size();i++){
+                vertexData[i] = vertexDataList.get(i);
+                colorData[i] = colorDataList.get(i);
+            }
+            
+            
+//            LasReader lasReader = new LasReader();
+//            lasReader.open(new File("/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.las"));
+//            LasHeader header = lasReader.getHeader();
+//            int numberOfPointrecords = (int) header.getNumberOfPointrecords();
 //            
-//            /***DTM***/
-//            RegularDtm dtm = DtmLoader.readFromAscFile(new File("/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc"));
-//            Mat4D transfMatrix = new Mat4D();
-//            transfMatrix.mat = new double[]{0.9540688863574789,0.29958731629459895,0.0,-448120.0441687209,
-//                -0.29958731629459895,0.9540688863574789,0.0,-470918.3928060016,
-//                0.0,0.0,1.0,0.0,
-//                0.0,0.0,0.0,1.0};
+//            float[] vertexData = new float[numberOfPointrecords*3];
+//            float[] colorData = new float[numberOfPointrecords*3];
 //            
-//            dtm.setTransformationMatrix(transfMatrix);
-//            dtm.buildMesh();
-//            GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormalesFromDTM(dtm);
-//            SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, false);
-//            dtmSceneObject.setShader(scene.lightedShader);
-//            scene.addSceneObject(dtmSceneObject);
-//
-//            /***light***/
-//            scene.setLightPosition(new Point3F(voxelSpace.getPosition().x, voxelSpace.getPosition().y, voxelSpace.getPosition().z+voxelSpace.widthZ+100));
-//
-//            /***camera***/
-//            TrackballCamera trackballCamera = new TrackballCamera();
-//            trackballCamera.setPivot(voxelSpace);
-//            trackballCamera.setLocation(new Vec3F(voxelSpace.getPosition().x+voxelSpace.widthX, voxelSpace.getPosition().y+voxelSpace.widthY, voxelSpace.getPosition().z+voxelSpace.widthZ));
-//            viewer3D.getScene().setCamera(trackballCamera);
+//            Iterator<PointDataRecordFormat> iterator = lasReader.iterator();
+//            Mat4D transfMatrix = Mat4D.identity();
 //            
-//            viewer3D.show();
-//
-//        } catch (Exception ex) {
-//            java.util.logging.Logger.getLogger(Viewer3D.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        
-        //launch(args);
-        //launch("--help");
-        //MainApp.usage();
-        /*
-        Mat4D mat = new Mat4D();
-        mat.mat = new double[]{0.9540688863574789,0.29958731629459895,0.0,-448120.0441687209,
-                -0.29958731629459895,0.9540688863574789,0.0,-470918.3928060016,
-                0.0,0.0,1.0,0.0,
-                0.0,0.0,0.0,1.0};*/
-        
-        
-        //launch("--width=853", "--height=512", "--input=/home/calcul/Documents/Julien/test.vox" ,"--attribut=PadBVTotal");
-        //launch("--width=500","--height=200","--input=/home/calcul/Documents/Julien/las_paracou_transmittance/las_1m.vox", "--attribut=bvEntering");
+//            int i=0;
+//            while(iterator.hasNext()){
+//                
+//                PointDataRecordFormat point = iterator.next();
+//                float x = (float) ((header.getxOffset()) + point.getX() * header.getxScaleFactor());
+//                float y = (float) ((header.getyOffset()) + point.getY() * header.getyScaleFactor());
+//                float z = (float) ((header.getzOffset()) + point.getZ() * header.getzScaleFactor());
+//                
+//                Vec4D pointTransformed = Mat4D.multiply(transfMatrix, new Vec4D(x, y, z, 1));
+//                vertexData[i] = (float) pointTransformed.x;
+//                vertexData[i+1] = (float) pointTransformed.y;
+//                vertexData[i+2] = (float) pointTransformed.z;
+//                
+//                if(point.getClassification() == 2){
+//                    colorData[i] = 1;
+//                    colorData[i+2] = 0;
+//                }else{
+//                    colorData[i] = 0;
+//                    colorData[i+2] = 1;
+//                }
+//                
+//                colorData[i+1] = 0;
+//                
+//                
+//                i+=3;
+//            }
+            
+            PointCloudGLMesh pointcloudMesh = (PointCloudGLMesh) GLMeshFactory.createPointCloud(vertexData,colorData);
+            
+            PointCloudSceneObject pointCloud = new PointCloudSceneObject(pointcloudMesh, false);
+            pointCloud.setShader(scene.colorShader);
+            scene.addSceneObject(pointCloud);
+            
+            /**
+             * *light**
+             */
+            scene.setLightPosition(new Point3F(pointCloud.getPosition().x, pointCloud.getPosition().y, pointCloud.getPosition().z + 100));
+            
+            /**
+             * *camera**
+             */
+            TrackballCamera trackballCamera = new TrackballCamera();
+            trackballCamera.setPivot(pointCloud);
+            trackballCamera.setLocation(new Vec3F(pointCloud.getPosition().x-50, pointCloud.getPosition().y, pointCloud.getPosition().z+50));
+            viewer3D.getScene().setCamera(trackballCamera);
+            
+            
+            
+            
+            viewer3D.addWindowListener(new GLRenderWindowListener(null, viewer3D.getAnimator()));
+            //joglWindow.setOnTop();
+            viewer3D.show();
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(Viewer3D.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     

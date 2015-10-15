@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration creation-date="Mon Oct 12 08:25:41 CEST 2015" build-version="33362794">
+  <process mode="voxelisation" type="ALS">
+    <input_file type="0" src="/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz" />
+    <output_file src="/home/calcul/Documents/Julien/test_lad/als_spherical_new.vox" />
+    <voxelspace xmin="-12.0" ymin="-2.0" zmin="8.0" xmax="12.0" ymax="238.0" zmax="72.0" splitX="24" splitY="240" splitZ="64" resolution="1.0" />
+    <ponderation mode="1">
+      <matrix type_id="ponderation">1.0 NaN NaN NaN NaN NaN NaN 0.62 0.38 NaN NaN NaN NaN NaN 0.4 0.35 0.25 NaN NaN NaN NaN 0.28 0.29 0.24 0.19 NaN NaN NaN 0.21 0.24 0.21 0.19 0.15 NaN NaN 0.16 0.21 0.19 0.18 0.14 0.12 NaN 0.15 0.17 0.15 0.16 0.12 0.19 0.06</matrix>
+    </ponderation>
+    <dtm-filter enabled="true" src="/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc" height-min="1.0" />
+    <pointcloud-filters enabled="false" />
+    <transformation use-pop="false" use-sop="false" use-vop="true">
+      <matrix type_id="vop">0.9540688863574789, 0.29958731629459895, 0.0, -448120.0441687209
+-0.29958731629459895, 0.9540688863574789, 0.0, -470918.3928060016
+0.0, 0.0, 1.0, 0.0
+0.0, 0.0, 0.0, 1.0</matrix>
+    </transformation>
+    <limits>
+      <limit name="PAD" min="" max="5.0" />
+    </limits>
+    <filters>
+      <point-filters classifications="" />
+    </filters>
+    <leaf-angle-distribution mode="0" type="Spherical" />
+    <trajectory src="/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/sbet_250913_01.txt" />
+    <ground-energy generate="false" />
+    <correct-NaNs enabled="false" threshold="0.5" />
+  </process>
+</configuration>

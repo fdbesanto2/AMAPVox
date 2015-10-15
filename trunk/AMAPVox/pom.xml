@@ -26,7 +26,7 @@
         <module>VoxCommons</module>
         <module>VoxReader</module>
         <module>VoxWriter</module>
-        
+        <module>VoxChecking</module>
     </modules>
     
     <distributionManagement>        

@@ -35,7 +35,6 @@ import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject2;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import fr.amap.amapvox.voxviewer.renderer.GLRenderWindowListener;
-import fr.amap.amapvox.voxviewer.renderer.JoglListenerListener;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -421,22 +420,22 @@ public class FXViewer3D extends Application {
                                             //toolBarFrameStage.setHeight(joglWindow.getHeight() / 2);
                                             viewer3D.getJoglContext().startX = (int) toolBarFrameStage.getWidth();
 
-                                            viewer3D.getJoglContext().addListener(new JoglListenerListener() {
-
-                                                @Override
-                                                public void sceneInitialized() {
-                                                    viewer3D.setOnTop();
-                                                    toolBarFrameController.initContent(voxelSpace);
-                                                    Platform.runLater(new Runnable() {
-
-                                                        @Override
-                                                        public void run() {
-                                                            toolBarFrameStage.setAlwaysOnTop(true);
-                                                        }
-                                                    });
-
-                                                }
-                                            });
+//                                            viewer3D.getJoglContext().addListener(new JoglListenerListener() {
+//
+//                                                @Override
+//                                                public void sceneInitialized() {
+//                                                    viewer3D.setOnTop();
+//                                                    toolBarFrameController.initContent(voxelSpace);
+//                                                    Platform.runLater(new Runnable() {
+//
+//                                                        @Override
+//                                                        public void run() {
+//                                                            toolBarFrameStage.setAlwaysOnTop(true);
+//                                                        }
+//                                                    });
+//
+//                                                }
+//                                            });
                                             
 
                                             viewer3D.addWindowListener(new WindowAdapter() {

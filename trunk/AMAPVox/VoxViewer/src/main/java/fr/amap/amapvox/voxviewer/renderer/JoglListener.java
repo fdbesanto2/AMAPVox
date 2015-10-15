@@ -44,11 +44,11 @@ import javax.vecmath.Point3d;
 public class JoglListener implements GLEventListener {
     
     private EventManager eventListener;
-    private Scene scene;
+    private final Scene scene;
     private Vec3F worldColor;
     
-    public int width;
-    public int height;
+    private int width;
+    private int height;
     
     public int viewportWidth;
     public int viewportHeight;
@@ -106,17 +106,6 @@ public class JoglListener implements GLEventListener {
     public void attachEventListener(EventManager eventListener){
         
         this.eventListener = eventListener;
-    }
-    
-    public void addListener(JoglListenerListener listener){
-        listeners.add(JoglListenerListener.class, listener);
-    }
-    
-    public void fireSceneInitialized() {
-
-        for (JoglListenerListener listener : listeners.getListeners(JoglListenerListener.class)) {
-            listener.sceneInitialized();
-        }
     }
     
     @Override
@@ -313,7 +302,6 @@ public class JoglListener implements GLEventListener {
             //label3.translate(new Vec3F(0, 70, 0));
             //scene.addObject(label3, gl);
             
-            fireSceneInitialized();
             
         }catch(Exception e){
             throw new Exception("error in scene initialization", e);
@@ -486,4 +474,6 @@ public class JoglListener implements GLEventListener {
         
         return Vec3F.length(Vec3F.substract(location, center));
     }
+    
+    
 }
