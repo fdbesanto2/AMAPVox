@@ -7,9 +7,13 @@ package fr.amap.amapvox.voxelisation;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.vecmath.Point3d;
 
 /**
@@ -148,7 +152,7 @@ public class Voxel implements Serializable {
         protected static Set<Field> _fields;
         
         private static boolean classInit;
-        
+        private final static List<Field> exportableFields;
         
 
         /**
@@ -178,6 +182,17 @@ public class Voxel implements Serializable {
         
         static{
             _fields = Voxel.getFields(Voxel.class);
+            exportableFields = new ArrayList<>();
+            
+            for (Field _field : _fields) {
+                
+                String fieldName = _field.getName();
+                
+                if (!fieldName.startsWith("_")) {
+                    
+                    exportableFields.add(_field);
+                }
+            }
         }
         
         public Voxel(){
@@ -272,22 +287,39 @@ public class Voxel implements Serializable {
             String voxelString = "";
 
             // compare values now
-            for (Field _field : _fields) {
+            
+            for (Field field : exportableFields) {
                 
-                String fieldName = _field.getName();
-                
-                if (!fieldName.startsWith("_")) {
-                    
-                    try {
-                        Object newObj = _field.get(this);
-                        voxelString += newObj + " ";
-                    }catch (IllegalArgumentException | IllegalAccessException ex) {
-                        //_logger.error(ex);
-                    }
+                try {
+                    Object newObj = field.get(this);
+                    voxelString += newObj + " ";
+                } catch (IllegalArgumentException | IllegalAccessException ex) {
+                    Logger.getLogger(Voxel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             
             voxelString = voxelString.trim();
+            return voxelString;
+        }
+        
+        public String toStringFast() {
+
+            String voxelString =$i+" "+
+                                $j+" "+
+                                $k+" "+
+                                PadBVTotal + " "+
+                                angleMean + " "+
+                                bvEntering + " "+
+                                bvIntercepted + " "+
+                                ground_distance + " "+
+                                lMeanTotal + " "+
+                                lgTotal + " "+
+                                nbEchos + " "+
+                                nbSampling + " "+
+                                neighboursNumber + " "+
+                                passNumber + " "+
+                                transmittance;
+            
             return voxelString;
         }
     }

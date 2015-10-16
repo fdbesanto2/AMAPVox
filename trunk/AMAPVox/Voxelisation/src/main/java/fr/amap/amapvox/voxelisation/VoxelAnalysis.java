@@ -41,6 +41,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 
 public class VoxelAnalysis {
+    
+    final static boolean DEBUG = true;
 
     public enum LaserSpecification{
         
@@ -1021,6 +1023,28 @@ public class VoxelAnalysis {
         return indices;
     }
     
+    private int getNeighboursNumberInAxis(int passID, int voxelID, int splitNumber){
+        
+        /**number of possible voxel including borders**/
+       int nLeft = Integer.min(passID, voxelID);
+       int nRight = Integer.min(passID, splitNumber - voxelID - 1);
+       
+       int width = nLeft+nRight+1;
+       
+       return width;
+    }
+    
+    private int getNeighboursNumber(int passID, int voxelXId, int voxelYId, int voxelZId, int splitX, int splitY, int splitZ){
+        
+        int neighboursNumberInXAxis = getNeighboursNumberInAxis(passID, voxelXId, splitX);
+        int neighboursNumberInYAxis = getNeighboursNumberInAxis(passID, voxelYId, splitY);
+        int neighboursNumberInZAxis = getNeighboursNumberInAxis(passID, voxelZId, splitZ);
+        
+        int neighboursNumber = (neighboursNumberInXAxis * neighboursNumberInYAxis * neighboursNumberInZAxis) - 1;
+        
+        return neighboursNumber;
+    }
+    
     public void correctNaNs(){
         
         /**A faire : corriger de manière parallèle**/
@@ -1044,6 +1068,17 @@ public class VoxelAnalysis {
         
         int passMax = 0;
         
+        //for debug
+        int nbFail = 0;
+        int nbSuccess = 0;
+        int countPassIDEqualsZero = 0;
+        int countPassIDEqualsOne = 0;
+        int countPassIDEqualsTwo = 0;
+        int countPassIDEqualsThree = 0;
+        int countPassIDEqualsFour = 0;
+        int countPassIDEqualsFive = 0;
+        int countPassIDEqualsSix = 0;
+        
         for (int x = 0; x < parameters.split.x; x++) {
             for (int y = 0; y < parameters.split.y; y++) {
                 for (int z = 0; z < parameters.split.z; z++) {
@@ -1063,36 +1098,26 @@ public class VoxelAnalysis {
                         //testloop:
                         while(currentNbSampling <= parameters.getCorrectNaNsNbSamplingThreshold() || currentTransmittance == 0 ){
                             
+                            int nbRemovedNeighbors = 0;
+                            
                             if(passID > passLimit){
                                 break;
                             }
-                        //while(currentNbSampling <= 0 || currentTransmittance == 0 || Float.isNaN(currentTransmittance)){
-
-//                            List<Point3I> indices = getIndicesFromPassID(new Point3I(x, y, z), 
-//                                                    passID+1,
-//                                                    new Point3I(0, 0, 0), //min boundaries
-//                                                    new Point3I(parameters.getSplit().x-1, parameters.getSplit().y-1, parameters.getSplit().z-1)); //max boundaries
-//                            
-//                            for(Point3I indice : indices){
-//                                
-//                                if (passID == 0 && indice.x == x && indice.y == y && indice.z == z) {
-//
-//                                } else {
-//
-//                                    //if (indice.z <= canopeeArray[indice.x][indice.y]) {
-//
-//                                        Voxel neighbour = voxels[indice.x][indice.y][indice.z];
-//
-//                                        //if (neighbour.ground_distance >= -(parameters.resolution / 2.0f)) {
-//                                            neighboursNew.add(neighbour);
-//                                        //}
-//                                    //}
-//                                }
-//                            }
-                            //on parcours les voxels voisins
-                            for(int i = -1+x-passID ; i< 2+x+passID ; i++){
-                                for(int j = -1+y-passID ; j< 2+y+passID ; j++){
-                                    for(int k = -1+z-passID ; k< 2+z+passID ; k++){
+                            
+                            
+                            int minX = Integer.max(-1+x-passID, 0);
+                            int minY = Integer.max(-1+y-passID, 0);
+                            int minZ = Integer.max(-1+z-passID, 0);
+                            
+                            int maxX = Integer.min(2+x+passID, parameters.split.x);
+                            int maxY = Integer.min(2+y+passID, parameters.split.y);
+                            int maxZ = Integer.min(2+z+passID, parameters.split.z);
+                            
+                            
+                            //get neighbors
+                            for(int i = minX ; i< maxX ; i++){
+                                for(int j = minY ; j< maxY ; j++){
+                                    for(int k = minZ ; k< maxZ ; k++){
 
                                             //on n'ajoute pas les voxels de la passe précédente
                                         if(passID != 0 && (i >= -1+x-passID+1 && i < 2+x+passID-1)
@@ -1115,7 +1140,11 @@ public class VoxelAnalysis {
 
                                                         if (neighbour.ground_distance >= -(parameters.resolution / 2.0f)) {
                                                             neighbours.add(neighbour);
+                                                        }else{
+                                                            nbRemovedNeighbors++;
                                                         }
+                                                    }else{
+                                                        nbRemovedNeighbors++;
                                                     }
                                                 }
 
@@ -1126,13 +1155,43 @@ public class VoxelAnalysis {
                                     }
                                 }
                             }
-
+                            
+                            if(DEBUG){
+                                
+                                switch(passID){
+                                    case 0:
+                                        countPassIDEqualsZero++;
+                                        break;
+                                    case 1:countPassIDEqualsOne++;
+                                        break;
+                                    case 2:countPassIDEqualsTwo++;
+                                        break;
+                                    case 3:countPassIDEqualsThree++;
+                                        break;
+                                    case 4:countPassIDEqualsFour++;
+                                        break;
+                                    case 5:countPassIDEqualsFive++;
+                                        break;
+                                    case 6:countPassIDEqualsSix++;
+                                        break;
+                                }
+                                
+                                int nbOfNeighbors = getNeighboursNumber(passID+1, x, y, z, parameters.split.x, parameters.split.y, parameters.split.z) - nbRemovedNeighbors;
+                                if(nbOfNeighbors != neighbours.size()){
+                                    nbFail++;
+                                }else{
+                                    nbSuccess++;
+                                }
+                            }
+                            
+                            
                             float meanEffectiveNbSampling = 0;
                             float meanTransmittance = 0;
                             
                             float sumBVEntering = 0;
                             float sumBVIntercepted = 0;
                             float sumLgTotal = 0;
+                            
                             
                             int count = 0;
 
@@ -1213,6 +1272,18 @@ public class VoxelAnalysis {
                     
                 }
             }
+        }
+        
+        if(DEBUG){
+            System.out.println("number of fails : "+nbFail);
+            System.out.println("number of success : "+nbSuccess);
+            System.out.println("number of passID equals to 0: "+countPassIDEqualsZero);
+            System.out.println("number of passID equals to 1: "+countPassIDEqualsOne);
+            System.out.println("number of passID equals to 2: "+countPassIDEqualsTwo);
+            System.out.println("number of passID equals to 3: "+countPassIDEqualsThree);
+            System.out.println("number of passID equals to 4: "+countPassIDEqualsFour);
+            System.out.println("number of passID equals to 5: "+countPassIDEqualsFive);
+            System.out.println("number of passID equals to 6: "+countPassIDEqualsSix);
         }
     }
 
