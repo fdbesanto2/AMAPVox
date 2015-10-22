@@ -88,9 +88,14 @@ public class VoxelFileRawReader extends AbstractReader implements Iterable<RawVo
                 }else{
                     voxel = parseVoxelFileLine(currentLine);
                     
-                    if(keepInMemory){
-                        voxelSpace.voxels.add(voxel);
+                    if(voxel == null){
+                        logger.error("Error parsing line: "+(currentVoxelIndex+7));
+                    }else{
+                        if(keepInMemory){
+                            voxelSpace.voxels.add(voxel);
+                        }
                     }
+                    
                 }
                 
                 return voxel;
@@ -102,20 +107,27 @@ public class VoxelFileRawReader extends AbstractReader implements Iterable<RawVo
 
     private RawVoxel parseVoxelFileLine(String line){
         
-        String[] voxelLine = line.split(" ");
+        try{
+            String[] voxelLine = line.split(" ");
                     
-        Point3i indice = new Point3i(Integer.valueOf(voxelLine[0]), 
-                Integer.valueOf(voxelLine[1]),
-                Integer.valueOf(voxelLine[2]));
-        
+            Point3i indice = new Point3i(Integer.valueOf(voxelLine[0]), 
+                    Integer.valueOf(voxelLine[1]),
+                    Integer.valueOf(voxelLine[2]));
 
-        RawVoxel vox = new RawVoxel(indice.x, indice.y, indice.z);
-        vox.attributs = new float[voxelLine.length - 3];
 
-        for(int i=3;i<voxelLine.length;i++){
-            vox.attributs[i-3] = Float.valueOf(voxelLine[i]);
+            RawVoxel vox = new RawVoxel(indice.x, indice.y, indice.z);
+            vox.attributs = new float[voxelLine.length - 3];
+
+            for(int i=3;i<voxelLine.length;i++){
+                vox.attributs[i-3] = Float.valueOf(voxelLine[i]);
+            }
+            
+            return vox;
+            
+        }catch(Exception e){
+            return null;
         }
         
-        return vox;
+        
     }
 }

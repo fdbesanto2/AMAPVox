@@ -5,8 +5,8 @@
  */
 package fr.amap.amapvox.voxviewer.object.camera;
 
-import fr.amap.amapvox.commons.math.matrix.Mat4F;
-import fr.amap.amapvox.commons.math.vector.Vec3F;
+import fr.amap.amapvox.math.matrix.Mat4F;
+import fr.amap.amapvox.math.vector.Vec3F;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import javax.swing.event.EventListenerList;

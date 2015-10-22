@@ -105,7 +105,7 @@ public class RxpExtraction implements Iterable<Shot>{
         
         Iterator<Shot> it = new Iterator<Shot>() {
             
-            Shot shot;
+            private Shot shot;
             
             @Override
             public boolean hasNext() {

@@ -7,11 +7,11 @@ package fr.amap.amapvox.voxviewer.object.scene;
 
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL3;
-import fr.amap.amapvox.commons.math.geometry.AABB;
-import fr.amap.amapvox.commons.math.geometry.Plane;
-import fr.amap.amapvox.commons.math.point.Point3F;
-import fr.amap.amapvox.commons.math.vector.Vec3F;
-import fr.amap.amapvox.commons.util.BoundingBox3F;
+import fr.amap.amapvox.math.geometry.AABB;
+import fr.amap.amapvox.math.geometry.Plane;
+import fr.amap.amapvox.math.point.Point3F;
+import fr.amap.amapvox.math.vector.Vec3F;
+import fr.amap.amapvox.math.geometry.BoundingBox3F;
 import fr.amap.amapvox.commons.util.ColorGradient;
 import fr.amap.amapvox.commons.util.CombinedFilter;
 import fr.amap.amapvox.commons.util.CombinedFilters;
@@ -29,6 +29,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
+import java.nio.FloatBuffer;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -51,7 +52,10 @@ public class VoxelSpaceSceneObject extends SceneObject{
     public static final int VOXELSPACE_FORMAT1 = 1;
     public static final int VOXELSPACE_FORMAT2 = 2;
 
-    
+    @Override
+    public void updateBuffers(GL3 gl, int index, FloatBuffer buffer) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     public enum Format{
         VOXELSPACE_FORMAT2(2);
@@ -344,23 +348,26 @@ public class VoxelSpaceSceneObject extends SceneObject{
 
             for(RawVoxel voxel : reader){
 
-                float[] mapAttrs = new float[voxel.attributs.length+3];
-                mapAttrs[0] = voxel.$i;
-                mapAttrs[1] = voxel.$j;
-                mapAttrs[2] = voxel.$k;
+                if(voxel != null){
+                    
+                    float[] mapAttrs = new float[voxel.attributs.length+3];
+                    mapAttrs[0] = voxel.$i;
+                    mapAttrs[1] = voxel.$j;
+                    mapAttrs[2] = voxel.$k;
 
-                for (int i=3;i<mapAttrs.length;i++) {
+                    for (int i=3;i<mapAttrs.length;i++) {
 
-                    mapAttrs[i] = voxel.attributs[i-3];
+                        mapAttrs[i] = voxel.attributs[i-3];
+                    }
+
+                    Point3i indice = new Point3i(voxel.$i, voxel.$j, voxel.$k);               
+
+                    data.voxels.add(new VoxelObject(indice, mapAttrs, 1.0f));
+
+                    lineNumber++;
+
+                    setReadFileProgress((lineNumber * 100) / count);
                 }
-
-                Point3i indice = new Point3i(voxel.$i, voxel.$j, voxel.$k);               
-
-                data.voxels.add(new VoxelObject(indice, mapAttrs, 1.0f));
-
-                lineNumber++;
-
-                setReadFileProgress((lineNumber * 100) / count);
             }
             
         } catch (Exception ex) {

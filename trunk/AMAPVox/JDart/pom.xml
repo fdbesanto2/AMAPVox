@@ -31,6 +31,11 @@
         </dependency>
         <dependency>
             <groupId>fr.amap.amapvox</groupId>
+            <artifactId>Math</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.amap.amapvox</groupId>
             <artifactId>VoxViewer</artifactId>
             <version>1.0</version>
         </dependency>

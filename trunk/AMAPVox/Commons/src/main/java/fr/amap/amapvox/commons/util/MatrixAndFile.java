@@ -6,14 +6,13 @@
 package fr.amap.amapvox.commons.util;
 
 import java.io.File;
-import java.io.Serializable;
 import javax.vecmath.Matrix4d;
 
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class MatrixAndFile implements Serializable{
+public class MatrixAndFile{
     
     public File file;
     public Matrix4d matrix;

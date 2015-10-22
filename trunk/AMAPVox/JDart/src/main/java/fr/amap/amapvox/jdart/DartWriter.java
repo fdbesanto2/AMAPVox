@@ -5,11 +5,11 @@
  */
 package fr.amap.amapvox.jdart;
 
-import fr.amap.amapvox.commons.math.matrix.Mat4D;
-import fr.amap.amapvox.commons.math.point.Point2F;
-import fr.amap.amapvox.commons.math.point.Point3F;
-import fr.amap.amapvox.commons.math.point.Point3I;
-import fr.amap.amapvox.commons.util.BoundingBox2F;
+import fr.amap.amapvox.math.matrix.Mat4D;
+import fr.amap.amapvox.math.point.Point2F;
+import fr.amap.amapvox.math.point.Point3F;
+import fr.amap.amapvox.math.point.Point3I;
+import fr.amap.amapvox.math.geometry.BoundingBox2F;
 import fr.amap.amapvox.jraster.asc.DTMPoint;
 import fr.amap.amapvox.jraster.asc.DtmLoader;
 import fr.amap.amapvox.jraster.asc.Face;

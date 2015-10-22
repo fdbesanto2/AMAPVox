@@ -6,11 +6,7 @@ package fr.amap.amapvox.voxviewer;
  * and open the template in the editor.
  */
 
-import fr.amap.amapvox.commons.math.geometry.AABB;
-import fr.amap.amapvox.commons.math.geometry.Plane;
-import fr.amap.amapvox.commons.math.point.Point3F;
-import fr.amap.amapvox.commons.math.vector.Vec3F;
-import fr.amap.amapvox.commons.util.BoundingBox3F;
+import fr.amap.amapvox.math.vector.Vec3F;
 import fr.amap.amapvox.commons.util.ColorGradient;
 import fr.amap.amapvox.commons.util.CombinedFilter;
 import fr.amap.amapvox.commons.util.Filter;
@@ -22,7 +18,6 @@ import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.application.Platform;
@@ -46,7 +41,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
 
 /**

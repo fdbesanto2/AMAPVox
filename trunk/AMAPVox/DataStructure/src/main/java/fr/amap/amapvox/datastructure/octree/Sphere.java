@@ -5,7 +5,7 @@
  */
 package fr.amap.amapvox.datastructure.octree;
 
-import fr.amap.amapvox.commons.math.point.Point3F;
+import fr.amap.amapvox.math.point.Point3F;
 
 
 /**

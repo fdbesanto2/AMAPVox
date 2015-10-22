@@ -6,8 +6,9 @@
 package fr.amap.amapvox.voxviewer.event;
 
 import com.jogamp.opengl.util.FPSAnimator;
-import fr.amap.amapvox.commons.math.point.Point3F;
-import fr.amap.amapvox.commons.math.vector.Vec3F;
+import fr.amap.amapvox.math.point.Point3F;
+import fr.amap.amapvox.math.vector.Vec3F;
+import fr.amap.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.SceneObject;
 import fr.amap.amapvox.voxviewer.renderer.JoglListener;
 import java.awt.Robot;
@@ -18,7 +19,9 @@ import java.awt.Robot;
  */
 public class BasicEvent extends EventManager{
     
-    private final JoglListener joglContext;    
+    private final JoglListener joglContext; 
+    
+    private int currentColorIndex = 0;
     
     public BasicEvent(FPSAnimator animator, JoglListener context){
         
@@ -178,6 +181,17 @@ public class BasicEvent extends EventManager{
         
         if(spaceKeyPressed){
             
+            SceneObject firstSceneObject = joglContext.getScene().getFirstSceneObject();
+            if(firstSceneObject != null){
+                
+                if(currentColorIndex == 1){
+                    currentColorIndex = 0;
+                }else{
+                    currentColorIndex++;
+                }
+                
+                ((PointCloudSceneObject)firstSceneObject).switchColor(currentColorIndex);
+            }
             
             //joglContext.getScene().getCamera().rotateAroundPoint(new Vec3F(0.0f,1.0f,0.0f), new Vec3F(0.0f,0.0f,0.0f), (float) Math.toRadians(5));
         }
@@ -231,6 +245,7 @@ public class BasicEvent extends EventManager{
         rightMouseDragged = false;
         escapeKeyPressed = false;
         isMouseLocationUpdated = false;
+        spaceKeyPressed = false;
         
     }
 }

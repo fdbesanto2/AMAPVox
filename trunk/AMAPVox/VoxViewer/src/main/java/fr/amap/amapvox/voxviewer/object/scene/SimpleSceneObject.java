@@ -6,10 +6,11 @@
 package fr.amap.amapvox.voxviewer.object.scene;
 
 import com.jogamp.opengl.GL3;
-import fr.amap.amapvox.commons.math.point.Point3F;
+import fr.amap.amapvox.math.point.Point3F;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh;
 import static fr.amap.amapvox.voxviewer.mesh.GLMesh.FLOAT_SIZE;
 import fr.amap.amapvox.voxviewer.mesh.TexturedGLMesh;
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 /**
@@ -17,6 +18,10 @@ import java.nio.IntBuffer;
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class SimpleSceneObject extends SceneObject{
+    
+    public SimpleSceneObject(){
+        this.position = new Point3F();
+    }
     
     public SimpleSceneObject(GLMesh mesh, boolean isAlphaRequired, Point3F position){
         
@@ -84,6 +89,11 @@ public class SimpleSceneObject extends SceneObject{
     @Override
     public void draw(GL3 gl){
         
+        if(colorNeedUpdate){
+            mesh.updateColorBuffer(gl, 1);
+            colorNeedUpdate = false;
+        }
+        
         gl.glBindVertexArray(vaoId);
             if(texture != null){
                 gl.glBindTexture(GL3.GL_TEXTURE_2D, texture.getId());
@@ -95,5 +105,10 @@ public class SimpleSceneObject extends SceneObject{
                 gl.glBindTexture(GL3.GL_TEXTURE_2D, 0);
             }
         gl.glBindVertexArray(0);
+    }
+
+    @Override
+    public void updateBuffers(GL3 gl, int index, FloatBuffer buffer) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

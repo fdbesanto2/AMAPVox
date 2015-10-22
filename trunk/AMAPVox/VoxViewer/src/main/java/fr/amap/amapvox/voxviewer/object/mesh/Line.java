@@ -5,7 +5,7 @@
  */
 package fr.amap.amapvox.voxviewer.object.mesh;
 
-import fr.amap.amapvox.commons.math.vector.Vec2F;
+import fr.amap.amapvox.math.vector.Vec2F;
 
 
 /**

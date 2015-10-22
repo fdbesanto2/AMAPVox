@@ -5,9 +5,9 @@
  */
 package fr.amap.amapvox.datastructure.octree;
 
-import fr.amap.amapvox.commons.math.matrix.Mat4D;
-import fr.amap.amapvox.commons.math.point.Point3F;
-import fr.amap.amapvox.commons.math.vector.Vec4D;
+import fr.amap.amapvox.math.matrix.Mat4D;
+import fr.amap.amapvox.math.point.Point3F;
+import fr.amap.amapvox.math.vector.Vec4D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;

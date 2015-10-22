@@ -18,17 +18,13 @@ public class CoordinatesConversion {
 	 * @return cartesian coordinates
 	 */
 	static public Vector3f polarToCartesian (float zenith, float azimuth) {
+            
 		Point3f dir = new Point3f ();
 		dir.z = (float) Math.cos (zenith);
 		dir.x = dir.y = (float) Math.sin (zenith);
-		// dir.x *= Math.sin(azimuth);
-		// dir.y *= Math.cos(azimuth);
-		// float az= (float) (azimuth-(Math.PI/2));
 		dir.x *= -Math.sin (azimuth);
 		dir.y *= Math.cos (azimuth);
-		// dir= dir.multiply(-1);
 
-		// direction.setVectorPoint(dir);
 		Vector3f direction = new Vector3f (dir);
 		return direction;
 	}

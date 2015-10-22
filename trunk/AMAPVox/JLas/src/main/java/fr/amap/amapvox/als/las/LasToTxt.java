@@ -6,7 +6,7 @@ package fr.amap.amapvox.als.las;
 
 import fr.amap.amapvox.als.LasHeader;
 import fr.amap.amapvox.als.LasHeader12;
-import fr.amap.amapvox.commons.math.matrix.Mat4D;
+import fr.amap.amapvox.math.matrix.Mat4D;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

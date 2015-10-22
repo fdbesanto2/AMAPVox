@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="451.0" prefWidth="523.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.40" fx:controller="fr.amap.amapvox.gui.RspExtractorFrameController">
+   <children>
+      <VBox prefHeight="451.0" prefWidth="523.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TreeView fx:id="treeViewRspContent" prefHeight="481.0" prefWidth="523.0" />
+            <AnchorPane>
+               <children>
+                  <Button layoutX="390.0" mnemonicParsing="false" onAction="#onActionButtonImportSelectedScans" text="Import selected" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+                  <MenuButton layoutX="18.0" layoutY="2.0" mnemonicParsing="false" text="Selection" AnchorPane.leftAnchor="5.0">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemSelectAll" text="All" />
+                        <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemSelectNone" text="None" />
+                     </items>
+                  </MenuButton>
+                  <CheckBox fx:id="checkboxSwitchFullDecimated" layoutX="153.0" layoutY="5.0" mnemonicParsing="false" text="Switch full/decimated" />
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

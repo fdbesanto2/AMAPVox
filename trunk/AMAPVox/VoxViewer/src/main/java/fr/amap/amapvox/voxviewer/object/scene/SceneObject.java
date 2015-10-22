@@ -6,14 +6,15 @@
 package fr.amap.amapvox.voxviewer.object.scene;
 
 import com.jogamp.opengl.GL3;
-import fr.amap.amapvox.commons.math.matrix.Mat4F;
-import fr.amap.amapvox.commons.math.point.Point3F;
-import fr.amap.amapvox.commons.math.vector.Vec3F;
-import fr.amap.amapvox.commons.math.vector.Vec4;
+import fr.amap.amapvox.math.matrix.Mat4F;
+import fr.amap.amapvox.math.point.Point3F;
+import fr.amap.amapvox.math.vector.Vec3F;
+import fr.amap.amapvox.math.vector.Vec4;
 import fr.amap.amapvox.voxviewer.loading.shader.Shader;
 import fr.amap.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh.DrawType;
+import java.nio.FloatBuffer;
 
 /**
  *
@@ -31,7 +32,7 @@ public abstract class SceneObject{
     protected Shader shader;
     protected Point3F position;
     private int id;
-    private boolean needUpdate;
+    protected boolean colorNeedUpdate = false;
 
     public void setId(int id) {
         this.id = id;
@@ -132,6 +133,8 @@ public abstract class SceneObject{
     }
     
     public abstract void initBuffers(GL3 gl);
+    
+    public abstract void updateBuffers(GL3 gl, int index, FloatBuffer buffer);
     
     public abstract void initVao(GL3 gl);
     

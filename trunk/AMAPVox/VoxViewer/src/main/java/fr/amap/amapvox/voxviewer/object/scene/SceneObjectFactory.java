@@ -5,7 +5,7 @@
  */
 package fr.amap.amapvox.voxviewer.object.scene;
 
-import fr.amap.amapvox.commons.math.vector.Vec3F;
+import fr.amap.amapvox.math.vector.Vec3F;
 import fr.amap.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.amapvox.voxviewer.mesh.GLMeshFactory;
 import java.io.File;

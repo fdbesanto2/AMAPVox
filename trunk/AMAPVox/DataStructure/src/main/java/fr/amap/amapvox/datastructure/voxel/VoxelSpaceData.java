@@ -5,8 +5,8 @@
  */
 package fr.amap.amapvox.datastructure.voxel;
 
-import fr.amap.amapvox.commons.math.point.Point3F;
-import fr.amap.amapvox.commons.math.point.Point3I;
+import fr.amap.amapvox.math.point.Point3F;
+import fr.amap.amapvox.math.point.Point3I;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;

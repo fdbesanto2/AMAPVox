@@ -6,8 +6,8 @@
 package fr.amap.amapvox.voxviewer.mesh;
 
 import com.jogamp.common.nio.Buffers;
-import fr.amap.amapvox.commons.math.vector.Vec3F;
-import fr.amap.amapvox.commons.math.vector.Vec3i;
+import fr.amap.amapvox.math.vector.Vec3F;
+import fr.amap.amapvox.math.vector.Vec3i;
 import fr.amap.amapvox.commons.util.ColorGradient;
 import fr.amap.amapvox.jraster.asc.DTMPoint;
 import fr.amap.amapvox.jraster.asc.Face;

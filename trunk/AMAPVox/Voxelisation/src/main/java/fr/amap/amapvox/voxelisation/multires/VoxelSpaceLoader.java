@@ -6,7 +6,7 @@
 package fr.amap.amapvox.voxelisation.multires;
 
 import fr.amap.amapvox.commons.io.file.FileManager;
-import fr.amap.amapvox.commons.math.point.Point2F;
+import fr.amap.amapvox.math.point.Point2F;
 import fr.amap.amapvox.voxelisation.Voxel;
 import fr.amap.amapvox.voxelisation.multires.VoxelSpaceData.Type;
 import java.io.BufferedReader;

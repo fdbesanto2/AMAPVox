@@ -14,8 +14,8 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.amapvox.voxviewer.object.lighting;
 
-import fr.amap.amapvox.commons.math.point.Point3F;
-import fr.amap.amapvox.commons.math.vector.Vec3F;
+import fr.amap.amapvox.math.point.Point3F;
+import fr.amap.amapvox.math.vector.Vec3F;
 
 
 /**

@@ -5,11 +5,11 @@
  */
 package fr.amap.amapvox.jraster.asc;
 
-import fr.amap.amapvox.commons.math.matrix.Mat4D;
-import fr.amap.amapvox.commons.math.point.Point2F;
-import fr.amap.amapvox.commons.math.point.Point3F;
-import fr.amap.amapvox.commons.math.vector.Vec4D;
-import fr.amap.amapvox.commons.util.BoundingBox2F;
+import fr.amap.amapvox.math.matrix.Mat4D;
+import fr.amap.amapvox.math.point.Point2F;
+import fr.amap.amapvox.math.point.Point3F;
+import fr.amap.amapvox.math.vector.Vec4D;
+import fr.amap.amapvox.math.geometry.BoundingBox2F;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;

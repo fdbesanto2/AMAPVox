@@ -11,7 +11,7 @@ import fr.amap.amapvox.jeeb.workspace.sunrapp.light.SolarRadiation;
 import fr.amap.amapvox.jeeb.workspace.sunrapp.light.Turtle;
 import fr.amap.amapvox.jeeb.workspace.sunrapp.util.Colouring;
 import fr.amap.amapvox.jeeb.workspace.sunrapp.util.Time;
-import fr.amap.amapvox.simulation.transmittance.Parameters.Mode;
+import fr.amap.amapvox.simulation.transmittance.TransmittanceParameters.Mode;
 import fr.amap.amapvox.simulation.transmittance.lai2xxx.LAI2000;
 import fr.amap.amapvox.simulation.transmittance.lai2xxx.LAI2200;
 import fr.amap.amapvox.simulation.transmittance.lai2xxx.LAI2xxx;
@@ -63,21 +63,21 @@ public class TransmittanceSim {
     private float mnt[][];
     private float mntZmax;
     private float mntZmin;
-    private final Turtle turtle;
+    private Turtle turtle;
     private LAI2xxx lai2xxx;
 
     private ArrayList<Point3d> positions;
     
-    private final Parameters parameters;
+    private TransmittanceParameters parameters;
 
     private class TLSVoxel {
 
         float padBV;
     }
     
-    public static void simulationProcess(VirtualMeasuresCfg cfg) throws IOException, Exception{
+    public static void simulationProcess(TransmittanceCfg cfg) throws IOException, Exception{
         
-        Parameters parameters = cfg.getParameters();
+        TransmittanceParameters parameters = cfg.getParameters();
         
         TransmittanceSim padTransmittance;
         try {
@@ -98,7 +98,14 @@ public class TransmittanceSim {
         
     }
     
-    public TransmittanceSim(Parameters parameters) throws IOException{
+    public TransmittanceSim() throws IOException{
+        
+        vsMin = new Point3d();
+        vsMax = new Point3d();
+        splitting = new Point3i();
+    }
+    
+    public TransmittanceSim(TransmittanceParameters parameters) throws IOException{
         
         this.parameters = parameters;
         
@@ -201,7 +208,10 @@ public class TransmittanceSim {
                 for(int m=0 ; m < solRad.size();m++){
                     ir = solRad.get(m);
                     
-                    transmissionPeriod[positionID][m] += transmitted * ir.directionalGlobals[t];
+                    //transmittance for the direction
+                    double transmittance = transmitted * ir.directionalGlobals[t];
+                    
+                    transmissionPeriod[positionID][m] += transmittance;
                 }
                 
                 if(lai2xxx != null){
@@ -244,6 +254,7 @@ public class TransmittanceSim {
             
             String periodString = period.getPeriod().toString().replaceAll(" ", "_");
             periodString = periodString.replaceAll("/", "-");
+            periodString = periodString.replaceAll(":", "");
             
             File outputFile = new File(parameters.getBitmapFile()+File.separator+"period_"+periodString+".bmp");
             logger.info("Writing file "+outputFile);
@@ -311,7 +322,7 @@ public class TransmittanceSim {
         }
     }*/
 
-    private void readData(File inputFile) throws IOException, Exception {
+    public void readData(File inputFile) throws IOException, Exception {
 
 
         VoxelFileReader reader = new VoxelFileReader(inputFile);
@@ -339,17 +350,21 @@ public class TransmittanceSim {
             
             Voxel voxel = iterator.next();
             
-            if (voxel.$k == 0) {
-                mnt[voxel.$i][voxel.$j] = mntZmin - voxel.ground_distance;
+            if(voxel != null){
+                if (voxel.$k == 0) {
+                    mnt[voxel.$i][voxel.$j] = mntZmin - voxel.ground_distance;
+                }
+
+                if (Float.isNaN(voxel.PadBVTotal)) {
+                    voxels[voxel.$i][voxel.$j][voxel.$k].padBV = 0;
+                } else {
+                    voxels[voxel.$i][voxel.$j][voxel.$k].padBV = voxel.PadBVTotal;
+                }
+
+                count++;
+            }else{
+                logger.warn("Voxel null");
             }
-            
-            if (Float.isNaN(voxel.PadBVTotal)) {
-                voxels[voxel.$i][voxel.$j][voxel.$k].padBV = 0;
-            } else {
-                voxels[voxel.$i][voxel.$j][voxel.$k].padBV = voxel.PadBVTotal;
-            }
-            
-            count++;
             /*if (count % 100000 == 0) {
                 logger.info(" " + count + " shots");
             }*/
@@ -668,7 +683,7 @@ public class TransmittanceSim {
         logger.info("nb positions= " + positions.size());
     }
 
-    public void createVoxelTable() {
+    private void createVoxelTable() {
 
         voxSpace = new VoxelSpace(new BoundingBox3d(vsMin, vsMax), splitting, 0);
 
@@ -686,7 +701,7 @@ public class TransmittanceSim {
         }
     }
 
-    public void allocateMNT() {
+    private void allocateMNT() {
 
         // allocate MNT
         logger.info("allocate MNT");

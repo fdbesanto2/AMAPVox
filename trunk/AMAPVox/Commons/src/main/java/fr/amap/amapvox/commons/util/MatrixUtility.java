@@ -5,8 +5,8 @@
  */
 package fr.amap.amapvox.commons.util;
 
-import fr.amap.amapvox.commons.math.matrix.Mat4D;
-import fr.amap.amapvox.commons.math.vector.Vec2D;
+import fr.amap.amapvox.math.matrix.Mat4D;
+import fr.amap.amapvox.math.vector.Vec2D;
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Vector3d;
 

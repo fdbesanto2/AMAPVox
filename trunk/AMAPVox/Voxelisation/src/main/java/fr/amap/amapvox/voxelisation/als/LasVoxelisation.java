@@ -5,7 +5,7 @@
  */
 package fr.amap.amapvox.voxelisation.als;
 
-import fr.amap.amapvox.commons.math.matrix.Mat4D;
+import fr.amap.amapvox.math.matrix.Mat4D;
 import fr.amap.amapvox.commons.util.Filter;
 import fr.amap.amapvox.commons.util.Processing;
 import fr.amap.amapvox.commons.util.ProcessingListener;

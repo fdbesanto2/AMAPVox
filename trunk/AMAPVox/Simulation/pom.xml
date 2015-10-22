@@ -17,9 +17,9 @@
     
     <dependencies>
         <dependency>
-            <groupId>java3d</groupId>
+            <groupId>javax.vecmath</groupId>
             <artifactId>vecmath</artifactId>
-            <version>1.3.1</version>
+            <version>1.5.2</version>
         </dependency>
         <dependency>
             <groupId>fr.amap.amapvox</groupId>
@@ -28,7 +28,17 @@
         </dependency>
         <dependency>
             <groupId>fr.amap.amapvox</groupId>
+            <artifactId>JRiegl</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.amap.amapvox</groupId>
             <artifactId>commons</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.amap.amapvox</groupId>
+            <artifactId>Math</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>

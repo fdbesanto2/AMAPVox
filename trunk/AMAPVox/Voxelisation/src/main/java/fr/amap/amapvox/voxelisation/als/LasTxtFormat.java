@@ -5,7 +5,7 @@
  */
 package fr.amap.amapvox.voxelisation.als;
 
-import fr.amap.amapvox.commons.math.vector.Vec3D;
+import fr.amap.amapvox.math.vector.Vec3D;
 
 
 /**

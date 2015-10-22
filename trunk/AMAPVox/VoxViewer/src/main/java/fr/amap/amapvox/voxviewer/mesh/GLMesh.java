@@ -149,6 +149,15 @@ public abstract class GLMesh {
         buffersSizes.add(bufferSize);
     }
     
+    public void updateColorBuffer(GL3 gl, int index){
+        
+        bindBuffer(gl);
+        
+            gl.glBufferSubData(GL3.GL_ARRAY_BUFFER, offsets.get(index), buffersSizes.get(index), colorBuffer);
+        
+        unbindBuffer(gl);
+    }
+    
     /**
      * Update buffer linked to the specified index
      * @param gl opengl context
@@ -262,4 +271,12 @@ public abstract class GLMesh {
             vertexBuffer = Buffers.newDirectFloatBuffer(tab);
         }
     }   
+    
+    public void setVertexData(float[] vertices){
+        vertexBuffer = Buffers.newDirectFloatBuffer(vertices);
+    }
+    
+    public void setColorData(float[] colors){
+        colorBuffer = Buffers.newDirectFloatBuffer(colors);
+    }
 }

@@ -5,10 +5,10 @@
  */
 package fr.amap.amapvox.voxelisation.tls;
 
-import fr.amap.amapvox.commons.math.matrix.Mat3D;
-import fr.amap.amapvox.commons.math.matrix.Mat4D;
-import fr.amap.amapvox.commons.math.vector.Vec3D;
-import fr.amap.amapvox.commons.math.vector.Vec4D;
+import fr.amap.amapvox.math.matrix.Mat3D;
+import fr.amap.amapvox.math.matrix.Mat4D;
+import fr.amap.amapvox.math.vector.Vec3D;
+import fr.amap.amapvox.math.vector.Vec4D;
 import fr.amap.amapvox.commons.util.Filter;
 import fr.amap.amapvox.datastructure.octree.Octree;
 import fr.amap.amapvox.io.tls.rxp.RxpExtraction;

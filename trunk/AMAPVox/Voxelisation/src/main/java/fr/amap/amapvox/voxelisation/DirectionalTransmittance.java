@@ -175,6 +175,12 @@ public class DirectionalTransmittance {
                 indice = (int) (Math.toDegrees(theta)/res);
             }
             
+            if(indice >= transmittanceFunctions.length){
+                indice = transmittanceFunctions.length -1;
+            }else if(indice < 0){
+                indice = 0;
+            }
+            
             return transmittanceFunctions[indice];
             
         }else{ //no table was built, get transmittance on the fly

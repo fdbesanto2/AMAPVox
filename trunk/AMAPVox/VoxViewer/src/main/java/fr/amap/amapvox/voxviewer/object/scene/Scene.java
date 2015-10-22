@@ -6,9 +6,9 @@
 package fr.amap.amapvox.voxviewer.object.scene;
 
 import com.jogamp.opengl.GL3;
-import fr.amap.amapvox.commons.math.matrix.Mat4F;
-import fr.amap.amapvox.commons.math.point.Point3F;
-import fr.amap.amapvox.commons.math.vector.Vec3F;
+import fr.amap.amapvox.math.matrix.Mat4F;
+import fr.amap.amapvox.math.point.Point3F;
+import fr.amap.amapvox.math.vector.Vec3F;
 import fr.amap.amapvox.voxviewer.loading.shader.AxisShader;
 import fr.amap.amapvox.voxviewer.loading.shader.ColorShader;
 import fr.amap.amapvox.voxviewer.loading.shader.InstanceLightedShader;
@@ -217,6 +217,15 @@ public class Scene {
         objectsList.add(sceneObject);
     }
     
+    public SceneObject getFirstSceneObject(){
+        
+        if(objectsList.size() > 0){
+            return objectsList.get(0);
+        }
+        
+        return null;
+    }
+    
     public void changeObjectTexture(int idObject, Texture texture){
         
         objectsList.get(idObject).attachTexture(texture);
@@ -273,7 +282,6 @@ public class Scene {
         gl.glEnable(GL3.GL_BLEND);
 
         for(SceneObject object : objectsList){
-
 
             if(!object.depthTest){
                 gl.glClear(GL3.GL_DEPTH_BUFFER_BIT);

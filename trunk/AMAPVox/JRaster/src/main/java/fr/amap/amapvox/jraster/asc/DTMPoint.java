@@ -15,7 +15,7 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.amapvox.jraster.asc;
 
-import fr.amap.amapvox.commons.math.point.Point3F;
+import fr.amap.amapvox.math.point.Point3F;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -94,11 +94,18 @@ public class VoxelFileReader extends AbstractReader implements Iterable<Voxel>{
                         voxel = parseVoxelFileLine(currentLine);
                     }
                 }else{
+                    
+                    
                     voxel = parseVoxelFileLine(currentLine);
                     
-                    if(keepInMemory){
-                        voxelSpace.voxels.add(voxel);
+                    if(voxel == null){
+                        logger.error("Error parsing line: "+(currentVoxelIndex+7));
+                    }else{
+                        if(keepInMemory){
+                            voxelSpace.voxels.add(voxel);
+                        }
                     }
+                    
                 }
                 
                 return voxel;
@@ -110,31 +117,38 @@ public class VoxelFileReader extends AbstractReader implements Iterable<Voxel>{
     
     public Voxel parseVoxelFileLine(String line){
         
-        String[] voxelLine = line.split(" ");
+        try{
+            
+            String[] voxelLine = line.split(" ");
                     
-        Point3i indice = new Point3i(Integer.valueOf(voxelLine[0]), 
-                Integer.valueOf(voxelLine[1]),
-                Integer.valueOf(voxelLine[2]));
+            Point3i indice = new Point3i(Integer.valueOf(voxelLine[0]), 
+                    Integer.valueOf(voxelLine[1]),
+                    Integer.valueOf(voxelLine[2]));
 
-        float[] mapAttrs = new float[voxelSpace.getVoxelSpaceInfos().getColumnNames().length];
+            float[] mapAttrs = new float[voxelSpace.getVoxelSpaceInfos().getColumnNames().length];
 
-        for (int i=0;i<voxelLine.length;i++) {
+            for (int i=0;i<voxelLine.length;i++) {
 
-            float value = Float.valueOf(voxelLine[i]);
+                float value = Float.valueOf(voxelLine[i]);
 
-            mapAttrs[i] = value;
-        }
-
-        Voxel vox = new Voxel(indice.x, indice.y, indice.z, Voxel.class);
-
-        for(int i=3;i<mapAttrs.length;i++){
-            try {
-                vox.setFieldValue(vox.getClass(), voxelSpace.getVoxelSpaceInfos().getColumnNames()[i], vox, mapAttrs[i]);
-            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
-               //logger.error("Cannot set field value",ex);
+                mapAttrs[i] = value;
             }
+
+            Voxel vox = new Voxel(indice.x, indice.y, indice.z, Voxel.class);
+
+            for(int i=3;i<mapAttrs.length;i++){
+                try {
+                    vox.setFieldValue(vox.getClass(), voxelSpace.getVoxelSpaceInfos().getColumnNames()[i], vox, mapAttrs[i]);
+                } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+                   //logger.error("Cannot set field value",ex);
+                }
+            }
+
+            return vox;
+
+        }catch(Exception e){
+            return null;
         }
         
-        return vox;
     }
 }

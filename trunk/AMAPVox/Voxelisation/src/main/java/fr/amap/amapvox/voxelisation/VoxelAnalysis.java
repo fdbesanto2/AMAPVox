@@ -1,7 +1,7 @@
 package fr.amap.amapvox.voxelisation;
 
-import fr.amap.amapvox.commons.math.point.Point3F;
-import fr.amap.amapvox.commons.math.point.Point3I;
+import fr.amap.amapvox.math.point.Point3F;
+import fr.amap.amapvox.math.point.Point3I;
 import fr.amap.amapvox.commons.util.Filter;
 import fr.amap.amapvox.commons.util.TimeCounter;
 import fr.amap.amapvox.datastructure.octree.Octree;
@@ -19,6 +19,7 @@ import fr.amap.amapvox.jraster.asc.RegularDtm;
 import fr.amap.amapvox.jraster.braster.BCommon;
 import fr.amap.amapvox.jraster.braster.BHeader;
 import fr.amap.amapvox.jraster.braster.BSQ;
+import fr.amap.amapvox.voxcommons.VoxTool;
 import fr.amap.amapvox.voxelisation.configuration.VoxelParameters;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -32,6 +33,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import javax.imageio.ImageIO;
@@ -42,7 +46,7 @@ import org.apache.log4j.Logger;
 
 public class VoxelAnalysis {
     
-    final static boolean DEBUG = true;
+    final static boolean DEBUG = false;
 
     public enum LaserSpecification{
         
@@ -1021,29 +1025,8 @@ public class VoxelAnalysis {
         }
         
         return indices;
-    }
+    }    
     
-    private int getNeighboursNumberInAxis(int passID, int voxelID, int splitNumber){
-        
-        /**number of possible voxel including borders**/
-       int nLeft = Integer.min(passID, voxelID);
-       int nRight = Integer.min(passID, splitNumber - voxelID - 1);
-       
-       int width = nLeft+nRight+1;
-       
-       return width;
-    }
-    
-    private int getNeighboursNumber(int passID, int voxelXId, int voxelYId, int voxelZId, int splitX, int splitY, int splitZ){
-        
-        int neighboursNumberInXAxis = getNeighboursNumberInAxis(passID, voxelXId, splitX);
-        int neighboursNumberInYAxis = getNeighboursNumberInAxis(passID, voxelYId, splitY);
-        int neighboursNumberInZAxis = getNeighboursNumberInAxis(passID, voxelZId, splitZ);
-        
-        int neighboursNumber = (neighboursNumberInXAxis * neighboursNumberInYAxis * neighboursNumberInZAxis) - 1;
-        
-        return neighboursNumber;
-    }
     
     public void correctNaNs(){
         
@@ -1068,16 +1051,7 @@ public class VoxelAnalysis {
         
         int passMax = 0;
         
-        //for debug
-        int nbFail = 0;
-        int nbSuccess = 0;
-        int countPassIDEqualsZero = 0;
-        int countPassIDEqualsOne = 0;
-        int countPassIDEqualsTwo = 0;
-        int countPassIDEqualsThree = 0;
-        int countPassIDEqualsFour = 0;
-        int countPassIDEqualsFive = 0;
-        int countPassIDEqualsSix = 0;
+        long startTime = System.currentTimeMillis();
         
         for (int x = 0; x < parameters.split.x; x++) {
             for (int y = 0; y < parameters.split.y; y++) {
@@ -1092,62 +1066,77 @@ public class VoxelAnalysis {
 
                         //List<Voxel> neighboursNew = new ArrayList<>();
                         List<Voxel> neighbours = new ArrayList<>();
+                        int nbRemovedNeighbors = 0;
 
-                        int passID = 0;
+                        int passID = 1;
 
                         //testloop:
                         while(currentNbSampling <= parameters.getCorrectNaNsNbSamplingThreshold() || currentTransmittance == 0 ){
                             
-                            int nbRemovedNeighbors = 0;
-                            
+                                                        
                             if(passID > passLimit){
                                 break;
                             }
                             
                             
-                            int minX = Integer.max(-1+x-passID, 0);
-                            int minY = Integer.max(-1+y-passID, 0);
-                            int minZ = Integer.max(-1+z-passID, 0);
+                            int minX = Integer.max(x-passID, 0);
+                            int minY = Integer.max(y-passID, 0);
+                            int minZ = Integer.max(z-passID, 0);
                             
-                            int maxX = Integer.min(2+x+passID, parameters.split.x);
-                            int maxY = Integer.min(2+y+passID, parameters.split.y);
-                            int maxZ = Integer.min(2+z+passID, parameters.split.z);
+                            int maxX = Integer.min(x+passID, parameters.split.x-1);
+                            int maxY = Integer.min(y+passID, parameters.split.y-1);
+                            int maxZ = Integer.min(z+passID, parameters.split.z-1);
                             
+                            //List<Point3I> neighboursList = getIndicesFromPassID(new Point3I(x, y, z), passID+1, new Point3I(0, 0, 0), new Point3I(parameters.split.x-1, parameters.split.y-1, parameters.split.z-1));
+//                            List<Point3I> neighboursList = getNeighboursList(passID, x, y, z, parameters.split.x, parameters.split.y, parameters.split.z);
+//                            
+//                            for(Point3I neighbor : neighboursList){
+//                                
+//                                int i = neighbor.x;
+//                                int j = neighbor.y;
+//                                int k = neighbor.z;
+//                                
+//                                if (k <= canopeeArray[i][j]) {
+//
+//                                    Voxel neighbour = voxels[i][j][k];
+//
+//                                    if (neighbour.ground_distance >= -(parameters.resolution / 2.0f)) {
+//                                        neighbours.add(neighbour);
+//                                    }else{
+//                                        nbRemovedNeighbors++;
+//                                    }
+//                                }else{
+//                                    nbRemovedNeighbors++;
+//                                }
+//                            }
                             
                             //get neighbors
-                            for(int i = minX ; i< maxX ; i++){
-                                for(int j = minY ; j< maxY ; j++){
-                                    for(int k = minZ ; k< maxZ ; k++){
+                            for(int i = minX ; i<= maxX ; i++){
+                                for(int j = minY ; j<= maxY ; j++){
+                                    for(int k = minZ ; k<= maxZ ; k++){
 
                                             //on n'ajoute pas les voxels de la passe précédente
-                                        if(passID != 0 && (i >= -1+x-passID+1 && i < 2+x+passID-1)
-                                                && (j >= -1+y-passID+1 && j < 2+y+passID-1)
-                                                && (k >= -1+z-passID+1 && k < 2+z+passID-1)){
+                                        if(passID != 1 && (i >= x-(passID-1) && i <= x+(passID-1))
+                                                && (j >= y-(passID-1) && j <= y+(passID-1))
+                                                && (k >= z-(passID-1) && k <= z+(passID-1))){
 
                                         } else {
 
-                                            if (passID == 0 && i == x && j == y && k == z) {
+                                            if (i == x && j == y && k == z) {
 
                                             } else {
+                                                if (k <= canopeeArray[i][j]) {
 
-                                                 if (i >= 0 && i < parameters.split.x
-                                                        && j >= 0 && j < parameters.split.y
-                                                        && k >= 0 && k < parameters.split.z) {
+                                                    Voxel neighbour = voxels[i][j][k];
 
-                                                    if (k <= canopeeArray[i][j]) {
-
-                                                        Voxel neighbour = voxels[i][j][k];
-
-                                                        if (neighbour.ground_distance >= -(parameters.resolution / 2.0f)) {
-                                                            neighbours.add(neighbour);
-                                                        }else{
-                                                            nbRemovedNeighbors++;
-                                                        }
+                                                    if (neighbour.ground_distance >= -(parameters.resolution / 2.0f)) {
+                                                        neighbours.add(neighbour);
                                                     }else{
                                                         nbRemovedNeighbors++;
                                                     }
+                                                }else{
+                                                    nbRemovedNeighbors++;
                                                 }
-
                                             }
                                         }
                                         //}
@@ -1155,35 +1144,6 @@ public class VoxelAnalysis {
                                     }
                                 }
                             }
-                            
-                            if(DEBUG){
-                                
-                                switch(passID){
-                                    case 0:
-                                        countPassIDEqualsZero++;
-                                        break;
-                                    case 1:countPassIDEqualsOne++;
-                                        break;
-                                    case 2:countPassIDEqualsTwo++;
-                                        break;
-                                    case 3:countPassIDEqualsThree++;
-                                        break;
-                                    case 4:countPassIDEqualsFour++;
-                                        break;
-                                    case 5:countPassIDEqualsFive++;
-                                        break;
-                                    case 6:countPassIDEqualsSix++;
-                                        break;
-                                }
-                                
-                                int nbOfNeighbors = getNeighboursNumber(passID+1, x, y, z, parameters.split.x, parameters.split.y, parameters.split.z) - nbRemovedNeighbors;
-                                if(nbOfNeighbors != neighbours.size()){
-                                    nbFail++;
-                                }else{
-                                    nbSuccess++;
-                                }
-                            }
-                            
                             
                             float meanEffectiveNbSampling = 0;
                             float meanTransmittance = 0;
@@ -1213,21 +1173,9 @@ public class VoxelAnalysis {
 
                             if(count > 0 && sumBVEntering > 0 && neighbours.size() > 0){
                                 
-                                //double factor = 1/count;
-                                //if(voxel.transmittance == 0){
-                                    meanTransmittance = (float) Math.pow((sumBVEntering-sumBVIntercepted)/sumBVEntering, sumBVEntering/sumLgTotal);
-                                //}else{
-                                  //  meanTransmittance = voxel.transmittance;
-                                //}
-                                
+                                meanTransmittance = (float) Math.pow((sumBVEntering-sumBVIntercepted)/sumBVEntering, sumBVEntering/sumLgTotal);
                                 meanEffectiveNbSampling /= (float)neighbours.size();
                                 
-                                /*if(neighbours.size() > 0){
-                                    meanEffectiveNbSampling /= (float)neighbours.size();
-                                    meanTransmittance = (float) Math.pow(meanTransmittance, factor);
-                                }else{
-                                    break;
-                                }*/
                                 currentNbSampling = meanEffectiveNbSampling;
                                 currentTransmittance = meanTransmittance;
 
@@ -1274,17 +1222,9 @@ public class VoxelAnalysis {
             }
         }
         
-        if(DEBUG){
-            System.out.println("number of fails : "+nbFail);
-            System.out.println("number of success : "+nbSuccess);
-            System.out.println("number of passID equals to 0: "+countPassIDEqualsZero);
-            System.out.println("number of passID equals to 1: "+countPassIDEqualsOne);
-            System.out.println("number of passID equals to 2: "+countPassIDEqualsTwo);
-            System.out.println("number of passID equals to 3: "+countPassIDEqualsThree);
-            System.out.println("number of passID equals to 4: "+countPassIDEqualsFour);
-            System.out.println("number of passID equals to 5: "+countPassIDEqualsFive);
-            System.out.println("number of passID equals to 6: "+countPassIDEqualsSix);
-        }
+        long endTime = System.currentTimeMillis();
+        long time = endTime - startTime;
+        System.out.println("Time : "+time+" ms");
     }
 
     public void writeGroundEnergy() {
@@ -1430,36 +1370,50 @@ public class VoxelAnalysis {
     
     public static void main(String[] args) {
         
-        VoxelAnalysis voxelAnalysis = new VoxelAnalysis(null, null, null);
-        VoxelParameters parameters = new VoxelParameters(new Point3d(0, 0, 0),
-                                                        new Point3d(20, 20, 20),
-                                                        new Point3i(20, 20, 20));
         
-        parameters.setResolution(1.0);
-        parameters.setMaxPAD(3.5f);
-        parameters.setTLS(true);
-        parameters.setWeighting(VoxelParameters.WEIGHTING_ECHOS_NUMBER);
-        parameters.setWeightingData(VoxelParameters.DEFAULT_ALS_WEIGHTING);
-        parameters.setLadType(LeafAngleDistribution.Type.SPHERIC);
+//        VoxelAnalysis voxelAnalysis = new VoxelAnalysis(null, null, null);
+//        
+//        List<Point3I> neighboursList = voxelAnalysis.getNeighboursList(2, 2, 2, 2, 3, 3, 3);
+//        
+//        int neighboursNumber = VoxTool.getNeighboursNumber(2, 2, 2, 2, 3, 3, 3);
+//        Collections.sort(neighboursList);
+//        
+//        if(neighboursNumber != neighboursList.size()){
+//            System.out.println("erreur");
+//        }else{
+//            System.out.println("correct");
+//        }
         
         
-        voxelAnalysis.init(parameters, new File("/home/calcul/Documents/Julien/test.vox"));
-        voxelAnalysis.createVoxelSpace();
-        
-        List<Shot> shots = new ArrayList<>();
-        //shots.add(new Shot(4, new Point3d(10, 10, 15), new Vector3d(0, 0, -1), new double[]{6, 14, 18, 21}, new int[4], new int[4]));
-        
-        //shots.add(new Shot(1, new Point3d(10.5, 10.5, 10.99), new Vector3d(0, 0, -1), new double[]{8}, new int[1], new int[1]));
-        //shots.add(new Shot(4, new Point3d(10.5, 10.5, 10.99), new Vector3d(0, 0, -1), new double[]{2, 4, 6, 8}, new int[4], new int[4]));
-        //shots.add(new Shot(4, new Point3d(10, 10, 24), new Vector3d(0, 0, -1), new double[]{6.1, 6.2, 6.3, 10}, new int[1], new int[1]));
-        shots.add(new Shot(1, new Point3d(0.5, 0.01, 19.9), new Vector3d(1, 0, -1), new double[]{100}, new int[1], new int[1]));
-        
-        for(Shot shot : shots){
-            voxelAnalysis.processOneShot(shot);
-        }
-        
-        voxelAnalysis.computePADs();
-        voxelAnalysis.write();
+//        VoxelParameters parameters = new VoxelParameters(new Point3d(0, 0, 0),
+//                                                        new Point3d(20, 20, 20),
+//                                                        new Point3i(20, 20, 20));
+//        
+//        parameters.setResolution(1.0);
+//        parameters.setMaxPAD(3.5f);
+//        parameters.setTLS(true);
+//        parameters.setWeighting(VoxelParameters.WEIGHTING_ECHOS_NUMBER);
+//        parameters.setWeightingData(VoxelParameters.DEFAULT_ALS_WEIGHTING);
+//        parameters.setLadType(LeafAngleDistribution.Type.SPHERIC);
+//
+//        
+//        voxelAnalysis.init(parameters, new File("/home/calcul/Documents/Julien/test.vox"));
+//        voxelAnalysis.createVoxelSpace();
+//        
+//        List<Shot> shots = new ArrayList<>();
+//        //shots.add(new Shot(4, new Point3d(10, 10, 15), new Vector3d(0, 0, -1), new double[]{6, 14, 18, 21}, new int[4], new int[4]));
+//        
+//        //shots.add(new Shot(1, new Point3d(10.5, 10.5, 10.99), new Vector3d(0, 0, -1), new double[]{8}, new int[1], new int[1]));
+//        //shots.add(new Shot(4, new Point3d(10.5, 10.5, 10.99), new Vector3d(0, 0, -1), new double[]{2, 4, 6, 8}, new int[4], new int[4]));
+//        //shots.add(new Shot(4, new Point3d(10, 10, 24), new Vector3d(0, 0, -1), new double[]{6.1, 6.2, 6.3, 10}, new int[1], new int[1]));
+//        shots.add(new Shot(1, new Point3d(0.5, 0.01, 19.9), new Vector3d(1, 0, -1), new double[]{100}, new int[1], new int[1]));
+//        
+//        for(Shot shot : shots){
+//            voxelAnalysis.processOneShot(shot);
+//        }
+//        
+//        voxelAnalysis.computePADs();
+//        voxelAnalysis.write();
     }
     
 }

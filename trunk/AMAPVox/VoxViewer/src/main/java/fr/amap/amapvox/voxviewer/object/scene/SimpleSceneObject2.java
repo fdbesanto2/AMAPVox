@@ -8,6 +8,7 @@ package fr.amap.amapvox.voxviewer.object.scene;
 import com.jogamp.opengl.GL3;
 import fr.amap.amapvox.voxviewer.loading.shader.Shader;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh;
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 /**
@@ -54,5 +55,10 @@ public class SimpleSceneObject2 extends SceneObject{
         gl.glBindVertexArray(vaoId);
         mesh.draw(gl);
         gl.glBindVertexArray(0);
+    }
+
+    @Override
+    public void updateBuffers(GL3 gl, int index, FloatBuffer buffer) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -5,37 +5,23 @@
  */
 package fr.amap.amapvox.voxviewer.renderer;
 
-import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.util.FPSAnimator;
-import fr.amap.amapvox.commons.math.geometry.AABB;
-import fr.amap.amapvox.commons.math.geometry.Plane;
-import fr.amap.amapvox.commons.math.matrix.Mat4F;
-import fr.amap.amapvox.commons.math.point.Point3F;
-import fr.amap.amapvox.commons.math.vector.Vec3F;
-import fr.amap.amapvox.commons.util.BoundingBox3F;
+import fr.amap.amapvox.math.vector.Vec3F;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
-import fr.amap.amapvox.voxviewer.event.BasicEvent;
 import fr.amap.amapvox.voxviewer.event.EventManager;
-import fr.amap.amapvox.voxviewer.loading.shader.Shader;
 import fr.amap.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh;
 import fr.amap.amapvox.voxviewer.mesh.GLMeshFactory;
-import fr.amap.amapvox.voxviewer.object.camera.CameraAdapter;
 import fr.amap.amapvox.voxviewer.object.scene.Scene;
 import fr.amap.amapvox.voxviewer.object.scene.SceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.SceneObjectFactory;
-import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject;
-import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import java.io.InputStreamReader;
-import java.nio.FloatBuffer;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
-import javax.vecmath.Point3d;
 
 /**
  *

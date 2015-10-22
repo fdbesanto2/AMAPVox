@@ -18,7 +18,7 @@
     <dependencies>
         <dependency>
             <groupId>fr.amap.amapvox</groupId>
-            <artifactId>commons</artifactId>
+            <artifactId>Math</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>

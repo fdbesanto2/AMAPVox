@@ -5,7 +5,7 @@
  */
 package fr.amap.amapvox.io.tls.rsp;
 
-import fr.amap.amapvox.commons.math.matrix.Mat4D;
+import fr.amap.amapvox.math.matrix.Mat4D;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -51,7 +51,7 @@ public class VoxelAnalysisTest {
         }
         
         voxelAnalysis.computePADs();
-        voxelAnalysis.write();
+        //voxelAnalysis.write();
         
     }
     

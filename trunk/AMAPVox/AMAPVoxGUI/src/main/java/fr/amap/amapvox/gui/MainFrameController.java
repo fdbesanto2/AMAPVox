@@ -6,7 +6,6 @@
 package fr.amap.amapvox.gui;
 
 import com.jogamp.newt.event.WindowAdapter;
-import com.jogamp.opengl.GL3;
 import fr.amap.amapvox.als.las.PointDataRecordFormat.Classification;
 import fr.amap.amapvox.chart.ChartViewer;
 import fr.amap.amapvox.chart.VoxelFileChart;
@@ -21,12 +20,10 @@ import static fr.amap.amapvox.commons.configuration.Configuration.InputType.RSP_
 import static fr.amap.amapvox.commons.configuration.Configuration.InputType.RXP_SCAN;
 import static fr.amap.amapvox.commons.configuration.Configuration.InputType.SHOTS_FILE;
 import fr.amap.amapvox.commons.io.file.FileManager;
-import fr.amap.amapvox.commons.math.matrix.Mat4D;
-import fr.amap.amapvox.commons.math.point.Point2F;
-import fr.amap.amapvox.commons.math.point.Point3F;
-import fr.amap.amapvox.commons.math.vector.Vec3F;
-import fr.amap.amapvox.commons.util.BoundingBox2F;
-import fr.amap.amapvox.commons.util.BoundingBox3F;
+import fr.amap.amapvox.math.matrix.Mat4D;
+import fr.amap.amapvox.math.point.Point2F;
+import fr.amap.amapvox.math.point.Point3F;
+import fr.amap.amapvox.math.vector.Vec3F;
 import fr.amap.amapvox.commons.util.BoundingBox3d;
 import fr.amap.amapvox.commons.util.Filter;
 import fr.amap.amapvox.commons.util.MatrixAndFile;
@@ -42,9 +39,14 @@ import fr.amap.amapvox.io.tls.rsp.Scans;
 import fr.amap.amapvox.jdart.DartPlotsXMLWriter;
 import fr.amap.amapvox.jraster.asc.DtmLoader;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
-import fr.amap.amapvox.simulation.transmittance.Parameters;
+import fr.amap.amapvox.math.geometry.BoundingBox2F;
+import fr.amap.amapvox.math.geometry.BoundingBox3F;
+import fr.amap.amapvox.simulation.hemi.HemiParameters;
+import fr.amap.amapvox.simulation.hemi.HemiPhotoCfg;
+import fr.amap.amapvox.simulation.hemi.HemiScanView;
+import fr.amap.amapvox.simulation.transmittance.TransmittanceParameters;
 import fr.amap.amapvox.simulation.transmittance.SimulationPeriod;
-import fr.amap.amapvox.simulation.transmittance.VirtualMeasuresCfg;
+import fr.amap.amapvox.simulation.transmittance.TransmittanceCfg;
 import fr.amap.amapvox.simulation.transmittance.TransmittanceSim;
 import fr.amap.amapvox.update.Updater;
 import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
@@ -76,7 +78,6 @@ import fr.amap.amapvox.voxviewer.object.scene.SceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.SceneObjectFactory;
 import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject2;
-import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceData;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import fr.amap.amapvox.voxviewer.renderer.GLRenderWindowListener;
 import java.awt.image.BufferedImage;
@@ -122,7 +123,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -130,7 +130,6 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -149,8 +148,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -186,12 +184,16 @@ public class MainFrameController implements Initializable {
     
     private Stage stage;
 
+    private Stage rspExtractorFrame;
     private Stage calculateMatrixFrame;
     private Stage filterFrame;
     private Stage transformationFrame;
     private Stage dateChooserFrame;
     private Stage viewCapsSetupFrame;
+    private Stage updaterFrame;
     
+    private RspExtractorFrameController rspExtractorFrameController;
+    private UpdaterFrameController updaterFrameController;
     private TransformationFrameController transformationFrameController;
     private DateChooserFrameController dateChooserFrameController;
     private ViewCapsSetupFrameController viewCapsSetupFrameController;
@@ -203,11 +205,6 @@ public class MainFrameController implements Initializable {
 
     private CalculateMatrixFrameController calculateMatrixFrameController;
     private FilterFrameController filterFrameController;
-
-    private ImageView ivFormulaTransALSV1;
-    private ImageView ivFormulaTransALSV2;
-    private ImageView ivFormulaTransTLSV1;
-    private ImageView ivFormulaTransTLSV2;
 
     private File lastFCSaveConfiguration;
     private File lastFCOpenInputFileALS;
@@ -228,6 +225,8 @@ public class MainFrameController implements Initializable {
     private File lastFCOpenPointsPositionFile;
     private File lastFCSaveTransmittanceTextFile;
     private File lastDCSaveTransmittanceBitmapFile;
+    private File lastFCOpenHemiPhotoOutputBitmapFile;
+    private File lastFCOpenHemiPhotoOutputTextFile;
 
     private FileChooser fileChooserOpenConfiguration;
     private FileChooser fileChooserSaveConfiguration;
@@ -253,6 +252,8 @@ public class MainFrameController implements Initializable {
     private FileChooser fileChooserOpenPointsPositionFile;
     private FileChooser fileChooserSaveTransmittanceTextFile;
     private DirectoryChooser directoryChooserSaveTransmittanceBitmapFile;
+    private FileChooser fileChooserSaveHemiPhotoOutputBitmapFile;
+    private FileChooser fileChooserSaveHemiPhotoOutputTextFile;
     
     private DirectoryChooser directoryChooserOpenOutputPathALS;
     private DirectoryChooser directoryChooserOpenOutputPathTLS;
@@ -299,6 +300,38 @@ public class MainFrameController implements Initializable {
     private Label labelLADBeta;
     @FXML
     private Label labelLADAlpha;
+    @FXML
+    private ListView<MatrixAndFile> listViewHemiPhotoScans;
+    @FXML
+    private VBox vBoxGenerateBitmapFiles;
+    @FXML
+    private TextField textfieldVoxelFilePathHemiPhoto;
+    @FXML
+    private TextField textfieldSensorPositionX;
+    @FXML
+    private TextField textfieldSensorPositionY;
+    @FXML
+    private TextField textfieldSensorPositionZ;
+    @FXML
+    private TextField textfieldPixelNumber;
+    @FXML
+    private TextField textfieldAzimutsNumber;
+    @FXML
+    private TextField textfieldZenithsNumber;
+    @FXML
+    private CheckBox checkboxGenerateSectorsTextFileHemiPhoto;
+    @FXML
+    private VBox vBoxGenerateBitmapFiles1;
+    @FXML
+    private ComboBox<String> comboboxHemiPhotoBitmapOutputMode;
+    @FXML
+    private TabPane tabpaneHemiPhotoMode;
+    @FXML
+    private CheckBox checkboxHemiPhotoGenerateBitmapFile;
+    @FXML
+    private TextField textfieldHemiPhotoOutputTextFile;
+    @FXML
+    private TextField textfieldHemiPhotoOutputBitmapFile;
 
     @FXML
     private void onActionButtonDisplayPdf(ActionEvent event) {
@@ -376,21 +409,122 @@ public class MainFrameController implements Initializable {
         viewer.insertChart(ChartViewer.createBasicChart("GTheta ~ inclinaison angle", dataset, "Angle (degrees)", "GTheta"));
         viewer.show();
     }
-    
-    static class ColorRectCell extends ListCell<VoxelFileChart> {
 
-        @Override
-        public void updateItem(VoxelFileChart item, boolean empty) {
-            super.updateItem(item, empty);
+    @FXML
+    private void onActionButtonOpenRspProject(ActionEvent event) {
+        
+        File selectedFile = fileChooserOpenInputFileTLS.showOpenDialog(stage);
+        
+        if(selectedFile != null){
             
-            if (item != null/* && !item.loaded*/) {
-                pseudoClassStateChanged(loadedPseudoClass, item.loaded);
-                setText(item.label);
+            Rsp selectedProject = new Rsp();
+            try {
+                selectedProject.read(selectedFile);
+
+                rspExtractorFrameController.init(selectedProject);
+                rspExtractorFrame.show();
+
+                rspExtractorFrame.setOnHidden(new EventHandler<WindowEvent>() {
+
+                    @Override
+                    public void handle(WindowEvent event) {
+                        List<RspExtractorFrameController.Scan> selectedScans = rspExtractorFrameController.getSelectedScans();
+                        
+                        ObservableList<MatrixAndFile> items1 = listViewHemiPhotoScans.getItems();
+                        
+                        for(RspExtractorFrameController.Scan scan : selectedScans){
+                            items1.add(new MatrixAndFile(scan.getFile(), MatrixUtility.convertMat4DToMatrix4d(scan.getSop())));
+                        }
+                        
+
+                    }
+                });
+
+            } catch (JDOMException | IOException ex) {
+                showErrorDialog(ex);
+            }
+
+        }
+        
+        
+        
+    }
+
+    @FXML
+    private void onActionButtonOpenVoxelFileHemiPhoto(ActionEvent event) {
+    }
+
+    @FXML
+    private void onActionButtonHemiPhotoAddToTaskList(ActionEvent event) {
+        
+        if (lastFCSaveConfiguration != null) {
+            fileChooserSaveConfiguration.setInitialDirectory(lastFCSaveConfiguration.getParentFile());
+            fileChooserSaveConfiguration.setInitialFileName(lastFCSaveConfiguration.getName());
+        }
+
+        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
+        
+        if (selectedFile != null) {
+            
+            lastFCSaveConfiguration = selectedFile;
+            
+            HemiParameters hemiParameters = new HemiParameters();
+            try {
+                
+                hemiParameters.setPixelNumber(Integer.valueOf(textfieldPixelNumber.getText()));
+                hemiParameters.setAzimutsNumber(Integer.valueOf(textfieldAzimutsNumber.getText()));
+                hemiParameters.setZenithsNumber(Integer.valueOf(textfieldZenithsNumber.getText()));
+                
+                int selectedMode = tabpaneHemiPhotoMode.getSelectionModel().getSelectedIndex();
+                
+                switch(selectedMode){
+                    case 0 :
+                        hemiParameters.setMode(HemiParameters.Mode.ECHOS);
+                        hemiParameters.setRxpScansList(listViewHemiPhotoScans.getItems());
+                        break;
+                    case 1:
+                        hemiParameters.setMode(HemiParameters.Mode.PAD);
+                        
+                        hemiParameters.setVoxelFile(new File(textfieldVoxelFilePathHemiPhoto.getText()));
+                        hemiParameters.setSensorPosition(new Point3d(Double.valueOf(textfieldSensorPositionX.getText()),
+                                                                    Double.valueOf(textfieldSensorPositionY.getText()),
+                                                                    Double.valueOf(textfieldSensorPositionZ.getText())));
+                        break;
+                }
+                
+                hemiParameters.setGenerateBitmapFile(checkboxHemiPhotoGenerateBitmapFile.isSelected());
+                
+                if(checkboxHemiPhotoGenerateBitmapFile.isSelected()){
+                    hemiParameters.setOutputBitmapFile(new File(textfieldHemiPhotoOutputBitmapFile.getText()));
+                    
+                    int selectedIndex = comboboxHemiPhotoBitmapOutputMode.getSelectionModel().getSelectedIndex();
+                    switch(selectedIndex){
+                        case 0:
+                            hemiParameters.setBitmapMode(HemiParameters.BitmapMode.PIXEL);
+                            break;
+                        case 1:
+                            hemiParameters.setBitmapMode(HemiParameters.BitmapMode.COLOR);
+                            break;
+                    }
+                    
+                }
+                
+                hemiParameters.setGenerateTextFile(checkboxGenerateSectorsTextFileHemiPhoto.isSelected());
+                
+                if(checkboxGenerateSectorsTextFileHemiPhoto.isSelected()){
+                    hemiParameters.setOutputTextFile(new File(textfieldHemiPhotoOutputTextFile.getText()));
+                }
+                
+                HemiPhotoCfg hemiPhotoCfg = new HemiPhotoCfg(hemiParameters);
+                hemiPhotoCfg.writeConfiguration(selectedFile);
+                addTasksToTaskList(selectedFile);
+                
+            } catch (Exception ex) {
+                showErrorDialog(ex);
             }
         }
     }
     
-    private ObservableList<SimulationPeriod> data;
     
     @FXML
     private ComboBox<LeafAngleDistribution.Type> comboboxLADChoice;
@@ -758,8 +892,6 @@ public class MainFrameController implements Initializable {
     @FXML
     private ToggleButton toggleButtonLAI2200;
     @FXML
-    private GridPane gridPaneGenerateBitmapFiles;
-    @FXML
     private Label labelDirectionsNumber;
     @FXML
     private Button buttonSetupViewCap;
@@ -803,11 +935,77 @@ public class MainFrameController implements Initializable {
     private AnchorPane anchorpaneQuadrats;
     @FXML
     private HBox hboxMaxPADVegetationProfile;
+
+    @FXML
+    private void onActionButtonOpenHemiPhotoOutputTextFile(ActionEvent event) {
+        
+        if(lastFCOpenHemiPhotoOutputTextFile != null){
+            fileChooserSaveHemiPhotoOutputTextFile.setInitialDirectory(lastFCOpenHemiPhotoOutputTextFile.getParentFile());
+        }
+        
+        File selectedFile = fileChooserSaveHemiPhotoOutputTextFile.showSaveDialog(stage);
+        
+        if(selectedFile != null){
+            lastFCOpenHemiPhotoOutputTextFile = selectedFile;
+            textfieldHemiPhotoOutputTextFile.setText(selectedFile.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    private void onActionButtonOpenHemiPhotoOutputBitmapFile(ActionEvent event) {
+        
+        if(lastFCOpenHemiPhotoOutputBitmapFile != null){
+            fileChooserSaveHemiPhotoOutputBitmapFile.setInitialDirectory(lastFCOpenHemiPhotoOutputBitmapFile.getParentFile());
+        }
+        
+        File selectedFile = fileChooserSaveHemiPhotoOutputBitmapFile.showSaveDialog(stage);
+        
+        if(selectedFile != null){
+            lastFCOpenHemiPhotoOutputBitmapFile = selectedFile;
+            textfieldHemiPhotoOutputBitmapFile.setText(selectedFile.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    private void onActionMenuItemSelectAllScansHemiPhoto(ActionEvent event) {
+        listViewHemiPhotoScans.getSelectionModel().selectAll();
+    }
+
+    @FXML
+    private void onActionMenuItemUnselectAllScansHemiPhoto(ActionEvent event) {
+        listViewHemiPhotoScans.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    private void onActionButtonRemoveScanFromHemiPhotoListView(ActionEvent event) {
+        
+        ObservableList<MatrixAndFile> selectedItems = listViewHemiPhotoScans.getSelectionModel().getSelectedItems();
+        listViewHemiPhotoScans.getItems().removeAll(selectedItems);
+    }
+    
+    static class ColorRectCell extends ListCell<VoxelFileChart> {
+
+        @Override
+        public void updateItem(VoxelFileChart item, boolean empty) {
+            super.updateItem(item, empty);
+            
+            if (item != null/* && !item.loaded*/) {
+                pseudoClassStateChanged(loadedPseudoClass, item.loaded);
+                setText(item.label);
+            }
+        }
+    }
+    
+    private ObservableList<SimulationPeriod> data;
+    
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        listViewHemiPhotoScans.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         
         /**LAD tab initialization**/
         comboboxLADChoice.getItems().addAll(LeafAngleDistribution.Type.UNIFORM,
@@ -940,6 +1138,9 @@ public class MainFrameController implements Initializable {
         
         /**Virtual measures panel initialization**/
         
+        comboboxHemiPhotoBitmapOutputMode.getItems().addAll("Pixel", "Color");
+        comboboxHemiPhotoBitmapOutputMode.getSelectionModel().selectFirst();
+        
         ToggleGroup virtualMeasuresChoiceGroup = new ToggleGroup();
         
         toggleButtonTransmittance.setToggleGroup(virtualMeasuresChoiceGroup);
@@ -950,7 +1151,7 @@ public class MainFrameController implements Initializable {
 
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                gridPaneGenerateBitmapFiles.setDisable(newValue);
+                vBoxGenerateBitmapFiles.setDisable(newValue);
                 comboboxChooseDirectionsNumber.setEditable(newValue);
                 buttonSetupViewCap.setVisible(newValue);
                 if(newValue){
@@ -1117,6 +1318,12 @@ public class MainFrameController implements Initializable {
         
         directoryChooserSaveTransmittanceBitmapFile = new DirectoryChooser();
         directoryChooserSaveTransmittanceBitmapFile.setTitle("Choose output directory");
+        
+        fileChooserSaveHemiPhotoOutputBitmapFile = new FileChooser();
+        fileChooserSaveHemiPhotoOutputBitmapFile.setTitle("Save bitmap file");
+        
+        fileChooserSaveHemiPhotoOutputTextFile = new FileChooser();
+        fileChooserSaveHemiPhotoOutputTextFile.setTitle("Save text file");
 
         fileChooserOpenVoxelFile = new FileChooser();
         fileChooserOpenVoxelFile.setTitle("Open voxel file");
@@ -1217,6 +1424,31 @@ public class MainFrameController implements Initializable {
             transformationFrameController.setStage(transformationFrame);
             transformationFrameController.setParent(this);
             transformationFrame.setScene(new Scene(root));
+        } catch (IOException ex) {
+            logger.error("Cannot load fxml file", ex);
+        }
+        
+        updaterFrame = new Stage();
+        
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UpdaterFrame.fxml"));
+            Parent root = loader.load();
+            updaterFrameController = loader.getController();
+            updaterFrame.setScene(new Scene(root));
+        
+        } catch (IOException ex) {
+            logger.error("Cannot load fxml file", ex);
+        }
+        
+        rspExtractorFrame = new Stage();
+        
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/RspExtractorFrame.fxml"));
+            Parent root = loader.load();
+            rspExtractorFrameController = loader.getController();
+            rspExtractorFrame.setScene(new Scene(root));
+            rspExtractorFrameController.setStage(rspExtractorFrame);
+        
         } catch (IOException ex) {
             logger.error("Cannot load fxml file", ex);
         }
@@ -3082,7 +3314,7 @@ public class MainFrameController implements Initializable {
         }
     }
     
-    public void addTasksToTaskList(List<File> tasks){
+    public void addTasksToTaskList(File... tasks){
         
         for(File f : tasks){
             addFileToTaskList(f);
@@ -3119,7 +3351,7 @@ public class MainFrameController implements Initializable {
             @Override
             public void run() {
                 Alert alert = new Alert(AlertType.ERROR);
-                alert.setContentText(e.getMessage());
+                alert.setContentText(e.getLocalizedMessage());
                 alert.setResizable(true);
                 alert.getDialogPane().setPrefSize(500, 200);
                 alert.initOwner(stage);
@@ -3181,9 +3413,9 @@ public class MainFrameController implements Initializable {
                                 case "LAI2000":
                                 case "LAI2200":
                                     
-                                    VirtualMeasuresCfg cfg;
+                                    TransmittanceCfg cfg;
                                     try {
-                                        cfg = VirtualMeasuresCfg.readCfg(file);
+                                        cfg = TransmittanceCfg.readCfg(file);
                                         try {
                                             TransmittanceSim.simulationProcess(cfg);
                                         }catch(IOException ex){
@@ -3198,6 +3430,18 @@ public class MainFrameController implements Initializable {
                                     
                                     
                                 break;
+                                    
+                                case "Hemi-Photo":
+                                    try {
+                                        HemiPhotoCfg hemiphotoCfg = HemiPhotoCfg.readCfg(file);
+                                        HemiScanView.launchSimulation(hemiphotoCfg.getParameters());
+                                        
+                                    } catch (IOException | JDOMException ex) {
+                                        logger.error("Cannot read configuration file", ex);
+                                        showErrorDialog(ex);
+                                    }
+                                    
+                                    break;
 
                                 case "merging":
                                     
@@ -3859,12 +4103,47 @@ public class MainFrameController implements Initializable {
                     textFieldOutputFileMultiRes.setText(cfg1.getOutputFile().getAbsolutePath());
                     checkboxOverwritePadLimit.setSelected(!cfg1.isMultiResUseDefaultMaxPad());
                     
+                }else if(type.equals("Hemi-Photo")){
+                    
+                    HemiPhotoCfg cfg = HemiPhotoCfg.readCfg(selectedFile);
+                    HemiParameters hemiParameters = cfg.getParameters();
+                    
+                    switch(hemiParameters.getMode()){
+                        case ECHOS:
+                            listViewHemiPhotoScans.getItems().setAll(hemiParameters.getRxpScansList());
+                            break;
+                        case PAD:
+                            textfieldVoxelFilePathHemiPhoto.setText(hemiParameters.getVoxelFile().getAbsolutePath());
+                            textfieldSensorPositionX.setText(String.valueOf(hemiParameters.getSensorPosition().x));
+                            textfieldSensorPositionY.setText(String.valueOf(hemiParameters.getSensorPosition().y));
+                            textfieldSensorPositionZ.setText(String.valueOf(hemiParameters.getSensorPosition().z));
+                            break;
+                    }
+                    
+                    textfieldPixelNumber.setText(String.valueOf(hemiParameters.getPixelNumber()));
+                    textfieldAzimutsNumber.setText(String.valueOf(hemiParameters.getAzimutsNumber()));
+                    textfieldZenithsNumber.setText(String.valueOf(hemiParameters.getZenithsNumber()));
+                    
+                    checkboxGenerateSectorsTextFileHemiPhoto.setSelected(hemiParameters.isGenerateTextFile());
+                    
+                    if(hemiParameters.isGenerateTextFile()){
+                        textfieldHemiPhotoOutputTextFile.setText(hemiParameters.getOutputTextFile().getAbsolutePath());
+                    }
+                    
+                    checkboxHemiPhotoGenerateBitmapFile.setSelected(hemiParameters.isGenerateBitmapFile());
+                    
+                    if(hemiParameters.isGenerateBitmapFile()){
+                        comboboxHemiPhotoBitmapOutputMode.getSelectionModel().select(hemiParameters.getBitmapMode().getMode());
+                        textfieldHemiPhotoOutputBitmapFile.setText(hemiParameters.getOutputBitmapFile().getAbsolutePath());
+                        
+                    }
+                    
                 }else if(type.equals("transmittance") || type.equals("LAI2000") || type.equals("LAI2200")){
                     
-                    VirtualMeasuresCfg cfg = VirtualMeasuresCfg.readCfg(selectedFile);
+                    TransmittanceCfg cfg = TransmittanceCfg.readCfg(selectedFile);
 
                     //cfg.readConfiguration(selectedFile);
-                    Parameters params = cfg.getParameters();
+                    TransmittanceParameters params = cfg.getParameters();
 
                     textfieldVoxelFilePathTransmittance.setText(params.getInputFile().getAbsolutePath());
                     
@@ -4731,41 +5010,48 @@ public class MainFrameController implements Initializable {
     
     @FXML
     private void onActionMenuItemUpdate(ActionEvent event) {
-                                    
-        Service<Void> service = new Service<Void>() {
-            @Override
-            protected Task<Void> createTask() {
-                return new Task<Void>() {
-                    @Override
-                    protected Void call() throws InterruptedException {
-
-                            final Updater updater = new Updater();
-                            
-                            updater.update();
-                            
-                            Platform.runLater(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    Alert alert = new Alert(AlertType.INFORMATION);
-                                    alert.setTitle("Information");
-                                    alert.setHeaderText("About the Update");
-                                    alert.setContentText("AmapVox needs to be restarted in order to apply update!");
-                                    alert.show();
-                                }
-                            });
-                            
-                            return null;
-                    }
-                };
-            }
-        };
-
-        ProgressDialog d = new ProgressDialog(service);
-        d.initOwner(stage);
-        d.show();
-
-        service.start();
+                
+        
+        updaterFrame.show();
+        updaterFrameController.load();
+        
+//        Service<Void> service = new Service<Void>() {
+//            @Override
+//            protected Task<Void> createTask() {
+//                return new Task<Void>() {
+//                    @Override
+//                    protected Void call() throws InterruptedException {
+//
+//                            final Updater updater = new Updater();
+//                            
+//                            updater.connect();
+//                            updater.getFileList();
+//                            
+//                            //updater.update();
+//                            
+//                            Platform.runLater(new Runnable() {
+//
+//                                @Override
+//                                public void run() {
+//                                    Alert alert = new Alert(AlertType.INFORMATION);
+//                                    alert.setTitle("Information");
+//                                    alert.setHeaderText("About the Update");
+//                                    alert.setContentText("AmapVox needs to be restarted in order to apply update!");
+//                                    alert.show();
+//                                }
+//                            });
+//                            
+//                            return null;
+//                    }
+//                };
+//            }
+//        };
+//
+//        ProgressDialog d = new ProgressDialog(service);
+//        d.initOwner(stage);
+//        d.show();
+//
+//        service.start();
         
     }
 
@@ -5048,16 +5334,16 @@ public class MainFrameController implements Initializable {
             
             lastFCSaveConfiguration= selectedFile;
             
-            Parameters transmParameters = new Parameters();
+            TransmittanceParameters transmParameters = new TransmittanceParameters();
         
             if(toggleButtonLAI2000.isSelected() || toggleButtonLAI2200.isSelected()){
                 
                 transmParameters.setShotNumber(Integer.valueOf(comboboxChooseDirectionsNumber.getEditor().getText()));
                 
                 if(toggleButtonLAI2000.isSelected()){
-                    transmParameters.setMode(Parameters.Mode.LAI2000);
+                    transmParameters.setMode(TransmittanceParameters.Mode.LAI2000);
                 }else{
-                    transmParameters.setMode(Parameters.Mode.LAI2200);
+                    transmParameters.setMode(TransmittanceParameters.Mode.LAI2200);
                 }
             }
             
@@ -5094,7 +5380,7 @@ public class MainFrameController implements Initializable {
             
             transmParameters.setSimulationPeriods(tableViewSimulationPeriods.getItems());
             
-            VirtualMeasuresCfg cfg = new VirtualMeasuresCfg(transmParameters);
+            TransmittanceCfg cfg = new TransmittanceCfg(transmParameters);
             try {
                 cfg.writeConfiguration(selectedFile);
                 addFileToTaskList(selectedFile);

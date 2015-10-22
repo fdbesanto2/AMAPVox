@@ -6,11 +6,15 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLException;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.FPSAnimator;
-import fr.amap.amapvox.commons.math.point.Point3F;
-import fr.amap.amapvox.commons.math.vector.Vec3F;
+import fr.amap.amapvox.commons.util.ColorGradient;
+import fr.amap.amapvox.io.tls.rsp.Rsp;
+import fr.amap.amapvox.math.point.Point3F;
+import fr.amap.amapvox.math.vector.Vec3F;
 import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.amapvox.jeeb.workspace.sunrapp.util.Colouring;
+import fr.amap.amapvox.math.matrix.Mat4D;
+import fr.amap.amapvox.math.vector.Vec4D;
 import fr.amap.amapvox.voxviewer.event.BasicEvent;
 import fr.amap.amapvox.voxviewer.event.EventManager;
 import fr.amap.amapvox.voxviewer.input.InputKeyListener;
@@ -45,7 +49,6 @@ public class Viewer3D extends Application {
     
     private boolean focused;
     
-    private final static Logger logger = Logger.getLogger(Viewer3D.class);
     private int width;
     private int height;
     
@@ -515,20 +518,22 @@ public class Viewer3D extends Application {
         
         try {
             
-            Viewer3D viewer3D = new Viewer3D(((int) 640 / 4), (int) 480 / 4, 640, 480, "");
-            viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
             
-            fr.amap.amapvox.voxviewer.object.scene.Scene scene = viewer3D.getScene();
+            
+            PointCloudSceneObject pointCloud = new PointCloudSceneObject(2);
+            Rsp rsp = new Rsp();
+            rsp.read(new File("/media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/project.rsp"));
+            
             
             long startTime = System.currentTimeMillis();
             
             RxpExtraction reader = new RxpExtraction();
-            reader.openRxpFile(new File("/media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos001/SINGLESCANS/130917_153258.rxp"), RxpExtraction.SHOT_WITH_REFLECTANCE);
+            reader.openRxpFile(new File("/media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos001/SINGLESCANS/130917_153258.mon.rxp"), RxpExtraction.SHOT_WITH_REFLECTANCE);
             Iterator<Shot> iterator = reader.iterator();
             
-            List<Float> vertexDataList = new ArrayList<>(81547452);
-            List<Float> colorDataList = new ArrayList<>(81547452);
-            
+            /*List<Float> vertexDataList = new ArrayList<>(81547452);
+            List<Float> colorDataList = new ArrayList<>(81547452);*/
+            Mat4D sopMatrix = rsp.getRxpList().get(0).getSopMatrix();
             int count = 0;
             
             while(iterator.hasNext()){
@@ -543,17 +548,18 @@ public class Viewer3D extends Application {
                     float y = (float) (shot.origin.y + shot.direction.y * range);
                     float z = (float) (shot.origin.z + shot.direction.z * range);
                     
-                    vertexDataList.add(x);
-                    vertexDataList.add(y);
-                    vertexDataList.add(z);
+                    Vec4D transformedPoint = Mat4D.multiply(sopMatrix, new Vec4D(x, y, z, 1));
+                    pointCloud.addPoint((float)transformedPoint.x, (float)transformedPoint.y, (float)transformedPoint.z);
                     
                     double reflectance = shot.reflectances[i];
                     
-                    float colorValue = (float) ((reflectance+38)/69.0f);
+                    float reflectanceColor = (float) ((reflectance+38)/69.0f);
                     
-                    colorDataList.add(colorValue);
-                    colorDataList.add(colorValue);
-                    colorDataList.add(colorValue);
+                    pointCloud.addColor(0, reflectanceColor, reflectanceColor, reflectanceColor);
+                    
+                    float zColor = (float) (Math.abs(z)/70.0f);
+                    Point3f rainbowRGB = Colouring.rainbowRGB(zColor);
+                    pointCloud.addColor(1, rainbowRGB.x/255.0f, rainbowRGB.y/255.0f, rainbowRGB.z/255.0f);
                 }
                 
                 count++;
@@ -563,15 +569,53 @@ public class Viewer3D extends Application {
             long endTime = System.currentTimeMillis();
             System.out.println("Temps de lecture du fichier : "+(endTime-startTime)+" ms");
             System.out.println("Nombre de tirs : "+count);
-            System.out.println("Nombre de points : "+vertexDataList.size()/3);
             
-            float[] vertexData = new float[vertexDataList.size()];
+            reader.openRxpFile(new File("/media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos002/SINGLESCANS/130917_155228.mon.rxp"), RxpExtraction.SHOT_WITH_REFLECTANCE);
+            iterator = reader.iterator();
+            
+            sopMatrix = rsp.getRxpList().get(1).getSopMatrix();
+            
+            count = 0;
+            
+            while(iterator.hasNext()){
+                
+                Shot shot = iterator.next();
+                
+                for(int i=0;i<shot.ranges.length;i++){
+                    
+                    double range = shot.ranges[i];
+                    
+                    float x = (float) (shot.origin.x + shot.direction.x * range);
+                    float y = (float) (shot.origin.y + shot.direction.y * range);
+                    float z = (float) (shot.origin.z + shot.direction.z * range);
+                    
+                    Vec4D transformedPoint = Mat4D.multiply(sopMatrix, new Vec4D(x, y, z, 1));
+                    pointCloud.addPoint((float)transformedPoint.x, (float)transformedPoint.y, (float)transformedPoint.z);
+                    
+                    double reflectance = shot.reflectances[i];
+                    
+                    float reflectanceColor = (float) ((reflectance+38)/69.0f);
+                    
+                    pointCloud.addColor(0, reflectanceColor, reflectanceColor, reflectanceColor);
+                    
+                    float zColor = (float) (Math.abs(z)/70.0f);
+                    Point3f rainbowRGB = Colouring.rainbowRGB(zColor);
+                    pointCloud.addColor(1, rainbowRGB.x/255.0f, rainbowRGB.y/255.0f, rainbowRGB.z/255.0f);
+                }
+                
+                count++;
+                
+            }
+            
+            //System.out.println("Nombre de points : "+vertexDataList.size()/3);
+            
+            /*float[] vertexData = new float[vertexDataList.size()];
             float[] colorData = new float[colorDataList.size()];
             
             for(int i=0;i<vertexDataList.size();i++){
                 vertexData[i] = vertexDataList.get(i);
                 colorData[i] = colorDataList.get(i);
-            }
+            }*/
             
             
 //            LasReader lasReader = new LasReader();
@@ -612,9 +656,14 @@ public class Viewer3D extends Application {
 //                i+=3;
 //            }
             
-            PointCloudGLMesh pointcloudMesh = (PointCloudGLMesh) GLMeshFactory.createPointCloud(vertexData,colorData);
+            Viewer3D viewer3D = new Viewer3D(((int) 640 / 4), (int) 480 / 4, 640, 480, "");
+            viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
+            fr.amap.amapvox.voxviewer.object.scene.Scene scene = viewer3D.getScene();
             
-            PointCloudSceneObject pointCloud = new PointCloudSceneObject(pointcloudMesh, false);
+            //PointCloudGLMesh pointcloudMesh = (PointCloudGLMesh) GLMeshFactory.createPointCloud(vertexData,colorData);
+            
+            //PointCloudSceneObject pointCloud = new PointCloudSceneObject(pointcloudMesh, false);
+            pointCloud.initMesh();
             pointCloud.setShader(scene.colorShader);
             scene.addSceneObject(pointCloud);
             
