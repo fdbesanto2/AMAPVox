@@ -14,22 +14,14 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.amapvox.simulation.hemi;
 
-import fr.amap.amapvox.simulation.transmittance.*;
 import fr.amap.amapvox.commons.configuration.Configuration;
 import fr.amap.amapvox.commons.util.MatrixAndFile;
-import fr.amap.amapvox.simulation.transmittance.util.Period;
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Point3d;
-import javax.vecmath.Point3f;
 import org.jdom2.Attribute;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;

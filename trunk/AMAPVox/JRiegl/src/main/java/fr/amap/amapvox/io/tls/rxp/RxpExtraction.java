@@ -101,18 +101,17 @@ public class RxpExtraction implements Iterable<Shot>{
     @Override
     public Iterator<Shot> iterator() {
         
-        
-        
         Iterator<Shot> it = new Iterator<Shot>() {
-            
+                        
             private Shot shot;
-            
+             
             @Override
             public boolean hasNext() {
                 
                 if(hasShot(rxpPointer)){
                     
                     shot = getNextShot(rxpPointer);
+                    
                     return shot != null;
                     
                 }else{

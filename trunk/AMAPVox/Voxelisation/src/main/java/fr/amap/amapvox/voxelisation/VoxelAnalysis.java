@@ -1355,7 +1355,7 @@ public class VoxelAnalysis {
             }
 
         } else {
-            dist = (float) (position.z);
+            dist = (float) (position.z - parameters.getBottomCorner().z);
         }
 
         vox.setDist(dist);

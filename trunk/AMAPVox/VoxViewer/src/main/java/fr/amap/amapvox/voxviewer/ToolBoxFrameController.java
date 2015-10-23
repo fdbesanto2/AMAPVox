@@ -434,7 +434,7 @@ public class ToolBoxFrameController implements Initializable {
         
     }
     
-    public void initContent(VoxelSpaceSceneObject voxelSpace){
+    public void initContent(final VoxelSpaceSceneObject voxelSpace){
         
         this.voxelSpace = voxelSpace;
         

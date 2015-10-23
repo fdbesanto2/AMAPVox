@@ -184,7 +184,7 @@ public class BasicEvent extends EventManager{
             SceneObject firstSceneObject = joglContext.getScene().getFirstSceneObject();
             if(firstSceneObject != null){
                 
-                if(currentColorIndex == 1){
+                if(currentColorIndex == 3){
                     currentColorIndex = 0;
                 }else{
                     currentColorIndex++;

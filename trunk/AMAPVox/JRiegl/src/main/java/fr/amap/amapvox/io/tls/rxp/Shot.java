@@ -21,7 +21,7 @@ public class Shot {
 
     public Point3d origin;
     public Vector3d direction;
-    public double ranges[];
+    public double ranges[] = null;
     public int intensities[];
     public int classifications[];
     

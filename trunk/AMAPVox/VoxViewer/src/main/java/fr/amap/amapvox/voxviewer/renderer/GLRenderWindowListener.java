@@ -45,7 +45,7 @@ public class GLRenderWindowListener extends WindowAdapter{
         final int height = window.getHeight();
         
         if(toolboxStage != null){
-            
+        
             Platform.runLater(new Runnable() {
 
                 @Override
@@ -76,17 +76,17 @@ public class GLRenderWindowListener extends WindowAdapter{
         
         if(toolboxStage != null){
             Platform.runLater(new Runnable() {
-
+        
                 @Override
                 public void run() {
                     //stage.toFront();
                     toolboxStage.setX((int)locationOnScreen.getX());
                     //toolboxStage.setX((int)locationOnScreen.getX()-toolboxStage.getWidth());
                     toolboxStage.setY((int)locationOnScreen.getY());
-                }
+    }
             });
         }
-        
+    
     }
     
     @Override
@@ -100,7 +100,7 @@ public class GLRenderWindowListener extends WindowAdapter{
                 @Override
                 public void run() {
                     toolboxStage.close();
-                }
+    }  
             });
         }
     }  

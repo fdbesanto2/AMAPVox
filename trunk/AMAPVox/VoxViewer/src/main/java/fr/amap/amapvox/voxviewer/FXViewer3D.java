@@ -208,7 +208,7 @@ public class FXViewer3D extends Application {
                         @Override
                         protected Object call() throws Exception {
 
-                            Viewer3D viewer3D = new Viewer3D(((int) windowWidth / 4), (int) windowHeight / 4, windowWidth, windowHeight, voxelFile.toString());
+                            final Viewer3D viewer3D = new Viewer3D(((int) windowWidth / 4), (int) windowHeight / 4, windowWidth, windowHeight, voxelFile.toString());
                             viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
 
                             fr.amap.amapvox.voxviewer.object.scene.Scene scene = viewer3D.getScene();
@@ -267,7 +267,7 @@ public class FXViewer3D extends Application {
                              */
                             File voxelFile = new File("/home/calcul/Documents/Julien/test_lad/als_spherical_new.vox");
                             updateMessage("Loading voxel space: " + voxelFile.getAbsolutePath());
-                            VoxelSpaceSceneObject voxelSpace = SceneObjectFactory.createVoxelSpace(voxelFile);
+                            final VoxelSpaceSceneObject voxelSpace = SceneObjectFactory.createVoxelSpace(voxelFile);
                             voxelSpace.changeCurrentAttribut(attributeToView);
                             voxelSpace.setShader(scene.instanceLightedShader);
                             scene.addSceneObject(voxelSpace);

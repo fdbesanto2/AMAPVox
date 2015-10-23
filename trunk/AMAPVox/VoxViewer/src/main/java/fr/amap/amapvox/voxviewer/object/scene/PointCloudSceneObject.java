@@ -9,7 +9,10 @@ import com.jogamp.common.nio.Buffers;
 import fr.amap.amapvox.math.point.Point3F;
 import fr.amap.amapvox.voxviewer.mesh.GLMeshFactory;
 import fr.amap.amapvox.voxviewer.mesh.PointCloudGLMesh;
+import gnu.trove.list.TFloatList;
 import gnu.trove.list.array.TFloatArrayList;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -19,6 +22,10 @@ public class PointCloudSceneObject extends SimpleSceneObject{
 
     private TFloatArrayList vertexDataList;
     private TFloatArrayList[] colorDataList;
+    
+    private float[][] colorDataArray;
+    
+    private int colorAttributsNumber;
             
     public PointCloudSceneObject(PointCloudGLMesh mesh, boolean isAlphaRequired){
         super(mesh, isAlphaRequired, new Point3F());
@@ -26,12 +33,15 @@ public class PointCloudSceneObject extends SimpleSceneObject{
     
     public PointCloudSceneObject(int colorAttributsNumber){
         
-        vertexDataList = new TFloatArrayList(40000000);
+        vertexDataList = new TFloatArrayList();
         colorDataList = new TFloatArrayList[colorAttributsNumber];
+        this.colorAttributsNumber = colorAttributsNumber;
         
         for(int i=0 ; i < colorDataList.length;i++){
-            colorDataList[i] = new TFloatArrayList(40000000);
+            
+            colorDataList[i] = new TFloatArrayList();
         }
+        
         
     }
     
@@ -58,12 +68,10 @@ public class PointCloudSceneObject extends SimpleSceneObject{
             
             mesh = new PointCloudGLMesh();
             initMesh();
-            
-            mesh.setVertexData(vertexDataList.toArray());
         }
         
-        if(colorAttributIndex < colorDataList.length){
-            mesh.setColorData(colorDataList[colorAttributIndex].toArray());
+        if(colorAttributIndex < colorDataArray.length){
+            mesh.setColorData(colorDataArray[colorAttributIndex]);
         }
         
         colorNeedUpdate = true;
@@ -72,7 +80,17 @@ public class PointCloudSceneObject extends SimpleSceneObject{
     public void initMesh(){
         
         if(colorDataList.length > 0){
-            mesh = GLMeshFactory.createPointCloud(vertexDataList.toArray(), colorDataList[0].toArray());
+            
+            colorDataArray = new float[colorAttributsNumber][colorDataList[0].size()];
+            
+            for(int i=0;i<colorDataArray.length;i++){
+                colorDataArray[i] = colorDataList[i].toArray();
+                colorDataList[i] = new TFloatArrayList();
+            }
+            
+            colorDataList = null;
+            
+            mesh = GLMeshFactory.createPointCloud(vertexDataList.toArray(), colorDataArray[0]);
         }
     }
     
