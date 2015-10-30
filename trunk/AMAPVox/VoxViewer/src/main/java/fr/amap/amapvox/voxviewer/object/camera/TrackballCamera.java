@@ -443,6 +443,139 @@ public class TrackballCamera extends Camera{
         updateProjMatrix();
     }
     
+    private float getTargetDistance(){
+        
+        Vec3F center = new Vec3F(getPivot().getPosition().x, 
+                                getPivot().getPosition().y,
+                                getPivot().getPosition().z);
+        
+        return Vec3F.length(Vec3F.substract(location, center));
+    }
+    
+    public void setViewToBack(){
+        
+        project(
+                        new Vec3F(getPivot().getPosition().x,
+                                 getPivot().getPosition().y + getTargetDistance(),
+                                 getPivot().getPosition().z),
+                        new Vec3F(getPivot().getPosition().x,
+                                 getPivot().getPosition().y,
+                                 getPivot().getPosition().z));
+        
+        updateViewMatrix();
+    }
+    
+    public void setViewToFront(){
+        
+        project(
+                        new Vec3F(getPivot().getPosition().x, 
+                                getPivot().getPosition().y-getTargetDistance(),
+                                getPivot().getPosition().z), 
+                
+                        new Vec3F(getPivot().getPosition().x, 
+                                getPivot().getPosition().y,
+                                getPivot().getPosition().z));
+        
+        updateViewMatrix();
+    }
+    
+    public void setViewToLeft(){
+        
+        setLocation(new Vec3F(
+                getPivot().getPosition().x-getTargetDistance(), 
+                getPivot().getPosition().y, 
+                getPivot().getPosition().z));
+        
+        setTarget(new Vec3F(getPivot().getPosition().x, 
+                                            getLocation().y,
+                                            getLocation().z));
+        
+        updateViewMatrix();
+    }
+    
+        public void setViewToRight(){
+        
+        setLocation(new Vec3F(
+                getPivot().getPosition().x+getTargetDistance(),
+                getPivot().getPosition().y,
+                getPivot().getPosition().z));
+        
+        setTarget(new Vec3F(getPivot().getPosition().x, 
+                                                      getLocation().y,
+                                                      getLocation().z));
+        
+        updateViewMatrix();
+    }
+    
+    public void setViewToBottom(){
+        
+        project(new Vec3F(getPivot().getPosition().x, 
+                                    getPivot().getPosition().y,
+                                    getPivot().getPosition().z-getTargetDistance()), 
+                      new Vec3F(getPivot().getPosition().x, 
+                                    getPivot().getPosition().y,
+                                    getPivot().getPosition().z));
+        
+        updateViewMatrix();
+    }
+    
+    public void setViewToTop(){
+        
+        project(new Vec3F(getPivot().getPosition().x, 
+                                                      getPivot().getPosition().y,
+                                                      getPivot().getPosition().z+getTargetDistance()), 
+                                        new Vec3F(getPivot().getPosition().x, 
+                                                      getPivot().getPosition().y,
+                                                      getPivot().getPosition().z));
+        
+        updateViewMatrix();
+    }
+    
+    public void setViewToOrthographic(){
+        
+        /*float objectDepth = Vec3F.dot(
+                Vec3F.substract(
+                        new Vec3F(voxelSpace.getCenterX(), voxelSpace.getCenterY(), voxelSpace.getCenterZ()),
+                        camera.getLocation()),
+                camera.getForwardVector());
+
+        float cameraWidth = (2.0f / camera.getProjectionMatrix().mat[0]) * objectDepth;
+        float cameraHeight = (2.0f / camera.getProjectionMatrix().mat[5]) * objectDepth;
+            
+        float ymax = (float) Math.tan(camera.getFovy() * Math.PI / 360.0f);
+        float xmax = ymax * camera.getAspect();
+        cameraWidth = objectDepth * xmax;
+        cameraHeight = objectDepth * ymax;
+        
+        camera.setWidth(width);
+        camera.setHeight(height);*/
+        setOrthographic(getLeft(), getRight(), getTop(), getBottom(), getNearOrtho(), getFarOrtho());
+    }
+    
+    public void setViewToOrthographic(float left, float right, float top, float bottom, float near, float far){
+        
+        setOrthographic(left, right, top, bottom, near, far);
+    }
+    
+    public void setViewToPerspective(){
+        
+        setPerspective(getFovy(), getAspect(), getNearPersp(), getFarPersp());
+    }
+    
+    public void setViewToPerspective(float fov, float near, float far){
+        
+        setPerspective(fov, getAspect(), near, far);
+    }
+    
+    public void switchPerspective(){
+        
+        if(isPerspective()){
+            setViewToOrthographic();
+        }else{
+            setViewToPerspective();
+        }
+    }
+    
     public Vec3F getForwardVector(){
         return Vec3F.substract(target, location);
     }

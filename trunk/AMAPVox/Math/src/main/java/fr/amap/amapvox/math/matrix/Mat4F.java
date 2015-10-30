@@ -6,24 +6,33 @@
 package fr.amap.amapvox.math.matrix;
 
 import fr.amap.amapvox.math.vector.Vec3F;
-import fr.amap.amapvox.math.vector.Vec4;
+import fr.amap.amapvox.math.vector.Vec4F;
 
 
 /**
- *
+ * A single precision 4x4 matrix
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Mat4F {
     
+    /**
+     * The matrix array
+     */
     public float[] mat;
     
+    /**
+     * Constructs and initialize a new single precision 4x4 matrix filled with zero
+     */
     public Mat4F(){
         
-        //mat=Mat4.create();
         mat = new float[16];
         
     }
     
+    /**
+     * Constructs and initialize a new 4x4 single precision matrix with an existing matrix
+     * @param source the matrix to copy
+     */
     public Mat4F(Mat4F source){
         
         mat = new float[16];
@@ -46,6 +55,10 @@ public class Mat4F {
         mat[15] = source.mat[15];
     }
     
+    /**
+     *
+     * @return double array of 16
+     */
     public static float[] create(){
         
         float[] dest = new float[16];
@@ -53,6 +66,10 @@ public class Mat4F {
         return dest;
     }
     
+    /**
+     *
+     * @return 4x4 identity matrix
+     */
     public static Mat4F identity(){
         
         
@@ -68,6 +85,11 @@ public class Mat4F {
         return dest;
     }
     
+    /**
+     * Get inverse of the given matrix
+     * @param mat4F 4x4 matrix to inverse
+     * @return inverse of the matrix
+     */
     public static Mat4F inverse(Mat4F mat4F){
         
         Mat4F dest = new Mat4F();
@@ -103,10 +125,18 @@ public class Mat4F {
         return dest;
     }
     
-    public static Mat4F multiply(Mat4F mat4F, float[] mat2){
+    /**
+     * Multiply a 4x4 single precision matrix by another in this order
+     * @param mat4F The first 4x4 matrix
+     * @param mat4F2 The second 4x4 matrix
+     * @return The new matrix, result of the multiplication
+     */
+    public static Mat4F multiply(Mat4F mat4F, Mat4F mat4F2){
         
         Mat4F dest = new Mat4F();
         float[] mat = mat4F.mat;
+        
+        float[] mat2 = mat4F2.mat;
         
         float a00 = mat[0], a01 = mat[1], a02 = mat[2], a03 = mat[3];
         float a10 = mat[4], a11 = mat[5], a12 = mat[6], a13 = mat[7];
@@ -128,9 +158,15 @@ public class Mat4F {
         return dest;
     }
     
-    public static Vec4 multiply(Mat4F mat4F, Vec4 vec4){
+    /**
+     * Multiply a 4x4 single precision matrix by a 4d vector in this order
+     * @param mat4F The 4x4 matrix
+     * @param vec4 The 4d vector
+     * @return A new 4d vector, result of the multiplication
+     */
+    public static Vec4F multiply(Mat4F mat4F, Vec4F vec4){
         
-        Vec4 dest = new Vec4();
+        Vec4F dest = new Vec4F();
         float[] mat = mat4F.mat;
         
         dest.x = mat[0] * vec4.x + mat[1] * vec4.y + mat[2] * vec4.z + mat[3] * vec4.w;
@@ -141,6 +177,12 @@ public class Mat4F {
         return dest;
     }
     
+    /**
+     * Perform a translation of a 4x4 single precision transformation matrix by a 3d translation vector
+     * @param mat4F The 4x4 matrix
+     * @param vec The 3d vector
+     * @return The given matrix, translated by the vector
+     */
     public static Mat4F translate(Mat4F mat4F, Vec3F vec){
         
         Mat4F dest = new Mat4F();
@@ -163,6 +205,12 @@ public class Mat4F {
         return dest;
     }
     
+    /**
+     * Perform a scale of a 4x4 single precision transformation matrix by a 3d scaling vector
+     * @param mat4F The 4x4 matrix
+     * @param vec The 3d vector
+     * @return The given matrix, scaled by the vector
+     */
     public static Mat4F scale(Mat4F mat4F, Vec3F vec){
         
         Mat4F dest = new Mat4F();
@@ -187,7 +235,14 @@ public class Mat4F {
     
     
     */
-    
+
+    /**
+     * Perform a rotation of a 4x4 single precision transformation matrix by the given axis and angle
+     * @param matrix The 4x4 matrix
+     * @param angle The angle, in radians
+     * @param axis The 3d vector acting representing the axis
+     * @return The given matrix, with the rotation applied
+     */
     public static Mat4F setRotation(Mat4F matrix, Vec3F axis, float angle){
         
         Mat4F result = new Mat4F(matrix);
@@ -213,11 +268,19 @@ public class Mat4F {
         
     }
     
-    public static float[] rotate(float[] mat, float angle, float[] axis){
+    /**
+     * Perform a rotation of a 4x4 single precision transformation matrix by the given axis and angle
+     * @param mat4F The 4x4 matrix
+     * @param angle The angle, in radians
+     * @param axis The 3d vector acting representing the axis
+     * @return The given matrix, with the rotation applied
+     */
+    public static Mat4F rotate(Mat4F mat4F, float angle, Vec4F axis){
         
         float[] dest = Mat4F.create();
+        float[] mat = mat4F.mat;
         
-        float x = axis[0], y = axis[1], z = axis[2];
+        float x = axis.x, y = axis.y, z = axis.z;
         float len = (float)Math.sqrt(x*x + y*y + z*z);
         if (Float.isNaN(len)) { return null; }
         if (len != 1) {
@@ -264,9 +327,22 @@ public class Mat4F {
         dest[14] = mat[14];
         dest[15] = mat[15];
         
-        return dest;
+        Mat4F result = new Mat4F();
+        result.mat = dest;
+        
+        return result;
     }
     
+    /**
+     * Constructs a square frustum by the given parameters, represents this frustum like a 4x4 matrix
+     * @param left The left limit
+     * @param right The right limit
+     * @param bottom The bottom limit
+     * @param top The top limit
+     * @param near The near limit
+     * @param far The far limit
+     * @return The frustum 4x4 matrix
+     */
     public static Mat4F frustum(float left, float right,float bottom, float top, float near, float far){
         
         Mat4F dest = new Mat4F();
@@ -284,6 +360,15 @@ public class Mat4F {
         
         return dest;
     }
+
+    /**
+     * Constructs and initialize a 4x4 single precision perspective matrix
+     * @param fovy The field of view
+     * @param aspect The aspect ratio
+     * @param near The near limit of the frustum
+     * @param far The far limit of the frustum
+     * @return A perspective single precision 4x4 matrix
+     */
     public static Mat4F perspective(float fovy, float aspect, float near, float far){
         
         float top = (float)(near*Math.tan(fovy*Math.PI / 360.0));
@@ -291,6 +376,17 @@ public class Mat4F {
         return Mat4F.frustum(-right, right, -top, top, near, far);
     }
     
+    /**
+     * <p>Constructs and initialize a 4x4 single precision orthographic projection matrix.</p>
+     * An orthographic matrix is represented by a rectangular volume.
+     * @param left The left limit
+     * @param right The right limit
+     * @param bottom The bottom limit
+     * @param top The top limit
+     * @param near The near limit
+     * @param far The far limit
+     * @return An orthographic projection 4x4 matrix
+     */
     public static Mat4F ortho(float left, float right, float bottom, float top, float near, float far){
         
         Mat4F dest = new Mat4F();
@@ -312,10 +408,10 @@ public class Mat4F {
     /**
      * Compute a view matrix from the world position of the camera (eye), 
      * a global up vector and a target point (the point we want to look at)
-     * @param eye
-     * @param center
-     * @param up
-     * @return
+     * @param eye The eye position as a 3d vector
+     * @param center The target position as a 3d vector
+     * @param up The up direction as a 3d vector
+     * @return a 4x4 single precision lookat matrix
      */
     public static Mat4F lookAt(Vec3F eye, Vec3F center, Vec3F up){
         
@@ -346,6 +442,12 @@ public class Mat4F {
         
         return result;
     }
+
+    /**
+     * Transpose a given 4x4 single precision matrix and return the result
+     * @param mat4F The 4x4 matrix to transpose
+     * @return The transposed matrix
+     */
     public static Mat4F transpose(Mat4F mat4F){
         
         float[] source = mat4F.mat;
@@ -359,35 +461,5 @@ public class Mat4F {
         };
         
         return dest;
-    }
-    
-    /**
-     *
-     * @param mat4F the matrix who got transformed by a lookat
-     * @return
-     */
-    public static Vec3F getEyeFromMatrix(Mat4F mat4F){
-      
-        Mat4F modelViewT = transpose(mat4F);
-
-        // Get plane normals 
-        Vec3F n1 = new Vec3F(modelViewT.mat[0],modelViewT.mat[1],modelViewT.mat[2]);
-        Vec3F n2 = new Vec3F(modelViewT.mat[4],modelViewT.mat[5],modelViewT.mat[6]);
-        Vec3F n3 = new Vec3F(modelViewT.mat[8],modelViewT.mat[9],modelViewT.mat[10]);
-
-        // Get plane distances
-        float d1 = modelViewT.mat[3];
-        float d2 = modelViewT.mat[7];
-        float d3 = modelViewT.mat[11];
-
-        Vec3F n2n3 = Vec3F.cross(n2, n3);
-        Vec3F n3n1 = Vec3F.cross(n3, n1);
-        Vec3F n1n2 = Vec3F.cross(n1, n2);
-
-        Vec3F top = Vec3F.add(Vec3F.add(Vec3F.multiply(n2n3, d1), Vec3F.multiply(n3n1, d2)), Vec3F.multiply(n1n2, d3));
-        float denom = Vec3F.dot(n1, n2n3);
-
-        return Vec3F.multiply(top, 1/(-denom));
-        //return top / -denom;
     }
 }

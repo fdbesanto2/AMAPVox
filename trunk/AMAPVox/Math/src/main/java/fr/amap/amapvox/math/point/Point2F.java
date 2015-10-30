@@ -6,7 +6,7 @@
 package fr.amap.amapvox.math.point;
 
 /**
- *
+ * A single precision 2d point
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Point2F {
@@ -23,6 +23,11 @@ public class Point2F {
         this.y = y;
     }
     
+    /**
+     * Get the distance between two points
+     * @param point the point to compare the distance from
+     * @return the distance between the two points
+     */
     public float distanceTo(Point2F point){
         
         return (float) Math.sqrt(Math.pow(point.x-x, 2)+Math.pow(point.y-y, 2));

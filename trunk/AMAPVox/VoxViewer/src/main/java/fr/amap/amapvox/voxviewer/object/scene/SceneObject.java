@@ -9,11 +9,12 @@ import com.jogamp.opengl.GL3;
 import fr.amap.amapvox.math.matrix.Mat4F;
 import fr.amap.amapvox.math.point.Point3F;
 import fr.amap.amapvox.math.vector.Vec3F;
-import fr.amap.amapvox.math.vector.Vec4;
+import fr.amap.amapvox.math.vector.Vec4F;
 import fr.amap.amapvox.voxviewer.loading.shader.Shader;
 import fr.amap.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh.DrawType;
+import java.io.File;
 import java.nio.FloatBuffer;
 
 /**
@@ -124,7 +125,7 @@ public abstract class SceneObject{
             float z = mesh.vertexBuffer.get(j+2);
             
                 
-            Vec4 result = Mat4F.multiply(rotation, new Vec4(x, y, z, 1));
+            Vec4F result = Mat4F.multiply(rotation, new Vec4F(x, y, z, 1));
             mesh.vertexBuffer.put(j, result.x);
             mesh.vertexBuffer.put(j+1, result.y);
             mesh.vertexBuffer.put(j+2, result.z);
@@ -140,5 +141,5 @@ public abstract class SceneObject{
     
     public abstract void draw(GL3 gl);
 
-    
+    public abstract void load(File file);
 }

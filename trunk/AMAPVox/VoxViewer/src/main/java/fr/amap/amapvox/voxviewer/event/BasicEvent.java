@@ -184,7 +184,7 @@ public class BasicEvent extends EventManager{
             SceneObject firstSceneObject = joglContext.getScene().getFirstSceneObject();
             if(firstSceneObject != null){
                 
-                if(currentColorIndex == 3){
+                if(currentColorIndex == 4){
                     currentColorIndex = 0;
                 }else{
                     currentColorIndex++;
@@ -211,32 +211,45 @@ public class BasicEvent extends EventManager{
         if(number1KeyPressed){
             
             if(ctrlPressed){
-                joglContext.setViewToBack();
+                joglContext.getScene().getCamera().setViewToBack();
             }else{
-                joglContext.setViewToFront();
+                joglContext.getScene().getCamera().setViewToFront();
             }
+            
+            resetMouseLocation();
+            joglContext.refresh();
         }
         
         if(number3KeyPressed){
             
             if(ctrlPressed){
-                joglContext.setViewToLeft();
+                joglContext.getScene().getCamera().setViewToLeft();
             }else{
-                joglContext.setViewToRight();
+                joglContext.getScene().getCamera().setViewToRight();
             }
+            
+            resetMouseLocation();
+            joglContext.refresh();
         }
         
         if(number7KeyPressed){
             
             if(ctrlPressed){
-                joglContext.setViewToBottom();
+                joglContext.getScene().getCamera().setViewToBottom();
+                
             }else{
-                joglContext.setViewToTop();
+                joglContext.getScene().getCamera().setViewToTop();
             }
+            
+            resetMouseLocation();
+            joglContext.refresh();
         }
         
         if(number5KeyPressed){
-            joglContext.switchPerspective();
+            joglContext.getScene().getCamera().switchPerspective();
+            joglContext.updateCamera();
+            resetMouseLocation();
+            joglContext.refresh();
         }
         
         mouseWheelRotateUp = false;
@@ -247,5 +260,11 @@ public class BasicEvent extends EventManager{
         isMouseLocationUpdated = false;
         spaceKeyPressed = false;
         
+    }
+    
+    private void resetMouseLocation(){
+        
+        mouseXOldLocation = mouseXCurrentLocation;
+        mouseYOldLocation = mouseYCurrentLocation;
     }
 }

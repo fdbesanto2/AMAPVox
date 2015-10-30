@@ -26,6 +26,12 @@ public class Point3F  implements Comparable<Point3F>{
         this.z = z;
     }
     
+    /**
+     *
+     * @param point1
+     * @param point2
+     * @return
+     */
     public static Point3F middle(Point3F point1, Point3F point2){
         
         Point3F middle = new Point3F((point1.x+point2.x)/2.0f,
@@ -35,26 +41,36 @@ public class Point3F  implements Comparable<Point3F>{
         return middle;
     }
     
+    /**
+     *
+     * @param point
+     * @return
+     */
     public float distanceTo(Point3F point){
         
         return (float) Math.sqrt(Math.pow(point.x-x, 2)+Math.pow(point.y-y, 2)+Math.pow(point.z-z, 2));
     }
     
+    /**
+     * Order points in the following order: x, y, z
+     * @param point {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     @Override
-    public int compareTo(Point3F o) {
-        if(o.x > this.x){
+    public int compareTo(Point3F point) {
+        if(point.x > this.x){
             return -1;
-        }else if(o.x < this.x){
+        }else if(point.x < this.x){
             return 1;
         }else{
-            if(o.y > this.y){
+            if(point.y > this.y){
                 return -1;
-            }else if(o.y < this.y){
+            }else if(point.y < this.y){
                 return 1;
             }else{
-                if(o.z > this.z){
+                if(point.z > this.z){
                     return -1;
-                }else if(o.z < this.z){
+                }else if(point.z < this.z){
                     return 1;
                 }else{
                     return 0;

@@ -26,21 +26,26 @@ public class Point3I implements Comparable<Point3I>{
         this.z = z;
     }
     
+    /**
+     * Order points in the following order: x, y, z
+     * @param point {@inheritDoc}
+     * @return {@inheritDoc}
+     */
     @Override
-    public int compareTo(Point3I o) {
-        if(o.x > this.x){
+    public int compareTo(Point3I point) {
+        if(point.x > this.x){
             return -1;
-        }else if(o.x < this.x){
+        }else if(point.x < this.x){
             return 1;
         }else{
-            if(o.y > this.y){
+            if(point.y > this.y){
                 return -1;
-            }else if(o.y < this.y){
+            }else if(point.y < this.y){
                 return 1;
             }else{
-                if(o.z > this.z){
+                if(point.z > this.z){
                     return -1;
-                }else if(o.z < this.z){
+                }else if(point.z < this.z){
                     return 1;
                 }else{
                     return 0;

@@ -6,7 +6,7 @@
 package fr.amap.amapvox.math.point;
 
 /**
- *
+ * A double precision 2d point
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Point2D {

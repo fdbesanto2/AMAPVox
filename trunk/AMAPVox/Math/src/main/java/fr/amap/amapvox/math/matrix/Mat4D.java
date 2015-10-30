@@ -10,18 +10,18 @@ import fr.amap.amapvox.math.vector.Vec4D;
 import static java.lang.Double.NaN;
 
 /**
- *
+ * A double precision 4x4 matrix
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Mat4D {
     
     /**
-     *
+     * The matrix array
      */
     public double[] mat;
     
     /**
-     *
+     * Constructs and initialize a new double precision 4x4 matrix filled with zero
      */
     public Mat4D(){
         
@@ -30,8 +30,8 @@ public class Mat4D {
     }
     
     /**
-     *
-     * @return
+     * Convert the 4x4 matrix to an undefine sized matrix
+     * @return a new Mat object with 4x4 size
      */
     public Mat toMat(){
         Mat result = new Mat(4,4);
@@ -42,7 +42,7 @@ public class Mat4D {
     }
     
     /**
-     *
+     * Constructs and initialize a new 4x4 double precision matrix with an existing matrix
      * @param source the matrix to copy
      */
     public Mat4D(Mat4D source){
@@ -80,7 +80,7 @@ public class Mat4D {
     
     /**
      *
-     * @return identity matrix 4x4
+     * @return 4x4 identity matrix
      */
     public static Mat4D identity(){
         
@@ -98,9 +98,9 @@ public class Mat4D {
     }
     
     /**
-     *
-     * @param mat4D
-     * @return
+     * Get inverse of the given matrix
+     * @param mat4D 4x4 matrix to inverse
+     * @return inverse of the matrix
      */
     public static Mat4D inverse(Mat4D mat4D){
         
@@ -138,10 +138,10 @@ public class Mat4D {
     }
     
     /**
-     *
-     * @param mat4D1
-     * @param mat4D2
-     * @return
+     * Multiply a 4x4 double precision matrix by another in this order
+     * @param mat4D1 The first 4x4 matrix
+     * @param mat4D2 The second 4x4 matrix
+     * @return The new matrix, result of the multiplication
      */
     public static Mat4D multiply(Mat4D mat4D1, Mat4D mat4D2){
         
@@ -170,10 +170,10 @@ public class Mat4D {
     }
     
     /**
-     *
-     * @param mat4D
-     * @param vec4D
-     * @return
+     * Multiply a 4x4 double precision matrix by a 4d vector in this order
+     * @param mat4D The 4x4 matrix
+     * @param vec4D The 4d vector
+     * @return A new 4d vector, result of the multiplication
      */
     public static Vec4D multiply(Mat4D mat4D, Vec4D vec4D){
         
@@ -199,17 +199,17 @@ public class Mat4D {
     }
     
     /**
-     *
-     * @param mat4D
-     * @param vec
-     * @return
+     * Perform a translation of a 4x4 double precision transformation matrix by a 3d translation vector
+     * @param mat4D The 4x4 matrix
+     * @param vec3D The 3d vector
+     * @return The given matrix, translated by the vector
      */
-    public static Mat4D translate(Mat4D mat4D, Vec3D vec){
+    public static Mat4D translate(Mat4D mat4D, Vec3D vec3D){
         
         Mat4D dest = new Mat4D();
         double[] mat = mat4D.mat;
         
-        double x = vec.x, y = vec.y, z = vec.z;
+        double x = vec3D.x, y = vec3D.y, z = vec3D.z;
         
         double a00 = mat[0], a01 = mat[1], a02 = mat[2], a03 = mat[3];
         double a10 = mat[4], a11 = mat[5], a12 = mat[6], a13 = mat[7];
@@ -227,17 +227,17 @@ public class Mat4D {
     }
     
     /**
-     *
-     * @param mat4D
-     * @param vec
-     * @return
+     * Perform a scale of a 4x4 double precision transformation matrix by a 3d scaling vector
+     * @param mat4D The 4x4 matrix
+     * @param vec3D The 3d vector
+     * @return The given matrix, scaled by the vector
      */
-    public static Mat4D scale(Mat4D mat4D, Vec3D vec){
+    public static Mat4D scale(Mat4D mat4D, Vec3D vec3D){
         
         Mat4D dest = new Mat4D();
         double[] mat = mat4D.mat;
         
-        double x = vec.x, y = vec.y, z = vec.z;
+        double x = vec3D.x, y = vec3D.y, z = vec3D.z;
         
         dest.mat = new double[]{
             mat[0]*x, mat[1]*x, mat[2]*x, mat[3]*x,
@@ -248,31 +248,21 @@ public class Mat4D {
         
         return dest;
     }
-    
-    /*
-    parameters:
-    mat: mat to rotate
-    angle: in radians
-    axis: vec3 representing the axis to rotate around
-    
-    
-    */
 
     /**
-     *
-     * @param mat4D
-     * @param angle
-     * @param axis
-     * @return
+     * Perform a rotation of a 4x4 double precision transformation matrix by the given axis and angle
+     * @param mat4D The 4x4 matrix
+     * @param angle The angle, in radians
+     * @param axis The 3d vector acting representing the axis
+     * @return The given matrix, with the rotation applied
      */
-    
-    public static double[] rotate(Mat4D mat4D, double angle, double[] axis){
+    public static Mat4D rotate(Mat4D mat4D, double angle, Vec3D axis){
         
         double[] dest = Mat4D.create();
         double[] mat = mat4D.mat;
 
         
-        double x = axis[0], y = axis[1], z = axis[2];
+        double x = axis.x, y = axis.y, z = axis.z;
         double len = (double)Math.sqrt(x*x + y*y + z*z);
         if (len == NaN) { return null; }
         if (len != 1) {
@@ -319,18 +309,21 @@ public class Mat4D {
         dest[14] = mat[14];
         dest[15] = mat[15];
         
-        return dest;
+        Mat4D result = new Mat4D();
+        result.mat = dest;
+        
+        return result;
     }
     
     /**
-     *
-     * @param left
-     * @param right
-     * @param bottom
-     * @param top
-     * @param near
-     * @param far
-     * @return
+     * Constructs a square frustum by the given parameters, represents this frustum like a 4x4 matrix
+     * @param left The left limit
+     * @param right The right limit
+     * @param bottom The bottom limit
+     * @param top The top limit
+     * @param near The near limit
+     * @param far The far limit
+     * @return The frustum 4x4 matrix
      */
     public static Mat4D frustum(double left, double right,double bottom, double top, double near, double far){
         
@@ -351,12 +344,12 @@ public class Mat4D {
     }
 
     /**
-     *
-     * @param fovy
-     * @param aspect
-     * @param near
-     * @param far
-     * @return
+     * Constructs and initialize a 4x4 double precision perspective matrix
+     * @param fovy The field of view
+     * @param aspect The aspect ratio
+     * @param near The near limit of the frustum
+     * @param far The far limit of the frustum
+     * @return A perspective double precision 4x4 matrix
      */
     public static Mat4D perspective(double fovy, double aspect, double near, double far){
         
@@ -366,14 +359,15 @@ public class Mat4D {
     }
     
     /**
-     *
-     * @param left
-     * @param right
-     * @param bottom
-     * @param top
-     * @param near
-     * @param far
-     * @return
+     * <p>Constructs and initialize a 4x4 double precision orthographic projection matrix.</p>
+     * An orthographic matrix is represented by a rectangular volume.
+     * @param left The left limit
+     * @param right The right limit
+     * @param bottom The bottom limit
+     * @param top The top limit
+     * @param near The near limit
+     * @param far The far limit
+     * @return An orthographic projection 4x4 matrix
      */
     public static Mat4D ortho(double left, double right, double bottom, double top, double near, double far){
         
@@ -396,10 +390,10 @@ public class Mat4D {
     /**
      * Compute a view matrix from the world position of the camera (eye), 
      * a global up vector and a target point (the point we want to look at)
-     * @param eye
-     * @param center
-     * @param up
-     * @return
+     * @param eye The eye position as a 3d vector
+     * @param center The target position as a 3d vector
+     * @param up The up direction as a 3d vector
+     * @return a 4x4 double precision lookat matrix
      */
     public static Mat4D lookAt(Vec3D eye, Vec3D center, Vec3D up){
         
@@ -476,13 +470,14 @@ public class Mat4D {
     }
 
     /**
-     *
-     * @param mat
-     * @return
+     * Transpose a given 4x4 double precision matrix and return the result
+     * @param mat4D The 4x4 matrix to transpose
+     * @return The transposed matrix
      */
-    public static Mat4D transpose(double[] mat){
+    public static Mat4D transpose(Mat4D mat4D){
         
         Mat4D dest = new Mat4D();
+        double[] mat = mat4D.mat;
         
         dest.mat = new double[]{
             mat[0], mat[4], mat[8], mat[12],
@@ -492,36 +487,6 @@ public class Mat4D {
         };
         
         return dest;
-    }
-    
-    /**
-     *
-     * @param mat4D the matrix who got transformed by a lookat
-     * @return
-     */
-    public static Vec3D getEyeFromMatrix(Mat4D mat4D){
-      
-        Mat4D modelViewT = transpose(mat4D.mat);
-
-        // Get plane normals 
-        Vec3D n1 = new Vec3D(modelViewT.mat[0],modelViewT.mat[1],modelViewT.mat[2]);
-        Vec3D n2 = new Vec3D(modelViewT.mat[4],modelViewT.mat[5],modelViewT.mat[6]);
-        Vec3D n3 = new Vec3D(modelViewT.mat[8],modelViewT.mat[9],modelViewT.mat[10]);
-
-        // Get plane distances
-        double d1 = modelViewT.mat[3];
-        double d2 = modelViewT.mat[7];
-        double d3 = modelViewT.mat[11];
-
-        Vec3D n2n3 = Vec3D.cross(n2, n3);
-        Vec3D n3n1 = Vec3D.cross(n3, n1);
-        Vec3D n1n2 = Vec3D.cross(n1, n2);
-
-        Vec3D top = Vec3D.add(Vec3D.add(Vec3D.multiply(n2n3, d1), Vec3D.multiply(n3n1, d2)), Vec3D.multiply(n1n2, d3));
-        double denom = Vec3D.dot(n1, n2n3);
-
-        return Vec3D.multiply(top, 1/(-denom));
-        //return top / -denom;
     }
     
     @Override

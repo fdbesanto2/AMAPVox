@@ -13,10 +13,7 @@ import fr.amap.amapvox.math.point.Point2D;
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Vec2D extends Point2D{
-    
-    public double x;
-    public double y;
-    
+        
     public Vec2D(){
         
         this.x = 0;

@@ -7,7 +7,7 @@ package fr.amap.amapvox.voxviewer.mesh;
 
 import com.jogamp.common.nio.Buffers;
 import fr.amap.amapvox.math.vector.Vec3F;
-import fr.amap.amapvox.math.vector.Vec3i;
+import fr.amap.amapvox.math.vector.Vec3I;
 import fr.amap.amapvox.commons.util.ColorGradient;
 import fr.amap.amapvox.jraster.asc.DTMPoint;
 import fr.amap.amapvox.jraster.asc.Face;
@@ -528,7 +528,7 @@ public class GLMeshFactory {
                     
                     String[] faceSplit = line.replaceAll("//", " ").split(" ");
                     
-                    Vec3i face = new Vec3i(Integer.valueOf(faceSplit[1]), Integer.valueOf(faceSplit[3]), Integer.valueOf(faceSplit[5]));
+                    Vec3I face = new Vec3I(Integer.valueOf(faceSplit[1]), Integer.valueOf(faceSplit[3]), Integer.valueOf(faceSplit[5]));
                     
                     normalesArray[face.x-1] = normales.get(Integer.valueOf(faceSplit[2])-1);
                     normalesArray[face.y-1] = normales.get(Integer.valueOf(faceSplit[4])-1);

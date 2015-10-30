@@ -17,12 +17,8 @@ public class AABB {
     
     private final Point3F[] points;
     private final int[][] faces;
-    
-    private final BoundingBox3F boundingBox3F;
 
     public AABB(BoundingBox3F boundingBox) {
-        
-        this.boundingBox3F = boundingBox;
         
         this.points = new Point3F[8];
         
@@ -45,6 +41,7 @@ public class AABB {
         faces[5] = new int[]{0, 2, 4, 6}; //bottom face
     }
     
+    //check if an element is inside the given range
     private boolean intoRange(float rangeElement1, float rangeElement2, float value){
         
         if(rangeElement1 > rangeElement2){
@@ -56,7 +53,7 @@ public class AABB {
     
     public List<Point3F> getIntersectionWithPlane(Plane plane){
         
-        //on teste l'intersection du plan avec chaque face de AABB
+        //test plane intersection with each face of AABB
         List<Point3F> intersections = new ArrayList<>();
         
         for(int[] face : faces){
@@ -111,7 +108,6 @@ public class AABB {
     
     public Point3F getNearestPoint(Point3F point){
         
-        Point3F nearestPoint = new Point3F();
         float minDistance = 999999999;
         
         int indice = -1;

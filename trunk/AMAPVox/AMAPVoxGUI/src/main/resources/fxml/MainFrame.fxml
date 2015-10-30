@@ -32,7 +32,7 @@
                <children>
                   <TabPane fx:id="tabPaneMain" prefHeight="400.0" prefWidth="798.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <tabs>
-                      <Tab text="Voxelisation">
+                      <Tab text="Voxelization">
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
@@ -848,66 +848,82 @@
                                           <content>
                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                    <children>
-                                                      <SplitPane dividerPositions="0.6618610747051114" layoutX="33.0" layoutY="50.0" prefHeight="414.0" prefWidth="765.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                      <SplitPane dividerPositions="0.5" layoutX="33.0" layoutY="50.0" prefHeight="414.0" prefWidth="765.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <items>
                                                             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                                <children>
-                                                                  <ComboBox fx:id="comboboxAttributeToView" layoutX="230.0" layoutY="90.0" prefWidth="150.0" />
-                                                                  <Label layoutX="109.0" layoutY="94.0" text="Attribute to view" />
-                                                                  <Button fx:id="buttonOpen3DView" disable="true" layoutX="207.0" layoutY="373.0" mnemonicParsing="false" onAction="#onActionButtonVizualize" text="Open display window" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                                                                  <CheckBox fx:id="checkboxRaster" layoutX="32.0" layoutY="144.0" mnemonicParsing="false" text="Raster" />
-                                                                  <AnchorPane fx:id="anchorPaneRasterParameters" disable="true" layoutX="109.0" layoutY="138.0" prefHeight="135.0" prefWidth="375.0">
+                                                                  <HBox alignment="CENTER" layoutX="32.0" layoutY="90.0" spacing="15.0">
                                                                      <children>
-                                                                        <TextField fx:id="textfieldRasterFilePath" layoutX="6.0" prefHeight="25.0" prefWidth="316.0" AnchorPane.leftAnchor="0.0" />
-                                                                        <HBox layoutY="39.0" />
-                                                                        <Button fx:id="buttonOpenRasterFile" layoutX="322.0" mnemonicParsing="false" onAction="#onActionButtonOpenRasterFile" text="Open" />
-                                                                        <CheckBox fx:id="checkboxUseTransformationMatrix" layoutX="63.0" layoutY="31.0" mnemonicParsing="false" onAction="#onActionCheckboxUseTransformationMatrix" prefHeight="30.0" prefWidth="184.0" AnchorPane.leftAnchor="0.0">
-                                                                           <graphic>
-                                                                              <HBox alignment="CENTER" spacing="10.0">
-                                                                                 <children>
-                                                                                    <Label text="Transformation" />
-                                                                                    <Button fx:id="buttonSetTransformationMatrix" mnemonicParsing="false" onAction="#onActionButtonSetTransformationMatrix">
-                                                                                       <graphic>
-                                                                                          <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                                                                             <image>
-                                                                                                <Image url="@icons/Interaction_Transformation.png" />
-                                                                                             </image>
-                                                                                          </ImageView>
-                                                                                       </graphic>
-                                                                                    </Button>
-                                                                                 </children>
-                                                                              </HBox>
-                                                                           </graphic>
-                                                                        </CheckBox>
-                                                                        <CheckBox fx:id="checkboxFitRasterToVoxelSpace" layoutX="11.0" layoutY="72.0" mnemonicParsing="false" selected="true" text="Fit to voxel space" AnchorPane.leftAnchor="0.0" />
-                                                                        <Label layoutX="166.0" layoutY="74.0" text="Margin (cell number)" />
-                                                                        <TextField fx:id="textfieldRasterFittingMargin" layoutX="309.0" layoutY="69.0" prefHeight="25.0" prefWidth="60.0" text="0" />
+                                                                        <CheckBox fx:id="checkboxRaster1" disable="true" mnemonicParsing="false" selected="true" text="Voxels" />
+                                                                        <Label text="Attribute to view" />
+                                                                        <ComboBox fx:id="comboboxAttributeToView" prefWidth="150.0" />
                                                                      </children>
-                                                                  </AnchorPane>
-                                                                  <CheckBox fx:id="checkboxRaster1" disable="true" layoutX="32.0" layoutY="94.0" mnemonicParsing="false" selected="true" text="Voxels" />
-                                                               </children>
-                                                            </AnchorPane>
-                                                            <TabPane prefHeight="412.0" prefWidth="395.0" tabClosingPolicy="UNAVAILABLE">
-                                                              <tabs>
-                                                                <Tab text="Filters">
-                                                                     <content>
-                                                                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                                  </HBox>
+                                                                  <HBox layoutX="32.0" layoutY="138.0" spacing="10.0">
+                                                                     <children>
+                                                                        <CheckBox fx:id="checkboxRaster" mnemonicParsing="false" text="Raster" />
+                                                                        <AnchorPane fx:id="anchorPaneRasterParameters" disable="true" prefHeight="135.0" prefWidth="375.0">
                                                                            <children>
-                                                                              <AnchorPane fx:id="anchorpanePreFiltering" disable="true" layoutX="27.0" layoutY="66.0" />
-                                                                           </children></AnchorPane>
-                                                                     </content>
-                                                                  </Tab>
-                                                                <Tab text="Attributs">
-                                                                     <content>
-                                                                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                                                           <children>
-                                                                              <Button fx:id="buttonCreateAttribut" layoutX="61.0" layoutY="120.0" mnemonicParsing="false" text="Create attribut" />
+                                                                              <TextField fx:id="textfieldRasterFilePath" layoutX="6.0" prefHeight="25.0" prefWidth="316.0" AnchorPane.leftAnchor="0.0" />
+                                                                              <HBox layoutY="39.0" />
+                                                                              <Button fx:id="buttonOpenRasterFile" layoutX="322.0" mnemonicParsing="false" onAction="#onActionButtonOpenRasterFile" text="Open" />
+                                                                              <CheckBox fx:id="checkboxUseTransformationMatrix" layoutX="63.0" layoutY="31.0" mnemonicParsing="false" onAction="#onActionCheckboxUseTransformationMatrix" prefHeight="30.0" prefWidth="184.0" AnchorPane.leftAnchor="0.0">
+                                                                                 <graphic>
+                                                                                    <HBox alignment="CENTER" spacing="10.0">
+                                                                                       <children>
+                                                                                          <Label text="Transformation" />
+                                                                                          <Button fx:id="buttonSetTransformationMatrix" mnemonicParsing="false" onAction="#onActionButtonSetTransformationMatrix">
+                                                                                             <graphic>
+                                                                                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                   <image>
+                                                                                                      <Image url="@icons/Interaction_Transformation.png" />
+                                                                                                   </image>
+                                                                                                </ImageView>
+                                                                                             </graphic>
+                                                                                          </Button>
+                                                                                       </children>
+                                                                                    </HBox>
+                                                                                 </graphic>
+                                                                              </CheckBox>
+                                                                              <CheckBox fx:id="checkboxFitRasterToVoxelSpace" layoutX="11.0" layoutY="72.0" mnemonicParsing="false" selected="true" text="Fit to voxel space" AnchorPane.leftAnchor="0.0" />
+                                                                              <Label layoutX="166.0" layoutY="74.0" text="Margin (cell number)" />
+                                                                              <TextField fx:id="textfieldRasterFittingMargin" layoutX="309.0" layoutY="69.0" prefHeight="25.0" prefWidth="60.0" text="0" />
                                                                            </children>
                                                                         </AnchorPane>
-                                                                     </content>
-                                                                  </Tab>
-                                                              </tabs>
-                                                            </TabPane>
+                                                                     </children>
+                                                                  </HBox>
+                                                                  <Button fx:id="buttonOpen3DView" layoutX="207.0" layoutY="373.0" mnemonicParsing="false" onAction="#onActionButtonVizualize" text="Open display window" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                                                                  <ListView fx:id="listviewTreeSceneObjects" layoutX="10.0" layoutY="257.0" prefHeight="87.0" prefWidth="465.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                                                                  <HBox layoutX="14.0" layoutY="344.0" spacing="30.0">
+                                                                     <children>
+                                                                        <MenuButton mnemonicParsing="false" text="Selection">
+                                                                           <items>
+                                                                              <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemSelectAllSceneObjects" text="All" />
+                                                                              <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemUnselectAllSceneObjects" text="None" />
+                                                                           </items>
+                                                                        </MenuButton>
+                                                                        <HBox spacing="5.0">
+                                                                           <children>
+                                                                              <Button mnemonicParsing="false" onAction="#onActionButtonRemoveSceneObject">
+                                                                                 <graphic>
+                                                                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                       <image>
+                                                                                          <Image url="@icons/gnome_list_remove.png" />
+                                                                                       </image>
+                                                                                    </ImageView>
+                                                                                 </graphic>
+                                                                              </Button>
+                                                                           </children>
+                                                                        </HBox>
+                                                                     </children>
+                                                                  </HBox>
+                                                               </children>
+                                                            </AnchorPane>
+                                                            <TitledPane collapsible="false" prefHeight="471.0" prefWidth="271.0" text="Properties">
+                                                               <content>
+                                                                  <TableView fx:id="tableviewSceneObjectProperties" prefHeight="200.0" prefWidth="200.0" />
+                                                               </content>
+                                                            </TitledPane>
                                                          </items>
                                                       </SplitPane>
                                                    </children>

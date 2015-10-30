@@ -42,7 +42,7 @@ public class SceneObjectFactory {
         VoxelSpaceSceneObject voxelSpace = new VoxelSpaceSceneObject(voxelSpaceFile);
         
         try {
-            voxelSpace.load();
+            voxelSpace.load(null);
             
             return voxelSpace;
             

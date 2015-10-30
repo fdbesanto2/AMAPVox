@@ -1,7 +1,9 @@
 package fr.amap.amapvox.voxviewer;
 
 import com.jogamp.nativewindow.util.Point;
+import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.event.WindowListener;
+import com.jogamp.newt.event.WindowUpdateEvent;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLException;
 import com.jogamp.opengl.GLProfile;
@@ -10,7 +12,10 @@ import fr.amap.amapvox.voxviewer.event.EventManager;
 import fr.amap.amapvox.voxviewer.input.InputKeyListener;
 import fr.amap.amapvox.voxviewer.input.InputMouseAdapter;
 import fr.amap.amapvox.voxviewer.renderer.GLRenderFrame;
+import fr.amap.amapvox.voxviewer.renderer.MinimalWindowAdapter;
 import fr.amap.amapvox.voxviewer.renderer.JoglListener;
+import fr.amap.amapvox.voxviewer.renderer.MinimalKeyAdapter;
+import fr.amap.amapvox.voxviewer.renderer.MinimalMouseAdapter;
 import java.io.File;
 import java.util.List;
 
@@ -42,17 +47,21 @@ public class Viewer3D {
             this.width = width;
             this.height = height;
             
-            renderFrame = GLRenderFrame.create(caps, posX, posY, width, height, title);
+            renderFrame = new GLRenderFrame(caps, posX, posY, width, height, title);
+            //renderFrame = GLRenderFrame.create(caps, posX, posY, width, height, title);
             animator = new FPSAnimator(renderFrame, 60);
 
             joglContext = new JoglListener(animator);
             joglContext.getScene().setWidth(width);
             joglContext.getScene().setHeight(height);
-
-            renderFrame.addGLEventListener(joglContext);
             
-            //BasicEvent eventListener = new BasicEvent(animator, joglContext);
-            //joglContext.attachEventListener(eventListener);            
+            renderFrame.addGLEventListener(joglContext);
+            renderFrame.addWindowListener(new MinimalWindowAdapter(animator));
+            
+            
+            //basic input adapters for waking up animator if necessary
+            renderFrame.addKeyListener(new MinimalKeyAdapter(animator));
+            renderFrame.addMouseListener(new MinimalMouseAdapter(animator));      
             
             animator.start();
             
@@ -157,8 +166,8 @@ public class Viewer3D {
     public void attachEventManager(EventManager eventManager){
         
         joglContext.attachEventListener(eventManager);
-        renderFrame.addKeyListener(new InputKeyListener(eventManager, animator));
-        renderFrame.addMouseListener(new InputMouseAdapter(eventManager, animator));
+        renderFrame.addKeyListener(new InputKeyListener(eventManager));
+        renderFrame.addMouseListener(new InputMouseAdapter(eventManager));
     }
     
     public void addWindowListener(WindowListener listener){

@@ -204,7 +204,7 @@ public class ToolBoxFrameController implements Initializable {
                 //update instance color buffer to gpu
                 voxelSpace.updateInstanceColorBuffer();
 
-                joglContext.drawNextFrame();
+                joglContext.refresh();
         
             }
         });
@@ -215,7 +215,7 @@ public class ToolBoxFrameController implements Initializable {
             public void changed(ObservableValue<? extends javafx.scene.paint.Color> observable, javafx.scene.paint.Color oldValue, javafx.scene.paint.Color newValue) {
                 
                 joglContext.setWorldColor(new Vec3F((float)newValue.getRed(), (float)newValue.getGreen(), (float)newValue.getBlue()));
-                joglContext.drawNextFrame();
+                joglContext.refresh();
             }
         });
         
@@ -224,7 +224,7 @@ public class ToolBoxFrameController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends javafx.scene.paint.Color> observable, javafx.scene.paint.Color oldValue, javafx.scene.paint.Color newValue) {
                 joglContext.getScene().setLightAmbientValue(new Vec3F((float)newValue.getRed(), (float)newValue.getGreen(), (float)newValue.getBlue()));
-                joglContext.drawNextFrame();
+                joglContext.refresh();
             }
         });
         
@@ -233,7 +233,7 @@ public class ToolBoxFrameController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends javafx.scene.paint.Color> observable, javafx.scene.paint.Color oldValue, javafx.scene.paint.Color newValue) {
                 joglContext.getScene().setLightDiffuseValue(new Vec3F((float)newValue.getRed(), (float)newValue.getGreen(), (float)newValue.getBlue()));
-                joglContext.drawNextFrame();
+                joglContext.refresh();
             }
         });
         
@@ -242,7 +242,7 @@ public class ToolBoxFrameController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends javafx.scene.paint.Color> observable, javafx.scene.paint.Color oldValue, javafx.scene.paint.Color newValue) {
                 joglContext.getScene().setLightSpecularValue(new Vec3F((float)newValue.getRed(), (float)newValue.getGreen(), (float)newValue.getBlue()));
-                joglContext.drawNextFrame();
+                joglContext.refresh();
             }
         });
         
@@ -255,7 +255,7 @@ public class ToolBoxFrameController implements Initializable {
                     voxelSpace.changeCurrentAttribut(newValue);
                     voxelSpace.updateVao();
                     voxelSpace.updateInstanceColorBuffer();
-                    joglContext.drawNextFrame();
+                    joglContext.refresh();
                     textFieldMinValue.setText(String.valueOf(voxelSpace.getRealAttributValueMin()));
                     textFieldMaxValue.setText(String.valueOf(voxelSpace.getRealAttributValueMax()));
                     
@@ -276,7 +276,7 @@ public class ToolBoxFrameController implements Initializable {
                     voxelSpace.setShader(joglContext.getScene().instanceShader);
                 }
                 
-                joglContext.drawNextFrame();
+                joglContext.refresh();
             }
         });
         
@@ -301,14 +301,14 @@ public class ToolBoxFrameController implements Initializable {
                     voxelSpace.updateInstanceColorBuffer();
                     
                     
-                    joglContext.drawNextFrame();
+                    joglContext.refresh();
                 }else{
                     voxelSpace.setStretched(false);
                     voxelSpace.updateValue();
                     voxelSpace.updateInstanceColorBuffer();
                     
                     
-                    joglContext.drawNextFrame();
+                    joglContext.refresh();
                 }
                 
             }
@@ -340,7 +340,7 @@ public class ToolBoxFrameController implements Initializable {
                     float fov = Float.valueOf(newValue);
                     TrackballCamera camera = joglContext.getScene().getCamera();
                     joglContext.getScene().getCamera().setPerspective(fov, camera.getAspect(), camera.getNearPersp(), camera.getFarPersp());
-                    joglContext.drawNextFrame();
+                    joglContext.refresh();
                     
                 }catch(Exception e){}
             }
@@ -355,11 +355,15 @@ public class ToolBoxFrameController implements Initializable {
                     TrackballCamera camera = joglContext.getScene().getCamera();
                     if(radiobuttonOrthographicCamera.isSelected()){
                         joglContext.getScene().getCamera().setOrthographic(camera.getLeft(), camera.getRight(), camera.getTop(), camera.getBottom(), near, camera.getFarOrtho());
+                        joglContext.updateCamera();
+                        joglContext.refresh();
                     }else{
                         joglContext.getScene().getCamera().setPerspective(camera.getFovy(), camera.getAspect(), near, camera.getFarPersp());
+                        joglContext.updateCamera();
+                        joglContext.refresh();
                     }
                     
-                    joglContext.drawNextFrame();
+                    joglContext.refresh();
                     
                 }catch(Exception e){}
             }
@@ -374,11 +378,15 @@ public class ToolBoxFrameController implements Initializable {
                     TrackballCamera camera = joglContext.getScene().getCamera();
                     if(radiobuttonOrthographicCamera.isSelected()){
                         camera.setOrthographic(camera.getLeft(), camera.getRight(), camera.getTop(), camera.getBottom(), camera.getNearOrtho(), far);
+                        joglContext.updateCamera();
+                        joglContext.refresh();
                     }else{
                         camera.setPerspective(camera.getFovy(), camera.getAspect(), camera.getNearPersp(), far);
+                        joglContext.updateCamera();
+                        joglContext.refresh();
                     }
                     
-                    joglContext.drawNextFrame();
+                    joglContext.refresh();
                     
                 }catch(Exception e){}
             }
@@ -397,8 +405,9 @@ public class ToolBoxFrameController implements Initializable {
                     try{
                         float near = Float.valueOf(textfieldCameraNear.getText());
                         float far = Float.valueOf(textfieldCameraFar.getText());
-                        joglContext.setViewToOrthographic(near, far, far, far, near, far);
-                        joglContext.drawNextFrame();
+                        joglContext.getScene().getCamera().setViewToOrthographic(near, far, far, far, near, far);
+                        joglContext.updateCamera();
+                        joglContext.refresh();
                     }catch(Exception e){}
                     
                 }
@@ -416,7 +425,9 @@ public class ToolBoxFrameController implements Initializable {
                         float near = Float.valueOf(textfieldCameraNear.getText());
                         float far = Float.valueOf(textfieldCameraFar.getText());
 
-                        joglContext.setViewToPerspective(fov, near, far);
+                        joglContext.getScene().getCamera().setViewToPerspective(fov, near, far);
+                        joglContext.updateCamera();
+                        joglContext.refresh();
                         
                     }catch(Exception e){}
                     
@@ -514,7 +525,7 @@ public class ToolBoxFrameController implements Initializable {
                 voxelSpace.setFilterValues(filterValues, radiobuttonDisplayValues.isSelected());
                 voxelSpace.updateColorValue(voxelSpace.getGradient());
                 voxelSpace.updateVao();
-                joglContext.drawNextFrame();
+                joglContext.refresh();
                 
                 return null;
             }
@@ -556,7 +567,7 @@ public class ToolBoxFrameController implements Initializable {
                     Float voxelSize = Float.valueOf(textFieldVoxelSize.getText());
 
                     voxelSpace.updateCubeSize(null, voxelSize);
-                    joglContext.drawNextFrame();
+                    joglContext.refresh();
 
                 }catch(NumberFormatException e){
                     logger.error("Cannot parse string value to float", e);
@@ -581,7 +592,7 @@ public class ToolBoxFrameController implements Initializable {
         voxelSpace.updateValue();
         voxelSpace.updateColorValue(voxelSpace.getGradient());
         voxelSpace.updateInstanceColorBuffer();
-        joglContext.drawNextFrame();
+        joglContext.refresh();
     }
 
     @FXML
@@ -595,7 +606,7 @@ public class ToolBoxFrameController implements Initializable {
             voxelSpace.updateValue();
             voxelSpace.updateColorValue(voxelSpace.getGradient());
             voxelSpace.updateInstanceColorBuffer();
-            joglContext.drawNextFrame();
+            joglContext.refresh();
             
         }catch(NumberFormatException e){
             logger.error("Cannot parse string value to float", e);
@@ -632,44 +643,50 @@ public class ToolBoxFrameController implements Initializable {
         }
         
         joglContext.updateCamera();
-        joglContext.drawNextFrame();
+        joglContext.refresh();
         
     }
 
     @FXML
     private void onActionButtonViewTop(ActionEvent event) {
         
-        joglContext.setViewToTop();
+        joglContext.getScene().getCamera().setViewToTop();
+        joglContext.refresh();
     }
 
     @FXML
     private void onActionButtonViewRight(ActionEvent event) {
         
-        joglContext.setViewToRight();
+        joglContext.getScene().getCamera().setViewToRight();
+        joglContext.refresh();
     }
 
     @FXML
     private void onActionButtonViewBottom(ActionEvent event) {
                 
-        joglContext.setViewToBottom();
+        joglContext.getScene().getCamera().setViewToBottom();
+        joglContext.refresh();
     }
 
     @FXML
     private void onActionButtonViewLeft(ActionEvent event) {
         
-        joglContext.setViewToLeft();
+        joglContext.getScene().getCamera().setViewToLeft();
+        joglContext.refresh();
     }
 
     @FXML
     private void onActionButtonViewFront(ActionEvent event) {
         
-        joglContext.setViewToFront();
+        joglContext.getScene().getCamera().setViewToFront();
+        joglContext.refresh();
     }
 
     @FXML
     private void onActionButtonViewBack(ActionEvent event) {
         
-        joglContext.setViewToBack();
+        joglContext.getScene().getCamera().setViewToBack();
+        joglContext.refresh();
     }
 
     @FXML
@@ -702,7 +719,7 @@ public class ToolBoxFrameController implements Initializable {
     private void onActionButtonResetCuttingPlane(ActionEvent event) {
         
         voxelSpace.resetCuttingPlane();
-        joglContext.drawNextFrame();
+        joglContext.refresh();
     }
     
     private void cutting(boolean increase){
@@ -715,7 +732,7 @@ public class ToolBoxFrameController implements Initializable {
                 joglContext.getScene().getCamera().getLocation());
         
         
-        joglContext.drawNextFrame();
+        joglContext.refresh();
     }
     
 }

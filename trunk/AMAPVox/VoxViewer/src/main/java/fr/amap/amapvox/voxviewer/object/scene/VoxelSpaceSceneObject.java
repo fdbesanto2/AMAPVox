@@ -56,6 +56,11 @@ public class VoxelSpaceSceneObject extends SceneObject{
     public void updateBuffers(GL3 gl, int index, FloatBuffer buffer) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void load(File file) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     public enum Format{
         VOXELSPACE_FORMAT2(2);
@@ -179,7 +184,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
         this.currentAttribut = attributToVisualize;
     }
     
-    public void load() throws IOException, Exception{
+    public void loadVoxels() throws IOException, Exception{
         
         loadFromFile(voxelsFile);
         
@@ -838,15 +843,17 @@ public class VoxelSpaceSceneObject extends SceneObject{
         
         if(!instancesUpdated){
             
+            //update buffers
             mesh.updateBuffer(gl, 1, ((InstancedGLMesh)mesh).instancePositionsBuffer);
             mesh.updateBuffer(gl, 2, ((InstancedGLMesh)mesh).instanceColorsBuffer);
             
+            //update offsets
             gl.glBindVertexArray(vaoId);
         
                 gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, mesh.getVboId());
 
-                    gl.glEnableVertexAttribArray(shader.attributeMap.get("position"));
-                    gl.glVertexAttribPointer(shader.attributeMap.get("position"), 3, GL3.GL_FLOAT, false, 0, 0);
+                    /*gl.glEnableVertexAttribArray(shader.attributeMap.get("position"));
+                    gl.glVertexAttribPointer(shader.attributeMap.get("position"), 3, GL3.GL_FLOAT, false, 0, 0);*/
 
                     gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_position"));
                     gl.glVertexAttribPointer(shader.attributeMap.get("instance_position"), 3, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE);

@@ -5,4 +5,4 @@
  * It involves that the FPSAnimator (which is used to callback the render function)<br>
  * is set to pause when nothing happens and set to resume when events happens.<br>
  */
-package fr.ird.voxelidar.engine3d;
+package fr.amap.amapvox.voxviewer;

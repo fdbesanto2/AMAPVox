@@ -34,7 +34,7 @@ import fr.amap.amapvox.voxviewer.object.scene.SceneObjectFactory;
 import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject2;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
-import fr.amap.amapvox.voxviewer.renderer.GLRenderWindowListener;
+import fr.amap.amapvox.voxviewer.renderer.MinimalWindowAdapter;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -480,7 +480,7 @@ public class FXViewer3D extends Application {
                                                 }
                                             });
 
-                                            viewer3D.addWindowListener(new GLRenderWindowListener(toolBarFrameStage, viewer3D.getAnimator()));
+                                            //viewer3D.addWindowListener(new MinimalWindowAdapter(toolBarFrameStage, viewer3D.getAnimator()));
                                             //joglWindow.setOnTop();
                                             viewer3D.show();
 

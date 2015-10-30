@@ -41,8 +41,8 @@ public class BoundingBox3F {
     
     public void keepLargest(BoundingBox3F boundingBox3F){
         
-        float xMin = 0, yMin = 0, zMin = 0;
-        float xMax = 0, yMax = 0, zMax = 0;
+        float xMin, yMin, zMin;
+        float xMax, yMax, zMax;
         
         if(boundingBox3F.min.x < min.x){
             xMin = boundingBox3F.min.x;

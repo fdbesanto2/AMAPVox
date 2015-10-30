@@ -9,11 +9,11 @@ package fr.amap.amapvox.math.vector;
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class Vec4 {
+public class Vec4F {
     
     public float x, y, z, w;
     
-    public Vec4(){
+    public Vec4F(){
         
         this.x = 0;
         this.y = 0;
@@ -21,7 +21,7 @@ public class Vec4 {
         this.w = 0;
     }
     
-    public Vec4(float x, float y, float z, float w){
+    public Vec4F(float x, float y, float z, float w){
         
         this.x = x;
         this.y = y;

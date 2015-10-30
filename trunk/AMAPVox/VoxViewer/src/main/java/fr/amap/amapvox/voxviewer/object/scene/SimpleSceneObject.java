@@ -5,11 +5,13 @@
  */
 package fr.amap.amapvox.voxviewer.object.scene;
 
+import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL3;
 import fr.amap.amapvox.math.point.Point3F;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh;
 import static fr.amap.amapvox.voxviewer.mesh.GLMesh.FLOAT_SIZE;
 import fr.amap.amapvox.voxviewer.mesh.TexturedGLMesh;
+import java.io.File;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -109,6 +111,11 @@ public class SimpleSceneObject extends SceneObject{
 
     @Override
     public void updateBuffers(GL3 gl, int index, FloatBuffer buffer) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void load(File file) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -17,6 +17,9 @@ public class Vec3F{
     public float y;
     public float z;
     
+    /**
+     * Constructs and initialize a new 3d single precision vector filled with zeros
+     */
     public Vec3F(){
         
         this.x = 0.0f;
@@ -38,6 +41,12 @@ public class Vec3F{
         this.z = point2.z - point1.z;
     }
     
+    /**
+     * Create a new single precision 3d vector from two 3d points
+     * @param point1 The first point
+     * @param point2 The second point
+     * @return A 3d vector constructed with the two given points
+     */
     public static Vec3F createVec3FromPoints(Vec3F point1, Vec3F point2){
         
         Vec3F result = new Vec3F();
@@ -49,6 +58,12 @@ public class Vec3F{
         return result;
     }
     
+    /**
+     * Get angle between two vectors
+     * @param vec1 The first vector
+     * @param vec2 The second vector
+     * @return The angle (in radians) as a single precision number
+     */
     public static float angle(Vec3F vec1, Vec3F vec2){
         
         float n = Vec3F.dot(vec1, vec2);
@@ -59,6 +74,12 @@ public class Vec3F{
         return angle;
     }
     
+    /**
+     * Get the cross product of two 3d vectors
+     * @param vec First vector
+     * @param vec2 Second vector
+     * @return The cross product as a 3d single precision vector
+     */
     public static Vec3F cross(Vec3F vec, Vec3F vec2){
         
         Vec3F dest = new Vec3F();
@@ -73,13 +94,11 @@ public class Vec3F{
         return dest;
     }
     
-    public static void main(String[] args){
-        
-        float result = Vec3F.angle(new Vec3F(0, 0, 1), new Vec3F(0, 1, 0));
-        result = (float) Math.toDegrees(result);
-        System.out.println("test");
-    }
-    
+    /**
+     * Normalize a 3d vector
+     * @param vec The vector to normalize
+     * @return The normalized vector
+     */
     public static Vec3F normalize(Vec3F vec){
         
         Vec3F dest = new Vec3F();
@@ -107,6 +126,12 @@ public class Vec3F{
         return dest;
     }
     
+    /**
+     * Add a 3d vector to another
+     * @param vec1 The first vector
+     * @param vec2 The second vector
+     * @return The vector addition as a 3d single precision vector
+     */
     public static Vec3F add(Vec3F vec1, Vec3F vec2){
         
         Vec3F result = new Vec3F();
@@ -118,6 +143,12 @@ public class Vec3F{
         return result;
     }
     
+    /**
+     * Substract a 3d vector from another
+     * @param vec1 The original vector
+     * @param vec2 The second vector
+     * @return The original 3d vector, substracted by the other
+     */
     public static Vec3F substract(Vec3F vec1, Vec3F vec2){
         
         Vec3F result = new Vec3F();
@@ -129,6 +160,12 @@ public class Vec3F{
         return result;
     }
     
+    /**
+     * Multiply a 3d vector by another
+     * @param vec1 The first vector
+     * @param vec2 The second vector
+     * @return A 3d vector, result of the product of the first vector by the second one
+     */
     public static Vec3F multiply(Vec3F vec1, Vec3F vec2){
         
         Vec3F result = new Vec3F();
@@ -140,6 +177,12 @@ public class Vec3F{
         return result;
     }
     
+    /**
+     * Multiply a 3d vector by a single precision number
+     * @param vec The 3d vector
+     * @param multiplier The factor
+     * @return A 3d vector, result of the product of the vector by the factor
+     */
     public static Vec3F multiply(Vec3F vec, float multiplier){
         
         Vec3F result = Vec3F.multiply(vec, new Vec3F(multiplier, multiplier, multiplier));
@@ -147,6 +190,11 @@ public class Vec3F{
         return result;
     }
     
+    /**
+     * Get the length of a single precision 3d vector
+     * @param vec The vector
+     * @return The length of the vector, as a single precision number
+     */
     public static float length(Vec3F vec){
         
         float result = (float) Math.sqrt((vec.x * vec.x)+(vec.y * vec.y)+(vec.z * vec.z));
@@ -154,6 +202,12 @@ public class Vec3F{
         return result;
     }
     
+    /**
+     * Get the dot product of two 3d vector
+     * @param vec The first vector
+     * @param vec2 The second vector
+     * @return The result of the dot product as a single precision number
+     */
     public static float dot(Vec3F vec, Vec3F vec2){
         
         float result = vec.x*vec2.x + vec.y*vec2.y + vec.z*vec2.z;
@@ -161,6 +215,11 @@ public class Vec3F{
         return result;
     }
     
+    /**
+     * Convert the given vector to a 1 dimensional array with a size of 3
+     * @param vec The 3d vector
+     * @return a one dimensional single precision array with a length of 3
+     */
     public static float[] toArray(Vec3F vec){
         
         float array[] = new float[3];

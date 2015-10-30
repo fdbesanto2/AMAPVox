@@ -24,6 +24,24 @@ public class GLRenderFrame extends GLWindow{
         super(w);
     }
     
+    public GLRenderFrame(GLCapabilities caps, int posX, int posY, int width, int height, String title){
+        
+        super(NewtFactory.createWindow(caps));
+        
+        setTitle("3D viewer - "+title);
+        
+        //viewer.setVisible(true); 
+        setSize(width, height);
+        this.width = width;
+        this.height = height;
+        setPosition(posX, posY);
+        
+        /*viewer.setPosition((GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getWidth()/2)-320,
+                           (GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getHeight()/2)-240);*/
+        //viewer.setAlwaysOnTop(true); 
+        setDefaultCloseOperation(WindowClosingProtocol.WindowClosingMode.DISPOSE_ON_CLOSE);
+    }
+    
     public static GLRenderFrame create(GLCapabilities caps, int posX, int posY, int width, int height, String title){
                         
         GLRenderFrame viewer = new GLRenderFrame(NewtFactory.createWindow(caps)); 

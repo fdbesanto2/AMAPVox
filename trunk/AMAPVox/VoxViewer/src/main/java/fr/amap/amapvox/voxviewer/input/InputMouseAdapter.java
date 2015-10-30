@@ -7,8 +7,6 @@ package fr.amap.amapvox.voxviewer.input;
 
 import com.jogamp.newt.event.MouseAdapter;
 import com.jogamp.newt.event.MouseEvent;
-import com.jogamp.opengl.util.FPSAnimator;
-import fr.amap.amapvox.voxviewer.event.BasicEvent;
 import fr.amap.amapvox.voxviewer.event.EventManager;
 
 /**
@@ -18,42 +16,18 @@ import fr.amap.amapvox.voxviewer.event.EventManager;
 public class InputMouseAdapter extends MouseAdapter{
     
     private final EventManager listener;
-    private final FPSAnimator animator;
     
     private int lastPositionX, lastPositionY;
     
     
-    public InputMouseAdapter(EventManager listener , FPSAnimator animator){
+    public InputMouseAdapter(EventManager listener){
         
         this.listener = listener;
-        this.animator = animator;
-    }
-
-    @Override
-    public void mouseClicked(com.jogamp.newt.event.MouseEvent me) {
-        
-        if(animator.isPaused()){
-            animator.resume();
-        }
-        
-        if(me.getButton() == MouseEvent.BUTTON2){
-            
-            if(animator.isPaused()){
-                animator.resume();
-            }else{
-                animator.pause();
-            }
-            
-        }
     }
 
     @Override
     public void mousePressed(com.jogamp.newt.event.MouseEvent me) {
-        
-        if(animator.isPaused()){
-            animator.resume();
-        }
-        
+                
         if(me.getButton() == MouseEvent.BUTTON1){
             
             listener.leftMousePressed = true;
@@ -67,10 +41,6 @@ public class InputMouseAdapter extends MouseAdapter{
 
     @Override
     public void mouseReleased(com.jogamp.newt.event.MouseEvent me) {
-        
-        if(!animator.isPaused()){
-            animator.pause();
-        }
         
         if(  me.isAutoRepeat() ) {
             return;
@@ -98,10 +68,6 @@ public class InputMouseAdapter extends MouseAdapter{
 
     @Override
     public void mouseDragged(com.jogamp.newt.event.MouseEvent me) {
-        
-        if(animator.isPaused()){
-            animator.resume();
-        }
         
         switch(me.getButton()){
             
@@ -162,10 +128,6 @@ public class InputMouseAdapter extends MouseAdapter{
 
     @Override
     public void mouseWheelMoved(com.jogamp.newt.event.MouseEvent me) {
-        
-        if(animator.isPaused()){
-            animator.resume();
-        }
         
         float[] rotation = me.getRotation();
         float verticalRotation = rotation[1];

@@ -8,7 +8,7 @@ package fr.amap.amapvox.math.matrix;
 import fr.amap.amapvox.math.vector.Vec3F;
 
 /**
- *
+ * A double precision matrix with undefined row and column number
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Mat {
@@ -98,7 +98,7 @@ public class Mat {
     /**
      *
      * @param matSource the matrix to transpose
-     * @return
+     * @return the transposed matrix
      */
     public static Mat transpose(Mat matSource){
         
@@ -116,7 +116,7 @@ public class Mat {
     }
     
     /**
-     *
+     * Add a 3d vector to the matrix
      * @param vec
      */
     public void addVec3(Vec3F vec){
@@ -136,7 +136,7 @@ public class Mat {
      *
      * @param mat1 first matrix to multiply
      * @param mat2 second matrix to multiply
-     * @return the multiplied matrix
+     * @return the resulting matrix
      */
     public static Mat multiply(Mat mat1, Mat mat2){
         

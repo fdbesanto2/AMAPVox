@@ -11,6 +11,7 @@ import fr.amap.amapvox.voxviewer.mesh.GLMeshFactory;
 import fr.amap.amapvox.voxviewer.mesh.PointCloudGLMesh;
 import gnu.trove.list.TFloatList;
 import gnu.trove.list.array.TFloatArrayList;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +42,6 @@ public class PointCloudSceneObject extends SimpleSceneObject{
             
             colorDataList[i] = new TFloatArrayList();
         }
-        
-        
     }
     
     public void addPoint(float x, float y, float z){
@@ -100,5 +99,10 @@ public class PointCloudSceneObject extends SimpleSceneObject{
             return mesh.vertexCount;
         }
         return vertexDataList.size()/3;
+    }
+    
+    @Override
+    public void load(File file) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

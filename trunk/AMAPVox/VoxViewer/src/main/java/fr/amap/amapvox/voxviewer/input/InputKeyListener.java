@@ -7,8 +7,6 @@ package fr.amap.amapvox.voxviewer.input;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
-import com.jogamp.opengl.util.FPSAnimator;
-import fr.amap.amapvox.voxviewer.event.BasicEvent;
 import fr.amap.amapvox.voxviewer.event.EventManager;
 
 
@@ -19,20 +17,14 @@ import fr.amap.amapvox.voxviewer.event.EventManager;
 public class InputKeyListener implements KeyListener{
     
     private final EventManager listener;
-    private final FPSAnimator animator;
     
-    public InputKeyListener(EventManager listener, FPSAnimator animator){
+    public InputKeyListener(EventManager listener){
         
         this.listener = listener;
-        this.animator = animator;
     }
     
     @Override
     public void keyPressed(KeyEvent ke) {
-        
-        if(animator.isPaused()){
-            animator.resume();
-        }
         
         listener.ctrlPressed = ke.isControlDown();
         

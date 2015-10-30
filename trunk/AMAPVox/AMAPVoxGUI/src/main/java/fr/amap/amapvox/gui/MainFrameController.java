@@ -5,8 +5,14 @@
  */
 package fr.amap.amapvox.gui;
 
+import com.jogamp.newt.Window;
 import com.jogamp.newt.event.WindowAdapter;
+import fr.amap.amapvox.als.LasHeader;
+import fr.amap.amapvox.als.LasPoint;
+import fr.amap.amapvox.als.las.LasReader;
+import fr.amap.amapvox.als.las.PointDataRecordFormat;
 import fr.amap.amapvox.als.las.PointDataRecordFormat.Classification;
+import fr.amap.amapvox.als.laz.LazExtraction;
 import fr.amap.amapvox.chart.ChartViewer;
 import fr.amap.amapvox.chart.VoxelFileChart;
 import fr.amap.amapvox.chart.VoxelsToChart;
@@ -25,6 +31,7 @@ import fr.amap.amapvox.math.point.Point2F;
 import fr.amap.amapvox.math.point.Point3F;
 import fr.amap.amapvox.math.vector.Vec3F;
 import fr.amap.amapvox.commons.util.BoundingBox3d;
+import fr.amap.amapvox.commons.util.ColorGradient;
 import fr.amap.amapvox.commons.util.Filter;
 import fr.amap.amapvox.commons.util.MatrixAndFile;
 import fr.amap.amapvox.commons.util.MatrixFileParser;
@@ -36,11 +43,15 @@ import fr.amap.amapvox.datastructure.pointcloud.PointCloud;
 import fr.amap.amapvox.io.tls.rsp.Rsp;
 import fr.amap.amapvox.io.tls.rsp.RxpScan;
 import fr.amap.amapvox.io.tls.rsp.Scans;
+import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
+import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.amapvox.jdart.DartPlotsXMLWriter;
+import fr.amap.amapvox.jeeb.workspace.sunrapp.util.Colouring;
 import fr.amap.amapvox.jraster.asc.DtmLoader;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
 import fr.amap.amapvox.math.geometry.BoundingBox2F;
 import fr.amap.amapvox.math.geometry.BoundingBox3F;
+import fr.amap.amapvox.math.vector.Vec4D;
 import fr.amap.amapvox.simulation.hemi.HemiParameters;
 import fr.amap.amapvox.simulation.hemi.HemiPhotoCfg;
 import fr.amap.amapvox.simulation.hemi.HemiScanView;
@@ -48,7 +59,6 @@ import fr.amap.amapvox.simulation.transmittance.TransmittanceParameters;
 import fr.amap.amapvox.simulation.transmittance.SimulationPeriod;
 import fr.amap.amapvox.simulation.transmittance.TransmittanceCfg;
 import fr.amap.amapvox.simulation.transmittance.TransmittanceSim;
-import fr.amap.amapvox.update.Updater;
 import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
 import fr.amap.amapvox.voxelisation.DirectionalTransmittance;
 import fr.amap.amapvox.voxelisation.LeafAngleDistribution;
@@ -74,12 +84,14 @@ import fr.amap.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh;
 import fr.amap.amapvox.voxviewer.mesh.GLMeshFactory;
 import fr.amap.amapvox.voxviewer.object.camera.TrackballCamera;
+import fr.amap.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.SceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.SceneObjectFactory;
 import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject2;
+import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceAdapter;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
-import fr.amap.amapvox.voxviewer.renderer.GLRenderWindowListener;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -88,7 +100,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
+import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -114,6 +128,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -128,23 +143,25 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -159,6 +176,7 @@ import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javax.vecmath.Matrix4d;
+import javax.vecmath.Point2i;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
@@ -191,12 +209,14 @@ public class MainFrameController implements Initializable {
     private Stage dateChooserFrame;
     private Stage viewCapsSetupFrame;
     private Stage updaterFrame;
+    private Stage attributsImporterFrame;
     
     private RspExtractorFrameController rspExtractorFrameController;
     private UpdaterFrameController updaterFrameController;
     private TransformationFrameController transformationFrameController;
     private DateChooserFrameController dateChooserFrameController;
     private ViewCapsSetupFrameController viewCapsSetupFrameController;
+    private AttributsImporterFrameController attributsImporterFrameController;
 
     private BlockingQueue<File> queue = new ArrayBlockingQueue<>(100);
     private int taskNumber = 0;
@@ -278,6 +298,7 @@ public class MainFrameController implements Initializable {
 
     private final static String MATRIX_FORMAT_ERROR_MSG = "Matrix file has to look like this: \n\n\t1.0 0.0 0.0 0.0\n\t0.0 1.0 0.0 0.0\n\t0.0 0.0 1.0 0.0\n\t0.0 0.0 0.0 1.0\n";
     private static PseudoClass loadedPseudoClass = PseudoClass.getPseudoClass("loaded");
+    
     @FXML
     private RadioButton radiobuttonLADHomogeneous;
     @FXML
@@ -332,200 +353,10 @@ public class MainFrameController implements Initializable {
     private TextField textfieldHemiPhotoOutputTextFile;
     @FXML
     private TextField textfieldHemiPhotoOutputBitmapFile;
-
     @FXML
-    private void onActionButtonDisplayPdf(ActionEvent event) {
-        
-        LeafAngleDistribution distribution = getLeafAngleDistribution();
-        
-        XYSeries serie = new XYSeries(distribution.getType(), false);
-        
-        for(int i = 0 ; i < 180 ; i++){
-            
-            double angleInDegrees = i/2.0;
-            double pdf = distribution.getDensityProbability(Math.toRadians(angleInDegrees));
-            
-            serie.add(angleInDegrees, pdf);
-        }
-        
-        XYSeriesCollection dataset = new XYSeriesCollection(serie);
-            
-        ChartViewer viewer = new ChartViewer("PDF function", 500, 500, 1);
-        viewer.insertChart(ChartViewer.createBasicChart("PDF ~ angles", dataset, "Angle (degrees)", "PDF"));
-        viewer.show();
-        
-    }
-    
-    private LeafAngleDistribution getLeafAngleDistribution(){
-        
-        LeafAngleDistribution.Type type = comboboxLADChoice.getSelectionModel().getSelectedItem();
-        
-        double param1 = 0;
-        double param2 = 0;
-        
-        if(type == ELLIPSOIDAL){
-            try{
-                param1 = Double.valueOf(textFieldTwoBetaAlphaParameter.getText());
-            }catch(Exception e){}
-        }
-        
-        if(type == TWO_PARAMETER_BETA){
-        
-            try{
-                param1 = Double.valueOf(textFieldTwoBetaAlphaParameter.getText());
-            }catch(Exception e){}
-            
-            try{
-                param2 = Double.valueOf(textFieldTwoBetaBetaParameter.getText());
-            }catch(Exception e){}
-            
-        }
-        
-        LeafAngleDistribution distribution = new LeafAngleDistribution(type, param1, param2);
-        
-        return distribution;
-    }
-
+    private ListView<SceneObjectWrapper> listviewTreeSceneObjects;
     @FXML
-    private void onActionButtonDisplayGTheta(ActionEvent event) {
-        
-        LeafAngleDistribution distribution = getLeafAngleDistribution();
-        
-        XYSeries serie = new XYSeries(distribution.getType(), false);
-        
-        DirectionalTransmittance m = new DirectionalTransmittance(distribution);
-        m.buildTable(180);
-        
-        for(int i = 0 ; i < 180 ; i++){
-            
-            double angleInDegrees = i/2.0;
-            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
-            serie.add(angleInDegrees, GTheta);
-        }
-        
-        XYSeriesCollection dataset = new XYSeriesCollection(serie);
-            
-        ChartViewer viewer = new ChartViewer("GTheta", 500, 500, 1);
-        viewer.insertChart(ChartViewer.createBasicChart("GTheta ~ inclinaison angle", dataset, "Angle (degrees)", "GTheta"));
-        viewer.show();
-    }
-
-    @FXML
-    private void onActionButtonOpenRspProject(ActionEvent event) {
-        
-        File selectedFile = fileChooserOpenInputFileTLS.showOpenDialog(stage);
-        
-        if(selectedFile != null){
-            
-            Rsp selectedProject = new Rsp();
-            try {
-                selectedProject.read(selectedFile);
-
-                rspExtractorFrameController.init(selectedProject);
-                rspExtractorFrame.show();
-
-                rspExtractorFrame.setOnHidden(new EventHandler<WindowEvent>() {
-
-                    @Override
-                    public void handle(WindowEvent event) {
-                        List<RspExtractorFrameController.Scan> selectedScans = rspExtractorFrameController.getSelectedScans();
-                        
-                        ObservableList<MatrixAndFile> items1 = listViewHemiPhotoScans.getItems();
-                        
-                        for(RspExtractorFrameController.Scan scan : selectedScans){
-                            items1.add(new MatrixAndFile(scan.getFile(), MatrixUtility.convertMat4DToMatrix4d(scan.getSop())));
-                        }
-                        
-
-                    }
-                });
-
-            } catch (JDOMException | IOException ex) {
-                showErrorDialog(ex);
-            }
-
-        }
-        
-        
-        
-    }
-
-    @FXML
-    private void onActionButtonOpenVoxelFileHemiPhoto(ActionEvent event) {
-    }
-
-    @FXML
-    private void onActionButtonHemiPhotoAddToTaskList(ActionEvent event) {
-        
-        if (lastFCSaveConfiguration != null) {
-            fileChooserSaveConfiguration.setInitialDirectory(lastFCSaveConfiguration.getParentFile());
-            fileChooserSaveConfiguration.setInitialFileName(lastFCSaveConfiguration.getName());
-        }
-
-        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
-        
-        if (selectedFile != null) {
-            
-            lastFCSaveConfiguration = selectedFile;
-            
-            HemiParameters hemiParameters = new HemiParameters();
-            try {
-                
-                hemiParameters.setPixelNumber(Integer.valueOf(textfieldPixelNumber.getText()));
-                hemiParameters.setAzimutsNumber(Integer.valueOf(textfieldAzimutsNumber.getText()));
-                hemiParameters.setZenithsNumber(Integer.valueOf(textfieldZenithsNumber.getText()));
-                
-                int selectedMode = tabpaneHemiPhotoMode.getSelectionModel().getSelectedIndex();
-                
-                switch(selectedMode){
-                    case 0 :
-                        hemiParameters.setMode(HemiParameters.Mode.ECHOS);
-                        hemiParameters.setRxpScansList(listViewHemiPhotoScans.getItems());
-                        break;
-                    case 1:
-                        hemiParameters.setMode(HemiParameters.Mode.PAD);
-                        
-                        hemiParameters.setVoxelFile(new File(textfieldVoxelFilePathHemiPhoto.getText()));
-                        hemiParameters.setSensorPosition(new Point3d(Double.valueOf(textfieldSensorPositionX.getText()),
-                                                                    Double.valueOf(textfieldSensorPositionY.getText()),
-                                                                    Double.valueOf(textfieldSensorPositionZ.getText())));
-                        break;
-                }
-                
-                hemiParameters.setGenerateBitmapFile(checkboxHemiPhotoGenerateBitmapFile.isSelected());
-                
-                if(checkboxHemiPhotoGenerateBitmapFile.isSelected()){
-                    hemiParameters.setOutputBitmapFile(new File(textfieldHemiPhotoOutputBitmapFile.getText()));
-                    
-                    int selectedIndex = comboboxHemiPhotoBitmapOutputMode.getSelectionModel().getSelectedIndex();
-                    switch(selectedIndex){
-                        case 0:
-                            hemiParameters.setBitmapMode(HemiParameters.BitmapMode.PIXEL);
-                            break;
-                        case 1:
-                            hemiParameters.setBitmapMode(HemiParameters.BitmapMode.COLOR);
-                            break;
-                    }
-                    
-                }
-                
-                hemiParameters.setGenerateTextFile(checkboxGenerateSectorsTextFileHemiPhoto.isSelected());
-                
-                if(checkboxGenerateSectorsTextFileHemiPhoto.isSelected()){
-                    hemiParameters.setOutputTextFile(new File(textfieldHemiPhotoOutputTextFile.getText()));
-                }
-                
-                HemiPhotoCfg hemiPhotoCfg = new HemiPhotoCfg(hemiParameters);
-                hemiPhotoCfg.writeConfiguration(selectedFile);
-                addTasksToTaskList(selectedFile);
-                
-            } catch (Exception ex) {
-                showErrorDialog(ex);
-            }
-        }
-    }
-    
-    
+    private TableView<SceneObjectWrapper> tableviewSceneObjectProperties;
     @FXML
     private ComboBox<LeafAngleDistribution.Type> comboboxLADChoice;
     @FXML
@@ -722,29 +553,6 @@ public class MainFrameController implements Initializable {
     private ComboBox<String> comboboxGroundEnergyOutputFormat;
     @FXML
     private AnchorPane anchorPaneGroundEnergyParameters;
-    private RangeSlider rangeSliderFilterValue;
-    @FXML
-    private AnchorPane anchorpaneRoot;
-    @FXML
-    private MenuItem menuitemClearWindow;
-    @FXML
-    private MenuItem menuItemUpdate;
-    @FXML
-    private MenuItem menuItemSelectionAllMultiRes;
-    @FXML
-    private MenuItem menuItemSelectionNoneMultiRes;
-    @FXML
-    private Label labelPadMax4m;
-    @FXML
-    private Label labelPadMax1m;
-    @FXML
-    private Label labelPadMax5m;
-    @FXML
-    private Label labelPadMax3m;
-    @FXML
-    private Label labelPadMax2m;
-    @FXML
-    private Label labelOutputFileGroundEnergy;
     @FXML
     private TextField textfieldVoxelFilePathTransmittance;
     @FXML
@@ -773,8 +581,6 @@ public class MainFrameController implements Initializable {
     private TextField textfieldOutputBitmapFilePath;
     @FXML
     private CheckBox checkboxRaster1;
-    @FXML
-    private AnchorPane anchorpanePreFiltering;
     @FXML
     private Button buttonOpenInputFileALS;
     @FXML
@@ -829,8 +635,6 @@ public class MainFrameController implements Initializable {
     private Button buttonOpenOutputBitmapFile;
     @FXML
     private Button buttonOpenRasterFile;
-    @FXML
-    private Button buttonCreateAttribut;
     @FXML
     private MenuItem menuItemTaskSelectionAll;
     @FXML
@@ -935,75 +739,109 @@ public class MainFrameController implements Initializable {
     private AnchorPane anchorpaneQuadrats;
     @FXML
     private HBox hboxMaxPADVegetationProfile;
-
-    @FXML
-    private void onActionButtonOpenHemiPhotoOutputTextFile(ActionEvent event) {
-        
-        if(lastFCOpenHemiPhotoOutputTextFile != null){
-            fileChooserSaveHemiPhotoOutputTextFile.setInitialDirectory(lastFCOpenHemiPhotoOutputTextFile.getParentFile());
-        }
-        
-        File selectedFile = fileChooserSaveHemiPhotoOutputTextFile.showSaveDialog(stage);
-        
-        if(selectedFile != null){
-            lastFCOpenHemiPhotoOutputTextFile = selectedFile;
-            textfieldHemiPhotoOutputTextFile.setText(selectedFile.getAbsolutePath());
-        }
-    }
-
-    @FXML
-    private void onActionButtonOpenHemiPhotoOutputBitmapFile(ActionEvent event) {
-        
-        if(lastFCOpenHemiPhotoOutputBitmapFile != null){
-            fileChooserSaveHemiPhotoOutputBitmapFile.setInitialDirectory(lastFCOpenHemiPhotoOutputBitmapFile.getParentFile());
-        }
-        
-        File selectedFile = fileChooserSaveHemiPhotoOutputBitmapFile.showSaveDialog(stage);
-        
-        if(selectedFile != null){
-            lastFCOpenHemiPhotoOutputBitmapFile = selectedFile;
-            textfieldHemiPhotoOutputBitmapFile.setText(selectedFile.getAbsolutePath());
-        }
-    }
-
-    @FXML
-    private void onActionMenuItemSelectAllScansHemiPhoto(ActionEvent event) {
-        listViewHemiPhotoScans.getSelectionModel().selectAll();
-    }
-
-    @FXML
-    private void onActionMenuItemUnselectAllScansHemiPhoto(ActionEvent event) {
-        listViewHemiPhotoScans.getSelectionModel().clearSelection();
-    }
-
-    @FXML
-    private void onActionButtonRemoveScanFromHemiPhotoListView(ActionEvent event) {
-        
-        ObservableList<MatrixAndFile> selectedItems = listViewHemiPhotoScans.getSelectionModel().getSelectedItems();
-        listViewHemiPhotoScans.getItems().removeAll(selectedItems);
-    }
     
-    static class ColorRectCell extends ListCell<VoxelFileChart> {
+    private class SceneObjectProperty{
+        
+        private String name;
+        private String value;
 
-        @Override
-        public void updateItem(VoxelFileChart item, boolean empty) {
-            super.updateItem(item, empty);
-            
-            if (item != null/* && !item.loaded*/) {
-                pseudoClassStateChanged(loadedPseudoClass, item.loaded);
-                setText(item.label);
-            }
+        public SceneObjectProperty(String name, String value) {
+            this.name = name;
+            this.value = value;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getValue() {
+            return value;
         }
     }
-    
-    private ObservableList<SimulationPeriod> data;
-    
     
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+//        TableColumn<SceneObjectWrapper, String> propertyNameColumn = new TableColumn<>("Property");
+//        TableColumn<SceneObjectWrapper, String> propertyValueColumn = new TableColumn<>("State/value");
+//        
+//        propertyNameColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<SceneObjectWrapper, String>, ObservableValue<String>>() {
+//
+//            @Override
+//            public ObservableValue<String> call(TableColumn.CellDataFeatures<SceneObjectWrapper, String> param) {
+//                return new SimpleStringProperty(param.getValue().getPropertyList());
+//            }
+//        });
+//        
+//        propertyValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<SceneObjectWrapper, String>, ObservableValue<String>>() {
+//
+//            @Override
+//            public ObservableValue<String> call(TableColumn.CellDataFeatures<SceneObjectWrapper, String> param) {
+//                return new SimpleStringProperty(param.getValue().getValue());
+//            }
+//        });
+//        
+//        tableviewSceneObjectProperties.getColumns().addAll(propertyNameColumn, propertyValueColumn);
+        
+        EventHandler<DragEvent> dragOverEvent = new EventHandler<DragEvent>() {
+
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                if (db.hasFiles()) {
+                    event.acceptTransferModes(TransferMode.COPY);
+                } else {
+                    event.consume();
+                }
+            }
+        };
+        
+        listviewTreeSceneObjects.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listviewTreeSceneObjects.setCellFactory(new Callback<ListView<SceneObjectWrapper>, ListCell<SceneObjectWrapper>>() {
+
+            @Override
+            public ListCell<SceneObjectWrapper> call(ListView<SceneObjectWrapper> param) {
+                
+                ListCell<SceneObjectWrapper> cell = new ListCell<SceneObjectWrapper>(){
+                    
+                    @Override
+                    protected void updateItem(SceneObjectWrapper t, boolean bln) {
+                        
+                        super.updateItem(t, bln);                        
+                        setGraphic(t);
+                    }
+                };
+                
+                return cell;
+            }
+        });
+        
+        listviewTreeSceneObjects.setOnDragOver(dragOverEvent);
+        listviewTreeSceneObjects.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+                if (db.hasFiles() && db.getFiles().size() == 1) {
+                    success = true;
+                    for (File file : db.getFiles()) {
+                        if (file != null) {
+                            
+                            try {
+                                addSceneObjectToList(file);
+                            } catch (Exception ex) {
+                                showErrorDialog(ex);
+                            }
+                        }
+                    }
+                }
+                event.setDropCompleted(success);
+                event.consume();
+            }
+        });
         
         listViewHemiPhotoScans.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         
@@ -1417,6 +1255,17 @@ public class MainFrameController implements Initializable {
         }
         
         try {
+            attributsImporterFrame = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AttributsImporterFrame.fxml"));
+            Parent root = loader.load();
+            attributsImporterFrameController = loader.getController();
+            attributsImporterFrame.setScene(new Scene(root));
+            attributsImporterFrameController.setStage(attributsImporterFrame);
+        } catch (IOException ex) {
+            logger.error("Cannot load fxml file", ex);
+        }
+        
+        try {
             transformationFrame = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TransformationFrame.fxml"));
             Parent root = loader.load();
@@ -1815,19 +1664,6 @@ public class MainFrameController implements Initializable {
         sliderRSPCoresToUse.setMax(availableCores);
         sliderRSPCoresToUse.setValue(availableCores);
 
-        EventHandler<DragEvent> dragOverEvent = new EventHandler<DragEvent>() {
-
-            @Override
-            public void handle(DragEvent event) {
-                Dragboard db = event.getDragboard();
-                if (db.hasFiles()) {
-                    event.acceptTransferModes(TransferMode.COPY);
-                } else {
-                    event.consume();
-                }
-            }
-        };
-
         textFieldInputFileALS.setOnDragOver(dragOverEvent);
         textFieldTrajectoryFileALS.setOnDragOver(dragOverEvent);
         textFieldOutputFileALS.setOnDragOver(dragOverEvent);
@@ -1974,6 +1810,236 @@ public class MainFrameController implements Initializable {
                 buttonSetTransformationMatrix.setDisable(!newValue);
             }
         });
+    }
+    
+    
+    
+    @FXML
+    private void onActionButtonDisplayPdf(ActionEvent event) {
+        
+        LeafAngleDistribution distribution = getLeafAngleDistribution();
+        
+        XYSeries serie = new XYSeries(distribution.getType(), false);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double pdf = distribution.getDensityProbability(Math.toRadians(angleInDegrees));
+            
+            serie.add(angleInDegrees, pdf);
+        }
+        
+        XYSeriesCollection dataset = new XYSeriesCollection(serie);
+            
+        ChartViewer viewer = new ChartViewer("PDF function", 500, 500, 1);
+        viewer.insertChart(ChartViewer.createBasicChart("PDF ~ angles", dataset, "Angle (degrees)", "PDF"));
+        viewer.show();
+        
+    }
+
+    @FXML
+    private void onActionButtonDisplayGTheta(ActionEvent event) {
+        
+        LeafAngleDistribution distribution = getLeafAngleDistribution();
+        
+        XYSeries serie = new XYSeries(distribution.getType(), false);
+        
+        DirectionalTransmittance m = new DirectionalTransmittance(distribution);
+        m.buildTable(180);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            serie.add(angleInDegrees, GTheta);
+        }
+        
+        XYSeriesCollection dataset = new XYSeriesCollection(serie);
+            
+        ChartViewer viewer = new ChartViewer("GTheta", 500, 500, 1);
+        viewer.insertChart(ChartViewer.createBasicChart("GTheta ~ inclinaison angle", dataset, "Angle (degrees)", "GTheta"));
+        viewer.show();
+        
+        
+    }
+
+    @FXML
+    private void onActionButtonOpenRspProject(ActionEvent event) {
+        
+        File selectedFile = fileChooserOpenInputFileTLS.showOpenDialog(stage);
+        
+        if(selectedFile != null){
+            
+            Rsp selectedProject = new Rsp();
+            try {
+                selectedProject.read(selectedFile);
+
+                rspExtractorFrameController.init(selectedProject);
+                rspExtractorFrame.show();
+
+                rspExtractorFrame.setOnHidden(new EventHandler<WindowEvent>() {
+
+                    @Override
+                    public void handle(WindowEvent event) {
+                        List<RspExtractorFrameController.Scan> selectedScans = rspExtractorFrameController.getSelectedScans();
+                        
+                        ObservableList<MatrixAndFile> items1 = listViewHemiPhotoScans.getItems();
+                        
+                        for(RspExtractorFrameController.Scan scan : selectedScans){
+                            items1.add(new MatrixAndFile(scan.getFile(), MatrixUtility.convertMat4DToMatrix4d(scan.getSop())));
+                        }
+                        
+
+                    }
+                });
+
+            } catch (JDOMException | IOException ex) {
+                showErrorDialog(ex);
+            }
+
+        }
+        
+        
+        
+    }
+
+    @FXML
+    private void onActionButtonOpenVoxelFileHemiPhoto(ActionEvent event) {
+    }
+
+    @FXML
+    private void onActionButtonHemiPhotoAddToTaskList(ActionEvent event) {
+        
+        if (lastFCSaveConfiguration != null) {
+            fileChooserSaveConfiguration.setInitialDirectory(lastFCSaveConfiguration.getParentFile());
+            fileChooserSaveConfiguration.setInitialFileName(lastFCSaveConfiguration.getName());
+        }
+
+        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
+        
+        if (selectedFile != null) {
+            
+            lastFCSaveConfiguration = selectedFile;
+            
+            HemiParameters hemiParameters = new HemiParameters();
+            try {
+                
+                hemiParameters.setPixelNumber(Integer.valueOf(textfieldPixelNumber.getText()));
+                hemiParameters.setAzimutsNumber(Integer.valueOf(textfieldAzimutsNumber.getText()));
+                hemiParameters.setZenithsNumber(Integer.valueOf(textfieldZenithsNumber.getText()));
+                
+                int selectedMode = tabpaneHemiPhotoMode.getSelectionModel().getSelectedIndex();
+                
+                switch(selectedMode){
+                    case 0 :
+                        hemiParameters.setMode(HemiParameters.Mode.ECHOS);
+                        hemiParameters.setRxpScansList(listViewHemiPhotoScans.getItems());
+                        break;
+                    case 1:
+                        hemiParameters.setMode(HemiParameters.Mode.PAD);
+                        
+                        hemiParameters.setVoxelFile(new File(textfieldVoxelFilePathHemiPhoto.getText()));
+                        hemiParameters.setSensorPosition(new Point3d(Double.valueOf(textfieldSensorPositionX.getText()),
+                                                                    Double.valueOf(textfieldSensorPositionY.getText()),
+                                                                    Double.valueOf(textfieldSensorPositionZ.getText())));
+                        break;
+                }
+                
+                hemiParameters.setGenerateBitmapFile(checkboxHemiPhotoGenerateBitmapFile.isSelected());
+                
+                if(checkboxHemiPhotoGenerateBitmapFile.isSelected()){
+                    hemiParameters.setOutputBitmapFile(new File(textfieldHemiPhotoOutputBitmapFile.getText()));
+                    
+                    int selectedIndex = comboboxHemiPhotoBitmapOutputMode.getSelectionModel().getSelectedIndex();
+                    switch(selectedIndex){
+                        case 0:
+                            hemiParameters.setBitmapMode(HemiParameters.BitmapMode.PIXEL);
+                            break;
+                        case 1:
+                            hemiParameters.setBitmapMode(HemiParameters.BitmapMode.COLOR);
+                            break;
+                    }
+                    
+                }
+                
+                hemiParameters.setGenerateTextFile(checkboxGenerateSectorsTextFileHemiPhoto.isSelected());
+                
+                if(checkboxGenerateSectorsTextFileHemiPhoto.isSelected()){
+                    hemiParameters.setOutputTextFile(new File(textfieldHemiPhotoOutputTextFile.getText()));
+                }
+                
+                HemiPhotoCfg hemiPhotoCfg = new HemiPhotoCfg(hemiParameters);
+                hemiPhotoCfg.writeConfiguration(selectedFile);
+                addTasksToTaskList(selectedFile);
+                
+            } catch (Exception ex) {
+                showErrorDialog(ex);
+            }
+        }
+    }
+
+    @FXML
+    private void onActionButtonOpenHemiPhotoOutputTextFile(ActionEvent event) {
+        
+        if(lastFCOpenHemiPhotoOutputTextFile != null){
+            fileChooserSaveHemiPhotoOutputTextFile.setInitialDirectory(lastFCOpenHemiPhotoOutputTextFile.getParentFile());
+        }
+        
+        File selectedFile = fileChooserSaveHemiPhotoOutputTextFile.showSaveDialog(stage);
+        
+        if(selectedFile != null){
+            lastFCOpenHemiPhotoOutputTextFile = selectedFile;
+            textfieldHemiPhotoOutputTextFile.setText(selectedFile.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    private void onActionButtonOpenHemiPhotoOutputBitmapFile(ActionEvent event) {
+        
+        if(lastFCOpenHemiPhotoOutputBitmapFile != null){
+            fileChooserSaveHemiPhotoOutputBitmapFile.setInitialDirectory(lastFCOpenHemiPhotoOutputBitmapFile.getParentFile());
+        }
+        
+        File selectedFile = fileChooserSaveHemiPhotoOutputBitmapFile.showSaveDialog(stage);
+        
+        if(selectedFile != null){
+            lastFCOpenHemiPhotoOutputBitmapFile = selectedFile;
+            textfieldHemiPhotoOutputBitmapFile.setText(selectedFile.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    private void onActionMenuItemSelectAllScansHemiPhoto(ActionEvent event) {
+        listViewHemiPhotoScans.getSelectionModel().selectAll();
+    }
+
+    @FXML
+    private void onActionMenuItemUnselectAllScansHemiPhoto(ActionEvent event) {
+        listViewHemiPhotoScans.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    private void onActionButtonRemoveScanFromHemiPhotoListView(ActionEvent event) {
+        
+        ObservableList<MatrixAndFile> selectedItems = listViewHemiPhotoScans.getSelectionModel().getSelectedItems();
+        listViewHemiPhotoScans.getItems().removeAll(selectedItems);
+    }
+
+    @FXML
+    private void onActionMenuItemSelectAllSceneObjects(ActionEvent event) {
+        listviewTreeSceneObjects.getSelectionModel().selectAll();
+    }
+
+    @FXML
+    private void onActionMenuItemUnselectAllSceneObjects(ActionEvent event) {
+        listviewTreeSceneObjects.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    private void onActionButtonRemoveSceneObject(ActionEvent event) {
+        
+        ObservableList<SceneObjectWrapper> selectedItems = listviewTreeSceneObjects.getSelectionModel().getSelectedItems();
+        listviewTreeSceneObjects.getItems().removeAll(selectedItems);
     }
 
     public void setStage(final Stage stage) {
@@ -2202,149 +2268,224 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonVizualize(ActionEvent event) {
 
-        final File voxelFile = listViewVoxelsFiles.getSelectionModel().getSelectedItem();
-        final String attributeToView = comboboxAttributeToView.getSelectionModel().getSelectedItem();
-        
-        final boolean drawDTM = checkboxRaster.isSelected();
-        final File dtmFile = new File(textfieldRasterFilePath.getText());
-        final Mat4D dtmTransfMatrix = MatrixUtility.convertMatrix4dToMat4D(rasterTransfMatrix);
-        final boolean fitDTMToVoxelSpace = checkboxFitRasterToVoxelSpace.isSelected();
-        final int mntFittingMargin = Integer.valueOf(textfieldRasterFittingMargin.getText());
-        final boolean transform  = checkboxUseTransformationMatrix.isSelected();
-        
-        //window size
-        ObservableList<Screen> screens = Screen.getScreens();
+        if (listviewTreeSceneObjects.getItems().size() > 0) {
+            
+            ObservableList<SceneObjectWrapper> sceneObjects = listviewTreeSceneObjects.getItems();
+            
+            try {
 
-        if (screens != null && screens.size() > 0) {
-            SCREEN_WIDTH = screens.get(0).getBounds().getWidth();
-            SCREEN_HEIGHT = screens.get(0).getBounds().getHeight();
-        }
-       
+                Service s = new Service() {
 
-        try {
+                    @Override
+                    protected Task createTask() {
+                        return new Task() {
 
-            Service s = new Service() {
+                            @Override
+                            protected Object call() throws Exception {
 
-                @Override
-                protected Task createTask() {
-                    return new Task() {
+                                Viewer3D viewer3D = new Viewer3D((int) (SCREEN_WIDTH / 4.0d), (int) (SCREEN_HEIGHT / 4.0d), (int) (SCREEN_WIDTH / 1.5d), (int) (SCREEN_HEIGHT / 2.0d), "3d view");
+                                viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
 
-                        @Override
-                        protected Object call() throws Exception {
-
-                            Viewer3D viewer3D = new Viewer3D((int)(SCREEN_WIDTH/ 4.0d), (int)(SCREEN_HEIGHT/ 4.0d), (int)(SCREEN_WIDTH/ 1.5d), (int)(SCREEN_HEIGHT / 2.0d), voxelFile.toString());
-                            viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
-
-                            fr.amap.amapvox.voxviewer.object.scene.Scene scene = viewer3D.getScene();
-                            
-                            /**
-                             * *VOXEL SPACE**
-                             */
-                            updateMessage("Loading voxel space: " + voxelFile.getAbsolutePath());
-                            VoxelSpaceSceneObject voxelSpace = SceneObjectFactory.createVoxelSpace(voxelFile);
-                            voxelSpace.changeCurrentAttribut(attributeToView);
-                            voxelSpace.setShader(scene.instanceLightedShader);
-                            voxelSpace.setDrawType(GLMesh.DrawType.TRIANGLES);
-                            scene.addSceneObject(voxelSpace);
-                            
-                            VoxelFileReader reader = new VoxelFileReader(voxelFile);
-                            VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
-                            
-                            /**
-                             * *DTM**
-                             */
-                            if (drawDTM && dtmFile != null) {
-
-                                updateMessage("Loading DTM");
-                                RegularDtm dtm = DtmLoader.readFromAscFile(dtmFile);
-
-                                if (transform && dtmTransfMatrix != null) {
-                                    dtm.setTransformationMatrix(dtmTransfMatrix);
+                                for(SceneObjectWrapper sceneObjectWrapper : sceneObjects){
+                                    
+                                    SceneObject sceneObject = sceneObjectWrapper.getSceneObject();
+                                    
+                                    /*if(sceneObject instanceof PointCloudSceneObject){
+                                        sceneObject.setShader(viewer3D.getScene().colorShader);
+                                    }*/
+                                    
+                                    viewer3D.getScene().addSceneObject(sceneObject);
                                 }
+                                
+                                /**
+                                 * *light**
+                                 */
+                                //scene.setLightPosition(new Point3F(voxelSpace.getPosition().x, voxelSpace.getPosition().y, voxelSpace.getPosition().z + voxelSpace.widthZ + 100));
 
-                                if (fitDTMToVoxelSpace) {
+                                /**
+                                 * *camera**
+                                 */
+                                
+                                SceneObject root = sceneObjects.get(0).getSceneObject();
+                                TrackballCamera trackballCamera = new TrackballCamera();
+                                trackballCamera.setPivot(root);
+                                trackballCamera.setLocation(new Vec3F(root.getPosition().x +50, root.getPosition().y, root.getPosition().z+50));
+                                viewer3D.getScene().setCamera(trackballCamera);
+                                
+                                viewer3D.show();                               
 
-                                    dtm.setLimits(new BoundingBox2F(new Point2F((float) infos.getMinCorner().x, (float) infos.getMinCorner().y),
-                                            new Point2F((float) infos.getMaxCorner().x, (float) infos.getMaxCorner().y)), mntFittingMargin);
-                                }
-
-                                updateMessage("Converting raster to mesh");
-                                dtm.buildMesh();
-
-                                GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormalesFromDTM(dtm);
-                                SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, false);
-                                dtmSceneObject.setShader(scene.lightedShader);
-                                scene.addSceneObject(dtmSceneObject);
-
+                                return null;
                             }
-                            
-                            /**
-                             * *scale**
-                             */
-                            updateMessage("Generating scale");
-                            final Texture scaleTexture = new Texture(ScaleGradient.createColorScaleBufferedImage(voxelSpace.getGradient(),
-                                    voxelSpace.getAttributValueMin(), voxelSpace.getAttributValueMax(),
-                                    viewer3D.getWidth() - 80, (int) (viewer3D.getHeight() / 20),
-                                    ScaleGradient.Orientation.HORIZONTAL, 5, 8));
+                        };
+                    }
+                };
 
-                            SceneObject scalePlane = SceneObjectFactory.createTexturedPlane(new Vec3F(40, 20, 0), 
-                                                                                            (int) (viewer3D.getWidth() - 80), 
-                                                                                            (int) (viewer3D.getHeight() / 20),
-                                                                                            scaleTexture);
-                            
-                            scalePlane.setShader(scene.texturedShader);
-                            scalePlane.setDrawType(GLMesh.DrawType.TRIANGLES);
-                            scene.addSceneObject(scalePlane);
-                            
-                            
-                            GLMesh boundingBoxMesh = GLMeshFactory.createBoundingBox((float)infos.getMinCorner().x, 
-                                                                    (float)infos.getMinCorner().y,
-                                                                    (float)infos.getMinCorner().z,
-                                                                    (float)infos.getMaxCorner().x, 
-                                                                    (float)infos.getMaxCorner().y,
-                                                                    (float)infos.getMaxCorner().z);
-                                                                    
-                            SceneObject boundingBox = new SimpleSceneObject2(boundingBoxMesh, false);
-                            
-                            SimpleShader s = (SimpleShader) scene.simpleShader;
-                            s.setColor(new Vec3F(1, 0, 0));
-                            boundingBox.setShader(s);
-                            boundingBox.setDrawType(GLMesh.DrawType.LINES);
-                            scene.addSceneObject(boundingBox);
-                            
-                            voxelSpace.addPropertyChangeListener("gradientUpdated", new PropertyChangeListener() {
+                ProgressDialog d = new ProgressDialog(s);
+                d.show();
 
-                                @Override
-                                public void propertyChange(PropertyChangeEvent evt) {
-                                    
-                                    BufferedImage image = ScaleGradient.createColorScaleBufferedImage(voxelSpace.getGradient(),
-                                                                voxelSpace.getAttributValueMin(), voxelSpace.getAttributValueMax(),
-                                                                viewer3D.getWidth() - 80, (int) (viewer3D.getHeight() / 20),
-                                                                ScaleGradient.Orientation.HORIZONTAL, 5, 8);
-                                    
-                                    scaleTexture.setBufferedImage(image);
+                s.start();
+
+            } catch (Exception ex) {
+                logger.error("Cannot launch 3d view", ex);
+            }
+
+        } else {
+            final File voxelFile = listViewVoxelsFiles.getSelectionModel().getSelectedItem();
+            final String attributeToView = comboboxAttributeToView.getSelectionModel().getSelectedItem();
+
+            final boolean drawDTM = checkboxRaster.isSelected();
+            final File dtmFile = new File(textfieldRasterFilePath.getText());
+            final Mat4D dtmTransfMatrix = MatrixUtility.convertMatrix4dToMat4D(rasterTransfMatrix);
+            final boolean fitDTMToVoxelSpace = checkboxFitRasterToVoxelSpace.isSelected();
+            final int mntFittingMargin = Integer.valueOf(textfieldRasterFittingMargin.getText());
+            final boolean transform = checkboxUseTransformationMatrix.isSelected();
+
+            //window size
+            ObservableList<Screen> screens = Screen.getScreens();
+
+            if (screens != null && screens.size() > 0) {
+                SCREEN_WIDTH = screens.get(0).getBounds().getWidth();
+                SCREEN_HEIGHT = screens.get(0).getBounds().getHeight();
+            }
+
+            try {
+
+                Service s = new Service() {
+
+                    @Override
+                    protected Task createTask() {
+                        return new Task() {
+
+                            @Override
+                            protected Object call() throws Exception {
+
+                                Viewer3D viewer3D = new Viewer3D((int) (SCREEN_WIDTH / 4.0d), (int) (SCREEN_HEIGHT / 4.0d), (int) (SCREEN_WIDTH / 1.5d), (int) (SCREEN_HEIGHT / 2.0d), voxelFile.toString());
+                                viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
+
+                                fr.amap.amapvox.voxviewer.object.scene.Scene scene = viewer3D.getScene();
+
+                                /**
+                                 * *VOXEL SPACE**
+                                 */
+                                updateMessage("Loading voxel space: " + voxelFile.getAbsolutePath());
+
+                                VoxelSpaceSceneObject voxelSpace = new VoxelSpaceSceneObject(voxelFile);
+
+                                voxelSpace.addVoxelSpaceListener(new VoxelSpaceAdapter() {
+
+                                    @Override
+                                    public void voxelSpaceCreationProgress(int progress) {
+                                        updateProgress(progress, 100);
+                                    }
+                                });
+
+                                voxelSpace.loadVoxels();
+
+                                voxelSpace.changeCurrentAttribut(attributeToView);
+                                voxelSpace.setShader(scene.instanceLightedShader);
+                                voxelSpace.setDrawType(GLMesh.DrawType.TRIANGLES);
+                                scene.addSceneObject(voxelSpace);
+
+                                VoxelFileReader reader = new VoxelFileReader(voxelFile);
+                                VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
+
+                                /**
+                                 * *DTM**
+                                 */
+                                if (drawDTM && dtmFile != null) {
+
+                                    updateMessage("Loading DTM");
+                                    updateProgress(0, 100);
+
+                                    RegularDtm dtm = DtmLoader.readFromAscFile(dtmFile);
+
+                                    if (transform && dtmTransfMatrix != null) {
+                                        dtm.setTransformationMatrix(dtmTransfMatrix);
+                                    }
+
+                                    if (fitDTMToVoxelSpace) {
+
+                                        dtm.setLimits(new BoundingBox2F(new Point2F((float) infos.getMinCorner().x, (float) infos.getMinCorner().y),
+                                                new Point2F((float) infos.getMaxCorner().x, (float) infos.getMaxCorner().y)), mntFittingMargin);
+                                    }
+
+                                    updateMessage("Converting raster to mesh");
+                                    dtm.buildMesh();
+
+                                    GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormalesFromDTM(dtm);
+                                    SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, false);
+                                    dtmSceneObject.setShader(scene.lightedShader);
+                                    scene.addSceneObject(dtmSceneObject);
+
+                                    updateProgress(100, 100);
+
                                 }
-                            });
 
-                            /**
-                             * *light**
-                             */
-                            scene.setLightPosition(new Point3F(voxelSpace.getPosition().x, voxelSpace.getPosition().y, voxelSpace.getPosition().z + voxelSpace.widthZ + 100));
+                                /**
+                                 * *scale**
+                                 */
+                                updateMessage("Generating scale");
+                                final Texture scaleTexture = new Texture(ScaleGradient.createColorScaleBufferedImage(voxelSpace.getGradient(),
+                                        voxelSpace.getAttributValueMin(), voxelSpace.getAttributValueMax(),
+                                        viewer3D.getWidth() - 80, (int) (viewer3D.getHeight() / 20),
+                                        ScaleGradient.Orientation.HORIZONTAL, 5, 8));
 
-                            /**
-                             * *camera**
-                             */
-                            TrackballCamera trackballCamera = new TrackballCamera();
-                            trackballCamera.setPivot(voxelSpace);
-                            trackballCamera.setLocation(new Vec3F(voxelSpace.getPosition().x + voxelSpace.widthX, voxelSpace.getPosition().y + voxelSpace.widthY, voxelSpace.getPosition().z + voxelSpace.widthZ));
-                            viewer3D.getScene().setCamera(trackballCamera);
-                            
-                            
-                            Platform.runLater(new Runnable() {
+                                SceneObject scalePlane = SceneObjectFactory.createTexturedPlane(new Vec3F(40, 20, 0),
+                                        (int) (viewer3D.getWidth() - 80),
+                                        (int) (viewer3D.getHeight() / 20),
+                                        scaleTexture);
 
-                                @Override
-                                public void run() {
-                                        
+                                scalePlane.setShader(scene.texturedShader);
+                                scalePlane.setDrawType(GLMesh.DrawType.TRIANGLES);
+                                scene.addSceneObject(scalePlane);
+
+                                GLMesh boundingBoxMesh = GLMeshFactory.createBoundingBox((float) infos.getMinCorner().x,
+                                        (float) infos.getMinCorner().y,
+                                        (float) infos.getMinCorner().z,
+                                        (float) infos.getMaxCorner().x,
+                                        (float) infos.getMaxCorner().y,
+                                        (float) infos.getMaxCorner().z);
+
+                                SceneObject boundingBox = new SimpleSceneObject2(boundingBoxMesh, false);
+
+                                SimpleShader s = (SimpleShader) scene.simpleShader;
+                                s.setColor(new Vec3F(1, 0, 0));
+                                boundingBox.setShader(s);
+                                boundingBox.setDrawType(GLMesh.DrawType.LINES);
+                                scene.addSceneObject(boundingBox);
+
+                                voxelSpace.addPropertyChangeListener("gradientUpdated", new PropertyChangeListener() {
+
+                                    @Override
+                                    public void propertyChange(PropertyChangeEvent evt) {
+
+                                        BufferedImage image = ScaleGradient.createColorScaleBufferedImage(voxelSpace.getGradient(),
+                                                voxelSpace.getAttributValueMin(), voxelSpace.getAttributValueMax(),
+                                                viewer3D.getWidth() - 80, (int) (viewer3D.getHeight() / 20),
+                                                ScaleGradient.Orientation.HORIZONTAL, 5, 8);
+
+                                        scaleTexture.setBufferedImage(image);
+                                    }
+                                });
+
+                                /**
+                                 * *light**
+                                 */
+                                scene.setLightPosition(new Point3F(voxelSpace.getPosition().x, voxelSpace.getPosition().y, voxelSpace.getPosition().z + voxelSpace.widthZ + 100));
+
+                                /**
+                                 * *camera**
+                                 */
+                                TrackballCamera trackballCamera = new TrackballCamera();
+                                trackballCamera.setPivot(voxelSpace);
+                                trackballCamera.setLocation(new Vec3F(voxelSpace.getPosition().x + voxelSpace.widthX, voxelSpace.getPosition().y + voxelSpace.widthY, voxelSpace.getPosition().z + voxelSpace.widthZ));
+                                viewer3D.getScene().setCamera(trackballCamera);
+
+                                Platform.runLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+
                                         final Stage toolBarFrameStage = new Stage();
                                         final FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ToolBoxFrame.fxml"));
 
@@ -2352,12 +2493,11 @@ public class MainFrameController implements Initializable {
                                             stage.setAlwaysOnTop(false);
 
                                             Parent root = loader.load();
-                                            Scene scene = new Scene(root);
-                                            toolBarFrameStage.setScene(scene);
+                                            toolBarFrameStage.setScene(new Scene(root));
                                             toolBarFrameStage.initStyle(StageStyle.UNDECORATED);
 
                                             toolBarFrameStage.setAlwaysOnTop(true);
-                                            
+
                                             ToolBoxFrameController toolBarFrameController = loader.getController();
                                             toolBarFrameController.setStage(toolBarFrameStage);
                                             toolBarFrameStage.setX(viewer3D.getPosition().getX());
@@ -2379,25 +2519,78 @@ public class MainFrameController implements Initializable {
                                                     }
                                                 }
                                             });
-                                            
+
                                             toolBarFrameController.initContent(voxelSpace);
                                             toolBarFrameStage.setAlwaysOnTop(true);
 
                                             toolBarFrameStage.show();
 
-                                            //toolBarFrameStage.setHeight(joglWindow.getHeight() / 2);
+                                            double maxToolBoxHeight = toolBarFrameStage.getHeight();
                                             viewer3D.getJoglContext().startX = (int) toolBarFrameStage.getWidth();
 
                                             viewer3D.addWindowListener(new WindowAdapter() {
 
                                                 @Override
-                                                public void windowGainedFocus(com.jogamp.newt.event.WindowEvent e) {
+                                                public void windowResized(com.jogamp.newt.event.WindowEvent we) {
+                                                    Window window = (Window) we.getSource();
+                                                    final int height = window.getHeight();
 
-                                                    viewer3D.setIsFocused(true);
                                                     Platform.runLater(new Runnable() {
 
                                                         @Override
                                                         public void run() {
+
+                                                            if (height < maxToolBoxHeight) {
+                                                                toolBarFrameStage.setHeight(height);
+                                                            } else {
+                                                                toolBarFrameStage.setHeight(maxToolBoxHeight);
+                                                            }
+
+                                                        }
+                                                    });
+                                                }
+
+                                                @Override
+                                                public void windowMoved(com.jogamp.newt.event.WindowEvent we) {
+                                                    Window window = (Window) we.getSource();
+
+                                                    final Point2i locationOnScreen = new Point2i(window.getX(), window.getY());
+                                                    Platform.runLater(new Runnable() {
+
+                                                        @Override
+                                                        public void run() {
+                                                            toolBarFrameStage.setX((int) locationOnScreen.getX());
+                                                            toolBarFrameStage.setY((int) locationOnScreen.getY());
+                                                        }
+                                                    });
+                                                }
+
+                                                @Override
+                                                public void windowDestroyed(com.jogamp.newt.event.WindowEvent we) {
+
+                                                    Platform.runLater(new Runnable() {
+
+                                                        @Override
+                                                        public void run() {
+                                                            toolBarFrameStage.close();
+                                                        }
+                                                    });
+                                                }
+
+                                                @Override
+                                                public void windowGainedFocus(com.jogamp.newt.event.WindowEvent we) {
+
+                                                    viewer3D.setIsFocused(true);
+
+                                                    Platform.runLater(new Runnable() {
+
+                                                        @Override
+                                                        public void run() {
+
+                                                            if (!toolBarFrameStage.isShowing()) {
+                                                                toolBarFrameStage.toFront();
+                                                            }
+
                                                             toolBarFrameStage.setIconified(false);
                                                             toolBarFrameStage.setAlwaysOnTop(true);
                                                         }
@@ -2421,34 +2614,32 @@ public class MainFrameController implements Initializable {
                                                 }
                                             });
 
-                                            viewer3D.addWindowListener(new GLRenderWindowListener(toolBarFrameStage, viewer3D.getAnimator()));
-                                            //joglWindow.setOnTop();
                                             viewer3D.show();
 
                                             toolBarFrameStage.setAlwaysOnTop(true);
-                                        
 
-                                    } catch (IOException e) {
-                                        logger.error("Loading ToolBarFrame.fxml failed", e);
-                                    }catch (Exception e) {
-                                        logger.error("Error during toolbar init", e);
+                                        } catch (IOException e) {
+                                            logger.error("Loading ToolBarFrame.fxml failed", e);
+                                        } catch (Exception e) {
+                                            logger.error("Error during toolbar init", e);
+                                        }
                                     }
-                                }
-                            });                            
+                                });
 
-                            return null;
-                        }
-                    };
-                }
-            };
+                                return null;
+                            }
+                        };
+                    }
+                };
 
-            ProgressDialog d = new ProgressDialog(s);
-            d.show();
+                ProgressDialog d = new ProgressDialog(s);
+                d.show();
 
-            s.start();
+                s.start();
 
-        } catch (Exception ex) {
-            logger.error("Cannot launch 3d view", ex);
+            } catch (Exception ex) {
+                logger.error("Cannot launch 3d view", ex);
+            }
         }
 
     }
@@ -5602,5 +5793,909 @@ public class MainFrameController implements Initializable {
         ObservableList<T> items = lsv.<T>getItems();
         lsv.<T>setItems(null);
         lsv.<T>setItems(items);
+    }
+    
+    static class ColorRectCell extends ListCell<VoxelFileChart> {
+
+        @Override
+        public void updateItem(VoxelFileChart item, boolean empty) {
+            super.updateItem(item, empty);
+            
+            if (item != null/* && !item.loaded*/) {
+                pseudoClassStateChanged(loadedPseudoClass, item.loaded);
+                setText(item.label);
+            }
+        }
+    }
+    
+    private ObservableList<SimulationPeriod> data;
+    
+    private class SceneObjectWrapper extends GridPane{
+        
+        private SceneObject sceneObject;
+        private final Label label;
+        private final ProgressBar progressBar;
+        
+        //properties
+        private String name;
+        private String path;
+        
+
+        public SceneObjectWrapper(File file, ProgressBar progressBar) {
+            
+            this.label = new Label(file.getName());
+            this.path = file.getAbsolutePath();
+            this.name = file.getName();
+            this.progressBar = progressBar;
+            
+            HBox labelWrapper = new HBox(this.label);
+            HBox progressBarWrapper = new HBox(this.progressBar);
+            
+            labelWrapper.setAlignment(Pos.CENTER_LEFT);
+            progressBarWrapper.setAlignment(Pos.CENTER_RIGHT);
+            
+            this.addColumn(0, labelWrapper);
+            this.addColumn(1, progressBarWrapper);
+            
+            ColumnConstraints columnConstraints1 = new ColumnConstraints();
+            columnConstraints1.setPercentWidth(50);
+            
+            ColumnConstraints columnConstraints2 = new ColumnConstraints();
+            columnConstraints1.setPercentWidth(50);
+            
+            this.getColumnConstraints().addAll(columnConstraints1, columnConstraints2);
+            
+            this.prefWidthProperty().bind(listviewTreeSceneObjects.widthProperty());
+        }
+
+        public Label getLabel() {
+            return label;
+        }
+
+        public ProgressBar getProgressBar() {
+            return progressBar;
+        }
+
+        public SceneObject getSceneObject() {
+            return sceneObject;
+        }
+
+        public void setSceneObject(SceneObject sceneObject) {
+            this.sceneObject = sceneObject;
+        }
+        
+        public List<SceneObjectProperty> getPropertyList(){
+            
+            List<SceneObjectProperty> propertiesList = new ArrayList<>();
+            
+            propertiesList.add(new SceneObjectProperty("name", name));
+            propertiesList.add(new SceneObjectProperty("path", path));
+            
+            return propertiesList;
+        }
+        
+    }
+    
+    private boolean isFileTypeKnown(File file){
+        
+        String extension = FileManager.getExtension(file);
+        
+        switch(extension){
+            
+            case ".las":
+            case ".laz":
+            case ".asc":
+            case ".rsp":
+            case ".rxp":
+            case ".vox":
+                return true;
+            default:
+                String header = FileManager.readHeader(file.getAbsolutePath());
+            
+                if(header != null && header.equals("VOXEL SPACE")){
+                    return true;
+                }
+            
+            return false;
+        }
+    }
+    
+    
+    private void addSceneObjectToList(final File file) throws Exception{
+        
+        if(isFileTypeKnown(file)){
+            
+            SceneObjectWrapper sceneObjectWrapper = new SceneObjectWrapper(file, new ProgressBar(0));
+            
+            
+            String extension = FileManager.getExtension(file);
+            
+            LazAttributs lazAttributs = new LazAttributs();
+            LasAttributs lasAttributs = new LasAttributs();
+            
+            switch (extension) {
+
+            case ".las":
+                
+                listviewTreeSceneObjects.getItems().add(sceneObjectWrapper);
+                
+                //select attributs to import in the attributs importer frame
+                attributsImporterFrame.show();
+                attributsImporterFrameController.setAttributsList(lasAttributs.getAttributsNames());
+                
+                //create scene object and set attributs colors
+                attributsImporterFrame.setOnHidden(new EventHandler<WindowEvent>() {
+
+                    @Override
+                    public void handle(WindowEvent event) {
+
+                        if (attributsImporterFrameController.getSelectedAttributs() != null &&
+                                !attributsImporterFrameController.getSelectedAttributs().isEmpty()) {
+                            
+                            Service s = new Service() {
+
+                                @Override
+                                protected Task createTask() {
+                                    return new Task() {
+
+                                        @Override
+                                        protected Object call() throws Exception {
+
+                                            lasAttributs.processList(attributsImporterFrameController.getSelectedAttributs());
+
+                                            PointCloudSceneObject sceneObject = new PointCloudSceneObject(
+                                                    attributsImporterFrameController.getSelectedAttributs().size());
+
+                                            LasReader reader = new LasReader();
+                                            
+                                            
+                                            try {
+                                                reader.open(file);
+
+                                                LasHeader header = reader.getHeader();
+
+                                            sceneObject.setPosition(new Point3F((float)(header.getMinX() + (header.getMaxX()-header.getMinX())/2.0),
+                                                                    (float)(header.getMinY() + (header.getMaxY()-header.getMinY())/2.0),
+                                                                    (float)(header.getMinZ() + (header.getMaxZ()-header.getMinZ())/2.0)));
+
+                                            long pointNumber = header.getNumberOfPointrecords();
+
+                                            long step = (1*pointNumber)/100;
+
+                                            long count = 0;
+                                            long pointsProcessed = 0;
+
+                                            ColorGradient cg = new ColorGradient(0, 1);
+                                            cg.setGradientColor(ColorGradient.GRADIENT_RAINBOW3);
+                                            Iterator<PointDataRecordFormat> lasIterator = reader.iterator();
+
+                                            //compute statistic
+
+                                            while(lasIterator.hasNext()){
+
+                                                PointDataRecordFormat point = lasIterator.next();
+                                                lasAttributs.getClassificationStatistic().addValue(point.getClassification());
+                                                lasAttributs.getIntensityStatistic().addValue(point.getIntensity());
+                                                lasAttributs.getReturnNumberStatistic().addValue(point.getReturnNumber());
+                                                lasAttributs.getNumberOfReturnsStatistic().addValue(point.getNumberOfReturns());
+                                                lasAttributs.getTimeStatistic().addValue(point.getGpsTime());
+
+                                                count++;
+                                                pointsProcessed++;
+
+                                                if(count == step){
+                                                    updateProgress(pointsProcessed, pointNumber);
+                                                    count = 0;
+                                                }
+                                            }
+
+                                            count = 0;
+                                            pointsProcessed = 0;
+                                            
+                                            lasIterator = reader.iterator();
+
+                                            while(lasIterator.hasNext()){
+
+                                                PointDataRecordFormat point = lasIterator.next();
+                                                
+                                                sceneObject.addPoint((float)((point.getX() * header.getxScaleFactor()) + header.getxOffset()),
+                                                        (float)((point.getY() * header.getyScaleFactor()) + header.getyOffset()),
+                                                        (float)((point.getZ() * header.getzScaleFactor()) + header.getzOffset()));
+                                                
+                                                Color c;
+                                                
+                                                if(lasAttributs.isExportClassification()){
+                                                    cg.setMinValue((float)lasAttributs.getClassificationStatistic().getMinValue());
+                                                    cg.setMaxValue((float)lasAttributs.getClassificationStatistic().getMaxValue());
+                                                    c = cg.getColor((float)point.getClassification());
+                                                    sceneObject.addColor(0, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                }
+                                                
+                                                if(lasAttributs.isExportIntensity()){
+                                                    cg.setMinValue((float)lasAttributs.getIntensityStatistic().getMinValue());
+                                                    cg.setMaxValue((float)lasAttributs.getIntensityStatistic().getMaxValue());
+                                                    c = cg.getColor((float)point.getIntensity());
+                                                    sceneObject.addColor(1, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                }
+                                                
+                                                if(lasAttributs.isExportNumberOfReturns()){
+                                                    cg.setMinValue((float)lasAttributs.getNumberOfReturnsStatistic().getMinValue());
+                                                    cg.setMaxValue((float)lasAttributs.getNumberOfReturnsStatistic().getMaxValue());
+                                                    c = cg.getColor((float)point.getNumberOfReturns());
+                                                    sceneObject.addColor(2, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                }
+                                                
+                                                if(lasAttributs.isExportReturnNumber()){
+                                                    cg.setMinValue((float)lasAttributs.getReturnNumberStatistic().getMinValue());
+                                                    cg.setMaxValue((float)lasAttributs.getReturnNumberStatistic().getMaxValue());
+                                                    c = cg.getColor((float)point.getReturnNumber());
+                                                    sceneObject.addColor(3, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                }
+                                                
+                                                if(lasAttributs.isExportTime()){
+                                                    cg.setMinValue((float)lasAttributs.getTimeStatistic().getMinValue());
+                                                    cg.setMaxValue((float)lasAttributs.getTimeStatistic().getMaxValue());
+                                                    c = cg.getColor((float)point.getGpsTime());
+                                                    sceneObject.addColor(4, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                }
+                                                
+                                                count++;
+                                                pointsProcessed++;
+
+                                                if(count == step){
+                                                    updateProgress(pointsProcessed, pointNumber);
+                                                    count = 0;
+                                                }
+                                            }
+                                            
+                                            sceneObject.initMesh();
+                                            sceneObject.setShader(fr.amap.amapvox.voxviewer.object.scene.Scene.colorShader);
+                                            sceneObjectWrapper.setSceneObject(sceneObject);
+                                            
+
+                                            } catch (Exception ex) {
+                                                java.util.logging.Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                            return null;
+                                        }
+                                    };
+                                }
+                            };
+
+                            sceneObjectWrapper.getProgressBar().progressProperty().bind(s.progressProperty());
+                            s.start();    
+                        }
+                    }
+                });
+                
+                break;
+            case ".laz":
+                
+                listviewTreeSceneObjects.getItems().add(sceneObjectWrapper);
+                
+                //select attributs to import in the attributs importer frame
+                attributsImporterFrame.show();
+                attributsImporterFrameController.setAttributsList(lazAttributs.getAttributsNames());
+                
+                //create scene object and set attributs colors
+                attributsImporterFrame.setOnHidden(new EventHandler<WindowEvent>() {
+
+                    @Override
+                    public void handle(WindowEvent event) {
+
+                        if (attributsImporterFrameController.getSelectedAttributs() != null &&
+                                !attributsImporterFrameController.getSelectedAttributs().isEmpty()) {
+                            
+                            Service s = new Service() {
+
+                                @Override
+                                protected Task createTask() {
+                                    return new Task() {
+
+                                        @Override
+                                        protected Object call() throws Exception {
+
+                                            lazAttributs.processList(attributsImporterFrameController.getSelectedAttributs());
+
+                                            PointCloudSceneObject sceneObject = new PointCloudSceneObject(
+                                                    attributsImporterFrameController.getSelectedAttributs().size());
+
+                                            LazExtraction lazExtraction = new LazExtraction();
+                                            try {
+                                                lazExtraction.openLazFile(file);
+
+                                                LasHeader header = lazExtraction.getHeader();
+
+                                            sceneObject.setPosition(new Point3F((float)(header.getMinX() + (header.getMaxX()-header.getMinX())/2.0),
+                                                                    (float)(header.getMinY() + (header.getMaxY()-header.getMinY())/2.0),
+                                                                    (float)(header.getMinZ() + (header.getMaxZ()-header.getMinZ())/2.0)));
+
+                                            long pointNumber = header.getNumberOfPointrecords();
+
+                                            long step = (1*pointNumber)/100;
+
+                                            long count = 0;
+                                            long pointsProcessed = 0;
+
+                                            ColorGradient cg = new ColorGradient(0, 1);
+                                            cg.setGradientColor(ColorGradient.GRADIENT_RAINBOW3);
+                                            Iterator<LasPoint> lazIterator = lazExtraction.iterator();
+
+                                            //compute statistic
+
+                                            while(lazIterator.hasNext()){
+
+                                                LasPoint point = lazIterator.next();
+                                                lazAttributs.getClassificationStatistic().addValue(point.classification);
+                                                lazAttributs.getIntensityStatistic().addValue(point.i);
+                                                lazAttributs.getReturnNumberStatistic().addValue(point.r);
+                                                lazAttributs.getNumberOfReturnsStatistic().addValue(point.n);
+                                                lazAttributs.getTimeStatistic().addValue(point.t);
+
+                                                count++;
+                                                pointsProcessed++;
+
+                                                if(count == step){
+                                                    updateProgress(pointsProcessed, pointNumber);
+                                                    count = 0;
+                                                }
+                                            }
+
+                                            count = 0;
+                                            pointsProcessed = 0;
+
+                                            lazExtraction = new LazExtraction();
+                                            lazExtraction.openLazFile(file);
+                                            lazIterator = lazExtraction.iterator();
+
+                                            while(lazIterator.hasNext()){
+
+                                                LasPoint point = lazIterator.next();
+
+                                                point.x = (point.x * header.getxScaleFactor()) + header.getxOffset();
+                                                point.y = (point.y * header.getyScaleFactor()) + header.getyOffset();
+                                                point.z = (point.z * header.getzScaleFactor()) + header.getzOffset();
+
+                                                sceneObject.addPoint((float)point.x, (float)point.y, (float)point.z);
+                                                
+                                                Color c;
+                                                
+                                                if(lazAttributs.isExportClassification()){
+                                                    cg.setMinValue((float)lazAttributs.getClassificationStatistic().getMinValue());
+                                                    cg.setMaxValue((float)lazAttributs.getClassificationStatistic().getMaxValue());
+                                                    c = cg.getColor((float)point.classification);
+                                                    sceneObject.addColor(0, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                }
+                                                
+                                                if(lazAttributs.isExportIntensity()){
+                                                    cg.setMinValue((float)lazAttributs.getIntensityStatistic().getMinValue());
+                                                    cg.setMaxValue((float)lazAttributs.getIntensityStatistic().getMaxValue());
+                                                    c = cg.getColor((float)point.i);
+                                                    sceneObject.addColor(1, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                }
+                                                
+                                                if(lazAttributs.isExportNumberOfReturns()){
+                                                    cg.setMinValue((float)lazAttributs.getNumberOfReturnsStatistic().getMinValue());
+                                                    cg.setMaxValue((float)lazAttributs.getNumberOfReturnsStatistic().getMaxValue());
+                                                    c = cg.getColor((float)point.n);
+                                                    sceneObject.addColor(2, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                }
+                                                
+                                                if(lazAttributs.isExportReturnNumber()){
+                                                    cg.setMinValue((float)lazAttributs.getReturnNumberStatistic().getMinValue());
+                                                    cg.setMaxValue((float)lazAttributs.getReturnNumberStatistic().getMaxValue());
+                                                    c = cg.getColor((float)point.r);
+                                                    sceneObject.addColor(3, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                }
+                                                
+                                                if(lazAttributs.isExportTime()){
+                                                    cg.setMinValue((float)lazAttributs.getTimeStatistic().getMinValue());
+                                                    cg.setMaxValue((float)lazAttributs.getTimeStatistic().getMaxValue());
+                                                    c = cg.getColor((float)point.t);
+                                                    sceneObject.addColor(4, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                }
+                                                
+                                                count++;
+                                                pointsProcessed++;
+
+                                                if(count == step){
+                                                    updateProgress(pointsProcessed, pointNumber);
+                                                    count = 0;
+                                                }
+                                            }
+
+                                            lazExtraction.close();
+
+                                            sceneObject.initMesh();
+                                            sceneObject.setShader(fr.amap.amapvox.voxviewer.object.scene.Scene.colorShader);
+                                            sceneObjectWrapper.setSceneObject(sceneObject);
+
+                                            } catch (Exception ex) {
+                                                java.util.logging.Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                            return null;
+                                        }
+                                    };
+                                }
+                            };
+
+                            sceneObjectWrapper.getProgressBar().progressProperty().bind(s.progressProperty());
+                            s.start();    
+                        }
+                    }
+                });
+                
+                break;
+            case ".asc":
+                break;
+            case ".rsp":
+                
+                Rsp rsp = new Rsp();
+                rsp.read(file);
+                
+                rspExtractorFrameController.init(rsp);
+                rspExtractorFrame.show();
+                
+                rspExtractorFrame.setOnHidden(new EventHandler<WindowEvent>() {
+
+                    @Override
+                    public void handle(WindowEvent event) {
+                        
+                        final List<RspExtractorFrameController.Scan> selectedScans = rspExtractorFrameController.getSelectedScans();
+                        
+                        final int lastListIndex = listviewTreeSceneObjects.getItems().size();
+                        for(RspExtractorFrameController.Scan scan : selectedScans){
+                            listviewTreeSceneObjects.getItems().add(new SceneObjectWrapper(scan.getFile(), new ProgressBar()));
+                        }
+                        
+                        Service s = new Service() {
+
+                            @Override
+                            protected Task createTask() {
+                                return new Task() {
+
+                                    @Override
+                                    protected Object call() throws Exception {
+                                        
+                                        final List<SceneObject> sceneObjects = new ArrayList<>(selectedScans.size());
+                                        
+                                        for(RspExtractorFrameController.Scan scan : selectedScans){
+                                            
+                                            PointCloudSceneObject pointCloud = new PointCloudSceneObject(1);
+                                            
+                                            RxpExtraction reader = new RxpExtraction();
+                                            reader.openRxpFile(scan.getFile(), RxpExtraction.SHOT_WITH_REFLECTANCE);
+                                            final Iterator<Shot> iterator = reader.iterator();
+                                            
+                                            Mat4D sopMatrix = scan.getSop();
+                                            int count = 0;
+                                            
+                                            ColorGradient cg = new ColorGradient(-30, 10);
+                                            cg.setGradientColor(ColorGradient.GRADIENT_RAINBOW3);
+
+                                            while(iterator.hasNext()){
+                                                
+                                                Shot shot = iterator.next();
+
+                                                for(int i=0;i<shot.ranges.length;i++){
+
+                                                    double range = shot.ranges[i];
+
+                                                    float x = (float) (shot.origin.x + shot.direction.x * range);
+                                                    float y = (float) (shot.origin.y + shot.direction.y * range);
+                                                    float z = (float) (shot.origin.z + shot.direction.z * range);
+
+                                                    Vec4D transformedPoint = Mat4D.multiply(sopMatrix, new Vec4D(x, y, z, 1));
+                                                    pointCloud.addPoint((float)transformedPoint.x, (float)transformedPoint.y, (float)transformedPoint.z);
+
+                                                    double reflectance = shot.reflectances[i];
+
+                                                    Color reflectanceColor = cg.getColor((float)reflectance);
+
+                                                    pointCloud.addColor(0, reflectanceColor.getRed()/255.0f, reflectanceColor.getGreen()/255.0f, reflectanceColor.getBlue()/255.0f);
+                                                }
+
+                                                
+                                            }
+                                            
+                                            pointCloud.initMesh();
+                                            pointCloud.setShader(fr.amap.amapvox.voxviewer.object.scene.Scene.colorShader);
+                                            sceneObjects.add(pointCloud);
+                                            
+                                            count++;
+                                            //updateProgress(count, selectedScans.size());
+                                        }
+                                        
+                                        Platform.runLater(new Runnable() {
+
+                                            @Override
+                                            public void run() {
+                                                
+                                                for(int i = 0;i<sceneObjects.size();i++){
+                                                    SceneObject sceneObject = sceneObjects.get(i);
+                                                    listviewTreeSceneObjects.getItems().get(lastListIndex+i).setSceneObject(sceneObject);
+                                                    listviewTreeSceneObjects.getItems().get(lastListIndex+i).getProgressBar().setProgress(1);
+                                                }                                                
+                                            }
+                                        });
+                                        
+                                        return null;
+                                    }
+                                };
+                            }
+                        };
+                        
+                        //sceneObjectWrapper.getProgressBar().progressProperty().bind(s.progressProperty());
+                        s.start();
+                    }
+                });
+                
+                break;
+            case ".rxp":
+                break;
+            case ".vox":
+            default:
+                String fileHeader = FileManager.readHeader(file.getAbsolutePath());
+
+                if (fileHeader != null && fileHeader.equals("VOXEL SPACE")) {
+
+                }        
+                }
+            
+        }
+        
+    }
+    
+    private LeafAngleDistribution getLeafAngleDistribution(){
+        
+        LeafAngleDistribution.Type type = comboboxLADChoice.getSelectionModel().getSelectedItem();
+        
+        double param1 = 0;
+        double param2 = 0;
+        
+        if(type == ELLIPSOIDAL){
+            try{
+                param1 = Double.valueOf(textFieldTwoBetaAlphaParameter.getText());
+            }catch(Exception e){}
+        }
+        
+        if(type == TWO_PARAMETER_BETA){
+        
+            try{
+                param1 = Double.valueOf(textFieldTwoBetaAlphaParameter.getText());
+            }catch(Exception e){}
+            
+            try{
+                param2 = Double.valueOf(textFieldTwoBetaBetaParameter.getText());
+            }catch(Exception e){}
+            
+        }
+        
+        LeafAngleDistribution distribution = new LeafAngleDistribution(type, param1, param2);
+        
+        return distribution;
+    }
+    
+    private void displayPDFAllDistributions(){
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        
+        
+        LeafAngleDistribution distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.ELLIPSOIDAL);
+        
+        XYSeries serie = new XYSeries(distribution.getType(), false);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double pdf = distribution.getDensityProbability(Math.toRadians(angleInDegrees));
+            serie.add(angleInDegrees, pdf);
+        }
+        
+        //elliptical
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.ELLIPTICAL);
+        
+        XYSeries serie2 = new XYSeries(distribution.getType(), false);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double pdf = distribution.getDensityProbability(Math.toRadians(angleInDegrees));
+            serie2.add(angleInDegrees, pdf);
+        }
+        
+        dataset.addSeries(serie2);
+        
+        //erectophile
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.ERECTOPHILE);
+        
+        XYSeries serie3 = new XYSeries(distribution.getType(), false);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double pdf = distribution.getDensityProbability(Math.toRadians(angleInDegrees));
+            serie3.add(angleInDegrees, pdf);
+        }
+        
+        dataset.addSeries(serie3);
+        
+        //extremophile
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.EXTREMOPHILE);
+        
+        XYSeries serie4 = new XYSeries(distribution.getType().toString(), false);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double pdf = distribution.getDensityProbability(Math.toRadians(angleInDegrees));
+            serie4.add(angleInDegrees, pdf);
+        }
+        
+        dataset.addSeries(serie4);
+        
+        //horizontal
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.HORIZONTAL);
+        
+        XYSeries serie5 = new XYSeries(distribution.getType(), false);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double pdf = distribution.getDensityProbability(Math.toRadians(angleInDegrees));
+            serie5.add(angleInDegrees, pdf);
+        }
+        
+        dataset.addSeries(serie5);
+        
+        //vertical
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.VERTICAL);
+        
+        XYSeries serie6 = new XYSeries(distribution.getType(), false);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double pdf = distribution.getDensityProbability(Math.toRadians(angleInDegrees));
+            serie6.add(angleInDegrees, pdf);
+        }
+        
+        dataset.addSeries(serie6);
+        
+        //plagiophile
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.PLAGIOPHILE);
+        
+        XYSeries serie7 = new XYSeries(distribution.getType(), false);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double pdf = distribution.getDensityProbability(Math.toRadians(angleInDegrees));
+            serie7.add(angleInDegrees, pdf);
+        }
+        
+        dataset.addSeries(serie7);
+        
+        //planophile
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.PLANOPHILE);
+        
+        XYSeries serie8 = new XYSeries(distribution.getType(), false);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double pdf = distribution.getDensityProbability(Math.toRadians(angleInDegrees));
+            serie8.add(angleInDegrees, pdf);
+        }
+        
+        dataset.addSeries(serie8);
+        
+        //spherical
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.SPHERIC);
+        
+        XYSeries serie9 = new XYSeries(distribution.getType(), false);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double pdf = distribution.getDensityProbability(Math.toRadians(angleInDegrees));
+            serie9.add(angleInDegrees, pdf);
+        }
+        
+        dataset.addSeries(serie9);
+        
+        //uniform
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.UNIFORM);
+        
+        XYSeries serie10 = new XYSeries(distribution.getType(), false);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double pdf = distribution.getDensityProbability(Math.toRadians(angleInDegrees));
+            serie10.add(angleInDegrees, pdf);
+        }
+        
+        dataset.addSeries(serie10);
+            
+        ChartViewer viewer = new ChartViewer("PDF", 500, 500, 1);
+        viewer.insertChart(ChartViewer.createBasicChart("f(θL)", dataset, "Leaf inclination angle (degrees)", "PDF"));
+        viewer.show();
+    }
+    
+    private void displayGThetaAllDistributions(){
+        
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        
+        
+        LeafAngleDistribution distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.ELLIPSOIDAL);
+        
+        XYSeries serie = new XYSeries(distribution.getType(), false);
+        
+        DirectionalTransmittance m = new DirectionalTransmittance(distribution);
+        m.buildTable(180);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            serie.add(angleInDegrees, GTheta);
+        }
+        
+        //elliptical
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.ELLIPTICAL);
+        
+        serie = new XYSeries(distribution.getType(), false);
+        
+        m = new DirectionalTransmittance(distribution);
+        m.buildTable(180);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            serie.add(angleInDegrees, GTheta);
+        }
+        
+        dataset.addSeries(serie);
+        
+        //erectophile
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.ERECTOPHILE);
+        
+        serie = new XYSeries(distribution.getType(), false);
+        
+        m = new DirectionalTransmittance(distribution);
+        m.buildTable(180);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            serie.add(angleInDegrees, GTheta);
+        }
+        
+        dataset.addSeries(serie);
+        
+        //extremophile
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.EXTREMOPHILE);
+        
+        serie = new XYSeries(distribution.getType(), false);
+        
+        m = new DirectionalTransmittance(distribution);
+        m.buildTable(180);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            serie.add(angleInDegrees, GTheta);
+        }
+        
+        dataset.addSeries(serie);
+        
+        //horizontal
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.HORIZONTAL);
+        
+        serie = new XYSeries(distribution.getType(), false);
+        
+        m = new DirectionalTransmittance(distribution);
+        m.buildTable(180);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            serie.add(angleInDegrees, GTheta);
+        }
+        
+        dataset.addSeries(serie);
+        
+        //vertical
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.VERTICAL);
+        
+        serie = new XYSeries(distribution.getType(), false);
+        
+        m = new DirectionalTransmittance(distribution);
+        m.buildTable(180);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            serie.add(angleInDegrees, GTheta);
+        }
+        
+        dataset.addSeries(serie);
+        
+        //plagiophile
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.PLAGIOPHILE);
+        
+        serie = new XYSeries(distribution.getType(), false);
+        
+        m = new DirectionalTransmittance(distribution);
+        m.buildTable(180);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            serie.add(angleInDegrees, GTheta);
+        }
+        
+        dataset.addSeries(serie);
+        
+        //planophile
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.PLANOPHILE);
+        
+        serie = new XYSeries(distribution.getType(), false);
+        
+        m = new DirectionalTransmittance(distribution);
+        m.buildTable(180);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            serie.add(angleInDegrees, GTheta);
+        }
+        
+        dataset.addSeries(serie);
+        
+        //spherical
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.SPHERIC);
+        
+        serie = new XYSeries(distribution.getType(), false);
+        
+        m = new DirectionalTransmittance(distribution);
+        m.buildTable(180);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            serie.add(angleInDegrees, GTheta);
+        }
+        
+        dataset.addSeries(serie);
+        
+        //uniform
+        distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.UNIFORM);
+        
+        serie = new XYSeries(distribution.getType(), false);
+        
+        m = new DirectionalTransmittance(distribution);
+        m.buildTable(180);
+        
+        for(int i = 0 ; i < 180 ; i++){
+            
+            double angleInDegrees = i/2.0;
+            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            serie.add(angleInDegrees, GTheta);
+        }
+        
+        dataset.addSeries(serie);
+            
+        ChartViewer viewer = new ChartViewer("GTheta", 500, 500, 1);
+        viewer.insertChart(ChartViewer.createBasicChart("GTheta ~ Beam direction zenithal angle", dataset, "Beam direction zenithal angle (degrees)", "GTheta"));
+        viewer.show();
     }
 }

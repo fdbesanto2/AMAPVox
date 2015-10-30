@@ -248,6 +248,11 @@ public abstract class GLMesh {
         gl.glGenBuffers(2, tmp);
         vboId=tmp.get(0);
         iboId=tmp.get(1);
+        
+        totalBuffersSize = 0;
+        offset = 0;
+        offsets = new ArrayList<>();
+        buffersSizes = new ArrayList<>();
     }
     
     protected void sendIBOData(GL3 gl){

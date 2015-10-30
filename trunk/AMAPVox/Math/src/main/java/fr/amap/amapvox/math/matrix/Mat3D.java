@@ -9,18 +9,18 @@ import fr.amap.amapvox.math.vector.Vec3D;
 
 
 /**
- *
+ * A double precision 3x3 matrix
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class Mat3D {
     
     /**
-     *
+     * The matrix array
      */
     public double[] mat;
     
     /**
-     *
+     * Constructs and initialize a new double precision 3x3 matrix filled with 0
      */
     public Mat3D(){
         
@@ -29,19 +29,19 @@ public class Mat3D {
     }
     
     /**
-     *
-     * @return
+     * Convert the 3x3 matrix to an undefine sized matrix
+     * @return a new Mat object with 3x3 size
      */
     public Mat toMat(){
-        Mat result = new Mat(3,3);
         
+        Mat result = new Mat(3,3);
         result.setData(mat);
         
         return result;
     }
     
     /**
-     *
+     * Constructs and initialize a new 3x3 matrix with an existing matrix
      * @param source matrix to copy
      */
     public Mat3D(Mat3D source){
@@ -60,6 +60,12 @@ public class Mat3D {
         mat[9] = source.mat[9];
     }
     
+    /**
+     * Multiply a double precision 3x3 matrix by a double precision 3d vector in this order
+     * @param mat3D the 3x3 double precision matrix
+     * @param vec3D the 3x3 double precision vector
+     * @return the result as a new double precision 3d vector
+     */
     public static Vec3D multiply(Mat3D mat3D, Vec3D vec3D){
         
         Vec3D dest = new Vec3D();

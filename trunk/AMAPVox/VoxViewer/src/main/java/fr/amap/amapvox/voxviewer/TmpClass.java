@@ -16,7 +16,7 @@ import fr.amap.amapvox.math.vector.Vec4D;
 import fr.amap.amapvox.voxviewer.event.BasicEvent;
 import fr.amap.amapvox.voxviewer.object.camera.TrackballCamera;
 import fr.amap.amapvox.voxviewer.object.scene.PointCloudSceneObject;
-import fr.amap.amapvox.voxviewer.renderer.GLRenderWindowListener;
+import fr.amap.amapvox.voxviewer.renderer.MinimalWindowAdapter;
 import java.io.File;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -35,7 +35,7 @@ public class TmpClass{
         public static void execute(){
             
             try {
-                PointCloudSceneObject pointCloud = new PointCloudSceneObject(4);
+                PointCloudSceneObject pointCloud = new PointCloudSceneObject(2);
                 Rsp rsp = new Rsp();
                 rsp.read(new File("/media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/project.rsp"));
 
@@ -56,14 +56,6 @@ public class TmpClass{
                     try{
                         
                         Shot shot = iterator.next();
-                    
-                        if(shot == null){
-                            System.out.println("test");
-                        }else{
-                            if(shot.ranges == null){
-                                System.out.println("test");
-                            }
-                        }
 
                         for(int i=0;i<shot.ranges.length;i++){
 
@@ -86,13 +78,13 @@ public class TmpClass{
                             Point3f rainbowRGB = Colouring.rainbowRGB(zColor);
                             pointCloud.addColor(1, rainbowRGB.x/255.0f, rainbowRGB.y/255.0f, rainbowRGB.z/255.0f);
 
-                            float yColor = (float) (Math.abs(y)/70.0f);
+                            /*float yColor = (float) (Math.abs(y)/70.0f);
                             Point3f rainbowRGBY = Colouring.rainbowRGB(yColor);
                             pointCloud.addColor(2, rainbowRGBY.x/255.0f, rainbowRGBY.y/255.0f, rainbowRGBY.z/255.0f);
 
                             float xColor = (float) (Math.abs(x)/70.0f);
                             Point3f rainbowRGBX = Colouring.rainbowRGB(xColor);
-                            pointCloud.addColor(3, rainbowRGBX.x/255.0f, rainbowRGBX.y/255.0f, rainbowRGBX.z/255.0f);
+                            pointCloud.addColor(3, rainbowRGBX.x/255.0f, rainbowRGBX.y/255.0f, rainbowRGBX.z/255.0f);*/
                         }
 
                         count++;
@@ -221,7 +213,7 @@ public class TmpClass{
 
 
 
-                viewer3D.addWindowListener(new GLRenderWindowListener(null, viewer3D.getAnimator()));
+                //viewer3D.addWindowListener(new MinimalWindowAdapter(null, viewer3D.getAnimator()));
                 //joglWindow.setOnTop();
                 viewer3D.show();
             } catch (Exception ex) {

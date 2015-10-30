@@ -240,48 +240,6 @@ public abstract class Shader {
         }
     }
     
-    public static String[] composeShaderUniforms(String[]... uniformsArrays){
-        
-        int count = 0;
-        
-        for (String[] uniformsArray : uniformsArrays) {
-            count += uniformsArray.length;
-        }
-        
-        String[] globalUniformArray = new String[count];
-        
-        int count2 = 0;
-        for (int i=0;i< uniformsArrays.length;i++) {
-            for (int j = 0; j<uniformsArrays[i].length; j++) {
-                globalUniformArray[count2] = uniformsArrays[i][j];
-                count2++;
-            }
-        }
-        
-        return globalUniformArray;
-    }
-    
-    public static String[] composeShaderAttributes(String[]... attributesArrays){
-        
-        int count = 0;
-        
-        for (String[] attributesArray : attributesArrays) {
-            count += attributesArray.length;
-        }
-        
-        String[] globalAttributeArray = new String[count];
-        
-        int count2 = 0;
-        for (int i=0;i< attributesArrays.length;i++) {
-            for (int j = 0; j<attributesArrays[i].length; j++) {
-                globalAttributeArray[count2] = attributesArrays[i][j];
-                count2++;
-            }
-        }
-        
-        return globalAttributeArray;
-    }
-    
     private InputStreamReader getStream(String path){
         
         return new InputStreamReader(Shader.class.getClassLoader().getResourceAsStream(path));

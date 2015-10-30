@@ -66,7 +66,7 @@ public class Scene {
     public Shader labelShader = new TextureShader("labelShader");
     public Shader lightedShader = new LightedShader("lightShader");
     public Shader simpleShader = new SimpleShader("simpleShader");
-    public Shader colorShader = new ColorShader("colorShader");
+    public static Shader colorShader = new ColorShader("colorShader");
     
     //global uniforms, can be used inside shaders files
     public UniformMat4F viewMatrixUniform = new UniformMat4F("viewMatrix");
