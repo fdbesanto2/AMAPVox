@@ -28,6 +28,7 @@
         <module>VoxWriter</module>
         <module>VoxChecking</module>
         <module>Math</module>
+        <module>Gui</module>
     </modules>
     
     <distributionManagement>        

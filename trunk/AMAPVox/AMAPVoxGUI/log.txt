@@ -18058,3 +18058,52 @@ i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal l
 2015-10-30 14:07:52 INFO  - file written ( 31.0 s )
 2015-10-30 14:07:52 INFO  - Voxelisation finished in 12546.0 s
 2015-10-30 14:07:52 INFO  - Voxelisation finished in 12546.0 s
+2015-11-03 10:29:20 WARN  - Cannot find input_file element
+2015-11-03 10:29:20 WARN  - Cannot find output_file element
+2015-11-03 10:29:38 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-03 10:29:39 INFO  - Laz file is closed
+2015-11-03 10:29:51 INFO  - Building transmittance functions table
+2015-11-03 10:29:51 INFO  - Transmittance functions table is built
+2015-11-03 10:29:51 INFO  - allocate!!!!!!!!
+2015-11-03 10:29:51 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-03 10:29:52 INFO  - Laz file is closed
+2015-11-03 10:29:54 INFO  - Shots processed: 144511
+2015-11-03 10:29:54 INFO  - writing file: /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox
+2015-11-03 10:29:58 INFO  - file written ( 3.0 s )
+2015-11-03 10:29:58 INFO  - las voxelisation finished in 10.0 s
+2015-11-03 10:32:01 INFO  - Building transmittance functions table
+2015-11-03 10:32:01 INFO  - Transmittance functions table is built
+2015-11-03 10:32:01 INFO  - allocate!!!!!!!!
+2015-11-03 10:32:01 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-03 10:32:02 INFO  - Laz file is closed
+2015-11-03 10:32:04 INFO  - Shots processed: 141106
+2015-11-03 10:32:04 INFO  - writing file: /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox
+2015-11-03 10:32:08 INFO  - file written ( 3.0 s )
+2015-11-03 10:32:08 INFO  - las voxelisation finished in 10.0 s
+2015-11-03 10:33:00 INFO  - Building transmittance functions table
+2015-11-03 10:33:00 INFO  - Transmittance functions table is built
+2015-11-03 10:33:00 INFO  - allocate!!!!!!!!
+2015-11-03 10:33:00 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-03 10:33:01 INFO  - Laz file is closed
+2015-11-03 10:33:02 INFO  - Shots processed: 141106
+2015-11-03 10:33:02 INFO  - writing file: /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox
+2015-11-03 10:33:03 INFO  - file written ( 0.0 s )
+2015-11-03 10:33:03 INFO  - las voxelisation finished in 6.0 s
+2015-11-03 10:34:19 INFO  - Building transmittance functions table
+2015-11-03 10:34:19 INFO  - Transmittance functions table is built
+2015-11-03 10:34:19 INFO  - allocate!!!!!!!!
+2015-11-03 10:34:19 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-03 10:34:20 INFO  - Laz file is closed
+2015-11-03 10:34:21 INFO  - Shots processed: 141106
+2015-11-03 10:34:42 INFO  - writing file: /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox
+2015-11-03 10:34:46 INFO  - file written ( 3.0 s )
+2015-11-03 10:34:46 INFO  - las voxelisation finished in 30.0 s
+2015-11-03 10:37:58 INFO  - Building transmittance functions table
+2015-11-03 10:37:58 INFO  - Transmittance functions table is built
+2015-11-03 10:37:58 INFO  - allocate!!!!!!!!
+2015-11-03 10:37:58 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-03 10:37:59 INFO  - Laz file is closed
+2015-11-03 10:38:01 INFO  - Shots processed: 144511
+2015-11-03 10:38:15 INFO  - writing file: /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox
+2015-11-03 10:38:19 INFO  - file written ( 3.0 s )
+2015-11-03 10:38:19 INFO  - las voxelisation finished in 24.0 s

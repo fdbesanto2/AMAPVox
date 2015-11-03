@@ -95,7 +95,10 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -217,7 +220,8 @@ public class MainFrameController implements Initializable {
     private DateChooserFrameController dateChooserFrameController;
     private ViewCapsSetupFrameController viewCapsSetupFrameController;
     private AttributsImporterFrameController attributsImporterFrameController;
-
+    private TextFileParserFrameController textFileParserFrameController;
+    
     private BlockingQueue<File> queue = new ArrayBlockingQueue<>(100);
     private int taskNumber = 0;
     private int taskID = 1;
@@ -1262,6 +1266,12 @@ public class MainFrameController implements Initializable {
             attributsImporterFrame.setScene(new Scene(root));
             attributsImporterFrameController.setStage(attributsImporterFrame);
         } catch (IOException ex) {
+            logger.error("Cannot load fxml file", ex);
+        }
+        
+        try {
+            textFileParserFrameController = TextFileParserFrameController.getInstance();
+        } catch (Exception ex) {
             logger.error("Cannot load fxml file", ex);
         }
         
@@ -5888,6 +5898,8 @@ public class MainFrameController implements Initializable {
             case ".rsp":
             case ".rxp":
             case ".vox":
+            case ".txt":
+            case "":
                 return true;
             default:
                 String header = FileManager.readHeader(file.getAbsolutePath());
@@ -6333,14 +6345,142 @@ public class MainFrameController implements Initializable {
                 break;
             case ".rxp":
                 break;
+            case ".txt":
+                
+                listviewTreeSceneObjects.getItems().add(sceneObjectWrapper);
+                
+                textFileParserFrameController.setColumnAssignment(true);
+                textFileParserFrameController.setColumnAssignmentValues("Ignore", "X", "Y", "Z", "Red", "Green", "Blue");
+        
+                textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(0, 1);
+                textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(1, 2);
+                textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(2, 3);
+                textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(3, 4);
+                
+                textFileParserFrameController.setTextFile(file);
+        
+                Stage textFileParserFrame = textFileParserFrameController.getStage();
+                textFileParserFrame.show();
+                
+                textFileParserFrame.setOnHidden(new EventHandler<WindowEvent>() {
+
+                    @Override
+                    public void handle(WindowEvent event) {
+                        
+                        String separator = textFileParserFrameController.getSeparator();
+                        List<String> columnAssignment = textFileParserFrameController.getAssignedColumnsItems();
+                        final int numberOfLines = textFileParserFrameController.getNumberOfLines();
+                        
+                        final int headerIndex = textFileParserFrameController.getHeaderIndex();
+                        int skipNumber = textFileParserFrameController.getSkipLinesNumber();
+                        
+                        int xIndex = -1, yIndex = -1, zIndex = -1;
+                        
+                        for(int i =0;i<columnAssignment.size();i++){
+                            
+                            String item = columnAssignment.get(i);
+                            switch(item){
+                                case "X":
+                                    xIndex = i;
+                                    break;
+                                case "Y":
+                                    yIndex = i;
+                                    break;
+                                case "Z":
+                                    zIndex = i;
+                                    break;
+                            } 
+                        }
+                        
+                        if(headerIndex != -1){
+                            skipNumber++;
+                        }
+                        
+                        final int finalSkipNumber = skipNumber;
+                        final int finalXIndex = xIndex;
+                        final int finalYIndex = yIndex;
+                        final int finalZIndex = zIndex;
+                        
+                        Service service = new Service() {
+
+                            @Override
+                            protected Task createTask() {
+                                return new Task() {
+
+                                    @Override
+                                    protected Object call() throws Exception {
+                                        
+                                        PointCloudSceneObject sceneObject = new PointCloudSceneObject(1);
+                                        sceneObject.setPosition(new Point3F(0, 0, 0));
+
+                                        BufferedReader reader;
+                                        try {
+                                            reader = new BufferedReader(new FileReader(file));
+
+                                            String line;
+                                            int count = 0;
+
+                                            for(int i=0;i<finalSkipNumber;i++){
+                                                reader.readLine();
+                                            }
+
+                                            while((line = reader.readLine()) != null){
+
+                                                if(count == numberOfLines){
+                                                    break;
+                                                }
+
+                                                String[] lineSplitted = line.split(separator);
+                                                
+                                                sceneObject.addPoint(Float.valueOf(lineSplitted[finalXIndex]),
+                                                        Float.valueOf(lineSplitted[finalYIndex]),
+                                                        Float.valueOf(lineSplitted[finalZIndex]));
+
+                                                sceneObject.addColor(0, 1, 0, 0);
+
+                                                count++;
+                                            }
+
+                                            reader.close();                            
+
+                                        } catch (FileNotFoundException ex) {
+                                            logger.error("Cannot load point file", ex);
+                                        } catch (IOException ex) {
+                                            logger.error("Cannot load point file", ex);
+                                        }
+                                        
+                                        sceneObject.initMesh();
+                                        sceneObject.setShader(fr.amap.amapvox.voxviewer.object.scene.Scene.colorShader);
+
+                                        Platform.runLater(new Runnable() {
+
+                                            @Override
+                                            public void run() {
+                                                sceneObjectWrapper.setSceneObject(sceneObject);
+                                                sceneObjectWrapper.getProgressBar().setProgress(1);
+                                            }
+                                        });
+                                        return null;
+                                    }
+                                };
+                            }
+                        };
+                        
+                        service.start();
+                    }
+                });
+                
+                break;
             case ".vox":
             default:
                 String fileHeader = FileManager.readHeader(file.getAbsolutePath());
 
                 if (fileHeader != null && fileHeader.equals("VOXEL SPACE")) {
 
-                }        
+                }else{
+                    
                 }
+            }
             
         }
         

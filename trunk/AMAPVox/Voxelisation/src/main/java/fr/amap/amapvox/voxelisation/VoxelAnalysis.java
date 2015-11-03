@@ -1027,6 +1027,10 @@ public class VoxelAnalysis {
         return indices;
     }    
     
+    public static void cleanIsolatedVoxels(File voxelFile, int nbEchosThreshold, int neighboursRange){
+        
+        //VoxelFileReader 
+    }
     
     public void correctNaNs(){
         

@@ -137,6 +137,8 @@ public class RspExtractorFrameController implements Initializable {
         
         root.setExpanded(true);
         
+        
+        
         ArrayList<Scans> rxpList = rsp.getRxpList();
         
         double minX = 0, minY = 0, minZ = 0;
@@ -327,6 +329,8 @@ public class RspExtractorFrameController implements Initializable {
 //                }
 //            }
 //        }
+        
+        root.getChildren().clear();
         
         for(Scans scans : rxpList){
             

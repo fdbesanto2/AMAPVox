@@ -270,15 +270,14 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
             @Override
             public Shot next() {
                 
+                
+                //parcours les points las jusqu'à retrouver un tir avec tous ses échos
                 for (int i=currentLasPointIndex;i<lasPointList.size(); i++) {
 
                     if(!wasReturned){
-                        //System.out.println(i);
+                        
                         LasPoint lasPoint = lasPointList.get(i);
-                        /*
-                        if(iterations % step == 0){
-                            fireProgress("Voxelisation", (int) ((iterations*100)/(float)maxIterations));
-                        }*/
+                        
 
                         double targetTime = lasPoint.t;
 
@@ -296,16 +295,9 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
                         double ratio = (lasPoint.t - min) / (max - min);
 
                         //formule interpolation
-                        /*
-                        double xValue = trajectoryMap.get(min).x + ((trajectoryMap.get(max).x - trajectoryMap.get(min).x) * ratio);
-                        double yValue = trajectoryMap.get(min).y + ((trajectoryMap.get(max).y - trajectoryMap.get(min).y) * ratio);
-                        double zValue = trajectoryMap.get(min).z + ((trajectoryMap.get(max).z - trajectoryMap.get(min).z) * ratio);
-                        */
                         double xValue = trajectoryList.get(indexMin).x + ((trajectoryList.get(indexMax).x - trajectoryList.get(indexMin).x) * ratio);
                         double yValue = trajectoryList.get(indexMin).y + ((trajectoryList.get(indexMax).y - trajectoryList.get(indexMin).y) * ratio);
                         double zValue = trajectoryList.get(indexMin).z + ((trajectoryList.get(indexMax).z - trajectoryList.get(indexMin).z) * ratio);
-
-                        //trajectoryInterpolate.add(new Vec3D(xValue, yValue, zValue));
 
                         mix = new LasShot(lasPoint, 0, 0, 0);
 
@@ -337,6 +329,7 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
 
                     double time = mix.lasPoint.t;
 
+                    //le temps associé au point à changé donc le tir peut être retourné
                     if (isNewExp && time != oldTime && !wasReturned) {
 
                         /**
@@ -347,7 +340,7 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
                          * veut pas nettoyer
                          *
                          */
-                        if (oldN == count) {
+                        //if (oldN == count) {
                             
                             //currentLasPointIndex++;
                             count = 0;
@@ -355,17 +348,17 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
                             wasReturned = true;
                             
                             return shot;
-                        }
+                        //}
                         
-                        count = 0;
-                        isNewExp = false;
+                        //count = 0;
+                        //isNewExp = false;
 
                     }
-                    
-                    //currentLasPointIndex = i;
 
+                    //le point appartient toujours au même tir
                     if (time == oldTime || (!isNewExp && time != oldTime)) {
 
+                        //le point est associé à un nouveau tir donc on crée ce tir
                         if ((!isNewExp && time != oldTime) || currentEchoFound == currentNbEchos) {
 
                             shot= new Shot(mix.lasPoint.n, new Point3d(mix.xloc_s, mix.yloc_s, mix.zloc_s), 
@@ -386,7 +379,7 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
 
                         }else if(mix.lasPoint.r <= mix.lasPoint.n){
 
-                            int currentEchoIndex = mix.lasPoint.r-1;
+                            int currentEchoIndex = mix.lasPoint.r-1; //rang de l'écho
                             
                             if(currentEchoIndex == shot.ranges.length){
                                 System.out.println("test");
