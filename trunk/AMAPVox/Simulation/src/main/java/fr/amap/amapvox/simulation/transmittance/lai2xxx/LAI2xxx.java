@@ -15,15 +15,20 @@ For further information, please contact Gregoire Vincent.
 package fr.amap.amapvox.simulation.transmittance.lai2xxx;
 
 import fr.amap.amapvox.simulation.transmittance.util.SphericalCoordinates;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import javax.vecmath.Vector3f;
 import org.apache.log4j.Logger;
 
 /**
- *
- * @author calcul
+ * <p>This class compute lai2000-2200 values based on the lai-2200 manual</p>
+ * @see <a href=http://www.licor.co.za/manuals/LAI-2200_Manual.pdf>http://www.licor.co.za/manuals/LAI-2200_Manual.pdf</a>
+ * @author Julien Heurtebize
  */
 
 
@@ -56,6 +61,7 @@ public abstract class LAI2xxx {
     protected float[] avgTransByRing;
     protected float[] meanContactNumber;
     protected float[] gapsByRing;
+    protected float[][] gapsByRingAndPosition;
     protected float[] contactNumberByRing;
     
     /**
@@ -70,7 +76,8 @@ public abstract class LAI2xxx {
     
     protected float[][] transmittances;
     
-    protected float LAI;
+    protected float[] byPosition_LAI;
+    protected float global_LAI; //lai for all positions
     protected float acf;
     
     protected ViewCap viewCap;
@@ -85,10 +92,30 @@ public abstract class LAI2xxx {
         
         this.directionNumber = shotNumber;
         this.viewCap = viewCap;
-        this.rings = rings;
         this.avgTransByRing = new float[rings.length];
         this.gapsByRing = new float[rings.length];
         this.meanContactNumber = new float[rings.length];
+        
+        this.rings = rings;
+        
+        /****normalize weighting factor to sum to 1****/
+        float residualWeigtingFactor = 0;
+        int nbOfMaskedRings = 0;
+        
+        for(Ring ring : rings){
+            if(ring.isMasked()){
+                residualWeigtingFactor += ring.getWeightingFactor();
+                nbOfMaskedRings++;
+            }
+        }
+        
+        int nbRingsLeft = rings.length-nbOfMaskedRings;
+                
+        for(Ring ring : rings){
+            if(!ring.isMasked()){
+                ring.setWeightingFactor(ring.getWeightingFactor()+(residualWeigtingFactor / nbRingsLeft));
+            }
+        }
     }
     
     public enum ViewCap{
@@ -163,11 +190,39 @@ public abstract class LAI2xxx {
         for(int i=0;i<rings.length;i++){
             
             //pourcentage d'angle solide
-            float solidAnglePercentage = rings[i].getSolidAngle()/solidAngleSum;
+            float solidAnglePercentage = (rings[i].getSolidAngle()/solidAngleSum);
             
             shotNumberByRing[i] = (int) Math.ceil(solidAnglePercentage * directionNumber);
             rings[i].setNbDirections(shotNumberByRing[i]);
         }
+        
+        int nbDirectionForOneRing = (directionNumber/5);
+        
+        for(int i=0;i<rings.length;i++){
+            
+           shotNumberByRing[i] = (shotNumberByRing[i] + nbDirectionForOneRing)/2;
+        }
+        
+        int nbSubRings=3;
+        switch(directionNumber){
+            case 500:
+                nbSubRings = 4;
+                break;
+            case 4000:
+                nbSubRings = 8;
+                break;
+            case 10000:
+                nbSubRings = 12;
+                break;
+            default:
+                if(directionNumber > 4000){
+                    nbSubRings = 6;
+                }else if(directionNumber < 500){
+                    nbSubRings = 3;
+                }
+                
+        }
+        
         
         //paramètres définissant le balayage incrémentielle d'un angle donné
         RingInformation[] ringInformations = new RingInformation[rings.length];
@@ -177,9 +232,14 @@ public abstract class LAI2xxx {
             Ring ring = rings[i];
             
             ringInformations[i] = new RingInformation(
+                    ring.getLowerZenithalAngle(),
+                    ring.getUpperZenithalAngle(),
+                    360/(float)shotNumberByRing[i], shotNumberByRing[i], rings[i].getSolidAngle());
+                    
+            /*ringInformations[i] = new RingInformation(
                     ring.getUpperZenithalAngle() + (ring.getLowerZenithalAngle() - ring.getUpperZenithalAngle()) * 0.25f,
                     ring.getUpperZenithalAngle() + (ring.getLowerZenithalAngle() - ring.getUpperZenithalAngle()) * 0.75f,
-                    360/(float)shotNumberByRing[i]);
+                    360/(float)shotNumberByRing[i]);*/
             
         }
         
@@ -203,35 +263,67 @@ public abstract class LAI2xxx {
                     
             float azimuthalAngle = 0;
             float elevationAngle;
+            float azimuthalOffset = 0;
             
-            boolean lowAngle = false;
-            
-            //pour tous les tirs d'une plage angulaire
-            for (int s=0;s<shotNumberByRing[i];s++){
+            for (int j=0;j<ringInformation.nbSubRings;j++){
                 
-                //view cap filtrage
-                if(azimuthalAngle < minAzimuthAngle && azimuthalAngle > maxAzimuthAngle){
-                    //on filtre
-                }else{
+                if(ringInformation.subRingsSamplingRate[j] != 0){
                     
-                    if(lowAngle){
-                        elevationAngle = ringInformation.getLowerShotAngle();
-                    }else{
-                        elevationAngle = ringInformation.getUpperShotAngle();
+                    float azimuthalStep = 360/(float)ringInformation.subRingsSamplingRate[j];
+                    
+                    azimuthalAngle = azimuthalOffset;
+                
+                    for (int s=0;s<ringInformation.subRingsSamplingRate[j];s++){
+
+                        elevationAngle = ringInformation.subRingsAngles[j];
+                        azimuthAnglesList.add(azimuthalAngle);
+                        elevationAnglesList.add(elevationAngle);
+
+                        SphericalCoordinates sphericalCoordinates = new SphericalCoordinates(
+                                (float)Math.toRadians(azimuthalAngle), (float)Math.toRadians(elevationAngle));
+
+                        directionList.add(sphericalCoordinates.toCartesian());
+
+                        azimuthalAngle += azimuthalStep;
                     }
-                    
-                    azimuthAnglesList.add(azimuthalAngle);
-                    elevationAnglesList.add(elevationAngle);
 
-                    SphericalCoordinates sphericalCoordinates = new SphericalCoordinates(
-                            (float)Math.toRadians(azimuthalAngle), (float)Math.toRadians(elevationAngle));
-
-                    directionList.add(sphericalCoordinates.toCartesian());
+                    azimuthalOffset += (azimuthalStep/2.0f);
                 }
                 
-                azimuthalAngle += ringInformations[i].getAzimuthalStepAngle();
-                
             }
+            
+//            boolean lowAngle = false;
+//            
+//            
+//            
+//            //pour tous les tirs d'une plage angulaire
+//            for (int s=0;s<shotNumberByRing[i];s++){
+//                
+//                //view cap filtrage
+//                if(azimuthalAngle < minAzimuthAngle && azimuthalAngle > maxAzimuthAngle){
+//                    //on filtre
+//                }else{
+//                    
+//                    if(lowAngle){ //alternate lower angle and upper angle
+//                        elevationAngle = ringInformation.getLowerShotAngle();
+//                        lowAngle = false;
+//                    }else{
+//                        elevationAngle = ringInformation.getUpperShotAngle();
+//                        lowAngle = true;
+//                    }
+//                    
+//                    azimuthAnglesList.add(azimuthalAngle);
+//                    elevationAnglesList.add(elevationAngle);
+//
+//                    SphericalCoordinates sphericalCoordinates = new SphericalCoordinates(
+//                            (float)Math.toRadians(azimuthalAngle), (float)Math.toRadians(elevationAngle));
+//
+//                    directionList.add(sphericalCoordinates.toCartesian());
+//                }
+//                
+//                azimuthalAngle += ringInformations[i].getAzimuthalStepAngle();
+//                
+//            }
         }
         
         directions = new Vector3f[directionList.size()];
@@ -245,6 +337,26 @@ public abstract class LAI2xxx {
             elevationAngles[i] = (float) Math.toRadians(elevationAnglesList.get(i));
         }
         
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/home/calcul/Documents/Julien/Test_transmittance_marilyne/directions.obj")));
+            
+            float length = 100;
+            for(Vector3f direction : directions){
+                
+                float x1 = 0, y1 = 0, z1 = 0;
+                
+                float x2 = x1+direction.x*length;
+                float y2 = y1+direction.y*length;
+                float z2 = z1+direction.z*length;
+                
+                writer.write("v "+ x1+" "+y1+" "+z1+"\n");
+                writer.write("v "+ x2+" "+y2+" "+z2+"\n");
+            }
+            
+            writer.close();
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(LAI2xxx.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public Vector3f[] getDirections() {
@@ -272,7 +384,11 @@ public abstract class LAI2xxx {
         //compute avgtrans
         logger.info("Computation of AVGTRANS...");
         int[] countByRing = new int[rings.length];
+        
+        int[][] countByPositionAndRing = new int[positionNumber][rings.length];
         avgTransByRing = new float[rings.length];
+        
+        float[][] avgTransByPosAndRing = new float[positionNumber][rings.length];
             
         for(int j=0;j<positionNumber;j++){
             for(int d=0;d<directionNumber;d++){
@@ -282,9 +398,10 @@ public abstract class LAI2xxx {
                 
                 if(!Float.isNaN(transmittances[i][j])){
                     avgTransByRing[i] += transmittances[i][j];
+                    avgTransByPosAndRing[j][i] += transmittances[i][j];
                     countByRing[i]++;
+                    countByPositionAndRing[j][i]++;
                 }
-                
             }
         }
         
@@ -293,14 +410,23 @@ public abstract class LAI2xxx {
             avgTransByRing[i] /= countByRing[i];
         }
         
+        for(int j=0;j<positionNumber;j++){
+            for(int i=0;i<rings.length;i++){
+                avgTransByPosAndRing[j][i] /= countByPositionAndRing[j][i];
+            }
+        }
+        
         //compute contact numbers (CNTC#)
         logger.info("Computation of CNTC#...");
         contactNumberByRing = new float[rings.length]; //Ki
+        
+        float[][] contactNumberByPositionAndRing = new float[positionNumber][rings.length]; //Ki
         
         //contact value for the pair for each ring (Kij)
         float[][] contactValueForPairByRing = new float[rings.length][positionNumber];
 
         countByRing = new int[rings.length];
+        countByPositionAndRing = new int[positionNumber][rings.length];
 
         //calcul des indices K
         for(int j=0;j<positionNumber;j++){
@@ -314,8 +440,13 @@ public abstract class LAI2xxx {
                 if(transmittances[i][j] != 0){
                     
                     contactValueForPairByRing[i][j] = (float) (-Math.log(transmittances[i][j]) / pathLength);
-                    contactNumberByRing[i] += -Math.log(transmittances[i][j]) / pathLength;
+                    
+                    float contactNumber = (float) (-Math.log(transmittances[i][j]) / pathLength);
+                    contactNumberByRing[i] += contactNumber;
+                    contactNumberByPositionAndRing[j][i] += contactNumber;
+                    
                     countByRing[i]++;
+                    countByPositionAndRing[j][i]++;
                 }else{
                     contactValueForPairByRing[i][j] = Float.NaN;
                 }
@@ -326,21 +457,50 @@ public abstract class LAI2xxx {
             contactNumberByRing[i] /= countByRing[i];
         }
         
-        //compute LAI
+        //mean contact number for each position
+        for(int j=0;j<positionNumber;j++){
+            for(int i=0;i<rings.length;i++){
+                contactNumberByPositionAndRing[j][i] /= countByPositionAndRing[j][i];
+            }
+        }
+        
+        //compute global_LAI
         logger.info("Computation of LAI...");
-        LAI = 0.0f;
+        global_LAI = 0.0f;
 
         for(int i=0;i<rings.length;i++){
-            LAI += contactNumberByRing[i] * rings[i].getWeightingFactor();
+            if(!rings[i].isMasked()){
+                global_LAI += contactNumberByRing[i] * rings[i].getWeightingFactor();
+            }
         }
 
-        LAI *= 2;
+        global_LAI *= 2;
+        
+        //compute one LAI by position
+        byPosition_LAI = new float[positionNumber];
+        
+        for(int j=0;j<positionNumber;j++){
+            
+            float position_LAI = 0;
+            
+            for(int i=0;i<rings.length;i++){
+                if(!rings[i].isMasked()){
+                    position_LAI += contactNumberByPositionAndRing[j][i] * rings[i].getWeightingFactor();
+                }
+            }
+            
+            position_LAI *= 2;
+            byPosition_LAI[j] = position_LAI;
+        }
+        
         
         //compute Gaps
         logger.info("Computation of GAPS...");
         gapsByRing = new float[rings.length]; //Ki
+        gapsByRingAndPosition = new float[rings.length][positionNumber];
 
         countByRing = new int[rings.length];
+        countByPositionAndRing = new int[positionNumber][rings.length];
 
         //calcul des indices K
         for(int j=0;j<positionNumber;j++){
@@ -350,8 +510,14 @@ public abstract class LAI2xxx {
                 int i = getRingIDFromDirectionID(d);
                 
                 if(transmittances[i][j] != 0){
-                    gapsByRing[i] += Math.log(transmittances[i][j]);
+                    
+                    double gap = Math.log(transmittances[i][j]);
+                    
+                    gapsByRing[i] += gap;
+                    gapsByRingAndPosition[i][j] += gap;
+                    
                     countByRing[i]++;
+                    countByPositionAndRing[j][i]++;
                 }
             }
         }
@@ -363,6 +529,15 @@ public abstract class LAI2xxx {
             gapsByRing[i] /= countByRing[i];
             meanLnTransByring[i] = gapsByRing[i];
             gapsByRing[i] = (float) Math.exp(gapsByRing[i]);
+        }
+        
+        //moyenne des ln des transmittances pour chaque ring et position
+        for(int j=0;j<positionNumber;j++){
+            for(int i=0;i<rings.length;i++){
+                
+                gapsByRingAndPosition[i][j] /= countByPositionAndRing[j][i];
+                gapsByRingAndPosition[i][j] = (float) Math.exp(gapsByRingAndPosition[i][j]);
+            }
         }
         
         //compute acfs
@@ -414,7 +589,7 @@ public abstract class LAI2xxx {
         for(int i=0;i<ringOffsetID.length;i++){
             
             if(i+1 < ringOffsetID.length){
-                if(directionID >= ringOffsetID[i] && directionID <= ringOffsetID[i+1]){
+                if(directionID >= ringOffsetID[i] && directionID < ringOffsetID[i+1]){
                     return i;
                 }
             }else{
@@ -441,11 +616,38 @@ public abstract class LAI2xxx {
         * pas angulaire azimuthal
         */
         private final float azimuthalStepAngle;
+        
+        public final float[] subRingsAngles;
+        public final float[] subRingsSolidAngles;
+        public final int[] subRingsSamplingRate;
+        public int nbSubRings = 0;
 
-        public RingInformation(float lowerShotAngle, float upperShotAngle, float azimuthalStepAngle) {
+        public RingInformation(float lowerShotAngle, float upperShotAngle, float azimuthalStepAngle, int nbShots, float solidAngle) {
+            
+            float alpha = (float) Math.acos(1- (solidAngle/(2*Math.PI)));
+            nbSubRings = (int) (((lowerShotAngle - upperShotAngle) / (2 * alpha))+0.5);
+                    
             this.lowerShotAngle = lowerShotAngle;
             this.upperShotAngle = upperShotAngle;
             this.azimuthalStepAngle = azimuthalStepAngle;
+            this.subRingsAngles = new float[nbSubRings];
+            this.subRingsSolidAngles = new float[nbSubRings];
+            this.subRingsSamplingRate = new int[nbSubRings];
+            
+            float oldUpperSubRingAngle = upperShotAngle;
+            float step = (lowerShotAngle - upperShotAngle)/nbSubRings;
+            
+            for(int i=0;i<subRingsAngles.length;i++){
+                
+                float upperSubRingAngle = oldUpperSubRingAngle;
+                
+                float lowerSubRingAngle = upperSubRingAngle + step;
+                oldUpperSubRingAngle = lowerSubRingAngle;
+                
+                subRingsAngles[i] = (lowerSubRingAngle + upperSubRingAngle)/2;
+                subRingsSolidAngles[i] = (float) (2* Math.PI * (Math.cos(Math.toRadians(upperSubRingAngle)) - Math.cos(Math.toRadians(lowerSubRingAngle))));
+                subRingsSamplingRate[i] = (int) (((subRingsSolidAngles[i] / solidAngle)*nbShots)+0.5);
+            }
         }
         public float getLowerShotAngle() {
             return lowerShotAngle;
@@ -458,12 +660,19 @@ public abstract class LAI2xxx {
         public float getAzimuthalStepAngle() {
             return azimuthalStepAngle;
         }
-        
     }
     
     public Ring getRing(int ringID){
         return rings[ringID];
     }
+
+    public float[] getByPosition_LAI() {
+        return byPosition_LAI;
+    }    
+
+    public float[][] getGapsByRingAndPosition() {
+        return gapsByRingAndPosition;
+    }    
     
     public abstract void writeOutput(File outputFile);
 }

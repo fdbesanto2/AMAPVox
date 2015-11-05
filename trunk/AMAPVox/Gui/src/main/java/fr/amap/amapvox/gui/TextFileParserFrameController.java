@@ -41,7 +41,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -55,25 +57,11 @@ public class TextFileParserFrameController implements Initializable{
     @FXML
     private TextField textfieldSeparator;
     @FXML
-    private Button buttonSpaceSeparator;
-    @FXML
-    private Button buttonTabSeparator;
-    @FXML
-    private Button buttonCommaSeparator;
-    @FXML
-    private Button buttonSemiColonSeparator;
-    @FXML
-    private ToggleButton toggleButtonPointDecimalMark;
-    @FXML
-    private ToggleButton toggleButtonCommaDecimalMark;
-    @FXML
     private Spinner<Integer> spinnerSkipLines;
     @FXML
     private CheckBox checkboxKeepAllLines;
     @FXML
     private Spinner<Integer> spinnerNumberOfLines;
-    @FXML
-    private Button buttonApply;
     @FXML
     private TableView<ObservableList<String>> tableViewFileContent;
     @FXML
@@ -99,7 +87,8 @@ public class TextFileParserFrameController implements Initializable{
     private ObservableList<String> columnAssignmentValues;
     private boolean columnAssignmentEnabled;
     private List<Integer> columnAssignmentselectedIndices;
-    private HBox columnsHbox;
+    //private HBox columnsHbox;
+    private GridPane columnsGridPane;
     
     public static TextFileParserFrameController getInstance() throws IOException, Exception{
         
@@ -132,11 +121,7 @@ public class TextFileParserFrameController implements Initializable{
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        ToggleGroup decimalMarkGroup = new ToggleGroup();
-        toggleButtonCommaDecimalMark.setToggleGroup(decimalMarkGroup);
-        toggleButtonPointDecimalMark.setToggleGroup(decimalMarkGroup);
-        
+               
         
         spinnerSkipLines.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, MAX_LINE_NUMBER, 0));
         spinnerNumberOfLines.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 0));
@@ -173,6 +158,7 @@ public class TextFileParserFrameController implements Initializable{
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 updateColumns();
+                updateTable();
             }
         });
         
@@ -182,6 +168,7 @@ public class TextFileParserFrameController implements Initializable{
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 
                 updateColumns();
+                updateTable();
             }
         });
         
@@ -340,7 +327,9 @@ public class TextFileParserFrameController implements Initializable{
                 
                 //columns assignment
                 
-                columnsHbox = new HBox();
+                //columnsHbox = new HBox();
+                columnsGridPane = new GridPane();
+                
                 
                 tableViewFileContent.getColumns().clear();
 
@@ -372,12 +361,14 @@ public class TextFileParserFrameController implements Initializable{
                     
                     if(columnAssignmentEnabled){
                         ComboBox comboBox = new ComboBox(columnAssignmentValues);
+                        comboBox.setMaxWidth(Double.MAX_VALUE);
                     
                         column.widthProperty().addListener(new ChangeListener<Number>() {
 
                             @Override
                             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                                 comboBox.setPrefWidth(newValue.doubleValue());
+                                
                             }
                         });
                         
@@ -385,16 +376,26 @@ public class TextFileParserFrameController implements Initializable{
                             comboBox.getSelectionModel().select(columnAssignmentselectedIndices.get(j).intValue());
                         }                        
 
-                        columnsHbox.getChildren().add(comboBox);
+                        columnsGridPane.add(comboBox, j, 0);
+                        //columnsHbox.getChildren().add(comboBox);
+                        //HBox.setHgrow(comboBox, Priority.ALWAYS);
                     }
                 }
 
                 if(columnAssignmentEnabled){
                     if(isInit){
-                        vboxTableViewAndColumnsTypeWrapper.getChildren().add(0, columnsHbox);
+                        vboxTableViewAndColumnsTypeWrapper.getChildren().add(0, columnsGridPane);
                     }else{
-                        vboxTableViewAndColumnsTypeWrapper.getChildren().set(0, columnsHbox);
+                        vboxTableViewAndColumnsTypeWrapper.getChildren().set(0, columnsGridPane);
                     }
+                    
+                    tableViewFileContent.widthProperty().addListener(new ChangeListener<Number>() {
+
+                        @Override
+                        public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                            columnsGridPane.setPrefWidth(newValue.doubleValue());
+                        }
+                    });
                 }
             }
         }
@@ -433,7 +434,7 @@ public class TextFileParserFrameController implements Initializable{
     
     public List<Integer> getAssignedColumnsIndices(){
         
-        ObservableList<Node> childs = columnsHbox.getChildren();
+        ObservableList<Node> childs = columnsGridPane.getChildren();
         List<Integer> list = new ArrayList<>();
         
         for(Node child : childs){
@@ -445,7 +446,7 @@ public class TextFileParserFrameController implements Initializable{
     
     public List<String> getAssignedColumnsItems(){
         
-        ObservableList<Node> childs = columnsHbox.getChildren();
+        ObservableList<Node> childs = columnsGridPane.getChildren();
         List<String> list = new ArrayList<>();
         
         for(Node child : childs){

@@ -25,7 +25,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -136,6 +139,32 @@ public class TransformationFrameController implements Initializable {
     private TextField textFieldPoint2Y;
     @FXML
     private TextField textFieldPoint2Z;
+    
+    public static TransformationFrameController getInstance() throws IOException, Exception{
+        
+        try {
+            FXMLLoader loader = new FXMLLoader(TransformationFrameController.class.getResource("/fxml/TransformationFrame.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            TransformationFrameController controller = loader.getController();
+            stage.setScene(new Scene(root));
+            controller.setStage(stage);
+            return controller;
+            
+        } catch (IOException ex) {
+            throw ex;
+        }catch (Exception ex) {
+            throw ex;
+        }
+    }
+    
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
     
     /**
      * Initializes the controller class.
@@ -402,10 +431,6 @@ public class TransformationFrameController implements Initializable {
             matrixM22.setText(String.valueOf((uZ*uZ)+(1-(uZ*uZ))*c));
         }
         
-    }
-    
-    public void setStage(Stage stage) {
-        this.stage = stage;
     }
     
     /*public void setParent(MainFrameController controller){

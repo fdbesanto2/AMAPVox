@@ -6,6 +6,7 @@
 package fr.amap.amapvox.voxviewer.object.scene;
 
 import com.jogamp.common.nio.Buffers;
+import fr.amap.amapvox.commons.util.Statistic;
 import fr.amap.amapvox.math.point.Point3F;
 import fr.amap.amapvox.voxviewer.mesh.GLMeshFactory;
 import fr.amap.amapvox.voxviewer.mesh.PointCloudGLMesh;
@@ -13,7 +14,10 @@ import gnu.trove.list.TFloatList;
 import gnu.trove.list.array.TFloatArrayList;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -21,27 +25,26 @@ import java.util.List;
  */
 public class PointCloudSceneObject extends SimpleSceneObject{
 
+    private Statistic xPositionStatistic;
+    private Statistic yPositionStatistic;
+    private Statistic zPositionStatistic;
+    
     private TFloatArrayList vertexDataList;
-    private TFloatArrayList[] colorDataList;
-    
-    private float[][] colorDataArray;
-    
-    private int colorAttributsNumber;
+    private Map<String, ScalarField> scalarFieldsList;
+    private String currentAttribut;
             
     public PointCloudSceneObject(PointCloudGLMesh mesh, boolean isAlphaRequired){
         super(mesh, isAlphaRequired, new Point3F());
     }
     
-    public PointCloudSceneObject(int colorAttributsNumber){
+    public PointCloudSceneObject(){
         
         vertexDataList = new TFloatArrayList();
-        colorDataList = new TFloatArrayList[colorAttributsNumber];
-        this.colorAttributsNumber = colorAttributsNumber;
+        scalarFieldsList = new HashMap<>();
         
-        for(int i=0 ; i < colorDataList.length;i++){
-            
-            colorDataList[i] = new TFloatArrayList();
-        }
+        xPositionStatistic = new Statistic();
+        yPositionStatistic = new Statistic();
+        zPositionStatistic = new Statistic();
     }
     
     public void addPoint(float x, float y, float z){
@@ -49,18 +52,40 @@ public class PointCloudSceneObject extends SimpleSceneObject{
         vertexDataList.add(x);
         vertexDataList.add(y);
         vertexDataList.add(z);
+        
+        xPositionStatistic.addValue(x);
+        yPositionStatistic.addValue(y);
+        zPositionStatistic.addValue(z);
     }
     
-    public void addColor(int index, float red, float green, float blue){
+    public void addValue(String index, float value){
         
-        if(index < colorDataList.length){
-            colorDataList[index].add(red);
-            colorDataList[index].add(green);
-            colorDataList[index].add(blue);
+        if(!scalarFieldsList.containsKey(index)){
+            scalarFieldsList.put(index, new ScalarField(index));
+        }
+        
+        scalarFieldsList.get(index).addValue(value);
+    }
+    
+    public void switchToNextColor(){
+        
+        Iterator<Map.Entry<String, ScalarField>> iterator = scalarFieldsList.entrySet().iterator();
+        
+        while(iterator.hasNext()){
+            
+            String key = iterator.next().getKey();
+            if(key.equals(currentAttribut)){
+                
+                if(iterator.hasNext()){
+                    switchColor(iterator.next().getKey());
+                }else{
+                    switchColor(scalarFieldsList.entrySet().iterator().next().getKey());
+                }
+            }
         }
     }
     
-    public void switchColor(int colorAttributIndex){
+    public void switchColor(String colorAttributIndex){
         
         
         if(mesh == null){
@@ -69,28 +94,48 @@ public class PointCloudSceneObject extends SimpleSceneObject{
             initMesh();
         }
         
-        if(colorAttributIndex < colorDataArray.length){
-            mesh.setColorData(colorDataArray[colorAttributIndex]);
+        if(scalarFieldsList.containsKey(colorAttributIndex)){
+            
+            ScalarField scalarField = scalarFieldsList.get(colorAttributIndex);
+            
+            int nbValues = scalarField.getNbValues()*3;
+            float[] colorDataArray = new float[nbValues];
+
+            for(int i=0, j=0;i<scalarField.getNbValues();i++, j+=3){
+
+                colorDataArray[j] = scalarField.getColor(i).getRed()/255.0f;
+                colorDataArray[j+1] = scalarField.getColor(i).getGreen()/255.0f;
+                colorDataArray[j+2] = scalarField.getColor(i).getBlue()/255.0f;
+            }
+
+            mesh.setColorData(colorDataArray);
+            colorNeedUpdate = true;
+            
+            currentAttribut = scalarField.getName();
         }
-        
-        colorNeedUpdate = true;
     }
     
     public void initMesh(){
         
-        if(colorDataList.length > 0){
+        this.position = new Point3F((float)(xPositionStatistic.getMean()),
+                                    (float)(yPositionStatistic.getMean()),
+                                    (float)(zPositionStatistic.getMean()));
+        
+        ScalarField scalarField = scalarFieldsList.entrySet().iterator().next().getValue();
+        
+        int nbValues = scalarField.getNbValues()*3;
+        float[] colorDataArray = new float[nbValues];
+        
+        for(int i=0, j=0;i<scalarField.getNbValues();i++, j+=3){
             
-            colorDataArray = new float[colorAttributsNumber][colorDataList[0].size()];
-            
-            for(int i=0;i<colorDataArray.length;i++){
-                colorDataArray[i] = colorDataList[i].toArray();
-                colorDataList[i] = new TFloatArrayList();
-            }
-            
-            colorDataList = null;
-            
-            mesh = GLMeshFactory.createPointCloud(vertexDataList.toArray(), colorDataArray[0]);
+            colorDataArray[j] = scalarField.getColor(i).getRed()/255.0f;
+            colorDataArray[j+1] = scalarField.getColor(i).getGreen()/255.0f;
+            colorDataArray[j+2] = scalarField.getColor(i).getBlue()/255.0f;
         }
+
+        mesh = GLMeshFactory.createPointCloud(vertexDataList.toArray(), colorDataArray);
+        
+        currentAttribut = scalarField.getName();
     }
     
     public int getNumberOfPoints(){

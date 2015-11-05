@@ -119,9 +119,9 @@ public class TransmittanceSim {
         if(parameters.getMode() == Mode.LAI2000 || parameters.getMode() == Mode.LAI2200){
                         
             if(parameters.getMode() == Mode.LAI2000){
-                lai2xxx = new LAI2000(parameters.getDirectionsNumber(), CAP_360);
+                lai2xxx = new LAI2000(parameters.getDirectionsNumber(), CAP_360, parameters.getMasks());
             }else{
-                lai2xxx = new LAI2200(parameters.getDirectionsNumber(), CAP_360);
+                lai2xxx = new LAI2200(parameters.getDirectionsNumber(), CAP_360, parameters.getMasks());
             }
             
             logger.info("Computing directions...");
@@ -220,8 +220,8 @@ public class TransmittanceSim {
                     
                     // on récupère la première période, normalement il y en a une seule pour une simulation de lai2000
                     IncidentRadiation incidentRadiation = solRad.get(0); 
-                    lai2xxx.addTransmittanceV2(ring, positionID, (float) (transmitted * incidentRadiation.directionalGlobals[t]));
-                    lai2xxx.getRing(ring).setTrans((float) (transmitted * incidentRadiation.directionalGlobals[t]));
+                    lai2xxx.addTransmittanceV2(ring, positionID, (float) (transmitted/* * incidentRadiation.directionalGlobals[t])/solRad.get(0).global*/));
+                    lai2xxx.getRing(ring).setTrans((float) (transmitted * incidentRadiation.directionalGlobals[t])/solRad.get(0).global);
                 }
                 
             }
@@ -783,7 +783,34 @@ public class TransmittanceSim {
             }
             
         }else{
-            lai2xxx.writeOutput(parameters.getTextFile());
+            if(parameters.isGenerateLAI2xxxTypeFormat()){
+                lai2xxx.writeOutput(parameters.getTextFile());
+            }else{
+                
+                lai2xxx.computeValues();
+                
+                try (BufferedWriter bw = new BufferedWriter(new FileWriter(parameters.getTextFile()))) {
+                    
+                    bw.write("posX\tposY\tposZ\tLAI\tGAP[1]\tGAP[2]\tGAP[3]\tGAP[4]\tGAP[5]\n");
+                    
+                    for(int i =0 ; i<positions.size() ; i++){
+                        
+                        Point3d position = positions.get(i);
+                        
+                        String line = position.x + "\t" + position.y + "\t" + position.z+"\t" + lai2xxx.getByPosition_LAI()[i];
+                        
+                        for(int r=0;r<lai2xxx.getRingNumber();r++){
+                            line += "\t"+lai2xxx.getGapsByRingAndPosition()[r][i];
+                        }
+                        
+                        bw.write(line+"\n");
+                        
+                    }
+                }catch(IOException ex){
+                    throw ex;
+                }
+                
+            }
         }
         
         logger.info("File "+parameters.getTextFile().getAbsolutePath()+" written");

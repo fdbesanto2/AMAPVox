@@ -35,7 +35,7 @@ public class TmpClass{
         public static void execute(){
             
             try {
-                PointCloudSceneObject pointCloud = new PointCloudSceneObject(2);
+                PointCloudSceneObject pointCloud = new PointCloudSceneObject();
                 Rsp rsp = new Rsp();
                 rsp.read(new File("/media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/project.rsp"));
 
@@ -72,11 +72,11 @@ public class TmpClass{
 
                             float reflectanceColor = (float) ((reflectance+38)/69.0f);
 
-                            pointCloud.addColor(0, reflectanceColor, reflectanceColor, reflectanceColor);
+                            //pointCloud.addColor(0, reflectanceColor, reflectanceColor, reflectanceColor);
 
                             float zColor = (float) (Math.abs(z)/70.0f);
                             Point3f rainbowRGB = Colouring.rainbowRGB(zColor);
-                            pointCloud.addColor(1, rainbowRGB.x/255.0f, rainbowRGB.y/255.0f, rainbowRGB.z/255.0f);
+                            //pointCloud.addColor(1, rainbowRGB.x/255.0f, rainbowRGB.y/255.0f, rainbowRGB.z/255.0f);
 
                             /*float yColor = (float) (Math.abs(y)/70.0f);
                             Point3f rainbowRGBY = Colouring.rainbowRGB(yColor);

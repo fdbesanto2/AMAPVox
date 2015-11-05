@@ -48,6 +48,10 @@ public class TransmittanceParameters {
     private Mode mode;
     private int shotNumber;
     
+    //lai2xxx specific
+    private boolean[] masks; //ring masks
+    private boolean generateLAI2xxxTypeFormat;
+    
     public enum Mode{
         
         TRANSMITTANCE((short)0),
@@ -185,4 +189,20 @@ public class TransmittanceParameters {
     public void setShotNumber(int shotNumber) {
         this.shotNumber = shotNumber;
     }    
+
+    public boolean[] getMasks() {
+        return masks;
+    }
+
+    public void setMasks(boolean[] masks) {
+        this.masks = masks;
+    }   
+
+    public boolean isGenerateLAI2xxxTypeFormat() {
+        return generateLAI2xxxTypeFormat;
+    }
+
+    public void setGenerateLAI2xxxTypeFormat(boolean generateLAI2xxxTypeFormat) {
+        this.generateLAI2xxxTypeFormat = generateLAI2xxxTypeFormat;
+    }
 }

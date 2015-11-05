@@ -31,13 +31,13 @@ import java.util.Calendar;
 public class LAI2000 extends LAI2xxx{
     
     
-    public LAI2000(int shotNumber, ViewCap viewCap){
+    public LAI2000(int shotNumber, ViewCap viewCap, boolean[] masked){
         
-        super(shotNumber, viewCap, new Ring(13, 0),
-                                    new Ring(28, 16),
-                                    new Ring(43, 32),
-                                    new Ring(58, 47),
-                                    new Ring(74, 61));
+        super(shotNumber, viewCap, new Ring(13, 0, masked[0]),
+                                    new Ring(28, 16, masked[1]),
+                                    new Ring(43, 32, masked[2]),
+                                    new Ring(58, 47, masked[3]),
+                                    new Ring(74, 61, masked[4]));
         
     }
 
@@ -62,7 +62,7 @@ public class LAI2000 extends LAI2xxx{
 
             computeValues();
 
-            writer.write(file+"\t"+dateAndTime+"\t"+crop+"\t"+plot+"\t"+LAI+"\t"+sel+"\t"+difn+"\t"+mta+"\t"+sem+"\t"+smp+"\n");
+            writer.write(file+"\t"+dateAndTime+"\t"+crop+"\t"+plot+"\t"+global_LAI+"\t"+sel+"\t"+difn+"\t"+mta+"\t"+sem+"\t"+smp+"\n");
             
             /*****write statistics*****/
                 

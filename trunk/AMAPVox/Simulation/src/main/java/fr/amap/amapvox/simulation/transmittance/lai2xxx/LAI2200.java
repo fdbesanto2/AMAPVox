@@ -30,13 +30,13 @@ import java.util.Calendar;
 
 public class LAI2200 extends LAI2xxx{
 
-    public LAI2200(int shotNumber, ViewCap viewCap){
+    public LAI2200(int shotNumber, ViewCap viewCap, boolean[] masked){
         
-         super(shotNumber, viewCap, new Ring(12.3f, 0),
-                                    new Ring(28.6f, 16.7f),
-                                    new Ring(43.4f, 32.4f),
-                                    new Ring(58.1f, 47.3f),
-                                    new Ring(74.1f, 62.3f));
+         super(shotNumber, viewCap, new Ring(12.3f, 0, masked[0]),
+                                    new Ring(28.6f, 16.7f, masked[1]),
+                                    new Ring(43.4f, 32.4f, masked[2]),
+                                    new Ring(58.1f, 47.3f, masked[3]),
+                                    new Ring(74.1f, 62.3f, masked[4]));
      
         //le lai2200 a 5 plages angulaires
         
@@ -58,7 +58,7 @@ public class LAI2200 extends LAI2xxx{
                 computeValues();
 
                 //leaf area index
-                writer.write("LAI\t"+LAI+"\n");
+                writer.write("LAI\t"+global_LAI+"\n");
 
                 //standard error lai
                 writer.write("SEL\t"+Float.NaN+"\n");
@@ -91,7 +91,8 @@ public class LAI2200 extends LAI2xxx{
 
             for(int i=0;i<rings.length;i++){
 
-                maskLine += "1"+"\t";
+                int mask = (rings[i].isMasked())? 1 : 0;
+                maskLine += (mask+"\t");
                 anglesLine += rings[i].getMeanAngle()+"\t";
                 avgTransLine += avgTransByRing[i]+"\t";
                 acfsLine += acfsByRing[i]+"\t";

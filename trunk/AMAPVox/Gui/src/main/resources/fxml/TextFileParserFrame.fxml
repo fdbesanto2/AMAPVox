@@ -12,7 +12,7 @@
    <children>
       <VBox layoutX="14.0" layoutY="14.0" spacing="20.0" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
          <children>
-            <ScrollPane>
+            <ScrollPane fitToHeight="true" fitToWidth="true">
                <content>
                   <AnchorPane>
                      <children>
@@ -37,17 +37,10 @@
                            <children>
                               <Label text="Separator" />
                               <TextField fx:id="textfieldSeparator" prefHeight="25.0" prefWidth="52.0" text=" " />
-                              <Button fx:id="buttonSpaceSeparator" mnemonicParsing="false" onAction="#onActionButtonSpaceSeparator" text="Space" />
-                              <Button fx:id="buttonTabSeparator" mnemonicParsing="false" onAction="#onActionButtonTabSeparator" text="Tab" />
-                              <Button fx:id="buttonCommaSeparator" mnemonicParsing="false" onAction="#onActionButtonCommaSeparator" text="," />
-                              <Button fx:id="buttonSemiColonSeparator" mnemonicParsing="false" onAction="#onActionButtonSemiColonSeparator" text=";" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="10.0">
-                           <children>
-                              <Label text="Decimal mark" />
-                              <ToggleButton fx:id="toggleButtonPointDecimalMark" mnemonicParsing="false" selected="true" text="." />
-                              <ToggleButton fx:id="toggleButtonCommaDecimalMark" mnemonicParsing="false" text="," />
+                              <Button mnemonicParsing="false" onAction="#onActionButtonSpaceSeparator" text="Space" />
+                              <Button mnemonicParsing="false" onAction="#onActionButtonTabSeparator" text="Tab" />
+                              <Button mnemonicParsing="false" onAction="#onActionButtonCommaSeparator" text="," />
+                              <Button mnemonicParsing="false" onAction="#onActionButtonSemiColonSeparator" text=";" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" spacing="10.0">
@@ -80,6 +73,6 @@
             </HBox>
          </children>
       </VBox>
-      <Button fx:id="buttonApply" layoutX="657.0" layoutY="548.0" mnemonicParsing="false" onAction="#onActionButtonApply" text="Apply" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+      <Button layoutX="657.0" layoutY="548.0" mnemonicParsing="false" onAction="#onActionButtonApply" text="Apply" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
    </children>
 </AnchorPane>

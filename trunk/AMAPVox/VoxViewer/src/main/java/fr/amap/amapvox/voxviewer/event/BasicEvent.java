@@ -190,7 +190,7 @@ public class BasicEvent extends EventManager{
                     currentColorIndex++;
                 }
                 
-                ((PointCloudSceneObject)firstSceneObject).switchColor(currentColorIndex);
+                ((PointCloudSceneObject)firstSceneObject).switchToNextColor();
             }
             
             //joglContext.getScene().getCamera().rotateAroundPoint(new Vec3F(0.0f,1.0f,0.0f), new Vec3F(0.0f,0.0f,0.0f), (float) Math.toRadians(5));

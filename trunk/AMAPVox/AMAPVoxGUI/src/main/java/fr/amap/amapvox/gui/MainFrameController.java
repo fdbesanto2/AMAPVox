@@ -743,6 +743,40 @@ public class MainFrameController implements Initializable {
     private AnchorPane anchorpaneQuadrats;
     @FXML
     private HBox hboxMaxPADVegetationProfile;
+    @FXML
+    private AnchorPane anchorpaneRoot;
+    @FXML
+    private MenuItem menuitemClearWindow;
+    @FXML
+    private MenuItem menuItemUpdate;
+    @FXML
+    private MenuItem menuItemSelectionAllMultiRes;
+    @FXML
+    private MenuItem menuItemSelectionNoneMultiRes;
+    @FXML
+    private Label labelPadMax1m;
+    @FXML
+    private Label labelPadMax2m;
+    @FXML
+    private Label labelPadMax3m;
+    @FXML
+    private Label labelPadMax4m;
+    @FXML
+    private Label labelPadMax5m;
+    @FXML
+    private Label labelOutputFileGroundEnergy;
+    @FXML
+    private ToggleButton toggleButtonRingMask1;
+    @FXML
+    private ToggleButton toggleButtonRingMask2;
+    @FXML
+    private ToggleButton toggleButtonRingMask3;
+    @FXML
+    private ToggleButton toggleButtonRingMask4;
+    @FXML
+    private ToggleButton toggleButtonRingMask5;
+    @FXML
+    private CheckBox checkboxGenerateLAI2xxxTypeFormat;
     
     private class SceneObjectProperty{
         
@@ -994,12 +1028,15 @@ public class MainFrameController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 vBoxGenerateBitmapFiles.setDisable(newValue);
-                comboboxChooseDirectionsNumber.setEditable(newValue);
+                //comboboxChooseDirectionsNumber.setEditable(newValue);
                 buttonSetupViewCap.setVisible(newValue);
                 if(newValue){
                     labelDirectionsNumber.setText("Shot number");
+                    comboboxChooseDirectionsNumber.getItems().setAll(500, 4000, 10000);
+                    
                 }else{
                     labelDirectionsNumber.setText("Directions number");
+                    comboboxChooseDirectionsNumber.getItems().setAll(1, 6, 16, 46, 136, 406);
                 }
             }
         };
@@ -1276,14 +1313,9 @@ public class MainFrameController implements Initializable {
         }
         
         try {
-            transformationFrame = new Stage();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TransformationFrame.fxml"));
-            Parent root = loader.load();
-            transformationFrameController = loader.getController();
-            transformationFrameController.setStage(transformationFrame);
-            transformationFrameController.setParent(this);
-            transformationFrame.setScene(new Scene(root));
-        } catch (IOException ex) {
+            transformationFrameController = TransformationFrameController.getInstance();
+            transformationFrame = transformationFrameController.getStage();
+        } catch (Exception ex) {
             logger.error("Cannot load fxml file", ex);
         }
         
@@ -4360,6 +4392,17 @@ public class MainFrameController implements Initializable {
                         }
                         
                         comboboxChooseDirectionsNumber.getEditor().setText(String.valueOf(params.getDirectionsNumber()));
+                        
+                        boolean[] masks = params.getMasks();
+                        if(masks != null && masks.length == 5){
+                            toggleButtonRingMask1.setSelected(masks[0]);
+                            toggleButtonRingMask2.setSelected(masks[1]);
+                            toggleButtonRingMask3.setSelected(masks[2]);
+                            toggleButtonRingMask4.setSelected(masks[3]);
+                            toggleButtonRingMask5.setSelected(masks[4]);
+                        }
+                        
+                        checkboxGenerateLAI2xxxTypeFormat.setSelected(params.isGenerateLAI2xxxTypeFormat());
                     }
                     
                     radiobuttonScannerPosFile.setSelected(params.isUseScanPositionsFile());
@@ -5546,6 +5589,14 @@ public class MainFrameController implements Initializable {
                 }else{
                     transmParameters.setMode(TransmittanceParameters.Mode.LAI2200);
                 }
+                
+                transmParameters.setMasks(new boolean[]{toggleButtonRingMask1.isSelected(),
+                                                        toggleButtonRingMask2.isSelected(),
+                                                        toggleButtonRingMask3.isSelected(),
+                                                        toggleButtonRingMask4.isSelected(),
+                                                        toggleButtonRingMask5.isSelected()});
+                
+                transmParameters.setGenerateLAI2xxxTypeFormat(checkboxGenerateLAI2xxxTypeFormat.isSelected());
             }
             
             transmParameters.setInputFile(new File(textfieldVoxelFilePathTransmittance.getText()));
@@ -5955,8 +6006,7 @@ public class MainFrameController implements Initializable {
 
                                             lasAttributs.processList(attributsImporterFrameController.getSelectedAttributs());
 
-                                            PointCloudSceneObject sceneObject = new PointCloudSceneObject(
-                                                    attributsImporterFrameController.getSelectedAttributs().size());
+                                            PointCloudSceneObject sceneObject = new PointCloudSceneObject();
 
                                             LasReader reader = new LasReader();
                                             
@@ -5977,29 +6027,7 @@ public class MainFrameController implements Initializable {
                                             long count = 0;
                                             long pointsProcessed = 0;
 
-                                            ColorGradient cg = new ColorGradient(0, 1);
-                                            cg.setGradientColor(ColorGradient.GRADIENT_RAINBOW3);
                                             Iterator<PointDataRecordFormat> lasIterator = reader.iterator();
-
-                                            //compute statistic
-
-                                            while(lasIterator.hasNext()){
-
-                                                PointDataRecordFormat point = lasIterator.next();
-                                                lasAttributs.getClassificationStatistic().addValue(point.getClassification());
-                                                lasAttributs.getIntensityStatistic().addValue(point.getIntensity());
-                                                lasAttributs.getReturnNumberStatistic().addValue(point.getReturnNumber());
-                                                lasAttributs.getNumberOfReturnsStatistic().addValue(point.getNumberOfReturns());
-                                                lasAttributs.getTimeStatistic().addValue(point.getGpsTime());
-
-                                                count++;
-                                                pointsProcessed++;
-
-                                                if(count == step){
-                                                    updateProgress(pointsProcessed, pointNumber);
-                                                    count = 0;
-                                                }
-                                            }
 
                                             count = 0;
                                             pointsProcessed = 0;
@@ -6014,41 +6042,25 @@ public class MainFrameController implements Initializable {
                                                         (float)((point.getY() * header.getyScaleFactor()) + header.getyOffset()),
                                                         (float)((point.getZ() * header.getzScaleFactor()) + header.getzOffset()));
                                                 
-                                                Color c;
                                                 
                                                 if(lasAttributs.isExportClassification()){
-                                                    cg.setMinValue((float)lasAttributs.getClassificationStatistic().getMinValue());
-                                                    cg.setMaxValue((float)lasAttributs.getClassificationStatistic().getMaxValue());
-                                                    c = cg.getColor((float)point.getClassification());
-                                                    sceneObject.addColor(0, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                    sceneObject.addValue("classification", (float)point.getClassification());
                                                 }
                                                 
                                                 if(lasAttributs.isExportIntensity()){
-                                                    cg.setMinValue((float)lasAttributs.getIntensityStatistic().getMinValue());
-                                                    cg.setMaxValue((float)lasAttributs.getIntensityStatistic().getMaxValue());
-                                                    c = cg.getColor((float)point.getIntensity());
-                                                    sceneObject.addColor(1, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                    sceneObject.addValue("intensity", (float)point.getIntensity());
                                                 }
                                                 
                                                 if(lasAttributs.isExportNumberOfReturns()){
-                                                    cg.setMinValue((float)lasAttributs.getNumberOfReturnsStatistic().getMinValue());
-                                                    cg.setMaxValue((float)lasAttributs.getNumberOfReturnsStatistic().getMaxValue());
-                                                    c = cg.getColor((float)point.getNumberOfReturns());
-                                                    sceneObject.addColor(2, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                    sceneObject.addValue("number of returns", (float)point.getNumberOfReturns());
                                                 }
                                                 
                                                 if(lasAttributs.isExportReturnNumber()){
-                                                    cg.setMinValue((float)lasAttributs.getReturnNumberStatistic().getMinValue());
-                                                    cg.setMaxValue((float)lasAttributs.getReturnNumberStatistic().getMaxValue());
-                                                    c = cg.getColor((float)point.getReturnNumber());
-                                                    sceneObject.addColor(3, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                    sceneObject.addValue("return number", (float)point.getReturnNumber());
                                                 }
                                                 
                                                 if(lasAttributs.isExportTime()){
-                                                    cg.setMinValue((float)lasAttributs.getTimeStatistic().getMinValue());
-                                                    cg.setMaxValue((float)lasAttributs.getTimeStatistic().getMaxValue());
-                                                    c = cg.getColor((float)point.getGpsTime());
-                                                    sceneObject.addColor(4, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                    sceneObject.addValue("GPS time", (float)point.getGpsTime());
                                                 }
                                                 
                                                 count++;
@@ -6109,8 +6121,7 @@ public class MainFrameController implements Initializable {
 
                                             lazAttributs.processList(attributsImporterFrameController.getSelectedAttributs());
 
-                                            PointCloudSceneObject sceneObject = new PointCloudSceneObject(
-                                                    attributsImporterFrameController.getSelectedAttributs().size());
+                                            PointCloudSceneObject sceneObject = new PointCloudSceneObject();
 
                                             LazExtraction lazExtraction = new LazExtraction();
                                             try {
@@ -6133,26 +6144,6 @@ public class MainFrameController implements Initializable {
                                             cg.setGradientColor(ColorGradient.GRADIENT_RAINBOW3);
                                             Iterator<LasPoint> lazIterator = lazExtraction.iterator();
 
-                                            //compute statistic
-
-                                            while(lazIterator.hasNext()){
-
-                                                LasPoint point = lazIterator.next();
-                                                lazAttributs.getClassificationStatistic().addValue(point.classification);
-                                                lazAttributs.getIntensityStatistic().addValue(point.i);
-                                                lazAttributs.getReturnNumberStatistic().addValue(point.r);
-                                                lazAttributs.getNumberOfReturnsStatistic().addValue(point.n);
-                                                lazAttributs.getTimeStatistic().addValue(point.t);
-
-                                                count++;
-                                                pointsProcessed++;
-
-                                                if(count == step){
-                                                    updateProgress(pointsProcessed, pointNumber);
-                                                    count = 0;
-                                                }
-                                            }
-
                                             count = 0;
                                             pointsProcessed = 0;
 
@@ -6170,41 +6161,24 @@ public class MainFrameController implements Initializable {
 
                                                 sceneObject.addPoint((float)point.x, (float)point.y, (float)point.z);
                                                 
-                                                Color c;
-                                                
                                                 if(lazAttributs.isExportClassification()){
-                                                    cg.setMinValue((float)lazAttributs.getClassificationStatistic().getMinValue());
-                                                    cg.setMaxValue((float)lazAttributs.getClassificationStatistic().getMaxValue());
-                                                    c = cg.getColor((float)point.classification);
-                                                    sceneObject.addColor(0, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                    sceneObject.addValue("classification", (float)point.classification);
                                                 }
                                                 
                                                 if(lazAttributs.isExportIntensity()){
-                                                    cg.setMinValue((float)lazAttributs.getIntensityStatistic().getMinValue());
-                                                    cg.setMaxValue((float)lazAttributs.getIntensityStatistic().getMaxValue());
-                                                    c = cg.getColor((float)point.i);
-                                                    sceneObject.addColor(1, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                    sceneObject.addValue("intensity", (float)point.i);
                                                 }
                                                 
                                                 if(lazAttributs.isExportNumberOfReturns()){
-                                                    cg.setMinValue((float)lazAttributs.getNumberOfReturnsStatistic().getMinValue());
-                                                    cg.setMaxValue((float)lazAttributs.getNumberOfReturnsStatistic().getMaxValue());
-                                                    c = cg.getColor((float)point.n);
-                                                    sceneObject.addColor(2, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                    sceneObject.addValue("number of returns", (float)point.n);
                                                 }
                                                 
                                                 if(lazAttributs.isExportReturnNumber()){
-                                                    cg.setMinValue((float)lazAttributs.getReturnNumberStatistic().getMinValue());
-                                                    cg.setMaxValue((float)lazAttributs.getReturnNumberStatistic().getMaxValue());
-                                                    c = cg.getColor((float)point.r);
-                                                    sceneObject.addColor(3, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                    sceneObject.addValue("number of returns", (float)point.r);
                                                 }
                                                 
                                                 if(lazAttributs.isExportTime()){
-                                                    cg.setMinValue((float)lazAttributs.getTimeStatistic().getMinValue());
-                                                    cg.setMaxValue((float)lazAttributs.getTimeStatistic().getMaxValue());
-                                                    c = cg.getColor((float)point.t);
-                                                    sceneObject.addColor(4, c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
+                                                    sceneObject.addValue("GPS time", (float)point.t);
                                                 }
                                                 
                                                 count++;
@@ -6273,17 +6247,13 @@ public class MainFrameController implements Initializable {
                                         
                                         for(RspExtractorFrameController.Scan scan : selectedScans){
                                             
-                                            PointCloudSceneObject pointCloud = new PointCloudSceneObject(1);
+                                            PointCloudSceneObject pointCloud = new PointCloudSceneObject();
                                             
                                             RxpExtraction reader = new RxpExtraction();
                                             reader.openRxpFile(scan.getFile(), RxpExtraction.SHOT_WITH_REFLECTANCE);
                                             final Iterator<Shot> iterator = reader.iterator();
                                             
                                             Mat4D sopMatrix = scan.getSop();
-                                            int count = 0;
-                                            
-                                            ColorGradient cg = new ColorGradient(-30, 10);
-                                            cg.setGradientColor(ColorGradient.GRADIENT_RAINBOW3);
 
                                             while(iterator.hasNext()){
                                                 
@@ -6301,20 +6271,15 @@ public class MainFrameController implements Initializable {
                                                     pointCloud.addPoint((float)transformedPoint.x, (float)transformedPoint.y, (float)transformedPoint.z);
 
                                                     double reflectance = shot.reflectances[i];
-
-                                                    Color reflectanceColor = cg.getColor((float)reflectance);
-
-                                                    pointCloud.addColor(0, reflectanceColor.getRed()/255.0f, reflectanceColor.getGreen()/255.0f, reflectanceColor.getBlue()/255.0f);
+                                                    
+                                                    pointCloud.addValue("reflectance", (float)reflectance);
                                                 }
-
                                                 
                                             }
                                             
                                             pointCloud.initMesh();
                                             pointCloud.setShader(fr.amap.amapvox.voxviewer.object.scene.Scene.colorShader);
                                             sceneObjects.add(pointCloud);
-                                            
-                                            count++;
                                             //updateProgress(count, selectedScans.size());
                                         }
                                         
@@ -6379,17 +6344,20 @@ public class MainFrameController implements Initializable {
                         for(int i =0;i<columnAssignment.size();i++){
                             
                             String item = columnAssignment.get(i);
-                            switch(item){
-                                case "X":
-                                    xIndex = i;
-                                    break;
-                                case "Y":
-                                    yIndex = i;
-                                    break;
-                                case "Z":
-                                    zIndex = i;
-                                    break;
-                            } 
+                            
+                            if(item != null){
+                                switch(item){
+                                    case "X":
+                                        xIndex = i;
+                                        break;
+                                    case "Y":
+                                        yIndex = i;
+                                        break;
+                                    case "Z":
+                                        zIndex = i;
+                                        break;
+                                } 
+                            }
                         }
                         
                         if(headerIndex != -1){
@@ -6410,7 +6378,7 @@ public class MainFrameController implements Initializable {
                                     @Override
                                     protected Object call() throws Exception {
                                         
-                                        PointCloudSceneObject sceneObject = new PointCloudSceneObject(1);
+                                        PointCloudSceneObject sceneObject = new PointCloudSceneObject();
                                         sceneObject.setPosition(new Point3F(0, 0, 0));
 
                                         BufferedReader reader;
@@ -6436,7 +6404,8 @@ public class MainFrameController implements Initializable {
                                                         Float.valueOf(lineSplitted[finalYIndex]),
                                                         Float.valueOf(lineSplitted[finalZIndex]));
 
-                                                sceneObject.addColor(0, 1, 0, 0);
+                                                sceneObject.addValue(line, count);
+                                                //sceneObject.addColor(0, 1, 0, 0);
 
                                                 count++;
                                             }

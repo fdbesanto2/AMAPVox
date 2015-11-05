@@ -15,6 +15,8 @@ For further information, please contact Gregoire Vincent.
 package fr.amap.amapvox.simulation.transmittance;
 
 import fr.amap.amapvox.commons.configuration.Configuration;
+import static fr.amap.amapvox.simulation.transmittance.TransmittanceParameters.Mode.LAI2000;
+import static fr.amap.amapvox.simulation.transmittance.TransmittanceParameters.Mode.LAI2200;
 import fr.amap.amapvox.simulation.transmittance.util.Period;
 import java.io.File;
 import java.io.IOException;
@@ -93,6 +95,13 @@ public class TransmittanceCfg extends Configuration{
                 String outputTextFileSrc = outputTextFileElement.getAttributeValue("src");
                 if(outputTextFileSrc != null){
                     parameters.setTextFile(new File(outputTextFileSrc));
+                    
+                     if(parameters.getMode() == LAI2000 || parameters.getMode() == LAI2200){
+                         
+                        try{
+                            parameters.setGenerateLAI2xxxTypeFormat(Boolean.valueOf(outputTextFileElement.getAttributeValue("lai2xxx-type")));
+                        }catch(Exception e){}
+                    }
                 }
 
             }
@@ -217,6 +226,19 @@ public class TransmittanceCfg extends Configuration{
                 parameters.setSimulationPeriods(simulationPeriods);
             }
         }
+        
+        boolean[] ringMasks = new boolean[5];
+        
+        Element ringMasksElement = processElement.getChild("ring-masks");
+        if(ringMasksElement != null){
+            ringMasks[0] = Boolean.valueOf(ringMasksElement.getAttributeValue("mask-ring-1"));
+            ringMasks[1] = Boolean.valueOf(ringMasksElement.getAttributeValue("mask-ring-2"));
+            ringMasks[2] = Boolean.valueOf(ringMasksElement.getAttributeValue("mask-ring-3"));
+            ringMasks[3] = Boolean.valueOf(ringMasksElement.getAttributeValue("mask-ring-4"));
+            ringMasks[4] = Boolean.valueOf(ringMasksElement.getAttributeValue("mask-ring-5"));
+        }        
+        
+        parameters.setMasks(ringMasks);
     }
 
     @Override
@@ -249,6 +271,10 @@ public class TransmittanceCfg extends Configuration{
         
         if(parameters.isGenerateTextFile() && parameters.getTextFile() != null){
             outputTextFileElement.setAttribute("src", parameters.getTextFile().getAbsolutePath());
+            
+            if(parameters.getMode() == LAI2000 || parameters.getMode() == LAI2200){
+                outputTextFileElement.setAttribute("lai2xxx-type", String.valueOf(parameters.isGenerateLAI2xxxTypeFormat()));
+            }
         }
         
         outputFilesElement.addContent(outputTextFileElement);
@@ -311,6 +337,24 @@ public class TransmittanceCfg extends Configuration{
         }
         
         processElement.addContent(simulationPeriodsElement);
+        
+        if(parameters.getMode() == LAI2000 || parameters.getMode() == LAI2200){
+            
+            Element ringMasksElement = new Element("ring-masks");
+            
+            boolean[] masks = parameters.getMasks();
+            if(masks == null){
+                masks = new boolean[5];
+            }
+            
+            ringMasksElement.setAttribute("mask-ring-1", String.valueOf(masks[0]));
+            ringMasksElement.setAttribute("mask-ring-2", String.valueOf(masks[1]));
+            ringMasksElement.setAttribute("mask-ring-3", String.valueOf(masks[2]));
+            ringMasksElement.setAttribute("mask-ring-4", String.valueOf(masks[3]));
+            ringMasksElement.setAttribute("mask-ring-5", String.valueOf(masks[4]));
+            
+            processElement.addContent(ringMasksElement);
+        }
         
         writeDocument(outputParametersFile);
     }

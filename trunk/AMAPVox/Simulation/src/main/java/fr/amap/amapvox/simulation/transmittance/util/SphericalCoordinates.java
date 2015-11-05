@@ -44,8 +44,8 @@ public class SphericalCoordinates {
         
         float radius = 1;
         
-        return new Vector3f(radius * (float)Math.cos(elevation) * (float)Math.cos(azimuth), 
-                            radius * (float)Math.cos(elevation) * (float)Math.sin(azimuth), 
-                            radius * (float)Math.sin((double)elevation));
+        return new Vector3f(radius * (float)Math.sin(elevation) * (float)Math.cos(azimuth), 
+                            radius * (float)Math.sin(elevation) * (float)Math.sin(azimuth), 
+                            radius * (float)Math.cos((double)elevation));
     }
 }

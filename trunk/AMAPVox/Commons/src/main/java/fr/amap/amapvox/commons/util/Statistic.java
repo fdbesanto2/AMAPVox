@@ -13,6 +13,8 @@ public class Statistic {
     
     private double minValue;
     private double maxValue;
+    private double mean;
+    private int nbValues;
     
     private boolean firstValue = true;
 
@@ -32,6 +34,9 @@ public class Statistic {
             maxValue = Double.max(maxValue, value);
         }
         
+        mean += value;
+        nbValues++;
+        
         firstValue = false;
     }
 
@@ -49,5 +54,9 @@ public class Statistic {
 
     public void setMaxValue(double maxValue) {
         this.maxValue = maxValue;
+    }
+    
+    public double getMean(){
+        return mean / nbValues;
     }
 }

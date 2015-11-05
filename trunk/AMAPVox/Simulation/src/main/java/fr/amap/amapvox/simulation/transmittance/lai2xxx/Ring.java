@@ -26,7 +26,7 @@ public class Ring {
     private final float upperZenithalAngle;
     private final float meanAngle;
     private final float width;
-    private final float weightingFactor;
+    private float weightingFactor;
     private final float solidAngle;
     private int nbDirections;
     private float sumTrans;
@@ -35,12 +35,14 @@ public class Ring {
     private float stdev;
     private float dist;
     private float gap;
+    private boolean masked;
     
 
-    public Ring(float lowerZenithalAngle, float upperZenithalAngle) {
+    public Ring(float lowerZenithalAngle, float upperZenithalAngle, boolean masked) {
         
         this.lowerZenithalAngle = lowerZenithalAngle;
         this.upperZenithalAngle = upperZenithalAngle;
+        this.masked = masked;
         
         this.meanAngle = (lowerZenithalAngle+upperZenithalAngle) / 2.0f;
         this.width = (float) (Math.toRadians(lowerZenithalAngle) - Math.toRadians(upperZenithalAngle));
@@ -129,4 +131,13 @@ public class Ring {
     public float getWeightingFactor() {
         return weightingFactor;
     }
+
+    public boolean isMasked() {
+        return masked;
+    }
+
+    public void setWeightingFactor(float weightingFactor) {
+        this.weightingFactor = weightingFactor;
+    }
+    
 }
