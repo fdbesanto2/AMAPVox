@@ -12,7 +12,7 @@ Authors:
 For further information, please contact Gregoire Vincent.
  */
 
-package fr.amap.amapvox.simulation.transmittance.util;
+package fr.amap.amapvox.commons.util;
 
 import javax.vecmath.Vector3f;
 

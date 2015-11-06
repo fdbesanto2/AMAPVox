@@ -146,8 +146,10 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
@@ -156,6 +158,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.ClipboardContent;
@@ -221,6 +224,7 @@ public class MainFrameController implements Initializable {
     private ViewCapsSetupFrameController viewCapsSetupFrameController;
     private AttributsImporterFrameController attributsImporterFrameController;
     private TextFileParserFrameController textFileParserFrameController;
+    private SceneObjectPropertiesPanelController sceneObjectPropertiesPanelController;
     
     private BlockingQueue<File> queue = new ArrayBlockingQueue<>(100);
     private int taskNumber = 0;
@@ -359,8 +363,6 @@ public class MainFrameController implements Initializable {
     private TextField textfieldHemiPhotoOutputBitmapFile;
     @FXML
     private ListView<SceneObjectWrapper> listviewTreeSceneObjects;
-    @FXML
-    private TableView<SceneObjectWrapper> tableviewSceneObjectProperties;
     @FXML
     private ComboBox<LeafAngleDistribution.Type> comboboxLADChoice;
     @FXML
@@ -777,6 +779,10 @@ public class MainFrameController implements Initializable {
     private ToggleButton toggleButtonRingMask5;
     @FXML
     private CheckBox checkboxGenerateLAI2xxxTypeFormat;
+    @FXML
+    private TitledPane titledPaneSceneObjectProperties;
+    @FXML
+    private ScrollPane scrollPaneSceneObjectProperties;
     
     private class SceneObjectProperty{
         
@@ -878,6 +884,18 @@ public class MainFrameController implements Initializable {
                 }
                 event.setDropCompleted(success);
                 event.consume();
+            }
+        });
+        
+        listviewTreeSceneObjects.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<SceneObjectWrapper>() {
+
+            @Override
+            public void changed(ObservableValue<? extends SceneObjectWrapper> observable, SceneObjectWrapper oldValue, SceneObjectWrapper newValue) {
+                
+                if(newValue != null){
+                    sceneObjectPropertiesPanelController.setSceneObjectWrapper(newValue);
+                }
+                
             }
         });
         
@@ -1295,6 +1313,15 @@ public class MainFrameController implements Initializable {
             logger.error("Cannot load fxml file", ex);
         }
         
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SceneObjectPropertiesPanel.fxml"));
+            AnchorPane sceneObjectPropertiesPane = loader.load();
+            sceneObjectPropertiesPanelController = loader.getController();
+            scrollPaneSceneObjectProperties.setContent(sceneObjectPropertiesPane);
+        } catch (IOException ex) {
+            logger.error("Cannot load fxml file", ex);
+        }
+            
         try {
             attributsImporterFrame = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AttributsImporterFrame.fxml"));
@@ -5871,71 +5898,6 @@ public class MainFrameController implements Initializable {
     
     private ObservableList<SimulationPeriod> data;
     
-    private class SceneObjectWrapper extends GridPane{
-        
-        private SceneObject sceneObject;
-        private final Label label;
-        private final ProgressBar progressBar;
-        
-        //properties
-        private String name;
-        private String path;
-        
-
-        public SceneObjectWrapper(File file, ProgressBar progressBar) {
-            
-            this.label = new Label(file.getName());
-            this.path = file.getAbsolutePath();
-            this.name = file.getName();
-            this.progressBar = progressBar;
-            
-            HBox labelWrapper = new HBox(this.label);
-            HBox progressBarWrapper = new HBox(this.progressBar);
-            
-            labelWrapper.setAlignment(Pos.CENTER_LEFT);
-            progressBarWrapper.setAlignment(Pos.CENTER_RIGHT);
-            
-            this.addColumn(0, labelWrapper);
-            this.addColumn(1, progressBarWrapper);
-            
-            ColumnConstraints columnConstraints1 = new ColumnConstraints();
-            columnConstraints1.setPercentWidth(50);
-            
-            ColumnConstraints columnConstraints2 = new ColumnConstraints();
-            columnConstraints1.setPercentWidth(50);
-            
-            this.getColumnConstraints().addAll(columnConstraints1, columnConstraints2);
-            
-            this.prefWidthProperty().bind(listviewTreeSceneObjects.widthProperty());
-        }
-
-        public Label getLabel() {
-            return label;
-        }
-
-        public ProgressBar getProgressBar() {
-            return progressBar;
-        }
-
-        public SceneObject getSceneObject() {
-            return sceneObject;
-        }
-
-        public void setSceneObject(SceneObject sceneObject) {
-            this.sceneObject = sceneObject;
-        }
-        
-        public List<SceneObjectProperty> getPropertyList(){
-            
-            List<SceneObjectProperty> propertiesList = new ArrayList<>();
-            
-            propertiesList.add(new SceneObjectProperty("name", name));
-            propertiesList.add(new SceneObjectProperty("path", path));
-            
-            return propertiesList;
-        }
-        
-    }
     
     private boolean isFileTypeKnown(File file){
         
@@ -6302,13 +6264,74 @@ public class MainFrameController implements Initializable {
                             }
                         };
                         
-                        //sceneObjectWrapper.getProgressBar().progressProperty().bind(s.progressProperty());
                         s.start();
                     }
                 });
                 
                 break;
             case ".rxp":
+                
+                listviewTreeSceneObjects.getItems().add(sceneObjectWrapper);
+
+                Service s = new Service() {
+
+                    @Override
+                    protected Task createTask() {
+                        return new Task() {
+
+                            @Override
+                            protected Object call() throws Exception {
+
+                                final PointCloudSceneObject pointCloud = new PointCloudSceneObject();
+
+                                RxpExtraction reader = new RxpExtraction();
+                                reader.openRxpFile(file, RxpExtraction.SHOT_WITH_REFLECTANCE);
+                                final Iterator<Shot> iterator = reader.iterator();
+
+                                Mat4D sopMatrix = Mat4D.identity();
+
+                                while(iterator.hasNext()){
+
+                                    Shot shot = iterator.next();
+
+                                    for(int i=0;i<shot.ranges.length;i++){
+
+                                        double range = shot.ranges[i];
+
+                                        float x = (float) (shot.origin.x + shot.direction.x * range);
+                                        float y = (float) (shot.origin.y + shot.direction.y * range);
+                                        float z = (float) (shot.origin.z + shot.direction.z * range);
+
+                                        Vec4D transformedPoint = Mat4D.multiply(sopMatrix, new Vec4D(x, y, z, 1));
+                                        pointCloud.addPoint((float)transformedPoint.x, (float)transformedPoint.y, (float)transformedPoint.z);
+
+                                        double reflectance = shot.reflectances[i];
+
+                                        pointCloud.addValue("reflectance", (float)reflectance);
+                                    }
+
+                                }
+
+                                pointCloud.initMesh();
+                                pointCloud.setShader(fr.amap.amapvox.voxviewer.object.scene.Scene.colorShader);
+                                
+                                Platform.runLater(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        sceneObjectWrapper.setSceneObject(pointCloud);
+                                        sceneObjectWrapper.getProgressBar().setProgress(1);
+                                    }
+                                });
+
+                                return null;
+                            }
+                        };
+                    }
+                };
+
+                s.start();
+                
                 break;
             case ".txt":
                 

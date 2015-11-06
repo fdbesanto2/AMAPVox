@@ -110,10 +110,12 @@ public class BasicEvent extends EventManager{
             Vec3F.normalize(new Vec3F(xOffset, yOffset, mouseSpeed));
             
             if(xOffset != 0){
-                joglContext.getScene().getCamera().rotateFromOrientation(new Vec3F(1.0f, 0.0f, 0.0f), null, (float) Math.toRadians(xOffset)*mouseSpeed);
+                joglContext.getScene().getCamera().rotateFromOrientationV2(new Vec3F(1.0f, 0.0f, 0.0f), xOffset, yOffset);
+                //joglContext.getScene().getCamera().rotateFromOrientation(new Vec3F(1.0f, 0.0f, 0.0f), null, (float) Math.toRadians(xOffset)*mouseSpeed);
             }
             if(yOffset != 0){
-                joglContext.getScene().getCamera().rotateFromOrientation(new Vec3F(0.0f, 1.0f, 0.0f), null, (float) Math.toRadians(yOffset)*mouseSpeed);
+                joglContext.getScene().getCamera().rotateFromOrientationV2(new Vec3F(1.0f, 0.0f, 0.0f), xOffset, yOffset);
+                //joglContext.getScene().getCamera().rotateFromOrientation(new Vec3F(0.0f, 1.0f, 0.0f), null, (float) Math.toRadians(yOffset)*mouseSpeed);
             }
         }
         
@@ -196,10 +198,6 @@ public class BasicEvent extends EventManager{
             //joglContext.getScene().getCamera().rotateAroundPoint(new Vec3F(0.0f,1.0f,0.0f), new Vec3F(0.0f,0.0f,0.0f), (float) Math.toRadians(5));
         }
         
-        if(!animator.isPaused() && !leftMousePressed){
-            animator.pause();
-        }
-        
         if(plusKeyPressed){
             //joglContext.cuttingPlane(true);
         }
@@ -250,6 +248,10 @@ public class BasicEvent extends EventManager{
             joglContext.updateCamera();
             resetMouseLocation();
             joglContext.refresh();
+        }
+        
+        if(!animator.isPaused() && (!leftMousePressed && !rightMousePressed)){
+            animator.pause();
         }
         
         mouseWheelRotateUp = false;

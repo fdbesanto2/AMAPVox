@@ -98,21 +98,27 @@ public class PointCloudSceneObject extends SimpleSceneObject{
             
             ScalarField scalarField = scalarFieldsList.get(colorAttributIndex);
             
-            int nbValues = scalarField.getNbValues()*3;
-            float[] colorDataArray = new float[nbValues];
-
-            for(int i=0, j=0;i<scalarField.getNbValues();i++, j+=3){
-
-                colorDataArray[j] = scalarField.getColor(i).getRed()/255.0f;
-                colorDataArray[j+1] = scalarField.getColor(i).getGreen()/255.0f;
-                colorDataArray[j+2] = scalarField.getColor(i).getBlue()/255.0f;
-            }
-
-            mesh.setColorData(colorDataArray);
-            colorNeedUpdate = true;
-            
             currentAttribut = scalarField.getName();
+            updateColor();
         }
+    }
+    
+    public void updateColor(){
+        
+        ScalarField scalarField = scalarFieldsList.get(currentAttribut);
+        
+        int nbValues = scalarField.getNbValues()*3;
+        float[] colorDataArray = new float[nbValues];
+
+        for(int i=0, j=0;i<scalarField.getNbValues();i++, j+=3){
+
+            colorDataArray[j] = scalarField.getColor(i).getRed()/255.0f;
+            colorDataArray[j+1] = scalarField.getColor(i).getGreen()/255.0f;
+            colorDataArray[j+2] = scalarField.getColor(i).getBlue()/255.0f;
+        }
+
+        mesh.setColorData(colorDataArray);
+        colorNeedUpdate = true;
     }
     
     public void initMesh(){
@@ -120,6 +126,13 @@ public class PointCloudSceneObject extends SimpleSceneObject{
         this.position = new Point3F((float)(xPositionStatistic.getMean()),
                                     (float)(yPositionStatistic.getMean()),
                                     (float)(zPositionStatistic.getMean()));
+        
+        Iterator<Map.Entry<String, ScalarField>> iterator = scalarFieldsList.entrySet().iterator();
+        
+        while(iterator.hasNext()){
+            
+            iterator.next().getValue().buildHistogram();
+        }
         
         ScalarField scalarField = scalarFieldsList.entrySet().iterator().next().getValue();
         
@@ -149,5 +162,9 @@ public class PointCloudSceneObject extends SimpleSceneObject{
     @Override
     public void load(File file) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Map<String, ScalarField> getScalarFieldsList() {
+        return scalarFieldsList;
     }
 }

@@ -9,6 +9,8 @@ import fr.amap.amapvox.commons.util.ColorGradient;
 import fr.amap.amapvox.commons.util.Statistic;
 import gnu.trove.list.array.TFloatArrayList;
 import java.awt.Color;
+import java.util.Comparator;
+import org.apache.commons.math3.stat.Frequency;
 
 /**
  *
@@ -20,13 +22,20 @@ public class ScalarField {
     private ColorGradient colorGradient;
     private final TFloatArrayList values;
     private final String name;
-
+    
+    private final Frequency f;
+    public long[] histogramFrequencyCount;
+    public double[] histogramValue;
+            
     public ScalarField(String name) {
         
         this.name = name;
         values = new TFloatArrayList();
         statistic = new Statistic();
         colorGradient = new ColorGradient(0, 0);
+        
+        
+        f = new Frequency();
     }
     
     public void addValue(float value){
@@ -46,6 +55,10 @@ public class ScalarField {
         this.colorGradient = colorGradient;
     }
     
+    public void setGradientColor(Color[] color) {
+        this.colorGradient.setGradientColor(color);
+    }
+    
     public int getNbValues(){
         return values.size();
     }
@@ -53,4 +66,36 @@ public class ScalarField {
     public String getName() {
         return name;
     }
+
+    public Statistic getStatistic() {
+        return statistic;
+    }
+    
+    public void buildHistogram(){
+        
+        for(int i=0;i< values.size();i++){
+            float value = values.get(i);
+            f.addValue(new Double(value).longValue());
+        }
+        
+        double minValue = statistic.getMinValue();
+        double maxValue = statistic.getMaxValue();
+        
+        double width = maxValue - minValue;
+        double step = width / 18.0d;
+        
+        histogramValue = new double[19];
+        histogramFrequencyCount = new long[19];
+        
+        int i=0;
+        
+        for(double d = minValue ; d <= maxValue ; d += step){
+            
+            histogramFrequencyCount[i] = f.getCumFreq(new Double(d + step).longValue()) - f.getCumFreq(new Double(d).longValue());
+            histogramValue[i] = d;
+            i++;
+        }
+    }
+    
+    
 }

@@ -9,6 +9,8 @@ import fr.amap.amapvox.math.matrix.Mat4F;
 import fr.amap.amapvox.math.vector.Vec3F;
 import fr.amap.amapvox.voxviewer.object.scene.SceneObject;
 import javax.swing.event.EventListenerList;
+import org.apache.commons.math3.geometry.euclidean.threed.SphericalCoordinates;
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 /**
  *
@@ -25,6 +27,9 @@ public class TrackballCamera extends Camera{
     
     private float width;
     private float height;
+    
+    private boolean inverseY = false;
+    
     
     private SceneObject pivot;
 
@@ -182,6 +187,88 @@ public class TrackballCamera extends Camera{
     public void setPivot(Vec3F pivot){
         
         this.target = pivot;
+    }
+    
+    private float normalizeTheta(float theta){
+        
+        //normalize between 0 and 2pi
+        while(theta < 0){
+            theta += Math.PI * 2;
+        }
+        while(theta > (Math.PI * 2)){
+            theta -= (Math.PI  * 2);
+        } 
+        
+        return theta;
+    }
+    
+    private float normalizePhi(float phi){
+        
+        //lock between 0 excluded and pi exluded
+        
+        while(theta < 0){
+            theta += Math.PI * 2;
+        }
+        while(theta > (Math.PI * 2)){
+            theta -= (Math.PI  * 2);
+        } 
+        
+        return theta;
+    }
+        
+    public void rotateFromOrientationV2(Vec3F axis, float offsetX, float offsetY){
+        
+        
+        //get current theta and phi
+        SphericalCoordinates sc1 = new SphericalCoordinates(new Vector3D(location.x - target.x, location.y - target.y, location.z - target.z));
+        
+        float oldTheta = (float) sc1.getTheta();
+        float oldPhi = (float) sc1.getPhi();
+    
+        //theta doit être compris entre 0 et 2pi
+        //phi doit être compris entre entre ]0 et pi[
+        float theta = 0, phi = 0;
+        
+        forwardVec = getForwardVector();
+        float radius = Vec3F.length(forwardVec);
+        
+        float thetaStep = (float) Math.toRadians(Math.abs(offsetX));
+        float phiStep = (float) Math.toRadians(Math.abs(offsetY/2.0f));
+        
+        //float thetaStep = (float) ((Math.PI * 2)/360.0f); //1° step
+        //float phiStep = (float) ((Math.PI * 2)/360.0f); //1° step
+        
+        if(offsetX > 0){
+            theta -= thetaStep;
+        }else if(offsetX < 0){
+            theta += thetaStep;
+        }
+        
+        theta += oldTheta;        
+        phi += oldPhi;
+        
+        theta = normalizeTheta(theta);
+        
+        if(offsetY > 0){
+            phi -= phiStep;
+            if(phi < 0){
+                phi += phiStep;
+            }
+        }else if(offsetY < 0){
+            phi += phiStep;
+            if(phi > Math.PI){
+                phi -= phiStep;
+            }
+        }
+        
+        SphericalCoordinates sc = new SphericalCoordinates(radius, theta, phi);
+        Vector3D cartesian = sc.getCartesian();
+        
+        location.x =  target.x + (float) cartesian.getX();
+        location.y =  target.y + (float) cartesian.getY();
+        location.z =  target.z + (float) cartesian.getZ();
+        
+        updateViewMatrix();
     }
     
     public void rotateFromOrientation(Vec3F axis, Vec3F center, float angle){

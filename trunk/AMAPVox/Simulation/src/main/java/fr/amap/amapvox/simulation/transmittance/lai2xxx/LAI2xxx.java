@@ -14,7 +14,7 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.amapvox.simulation.transmittance.lai2xxx;
 
-import fr.amap.amapvox.simulation.transmittance.util.SphericalCoordinates;
+import fr.amap.amapvox.commons.util.SphericalCoordinates;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -193,7 +193,6 @@ public abstract class LAI2xxx {
             float solidAnglePercentage = (rings[i].getSolidAngle()/solidAngleSum);
             
             shotNumberByRing[i] = (int) Math.ceil(solidAnglePercentage * directionNumber);
-            rings[i].setNbDirections(shotNumberByRing[i]);
         }
         
         int nbDirectionForOneRing = (directionNumber/5);
@@ -201,6 +200,7 @@ public abstract class LAI2xxx {
         for(int i=0;i<rings.length;i++){
             
            shotNumberByRing[i] = (shotNumberByRing[i] + nbDirectionForOneRing)/2;
+           rings[i].setNbDirections(shotNumberByRing[i]);
         }
         
         int nbSubRings=3;
@@ -624,8 +624,15 @@ public abstract class LAI2xxx {
 
         public RingInformation(float lowerShotAngle, float upperShotAngle, float azimuthalStepAngle, int nbShots, float solidAngle) {
             
-            float alpha = (float) Math.acos(1- (solidAngle/(2*Math.PI)));
-            nbSubRings = (int) (((lowerShotAngle - upperShotAngle) / (2 * alpha))+0.5);
+            
+            float zenitalStep = (float) (Math.toRadians(lowerShotAngle) - Math.toRadians(upperShotAngle));
+            float petitOmega = solidAngle/(float)nbShots;
+            float twoAlpha = (float) Math.sqrt(petitOmega);
+            //float alpha = (float) Math.acos(1-(petitOmega/(2*Math.PI)));
+            nbSubRings = (int)(((zenitalStep) / (twoAlpha))+0.5);
+            
+            //float alpha = (float) Math.acos(1- ((solidAngle/(float)nbShots)/(2*Math.PI)));
+            //nbSubRings = (int) (((Math.toRadians(lowerShotAngle) - Math.toRadians(upperShotAngle)) / (2 * alpha))+0.5);
                     
             this.lowerShotAngle = lowerShotAngle;
             this.upperShotAngle = upperShotAngle;

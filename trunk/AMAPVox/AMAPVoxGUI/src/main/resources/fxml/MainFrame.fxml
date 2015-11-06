@@ -936,11 +936,15 @@
                                                                   </HBox>
                                                                </children>
                                                             </AnchorPane>
-                                                            <TitledPane collapsible="false" prefHeight="471.0" prefWidth="271.0" text="Properties">
-                                                               <content>
-                                                                  <TableView fx:id="tableviewSceneObjectProperties" prefHeight="200.0" prefWidth="200.0" />
-                                                               </content>
-                                                            </TitledPane>
+                                                            <AnchorPane prefHeight="359.0" prefWidth="271.0">
+                                                               <children>
+                                                                  <TitledPane fx:id="titledPaneSceneObjectProperties" collapsible="false" prefHeight="471.0" prefWidth="271.0" text="Properties" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                     <content>
+                                                                        <ScrollPane fx:id="scrollPaneSceneObjectProperties" fitToHeight="true" fitToWidth="true" />
+                                                                     </content>
+                                                                  </TitledPane>
+                                                               </children>
+                                                            </AnchorPane>
                                                          </items>
                                                       </SplitPane>
                                                    </children>

@@ -36,7 +36,7 @@ public class JoglListener implements GLEventListener {
     public int startX = 0;
     public int startY = 0;
     
-    private boolean justOnce = false;
+    private boolean justOnce = true;
     private final FPSAnimator animator;
     private boolean isInit;
     
@@ -145,8 +145,11 @@ public class JoglListener implements GLEventListener {
      * Draw the next frame
      */
     public void refresh(){
+        
         justOnce = true;
+        
         animator.resume();
+        
     }
 
     @Override
