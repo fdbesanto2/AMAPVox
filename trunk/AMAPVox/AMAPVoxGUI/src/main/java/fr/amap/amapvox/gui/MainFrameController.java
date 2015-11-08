@@ -12,6 +12,7 @@ import fr.amap.amapvox.als.LasPoint;
 import fr.amap.amapvox.als.las.LasReader;
 import fr.amap.amapvox.als.las.PointDataRecordFormat;
 import fr.amap.amapvox.als.las.PointDataRecordFormat.Classification;
+import fr.amap.amapvox.als.las.PointDataRecordFormat2;
 import fr.amap.amapvox.als.laz.LazExtraction;
 import fr.amap.amapvox.chart.ChartViewer;
 import fr.amap.amapvox.chart.VoxelFileChart;
@@ -46,7 +47,6 @@ import fr.amap.amapvox.io.tls.rsp.Scans;
 import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.amapvox.jdart.DartPlotsXMLWriter;
-import fr.amap.amapvox.jeeb.workspace.sunrapp.util.Colouring;
 import fr.amap.amapvox.jraster.asc.DtmLoader;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
 import fr.amap.amapvox.math.geometry.BoundingBox2F;
@@ -91,7 +91,6 @@ import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject2;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceAdapter;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -103,7 +102,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -131,7 +129,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -146,7 +143,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
@@ -154,7 +150,6 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -167,7 +162,6 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -187,7 +181,6 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.controlsfx.control.RangeSlider;
 import org.controlsfx.dialog.ProgressDialog;
 import org.jdom2.JDOMException;
 import org.jfree.chart.JFreeChart;
@@ -5936,7 +5929,7 @@ public class MainFrameController implements Initializable {
             String extension = FileManager.getExtension(file);
             
             LazAttributs lazAttributs = new LazAttributs();
-            LasAttributs lasAttributs = new LasAttributs();
+            
             
             switch (extension) {
 
@@ -5946,6 +5939,13 @@ public class MainFrameController implements Initializable {
                 
                 //select attributs to import in the attributs importer frame
                 attributsImporterFrame.show();
+                
+                LasReader reader = new LasReader();
+                reader.open(file);
+                LasHeader header = reader.getHeader();
+                
+                LasAttributs lasAttributs = new LasAttributs(header.getPointDataFormatID());
+                                                
                 attributsImporterFrameController.setAttributsList(lasAttributs.getAttributsNames());
                 
                 //create scene object and set attributs colors
@@ -6023,6 +6023,30 @@ public class MainFrameController implements Initializable {
                                                 
                                                 if(lasAttributs.isExportTime()){
                                                     sceneObject.addValue("GPS time", (float)point.getGpsTime());
+                                                }
+                                                
+                                                if(header.getPointDataFormatID() == 2 || header.getPointDataFormatID() == 3){
+                                                    
+                                                    if(lasAttributs.isExportRed() || lasAttributs.isExportGreen() || lasAttributs.isExportBlue()){
+                                                        
+                                                        int red = 0;
+                                                        int green = 0;
+                                                        int blue = 0;
+                                                        if(lasAttributs.isExportRed()){
+                                                            red = ((PointDataRecordFormat2)point).getRed();
+                                                        }
+                                                        if(lasAttributs.isExportGreen()){
+                                                            green = ((PointDataRecordFormat2)point).getGreen();
+                                                        }
+                                                        if(lasAttributs.isExportBlue()){
+                                                            blue = ((PointDataRecordFormat2)point).getBlue();
+                                                        }
+
+                                                        sceneObject.addValue("RGB color", red, false);
+                                                        sceneObject.addValue("RGB color", green, false);
+                                                        sceneObject.addValue("RGB color", blue, false);
+                                                    }
+                                                    
                                                 }
                                                 
                                                 count++;
@@ -6427,7 +6451,7 @@ public class MainFrameController implements Initializable {
                                                         Float.valueOf(lineSplitted[finalYIndex]),
                                                         Float.valueOf(lineSplitted[finalZIndex]));
 
-                                                sceneObject.addValue(line, count);
+                                                sceneObject.addValue("default", 0);
                                                 //sceneObject.addColor(0, 1, 0, 0);
 
                                                 count++;

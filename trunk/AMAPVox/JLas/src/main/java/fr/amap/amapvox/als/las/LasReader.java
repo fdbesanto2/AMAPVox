@@ -857,11 +857,14 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
                             break;
 
                         case 2:
-                            red = dis.readByte() + dis.readByte();
+                            red = LasReader.bytesToShortInt(dis.readByte(), dis.readByte());
+                            //red = dis.readByte() + dis.readByte();
                             ((PointDataRecordFormat2) pdr).setRed(red);
-                            green = dis.readByte() + dis.readByte();
+                            green = LasReader.bytesToShortInt(dis.readByte(), dis.readByte());
+                            //green = dis.readByte() + dis.readByte();
                             ((PointDataRecordFormat2) pdr).setGreen(green);
-                            blue = dis.readByte() + dis.readByte();
+                            blue = LasReader.bytesToShortInt(dis.readByte(), dis.readByte());
+                            //blue = dis.readByte() + dis.readByte();
                             ((PointDataRecordFormat2) pdr).setBlue(blue);
 
                             length = PointDataRecordFormat2.LENGTH;

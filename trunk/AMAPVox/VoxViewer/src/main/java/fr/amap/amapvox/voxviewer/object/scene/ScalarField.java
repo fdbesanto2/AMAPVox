@@ -26,6 +26,8 @@ public class ScalarField {
     private final Frequency f;
     public long[] histogramFrequencyCount;
     public double[] histogramValue;
+    
+    public boolean hasColorGradient;
             
     public ScalarField(String name) {
         
@@ -33,14 +35,18 @@ public class ScalarField {
         values = new TFloatArrayList();
         statistic = new Statistic();
         colorGradient = new ColorGradient(0, 0);
-        
-        
+        hasColorGradient = true;
         f = new Frequency();
     }
     
     public void addValue(float value){
         values.add(value);
         statistic.addValue(value);
+    }
+    
+    public float getValue(int index){
+        
+        return values.get(index);
     }
     
     public Color getColor(int index){
@@ -89,12 +95,20 @@ public class ScalarField {
         
         int i=0;
         
-        for(double d = minValue ; d <= maxValue ; d += step){
+        try{
+            for(double d = minValue ; d <= maxValue ; d += step){
             
-            histogramFrequencyCount[i] = f.getCumFreq(new Double(d + step).longValue()) - f.getCumFreq(new Double(d).longValue());
-            histogramValue[i] = d;
-            i++;
+            if(i < histogramValue.length){
+                    histogramFrequencyCount[i] = f.getCumFreq(new Double(d + step).longValue()) - f.getCumFreq(new Double(d).longValue());
+                    histogramValue[i] = d;
+                }
+
+                i++;
+            }
+        }catch(Exception e){
+            
         }
+        
     }
     
     

@@ -61,7 +61,20 @@ public class PointCloudSceneObject extends SimpleSceneObject{
     public void addValue(String index, float value){
         
         if(!scalarFieldsList.containsKey(index)){
+            
             scalarFieldsList.put(index, new ScalarField(index));
+        }
+        
+        scalarFieldsList.get(index).addValue(value);
+    }
+    
+    public void addValue(String index, float value, boolean gradient){
+        
+        
+        if(!scalarFieldsList.containsKey(index)){
+            ScalarField scalarField = new ScalarField(index);
+            scalarField.hasColorGradient = gradient;
+            scalarFieldsList.put(index, scalarField);
         }
         
         scalarFieldsList.get(index).addValue(value);
@@ -103,18 +116,61 @@ public class PointCloudSceneObject extends SimpleSceneObject{
         }
     }
     
+    public float[] updateColor(ScalarField scalarField){
+        
+        int nbValues;
+        float[] colorDataArray;
+        
+        if(scalarField.hasColorGradient){
+            
+            nbValues = scalarField.getNbValues()*3;
+            colorDataArray = new float[nbValues];
+            
+            for(int i=0, j=0;i<scalarField.getNbValues();i++, j+=3){
+
+                colorDataArray[j] = scalarField.getColor(i).getRed()/255.0f;
+                colorDataArray[j+1] = scalarField.getColor(i).getGreen()/255.0f;
+                colorDataArray[j+2] = scalarField.getColor(i).getBlue()/255.0f;
+            }
+        }else{
+            
+            nbValues = scalarField.getNbValues();
+            colorDataArray = new float[nbValues];
+            
+            for(int i=0;i<scalarField.getNbValues();i++){
+                colorDataArray[i] = scalarField.getValue(i)/255.0f;
+            }
+        }
+        
+        return colorDataArray;
+    }
+    
     public void updateColor(){
         
         ScalarField scalarField = scalarFieldsList.get(currentAttribut);
         
-        int nbValues = scalarField.getNbValues()*3;
-        float[] colorDataArray = new float[nbValues];
+        int nbValues;
+        float[] colorDataArray;
+        
+        if(scalarField.hasColorGradient){
+            
+            nbValues = scalarField.getNbValues()*3;
+            colorDataArray = new float[nbValues];
+            
+            for(int i=0, j=0;i<scalarField.getNbValues();i++, j+=3){
 
-        for(int i=0, j=0;i<scalarField.getNbValues();i++, j+=3){
-
-            colorDataArray[j] = scalarField.getColor(i).getRed()/255.0f;
-            colorDataArray[j+1] = scalarField.getColor(i).getGreen()/255.0f;
-            colorDataArray[j+2] = scalarField.getColor(i).getBlue()/255.0f;
+                colorDataArray[j] = scalarField.getColor(i).getRed()/255.0f;
+                colorDataArray[j+1] = scalarField.getColor(i).getGreen()/255.0f;
+                colorDataArray[j+2] = scalarField.getColor(i).getBlue()/255.0f;
+            }
+        }else{
+            
+            nbValues = scalarField.getNbValues();
+            colorDataArray = new float[nbValues];
+            
+            for(int i=0;i<scalarField.getNbValues();i++){
+                colorDataArray[i] = scalarField.getValue(i)/255.0f;
+            }
         }
 
         mesh.setColorData(colorDataArray);
@@ -136,17 +192,10 @@ public class PointCloudSceneObject extends SimpleSceneObject{
         
         ScalarField scalarField = scalarFieldsList.entrySet().iterator().next().getValue();
         
-        int nbValues = scalarField.getNbValues()*3;
-        float[] colorDataArray = new float[nbValues];
         
-        for(int i=0, j=0;i<scalarField.getNbValues();i++, j+=3){
-            
-            colorDataArray[j] = scalarField.getColor(i).getRed()/255.0f;
-            colorDataArray[j+1] = scalarField.getColor(i).getGreen()/255.0f;
-            colorDataArray[j+2] = scalarField.getColor(i).getBlue()/255.0f;
-        }
+        
 
-        mesh = GLMeshFactory.createPointCloud(vertexDataList.toArray(), colorDataArray);
+        mesh = GLMeshFactory.createPointCloud(vertexDataList.toArray(), updateColor(scalarField));
         
         currentAttribut = scalarField.getName();
     }

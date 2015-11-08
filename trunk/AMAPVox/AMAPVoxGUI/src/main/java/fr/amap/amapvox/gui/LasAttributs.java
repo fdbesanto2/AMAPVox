@@ -20,37 +20,33 @@ public class LasAttributs{
     private final static String numberOfReturns = "Number of returns";
     private final static String returnNumber = "Return number";
     private final static String time = "GPS time";
+    private final static String red = "red";
+    private final static String green = "green";
+    private final static String blue = "blue";
 
     private boolean exportClassification;
     private boolean exportIntensity;
     private boolean exportNumberOfReturns;
     private boolean exportReturnNumber;
     private boolean exportTime;
+    private boolean exportRed;
+    private boolean exportGreen;
+    private boolean exportBlue;
     
-    private final Statistic classificationStatistic = new Statistic();
-    private final Statistic intensityStatistic = new Statistic();
-    private final Statistic returnNumberStatistic = new Statistic();
-    private final Statistic numberOfReturnsStatistic = new Statistic();
-    private final Statistic timeStatistic = new Statistic();
+    private final int pointDataFormatID;
     
-    private final static List<String> list = new ArrayList<>();
-    
-    static{
-        list.add(classification);
-        list.add(intensity);
-        list.add(numberOfReturns);
-        list.add(returnNumber);
-        list.add(time);
-    }
 
-
-    public LasAttributs(){
+    public LasAttributs(int pointDataFormatID){
 
         exportClassification = false;
         exportIntensity = false;
         exportNumberOfReturns = false;
         exportReturnNumber = false;
         exportTime = false;
+        exportRed = false;
+        exportGreen = false;
+        exportBlue = false;
+        this.pointDataFormatID = pointDataFormatID;
     }
     
     public void processList(List<String> attributsToExport){
@@ -72,12 +68,38 @@ public class LasAttributs{
                 case time:
                     exportTime = true;
                     break;
+                case red:
+                    exportRed = true;
+                    break;
+                case green:
+                    exportGreen = true;
+                    break;
+                case blue:
+                    exportBlue = true;
+                    break;
             }
         }
     }
 
     public List<String> getAttributsNames(){
 
+        List<String> list = new ArrayList<>();
+        
+        if(pointDataFormatID <= 3){
+            
+            
+            list.add(classification);
+            list.add(intensity);
+            list.add(numberOfReturns);
+            list.add(returnNumber);
+            list.add(time);
+            
+            if(pointDataFormatID >= 2){
+                list.add(red);
+                list.add(green);
+                list.add(blue);
+            }
+        }
         return list;
     }
 
@@ -101,24 +123,16 @@ public class LasAttributs{
         return exportTime;
     }
 
-    public Statistic getClassificationStatistic() {
-        return classificationStatistic;
+    public boolean isExportRed() {
+        return exportRed;
     }
 
-    public Statistic getIntensityStatistic() {
-        return intensityStatistic;
+    public boolean isExportGreen() {
+        return exportGreen;
     }
 
-    public Statistic getReturnNumberStatistic() {
-        return returnNumberStatistic;
+    public boolean isExportBlue() {
+        return exportBlue;
     }
-
-    public Statistic getNumberOfReturnsStatistic() {
-        return numberOfReturnsStatistic;
-    }
-
-    public Statistic getTimeStatistic() {
-        return timeStatistic;
-    }
-
+    
 }
