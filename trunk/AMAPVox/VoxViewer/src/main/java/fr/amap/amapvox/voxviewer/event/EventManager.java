@@ -42,6 +42,7 @@ public abstract class EventManager {
     
     public boolean leftMousePressed;
     public boolean rightMousePressed;
+    public boolean middleMousePressed;
     public boolean leftMouseDragged;
     public boolean rightMouseDragged;
     public boolean spaceKeyPressed;

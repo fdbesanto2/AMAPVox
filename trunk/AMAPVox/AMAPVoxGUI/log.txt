@@ -40590,3 +40590,21 @@ i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal l
 2015-11-06 23:00:15 INFO  - Laz file C:\Users\Julien\Downloads\Palm Beach Post Hurricane.laz is opened
 2015-11-06 23:00:15 INFO  - Laz file C:\Users\Julien\Downloads\Palm Beach Post Hurricane.laz is opened
 2015-11-06 23:00:20 INFO  - Laz file is closed
+2015-11-09 08:33:35 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-09 08:33:35 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-09 08:33:36 INFO  - Laz file is closed
+2015-11-09 09:39:39 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-09 09:39:39 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-09 09:39:40 INFO  - Laz file is closed
+2015-11-09 09:42:34 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-09 09:42:34 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-09 09:42:35 INFO  - Laz file is closed
+2015-11-09 09:44:12 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-09 09:44:12 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-09 09:44:13 INFO  - Laz file is closed
+2015-11-09 09:46:11 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-09 09:46:11 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-09 09:46:12 INFO  - Laz file is closed
+2015-11-09 09:48:18 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-09 09:48:18 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-11-09 09:48:19 INFO  - Laz file is closed

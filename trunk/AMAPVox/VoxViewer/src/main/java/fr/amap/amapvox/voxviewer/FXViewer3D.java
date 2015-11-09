@@ -418,7 +418,7 @@ public class FXViewer3D extends Application {
                                             toolBarFrameStage.show();
 
                                             //toolBarFrameStage.setHeight(joglWindow.getHeight() / 2);
-                                            viewer3D.getJoglContext().startX = (int) toolBarFrameStage.getWidth();
+                                            viewer3D.getJoglContext().setStartX((int) toolBarFrameStage.getWidth());
 
 //                                            viewer3D.getJoglContext().addListener(new JoglListenerListener() {
 //

@@ -53,6 +53,8 @@ public class Scene {
     public TrackballCamera camera;
     private Light light;
     
+    private MousePicker mousePicker;
+    
     public boolean canDraw;
     
     private int width;
@@ -89,6 +91,7 @@ public class Scene {
         textureList = new ArrayList<>();
         canDraw = false;
         light = new Light();
+        
         
         uniforms.put(viewMatrixUniform.getName(), viewMatrixUniform);
         uniforms.put(projMatrixUniform.getName(), projMatrixUniform);
@@ -161,6 +164,7 @@ public class Scene {
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
                     projMatrixUniform.setValue((Mat4F) evt.getNewValue());
+                    mousePicker.setProjectionMatrix((Mat4F) evt.getNewValue());
                 }
             });
             
@@ -169,6 +173,7 @@ public class Scene {
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
                     viewMatrixUniform.setValue((Mat4F) evt.getNewValue());
+                    mousePicker.setViewMatrix((Mat4F) evt.getNewValue());
                 }
             });
             
@@ -225,6 +230,11 @@ public class Scene {
         
         return null;
     }
+    
+    public void updateMousePicker(float mouseX, float mouseY, float viewportWidth, float viewportHeight){
+        mousePicker.update(mouseX, mouseY, viewportWidth, viewportHeight);
+    }
+    
     
     public void changeObjectTexture(int idObject, Texture texture){
         
@@ -286,6 +296,11 @@ public class Scene {
             if(!object.depthTest){
                 gl.glClear(GL3.GL_DEPTH_BUFFER_BIT);
             }
+            
+            if(object.isMousePickable()){
+                object.updateMousePicker(mousePicker);
+                System.out.println(object.doPicking());
+            }
 
             gl.glUseProgram(object.getShaderId());
                 object.draw(gl);
@@ -329,6 +344,7 @@ public class Scene {
 
     public void setCamera(TrackballCamera camera) {
         this.camera = camera;
+        mousePicker = new MousePicker(camera);
     }
 
     public TrackballCamera getCamera() {

@@ -12,6 +12,7 @@ import com.jogamp.opengl.util.FPSAnimator;
 import fr.amap.amapvox.math.vector.Vec3F;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
 import fr.amap.amapvox.voxviewer.event.EventManager;
+import fr.amap.amapvox.voxviewer.object.scene.MousePicker;
 import fr.amap.amapvox.voxviewer.object.scene.Scene;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,12 +34,13 @@ public class JoglListener implements GLEventListener {
     public int viewportWidth;
     public int viewportHeight;
     
-    public int startX = 0;
-    public int startY = 0;
+    private int startX = 0;
+    private int startY = 0;
     
     private boolean justOnce = true;
     private final FPSAnimator animator;
     private boolean isInit;
+    
     
     public Scene getScene() {
         return scene;
@@ -121,7 +123,17 @@ public class JoglListener implements GLEventListener {
         
         GL3 gl = drawable.getGL().getGL3();
         
-        gl.glViewport(startX, startY, width-startX, height);
+        /*
+        glViewport specifies the affine transformation of x and y from normalized 
+        device coordinates to window coordinates. 
+        Let x nd y nd be normalized device coordinates. 
+        Then the window coordinates x w y w are computed as follows:
+
+        x w = x nd + 1 ⁢* width * 2 + x
+        y w = y nd + 1 ⁢* height * 2 + y
+        */
+        gl.glViewport(0, 0, viewportWidth, viewportHeight);
+        
         gl.glClear(GL3.GL_DEPTH_BUFFER_BIT|GL3.GL_COLOR_BUFFER_BIT);
         gl.glClearColor(worldColor.x, worldColor.y, worldColor.z, 1.0f);
         
@@ -130,6 +142,8 @@ public class JoglListener implements GLEventListener {
         if(eventListener != null){
             eventListener.updateEvents();
         }
+        
+        
         
         isInit = false;
         
@@ -151,6 +165,12 @@ public class JoglListener implements GLEventListener {
         animator.resume();
         
     }
+    
+    public void updateMousePicker(){
+        
+        scene.updateMousePicker(eventListener.getMouseXCurrentLocation(), eventListener.getMouseYCurrentLocation(), viewportWidth, viewportHeight);
+        
+    }
 
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -163,7 +183,7 @@ public class JoglListener implements GLEventListener {
         viewportWidth = this.width-startX;
         viewportHeight = this.height;
         
-        gl.glViewport(startX, startY, viewportWidth, viewportHeight);
+        gl.glViewport(0, 0, viewportWidth, viewportHeight);
         
         if(isInit){
             scene.getCamera().setPerspective(60.0f, (1.0f*this.width-startX)/height, 1.0f, 1000.0f);
@@ -172,15 +192,16 @@ public class JoglListener implements GLEventListener {
         updateCamera();
     }
     
+    
     public void updateCamera() {
 
         if (scene.getCamera().isPerspective()) {
+            scene.getCamera().setViewportWidth(viewportWidth);
+            scene.getCamera().setViewportHeight(viewportHeight);
             scene.getCamera().setPerspective(60.0f, (1.0f * this.width - startX) / height, scene.getCamera().getNearPersp(), scene.getCamera().getFarPersp());
         } else {
             //camera.initOrtho(0, width, height, 0, camera.getNearOrtho(), camera.getFarOrtho());
 
-            scene.getCamera().setViewportWidth(viewportWidth);
-            scene.getCamera().setViewportHeight(viewportHeight);
 
             //camera.initOrtho(-camera.getWidth()*0.5f, camera.getWidth()*0.5f, camera.getHeight()*0.5f, -camera.getHeight()*0.5f, camera.getNearOrtho(), camera.getFarOrtho());
             scene.getCamera().initOrtho(-((viewportWidth) / 100), (viewportWidth) / 100, viewportHeight / 100, -(viewportHeight) / 100, scene.getCamera().getNearOrtho(), scene.getCamera().getFarOrtho());
@@ -189,6 +210,30 @@ public class JoglListener implements GLEventListener {
         }
 
     }
-    
+
+    public int getStartX() {
+        return startX;
+    }
+
+    public void setStartX(int startX) {
+        
+        this.startX = startX;
+        
+        viewportWidth = this.width-startX;
+        viewportHeight = this.height;
+        
+        scene.getCamera().setViewportWidth(viewportWidth);
+        scene.getCamera().setViewportHeight(viewportHeight);
+        
+        scene.getCamera().setPerspective(60.0f, (1.0f*this.width-startX)/height, 1.0f, 1000.0f);
+    }
+
+    public int getStartY() {
+        return startY;
+    }
+
+    public void setStartY(int startY) {
+        this.startY = startY;
+    }
     
 }

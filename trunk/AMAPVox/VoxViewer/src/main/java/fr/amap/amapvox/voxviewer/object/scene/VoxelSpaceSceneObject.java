@@ -17,6 +17,10 @@ import fr.amap.amapvox.commons.util.CombinedFilter;
 import fr.amap.amapvox.commons.util.CombinedFilters;
 import fr.amap.amapvox.commons.util.Filter;
 import fr.amap.amapvox.commons.util.StandardDeviation;
+import fr.amap.amapvox.jeeb.raytracing.geometry.LineSegment;
+import fr.amap.amapvox.jeeb.raytracing.util.BoundingBox3d;
+import fr.amap.amapvox.jeeb.raytracing.voxel.VoxelManager;
+import fr.amap.amapvox.jeeb.raytracing.voxel.VoxelManagerSettings;
 import fr.amap.amapvox.voxcommons.RawVoxel;
 import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
 import fr.amap.amapvox.voxreader.VoxelFileRawReader;
@@ -24,7 +28,9 @@ import fr.amap.amapvox.voxviewer.mesh.GLMesh;
 import fr.amap.amapvox.voxviewer.mesh.GLMeshFactory;
 import fr.amap.amapvox.voxviewer.mesh.InstancedGLMesh;
 import fr.amap.amapvox.voxviewer.misc.Attribut;
+import fr.amap.amapvox.voxviewer.object.camera.TrackballCamera;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
@@ -35,6 +41,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.event.EventListenerList;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
@@ -60,6 +69,75 @@ public class VoxelSpaceSceneObject extends SceneObject{
     @Override
     public void load(File file) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String doPicking() {
+        
+        boolean drawImage = false;
+        
+        if(drawImage){
+            int width = (int) ((TrackballCamera)mousePicker.getCamera()).getViewportWidth();
+            int height = (int) ((TrackballCamera)mousePicker.getCamera()).getViewportHeight();
+            
+            Color full = new Color(255, 0, 0);
+            Color empty = new Color(0, 0, 0);
+
+            BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+            for(int i=0;i<width;i++){
+                for(int j=0;j<height;j++){
+                    
+                    mousePicker.update(i, j, width, height);
+
+                    //Point3F camPosition = new Point3F();
+                    Point3F camPosition = mousePicker.getCamPosition();
+                    Vec3F currentRay = mousePicker.getCurrentRay();
+
+                    //System.out.println(currentRay.x+" "+currentRay.y+" "+currentRay.z);
+
+                    Point3F closestPoint = mousePicker.getPointOnray(camPosition, currentRay, 1);
+                    Point3F farestPoint = mousePicker.getPointOnray(camPosition, currentRay, 999);
+
+                    LineSegment lineSegment = new LineSegment(
+                            new Point3d(closestPoint.x, closestPoint.y, closestPoint.z),
+                            new Point3d(farestPoint.x, farestPoint.y, farestPoint.z));
+
+                    VoxelManager.VoxelCrossingContext context = voxelManager.getFirstVoxelV2(lineSegment);
+
+                    boolean hasResult = false;
+                    
+                    while ((context != null) && (context.indices != null)) {
+
+                        VoxelObject voxel = data.getVoxel(context.indices.x, context.indices.y, context.indices.z);
+
+                        if(voxel.getAlpha() > 0){
+                            image.setRGB(i, height-j-1, full.getRGB());
+                            hasResult = true;
+                            break;
+                            //return (voxel.$i+" "+voxel.$j+" "+voxel.$k);
+                        }else{
+                            context = voxelManager.CrossVoxel(lineSegment, context.indices);
+                        }
+                    }
+                    
+                    if(!hasResult){
+                        image.setRGB(i, height-j-1, empty.getRGB());
+                    }
+                    
+                }
+            }
+            
+            try {
+                ImageIO.write(image, "png", new File("/home/calcul/Documents/Julien/tmp.png"));
+                
+            } catch (IOException ex) {
+                Logger.getLogger(VoxelSpaceSceneObject.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        
+        return "";
     }
     
     public enum Format{
@@ -123,6 +201,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
     private float cuttingIncrementFactor = 1.0f;
     
     private final PropertyChangeSupport props = new PropertyChangeSupport(this);
+    private VoxelManager voxelManager;
     
     public VoxelSpaceSceneObject(){
         
@@ -152,6 +231,8 @@ public class VoxelSpaceSceneObject extends SceneObject{
         fileLoaded = false;
         
         this.voxelsFile = voxelSpace;
+        
+        this.mousePickable = true;
     }
     
     public void addPropertyChangeListener(String propName, PropertyChangeListener l) {
@@ -192,6 +273,13 @@ public class VoxelSpaceSceneObject extends SceneObject{
         
         int instanceNumber = data.voxels.size();    
         mesh = new InstancedGLMesh(GLMeshFactory.createCube(cubeSize), instanceNumber);
+        
+        if(mousePickable){
+            VoxelSpaceInfos infos = data.getVoxelSpaceInfos();
+            fr.amap.amapvox.jeeb.raytracing.voxel.Scene scene = new fr.amap.amapvox.jeeb.raytracing.voxel.Scene();
+            scene.setBoundingBox(new BoundingBox3d(infos.getMinCorner(), infos.getMaxCorner()));
+            voxelManager = new VoxelManager(scene,  new VoxelManagerSettings(infos.getSplit(), VoxelManagerSettings.NON_TORIC_FINITE_BOX_TOPOLOGY));
+        }
     }
 
     public Map<String, Attribut> getMapAttributs() {

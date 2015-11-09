@@ -76,5 +76,25 @@ public class VoxelSpaceData extends fr.amap.amapvox.voxcommons.VoxelSpace{
         return indices;
     }
     
+    public VoxelObject getVoxel(int i, int j, int k){
+        
+        if(i > voxelSpaceInfos.getSplit().x -1 || j > voxelSpaceInfos.getSplit().y -1 || k > voxelSpaceInfos.getSplit().z -1){
+            return null;
+        }
+        
+        int index = get1DFrom3D(i, j, k);
+        
+        if(index>voxels.size()-1){
+            return null;
+        }
+        
+        return (VoxelObject) voxels.get(index);
+    }
+    
+    private int get1DFrom3D(int i, int j, int k){
+        
+        return (i*voxelSpaceInfos.getSplit().y*voxelSpaceInfos.getSplit().z) + (j*voxelSpaceInfos.getSplit().z) +  k;
+    }
+    
     
 }

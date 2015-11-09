@@ -1,0 +1,7 @@
+\left({\frac{ \sum_{i}^{n} \left({BVOutgoing_i \cdot S_i \cdot l_i}\right)}{ \sum_{i}^{n} \left({BVEntering_i \cdot S_i \cdot l_i}\right)}}\right)^{\frac {1}{lMean_i}}
+
+\left({\frac{ \sum_{i}^{n} \left({out_i  \cdot l_i}\right)}{ \sum_{i}^{n} \left({in_i \cdot l_i}\right)}}\right)^{\frac {1}{lMean_i}}
+
+G(\theta, \varphi) = \int_0^{\frac{\pi}{2}} A(\theta_L, \varphi_L)\ f(\theta_L)\ d(\theta_L)
+
+G(\theta) = \sum_j^{N} \left(\int_\theta_{j-1}^{\theta_j} A(\theta, \theta_L)\ d(\theta_L)\cdot f_j\right)

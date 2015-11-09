@@ -34,6 +34,8 @@ public abstract class SceneObject{
     protected Point3F position;
     private int id;
     protected boolean colorNeedUpdate = false;
+    protected boolean mousePickable;
+    protected MousePicker mousePicker;
 
     public void setId(int id) {
         this.id = id;
@@ -133,6 +135,19 @@ public abstract class SceneObject{
         }
     }
     
+    public void setMousePickable(boolean isPickable){
+        
+        this.mousePickable = isPickable;
+    }
+
+    public boolean isMousePickable() {
+        return mousePickable;
+    }  
+    
+    public void updateMousePicker(MousePicker mousePicker){
+        this.mousePicker = mousePicker;
+    }
+    
     public abstract void initBuffers(GL3 gl);
     
     public abstract void updateBuffers(GL3 gl, int index, FloatBuffer buffer);
@@ -142,4 +157,6 @@ public abstract class SceneObject{
     public abstract void draw(GL3 gl);
 
     public abstract void load(File file);
+    
+    public abstract String doPicking();
 }

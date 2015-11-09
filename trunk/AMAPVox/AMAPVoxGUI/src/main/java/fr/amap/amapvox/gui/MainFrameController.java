@@ -2588,7 +2588,7 @@ public class MainFrameController implements Initializable {
                                             toolBarFrameStage.show();
 
                                             double maxToolBoxHeight = toolBarFrameStage.getHeight();
-                                            viewer3D.getJoglContext().startX = (int) toolBarFrameStage.getWidth();
+                                            viewer3D.getJoglContext().setStartX((int) toolBarFrameStage.getWidth());
 
                                             viewer3D.addWindowListener(new WindowAdapter() {
 

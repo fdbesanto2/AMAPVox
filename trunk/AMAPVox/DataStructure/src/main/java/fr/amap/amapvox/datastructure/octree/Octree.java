@@ -14,6 +14,9 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.amapvox.datastructure.octree;
 
+import fr.amap.amapvox.commons.util.Statistic;
+import fr.amap.amapvox.math.geometry.BoundingBox3F;
+import fr.amap.amapvox.math.geometry.Intersection;
 import fr.amap.amapvox.math.point.Point3F;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +41,7 @@ public class Octree {
     
     public final static short BINARY_SEARCH = 0;
     public final static short INCREMENTAL_SEARCH = 1;
+    
     
     public Octree(int maximumPoints){
         this.maximumPoints = maximumPoints;
@@ -110,6 +114,69 @@ public class Octree {
         }
         
         return node;
+    }
+    
+    public Node traverse(Node node, Point3F source, Point3F end){
+                
+        BoundingBox3F boundingBox3F = new BoundingBox3F(node.getMinPoint(), node.getMaxPoint());
+        Point3F intersection = Intersection.getIntersectionLineBoundingBox(source, end, boundingBox3F);
+
+        while(node.hasChilds() && intersection != null){
+
+            if(node.getPoints().length != 0){
+
+            }else{
+                for(int i=0;i<8;i++){
+                    Node child = node.getChild((short) i);
+                    node = traverse(child, source, end);
+                }
+            }
+        }
+        
+        return node;
+    }
+    
+    public Point3F rayIntersectNode(Node node, Point3F source, Point3F end){
+                
+        //on vérifie l'intersection avec le noeud root
+        BoundingBox3F boundingBox3F = new BoundingBox3F(node.getMinPoint(), node.getMaxPoint());
+        Point3F intersection = Intersection.getIntersectionLineBoundingBox(source, end, boundingBox3F);
+        
+        return intersection;
+        //si la droite intersecte le noeud, on vérifie l'intersection avec tous les noeuds du root
+        //dès qu'il y a intersection dans un ou plusieurs des enfants du noeud, on arrête le processus
+        //pour chaque noeud qui intersecte la droite, 
+    }
+    
+    //retourne le noeud intersecté le plus proche
+    public Node rayTraversal(Node node, Point3F source, Point3F end){
+                
+        //on vérifie l'intersection avec le noeud root
+        
+        Node nearestIntersectedNode = null;
+        
+        Point3F intersection = rayIntersectNode(node, source, end);
+            
+        if(intersection != null){
+
+            if(node.hasChilds()){ //le noeud a des enfants, on continue la recherche
+                for(int i=0;i<8;i++){
+                    Node child = node.getChild((short) i);
+                    nearestIntersectedNode = rayTraversal(child, source, end);
+                }
+            }else if(node.getPoints().length > 0){ //le noeud n'a pas d'enfants et il contient des points
+                nearestIntersectedNode = node;
+            }else{ //le noeud n'a pas d'enfants et ne contient pas de points
+                return null;
+            }
+
+        }
+        
+        return nearestIntersectedNode;
+        
+        //si la droite intersecte le noeud, on vérifie l'intersection avec tous les noeuds du root
+        //dès qu'il y a intersection dans un ou plusieurs des enfants du noeud, on arrête le processus
+        //pour chaque noeud qui intersecte la droite, 
     }
     
     public Point3F searchNearestPoint(Point3F point, short type, float errorMargin){
@@ -407,6 +474,39 @@ public class Octree {
 
     public void setPoints(Point3F[] points) {
         this.points = points;
+    }
+    
+    public void setPoints(float[] points) {
+        
+        Point3F minPoint = null;
+        Point3F maxPoint = null;
+        
+        this.points = new Point3F[points.length/3];
+        
+        for(int i=0, j=0;i<points.length;i++,j+=3){
+            
+            this.points[i] = new Point3F(points[i], points[i+1], points[i+2]);
+            
+            if(i == 0){
+                minPoint = this.points[i];
+                maxPoint = this.points[i];
+            }else{
+                int minPointComparison = minPoint.compareTo(this.points[i]);
+                int maxPointComparison = maxPoint.compareTo(this.points[i]);
+                
+                if(minPointComparison < 0){
+                    minPoint = this.points[i];
+                }
+                
+                if(maxPointComparison > 0){
+                    maxPoint = this.points[i];
+                }
+                
+            }
+        }
+        
+        this.setMinPoint(minPoint);
+        this.setMaxPoint(maxPoint);
     }
 
     public void setMinPoint(Point3F minPoint) {

@@ -701,7 +701,15 @@ public class TrackballCamera extends Camera{
 
     public void setViewportHeight(float viewportHeight) {
         this.viewportHeight = viewportHeight;
-    }    
+    } 
+
+    public float getViewportWidth() {
+        return viewportWidth;
+    }
+
+    public float getViewportHeight() {
+        return viewportHeight;
+    }
 
     public float getWidth() {
         return width;

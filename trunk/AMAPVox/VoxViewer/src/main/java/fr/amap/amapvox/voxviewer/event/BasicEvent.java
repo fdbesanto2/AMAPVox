@@ -84,6 +84,10 @@ public class BasicEvent extends EventManager{
             rightMouseWasReleased = true;
         }
         
+        if(middleMousePressed){
+            
+            joglContext.updateMousePicker();
+        }
         
         
         if(isMouseLocationUpdated && leftMousePressed){

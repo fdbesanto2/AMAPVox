@@ -5,18 +5,16 @@
  */
 package fr.amap.amapvox.voxviewer.object.scene;
 
-import com.jogamp.common.nio.Buffers;
 import fr.amap.amapvox.commons.util.Statistic;
+import fr.amap.amapvox.datastructure.octree.Octree;
 import fr.amap.amapvox.math.point.Point3F;
+import fr.amap.amapvox.math.vector.Vec3F;
 import fr.amap.amapvox.voxviewer.mesh.GLMeshFactory;
 import fr.amap.amapvox.voxviewer.mesh.PointCloudGLMesh;
-import gnu.trove.list.TFloatList;
 import gnu.trove.list.array.TFloatArrayList;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +30,8 @@ public class PointCloudSceneObject extends SimpleSceneObject{
     private TFloatArrayList vertexDataList;
     private Map<String, ScalarField> scalarFieldsList;
     private String currentAttribut;
+    
+    private Octree octree;
             
     public PointCloudSceneObject(PointCloudGLMesh mesh, boolean isAlphaRequired){
         super(mesh, isAlphaRequired, new Point3F());
@@ -45,6 +45,12 @@ public class PointCloudSceneObject extends SimpleSceneObject{
         xPositionStatistic = new Statistic();
         yPositionStatistic = new Statistic();
         zPositionStatistic = new Statistic();
+        
+        this.mousePickable = true;
+        
+        if(mousePickable){
+            octree = new Octree(50);
+        }
     }
     
     public void addPoint(float x, float y, float z){
@@ -194,10 +200,12 @@ public class PointCloudSceneObject extends SimpleSceneObject{
         
         
         
-
-        mesh = GLMeshFactory.createPointCloud(vertexDataList.toArray(), updateColor(scalarField));
+        float[] points = vertexDataList.toArray();
+        mesh = GLMeshFactory.createPointCloud(points, updateColor(scalarField));
         
         currentAttribut = scalarField.getName();
+        
+        octree.setPoints(points);
     }
     
     public int getNumberOfPoints(){
@@ -216,4 +224,18 @@ public class PointCloudSceneObject extends SimpleSceneObject{
     public Map<String, ScalarField> getScalarFieldsList() {
         return scalarFieldsList;
     }
+
+    @Override
+    public String doPicking() {
+        
+        Point3F camPosition = mousePicker.getCamPosition();
+        Vec3F currentRay = mousePicker.getCurrentRay();
+        
+        Point3F closestPoint = mousePicker.getPointOnray(camPosition, currentRay, 1);
+        Point3F farestPoint = mousePicker.getPointOnray(camPosition, currentRay, 99999);
+        
+        
+        return ("ray direction : "+currentRay.x+" "+currentRay.y+ " " +currentRay.z);
+    }
+
 }

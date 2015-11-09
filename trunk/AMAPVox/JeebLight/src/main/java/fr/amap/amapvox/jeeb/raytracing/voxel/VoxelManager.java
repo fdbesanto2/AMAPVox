@@ -244,55 +244,7 @@ public class VoxelManager {
                point.x < max.x && point.y < max.y && point.z < max.z);
         }
         
-        //alternative à sceneCanvas.getNearestIntersection(), devrait être plus rapide (algorithme de smit)
-        public Point3d getIntersectionLineBoundingBox(LineElement lineElement) {
-                        
-            double tmin, tmax, tymin, tymax, tzmin, tzmax;
-            
-            Point3d[] bounds = new Point3d[]{voxelSpace.getBoundingBox().min, voxelSpace.getBoundingBox().max};
-            
-            Vector3d direction = lineElement.getDirection();
-            Vector3d invDirection = new Vector3d(1.0/direction.x, 1.0/direction.y, 1.0/direction.z);
-            int sign[] = new int[]{(invDirection.x < 0)? 1 : 0, (invDirection.y < 0)? 1 : 0 , (invDirection.z < 0)? 1 : 0};
-            
-            tmin = (bounds[sign[0]].x - lineElement.getOrigin().x) * invDirection.x;
-            tmax = (bounds[1 - sign[0]].x - lineElement.getOrigin().x) * invDirection.x;
-            tymin = (bounds[sign[1]].y - lineElement.getOrigin().y) * invDirection.y;
-            tymax = (bounds[1 - sign[1]].y - lineElement.getOrigin().y) * invDirection.y;
-            
-            if ((tmin > tymax) || (tymin > tmax)) {
-                return null;
-            }
-            if (tymin > tmin || Double.isNaN(tmin)) {
-                tmin = tymin;
-            }
-            if (tymax < tmax || Double.isNaN(tmax)) {
-                tmax = tymax;
-            }
-            
-            tzmin = (bounds[sign[2]].z - lineElement.getOrigin().z) * invDirection.z;
-            tzmax = (bounds[1 - sign[2]].z - lineElement.getOrigin().z) * invDirection.z;
-            
-            if ((tmin > tzmax) || (tzmin > tmax)) {
-                return null;
-            }
-            if (tzmin > tmin || Double.isNaN(tmin)) {
-                tmin = tzmin;
-            }
-            if (tzmax < tmax || Double.isNaN(tmax)) {
-                tmax = tzmax;
-            }
-            
-            if(tmax<tmin){
-                System.out.println("test");
-            }
-            
-            
-            LineSegment segment = new LineSegment(lineElement.getOrigin(), lineElement.getDirection(), tmin);
-            Point3d point =  segment.getEnd();
-            
-            return point;
-        }
+        
 
 	/**
 	 *  Returns the voxel context of the first entry in the scene canvas

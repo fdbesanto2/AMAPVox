@@ -58,6 +58,17 @@ public class Vec3F{
         return result;
     }
     
+    public static Vec3F createVec3FFromPoints(Point3F point1, Point3F point2){
+        
+        Vec3F result = new Vec3F();
+        
+        result.x = point2.x - point1.x;
+        result.y = point2.y - point1.y;
+        result.z = point2.z - point1.z;
+        
+        return result;
+    }
+    
     /**
      * Get angle between two vectors
      * @param vec1 The first vector

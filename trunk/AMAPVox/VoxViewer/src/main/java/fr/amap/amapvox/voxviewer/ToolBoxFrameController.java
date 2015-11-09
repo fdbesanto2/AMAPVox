@@ -625,7 +625,7 @@ public class ToolBoxFrameController implements Initializable {
             
             tabpaneContent.setPrefWidth(0);
             
-            joglContext.startX = 0;
+            joglContext.setStartX(0);
             
             stage.setWidth(14);
             imageViewArrowHiddingPane.setRotate(180);
@@ -636,7 +636,8 @@ public class ToolBoxFrameController implements Initializable {
             tabpaneContent.setPrefWidth(originalContentPaneWidth);
             stage.setWidth(originalStageWidth);
             
-            joglContext.startX = ((int)stage.getWidth());
+            joglContext.setStartX(((int)stage.getWidth()));
+            
             
             imageViewArrowHiddingPane.setRotate(0);
             isHidden = false;
