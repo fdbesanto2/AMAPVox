@@ -19,6 +19,8 @@ import static fr.amap.amapvox.simulation.transmittance.lai2xxx.LAI2xxx.ViewCap.C
 import fr.amap.amapvox.simulation.transmittance.util.Period;
 import fr.amap.amapvox.voxcommons.Voxel;
 import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
+import fr.amap.amapvox.voxelisation.DirectionalTransmittance;
+import fr.amap.amapvox.voxelisation.LeafAngleDistribution;
 import fr.amap.amapvox.voxreader.VoxelFileReader;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -42,6 +44,7 @@ import java.io.FileReader;
 import java.util.Calendar;
 import java.util.Iterator;
 import javax.vecmath.Point3d;
+import org.apache.commons.math3.util.FastMath;
 import org.apache.log4j.Logger;
 
 /**
@@ -69,6 +72,8 @@ public class TransmittanceSim {
     private ArrayList<Point3d> positions;
     
     private TransmittanceParameters parameters;
+    
+    private DirectionalTransmittance direcTransmittance;
 
     private class TLSVoxel {
 
@@ -103,11 +108,17 @@ public class TransmittanceSim {
         vsMin = new Point3d();
         vsMax = new Point3d();
         splitting = new Point3i();
+        
+        
     }
     
     public TransmittanceSim(TransmittanceParameters parameters) throws IOException{
         
         this.parameters = parameters;
+        
+        /*LeafAngleDistribution distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.TWO_PARAMETER_BETA, 62.21, 0.045);
+        direcTransmittance = new DirectionalTransmittance(distribution);
+        direcTransmittance.buildTable(DirectionalTransmittance.DEFAULT_STEP_NUMBER);*/
         
         vsMin = new Point3d();
         vsMax = new Point3d();
@@ -187,7 +198,7 @@ public class TransmittanceSim {
         
         
         if(lai2xxx != null){
-            lai2xxx.initPositions(positions.size());
+            lai2xxx.initPositions(positions.size());            
         }
         
         int positionID = 0;
@@ -220,7 +231,7 @@ public class TransmittanceSim {
                     
                     // on récupère la première période, normalement il y en a une seule pour une simulation de lai2000
                     IncidentRadiation incidentRadiation = solRad.get(0); 
-                    lai2xxx.addTransmittanceV2(ring, positionID, (float) (transmitted/* * incidentRadiation.directionalGlobals[t])/solRad.get(0).global*/));
+                    lai2xxx.addTransmittanceV2(ring, positionID, (float) (transmitted));
                     lai2xxx.getRing(ring).setTrans((float) (transmitted * incidentRadiation.directionalGlobals[t])/solRad.get(0).global);
                 }
                 
@@ -229,7 +240,7 @@ public class TransmittanceSim {
             for(int m=0 ; m < solRad.size();m++){
                 ir = solRad.get(m);
                 transmissionPeriod[positionID][m] /= ir.global;
-            }            
+            }
 
             positionID++;
 
@@ -546,6 +557,8 @@ public class TransmittanceSim {
     }
 
     public double directionalTransmittance(Point3d origin, List<Double> distances, Vector3d direction) {
+        
+        //double directionAngle = FastMath.toDegrees(FastMath.acos(direction.z));
 
         Point3d min = new Point3d(voxSpace.getBoundingBox().min);
         Point3d max = new Point3d(voxSpace.getBoundingBox().max);
@@ -578,6 +591,8 @@ public class TransmittanceSim {
             if (pMoy.z < mnt[i][j]) {
                 transmitted = 0;
             } else {
+                //float coefficientGTheta = (float) direcTransmittance.getTransmittanceFromAngle(directionAngle, true);
+                //transmitted *= Math.exp(-coefficientGTheta * voxels[i][j][k].padBV * pathLength);
                 transmitted *= Math.exp(-0.5 * voxels[i][j][k].padBV * pathLength);
             }
             d1 = d2;

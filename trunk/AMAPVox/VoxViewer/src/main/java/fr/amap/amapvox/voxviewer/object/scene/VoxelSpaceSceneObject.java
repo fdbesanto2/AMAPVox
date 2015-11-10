@@ -74,6 +74,32 @@ public class VoxelSpaceSceneObject extends SceneObject{
     @Override
     public String doPicking() {
         
+//        Point3F camPosition = mousePicker.getCamPosition();
+//        Vec3F currentRay = mousePicker.getCurrentRay();
+//
+//        //System.out.println(currentRay.x+" "+currentRay.y+" "+currentRay.z);
+//
+//        Point3F closestPoint = mousePicker.getPointOnray(camPosition, currentRay, 1);
+//        Point3F farestPoint = mousePicker.getPointOnray(camPosition, currentRay, 999);
+//
+//        LineSegment lineSegment = new LineSegment(
+//                new Point3d(closestPoint.x, closestPoint.y, closestPoint.z),
+//                new Point3d(farestPoint.x, farestPoint.y, farestPoint.z));
+//
+//        VoxelManager.VoxelCrossingContext context = voxelManager.getFirstVoxelV2(lineSegment);
+//
+//        while ((context != null) && (context.indices != null)) {
+//
+//            VoxelObject voxel = data.getVoxel(context.indices.x, context.indices.y, context.indices.z);
+//
+//            if(voxel.getAlpha() > 0){
+//                return (voxel.$i + " "+voxel.$j+" "+voxel.$k);
+//            }else{
+//                context = voxelManager.CrossVoxel(lineSegment, context.indices);
+//            }
+//        }
+//        return "no voxel intersected";
+                    
         boolean drawImage = false;
         
         if(drawImage){

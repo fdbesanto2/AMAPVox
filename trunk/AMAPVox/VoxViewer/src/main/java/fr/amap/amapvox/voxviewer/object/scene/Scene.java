@@ -298,7 +298,8 @@ public class Scene {
             }
             
             if(object.isMousePickable()){
-                //object.updateMousePicker(mousePicker);
+                object.updateMousePicker(mousePicker);
+                object.doPicking();
                 //System.out.println(object.doPicking());
             }
 

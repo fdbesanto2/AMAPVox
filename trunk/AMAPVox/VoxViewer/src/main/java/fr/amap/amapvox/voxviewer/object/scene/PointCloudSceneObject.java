@@ -46,7 +46,7 @@ public class PointCloudSceneObject extends SimpleSceneObject{
         yPositionStatistic = new Statistic();
         zPositionStatistic = new Statistic();
         
-        this.mousePickable = true;
+        this.mousePickable = false;
         
         if(mousePickable){
             octree = new Octree(50);

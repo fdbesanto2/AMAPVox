@@ -15,13 +15,20 @@ For further information, please contact Gregoire Vincent.
 package fr.amap.amapvox.simulation.transmittance.lai2xxx;
 
 import fr.amap.amapvox.commons.util.SphericalCoordinates;
+import fr.amap.amapvox.jeeb.workspace.sunrapp.light.IncidentRadiation;
+import fr.amap.amapvox.jeeb.workspace.sunrapp.light.SolarRadiation;
+import fr.amap.amapvox.jeeb.workspace.sunrapp.util.Time;
+import fr.amap.amapvox.simulation.transmittance.SimulationPeriod;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
+import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 import org.apache.log4j.Logger;
 
@@ -74,13 +81,15 @@ public abstract class LAI2xxx {
      */
     protected float[] acfsByRing;
     
-    protected float[][] transmittances;
+    public float[][] transmittances;
     
     protected float[] byPosition_LAI;
     protected float global_LAI; //lai for all positions
     protected float acf;
     
     protected ViewCap viewCap;
+    
+    protected int[][] countByPositionAndRing;
     
     /**
      *
@@ -142,6 +151,7 @@ public abstract class LAI2xxx {
         this.positionNumber = positionNumber;
         
         transmittances = new float[rings.length][positionNumber];
+        countByPositionAndRing = new int[positionNumber][rings.length];
     }
     
     public void addTransmittance(int ringID, float transmittance){
@@ -160,8 +170,8 @@ public abstract class LAI2xxx {
     public void addTransmittanceV2(int ringID, int position, float transmittance){
         
         if(ringID < rings.length && position < positionNumber){
-            transmittances[ringID][position] = transmittance;
-            
+            transmittances[ringID][position] += transmittance;
+            countByPositionAndRing[position][ringID] ++;
             if(!Float.isNaN(transmittance)){
                 nbObservations++;
             }
@@ -337,26 +347,26 @@ public abstract class LAI2xxx {
             elevationAngles[i] = (float) Math.toRadians(elevationAnglesList.get(i));
         }
         
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/home/calcul/Documents/Julien/Test_transmittance_marilyne/directions.obj")));
-            
-            float length = 100;
-            for(Vector3f direction : directions){
-                
-                float x1 = 0, y1 = 0, z1 = 0;
-                
-                float x2 = x1+direction.x*length;
-                float y2 = y1+direction.y*length;
-                float z2 = z1+direction.z*length;
-                
-                writer.write("v "+ x1+" "+y1+" "+z1+"\n");
-                writer.write("v "+ x2+" "+y2+" "+z2+"\n");
-            }
-            
-            writer.close();
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(LAI2xxx.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/home/calcul/Documents/Julien/Test_transmittance_marilyne/directions.obj")));
+//            
+//            float length = 100;
+//            for(Vector3f direction : directions){
+//                
+//                float x1 = 0, y1 = 0, z1 = 0;
+//                
+//                float x2 = x1+direction.x*length;
+//                float y2 = y1+direction.y*length;
+//                float z2 = z1+direction.z*length;
+//                
+//                writer.write("v "+ x1+" "+y1+" "+z1+"\n");
+//                writer.write("v "+ x2+" "+y2+" "+z2+"\n");
+//            }
+//            
+//            writer.close();
+//        } catch (IOException ex) {
+//            java.util.logging.Logger.getLogger(LAI2xxx.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     public Vector3f[] getDirections() {
@@ -377,15 +387,20 @@ public abstract class LAI2xxx {
     
     public void computeValues(){
         
-        /*computeContactNumbers();
-        computeLAI();
-        computeGapsFraction();*/
+        
+        
+        for(int j=0;j<positionNumber;j++){
+            for(int i=0;i<rings.length;i++){
+                
+                transmittances[i][j] /= (float)countByPositionAndRing[j][i];
+            }
+        }
         
         //compute avgtrans
         logger.info("Computation of AVGTRANS...");
         int[] countByRing = new int[rings.length];
         
-        int[][] countByPositionAndRing = new int[positionNumber][rings.length];
+        //int[][] countByPositionAndRing = new int[positionNumber][rings.length];
         avgTransByRing = new float[rings.length];
         
         float[][] avgTransByPosAndRing = new float[positionNumber][rings.length];
@@ -420,7 +435,7 @@ public abstract class LAI2xxx {
         logger.info("Computation of CNTC#...");
         contactNumberByRing = new float[rings.length]; //Ki
         
-        float[][] contactNumberByPositionAndRing = new float[positionNumber][rings.length]; //Ki
+        float[][] meanContactNumberByPositionAndRing = new float[positionNumber][rings.length]; //Ki
         
         //contact value for the pair for each ring (Kij)
         float[][] contactValueForPairByRing = new float[rings.length][positionNumber];
@@ -430,10 +445,8 @@ public abstract class LAI2xxx {
 
         //calcul des indices K
         for(int j=0;j<positionNumber;j++){
-            for(int d=0;d<directionNumber;d++){
-
-                //on détermine ici quel est le ring concerné
-                int i = getRingIDFromDirectionID(d);
+            
+            for(int i=0;i<5;i++){
 
                 float pathLength = rings[i].getDist();
                 
@@ -443,7 +456,7 @@ public abstract class LAI2xxx {
                     
                     float contactNumber = (float) (-Math.log(transmittances[i][j]) / pathLength);
                     contactNumberByRing[i] += contactNumber;
-                    contactNumberByPositionAndRing[j][i] += contactNumber;
+                    meanContactNumberByPositionAndRing[j][i] += contactNumber;
                     
                     countByRing[i]++;
                     countByPositionAndRing[j][i]++;
@@ -460,7 +473,7 @@ public abstract class LAI2xxx {
         //mean contact number for each position
         for(int j=0;j<positionNumber;j++){
             for(int i=0;i<rings.length;i++){
-                contactNumberByPositionAndRing[j][i] /= countByPositionAndRing[j][i];
+                meanContactNumberByPositionAndRing[j][i] /= countByPositionAndRing[j][i];
             }
         }
         
@@ -485,7 +498,7 @@ public abstract class LAI2xxx {
             
             for(int i=0;i<rings.length;i++){
                 if(!rings[i].isMasked()){
-                    position_LAI += contactNumberByPositionAndRing[j][i] * rings[i].getWeightingFactor();
+                    position_LAI += meanContactNumberByPositionAndRing[j][i] * rings[i].getWeightingFactor();
                 }
             }
             
@@ -504,10 +517,9 @@ public abstract class LAI2xxx {
 
         //calcul des indices K
         for(int j=0;j<positionNumber;j++){
-            for(int d=0;d<directionNumber;d++){
+            for(int i=0;i<5;i++){
 
                 //on détermine ici quel est le ring concerné
-                int i = getRingIDFromDirectionID(d);
                 
                 if(transmittances[i][j] != 0){
                     

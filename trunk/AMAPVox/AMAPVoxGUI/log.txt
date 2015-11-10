@@ -40633,3 +40633,444 @@ i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal l
 2015-11-09 18:21:58 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_10000TIRS.txt written
 2015-11-09 18:21:58 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
 2015-11-09 18:21:58 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
+2015-11-10 11:49:22 INFO  - Computing directions...
+2015-11-10 11:49:22 INFO  - Turtle built with 99 directions
+2015-11-10 11:49:22 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 11:49:22 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 11:49:22 INFO  - allocate Voxels
+2015-11-10 11:49:22 INFO  - allocate MNT
+2015-11-10 11:49:52 INFO  - nb positions= 64
+2015-11-10 11:49:52 INFO  - Computation of transmittance
+2015-11-10 11:49:52 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_100TIRS.txt
+2015-11-10 11:49:52 INFO  - Computation of AVGTRANS...
+2015-11-10 11:49:52 INFO  - Computation of CNTC#...
+2015-11-10 11:49:52 INFO  - Computation of LAI...
+2015-11-10 11:49:52 INFO  - Computation of GAPS...
+2015-11-10 11:49:52 INFO  - Computation of ACFS...
+2015-11-10 11:49:52 INFO  - Computation of ACF...
+2015-11-10 11:49:52 INFO  - Computation of STDEV...
+2015-11-10 11:49:52 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_100TIRS.txt written
+2015-11-10 11:49:52 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
+2015-11-10 11:49:52 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
+2015-11-10 11:49:52 INFO  - Computing directions...
+2015-11-10 11:49:52 INFO  - Turtle built with 500 directions
+2015-11-10 11:49:52 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 11:49:52 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 11:49:52 INFO  - allocate Voxels
+2015-11-10 11:49:52 INFO  - allocate MNT
+2015-11-10 11:50:18 INFO  - nb positions= 64
+2015-11-10 11:50:18 INFO  - Computation of transmittance
+2015-11-10 11:50:19 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_500TIRS.txt
+2015-11-10 11:50:19 INFO  - Computation of AVGTRANS...
+2015-11-10 11:50:19 INFO  - Computation of CNTC#...
+2015-11-10 11:50:19 INFO  - Computation of LAI...
+2015-11-10 11:50:19 INFO  - Computation of GAPS...
+2015-11-10 11:50:19 INFO  - Computation of ACFS...
+2015-11-10 11:50:19 INFO  - Computation of ACF...
+2015-11-10 11:50:19 INFO  - Computation of STDEV...
+2015-11-10 11:50:19 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_500TIRS.txt written
+2015-11-10 11:50:19 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
+2015-11-10 11:50:19 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
+2015-11-10 11:50:19 INFO  - Computing directions...
+2015-11-10 11:50:19 INFO  - Turtle built with 998 directions
+2015-11-10 11:50:19 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 11:50:19 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 11:50:19 INFO  - allocate Voxels
+2015-11-10 11:50:19 INFO  - allocate MNT
+2015-11-10 11:50:43 INFO  - nb positions= 64
+2015-11-10 11:50:43 INFO  - Computation of transmittance
+2015-11-10 11:50:45 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_1000TIRS.txt
+2015-11-10 11:50:45 INFO  - Computation of AVGTRANS...
+2015-11-10 11:50:45 INFO  - Computation of CNTC#...
+2015-11-10 11:50:45 INFO  - Computation of LAI...
+2015-11-10 11:50:45 INFO  - Computation of GAPS...
+2015-11-10 11:50:45 INFO  - Computation of ACFS...
+2015-11-10 11:50:45 INFO  - Computation of ACF...
+2015-11-10 11:50:45 INFO  - Computation of STDEV...
+2015-11-10 11:50:45 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_1000TIRS.txt written
+2015-11-10 11:50:45 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
+2015-11-10 11:50:45 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
+2015-11-10 11:50:45 INFO  - Computing directions...
+2015-11-10 11:50:45 INFO  - Turtle built with 4001 directions
+2015-11-10 11:50:45 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 11:50:45 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 11:50:45 INFO  - allocate Voxels
+2015-11-10 11:50:45 INFO  - allocate MNT
+2015-11-10 11:51:10 INFO  - nb positions= 64
+2015-11-10 11:51:10 INFO  - Computation of transmittance
+2015-11-10 11:51:15 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_4000TIRS.txt
+2015-11-10 11:51:15 INFO  - Computation of AVGTRANS...
+2015-11-10 11:51:15 INFO  - Computation of CNTC#...
+2015-11-10 11:51:15 INFO  - Computation of LAI...
+2015-11-10 11:51:15 INFO  - Computation of GAPS...
+2015-11-10 11:51:15 INFO  - Computation of ACFS...
+2015-11-10 11:51:15 INFO  - Computation of ACF...
+2015-11-10 11:51:15 INFO  - Computation of STDEV...
+2015-11-10 11:51:15 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_4000TIRS.txt written
+2015-11-10 11:51:15 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
+2015-11-10 11:51:15 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
+2015-11-10 11:51:15 INFO  - Computing directions...
+2015-11-10 11:51:15 INFO  - Turtle built with 9999 directions
+2015-11-10 11:51:15 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 11:51:15 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 11:51:15 INFO  - allocate Voxels
+2015-11-10 11:51:15 INFO  - allocate MNT
+2015-11-10 11:51:40 INFO  - nb positions= 64
+2015-11-10 11:51:40 INFO  - Computation of transmittance
+2015-11-10 11:51:52 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_10000TIRS.txt
+2015-11-10 11:51:52 INFO  - Computation of AVGTRANS...
+2015-11-10 11:51:52 INFO  - Computation of CNTC#...
+2015-11-10 11:51:52 INFO  - Computation of LAI...
+2015-11-10 11:51:52 INFO  - Computation of GAPS...
+2015-11-10 11:51:52 INFO  - Computation of ACFS...
+2015-11-10 11:51:52 INFO  - Computation of ACF...
+2015-11-10 11:51:52 INFO  - Computation of STDEV...
+2015-11-10 11:51:52 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_10000TIRS.txt written
+2015-11-10 11:51:52 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
+2015-11-10 11:51:52 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
+2015-11-10 11:51:52 INFO  - Computing directions...
+2015-11-10 11:51:53 INFO  - Turtle built with 99995 directions
+2015-11-10 11:51:53 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 11:51:53 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 11:51:53 INFO  - allocate Voxels
+2015-11-10 11:51:53 INFO  - allocate MNT
+2015-11-10 11:52:17 INFO  - nb positions= 64
+2015-11-10 11:52:18 INFO  - Computation of transmittance
+2015-11-10 11:54:05 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_100000TIRS.txt
+2015-11-10 11:54:05 INFO  - Computation of AVGTRANS...
+2015-11-10 11:54:05 INFO  - Computation of CNTC#...
+2015-11-10 11:54:06 INFO  - Computation of LAI...
+2015-11-10 11:54:06 INFO  - Computation of GAPS...
+2015-11-10 11:54:06 INFO  - Computation of ACFS...
+2015-11-10 11:54:06 INFO  - Computation of ACF...
+2015-11-10 11:54:06 INFO  - Computation of STDEV...
+2015-11-10 11:54:06 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_100000TIRS.txt written
+2015-11-10 11:54:06 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
+2015-11-10 11:54:06 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
+2015-11-10 15:08:12 INFO  - Computing directions...
+2015-11-10 15:08:12 INFO  - Turtle built with 99 directions
+2015-11-10 15:08:12 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 15:08:12 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 15:08:12 INFO  - allocate Voxels
+2015-11-10 15:08:12 INFO  - allocate MNT
+2015-11-10 15:08:45 INFO  - nb positions= 64
+2015-11-10 15:08:45 INFO  - Computation of transmittance
+2015-11-10 15:08:45 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_100TIRS.txt
+2015-11-10 15:08:45 INFO  - Computation of AVGTRANS...
+2015-11-10 15:08:45 INFO  - Computation of CNTC#...
+2015-11-10 15:08:45 INFO  - Computation of LAI...
+2015-11-10 15:08:45 INFO  - Computation of GAPS...
+2015-11-10 15:08:45 INFO  - Computation of ACFS...
+2015-11-10 15:08:45 INFO  - Computation of ACF...
+2015-11-10 15:08:45 INFO  - Computation of STDEV...
+2015-11-10 15:08:45 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_100TIRS.txt written
+2015-11-10 15:08:45 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
+2015-11-10 15:08:45 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
+2015-11-10 15:08:45 INFO  - Computing directions...
+2015-11-10 15:08:45 INFO  - Turtle built with 500 directions
+2015-11-10 15:08:45 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 15:08:45 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 15:08:45 INFO  - allocate Voxels
+2015-11-10 15:08:45 INFO  - allocate MNT
+2015-11-10 15:09:11 INFO  - nb positions= 64
+2015-11-10 15:09:11 INFO  - Computation of transmittance
+2015-11-10 15:09:12 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_500TIRS.txt
+2015-11-10 15:09:12 INFO  - Computation of AVGTRANS...
+2015-11-10 15:09:12 INFO  - Computation of CNTC#...
+2015-11-10 15:09:12 INFO  - Computation of LAI...
+2015-11-10 15:09:12 INFO  - Computation of GAPS...
+2015-11-10 15:09:12 INFO  - Computation of ACFS...
+2015-11-10 15:09:12 INFO  - Computation of ACF...
+2015-11-10 15:09:12 INFO  - Computation of STDEV...
+2015-11-10 15:09:12 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_500TIRS.txt written
+2015-11-10 15:09:12 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
+2015-11-10 15:09:12 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
+2015-11-10 15:09:12 INFO  - Computing directions...
+2015-11-10 15:09:12 INFO  - Turtle built with 998 directions
+2015-11-10 15:09:12 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 15:09:12 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 15:09:12 INFO  - allocate Voxels
+2015-11-10 15:09:12 INFO  - allocate MNT
+2015-11-10 15:09:37 INFO  - nb positions= 64
+2015-11-10 15:09:37 INFO  - Computation of transmittance
+2015-11-10 15:09:38 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_1000TIRS.txt
+2015-11-10 15:09:38 INFO  - Computation of AVGTRANS...
+2015-11-10 15:09:38 INFO  - Computation of CNTC#...
+2015-11-10 15:09:38 INFO  - Computation of LAI...
+2015-11-10 15:09:38 INFO  - Computation of GAPS...
+2015-11-10 15:09:38 INFO  - Computation of ACFS...
+2015-11-10 15:09:38 INFO  - Computation of ACF...
+2015-11-10 15:09:38 INFO  - Computation of STDEV...
+2015-11-10 15:09:38 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_1000TIRS.txt written
+2015-11-10 15:09:38 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
+2015-11-10 15:09:38 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
+2015-11-10 15:09:38 INFO  - Computing directions...
+2015-11-10 15:09:39 INFO  - Turtle built with 4001 directions
+2015-11-10 15:09:39 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 15:09:39 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 15:09:39 INFO  - allocate Voxels
+2015-11-10 15:09:39 INFO  - allocate MNT
+2015-11-10 15:10:03 INFO  - nb positions= 64
+2015-11-10 15:10:03 INFO  - Computation of transmittance
+2015-11-10 15:10:09 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_4000TIRS.txt
+2015-11-10 15:10:09 INFO  - Computation of AVGTRANS...
+2015-11-10 15:10:09 INFO  - Computation of CNTC#...
+2015-11-10 15:10:09 INFO  - Computation of LAI...
+2015-11-10 15:10:09 INFO  - Computation of GAPS...
+2015-11-10 15:10:09 INFO  - Computation of ACFS...
+2015-11-10 15:10:09 INFO  - Computation of ACF...
+2015-11-10 15:10:09 INFO  - Computation of STDEV...
+2015-11-10 15:10:09 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_4000TIRS.txt written
+2015-11-10 15:10:09 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
+2015-11-10 15:10:09 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
+2015-11-10 15:10:09 INFO  - Computing directions...
+2015-11-10 15:10:09 INFO  - Turtle built with 9999 directions
+2015-11-10 15:10:09 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 15:10:09 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 15:10:09 INFO  - allocate Voxels
+2015-11-10 15:10:09 INFO  - allocate MNT
+2015-11-10 15:10:38 INFO  - nb positions= 64
+2015-11-10 15:10:38 INFO  - Computation of transmittance
+2015-11-10 15:10:51 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_10000TIRS.txt
+2015-11-10 15:10:51 INFO  - Computation of AVGTRANS...
+2015-11-10 15:10:51 INFO  - Computation of CNTC#...
+2015-11-10 15:10:51 INFO  - Computation of LAI...
+2015-11-10 15:10:51 INFO  - Computation of GAPS...
+2015-11-10 15:10:51 INFO  - Computation of ACFS...
+2015-11-10 15:10:51 INFO  - Computation of ACF...
+2015-11-10 15:10:51 INFO  - Computation of STDEV...
+2015-11-10 15:10:51 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_10000TIRS.txt written
+2015-11-10 15:10:51 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
+2015-11-10 15:10:51 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
+2015-11-10 15:10:51 INFO  - Computing directions...
+2015-11-10 15:10:51 INFO  - Turtle built with 99995 directions
+2015-11-10 15:10:51 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 15:10:51 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 15:10:51 INFO  - allocate Voxels
+2015-11-10 15:10:51 INFO  - allocate MNT
+2015-11-10 15:11:16 INFO  - nb positions= 64
+2015-11-10 15:11:16 INFO  - Computation of transmittance
+2015-11-10 15:13:01 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_100000TIRS.txt
+2015-11-10 15:13:01 INFO  - Computation of AVGTRANS...
+2015-11-10 15:13:01 INFO  - Computation of CNTC#...
+2015-11-10 15:13:02 INFO  - Computation of LAI...
+2015-11-10 15:13:02 INFO  - Computation of GAPS...
+2015-11-10 15:13:02 INFO  - Computation of ACFS...
+2015-11-10 15:13:02 INFO  - Computation of ACF...
+2015-11-10 15:13:02 INFO  - Computation of STDEV...
+2015-11-10 15:13:02 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_100000TIRS.txt written
+2015-11-10 15:13:02 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
+2015-11-10 15:13:02 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
+2015-11-10 17:20:40 INFO  - Computing directions...
+2015-11-10 17:20:40 INFO  - Turtle built with 99995 directions
+2015-11-10 17:20:40 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 17:20:56 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 17:20:56 INFO  - allocate Voxels
+2015-11-10 17:20:56 INFO  - allocate MNT
+2015-11-10 17:21:26 INFO  - nb positions= 64
+2015-11-10 17:21:27 INFO  - Computation of transmittance
+2015-11-10 17:23:16 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_100000TIRS.txt
+2015-11-10 17:23:16 INFO  - Computation of AVGTRANS...
+2015-11-10 17:23:16 INFO  - Computation of CNTC#...
+2015-11-10 17:23:17 INFO  - Computation of LAI...
+2015-11-10 17:23:17 INFO  - Computation of GAPS...
+2015-11-10 17:23:17 INFO  - Computation of ACFS...
+2015-11-10 17:23:17 INFO  - Computation of ACF...
+2015-11-10 17:23:17 INFO  - Computation of STDEV...
+2015-11-10 17:23:17 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_100000TIRS.txt written
+2015-11-10 17:23:17 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
+2015-11-10 17:23:17 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
+2015-11-10 17:34:12 INFO  - Computing directions...
+2015-11-10 17:34:12 INFO  - Turtle built with 99995 directions
+2015-11-10 17:34:12 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 17:34:20 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 17:34:20 INFO  - allocate Voxels
+2015-11-10 17:34:20 INFO  - allocate MNT
+2015-11-10 17:34:58 INFO  - nb positions= 64
+2015-11-10 17:34:58 INFO  - Computation of transmittance
+2015-11-10 17:36:45 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_100000TIRS.txt
+2015-11-10 17:36:45 INFO  - Computation of AVGTRANS...
+2015-11-10 17:36:45 INFO  - Computation of CNTC#...
+2015-11-10 17:36:45 INFO  - Computation of LAI...
+2015-11-10 17:36:45 INFO  - Computation of GAPS...
+2015-11-10 17:36:45 INFO  - Computation of ACFS...
+2015-11-10 17:36:45 INFO  - Computation of ACF...
+2015-11-10 17:36:45 INFO  - Computation of STDEV...
+2015-11-10 17:36:45 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_100000TIRS.txt written
+2015-11-10 17:36:45 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
+2015-11-10 17:36:45 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
+2015-11-10 18:27:29 INFO  - Computing directions...
+2015-11-10 18:27:30 INFO  - Turtle built with 99995 directions
+2015-11-10 18:27:30 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 18:27:38 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 18:27:38 INFO  - allocate Voxels
+2015-11-10 18:27:38 INFO  - allocate MNT
+2015-11-10 18:28:16 INFO  - nb positions= 64
+2015-11-10 18:28:16 INFO  - Computation of transmittance
+2015-11-10 18:28:16 ERROR - Service failed : 
+java.lang.NullPointerException
+	at fr.amap.amapvox.simulation.transmittance.TransmittanceSim.directionalTransmittance(TransmittanceSim.java:592)
+	at fr.amap.amapvox.simulation.transmittance.TransmittanceSim.process(TransmittanceSim.java:215)
+	at fr.amap.amapvox.simulation.transmittance.TransmittanceSim.simulationProcess(TransmittanceSim.java:90)
+	at fr.amap.amapvox.gui.MainFrameController$49$1.call(MainFrameController.java:3673)
+	at fr.amap.amapvox.gui.MainFrameController$49$1.call(MainFrameController.java:3656)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$493(Service.java:725)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$494(Service.java:724)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-11-10 18:28:44 INFO  - Computing directions...
+2015-11-10 18:28:44 INFO  - Turtle built with 99995 directions
+2015-11-10 18:28:44 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 18:28:44 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 18:28:44 INFO  - allocate Voxels
+2015-11-10 18:28:45 INFO  - allocate MNT
+2015-11-10 18:29:51 INFO  - Computing directions...
+2015-11-10 18:29:51 INFO  - Turtle built with 99995 directions
+2015-11-10 18:29:51 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 18:29:51 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 18:29:51 INFO  - allocate Voxels
+2015-11-10 18:29:51 INFO  - allocate MNT
+2015-11-10 18:30:21 INFO  - nb positions= 64
+2015-11-10 18:30:21 INFO  - Computation of transmittance
+2015-11-10 18:32:18 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_100000TIRS.txt
+2015-11-10 18:32:18 INFO  - Computation of AVGTRANS...
+2015-11-10 18:32:18 INFO  - Computation of CNTC#...
+2015-11-10 18:32:18 INFO  - Computation of LAI...
+2015-11-10 18:32:18 INFO  - Computation of GAPS...
+2015-11-10 18:32:18 INFO  - Computation of ACFS...
+2015-11-10 18:32:18 INFO  - Computation of ACF...
+2015-11-10 18:32:18 INFO  - Computation of STDEV...
+2015-11-10 18:32:18 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_100000TIRS.txt written
+2015-11-10 18:32:18 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
+2015-11-10 18:32:18 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
+2015-11-10 18:36:48 INFO  - Computing directions...
+2015-11-10 18:36:48 INFO  - Turtle built with 99995 directions
+2015-11-10 18:36:48 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-10 18:36:48 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-10 18:36:48 INFO  - allocate Voxels
+2015-11-10 18:36:48 INFO  - allocate MNT
+2015-11-10 18:37:18 INFO  - nb positions= 64
+2015-11-10 18:37:18 INFO  - Computation of transmittance
+2015-11-10 18:39:41 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_100000TIRS.txt
+2015-11-10 18:39:41 INFO  - Computation of AVGTRANS...
+2015-11-10 18:39:41 INFO  - Computation of CNTC#...
+2015-11-10 18:39:41 INFO  - Computation of LAI...
+2015-11-10 18:39:41 INFO  - Computation of GAPS...
+2015-11-10 18:39:41 INFO  - Computation of ACFS...
+2015-11-10 18:39:41 INFO  - Computation of ACF...
+2015-11-10 18:39:41 INFO  - Computation of STDEV...
+2015-11-10 18:39:41 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_100000TIRS.txt written
+2015-11-10 18:39:41 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
+2015-11-10 18:39:41 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
