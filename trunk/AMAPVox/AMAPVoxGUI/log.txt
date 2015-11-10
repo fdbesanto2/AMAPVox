@@ -40608,3 +40608,28 @@ i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal l
 2015-11-09 09:48:18 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
 2015-11-09 09:48:18 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
 2015-11-09 09:48:19 INFO  - Laz file is closed
+2015-11-09 18:21:18 INFO  - Computing directions...
+2015-11-09 18:21:18 INFO  - Turtle built with 9999 directions
+2015-11-09 18:21:18 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2015-11-09 18:21:18 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-09 18:21:18 INFO  - allocate Voxels
+2015-11-09 18:21:18 INFO  - allocate MNT
+2015-11-09 18:21:44 INFO  - nb positions= 64
+2015-11-09 18:21:44 INFO  - Computation of transmittance
+2015-11-09 18:21:58 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_10000TIRS.txt
+2015-11-09 18:21:58 INFO  - Computation of AVGTRANS...
+2015-11-09 18:21:58 INFO  - Computation of CNTC#...
+2015-11-09 18:21:58 INFO  - Computation of LAI...
+2015-11-09 18:21:58 INFO  - Computation of GAPS...
+2015-11-09 18:21:58 INFO  - Computation of ACFS...
+2015-11-09 18:21:58 INFO  - Computation of ACF...
+2015-11-09 18:21:58 INFO  - Computation of STDEV...
+2015-11-09 18:21:58 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_10000TIRS.txt written
+2015-11-09 18:21:58 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
+2015-11-09 18:21:58 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written

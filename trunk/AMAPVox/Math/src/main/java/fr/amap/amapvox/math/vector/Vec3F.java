@@ -122,12 +122,12 @@ public class Vec3F{
                 dest.y = 0;
                 dest.z = 0;
                 return dest;
-        } else if (len == 1) {
+        } /*else if (len == 1) {
                 dest.x = x;
                 dest.y = y;
                 dest.z = z;
                 return dest;
-        }
+        }*/
         
         len = 1 / len;
         dest.x = (float) (x*len);

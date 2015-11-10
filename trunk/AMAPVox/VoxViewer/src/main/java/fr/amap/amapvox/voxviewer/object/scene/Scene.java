@@ -298,8 +298,8 @@ public class Scene {
             }
             
             if(object.isMousePickable()){
-                object.updateMousePicker(mousePicker);
-                System.out.println(object.doPicking());
+                //object.updateMousePicker(mousePicker);
+                //System.out.println(object.doPicking());
             }
 
             gl.glUseProgram(object.getShaderId());

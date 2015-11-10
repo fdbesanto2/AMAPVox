@@ -28,4 +28,38 @@ public class Vec4F {
         this.z = z;
         this.w = w;
     }
+    
+    /**
+     * Normalize a 3d vector
+     * @param vec The vector to normalize
+     * @return The normalized vector
+     */
+    public static Vec4F normalize(Vec4F vec){
+        
+        Vec4F dest = new Vec4F();
+        
+        float x = vec.x, y = vec.y, z = vec.z, w = vec.w;
+        double len = Math.sqrt(x*x + y*y + z*z + w*w);
+        
+        if (len == 0) {
+                dest.x = 0;
+                dest.y = 0;
+                dest.z = 0;
+                dest.w = 0;
+                return dest;
+        } /*else if (len == 1) {
+                dest.x = x;
+                dest.y = y;
+                dest.z = z;
+                return dest;
+        }*/
+        
+        len = 1 / len;
+        dest.x = (float) (x*len);
+        dest.y = (float) (y*len);
+        dest.z = (float) (z*len);
+        dest.w = (float) (w*len);
+        
+        return dest;
+    }
 }

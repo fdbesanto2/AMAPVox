@@ -6,8 +6,10 @@
 package fr.amap.amapvox.commons.util;
 
 import fr.amap.amapvox.math.matrix.Mat4D;
+import fr.amap.amapvox.math.matrix.Mat4F;
 import fr.amap.amapvox.math.vector.Vec2D;
 import javax.vecmath.Matrix4d;
+import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector3d;
 
 /**
@@ -33,6 +35,28 @@ public class MatrixUtility {
         }
         
         Mat4D matrix = new Mat4D();
+        matrix.mat = outputMatrix;
+               
+        return matrix;
+    }
+    
+    public static Mat4F convertMatrix4fToMat4F(Matrix4f inputMatrix){
+        
+        if(inputMatrix == null){
+            return null;
+        }
+        
+        float[] outputMatrix = new float[16];
+        
+        int count = 0;
+        for(int i=0;i<4;i++){
+            for(int j=0;j<4;j++){
+                outputMatrix[count] = inputMatrix.getElement(i, j);
+                count++;
+            }
+        }
+        
+        Mat4F matrix = new Mat4F();
         matrix.mat = outputMatrix;
                
         return matrix;

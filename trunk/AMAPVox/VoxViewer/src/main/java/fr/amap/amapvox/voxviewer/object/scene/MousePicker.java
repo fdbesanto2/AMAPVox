@@ -5,12 +5,14 @@
  */
 package fr.amap.amapvox.voxviewer.object.scene;
 
+import fr.amap.amapvox.commons.util.MatrixUtility;
 import fr.amap.amapvox.math.matrix.Mat4F;
 import fr.amap.amapvox.math.point.Point3F;
 import fr.amap.amapvox.math.vector.Vec2F;
 import fr.amap.amapvox.math.vector.Vec3F;
 import fr.amap.amapvox.math.vector.Vec4F;
 import fr.amap.amapvox.voxviewer.object.camera.Camera;
+import javax.vecmath.Matrix4f;
 
 /**
  *
@@ -51,16 +53,17 @@ public class MousePicker {
     public Vec3F calculateMouseRay(float mouseX, float mouseY, float displayWidth, float displayHeight){
         
         Vec2F normalizedCoords = getNormalizedDeviceCoords(mouseX, mouseY, displayWidth, displayHeight);
-        Vec4F clipCoords = new Vec4F(normalizedCoords.x, normalizedCoords.y, -1f, 1f);
+        Vec4F clipCoords = new Vec4F(normalizedCoords.x, normalizedCoords.y, -1, 1f);
         Vec4F eyeCoords = toEyeCoords(clipCoords);
         Vec3F worldRay = toWorldCoords(eyeCoords);
-        return new Vec3F(worldRay.x, worldRay.y, worldRay.z);
+        return new Vec3F(worldRay.x, worldRay.z, worldRay.y);
     }
     
     public Vec3F toWorldCoords(Vec4F eyeCoords){
         
-        Mat4F invertedView = Mat4F.inverse(viewMatrix);
+        Mat4F invertedView = Mat4F.inverse(viewMatrix);        
         Vec4F rayWorld = Mat4F.multiply(invertedView, eyeCoords);
+        rayWorld = Vec4F.normalize(rayWorld);
         Vec3F mouseRay  = new Vec3F(rayWorld.x, rayWorld.y, rayWorld.z);
         mouseRay = Vec3F.normalize(mouseRay);
         return mouseRay;
@@ -70,7 +73,7 @@ public class MousePicker {
         
         Mat4F invertedProjection = Mat4F.inverse(projectionMatrix);
         Vec4F eyeCoords = Mat4F.multiply(invertedProjection, clipCoords);
-        return new Vec4F(eyeCoords.x, eyeCoords.y, -1, 0);
+        return new Vec4F(eyeCoords.x, -1, eyeCoords.y, 0);
     }   
     
     public Vec2F getNormalizedDeviceCoords(float mouseX, float mouseY, float displayWidth, float displayHeight){
