@@ -41074,3 +41074,26 @@ i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal l
 2015-11-10 18:39:41 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/lai2200_format_100000TIRS.txt written
 2015-11-10 18:39:41 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp
 2015-11-10 18:39:41 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/period_From_18-09-14_0712_to_18-09-14_0714.bmp written
+2015-11-12 11:24:14 INFO  - Computing directions...
+2015-11-12 11:31:44 INFO  - Turtle built with 9999 directions
+2015-11-12 11:31:44 INFO  - ===== /home/calcul/Documents/Julien/Test_transmittance_marilyne/voxels/zone_test/50cm/merged.vox =====
+2015-11-12 11:31:44 INFO  - VOXEL SPACE
+#min_corner: 20.0 20.0 22.0
+#max_corner: 50.0 50.0 60.0
+#split: 60 60 76
+#type: TLS #res: 0.5 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-11-12 11:31:44 INFO  - allocate Voxels
+2015-11-12 11:31:44 INFO  - allocate MNT
+2015-11-12 11:31:46 INFO  - nb positions= 1
+2015-11-12 11:31:46 INFO  - Computation of transmittance
+2015-11-12 11:31:46 INFO  - Writing file /home/calcul/Documents/Julien/Test_transmittance_marilyne/voxels/zone_test/50cm/lai2000/lai2200.txt
+2015-11-12 11:31:46 INFO  - Computation of AVGTRANS...
+2015-11-12 11:31:46 INFO  - Computation of CNTC#...
+2015-11-12 11:31:46 INFO  - Computation of LAI...
+2015-11-12 11:31:46 INFO  - Computation of GAPS...
+2015-11-12 11:31:46 INFO  - Computation of ACFS...
+2015-11-12 11:31:46 INFO  - Computation of ACF...
+2015-11-12 11:31:46 INFO  - Computation of STDEV...
+2015-11-12 11:31:46 INFO  - File /home/calcul/Documents/Julien/Test_transmittance_marilyne/voxels/zone_test/50cm/lai2000/lai2200.txt written

@@ -34,5 +34,10 @@
             <artifactId>sax</artifactId>
             <version>2.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>fr.amap.amapvox</groupId>
+            <artifactId>VoxReader</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 </project>

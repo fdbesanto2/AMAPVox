@@ -203,10 +203,6 @@ public class Voxel implements Serializable {
             this._position = new Point3d(position);
         }
         
-        public void setDist(float dist){
-            this.ground_distance = dist;
-        }
-        
         public void setFieldValue(Class< ? extends Voxel> c, String fieldName, Object object, Object value) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
             try {
                 Field f = c.getField(fieldName);

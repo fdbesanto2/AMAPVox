@@ -198,7 +198,7 @@ public class VoxelAnalysis {
     }
 
     /**
-     *
+     * Get position of center of a voxel
      * @param indices
      * @param splitting
      * @param minCorner
@@ -1362,8 +1362,7 @@ public class VoxelAnalysis {
             dist = (float) (position.z - parameters.getBottomCorner().z);
         }
 
-        vox.setDist(dist);
-        //vox.setPosition(position);
+        vox.ground_distance = dist;
 
         return vox;
     }
