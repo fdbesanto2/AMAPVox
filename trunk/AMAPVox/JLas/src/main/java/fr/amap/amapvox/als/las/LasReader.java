@@ -9,6 +9,7 @@ import fr.amap.amapvox.als.LasHeader;
 import fr.amap.amapvox.als.LasHeader11;
 import fr.amap.amapvox.als.LasHeader12;
 import fr.amap.amapvox.als.LasHeader13;
+import fr.amap.amapvox.commons.io.LittleEndianUtility;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -59,7 +60,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
         int byteGE = dis.readByte() + dis.readByte() + dis.readByte() + dis.readByte();
         header.setReserved(byteGE);
 
-        long pigd1 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long pigd1 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
         header.setProjectIdGuidData1(pigd1);
 
         int pigd2 = dis.readByte() + dis.readByte();
@@ -68,7 +69,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
         int pigd3 = dis.readByte() + dis.readByte();
         header.setProjectIdGuidData3(pigd3);
 
-        double pigd4 = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double pigd4 = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setProjectIdGuidData4(pigd4);
 
@@ -100,85 +101,85 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
 
         header.setGeneratingSoftware(gs);
 
-        short fcdoy = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+        short fcdoy = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
         header.setFileCreationDayOfYear(fcdoy);
 
-        short fcy = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+        short fcy = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
         header.setFileCreationYear(fcy);
 
-        short hs = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+        short hs = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
         header.setHeaderSize(hs);
 
-        long otpd = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long otpd = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
         header.setOffsetToPointData(otpd);
 
-        long novlr = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long novlr = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
         header.setNumberOfVariableLengthRecords(novlr);
 
         byte pdfID = dis.readByte();
         header.setPointDataFormatID(pdfID);
 
-        short pdrl = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+        short pdrl = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
         header.setPointDataRecordLength(pdrl);
 
-        long nopr = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopr = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
         header.setNumberOfPointrecords(nopr);
 
-        long nopbyr1 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
-        long nopbyr2 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
-        long nopbyr3 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
-        long nopbyr4 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
-        long nopbyr5 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr1 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr2 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr3 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr4 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr5 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
 
         long[] nopbyr = new long[]{nopbyr1, nopbyr2, nopbyr3, nopbyr4, nopbyr5};
 
         header.setNumberOfPointsByReturn(nopbyr);
 
-        double sxf = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double sxf = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setxScaleFactor(sxf);
 
-        double syf = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double syf = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setyScaleFactor(syf);
 
-        double szf = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double szf = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setzScaleFactor(szf);
 
-        double xoff = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double xoff = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setxOffset(xoff);
 
-        double yoff = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double yoff = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setyOffset(yoff);
 
-        double zoff = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double zoff = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setzOffset(zoff);
 
-        double maxX = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double maxX = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMaxX(maxX);
 
-        double minX = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double minX = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMinX(minX);
 
-        double maxY = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double maxY = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMaxY(maxY);
 
-        double minY = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double minY = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMinY(minY);
 
-        double maxZ = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double maxZ = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMaxZ(maxZ);
 
-        double minZ = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double minZ = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMinZ(minZ);
 
@@ -209,7 +210,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
         int pigd3 = dis.readByte() + dis.readByte();
         header.setProjectIdGuidData3(pigd3);
 
-        double pigd4 = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double pigd4 = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setProjectIdGuidData4(pigd4);
 
@@ -241,85 +242,85 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
 
         header.setGeneratingSoftware(gs);
 
-        short fcdoy = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+        short fcdoy = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
         header.setFileCreationDayOfYear(fcdoy);
 
-        short fcy = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+        short fcy = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
         header.setFileCreationYear(fcy);
 
-        short hs = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+        short hs = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
         header.setHeaderSize(hs);
 
-        long otpd = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long otpd = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
         header.setOffsetToPointData(otpd);
 
-        long novlr = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long novlr = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
         header.setNumberOfVariableLengthRecords(novlr);
 
         byte pdfID = dis.readByte();
         header.setPointDataFormatID(pdfID);
 
-        short pdrl = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+        short pdrl = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
         header.setPointDataRecordLength(pdrl);
 
-        long nopr = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopr = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
         header.setNumberOfPointrecords(nopr);
 
-        long nopbyr1 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
-        long nopbyr2 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
-        long nopbyr3 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
-        long nopbyr4 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
-        long nopbyr5 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr1 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr2 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr3 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr4 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr5 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
 
         long[] nopbyr = new long[]{nopbyr1, nopbyr2, nopbyr3, nopbyr4, nopbyr5};
 
         header.setNumberOfPointsByReturn(nopbyr);
 
-        double sxf = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double sxf = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setxScaleFactor(sxf);
 
-        double syf = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double syf = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setyScaleFactor(syf);
 
-        double szf = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double szf = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setzScaleFactor(szf);
 
-        double xoff = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double xoff = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setxOffset(xoff);
 
-        double yoff = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double yoff = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setyOffset(yoff);
 
-        double zoff = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double zoff = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setzOffset(zoff);
 
-        double maxX = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double maxX = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMaxX(maxX);
 
-        double minX = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double minX = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMinX(minX);
 
-        double maxY = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double maxY = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMaxY(maxY);
 
-        double minY = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double minY = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMinY(minY);
 
-        double maxZ = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double maxZ = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMaxZ(maxZ);
 
-        double minZ = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double minZ = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMinZ(minZ);
 
@@ -350,7 +351,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
         int pigd3 = dis.readByte() + dis.readByte();
         header.setProjectIdGuidData3(pigd3);
 
-        double pigd4 = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double pigd4 = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setProjectIdGuidData4(pigd4);
 
@@ -382,85 +383,85 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
 
         header.setGeneratingSoftware(gs);
 
-        short fcdoy = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+        short fcdoy = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
         header.setFileCreationDayOfYear(fcdoy);
 
-        short fcy = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+        short fcy = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
         header.setFileCreationYear(fcy);
 
-        short hs = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+        short hs = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
         header.setHeaderSize(hs);
 
-        long otpd = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long otpd = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
         header.setOffsetToPointData(otpd);
 
-        long novlr = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long novlr = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
         header.setNumberOfVariableLengthRecords(novlr);
 
         byte pdfID = dis.readByte();
         header.setPointDataFormatID(pdfID);
 
-        short pdrl = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+        short pdrl = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
         header.setPointDataRecordLength(pdrl);
 
-        long nopr = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopr = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
         header.setNumberOfPointrecords(nopr);
 
-        long nopbyr1 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
-        long nopbyr2 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
-        long nopbyr3 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
-        long nopbyr4 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
-        long nopbyr5 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr1 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr2 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr3 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr4 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr5 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
 
         long[] nopbyr = new long[]{nopbyr1, nopbyr2, nopbyr3, nopbyr4, nopbyr5};
 
         header.setNumberOfPointsByReturn(nopbyr);
 
-        double sxf = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double sxf = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setxScaleFactor(sxf);
 
-        double syf = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double syf = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setyScaleFactor(syf);
 
-        double szf = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double szf = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setzScaleFactor(szf);
 
-        double xoff = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double xoff = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setxOffset(xoff);
 
-        double yoff = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double yoff = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setyOffset(yoff);
 
-        double zoff = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double zoff = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setzOffset(zoff);
 
-        double maxX = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double maxX = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMaxX(maxX);
 
-        double minX = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double minX = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMinX(minX);
 
-        double maxY = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double maxY = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMaxY(maxY);
 
-        double minY = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double minY = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMinY(minY);
 
-        double maxZ = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double maxZ = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMaxZ(maxZ);
 
-        double minZ = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double minZ = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMinZ(minZ);
 
@@ -491,7 +492,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
         int pigd3 = dis.readByte() + dis.readByte();
         header.setProjectIdGuidData3(pigd3);
 
-        double pigd4 = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double pigd4 = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setProjectIdGuidData4(pigd4);
 
@@ -523,89 +524,89 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
 
         header.setGeneratingSoftware(gs);
 
-        short fcdoy = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+        short fcdoy = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
         header.setFileCreationDayOfYear(fcdoy);
 
-        short fcy = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+        short fcy = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
         header.setFileCreationYear(fcy);
 
-        short hs = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+        short hs = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
         header.setHeaderSize(hs);
 
-        long otpd = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long otpd = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
         header.setOffsetToPointData(otpd);
 
-        long novlr = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long novlr = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
         header.setNumberOfVariableLengthRecords(novlr);
 
         byte pdfID = dis.readByte();
         header.setPointDataFormatID(pdfID);
 
-        short pdrl = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+        short pdrl = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
         header.setPointDataRecordLength(pdrl);
 
-        long nopr = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopr = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
         header.setNumberOfPointrecords(nopr);
 
-        long nopbyr1 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
-        long nopbyr2 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
-        long nopbyr3 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
-        long nopbyr4 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
-        long nopbyr5 = LasReader.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr1 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr2 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr3 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr4 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
+        long nopbyr5 = LittleEndianUtility.bytesToLong(new byte[]{dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte()});
 
         long[] nopbyr = new long[]{nopbyr1, nopbyr2, nopbyr3, nopbyr4, nopbyr5};
 
         header.setNumberOfPointsByReturn(nopbyr);
 
-        double sxf = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double sxf = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setxScaleFactor(sxf);
 
-        double syf = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double syf = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setyScaleFactor(syf);
 
-        double szf = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double szf = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setzScaleFactor(szf);
 
-        double xoff = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double xoff = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setxOffset(xoff);
 
-        double yoff = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double yoff = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setyOffset(yoff);
 
-        double zoff = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double zoff = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setzOffset(zoff);
 
-        double maxX = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double maxX = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMaxX(maxX);
 
-        double minX = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double minX = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMinX(minX);
 
-        double maxY = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double maxY = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMaxY(maxY);
 
-        double minY = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double minY = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMinY(minY);
 
-        double maxZ = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double maxZ = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMaxZ(maxZ);
 
-        double minZ = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        double minZ = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
         header.setMinZ(minZ);
 
-        BigInteger startOfWaveformDataPacketRecord = LasReader.toBigInteger(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+        BigInteger startOfWaveformDataPacketRecord = LittleEndianUtility.toBigInteger(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
 
         header.setStartOfWaveformDataPacketRecord(startOfWaveformDataPacketRecord);
@@ -681,7 +682,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
 
                     VariableLengthRecord vlr = new VariableLengthRecord();
 
-                    short reserved = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+                    short reserved = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
                     vlr.setReserved(reserved);
 
                     char[] userID = new char[]{(char) dis.readByte(), (char) dis.readByte(), (char) dis.readByte(), (char) dis.readByte(),
@@ -691,10 +692,10 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
 
                     vlr.setUserID(userID);
 
-                    short recordID = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+                    short recordID = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
                     vlr.setRecordID(recordID);
 
-                    short rlah = LasReader.bytesToShort(dis.readByte(), dis.readByte());
+                    short rlah = LittleEndianUtility.bytesToShort(dis.readByte(), dis.readByte());
                     vlr.setRecordLengthAfterHeader(rlah);
 
                     char[] description = new char[]{(char) dis.readByte(), (char) dis.readByte(), (char) dis.readByte(), (char) dis.readByte(),
@@ -727,7 +728,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
         LasReader reader = new LasReader();
         this.file = file;
         header = reader.readHeader(file);
-        variableLengthRecords = LasReader.readVariableLengthRecords(file, header.getHeaderSize(), header.getOffsetToPointData(), header.getNumberOfVariableLengthRecords());
+        variableLengthRecords = readVariableLengthRecords(file, header.getHeaderSize(), header.getOffsetToPointData(), header.getNumberOfVariableLengthRecords());
     }
     
 
@@ -777,14 +778,14 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
                 }
                 int x;
                 try {
-                    x = LasReader.bytesToInt(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
+                    x = LittleEndianUtility.bytesToInt(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
                     
                     pdr.setX(x);
-                    int y = LasReader.bytesToInt(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
+                    int y = LittleEndianUtility.bytesToInt(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
                     pdr.setY(y);
-                    int z = LasReader.bytesToInt(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
+                    int z = LittleEndianUtility.bytesToInt(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
                     pdr.setZ(z);
-                    int intensity = LasReader.bytesToShortInt(dis.readByte(), dis.readByte());
+                    int intensity = LittleEndianUtility.bytesToShortInt(dis.readByte(), dis.readByte());
                     pdr.setIntensity(intensity);
                     byte b = dis.readByte();
                     int bit0 = (b >> 0) & 1;
@@ -848,7 +849,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
                     switch (pointFormatID) {
 
                         case 1:
-                            gpsTime = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+                            gpsTime = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                                     dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
                             ((PointDataRecordFormat1) pdr).setGpsTime(gpsTime);
 
@@ -857,13 +858,13 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
                             break;
 
                         case 2:
-                            red = LasReader.bytesToShortInt(dis.readByte(), dis.readByte());
+                            red = LittleEndianUtility.bytesToShortInt(dis.readByte(), dis.readByte());
                             //red = dis.readByte() + dis.readByte();
                             ((PointDataRecordFormat2) pdr).setRed(red);
-                            green = LasReader.bytesToShortInt(dis.readByte(), dis.readByte());
+                            green = LittleEndianUtility.bytesToShortInt(dis.readByte(), dis.readByte());
                             //green = dis.readByte() + dis.readByte();
                             ((PointDataRecordFormat2) pdr).setGreen(green);
-                            blue = LasReader.bytesToShortInt(dis.readByte(), dis.readByte());
+                            blue = LittleEndianUtility.bytesToShortInt(dis.readByte(), dis.readByte());
                             //blue = dis.readByte() + dis.readByte();
                             ((PointDataRecordFormat2) pdr).setBlue(blue);
 
@@ -871,7 +872,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
 
                             break;
                         case 3:
-                            gpsTime = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+                            gpsTime = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                                     dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
                             ((PointDataRecordFormat3) pdr).setGpsTime(gpsTime);
                             red = dis.readByte() + dis.readByte();
@@ -950,16 +951,16 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
                         break;
                 }
 
-                int x = LasReader.bytesToInt(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
+                int x = LittleEndianUtility.bytesToInt(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
                 pdr.setX(x);
 
-                int y = LasReader.bytesToInt(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
+                int y = LittleEndianUtility.bytesToInt(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
                 pdr.setY(y);
 
-                int z = LasReader.bytesToInt(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
+                int z = LittleEndianUtility.bytesToInt(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
                 pdr.setZ(z);
 
-                int intensity = LasReader.bytesToShortInt(dis.readByte(), dis.readByte());
+                int intensity = LittleEndianUtility.bytesToShortInt(dis.readByte(), dis.readByte());
                 pdr.setIntensity(intensity);
 
                 byte b = dis.readByte();
@@ -1045,7 +1046,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
                 switch (pointFormatID) {
 
                     case 1:
-                        gpsTime = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+                        gpsTime = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
                         ((PointDataRecordFormat1) pdr).setGpsTime(gpsTime);
 
@@ -1065,7 +1066,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
 
                         break;
                     case 3:
-                        gpsTime = LasReader.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
+                        gpsTime = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                                 dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
                         ((PointDataRecordFormat3) pdr).setGpsTime(gpsTime);
                         red = dis.readByte() + dis.readByte();
@@ -1118,58 +1119,15 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
 
         LasReader reader = new LasReader();
         LasHeader header = reader.readHeader(file);
-        ArrayList<VariableLengthRecord> variableLengthRecords = LasReader.readVariableLengthRecords(file, header.getHeaderSize(), header.getOffsetToPointData(), header.getNumberOfVariableLengthRecords());
-        ArrayList<PointDataRecordFormat> pointDataRecords = LasReader.readPointDataRecords(file, header.getOffsetToPointData(), header.getPointDataRecordLength(), header.getNumberOfPointrecords(), header.getPointDataFormatID());
+        ArrayList<VariableLengthRecord> variableLengthRecords = readVariableLengthRecords(file, header.getHeaderSize(), header.getOffsetToPointData(), header.getNumberOfVariableLengthRecords());
+        ArrayList<PointDataRecordFormat> pointDataRecords = readPointDataRecords(file, header.getOffsetToPointData(), header.getPointDataRecordLength(), header.getNumberOfPointrecords(), header.getPointDataFormatID());
 
         Las las = new Las(header, variableLengthRecords, pointDataRecords);
 
         return las;
     }
 
-    private static short bytesToShort(byte b1, byte b2) {
-
-        byte[] bytes = new byte[]{b1, b2};
-        short result = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getShort();
-        return result;
-    }
-
-    private static int bytesToShortInt(byte b1, byte b2) {
-
-        byte b3 = 0, b4 = 0;
-        return LasReader.bytesToInt(b1, b2, b3, b4);
-    }
-
-    private static long bytesToLong(byte[] bytes) {
-        long result = 0;
-        for (int i = 0; i < 4; i++) {
-            result += ((256 + bytes[i]) % 256) * (int) Math.pow(256, i);
-        }
-        return result;
-    }
-
-    private static int bytesToInt(byte b1, byte b2, byte b3, byte b4) {
-
-        byte[] bytes = new byte[]{b1, b2, b3, b4};
-        int result = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getInt();
-        return result;
-    }
-
-    private static double toDouble(byte byte1, byte byte2, byte byte3, byte byte4, byte byte5, byte byte6, byte byte7, byte byte8) {
-
-        byte[] bytes = new byte[]{byte1, byte2, byte3, byte4, byte5, byte6, byte7, byte8};
-        //int[] integers = new int[]{byte1&0xff, byte2&0xff, byte3&0xff, byte4&0xff, byte5&0xff, byte6&0xff, byte7&0xff, byte8&0xff};
-        ArrayUtils.reverse(bytes);
-        double d = ByteBuffer.wrap(bytes).getDouble() + 0.0;
-        return d;
-    }
-
-    private static BigInteger toBigInteger(byte byte1, byte byte2, byte byte3, byte byte4, byte byte5, byte byte6, byte byte7, byte byte8) {
-
-        byte[] bytes = new byte[]{byte1, byte2, byte3, byte4, byte5, byte6, byte7, byte8};
-        ArrayUtils.reverse(bytes);
-        BigInteger bi = new BigInteger(bytes);
-        return bi;
-    }
+    
 
     private static byte[] getBin(int decimal) {
 

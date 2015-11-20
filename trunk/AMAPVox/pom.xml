@@ -29,6 +29,7 @@
         <module>VoxChecking</module>
         <module>Math</module>
         <module>Gui</module>
+        <module>JLeica</module>
     </modules>
     
     <distributionManagement>        
