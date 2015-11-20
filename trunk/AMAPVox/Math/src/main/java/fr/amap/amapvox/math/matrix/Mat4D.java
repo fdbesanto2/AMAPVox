@@ -489,6 +489,21 @@ public class Mat4D {
         return dest;
     }
     
+    public static Mat4D removeTranslationPart(Mat4D source){
+        
+        Mat4D dest = new Mat4D();
+        double[] mat = source.mat;
+        
+        dest.mat = new double[]{
+            mat[0], mat[1], mat[2], 0,
+            mat[4], mat[5], mat[6], 0,
+            mat[8], mat[9], mat[10], 0,
+            mat[12], mat[13], mat[14], mat[15]
+        };
+        
+        return dest;
+    }
+    
     @Override
     public String toString(){
         
@@ -500,4 +515,6 @@ public class Mat4D {
         
         return result.subSequence(0, result.length()-1).toString();
     }
+    
+    
 }

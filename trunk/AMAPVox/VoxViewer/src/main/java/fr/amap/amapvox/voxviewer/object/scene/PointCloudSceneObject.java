@@ -205,7 +205,10 @@ public class PointCloudSceneObject extends SimpleSceneObject{
         
         currentAttribut = scalarField.getName();
         
-        octree.setPoints(points);
+        if(octree != null){
+            octree.setPoints(points);
+        }
+        
     }
     
     public int getNumberOfPoints(){

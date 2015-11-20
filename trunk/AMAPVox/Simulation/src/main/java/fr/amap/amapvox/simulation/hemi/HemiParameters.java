@@ -59,8 +59,8 @@ public class HemiParameters {
     
     //common parameters
     private int pixelNumber;
-    private int azimutsNumber;
-    private int zenithsNumber;
+    private int azimutsNumber = 36;
+    private int zenithsNumber = 9;
     
     //output
     private File outputTextFile;

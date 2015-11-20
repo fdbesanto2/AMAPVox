@@ -3563,6 +3563,7 @@ public class MainFrameController implements Initializable {
 
         if (!listViewVoxelsFiles.getItems().contains(file) && Files.exists(file.toPath())) {
             listViewVoxelsFiles.getItems().add(file);
+            listViewVoxelsFiles.getSelectionModel().clearSelection();
             listViewVoxelsFiles.getSelectionModel().select(file);
         }
     }
@@ -3687,7 +3688,8 @@ public class MainFrameController implements Initializable {
                                 case "Hemi-Photo":
                                     try {
                                         HemiPhotoCfg hemiphotoCfg = HemiPhotoCfg.readCfg(file);
-                                        HemiScanView.launchSimulation(hemiphotoCfg.getParameters());
+                                        HemiScanView hemiScanView = new HemiScanView();
+                                        hemiScanView.launchSimulation(hemiphotoCfg.getParameters());
                                         
                                     } catch (IOException | JDOMException ex) {
                                         logger.error("Cannot read configuration file", ex);
@@ -5602,7 +5604,7 @@ public class MainFrameController implements Initializable {
         
             if(toggleButtonLAI2000.isSelected() || toggleButtonLAI2200.isSelected()){
                 
-                transmParameters.setShotNumber(Integer.valueOf(comboboxChooseDirectionsNumber.getEditor().getText()));
+                transmParameters.setShotNumber(comboboxChooseDirectionsNumber.getSelectionModel().getSelectedItem());
                 
                 if(toggleButtonLAI2000.isSelected()){
                     transmParameters.setMode(TransmittanceParameters.Mode.LAI2000);
@@ -6133,9 +6135,9 @@ public class MainFrameController implements Initializable {
                                             count = 0;
                                             pointsProcessed = 0;
 
-                                            lazExtraction = new LazExtraction();
+                                            /*lazExtraction = new LazExtraction();
                                             lazExtraction.openLazFile(file);
-                                            lazIterator = lazExtraction.iterator();
+                                            lazIterator = lazExtraction.iterator();*/
 
                                             while(lazIterator.hasNext()){
 

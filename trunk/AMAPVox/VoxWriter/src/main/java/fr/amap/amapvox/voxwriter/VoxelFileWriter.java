@@ -5,6 +5,7 @@
  */
 package fr.amap.amapvox.voxwriter;
 
+import fr.amap.amapvox.voxcommons.RawVoxel;
 import fr.amap.amapvox.voxcommons.Voxel;
 import fr.amap.amapvox.voxcommons.VoxelSpace;
 import java.io.BufferedWriter;
@@ -22,10 +23,10 @@ public class VoxelFileWriter {
     public static void write(VoxelSpace voxelspace, File outputFile) throws IOException{
         
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
-            writer.write(voxelspace.toString()+"\n");
+            writer.write(voxelspace.getVoxelSpaceInfos().toString()+"\n");
             
             for (Iterator it = voxelspace.voxels.iterator(); it.hasNext();) {
-                Voxel voxel = (Voxel) it.next();
+                RawVoxel voxel = (RawVoxel) it.next();
                 writer.write(voxel+"\n");
             }
         }

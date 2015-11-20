@@ -132,7 +132,7 @@ public class JoglListener implements GLEventListener {
         x w = x nd + 1 ⁢* width * 2 + x
         y w = y nd + 1 ⁢* height * 2 + y
         */
-        gl.glViewport(0, 0, viewportWidth, viewportHeight);
+        gl.glViewport(startX, startY, viewportWidth, viewportHeight);
         
         gl.glClear(GL3.GL_DEPTH_BUFFER_BIT|GL3.GL_COLOR_BUFFER_BIT);
         gl.glClearColor(worldColor.x, worldColor.y, worldColor.z, 1.0f);
@@ -183,7 +183,7 @@ public class JoglListener implements GLEventListener {
         viewportWidth = this.width-startX;
         viewportHeight = this.height;
         
-        gl.glViewport(0, 0, viewportWidth, viewportHeight);
+        gl.glViewport(startX, startY, viewportWidth, viewportHeight);
         
         if(isInit){
             scene.getCamera().setPerspective(60.0f, (1.0f*this.width-startX)/height, 1.0f, 1000.0f);

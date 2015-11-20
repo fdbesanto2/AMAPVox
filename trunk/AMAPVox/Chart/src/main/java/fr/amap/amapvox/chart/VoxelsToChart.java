@@ -591,7 +591,7 @@ public class VoxelsToChart {
                         layerIndex = (int) (voxel.ground_distance/resolution);
                     }
                 
-                    if(layerIndex > 0){
+                    if(layerIndex > 0 & layerIndex < padMeanByLayer.length){
 
                         padMeanByLayer[layerIndex] += pad;
                         valuesNumberByLayer[layerIndex]++;

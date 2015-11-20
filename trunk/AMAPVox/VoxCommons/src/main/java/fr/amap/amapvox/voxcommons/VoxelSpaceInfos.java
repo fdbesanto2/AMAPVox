@@ -114,6 +114,34 @@ public class VoxelSpaceInfos {
     public String[] getColumnNames() {
         return columnNames;
     }
+
+    public void setMinCorner(Point3d minCorner) {
+        this.minCorner = minCorner;
+    }
+
+    public void setMaxCorner(Point3d maxCorner) {
+        this.maxCorner = maxCorner;
+    }
+
+    public void setSplit(Point3i split) {
+        this.split = split;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setResolution(float resolution) {
+        this.resolution = resolution;
+    }
+
+    public void setMaxPAD(float maxPAD) {
+        this.maxPAD = maxPAD;
+    }
+
+    public void setColumnNames(String[] columnNames) {
+        this.columnNames = columnNames;
+    }
     
     @Override
     public String toString(){

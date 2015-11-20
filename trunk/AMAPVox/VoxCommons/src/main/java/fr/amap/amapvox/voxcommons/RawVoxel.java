@@ -27,4 +27,15 @@ public class RawVoxel {
         this.$k = $k;
     }
     
+    @Override
+    public String toString(){
+        
+        String result = $i + " " + $j + " " +$k;
+        
+        for(float f : attributs){
+            result += " " + f;
+        }
+        
+        return result;
+    }
 }

@@ -406,10 +406,11 @@ public abstract class LAI2xxx {
         float[][] avgTransByPosAndRing = new float[positionNumber][rings.length];
             
         for(int j=0;j<positionNumber;j++){
-            for(int d=0;d<directionNumber;d++){
+            for(int i=0;i<rings.length;i++){
+                //for(int d=0;d<directionNumber;d++){
 
                 //on détermine ici quel est le ring concerné
-                int i = getRingIDFromDirectionID(d);
+                //int i = getRingIDFromDirectionID(d);
                 
                 if(!Float.isNaN(transmittances[i][j])){
                     avgTransByRing[i] += transmittances[i][j];
@@ -417,7 +418,9 @@ public abstract class LAI2xxx {
                     countByRing[i]++;
                     countByPositionAndRing[j][i]++;
                 }
+            //}
             }
+            
         }
         
         //moyenne

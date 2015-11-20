@@ -20,7 +20,6 @@ import fr.amap.amapvox.simulation.transmittance.util.Period;
 import fr.amap.amapvox.voxcommons.Voxel;
 import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
 import fr.amap.amapvox.voxelisation.DirectionalTransmittance;
-import fr.amap.amapvox.voxelisation.LeafAngleDistribution;
 import fr.amap.amapvox.voxreader.VoxelFileReader;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -33,7 +32,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.imageio.ImageIO;
 import javax.vecmath.Point3i;
@@ -43,8 +41,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.vecmath.Point3d;
-import org.apache.commons.math3.util.FastMath;
 import org.apache.log4j.Logger;
 
 /**
@@ -206,15 +205,25 @@ public class TransmittanceSim {
 
         IncidentRadiation ir = solRad.get(0);
         
+        System.out.println("\n\n\n");
+        
+        
         for (Point3d position : positions) {
+            
+            int count = 1;
             
             for (int t = 0; t < turtle.getNbDirections(); t++) {
                 
+                /*if(count == 506){
+                    System.out.println("test");
+                }*/
                 Vector3d dir = new Vector3d(ir.directions[t]);
                 dir.normalize();
 
-                List<Double> distances = distToVoxelWalls(position, dir);
+                Set<Double> distances = distToVoxelWalls(position, dir);
                 transmitted = directionalTransmittance(position, distances, dir);
+                
+                //System.out.println(dir.x+"\t"+dir.y+"\t"+dir.z+"\t"+transmitted);
                 
                 for(int m=0 ; m < solRad.size();m++){
                     ir = solRad.get(m);
@@ -235,6 +244,7 @@ public class TransmittanceSim {
                     lai2xxx.getRing(ring).setTrans((float) (transmitted * incidentRadiation.directionalGlobals[t])/solRad.get(0).global);
                 }
                 
+                count++;
             }
             
             for(int m=0 ; m < solRad.size();m++){
@@ -494,7 +504,7 @@ public class TransmittanceSim {
         return new VoxelSpace(new BoundingBox3d(vsMin, vsMax), splitting, 0);
     }*/
 
-    public List<Double> distToVoxelWalls(Point3d origin, Vector3d direction) {
+    public Set<Double> distToVoxelWalls(Point3d origin, Vector3d direction) {
 
         // coordinates in voxel units
         Point3d min = new Point3d(voxSpace.getBoundingBox().min);
@@ -511,10 +521,13 @@ public class TransmittanceSim {
         exit.scale(dist);
         exit.add(origin);
 
-        Point3i o = new Point3i((int) ((origin.x - min.x) / voxSize.x), (int) ((origin.y - min.y) / voxSize.y), (int) ((origin.z - min.z) / voxSize.z));
-        Point3i e = new Point3i((int) ((exit.x - min.x) / voxSize.x), (int) ((exit.y - min.y) / voxSize.y), (int) ((exit.z - min.z) / voxSize.z));
+        //Point3i o = new Point3i((int) ((origin.x - min.x) / voxSize.x), (int) ((origin.y - min.y) / voxSize.y), (int) ((origin.z - min.z) / voxSize.z));
+        //Point3i e = new Point3i((int) ((exit.x - min.x) / voxSize.x), (int) ((exit.y - min.y) / voxSize.y), (int) ((exit.z - min.z) / voxSize.z));
+        Point3i o = new Point3i((int) Math.floor((origin.x - min.x) / voxSize.x), (int) Math.floor((origin.y - min.y) / voxSize.y), (int) Math.floor((origin.z - min.z) / voxSize.z));
+        Point3i e = new Point3i((int) Math.floor((exit.x - min.x) / voxSize.x), (int) Math.floor((exit.y - min.y) / voxSize.y), (int) Math.floor((exit.z - min.z) / voxSize.z));
 
-        List<Double> distances = new ArrayList<>();
+        
+        Set<Double> distances = new TreeSet<>();
 
         Vector3d oe = new Vector3d(exit);
         oe.sub(origin);
@@ -551,12 +564,12 @@ public class TransmittanceSim {
             distances.add(dz);
         }
 
-        Collections.sort(distances);
+        //Collections.sort(distances);
 
         return distances;
     }
 
-    public double directionalTransmittance(Point3d origin, List<Double> distances, Vector3d direction) {
+    public double directionalTransmittance(Point3d origin, Set<Double> distances, Vector3d direction) {
         
         //double directionAngle = FastMath.toDegrees(FastMath.acos(direction.z));
 
@@ -578,9 +591,10 @@ public class TransmittanceSim {
             pMoy.scale(dMoy);
             pMoy.add(origin);
             pMoy.sub(min);
-            int i = (int) (pMoy.x / voxSize.x);
-            int j = (int) (pMoy.y / voxSize.y);
-            int k = (int) (pMoy.z / voxSize.z);
+            
+            int i = (int) Math.floor(pMoy.x / voxSize.x);
+            int j = (int) Math.floor(pMoy.y / voxSize.y);
+            int k = (int) Math.floor(pMoy.z / voxSize.z);
 
             // no toricity option (rajouter des modulo pour g\E9rer l'option "torique"
             if (i < 0 || j < 0 || k < 0 || i >= splitting.x || j >= splitting.y || k >= splitting.z) {
