@@ -155,7 +155,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
             }
             
             try {
-                ImageIO.write(image, "png", new File("/home/calcul/Documents/Julien/tmp.png"));
+                ImageIO.write(image, "png", new File("C:\\Users\\Julien\\Documents\\tmp.png"));
                 
             } catch (IOException ex) {
                 Logger.getLogger(VoxelSpaceSceneObject.class.getName()).log(Level.SEVERE, null, ex);

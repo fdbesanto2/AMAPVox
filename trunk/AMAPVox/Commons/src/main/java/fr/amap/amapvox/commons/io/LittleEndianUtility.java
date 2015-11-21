@@ -44,6 +44,14 @@ public class LittleEndianUtility {
         return result;
     }
     
+    public static int toInt(byte b1, byte b2, byte b3, byte b4) {
+
+        byte[] bytes = new byte[]{b1, b2, b3, b4};
+        ArrayUtils.reverse(bytes);
+        int d = ByteBuffer.wrap(bytes).getInt();
+        return d;
+    }
+    
     public static long tolong(byte[] bytes) {
 
         ArrayUtils.reverse(bytes);
@@ -57,6 +65,14 @@ public class LittleEndianUtility {
         //int[] integers = new int[]{byte1&0xff, byte2&0xff, byte3&0xff, byte4&0xff, byte5&0xff, byte6&0xff, byte7&0xff, byte8&0xff};
         ArrayUtils.reverse(bytes);
         double d = ByteBuffer.wrap(bytes).getDouble() + 0.0;
+        return d;
+    }
+    
+    public static float toFloat(byte byte1, byte byte2, byte byte3, byte byte4) {
+
+        byte[] bytes = new byte[]{byte1, byte2, byte3, byte4};
+        ArrayUtils.reverse(bytes);
+        float d = ByteBuffer.wrap(bytes).getFloat() + 0.0f;
         return d;
     }
 

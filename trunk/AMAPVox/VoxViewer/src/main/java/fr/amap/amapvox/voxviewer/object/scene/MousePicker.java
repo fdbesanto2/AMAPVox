@@ -53,7 +53,7 @@ public class MousePicker {
     public Vec3F calculateMouseRay(float mouseX, float mouseY, float displayWidth, float displayHeight){
         
         Vec2F normalizedCoords = getNormalizedDeviceCoords(mouseX, mouseY, displayWidth, displayHeight);
-        Vec4F clipCoords = new Vec4F(normalizedCoords.x, normalizedCoords.y, -1, 1f);
+        Vec4F clipCoords = new Vec4F(normalizedCoords.x,  normalizedCoords.y, -1, 1f);
         Vec4F eyeCoords = toEyeCoords(clipCoords);
         Vec3F worldRay = toWorldCoords(eyeCoords);
         return new Vec3F(worldRay.x, worldRay.z, worldRay.y);
@@ -73,7 +73,7 @@ public class MousePicker {
         
         Mat4F invertedProjection = Mat4F.inverse(projectionMatrix);
         Vec4F eyeCoords = Mat4F.multiply(invertedProjection, clipCoords);
-        return new Vec4F(eyeCoords.x, -1, eyeCoords.y, 0);
+        return new Vec4F(eyeCoords.x, eyeCoords.z, eyeCoords.y, 0);
     }   
     
     public Vec2F getNormalizedDeviceCoords(float mouseX, float mouseY, float displayWidth, float displayHeight){
