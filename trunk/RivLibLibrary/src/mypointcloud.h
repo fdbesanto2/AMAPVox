@@ -22,16 +22,19 @@ using namespace std;
 namespace mpc
 {
 
-    enum ShotType { SIMPLE = 1, WITH_REFLECTANCE = 2};
+    enum ShotType {REFLECTANCE = 2, DEVIATION = 3, AMPLITUDE = 4};
 
     class mypointcloud: public scanlib::pointcloud
     {
 
     public:
 
-        mypointcloud(serializer& ser, JNIEnv *env, ShotType shotType);
+        mypointcloud(serializer& ser, JNIEnv *env);
         virtual ~mypointcloud();
         stack<jobject*> *shots;
+        void setExportReflectance(bool exportReflectance);
+        void setExportDeviation(bool exportDeviation);
+        void setExportAmplitude(bool exportAmplitude);
 
     protected :
         void on_echo_transformed(echo_type echo);
@@ -41,8 +44,9 @@ namespace mpc
     private :
         JNIEnv *env;
         serializer& serialize;
-        ShotType shotType;
-
+        bool exportReflectance;
+        bool exportDeviation;
+        bool exportAmplitude;
     };
 }
 

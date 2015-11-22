@@ -54,7 +54,7 @@ extern "C" {
         (JNIEnv *, jobject, jlong pointer);
 
     JNIEXPORT int JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_open
-    (JNIEnv *, jobject, jlong pointer, jstring file_name, jint shotType);
+    (JNIEnv *, jobject, jlong pointer, jstring file_name, jintArray shotTypes);
 
     JNIEXPORT void JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_closeConnexion
     (JNIEnv *, jobject, jlong pointer);

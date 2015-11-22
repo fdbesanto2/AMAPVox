@@ -74,7 +74,7 @@ JNIEXPORT void JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_delete(JNIE
     delete extraction_dll;
 }
 
-JNIEXPORT int JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_open(JNIEnv *env, jobject, jlong pointer, jstring file_name, jint shotType){
+JNIEXPORT int JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_open(JNIEnv *env, jobject, jlong pointer, jstring file_name, jintArray shotTypes){
 
     try
     {
@@ -92,21 +92,27 @@ JNIEXPORT int JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_open(JNIEnv 
         puechabonfilter filter;
         extraction_dll->serializer = new FastSerializer(std::cout, filter);
 
+        const jsize typesArrayLength = env->GetArrayLength(shotTypes);
 
-        ShotType shotTypeID;
+        extraction_dll->pointcloud = new mypointcloud(*extraction_dll->serializer, env);
 
-        switch(shotType){
-            case 1:
-                shotTypeID = mpc::SIMPLE;
-                break;
-            case 2:
-                shotTypeID = mpc::WITH_REFLECTANCE;
-                break;
-            default:
-                shotTypeID = mpc::SIMPLE;
-                break;
+        jint *body = env->GetIntArrayElements(shotTypes,0);
+
+        for(jint i=0;i<typesArrayLength;i++){
+
+            switch(body[i]){
+                case 2:
+                    extraction_dll->pointcloud->setExportReflectance(true);
+                    break;
+                case 3:
+                    extraction_dll->pointcloud->setExportDeviation(true);
+                    break;
+                case 4:
+                    extraction_dll->pointcloud->setExportAmplitude(true);
+                    break;
+            }
         }
-        extraction_dll->pointcloud = new mypointcloud(*extraction_dll->serializer, env, shotTypeID);
+
 
     }catch ( const std::exception &  ){
         return -1;
