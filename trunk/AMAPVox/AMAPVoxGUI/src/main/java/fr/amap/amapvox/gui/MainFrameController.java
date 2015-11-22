@@ -6238,7 +6238,7 @@ public class MainFrameController implements Initializable {
                                             PointCloudSceneObject pointCloud = new PointCloudSceneObject();
                                             
                                             RxpExtraction reader = new RxpExtraction();
-                                            reader.openRxpFile(scan.getFile(), RxpExtraction.SHOT_WITH_REFLECTANCE);
+                                            reader.openRxpFile(scan.getFile(), RxpExtraction.REFLECTANCE, RxpExtraction.AMPLITUDE, RxpExtraction.DEVIATION);
                                             final Iterator<Shot> iterator = reader.iterator();
                                             
                                             Mat4D sopMatrix = scan.getSop();
@@ -6258,9 +6258,13 @@ public class MainFrameController implements Initializable {
                                                     Vec4D transformedPoint = Mat4D.multiply(sopMatrix, new Vec4D(x, y, z, 1));
                                                     pointCloud.addPoint((float)transformedPoint.x, (float)transformedPoint.y, (float)transformedPoint.z);
 
-                                                    double reflectance = shot.reflectances[i];
+                                                    float reflectance = shot.reflectances[i];
+                                                    float deviation = shot.deviations[i];
+                                                    float amplitude = shot.amplitudes[i];
                                                     
-                                                    pointCloud.addValue("reflectance", (float)reflectance);
+                                                    pointCloud.addValue("reflectance", reflectance);
+                                                    pointCloud.addValue("deviation", deviation);
+                                                    pointCloud.addValue("amplitude", amplitude);
                                                 }
                                                 
                                             }
@@ -6297,66 +6301,119 @@ public class MainFrameController implements Initializable {
                 break;
             case ".rxp":
                 
-                listviewTreeSceneObjects.getItems().add(sceneObjectWrapper);
-
-                Service s = new Service() {
+                attributsImporterFrame.show();
+                attributsImporterFrameController.setAttributsList("reflectance", "deviation", "amplitude");
+                
+                attributsImporterFrame.setOnHidden(new EventHandler<WindowEvent>() {
 
                     @Override
-                    protected Task createTask() {
-                        return new Task() {
+                    public void handle(WindowEvent event) {
 
-                            @Override
-                            protected Object call() throws Exception {
+                        if (attributsImporterFrameController.getSelectedAttributs() != null &&
+                                !attributsImporterFrameController.getSelectedAttributs().isEmpty()) {
+                            
+                            listviewTreeSceneObjects.getItems().add(sceneObjectWrapper);
+                            
+                            final List<String> selectedAttributs = attributsImporterFrameController.getSelectedAttributs();
+                            
+                            Service s = new Service() {
 
-                                final PointCloudSceneObject pointCloud = new PointCloudSceneObject();
+                                @Override
+                                protected Task createTask() {
+                                    return new Task() {
 
-                                RxpExtraction reader = new RxpExtraction();
-                                reader.openRxpFile(file, RxpExtraction.SHOT_WITH_REFLECTANCE);
-                                final Iterator<Shot> iterator = reader.iterator();
+                                        @Override
+                                        protected Object call() throws Exception {
 
-                                Mat4D sopMatrix = Mat4D.identity();
+                                            boolean importReflectance = false, importDeviation = false, importAmplitude = false;
+                                            List<Integer> typeList = new ArrayList<>();
+                                            
+                                                    
+                                            if(selectedAttributs.contains("reflectance")){
+                                                importReflectance = true;
+                                                typeList.add(RxpExtraction.REFLECTANCE);
+                                            }
+                                            if(selectedAttributs.contains("deviation")){
+                                                importDeviation = true;
+                                                typeList.add(RxpExtraction.DEVIATION);
+                                            }
+                                            if(selectedAttributs.contains("amplitude")){
+                                                importAmplitude = true;
+                                                typeList.add(RxpExtraction.AMPLITUDE);
+                                            }
 
-                                while(iterator.hasNext()){
+                                            final PointCloudSceneObject pointCloud = new PointCloudSceneObject();
 
-                                    Shot shot = iterator.next();
+                                            RxpExtraction reader = new RxpExtraction();
+                                            int[] typeListNative = new int[typeList.size()];
+                                            
+                                            for(int i=0;i<typeList.size();i++){
+                                                typeListNative[i] = typeList.get(i);
+                                            }
+                                            
+                                            reader.openRxpFile(file, typeListNative);
+                                            
+                                            final Iterator<Shot> iterator = reader.iterator();
 
-                                    for(int i=0;i<shot.ranges.length;i++){
+                                            Mat4D sopMatrix = Mat4D.identity();
 
-                                        double range = shot.ranges[i];
+                                            while (iterator.hasNext()) {
 
-                                        float x = (float) (shot.origin.x + shot.direction.x * range);
-                                        float y = (float) (shot.origin.y + shot.direction.y * range);
-                                        float z = (float) (shot.origin.z + shot.direction.z * range);
+                                                Shot shot = iterator.next();
 
-                                        Vec4D transformedPoint = Mat4D.multiply(sopMatrix, new Vec4D(x, y, z, 1));
-                                        pointCloud.addPoint((float)transformedPoint.x, (float)transformedPoint.y, (float)transformedPoint.z);
+                                                for (int i = 0; i < shot.ranges.length; i++) {
 
-                                        double reflectance = shot.reflectances[i];
+                                                    double range = shot.ranges[i];
 
-                                        pointCloud.addValue("reflectance", (float)reflectance);
-                                    }
+                                                    float x = (float) (shot.origin.x + shot.direction.x * range);
+                                                    float y = (float) (shot.origin.y + shot.direction.y * range);
+                                                    float z = (float) (shot.origin.z + shot.direction.z * range);
 
+                                                    Vec4D transformedPoint = Mat4D.multiply(sopMatrix, new Vec4D(x, y, z, 1));
+                                                    pointCloud.addPoint((float) transformedPoint.x, (float) transformedPoint.y, (float) transformedPoint.z);
+
+                                                    
+                                                    if(importReflectance){
+                                                        float reflectance = shot.reflectances[i];
+                                                        pointCloud.addValue("reflectance", reflectance);
+                                                    }
+                                                    
+                                                    if(importDeviation){
+                                                        float deviation = shot.deviations[i];
+                                                        pointCloud.addValue("deviation", deviation);
+                                                    }
+                                                    
+                                                    if(importAmplitude){
+                                                        float amplitude = shot.amplitudes[i];
+                                                        pointCloud.addValue("amplitude", amplitude);
+                                                    }
+                                                }
+
+                                            }
+
+                                            pointCloud.initMesh();
+                                            pointCloud.setShader(fr.amap.amapvox.voxviewer.object.scene.Scene.colorShader);
+
+                                            Platform.runLater(new Runnable() {
+
+                                                @Override
+                                                public void run() {
+                                                    sceneObjectWrapper.setSceneObject(pointCloud);
+                                                    sceneObjectWrapper.getProgressBar().setProgress(1);
+                                                }
+                                            });
+
+                                            return null;
+                                        }
+                                    };
                                 }
+                            };
 
-                                pointCloud.initMesh();
-                                pointCloud.setShader(fr.amap.amapvox.voxviewer.object.scene.Scene.colorShader);
-                                
-                                Platform.runLater(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        sceneObjectWrapper.setSceneObject(pointCloud);
-                                        sceneObjectWrapper.getProgressBar().setProgress(1);
-                                    }
-                                });
-
-                                return null;
-                            }
-                        };
+                            s.start();
+                        }
                     }
-                };
-
-                s.start();
+                });
+                
                 
                 break;
             case ".txt":
@@ -6501,8 +6558,7 @@ public class MainFrameController implements Initializable {
             }
             
         }
-        
-    }
+    }    
     
     private LeafAngleDistribution getLeafAngleDistribution(){
         

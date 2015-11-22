@@ -254,7 +254,7 @@ public class HemiScanView {
     public void setScan(File scan){
         RxpExtraction extraction = new RxpExtraction();
         try {
-            extraction.openRxpFile(scan, RxpExtraction.SIMPLE_SHOT);
+            extraction.openRxpFile(scan);
             
             Iterator<Shot> iterator = extraction.iterator();
             

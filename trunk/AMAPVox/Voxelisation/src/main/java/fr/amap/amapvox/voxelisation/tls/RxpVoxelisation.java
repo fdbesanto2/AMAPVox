@@ -91,7 +91,7 @@ public class RxpVoxelisation implements Callable{
         
             voxelAnalysis.createVoxelSpace();
             RxpExtraction rxpExtraction = new RxpExtraction();
-            int result = rxpExtraction.openRxpFile(inputFile, RxpExtraction.SHOT_WITH_REFLECTANCE);
+            int result = rxpExtraction.openRxpFile(inputFile, RxpExtraction.REFLECTANCE);
             
             if(result != 0){
                 logger.error("Extraction aborted");

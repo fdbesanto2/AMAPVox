@@ -29,13 +29,14 @@ public class RxpExtraction implements Iterable<Shot>{
     private native void afficherBonjour();
     private native long instantiate();
     private native void delete(long pointer);
-    private native int open(long pointer, String file_name, int shotType);
+    private native int open(long pointer, String file_name, int[] shotTypes);
     private native void closeConnexion(long pointer);
     private native Shot getNextShot(long pointer);
     private native boolean hasShot(long pointer);
     
-    public final static short SIMPLE_SHOT = 1;
-    public final static short SHOT_WITH_REFLECTANCE = 2;
+    public final static int REFLECTANCE = 2;
+    public final static int DEVIATION = 3;
+    public final static int AMPLITUDE = 4;
     
     private long rxpPointer;
     
@@ -53,13 +54,13 @@ public class RxpExtraction implements Iterable<Shot>{
     /**
      * Open a rxp file and instantiate a pointer
      * @param file Rxp file to read
-     * @param shotType <p>Type of shot, can be RxpExtraction.SIMPLE_SHOT or RxpExtraction.SHOT_WITH_REFLECTANCE</p>
+     * @param shotTypes <p>Type of shot, can be RxpExtraction.SIMPLE_SHOT or RxpExtraction.SHOT_WITH_REFLECTANCE</p>
      * <p>One having simple informations and the other having reflectance value for each echo</p>
      * @return -1 if an exception has occured, 0 if everything if fine and other value for unknown exception
      * @throws IOException if path of the file is invalid
      * @throws Exception if an unknown exception occured when trying to open the file 
      */
-    public int openRxpFile(File file, int shotType) throws IOException, Exception{
+    public int openRxpFile(File file, int... shotTypes) throws IOException, Exception{
                 
         rxpPointer = instantiate();
 
@@ -69,7 +70,7 @@ public class RxpExtraction implements Iterable<Shot>{
             case -2:
                 break;
             default:
-                int result = open(rxpPointer, file.getAbsolutePath(), shotType);
+                int result = open(rxpPointer, file.getAbsolutePath(), shotTypes);
 
                 switch (result) {
                     case -1:
@@ -96,6 +97,27 @@ public class RxpExtraction implements Iterable<Shot>{
     public void close(){
         closeConnexion(rxpPointer);
         delete(rxpPointer);
+    }
+    
+    public static void main(String[] args) {
+        
+        RxpExtraction extraction = new RxpExtraction();
+        try {
+            extraction.openRxpFile(new File("C:\\Users\\Julien\\Documents\\130917_153258.rxp"), RxpExtraction.REFLECTANCE, RxpExtraction.AMPLITUDE, RxpExtraction.DEVIATION);
+            
+            Iterator<Shot> iterator = extraction.iterator();
+            
+            while(iterator.hasNext()){
+                Shot shot = iterator.next();
+                System.out.println(shot.origin.x+" "+shot.origin.y+" "+shot.origin.z);
+            }
+            
+            System.err.println("opened");
+        } catch (Exception ex) {
+            Logger.getLogger(RxpExtraction.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            extraction.close();
+        }
     }
 
     @Override

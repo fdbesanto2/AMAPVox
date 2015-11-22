@@ -36,6 +36,18 @@ public class AttributsImporterFrameController extends CustomController implement
         vBoxAttributsLayout.setSpacing(20);
     }    
     
+    public void setAttributsList(String... attributesList){
+        
+        vBoxAttributsLayout.getChildren().clear();
+        
+        for(String s : attributesList){
+            
+            CheckBox cb = new CheckBox(s);
+            cb.setSelected(true);
+            vBoxAttributsLayout.getChildren().add(cb);
+        }
+    }
+    
     public void setAttributsList(List<String> attributsList){
         
         vBoxAttributsLayout.getChildren().clear();

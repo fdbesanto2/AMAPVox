@@ -43,7 +43,7 @@ public class TmpClass{
                 long startTime = System.currentTimeMillis();
 
                 RxpExtraction reader = new RxpExtraction();
-                reader.openRxpFile(new File("/media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos001/SINGLESCANS/130917_153258.rxp"), RxpExtraction.SHOT_WITH_REFLECTANCE);
+                reader.openRxpFile(new File("/media/calcul/IomegaHDD/BDLidar/TLS/Paracou2013/Paracou2013complet.RISCAN/SCANS/ScanPos001/SINGLESCANS/130917_153258.rxp"), RxpExtraction.REFLECTANCE);
                 final Iterator<Shot> iterator = reader.iterator();
 
                 /*List<Float> vertexDataList = new ArrayList<>(81547452);

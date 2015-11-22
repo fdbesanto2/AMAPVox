@@ -33,8 +33,8 @@ public class Shot {
     to be in parallel to the laser beam direction.
      */
     public float reflectances[];
-    
-    //public float deviations[];
+    public float deviations[];
+    public float amplitudes[];
 
     public double angle;
     private static List<Filter> filters;
@@ -69,6 +69,18 @@ public class Shot {
         this.ranges = ranges;
         this.reflectances = reflectances;
         //this.deviations = deviations;
+    }
+    
+    public void setReflectances(float[] reflectances){
+        this.reflectances = reflectances;
+    }
+    
+    public void setDeviations(float[] deviations){
+        this.deviations = deviations;
+    }
+    
+    public void setAmplitudes(float[] amplitudes){
+        this.amplitudes = amplitudes;
     }
 
 
