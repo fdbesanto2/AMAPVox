@@ -383,8 +383,9 @@ public class TextFileParserFrameController implements Initializable{
                 }
 
                 if(columnAssignmentEnabled){
-                    if(isInit){
+                    if(isInit && vboxTableViewAndColumnsTypeWrapper.getChildren().size() <= 1){
                         vboxTableViewAndColumnsTypeWrapper.getChildren().add(0, columnsGridPane);
+                        
                     }else{
                         vboxTableViewAndColumnsTypeWrapper.getChildren().set(0, columnsGridPane);
                     }
@@ -469,7 +470,7 @@ public class TextFileParserFrameController implements Initializable{
         if(checkboxKeepAllLines.isSelected()){
             return Integer.MAX_VALUE;
         }else{
-            return spinnerNumberOfLines.getValue();
+            return Integer.valueOf(spinnerNumberOfLines.getEditor().getText());
         }
     }
     

@@ -6421,7 +6421,7 @@ public class MainFrameController implements Initializable {
                 listviewTreeSceneObjects.getItems().add(sceneObjectWrapper);
                 
                 textFileParserFrameController.setColumnAssignment(true);
-                textFileParserFrameController.setColumnAssignmentValues("Ignore", "X", "Y", "Z", "Red", "Green", "Blue");
+                textFileParserFrameController.setColumnAssignmentValues("Ignore", "X", "Y", "Z", "Red", "Green", "Blue", "Scalar field");
         
                 textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(0, 1);
                 textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(1, 2);
@@ -6446,6 +6446,7 @@ public class MainFrameController implements Initializable {
                         int skipNumber = textFileParserFrameController.getSkipLinesNumber();
                         
                         int xIndex = -1, yIndex = -1, zIndex = -1;
+                        List<Integer> otherFieldsIndices = new ArrayList<>();
                         
                         for(int i =0;i<columnAssignment.size();i++){
                             
@@ -6461,6 +6462,9 @@ public class MainFrameController implements Initializable {
                                         break;
                                     case "Z":
                                         zIndex = i;
+                                        break;
+                                    case "Scalar field":
+                                        otherFieldsIndices.add(i);
                                         break;
                                 } 
                             }
@@ -6506,12 +6510,29 @@ public class MainFrameController implements Initializable {
 
                                                 String[] lineSplitted = line.split(separator);
                                                 
-                                                sceneObject.addPoint(Float.valueOf(lineSplitted[finalXIndex]),
-                                                        Float.valueOf(lineSplitted[finalYIndex]),
-                                                        Float.valueOf(lineSplitted[finalZIndex]));
-
-                                                sceneObject.addValue("default", 0);
-                                                //sceneObject.addColor(0, 1, 0, 0);
+                                                float x = 0, y = 0, z = 0;
+                                                if(finalXIndex != -1){
+                                                    x = Float.valueOf(lineSplitted[finalXIndex]);
+                                                }
+                                                if(finalYIndex != -1){
+                                                    y = Float.valueOf(lineSplitted[finalYIndex]);
+                                                }
+                                                if(finalZIndex != -1){
+                                                    z = Float.valueOf(lineSplitted[finalZIndex]);
+                                                }
+                                                
+                                                sceneObject.addPoint(x, y, z);
+                                                
+                                                int scalarFieldIndex = 0;
+                                                
+                                                if(!otherFieldsIndices.isEmpty()){
+                                                    for(Integer i : otherFieldsIndices){
+                                                        sceneObject.addValue("Scalar field "+scalarFieldIndex, Float.valueOf(lineSplitted[i]));
+                                                        scalarFieldIndex++;
+                                                    }
+                                                }else{
+                                                    sceneObject.addValue("default", count);
+                                                }
 
                                                 count++;
                                             }

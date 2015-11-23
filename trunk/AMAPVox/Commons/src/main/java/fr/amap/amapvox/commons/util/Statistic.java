@@ -15,6 +15,8 @@ public class Statistic {
     private double maxValue;
     private double mean;
     private int nbValues;
+    private int nbNaNValues;
+    private int nbInfiniteValues;
     
     private boolean firstValue = true;
 
@@ -25,19 +27,25 @@ public class Statistic {
     
     public void addValue(double value){
         
-        if(firstValue){
-            
-            minValue = value;
-            maxValue = value;
+        if(Double.isNaN(value)){
+            nbNaNValues++;
+        }else if(Double.isInfinite(value)){
+            nbInfiniteValues++;
         }else{
-            minValue= Double.min(minValue, value);
-            maxValue = Double.max(maxValue, value);
+            if(firstValue){
+            
+                minValue = value;
+                maxValue = value;
+            }else{
+                minValue= Double.min(minValue, value);
+                maxValue = Double.max(maxValue, value);
+            }
+
+            mean += value;
+            nbValues++;
+
+            firstValue = false;
         }
-        
-        mean += value;
-        nbValues++;
-        
-        firstValue = false;
     }
 
     public double getMinValue() {
@@ -59,4 +67,13 @@ public class Statistic {
     public double getMean(){
         return mean / nbValues;
     }
+
+    public int getNbNaNValues() {
+        return nbNaNValues;
+    }
+
+    public int getNbInfiniteValues() {
+        return nbInfiniteValues;
+    }
+    
 }

@@ -70,9 +70,10 @@ public class LittleEndianUtility {
     
     public static float toFloat(byte byte1, byte byte2, byte byte3, byte byte4) {
 
-        byte[] bytes = new byte[]{byte1, byte2, byte3, byte4};
-        float result = ByteBuffer.wrap(bytes).order(ByteOrder.BIG_ENDIAN).getFloat();
-        return result;
+        byte[] bytes = new byte[]{byte1, byte2, byte3, byte4};        
+        ArrayUtils.reverse(bytes);
+        float value = ByteBuffer.wrap(bytes).getFloat()+ 0.0f;
+        return value;
     }
 
     public static BigInteger toBigInteger(byte byte1, byte byte2, byte byte3, byte byte4, byte byte5, byte byte6, byte byte7, byte byte8) {
