@@ -388,7 +388,19 @@ public class TrackballCamera extends Camera{
         if(translation.z !=0.0f){
             
             if(perspective){
+                
+                //copy old location
+                Vec3F oldForwardVector = getForwardVector();
+                Vec3F oldLocation = location;
+                
+                //test translation effect
                 location = Vec3F.add(location, Vec3F.multiply(forwardVec, translation.z));
+                Vec3F newForwardVector = getForwardVector();
+                
+                //if translation is not good, get back to the original location (equivalent to not move)
+                if((newForwardVector.z < 0 && oldForwardVector.z > 0) || (newForwardVector.z > 0 && oldForwardVector.z < 0)){
+                    location = oldLocation;
+                }
                 //target = Vec3F.add(target, Vec3F.multiply(orientation, translation.z)); //use for not reaching the target
                 //setPerspective(70.0f, (1.0f*640)/480, near-translation.z, far-translation.z);
             }else{

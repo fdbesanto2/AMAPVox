@@ -6416,7 +6416,20 @@ public class MainFrameController implements Initializable {
                 
                 
                 break;
+            case ".vox":
+            
+                //not implemented yet, go to default
+                String fileHeader = FileManager.readHeader(file.getAbsolutePath());
+
+                if (fileHeader != null && fileHeader.equals("VOXEL SPACE")) {
+                    //break;
+                }else{
+                    
+                }
+                
+            
             case ".txt":
+            default:
                 
                 listviewTreeSceneObjects.getItems().add(sceneObjectWrapper);
                 
@@ -6567,15 +6580,6 @@ public class MainFrameController implements Initializable {
                 });
                 
                 break;
-            case ".vox":
-            default:
-                String fileHeader = FileManager.readHeader(file.getAbsolutePath());
-
-                if (fileHeader != null && fileHeader.equals("VOXEL SPACE")) {
-
-                }else{
-                    
-                }
             }
             
         }

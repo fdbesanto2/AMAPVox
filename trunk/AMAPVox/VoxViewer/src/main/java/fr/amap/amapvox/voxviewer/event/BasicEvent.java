@@ -134,11 +134,11 @@ public class BasicEvent extends EventManager{
         
         if(mouseWheelRotateUp){
             
-            joglContext.getScene().getCamera().translate(new Vec3F(0.0f, 0.0f, 10.0f));
+            joglContext.getScene().getCamera().translate(new Vec3F(0.0f, 0.0f, 5.0f));
         }
         if(mouseWheelRotateDown){
             
-            joglContext.getScene().getCamera().translate(new Vec3F(0.0f, 0.0f, -10.0f));
+            joglContext.getScene().getCamera().translate(new Vec3F(0.0f, 0.0f, -5.0f));
         }
         
         if(rightKeyPressed){
