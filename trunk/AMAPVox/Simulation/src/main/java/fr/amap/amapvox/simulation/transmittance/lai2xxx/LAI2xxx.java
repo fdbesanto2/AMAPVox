@@ -292,7 +292,8 @@ public abstract class LAI2xxx {
                         SphericalCoordinates sphericalCoordinates = new SphericalCoordinates(
                                 (float)Math.toRadians(azimuthalAngle), (float)Math.toRadians(elevationAngle));
 
-                        directionList.add(sphericalCoordinates.toCartesian());
+                        Point3d toCartesian = sphericalCoordinates.toCartesian();
+                        directionList.add(new Vector3f(toCartesian));
 
                         azimuthalAngle += azimuthalStep;
                     }

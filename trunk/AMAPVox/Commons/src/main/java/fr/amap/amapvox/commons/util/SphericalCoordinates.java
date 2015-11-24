@@ -14,6 +14,8 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.amapvox.commons.util;
 
+import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
 /**
@@ -24,28 +26,49 @@ import javax.vecmath.Vector3f;
 
 public class SphericalCoordinates {
     
-    private float azimuth;
-    private float elevation;
+    private double azimuth;
+    private double elevation;
+    private double radius = 1;
+    
+    private Point3d cartesianCoordinates;
+    
+    public SphericalCoordinates() {
+    }
 
     public SphericalCoordinates(float azimuth, float elevation) {
         this.azimuth = azimuth;
         this.elevation = elevation;
     }
 
-    public float getAzimuth() {
+    public double getAzimuth() {
         return azimuth;
     }
 
-    public float getElevation() {
+    public double getElevation() {
         return elevation;
     }
+
+    public double getRadius() {
+        return radius;
+    }
     
-    public Vector3f toCartesian(){
+    public Point3d toCartesian(){
         
-        float radius = 1;
+        Point3d point = new Point3d(radius * Math.sin(elevation) * Math.cos(azimuth), 
+                            radius * Math.sin(elevation) * Math.sin(azimuth), 
+                            radius * Math.cos(elevation));
         
-        return new Vector3f(radius * (float)Math.sin(elevation) * (float)Math.cos(azimuth), 
-                            radius * (float)Math.sin(elevation) * (float)Math.sin(azimuth), 
-                            radius * (float)Math.cos((double)elevation));
+        cartesianCoordinates = point;
+        
+        return point;
+    }
+    
+    public void toSpherical(Point3d point) {
+        
+        radius = Math.sqrt((point.x * point.x) + (point.y * point.y)+ (point.z * point.z));
+        azimuth = Math.atan(point.y/point.x);
+        elevation = Math.atan(Math.sqrt((point.x*point.x) + (point.y*point.y))/point.z);
+        
+        cartesianCoordinates = point;
     }
 }
