@@ -44,7 +44,7 @@ public class VoxelAnalysisTest {
         voxelAnalysis.createVoxelSpace();
         
         List<Shot> shots = new ArrayList<>();
-        shots.add(new Shot(4, new Point3d(0, 0, 15), new Vector3d(0, 0, -1), new double[]{6, 14, 18, 21}, new int[4], new int[4]));
+        shots.add(new Shot(4, new Point3d(0, 0, 15), new Vector3d(0, 0, -1), new double[]{6, 14, 18, 21}, new int[4], new float[4]));
         
         for(Shot shot : shots){
             voxelAnalysis.processOneShot(shot);

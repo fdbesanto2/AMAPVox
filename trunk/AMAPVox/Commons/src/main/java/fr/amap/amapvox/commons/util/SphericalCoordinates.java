@@ -35,7 +35,7 @@ public class SphericalCoordinates {
     public SphericalCoordinates() {
     }
 
-    public SphericalCoordinates(float azimuth, float elevation) {
+    public SphericalCoordinates(double azimuth, double elevation) {
         this.azimuth = azimuth;
         this.elevation = elevation;
     }

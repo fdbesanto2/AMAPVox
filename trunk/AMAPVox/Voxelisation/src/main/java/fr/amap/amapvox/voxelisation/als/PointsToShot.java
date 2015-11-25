@@ -363,7 +363,7 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
 
                             shot= new Shot(mix.lasPoint.n, new Point3d(mix.xloc_s, mix.yloc_s, mix.zloc_s), 
                                                         new Vector3d(mix.x_u, mix.y_u, mix.z_u), 
-                                                        new double[mix.lasPoint.n], new int[mix.lasPoint.n], new int[mix.lasPoint.n]);
+                                                        new double[mix.lasPoint.n], new int[mix.lasPoint.n], new float[mix.lasPoint.n]);
                             
                             currentNbEchos = mix.lasPoint.n;
                             currentEchoFound = 0;

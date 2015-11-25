@@ -75,5 +75,12 @@ public class Statistic {
     public int getNbInfiniteValues() {
         return nbInfiniteValues;
     }
+
+    public int getNbValues() {
+        return nbValues;
+    }
     
+    public int getNbTotalValues() {
+        return (nbValues+nbInfiniteValues+nbNaNValues);
+    }
 }

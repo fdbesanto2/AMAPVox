@@ -22,7 +22,7 @@ public class Shot {
     public Point3d origin;
     public Vector3d direction;
     public double ranges[] = null;
-    public int intensities[];
+    public float intensities[];
     public int classifications[];
     
     /**
@@ -82,7 +82,10 @@ public class Shot {
     public void setAmplitudes(float[] amplitudes){
         this.amplitudes = amplitudes;
     }
-
+    
+    public void setIntensities(float[] intensities){
+        this.intensities = intensities;
+    }
 
     public Shot(int nbEchos, Point3d origin, Vector3d direction, double[] ranges) {
 
@@ -92,7 +95,7 @@ public class Shot {
         this.ranges = ranges;
     }
 
-    public Shot(int nbEchos, Point3d origin, Vector3d direction, double[] ranges, int[] classifications, int[] intensities) {
+    public Shot(int nbEchos, Point3d origin, Vector3d direction, double[] ranges, int[] classifications, float[] intensities) {
 
         this.origin = origin;
         this.nbEchos = nbEchos;
