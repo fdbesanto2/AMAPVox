@@ -66,8 +66,11 @@ public class SphericalCoordinates {
     public void toSpherical(Point3d point) {
         
         radius = Math.sqrt((point.x * point.x) + (point.y * point.y)+ (point.z * point.z));
-        azimuth = Math.atan(point.y/point.x);
-        elevation = Math.atan(Math.sqrt((point.x*point.x) + (point.y*point.y))/point.z);
+        azimuth = Math.atan2(point.y, point.x);
+        
+        elevation = Math.acos(point.z/radius);
+        //elevation = Math.atan(Math.sqrt((point.x*point.x) + (point.y*point.y))/point.z);
+        
         
         cartesianCoordinates = point;
     }
