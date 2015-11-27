@@ -39,6 +39,12 @@ public class SphericalCoordinates {
         this.azimuth = azimuth;
         this.elevation = elevation;
     }
+    
+    public SphericalCoordinates(double azimuth, double elevation, double radius) {
+        this.azimuth = azimuth;
+        this.elevation = elevation;
+        this.radius = radius;
+    }
 
     public double getAzimuth() {
         return azimuth;
