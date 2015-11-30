@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 public class FilterFrameController implements Initializable {
     
     private Stage stage;
+    private boolean requestAdd;
     
     @FXML
     private ComboBox<String> comboboxVariable;
@@ -42,7 +43,6 @@ public class FilterFrameController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         
         comboboxInequality.getItems().addAll("!=", "==", "<", "<=", ">", ">=");
-        comboboxVariable.getItems().addAll("Angle");
         
         comboboxInequality.getSelectionModel().selectFirst();
         comboboxVariable.getSelectionModel().selectFirst();
@@ -50,6 +50,10 @@ public class FilterFrameController implements Initializable {
     
     public void setStage(Stage stage){
         this.stage = stage;
+    }
+    
+    public void setFilters(String... items){
+        comboboxVariable.getItems().setAll(items);
     }
     
     public Filter getFilter(){
@@ -67,7 +71,12 @@ public class FilterFrameController implements Initializable {
 
     @FXML
     private void onActionButtonAdd(ActionEvent event) {
+        requestAdd = true;
         stage.close();
+        requestAdd = false;
     }
-    
+
+    public boolean isRequestAdd() {
+        return requestAdd;
+    }
 }

@@ -45825,3 +45825,97 @@ i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal l
 2015-11-20 15:20:26 INFO  - Computation of ACF...
 2015-11-20 15:20:26 INFO  - Computation of STDEV...
 2015-11-20 15:20:26 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_LAI2200_mesure_vs_simule/lai2200_TLS_with_ALS_buffer.txt written
+2015-11-30 22:38:55 INFO  - Building transmittance functions table
+2015-11-30 22:38:55 INFO  - Transmittance functions table is built
+2015-11-30 22:38:55 INFO  - rxp extraction is started
+2015-11-30 22:38:55 INFO  - allocate!!!!!!!!
+2015-11-30 22:38:55 INFO  - Voxelisation finished in 0.0 s
+2015-11-30 22:39:21 INFO  - Building transmittance functions table
+2015-11-30 22:39:21 INFO  - Transmittance functions table is built
+2015-11-30 22:39:21 INFO  - rxp extraction is started
+2015-11-30 22:39:21 INFO  - allocate!!!!!!!!
+2015-11-30 22:39:21 INFO  - Voxelisation finished in 0.0 s
+2015-11-30 22:39:59 INFO  - Building transmittance functions table
+2015-11-30 22:39:59 INFO  - Transmittance functions table is built
+2015-11-30 22:39:59 INFO  - rxp extraction is started
+2015-11-30 22:39:59 INFO  - allocate!!!!!!!!
+2015-11-30 22:42:04 INFO  - Building transmittance functions table
+2015-11-30 22:42:04 INFO  - Transmittance functions table is built
+2015-11-30 22:42:04 INFO  - rxp extraction is started
+2015-11-30 22:42:04 INFO  - allocate!!!!!!!!
+2015-11-30 22:42:14 INFO  - Shots processed: 1000000
+2015-11-30 22:42:24 INFO  - Shots processed: 2000000
+2015-11-30 22:42:35 INFO  - Shots processed: 3000000
+2015-11-30 22:42:46 INFO  - Shots processed: 4000000
+2015-11-30 22:43:01 INFO  - Shots processed: 5000000
+2015-11-30 22:43:16 INFO  - Shots processed: 6000000
+2015-11-30 22:43:31 INFO  - Shots processed: 7000000
+2015-11-30 22:43:41 INFO  - Shots processed: 8000000
+2015-11-30 22:43:53 INFO  - Shots processed: 9000000
+2015-11-30 22:44:04 INFO  - Shots processed: 10000000
+2015-11-30 22:44:15 INFO  - Shots processed: 11000000
+2015-11-30 22:44:25 INFO  - Shots processed: 12000000
+2015-11-30 22:44:35 INFO  - Shots processed: 13000000
+2015-11-30 22:44:46 INFO  - Shots processed: 14000000
+2015-11-30 22:44:55 INFO  - Shots processed: 15000000
+2015-11-30 22:45:07 INFO  - Shots processed: 16000000
+2015-11-30 22:45:21 INFO  - Shots processed: 17000000
+2015-11-30 22:45:33 INFO  - Shots processed: 18000000
+2015-11-30 22:45:43 INFO  - Shots processed: 19000000
+2015-11-30 22:45:53 INFO  - Shots processed: 20000000
+2015-11-30 22:46:04 INFO  - Shots processed: 21000000
+2015-11-30 22:46:14 INFO  - Shots processed: 22000000
+2015-11-30 22:46:19 INFO  - Shots processed: 22520922
+2015-11-30 22:46:19 INFO  - writing file: C:\Users\Julien\Documents\vox.vox
+2015-11-30 22:46:24 INFO  - file written ( 5.0 s )
+2015-11-30 22:46:24 INFO  - Voxelisation finished in 260.0 s
+2015-11-30 22:48:13 INFO  - Building transmittance functions table
+2015-11-30 22:48:13 INFO  - Transmittance functions table is built
+2015-11-30 22:48:13 INFO  - rxp extraction is started
+2015-11-30 22:48:13 INFO  - allocate!!!!!!!!
+2015-11-30 22:48:23 INFO  - Shots processed: 1000000
+2015-11-30 22:48:49 INFO  - Shots processed: 2000000
+2015-11-30 22:49:04 INFO  - Shots processed: 3000000
+2015-11-30 22:49:19 INFO  - Shots processed: 4000000
+2015-11-30 22:50:09 INFO  - Shots processed: 5000000
+2015-11-30 22:50:42 INFO  - Shots processed: 6000000
+2015-11-30 22:51:45 INFO  - Shots processed: 7000000
+2015-11-30 22:53:25 INFO  - Shots processed: 8000000
+2015-11-30 22:56:09 INFO  - Shots processed: 9000000
+2015-11-30 22:59:17 INFO  - Shots processed: 10000000
+2015-11-30 23:00:59 INFO  - Shots processed: 11000000
+2015-11-30 23:02:32 INFO  - Shots processed: 12000000
+2015-11-30 23:04:51 INFO  - Shots processed: 13000000
+2015-11-30 23:07:49 INFO  - Shots processed: 14000000
+2015-11-30 23:09:44 INFO  - Shots processed: 15000000
+2015-11-30 23:11:55 INFO  - Shots processed: 16000000
+2015-11-30 23:15:03 INFO  - Building transmittance functions table
+2015-11-30 23:15:03 INFO  - Transmittance functions table is built
+2015-11-30 23:15:03 INFO  - rxp extraction is started
+2015-11-30 23:15:03 INFO  - allocate!!!!!!!!
+2015-11-30 23:15:13 INFO  - Shots processed: 1000000
+2015-11-30 23:15:23 INFO  - Shots processed: 2000000
+2015-11-30 23:15:33 INFO  - Shots processed: 3000000
+2015-11-30 23:15:43 INFO  - Shots processed: 4000000
+2015-11-30 23:15:53 INFO  - Shots processed: 5000000
+2015-11-30 23:16:03 INFO  - Shots processed: 6000000
+2015-11-30 23:16:12 INFO  - Shots processed: 7000000
+2015-11-30 23:16:21 INFO  - Shots processed: 8000000
+2015-11-30 23:16:31 INFO  - Shots processed: 9000000
+2015-11-30 23:16:41 INFO  - Shots processed: 10000000
+2015-11-30 23:16:51 INFO  - Shots processed: 11000000
+2015-11-30 23:17:00 INFO  - Shots processed: 12000000
+2015-11-30 23:17:10 INFO  - Shots processed: 13000000
+2015-11-30 23:17:20 INFO  - Shots processed: 14000000
+2015-11-30 23:17:28 INFO  - Shots processed: 15000000
+2015-11-30 23:17:36 INFO  - Shots processed: 16000000
+2015-11-30 23:17:46 INFO  - Shots processed: 17000000
+2015-11-30 23:17:55 INFO  - Shots processed: 18000000
+2015-11-30 23:18:03 INFO  - Shots processed: 19000000
+2015-11-30 23:18:12 INFO  - Shots processed: 20000000
+2015-11-30 23:18:22 INFO  - Shots processed: 21000000
+2015-11-30 23:18:32 INFO  - Shots processed: 22000000
+2015-11-30 23:18:37 INFO  - Shots processed: 22520922
+2015-11-30 23:18:37 INFO  - writing file: C:\Users\Julien\Documents\vox.vox
+2015-11-30 23:18:41 INFO  - file written ( 4.0 s )
+2015-11-30 23:18:41 INFO  - Voxelisation finished in 219.0 s

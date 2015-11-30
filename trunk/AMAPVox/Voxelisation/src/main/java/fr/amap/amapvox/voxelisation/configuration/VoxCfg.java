@@ -50,11 +50,13 @@ public class VoxCfg extends Configuration{
     protected VoxelParameters voxelParameters;
     protected float[] multiResPadMax;
     protected List<Filter> filters;
+    protected List<Filter> echoFilters;
     protected boolean correctNaNs;
     protected boolean multiResUseDefaultMaxPad;
     
     protected Element limitsElement;
     protected Element filtersElement;
+    protected Element echoFilteringElement;
     
     @Override
     public void readConfiguration(File inputParametersFile) throws Exception {
@@ -231,6 +233,7 @@ public class VoxCfg extends Configuration{
 
         filtersElement = processElement.getChild("filters");
         filters = new ArrayList<>();
+        echoFilters = new ArrayList<>();
 
         if(filtersElement != null){
 
@@ -241,9 +244,6 @@ public class VoxCfg extends Configuration{
                 List<Element> childrensFilter = shotFiltersElement.getChildren("filter");
 
                 if(childrensFilter != null){
-
-
-
                     for(Element e : childrensFilter){
 
                         String variable = e.getAttributeValue("variable");
@@ -254,49 +254,68 @@ public class VoxCfg extends Configuration{
                     }
                 }
             }
-
-            Element ladElement = processElement.getChild("leaf-angle-distribution");
-            if(ladElement != null){
-                voxelParameters.setLadEstimationMode(Integer.valueOf(ladElement.getAttributeValue("mode")));
-                voxelParameters.setLadType(Type.fromString(ladElement.getAttributeValue("type")));
-                
-                String alphaValue = ladElement.getAttributeValue("alpha");
-                String betaValue = ladElement.getAttributeValue("beta");
-                
-                if(alphaValue != null){
-                    voxelParameters.setLadBetaFunctionAlphaParameter(Float.valueOf(alphaValue));
-                }
-                
-                if(betaValue != null){
-                    voxelParameters.setLadBetaFunctionBetaParameter(Float.valueOf(betaValue));
-                }
-            }
             
-            Element generateMultiBandRasterElement = processElement.getChild("multi-band-raster");
+            echoFilteringElement = filtersElement.getChild("echo-filters");
+
+            if(echoFilteringElement != null){
                 
-            if(generateMultiBandRasterElement != null){
+                List<Element> childrensFilter = echoFilteringElement.getChildren("filter");
 
-                boolean generateMultiBandRaster = Boolean.valueOf(generateMultiBandRasterElement.getAttributeValue("generate"));
-                voxelParameters.setGenerateMultiBandRaster(generateMultiBandRaster);
+                if(childrensFilter != null){
+                    for(Element e : childrensFilter){
 
-                if(generateMultiBandRaster){
-                    voxelParameters.setShortcutVoxelFileWriting(Boolean.valueOf(generateMultiBandRasterElement.getAttributeValue("discard_voxel_file_writing")));
-                    voxelParameters.setRasterStartingHeight(Float.valueOf(generateMultiBandRasterElement.getAttributeValue("starting-height")));
-                    voxelParameters.setRasterHeightStep(Float.valueOf(generateMultiBandRasterElement.getAttributeValue("step")));
-                    voxelParameters.setRasterBandNumber(Integer.valueOf(generateMultiBandRasterElement.getAttributeValue("band-number")));
-                    voxelParameters.setRasterResolution(Integer.valueOf(generateMultiBandRasterElement.getAttributeValue("resolution")));
+                        String variable = e.getAttributeValue("variable");
+                        String inequality = e.getAttributeValue("inequality");
+                        String value = e.getAttributeValue("value");
+
+                        echoFilters.add(new Filter(variable, Float.valueOf(value), Filter.getConditionFromString(inequality)));
+                    }
                 }
             }
-            
-            Element formulaElement = processElement.getChild("formula");
-                    
-            if(formulaElement != null){
-                Element transmittanceElement = formulaElement.getChild("transmittance");
-                if(transmittanceElement != null){
-                    voxelParameters.setTransmittanceMode(Integer.valueOf(transmittanceElement.getAttributeValue("mode")));
-                }
+        }
+        
+        Element ladElement = processElement.getChild("leaf-angle-distribution");
+        if(ladElement != null){
+            voxelParameters.setLadEstimationMode(Integer.valueOf(ladElement.getAttributeValue("mode")));
+            voxelParameters.setLadType(Type.fromString(ladElement.getAttributeValue("type")));
+
+            String alphaValue = ladElement.getAttributeValue("alpha");
+            String betaValue = ladElement.getAttributeValue("beta");
+
+            if(alphaValue != null){
+                voxelParameters.setLadBetaFunctionAlphaParameter(Float.valueOf(alphaValue));
             }
-        }  
+
+            if(betaValue != null){
+                voxelParameters.setLadBetaFunctionBetaParameter(Float.valueOf(betaValue));
+            }
+        }
+
+        Element generateMultiBandRasterElement = processElement.getChild("multi-band-raster");
+
+        if(generateMultiBandRasterElement != null){
+
+            boolean generateMultiBandRaster = Boolean.valueOf(generateMultiBandRasterElement.getAttributeValue("generate"));
+            voxelParameters.setGenerateMultiBandRaster(generateMultiBandRaster);
+
+            if(generateMultiBandRaster){
+                voxelParameters.setShortcutVoxelFileWriting(Boolean.valueOf(generateMultiBandRasterElement.getAttributeValue("discard_voxel_file_writing")));
+                voxelParameters.setRasterStartingHeight(Float.valueOf(generateMultiBandRasterElement.getAttributeValue("starting-height")));
+                voxelParameters.setRasterHeightStep(Float.valueOf(generateMultiBandRasterElement.getAttributeValue("step")));
+                voxelParameters.setRasterBandNumber(Integer.valueOf(generateMultiBandRasterElement.getAttributeValue("band-number")));
+                voxelParameters.setRasterResolution(Integer.valueOf(generateMultiBandRasterElement.getAttributeValue("resolution")));
+            }
+        }
+
+        Element formulaElement = processElement.getChild("formula");
+
+        if(formulaElement != null){
+            Element transmittanceElement = formulaElement.getChild("transmittance");
+            if(transmittanceElement != null){
+                voxelParameters.setTransmittanceMode(Integer.valueOf(transmittanceElement.getAttributeValue("mode")));
+            }
+        }
+          
     }
 
     @Override
@@ -396,6 +415,10 @@ public class VoxCfg extends Configuration{
         }
 
         processElement.addContent(pointcloudFiltersElement);
+        
+        if(echoFilters != null){
+            
+        }
 
         /***TRANSFORMATION***/
 
@@ -450,6 +473,22 @@ public class VoxCfg extends Configuration{
 
             filtersElement.addContent(shotFilterElement);
         }
+        
+        if(echoFilters != null && !echoFilters.isEmpty()){
+
+            Element echoFilterElement = new Element("echo-filters");
+
+            for(Filter f : echoFilters){
+                Element filterElement = new Element("filter");
+                filterElement.setAttribute("variable", f.getVariable());
+                filterElement.setAttribute("inequality", f.getConditionString());
+                filterElement.setAttribute("value", String.valueOf(f.getValue()));
+                echoFilterElement.addContent(filterElement);
+            }
+
+            filtersElement.addContent(echoFilterElement);
+        }
+        
         processElement.addContent(filtersElement);
         
         Element ladElement = new Element("leaf-angle-distribution");
@@ -561,6 +600,10 @@ public class VoxCfg extends Configuration{
     public List<Filter> getFilters() {
         return filters;
     }
+    
+    public void setEchoFilters(List<Filter> filters){
+        this.echoFilters = filters;
+    }
 
     public void setFilters(List<Filter> filters) {
         this.filters = filters;
@@ -581,5 +624,8 @@ public class VoxCfg extends Configuration{
     public void setMultiResUseDefaultMaxPad(boolean multiResUseDefaultMaxPad) {
         this.multiResUseDefaultMaxPad = multiResUseDefaultMaxPad;
     }
-    
+
+    public List<Filter> getEchoFilters() {
+        return echoFilters;
+    }
 }

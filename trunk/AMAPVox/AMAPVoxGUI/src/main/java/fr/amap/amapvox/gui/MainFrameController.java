@@ -218,6 +218,7 @@ public class MainFrameController implements Initializable {
     private AttributsImporterFrameController attributsImporterFrameController;
     private TextFileParserFrameController textFileParserFrameController;
     private SceneObjectPropertiesPanelController sceneObjectPropertiesPanelController;
+    private FilteringPaneComponentController filteringPaneController;
     
     private BlockingQueue<File> queue = new ArrayBlockingQueue<>(100);
     private int taskNumber = 0;
@@ -299,6 +300,14 @@ public class MainFrameController implements Initializable {
 
     private final static String MATRIX_FORMAT_ERROR_MSG = "Matrix file has to look like this: \n\n\t1.0 0.0 0.0 0.0\n\t0.0 1.0 0.0 0.0\n\t0.0 0.0 1.0 0.0\n\t0.0 0.0 0.0 1.0\n";
     private static PseudoClass loadedPseudoClass = PseudoClass.getPseudoClass("loaded");
+    
+    private ListView<CheckBox> listviewClassifications;
+    
+    //echo filtering for las, laz files
+    private AnchorPane anchorPaneEchoFilteringClassifications;
+    
+    //echo filtering for rxp files
+    private AnchorPane anchorPaneEchoFilteringRxp;
     
     @FXML
     private RadioButton radiobuttonLADHomogeneous;
@@ -663,10 +672,6 @@ public class MainFrameController implements Initializable {
     @FXML
     private CheckBox checkboxGenerateBitmapFile;
     @FXML
-    private ListView<CheckBox> listviewClassifications;
-    @FXML
-    private AnchorPane anchorpaneClassifications;
-    @FXML
     private AnchorPane anchorpaneBoundingBoxParameters;
     @FXML
     private CheckBox checkboxGenerateMultiBandRaster;
@@ -776,6 +781,8 @@ public class MainFrameController implements Initializable {
     private TitledPane titledPaneSceneObjectProperties;
     @FXML
     private ScrollPane scrollPaneSceneObjectProperties;
+    @FXML
+    private AnchorPane anchorPaneEchoFiltering;
     
     private class SceneObjectProperty{
         
@@ -1055,33 +1062,9 @@ public class MainFrameController implements Initializable {
         toggleButtonLAI2000.selectedProperty().addListener(toggleButtonLAI2xxxSelectedListener);
         toggleButtonLAI2200.selectedProperty().addListener(toggleButtonLAI2xxxSelectedListener);
         
-        listviewClassifications.getItems().addAll(
-                createSelectedCheckbox(Classification.CREATED_NEVER_CLASSIFIED.getValue()+" - "+
-                        Classification.CREATED_NEVER_CLASSIFIED.getDescription()),
-                createSelectedCheckbox(Classification.UNCLASSIFIED.getValue()+" - "+
-                        Classification.UNCLASSIFIED.getDescription()),
-                createSelectedCheckbox(Classification.GROUND.getValue()+" - "+
-                        Classification.GROUND.getDescription()),
-                createSelectedCheckbox(Classification.LOW_VEGETATION.getValue()+" - "+
-                        Classification.LOW_VEGETATION.getDescription()),
-                createSelectedCheckbox(Classification.MEDIUM_VEGETATION.getValue()+" - "+
-                        Classification.MEDIUM_VEGETATION.getDescription()),
-                createSelectedCheckbox(Classification.HIGH_VEGETATION.getValue()+" - "+
-                        Classification.HIGH_VEGETATION.getDescription()),
-                createSelectedCheckbox(Classification.BUILDING.getValue()+" - "+
-                        Classification.BUILDING.getDescription()),
-                createSelectedCheckbox(Classification.LOW_POINT.getValue()+" - "+
-                        Classification.LOW_POINT.getDescription()),
-                createSelectedCheckbox(Classification.MODEL_KEY_POINT.getValue()+" - "+
-                        Classification.MODEL_KEY_POINT.getDescription()),
-                createSelectedCheckbox(Classification.WATER.getValue()+" - "+
-                        Classification.WATER.getDescription()),
-                createSelectedCheckbox(Classification.RESERVED_10.getValue()+" - "+
-                        Classification.RESERVED_10.getDescription()),
-                createSelectedCheckbox(Classification.RESERVED_11.getValue()+" - "+
-                        Classification.RESERVED_11.getDescription()),
-                createSelectedCheckbox(Classification.OVERLAP_POINTS.getValue()+" - "+
-                        Classification.OVERLAP_POINTS.getDescription()));
+        initEchoFiltering();
+        
+        
         
         data = FXCollections.observableArrayList();
         
@@ -1314,6 +1297,15 @@ public class MainFrameController implements Initializable {
         } catch (IOException ex) {
             logger.error("Cannot load fxml file", ex);
         }
+        
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/FilteringPaneComponent.fxml"));
+            anchorPaneEchoFilteringRxp = loader.load();
+            filteringPaneController = loader.getController();
+            filteringPaneController.setFiltersNames("Reflectance", "Amplitude", "Deviation");
+        } catch (IOException ex) {
+            logger.error("Cannot load fxml file", ex);
+        }
             
         try {
             attributsImporterFrame = new Stage();
@@ -1440,6 +1432,7 @@ public class MainFrameController implements Initializable {
             Parent root = loader.load();
             filterFrameController = loader.getController();
             filterFrameController.setStage(filterFrame);
+            filterFrameController.setFilters("Angle");
             filterFrame.setScene(new Scene(root));
         } catch (IOException ex) {
             logger.error("Cannot load fxml file", ex);
@@ -1674,14 +1667,17 @@ public class MainFrameController implements Initializable {
                             
                         }
                         
-                        anchorpaneClassifications.setVisible(true);
+                        anchorPaneEchoFiltering.getChildren().set(0, anchorPaneEchoFilteringClassifications);
+                        
+                        //anchorPaneEchoFilteringClassifications.setVisible(true);
                         anchorpaneBoundingBoxParameters.setDisable(checkboxMultiFiles.isSelected());
                         
                         break;
                     default:
                         anchorPaneGroundEnergyParameters.setDisable(true);
                         checkboxCalculateGroundEnergy.setDisable(true);
-                        anchorpaneClassifications.setVisible(false);
+                        anchorPaneEchoFiltering.getChildren().set(0, anchorPaneEchoFilteringRxp);
+                        //anchorPaneEchoFilteringClassifications.setVisible(false);
                         anchorpaneBoundingBoxParameters.setDisable(false);
                 }
 
@@ -1874,7 +1870,48 @@ public class MainFrameController implements Initializable {
         });
     }
     
-    
+    private void initEchoFiltering(){
+        
+        anchorPaneEchoFilteringClassifications = new AnchorPane();
+        listviewClassifications = new ListView<>();
+        
+        
+        listviewClassifications.getItems().addAll(
+                createSelectedCheckbox(Classification.CREATED_NEVER_CLASSIFIED.getValue()+" - "+
+                        Classification.CREATED_NEVER_CLASSIFIED.getDescription()),
+                createSelectedCheckbox(Classification.UNCLASSIFIED.getValue()+" - "+
+                        Classification.UNCLASSIFIED.getDescription()),
+                createSelectedCheckbox(Classification.GROUND.getValue()+" - "+
+                        Classification.GROUND.getDescription()),
+                createSelectedCheckbox(Classification.LOW_VEGETATION.getValue()+" - "+
+                        Classification.LOW_VEGETATION.getDescription()),
+                createSelectedCheckbox(Classification.MEDIUM_VEGETATION.getValue()+" - "+
+                        Classification.MEDIUM_VEGETATION.getDescription()),
+                createSelectedCheckbox(Classification.HIGH_VEGETATION.getValue()+" - "+
+                        Classification.HIGH_VEGETATION.getDescription()),
+                createSelectedCheckbox(Classification.BUILDING.getValue()+" - "+
+                        Classification.BUILDING.getDescription()),
+                createSelectedCheckbox(Classification.LOW_POINT.getValue()+" - "+
+                        Classification.LOW_POINT.getDescription()),
+                createSelectedCheckbox(Classification.MODEL_KEY_POINT.getValue()+" - "+
+                        Classification.MODEL_KEY_POINT.getDescription()),
+                createSelectedCheckbox(Classification.WATER.getValue()+" - "+
+                        Classification.WATER.getDescription()),
+                createSelectedCheckbox(Classification.RESERVED_10.getValue()+" - "+
+                        Classification.RESERVED_10.getDescription()),
+                createSelectedCheckbox(Classification.RESERVED_11.getValue()+" - "+
+                        Classification.RESERVED_11.getDescription()),
+                createSelectedCheckbox(Classification.OVERLAP_POINTS.getValue()+" - "+
+                        Classification.OVERLAP_POINTS.getDescription()));
+        
+        listviewClassifications.setPrefSize(269, 134);
+        
+        anchorPaneEchoFilteringClassifications.getChildren().add(new VBox(new Label("Classifications"), listviewClassifications));
+        anchorPaneEchoFilteringClassifications.setLayoutX(14);
+        anchorPaneEchoFilteringClassifications.setLayoutY(14);
+        anchorPaneEchoFiltering.getChildren().add(anchorPaneEchoFilteringClassifications);
+        
+    }
     
     @FXML
     private void onActionButtonDisplayPdf(ActionEvent event) {
@@ -4223,6 +4260,8 @@ public class MainFrameController implements Initializable {
             if (it == InputType.RSP_PROJECT) {
                 cfg.setMatricesAndFiles(listviewRxpScans.getItems());
             }
+            
+            cfg.setEchoFilters(filteringPaneController.getFilterList());
 
             try {
                 cfg.writeConfiguration(selectedFile);
@@ -4548,6 +4587,9 @@ public class MainFrameController implements Initializable {
                         for (Integer i : classifiedPointsToDiscard) {
                             listviewClassifications.getItems().get(i).setSelected(false);
                         }
+                    }else if(type.equals("voxelisation-TLS")){
+                        
+                        filteringPaneController.setFilters(((TLSVoxCfg)cfg).getEchoFilters());
                     }
 
                     textFieldPADMax.setText(String.valueOf(((VoxCfg)cfg).getVoxelParameters().getMaxPAD()));

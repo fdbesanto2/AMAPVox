@@ -20,6 +20,7 @@ import fr.amap.amapvox.jraster.braster.BCommon;
 import fr.amap.amapvox.jraster.braster.BHeader;
 import fr.amap.amapvox.jraster.braster.BSQ;
 import fr.amap.amapvox.voxcommons.VoxTool;
+import fr.amap.amapvox.voxelisation.configuration.VoxCfg;
 import fr.amap.amapvox.voxelisation.configuration.VoxelParameters;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -91,6 +92,7 @@ public class VoxelAnalysis {
     int count3 = 0;
     int nbEchosSol = 0;
     public VoxelParameters parameters;
+    private VoxCfg cfg;
 
     private boolean isSet = false;
 
@@ -188,13 +190,14 @@ public class VoxelAnalysis {
 
         return distance;
     }
-
-    public VoxelAnalysis(RegularDtm terrain, List<Octree> pointcloud, List<Filter> filters) {
+            
+    public VoxelAnalysis(RegularDtm terrain, List<Octree> pointcloud, VoxCfg cfg) {
 
         nbShotsProcessed = 0;
         this.terrain = terrain;
         this.pointcloudList = pointcloud;
-        Shot.setFilters(filters);
+        Shot.setFilters(cfg.getFilters());
+        this.cfg = cfg;
     }
 
     /**
@@ -274,7 +277,7 @@ public class VoxelAnalysis {
 
                 LineSegment seg = new LineSegment(shot.origin, shot.direction, 999999);
                 Point3d echo = new Point3d(seg.getEnd());
-                propagate(origin, echo, (short) 0, 1, 1, shot.origin, false, shot.angle, nbShotsProcessed);
+                propagate(origin, echo, 1, 1, shot.origin, false, shot.angle, nbShotsProcessed, shot, -1);
 
             } else {
 
@@ -368,9 +371,9 @@ public class VoxelAnalysis {
                         
                         // propagate
                         if (parameters.isTLS()) {
-                            propagate(origin, echo, (short) 0, beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, nbShotsProcessed);
+                            propagate(origin, echo, beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, nbShotsProcessed, shot, i);
                         } else {
-                            propagate(origin, echo, shot.classifications[i], beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, nbShotsProcessed);
+                            propagate(origin, echo, beamFraction, residualEnergy, shot.origin, lastEcho, shot.angle, nbShotsProcessed, shot, i);
                         }
 
                         origin = new Point3d(echo);
@@ -418,7 +421,7 @@ public class VoxelAnalysis {
      * @param beamFraction
      * @param source shot origin
      */
-    private void propagate(Point3d origin, Point3d echo, int classification, double beamFraction, double residualEnergy, Point3d source, boolean lastEcho, double angle, int shotID) {
+    private void propagate(Point3d origin, Point3d echo, double beamFraction, double residualEnergy, Point3d source, boolean lastEcho, double angle, int shotID, Shot shot, int echoID) {
 
         //get shot line
         LineElement lineElement = new LineSegment(origin, echo);
@@ -597,7 +600,7 @@ public class VoxelAnalysis {
 
                 double intercepted = 0;
 
-                if (((classification != 2 && !parameters.isTLS()) || parameters.isTLS())
+                if ((keepEchoOfShot(shot, echoID))
                         && ((echoDistance >= parameters.minDTMDistance && echoDistance != Float.NaN && parameters.useDTMCorrection()) || !parameters.useDTMCorrection())
                         && keepEcho) {
 
@@ -623,6 +626,42 @@ public class VoxelAnalysis {
             }
         }
 
+    }
+    
+    private boolean keepEchoOfShot(Shot shot, int echoID){
+        
+        if(shot.classifications != null && shot.classifications[echoID] != 2 && !parameters.isTLS()){
+            return true;
+        }else if(parameters.isTLS() && cfg.getEchoFilters() != null){
+            
+            List<Filter> echoFilters = cfg.getEchoFilters();
+            
+            for(Filter filter : echoFilters){
+                
+                switch(filter.getVariable()){
+                    case "Reflectance":
+                        
+                        if(shot.reflectances != null){
+                            return filter.doFilter(shot.reflectances[echoID]);
+                        }
+                        
+                    case "Amplitude":
+                        
+                        if(shot.amplitudes != null){
+                            return filter.doFilter(shot.amplitudes[echoID]);
+                        }
+                        
+                    case "Deviation":
+                        
+                        if(shot.deviations != null){
+                            return filter.doFilter(shot.deviations[echoID]);
+                        }
+                }
+            }
+            
+        }
+        
+        return true;
     }
 
     private class Mean {

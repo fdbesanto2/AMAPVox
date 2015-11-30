@@ -206,7 +206,7 @@ public class ProcessTool implements Cancellable{
             for (MatrixAndFile file : matricesAndFiles) {
 
                 File outputFile = new File(output.getAbsolutePath() + "/" + file.file.getName() + ".vox");
-                tasks.put(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixUtility.convertMatrix4dToMat4D(file.matrix), parameters, dtm, pointcloudList, filters));
+                tasks.put(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixUtility.convertMatrix4dToMat4D(file.matrix), parameters, dtm, pointcloudList, cfg));
                 files.add(outputFile);
                 count++;
             }
@@ -278,7 +278,7 @@ public class ProcessTool implements Cancellable{
         if(sop == null){ sop = Mat4D.identity();}
         if(vop == null){ vop = Mat4D.identity();}
 
-        RxpVoxelisation voxelisation = new RxpVoxelisation(input, output, vop, pop, sop, parameters, dtm, pointcloudList, filters);
+        RxpVoxelisation voxelisation = new RxpVoxelisation(input, output, vop, pop, sop, parameters, dtm, pointcloudList, cfg);
         voxelisation.call();
 
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
@@ -352,7 +352,7 @@ public class ProcessTool implements Cancellable{
             throw ex;
         }
         
-        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, parameters, filters, classifiedPointsToDiscard, terrain, trajectoryList);
+        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, parameters, cfg, classifiedPointsToDiscard, terrain, trajectoryList);
         
         voxelisation.addProcessingListener(new ProcessingListener() {
 
@@ -1299,7 +1299,7 @@ public class ProcessTool implements Cancellable{
             params.setSplit(input.voxelParameters.getSplit());
             params.setResolution(input.voxelParameters.getResolution());
             
-            LasVoxelisation voxelisation = new LasVoxelisation(input.inputFile, input.outputFile, vopMatrix, params, configuration.getFilters(), configuration.getClassifiedPointsToDiscard(), terrain, trajectoryList);
+            LasVoxelisation voxelisation = new LasVoxelisation(input.inputFile, input.outputFile, vopMatrix, params, configuration, configuration.getClassifiedPointsToDiscard(), terrain, trajectoryList);
             
             voxelisation.process();
             

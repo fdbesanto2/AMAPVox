@@ -375,18 +375,9 @@
                                                                               </ScrollPane>
                                                                            </content>
                                                                         </TitledPane>
-                                                                        <TitledPane expanded="false" prefHeight="200.0" prefWidth="200.0" text="Other">
+                                                                        <TitledPane expanded="false" prefHeight="200.0" prefWidth="200.0" text="Echo">
                                                                            <content>
-                                                                              <AnchorPane>
-                                                                                 <children>
-                                                                                    <AnchorPane fx:id="anchorpaneClassifications" layoutX="14.0" layoutY="14.0">
-                                                                                       <children>
-                                                                                          <Label text="Classifications" />
-                                                                                          <ListView fx:id="listviewClassifications" layoutY="18.0" prefHeight="134.0" prefWidth="269.0" />
-                                                                                       </children>
-                                                                                    </AnchorPane>
-                                                                                 </children>
-                                                                              </AnchorPane>
+                                                                              <AnchorPane fx:id="anchorPaneEchoFiltering" />
                                                                            </content>
                                                                         </TitledPane>
                                                                     </panes>

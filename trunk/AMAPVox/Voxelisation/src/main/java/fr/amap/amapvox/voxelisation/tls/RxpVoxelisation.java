@@ -15,6 +15,7 @@ import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
 import fr.amap.amapvox.voxelisation.VoxelAnalysis;
+import fr.amap.amapvox.voxelisation.configuration.VoxCfg;
 import fr.amap.amapvox.voxelisation.configuration.VoxelParameters;
 import java.io.File;
 import java.util.Iterator;
@@ -48,7 +49,7 @@ public class RxpVoxelisation implements Callable{
         this.nbVoxelisationFinished = nbVoxelisationFinished;
     }    
     
-    public RxpVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, RegularDtm terrain, List<Octree> pointcloud, List<Filter> filters){
+    public RxpVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, RegularDtm terrain, List<Octree> pointcloud, VoxCfg cfg){
                 
         nbVoxelisationFinished = 0;
         this.inputFile = inputFile;
@@ -75,7 +76,7 @@ public class RxpVoxelisation implements Callable{
             terrain.setTransformationMatrix(vopMatrix);
         }
         
-        voxelAnalysis = new VoxelAnalysis(terrain, pointcloud, filters);
+        voxelAnalysis = new VoxelAnalysis(terrain, pointcloud, cfg);
         voxelAnalysis.init(parameters, outputFile);
         
     }

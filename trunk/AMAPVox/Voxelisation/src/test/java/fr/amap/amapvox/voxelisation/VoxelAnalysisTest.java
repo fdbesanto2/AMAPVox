@@ -6,6 +6,7 @@
 package fr.amap.amapvox.voxelisation;
 
 import fr.amap.amapvox.io.tls.rxp.Shot;
+import fr.amap.amapvox.voxelisation.configuration.VoxCfg;
 import fr.amap.amapvox.voxelisation.configuration.VoxelParameters;
 import java.io.File;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class VoxelAnalysisTest {
     
     public VoxelAnalysisTest() {
         
-        VoxelAnalysis voxelAnalysis = new VoxelAnalysis(null, null, null);
+        VoxelAnalysis voxelAnalysis = new VoxelAnalysis(null, null, new VoxCfg());
         VoxelParameters parameters = new VoxelParameters(new Point3d(-10, -10, -10),
                                                         new Point3d(10, 10, 10),
                                                         new Point3i(20, 20, 20));
