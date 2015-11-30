@@ -101,6 +101,14 @@ public class Vec3D{
         return dest;
     }
     
+    public static double angle(Vec3D vec1, Vec3D vec2){
+        
+        double angle = Math.acos(Vec3D.dot(vec1, vec2)/((Vec3D.length(vec1) * Vec3D.length(vec2))));
+        return angle;
+    }
+    
+    
+    
     /**
      * Add a 3d vector to another
      * @param vec1 The first vector
