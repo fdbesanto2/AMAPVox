@@ -255,7 +255,7 @@ public class VoxelAnalysis {
         logger.info("Transmittance functions table is built");
     }
 
-    public void processOneShot(Shot shot) {
+    public void processOneShot(final Shot shot) {
 
         if (voxelManager == null) {
             logger.error("VoxelManager not initialized, what happened??");

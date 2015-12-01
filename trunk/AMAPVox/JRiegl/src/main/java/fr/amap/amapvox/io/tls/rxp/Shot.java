@@ -15,7 +15,7 @@ import org.apache.commons.math3.util.FastMath;
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class Shot {
+public class Shot{
 
     public int nbEchos;
 
@@ -41,6 +41,19 @@ public class Shot {
 
     public Shot() {
 
+    }
+    
+    public Shot(Shot shot) {
+        this.amplitudes = shot.amplitudes;
+        this.angle = shot.angle;
+        this.classifications = shot.classifications;
+        this.deviations = shot.deviations;
+        this.direction = shot.direction;
+        this.intensities = shot.intensities;
+        this.nbEchos = shot.nbEchos;
+        this.origin = shot.origin;
+        this.ranges = shot.ranges;
+        this.reflectances = shot.reflectances;
     }
 
     public static void setFilters(List<Filter> filters) {

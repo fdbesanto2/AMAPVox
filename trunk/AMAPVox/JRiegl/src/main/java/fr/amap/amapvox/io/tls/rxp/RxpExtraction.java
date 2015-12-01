@@ -130,10 +130,12 @@ public class RxpExtraction implements Iterable<Shot>{
             @Override
             public boolean hasNext() {
                 
+                shot = null;
+                
                 if(hasShot(rxpPointer)){
                     
                     shot = getNextShot(rxpPointer);
-                    
+                                        
                     return shot != null;
                     
                 }else{

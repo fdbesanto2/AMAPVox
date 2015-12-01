@@ -152,9 +152,9 @@ public class RxpVoxelisation implements Callable{
             //return resultData;
         
         }catch(OutOfMemoryError ex){
-            //logger.error("Unsufficient memory, you need to allocate more to the JVM, change the Xmx value!",ex);
+            logger.error("Unsufficient memory, you need to allocate more to the JVM, change the Xmx value!",ex);
         }catch(Exception ex){
-            //logger.error("Unknow exception in RXPVoxelisation.class",ex);
+            logger.error("Unknow exception in RXPVoxelisation.class",ex);
         }
         
         return null;

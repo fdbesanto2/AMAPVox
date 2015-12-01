@@ -45919,3 +45919,348 @@ i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal l
 2015-11-30 23:18:37 INFO  - writing file: C:\Users\Julien\Documents\vox.vox
 2015-11-30 23:18:41 INFO  - file written ( 4.0 s )
 2015-11-30 23:18:41 INFO  - Voxelisation finished in 219.0 s
+2015-12-01 18:38:45 INFO  - Building transmittance functions table
+2015-12-01 18:38:45 INFO  - Transmittance functions table is built
+2015-12-01 18:38:45 INFO  - Building transmittance functions table
+2015-12-01 18:38:45 INFO  - Transmittance functions table is built
+2015-12-01 18:38:45 INFO  - Building transmittance functions table
+2015-12-01 18:38:45 INFO  - Transmittance functions table is built
+2015-12-01 18:38:45 INFO  - Building transmittance functions table
+2015-12-01 18:38:45 INFO  - Transmittance functions table is built
+2015-12-01 18:38:45 INFO  - Building transmittance functions table
+2015-12-01 18:38:45 INFO  - Transmittance functions table is built
+2015-12-01 18:38:45 INFO  - Building transmittance functions table
+2015-12-01 18:38:45 INFO  - Transmittance functions table is built
+2015-12-01 18:38:45 INFO  - Building transmittance functions table
+2015-12-01 18:38:45 INFO  - Transmittance functions table is built
+2015-12-01 18:38:45 INFO  - Building transmittance functions table
+2015-12-01 18:38:45 INFO  - Transmittance functions table is built
+2015-12-01 18:38:45 INFO  - Building transmittance functions table
+2015-12-01 18:38:45 INFO  - Transmittance functions table is built
+2015-12-01 18:38:45 INFO  - Building transmittance functions table
+2015-12-01 18:38:45 INFO  - Transmittance functions table is built
+2015-12-01 18:38:45 INFO  - Building transmittance functions table
+2015-12-01 18:38:45 INFO  - Transmittance functions table is built
+2015-12-01 18:38:45 INFO  - Building transmittance functions table
+2015-12-01 18:38:45 INFO  - Transmittance functions table is built
+2015-12-01 18:38:45 INFO  - Building transmittance functions table
+2015-12-01 18:38:45 INFO  - Transmittance functions table is built
+2015-12-01 18:38:45 INFO  - Building transmittance functions table
+2015-12-01 18:38:45 INFO  - Transmittance functions table is built
+2015-12-01 18:38:45 INFO  - rxp extraction is started
+2015-12-01 18:38:45 INFO  - rxp extraction is started
+2015-12-01 18:38:45 INFO  - allocate!!!!!!!!
+2015-12-01 18:38:45 INFO  - allocate!!!!!!!!
+2015-12-01 18:38:45 INFO  - rxp extraction is started
+2015-12-01 18:38:45 INFO  - rxp extraction is started
+2015-12-01 18:38:45 INFO  - allocate!!!!!!!!
+2015-12-01 18:38:45 INFO  - rxp extraction is started
+2015-12-01 18:38:45 INFO  - allocate!!!!!!!!
+2015-12-01 18:38:45 INFO  - rxp extraction is started
+2015-12-01 18:38:45 INFO  - rxp extraction is started
+2015-12-01 18:38:45 INFO  - rxp extraction is started
+2015-12-01 18:38:45 INFO  - allocate!!!!!!!!
+2015-12-01 18:38:45 INFO  - allocate!!!!!!!!
+2015-12-01 18:38:45 INFO  - allocate!!!!!!!!
+2015-12-01 18:38:45 INFO  - allocate!!!!!!!!
+2015-12-01 18:38:49 INFO  - Shots processed: 101845
+2015-12-01 18:38:49 INFO  - writing file: /home/calcul/Documents/Julien/Test_photos_hemispheriques/voxels/750209_180600.mon.rxp.vox
+2015-12-01 18:38:49 INFO  - Shots processed: 104959
+2015-12-01 18:38:49 INFO  - writing file: /home/calcul/Documents/Julien/Test_photos_hemispheriques/voxels/850215_180910.mon.rxp.vox
+2015-12-01 18:38:50 INFO  - Shots processed: 106121
+2015-12-01 18:38:50 INFO  - writing file: /home/calcul/Documents/Julien/Test_photos_hemispheriques/voxels/750209_173641.mon.rxp.vox
+2015-12-01 18:38:50 INFO  - Shots processed: 101847
+2015-12-01 18:38:50 INFO  - writing file: /home/calcul/Documents/Julien/Test_photos_hemispheriques/voxels/750209_175253.mon.rxp.vox
+2015-12-01 18:38:50 INFO  - Shots processed: 107131
+2015-12-01 18:38:50 INFO  - writing file: /home/calcul/Documents/Julien/Test_photos_hemispheriques/voxels/750209_182011.mon.rxp.vox
+2015-12-01 18:38:50 INFO  - Shots processed: 103588
+2015-12-01 18:38:50 INFO  - writing file: /home/calcul/Documents/Julien/Test_photos_hemispheriques/voxels/750209_171811.mon.rxp.vox
+2015-12-01 18:38:50 INFO  - Shots processed: 122348
+2015-12-01 18:38:50 INFO  - writing file: /home/calcul/Documents/Julien/Test_photos_hemispheriques/voxels/750209_171503.mon.rxp.vox
+2015-12-01 18:38:50 INFO  - Shots processed: 116119
+2015-12-01 18:38:50 INFO  - writing file: /home/calcul/Documents/Julien/Test_photos_hemispheriques/voxels/850215_183303.mon.rxp.vox
+2015-12-01 18:39:04 INFO  - Voxelisation was stopped
+2015-12-01 18:39:08 INFO  - file written ( 18.0 s )
+2015-12-01 18:39:10 INFO  - file written ( 20.0 s )
+2015-12-01 18:39:11 INFO  - file written ( 21.0 s )
+2015-12-01 18:39:11 INFO  - file written ( 21.0 s )
+2015-12-01 18:39:12 INFO  - file written ( 22.0 s )
+2015-12-01 18:39:12 INFO  - file written ( 22.0 s )
+2015-12-01 18:39:12 INFO  - file written ( 22.0 s )
+2015-12-01 18:39:12 INFO  - file written ( 22.0 s )
+2015-12-01 18:40:20 INFO  - Building transmittance functions table
+2015-12-01 18:40:20 INFO  - Transmittance functions table is built
+2015-12-01 18:40:20 INFO  - Building transmittance functions table
+2015-12-01 18:40:20 INFO  - Transmittance functions table is built
+2015-12-01 18:40:20 INFO  - Building transmittance functions table
+2015-12-01 18:40:20 INFO  - Transmittance functions table is built
+2015-12-01 18:40:20 INFO  - Building transmittance functions table
+2015-12-01 18:40:20 INFO  - Transmittance functions table is built
+2015-12-01 18:40:20 INFO  - Building transmittance functions table
+2015-12-01 18:40:20 INFO  - Transmittance functions table is built
+2015-12-01 18:40:20 INFO  - Building transmittance functions table
+2015-12-01 18:40:20 INFO  - Transmittance functions table is built
+2015-12-01 18:40:20 INFO  - Building transmittance functions table
+2015-12-01 18:40:20 INFO  - Transmittance functions table is built
+2015-12-01 18:40:20 INFO  - Building transmittance functions table
+2015-12-01 18:40:20 INFO  - Transmittance functions table is built
+2015-12-01 18:40:20 INFO  - Building transmittance functions table
+2015-12-01 18:40:20 INFO  - Transmittance functions table is built
+2015-12-01 18:40:20 INFO  - Building transmittance functions table
+2015-12-01 18:40:20 INFO  - Transmittance functions table is built
+2015-12-01 18:40:20 INFO  - Building transmittance functions table
+2015-12-01 18:40:20 INFO  - Transmittance functions table is built
+2015-12-01 18:40:20 INFO  - Building transmittance functions table
+2015-12-01 18:40:20 INFO  - Transmittance functions table is built
+2015-12-01 18:40:20 INFO  - Building transmittance functions table
+2015-12-01 18:40:20 INFO  - Transmittance functions table is built
+2015-12-01 18:40:20 INFO  - Building transmittance functions table
+2015-12-01 18:40:20 INFO  - Transmittance functions table is built
+2015-12-01 18:40:20 INFO  - rxp extraction is started
+2015-12-01 18:40:20 INFO  - allocate!!!!!!!!
+2015-12-01 18:40:20 INFO  - rxp extraction is started
+2015-12-01 18:40:20 INFO  - allocate!!!!!!!!
+2015-12-01 18:40:20 INFO  - rxp extraction is started
+2015-12-01 18:40:20 INFO  - allocate!!!!!!!!
+2015-12-01 18:40:20 INFO  - rxp extraction is started
+2015-12-01 18:40:20 INFO  - allocate!!!!!!!!
+2015-12-01 18:40:20 INFO  - rxp extraction is started
+2015-12-01 18:40:20 INFO  - allocate!!!!!!!!
+2015-12-01 18:40:20 INFO  - rxp extraction is started
+2015-12-01 18:40:20 INFO  - allocate!!!!!!!!
+2015-12-01 18:40:20 INFO  - rxp extraction is started
+2015-12-01 18:40:20 INFO  - allocate!!!!!!!!
+2015-12-01 18:40:20 INFO  - rxp extraction is started
+2015-12-01 18:40:20 INFO  - allocate!!!!!!!!
+2015-12-01 18:40:34 INFO  - Shots processed: 1000000
+2015-12-01 18:40:35 INFO  - Shots processed: 1000000
+2015-12-01 18:40:35 INFO  - Shots processed: 1000000
+2015-12-01 18:40:35 INFO  - Shots processed: 1000000
+2015-12-01 18:40:36 INFO  - Shots processed: 1000000
+2015-12-01 18:40:38 INFO  - Shots processed: 1000000
+2015-12-01 18:40:38 INFO  - Shots processed: 1000000
+2015-12-01 18:40:38 INFO  - Shots processed: 1000000
+2015-12-01 18:53:01 INFO  - Building transmittance functions table
+2015-12-01 18:53:01 INFO  - Transmittance functions table is built
+2015-12-01 18:53:01 INFO  - Building transmittance functions table
+2015-12-01 18:53:01 INFO  - Transmittance functions table is built
+2015-12-01 18:53:01 INFO  - Building transmittance functions table
+2015-12-01 18:53:01 INFO  - Transmittance functions table is built
+2015-12-01 18:53:01 INFO  - Building transmittance functions table
+2015-12-01 18:53:01 INFO  - Transmittance functions table is built
+2015-12-01 18:53:01 INFO  - Building transmittance functions table
+2015-12-01 18:53:01 INFO  - Transmittance functions table is built
+2015-12-01 18:53:01 INFO  - Building transmittance functions table
+2015-12-01 18:53:01 INFO  - Transmittance functions table is built
+2015-12-01 18:53:01 INFO  - Building transmittance functions table
+2015-12-01 18:53:01 INFO  - Transmittance functions table is built
+2015-12-01 18:53:01 INFO  - Building transmittance functions table
+2015-12-01 18:53:01 INFO  - Transmittance functions table is built
+2015-12-01 18:53:01 INFO  - Building transmittance functions table
+2015-12-01 18:53:01 INFO  - Transmittance functions table is built
+2015-12-01 18:53:01 INFO  - Building transmittance functions table
+2015-12-01 18:53:01 INFO  - Transmittance functions table is built
+2015-12-01 18:53:01 INFO  - Building transmittance functions table
+2015-12-01 18:53:01 INFO  - Transmittance functions table is built
+2015-12-01 18:53:01 INFO  - Building transmittance functions table
+2015-12-01 18:53:01 INFO  - Transmittance functions table is built
+2015-12-01 18:53:01 INFO  - Building transmittance functions table
+2015-12-01 18:53:01 INFO  - Transmittance functions table is built
+2015-12-01 18:53:01 INFO  - Building transmittance functions table
+2015-12-01 18:53:01 INFO  - Transmittance functions table is built
+2015-12-01 18:53:01 INFO  - rxp extraction is started
+2015-12-01 18:53:01 INFO  - rxp extraction is started
+2015-12-01 18:53:01 INFO  - rxp extraction is started
+2015-12-01 18:53:01 INFO  - rxp extraction is started
+2015-12-01 18:53:01 INFO  - rxp extraction is started
+2015-12-01 18:53:01 INFO  - allocate!!!!!!!!
+2015-12-01 18:53:01 INFO  - rxp extraction is started
+2015-12-01 18:53:01 INFO  - allocate!!!!!!!!
+2015-12-01 18:53:01 INFO  - rxp extraction is started
+2015-12-01 18:53:01 INFO  - allocate!!!!!!!!
+2015-12-01 18:53:01 INFO  - allocate!!!!!!!!
+2015-12-01 18:53:01 INFO  - allocate!!!!!!!!
+2015-12-01 18:53:01 INFO  - allocate!!!!!!!!
+2015-12-01 18:53:01 INFO  - allocate!!!!!!!!
+2015-12-01 18:53:01 INFO  - rxp extraction is started
+2015-12-01 18:53:01 INFO  - allocate!!!!!!!!
+2015-12-01 18:53:18 INFO  - Shots processed: 1000000
+2015-12-01 18:53:18 INFO  - Shots processed: 1000000
+2015-12-01 18:53:20 INFO  - Shots processed: 1000000
+2015-12-01 18:53:21 INFO  - Shots processed: 1000000
+2015-12-01 18:53:21 INFO  - Shots processed: 1000000
+2015-12-01 18:53:21 INFO  - Shots processed: 1000000
+2015-12-01 18:53:21 INFO  - Shots processed: 1000000
+2015-12-01 18:53:23 INFO  - Shots processed: 1000000
+2015-12-01 18:53:33 INFO  - Shots processed: 1464688
+2015-12-01 18:53:33 INFO  - writing file: /home/calcul/Documents/Julien/Test_photos_hemispheriques/voxels/tmp/750209_171503.rxp.vox
+2015-12-01 18:53:34 INFO  - Shots processed: 2000000
+2015-12-01 18:53:35 INFO  - Shots processed: 2000000
+2015-12-01 18:53:39 INFO  - Shots processed: 2000000
+2015-12-01 18:53:40 INFO  - Shots processed: 2000000
+2015-12-01 19:11:14 INFO  - Building transmittance functions table
+2015-12-01 19:11:14 INFO  - Transmittance functions table is built
+2015-12-01 19:11:14 INFO  - Building transmittance functions table
+2015-12-01 19:11:14 INFO  - Transmittance functions table is built
+2015-12-01 19:11:14 INFO  - Building transmittance functions table
+2015-12-01 19:11:14 INFO  - Transmittance functions table is built
+2015-12-01 19:11:14 INFO  - Building transmittance functions table
+2015-12-01 19:11:14 INFO  - Transmittance functions table is built
+2015-12-01 19:11:14 INFO  - Building transmittance functions table
+2015-12-01 19:11:14 INFO  - Transmittance functions table is built
+2015-12-01 19:11:14 INFO  - Building transmittance functions table
+2015-12-01 19:11:14 INFO  - Transmittance functions table is built
+2015-12-01 19:11:14 INFO  - Building transmittance functions table
+2015-12-01 19:11:14 INFO  - Transmittance functions table is built
+2015-12-01 19:11:14 INFO  - Building transmittance functions table
+2015-12-01 19:11:14 INFO  - Transmittance functions table is built
+2015-12-01 19:11:14 INFO  - Building transmittance functions table
+2015-12-01 19:11:14 INFO  - Transmittance functions table is built
+2015-12-01 19:11:14 INFO  - Building transmittance functions table
+2015-12-01 19:11:14 INFO  - Transmittance functions table is built
+2015-12-01 19:11:14 INFO  - Building transmittance functions table
+2015-12-01 19:11:14 INFO  - Transmittance functions table is built
+2015-12-01 19:11:14 INFO  - Building transmittance functions table
+2015-12-01 19:11:14 INFO  - Transmittance functions table is built
+2015-12-01 19:11:14 INFO  - Building transmittance functions table
+2015-12-01 19:11:14 INFO  - Transmittance functions table is built
+2015-12-01 19:11:14 INFO  - Building transmittance functions table
+2015-12-01 19:11:14 INFO  - Transmittance functions table is built
+2015-12-01 19:11:14 INFO  - rxp extraction is started
+2015-12-01 19:11:14 INFO  - rxp extraction is started
+2015-12-01 19:11:14 INFO  - rxp extraction is started
+2015-12-01 19:11:14 INFO  - rxp extraction is started
+2015-12-01 19:11:14 INFO  - allocate!!!!!!!!
+2015-12-01 19:11:14 INFO  - allocate!!!!!!!!
+2015-12-01 19:11:14 INFO  - allocate!!!!!!!!
+2015-12-01 19:11:14 INFO  - rxp extraction is started
+2015-12-01 19:11:14 INFO  - rxp extraction is started
+2015-12-01 19:11:14 INFO  - allocate!!!!!!!!
+2015-12-01 19:11:14 INFO  - allocate!!!!!!!!
+2015-12-01 19:11:14 INFO  - rxp extraction is started
+2015-12-01 19:11:14 INFO  - allocate!!!!!!!!
+2015-12-01 19:11:14 INFO  - allocate!!!!!!!!
+2015-12-01 19:11:14 INFO  - rxp extraction is started
+2015-12-01 19:11:14 INFO  - allocate!!!!!!!!
+2015-12-01 19:11:31 INFO  - Shots processed: 1000000
+2015-12-01 19:11:32 INFO  - Shots processed: 1000000
+2015-12-01 19:11:32 INFO  - Shots processed: 1000000
+2015-12-01 19:11:32 INFO  - Shots processed: 1000000
+2015-12-01 19:11:32 INFO  - Shots processed: 1000000
+2015-12-01 19:11:34 INFO  - Shots processed: 1000000
+2015-12-01 19:11:34 INFO  - Shots processed: 1000000
+2015-12-01 19:11:34 INFO  - Shots processed: 1000000
+2015-12-01 19:11:42 INFO  - Shots processed: 1464688
+2015-12-01 19:11:42 INFO  - writing file: /home/calcul/Documents/Julien/Test_photos_hemispheriques/voxels/tmp/750209_171503.rxp.vox
+2015-12-01 19:11:46 INFO  - Shots processed: 2000000
+2015-12-01 19:11:47 INFO  - Voxelisation was stopped
+2015-12-01 19:11:47 INFO  - Task cancelled
+2015-12-01 19:11:47 INFO  - Task cancelled
+2015-12-01 19:11:47 INFO  - Task cancelled
+2015-12-01 19:11:47 INFO  - Task cancelled
+2015-12-01 19:11:47 INFO  - Task cancelled
+2015-12-01 19:11:47 INFO  - Task cancelled
+2015-12-01 19:11:47 INFO  - Task cancelled
+2015-12-01 19:11:53 INFO  - file written ( 10.0 s )
+2015-12-01 19:13:09 INFO  - Building transmittance functions table
+2015-12-01 19:13:09 INFO  - Transmittance functions table is built
+2015-12-01 19:13:09 INFO  - Building transmittance functions table
+2015-12-01 19:13:09 INFO  - Transmittance functions table is built
+2015-12-01 19:13:09 INFO  - Building transmittance functions table
+2015-12-01 19:13:09 INFO  - Transmittance functions table is built
+2015-12-01 19:13:09 INFO  - Building transmittance functions table
+2015-12-01 19:13:09 INFO  - Transmittance functions table is built
+2015-12-01 19:13:09 INFO  - rxp extraction is started
+2015-12-01 19:13:09 INFO  - rxp extraction is started
+2015-12-01 19:13:09 INFO  - allocate!!!!!!!!
+2015-12-01 19:13:09 INFO  - allocate!!!!!!!!
+2015-12-01 19:13:09 INFO  - rxp extraction is started
+2015-12-01 19:13:09 INFO  - allocate!!!!!!!!
+2015-12-01 19:13:09 INFO  - rxp extraction is started
+2015-12-01 19:13:09 INFO  - allocate!!!!!!!!
+2015-12-01 19:13:16 INFO  - Shots processed: 1000000
+2015-12-01 19:13:17 INFO  - Shots processed: 1000000
+2015-12-01 19:13:21 INFO  - Shots processed: 1000000
+2015-12-01 19:13:21 INFO  - Shots processed: 1000000
+2015-12-01 19:13:23 INFO  - Shots processed: 2000000
+2015-12-01 19:13:25 INFO  - Shots processed: 2000000
+2015-12-01 19:13:31 INFO  - Shots processed: 3000000
+2015-12-01 19:13:33 INFO  - Shots processed: 2000000
+2015-12-01 19:13:34 INFO  - Shots processed: 2000000
+2015-12-01 19:13:37 INFO  - Shots processed: 3000000
+2015-12-01 19:13:41 INFO  - Shots processed: 4000000
+2015-12-01 19:13:45 INFO  - Shots processed: 3000000
+2015-12-01 19:13:45 INFO  - Shots processed: 3000000
+2015-12-01 19:13:48 INFO  - Shots processed: 4000000
+2015-12-01 19:13:53 INFO  - Shots processed: 5000000
+2015-12-01 19:13:56 INFO  - Shots processed: 4000000
+2015-12-01 19:13:56 INFO  - Shots processed: 4000000
+2015-12-01 19:13:58 INFO  - Shots processed: 5000000
+2015-12-01 19:14:04 INFO  - Shots processed: 6000000
+2015-12-01 19:14:05 INFO  - Shots processed: 5000000
+2015-12-01 19:14:06 INFO  - Shots processed: 5000000
+2015-12-01 19:14:11 INFO  - Shots processed: 6000000
+2015-12-01 19:14:16 INFO  - Shots processed: 5680406
+2015-12-01 19:14:16 INFO  - writing file: /home/calcul/Documents/Julien/tests_leica/comparaison_riegl_leica/801220_020556.rxp.vox
+2015-12-01 19:14:16 INFO  - Shots processed: 7000000
+2015-12-01 19:14:17 INFO  - Shots processed: 6000000
+2015-12-01 19:14:18 INFO  - file written ( 1.0 s )
+2015-12-01 19:14:21 INFO  - Shots processed: 7000000
+2015-12-01 19:14:28 INFO  - Shots processed: 8000000
+2015-12-01 19:14:28 INFO  - Shots processed: 7000000
+2015-12-01 19:14:31 INFO  - Shots processed: 8000000
+2015-12-01 19:14:36 INFO  - Shots processed: 8000000
+2015-12-01 19:14:37 INFO  - Shots processed: 9000000
+2015-12-01 19:14:40 INFO  - Shots processed: 9000000
+2015-12-01 19:14:44 INFO  - Shots processed: 9000000
+2015-12-01 19:14:47 INFO  - Shots processed: 10000000
+2015-12-01 19:14:50 INFO  - Shots processed: 10000000
+2015-12-01 19:14:53 INFO  - Shots processed: 10000000
+2015-12-01 19:14:55 INFO  - Shots processed: 11000000
+2015-12-01 19:14:58 INFO  - Shots processed: 11292589
+2015-12-01 19:14:58 INFO  - writing file: /home/calcul/Documents/Julien/tests_leica/comparaison_riegl_leica/850215_181418.rxp.vox
+2015-12-01 19:14:59 INFO  - file written ( 1.0 s )
+2015-12-01 19:15:00 INFO  - Shots processed: 11000000
+2015-12-01 19:15:01 INFO  - Shots processed: 11000000
+2015-12-01 19:15:09 INFO  - Shots processed: 12000000
+2015-12-01 19:15:11 INFO  - Shots processed: 12000000
+2015-12-01 19:15:16 INFO  - Shots processed: 13000000
+2015-12-01 19:15:22 INFO  - Shots processed: 13000000
+2015-12-01 19:15:25 INFO  - Shots processed: 14000000
+2015-12-01 19:15:31 INFO  - Shots processed: 14000000
+2015-12-01 19:15:35 INFO  - Shots processed: 15000000
+2015-12-01 19:15:39 INFO  - Shots processed: 15000000
+2015-12-01 19:15:43 INFO  - Shots processed: 16000000
+2015-12-01 19:15:47 INFO  - Shots processed: 16000000
+2015-12-01 19:15:51 INFO  - Shots processed: 17000000
+2015-12-01 19:15:54 INFO  - Shots processed: 17000000
+2015-12-01 19:16:00 INFO  - Shots processed: 18000000
+2015-12-01 19:16:04 INFO  - Shots processed: 18000000
+2015-12-01 19:16:08 INFO  - Shots processed: 19000000
+2015-12-01 19:16:14 INFO  - Shots processed: 19000000
+2015-12-01 19:16:16 INFO  - Shots processed: 20000000
+2015-12-01 19:16:23 INFO  - Shots processed: 21000000
+2015-12-01 19:16:24 INFO  - Shots processed: 20000000
+2015-12-01 19:16:32 INFO  - Shots processed: 22000000
+2015-12-01 19:16:33 INFO  - Shots processed: 21000000
+2015-12-01 19:16:38 INFO  - Shots processed: 22522499
+2015-12-01 19:16:38 INFO  - writing file: /home/calcul/Documents/Julien/tests_leica/comparaison_riegl_leica/850215_181210.rxp.vox
+2015-12-01 19:16:40 INFO  - file written ( 2.0 s )
+2015-12-01 19:16:40 INFO  - Shots processed: 22000000
+2015-12-01 19:16:44 INFO  - Shots processed: 22522516
+2015-12-01 19:16:44 INFO  - writing file: /home/calcul/Documents/Julien/tests_leica/comparaison_riegl_leica/700101_010633.rxp.vox
+2015-12-01 19:16:46 INFO  - file written ( 2.0 s )
+2015-12-01 19:16:46 INFO  - Voxelisation finished in 217.0 s
+2015-12-01 19:16:46 INFO  - Merging in progress, file 1 : 4
+2015-12-01 19:16:48 INFO  - Merging in progress, file 2 : 4
+2015-12-01 19:16:49 INFO  - Merging in progress, file 3 : 4
+2015-12-01 19:16:51 INFO  - Merging in progress, file 4 : 4
+2015-12-01 19:16:53 INFO  - Compute angleMean
+2015-12-01 19:16:53 INFO  - Compute lMeanTotal
+2015-12-01 19:16:53 INFO  - Compute transmittance and PAD
+2015-12-01 19:16:53 INFO  - Building transmittance functions table
+2015-12-01 19:16:53 INFO  - Transmittance functions table is built
+2015-12-01 19:16:53 INFO  - writing output file: /home/calcul/Documents/Julien/tests_leica/comparaison_riegl_leica/merged.vox
+2015-12-01 19:16:54 INFO  - file written ( 1.0 s )
+2015-12-01 19:16:54 INFO  - Voxelisation finished in 225.0 s
+2015-12-01 19:16:54 INFO  - Voxelisation finished in 225.0 s
