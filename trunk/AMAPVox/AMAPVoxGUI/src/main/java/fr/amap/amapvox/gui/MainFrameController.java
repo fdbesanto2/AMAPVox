@@ -783,6 +783,58 @@ public class MainFrameController implements Initializable {
     private ScrollPane scrollPaneSceneObjectProperties;
     @FXML
     private AnchorPane anchorPaneEchoFiltering;
+    @FXML
+    private TextField textfieldVoxelFilePathTransmittance1;
+    @FXML
+    private Button buttonOpenVoxelFileTransmittance1;
+    @FXML
+    private Label labelDirectionsNumber1;
+    @FXML
+    private ComboBox<?> comboboxChooseDirectionsNumber1;
+    @FXML
+    private Button buttonSetupViewCap1;
+    @FXML
+    private TextField textFieldViewCapAngle1;
+    @FXML
+    private ToggleButton toggleButtonRingMask11;
+    @FXML
+    private ToggleButton toggleButtonRingMask21;
+    @FXML
+    private ToggleButton toggleButtonRingMask31;
+    @FXML
+    private ToggleButton toggleButtonRingMask41;
+    @FXML
+    private ToggleButton toggleButtonRingMask51;
+    @FXML
+    private ListView<?> listViewVoxelsFiles1;
+    @FXML
+    private MenuItem menuItemSelectionAll1;
+    @FXML
+    private MenuItem menuItemSelectionNone1;
+    @FXML
+    private Button buttonRemoveVoxelFileFromListView2;
+    @FXML
+    private Button buttonAddVoxelFileToListView1;
+    @FXML
+    private CheckBox checkboxGenerateTextFile1;
+    @FXML
+    private CheckBox checkboxGenerateLAI2xxxTypeFormat1;
+    @FXML
+    private TextField textfieldOutputTextFilePath1;
+    @FXML
+    private Button buttonOpenOutputTextFile1;
+    @FXML
+    private VBox vBoxGenerateBitmapFiles2;
+    @FXML
+    private CheckBox checkboxGenerateBitmapFile1;
+    @FXML
+    private TextField textfieldOutputBitmapFilePath1;
+    @FXML
+    private Button buttonOpenOutputBitmapFile1;
+    @FXML
+    private MenuItem menuItemSelectionAll2;
+    @FXML
+    private MenuItem menuItemSelectionNone2;
     
     private class SceneObjectProperty{
         

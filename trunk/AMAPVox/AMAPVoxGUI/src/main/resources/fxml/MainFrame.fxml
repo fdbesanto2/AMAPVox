@@ -504,7 +504,7 @@
                                  <children>
                                     <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <tabs>
-                                          <Tab text="Transmittance">
+                                          <Tab text="Transmittance light map">
                                              <content>
                                                 <AnchorPane prefHeight="405.0" prefWidth="787.0">
                                                    <children>
@@ -519,54 +519,66 @@
                                                             </HBox>
                                                          </children>
                                                       </VBox>
-                                                      <VBox layoutX="401.0" layoutY="52.0" minWidth="-Infinity" prefHeight="152.0" prefWidth="362.0">
+                                                      <VBox layoutX="401.0" layoutY="4.0" spacing="5.0">
                                                          <children>
-                                                            <AnchorPane prefHeight="27.0" prefWidth="332.0">
+                                                            <Label text="Sun">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <HBox alignment="CENTER_LEFT" spacing="2.0">
                                                                <children>
-                                                                  <Label layoutY="6.0" text="Simulation periods" />
-                                                                  <Button fx:id="buttonAddPeriodToPeriodList" layoutX="303.0" mnemonicParsing="false" onAction="#onActionButtonAddPeriodToPeriodList">
-                                                                     <graphic>
-                                                                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                           <image>
-                                                                              <Image url="@icons/gnome_list_add.png" />
-                                                                           </image>
-                                                                        </ImageView>
-                                                                     </graphic>
-                                                                  </Button>
-                                                                  <Button fx:id="buttonRemovePeriodFromPeriodList" layoutX="263.0" mnemonicParsing="false" onAction="#onActionButtonRemovePeriodFromPeriodList">
-                                                                     <graphic>
-                                                                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                           <image>
-                                                                              <Image url="@icons/gnome_list_remove.png" />
-                                                                           </image>
-                                                                        </ImageView>
-                                                                     </graphic>
-                                                                  </Button>
-                                                                  <MenuButton fx:id="menuButtonSelectionPeriodsList" layoutX="142.0" layoutY="1.0" mnemonicParsing="false" text="Selection">
-                                                                     <items>
-                                                                        <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemSelectAllPeriods" text="All" />
-                                                                        <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemUnselectAllPeriods" text="None" />
-                                                                     </items>
-                                                                  </MenuButton>
+                                                                  <Label text="Latitude (degrees)" />
+                                                                  <TextField fx:id="textfieldLatitudeRadians" prefHeight="25.0" prefWidth="87.0" />
                                                                </children>
-                                                            </AnchorPane>
-                                                            <TableView fx:id="tableViewSimulationPeriods" editable="true" layoutX="379.0" layoutY="14.0" prefHeight="157.0" prefWidth="336.0" AnchorPane.topAnchor="14.0">
-                                                               <columns>
-                                                                  <TableColumn fx:id="tableColumnPeriod" prefWidth="282.0" text="Period" />
-                                                                  <TableColumn fx:id="tableColumnClearness" minWidth="0.0" prefWidth="79.0" text="Clearness" />
-                                                               </columns>
-                                                               <VBox.margin>
-                                                                  <Insets top="1.0" />
-                                                               </VBox.margin>
-                                                            </TableView>
+                                                            </HBox>
+                                                            <VBox minWidth="-Infinity" prefHeight="152.0" prefWidth="362.0">
+                                                               <children>
+                                                                  <AnchorPane prefHeight="27.0" prefWidth="332.0">
+                                                                     <children>
+                                                                        <Label layoutY="6.0" text="Simulation periods" />
+                                                                        <Button fx:id="buttonAddPeriodToPeriodList" layoutX="303.0" mnemonicParsing="false" onAction="#onActionButtonAddPeriodToPeriodList">
+                                                                           <graphic>
+                                                                              <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@icons/gnome_list_add.png" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                           </graphic>
+                                                                        </Button>
+                                                                        <Button fx:id="buttonRemovePeriodFromPeriodList" layoutX="263.0" mnemonicParsing="false" onAction="#onActionButtonRemovePeriodFromPeriodList">
+                                                                           <graphic>
+                                                                              <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@icons/gnome_list_remove.png" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                           </graphic>
+                                                                        </Button>
+                                                                        <MenuButton fx:id="menuButtonSelectionPeriodsList" layoutX="142.0" layoutY="1.0" mnemonicParsing="false" text="Selection">
+                                                                           <items>
+                                                                              <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemSelectAllPeriods" text="All" />
+                                                                              <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemUnselectAllPeriods" text="None" />
+                                                                           </items>
+                                                                        </MenuButton>
+                                                                     </children>
+                                                                  </AnchorPane>
+                                                                  <TableView fx:id="tableViewSimulationPeriods" editable="true" layoutX="379.0" layoutY="14.0" prefHeight="157.0" prefWidth="336.0" AnchorPane.topAnchor="14.0">
+                                                                     <columns>
+                                                                        <TableColumn fx:id="tableColumnPeriod" prefWidth="282.0" text="Period" />
+                                                                        <TableColumn fx:id="tableColumnClearness" minWidth="0.0" prefWidth="79.0" text="Clearness" />
+                                                                     </columns>
+                                                                     <VBox.margin>
+                                                                        <Insets top="1.0" />
+                                                                     </VBox.margin>
+                                                                  </TableView>
+                                                               </children>
+                                                               <padding>
+                                                                  <Insets top="2.0" />
+                                                               </padding>
+                                                            </VBox>
                                                          </children>
-                                                         <padding>
-                                                            <Insets top="2.0" />
-                                                         </padding>
                                                       </VBox>
-                                                      <Label layoutX="401.0" layoutY="9.0" text="Latitude (degrees)" />
-                                                      <TextField fx:id="textfieldLatitudeRadians" layoutX="538.0" layoutY="4.0" prefHeight="25.0" prefWidth="87.0" />
-                                                      <Separator layoutX="401.0" layoutY="41.0" prefHeight="5.0" prefWidth="365.0" />
                                                       <Separator layoutX="399.0" layoutY="212.0" prefHeight="8.0" prefWidth="359.0" />
                                                       <Button fx:id="buttonTransmittanceAddToTaskList" mnemonicParsing="false" onAction="#onActionButtonTransmittanceAddToTaskList" prefHeight="20.0" prefWidth="199.0" text="Save and add to task list" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                          <graphic>
@@ -662,6 +674,11 @@
                                                       </ScrollPane>
                                                       <VBox layoutX="400.0" layoutY="230.0" spacing="5.0">
                                                          <children>
+                                                            <Label text="Output">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
                                                             <VBox prefHeight="44.0" prefWidth="358.0" spacing="2.0">
                                                                <children>
                                                                   <HBox spacing="10.0">
@@ -695,86 +712,290 @@
                                                 </AnchorPane>
                                              </content>
                                           </Tab>
+                                          <Tab text="LAI2000-2200">
+                                             <content>
+                                                <AnchorPane prefHeight="405.0" prefWidth="787.0">
+                                                   <children>
+                                                      <VBox layoutX="14.0" layoutY="14.0" spacing="5.0">
+                                                         <children>
+                                                            <Label text="Input">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <HBox alignment="CENTER" spacing="2.0">
+                                                               <children>
+                                                                  <Label text="Voxel file" />
+                                                                  <TextField fx:id="textfieldVoxelFilePathTransmittance1" prefHeight="25.0" prefWidth="240.0" />
+                                                                  <Button fx:id="buttonOpenVoxelFileTransmittance1" mnemonicParsing="false" onAction="#onActionButtonOpenVoxelFileTransmittance" text="Open" />
+                                                               </children>
+                                                            </HBox>
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox layoutX="399.0" layoutY="14.0" spacing="10.0">
+                                                         <children>
+                                                            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                               <children>
+                                                                  <Label fx:id="labelDirectionsNumber1" text="Directions number">
+                                                                     <font>
+                                                                        <Font name="System Bold" size="12.0" />
+                                                                     </font>
+                                                                  </Label>
+                                                                  <ComboBox fx:id="comboboxChooseDirectionsNumber1" prefHeight="26.0" prefWidth="75.0" />
+                                                               </children>
+                                                            </HBox>
+                                                            <HBox>
+                                                               <children>
+                                                                  <Button fx:id="buttonSetupViewCap1" disable="true" mnemonicParsing="false" onAction="#onActionButtonSetupViewCap" prefHeight="16.0" prefWidth="78.0" text="View cap" />
+                                                                  <TextField fx:id="textFieldViewCapAngle1" disable="true" editable="false" prefHeight="26.0" prefWidth="42.0" promptText="360" />
+                                                               </children>
+                                                            </HBox>
+                                                            <HBox alignment="CENTER" spacing="10.0">
+                                                               <children>
+                                                                  <Label text="Rings masks">
+                                                                     <font>
+                                                                        <Font name="System Bold" size="12.0" />
+                                                                     </font>
+                                                                  </Label>
+                                                                  <GridPane alignment="CENTER" prefHeight="29.0" prefWidth="177.0">
+                                                                     <columnConstraints>
+                                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                                     </columnConstraints>
+                                                                     <rowConstraints>
+                                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                     </rowConstraints>
+                                                                     <children>
+                                                                        <ToggleButton fx:id="toggleButtonRingMask11" mnemonicParsing="false" text="1" GridPane.halignment="CENTER" />
+                                                                        <ToggleButton fx:id="toggleButtonRingMask21" mnemonicParsing="false" text="2" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                                                        <ToggleButton fx:id="toggleButtonRingMask31" mnemonicParsing="false" text="3" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                                                                        <ToggleButton fx:id="toggleButtonRingMask41" mnemonicParsing="false" text="4" GridPane.columnIndex="3" GridPane.halignment="CENTER" />
+                                                                        <ToggleButton fx:id="toggleButtonRingMask51" mnemonicParsing="false" text="5" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
+                                                                     </children>
+                                                                  </GridPane>
+                                                               </children>
+                                                            </HBox>
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox layoutX="399.0" layoutY="152.0" prefHeight="174.0" prefWidth="315.0">
+                                                         <children>
+                                                            <Label text="Sensor positions">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <ListView fx:id="listViewVoxelsFiles1" prefWidth="315.0" />
+                                                            <HBox spacing="10.0">
+                                                               <children>
+                                                                  <MenuButton mnemonicParsing="false" text="Selection">
+                                                                     <items>
+                                                                        <MenuItem fx:id="menuItemSelectionAll1" mnemonicParsing="false" onAction="#onActionMenuItemSelectionAll" text="All" />
+                                                                        <MenuItem fx:id="menuItemSelectionNone1" mnemonicParsing="false" onAction="#onActionMenuItemSelectionNone" text="None" />
+                                                                     </items>
+                                                                  </MenuButton>
+                                                                  <HBox spacing="5.0">
+                                                                     <children>
+                                                                        <Button fx:id="buttonRemoveVoxelFileFromListView2" mnemonicParsing="false" onAction="#onActionButtonRemoveVoxelFileFromListView">
+                                                                           <graphic>
+                                                                              <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@icons/gnome_list_remove.png" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                           </graphic>
+                                                                        </Button>
+                                                                        <Button fx:id="buttonAddVoxelFileToListView1" mnemonicParsing="false" onAction="#onActionButtonAddVoxelFileToListView">
+                                                                           <graphic>
+                                                                              <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@icons/gnome_list_add.png" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                           </graphic>
+                                                                        </Button>
+                                                                     </children>
+                                                                  </HBox>
+                                                               </children>
+                                                            </HBox>
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox layoutX="14.0" layoutY="94.0" spacing="5.0">
+                                                         <children>
+                                                            <Label text="Output">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <VBox prefHeight="44.0" prefWidth="358.0" spacing="2.0">
+                                                               <children>
+                                                                  <HBox spacing="10.0">
+                                                                     <children>
+                                                                        <CheckBox fx:id="checkboxGenerateTextFile1" mnemonicParsing="false" selected="true" text="Generate text file" />
+                                                                        <CheckBox fx:id="checkboxGenerateLAI2xxxTypeFormat1" mnemonicParsing="false" selected="true" text="LAI2xxx format" />
+                                                                     </children>
+                                                                  </HBox>
+                                                                  <HBox>
+                                                                     <children>
+                                                                        <TextField fx:id="textfieldOutputTextFilePath1" prefHeight="26.0" prefWidth="308.0" />
+                                                                        <Button fx:id="buttonOpenOutputTextFile1" maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenOutputTextFile" text="Open" />
+                                                                     </children>
+                                                                  </HBox>
+                                                               </children>
+                                                            </VBox>
+                                                            <VBox fx:id="vBoxGenerateBitmapFiles2" spacing="2.0">
+                                                               <children>
+                                                                  <CheckBox fx:id="checkboxGenerateBitmapFile1" mnemonicParsing="false" text="Generate bitmap files" />
+                                                                  <HBox>
+                                                                     <children>
+                                                                        <TextField fx:id="textfieldOutputBitmapFilePath1" prefHeight="26.0" prefWidth="309.0" />
+                                                                        <Button fx:id="buttonOpenOutputBitmapFile1" maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenOutputBitmapFile" text="Open" />
+                                                                     </children>
+                                                                  </HBox>
+                                                               </children>
+                                                            </VBox>
+                                                         </children>
+                                                      </VBox>
+                                                      <HBox layoutX="684.0" layoutY="351.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                         <children>
+                                                            <Button mnemonicParsing="false" text="Execute">
+                                                               <graphic>
+                                                                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@icons/gnome-run.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                            </Button>
+                                                            <MenuButton contentDisplay="RIGHT" mnemonicParsing="false">
+                                                               <padding>
+                                                                  <Insets left="-8.0" />
+                                                               </padding>
+                                                               <items>
+                                                                  <MenuItem fx:id="menuItemSelectionAll22" mnemonicParsing="false" onAction="#onActionMenuItemSelectionAll" text="Save">
+                                                                     <graphic>
+                                                                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                           <image>
+                                                                              <Image url="@icons/save.png" />
+                                                                           </image>
+                                                                        </ImageView>
+                                                                     </graphic>
+                                                                  </MenuItem>
+                                                                  <MenuItem fx:id="menuItemSelectionNone21" mnemonicParsing="false" onAction="#onActionMenuItemSelectionNone" text="Save and execute">
+                                                                     <graphic>
+                                                                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                           <image>
+                                                                              <Image url="@icons/save_execute.png" />
+                                                                           </image>
+                                                                        </ImageView>
+                                                                     </graphic>
+                                                                  </MenuItem>
+                                                               </items>
+                                                            </MenuButton>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </AnchorPane>
+                                             </content>
+                                             <graphic>
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@icons/lai2200.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                          </Tab>
                                           <Tab text="Hemispherical photography">
                                              <content>
                                                 <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                    <children>
-                                                      <TabPane fx:id="tabpaneHemiPhotoMode" layoutX="14.0" layoutY="14.0" tabClosingPolicy="UNAVAILABLE">
-                                                         <tabs>
-                                                            <Tab text="From hemi scans">
-                                                               <content>
-                                                                  <VBox spacing="4.0">
-                                                                     <children>
-                                                                        <ListView fx:id="listViewHemiPhotoScans" prefHeight="145.0" prefWidth="339.0" />
-                                                                        <HBox spacing="30.0">
+                                                      <VBox layoutX="14.0" layoutY="14.0">
+                                                         <children>
+                                                            <Label text="Input">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
+                                                            <TabPane fx:id="tabpaneHemiPhotoMode" tabClosingPolicy="UNAVAILABLE">
+                                                               <tabs>
+                                                                  <Tab text="From hemi scans">
+                                                                     <content>
+                                                                        <VBox prefHeight="141.0" prefWidth="349.0" spacing="4.0">
                                                                            <children>
-                                                                              <MenuButton mnemonicParsing="false" text="Selection">
-                                                                                 <items>
-                                                                                    <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemSelectAllScansHemiPhoto" text="All" />
-                                                                                    <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemUnselectAllScansHemiPhoto" text="None" />
-                                                                                 </items>
-                                                                              </MenuButton>
-                                                                              <HBox spacing="5.0">
+                                                                              <ListView fx:id="listViewHemiPhotoScans" prefHeight="118.0" prefWidth="339.0" />
+                                                                              <HBox spacing="30.0">
                                                                                  <children>
-                                                                                    <Button mnemonicParsing="false" onAction="#onActionButtonRemoveScanFromHemiPhotoListView">
-                                                                                       <graphic>
-                                                                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                                             <image>
-                                                                                                <Image url="@icons/gnome_list_remove.png" />
-                                                                                             </image>
-                                                                                          </ImageView>
-                                                                                       </graphic>
-                                                                                    </Button>
-                                                                                 </children>
-                                                                              </HBox>
-                                                                              <Button mnemonicParsing="false" onAction="#onActionButtonOpenRspProject" text="Open rsp project" />
-                                                                           </children>
-                                                                        </HBox>
-                                                                     </children>
-                                                                     <padding>
-                                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                                                     </padding>
-                                                                  </VBox>
-                                                               </content>
-                                                            </Tab>
-                                                            <Tab text="From PAD">
-                                                              <content>
-                                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                                                     <children>
-                                                                        <VBox layoutX="14.0" layoutY="14.0">
-                                                                           <children>
-                                                                              <Label text="Voxel file" />
-                                                                              <HBox>
-                                                                                 <children>
-                                                                                    <TextField fx:id="textfieldVoxelFilePathHemiPhoto" prefHeight="25.0" prefWidth="240.0" />
-                                                                                    <Button mnemonicParsing="false" onAction="#onActionButtonOpenVoxelFileHemiPhoto" text="Open" />
+                                                                                    <MenuButton mnemonicParsing="false" text="Selection">
+                                                                                       <items>
+                                                                                          <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemSelectAllScansHemiPhoto" text="All" />
+                                                                                          <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemUnselectAllScansHemiPhoto" text="None" />
+                                                                                       </items>
+                                                                                    </MenuButton>
+                                                                                    <HBox spacing="5.0">
+                                                                                       <children>
+                                                                                          <Button mnemonicParsing="false" onAction="#onActionButtonRemoveScanFromHemiPhotoListView">
+                                                                                             <graphic>
+                                                                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                   <image>
+                                                                                                      <Image url="@icons/gnome_list_remove.png" />
+                                                                                                   </image>
+                                                                                                </ImageView>
+                                                                                             </graphic>
+                                                                                          </Button>
+                                                                                       </children>
+                                                                                    </HBox>
+                                                                                    <Button mnemonicParsing="false" onAction="#onActionButtonOpenRspProject" text="Import scans" />
                                                                                  </children>
                                                                               </HBox>
                                                                            </children>
+                                                                           <padding>
+                                                                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                                           </padding>
                                                                         </VBox>
-                                                                        <Label layoutX="14.0" layoutY="85.0" text="Sensor position" />
-                                                                        <Label contentDisplay="RIGHT" layoutX="14.0" layoutY="109.0" text="X">
-                                                                           <graphic>
-                                                                              <TextField fx:id="textfieldSensorPositionX" prefHeight="26.0" prefWidth="60.0" />
-                                                                           </graphic>
-                                                                        </Label>
-                                                                        <Label contentDisplay="RIGHT" layoutX="98.0" layoutY="109.0" text="Y">
-                                                                           <graphic>
-                                                                              <TextField fx:id="textfieldSensorPositionY" prefHeight="26.0" prefWidth="60.0" />
-                                                                           </graphic>
-                                                                        </Label>
-                                                                        <Label contentDisplay="RIGHT" layoutX="182.0" layoutY="109.0" text="Z">
-                                                                           <graphic>
-                                                                              <TextField fx:id="textfieldSensorPositionZ" prefHeight="26.0" prefWidth="60.0" />
-                                                                           </graphic>
-                                                                        </Label>
-                                                                     </children>
-                                                                  </AnchorPane>
-                                                              </content>
-                                                            </Tab>
-                                                         </tabs>
-                                                      </TabPane>
-                                                      <GridPane layoutX="14.0" layoutY="256.0" vgap="5.0">
+                                                                     </content>
+                                                                  </Tab>
+                                                                  <Tab text="From PAD">
+                                                                    <content>
+                                                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                                           <children>
+                                                                              <VBox layoutX="14.0" layoutY="14.0">
+                                                                                 <children>
+                                                                                    <Label text="Voxel file" />
+                                                                                    <HBox>
+                                                                                       <children>
+                                                                                          <TextField fx:id="textfieldVoxelFilePathHemiPhoto" prefHeight="25.0" prefWidth="240.0" />
+                                                                                          <Button mnemonicParsing="false" onAction="#onActionButtonOpenVoxelFileHemiPhoto" text="Open" />
+                                                                                       </children>
+                                                                                    </HBox>
+                                                                                 </children>
+                                                                              </VBox>
+                                                                              <Label layoutX="14.0" layoutY="85.0" text="Sensor position" />
+                                                                              <Label contentDisplay="RIGHT" layoutX="14.0" layoutY="109.0" text="X">
+                                                                                 <graphic>
+                                                                                    <TextField fx:id="textfieldSensorPositionX" prefHeight="26.0" prefWidth="60.0" />
+                                                                                 </graphic>
+                                                                              </Label>
+                                                                              <Label contentDisplay="RIGHT" layoutX="98.0" layoutY="109.0" text="Y">
+                                                                                 <graphic>
+                                                                                    <TextField fx:id="textfieldSensorPositionY" prefHeight="26.0" prefWidth="60.0" />
+                                                                                 </graphic>
+                                                                              </Label>
+                                                                              <Label contentDisplay="RIGHT" layoutX="182.0" layoutY="109.0" text="Z">
+                                                                                 <graphic>
+                                                                                    <TextField fx:id="textfieldSensorPositionZ" prefHeight="26.0" prefWidth="60.0" />
+                                                                                 </graphic>
+                                                                              </Label>
+                                                                           </children>
+                                                                        </AnchorPane>
+                                                                    </content>
+                                                                  </Tab>
+                                                               </tabs>
+                                                            </TabPane>
+                                                         </children>
+                                                      </VBox>
+                                                      <GridPane layoutX="426.0" layoutY="31.0" vgap="5.0">
                                                          <columnConstraints>
                                                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="138.0" />
                                                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="68.0" minWidth="10.0" prefWidth="57.0" />
@@ -793,8 +1014,13 @@
                                                             <Label text="Zeniths number" GridPane.rowIndex="2" />
                                                          </children>
                                                       </GridPane>
-                                                      <VBox layoutX="422.0" layoutY="14.0" spacing="5.0">
+                                                      <VBox layoutX="14.0" layoutY="223.0" spacing="5.0">
                                                          <children>
+                                                            <Label text="Output">
+                                                               <font>
+                                                                  <Font name="System Bold" size="12.0" />
+                                                               </font>
+                                                            </Label>
                                                             <VBox prefHeight="44.0" prefWidth="358.0" spacing="2.0">
                                                                <children>
                                                                   <CheckBox fx:id="checkboxGenerateSectorsTextFileHemiPhoto" mnemonicParsing="false" selected="true" text="Generate sector text file" />
@@ -840,6 +1066,13 @@
                                                    </children>
                                                 </AnchorPane>
                                              </content>
+                                             <graphic>
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@icons/hemispherical.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
                                           </Tab>
                                        </tabs>
                                     </TabPane>
