@@ -84,6 +84,7 @@ public class RxpVoxelisation implements Callable{
     @Override
     public Object call() {
         
+        System.out.println(Thread.currentThread().getName());
         
         try {
             logger.info("rxp extraction is started");
@@ -116,7 +117,7 @@ public class RxpVoxelisation implements Callable{
                     Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
 
                     shot.setOriginAndDirection(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z));
-                    
+                                        
                     voxelAnalysis.processOneShot(shot);
                 }
 
@@ -154,7 +155,8 @@ public class RxpVoxelisation implements Callable{
         }catch(OutOfMemoryError ex){
             logger.error("Unsufficient memory, you need to allocate more to the JVM, change the Xmx value!",ex);
         }catch(Exception ex){
-            logger.error("Unknow exception in RXPVoxelisation.class",ex);
+            logger.error("Unknow exception in RXPVoxelisation.class in thread : "+Thread.currentThread().getName()+", retrying",ex);
+            this.call();
         }
         
         return null;

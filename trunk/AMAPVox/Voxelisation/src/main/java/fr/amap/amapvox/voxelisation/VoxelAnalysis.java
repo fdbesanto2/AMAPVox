@@ -239,10 +239,14 @@ public class VoxelAnalysis {
         
         MAX_PAD = parameters.getMaxPAD();
         
-        if(parameters.isTLS()){
-            laserSpec = LaserSpecification.VZ_400;
-        }else{
-            laserSpec = LaserSpecification.DEFAULT_ALS;
+        laserSpec = parameters.getLaserSpecification();
+        
+        if(laserSpec == null){
+            if(parameters.isTLS()){
+                laserSpec = LaserSpecification.VZ_400;
+            }else{
+                laserSpec = LaserSpecification.DEFAULT_ALS;
+            }
         }
 
         LeafAngleDistribution distribution = new LeafAngleDistribution(parameters.getLadType(), 
@@ -485,7 +489,7 @@ public class VoxelAnalysis {
             
             //surface de la section du faisceau à la distance de la source
             if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
-                surface = Math.pow((Math.tan(laserSpec.getBeamDivergence() / 2.0) * distance) + laserSpec.getBeamDiameterAtExit(), 2) * Math.PI; //TODO: récupérer taille faisceau sortie
+                surface = Math.pow((Math.tan(laserSpec.getBeamDivergence() / 2.0) * distance) + laserSpec.getBeamDiameterAtExit(), 2) * Math.PI;
             } else {
                 surface = 1;
             }
@@ -1458,5 +1462,7 @@ public class VoxelAnalysis {
 //        voxelAnalysis.computePADs();
 //        voxelAnalysis.write();
     }
+    
+    
     
 }

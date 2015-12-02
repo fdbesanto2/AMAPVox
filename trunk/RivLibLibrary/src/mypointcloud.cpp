@@ -80,49 +80,51 @@ void mypointcloud::on_shot_end() {
     jdoubleArray echos = env->NewDoubleArray(nbEchos);
     env->SetDoubleArrayRegion(echos, 0, nbEchos, distancesArray);
 
-
     jobject* shotTemp = new jobject();
     jclass shotClass = env->FindClass("fr/amap/amapvox/io/tls/rxp/Shot");
+    if(shotClass){
 
-    jmethodID shotConstructor = env->GetMethodID(shotClass, "<init>", "(IDDDDDD[D)V");
-    *shotTemp = env->NewObject(shotClass, shotConstructor, (jint)nbEchos,
-                               (jdouble)beam_origin[0], (jdouble)beam_origin[1], (jdouble)beam_origin[2],
-                                (jdouble)beam_direction[0], (jdouble)beam_direction[1], (jdouble)beam_direction[2], echos);
+        jmethodID shotConstructor = env->GetMethodID(shotClass, "<init>", "(IDDDDDD[D)V");
+        *shotTemp = env->NewObject(shotClass, shotConstructor, (jint)nbEchos,
+                                   (jdouble)beam_origin[0], (jdouble)beam_origin[1], (jdouble)beam_origin[2],
+                                    (jdouble)beam_direction[0], (jdouble)beam_direction[1], (jdouble)beam_direction[2], echos);
 
 
-    env->DeleteLocalRef(echos);
+        env->DeleteLocalRef(echos);
 
-    /**Handle echoes attributes**/
+        /**Handle echoes attributes**/
 
-    jfloatArray reflectances = NULL;
-    jfloatArray deviations = NULL;
-    jfloatArray amplitudes = NULL;
+        jfloatArray reflectances = NULL;
+        jfloatArray deviations = NULL;
+        jfloatArray amplitudes = NULL;
 
-    if(exportReflectance){
-        reflectances = env->NewFloatArray(nbEchos);
-        env->SetFloatArrayRegion(reflectances, 0, nbEchos, reflectanceArray);
-        jmethodID setReflectancesMethod = env->GetMethodID(shotClass, "setReflectances", "([F)V");
-        env->CallVoidMethod(*shotTemp, setReflectancesMethod, reflectances);
-        env->DeleteLocalRef(reflectances);
+        if(exportReflectance){
+            reflectances = env->NewFloatArray(nbEchos);
+            env->SetFloatArrayRegion(reflectances, 0, nbEchos, reflectanceArray);
+            jmethodID setReflectancesMethod = env->GetMethodID(shotClass, "setReflectances", "([F)V");
+            env->CallVoidMethod(*shotTemp, setReflectancesMethod, reflectances);
+            env->DeleteLocalRef(reflectances);
+        }
+
+        if(exportDeviation){
+            deviations = env->NewFloatArray(nbEchos);
+            env->SetFloatArrayRegion(deviations, 0, nbEchos, deviationArray);
+            jmethodID setDeviationsMethod = env->GetMethodID(shotClass, "setDeviations", "([F)V");
+            env->CallVoidMethod(*shotTemp, setDeviationsMethod, deviations);
+            env->DeleteLocalRef(deviations);
+
+        }
+
+        if(exportAmplitude){
+            amplitudes = env->NewFloatArray(nbEchos);
+            env->SetFloatArrayRegion(amplitudes, 0, nbEchos, amplitudeArray);
+            jmethodID setAmplitudesMethod = env->GetMethodID(shotClass, "setAmplitudes", "([F)V");
+            env->CallVoidMethod(*shotTemp, setAmplitudesMethod, amplitudes);
+            env->DeleteLocalRef(amplitudes);
+        }
+
+        shots->push(shotTemp);
+    }else{
+        std::cout << "Finding Shot class failed" << std::endl;
     }
-
-    if(exportDeviation){
-        deviations = env->NewFloatArray(nbEchos);
-        env->SetFloatArrayRegion(deviations, 0, nbEchos, deviationArray);
-        jmethodID setDeviationsMethod = env->GetMethodID(shotClass, "setDeviations", "([F)V");
-        env->CallVoidMethod(*shotTemp, setDeviationsMethod, deviations);
-        env->DeleteLocalRef(deviations);
-
-    }
-
-    if(exportAmplitude){
-        amplitudes = env->NewFloatArray(nbEchos);
-        env->SetFloatArrayRegion(amplitudes, 0, nbEchos, amplitudeArray);
-        jmethodID setAmplitudesMethod = env->GetMethodID(shotClass, "setAmplitudes", "([F)V");
-        env->CallVoidMethod(*shotTemp, setAmplitudesMethod, amplitudes);
-        env->DeleteLocalRef(amplitudes);
-    }
-
-    shots->push(shotTemp);
-
 }

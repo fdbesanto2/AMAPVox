@@ -7,6 +7,7 @@ package fr.amap.amapvox.voxelisation.configuration;
 
 import fr.amap.amapvox.commons.util.PointcloudFilter;
 import fr.amap.amapvox.voxelisation.LeafAngleDistribution.Type;
+import fr.amap.amapvox.voxelisation.VoxelAnalysis;
 import java.io.File;
 import java.util.List;
 import javax.vecmath.Point3d;
@@ -67,6 +68,8 @@ public class VoxelParameters {
     private float ladBetaFunctionBetaParameter;
     
     private int transmittanceMode = 0;
+    
+    private VoxelAnalysis.LaserSpecification laserSpecification = null;
     
     public static float[][] DEFAULT_ALS_WEIGHTING = new float[][]{
                         {1.00f, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
@@ -347,5 +350,13 @@ public class VoxelParameters {
 
     public void setLadBetaFunctionBetaParameter(float ladBetaFunctionBetaParameter) {
         this.ladBetaFunctionBetaParameter = ladBetaFunctionBetaParameter;
+    }
+
+    public VoxelAnalysis.LaserSpecification getLaserSpecification() {
+        return laserSpecification;
+    }
+
+    public void setLaserSpecification(VoxelAnalysis.LaserSpecification laserSpecification) {
+        this.laserSpecification = laserSpecification;
     }
 }

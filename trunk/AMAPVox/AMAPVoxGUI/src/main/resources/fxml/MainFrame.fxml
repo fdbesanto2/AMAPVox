@@ -712,7 +712,7 @@
                                                 </AnchorPane>
                                              </content>
                                           </Tab>
-                                          <Tab text="LAI2000-2200">
+                                          <Tab text="Canopy analyzer">
                                              <content>
                                                 <AnchorPane prefHeight="405.0" prefWidth="787.0">
                                                    <children>

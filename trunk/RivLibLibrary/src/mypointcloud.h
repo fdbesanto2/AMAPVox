@@ -35,6 +35,7 @@ namespace mpc
         void setExportReflectance(bool exportReflectance);
         void setExportDeviation(bool exportDeviation);
         void setExportAmplitude(bool exportAmplitude);
+        void setEnv(JNIEnv *env);
 
     protected :
         void on_echo_transformed(echo_type echo);

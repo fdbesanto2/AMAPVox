@@ -251,6 +251,8 @@ public class HemiScanView {
         }
     }
     
+    
+    
     public void setScan(File scan){
         RxpExtraction extraction = new RxpExtraction();
         try {
@@ -463,7 +465,7 @@ public class HemiScanView {
         }
     }
 
-    private void transform(Shot shot) {
+    public void transform(Shot shot) {
 
         float zenith = (float) FastMath.acos(shot.direction.z);
         float azimuth = xyAzimuthNW((float) shot.direction.x, (float) shot.direction.y);

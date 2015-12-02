@@ -159,7 +159,6 @@ JNIEXPORT jobject JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_getNextS
 
     }
 
-
     if(!extraction_dll->pointcloud->shots->empty()){
         jobject shotTemp;
         jobject *shotPtr = extraction_dll->pointcloud->shots->top();

@@ -251,7 +251,7 @@ public class RspExtractorFrameController implements Initializable {
             canvas.getChildren().add(label1);
         }
         
-        int minCanvasPositionX = (int) ((minPosition.x*resolution) + sceneWidth/2.0);
+        /*int minCanvasPositionX = (int) ((minPosition.x*resolution) + sceneWidth/2.0);
         int maxCanvasPositionX = (int) ((maxPosition.x*resolution) + (sceneWidth/2.0));
         
         int minCanvasPositionY = (int) ((-(minPosition.y*resolution)) + (sceneHeight/2.0));
@@ -259,7 +259,7 @@ public class RspExtractorFrameController implements Initializable {
         
         canvas.addGrid(minCanvasPositionX, maxCanvasPositionY,
                 maxCanvasPositionX - minCanvasPositionX,
-                minCanvasPositionY - maxCanvasPositionY, resolution);
+                minCanvasPositionY - maxCanvasPositionY, resolution);*/
         
 
         // create scene which can be dragged and zoomed

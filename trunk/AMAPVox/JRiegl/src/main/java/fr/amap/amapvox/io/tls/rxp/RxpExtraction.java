@@ -4,6 +4,7 @@ package fr.amap.amapvox.io.tls.rxp;
 import fr.amap.amapvox.commons.util.NativeLoader;
 import java.io.File;
 import java.io.IOException;
+import java.lang.invoke.MethodHandle;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -126,6 +127,7 @@ public class RxpExtraction implements Iterable<Shot>{
         Iterator<Shot> it = new Iterator<Shot>() {
                         
             private Shot shot;
+            int nbShotsFailed = 0;
              
             @Override
             public boolean hasNext() {
@@ -134,7 +136,14 @@ public class RxpExtraction implements Iterable<Shot>{
                 
                 if(hasShot(rxpPointer)){
                     
-                    shot = getNextShot(rxpPointer);
+                    Object o = getNextShot(rxpPointer);
+                    if(o instanceof Shot){
+                        shot = (fr.amap.amapvox.io.tls.rxp.Shot) o;
+                    }else{
+                        nbShotsFailed++;
+                        return hasNext();
+                    }
+                    
                                         
                     return shot != null;
                     
