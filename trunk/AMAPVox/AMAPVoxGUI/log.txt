@@ -46842,3 +46842,27 @@ java.lang.NullPointerException
 2015-12-02 16:03:36 INFO  - Task cancelled
 2015-12-02 16:03:36 INFO  - Task cancelled
 2015-12-02 16:03:36 INFO  - Task cancelled
+2015-12-03 10:00:48 INFO  - Laz file /home/calcul/Documents/Julien/test_rxp_to_laz/850215_180910.mon.rxp.laz is opened
+2015-12-03 10:00:48 INFO  - Laz file is closed
+2015-12-03 10:01:08 INFO  - Laz file /home/calcul/Documents/Julien/test_rxp_to_laz/850215_180910.mon.rxp.laz is opened
+2015-12-03 10:01:08 INFO  - Laz file is closed
+2015-12-03 10:51:18 INFO  - Laz file /home/calcul/Documents/Julien/test_rxp_to_laz/850215_183303.mon.rxp.laz is opened
+2015-12-03 10:51:19 INFO  - Laz file is closed
+2015-12-03 10:52:05 INFO  - Laz file /home/calcul/Documents/Julien/test_rxp_to_laz/850215_180910.mon.rxp.laz is opened
+2015-12-03 10:52:06 INFO  - Laz file is closed
+2015-12-03 11:14:36 INFO  - Laz file /home/calcul/Documents/Julien/test_rxp_to_laz/850215_180910.mon.rxp.laz is opened
+2015-12-03 11:14:37 INFO  - Laz file is closed
+2015-12-03 15:27:40 INFO  - Laz file /home/calcul/Documents/Julien/test_rxp_to_laz/output/750209_171503.mon.rxp.laz is opened
+2015-12-03 15:27:40 INFO  - Laz file is closed
+2015-12-03 15:33:35 INFO  - Laz file /home/calcul/Documents/Julien/test_rxp_to_laz/output/750209_171503.mon.rxp.laz is opened
+2015-12-03 15:33:35 INFO  - Laz file is closed
+2015-12-03 15:33:42 INFO  - Laz file /home/calcul/Documents/Julien/test_rxp_to_laz/output/750209_171811.mon.rxp.laz is opened
+2015-12-03 15:33:42 INFO  - Laz file is closed
+2015-12-03 15:33:48 INFO  - Laz file /home/calcul/Documents/Julien/test_rxp_to_laz/output/750209_173641.mon.rxp.laz is opened
+2015-12-03 15:33:48 INFO  - Laz file is closed
+2015-12-03 15:33:54 INFO  - Laz file /home/calcul/Documents/Julien/test_rxp_to_laz/output/750209_175253.mon.rxp.laz is opened
+2015-12-03 15:33:55 INFO  - Laz file is closed
+2015-12-03 15:34:03 INFO  - Laz file /home/calcul/Documents/Julien/test_rxp_to_laz/output/750209_180600.mon.rxp.laz is opened
+2015-12-03 15:34:03 INFO  - Laz file is closed
+2015-12-03 15:37:39 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-12-03 15:37:40 INFO  - Laz file is closed
