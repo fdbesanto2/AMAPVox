@@ -28,11 +28,14 @@ public class DirectionalTransmittance {
     
     private final static Logger logger = Logger.getLogger(DirectionalTransmittance.class);
     
-    private Point3d min;
-    private Point3d max;
+    private final Point3d min;
+    private final Point3d max;
     
-    private Point3d voxSize;
-    private Point3i splitting;
+    private final Point3d voxSize;
+    private final Point3i splitting;
+    
+    private final VoxelSpaceInfos infos;
+    private final VoxelSpace voxSpace;
     
     private TLSVoxel voxels[][][];
     private float mnt[][];
@@ -42,7 +45,47 @@ public class DirectionalTransmittance {
         float padBV;
     }
 
-    public DirectionalTransmittance() {
+    public DirectionalTransmittance(File inputFile) throws Exception {
+        
+        VoxelFileReader reader = new VoxelFileReader(inputFile);
+        infos = reader.getVoxelSpaceInfos();
+        
+        min = infos.getMinCorner();
+        max = infos.getMaxCorner();
+        splitting = infos.getSplit();
+        
+        voxSize = new Point3d();
+        voxSize.x = (max.x - min.x) / (double) splitting.x;
+        voxSize.y = (max.y - min.y) / (double) splitting.y;
+        voxSize.z = (max.z - min.z) / (double) splitting.z;
+        
+        logger.info(infos.toString()+"\n");
+
+        voxSpace = new VoxelSpace(new BoundingBox3d(min, max), splitting, 0);
+        
+        createVoxelTable();
+        allocateMNT();
+        
+        Iterator<Voxel> iterator = reader.iterator();
+        
+        while(iterator.hasNext()){
+            
+            Voxel voxel = iterator.next();
+            
+            if(voxel != null){
+                /*if (voxel.$k == 0) {
+                    mnt[voxel.$i][voxel.$j] = mntZmin - voxel.ground_distance;
+                }*/
+
+                if (Float.isNaN(voxel.PadBVTotal)) {
+                    voxels[voxel.$i][voxel.$j][voxel.$k].padBV = 0;
+                } else {
+                    voxels[voxel.$i][voxel.$j][voxel.$k].padBV = voxel.PadBVTotal;
+                }
+            }else{
+                logger.warn("Voxel null");
+            }
+        }
         
     }
  
@@ -118,9 +161,10 @@ public class DirectionalTransmittance {
             pMoy.scale(dMoy);
             pMoy.add(origin);
             pMoy.sub(min);
-            int i = (int) (pMoy.x / voxSize.x);
-            int j = (int) (pMoy.y / voxSize.y);
-            int k = (int) (pMoy.z / voxSize.z);
+            
+            int i = (int) Math.floor(pMoy.x / voxSize.x);
+            int j = (int) Math.floor(pMoy.y / voxSize.y);
+            int k = (int) Math.floor(pMoy.z / voxSize.z);
 
             // no toricity option (rajouter des modulo pour g\E9rer l'option "torique"
             if (i < 0 || j < 0 || k < 0 || i >= splitting.x || j >= splitting.y || k >= splitting.z) {
@@ -139,47 +183,6 @@ public class DirectionalTransmittance {
         }
 
         return transmitted;
-    }
-    
-    public void readData(File inputFile) throws IOException, Exception {
-
-        VoxelFileReader reader = new VoxelFileReader(inputFile);
-        VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
-        
-        min = infos.getMinCorner();
-        max = infos.getMaxCorner();
-        splitting = infos.getSplit();
-        
-        voxSize = new Point3d();
-        voxSize.x = (max.x - min.x) / (double) splitting.x;
-        voxSize.y = (max.y - min.y) / (double) splitting.y;
-        voxSize.z = (max.z - min.z) / (double) splitting.z;
-        
-        logger.info(infos.toString()+"\n");
-
-        createVoxelTable();
-        allocateMNT();
-        
-        Iterator<Voxel> iterator = reader.iterator();
-        
-        while(iterator.hasNext()){
-            
-            Voxel voxel = iterator.next();
-            
-            if(voxel != null){
-                /*if (voxel.$k == 0) {
-                    mnt[voxel.$i][voxel.$j] = mntZmin - voxel.ground_distance;
-                }*/
-
-                if (Float.isNaN(voxel.PadBVTotal)) {
-                    voxels[voxel.$i][voxel.$j][voxel.$k].padBV = 0;
-                } else {
-                    voxels[voxel.$i][voxel.$j][voxel.$k].padBV = voxel.PadBVTotal;
-                }
-            }else{
-                logger.warn("Voxel null");
-            }
-        }
     }
     
     private void allocateMNT() {
@@ -209,5 +212,17 @@ public class DirectionalTransmittance {
                 }
             }
         }
+    }
+
+    public VoxelSpace getVoxSpace() {
+        return voxSpace;
+    }
+
+    public float[][] getMnt() {
+        return mnt;
+    }  
+
+    public VoxelSpaceInfos getInfos() {
+        return infos;
     }
 }

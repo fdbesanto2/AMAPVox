@@ -46866,3 +46866,197 @@ java.lang.NullPointerException
 2015-12-03 15:34:03 INFO  - Laz file is closed
 2015-12-03 15:37:39 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
 2015-12-03 15:37:40 INFO  - Laz file is closed
+2015-12-03 23:08:47 INFO  - Turtle built with 406 directions
+2015-12-03 23:08:47 INFO  - ===== C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\als.vox =====
+2015-12-03 23:08:47 INFO  - VOXEL SPACE
+#min_corner: -12.0 -20.0 8.0
+#max_corner: 12.0 225.0 72.0
+#split: 24 245 64
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-03 23:08:47 INFO  - allocate Voxels
+2015-12-03 23:08:47 INFO  - allocate MNT
+2015-12-03 23:08:53 ERROR - Service failed : 
+java.lang.NullPointerException
+	at fr.amap.amapvox.simulation.transmittance.TransmittanceSim.getSensorPositions(TransmittanceSim.java:349)
+	at fr.amap.amapvox.simulation.transmittance.TransmittanceSim.process(TransmittanceSim.java:129)
+	at fr.amap.amapvox.simulation.transmittance.TransmittanceSim.simulationProcess(TransmittanceSim.java:84)
+	at fr.amap.amapvox.gui.MainFrameController$49$1.call(MainFrameController.java:3759)
+	at fr.amap.amapvox.gui.MainFrameController$49$1.call(MainFrameController.java:3747)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$493(Service.java:725)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$494(Service.java:724)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-12-03 23:11:31 INFO  - Turtle built with 136 directions
+2015-12-03 23:11:31 INFO  - ===== C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\als.vox =====
+2015-12-03 23:11:31 INFO  - VOXEL SPACE
+#min_corner: -12.0 -20.0 8.0
+#max_corner: 12.0 225.0 72.0
+#split: 24 245 64
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-03 23:11:31 INFO  - allocate Voxels
+2015-12-03 23:11:31 INFO  - allocate MNT
+2015-12-03 23:11:35 INFO  - nb positions= 4600
+2015-12-03 23:11:35 INFO  - Computation of transmittance
+2015-12-03 23:11:40 INFO  - 1000/4600
+2015-12-03 23:11:44 INFO  - 2000/4600
+2015-12-03 23:11:48 INFO  - 3000/4600
+2015-12-03 23:11:52 INFO  - 4000/4600
+2015-12-03 23:11:55 INFO  - Writing file C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\transmittance
+2015-12-03 23:11:55 INFO  - File C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\transmittance written
+2015-12-03 23:12:51 INFO  - Turtle built with 136 directions
+2015-12-03 23:12:51 INFO  - ===== C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\als.vox =====
+2015-12-03 23:12:51 INFO  - VOXEL SPACE
+#min_corner: -12.0 -20.0 8.0
+#max_corner: 12.0 225.0 72.0
+#split: 24 245 64
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-03 23:12:51 INFO  - allocate Voxels
+2015-12-03 23:12:51 INFO  - allocate MNT
+2015-12-03 23:12:54 INFO  - nb positions= 4600
+2015-12-03 23:12:54 INFO  - Computation of transmittance
+2015-12-03 23:12:58 INFO  - 1000/4600
+2015-12-03 23:13:02 INFO  - 2000/4600
+2015-12-03 23:13:06 INFO  - 3000/4600
+2015-12-03 23:13:10 INFO  - 4000/4600
+2015-12-03 23:13:12 INFO  - Writing file C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\transmittance
+2015-12-03 23:13:12 INFO  - File C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\transmittance written
+2015-12-03 23:13:12 INFO  - Writing file C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\transmittance.png\period_From_10-12-15_0001_to_11-12-15_2359.bmp
+2015-12-03 23:13:12 ERROR - Service failed : 
+java.lang.IllegalArgumentException: Width (0) and height (0) cannot be <= 0
+	at java.awt.image.DirectColorModel.createCompatibleWritableRaster(DirectColorModel.java:1016)
+	at java.awt.image.BufferedImage.<init>(BufferedImage.java:324)
+	at fr.amap.amapvox.simulation.transmittance.TransmittanceSim.writeBitmaps(TransmittanceSim.java:218)
+	at fr.amap.amapvox.simulation.transmittance.TransmittanceSim.simulationProcess(TransmittanceSim.java:91)
+	at fr.amap.amapvox.gui.MainFrameController$49$1.call(MainFrameController.java:3759)
+	at fr.amap.amapvox.gui.MainFrameController$49$1.call(MainFrameController.java:3747)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$493(Service.java:725)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$494(Service.java:724)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-12-03 23:14:11 INFO  - Turtle built with 136 directions
+2015-12-03 23:14:11 INFO  - ===== C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\als.vox =====
+2015-12-03 23:14:11 INFO  - VOXEL SPACE
+#min_corner: -12.0 -20.0 8.0
+#max_corner: 12.0 225.0 72.0
+#split: 24 245 64
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-03 23:14:36 INFO  - allocate Voxels
+2015-12-03 23:14:36 INFO  - allocate MNT
+2015-12-03 23:15:03 INFO  - nb positions= 4600
+2015-12-03 23:15:03 INFO  - Computation of transmittance
+2015-12-03 23:15:07 INFO  - 1000/4600
+2015-12-03 23:15:11 INFO  - 2000/4600
+2015-12-03 23:15:15 INFO  - 3000/4600
+2015-12-03 23:20:05 INFO  - Turtle built with 136 directions
+2015-12-03 23:20:05 INFO  - ===== C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\als.vox =====
+2015-12-03 23:20:05 INFO  - VOXEL SPACE
+#min_corner: -12.0 -20.0 8.0
+#max_corner: 12.0 225.0 72.0
+#split: 24 245 64
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-03 23:20:05 INFO  - allocate Voxels
+2015-12-03 23:20:05 INFO  - allocate MNT
+2015-12-03 23:20:10 INFO  - nb positions= 4600
+2015-12-03 23:20:10 INFO  - Computation of transmittance
+2015-12-03 23:20:14 INFO  - 1000/4600
+2015-12-03 23:20:18 INFO  - 2000/4600
+2015-12-03 23:20:22 INFO  - 3000/4600
+2015-12-03 23:20:25 INFO  - 4000/4600
+2015-12-03 23:20:27 INFO  - Writing file C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\transmittance
+2015-12-03 23:20:27 INFO  - File C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\transmittance written
+2015-12-03 23:20:27 INFO  - Writing file C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\period_From_10-12-15_0001_to_11-12-15_2359.bmp
+2015-12-03 23:20:36 INFO  - File C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\period_From_10-12-15_0001_to_11-12-15_2359.bmp written
+2015-12-03 23:21:53 INFO  - Computing directions...
+2015-12-03 23:21:53 INFO  - ===== C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\als.vox =====
+2015-12-03 23:21:53 INFO  - VOXEL SPACE
+#min_corner: -12.0 -20.0 8.0
+#max_corner: 12.0 225.0 72.0
+#split: 24 245 64
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-03 23:21:53 INFO  - allocate Voxels
+2015-12-03 23:21:53 INFO  - allocate MNT
+2015-12-03 23:21:56 INFO  - nb positions= 4600
+2015-12-03 23:21:56 INFO  - Computation of transmittance
+2015-12-03 23:22:57 INFO  - Computing directions...
+2015-12-03 23:22:57 INFO  - ===== C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\als.vox =====
+2015-12-03 23:22:57 INFO  - VOXEL SPACE
+#min_corner: -12.0 -20.0 8.0
+#max_corner: 12.0 225.0 72.0
+#split: 24 245 64
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-03 23:22:57 INFO  - allocate Voxels
+2015-12-03 23:22:57 INFO  - allocate MNT
+2015-12-03 23:23:01 INFO  - nb positions= 2
+2015-12-03 23:23:01 INFO  - Computation of transmittance
+2015-12-03 23:23:01 INFO  - Computation of AVGTRANS...
+2015-12-03 23:23:01 INFO  - Computation of CNTC#...
+2015-12-03 23:23:01 INFO  - Computation of LAI...
+2015-12-03 23:23:01 INFO  - Computation of GAPS...
+2015-12-03 23:23:01 INFO  - Computation of ACFS...
+2015-12-03 23:23:01 INFO  - Computation of ACF...
+2015-12-03 23:23:01 INFO  - Computation of STDEV...
+2015-12-03 23:23:03 INFO  - 1000/4600
+2015-12-03 23:24:01 INFO  - Computing directions...
+2015-12-03 23:24:01 INFO  - ===== C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\als.vox =====
+2015-12-03 23:24:01 INFO  - VOXEL SPACE
+#min_corner: -12.0 -20.0 8.0
+#max_corner: 12.0 225.0 72.0
+#split: 24 245 64
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-03 23:24:01 INFO  - allocate Voxels
+2015-12-03 23:24:01 INFO  - allocate MNT
+2015-12-03 23:24:04 INFO  - nb positions= 2
+2015-12-03 23:24:04 INFO  - Computation of transmittance
+2015-12-03 23:24:04 INFO  - Computation of AVGTRANS...
+2015-12-03 23:24:04 INFO  - Computation of CNTC#...
+2015-12-03 23:24:04 INFO  - Computation of LAI...
+2015-12-03 23:24:04 INFO  - Computation of GAPS...
+2015-12-03 23:24:04 INFO  - Computation of ACFS...
+2015-12-03 23:24:04 INFO  - Computation of ACF...
+2015-12-03 23:24:04 INFO  - Computation of STDEV...
+2015-12-03 23:24:15 INFO  - 2000/4600
+2015-12-03 23:24:26 INFO  - Computing directions...
+2015-12-03 23:24:26 INFO  - ===== C:\Users\Julien\Documents\Fichiers_voxels_paracou_2013\ALS\als.vox =====
+2015-12-03 23:24:26 INFO  - VOXEL SPACE
+#min_corner: -12.0 -20.0 8.0
+#max_corner: 12.0 225.0 72.0
+#split: 24 245 64
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-03 23:24:26 INFO  - allocate Voxels
+2015-12-03 23:24:26 INFO  - allocate MNT
+2015-12-03 23:24:29 INFO  - nb positions= 2
+2015-12-03 23:24:29 INFO  - Computation of transmittance
+2015-12-03 23:24:30 INFO  - Computation of AVGTRANS...
+2015-12-03 23:24:30 INFO  - Computation of CNTC#...
+2015-12-03 23:24:30 INFO  - Computation of LAI...
+2015-12-03 23:24:30 INFO  - Computation of GAPS...
+2015-12-03 23:24:30 INFO  - Computation of ACFS...
+2015-12-03 23:24:30 INFO  - Computation of ACF...
+2015-12-03 23:24:30 INFO  - Computation of STDEV...
+2015-12-04 01:59:26 INFO  - allocate MNT

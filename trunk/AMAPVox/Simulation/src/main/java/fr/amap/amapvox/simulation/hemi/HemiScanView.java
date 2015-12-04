@@ -5,11 +5,12 @@ package fr.amap.amapvox.simulation.hemi;
 
 import fr.amap.amapvox.commons.util.MatrixAndFile;
 import fr.amap.amapvox.commons.util.MatrixUtility;
+import fr.amap.amapvox.commons.util.SphericalCoordinates;
 import fr.amap.amapvox.io.tls.rsp.Rsp;
 import fr.amap.amapvox.io.tls.rsp.Scans;
 import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
 import fr.amap.amapvox.io.tls.rxp.Shot;
-import fr.amap.amapvox.jeeb.workspace.sunrapp.geometry.CoordinatesConversion;
+import fr.amap.amapvox.jeeb.raytracing.voxel.DirectionalTransmittance;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -71,6 +72,8 @@ public class HemiScanView {
     private boolean random;	// the color of pixels is drawn randomly depending on the gap fraction
     private Mat4D transformation;
     private Mat3D rotationFromTransf;
+    
+    private HemiParameters parameters;
 
     public class Pixel {
 
@@ -104,7 +107,7 @@ public class HemiScanView {
         
     }
 
-    class Sector {
+    private class Sector {
 
         int nbShots;
         float brightness;
@@ -146,6 +149,7 @@ public class HemiScanView {
     
     public HemiScanView(HemiParameters parameters){
         
+        this.parameters = parameters;
         init(parameters);
     }
     
@@ -181,7 +185,7 @@ public class HemiScanView {
         }
     }
     
-    public void launchSimulation(HemiParameters parameters){
+    public void launchSimulation() throws Exception{
         
         init(parameters);
         
@@ -238,21 +242,6 @@ public class HemiScanView {
         return rotation;
     }
     
-    public void setTransformation(File matrixFile){
-        
-        BufferedReader reader;        
-        try {
-            reader = new BufferedReader(new FileReader(matrixFile));
-            transformation = readMatrix(reader);
-            rotationFromTransf = getRotationFromMatrix(transformation);
-        
-        } catch (FileNotFoundException ex) {
-            logger.error(ex);
-        }
-    }
-    
-    
-    
     public void setScan(File scan){
         RxpExtraction extraction = new RxpExtraction();
         try {
@@ -301,7 +290,7 @@ public class HemiScanView {
      * @param args
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, Exception {
 
         HemiParameters parameters = new HemiParameters();
         parameters.setZenithsNumber(9);
@@ -329,9 +318,9 @@ public class HemiScanView {
         for (int x = 0; x < nbPixels; x++) {
             for (int y = 0; y < nbPixels; y++) {
                 Vector2f v = new Vector2f((x - radius) / radius, (y - radius) / radius);
-                float zen = (float) (v.length() * Math.PI / 2);
+                double zen = v.length() * Math.PI / 2;
                 if (zen < Math.PI / 2) {
-                    float azim = xyAzimuthNW(v.x, v.y);
+                    double azim = xyAzimuthNW(v.x, v.y);
                     int sx = (int) (zen / zenithWidth);
                     int sy = (int) (azim / azimWidth);
 
@@ -354,22 +343,9 @@ public class HemiScanView {
         writeHemiPhoto(outputFile);
     }
     
-    private void hemiFromPAD(File inputFile, Point3d position){
+    private void hemiFromPAD(File inputFile, Point3d position) throws Exception{
         
-        TransmittanceSim sim;
-        try {
-            
-            sim = new TransmittanceSim();
-            sim.readData(inputFile);
-                
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(HemiScanView.class.getName()).log(Level.SEVERE, null, ex);
-            return;
-        }catch (Exception ex) {
-            java.util.logging.Logger.getLogger(HemiScanView.class.getName()).log(Level.SEVERE, null, ex);
-            return;
-        }
-
+        DirectionalTransmittance dt = new DirectionalTransmittance(inputFile);
         
         float center = nbPixels / 2;
         
@@ -382,21 +358,22 @@ public class HemiScanView {
                 
                 if (distToCenter < center) {
                     
-                    float zenithAngle = (float) ((distToCenter/center)*Math.PI/2);
-                    float azimuthAngle = 0;
+                    double zenithAngle = (distToCenter/center)*Math.PI/2;
+                    double azimuthAngle = 0;
                     
                     if (deltaY != 0) {
-                        azimuthAngle = (float) Math.atan(deltaX / deltaY);
+                        azimuthAngle = Math.atan(deltaX / deltaY);
                         if (deltaY < 0) {
                             azimuthAngle += Math.PI;
                         } else if (deltaX < 0) {
                             azimuthAngle += Math.PI * 2;
                         }
                     } else if (deltaX < 0) {
-                        azimuthAngle = (float) (Math.PI / 2);
+                        azimuthAngle = Math.PI / 2;
                     }
                     
-                    Vector3f direction = CoordinatesConversion.polarToCartesian(zenithAngle, azimuthAngle);
+                    SphericalCoordinates sc = new SphericalCoordinates(azimuthAngle, zenithAngle);
+                    Vector3f direction = new Vector3f(sc.toCartesian());
                     
                     /*Vector3f direction = new Vector3f(0,0,1);
                     Transformations transform = new Transformations();
@@ -407,40 +384,12 @@ public class HemiScanView {
                     /*if(direction.x != rayDirection.x || direction.y != rayDirection.y || direction.z != rayDirection.z){
                         System.out.println("test");
                     }*/
-                    Vector3d directionD = new Vector3d(direction.x, direction.y, direction.z);
-                    
-                    Set<Double> distances = sim.distToVoxelWalls(position, directionD);
-                    double transmittance = sim.directionalTransmittance(position, distances, directionD);
+                    double transmittance = dt.directionalTransmittance(position, new Vector3d(direction.x, direction.y, direction.z));
                     
                     pixTab[i][j].updatePixel((float)transmittance);
                 }
             }
         }
-    }
-
-    private static Mat4D readMatrix(BufferedReader br) {
-
-        Matrix4d mat = new Matrix4d();
-
-        try {
-            String line = br.readLine();
-            int r = 0;
-            while (line != null) {
-                String[] els = line.split(" ");
-                for (int c = 0; c < els.length; c++) {
-                    mat.setElement(r, c, Double.valueOf(els[c]));
-                }
-                line = br.readLine();
-                r++;
-            }
-            
-            return MatrixUtility.convertMatrix4dToMat4D(mat);
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        return null;
     }
 
     private void transform(String line, Transformations tr) {
@@ -457,7 +406,7 @@ public class HemiScanView {
         direction.sub(origin);
         direction.normalize();
         float zenith = (float) FastMath.acos(direction.z);
-        float azimuth = xyAzimuthNW(direction.x, direction.y);
+        double azimuth = xyAzimuthNW(direction.x, direction.y);
 
         if (zenith < Math.PI / 2) {
             updatePixTab(zenith, azimuth, range);
@@ -467,12 +416,12 @@ public class HemiScanView {
 
     public void transform(Shot shot) {
 
-        float zenith = (float) FastMath.acos(shot.direction.z);
-        float azimuth = xyAzimuthNW((float) shot.direction.x, (float) shot.direction.y);
+        double zenith = FastMath.acos(shot.direction.z);
+        double azimuth = xyAzimuthNW(shot.direction.x, shot.direction.y);
 
-        float range = -9999;
+        double range = -9999;
         if (shot.nbEchos > 0) {
-            range = (float) shot.ranges[shot.nbEchos-1];
+            range = shot.ranges[shot.nbEchos-1];
         }
 
         if (zenith < Math.PI / 2) {
@@ -526,7 +475,7 @@ public class HemiScanView {
 
         // parallels
         g.setColor(new Color(220, 240, 255));
-        float rad = radius / nbZeniths;
+        double rad = radius / nbZeniths;
         for (int i = 1; i <= nbZeniths; i++) {
             g.drawOval((int) (center - rad * i), (int) (center - rad * i), (int) (2 * rad * i), (int) (2 * rad * i));
         }
@@ -552,15 +501,17 @@ public class HemiScanView {
     }
 
     /**
-     * @param	x, y	2D coordinates
+     * Get azimuth angle from 2D coordinates
+     * @param x 2D coordinates
+     * @param y 2D coordinates
      * @return	azimuthAngle	[radian] clockwise from Y axis
      */
-    public static float xyAzimuthNW(float x, float y) {
+    public static double xyAzimuthNW(double x, double y) {
 
-        float azimuth = 0;
+        double azimuth = 0;
         if(y != 0) {
             
-            azimuth = (float) FastMath.atan(x/y);
+            azimuth = FastMath.atan(x/y);
             if(y < 0){
                 azimuth += Math.PI;
             }
@@ -569,21 +520,21 @@ public class HemiScanView {
             }
         }
         else if (x < 0){
-            azimuth = (float) (Math.PI / 2);
+            azimuth = (Math.PI / 2);
         }
         
         return azimuth;
     }
 
-    private void updatePixTab(float zenith, float azimut, float distance) {
+    private void updatePixTab(double zenith, double azimut, double distance) {
         
-        float radius = nbPixels / 2f;
+        double radius = nbPixels / 2f;
         
         //normalization from 0 to radius
-        float normalizedRadius = (float) ((zenith / (Math.PI / 2)) * radius);
+        double normalizedRadius = ((zenith / (Math.PI / 2)) * radius);
         
-        float x = (float) (normalizedRadius * Math.cos(azimut));
-        float y = (float) (normalizedRadius * Math.sin(azimut));
+        double x = normalizedRadius * Math.cos(azimut);
+        double y = normalizedRadius * Math.sin(azimut);
         
         int indexX = (int) (x + radius);
         int indexY = (int) (y + radius);
@@ -600,16 +551,16 @@ public class HemiScanView {
     
     public static Point2i getPixelIndicesFromDirection(int nbPixels, Vector3f direction){
         
-        float zenith = (float) FastMath.acos(direction.z);
-        float azimut = xyAzimuthNW((float) direction.x, (float) direction.y);
+        double zenith = FastMath.acos(direction.z);
+        double azimut = xyAzimuthNW(direction.x, direction.y);
                 
-        float radius = nbPixels / 2f;
+        double radius = nbPixels / 2f;
         
         //normalization from 0 to radius
-        float normalizedRadius = (float) ((zenith / (Math.PI / 2)) * radius);
+        double normalizedRadius = ((zenith / (Math.PI / 2)) * radius);
         
-        float x = (float) (normalizedRadius * Math.cos(azimut));
-        float y = (float) (normalizedRadius * Math.sin(azimut));
+        double x = (normalizedRadius * Math.cos(azimut));
+        double y = (normalizedRadius * Math.sin(azimut));
         
         int indexX = (int) (x + radius);
         int indexY = (int) (y + radius);
@@ -620,7 +571,7 @@ public class HemiScanView {
         return new Point2i(indexX, indexY);
     }
     
-    public static Vector3f getDirectionFromPixel(int nbPixels, int i, int j){
+    public static Vector3d getDirectionFromPixel(int nbPixels, int i, int j){
         
         double radius = nbPixels/2;
         
@@ -636,11 +587,12 @@ public class HemiScanView {
         double azimut = Math.acos(x/normalizedRadius);
         double zenith = (normalizedRadius / radius) * Math.PI / 2.0;
         
-        Vector3f direction = CoordinatesConversion.polarToCartesian((float)zenith, (float)azimut);
+        SphericalCoordinates sc = new SphericalCoordinates(azimut, zenith);
+        Vector3d direction = new Vector3d(sc.toCartesian());
         return direction;
     }
 
-    private void updateSectorTab(float zenith, float azimuth, float distance) {
+    private void updateSectorTab(double zenith, double azimuth, double distance) {
 
         int indexZn = (int) ((zenith * nbZeniths) / (Math.PI / 2));
         int indexAz = (int) ((azimuth * nbAzimuts) / (Math.PI * 2));

@@ -92,7 +92,7 @@ public abstract class LAI2xxx {
     protected int[][] countByPositionAndRing;
     
     /**
-     *
+     * Create a LAI2000-2200 device
      * @param shotNumber
      * @param viewCap
      * @param rings
@@ -154,20 +154,7 @@ public abstract class LAI2xxx {
         countByPositionAndRing = new int[positionNumber][rings.length];
     }
     
-    public void addTransmittance(int ringID, float transmittance){
-        
-        if(!Float.isNaN(transmittance)){
-            avgTransByRing[ringID] += transmittance;
-            
-            float logTransmittance = (float) Math.log(transmittance);
-            gapsByRing[ringID] += logTransmittance;
-            /*
-            float pathLength = 0; // à déterminer
-            meanContactNumber[ringID] += logTransmittance/pathLength;*/
-        }
-    }
-    
-    public void addTransmittanceV2(int ringID, int position, float transmittance){
+    public void addTransmittance(int ringID, int position, float transmittance){
         
         if(ringID < rings.length && position < positionNumber){
             transmittances[ringID][position] += transmittance;

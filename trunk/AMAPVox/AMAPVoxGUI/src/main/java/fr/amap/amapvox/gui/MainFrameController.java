@@ -59,6 +59,7 @@ import fr.amap.amapvox.simulation.transmittance.TransmittanceParameters;
 import fr.amap.amapvox.simulation.transmittance.SimulationPeriod;
 import fr.amap.amapvox.simulation.transmittance.TransmittanceCfg;
 import fr.amap.amapvox.simulation.transmittance.TransmittanceSim;
+import fr.amap.amapvox.simulation.transmittance.lai2xxx.Lai2xxxSim;
 import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
 import fr.amap.amapvox.voxelisation.DirectionalTransmittance;
 import fr.amap.amapvox.voxelisation.LeafAngleDistribution;
@@ -209,6 +210,7 @@ public class MainFrameController implements Initializable {
     private Stage viewCapsSetupFrame;
     private Stage updaterFrame;
     private Stage attributsImporterFrame;
+    private Stage positionImporterFrame;
     
     private RspExtractorFrameController rspExtractorFrameController;
     private UpdaterFrameController updaterFrameController;
@@ -219,6 +221,7 @@ public class MainFrameController implements Initializable {
     private TextFileParserFrameController textFileParserFrameController;
     private SceneObjectPropertiesPanelController sceneObjectPropertiesPanelController;
     private FilteringPaneComponentController filteringPaneController;
+    private PositionImporterFrameController positionImporterFrameController;
     
     private BlockingQueue<File> queue = new ArrayBlockingQueue<>(100);
     private int taskNumber = 0;
@@ -276,6 +279,9 @@ public class MainFrameController implements Initializable {
     private DirectoryChooser directoryChooserSaveTransmittanceBitmapFile;
     private FileChooser fileChooserSaveHemiPhotoOutputBitmapFile;
     private FileChooser fileChooserSaveHemiPhotoOutputTextFile;
+    private FileChooserContext fileChooserOpenCanopyAnalyserInputFile;
+    private FileChooserContext fileChooserSaveCanopyAnalyserOutputFile;
+    private FileChooserContext fileChooserSaveCanopyAnalyserCfgFile;
     
     private DirectoryChooser directoryChooserOpenOutputPathALS;
     private DirectoryChooser directoryChooserOpenOutputPathTLS;
@@ -666,8 +672,6 @@ public class MainFrameController implements Initializable {
     @FXML
     private MenuItem menuItemExportDartPlots;
     @FXML
-    private Button buttonTransmittanceAddToTaskList;
-    @FXML
     private CheckBox checkboxGenerateTextFile;
     @FXML
     private CheckBox checkboxGenerateBitmapFile;
@@ -693,18 +697,6 @@ public class MainFrameController implements Initializable {
     private CheckBox checkboxMultiResAfterMode2;
     @FXML
     private CheckBox checkboxMultiFiles;
-    @FXML
-    private ToggleButton toggleButtonTransmittance;
-    @FXML
-    private ToggleButton toggleButtonLAI2000;
-    @FXML
-    private ToggleButton toggleButtonLAI2200;
-    @FXML
-    private Label labelDirectionsNumber;
-    @FXML
-    private Button buttonSetupViewCap;
-    @FXML
-    private TextField textFieldViewCapAngle;
     @FXML
     private ComboBox<String> comboboxPreDefinedProfile;
     @FXML
@@ -766,16 +758,6 @@ public class MainFrameController implements Initializable {
     @FXML
     private Label labelOutputFileGroundEnergy;
     @FXML
-    private ToggleButton toggleButtonRingMask1;
-    @FXML
-    private ToggleButton toggleButtonRingMask2;
-    @FXML
-    private ToggleButton toggleButtonRingMask3;
-    @FXML
-    private ToggleButton toggleButtonRingMask4;
-    @FXML
-    private ToggleButton toggleButtonRingMask5;
-    @FXML
     private CheckBox checkboxGenerateLAI2xxxTypeFormat;
     @FXML
     private TitledPane titledPaneSceneObjectProperties;
@@ -784,57 +766,223 @@ public class MainFrameController implements Initializable {
     @FXML
     private AnchorPane anchorPaneEchoFiltering;
     @FXML
-    private TextField textfieldVoxelFilePathTransmittance1;
-    @FXML
-    private Button buttonOpenVoxelFileTransmittance1;
-    @FXML
     private Label labelDirectionsNumber1;
-    @FXML
-    private ComboBox<?> comboboxChooseDirectionsNumber1;
-    @FXML
-    private Button buttonSetupViewCap1;
-    @FXML
-    private TextField textFieldViewCapAngle1;
-    @FXML
-    private ToggleButton toggleButtonRingMask11;
-    @FXML
-    private ToggleButton toggleButtonRingMask21;
-    @FXML
-    private ToggleButton toggleButtonRingMask31;
-    @FXML
-    private ToggleButton toggleButtonRingMask41;
-    @FXML
-    private ToggleButton toggleButtonRingMask51;
-    @FXML
-    private ListView<?> listViewVoxelsFiles1;
-    @FXML
-    private MenuItem menuItemSelectionAll1;
     @FXML
     private MenuItem menuItemSelectionNone1;
     @FXML
-    private Button buttonRemoveVoxelFileFromListView2;
+    private TextField textfieldVoxelFilePathCanopyAnalyzer;
     @FXML
-    private Button buttonAddVoxelFileToListView1;
+    private ComboBox<Integer> comboboxChooseCanopyAnalyzerSampling;
     @FXML
-    private CheckBox checkboxGenerateTextFile1;
+    private TextField textFieldViewCapAngleCanopyAnalyzer;
     @FXML
-    private CheckBox checkboxGenerateLAI2xxxTypeFormat1;
+    private ToggleButton toggleButtonCanopyAnalyzerRingMask1;
     @FXML
-    private TextField textfieldOutputTextFilePath1;
+    private ToggleButton toggleButtonCanopyAnalyzerRingMask2;
     @FXML
-    private Button buttonOpenOutputTextFile1;
+    private ToggleButton toggleButtonCanopyAnalyzerRingMask3;
     @FXML
-    private VBox vBoxGenerateBitmapFiles2;
+    private ToggleButton toggleButtonCanopyAnalyzerRingMask4;
     @FXML
-    private CheckBox checkboxGenerateBitmapFile1;
+    private ToggleButton toggleButtonCanopyAnalyzerRingMask5;
     @FXML
-    private TextField textfieldOutputBitmapFilePath1;
+    private ListView<Point3d> listViewCanopyAnalyzerSensorPositions;
     @FXML
-    private Button buttonOpenOutputBitmapFile1;
+    private CheckBox checkboxGenerateCanopyAnalyzerTextFile;
     @FXML
-    private MenuItem menuItemSelectionAll2;
+    private CheckBox checkboxGenerateLAI2xxxFormat;
     @FXML
-    private MenuItem menuItemSelectionNone2;
+    private TextField textfieldOutputCanopyAnalyzerTextFile;
+    @FXML
+    private ToggleButton toggleButtonLAI2000Choice;
+    @FXML
+    private ToggleButton toggleButtonLAI2200Choice;
+    @FXML
+    private Label labelDirectionsNumber;
+    @FXML
+    private TabPane tabPaneVirtualMeasures;
+
+    @FXML
+    private void onActionButtonOpenVoxelFileCanopyAnalyzer(ActionEvent event) {
+        
+        File selectedFile = fileChooserOpenCanopyAnalyserInputFile.showOpenDialog(stage);
+        
+        if(selectedFile != null){
+            textfieldVoxelFilePathCanopyAnalyzer.setText(selectedFile.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    private void onActionMenuItemPositionsCanopyAnalyzerSelectionAll(ActionEvent event) {
+        listViewCanopyAnalyzerSensorPositions.getSelectionModel().selectAll();
+    }
+
+    @FXML
+    private void onActionMenuItemPositionsCanopyAnalyzerSelectionNone(ActionEvent event) {
+        listViewCanopyAnalyzerSensorPositions.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    private void onActionButtonRemovePositionCanopyAnalyzer(ActionEvent event) {
+        ObservableList<?> selectedItems = listViewCanopyAnalyzerSensorPositions.getSelectionModel().getSelectedItems();
+        listViewCanopyAnalyzerSensorPositions.getItems().removeAll(selectedItems);
+    }
+
+    @FXML
+    private void onActionButtonAddPositionCanopyAnalyzer(ActionEvent event) {
+        
+        positionImporterFrame.show();
+        positionImporterFrame.setOnHidden(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+                listViewCanopyAnalyzerSensorPositions.getItems().addAll(positionImporterFrameController.getPositions());
+            }
+        });
+    }
+
+    @FXML
+    private void onActionButtonOpenOutputCanopyAnalyzerTextFile(ActionEvent event) {
+        
+    }
+
+    @FXML
+    private void onActionButtonExecuteCanopyAnalyzerSimulation(ActionEvent event) {
+    }
+    
+    
+
+    @FXML
+    private void onActionButtonSaveCanopyAnalyzerSimulation(ActionEvent event) {
+        
+        File selectedFile = fileChooserSaveCanopyAnalyserCfgFile.showSaveDialog(stage);
+        
+        if(selectedFile != null){
+
+            TransmittanceParameters transmParameters = new TransmittanceParameters();
+
+            if(toggleButtonLAI2000Choice.isSelected() || toggleButtonLAI2200Choice.isSelected()){
+
+                transmParameters.setShotNumber(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem());
+
+                if(toggleButtonLAI2000Choice.isSelected()){
+                    transmParameters.setMode(TransmittanceParameters.Mode.LAI2000);
+                }else{
+                    transmParameters.setMode(TransmittanceParameters.Mode.LAI2200);
+                }
+
+                transmParameters.setMasks(new boolean[]{toggleButtonCanopyAnalyzerRingMask1.isSelected(),
+                                                        toggleButtonCanopyAnalyzerRingMask2.isSelected(),
+                                                        toggleButtonCanopyAnalyzerRingMask3.isSelected(),
+                                                        toggleButtonCanopyAnalyzerRingMask4.isSelected(),
+                                                        toggleButtonCanopyAnalyzerRingMask5.isSelected()});
+
+                transmParameters.setGenerateLAI2xxxTypeFormat(checkboxGenerateLAI2xxxTypeFormat.isSelected());
+            }
+
+            transmParameters.setInputFile(new File(textfieldVoxelFilePathCanopyAnalyzer.getText()));
+            transmParameters.setGenerateTextFile(checkboxGenerateCanopyAnalyzerTextFile.isSelected());
+
+            if(checkboxGenerateCanopyAnalyzerTextFile.isSelected()){
+                transmParameters.setTextFile(new File(textfieldOutputTextFilePath.getText()));
+            }
+            if(comboboxChooseCanopyAnalyzerSampling.isEditable()){
+                transmParameters.setDirectionsNumber(Integer.valueOf(comboboxChooseCanopyAnalyzerSampling.getEditor().getText()));
+            }else{
+                transmParameters.setDirectionsNumber(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem());
+            }
+
+            transmParameters.setUseScanPositionsFile(radiobuttonScannerPosFile.isSelected());
+
+            if(radiobuttonScannerPosFile.isSelected()){
+                transmParameters.setPointsPositionsFile(new File(textfieldScannerPointsPositionsFile.getText()));
+            }else{
+                transmParameters.setCenterPoint(new Point3f(Float.valueOf(textfieldScannerPosCenterX.getText()), 
+                                                            Float.valueOf(textfieldScannerPosCenterY.getText()),
+                                                            Float.valueOf(textfieldScannerPosCenterZ.getText())));
+
+                transmParameters.setWidth(Float.valueOf(textfieldScannerWidthArea.getText()));
+                transmParameters.setStep(Float.valueOf(textfieldScannerStepArea.getText()));
+            }
+
+            TransmittanceCfg cfg = new TransmittanceCfg(transmParameters);
+            try {
+                cfg.writeConfiguration(selectedFile);
+                addFileToTaskList(selectedFile);
+            } catch (Exception ex) {
+                logger.error("Cannot write configuration file", ex);
+            }
+        }
+    }
+
+    @FXML
+    private void onActionButtonSaveExecuteCanopyAnalyzerSimulation(ActionEvent event) {
+        
+        if(lastFCSaveConfiguration != null) {
+            fileChooserSaveConfiguration.setInitialDirectory(lastFCSaveConfiguration.getParentFile());
+            fileChooserSaveConfiguration.setInitialFileName(lastFCSaveConfiguration.getName());
+        }else {
+            fileChooserSaveConfiguration.setInitialDirectory(new File(textfieldOutputCanopyAnalyzerTextFile.getText()).getParentFile());
+            fileChooserSaveConfiguration.setInitialFileName(new File(textfieldOutputCanopyAnalyzerTextFile.getText()).getName() + "_cfg.xml");
+        }
+
+        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
+        if (selectedFile != null) {
+            
+            lastFCSaveConfiguration= selectedFile;
+            
+            TransmittanceParameters transmParameters = new TransmittanceParameters();
+                
+            transmParameters.setShotNumber(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem());
+
+            if(toggleButtonLAI2000Choice.isSelected()){
+                transmParameters.setMode(TransmittanceParameters.Mode.LAI2000);
+            }else{
+                transmParameters.setMode(TransmittanceParameters.Mode.LAI2200);
+            }
+
+            transmParameters.setMasks(new boolean[]{toggleButtonCanopyAnalyzerRingMask1.isSelected(),
+                                                    toggleButtonCanopyAnalyzerRingMask2.isSelected(),
+                                                    toggleButtonCanopyAnalyzerRingMask3.isSelected(),
+                                                    toggleButtonCanopyAnalyzerRingMask4.isSelected(),
+                                                    toggleButtonCanopyAnalyzerRingMask5.isSelected()});
+
+            transmParameters.setGenerateLAI2xxxTypeFormat(checkboxGenerateLAI2xxxFormat.isSelected());
+            
+            transmParameters.setInputFile(new File(textfieldVoxelFilePathCanopyAnalyzer.getText()));
+            transmParameters.setGenerateTextFile(checkboxGenerateTextFile.isSelected());
+            
+            if(checkboxGenerateCanopyAnalyzerTextFile.isSelected()){
+                transmParameters.setTextFile(new File(textfieldOutputCanopyAnalyzerTextFile.getText()));
+            }
+            if(comboboxChooseCanopyAnalyzerSampling.isEditable()){
+                transmParameters.setDirectionsNumber(Integer.valueOf(comboboxChooseCanopyAnalyzerSampling.getEditor().getText()));
+            }else{
+                transmParameters.setDirectionsNumber(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem());
+            }
+            
+            transmParameters.setUseScanPositionsFile(radiobuttonScannerPosFile.isSelected());
+            
+            if(radiobuttonScannerPosFile.isSelected()){
+                transmParameters.setPointsPositionsFile(new File(textfieldScannerPointsPositionsFile.getText()));
+            }else{
+                transmParameters.setCenterPoint(new Point3f(Float.valueOf(textfieldScannerPosCenterX.getText()), 
+                                                            Float.valueOf(textfieldScannerPosCenterY.getText()),
+                                                            Float.valueOf(textfieldScannerPosCenterZ.getText())));
+                
+                transmParameters.setWidth(Float.valueOf(textfieldScannerWidthArea.getText()));
+                transmParameters.setStep(Float.valueOf(textfieldScannerStepArea.getText()));
+            }
+            
+            TransmittanceCfg cfg = new TransmittanceCfg(transmParameters);
+            try {
+                cfg.writeConfiguration(selectedFile);
+                addFileToTaskList(selectedFile);
+            } catch (Exception ex) {
+                logger.error("Cannot write configuration file", ex);
+            }
+        }
+    }
     
     private class SceneObjectProperty{
         
@@ -881,6 +1029,11 @@ public class MainFrameController implements Initializable {
 //        });
 //        
 //        tableviewSceneObjectProperties.getColumns().addAll(propertyNameColumn, propertyValueColumn);
+        
+        fileChooserSaveCanopyAnalyserOutputFile = new FileChooserContext();
+        fileChooserSaveCanopyAnalyserCfgFile = new FileChooserContext();
+        fileChooserOpenCanopyAnalyserInputFile = new FileChooserContext();
+        listViewCanopyAnalyzerSensorPositions.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         
         EventHandler<DragEvent> dragOverEvent = new EventHandler<DragEvent>() {
 
@@ -1089,34 +1242,13 @@ public class MainFrameController implements Initializable {
         
         ToggleGroup virtualMeasuresChoiceGroup = new ToggleGroup();
         
-        toggleButtonTransmittance.setToggleGroup(virtualMeasuresChoiceGroup);
-        toggleButtonLAI2000.setToggleGroup(virtualMeasuresChoiceGroup);
-        toggleButtonLAI2200.setToggleGroup(virtualMeasuresChoiceGroup);
+        toggleButtonLAI2000Choice.setToggleGroup(virtualMeasuresChoiceGroup);
+        toggleButtonLAI2200Choice.setToggleGroup(virtualMeasuresChoiceGroup);
         
-        ChangeListener toggleButtonLAI2xxxSelectedListener = new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                vBoxGenerateBitmapFiles.setDisable(newValue);
-                //comboboxChooseDirectionsNumber.setEditable(newValue);
-                buttonSetupViewCap.setVisible(newValue);
-                if(newValue){
-                    labelDirectionsNumber.setText("Shot number");
-                    comboboxChooseDirectionsNumber.getItems().setAll(500, 4000, 10000);
-                    
-                }else{
-                    labelDirectionsNumber.setText("Directions number");
-                    comboboxChooseDirectionsNumber.getItems().setAll(1, 6, 16, 46, 136, 406);
-                }
-            }
-        };
-        
-        toggleButtonLAI2000.selectedProperty().addListener(toggleButtonLAI2xxxSelectedListener);
-        toggleButtonLAI2200.selectedProperty().addListener(toggleButtonLAI2xxxSelectedListener);
+        comboboxChooseCanopyAnalyzerSampling.getItems().setAll(500, 4000, 10000);
+        comboboxChooseCanopyAnalyzerSampling.getSelectionModel().selectFirst();
         
         initEchoFiltering();
-        
-        
         
         data = FXCollections.observableArrayList();
         
@@ -1358,6 +1490,18 @@ public class MainFrameController implements Initializable {
         } catch (IOException ex) {
             logger.error("Cannot load fxml file", ex);
         }
+        
+        try {
+            positionImporterFrame = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PositionImporterFrame.fxml"));
+            Parent root = loader.load();
+            positionImporterFrameController = loader.getController();
+            positionImporterFrame.setScene(new Scene(root));
+            positionImporterFrameController.setStage(positionImporterFrame);
+        } catch (IOException ex) {
+            logger.error("Cannot load fxml file", ex);
+        }
+            
             
         try {
             attributsImporterFrame = new Stage();
@@ -2056,10 +2200,16 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionButtonOpenVoxelFileHemiPhoto(ActionEvent event) {
+        
+        File selectedFile = fileChooserOpenVoxelFile.showOpenDialog(stage);
+        
+        if(selectedFile != null){
+            textfieldVoxelFilePathHemiPhoto.setText(selectedFile.getAbsolutePath());
+        }
     }
-
+    
     @FXML
-    private void onActionButtonHemiPhotoAddToTaskList(ActionEvent event) {
+    private void onActionButtonSaveExecuteHemiPhotoSimulation(ActionEvent event) {
         
         if (lastFCSaveConfiguration != null) {
             fileChooserSaveConfiguration.setInitialDirectory(lastFCSaveConfiguration.getParentFile());
@@ -3753,32 +3903,34 @@ public class MainFrameController implements Initializable {
                             switch (type) {
                                 
                                 case "transmittance":  
+                                    
+                                    try {
+                                        TransmittanceSim.simulationProcess(TransmittanceCfg.readCfg(file));
+                                    } catch (IOException | JDOMException ex) {
+                                        logger.error("Error", ex);
+                                        showErrorDialog(ex);
+                                    }
+                                    
+                                    break;
                                 case "LAI2000":
                                 case "LAI2200":
                                     
-                                    TransmittanceCfg cfg;
                                     try {
-                                        cfg = TransmittanceCfg.readCfg(file);
-                                        try {
-                                            TransmittanceSim.simulationProcess(cfg);
-                                        }catch(IOException ex){
-                                            logger.error(ex.getMessage());
-                                            showErrorDialog(ex);
-                                        }
+                                        Lai2xxxSim lai2xxxSim = new Lai2xxxSim(TransmittanceCfg.readCfg(file));
+                                        lai2xxxSim.process();
                                         
                                     } catch (IOException | JDOMException ex) {
                                         logger.error("Cannot read configuration file", ex);
                                         showErrorDialog(ex);
                                     }
                                     
-                                    
                                 break;
                                     
                                 case "Hemi-Photo":
                                     try {
                                         HemiPhotoCfg hemiphotoCfg = HemiPhotoCfg.readCfg(file);
-                                        HemiScanView hemiScanView = new HemiScanView();
-                                        hemiScanView.launchSimulation(hemiphotoCfg.getParameters());
+                                        HemiScanView hemiScanView = new HemiScanView(hemiphotoCfg.getParameters());
+                                        hemiScanView.launchSimulation();
                                         
                                     } catch (IOException | JDOMException ex) {
                                         logger.error("Cannot read configuration file", ex);
@@ -4451,6 +4603,9 @@ public class MainFrameController implements Initializable {
                     
                 }else if(type.equals("Hemi-Photo")){
                     
+                    tabPaneMain.getSelectionModel().select(1);
+                    tabPaneVirtualMeasures.getSelectionModel().select(2);
+                    
                     HemiPhotoCfg cfg = HemiPhotoCfg.readCfg(selectedFile);
                     HemiParameters hemiParameters = cfg.getParameters();
                     
@@ -4486,6 +4641,9 @@ public class MainFrameController implements Initializable {
                     
                 }else if(type.equals("transmittance") || type.equals("LAI2000") || type.equals("LAI2200")){
                     
+                    tabPaneMain.getSelectionModel().select(1);
+                    
+                    
                     TransmittanceCfg cfg = TransmittanceCfg.readCfg(selectedFile);
 
                     //cfg.readConfiguration(selectedFile);
@@ -4494,28 +4652,30 @@ public class MainFrameController implements Initializable {
                     textfieldVoxelFilePathTransmittance.setText(params.getInputFile().getAbsolutePath());
                     
                     if(type.equals("transmittance")){
-                        toggleButtonTransmittance.setSelected(true);
+                        tabPaneVirtualMeasures.getSelectionModel().select(0);
                         comboboxChooseDirectionsNumber.getSelectionModel().select(new Integer(params.getDirectionsNumber()));
                     }else{
                         
                         if(type.equals("LAI2000")){
-                            toggleButtonLAI2000.setSelected(true);
+                            toggleButtonLAI2000Choice.setSelected(true);
                         }else if(type.equals("LAI2200")){
-                            toggleButtonLAI2200.setSelected(true);
+                            toggleButtonLAI2200Choice.setSelected(true);
                         }
                         
-                        comboboxChooseDirectionsNumber.getEditor().setText(String.valueOf(params.getDirectionsNumber()));
+                        tabPaneVirtualMeasures.getSelectionModel().select(1);
+                        
+                        comboboxChooseCanopyAnalyzerSampling.getSelectionModel().select(Integer.valueOf(params.getDirectionsNumber()));
                         
                         boolean[] masks = params.getMasks();
                         if(masks != null && masks.length == 5){
-                            toggleButtonRingMask1.setSelected(masks[0]);
-                            toggleButtonRingMask2.setSelected(masks[1]);
-                            toggleButtonRingMask3.setSelected(masks[2]);
-                            toggleButtonRingMask4.setSelected(masks[3]);
-                            toggleButtonRingMask5.setSelected(masks[4]);
+                            toggleButtonCanopyAnalyzerRingMask1.setSelected(masks[0]);
+                            toggleButtonCanopyAnalyzerRingMask2.setSelected(masks[1]);
+                            toggleButtonCanopyAnalyzerRingMask3.setSelected(masks[2]);
+                            toggleButtonCanopyAnalyzerRingMask4.setSelected(masks[3]);
+                            toggleButtonCanopyAnalyzerRingMask5.setSelected(masks[4]);
                         }
                         
-                        checkboxGenerateLAI2xxxTypeFormat.setSelected(params.isGenerateLAI2xxxTypeFormat());
+                        checkboxGenerateLAI2xxxFormat.setSelected(params.isGenerateLAI2xxxTypeFormat());
                     }
                     
                     radiobuttonScannerPosFile.setSelected(params.isUseScanPositionsFile());
@@ -5677,9 +5837,9 @@ public class MainFrameController implements Initializable {
     private void onActionMenuItemUnselectAllPeriods(ActionEvent event) {
         tableViewSimulationPeriods.getSelectionModel().clearSelection();
     }
-
+    
     @FXML
-    private void onActionButtonTransmittanceAddToTaskList(ActionEvent event) {
+    private void onActionButtonSaveExecuteLightMapTransmittanceSimulation(ActionEvent event) {
         
         if(lastFCSaveConfiguration != null) {
             fileChooserSaveConfiguration.setInitialDirectory(lastFCSaveConfiguration.getParentFile());
@@ -5696,21 +5856,21 @@ public class MainFrameController implements Initializable {
             
             TransmittanceParameters transmParameters = new TransmittanceParameters();
         
-            if(toggleButtonLAI2000.isSelected() || toggleButtonLAI2200.isSelected()){
+            if(toggleButtonLAI2000Choice.isSelected() || toggleButtonLAI2200Choice.isSelected()){
                 
                 transmParameters.setShotNumber(comboboxChooseDirectionsNumber.getSelectionModel().getSelectedItem());
                 
-                if(toggleButtonLAI2000.isSelected()){
+                if(toggleButtonLAI2000Choice.isSelected()){
                     transmParameters.setMode(TransmittanceParameters.Mode.LAI2000);
                 }else{
                     transmParameters.setMode(TransmittanceParameters.Mode.LAI2200);
                 }
                 
-                transmParameters.setMasks(new boolean[]{toggleButtonRingMask1.isSelected(),
-                                                        toggleButtonRingMask2.isSelected(),
-                                                        toggleButtonRingMask3.isSelected(),
-                                                        toggleButtonRingMask4.isSelected(),
-                                                        toggleButtonRingMask5.isSelected()});
+                transmParameters.setMasks(new boolean[]{toggleButtonCanopyAnalyzerRingMask1.isSelected(),
+                                                        toggleButtonCanopyAnalyzerRingMask2.isSelected(),
+                                                        toggleButtonCanopyAnalyzerRingMask3.isSelected(),
+                                                        toggleButtonCanopyAnalyzerRingMask4.isSelected(),
+                                                        toggleButtonCanopyAnalyzerRingMask5.isSelected()});
                 
                 transmParameters.setGenerateLAI2xxxTypeFormat(checkboxGenerateLAI2xxxTypeFormat.isSelected());
             }
@@ -5756,7 +5916,6 @@ public class MainFrameController implements Initializable {
                 logger.error("Cannot write configuration file", ex);
             }
         }
-        
     }
 
     @FXML
@@ -5796,9 +5955,9 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonSetupViewCap(ActionEvent event) {
         
-        if(toggleButtonLAI2000.isSelected()){
+        if(toggleButtonLAI2000Choice.isSelected()){
             viewCapsSetupFrameController.setViewCapAngles(ViewCapsSetupFrameController.ViewCaps.LAI_2000);
-        }else if(toggleButtonLAI2200.isSelected()){
+        }else if(toggleButtonLAI2200Choice.isSelected()){
             viewCapsSetupFrameController.setViewCapAngles(ViewCapsSetupFrameController.ViewCaps.LAI_2200);
         }
         
@@ -5807,7 +5966,7 @@ public class MainFrameController implements Initializable {
             @Override
             public void handle(WindowEvent event) {
                 if(viewCapsSetupFrameController.isConfirmed()){
-                    textFieldViewCapAngle.setText(String.valueOf(viewCapsSetupFrameController.getAngle()));
+                    textFieldViewCapAngleCanopyAnalyzer.setText(String.valueOf(viewCapsSetupFrameController.getAngle()));
                 }
             }
         });
