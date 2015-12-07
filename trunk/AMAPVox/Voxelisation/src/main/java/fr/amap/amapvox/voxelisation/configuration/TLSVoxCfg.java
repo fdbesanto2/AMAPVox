@@ -14,7 +14,7 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.amapvox.voxelisation.configuration;
 
-import fr.amap.amapvox.commons.util.MatrixAndFile;
+import fr.amap.amapvox.commons.util.LidarScan;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ import org.jdom2.Element;
 
 public class TLSVoxCfg extends VoxCfg{
     
-    private List<MatrixAndFile> matricesAndFiles;
+    private List<LidarScan> matricesAndFiles;
     
     @Override
     public void readConfiguration(File inputParametersFile) throws Exception {
@@ -50,7 +50,7 @@ public class TLSVoxCfg extends VoxCfg{
                 Matrix4d mat = getMatrixFromData(e.getChildText("matrix"));
                 File f = new File(e.getAttributeValue("src"));
 
-                matricesAndFiles.add(new MatrixAndFile(f, mat));
+                matricesAndFiles.add(new LidarScan(f, mat));
             }
 
             Element mergingElement = processElement.getChild("merging");
@@ -90,7 +90,7 @@ public class TLSVoxCfg extends VoxCfg{
 
             Element filesElement = new Element("files");
             if(matricesAndFiles != null){
-                for(MatrixAndFile f : matricesAndFiles){
+                for(LidarScan f : matricesAndFiles){
                     Element fileElement = new Element("file");
                     fileElement.setAttribute("src", f.file.getAbsolutePath());
                     fileElement.addContent(new Element("matrix").setText(f.matrix.toString()));
@@ -103,11 +103,11 @@ public class TLSVoxCfg extends VoxCfg{
         writeDocument(outputParametersFile);
     }
 
-    public List<MatrixAndFile> getMatricesAndFiles() {
+    public List<LidarScan> getMatricesAndFiles() {
         return matricesAndFiles;
     }
 
-    public void setMatricesAndFiles(List<MatrixAndFile> matricesAndFiles) {
+    public void setMatricesAndFiles(List<LidarScan> matricesAndFiles) {
         this.matricesAndFiles = matricesAndFiles;
     }    
 }

@@ -5,7 +5,7 @@
  */
 package fr.amap.amapvox.voxelisation.configuration;
 
-import fr.amap.amapvox.commons.util.PointcloudFilter;
+import fr.amap.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.amapvox.voxelisation.LeafAngleDistribution.Type;
 import fr.amap.amapvox.voxelisation.VoxelAnalysis;
 import java.io.File;

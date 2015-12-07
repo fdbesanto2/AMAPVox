@@ -16,9 +16,10 @@ package fr.amap.amapvox.voxelisation.configuration;
 
 import fr.amap.amapvox.commons.configuration.Configuration;
 import fr.amap.amapvox.commons.util.Filter;
-import fr.amap.amapvox.commons.util.PointcloudFilter;
-import fr.amap.amapvox.voxelisation.LeafAngleDistribution;
+import fr.amap.amapvox.voxelisation.PointcloudFilter;
+import fr.amap.amapvox.voxelisation.EchoFilter;
 import fr.amap.amapvox.voxelisation.LeafAngleDistribution.Type;
+import fr.amap.amapvox.voxelisation.ShotFilter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +52,10 @@ public class VoxCfg extends Configuration{
     protected float[] multiResPadMax;
     protected List<Filter> filters;
     protected List<Filter> echoFilters;
+    
+    protected ShotFilter shotFilter;
+    protected EchoFilter echoFilter;
+    
     protected boolean correctNaNs;
     protected boolean multiResUseDefaultMaxPad;
     
@@ -627,5 +632,21 @@ public class VoxCfg extends Configuration{
 
     public List<Filter> getEchoFilters() {
         return echoFilters;
+    }
+
+    public EchoFilter getEchoFilter() {
+        return echoFilter;
+    }
+
+    public void setEchoFilter(EchoFilter echoFilter) {
+        this.echoFilter = echoFilter;
+    }
+
+    public ShotFilter getShotFilter() {
+        return shotFilter;
+    }
+
+    public void setShotFilter(ShotFilter shotFilter) {
+        this.shotFilter = shotFilter;
     }
 }

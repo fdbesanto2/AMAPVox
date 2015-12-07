@@ -11,6 +11,7 @@ import fr.amap.amapvox.commons.util.Processing;
 import fr.amap.amapvox.commons.util.ProcessingListener;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
+import fr.amap.amapvox.voxelisation.SimpleShotFilter;
 import fr.amap.amapvox.voxelisation.VoxelAnalysis;
 import fr.amap.amapvox.voxelisation.configuration.VoxCfg;
 import fr.amap.amapvox.voxelisation.configuration.VoxelParameters;
@@ -33,7 +34,6 @@ public class LasVoxelisation extends Processing {
     private VoxelParameters parameters;
     private final List<Trajectory> trajectoryList;
     private final List<Integer> classifiedPointsToDiscard;
-    private final List<Filter> filters;
     private final VoxCfg cfg;
     private boolean updateALS;
     private PointsToShot conversion;
@@ -46,7 +46,6 @@ public class LasVoxelisation extends Processing {
         this.transfMatrix = transfMatrix;
         this.parameters = parameters;
         this.classifiedPointsToDiscard = classifiedPointsToDiscard;
-        this.filters = cfg.getFilters();
         this.cfg = cfg;
         this.terrain = terrain;
         this.trajectoryList = trajectoryList;
@@ -64,6 +63,9 @@ public class LasVoxelisation extends Processing {
     @Override
     public File process() {
                 
+        cfg.setEchoFilter(new LasEchoFilter(cfg.getFilters()));
+        cfg.setShotFilter(new SimpleShotFilter(cfg.getFilters()));
+        
         VoxelAnalysis voxelAnalysis = new VoxelAnalysis(terrain, null, cfg);
         voxelAnalysis.init(parameters, outputFile);
         voxelAnalysis.createVoxelSpace();

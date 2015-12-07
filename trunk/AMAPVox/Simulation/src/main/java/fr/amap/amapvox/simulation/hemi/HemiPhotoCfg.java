@@ -15,7 +15,7 @@ For further information, please contact Gregoire Vincent.
 package fr.amap.amapvox.simulation.hemi;
 
 import fr.amap.amapvox.commons.configuration.Configuration;
-import fr.amap.amapvox.commons.util.MatrixAndFile;
+import fr.amap.amapvox.commons.util.LidarScan;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ public class HemiPhotoCfg extends Configuration{
             Element inputFilesElement = processElement.getChild("input_files");
             List<Element> childrens = inputFilesElement.getChildren("scan");
             
-            List<MatrixAndFile> scans = new ArrayList<>(childrens.size());
+            List<LidarScan> scans = new ArrayList<>(childrens.size());
             
             for(Element children : childrens){
                 
@@ -93,7 +93,7 @@ public class HemiPhotoCfg extends Configuration{
                 }
                 
                 if(inputFileSrc != null){
-                    scans.add(new MatrixAndFile(new File(inputFileSrc), sopMatrix));
+                    scans.add(new LidarScan(new File(inputFileSrc), sopMatrix));
                 }
             }
             
@@ -191,9 +191,9 @@ public class HemiPhotoCfg extends Configuration{
             
             //input
             Element inputFilesElement = new Element("input_files");
-            List<MatrixAndFile> rxpScansList = parameters.getRxpScansList();
+            List<LidarScan> rxpScansList = parameters.getRxpScansList();
             
-            for(MatrixAndFile scan : rxpScansList){
+            for(LidarScan scan : rxpScansList){
                 Element scanElement = new Element("scan");
                 
                 Element sopMatrixElement = new Element("SOP");

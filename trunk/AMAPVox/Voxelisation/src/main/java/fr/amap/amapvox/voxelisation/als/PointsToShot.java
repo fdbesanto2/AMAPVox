@@ -29,7 +29,7 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 /**
- *
+ * This class merge trajectory file with point file (las, laz)
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class PointsToShot extends Processing implements Iterable<Shot>{

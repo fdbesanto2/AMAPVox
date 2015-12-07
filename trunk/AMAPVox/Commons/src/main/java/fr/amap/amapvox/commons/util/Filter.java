@@ -5,14 +5,12 @@
  */
 package fr.amap.amapvox.commons.util;
 
-import java.io.Serializable;
-
 /**
  * This class represent a filter and can is compound of a variable,
  * a condition and a value
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class Filter implements Serializable{
+public class Filter{
     
     public final static int NOT_EQUAL = 0;
 

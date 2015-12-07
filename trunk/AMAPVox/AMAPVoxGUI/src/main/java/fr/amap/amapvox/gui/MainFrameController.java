@@ -34,10 +34,10 @@ import fr.amap.amapvox.math.vector.Vec3F;
 import fr.amap.amapvox.commons.util.BoundingBox3d;
 import fr.amap.amapvox.commons.util.ColorGradient;
 import fr.amap.amapvox.commons.util.Filter;
-import fr.amap.amapvox.commons.util.MatrixAndFile;
+import fr.amap.amapvox.commons.util.LidarScan;
 import fr.amap.amapvox.commons.util.MatrixFileParser;
 import fr.amap.amapvox.commons.util.MatrixUtility;
-import fr.amap.amapvox.commons.util.PointcloudFilter;
+import fr.amap.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.amapvox.commons.util.TimeCounter;
 import fr.amap.amapvox.commons.util.image.ScaleGradient;
 import fr.amap.amapvox.datastructure.pointcloud.PointCloud;
@@ -130,6 +130,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -139,6 +140,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -158,6 +160,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -297,7 +300,7 @@ public class MainFrameController implements Initializable {
 
     private String scanFilter;
     private boolean filterScan;
-    private List<MatrixAndFile> items;
+    private List<LidarScan> items;
     private Rsp rsp;
     private double currentLastPointCloudLayoutY;
     
@@ -338,7 +341,7 @@ public class MainFrameController implements Initializable {
     @FXML
     private Label labelLADAlpha;
     @FXML
-    private ListView<MatrixAndFile> listViewHemiPhotoScans;
+    private ListView<LidarScan> listViewHemiPhotoScans;
     @FXML
     private VBox vBoxGenerateBitmapFiles;
     @FXML
@@ -536,7 +539,7 @@ public class MainFrameController implements Initializable {
     @FXML
     private TextField textFieldTLSFilter;
     @FXML
-    private ListView<MatrixAndFile> listviewRxpScans;
+    private ListView<LidarScan> listviewRxpScans;
     @FXML
     private CheckBox checkboxFilter;
     @FXML
@@ -1104,7 +1107,43 @@ public class MainFrameController implements Initializable {
             }
         });
         
+        ContextMenu contextMenuLidarScanEdit = new ContextMenu();
+        MenuItem editItem = new MenuItem("Edit");
+        
+        editItem.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                
+                filterFrameController.setFilters("Reflectance", "Deviation", "Amplitude");
+                filterFrame.show();
+
+                filterFrame.setOnHidden(new EventHandler<WindowEvent>() {
+
+                    @Override
+                    public void handle(WindowEvent event) {
+
+                        if (filterFrameController.getFilter() != null) {
+                            ObservableList<LidarScan> items = listViewHemiPhotoScans.getSelectionModel().getSelectedItems();
+                            for(LidarScan scan : items){
+                                scan.filters.add(filterFrameController.getFilter());
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        
+        contextMenuLidarScanEdit.getItems().add(editItem);
+        
         listViewHemiPhotoScans.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listViewHemiPhotoScans.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+
+            @Override
+            public void handle(ContextMenuEvent event) {
+                contextMenuLidarScanEdit.show(listViewHemiPhotoScans, event.getScreenX(), event.getScreenY());
+            }
+        });
         
         /**LAD tab initialization**/
         comboboxLADChoice.getItems().addAll(LeafAngleDistribution.Type.UNIFORM,
@@ -1798,10 +1837,10 @@ public class MainFrameController implements Initializable {
             }
         });
 
-        listviewRxpScans.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<MatrixAndFile>() {
+        listviewRxpScans.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<LidarScan>() {
 
             @Override
-            public void changed(ObservableValue<? extends MatrixAndFile> observable, MatrixAndFile oldValue, MatrixAndFile newValue) {
+            public void changed(ObservableValue<? extends LidarScan> observable, LidarScan oldValue, LidarScan newValue) {
                 sopMatrix = newValue.matrix;
                 updateResultMatrix();
             }
@@ -2178,10 +2217,10 @@ public class MainFrameController implements Initializable {
                     public void handle(WindowEvent event) {
                         List<RspExtractorFrameController.Scan> selectedScans = rspExtractorFrameController.getSelectedScans();
                         
-                        ObservableList<MatrixAndFile> items1 = listViewHemiPhotoScans.getItems();
+                        ObservableList<LidarScan> items1 = listViewHemiPhotoScans.getItems();
                         
                         for(RspExtractorFrameController.Scan scan : selectedScans){
-                            items1.add(new MatrixAndFile(scan.getFile(), MatrixUtility.convertMat4DToMatrix4d(scan.getSop())));
+                            items1.add(new LidarScan(scan.getFile(), MatrixUtility.convertMat4DToMatrix4d(scan.getSop())));
                         }
                         
 
@@ -2322,7 +2361,7 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonRemoveScanFromHemiPhotoListView(ActionEvent event) {
         
-        ObservableList<MatrixAndFile> selectedItems = listViewHemiPhotoScans.getSelectionModel().getSelectedItems();
+        ObservableList<LidarScan> selectedItems = listViewHemiPhotoScans.getSelectionModel().getSelectedItems();
         listViewHemiPhotoScans.getItems().removeAll(selectedItems);
     }
 
@@ -3061,7 +3100,7 @@ public class MainFrameController implements Initializable {
 
             listviewRxpScans.getItems().clear();
 
-            for (MatrixAndFile fileID : items) {
+            for (LidarScan fileID : items) {
 
                 if (fileID.file.getAbsolutePath().contains(scanFilter) && checkboxFilter.isSelected()) {
                     listviewRxpScans.getItems().add(fileID);
@@ -3107,7 +3146,7 @@ public class MainFrameController implements Initializable {
 
                             for (Entry scan : scanList.entrySet()) {
                                 RxpScan sc = (RxpScan) scan.getValue();
-                                items.add(new MatrixAndFile(new File(sc.getAbsolutePath()), MatrixUtility.convertMat4DToMatrix4d(rxp.getSopMatrix())));
+                                items.add(new LidarScan(new File(sc.getAbsolutePath()), MatrixUtility.convertMat4DToMatrix4d(rxp.getSopMatrix())));
                             }
                         }
 
@@ -4925,7 +4964,7 @@ public class MainFrameController implements Initializable {
                             textFieldMergedFileName.setText(((TLSVoxCfg)cfg).getVoxelParameters().getMergedFile().getName());
                         }
 
-                        List<MatrixAndFile> matricesAndFiles = ((TLSVoxCfg)cfg).getMatricesAndFiles();
+                        List<LidarScan> matricesAndFiles = ((TLSVoxCfg)cfg).getMatricesAndFiles();
                         if (matricesAndFiles != null) {
                             items = matricesAndFiles;
                             doFilterOnScanListView();
@@ -6176,7 +6215,7 @@ public class MainFrameController implements Initializable {
     
     private void addSceneObjectToList(final File file) throws Exception{
         
-        if(isFileTypeKnown(file)){
+        //if(isFileTypeKnown(file)){
             
             SceneObjectWrapper sceneObjectWrapper = new SceneObjectWrapper(file, new ProgressBar(0));
             
@@ -6835,7 +6874,7 @@ public class MainFrameController implements Initializable {
                 break;
             }
             
-        }
+        //}
     }    
     
     private LeafAngleDistribution getLeafAngleDistribution(){

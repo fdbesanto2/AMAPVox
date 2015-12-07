@@ -15,8 +15,10 @@ For further information, please contact Gregoire Vincent.
 package fr.amap.amapvox.datastructure.octree;
 
 import fr.amap.amapvox.commons.util.Statistic;
+import fr.amap.amapvox.math.geometry.BoundingBox3D;
 import fr.amap.amapvox.math.geometry.BoundingBox3F;
 import fr.amap.amapvox.math.geometry.Intersection;
+import fr.amap.amapvox.math.point.Point3D;
 import fr.amap.amapvox.math.point.Point3F;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +32,9 @@ import java.util.List;
 public class Octree {
     
     
-    private Point3F[] points;
-    private Point3F minPoint;
-    private Point3F maxPoint;
+    private Point3D[] points;
+    private Point3D minPoint;
+    private Point3D maxPoint;
     private int depth;
     private Node root;
     private List<Node> leafs;
@@ -91,7 +93,7 @@ public class Octree {
         }
     }
     
-    public Node traverse(Point3F point){
+    public Node traverse(Point3D point){
         
         Node node = null;
         
@@ -116,10 +118,10 @@ public class Octree {
         return node;
     }
     
-    public Node traverse(Node node, Point3F source, Point3F end){
+    public Node traverse(Node node, Point3D source, Point3D end){
                 
-        BoundingBox3F boundingBox3F = new BoundingBox3F(node.getMinPoint(), node.getMaxPoint());
-        Point3F intersection = Intersection.getIntersectionLineBoundingBox(source, end, boundingBox3F);
+        BoundingBox3D boundingBox3D = new BoundingBox3D(node.getMinPoint(), node.getMaxPoint());
+        Point3D intersection = Intersection.getIntersectionLineBoundingBox(source, end, boundingBox3D);
 
         while(node.hasChilds() && intersection != null){
 
@@ -136,11 +138,11 @@ public class Octree {
         return node;
     }
     
-    public Point3F rayIntersectNode(Node node, Point3F source, Point3F end){
+    public Point3D rayIntersectNode(Node node, Point3D source, Point3D end){
                 
         //on vérifie l'intersection avec le noeud root
-        BoundingBox3F boundingBox3F = new BoundingBox3F(node.getMinPoint(), node.getMaxPoint());
-        Point3F intersection = Intersection.getIntersectionLineBoundingBox(source, end, boundingBox3F);
+        BoundingBox3D boundingBox3D = new BoundingBox3D(node.getMinPoint(), node.getMaxPoint());
+        Point3D intersection = Intersection.getIntersectionLineBoundingBox(source, end, boundingBox3D);
         
         return intersection;
         //si la droite intersecte le noeud, on vérifie l'intersection avec tous les noeuds du root
@@ -149,13 +151,13 @@ public class Octree {
     }
     
     //retourne le noeud intersecté le plus proche
-    public Node rayTraversal(Node node, Point3F source, Point3F end){
+    public Node rayTraversal(Node node, Point3D source, Point3D end){
                 
         //on vérifie l'intersection avec le noeud root
         
         Node nearestIntersectedNode = null;
         
-        Point3F intersection = rayIntersectNode(node, source, end);
+        Point3D intersection = rayIntersectNode(node, source, end);
             
         if(intersection != null){
 
@@ -179,7 +181,7 @@ public class Octree {
         //pour chaque noeud qui intersecte la droite, 
     }
     
-    public Point3F searchNearestPoint(Point3F point, short type, float errorMargin){
+    public Point3D searchNearestPoint(Point3D point, short type, float errorMargin){
         
         switch(type){
             case BINARY_SEARCH:
@@ -191,14 +193,14 @@ public class Octree {
         return null;
     }
     
-    public boolean isPointBelongsToPointcloud(Point3F point, float errorMargin, short type){
+    public boolean isPointBelongsToPointcloud(Point3D point, float errorMargin, short type){
         
-        Point3F incrementalSearchNearestPoint = searchNearestPoint(point, type, errorMargin);
+        Point3D incrementalSearchNearestPoint = searchNearestPoint(point, type, errorMargin);
                             
                             
         boolean test = false;
         if(incrementalSearchNearestPoint != null){
-            float distance = point.distanceTo(incrementalSearchNearestPoint);
+            double distance = point.distanceTo(incrementalSearchNearestPoint);
             
 
             if(distance < errorMargin){
@@ -209,14 +211,14 @@ public class Octree {
         return test;
     }
     
-    private Point3F binarySearchNearestPoint(Point3F point, float errorMargin){
+    private Point3D binarySearchNearestPoint(Point3D point, float errorMargin){
         
-        Point3F nearestPoint = null;
+        Point3D nearestPoint = null;
         
         if(root != null){
             
             int[] nearestPoints;
-            float distance = 99999999;
+            double distance = 99999999;
             
             List<Node> nodesIntersectingSphere = new ArrayList<>();
 
@@ -238,7 +240,7 @@ public class Octree {
 
                     while (low <= high) {
                         int mid = (low + high) >>> 1;
-                        float midValX = points[nearestPoints[mid]].x;
+                        double midValX = points[nearestPoints[mid]].x;
                         
                         if(point.x > midValX){
                             low = mid + 1;
@@ -260,7 +262,7 @@ public class Octree {
 
                     while (low <= high) {
                         int mid = (low + high) >>> 1;
-                        float midValY = points[nearestPoints[mid]].y;
+                        double midValY = points[nearestPoints[mid]].y;
                         
                         if(point.y > midValY){
                             low = mid + 1;
@@ -282,7 +284,7 @@ public class Octree {
 
                     while (low <= high) {
                         int mid = (low + high) >>> 1;
-                        float midValZ = points[nearestPoints[mid]].z;
+                        double midValZ = points[nearestPoints[mid]].z;
                         
                         if(point.z > midValZ){
                             low = mid + 1;
@@ -323,7 +325,7 @@ public class Octree {
                     if(indexMin != -1 && indexMax != -1){
                         for (int i=indexMin;i < indexMax;i++) {
                             
-                            float dist = point.distanceTo(points[nearestPoints[i]]);
+                            double dist = point.distanceTo(points[nearestPoints[i]]);
 
                             if(dist < distance){
                                 distance = dist;
@@ -340,14 +342,14 @@ public class Octree {
         return nearestPoint;
     }
     
-    private Point3F incrementalSearchNearestPoint(Point3F point, float errorMargin){
+    private Point3D incrementalSearchNearestPoint(Point3D point, float errorMargin){
         
-        Point3F nearestPoint = null;
+        Point3D nearestPoint = null;
         
         if(root != null){
             
             int[] nearestPoints;
-            float distance = 99999999;
+            double distance = 99999999;
             
             /*
             Node leaf = traverse(point);
@@ -387,7 +389,7 @@ public class Octree {
 
                         for (int pointToTest : nearestPoints) {
 
-                            float dist = point.distanceTo(points[pointToTest]);
+                            double dist = point.distanceTo(points[pointToTest]);
 
                             if(dist < distance){
                                 distance = dist;
@@ -430,10 +432,10 @@ public class Octree {
         
         float dist_squared = sphere.getRadius()*sphere.getRadius();
         
-        Point3F sphereCenter = sphere.getCenter();
+        Point3D sphereCenter = sphere.getCenter();
         
-        Point3F nodeBottomCorner = node.getMinPoint();
-        Point3F nodeTopCorner = node.getMaxPoint();
+        Point3D nodeBottomCorner = node.getMinPoint();
+        Point3D nodeTopCorner = node.getMaxPoint();
         
         if (sphereCenter.x < nodeBottomCorner.x){
             dist_squared -= Math.pow(sphereCenter.x - nodeBottomCorner.x, 2);
@@ -460,7 +462,7 @@ public class Octree {
         return maximumPoints;
     }
 
-    public Point3F[] getPoints() {
+    public Point3D[] getPoints() {
         return points;
     }
 
@@ -472,20 +474,20 @@ public class Octree {
         this.depth = depth;
     }
 
-    public void setPoints(Point3F[] points) {
+    public void setPoints(Point3D[] points) {
         this.points = points;
     }
     
     public void setPoints(float[] points) {
         
-        Point3F minPoint = null;
-        Point3F maxPoint = null;
+        Point3D minPoint = null;
+        Point3D maxPoint = null;
         
-        this.points = new Point3F[points.length/3];
+        this.points = new Point3D[points.length/3];
         
         for(int i=0, j=0;i<points.length;i++,j+=3){
             
-            this.points[i] = new Point3F(points[i], points[i+1], points[i+2]);
+            this.points[i] = new Point3D(points[i], points[i+1], points[i+2]);
             
             if(i == 0){
                 minPoint = this.points[i];
@@ -509,11 +511,11 @@ public class Octree {
         this.setMaxPoint(maxPoint);
     }
 
-    public void setMinPoint(Point3F minPoint) {
+    public void setMinPoint(Point3D minPoint) {
         this.minPoint = minPoint;
     }
 
-    public void setMaxPoint(Point3F maxPoint) {
+    public void setMaxPoint(Point3D maxPoint) {
         this.maxPoint = maxPoint;
     }
     

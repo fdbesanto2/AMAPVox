@@ -6,6 +6,7 @@
 package fr.amap.amapvox.datastructure.octree;
 
 import fr.amap.amapvox.math.matrix.Mat4D;
+import fr.amap.amapvox.math.point.Point3D;
 import fr.amap.amapvox.math.point.Point3F;
 import fr.amap.amapvox.math.vector.Vec4D;
 import java.io.BufferedReader;
@@ -28,7 +29,7 @@ public class OctreeFactory {
     
     public static Octree createOctreeFromPointFile(File file, int maximumPointNumber, boolean sortPoints, Mat4D transfMatrix) throws Exception{
         
-        List<Point3F> pointList = new ArrayList<>();
+        List<Point3D> pointList = new ArrayList<>();
         
         try(BufferedReader reader = new BufferedReader(new FileReader(file))) {
             
@@ -63,7 +64,7 @@ public class OctreeFactory {
                 
                 Vec4D transformedPoint = Mat4D.multiply(transfMatrix, new Vec4D(Float.valueOf(split[0]), Float.valueOf(split[1]), Float.valueOf(split[2]), 1));
                 
-                pointList.add(new Point3F((float) transformedPoint.x, (float) transformedPoint.y, (float) transformedPoint.z));
+                pointList.add(new Point3D((float) transformedPoint.x, (float) transformedPoint.y, (float) transformedPoint.z));
                 count++;
             }
             
@@ -73,13 +74,13 @@ public class OctreeFactory {
             throw ex;
         }
         
-        Point3F[] points = new Point3F[pointList.size()];
+        Point3D[] points = new Point3D[pointList.size()];
         
-        float minPointX = 0, minPointY = 0, minPointZ = 0;
-        float maxPointX = 0, maxPointY = 0, maxPointZ = 0;
+        double minPointX = 0, minPointY = 0, minPointZ = 0;
+        double maxPointX = 0, maxPointY = 0, maxPointZ = 0;
         
         boolean init = false;
-        for(Point3F point : pointList){
+        for(Point3D point : pointList){
             
             if(!init){
                 minPointX = point.x;
@@ -114,8 +115,8 @@ public class OctreeFactory {
             }
         }
         
-        Point3F minPoint = new Point3F(minPointX, minPointY, minPointZ);
-        Point3F maxPoint = new Point3F(maxPointX, maxPointY, maxPointZ);
+        Point3D minPoint = new Point3D(minPointX, minPointY, minPointZ);
+        Point3D maxPoint = new Point3D(maxPointX, maxPointY, maxPointZ);
         
         if(sortPoints){
             Collections.sort(pointList);

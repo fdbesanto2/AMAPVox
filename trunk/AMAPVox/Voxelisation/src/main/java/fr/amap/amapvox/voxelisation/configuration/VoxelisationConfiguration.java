@@ -7,8 +7,8 @@ package fr.amap.amapvox.voxelisation.configuration;
 
 import fr.amap.amapvox.commons.configuration.Configuration;
 import fr.amap.amapvox.commons.util.Filter;
-import fr.amap.amapvox.commons.util.MatrixAndFile;
-import fr.amap.amapvox.commons.util.PointcloudFilter;
+import fr.amap.amapvox.commons.util.LidarScan;
+import fr.amap.amapvox.voxelisation.PointcloudFilter;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,7 +49,7 @@ public class VoxelisationConfiguration extends Configuration{
     private List<File> files;
     private List<Input> multiProcessInputs;
     private boolean correctNaNs;
-    private List<MatrixAndFile> matricesAndFiles;
+    private List<LidarScan> matricesAndFiles;
     private List<Filter> filters;
     private List<Integer> classifiedPointsToDiscard;
     //private boolean removeLowPoint = false;
@@ -475,7 +475,7 @@ public class VoxelisationConfiguration extends Configuration{
                 
                 Element filesElement = new Element("files");
                 if(matricesAndFiles != null){
-                    for(MatrixAndFile f : matricesAndFiles){
+                    for(LidarScan f : matricesAndFiles){
                         Element fileElement = new Element("file");
                         fileElement.setAttribute("src", f.file.getAbsolutePath());
                         fileElement.addContent(new Element("matrix").setText(f.matrix.toString()));
@@ -766,7 +766,7 @@ public class VoxelisationConfiguration extends Configuration{
                                     Matrix4d mat = getMatrixFromData(e.getChildText("matrix"));
                                     File f = new File(e.getAttributeValue("src"));
 
-                                    matricesAndFiles.add(new MatrixAndFile(f, mat));
+                                    matricesAndFiles.add(new LidarScan(f, mat));
                                 }
 
                                 Element mergingElement = processElement.getChild("merging");
@@ -1071,11 +1071,11 @@ public class VoxelisationConfiguration extends Configuration{
         this.files = files;
     }
 
-    public List<MatrixAndFile> getMatricesAndFiles() {
+    public List<LidarScan> getMatricesAndFiles() {
         return matricesAndFiles;
     }
 
-    public void setMatricesAndFiles(List<MatrixAndFile> matricesAndFiles) {
+    public void setMatricesAndFiles(List<LidarScan> matricesAndFiles) {
         this.matricesAndFiles = matricesAndFiles;
     }
 

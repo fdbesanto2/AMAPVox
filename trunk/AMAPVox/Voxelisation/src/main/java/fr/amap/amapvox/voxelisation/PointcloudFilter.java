@@ -12,9 +12,13 @@ Authors:
 For further information, please contact Gregoire Vincent.
  */
 
-package fr.amap.amapvox.commons.util;
+package fr.amap.amapvox.voxelisation;
 
+import fr.amap.amapvox.datastructure.octree.Octree;
+import fr.amap.amapvox.math.point.Point3D;
+import fr.amap.amapvox.math.point.Point3F;
 import java.io.File;
+import javax.vecmath.Point3d;
 
 /**
  *
@@ -27,6 +31,7 @@ public class PointcloudFilter {
     private File pointcloudFile;
     private float pointcloudErrorMargin;
     private boolean keep;
+    private Octree octree;
 
 
     public PointcloudFilter(File pointcloudFile, float pointcloudErrorMargin, boolean keep) {
@@ -58,5 +63,25 @@ public class PointcloudFilter {
     public void setKeep(boolean keep) {
         this.keep = keep;
     }
+
+    public Octree getOctree() {
+        return octree;
+    }
+
+    public void setOctree(Octree octree) {
+        this.octree = octree;
+    }
     
+    public boolean doFiltering(Point3d point){
+        
+        boolean test;
+
+        test = octree.isPointBelongsToPointcloud(new Point3D(point.x, point.y, point.z), pointcloudErrorMargin, Octree.INCREMENTAL_SEARCH);
+        
+        if(keep){
+            return test;
+        }else{
+            return !test;
+        }
+    }
 }

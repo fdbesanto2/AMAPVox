@@ -15,8 +15,10 @@ For further information, please contact Gregoire Vincent.
 package fr.amap.amapvox.commons.util;
 
 import javax.vecmath.Point3d;
+import javax.vecmath.Tuple3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
+import org.apache.commons.math3.util.FastMath;
 
 /**
  *
@@ -30,7 +32,7 @@ public class SphericalCoordinates {
     private double elevation;
     private double radius = 1;
     
-    private Point3d cartesianCoordinates;
+    private Tuple3d cartesianCoordinates;
     
     public SphericalCoordinates() {
     }
@@ -60,21 +62,21 @@ public class SphericalCoordinates {
     
     public Point3d toCartesian(){
         
-        Point3d point = new Point3d(radius * Math.sin(elevation) * Math.cos(azimuth), 
-                            radius * Math.sin(elevation) * Math.sin(azimuth), 
-                            radius * Math.cos(elevation));
+        Point3d point = new Point3d(radius * FastMath.sin(elevation) * FastMath.cos(azimuth), 
+                            radius * FastMath.sin(elevation) * FastMath.sin(azimuth), 
+                            radius * FastMath.cos(elevation));
         
         cartesianCoordinates = point;
         
         return point;
     }
     
-    public void toSpherical(Point3d point) {
+    public void toSpherical(Tuple3d point) {
         
-        radius = Math.sqrt((point.x * point.x) + (point.y * point.y)+ (point.z * point.z));
-        azimuth = Math.atan2(point.y, point.x);
+        radius = FastMath.sqrt((point.x * point.x) + (point.y * point.y)+ (point.z * point.z));
+        azimuth = FastMath.atan2(point.y, point.x);
         
-        elevation = Math.acos(point.z/radius);
+        elevation = FastMath.acos(point.z/radius);
         //elevation = Math.atan(Math.sqrt((point.x*point.x) + (point.y*point.y))/point.z);
         
         

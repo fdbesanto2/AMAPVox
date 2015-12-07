@@ -5,6 +5,7 @@
  */
 package fr.amap.amapvox.datastructure.octree;
 
+import fr.amap.amapvox.math.point.Point3D;
 import fr.amap.amapvox.math.point.Point3F;
 
 
@@ -14,38 +15,38 @@ import fr.amap.amapvox.math.point.Point3F;
  */
 public class Sphere {
     
-    private Point3F center;
+    private Point3D center;
     private float radius;
     
     public Sphere(){
         
         this.radius = 1.0f;
-        this.center = new Point3F();
+        this.center = new Point3D();
     }
     
     public Sphere(float radius){
         
         this.radius = radius;
-        this.center = new Point3F();
+        this.center = new Point3D();
     }
     
-    public Sphere(Point3F center){
+    public Sphere(Point3D center){
         
         this.radius = 1.0f;
         this.center = center;
     }
     
-    public Sphere(Point3F center, float radius){
+    public Sphere(Point3D center, float radius){
         
         this.radius = radius;
         this.center = center;
     }
 
-    public Point3F getCenter() {
+    public Point3D getCenter() {
         return center;
     }
 
-    public void setCenter(Point3F center) {
+    public void setCenter(Point3D center) {
         this.center = center;
     }
 
@@ -57,7 +58,7 @@ public class Sphere {
         this.radius = radius;
     }
     
-    public float distanceTo(Point3F target){
+    public double distanceTo(Point3D target){
         return center.distanceTo(target);
     }
 }

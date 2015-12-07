@@ -3,7 +3,8 @@
  */
 package fr.amap.amapvox.simulation.hemi;
 
-import fr.amap.amapvox.commons.util.MatrixAndFile;
+import fr.amap.amapvox.commons.util.Filter;
+import fr.amap.amapvox.commons.util.LidarScan;
 import fr.amap.amapvox.commons.util.MatrixUtility;
 import fr.amap.amapvox.commons.util.SphericalCoordinates;
 import fr.amap.amapvox.io.tls.rsp.Rsp;
@@ -30,6 +31,8 @@ import fr.amap.amapvox.math.vector.Vec3D;
 import fr.amap.amapvox.math.vector.Vec4D;
 import fr.amap.amapvox.simulation.transmittance.TransmittanceParameters;
 import fr.amap.amapvox.simulation.transmittance.TransmittanceSim;
+import fr.amap.amapvox.voxelisation.EchoFilter;
+import fr.amap.amapvox.voxelisation.tls.RxpEchoFilter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -194,10 +197,12 @@ public class HemiScanView {
         switch(parameters.getMode()){
             case ECHOS:
                 
-                for(MatrixAndFile scan : parameters.getRxpScansList()){
+                
+                
+                for(LidarScan scan : parameters.getRxpScansList()){
                 
                     setTransformation(MatrixUtility.convertMatrix4dToMat4D(scan.matrix));
-                    setScan(scan.file);
+                    setScan(scan.file, parameters.getEchoFilter());
                 }
                 
                 break;
@@ -242,15 +247,18 @@ public class HemiScanView {
         return rotation;
     }
     
-    public void setScan(File scan){
+    public void setScan(File scan, EchoFilter filter){
+        
+        int count = 0;
+        int totalShots = 0;
+        
+            
         RxpExtraction extraction = new RxpExtraction();
+        
         try {
             extraction.openRxpFile(scan);
             
             Iterator<Shot> iterator = extraction.iterator();
-            
-            int count = 0;
-            int totalShots = 0;
             
             while(iterator.hasNext()){
                 
@@ -259,25 +267,29 @@ public class HemiScanView {
                 Vec4D locVector = Mat4D.multiply(transformation, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
                 Vec3D uVector = Mat3D.multiply(rotationFromTransf, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
 
-                
                 shot.setOriginAndDirection(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z));
                 
-                //shot.direction.sub(shot.origin);
-                //shot.direction.normalize();    
+                boolean keepShot = true;
                 
-                transform(shot);
-                
-                count++;
-                totalShots++;
-                
-                if(count == 1000000){
-                    System.out.println("Shots processed : "+totalShots);
-                    //logger.info("Shots processed : "+totalShots);
-                    count = 0;
+                if(shot.nbEchos > 0){
+                    keepShot = filter.doFiltering(shot, shot.nbEchos-1);
                 }
+                
+                if(keepShot){
+                    
+                    transform(shot);
+                
+                    count++;
+                    totalShots++;
+                    
+                    if(count == 1000000){
+                        logger.info("Shots processed : "+totalShots);
+                        count = 0;
+                    }
+                }
+                
             }
             
-            //logger.info("Shots processed : "+count);
             logger.info("Total shots processed : "+totalShots);
             
             extraction.close();
@@ -320,7 +332,9 @@ public class HemiScanView {
                 Vector2f v = new Vector2f((x - radius) / radius, (y - radius) / radius);
                 double zen = v.length() * Math.PI / 2;
                 if (zen < Math.PI / 2) {
+                    
                     double azim = xyAzimuthNW(v.x, v.y);
+                    
                     int sx = (int) (zen / zenithWidth);
                     int sy = (int) (azim / azimWidth);
 
@@ -392,32 +406,35 @@ public class HemiScanView {
         }
     }
 
-    private void transform(String line, Transformations tr) {
-        String[] st = line.split(" ");
-        int echocount = Integer.valueOf(st[1]);
-        Point3f origin = new Point3f(Float.valueOf(st[2]), Float.valueOf(st[3]), Float.valueOf(st[4]));
-        Vector3f direction = new Vector3f(Float.valueOf(st[5]), Float.valueOf(st[6]), Float.valueOf(st[7]));
-        float range = -9999;
-        if (echocount > 0) {
-            range = Float.valueOf(st[8]);
-        }
-        tr.apply(direction);
-        tr.apply(origin);
-        direction.sub(origin);
-        direction.normalize();
-        float zenith = (float) FastMath.acos(direction.z);
-        double azimuth = xyAzimuthNW(direction.x, direction.y);
-
-        if (zenith < Math.PI / 2) {
-            updatePixTab(zenith, azimuth, range);
-            updateSectorTab(zenith, azimuth, range);
-        }
-    }
+//    private void transform(String line, Transformations tr) {
+//        String[] st = line.split(" ");
+//        int echocount = Integer.valueOf(st[1]);
+//        Point3d origin = new Point3d(Double.valueOf(st[2]), Double.valueOf(st[3]), Double.valueOf(st[4]));
+//        Vector3d direction = new Vector3d(Double.valueOf(st[5]), Double.valueOf(st[6]), Double.valueOf(st[7]));
+//        double range = -9999;
+//        if (echocount > 0) {
+//            range = Float.valueOf(st[8]);
+//        }
+//        tr.apply(direction);
+//        tr.apply(origin);
+//        direction.sub(origin);
+//        direction.normalize();
+//        float zenith = (float) FastMath.acos(direction.z);
+//        double azimuth = xyAzimuthNW(direction.x, direction.y);
+//        
+//        SphericalCoordinates sc = new SphericalCoordinates();
+//        sc.toSpherical(direction);
+//
+//        if (zenith < Math.PI / 2) {
+//            updatePixTab(zenith, azimuth, range);
+//            updateSectorTab(zenith, azimuth, range);
+//        }
+//    }
 
     public void transform(Shot shot) {
 
         double zenith = FastMath.acos(shot.direction.z);
-        double azimuth = xyAzimuthNW(shot.direction.x, shot.direction.y);
+        double azimut = xyAzimuthNW(shot.direction.x, shot.direction.y);
 
         double range = -9999;
         if (shot.nbEchos > 0) {
@@ -425,8 +442,8 @@ public class HemiScanView {
         }
 
         if (zenith < Math.PI / 2) {
-            updatePixTab(zenith, azimuth, range);
-            updateSectorTab(zenith, azimuth, range);
+            updatePixTab(zenith, azimut, range);
+            updateSectorTab(zenith, azimut, range);
         }
     }
 
@@ -551,7 +568,7 @@ public class HemiScanView {
     
     public static Point2i getPixelIndicesFromDirection(int nbPixels, Vector3f direction){
         
-        double zenith = FastMath.acos(direction.z);
+        double zenith = FastMath.acos(direction.z);        
         double azimut = xyAzimuthNW(direction.x, direction.y);
                 
         double radius = nbPixels / 2f;

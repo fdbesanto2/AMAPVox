@@ -19,7 +19,7 @@ import fr.amap.amapvox.commons.util.Cancellable;
 import fr.amap.amapvox.commons.util.DataSet.Mode;
 import static fr.amap.amapvox.commons.util.DataSet.Mode.SUM;
 import fr.amap.amapvox.commons.util.Filter;
-import fr.amap.amapvox.commons.util.MatrixAndFile;
+import fr.amap.amapvox.commons.util.LidarScan;
 import fr.amap.amapvox.commons.util.MatrixUtility;
 import fr.amap.amapvox.commons.util.ProcessingListener;
 import fr.amap.amapvox.commons.util.TimeCounter;
@@ -38,6 +38,7 @@ import fr.amap.amapvox.voxelisation.configuration.TLSVoxCfg;
 import fr.amap.amapvox.voxelisation.configuration.VoxMergingCfg;
 import fr.amap.amapvox.voxelisation.configuration.VoxelParameters;
 import fr.amap.amapvox.voxelisation.multires.ProcessingMultiRes;
+import fr.amap.amapvox.voxelisation.tls.RxpEchoFilter;
 import fr.amap.amapvox.voxelisation.tls.RxpVoxelisation;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -158,9 +159,8 @@ public class ProcessTool implements Cancellable{
         VoxelParameters parameters = cfg.getVoxelParameters();
         Mat4D vop = MatrixUtility.convertMatrix4dToMat4D(cfg.getVopMatrix());
         Mat4D pop = MatrixUtility.convertMatrix4dToMat4D(cfg.getPopMatrix());
-        List<MatrixAndFile> matricesAndFiles = cfg.getMatricesAndFiles();
-        List<Filter> filters = cfg.getFilters();
-        
+        List<LidarScan> matricesAndFiles = cfg.getMatricesAndFiles();
+        cfg.setEchoFilter(new RxpEchoFilter(cfg.getEchoFilters()));
         
         if (!Files.isReadable(output.toPath())) {
             logger.error("File " + output.getAbsolutePath() + " not reachable");
@@ -179,18 +179,19 @@ public class ProcessTool implements Cancellable{
             dtm = loadDTM(parameters.getDtmFile());
         }
         
-        List<fr.amap.amapvox.commons.util.PointcloudFilter> pointcloudFilters = parameters.getPointcloudFilters();
-        List<Octree> pointcloudList = null;
+        List<PointcloudFilter> pointcloudFilters = parameters.getPointcloudFilters();
+        //List<Octree> pointcloudList = null;
         
         if(pointcloudFilters != null){
             
             if(vop == null){ vop = Mat4D.identity();}
             
-            pointcloudList = new ArrayList<>();
+            //pointcloudList = new ArrayList<>();
             
             if(parameters.isUsePointCloudFilter()){
-                for(fr.amap.amapvox.commons.util.PointcloudFilter filter : pointcloudFilters){
-                    pointcloudList.add(loadOctree(filter.getPointcloudFile(), vop));
+                for(fr.amap.amapvox.voxelisation.PointcloudFilter filter : pointcloudFilters){
+                    filter.setOctree(loadOctree(filter.getPointcloudFile(), vop));
+                    //pointcloudList.add(loadOctree(filter.getPointcloudFile(), vop));
                 }
             }
         }
@@ -203,10 +204,10 @@ public class ProcessTool implements Cancellable{
             LinkedBlockingQueue<Callable<RxpVoxelisation>>  tasks = new LinkedBlockingQueue<>();
 
             int count = 1;
-            for (MatrixAndFile file : matricesAndFiles) {
+            for (LidarScan file : matricesAndFiles) {
 
                 File outputFile = new File(output.getAbsolutePath() + "/" + file.file.getName() + ".vox");
-                tasks.put(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixUtility.convertMatrix4dToMat4D(file.matrix), parameters, dtm, pointcloudList, cfg));
+                tasks.put(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixUtility.convertMatrix4dToMat4D(file.matrix), parameters, dtm, pointcloudFilters, cfg));
                 files.add(outputFile);
                 count++;
             }
@@ -244,7 +245,7 @@ public class ProcessTool implements Cancellable{
         Mat4D vop = MatrixUtility.convertMatrix4dToMat4D(cfg.getVopMatrix());
         Mat4D pop = MatrixUtility.convertMatrix4dToMat4D(cfg.getPopMatrix());
         Mat4D sop = MatrixUtility.convertMatrix4dToMat4D(cfg.getSopMatrix());
-        List<Filter> filters = cfg.getFilters();        
+        //List<Filter> filters = cfg.getFilters();        
         
         parameters.setTLS(true);
 
@@ -258,18 +259,19 @@ public class ProcessTool implements Cancellable{
             dtm = loadDTM(parameters.getDtmFile());
         }
         
-        List<fr.amap.amapvox.commons.util.PointcloudFilter> pointcloudFilters = parameters.getPointcloudFilters();
-        List<Octree> pointcloudList = null;
+        List<PointcloudFilter> pointcloudFilters = parameters.getPointcloudFilters();
+        //List<Octree> pointcloudList = null;
         
         if(pointcloudFilters != null){
             
             if(vop == null){ vop = Mat4D.identity();}
             
-            pointcloudList = new ArrayList<>();
+            //pointcloudList = new ArrayList<>();
             
             if(parameters.isUsePointCloudFilter()){
-                for(fr.amap.amapvox.commons.util.PointcloudFilter filter : pointcloudFilters){
-                    pointcloudList.add(loadOctree(filter.getPointcloudFile(), vop));
+                for(PointcloudFilter filter : pointcloudFilters){
+                    filter.setOctree(loadOctree(filter.getPointcloudFile(), vop));
+                    //pointcloudList.add(loadOctree(filter.getPointcloudFile(), vop));
                 }
             }
         }
@@ -277,8 +279,9 @@ public class ProcessTool implements Cancellable{
         if(pop == null){ pop = Mat4D.identity();}
         if(sop == null){ sop = Mat4D.identity();}
         if(vop == null){ vop = Mat4D.identity();}
-
-        RxpVoxelisation voxelisation = new RxpVoxelisation(input, output, vop, pop, sop, parameters, dtm, pointcloudList, cfg);
+        
+        cfg.setEchoFilter(new RxpEchoFilter(cfg.getEchoFilters()));
+        RxpVoxelisation voxelisation = new RxpVoxelisation(input, output, vop, pop, sop, parameters, dtm, pointcloudFilters, cfg);
         voxelisation.call();
 
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
@@ -795,60 +798,18 @@ public class ProcessTool implements Cancellable{
         
         DirectionalTransmittance direcTransmittance = new DirectionalTransmittance(distribution);
         
+        VoxelAnalysis voxelAnalysis = new VoxelAnalysis();
+        voxelAnalysis.init(cfg.getVoxelParameters(), null);
+        
         logger.info("Building transmittance functions table");
         direcTransmittance.buildTable(DirectionalTransmittance.DEFAULT_STEP_NUMBER);
         logger.info("Transmittance functions table is built");
         
         for (int i = 0; i < size; i++) {
-            
-            resultingFile[i][transmittanceColumnIndex] = (resultingFile[i][bvEnteringColumnIndex] - resultingFile[i][bvInterceptedColumnIndex])/
-                                                        resultingFile[i][bvEnteringColumnIndex];
 
-            resultingFile[i][transmittanceColumnIndex] = (float) Math.pow(resultingFile[i][transmittanceColumnIndex], 1 / resultingFile[i][lMeanTotalColumnIndex]);
-            
-            float pad1;
-
-            if (resultingFile[i][nbSamplingColumnIndex] == 0) {
-
-                pad1 = Float.NaN;
-                resultingFile[i][transmittanceColumnIndex] = Float.NaN;
-
-            } else if (resultingFile[i][bvInterceptedColumnIndex] > resultingFile[i][bvEnteringColumnIndex]) {
-
-                logger.error("BFInterceptes > BFEntering, NaN assigné");
-
-                pad1 = Float.NaN;
-                resultingFile[i][transmittanceColumnIndex] = Float.NaN;
-
-            } else {
-
-                if (/*resultingFile[i][nbSamplingColumnIndex] > 1 && */resultingFile[i][transmittanceColumnIndex] == 0) {
-
-                    pad1 = cfg.getVoxelParameters().getMaxPAD();
-
-                }/* else if (resultingFile[i][nbSamplingColumnIndex] <= 2 && resultingFile[i][transmittanceColumnIndex] == 0 && Objects.equals(resultingFile[i][nbSamplingColumnIndex], resultingFile[i][nbEchosColumnIndex])) {
-
-                    pad1 = Float.NaN;
-
-                } */else {
-
-                    double coefficientGTheta = direcTransmittance.getTransmittanceFromAngle(resultingFile[i][angleMeanColumnIndex], true);
-                    
-                    if(coefficientGTheta == 0){
-                        logger.error("Voxel : " + resultingFile[i][0] + " " + resultingFile[i][1] + " " + resultingFile[i][2] + " -> coefficient GTheta nul, angle = "+resultingFile[i][angleMeanColumnIndex]);
-                    }
-                    
-                    pad1 = (float) (Math.log(resultingFile[i][transmittanceColumnIndex]) / (-coefficientGTheta));
-
-                    if (Float.isNaN(pad1)) {
-                        pad1 = Float.NaN;
-                    } else if (pad1 > cfg.getVoxelParameters().getMaxPAD() || Float.isInfinite(pad1)) {
-                        pad1 = cfg.getVoxelParameters().getMaxPAD();
-                    }
-                }
-            }
-
-            resultingFile[i][padBVTotalColumnIndex] = pad1 + 0.0f;
+            resultingFile[i][transmittanceColumnIndex] = voxelAnalysis.computeTransmittance(resultingFile[i][bvEnteringColumnIndex], resultingFile[i][bvInterceptedColumnIndex]);
+            resultingFile[i][transmittanceColumnIndex] =  voxelAnalysis.computeNormTransmittance(resultingFile[i][transmittanceColumnIndex], resultingFile[i][lMeanTotalColumnIndex]);
+            resultingFile[i][padBVTotalColumnIndex] = voxelAnalysis.computePADFromNormTransmittance(resultingFile[i][transmittanceColumnIndex], resultingFile[i][angleMeanColumnIndex]);
         }
         
         logger.info("writing output file: " + cfg.getOutputFile().getAbsolutePath());
@@ -872,7 +833,7 @@ public class ProcessTool implements Cancellable{
             writer.write(header + "\n");
 
             for (int i = 0; i < size; i++) {
-
+                
                 StringBuilder voxel = new StringBuilder();
                 
                 for (int j = 0;j<columnNumber;j++){

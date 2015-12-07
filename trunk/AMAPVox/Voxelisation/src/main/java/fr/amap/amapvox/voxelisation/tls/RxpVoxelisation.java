@@ -9,11 +9,11 @@ import fr.amap.amapvox.math.matrix.Mat3D;
 import fr.amap.amapvox.math.matrix.Mat4D;
 import fr.amap.amapvox.math.vector.Vec3D;
 import fr.amap.amapvox.math.vector.Vec4D;
-import fr.amap.amapvox.commons.util.Filter;
-import fr.amap.amapvox.datastructure.octree.Octree;
 import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
+import fr.amap.amapvox.voxelisation.PointcloudFilter;
+import fr.amap.amapvox.voxelisation.SimpleShotFilter;
 import fr.amap.amapvox.voxelisation.VoxelAnalysis;
 import fr.amap.amapvox.voxelisation.configuration.VoxCfg;
 import fr.amap.amapvox.voxelisation.configuration.VoxelParameters;
@@ -49,7 +49,7 @@ public class RxpVoxelisation implements Callable{
         this.nbVoxelisationFinished = nbVoxelisationFinished;
     }    
     
-    public RxpVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, RegularDtm terrain, List<Octree> pointcloud, VoxCfg cfg){
+    public RxpVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, RegularDtm terrain, List<PointcloudFilter> pointcloud, VoxCfg cfg){
                 
         nbVoxelisationFinished = 0;
         this.inputFile = inputFile;
@@ -76,6 +76,8 @@ public class RxpVoxelisation implements Callable{
             terrain.setTransformationMatrix(vopMatrix);
         }
         
+        cfg.setShotFilter(new SimpleShotFilter(cfg.getFilters()));
+        
         voxelAnalysis = new VoxelAnalysis(terrain, pointcloud, cfg);
         voxelAnalysis.init(parameters, outputFile);
         
@@ -93,7 +95,7 @@ public class RxpVoxelisation implements Callable{
         
             voxelAnalysis.createVoxelSpace();
             RxpExtraction rxpExtraction = new RxpExtraction();
-            int result = rxpExtraction.openRxpFile(inputFile, RxpExtraction.REFLECTANCE);
+            int result = rxpExtraction.openRxpFile(inputFile, RxpExtraction.REFLECTANCE, RxpExtraction.DEVIATION);
             
             if(result != 0){
                 logger.error("Extraction aborted");
@@ -137,7 +139,9 @@ public class RxpVoxelisation implements Callable{
             }
 
             if((parameters.isGenerateMultiBandRaster() && !parameters.isShortcutVoxelFileWriting()) || !parameters.isGenerateMultiBandRaster()){
-                voxelAnalysis.calculatePADAndWrite(0);
+                voxelAnalysis.computePADs();
+                voxelAnalysis.write();
+                //voxelAnalysis.calculatePADAndWrite(0);
             }
             
 

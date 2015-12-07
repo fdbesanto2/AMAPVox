@@ -37,7 +37,6 @@ public class Shot{
     public float amplitudes[];
 
     public double angle;
-    private static List<Filter> filters;
 
     public Shot() {
 
@@ -54,10 +53,6 @@ public class Shot{
         this.origin = shot.origin;
         this.ranges = shot.ranges;
         this.reflectances = shot.reflectances;
-    }
-
-    public static void setFilters(List<Filter> filters) {
-        Shot.filters = filters;
     }
 
     public Shot(int nbEchos,
@@ -131,56 +126,6 @@ public class Shot{
         
         //attention ! : les angles sont les mêmes que z soit positif ou négatif
         this.angle = FastMath.toDegrees(FastMath.acos(direction.z));
-    }
-
-    public boolean doFilter() {
-        
-        if (filters != null) {
-
-            for (Filter f : filters) {
-
-                switch (f.getVariable()) {
-                    case "Angle":
-                        switch (f.getCondition()) {
-
-                            case Filter.EQUAL:
-                                if (angle != f.getValue()) {
-                                    return false;
-                                }
-                                break;
-                            case Filter.GREATER_THAN:
-                                if (angle <= f.getValue()) {
-                                    return false;
-                                }
-                                break;
-                            case Filter.GREATER_THAN_OR_EQUAL:
-                                if (angle < f.getValue()) {
-                                    return false;
-                                }
-                                break;
-                            case Filter.LESS_THAN:
-                                if (angle >= f.getValue()) {
-                                    return false;
-                                }
-                                break;
-                            case Filter.LESS_THAN_OR_EQUAL:
-                                if (angle > f.getValue()) {
-                                    return false;
-                                }
-                                break;
-                            case Filter.NOT_EQUAL:
-                                if (angle == f.getValue()) {
-                                    return false;
-                                }
-                                break;
-                        }
-
-                        break;
-                }
-            }
-        }
-
-        return true;
     }
 
 }

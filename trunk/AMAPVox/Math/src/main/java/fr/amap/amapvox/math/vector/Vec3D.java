@@ -5,6 +5,8 @@
  */
 package fr.amap.amapvox.math.vector;
 
+import fr.amap.amapvox.math.point.Point3D;
+
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
@@ -38,7 +40,7 @@ public class Vec3D{
      * @param point2 The second point
      * @return A 3d vector constructed with the two given points
      */
-    public static Vec3D createVec3DFromPoints(Vec3D point1, Vec3D point2){
+    public static Vec3D createVec3DFromPoints(Point3D point1, Point3D point2){
         
         Vec3D result = new Vec3D();
         

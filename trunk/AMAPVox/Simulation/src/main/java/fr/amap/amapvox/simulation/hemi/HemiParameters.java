@@ -5,7 +5,8 @@
  */
 package fr.amap.amapvox.simulation.hemi;
 
-import fr.amap.amapvox.commons.util.MatrixAndFile;
+import fr.amap.amapvox.commons.util.LidarScan;
+import fr.amap.amapvox.voxelisation.EchoFilter;
 import java.io.File;
 import java.util.List;
 import javax.vecmath.Point3d;
@@ -51,7 +52,8 @@ public class HemiParameters {
     private Mode mode;
     
     //echos mode
-    private List<MatrixAndFile> rxpScansList;
+    private List<LidarScan> rxpScansList;
+    private EchoFilter echoFilter;
     
     //PAD mode
     private File voxelFile;
@@ -77,11 +79,11 @@ public class HemiParameters {
         this.mode = mode;
     }
 
-    public List<MatrixAndFile> getRxpScansList() {
+    public List<LidarScan> getRxpScansList() {
         return rxpScansList;
     }
 
-    public void setRxpScansList(List<MatrixAndFile> rxpScansList) {
+    public void setRxpScansList(List<LidarScan> rxpScansList) {
         this.rxpScansList = rxpScansList;
     }
 
@@ -164,4 +166,13 @@ public class HemiParameters {
     public void setGenerateTextFile(boolean generateTextFile) {
         this.generateTextFile = generateTextFile;
     }
+
+    public EchoFilter getEchoFilter() {
+        return echoFilter;
+    }
+
+    public void setEchoFilter(EchoFilter echoFilter) {
+        this.echoFilter = echoFilter;
+    }
+    
 }

@@ -15,6 +15,7 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.amapvox.datastructure.octree;
 
+import fr.amap.amapvox.math.point.Point3D;
 import fr.amap.amapvox.math.point.Point3F;
 import fr.amap.amapvox.math.point.Point3I;
 import java.util.Arrays;
@@ -31,10 +32,10 @@ public class Node {
     private Node[] childs;
     private int[] points;
     private int pointNumber;
-    private Point3F minPoint;
-    private Point3F maxPoint;
+    private Point3D minPoint;
+    private Point3D maxPoint;
     
-    public Node(Point3F minPoint, Point3F maxPoint){
+    public Node(Point3D minPoint, Point3D maxPoint){
         
         this.minPoint = minPoint;
         this.maxPoint = maxPoint;
@@ -54,8 +55,8 @@ public class Node {
             short indiceY = decToBin[1];
             short indiceZ = decToBin[2];
             
-            float minPointX, minPointY, minPointZ;
-            float maxPointX, maxPointY, maxPointZ;
+            double minPointX, minPointY, minPointZ;
+            double maxPointX, maxPointY, maxPointZ;
             
             if(indiceX == 0){
                 minPointX = parent.minPoint.x;
@@ -81,8 +82,8 @@ public class Node {
                 maxPointZ = parent.maxPoint.z;
             }
             
-            minPoint = new Point3F(minPointX, minPointY, minPointZ);
-            maxPoint = new Point3F(maxPointX, maxPointY, maxPointZ);
+            minPoint = new Point3D(minPointX, minPointY, minPointZ);
+            maxPoint = new Point3D(maxPointX, maxPointY, maxPointZ);
             
         }else{
             throw new Exception("Cannot instantiate node cause parent is null or indice is not range between 0 to 7");
@@ -134,7 +135,7 @@ public class Node {
             
             //on détermine dans quel enfant se trouve le point
             int childContainingPointID;
-            Point3F point = octree.getPoints()[indice];
+            Point3D point = octree.getPoints()[indice];
 
             Point3I indices = get3DIndicesFromPoint(point);
 
@@ -151,7 +152,7 @@ public class Node {
         }
     }
     
-    public short get1DIndiceFromPoint(Point3F point){
+    public short get1DIndiceFromPoint(Point3D point){
         
         Point3I indices = get3DIndicesFromPoint(point);
         
@@ -162,7 +163,7 @@ public class Node {
         return get1DIndiceFrom3DIndices(indices.x, indices.y, indices.z);
     }
     
-    public Point3I get3DIndicesFromPoint(Point3F point){
+    public Point3I get3DIndicesFromPoint(Point3D point){
         
         int indiceX = (int)((point.x-minPoint.x)/((maxPoint.x-minPoint.x)/2.0f));
         int indiceY = (int)((point.y-minPoint.y)/((maxPoint.y-minPoint.y)/2.0f));
@@ -229,34 +230,34 @@ public class Node {
         return result;
     }
     
-    public float getTopCornerDistance(Point3F point){
+    public double getTopCornerDistance(Point3D point){
         
-        return point.distanceTo(new Point3F(point.x, point.y, maxPoint.z));
+        return point.distanceTo(new Point3D(point.x, point.y, maxPoint.z));
     }
     
-    public float getBottomCornerDistance(Point3F point){
+    public double getBottomCornerDistance(Point3D point){
         
-        return point.distanceTo(new Point3F(point.x, point.y, minPoint.z));
+        return point.distanceTo(new Point3D(point.x, point.y, minPoint.z));
     }
     
-    public float getLeftCornerDistance(Point3F point){
+    public double getLeftCornerDistance(Point3D point){
         
-        return point.distanceTo(new Point3F(minPoint.x, point.y, point.z));
+        return point.distanceTo(new Point3D(minPoint.x, point.y, point.z));
     }
     
-    public float getRightCornerDistance(Point3F point){
+    public double getRightCornerDistance(Point3D point){
         
-        return point.distanceTo(new Point3F(maxPoint.x, point.y, point.z));
+        return point.distanceTo(new Point3D(maxPoint.x, point.y, point.z));
     }
     
-    public float getFrontCornerDistance(Point3F point){
+    public double getFrontCornerDistance(Point3D point){
         
-        return point.distanceTo(new Point3F(point.x, minPoint.y, point.z));
+        return point.distanceTo(new Point3D(point.x, minPoint.y, point.z));
     }
     
-    public float getBackCornerDistance(Point3F point){
+    public double getBackCornerDistance(Point3D point){
         
-        return point.distanceTo(new Point3F(point.x, maxPoint.y, point.z));
+        return point.distanceTo(new Point3D(point.x, maxPoint.y, point.z));
     }
     
     public Node getChild(short indice){
@@ -272,11 +273,11 @@ public class Node {
         return (value >= min && value <= max);
     }
 
-    public Point3F getMinPoint() {
+    public Point3D getMinPoint() {
         return minPoint;
     }
 
-    public Point3F getMaxPoint() {
+    public Point3D getMaxPoint() {
         return maxPoint;
     }
     

@@ -5,8 +5,8 @@
  */
 package fr.amap.amapvox.math.geometry;
 
-import fr.amap.amapvox.math.point.Point3F;
-import fr.amap.amapvox.math.vector.Vec3F;
+import fr.amap.amapvox.math.point.Point3D;
+import fr.amap.amapvox.math.vector.Vec3D;
 
 /**
  *
@@ -15,15 +15,15 @@ import fr.amap.amapvox.math.vector.Vec3F;
 public class Intersection {
     
     //(algorithme de smit)
-    public static Point3F getIntersectionLineBoundingBox(Point3F startPoint, Point3F endPoint, BoundingBox3F boundingBox3F) {
+    public static Point3D getIntersectionLineBoundingBox(Point3D startPoint, Point3D endPoint, BoundingBox3D boundingBox3D) {
 
         double tmin, tmax, tymin, tymax, tzmin, tzmax;
 
-        Point3F[] bounds = new Point3F[]{boundingBox3F.min, boundingBox3F.max};
+        Point3D[] bounds = new Point3D[]{boundingBox3D.min, boundingBox3D.max};
 
-        Vec3F direction = Vec3F.createVec3FFromPoints(startPoint, endPoint);
-        direction = Vec3F.normalize(direction);
-        Vec3F invDirection = new Vec3F(1.0f/direction.x, 1.0f/direction.y, 1.0f/direction.z);
+        Vec3D direction = Vec3D.createVec3DFromPoints(startPoint, endPoint);
+        direction = Vec3D.normalize(direction);
+        Vec3D invDirection = new Vec3D(1.0/direction.x, 1.0/direction.y, 1.0/direction.z);
         int sign[] = new int[]{(invDirection.x < 0)? 1 : 0, (invDirection.y < 0)? 1 : 0 , (invDirection.z < 0)? 1 : 0};
 
         tmin = (bounds[sign[0]].x - startPoint.x) * invDirection.x;
@@ -60,7 +60,7 @@ public class Intersection {
 
         
         
-        Point3F point = new Point3F(
+        Point3D point = new Point3D(
                 startPoint.x * direction.x + (float)tmin,
                 startPoint.y * direction.y + (float)tmin,
                 startPoint.z * direction.z + (float)tmin);
