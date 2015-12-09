@@ -48282,3 +48282,346 @@ i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal l
 2015-12-07 18:29:14 INFO  - Context menu requested
 2015-12-07 18:29:15 INFO  - Context menu requested
 2015-12-07 18:29:16 INFO  - Context menu requested
+2015-12-08 15:49:37 INFO  - Laz file /home/calcul/Documents/Julien/shapes_files/p9.laz is opened
+2015-12-08 15:50:49 INFO  - Laz file is closed
+2015-12-08 15:58:32 INFO  - Laz file /home/calcul/Documents/Julien/shapes_files/p9.laz is opened
+2015-12-08 15:59:32 INFO  - Laz file is closed
+2015-12-08 16:06:27 INFO  - Building transmittance functions table
+2015-12-08 16:06:27 INFO  - Transmittance functions table is built
+2015-12-08 16:06:27 INFO  - allocate!!!!!!!!
+2015-12-08 16:06:27 INFO  - Voxel space informations:
+			Corner Inf	:	(286147.0, 581497.0, 5.0)
+			Corner Sup	:	(286452.0, 581806.0, 90.0)
+			Dimensions	:	(305, 309, 85)
+			Toricity 	:	false
+
+2015-12-08 16:06:27 INFO  - Laz file /home/calcul/Documents/Julien/shapes_files/p9.laz is opened
+2015-12-08 16:07:33 INFO  - Laz file is closed
+2015-12-08 16:09:03 INFO  - Shots processed: 1000000
+2015-12-08 16:11:13 INFO  - Building transmittance functions table
+2015-12-08 16:11:13 INFO  - Transmittance functions table is built
+2015-12-08 16:11:13 INFO  - allocate!!!!!!!!
+2015-12-08 16:11:13 INFO  - Voxel space informations:
+			Corner Inf	:	(286147.0, 581497.0, 5.0)
+			Corner Sup	:	(286452.0, 581806.0, 90.0)
+			Dimensions	:	(305, 309, 85)
+			Toricity 	:	false
+
+2015-12-08 16:11:13 INFO  - Laz file /home/calcul/Documents/Julien/shapes_files/p9.laz is opened
+2015-12-08 16:12:15 INFO  - Laz file is closed
+2015-12-08 16:12:29 INFO  - Shots processed: 1000000
+2015-12-08 16:12:31 INFO  - Shots processed: 2000000
+2015-12-08 16:12:35 INFO  - Shots processed: 3000000
+2015-12-08 16:12:38 INFO  - Shots processed: 4000000
+2015-12-08 16:12:45 INFO  - Shots processed: 5000000
+2015-12-08 16:12:47 INFO  - Shots processed: 6000000
+2015-12-08 16:12:52 INFO  - Shots processed: 7000000
+2015-12-08 16:12:56 INFO  - Shots processed: 8000000
+2015-12-08 16:12:59 INFO  - Shots processed: 9000000
+2015-12-08 16:13:01 INFO  - Shots processed: 10000000
+2015-12-08 16:13:03 INFO  - Shots processed: 11000000
+2015-12-08 16:13:05 INFO  - Shots processed: 12000000
+2015-12-08 16:13:06 INFO  - Shots processed: 12394934
+2015-12-08 16:13:08 INFO  - writing file: /home/calcul/Documents/Julien/pour_eloi/paracou/P9/las.vox
+2015-12-08 16:13:40 INFO  - file written ( 32.0 s )
+2015-12-08 16:13:40 INFO  - las voxelisation finished in 167.0 s
+2015-12-08 16:16:36 INFO  - Building transmittance functions table
+2015-12-08 16:16:36 INFO  - Transmittance functions table is built
+2015-12-08 16:16:36 INFO  - allocate!!!!!!!!
+2015-12-08 16:16:36 INFO  - Voxel space informations:
+			Corner Inf	:	(286147.0, 581497.0, 5.0)
+			Corner Sup	:	(286452.0, 581806.0, 90.0)
+			Dimensions	:	(305, 309, 85)
+			Toricity 	:	false
+
+2015-12-08 16:16:36 INFO  - Laz file /home/calcul/Documents/Julien/shapes_files/p9.laz is opened
+2015-12-08 16:17:35 INFO  - Laz file is closed
+2015-12-08 16:17:53 INFO  - Shots processed: 1000000
+2015-12-08 16:18:02 INFO  - Shots processed: 2000000
+2015-12-08 16:18:11 INFO  - Shots processed: 3000000
+2015-12-08 16:18:14 INFO  - Shots processed: 4000000
+2015-12-08 16:18:21 INFO  - Shots processed: 5000000
+2015-12-08 16:18:23 INFO  - Shots processed: 6000000
+2015-12-08 16:18:28 INFO  - Shots processed: 7000000
+2015-12-08 16:18:31 INFO  - Shots processed: 8000000
+2015-12-08 16:18:34 INFO  - Shots processed: 9000000
+2015-12-08 16:18:36 INFO  - Shots processed: 10000000
+2015-12-08 16:18:38 INFO  - Shots processed: 11000000
+2015-12-08 16:18:40 INFO  - Shots processed: 12000000
+2015-12-08 16:18:41 INFO  - Shots processed: 12394934
+2015-12-08 16:18:42 INFO  - Maximum neighborhood range : 26
+2015-12-08 16:18:45 INFO  - Maximum neighborhood range : 27
+2015-12-08 16:25:07 INFO  - Building transmittance functions table
+2015-12-08 16:25:07 INFO  - Transmittance functions table is built
+2015-12-08 16:25:07 INFO  - allocate!!!!!!!!
+2015-12-08 16:25:07 INFO  - Voxel space informations:
+			Corner Inf	:	(286147.0, 581497.0, 5.0)
+			Corner Sup	:	(286452.0, 581806.0, 90.0)
+			Dimensions	:	(305, 309, 85)
+			Toricity 	:	false
+
+2015-12-08 16:25:07 INFO  - Laz file /home/calcul/Documents/Julien/pour_eloi/paracou/P9/data/p9.laz is opened
+2015-12-08 16:26:16 INFO  - Laz file is closed
+2015-12-08 16:26:25 INFO  - Shots processed: 1000000
+2015-12-08 16:26:27 INFO  - Shots processed: 2000000
+2015-12-08 16:26:32 INFO  - Shots processed: 3000000
+2015-12-08 16:26:34 INFO  - Shots processed: 4000000
+2015-12-08 16:26:42 INFO  - Shots processed: 5000000
+2015-12-08 16:26:44 INFO  - Shots processed: 6000000
+2015-12-08 16:26:49 INFO  - Shots processed: 7000000
+2015-12-08 16:26:52 INFO  - Shots processed: 8000000
+2015-12-08 16:26:55 INFO  - Shots processed: 9000000
+2015-12-08 16:26:57 INFO  - Shots processed: 10000000
+2015-12-08 16:26:59 INFO  - Shots processed: 11000000
+2015-12-08 16:27:02 INFO  - Shots processed: 12000000
+2015-12-08 16:27:02 INFO  - Shots processed: 12394934
+2015-12-08 16:27:04 INFO  - Maximum neighborhood range : 10
+2015-12-08 16:27:04 INFO  - Maximum neighborhood range : 11
+2015-12-08 16:27:04 INFO  - Maximum neighborhood range : 12
+2015-12-08 16:27:04 INFO  - Maximum neighborhood range : 14
+2015-12-08 16:27:04 INFO  - Maximum neighborhood range : 15
+2015-12-08 16:27:04 INFO  - Maximum neighborhood range : 18
+2015-12-08 16:27:05 INFO  - Maximum neighborhood range : 19
+2015-12-08 16:28:28 INFO  - Time : 84047 ms
+2015-12-08 16:28:28 INFO  - writing file: /home/calcul/Documents/Julien/pour_eloi/paracou/P9/las_NaNs_corrected.vox
+2015-12-08 16:29:02 INFO  - file written ( 33.0 s )
+2015-12-08 16:29:02 INFO  - las voxelisation finished in 255.0 s
+2015-12-09 14:57:55 INFO  - Laz file /home/calcul/Documents/Julien/pour_eloi/paracou/ALS/P10/data/p10.laz is opened
+2015-12-09 14:57:55 INFO  - Laz file is closed
+2015-12-09 15:03:09 INFO  - Laz file /home/calcul/Documents/Julien/pour_eloi/paracou/ALS/P10/data/p10.laz is opened
+2015-12-09 15:03:42 INFO  - Laz file is closed
+2015-12-09 15:06:29 INFO  - Building transmittance functions table
+2015-12-09 15:06:29 INFO  - Transmittance functions table is built
+2015-12-09 15:06:29 INFO  - allocate!!!!!!!!
+2015-12-09 15:06:29 INFO  - Voxel space informations:
+			Corner Inf	:	(286509.0, 581558.0, 5.0)
+			Corner Sup	:	(286749.0, 581863.0, 90.0)
+			Dimensions	:	(240, 305, 85)
+			Toricity 	:	false
+
+2015-12-09 15:06:29 INFO  - Laz file /home/calcul/Documents/Julien/pour_eloi/paracou/ALS/P10/data/p10.laz is opened
+2015-12-09 15:07:01 INFO  - Laz file is closed
+2015-12-09 15:07:07 INFO  - Shots processed: 1000000
+2015-12-09 15:07:14 INFO  - Shots processed: 2000000
+2015-12-09 15:07:18 INFO  - Shots processed: 3000000
+2015-12-09 15:07:24 INFO  - Shots processed: 4000000
+2015-12-09 15:07:29 INFO  - Shots processed: 5000000
+2015-12-09 15:07:31 INFO  - Shots processed: 6000000
+2015-12-09 15:07:31 INFO  - Shots processed: 6054868
+2015-12-09 15:07:33 INFO  - writing file: /home/calcul/Documents/Julien/pour_eloi/paracou/ALS/P10/las.vox
+2015-12-09 15:07:58 INFO  - file written ( 25.0 s )
+2015-12-09 15:07:58 INFO  - las voxelisation finished in 123.0 s
+2015-12-09 15:10:37 INFO  - Building transmittance functions table
+2015-12-09 15:10:37 INFO  - Transmittance functions table is built
+2015-12-09 15:10:37 INFO  - allocate!!!!!!!!
+2015-12-09 15:10:37 INFO  - Voxel space informations:
+			Corner Inf	:	(286509.0, 581558.0, 5.0)
+			Corner Sup	:	(286749.0, 581863.0, 90.0)
+			Dimensions	:	(240, 305, 85)
+			Toricity 	:	false
+
+2015-12-09 15:10:37 INFO  - Laz file /home/calcul/Documents/Julien/pour_eloi/paracou/ALS/P10/data/p10.laz is opened
+2015-12-09 15:11:12 INFO  - Laz file is closed
+2015-12-09 15:11:17 INFO  - Shots processed: 1000000
+2015-12-09 15:11:24 INFO  - Shots processed: 2000000
+2015-12-09 15:11:28 INFO  - Shots processed: 3000000
+2015-12-09 15:11:35 INFO  - Shots processed: 4000000
+2015-12-09 15:11:39 INFO  - Shots processed: 5000000
+2015-12-09 15:11:42 INFO  - Shots processed: 6000000
+2015-12-09 15:11:42 INFO  - Shots processed: 6054868
+2015-12-09 15:11:43 INFO  - Maximum neighborhood range : 5
+2015-12-09 15:11:43 INFO  - Maximum neighborhood range : 6
+2015-12-09 15:11:43 INFO  - Maximum neighborhood range : 7
+2015-12-09 15:11:43 INFO  - Maximum neighborhood range : 10
+2015-12-09 15:11:43 INFO  - Maximum neighborhood range : 11
+2015-12-09 15:11:43 INFO  - Maximum neighborhood range : 12
+2015-12-09 15:11:43 INFO  - Maximum neighborhood range : 13
+2015-12-09 15:11:43 INFO  - Maximum neighborhood range : 14
+2015-12-09 15:11:43 INFO  - Maximum neighborhood range : 15
+2015-12-09 15:11:43 INFO  - Maximum neighborhood range : 16
+2015-12-09 15:11:43 INFO  - Maximum neighborhood range : 17
+2015-12-09 15:11:43 INFO  - Maximum neighborhood range : 18
+2015-12-09 15:11:44 INFO  - Maximum neighborhood range : 19
+2015-12-09 15:12:20 INFO  - Time : 37327 ms
+2015-12-09 15:12:20 INFO  - writing file: /home/calcul/Documents/Julien/pour_eloi/paracou/ALS/P10/las_NaNs_corrected.vox
+2015-12-09 15:12:46 INFO  - file written ( 26.0 s )
+2015-12-09 15:12:46 INFO  - las voxelisation finished in 166.0 s
+2015-12-09 17:14:15 INFO  - Building transmittance functions table
+2015-12-09 17:14:15 INFO  - Transmittance functions table is built
+2015-12-09 17:14:15 INFO  - allocate!!!!!!!!
+2015-12-09 17:14:15 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, 12.0, 8.0)
+			Corner Sup	:	(12.0, 238.0, 72.0)
+			Dimensions	:	(24, 226, 64)
+			Toricity 	:	false
+
+2015-12-09 17:14:15 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-12-09 17:14:16 INFO  - Laz file is closed
+2015-12-09 17:14:17 INFO  - Shots processed: 144511
+2015-12-09 17:14:17 INFO  - writing file: /home/calcul/Documents/Julien/pour_eloi/paracou/ALS/Transect_P15/las.vox
+2015-12-09 17:14:19 INFO  - file written ( 1.0 s )
+2015-12-09 17:14:19 INFO  - las voxelisation finished in 41.0 s
+2015-12-09 17:17:28 INFO  - Building transmittance functions table
+2015-12-09 17:17:28 INFO  - Transmittance functions table is built
+2015-12-09 17:17:28 INFO  - allocate!!!!!!!!
+2015-12-09 17:17:28 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, 12.0, 8.0)
+			Corner Sup	:	(12.0, 238.0, 72.0)
+			Dimensions	:	(24, 226, 64)
+			Toricity 	:	false
+
+2015-12-09 17:17:28 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-12-09 17:17:29 INFO  - Laz file is closed
+2015-12-09 17:17:30 INFO  - Shots processed: 144511
+2015-12-09 17:17:30 INFO  - Maximum neighborhood range : 3
+2015-12-09 17:17:30 INFO  - Maximum neighborhood range : 4
+2015-12-09 17:17:30 INFO  - Maximum neighborhood range : 6
+2015-12-09 17:17:30 INFO  - Maximum neighborhood range : 7
+2015-12-09 17:17:30 INFO  - Maximum neighborhood range : 8
+2015-12-09 17:17:30 INFO  - Maximum neighborhood range : 9
+2015-12-09 17:17:30 INFO  - Maximum neighborhood range : 10
+2015-12-09 17:17:30 INFO  - Maximum neighborhood range : 11
+2015-12-09 17:17:30 INFO  - Maximum neighborhood range : 12
+2015-12-09 17:17:30 INFO  - Maximum neighborhood range : 13
+2015-12-09 17:17:31 INFO  - Maximum neighborhood range : 14
+2015-12-09 17:17:31 INFO  - Maximum neighborhood range : 15
+2015-12-09 17:17:31 INFO  - Maximum neighborhood range : 16
+2015-12-09 17:17:31 INFO  - Maximum neighborhood range : 17
+2015-12-09 17:17:31 INFO  - Maximum neighborhood range : 18
+2015-12-09 17:17:31 INFO  - Maximum neighborhood range : 20
+2015-12-09 17:17:31 INFO  - Maximum neighborhood range : 21
+2015-12-09 17:17:31 INFO  - Maximum neighborhood range : 22
+2015-12-09 17:17:31 INFO  - Maximum neighborhood range : 23
+2015-12-09 17:17:31 INFO  - Maximum neighborhood range : 24
+2015-12-09 17:17:32 INFO  - Maximum neighborhood range : 25
+2015-12-09 17:17:32 INFO  - Maximum neighborhood range : 26
+2015-12-09 17:17:41 INFO  - Time : 10924 ms
+2015-12-09 17:17:41 INFO  - writing file: /home/calcul/Documents/Julien/pour_eloi/paracou/ALS/Transect_P15/las_NaNs_corrected.vox
+2015-12-09 17:17:43 INFO  - file written ( 1.0 s )
+2015-12-09 17:17:43 INFO  - las voxelisation finished in 54.0 s
+2015-12-09 17:31:58 INFO  - Building transmittance functions table
+2015-12-09 17:31:58 INFO  - Transmittance functions table is built
+2015-12-09 17:31:58 INFO  - allocate!!!!!!!!
+2015-12-09 17:31:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, 12.0, 8.0)
+			Corner Sup	:	(12.0, 238.0, 72.0)
+			Dimensions	:	(24, 226, 64)
+			Toricity 	:	false
+
+2015-12-09 17:31:58 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-12-09 17:31:58 INFO  - Laz file is closed
+2015-12-09 17:31:59 INFO  - Shots processed: 144511
+2015-12-09 17:31:59 INFO  - Maximum neighborhood range : 3
+2015-12-09 17:31:59 INFO  - Maximum neighborhood range : 20
+2015-12-09 17:32:00 INFO  - Maximum neighborhood range : 21
+2015-12-09 17:32:00 INFO  - Maximum neighborhood range : 22
+2015-12-09 17:32:00 INFO  - Maximum neighborhood range : 23
+2015-12-09 17:32:00 INFO  - Maximum neighborhood range : 24
+2015-12-09 17:32:01 INFO  - Maximum neighborhood range : 25
+2015-12-09 17:32:01 INFO  - Maximum neighborhood range : 26
+2015-12-09 17:32:02 INFO  - Maximum neighborhood range : 28
+2015-12-09 17:32:02 INFO  - Maximum neighborhood range : 29
+2015-12-09 17:32:02 INFO  - Maximum neighborhood range : 30
+2015-12-09 17:32:02 INFO  - Maximum neighborhood range : 31
+2015-12-09 17:32:02 INFO  - Maximum neighborhood range : 32
+2015-12-09 17:32:03 INFO  - Maximum neighborhood range : 33
+2015-12-09 17:32:03 INFO  - Maximum neighborhood range : 34
+2015-12-09 17:32:03 INFO  - Maximum neighborhood range : 35
+2015-12-09 17:32:04 INFO  - Maximum neighborhood range : 36
+2015-12-09 17:32:04 INFO  - Maximum neighborhood range : 37
+2015-12-09 17:32:04 INFO  - Maximum neighborhood range : 38
+2015-12-09 17:32:04 INFO  - Maximum neighborhood range : 39
+2015-12-09 17:33:05 INFO  - Time : 65346 ms
+2015-12-09 17:33:05 INFO  - writing file: /home/calcul/Documents/Julien/pour_eloi/paracou/ALS/Transect_P15/las_NaNs_corrected.vox
+2015-12-09 17:33:06 INFO  - file written ( 1.0 s )
+2015-12-09 17:33:06 INFO  - las voxelisation finished in 100.0 s
+2015-12-09 17:34:45 INFO  - Building transmittance functions table
+2015-12-09 17:34:45 INFO  - Transmittance functions table is built
+2015-12-09 17:34:45 INFO  - allocate!!!!!!!!
+2015-12-09 17:34:45 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, 12.0, 8.0)
+			Corner Sup	:	(12.0, 238.0, 72.0)
+			Dimensions	:	(24, 226, 64)
+			Toricity 	:	false
+
+2015-12-09 17:34:45 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-12-09 17:34:46 INFO  - Laz file is closed
+2015-12-09 17:34:47 INFO  - Shots processed: 144511
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 3
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 4
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 6
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 7
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 8
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 9
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 10
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 11
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 12
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 13
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 14
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 15
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 16
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 17
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 18
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 20
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 21
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 22
+2015-12-09 17:34:47 INFO  - Maximum neighborhood range : 23
+2015-12-09 17:34:48 INFO  - Maximum neighborhood range : 24
+2015-12-09 17:34:48 INFO  - Maximum neighborhood range : 25
+2015-12-09 17:34:48 INFO  - Maximum neighborhood range : 26
+2015-12-09 17:34:58 INFO  - Time : 11460 ms
+2015-12-09 17:34:58 INFO  - writing file: /home/calcul/Documents/Julien/pour_eloi/paracou/ALS/Transect_P15/las_NaNs_corrected.vox
+2015-12-09 17:35:00 INFO  - file written ( 1.0 s )
+2015-12-09 17:35:00 INFO  - las voxelisation finished in 43.0 s
+2015-12-09 17:38:45 INFO  - Building transmittance functions table
+2015-12-09 17:38:45 INFO  - Transmittance functions table is built
+2015-12-09 17:38:45 INFO  - allocate!!!!!!!!
+2015-12-09 17:38:45 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 238.0, 72.0)
+			Dimensions	:	(24, 240, 64)
+			Toricity 	:	false
+
+2015-12-09 17:38:45 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-12-09 17:38:46 INFO  - Laz file is closed
+2015-12-09 17:38:47 INFO  - Shots processed: 144511
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 4
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 5
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 7
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 8
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 9
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 10
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 11
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 12
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 13
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 14
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 15
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 16
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 17
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 18
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 20
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 21
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 22
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 23
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 24
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 25
+2015-12-09 17:38:47 INFO  - Maximum neighborhood range : 26
+2015-12-09 17:38:56 INFO  - Time : 9060 ms
+2015-12-09 17:38:56 INFO  - writing file: /home/calcul/Documents/Julien/pour_eloi/paracou/ALS/Transect_P15/las_NaNs_corrected.vox
+2015-12-09 17:38:58 INFO  - file written ( 2.0 s )
+2015-12-09 17:38:58 INFO  - las voxelisation finished in 37.0 s
+2015-12-09 17:44:18 INFO  - Building transmittance functions table
+2015-12-09 17:44:18 INFO  - Transmittance functions table is built
+2015-12-09 17:44:18 INFO  - allocate!!!!!!!!
+2015-12-09 17:44:18 INFO  - Voxel space informations:
+			Corner Inf	:	(-12.0, -2.0, 8.0)
+			Corner Sup	:	(12.0, 238.0, 72.0)
+			Dimensions	:	(24, 240, 64)
+			Toricity 	:	false
+
+2015-12-09 17:44:18 INFO  - Laz file /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt.laz is opened
+2015-12-09 17:44:19 INFO  - Laz file is closed
+2015-12-09 17:44:20 INFO  - Shots processed: 144511
+2015-12-09 17:44:20 INFO  - writing file: /home/calcul/Documents/Julien/pour_eloi/paracou/ALS/Transect_P15/las.vox
+2015-12-09 17:44:22 INFO  - file written ( 1.0 s )
+2015-12-09 17:44:22 INFO  - las voxelisation finished in 37.0 s

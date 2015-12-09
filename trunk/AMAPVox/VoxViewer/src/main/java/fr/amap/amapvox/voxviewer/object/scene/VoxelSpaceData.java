@@ -65,13 +65,9 @@ public class VoxelSpaceData extends fr.amap.amapvox.voxcommons.VoxelSpace{
 
         Point3I indices = new Point3I();
         
-        indices.x = (int)pt.x;
-        indices.y = (int)pt.y;
-        indices.z = (int)pt.z;
-        /*
-        indices.x = (int) Math.floor ((double) (pt.x % header.split.x)); if (indices.x<0) indices.x += header.split.x;
-        indices.y = (int) Math.floor ((double) (pt.y % header.split.y)); if (indices.y<0) indices.y += header.split.y;
-        indices.z = (int) Math.min (pt.z, header.split.z-1);*/
+        indices.x = (int) Math.floor ((double) (pt.x % voxelSpaceInfos.getSplit().x)); if (indices.x<0) indices.x += voxelSpaceInfos.getSplit().x;
+        indices.y = (int) Math.floor ((double) (pt.y % voxelSpaceInfos.getSplit().y)); if (indices.y<0) indices.y += voxelSpaceInfos.getSplit().y;
+        indices.z = (int) Math.min (pt.z, voxelSpaceInfos.getSplit().z-1);
                 
         return indices;
     }

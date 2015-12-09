@@ -247,11 +247,14 @@ public class HemiScanView {
         return rotation;
     }
     
+    public void setScan(File scan){
+        setScan(scan, null);
+    }
+    
     public void setScan(File scan, EchoFilter filter){
         
         int count = 0;
         int totalShots = 0;
-        
             
         RxpExtraction extraction = new RxpExtraction();
         
@@ -271,7 +274,7 @@ public class HemiScanView {
                 
                 boolean keepShot = true;
                 
-                if(shot.nbEchos > 0){
+                if(shot.nbEchos > 0 && filter != null){
                     keepShot = filter.doFiltering(shot, shot.nbEchos-1);
                 }
                 

@@ -352,7 +352,7 @@ public class DartWriter {
         
         RegularDtm dtm = null;
         
-        Set<Integer>[][][] faces = null;
+        Set<Integer>[][][] faces = null; //faces of a voxel
         
         if(generateTrianglesFile && dtmFile != null){
             
@@ -363,7 +363,7 @@ public class DartWriter {
                 dtm.setTransformationMatrix(transfMatrix);
                 
                 dtm.setLimits(new BoundingBox2F(new Point2F((float)infos.getMinCorner().x, (float)infos.getMinCorner().y), 
-                                                new Point2F((float)infos.getMaxCorner().x, (float)infos.getMaxCorner().y)), 10);
+                                                new Point2F((float)infos.getMaxCorner().x, (float)infos.getMaxCorner().y)), 0);
                 
                 //logger.info("Building DTM");
                 dtm.buildMesh();
@@ -423,7 +423,7 @@ public class DartWriter {
                     dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_EMPTY);
                 }else{
                     dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_OPAQUE_GROUND);
-                    dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(0);
+                    //dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(0);
                 }
                 
                 densite = 0f;

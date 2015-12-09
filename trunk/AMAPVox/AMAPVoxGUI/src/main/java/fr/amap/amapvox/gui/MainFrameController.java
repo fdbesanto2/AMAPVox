@@ -2851,6 +2851,9 @@ public class MainFrameController implements Initializable {
                                                 public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                                                     if (newValue) {
                                                         toolBarFrameStage.setAlwaysOnTop(true);
+                                                        
+                                                        toolBarFrameStage.setX(viewer3D.getPosition().getX());
+                                                        toolBarFrameStage.setY(viewer3D.getPosition().getY());
                                                     } else {
 
                                                         if (!viewer3D.isFocused()) {
@@ -2872,6 +2875,7 @@ public class MainFrameController implements Initializable {
 
                                                 @Override
                                                 public void windowResized(com.jogamp.newt.event.WindowEvent we) {
+                                                    
                                                     Window window = (Window) we.getSource();
                                                     final int height = window.getHeight();
 
@@ -2885,22 +2889,22 @@ public class MainFrameController implements Initializable {
                                                             } else {
                                                                 toolBarFrameStage.setHeight(maxToolBoxHeight);
                                                             }
-
+                                                            
+                                                            toolBarFrameStage.setX(viewer3D.getPosition().getX());
+                                                            toolBarFrameStage.setY(viewer3D.getPosition().getY());
                                                         }
                                                     });
                                                 }
 
                                                 @Override
                                                 public void windowMoved(com.jogamp.newt.event.WindowEvent we) {
-                                                    Window window = (Window) we.getSource();
 
-                                                    final Point2i locationOnScreen = new Point2i(window.getX(), window.getY());
                                                     Platform.runLater(new Runnable() {
 
                                                         @Override
                                                         public void run() {
-                                                            toolBarFrameStage.setX((int) locationOnScreen.getX());
-                                                            toolBarFrameStage.setY((int) locationOnScreen.getY());
+                                                            toolBarFrameStage.setX(viewer3D.getPosition().getX());
+                                                            toolBarFrameStage.setY(viewer3D.getPosition().getY());
                                                         }
                                                     });
                                                 }
@@ -2921,6 +2925,7 @@ public class MainFrameController implements Initializable {
                                                 public void windowGainedFocus(com.jogamp.newt.event.WindowEvent we) {
 
                                                     viewer3D.setIsFocused(true);
+                                                    
 
                                                     Platform.runLater(new Runnable() {
 
@@ -2933,6 +2938,9 @@ public class MainFrameController implements Initializable {
 
                                                             toolBarFrameStage.setIconified(false);
                                                             toolBarFrameStage.setAlwaysOnTop(true);
+                                                            
+                                                            toolBarFrameStage.setX(viewer3D.getPosition().getX());
+                                                            toolBarFrameStage.setY(viewer3D.getPosition().getY());
                                                         }
                                                     });
                                                 }
