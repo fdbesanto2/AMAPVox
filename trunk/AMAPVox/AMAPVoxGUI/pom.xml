@@ -84,7 +84,7 @@
                         </goals>
                         <configuration>
                             <executable>${java.home}/bin/java</executable>
-                            <commandlineArgs>-Xdebug -Xmx10g -Xrunjdwp:transport=dt_socket,server=n,address=localhost:8000,suspend=y -classpath "${project.build.directory}/lib" -jar "${project.build.directory}/release/${project.build.finalName}.jar"</commandlineArgs>
+                            <commandlineArgs>-Xmx10g ${debug.parameters} -classpath "${project.build.directory}/lib" -jar "${project.build.directory}/release/${project.build.finalName}.jar"</commandlineArgs>
                         </configuration>
                     </execution>
                 </executions>  
