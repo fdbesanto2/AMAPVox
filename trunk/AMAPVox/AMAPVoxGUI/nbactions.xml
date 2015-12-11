@@ -19,7 +19,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.4.0:exec</goal>
             </goals>
             <properties>
-                <runfx.args>-Xdebug -Xmx10g -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath "${project.build.directory}/lib" -jar "${project.build.directory}/release/${project.build.finalName}.jar"</runfx.args>
+                <debug.parameters></debug.parameters>
                 <jpda.listen>true</jpda.listen>
             </properties>
         </action>     
@@ -28,11 +28,11 @@
             <goals>
                 <goal>clean</goal>
                 <goal>package</goal>
-                <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.4.0:exec</goal>
             </goals>
             <properties>
-                <runfx.args>-Xdebug -Xmx10g -Xrunjdwp:transport=dt_socket,server=n,address=localhost:8000 -classpath "${project.build.directory}/lib" -jar "${project.build.directory}/release/${project.build.finalName}.jar"</runfx.args>
-                <jpda.listen>false</jpda.listen>
+                <debug.parameters>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address}</debug.parameters>
+                <jpda.listen>true</jpda.listen>
             </properties>
         </action>     
         <action>
