@@ -1,0 +1,2 @@
+Récupération des dernières modifications dans le dépôt AMAPVox:
+git pull http://amap-dev.cirad.fr/git/voxelidar.git
