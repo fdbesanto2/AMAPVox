@@ -242,7 +242,10 @@ public class RspExtractorFrameController implements Initializable {
             
             canvas.getChildren().add(circle1);
             
-            Label label1 = new Label(scans1.getName());
+            Label label1 = new Label(scans1.getName()+" ("+((Math.round(position.x*10000))/10000.0)+
+									            		" "+((Math.round(position.y*10000))/10000.0)+
+									            		" "+((Math.round(position.z*10000))/10000.0)+")");
+            
             label1.setTranslateX(canvasPosition.x);
             label1.setTranslateY(canvasPosition.y);
             label1.addEventFilter( MouseEvent.MOUSE_PRESSED, nodeGestures.getOnMousePressedEventHandler());

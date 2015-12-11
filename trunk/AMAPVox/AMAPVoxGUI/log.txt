@@ -48625,3 +48625,222 @@ i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal l
 2015-12-09 17:44:20 INFO  - writing file: /home/calcul/Documents/Julien/pour_eloi/paracou/ALS/Transect_P15/las.vox
 2015-12-09 17:44:22 INFO  - file written ( 1.0 s )
 2015-12-09 17:44:22 INFO  - las voxelisation finished in 37.0 s
+2015-12-11 16:01:50 INFO  - Building transmittance functions table
+2015-12-11 16:01:50 INFO  - Transmittance functions table is built
+2015-12-11 16:01:50 INFO  - Building transmittance functions table
+2015-12-11 16:01:50 INFO  - Transmittance functions table is built
+2015-12-11 16:01:50 INFO  - Building transmittance functions table
+2015-12-11 16:01:50 INFO  - Transmittance functions table is built
+2015-12-11 16:01:50 INFO  - Building transmittance functions table
+2015-12-11 16:01:50 INFO  - Transmittance functions table is built
+2015-12-11 16:01:50 INFO  - Building transmittance functions table
+2015-12-11 16:01:50 INFO  - Transmittance functions table is built
+2015-12-11 16:01:50 INFO  - Building transmittance functions table
+2015-12-11 16:01:50 INFO  - Transmittance functions table is built
+2015-12-11 16:01:50 INFO  - Building transmittance functions table
+2015-12-11 16:01:50 INFO  - Transmittance functions table is built
+2015-12-11 16:01:50 INFO  - Building transmittance functions table
+2015-12-11 16:01:50 INFO  - Transmittance functions table is built
+2015-12-11 16:01:50 INFO  - Building transmittance functions table
+2015-12-11 16:01:50 INFO  - Transmittance functions table is built
+2015-12-11 16:01:50 INFO  - Building transmittance functions table
+2015-12-11 16:01:50 INFO  - Transmittance functions table is built
+2015-12-11 16:01:50 INFO  - Building transmittance functions table
+2015-12-11 16:01:50 INFO  - Transmittance functions table is built
+2015-12-11 16:01:50 INFO  - Building transmittance functions table
+2015-12-11 16:01:50 INFO  - Transmittance functions table is built
+2015-12-11 16:01:50 INFO  - Building transmittance functions table
+2015-12-11 16:01:50 INFO  - Transmittance functions table is built
+2015-12-11 16:01:50 INFO  - Building transmittance functions table
+2015-12-11 16:01:50 INFO  - Transmittance functions table is built
+2015-12-11 16:01:50 INFO  - rxp extraction is started
+2015-12-11 16:01:50 INFO  - rxp extraction is started
+2015-12-11 16:01:50 INFO  - rxp extraction is started
+2015-12-11 16:01:50 INFO  - rxp extraction is started
+2015-12-11 16:01:50 INFO  - rxp extraction is started
+2015-12-11 16:01:50 INFO  - rxp extraction is started
+2015-12-11 16:01:50 INFO  - rxp extraction is started
+2015-12-11 16:01:50 INFO  - rxp extraction is started
+2015-12-11 16:01:50 INFO  - allocate!!!!!!!!
+2015-12-11 16:01:50 INFO  - allocate!!!!!!!!
+2015-12-11 16:01:50 INFO  - allocate!!!!!!!!
+2015-12-11 16:01:50 INFO  - Voxel space informations:
+			Corner Inf	:	(-40.0, -40.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 30.0)
+			Dimensions	:	(90, 90, 40)
+			Toricity 	:	false
+
+2015-12-11 16:01:50 INFO  - Voxel space informations:
+			Corner Inf	:	(-40.0, -40.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 30.0)
+			Dimensions	:	(90, 90, 40)
+			Toricity 	:	false
+
+2015-12-11 16:01:50 INFO  - Voxel space informations:
+			Corner Inf	:	(-40.0, -40.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 30.0)
+			Dimensions	:	(90, 90, 40)
+			Toricity 	:	false
+
+2015-12-11 16:01:50 INFO  - allocate!!!!!!!!
+2015-12-11 16:01:50 INFO  - allocate!!!!!!!!
+2015-12-11 16:01:50 INFO  - Voxel space informations:
+			Corner Inf	:	(-40.0, -40.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 30.0)
+			Dimensions	:	(90, 90, 40)
+			Toricity 	:	false
+
+2015-12-11 16:01:50 INFO  - Voxel space informations:
+			Corner Inf	:	(-40.0, -40.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 30.0)
+			Dimensions	:	(90, 90, 40)
+			Toricity 	:	false
+
+2015-12-11 16:01:50 INFO  - allocate!!!!!!!!
+2015-12-11 16:01:50 INFO  - allocate!!!!!!!!
+2015-12-11 16:01:50 INFO  - allocate!!!!!!!!
+2015-12-11 16:01:50 INFO  - Voxel space informations:
+			Corner Inf	:	(-40.0, -40.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 30.0)
+			Dimensions	:	(90, 90, 40)
+			Toricity 	:	false
+
+2015-12-11 16:01:50 INFO  - Voxel space informations:
+			Corner Inf	:	(-40.0, -40.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 30.0)
+			Dimensions	:	(90, 90, 40)
+			Toricity 	:	false
+
+2015-12-11 16:01:50 INFO  - Voxel space informations:
+			Corner Inf	:	(-40.0, -40.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 30.0)
+			Dimensions	:	(90, 90, 40)
+			Toricity 	:	false
+
+2015-12-11 16:01:53 INFO  - Shots processed: 101845
+2015-12-11 16:01:53 INFO  - Shots processed: 101847
+2015-12-11 16:01:53 INFO  - writing file: D:\Mes donnees\riscan projects\testVox\750209_180600.mon.rxp.vox
+2015-12-11 16:01:53 INFO  - writing file: D:\Mes donnees\riscan projects\testVox\750209_175253.mon.rxp.vox
+2015-12-11 16:01:53 INFO  - Shots processed: 106121
+2015-12-11 16:01:53 INFO  - writing file: D:\Mes donnees\riscan projects\testVox\750209_173641.mon.rxp.vox
+2015-12-11 16:01:53 INFO  - Shots processed: 107131
+2015-12-11 16:01:53 INFO  - Shots processed: 103588
+2015-12-11 16:01:53 INFO  - writing file: D:\Mes donnees\riscan projects\testVox\750209_182011.mon.rxp.vox
+2015-12-11 16:01:53 INFO  - Shots processed: 104959
+2015-12-11 16:01:53 INFO  - Shots processed: 122348
+2015-12-11 16:01:53 INFO  - writing file: D:\Mes donnees\riscan projects\testVox\850215_180910.mon.rxp.vox
+2015-12-11 16:01:53 INFO  - writing file: D:\Mes donnees\riscan projects\testVox\750209_171503.mon.rxp.vox
+2015-12-11 16:01:53 INFO  - Shots processed: 116119
+2015-12-11 16:01:54 INFO  - writing file: D:\Mes donnees\riscan projects\testVox\750209_171811.mon.rxp.vox
+2015-12-11 16:01:54 INFO  - writing file: D:\Mes donnees\riscan projects\testVox\850215_183303.mon.rxp.vox
+2015-12-11 16:01:57 INFO  - file written ( 3.0 s )
+2015-12-11 16:01:57 INFO  - rxp extraction is started
+2015-12-11 16:01:57 INFO  - allocate!!!!!!!!
+2015-12-11 16:01:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-40.0, -40.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 30.0)
+			Dimensions	:	(90, 90, 40)
+			Toricity 	:	false
+
+2015-12-11 16:01:57 INFO  - file written ( 3.0 s )
+2015-12-11 16:01:57 INFO  - rxp extraction is started
+2015-12-11 16:01:57 INFO  - allocate!!!!!!!!
+2015-12-11 16:01:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-40.0, -40.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 30.0)
+			Dimensions	:	(90, 90, 40)
+			Toricity 	:	false
+
+2015-12-11 16:01:57 INFO  - file written ( 3.0 s )
+2015-12-11 16:01:57 INFO  - rxp extraction is started
+2015-12-11 16:01:57 INFO  - allocate!!!!!!!!
+2015-12-11 16:01:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-40.0, -40.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 30.0)
+			Dimensions	:	(90, 90, 40)
+			Toricity 	:	false
+
+2015-12-11 16:01:57 INFO  - file written ( 3.0 s )
+2015-12-11 16:01:57 INFO  - rxp extraction is started
+2015-12-11 16:01:57 INFO  - allocate!!!!!!!!
+2015-12-11 16:01:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-40.0, -40.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 30.0)
+			Dimensions	:	(90, 90, 40)
+			Toricity 	:	false
+
+2015-12-11 16:01:57 INFO  - file written ( 3.0 s )
+2015-12-11 16:01:57 INFO  - rxp extraction is started
+2015-12-11 16:01:57 INFO  - allocate!!!!!!!!
+2015-12-11 16:01:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-40.0, -40.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 30.0)
+			Dimensions	:	(90, 90, 40)
+			Toricity 	:	false
+
+2015-12-11 16:01:57 INFO  - file written ( 3.0 s )
+2015-12-11 16:01:57 INFO  - rxp extraction is started
+2015-12-11 16:01:57 INFO  - allocate!!!!!!!!
+2015-12-11 16:01:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-40.0, -40.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 30.0)
+			Dimensions	:	(90, 90, 40)
+			Toricity 	:	false
+
+2015-12-11 16:01:57 INFO  - file written ( 3.0 s )
+2015-12-11 16:01:57 INFO  - file written ( 3.0 s )
+2015-12-11 16:01:59 INFO  - Shots processed: 106955
+2015-12-11 16:01:59 INFO  - Shots processed: 101411
+2015-12-11 16:01:59 INFO  - Shots processed: 105409
+2015-12-11 16:01:59 INFO  - writing file: D:\Mes donnees\riscan projects\testVox\750209_182931.mon.rxp.vox
+2015-12-11 16:01:59 INFO  - Shots processed: 106173
+2015-12-11 16:01:59 INFO  - writing file: D:\Mes donnees\riscan projects\testVox\750209_184624.mon.rxp.vox
+2015-12-11 16:01:59 INFO  - writing file: D:\Mes donnees\riscan projects\testVox\750209_191920.mon.rxp.vox
+2015-12-11 16:01:59 INFO  - writing file: D:\Mes donnees\riscan projects\testVox\750209_185430.mon.rxp.vox
+2015-12-11 16:01:59 INFO  - Shots processed: 103573
+2015-12-11 16:02:00 INFO  - writing file: D:\Mes donnees\riscan projects\testVox\750209_190358.mon.rxp.vox
+2015-12-11 16:02:00 INFO  - Shots processed: 139647
+2015-12-11 16:02:00 INFO  - writing file: D:\Mes donnees\riscan projects\testVox\750209_201306.mon.rxp.vox
+2015-12-11 16:02:02 INFO  - file written ( 2.0 s )
+2015-12-11 16:02:02 INFO  - file written ( 2.0 s )
+2015-12-11 16:02:02 INFO  - file written ( 2.0 s )
+2015-12-11 16:02:02 INFO  - file written ( 2.0 s )
+2015-12-11 16:02:02 INFO  - file written ( 2.0 s )
+2015-12-11 16:02:02 INFO  - file written ( 1.0 s )
+2015-12-11 16:02:02 INFO  - Voxelisation finished in 12.0 s
+2015-12-11 16:02:02 INFO  - Merging in progress, file 1 : 14
+2015-12-11 16:02:03 INFO  - Merging in progress, file 2 : 14
+2015-12-11 16:02:04 INFO  - Merging in progress, file 3 : 14
+2015-12-11 16:02:05 INFO  - Merging in progress, file 4 : 14
+2015-12-11 16:02:06 INFO  - Merging in progress, file 5 : 14
+2015-12-11 16:02:07 INFO  - Merging in progress, file 6 : 14
+2015-12-11 16:02:08 INFO  - Merging in progress, file 7 : 14
+2015-12-11 16:02:08 INFO  - Merging in progress, file 8 : 14
+2015-12-11 16:02:09 INFO  - Merging in progress, file 9 : 14
+2015-12-11 16:02:10 INFO  - Merging in progress, file 10 : 14
+2015-12-11 16:02:11 INFO  - Merging in progress, file 11 : 14
+2015-12-11 16:02:12 INFO  - Merging in progress, file 12 : 14
+2015-12-11 16:02:13 INFO  - Merging in progress, file 13 : 14
+2015-12-11 16:02:13 INFO  - Merging in progress, file 14 : 14
+2015-12-11 16:02:14 INFO  - Compute angleMean
+2015-12-11 16:02:14 INFO  - Compute lMeanTotal
+2015-12-11 16:02:14 INFO  - Compute transmittance and PAD
+2015-12-11 16:02:14 INFO  - Building transmittance functions table
+2015-12-11 16:02:14 INFO  - Transmittance functions table is built
+2015-12-11 16:02:14 INFO  - Building transmittance functions table
+2015-12-11 16:02:14 INFO  - Transmittance functions table is built
+2015-12-11 16:02:15 INFO  - writing output file: D:\Mes donnees\riscan projects\testVox\merged.vox
+2015-12-11 16:02:15 INFO  - file written ( 0.0 s )
+2015-12-11 16:02:15 INFO  - Voxelisation finished in 25.0 s
+2015-12-11 16:02:15 INFO  - Voxelisation finished in 25.0 s
+2015-12-11 16:30:06 INFO  - VOXEL SPACE
+#min_corner: -40.0 -40.0 -10.0
+#max_corner: 50.0 50.0 30.0
+#split: 90 90 40
+#type: TLS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-11 16:30:06 INFO  - allocate Voxels
+2015-12-11 16:30:06 INFO  - allocate MNT
+2015-12-11 16:31:44 INFO  - Total shots processed : 104959
+2015-12-11 16:31:45 INFO  - Total shots processed : 116119
