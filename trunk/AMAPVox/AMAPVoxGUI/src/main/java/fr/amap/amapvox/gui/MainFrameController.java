@@ -6538,7 +6538,7 @@ public class MainFrameController implements Initializable {
                                             PointCloudSceneObject pointCloud = new PointCloudSceneObject();
                                             
                                             RxpExtraction reader = new RxpExtraction();
-                                            reader.openRxpFile(scan.getFile(), RxpExtraction.REFLECTANCE, RxpExtraction.AMPLITUDE, RxpExtraction.DEVIATION);
+                                            reader.openRxpFile(scan.getFile(), RxpExtraction.REFLECTANCE, RxpExtraction.AMPLITUDE, RxpExtraction.DEVIATION, RxpExtraction.TIME);
                                             final Iterator<Shot> iterator = reader.iterator();
                                             
                                             Mat4D sopMatrix = scan.getSop();
@@ -6561,10 +6561,12 @@ public class MainFrameController implements Initializable {
                                                     float reflectance = shot.reflectances[i];
                                                     float deviation = shot.deviations[i];
                                                     float amplitude = shot.amplitudes[i];
+                                                    double time = shot.times[i];
                                                     
                                                     pointCloud.addValue("reflectance", reflectance);
                                                     pointCloud.addValue("deviation", deviation);
                                                     pointCloud.addValue("amplitude", amplitude);
+                                                    pointCloud.addValue("time", (float) time);
                                                 }
                                                 
                                             }
@@ -6625,7 +6627,7 @@ public class MainFrameController implements Initializable {
                                         @Override
                                         protected Object call() throws Exception {
 
-                                            boolean importReflectance = false, importDeviation = false, importAmplitude = false;
+                                            boolean importReflectance = false, importDeviation = false, importAmplitude = false, importTime = false;
                                             List<Integer> typeList = new ArrayList<>();
                                             
                                                     
@@ -6640,6 +6642,10 @@ public class MainFrameController implements Initializable {
                                             if(selectedAttributs.contains("amplitude")){
                                                 importAmplitude = true;
                                                 typeList.add(RxpExtraction.AMPLITUDE);
+                                            }
+                                            if(selectedAttributs.contains("time")){
+                                                importTime = true;
+                                                typeList.add(RxpExtraction.TIME);
                                             }
 
                                             final PointCloudSceneObject pointCloud = new PointCloudSceneObject();

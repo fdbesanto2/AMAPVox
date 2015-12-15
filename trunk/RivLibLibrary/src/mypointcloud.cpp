@@ -34,6 +34,10 @@ void mypointcloud::setExportAmplitude(bool exportAmplitude){
     this->exportAmplitude = exportAmplitude;
 }
 
+void mypointcloud::setExportTime(bool exportTime){
+    this->exportTime = exportTime;
+}
+
 void mypointcloud::on_echo_transformed(echo_type echo){
 	pointcloud::on_echo_transformed(echo);
 }
@@ -52,6 +56,7 @@ void mypointcloud::on_shot_end() {
     jfloat reflectanceArray[7];
     jfloat deviationArray[7];
     jfloat amplitudeArray[7];
+    jdouble timeArray[7];
 
     for(pointcloud::target_count_type i = 0; i < target_count; ++i) {
 
@@ -71,6 +76,10 @@ void mypointcloud::on_shot_end() {
 
                 if(exportAmplitude){
                     amplitudeArray[i] = t.amplitude;
+                }
+
+                if(exportTime){
+                    timeArray[i] = t.time;
                 }
 
                 nbEchos++;
@@ -97,6 +106,7 @@ void mypointcloud::on_shot_end() {
         jfloatArray reflectances = NULL;
         jfloatArray deviations = NULL;
         jfloatArray amplitudes = NULL;
+        jdoubleArray times = NULL;
 
         if(exportReflectance){
             reflectances = env->NewFloatArray(nbEchos);
@@ -121,6 +131,14 @@ void mypointcloud::on_shot_end() {
             jmethodID setAmplitudesMethod = env->GetMethodID(shotClass, "setAmplitudes", "([F)V");
             env->CallVoidMethod(*shotTemp, setAmplitudesMethod, amplitudes);
             env->DeleteLocalRef(amplitudes);
+        }
+
+        if(exportTime){
+            times = env->NewDoubleArray(nbEchos);
+            env->SetDoubleArrayRegion(times, 0, nbEchos, timeArray);
+            jmethodID setTimesMethod = env->GetMethodID(shotClass, "setTimes", "([D)V");
+            env->CallVoidMethod(*shotTemp, setTimesMethod, times);
+            env->DeleteLocalRef(times);
         }
 
         shots->push(shotTemp);

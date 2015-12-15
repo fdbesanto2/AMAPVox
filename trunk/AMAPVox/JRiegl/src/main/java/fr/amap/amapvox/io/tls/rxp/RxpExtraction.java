@@ -38,6 +38,7 @@ public class RxpExtraction implements Iterable<Shot>{
     public final static int REFLECTANCE = 2;
     public final static int DEVIATION = 3;
     public final static int AMPLITUDE = 4;
+    public final static int TIME = 5;
     
     private long rxpPointer;
     

@@ -110,6 +110,9 @@ JNIEXPORT int JNICALL Java_fr_amap_amapvox_io_tls_rxp_RxpExtraction_open(JNIEnv 
                 case 4:
                     extraction_dll->pointcloud->setExportAmplitude(true);
                     break;
+                case 5:
+                    extraction_dll->pointcloud->setExportTime(true);
+                    break;
             }
         }
 

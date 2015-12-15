@@ -35,6 +35,7 @@ public class Shot{
     public float reflectances[];
     public float deviations[];
     public float amplitudes[];
+    public double times[];
 
     public double angle;
 
@@ -93,6 +94,10 @@ public class Shot{
     
     public void setIntensities(float[] intensities){
         this.intensities = intensities;
+    }
+    
+    public void setTimes(double[] times){
+        this.times = times;
     }
 
     public Shot(int nbEchos, Point3d origin, Vector3d direction, double[] ranges) {

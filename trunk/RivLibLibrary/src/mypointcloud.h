@@ -35,6 +35,7 @@ namespace mpc
         void setExportReflectance(bool exportReflectance);
         void setExportDeviation(bool exportDeviation);
         void setExportAmplitude(bool exportAmplitude);
+        void setExportTime(bool exportTime);
         void setEnv(JNIEnv *env);
 
     protected :
@@ -48,6 +49,7 @@ namespace mpc
         bool exportReflectance;
         bool exportDeviation;
         bool exportAmplitude;
+        bool exportTime;
     };
 }
 
