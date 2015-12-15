@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
 import org.jdom2.Attribute;
 import org.jdom2.Element;
@@ -134,49 +135,64 @@ public class TransmittanceCfg extends Configuration{
         Element scannerPositionsElement = processElement.getChild("scanners-positions");
 
         if(scannerPositionsElement != null){
-
-            String scannerPositionType = scannerPositionsElement.getAttributeValue("type");
-
-            if(scannerPositionType != null){
-
-                switch(scannerPositionType){
-
-                    case "squared-area":
-
-                        parameters.setUseScanPositionsFile(false);
-
-                        String centerPositionX = scannerPositionsElement.getAttributeValue("centerX");
-                        String centerPositionY = scannerPositionsElement.getAttributeValue("centerY");
-                        String centerPositionZ = scannerPositionsElement.getAttributeValue("centerZ");
-
-                        if(centerPositionX != null && centerPositionY != null && centerPositionZ != null){
-                            parameters.setCenterPoint(new Point3f(Float.valueOf(centerPositionX), 
-                                                                  Float.valueOf(centerPositionY), 
-                                                                  Float.valueOf(centerPositionZ)));
-                        }
-
-                        String width = scannerPositionsElement.getAttributeValue("width");
-                        if(width != null){
-                            parameters.setWidth(Float.valueOf(width));
-                        }
-
-                        String step = scannerPositionsElement.getAttributeValue("step");
-                        if(step != null){
-                            parameters.setStep(Float.valueOf(step));
-                        }
-
-                        break;
-                    case "file":
-
-                        parameters.setUseScanPositionsFile(true);
-
-                        String scanPositionsFileSrc = scannerPositionsElement.getAttributeValue("src");
-                        if(scanPositionsFileSrc != null){
-                            parameters.setPointsPositionsFile(new File(scanPositionsFileSrc));
-                        }
-                        break;
+            
+            
+            List<Element> childrens = scannerPositionsElement.getChildren("position");
+            if(childrens != null){
+                List<Point3d> positions = new ArrayList<>();
+                
+                for(Element children : childrens){
+                    positions.add(new Point3d(Double.valueOf(children.getAttributeValue("x")),
+                                            Double.valueOf(children.getAttributeValue("y")),
+                                            Double.valueOf(children.getAttributeValue("z"))));
                 }
-            }
+                
+                parameters.setPositions(positions);
+                
+            }else{ //to remove after, keep retro-compatibility with old methods
+                String scannerPositionType = scannerPositionsElement.getAttributeValue("type");
+
+                if(scannerPositionType != null){
+
+                    switch(scannerPositionType){
+
+                        case "squared-area":
+
+                            parameters.setUseScanPositionsFile(false);
+
+                            String centerPositionX = scannerPositionsElement.getAttributeValue("centerX");
+                            String centerPositionY = scannerPositionsElement.getAttributeValue("centerY");
+                            String centerPositionZ = scannerPositionsElement.getAttributeValue("centerZ");
+
+                            if(centerPositionX != null && centerPositionY != null && centerPositionZ != null){
+                                parameters.setCenterPoint(new Point3f(Float.valueOf(centerPositionX), 
+                                                                      Float.valueOf(centerPositionY), 
+                                                                      Float.valueOf(centerPositionZ)));
+                            }
+
+                            String width = scannerPositionsElement.getAttributeValue("width");
+                            if(width != null){
+                                parameters.setWidth(Float.valueOf(width));
+                            }
+
+                            String step = scannerPositionsElement.getAttributeValue("step");
+                            if(step != null){
+                                parameters.setStep(Float.valueOf(step));
+                            }
+
+                            break;
+                        case "file":
+
+                            parameters.setUseScanPositionsFile(true);
+
+                            String scanPositionsFileSrc = scannerPositionsElement.getAttributeValue("src");
+                            if(scanPositionsFileSrc != null){
+                                parameters.setPointsPositionsFile(new File(scanPositionsFileSrc));
+                            }
+                            break;
+                    }
+                }
+            }           
 
         }
 
@@ -296,25 +312,40 @@ public class TransmittanceCfg extends Configuration{
         //scanners positions
         Element scannersPositionsElement = new Element("scanners-positions");
         
-        if(parameters.isUseScanPositionsFile()){
-            scannersPositionsElement.setAttribute("type", "file");
+        if(parameters.getPositions() != null){
+           
+            List<Point3d> positions = parameters.getPositions();
             
-            if(parameters.getPointsPositionsFile() != null){
-                scannersPositionsElement.setAttribute("src", parameters.getPointsPositionsFile().getAbsolutePath());
+            for(Point3d position : positions){
+                Element positionElement = new Element("position");
+                positionElement.setAttribute("x", String.valueOf(position.x));
+                positionElement.setAttribute("y", String.valueOf(position.y));
+                positionElement.setAttribute("z", String.valueOf(position.z));
+                scannersPositionsElement.addContent(positionElement);
             }
             
         }else{
-            scannersPositionsElement.setAttribute("type", "squared-area");
-            
-            if(parameters.getCenterPoint() != null){
-                scannersPositionsElement.setAttribute("centerX", String.valueOf(parameters.getCenterPoint().x));
-                scannersPositionsElement.setAttribute("centerY", String.valueOf(parameters.getCenterPoint().y));
-                scannersPositionsElement.setAttribute("centerZ", String.valueOf(parameters.getCenterPoint().z));
+            if(parameters.isUseScanPositionsFile()){
+                scannersPositionsElement.setAttribute("type", "file");
+
+                if(parameters.getPointsPositionsFile() != null){
+                    scannersPositionsElement.setAttribute("src", parameters.getPointsPositionsFile().getAbsolutePath());
+                }
+
+            }else{
+                scannersPositionsElement.setAttribute("type", "squared-area");
+
+                if(parameters.getCenterPoint() != null){
+                    scannersPositionsElement.setAttribute("centerX", String.valueOf(parameters.getCenterPoint().x));
+                    scannersPositionsElement.setAttribute("centerY", String.valueOf(parameters.getCenterPoint().y));
+                    scannersPositionsElement.setAttribute("centerZ", String.valueOf(parameters.getCenterPoint().z));
+                }
+
+                scannersPositionsElement.setAttribute("width", String.valueOf(parameters.getWidth()));
+                scannersPositionsElement.setAttribute("step", String.valueOf(parameters.getStep()));
             }
-            
-            scannersPositionsElement.setAttribute("width", String.valueOf(parameters.getWidth()));
-            scannersPositionsElement.setAttribute("step", String.valueOf(parameters.getStep()));
         }
+        
                 
         processElement.addContent(scannersPositionsElement);
         

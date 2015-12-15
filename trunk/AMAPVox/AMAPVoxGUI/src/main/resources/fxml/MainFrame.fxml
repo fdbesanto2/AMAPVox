@@ -838,7 +838,7 @@
                                                                   </HBox>
                                                                   <HBox>
                                                                      <children>
-                                                                        <TextField fx:id="textfieldOutputCanopyAnalyzerTextFile" prefHeight="26.0" prefWidth="308.0" />
+                                                                        <TextField fx:id="textfieldOutputCanopyAnalyzerTextFile" prefHeight="26.0" prefWidth="291.0" />
                                                                         <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenOutputCanopyAnalyzerTextFile" text="Open" />
                                                                      </children>
                                                                   </HBox>

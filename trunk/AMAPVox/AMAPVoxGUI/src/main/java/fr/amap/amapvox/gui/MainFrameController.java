@@ -847,13 +847,33 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonOpenOutputCanopyAnalyzerTextFile(ActionEvent event) {
         
+        File selectedFile = fileChooserSaveCanopyAnalyserOutputFile.showSaveDialog(stage);
+        
+        if(selectedFile != null){
+            
+            textfieldOutputCanopyAnalyzerTextFile.setText(selectedFile.getAbsolutePath());
+        }
     }
 
     @FXML
     private void onActionButtonExecuteCanopyAnalyzerSimulation(ActionEvent event) {
+        
+        File temporaryFile;
+        try{
+            temporaryFile  = File.createTempFile("cfg_temp", ".xml");
+            saveCanopyAnalyzerSimulation(temporaryFile);
+            logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
+            
+        }catch(IOException e){
+            showErrorDialog(e);
+            return;
+        }catch(Exception e){
+            showErrorDialog(e);
+            return;
+        }
+        
+        executeProcess(temporaryFile);
     }
-    
-    
 
     @FXML
     private void onActionButtonSaveCanopyAnalyzerSimulation(ActionEvent event) {
@@ -862,129 +882,102 @@ public class MainFrameController implements Initializable {
         
         if(selectedFile != null){
 
-            TransmittanceParameters transmParameters = new TransmittanceParameters();
-
-            if(toggleButtonLAI2000Choice.isSelected() || toggleButtonLAI2200Choice.isSelected()){
-
-                transmParameters.setShotNumber(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem());
-
-                if(toggleButtonLAI2000Choice.isSelected()){
-                    transmParameters.setMode(TransmittanceParameters.Mode.LAI2000);
-                }else{
-                    transmParameters.setMode(TransmittanceParameters.Mode.LAI2200);
-                }
-
-                transmParameters.setMasks(new boolean[]{toggleButtonCanopyAnalyzerRingMask1.isSelected(),
-                                                        toggleButtonCanopyAnalyzerRingMask2.isSelected(),
-                                                        toggleButtonCanopyAnalyzerRingMask3.isSelected(),
-                                                        toggleButtonCanopyAnalyzerRingMask4.isSelected(),
-                                                        toggleButtonCanopyAnalyzerRingMask5.isSelected()});
-
-                transmParameters.setGenerateLAI2xxxTypeFormat(checkboxGenerateLAI2xxxTypeFormat.isSelected());
-            }
-
-            transmParameters.setInputFile(new File(textfieldVoxelFilePathCanopyAnalyzer.getText()));
-            transmParameters.setGenerateTextFile(checkboxGenerateCanopyAnalyzerTextFile.isSelected());
-
-            if(checkboxGenerateCanopyAnalyzerTextFile.isSelected()){
-                transmParameters.setTextFile(new File(textfieldOutputTextFilePath.getText()));
-            }
-            if(comboboxChooseCanopyAnalyzerSampling.isEditable()){
-                transmParameters.setDirectionsNumber(Integer.valueOf(comboboxChooseCanopyAnalyzerSampling.getEditor().getText()));
-            }else{
-                transmParameters.setDirectionsNumber(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem());
-            }
-
-            transmParameters.setUseScanPositionsFile(radiobuttonScannerPosFile.isSelected());
-
-            if(radiobuttonScannerPosFile.isSelected()){
-                transmParameters.setPointsPositionsFile(new File(textfieldScannerPointsPositionsFile.getText()));
-            }else{
-                transmParameters.setCenterPoint(new Point3f(Float.valueOf(textfieldScannerPosCenterX.getText()), 
-                                                            Float.valueOf(textfieldScannerPosCenterY.getText()),
-                                                            Float.valueOf(textfieldScannerPosCenterZ.getText())));
-
-                transmParameters.setWidth(Float.valueOf(textfieldScannerWidthArea.getText()));
-                transmParameters.setStep(Float.valueOf(textfieldScannerStepArea.getText()));
-            }
-
-            TransmittanceCfg cfg = new TransmittanceCfg(transmParameters);
             try {
-                cfg.writeConfiguration(selectedFile);
+                saveCanopyAnalyzerSimulation(selectedFile);
                 addFileToTaskList(selectedFile);
             } catch (Exception ex) {
-                logger.error("Cannot write configuration file", ex);
+                logger.error("Cannot write simulation file", ex);
+                return;
             }
+        }
+    }
+    
+    private void saveCanopyAnalyzerSimulation(File file) throws Exception{
+        
+            
+        TransmittanceParameters transmParameters = new TransmittanceParameters();
+
+        transmParameters.setShotNumber(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem());
+
+        if(toggleButtonLAI2000Choice.isSelected()){
+            transmParameters.setMode(TransmittanceParameters.Mode.LAI2000);
+        }else{
+            transmParameters.setMode(TransmittanceParameters.Mode.LAI2200);
+        }
+
+        transmParameters.setMasks(new boolean[]{toggleButtonCanopyAnalyzerRingMask1.isSelected(),
+                                                toggleButtonCanopyAnalyzerRingMask2.isSelected(),
+                                                toggleButtonCanopyAnalyzerRingMask3.isSelected(),
+                                                toggleButtonCanopyAnalyzerRingMask4.isSelected(),
+                                                toggleButtonCanopyAnalyzerRingMask5.isSelected()});
+
+        transmParameters.setGenerateLAI2xxxTypeFormat(checkboxGenerateLAI2xxxFormat.isSelected());
+
+        transmParameters.setInputFile(new File(textfieldVoxelFilePathCanopyAnalyzer.getText()));
+        transmParameters.setGenerateTextFile(checkboxGenerateTextFile.isSelected());
+
+        if(checkboxGenerateCanopyAnalyzerTextFile.isSelected()){
+            transmParameters.setTextFile(new File(textfieldOutputCanopyAnalyzerTextFile.getText()));
+        }
+        if(comboboxChooseCanopyAnalyzerSampling.isEditable()){
+            transmParameters.setDirectionsNumber(Integer.valueOf(comboboxChooseCanopyAnalyzerSampling.getEditor().getText()));
+        }else{
+            transmParameters.setDirectionsNumber(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem());
+        }
+
+        transmParameters.setPositions(listViewCanopyAnalyzerSensorPositions.getItems());
+
+        //to remove later
+        /*transmParameters.setUseScanPositionsFile(radiobuttonScannerPosFile.isSelected());
+
+        if(radiobuttonScannerPosFile.isSelected()){
+            transmParameters.setPointsPositionsFile(new File(textfieldScannerPointsPositionsFile.getText()));
+        }else{
+            transmParameters.setCenterPoint(new Point3f(Float.valueOf(textfieldScannerPosCenterX.getText()), 
+                                                        Float.valueOf(textfieldScannerPosCenterY.getText()),
+                                                        Float.valueOf(textfieldScannerPosCenterZ.getText())));
+
+            transmParameters.setWidth(Float.valueOf(textfieldScannerWidthArea.getText()));
+            transmParameters.setStep(Float.valueOf(textfieldScannerStepArea.getText()));
+        }*/
+
+        TransmittanceCfg cfg = new TransmittanceCfg(transmParameters);
+        try {
+            cfg.writeConfiguration(file);
+            
+        } catch (Exception ex) {
+            throw ex;
         }
     }
 
     @FXML
     private void onActionButtonSaveExecuteCanopyAnalyzerSimulation(ActionEvent event) {
         
-        if(lastFCSaveConfiguration != null) {
-            fileChooserSaveConfiguration.setInitialDirectory(lastFCSaveConfiguration.getParentFile());
-            fileChooserSaveConfiguration.setInitialFileName(lastFCSaveConfiguration.getName());
-        }else {
-            fileChooserSaveConfiguration.setInitialDirectory(new File(textfieldOutputCanopyAnalyzerTextFile.getText()).getParentFile());
-            fileChooserSaveConfiguration.setInitialFileName(new File(textfieldOutputCanopyAnalyzerTextFile.getText()).getName() + "_cfg.xml");
-        }
-
-        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
-        if (selectedFile != null) {
-            
-            lastFCSaveConfiguration= selectedFile;
-            
-            TransmittanceParameters transmParameters = new TransmittanceParameters();
-                
-            transmParameters.setShotNumber(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem());
-
-            if(toggleButtonLAI2000Choice.isSelected()){
-                transmParameters.setMode(TransmittanceParameters.Mode.LAI2000);
-            }else{
-                transmParameters.setMode(TransmittanceParameters.Mode.LAI2200);
+        File selectedFile;
+        
+        try {
+            if(lastFCSaveConfiguration != null) {
+                fileChooserSaveConfiguration.setInitialDirectory(lastFCSaveConfiguration.getParentFile());
+                fileChooserSaveConfiguration.setInitialFileName(lastFCSaveConfiguration.getName());
+            }else {
+                fileChooserSaveConfiguration.setInitialDirectory(new File(textfieldOutputCanopyAnalyzerTextFile.getText()).getParentFile());
+                fileChooserSaveConfiguration.setInitialFileName(new File(textfieldOutputCanopyAnalyzerTextFile.getText()).getName() + "_cfg.xml");
             }
 
-            transmParameters.setMasks(new boolean[]{toggleButtonCanopyAnalyzerRingMask1.isSelected(),
-                                                    toggleButtonCanopyAnalyzerRingMask2.isSelected(),
-                                                    toggleButtonCanopyAnalyzerRingMask3.isSelected(),
-                                                    toggleButtonCanopyAnalyzerRingMask4.isSelected(),
-                                                    toggleButtonCanopyAnalyzerRingMask5.isSelected()});
+            selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
+            if (selectedFile != null) {
 
-            transmParameters.setGenerateLAI2xxxTypeFormat(checkboxGenerateLAI2xxxFormat.isSelected());
-            
-            transmParameters.setInputFile(new File(textfieldVoxelFilePathCanopyAnalyzer.getText()));
-            transmParameters.setGenerateTextFile(checkboxGenerateTextFile.isSelected());
-            
-            if(checkboxGenerateCanopyAnalyzerTextFile.isSelected()){
-                transmParameters.setTextFile(new File(textfieldOutputCanopyAnalyzerTextFile.getText()));
-            }
-            if(comboboxChooseCanopyAnalyzerSampling.isEditable()){
-                transmParameters.setDirectionsNumber(Integer.valueOf(comboboxChooseCanopyAnalyzerSampling.getEditor().getText()));
-            }else{
-                transmParameters.setDirectionsNumber(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem());
-            }
-            
-            transmParameters.setUseScanPositionsFile(radiobuttonScannerPosFile.isSelected());
-            
-            if(radiobuttonScannerPosFile.isSelected()){
-                transmParameters.setPointsPositionsFile(new File(textfieldScannerPointsPositionsFile.getText()));
-            }else{
-                transmParameters.setCenterPoint(new Point3f(Float.valueOf(textfieldScannerPosCenterX.getText()), 
-                                                            Float.valueOf(textfieldScannerPosCenterY.getText()),
-                                                            Float.valueOf(textfieldScannerPosCenterZ.getText())));
-                
-                transmParameters.setWidth(Float.valueOf(textfieldScannerWidthArea.getText()));
-                transmParameters.setStep(Float.valueOf(textfieldScannerStepArea.getText()));
-            }
-            
-            TransmittanceCfg cfg = new TransmittanceCfg(transmParameters);
-            try {
-                cfg.writeConfiguration(selectedFile);
+                lastFCSaveConfiguration= selectedFile;
+                saveCanopyAnalyzerSimulation(selectedFile);
                 addFileToTaskList(selectedFile);
-            } catch (Exception ex) {
-                logger.error("Cannot write configuration file", ex);
             }
+            
+        } catch (Exception ex) {
+            logger.error("Cannot write simulation file", ex);
+            return;
         }
+        
+        executeProcess(selectedFile);
     }
     
     private class SceneObjectProperty{
@@ -4696,7 +4689,7 @@ public class MainFrameController implements Initializable {
                     //cfg.readConfiguration(selectedFile);
                     TransmittanceParameters params = cfg.getParameters();
 
-                    textfieldVoxelFilePathTransmittance.setText(params.getInputFile().getAbsolutePath());
+                    textfieldVoxelFilePathCanopyAnalyzer.setText(params.getInputFile().getAbsolutePath());
                     
                     if(type.equals("transmittance")){
                         tabPaneVirtualMeasures.getSelectionModel().select(0);
@@ -4723,9 +4716,22 @@ public class MainFrameController implements Initializable {
                         }
                         
                         checkboxGenerateLAI2xxxFormat.setSelected(params.isGenerateLAI2xxxTypeFormat());
+                        
+                        List<Point3d> positions = params.getPositions();
+                        if(positions != null){
+                            listViewCanopyAnalyzerSensorPositions.getItems().setAll(positions);
+                        }
+                        
+                        checkboxGenerateCanopyAnalyzerTextFile.setSelected(params.isGenerateTextFile());
+                        if (params.isGenerateTextFile() && params.getTextFile() != null) {
+                            textfieldOutputCanopyAnalyzerTextFile.setText(params.getTextFile().getAbsolutePath());
+                        }
+                        
                     }
                     
-                    radiobuttonScannerPosFile.setSelected(params.isUseScanPositionsFile());
+                    
+                    
+                    /*radiobuttonScannerPosFile.setSelected(params.isUseScanPositionsFile());
                     radiobuttonScannerPosSquaredArea.setSelected(!params.isUseScanPositionsFile());
 
                     if (params.isUseScanPositionsFile()) {
@@ -4749,18 +4755,14 @@ public class MainFrameController implements Initializable {
 
                     if (simulationPeriods != null) {
                         data.addAll(simulationPeriods);
-                    }
+                    }*/
 
                     checkboxGenerateBitmapFile.setSelected(params.isGenerateBitmapFile());
-                    checkboxGenerateTextFile.setSelected(params.isGenerateTextFile());
 
                     if (params.isGenerateBitmapFile() && params.getBitmapFile() != null) {
                         textfieldOutputBitmapFilePath.setText(params.getBitmapFile().getAbsolutePath());
                     }
-
-                    if (params.isGenerateTextFile() && params.getTextFile() != null) {
-                        textfieldOutputTextFilePath.setText(params.getTextFile().getAbsolutePath());
-                    }
+                    
 
                 }else if(type.equals("merging")){
                     

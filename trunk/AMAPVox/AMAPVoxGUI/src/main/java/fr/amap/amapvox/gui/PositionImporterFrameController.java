@@ -24,6 +24,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -72,6 +73,12 @@ public class PositionImporterFrameController implements Initializable {
     private MenuItem menuItemSelectionNone1;
     @FXML
     private Button onActionButtonImportFromFile1;
+    @FXML
+    private TextField textFieldXPosition;
+    @FXML
+    private TextField textFieldYPosition;
+    @FXML
+    private TextField textFieldZPosition;
 
     /**
      * Initializes the controller class.
@@ -277,69 +284,64 @@ public class PositionImporterFrameController implements Initializable {
 
                     @Override
                     protected Object call() throws Exception {
-                        try {
-                            
-                            final List<Point3d> positions = new ArrayList<>();
-                            
-                            VoxelFileReader reader = new VoxelFileReader(new File(textfieldVoxelFile.getText()));
-                            VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
-                            Point3d voxSize = new Point3d();
-                            voxSize.x = (infos.getMaxCorner().x - infos.getMinCorner().x) / (double) infos.getSplit().x;
-                            voxSize.y = (infos.getMaxCorner().y - infos.getMinCorner().y) / (double) infos.getSplit().y;
-                            voxSize.z = (infos.getMaxCorner().z - infos.getMinCorner().z) / (double) infos.getSplit().z;
+                        
+                        int size = Integer.valueOf(textfieldScannerWidthArea.getText());
 
-                            // allocate MNT
-                            logger.info("allocate MNT");
-                            mnt = new float[infos.getSplit().x][];
-                            for (int x = 0; x < infos.getSplit().x; x++) {
-                                mnt[x] = new float[infos.getSplit().y];
-                                for (int y = 0; y < infos.getSplit().y; y++) {
-                                    mnt[x][y] = (float) infos.getMinCorner().z;
-                                }
+                        int middleX = (int) Integer.valueOf(textfieldScannerPosCenterX.getText());
+                        int middleY = (int) Integer.valueOf(textfieldScannerPosCenterY.getText());
+                        float zOffset = Float.valueOf(textfieldScannerPosCenterZ.getText());
+                        
+                        final List<Point3d> positions = new ArrayList<>();
+
+                        VoxelFileReader reader = new VoxelFileReader(new File(textfieldVoxelFile.getText()));
+                        VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
+                        Point3d voxSize = new Point3d();
+                        voxSize.x = (infos.getMaxCorner().x - infos.getMinCorner().x) / (double) infos.getSplit().x;
+                        voxSize.y = (infos.getMaxCorner().y - infos.getMinCorner().y) / (double) infos.getSplit().y;
+                        voxSize.z = (infos.getMaxCorner().z - infos.getMinCorner().z) / (double) infos.getSplit().z;
+
+                        // allocate MNT
+                        logger.info("allocate MNT");
+                        mnt = new float[infos.getSplit().x][];
+                        for (int x = 0; x < infos.getSplit().x; x++) {
+                            mnt[x] = new float[infos.getSplit().y];
+                            for (int y = 0; y < infos.getSplit().y; y++) {
+                                mnt[x][y] = (float) infos.getMinCorner().z;
                             }
-
-                            int size = Integer.valueOf(textfieldScannerWidthArea.getText());
-
-                            int middleX = (int) Integer.valueOf(textfieldScannerPosCenterX.getText());
-                            int middleY = (int) Integer.valueOf(textfieldScannerPosCenterY.getText());
-                            float zOffset = Float.valueOf(textfieldScannerPosCenterZ.getText());
-
-                            int xMin = middleX - size;
-                            int yMin = middleY - size;
-
-                            int xMax = middleX + size;
-                            int yMax = middleY + size;
-
-                            xMin = Integer.max(xMin, 0);
-                            yMin = Integer.max(yMin, 0);
-
-                            xMax = Integer.min(xMax, infos.getSplit().x - 1);
-                            yMax = Integer.min(yMax, infos.getSplit().y - 1);
-
-                            for (int i = xMin; i < xMax; i++) {
-
-                                double tx = (0.5f + (double) i) * voxSize.x;
-
-                                for (int j = yMin; j < yMax; j++) {
-
-                                    double ty = (0.5f + (double) j) * voxSize.y;
-                                    Point3d pos = new Point3d(infos.getMinCorner());
-                                    pos.add(new Point3d(tx, ty, mnt[i][j] + zOffset));
-                                    positions.add(pos);
-                                }
-                            }
-                            
-                            Platform.runLater(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    listViewCanopyAnalyzerSensorPositions.getItems().addAll(positions);
-                                }
-                            });
-                            
-                        } catch (Exception ex) {
-                            logger.error(ex);
                         }
+
+                        int xMin = middleX - size;
+                        int yMin = middleY - size;
+
+                        int xMax = middleX + size;
+                        int yMax = middleY + size;
+
+                        xMin = Integer.max(xMin, 0);
+                        yMin = Integer.max(yMin, 0);
+
+                        xMax = Integer.min(xMax, infos.getSplit().x - 1);
+                        yMax = Integer.min(yMax, infos.getSplit().y - 1);
+
+                        for (int i = xMin; i < xMax; i++) {
+
+                            double tx = (0.5f + (double) i) * voxSize.x;
+
+                            for (int j = yMin; j < yMax; j++) {
+
+                                double ty = (0.5f + (double) j) * voxSize.y;
+                                Point3d pos = new Point3d(infos.getMinCorner());
+                                pos.add(new Point3d(tx, ty, mnt[i][j] + zOffset));
+                                positions.add(pos);
+                            }
+                        }
+
+                        Platform.runLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                listViewCanopyAnalyzerSensorPositions.getItems().addAll(positions);
+                            }
+                        });
                         
                         
 
@@ -350,12 +352,36 @@ public class PositionImporterFrameController implements Initializable {
         };
         
         s.start();
+        
+        
+        
+        s.setOnFailed(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                ErrorDialog.show(new Exception(s.getException()));
+            }
+        });
 
     }
     
     public List<Point3d> getPositions(){
         
         return listViewCanopyAnalyzerSensorPositions.getItems();
+    }
+
+    @FXML
+    private void onActionButtonAddSinglePosition(ActionEvent event) {
+        
+        try{
+            Point3d position = new Point3d(Double.valueOf(textFieldXPosition.getText()),
+                                        Double.valueOf(textFieldYPosition.getText()),
+                                        Double.valueOf(textFieldZPosition.getText()));
+        
+            listViewCanopyAnalyzerSensorPositions.getItems().add(position);
+            
+        }catch(Exception e){
+            ErrorDialog.show(e);
+        }
     }
     
 }

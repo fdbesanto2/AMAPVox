@@ -13,7 +13,6 @@
     <modules>
         <module>DataStructure</module>
         <module>JLas</module>
-        <module>JRiegl</module>
         <module>JRaster</module>
         <module>VoxViewer</module>
         <module>Simulation</module>

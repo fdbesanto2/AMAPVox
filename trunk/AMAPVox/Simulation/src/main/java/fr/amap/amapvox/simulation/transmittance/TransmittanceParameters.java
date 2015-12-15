@@ -17,6 +17,7 @@ package fr.amap.amapvox.simulation.transmittance;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
 
 /**
@@ -36,6 +37,7 @@ public class TransmittanceParameters {
     private float width;
     private float step;
     private File pointsPositionsFile;
+    private List<Point3d> positions;
     
     private float latitudeInDegrees;
     
@@ -124,6 +126,14 @@ public class TransmittanceParameters {
 
     public void setPointsPositionsFile(File pointsPositionsFile) {
         this.pointsPositionsFile = pointsPositionsFile;
+    }
+
+    public List<Point3d> getPositions() {
+        return positions;
+    }
+
+    public void setPositions(List<Point3d> positions) {
+        this.positions = positions;
     }
 
     public float getLatitudeInDegrees() {

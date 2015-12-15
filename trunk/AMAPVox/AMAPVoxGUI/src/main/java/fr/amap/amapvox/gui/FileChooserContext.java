@@ -41,7 +41,7 @@ public class FileChooserContext {
     public File showSaveDialog(Window ownerWindow){
         
         if(lastSelectedFile != null){
-            fc.setInitialDirectory(lastSelectedFile);
+            fc.setInitialDirectory(lastSelectedFile.getParentFile());
             fc.setInitialFileName(lastSelectedFile.getName());
         }
         
