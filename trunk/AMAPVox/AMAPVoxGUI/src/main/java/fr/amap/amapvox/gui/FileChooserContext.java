@@ -26,8 +26,7 @@ public class FileChooserContext {
     public File showOpenDialog(Window ownerWindow){
         
         if(lastSelectedFile != null){
-            fc.setInitialDirectory(lastSelectedFile);
-            fc.setInitialFileName(lastSelectedFile.getName());
+            fc.setInitialDirectory(lastSelectedFile.getParentFile());
         }
         
         File resultFile = fc.showOpenDialog(ownerWindow);

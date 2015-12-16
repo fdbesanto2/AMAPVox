@@ -47,6 +47,8 @@ import fr.amap.amapvox.io.tls.rsp.Scans;
 import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.amapvox.jdart.DartPlotsXMLWriter;
+import fr.amap.amapvox.jleica.ptg.PTGReader;
+import fr.amap.amapvox.jleica.ptg.PTGScan;
 import fr.amap.amapvox.jraster.asc.DtmLoader;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
 import fr.amap.amapvox.math.geometry.BoundingBox2F;
@@ -67,6 +69,7 @@ import static fr.amap.amapvox.voxelisation.LeafAngleDistribution.Type.TWO_PARAME
 import static fr.amap.amapvox.voxelisation.LeafAngleDistribution.Type.ELLIPSOIDAL;
 import fr.amap.amapvox.voxelisation.ProcessTool;
 import fr.amap.amapvox.voxelisation.ProcessToolListener;
+import fr.amap.amapvox.voxelisation.VoxelAnalysis.LaserSpecification;
 import fr.amap.amapvox.voxelisation.configuration.ALSVoxCfg;
 import fr.amap.amapvox.voxelisation.configuration.Input;
 import fr.amap.amapvox.voxelisation.configuration.MultiResCfg;
@@ -103,6 +106,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -261,7 +266,8 @@ public class MainFrameController implements Initializable {
     private FileChooser fileChooserOpenInputFileALS;
     private FileChooser fileChooserOpenTrajectoryFileALS;
     private FileChooser fileChooserOpenOutputFileALS;
-    private FileChooser fileChooserOpenInputFileTLS;
+    private FileChooserContext fileChooserOpenInputFileTLS;
+    //private FileChooser fileChooserOpenInputFileTLS;
     private FileChooser fileChooserOpenVoxelFile;
     private FileChooser fileChooserOpenPopMatrixFile;
     private FileChooser fileChooserOpenSopMatrixFile;
@@ -298,8 +304,6 @@ public class MainFrameController implements Initializable {
     
     //private boolean alsMultiFile;
 
-    private String scanFilter;
-    private boolean filterScan;
     private List<LidarScan> items;
     private Rsp rsp;
     private double currentLastPointCloudLayoutY;
@@ -537,11 +541,7 @@ public class MainFrameController implements Initializable {
     @FXML
     private TextField textFieldPADMax;
     @FXML
-    private TextField textFieldTLSFilter;
-    @FXML
     private ListView<LidarScan> listviewRxpScans;
-    @FXML
-    private CheckBox checkboxFilter;
     @FXML
     private CheckBox checkboxMergeAfter;
     @FXML
@@ -760,7 +760,6 @@ public class MainFrameController implements Initializable {
     private Label labelPadMax5m;
     @FXML
     private Label labelOutputFileGroundEnergy;
-    @FXML
     private CheckBox checkboxGenerateLAI2xxxTypeFormat;
     @FXML
     private TitledPane titledPaneSceneObjectProperties;
@@ -804,6 +803,14 @@ public class MainFrameController implements Initializable {
     private Label labelDirectionsNumber;
     @FXML
     private TabPane tabPaneVirtualMeasures;
+    @FXML
+    private ComboBox<LaserSpecification> comboboxLaserSpecification;
+    @FXML
+    private TextField textFieldBeamDiameterAtExit;
+    @FXML
+    private TextField textFieldBeamDivergence;
+    @FXML
+    private CheckBox checkboxCustomLaserSpecification;
 
     @FXML
     private void onActionButtonOpenVoxelFileCanopyAnalyzer(ActionEvent event) {
@@ -1385,9 +1392,9 @@ public class MainFrameController implements Initializable {
         fileChooserOpenOutputFileALS = new FileChooser();
         fileChooserOpenOutputFileALS.setTitle("Choose output file");
 
-        fileChooserOpenInputFileTLS = new FileChooser();
-        fileChooserOpenInputFileTLS.setTitle("Open input file");
-        fileChooserOpenInputFileTLS.getExtensionFilters().addAll(
+        fileChooserOpenInputFileTLS = new FileChooserContext();
+        fileChooserOpenInputFileTLS.fc.setTitle("Open input file");
+        fileChooserOpenInputFileTLS.fc.getExtensionFilters().addAll(
                 new ExtensionFilter("All Files", "*"),
                 new ExtensionFilter("Text Files", "*.txt"),
                 new ExtensionFilter("Rxp Files", "*.rxp"),
@@ -1597,12 +1604,34 @@ public class MainFrameController implements Initializable {
         }
 
         comboboxModeALS.getItems().addAll("Las file", "Laz file", "Points file (unavailable)", "Shots file (unavailable)");
-        comboboxModeTLS.getItems().addAll("Rxp scan", "Rsp project", "Points file (unavailable)", "Shots file (unavailable)");
+        comboboxModeTLS.getItems().addAll("Rxp scan", "Rsp project", "ptx","ptg","Points file (unavailable)", "Shots file (unavailable)");
         comboboxWeighting.getItems().addAll("From the echo number", "From a matrix file", "Local recalculation (unavailable)");
         comboboxGroundEnergyOutputFormat.getItems().addAll("txt", "png");
 
-        ClassLoader classLoader = this.getClass().getClassLoader();
-
+        comboboxLaserSpecification.getItems().addAll(LaserSpecification.values());
+        
+        comboboxLaserSpecification.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<LaserSpecification>() {
+            @Override
+            public void changed(ObservableValue<? extends LaserSpecification> observable, LaserSpecification oldValue, LaserSpecification newValue) {
+                DecimalFormatSymbols symb = new DecimalFormatSymbols();
+                symb.setDecimalSeparator('.');
+                DecimalFormat formatter = new DecimalFormat("#####.######", symb);
+                
+                textFieldBeamDiameterAtExit.setText(formatter.format(newValue.getBeamDiameterAtExit()));
+                textFieldBeamDivergence.setText(formatter.format(newValue.getBeamDivergence()));
+            }
+        });
+        
+        comboboxLaserSpecification.getSelectionModel().select(LaserSpecification.DEFAULT_ALS);
+        
+        checkboxCustomLaserSpecification.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                comboboxLaserSpecification.setDisable(newValue);
+                textFieldBeamDiameterAtExit.setDisable(!newValue);
+                textFieldBeamDivergence.setDisable(!newValue);
+            }
+        });
 
         listViewVoxelsFiles.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -1776,19 +1805,6 @@ public class MainFrameController implements Initializable {
             }
         });
 
-        scanFilter = textFieldTLSFilter.getText();
-        filterScan = checkboxFilter.isSelected();
-
-        checkboxFilter.selectedProperty().addListener(new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-
-                doFilterOnScanListView();
-
-            }
-        });
-
         checkboxOverwritePadLimit.selectedProperty().addListener(new ChangeListener<Boolean>() {
 
             @Override
@@ -1822,20 +1838,14 @@ public class MainFrameController implements Initializable {
 
         comboboxWeighting.disableProperty().bind(checkboxEnableWeighting.selectedProperty().not());
 
-        textFieldTLSFilter.textProperty().addListener(new ChangeListener<String>() {
-
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                doFilterOnScanListView();
-            }
-        });
-
         listviewRxpScans.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<LidarScan>() {
 
             @Override
             public void changed(ObservableValue<? extends LidarScan> observable, LidarScan oldValue, LidarScan newValue) {
-                sopMatrix = newValue.matrix;
-                updateResultMatrix();
+                if(newValue != null){
+                    sopMatrix = newValue.matrix;
+                    updateResultMatrix();
+                }
             }
         });
 
@@ -1847,9 +1857,7 @@ public class MainFrameController implements Initializable {
                 switch (newValue.intValue()) {
 
                     case 1:
-                        checkboxFilter.setDisable(false);
                         listviewRxpScans.setDisable(false);
-                        textFieldTLSFilter.setDisable(false);
                         checkboxMergeAfter.setDisable(false);
                         textFieldMergedFileName.setDisable(false);
                         disableSopMatrixChoice(false);
@@ -1857,9 +1865,7 @@ public class MainFrameController implements Initializable {
                         break;
 
                     default:
-                        checkboxFilter.setDisable(true);
                         listviewRxpScans.setDisable(true);
-                        textFieldTLSFilter.setDisable(true);
                         checkboxMergeAfter.setDisable(true);
                         textFieldMergedFileName.setDisable(true);
                         //disableSopMatrixChoice(true);
@@ -3095,27 +3101,10 @@ public class MainFrameController implements Initializable {
 
     }
 
-    private void doFilterOnScanListView() {
-
-        if (items != null && listviewRxpScans != null) {
-
-            listviewRxpScans.getItems().clear();
-
-            for (LidarScan fileID : items) {
-
-                if (fileID.file.getAbsolutePath().contains(scanFilter) && checkboxFilter.isSelected()) {
-                    listviewRxpScans.getItems().add(fileID);
-                } else if (!fileID.file.getAbsolutePath().contains(scanFilter) && !checkboxFilter.isSelected()) {
-                    listviewRxpScans.getItems().add(fileID);
-                }
-            }
-        }
-    }
-
     @FXML
     private void onActionButtonOpenInputFileTLS(ActionEvent event) {
 
-        if (lastFCOpenInputFileTLS != null) {
+        /*if (lastFCOpenInputFileTLS != null) {
             fileChooserOpenInputFileTLS.setInitialDirectory(lastFCOpenInputFileTLS.getParentFile());
         }
 
@@ -3155,17 +3144,138 @@ public class MainFrameController implements Initializable {
                         updateResultMatrix();
 
                         doFilterOnScanListView();
+                        
 
-                    } catch (JDOMException ex) {
-                        logger.error("Cannot parse rsp file project", ex);
-                    } catch (IOException ex) {
-                        logger.error("Cannot read rsp file project", ex);
+                    } catch (JDOMException | IOException ex) {
+                        showErrorDialog(ex);
                     }
 
+                    break;
+                case ".ptg":
+                    PTGReader pTGReader = new PTGReader();
+                    try {
+                        pTGReader.openPTGFile(selectedFile);
+                        
+                        if(pTGReader.isAsciiFile()){
+                            
+                            List<File> ptgList = pTGReader.getScanList();
+                            
+                            items = new ArrayList<>();
+
+                            for (File file : ptgList) {
+                                
+                                PTGScan pTGScan = new PTGScan();
+                                pTGScan.openScanFile(file);
+                                
+                                items.add(new LidarScan(file, MatrixUtility.convertMat4DToMatrix4d(pTGScan.getHeader().getTransfMatrix())));
+                            }
+                            
+                            updateResultMatrix();
+                            listviewRxpScans.getItems().setAll(items);
+                        }
+                        
+                    } catch (IOException ex) {
+                        showErrorDialog(ex);
+                    } catch (Exception ex) {
+                        showErrorDialog(ex);
+                    }
+                    
                     break;
                 default:
                     comboboxModeTLS.getSelectionModel().select(2);
             }
+        }*/
+        
+        File selectedFile = fileChooserOpenInputFileTLS.showOpenDialog(stage);
+        
+        if(selectedFile != null){
+            
+            String extension = FileManager.getExtension(selectedFile);
+
+            switch (extension) {
+                case ".rxp":
+                    
+                    textFieldInputFileTLS.setText(selectedFile.getAbsolutePath());
+                    
+                    comboboxModeTLS.getSelectionModel().select(0);
+                    
+                    items = new ArrayList<>();
+                    items.add(new LidarScan(selectedFile, MatrixUtility.convertMat4DToMatrix4d(Mat4D.identity())));
+                    
+                    listviewRxpScans.getItems().setAll(items);
+                    
+                    break;
+                case ".rsp":
+                    
+                    Rsp rsp = new Rsp();
+                    try {
+                        rsp.read(selectedFile);
+                        
+                        textFieldInputFileTLS.setText(selectedFile.getAbsolutePath());
+
+                        rspExtractorFrameController.init(rsp);
+                        rspExtractorFrame.show();
+
+                        rspExtractorFrame.setOnHidden(new EventHandler<WindowEvent>() {
+
+                            @Override
+                            public void handle(WindowEvent event) {
+                                
+                                final List<RspExtractorFrameController.Scan> selectedScans = rspExtractorFrameController.getSelectedScans();
+                                
+                                items = new ArrayList<>();
+
+                                for(RspExtractorFrameController.Scan scan : selectedScans){
+                                    items.add(new LidarScan(scan.getFile(), MatrixUtility.convertMat4DToMatrix4d(scan.getSop())));
+                                }
+
+                                popMatrix = MatrixUtility.convertMat4DToMatrix4d(rsp.getPopMatrix());
+                                updateResultMatrix();
+                                
+                                listviewRxpScans.getItems().setAll(items);
+                            }
+                        });
+
+                    } catch (JDOMException | IOException ex) {
+                        showErrorDialog(ex);
+                    }
+
+                    break;
+                case ".ptg":
+                    PTGReader pTGReader = new PTGReader();
+                    try {
+                        pTGReader.openPTGFile(selectedFile);
+
+                        if(pTGReader.isAsciiFile()){
+
+                            List<File> ptgList = pTGReader.getScanList();
+
+                            items = new ArrayList<>();
+
+                            for (File file : ptgList) {
+
+                                PTGScan pTGScan = new PTGScan();
+                                pTGScan.openScanFile(file);
+
+                                items.add(new LidarScan(file, MatrixUtility.convertMat4DToMatrix4d(pTGScan.getHeader().getTransfMatrix())));
+                            }
+
+                            updateResultMatrix();
+                            listviewRxpScans.getItems().setAll(items);
+                        }
+
+                    } catch (IOException ex) {
+                        showErrorDialog(ex);
+                    } catch (Exception ex) {
+                        showErrorDialog(ex);
+                    }
+
+                    break;
+                default:
+            }
+            
+            
+
         }
     }
     
@@ -4977,7 +5087,6 @@ public class MainFrameController implements Initializable {
                         List<LidarScan> matricesAndFiles = ((TLSVoxCfg)cfg).getMatricesAndFiles();
                         if (matricesAndFiles != null) {
                             items = matricesAndFiles;
-                            doFilterOnScanListView();
                         }
                     }
                     

@@ -78,14 +78,13 @@
                                                       <content>
                                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                <children>
-                                                                  <TextField fx:id="textFieldTLSFilter" layoutX="230.0" layoutY="229.0" prefHeight="25.0" prefWidth="69.0" text=".mon" />
                                                                   <Button fx:id="buttonOpenOutputPathTLS" layoutX="14.0" layoutY="294.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputPathTLS" text="Open" AnchorPane.topAnchor="296.0" />
                                                                   <Label fx:id="labelTLSOutputPath" layoutX="14.0" layoutY="254.0" text="Output path" />
                                                                   <TextField fx:id="textFieldOutputPathTLS" layoutX="14.0" layoutY="269.0" prefHeight="25.0" prefWidth="300.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
                                                                   <ComboBox fx:id="comboboxModeTLS" layoutX="14.0" layoutY="14.0" prefWidth="150.0" promptText="Choose mode..." />
                                                                   <TextField fx:id="textFieldInputFileTLS" layoutX="14.0" layoutY="73.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
                                                                   <Label layoutX="14.0" layoutY="58.0" text="Input file" />
-                                                                  <Button fx:id="buttonOpenInputFileTLS" layoutX="14.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileTLS" text="Open" AnchorPane.topAnchor="100.0" />
+                                                                  <Button fx:id="buttonOpenInputFileTLS" layoutX="14.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileTLS" text="Import scans" AnchorPane.topAnchor="100.0" />
                                                                   <ListView fx:id="listviewRxpScans" layoutX="14.0" layoutY="129.0" maxWidth="1.7976931348623157E308" prefHeight="91.0" prefWidth="300.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
                                                                   <Button fx:id="buttonTLSAddToTaskList" layoutX="210.0" layoutY="349.0" mnemonicParsing="false" onAction="#onActionButtonTLSAddToTaskList" text="Save and add to task list" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                                      <graphic>
@@ -96,7 +95,6 @@
                                                                         </ImageView>
                                                                      </graphic>
                                                                   </Button>
-                                                                  <CheckBox fx:id="checkboxFilter" layoutX="159.0" layoutY="227.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="61.0" selected="true" text="Filter" />
                                                                   <CheckBox fx:id="checkboxMergeAfter" layoutX="99.0" layoutY="309.0" mnemonicParsing="false" text="Merge after" />
                                                                   <TextField fx:id="textFieldMergedFileName" layoutX="230.0" layoutY="305.0" prefHeight="25.0" prefWidth="103.0" text="merged.vox" AnchorPane.rightAnchor="24.0" />
                                                                </children></AnchorPane>
@@ -396,6 +394,47 @@
                                                                </children></AnchorPane>
                                                          </content>
                                                       </Tab>
+                                                      <Tab text="Scanner">
+                                                         <content>
+                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <Label layoutX="18.0" layoutY="23.0" text="Laser specification" />
+                                                                  <VBox layoutX="36.0" layoutY="50.0" spacing="5.0">
+                                                                     <children>
+                                                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                                                           <children>
+                                                                              <ComboBox fx:id="comboboxLaserSpecification" prefHeight="26.0" prefWidth="166.0" />
+                                                                              <CheckBox fx:id="checkboxCustomLaserSpecification" mnemonicParsing="false" text="Custom">
+                                                                                 <font>
+                                                                                    <Font size="12.0" />
+                                                                                 </font>
+                                                                              </CheckBox>
+                                                                           </children>
+                                                                        </HBox>
+                                                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                                                           <children>
+                                                                              <Label text="Beam diameter at exit (m)">
+                                                                                 <font>
+                                                                                    <Font size="12.0" />
+                                                                                 </font></Label>
+                                                                              <TextField fx:id="textFieldBeamDiameterAtExit" disable="true" prefHeight="26.0" prefWidth="80.0" text="0.0003" />
+                                                                           </children>
+                                                                        </HBox>
+                                                                        <HBox alignment="CENTER_LEFT" spacing="2.0">
+                                                                           <children>
+                                                                              <Label text="Beam divergence (radians)">
+                                                                                 <font>
+                                                                                    <Font size="12.0" />
+                                                                                 </font></Label>
+                                                                              <TextField fx:id="textFieldBeamDivergence" disable="true" prefHeight="26.0" prefWidth="80.0" text="0.005" />
+                                                                           </children>
+                                                                        </HBox>
+                                                                     </children>
+                                                                  </VBox>
+                                                               </children>
+                                                            </AnchorPane>
+                                                         </content>
+                                                      </Tab>
                                                       <Tab text="Limits">
                                                         <content>
                                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -427,8 +466,14 @@
                                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                <children>
                                                                   <Label layoutX="14.0" layoutY="14.0" text="Leaf Angle Distribution (LAD)" />
-                                                                  <RadioButton fx:id="radiobuttonLADHomogeneous" layoutX="43.0" layoutY="46.0" mnemonicParsing="false" selected="true" text="Homogeneous" />
-                                                                  <RadioButton fx:id="radiobuttonLADLocalEstimation" disable="true" layoutX="43.0" layoutY="78.0" mnemonicParsing="false" text="Local estimation" />
+                                                                  <RadioButton fx:id="radiobuttonLADHomogeneous" layoutX="43.0" layoutY="46.0" mnemonicParsing="false" selected="true" text="Homogeneous">
+                                                                     <font>
+                                                                        <Font size="12.0" />
+                                                                     </font></RadioButton>
+                                                                  <RadioButton fx:id="radiobuttonLADLocalEstimation" disable="true" layoutX="43.0" layoutY="78.0" mnemonicParsing="false" text="Local estimation">
+                                                                     <font>
+                                                                        <Font size="12.0" />
+                                                                     </font></RadioButton>
                                                                   <ComboBox fx:id="comboboxLADChoice" layoutX="43.0" layoutY="126.0" prefHeight="26.0" prefWidth="170.0" />
                                                                   <HBox fx:id="hboxTwoBetaParameters" layoutX="264.0" layoutY="126.0" spacing="15.0" visible="false">
                                                                      <children>
@@ -1000,12 +1045,30 @@
                                                             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                                                          </rowConstraints>
                                                          <children>
-                                                            <TextField fx:id="textfieldPixelNumber" prefHeight="26.0" prefWidth="74.0" text="800" GridPane.columnIndex="1" />
-                                                            <Label text="Pixel number" />
-                                                            <TextField fx:id="textfieldAzimutsNumber" prefHeight="26.0" prefWidth="74.0" text="36" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                            <Label text="Azimuts number" GridPane.rowIndex="1" />
-                                                            <TextField fx:id="textfieldZenithsNumber" prefHeight="26.0" prefWidth="74.0" text="9" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                            <Label text="Zeniths number" GridPane.rowIndex="2" />
+                                                            <TextField fx:id="textfieldPixelNumber" prefHeight="26.0" prefWidth="74.0" text="800" GridPane.columnIndex="1">
+                                                               <font>
+                                                                  <Font size="12.0" />
+                                                               </font></TextField>
+                                                            <Label text="Pixel number">
+                                                               <font>
+                                                                  <Font size="12.0" />
+                                                               </font></Label>
+                                                            <TextField fx:id="textfieldAzimutsNumber" prefHeight="26.0" prefWidth="74.0" text="36" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                               <font>
+                                                                  <Font size="12.0" />
+                                                               </font></TextField>
+                                                            <Label text="Azimuts number" GridPane.rowIndex="1">
+                                                               <font>
+                                                                  <Font size="12.0" />
+                                                               </font></Label>
+                                                            <TextField fx:id="textfieldZenithsNumber" prefHeight="26.0" prefWidth="74.0" text="9" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                               <font>
+                                                                  <Font size="12.0" />
+                                                               </font></TextField>
+                                                            <Label text="Zeniths number" GridPane.rowIndex="2">
+                                                               <font>
+                                                                  <Font size="12.0" />
+                                                               </font></Label>
                                                          </children>
                                                       </GridPane>
                                                       <VBox layoutX="14.0" layoutY="223.0" spacing="5.0">

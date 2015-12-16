@@ -13,8 +13,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
 /**
- *
- * @author calcul
+ * This is an utility class to show Exception to the user by a dialog frame
+ * @author Julien Heurtebize
  */
 public class ErrorDialog {
     

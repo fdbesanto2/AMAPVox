@@ -83,7 +83,7 @@ public class Lai2xxxSim {
         
         //test
         //lecture du fichier voxel
-//        VoxelFileReader voxReader = new VoxelFileReader(new File("/media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraTLSfull_withbufferALS.txt"));
+//        VoxelFileReader voxReader = new VoxelFileReader(new File("/media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraTLS.txt"));
 //        VoxelSpaceInfos infos = voxReader.getVoxelSpaceInfos();
 //
 //        Iterator<Voxel> iterator = voxReader.iterator();
@@ -97,9 +97,10 @@ public class Lai2xxxSim {
 //        //initialisation de la scène
 //        Scene scene = new Scene();
 //        scene.setBoundingBox(new BoundingBox3d(infos.getMinCorner(), infos.getMaxCorner()));
+//        
 //
 //        //création d'un nouveau VoxelManager avec les paramètres du fichier voxel
-//        VoxelManager vm = new VoxelManager(scene, new VoxelManagerSettings(infos.getSplit()));
+//        VoxelManager vm = new VoxelManager(scene, new VoxelManagerSettings(infos.getSplit(), 0));
         
 
         getSensorPositions();
@@ -174,18 +175,7 @@ public class Lai2xxxSim {
 //                    }
 //                }
 //
-//                double pathLength;
-//                if(lastVoxel.x > infos.getSplit().x
-//                        || lastVoxel.y > infos.getSplit().y
-//                        || lastVoxel.x == 0
-//                        || lastVoxel.y == 0){
-//
-//                    pathLength = 1;
-//
-//                }else{
-//                    pathLength = lastValidDistance;
-//                }
-//                    
+//                double pathLength = lastValidDistance;
 //                lai2xxx.addTransmittance(ring, positionID, (float) (Math.pow(transmitted, 1/pathLength)));
                 lai2xxx.addTransmittance(ring, positionID, (float) transmitted);
             }
