@@ -126,9 +126,10 @@ public class PositionImporterFrameController implements Initializable {
         if(selectedFile != null){
             textFileParserFrameController.setColumnAssignment(true);
             textFileParserFrameController.setColumnAssignmentValues("X", "Y", "Z");
-            textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(0, 1);
-            textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(1, 2);
-            textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(2, 3);
+            textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(0, 0);
+            textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(1, 1);
+            textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(2, 2);
+            textFileParserFrameController.setHeaderExtractionEnabled(false);
 
 
             try {

@@ -38,6 +38,7 @@ import fr.amap.amapvox.voxelisation.configuration.TLSVoxCfg;
 import fr.amap.amapvox.voxelisation.configuration.VoxMergingCfg;
 import fr.amap.amapvox.voxelisation.configuration.VoxelParameters;
 import fr.amap.amapvox.voxelisation.multires.ProcessingMultiRes;
+import fr.amap.amapvox.voxelisation.tls.PTGVoxelisation;
 import fr.amap.amapvox.voxelisation.tls.RxpEchoFilter;
 import fr.amap.amapvox.voxelisation.tls.RxpVoxelisation;
 import java.io.BufferedReader;
@@ -149,6 +150,84 @@ public class ProcessTool implements Cancellable{
         }
 
         return octree;
+    }
+    
+    public ArrayList<File> voxeliseFromPTG(TLSVoxCfg cfg){
+        
+        File output = cfg.getOutputFile();
+        File input = cfg.getInputFile();
+        VoxelParameters parameters = cfg.getVoxelParameters();
+        Mat4D vop = MatrixUtility.convertMatrix4dToMat4D(cfg.getVopMatrix());
+        Mat4D pop = MatrixUtility.convertMatrix4dToMat4D(cfg.getPopMatrix());
+        List<LidarScan> matricesAndFiles = cfg.getMatricesAndFiles();
+        cfg.setEchoFilter(new RxpEchoFilter(cfg.getEchoFilters()));
+        
+        if (!Files.isReadable(output.toPath())) {
+            logger.error("File " + output.getAbsolutePath() + " not reachable");
+        }
+
+        if (!Files.isReadable(input.toPath())) {
+            logger.error("File " + input.getAbsolutePath() + " not reachable");
+        }
+
+        startTime = System.currentTimeMillis();
+
+        parameters.setTLS(true);
+        
+        RegularDtm dtm = null;
+        if (parameters.useDTMCorrection()) {
+            dtm = loadDTM(parameters.getDtmFile());
+        }
+        
+        List<PointcloudFilter> pointcloudFilters = parameters.getPointcloudFilters();
+        
+        if(pointcloudFilters != null){
+            
+            if(vop == null){ vop = Mat4D.identity();}
+            
+            if(parameters.isUsePointCloudFilter()){
+                for(fr.amap.amapvox.voxelisation.PointcloudFilter filter : pointcloudFilters){
+                    filter.setOctree(loadOctree(filter.getPointcloudFile(), vop));
+                }
+            }
+        }
+        
+        ArrayList<File> files = new ArrayList<>();
+        exec = Executors.newFixedThreadPool(coresNumber);
+        
+        try {
+            LinkedBlockingQueue<Callable<PTGVoxelisation>>  tasks = new LinkedBlockingQueue<>();
+
+            int count = 1;
+            for (LidarScan file : matricesAndFiles) {
+
+                File outputFile = new File(output.getAbsolutePath() + "/" + file.file.getName() + ".vox");
+                tasks.put(new PTGVoxelisation(file.file, outputFile, vop, pop, MatrixUtility.convertMatrix4dToMat4D(file.matrix), parameters, dtm, pointcloudFilters, cfg));
+                files.add(outputFile);
+                count++;
+            }
+            
+            exec.invokeAll(tasks);
+            
+            exec.shutdown();
+            
+            
+        }catch (InterruptedException ex){
+            logger.info("Voxelisation was stopped");
+            cancelled = true;
+            return null;
+        }catch(NullPointerException ex){
+            logger.error("Unknwown exception", ex);
+            cancelled = true;
+            return null;
+        }finally{
+            
+        }
+        
+
+        fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
+
+        return files;
     }
 
     public ArrayList<File> voxeliseFromRsp(TLSVoxCfg cfg){

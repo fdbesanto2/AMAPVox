@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -135,7 +136,7 @@ public class UpdaterFrameController implements Initializable {
             
             return file.getName()+ "\t\t" +
                     numberFormat.format(date.get(Calendar.DAY_OF_MONTH)) + "/" + 
-                    numberFormat.format(date.get(Calendar.MONTH)) + "/" + 
+                    numberFormat.format(date.get(Calendar.MONTH)+1) + "/" + 
                     date.get(Calendar.YEAR) + " " +
                     numberFormat.format(date.get(Calendar.HOUR_OF_DAY)) + ":" +
                     numberFormat.format(date.get(Calendar.MINUTE)) + ":" +

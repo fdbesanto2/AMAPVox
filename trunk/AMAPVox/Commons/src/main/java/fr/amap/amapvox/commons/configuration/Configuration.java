@@ -73,7 +73,9 @@ public abstract class Configuration {
         SHOTS_FILE(3),
         RXP_SCAN(4),
         RSP_PROJECT(5),
-        VOXEL_FILE(6);
+        VOXEL_FILE(6),
+        PTX_PROJECT(7),
+        PTG_PROJECT(8);
         
         public int type;
         
@@ -200,6 +202,10 @@ public abstract class Configuration {
                 return InputType.RXP_SCAN;
             case 5:
                 return InputType.RSP_PROJECT;
+            case 7:
+                return InputType.PTX_PROJECT;
+            case 8:
+                return InputType.PTG_PROJECT;
         }
         
         return null;

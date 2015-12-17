@@ -81,7 +81,7 @@ public class Updater {
             if(child.isFile()){
                 DbxEntry.File f = child.asFile();
                 if(f.name.contains(".zip")){
-                    fileList.put(f.clientMtime, new File(f.path));
+                    fileList.put(f.lastModified, new File(f.path));
                 }
             }
         }

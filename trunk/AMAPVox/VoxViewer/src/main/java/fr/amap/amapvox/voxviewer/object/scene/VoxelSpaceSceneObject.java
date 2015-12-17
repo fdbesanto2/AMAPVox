@@ -36,6 +36,7 @@ import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
 import java.nio.FloatBuffer;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -60,6 +61,8 @@ public class VoxelSpaceSceneObject extends SceneObject{
     
     public static final int VOXELSPACE_FORMAT1 = 1;
     public static final int VOXELSPACE_FORMAT2 = 2;
+    
+    private Map<String, ScalarField> scalarFieldsList;
 
     @Override
     public void updateBuffers(GL3 gl, int index, FloatBuffer buffer) {
@@ -437,6 +440,8 @@ public class VoxelSpaceSceneObject extends SceneObject{
     }
     
     public void initAttributs(String[] columnsNames){
+        
+        scalarFieldsList = new HashMap<>();
         
         for(String name : columnsNames){
             variables.add(name);

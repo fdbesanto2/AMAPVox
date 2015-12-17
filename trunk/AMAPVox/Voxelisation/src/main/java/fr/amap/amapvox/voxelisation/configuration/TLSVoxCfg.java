@@ -39,7 +39,7 @@ public class TLSVoxCfg extends VoxCfg{
         
         processMode = ProcessMode.VOXELISATION_TLS;
         
-        if (inputType == InputType.RSP_PROJECT) {
+        if (inputType == InputType.RSP_PROJECT || inputType == InputType.PTX_PROJECT || inputType == InputType.PTG_PROJECT) {
 
             Element filesElement = processElement.getChild("files");
             List<Element> childrens = filesElement.getChildren("file");
@@ -74,7 +74,7 @@ public class TLSVoxCfg extends VoxCfg{
         processElement.setAttribute(new Attribute("mode","voxelisation"));
         processElement.setAttribute(new Attribute("type","TLS"));
         
-        if(inputType == InputType.RSP_PROJECT){
+        if(inputType == InputType.RSP_PROJECT || inputType == InputType.PTX_PROJECT || inputType == InputType.PTG_PROJECT){
                 
             /***MERGING***/
 

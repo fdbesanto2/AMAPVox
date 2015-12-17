@@ -62,7 +62,7 @@ public class Scene {
     
     //default shaders
     public Shader noTranslationShader = new AxisShader("noTranslationShader");
-    public Shader instanceLightedShader = new InstanceLightedShader("instanceLightedShader");
+    public static Shader instanceLightedShader = new InstanceLightedShader("instanceLightedShader");
     public Shader instanceShader = new InstanceShader("instanceShader");
     public Shader texturedShader = new TextureShader("textureShader");
     public Shader labelShader = new TextureShader("labelShader");

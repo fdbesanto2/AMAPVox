@@ -362,6 +362,14 @@ public class TextFileParserFrameController implements Initializable{
                     if(columnAssignmentEnabled){
                         ComboBox comboBox = new ComboBox(columnAssignmentValues);
                         comboBox.setMaxWidth(Double.MAX_VALUE);
+                        
+                        stage.widthProperty().addListener(new ChangeListener<Number>() {
+
+                            @Override
+                            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                                comboBox.setPrefWidth(newValue.doubleValue());
+                            }
+                        });
                     
                         column.widthProperty().addListener(new ChangeListener<Number>() {
 
@@ -472,6 +480,10 @@ public class TextFileParserFrameController implements Initializable{
         }else{
             return Integer.valueOf(spinnerNumberOfLines.getEditor().getText());
         }
+    }
+    
+    public void setHeaderExtractionEnabled(boolean value){
+        checkboxExtractScalarFieldNames.setSelected(value);
     }
     
     public int getHeaderIndex(){

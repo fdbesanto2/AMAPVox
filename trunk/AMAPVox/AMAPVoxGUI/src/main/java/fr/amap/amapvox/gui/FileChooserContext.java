@@ -18,9 +18,15 @@ public class FileChooserContext {
     
     public FileChooser fc;
     public File lastSelectedFile;
+    private String defaultFileName;
     
     public FileChooserContext(){
         fc = new FileChooser();
+    }
+    
+    public FileChooserContext(String defaultFileName){
+        fc = new FileChooser();
+        this.defaultFileName = defaultFileName;
     }
     
     public File showOpenDialog(Window ownerWindow){
@@ -42,6 +48,8 @@ public class FileChooserContext {
         if(lastSelectedFile != null){
             fc.setInitialDirectory(lastSelectedFile.getParentFile());
             fc.setInitialFileName(lastSelectedFile.getName());
+        }else if(defaultFileName != null){
+            fc.setInitialFileName(defaultFileName);
         }
         
         File resultFile = fc.showSaveDialog(ownerWindow);

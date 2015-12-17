@@ -9,6 +9,7 @@ import fr.amap.amapvox.commons.util.ColorGradient;
 import fr.amap.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.ScalarField;
 import fr.amap.amapvox.voxviewer.object.scene.SceneObject;
+import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import java.awt.Color;
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -139,13 +140,18 @@ public class SceneObjectPropertiesPanelController implements Initializable {
         
         sceneObjectWrapper = selectedItem;
         
-        if(((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()) instanceof PointCloudSceneObject){
+        if(sceneObjectWrapper.getSceneObject() instanceof PointCloudSceneObject){
             
             comboboxActiveScalarField.getItems().setAll(((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).getScalarFieldsList().keySet());
             
             if(!((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).getScalarFieldsList().isEmpty()){
                 updateValues(((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).getScalarFieldsList().get(comboboxActiveScalarField.getItems().get(0)));
             }
+            
+        }else if(sceneObjectWrapper.getSceneObject() instanceof VoxelSpaceSceneObject){
+            
+            comboboxActiveScalarField.getItems().setAll(((VoxelSpaceSceneObject)sceneObjectWrapper.getSceneObject()).getVariables());
+            
         }
         
         comboboxActiveScalarField.getSelectionModel().selectFirst();

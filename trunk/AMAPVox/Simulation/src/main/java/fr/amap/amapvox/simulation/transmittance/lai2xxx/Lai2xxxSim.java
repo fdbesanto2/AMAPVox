@@ -189,7 +189,10 @@ public class Lai2xxxSim {
         
         if(parameters.isGenerateTextFile()){
             writeTransmittance();
-        }        
+            logger.info("File "+parameters.getTextFile().getAbsolutePath()+" was written.");
+        }
+
+        logger.info("Simulation is finished.");        
     }
     
     //doublon (même méthode dans TransmittanceSim, à nettoyer)
