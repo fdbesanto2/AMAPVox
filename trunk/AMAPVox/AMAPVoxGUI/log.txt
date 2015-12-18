@@ -50334,3 +50334,1467 @@ java.lang.NullPointerException
 2015-12-17 19:24:32 INFO  - file written ( 2.0 s )
 2015-12-17 19:24:32 INFO  - Voxelisation finished in 420.0 s
 2015-12-17 19:24:32 INFO  - Voxelisation finished in 420.0 s
+2015-12-18 08:26:39 INFO  - Computing directions...
+2015-12-18 08:26:39 INFO  - Nb shots ring 1 = 1205
+2015-12-18 08:26:39 INFO  - Nb shots ring 2 = 1711
+2015-12-18 08:26:39 INFO  - Nb shots ring 3 = 2049
+2015-12-18 08:26:39 INFO  - Nb shots ring 4 = 2334
+2015-12-18 08:26:39 INFO  - Nb shots ring 5 = 2701
+2015-12-18 08:26:39 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inra_huge_TLS_no_ALS/merged.vox =====
+2015-12-18 08:26:39 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 65.0
+#split: 270 270 65
+#type: TLS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 08:26:39 INFO  - allocate Voxels
+2015-12-18 08:26:40 INFO  - allocate MNT
+2015-12-18 08:27:47 INFO  - nb positions= 64
+2015-12-18 08:27:47 INFO  - Computation of transmittance
+2015-12-18 08:29:49 INFO  - Computation of AVGTRANS...
+2015-12-18 08:29:49 INFO  - Computation of CNTC#...
+2015-12-18 08:29:49 INFO  - Computation of LAI...
+2015-12-18 08:29:49 INFO  - Computation of GAPS...
+2015-12-18 08:29:49 INFO  - Computation of ACFS...
+2015-12-18 08:29:49 INFO  - Computation of ACF...
+2015-12-18 08:29:49 INFO  - Computation of STDEV...
+2015-12-18 08:29:49 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inra_huge_TLS_no_ALS/lai2200/lai2200.txt was written.
+2015-12-18 08:29:49 INFO  - Simulation is finished.
+2015-12-18 08:35:10 ERROR - An error occured
+org.jdom2.input.JDOMParseException: Error on line 1 of document file:/media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inra_huge_TLS_no_ALS/lai2200/lai2200.txt: Contenu non autorisé dans le prologue.
+	at org.jdom2.input.sax.SAXBuilderEngine.build(SAXBuilderEngine.java:228)
+	at org.jdom2.input.sax.SAXBuilderEngine.build(SAXBuilderEngine.java:277)
+	at org.jdom2.input.sax.SAXBuilderEngine.build(SAXBuilderEngine.java:264)
+	at org.jdom2.input.SAXBuilder.build(SAXBuilder.java:1116)
+	at fr.amap.amapvox.commons.configuration.Configuration.readType(Configuration.java:94)
+	at fr.amap.amapvox.gui.MainFrameController.executeProcess(MainFrameController.java:4064)
+	at fr.amap.amapvox.gui.MainFrameController.executeTaskList(MainFrameController.java:4009)
+	at fr.amap.amapvox.gui.MainFrameController.onActionButtonExecute(MainFrameController.java:4020)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.Trampoline.invoke(MethodUtil.java:71)
+	at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.MethodUtil.invoke(MethodUtil.java:275)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1769)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1657)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Node.fireEvent(Node.java:8411)
+	at javafx.scene.control.Button.fire(Button.java:185)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:182)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:96)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:89)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:218)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:3757)
+	at javafx.scene.Scene$MouseHandler.access$1500(Scene.java:3485)
+	at javafx.scene.Scene.impl_processMouseEvent(Scene.java:1762)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2494)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:352)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:275)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$354(GlassViewEventHandler.java:388)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:389)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:555)
+	at com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$49(GtkApplication.java:139)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: org.xml.sax.SAXParseException; systemId: file:/media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inra_huge_TLS_no_ALS/lai2200/lai2200.txt; lineNumber: 1; columnNumber: 1; Contenu non autorisé dans le prologue.
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.createSAXParseException(ErrorHandlerWrapper.java:203)
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.fatalError(ErrorHandlerWrapper.java:177)
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:400)
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:327)
+	at com.sun.org.apache.xerces.internal.impl.XMLScanner.reportFatalError(XMLScanner.java:1437)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl$PrologDriver.next(XMLDocumentScannerImpl.java:999)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:606)
+	at com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.next(XMLNSDocumentScannerImpl.java:118)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:510)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:848)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:777)
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:141)
+	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.parse(AbstractSAXParser.java:1213)
+	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser.parse(SAXParserImpl.java:643)
+	at org.jdom2.input.sax.SAXBuilderEngine.build(SAXBuilderEngine.java:217)
+	... 77 more
+2015-12-18 08:35:34 INFO  - temporary file created : /tmp/cfg_temp3421939166028555041.xml
+2015-12-18 08:35:34 INFO  - Computing directions...
+2015-12-18 08:35:34 INFO  - Nb shots ring 1 = 1205
+2015-12-18 08:35:34 INFO  - Nb shots ring 2 = 1711
+2015-12-18 08:35:34 INFO  - Nb shots ring 3 = 2049
+2015-12-18 08:35:34 INFO  - Nb shots ring 4 = 2334
+2015-12-18 08:35:34 INFO  - Nb shots ring 5 = 2701
+2015-12-18 08:35:34 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inra_huge_TLS_no_ALS/merged.vox =====
+2015-12-18 08:35:34 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 65.0
+#split: 270 270 65
+#type: TLS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 08:35:34 INFO  - allocate Voxels
+2015-12-18 08:35:34 INFO  - allocate MNT
+2015-12-18 08:36:28 INFO  - nb positions= 64
+2015-12-18 08:36:28 INFO  - Computation of transmittance
+2015-12-18 08:40:12 INFO  - Computation of AVGTRANS...
+2015-12-18 08:40:12 INFO  - Computation of CNTC#...
+2015-12-18 08:40:12 INFO  - Computation of LAI...
+2015-12-18 08:40:12 INFO  - Computation of GAPS...
+2015-12-18 08:40:12 INFO  - Computation of ACFS...
+2015-12-18 08:40:12 INFO  - Computation of ACF...
+2015-12-18 08:40:12 INFO  - Computation of STDEV...
+2015-12-18 08:40:12 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inra_huge_TLS_no_ALS/lai2200/lai2200.txt was written.
+2015-12-18 08:40:12 INFO  - Simulation is finished.
+2015-12-18 08:40:14 INFO  - temporary file created : /tmp/cfg_temp7812363602063837201.xml
+2015-12-18 08:40:14 INFO  - Computing directions...
+2015-12-18 08:40:14 INFO  - Nb shots ring 1 = 1205
+2015-12-18 08:40:14 INFO  - Nb shots ring 2 = 1711
+2015-12-18 08:40:14 INFO  - Nb shots ring 3 = 2049
+2015-12-18 08:40:14 INFO  - Nb shots ring 4 = 2334
+2015-12-18 08:40:14 INFO  - Nb shots ring 5 = 2701
+2015-12-18 08:40:14 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inra_huge_TLS_no_ALS/merged.vox =====
+2015-12-18 08:40:14 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 65.0
+#split: 270 270 65
+#type: TLS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 08:40:14 INFO  - allocate Voxels
+2015-12-18 08:40:14 INFO  - allocate MNT
+2015-12-18 08:41:09 INFO  - nb positions= 64
+2015-12-18 08:41:09 INFO  - Computation of transmittance
+2015-12-18 08:42:38 INFO  - temporary file created : /tmp/cfg_temp2189499446197074787.xml
+2015-12-18 08:42:38 INFO  - Computing directions...
+2015-12-18 08:42:38 INFO  - Nb shots ring 1 = 1205
+2015-12-18 08:42:38 INFO  - Nb shots ring 2 = 1711
+2015-12-18 08:42:38 INFO  - Nb shots ring 3 = 2049
+2015-12-18 08:42:38 INFO  - Nb shots ring 4 = 2334
+2015-12-18 08:42:38 INFO  - Nb shots ring 5 = 2701
+2015-12-18 08:42:38 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inra_huge_TLS_no_ALS/merged.vox =====
+2015-12-18 08:42:39 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 65.0
+#split: 270 270 65
+#type: TLS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 08:42:39 INFO  - allocate Voxels
+2015-12-18 08:42:39 INFO  - allocate MNT
+2015-12-18 08:43:45 INFO  - nb positions= 64
+2015-12-18 08:43:45 INFO  - Computation of transmittance
+2015-12-18 08:45:45 INFO  - temporary file created : /tmp/cfg_temp3234126027412573040.xml
+2015-12-18 08:45:45 INFO  - Computing directions...
+2015-12-18 08:45:45 INFO  - Nb shots ring 1 = 1205
+2015-12-18 08:45:45 INFO  - Nb shots ring 2 = 1711
+2015-12-18 08:45:45 INFO  - Nb shots ring 3 = 2049
+2015-12-18 08:45:45 INFO  - Nb shots ring 4 = 2334
+2015-12-18 08:45:45 INFO  - Nb shots ring 5 = 2701
+2015-12-18 08:46:23 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inra_huge_TLS_no_ALS/merged.vox =====
+2015-12-18 08:46:23 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 65.0
+#split: 270 270 65
+#type: TLS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 08:46:23 INFO  - allocate Voxels
+2015-12-18 08:46:23 INFO  - allocate MNT
+2015-12-18 08:46:51 INFO  - nb positions= 64
+2015-12-18 08:46:51 INFO  - Computation of transmittance
+2015-12-18 08:50:17 INFO  - Computation of AVGTRANS...
+2015-12-18 08:50:17 INFO  - Computation of CNTC#...
+2015-12-18 08:50:17 INFO  - Computation of LAI...
+2015-12-18 08:50:17 INFO  - Computation of GAPS...
+2015-12-18 08:50:17 INFO  - Computation of ACFS...
+2015-12-18 08:50:17 INFO  - Computation of ACF...
+2015-12-18 08:50:17 INFO  - Computation of STDEV...
+2015-12-18 08:50:17 INFO  - File /home/calcul/Documents/Julien/tmp/lai2200.txt was written.
+2015-12-18 08:50:17 INFO  - Simulation is finished.
+2015-12-18 09:09:22 INFO  - Computing directions...
+2015-12-18 09:09:22 INFO  - Nb shots ring 1 = 1205
+2015-12-18 09:09:22 INFO  - Nb shots ring 2 = 1711
+2015-12-18 09:09:22 INFO  - Nb shots ring 3 = 2049
+2015-12-18 09:09:22 INFO  - Nb shots ring 4 = 2334
+2015-12-18 09:09:22 INFO  - Nb shots ring 5 = 2701
+2015-12-18 09:10:07 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraALS.txt =====
+2015-12-18 09:10:07 INFO  - VOXEL SPACE
+#min_corner: -125.0 -125.0 0.0
+#max_corner: 198.0 195.0 60.0
+#split: 323 320 60
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 09:10:07 INFO  - allocate Voxels
+2015-12-18 09:10:07 INFO  - allocate MNT
+2015-12-18 09:10:43 INFO  - nb positions= 64
+2015-12-18 09:10:43 INFO  - Computation of transmittance
+2015-12-18 09:11:34 INFO  - Computation of AVGTRANS...
+2015-12-18 09:11:34 INFO  - Computation of CNTC#...
+2015-12-18 09:11:34 INFO  - Computation of LAI...
+2015-12-18 09:11:34 INFO  - Computation of GAPS...
+2015-12-18 09:11:34 INFO  - Computation of ACFS...
+2015-12-18 09:11:34 INFO  - Computation of ACF...
+2015-12-18 09:11:34 INFO  - Computation of STDEV...
+2015-12-18 09:11:34 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_LAI2200_mesure_vs_simule/lai2200_ALS.txt was written.
+2015-12-18 09:11:34 INFO  - Simulation is finished.
+2015-12-18 09:45:53 INFO  - Computing directions...
+2015-12-18 09:45:53 INFO  - Nb shots ring 1 = 1205
+2015-12-18 09:45:53 INFO  - Nb shots ring 2 = 1711
+2015-12-18 09:45:53 INFO  - Nb shots ring 3 = 2049
+2015-12-18 09:45:53 INFO  - Nb shots ring 4 = 2334
+2015-12-18 09:45:53 INFO  - Nb shots ring 5 = 2701
+2015-12-18 09:46:51 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraALS.txt =====
+2015-12-18 09:46:51 INFO  - VOXEL SPACE
+#min_corner: -125.0 -125.0 0.0
+#max_corner: 198.0 195.0 60.0
+#split: 323 320 60
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 09:46:51 INFO  - allocate Voxels
+2015-12-18 09:46:51 INFO  - allocate MNT
+2015-12-18 09:47:27 INFO  - nb positions= 64
+2015-12-18 09:47:27 INFO  - Computation of transmittance
+2015-12-18 09:49:44 INFO  - Computation of AVGTRANS...
+2015-12-18 09:49:44 INFO  - Computation of CNTC#...
+2015-12-18 09:49:44 INFO  - Computation of LAI...
+2015-12-18 09:49:44 INFO  - Computation of GAPS...
+2015-12-18 09:49:44 INFO  - Computation of ACFS...
+2015-12-18 09:49:44 INFO  - Computation of ACF...
+2015-12-18 09:49:44 INFO  - Computation of STDEV...
+2015-12-18 09:49:44 ERROR - Cannot read configuration file
+java.io.FileNotFoundException: /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_LAI2200_mesure_vs_simule/lai2200_ALS.txt/media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_LAI2200_mesure_vs_simule/lai2200_ALS.txt (N'est pas un dossier)
+	at java.io.FileOutputStream.open0(Native Method)
+	at java.io.FileOutputStream.open(FileOutputStream.java:270)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:213)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:162)
+	at java.io.FileWriter.<init>(FileWriter.java:90)
+	at fr.amap.amapvox.simulation.transmittance.lai2xxx.Lai2xxxSim.writeTransmittance(Lai2xxxSim.java:326)
+	at fr.amap.amapvox.simulation.transmittance.lai2xxx.Lai2xxxSim.process(Lai2xxxSim.java:207)
+	at fr.amap.amapvox.gui.MainFrameController$48$1.call(MainFrameController.java:4103)
+	at fr.amap.amapvox.gui.MainFrameController$48$1.call(MainFrameController.java:4079)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$492(Service.java:725)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$493(Service.java:724)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2015-12-18 09:52:28 INFO  - Computing directions...
+2015-12-18 09:52:28 INFO  - Nb shots ring 1 = 1205
+2015-12-18 09:52:28 INFO  - Nb shots ring 2 = 1711
+2015-12-18 09:52:28 INFO  - Nb shots ring 3 = 2049
+2015-12-18 09:52:28 INFO  - Nb shots ring 4 = 2334
+2015-12-18 09:52:28 INFO  - Nb shots ring 5 = 2701
+2015-12-18 09:53:03 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraALS.txt =====
+2015-12-18 09:53:03 INFO  - VOXEL SPACE
+#min_corner: -125.0 -125.0 0.0
+#max_corner: 198.0 195.0 60.0
+#split: 323 320 60
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 09:53:03 INFO  - allocate Voxels
+2015-12-18 09:53:03 INFO  - allocate MNT
+2015-12-18 09:53:37 INFO  - nb positions= 64
+2015-12-18 09:53:37 INFO  - Computation of transmittance
+2015-12-18 09:54:00 INFO  - Computation of AVGTRANS...
+2015-12-18 09:54:00 INFO  - Computation of CNTC#...
+2015-12-18 09:54:00 INFO  - Computation of LAI...
+2015-12-18 09:54:00 INFO  - Computation of GAPS...
+2015-12-18 09:54:00 INFO  - Computation of ACFS...
+2015-12-18 09:54:00 INFO  - Computation of ACF...
+2015-12-18 09:54:00 INFO  - Computation of STDEV...
+2015-12-18 09:54:00 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_LAI2200_mesure_vs_simule/lai2200_ALS.txt was written.
+2015-12-18 09:54:00 INFO  - Simulation is finished.
+2015-12-18 09:55:58 ERROR - File is not a voxel file: /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_LAI2200_mesure_vs_simule/lai2200_ALS.txt
+2015-12-18 10:02:51 INFO  - Computing directions...
+2015-12-18 10:02:51 INFO  - Nb shots ring 1 = 1205
+2015-12-18 10:02:51 INFO  - Nb shots ring 2 = 1711
+2015-12-18 10:02:51 INFO  - Nb shots ring 3 = 2049
+2015-12-18 10:02:51 INFO  - Nb shots ring 4 = 2334
+2015-12-18 10:02:51 INFO  - Nb shots ring 5 = 2701
+2015-12-18 10:03:38 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraALS.txt =====
+2015-12-18 10:03:38 INFO  - VOXEL SPACE
+#min_corner: -125.0 -125.0 0.0
+#max_corner: 198.0 195.0 60.0
+#split: 323 320 60
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 10:03:38 INFO  - allocate Voxels
+2015-12-18 10:03:38 INFO  - allocate MNT
+2015-12-18 10:04:13 INFO  - nb positions= 64
+2015-12-18 10:04:13 INFO  - Computation of transmittance
+2015-12-18 10:04:38 INFO  - Computation of AVGTRANS...
+2015-12-18 10:04:38 INFO  - Computation of CNTC#...
+2015-12-18 10:04:38 INFO  - Computation of LAI...
+2015-12-18 10:04:38 INFO  - Computation of GAPS...
+2015-12-18 10:04:38 INFO  - Computation of ACFS...
+2015-12-18 10:04:38 INFO  - Computation of ACF...
+2015-12-18 10:04:38 INFO  - Computation of STDEV...
+2015-12-18 10:04:38 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_LAI2200_mesure_vs_simule/lai2200_ALS.txt was written.
+2015-12-18 10:04:38 INFO  - Simulation is finished.
+2015-12-18 10:07:05 INFO  - Computing directions...
+2015-12-18 10:07:05 INFO  - Nb shots ring 1 = 1205
+2015-12-18 10:07:05 INFO  - Nb shots ring 2 = 1711
+2015-12-18 10:07:05 INFO  - Nb shots ring 3 = 2049
+2015-12-18 10:07:05 INFO  - Nb shots ring 4 = 2334
+2015-12-18 10:07:05 INFO  - Nb shots ring 5 = 2701
+2015-12-18 10:07:57 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraALS.txt =====
+2015-12-18 10:07:57 INFO  - VOXEL SPACE
+#min_corner: -125.0 -125.0 0.0
+#max_corner: 198.0 195.0 60.0
+#split: 323 320 60
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 10:07:57 INFO  - allocate Voxels
+2015-12-18 10:07:57 INFO  - allocate MNT
+2015-12-18 10:08:33 INFO  - nb positions= 64
+2015-12-18 10:08:33 INFO  - Computation of transmittance
+2015-12-18 10:08:56 INFO  - Computation of AVGTRANS...
+2015-12-18 10:08:56 INFO  - Computation of CNTC#...
+2015-12-18 10:08:56 INFO  - Computation of LAI...
+2015-12-18 10:08:56 INFO  - Computation of GAPS...
+2015-12-18 10:08:56 INFO  - Computation of ACFS...
+2015-12-18 10:08:56 INFO  - Computation of ACF...
+2015-12-18 10:08:56 INFO  - Computation of STDEV...
+2015-12-18 10:08:56 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_LAI2200_mesure_vs_simule/lai2200_ALS.txt was written.
+2015-12-18 10:08:56 INFO  - Simulation is finished.
+2015-12-18 10:19:13 INFO  - Computing directions...
+2015-12-18 10:19:13 INFO  - Nb shots ring 1 = 1205
+2015-12-18 10:19:13 INFO  - Nb shots ring 2 = 1711
+2015-12-18 10:19:13 INFO  - Nb shots ring 3 = 2049
+2015-12-18 10:19:13 INFO  - Nb shots ring 4 = 2334
+2015-12-18 10:19:13 INFO  - Nb shots ring 5 = 2701
+2015-12-18 10:20:00 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraALS.txt =====
+2015-12-18 10:20:00 INFO  - VOXEL SPACE
+#min_corner: -125.0 -125.0 0.0
+#max_corner: 198.0 195.0 60.0
+#split: 323 320 60
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 10:20:00 INFO  - allocate Voxels
+2015-12-18 10:20:00 INFO  - allocate MNT
+2015-12-18 10:20:35 INFO  - nb positions= 64
+2015-12-18 10:20:35 INFO  - Computation of transmittance
+2015-12-18 10:21:00 INFO  - Computation of AVGTRANS...
+2015-12-18 10:21:00 INFO  - Computation of CNTC#...
+2015-12-18 10:21:00 INFO  - Computation of LAI...
+2015-12-18 10:21:00 INFO  - Computation of GAPS...
+2015-12-18 10:21:00 INFO  - Computation of ACFS...
+2015-12-18 10:21:00 INFO  - Computation of ACF...
+2015-12-18 10:21:00 INFO  - Computation of STDEV...
+2015-12-18 10:21:00 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_LAI2200_mesure_vs_simule/lai2200_ALS.txt was written.
+2015-12-18 10:21:00 INFO  - Simulation is finished.
+2015-12-18 10:22:15 INFO  - Computing directions...
+2015-12-18 10:22:15 INFO  - Nb shots ring 1 = 1205
+2015-12-18 10:22:15 INFO  - Nb shots ring 2 = 1711
+2015-12-18 10:22:15 INFO  - Nb shots ring 3 = 2049
+2015-12-18 10:22:15 INFO  - Nb shots ring 4 = 2334
+2015-12-18 10:22:15 INFO  - Nb shots ring 5 = 2701
+2015-12-18 10:23:01 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraALS.txt =====
+2015-12-18 10:23:01 INFO  - VOXEL SPACE
+#min_corner: -125.0 -125.0 0.0
+#max_corner: 198.0 195.0 60.0
+#split: 323 320 60
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 10:23:01 INFO  - allocate Voxels
+2015-12-18 10:23:01 INFO  - allocate MNT
+2015-12-18 10:23:37 INFO  - nb positions= 64
+2015-12-18 10:23:37 INFO  - Computation of transmittance
+2015-12-18 10:24:03 INFO  - Computation of AVGTRANS...
+2015-12-18 10:24:03 INFO  - Computation of CNTC#...
+2015-12-18 10:24:03 INFO  - Computation of LAI...
+2015-12-18 10:24:03 INFO  - Computation of GAPS...
+2015-12-18 10:24:03 INFO  - Computation of ACFS...
+2015-12-18 10:24:03 INFO  - Computation of ACF...
+2015-12-18 10:24:03 INFO  - Computation of STDEV...
+2015-12-18 10:24:03 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_LAI2200_mesure_vs_simule/lai2200_ALS.txt was written.
+2015-12-18 10:24:03 INFO  - Simulation is finished.
+2015-12-18 10:25:42 INFO  - Computing directions...
+2015-12-18 10:25:42 INFO  - Nb shots ring 1 = 1205
+2015-12-18 10:25:42 INFO  - Nb shots ring 2 = 1711
+2015-12-18 10:25:42 INFO  - Nb shots ring 3 = 2049
+2015-12-18 10:25:42 INFO  - Nb shots ring 4 = 2334
+2015-12-18 10:25:42 INFO  - Nb shots ring 5 = 2701
+2015-12-18 10:26:28 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraALS.txt =====
+2015-12-18 10:26:28 INFO  - VOXEL SPACE
+#min_corner: -125.0 -125.0 0.0
+#max_corner: 198.0 195.0 60.0
+#split: 323 320 60
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 10:26:28 INFO  - allocate Voxels
+2015-12-18 10:26:28 INFO  - allocate MNT
+2015-12-18 10:27:05 INFO  - nb positions= 64
+2015-12-18 10:27:05 INFO  - Computation of transmittance
+2015-12-18 10:27:33 INFO  - Computation of AVGTRANS...
+2015-12-18 10:27:33 INFO  - Computation of CNTC#...
+2015-12-18 10:27:33 INFO  - Computation of LAI...
+2015-12-18 10:27:33 INFO  - Computation of GAPS...
+2015-12-18 10:27:33 INFO  - Computation of ACFS...
+2015-12-18 10:27:33 INFO  - Computation of ACF...
+2015-12-18 10:27:33 INFO  - Computation of STDEV...
+2015-12-18 10:27:33 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_LAI2200_mesure_vs_simule/lai2200_ALS.txt was written.
+2015-12-18 10:27:33 INFO  - Simulation is finished.
+2015-12-18 10:29:55 INFO  - Computing directions...
+2015-12-18 10:29:55 INFO  - Nb shots ring 1 = 1205
+2015-12-18 10:29:55 INFO  - Nb shots ring 2 = 1711
+2015-12-18 10:29:55 INFO  - Nb shots ring 3 = 2049
+2015-12-18 10:29:55 INFO  - Nb shots ring 4 = 2334
+2015-12-18 10:29:55 INFO  - Nb shots ring 5 = 2701
+2015-12-18 10:30:33 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inra_huge_TLS_no_ALS/merged.vox =====
+2015-12-18 10:30:33 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 65.0
+#split: 270 270 65
+#type: TLS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 10:30:33 INFO  - allocate Voxels
+2015-12-18 10:30:33 INFO  - allocate MNT
+2015-12-18 10:31:02 INFO  - nb positions= 64
+2015-12-18 10:31:02 INFO  - Computation of transmittance
+2015-12-18 10:31:31 INFO  - Computation of AVGTRANS...
+2015-12-18 10:31:31 INFO  - Computation of CNTC#...
+2015-12-18 10:31:31 INFO  - Computation of LAI...
+2015-12-18 10:31:31 INFO  - Computation of GAPS...
+2015-12-18 10:31:31 INFO  - Computation of ACFS...
+2015-12-18 10:31:31 INFO  - Computation of ACF...
+2015-12-18 10:31:31 INFO  - Computation of STDEV...
+2015-12-18 10:31:31 INFO  - File /home/calcul/Documents/Julien/tmp/lai2200.txt was written.
+2015-12-18 10:31:31 INFO  - Simulation is finished.
+2015-12-18 10:52:44 INFO  - Computing directions...
+2015-12-18 10:52:44 INFO  - Nb shots ring 1 = 1205
+2015-12-18 10:52:44 INFO  - Nb shots ring 2 = 1711
+2015-12-18 10:52:44 INFO  - Nb shots ring 3 = 2049
+2015-12-18 10:52:44 INFO  - Nb shots ring 4 = 2334
+2015-12-18 10:52:44 INFO  - Nb shots ring 5 = 2701
+2015-12-18 10:53:30 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraALS.txt =====
+2015-12-18 10:53:30 INFO  - VOXEL SPACE
+#min_corner: -125.0 -125.0 0.0
+#max_corner: 198.0 195.0 60.0
+#split: 323 320 60
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 10:53:30 INFO  - allocate Voxels
+2015-12-18 10:53:30 INFO  - allocate MNT
+2015-12-18 10:54:06 INFO  - nb positions= 64
+2015-12-18 10:54:06 INFO  - Computation of transmittance
+2015-12-18 10:54:29 INFO  - Computation of AVGTRANS...
+2015-12-18 10:54:29 INFO  - Computation of CNTC#...
+2015-12-18 10:54:29 INFO  - Computation of LAI...
+2015-12-18 10:54:29 INFO  - Computation of GAPS...
+2015-12-18 10:54:29 INFO  - Computation of ACFS...
+2015-12-18 10:54:29 INFO  - Computation of ACF...
+2015-12-18 10:54:29 INFO  - Computation of STDEV...
+2015-12-18 10:54:29 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/lai2200_ALS.txt was written.
+2015-12-18 10:54:29 INFO  - Simulation is finished.
+2015-12-18 10:54:29 INFO  - Computing directions...
+2015-12-18 10:54:29 INFO  - Nb shots ring 1 = 1205
+2015-12-18 10:54:29 INFO  - Nb shots ring 2 = 1711
+2015-12-18 10:54:29 INFO  - Nb shots ring 3 = 2049
+2015-12-18 10:54:29 INFO  - Nb shots ring 4 = 2334
+2015-12-18 10:54:29 INFO  - Nb shots ring 5 = 2701
+2015-12-18 10:55:07 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inra_huge_TLS_no_ALS/merged.vox =====
+2015-12-18 10:55:07 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 65.0
+#split: 270 270 65
+#type: TLS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 10:55:07 INFO  - allocate Voxels
+2015-12-18 10:55:07 INFO  - allocate MNT
+2015-12-18 10:55:35 INFO  - nb positions= 64
+2015-12-18 10:55:35 INFO  - Computation of transmittance
+2015-12-18 10:56:04 INFO  - Computation of AVGTRANS...
+2015-12-18 10:56:04 INFO  - Computation of CNTC#...
+2015-12-18 10:56:04 INFO  - Computation of LAI...
+2015-12-18 10:56:04 INFO  - Computation of GAPS...
+2015-12-18 10:56:04 INFO  - Computation of ACFS...
+2015-12-18 10:56:04 INFO  - Computation of ACF...
+2015-12-18 10:56:04 INFO  - Computation of STDEV...
+2015-12-18 10:56:04 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/lai2200_TLS.txt was written.
+2015-12-18 10:56:04 INFO  - Simulation is finished.
+2015-12-18 10:56:04 INFO  - Computing directions...
+2015-12-18 10:56:04 INFO  - Nb shots ring 1 = 1205
+2015-12-18 10:56:04 INFO  - Nb shots ring 2 = 1711
+2015-12-18 10:56:04 INFO  - Nb shots ring 3 = 2049
+2015-12-18 10:56:04 INFO  - Nb shots ring 4 = 2334
+2015-12-18 10:56:04 INFO  - Nb shots ring 5 = 2701
+2015-12-18 10:56:43 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraTLSfull_withbufferALS.txt =====
+2015-12-18 10:56:43 INFO  - VOXEL SPACE
+#min_corner: -125.0 -125.0 0.0
+#max_corner: 198.0 195.0 60.0
+#split: 323 320 60
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 10:56:43 INFO  - allocate Voxels
+2015-12-18 10:56:43 INFO  - allocate MNT
+2015-12-18 10:57:19 INFO  - nb positions= 64
+2015-12-18 10:57:19 INFO  - Computation of transmittance
+2015-12-18 10:57:42 INFO  - Computation of AVGTRANS...
+2015-12-18 10:57:42 INFO  - Computation of CNTC#...
+2015-12-18 10:57:42 INFO  - Computation of LAI...
+2015-12-18 10:57:42 INFO  - Computation of GAPS...
+2015-12-18 10:57:42 INFO  - Computation of ACFS...
+2015-12-18 10:57:42 INFO  - Computation of ACF...
+2015-12-18 10:57:42 INFO  - Computation of STDEV...
+2015-12-18 10:57:42 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/lai2200_TLS_ALS_buffer.txt was written.
+2015-12-18 10:57:42 INFO  - Simulation is finished.
+2015-12-18 11:06:44 INFO  - Computing directions...
+2015-12-18 11:06:44 INFO  - Nb shots ring 1 = 1205
+2015-12-18 11:06:44 INFO  - Nb shots ring 2 = 1711
+2015-12-18 11:06:44 INFO  - Nb shots ring 3 = 2049
+2015-12-18 11:06:44 INFO  - Nb shots ring 4 = 2334
+2015-12-18 11:06:44 INFO  - Nb shots ring 5 = 2701
+2015-12-18 11:07:29 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraALS.txt =====
+2015-12-18 11:07:29 INFO  - VOXEL SPACE
+#min_corner: -125.0 -125.0 0.0
+#max_corner: 198.0 195.0 60.0
+#split: 323 320 60
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 11:07:29 INFO  - allocate Voxels
+2015-12-18 11:07:29 INFO  - allocate MNT
+2015-12-18 11:08:05 INFO  - nb positions= 64
+2015-12-18 11:08:05 INFO  - Computation of transmittance
+2015-12-18 11:08:29 INFO  - Computation of AVGTRANS...
+2015-12-18 11:08:29 INFO  - Computation of CNTC#...
+2015-12-18 11:08:29 INFO  - Computation of LAI...
+2015-12-18 11:08:29 INFO  - Computation of GAPS...
+2015-12-18 11:08:29 INFO  - Computation of ACFS...
+2015-12-18 11:08:29 INFO  - Computation of ACF...
+2015-12-18 11:08:29 INFO  - Computation of STDEV...
+2015-12-18 11:08:29 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/normalized/lai2200_ALS.txt was written.
+2015-12-18 11:08:29 INFO  - Simulation is finished.
+2015-12-18 11:08:29 INFO  - Computing directions...
+2015-12-18 11:08:29 INFO  - Nb shots ring 1 = 1205
+2015-12-18 11:08:29 INFO  - Nb shots ring 2 = 1711
+2015-12-18 11:08:29 INFO  - Nb shots ring 3 = 2049
+2015-12-18 11:08:29 INFO  - Nb shots ring 4 = 2334
+2015-12-18 11:08:29 INFO  - Nb shots ring 5 = 2701
+2015-12-18 11:09:07 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inra_huge_TLS_no_ALS/merged.vox =====
+2015-12-18 11:09:07 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 65.0
+#split: 270 270 65
+#type: TLS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 11:09:07 INFO  - allocate Voxels
+2015-12-18 11:09:07 INFO  - allocate MNT
+2015-12-18 11:09:34 INFO  - nb positions= 64
+2015-12-18 11:09:34 INFO  - Computation of transmittance
+2015-12-18 11:10:03 INFO  - Computation of AVGTRANS...
+2015-12-18 11:10:03 INFO  - Computation of CNTC#...
+2015-12-18 11:10:03 INFO  - Computation of LAI...
+2015-12-18 11:10:03 INFO  - Computation of GAPS...
+2015-12-18 11:10:03 INFO  - Computation of ACFS...
+2015-12-18 11:10:03 INFO  - Computation of ACF...
+2015-12-18 11:10:03 INFO  - Computation of STDEV...
+2015-12-18 11:10:03 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/normalized/lai2200_TLS.txt was written.
+2015-12-18 11:10:03 INFO  - Simulation is finished.
+2015-12-18 11:10:03 INFO  - Computing directions...
+2015-12-18 11:10:03 INFO  - Nb shots ring 1 = 1205
+2015-12-18 11:10:03 INFO  - Nb shots ring 2 = 1711
+2015-12-18 11:10:03 INFO  - Nb shots ring 3 = 2049
+2015-12-18 11:10:03 INFO  - Nb shots ring 4 = 2334
+2015-12-18 11:10:03 INFO  - Nb shots ring 5 = 2701
+2015-12-18 11:10:42 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraTLSfull_withbufferALS.txt =====
+2015-12-18 11:10:43 INFO  - VOXEL SPACE
+#min_corner: -125.0 -125.0 0.0
+#max_corner: 198.0 195.0 60.0
+#split: 323 320 60
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 11:10:43 INFO  - allocate Voxels
+2015-12-18 11:10:43 INFO  - allocate MNT
+2015-12-18 11:11:18 INFO  - nb positions= 64
+2015-12-18 11:11:18 INFO  - Computation of transmittance
+2015-12-18 11:11:42 INFO  - Computation of AVGTRANS...
+2015-12-18 11:11:42 INFO  - Computation of CNTC#...
+2015-12-18 11:11:42 INFO  - Computation of LAI...
+2015-12-18 11:11:42 INFO  - Computation of GAPS...
+2015-12-18 11:11:42 INFO  - Computation of ACFS...
+2015-12-18 11:11:42 INFO  - Computation of ACF...
+2015-12-18 11:11:42 INFO  - Computation of STDEV...
+2015-12-18 11:11:42 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/normalized/lai2200_TLS_ALS_buffer.txt was written.
+2015-12-18 11:11:42 INFO  - Simulation is finished.
+2015-12-18 11:17:28 INFO  - Computing directions...
+2015-12-18 11:17:28 INFO  - Nb shots ring 1 = 1205
+2015-12-18 11:17:28 INFO  - Nb shots ring 2 = 1711
+2015-12-18 11:17:28 INFO  - Nb shots ring 3 = 2049
+2015-12-18 11:17:28 INFO  - Nb shots ring 4 = 2334
+2015-12-18 11:17:28 INFO  - Nb shots ring 5 = 2701
+2015-12-18 11:18:13 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraALS.txt =====
+2015-12-18 11:18:13 INFO  - VOXEL SPACE
+#min_corner: -125.0 -125.0 0.0
+#max_corner: 198.0 195.0 60.0
+#split: 323 320 60
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 11:18:13 INFO  - allocate Voxels
+2015-12-18 11:18:13 INFO  - allocate MNT
+2015-12-18 11:18:49 INFO  - nb positions= 64
+2015-12-18 11:18:49 INFO  - Computation of transmittance
+2015-12-18 11:19:05 INFO  - Computation of AVGTRANS...
+2015-12-18 11:19:05 INFO  - Computation of CNTC#...
+2015-12-18 11:19:05 INFO  - Computation of LAI...
+2015-12-18 11:19:05 INFO  - Computation of GAPS...
+2015-12-18 11:19:05 INFO  - Computation of ACFS...
+2015-12-18 11:19:05 INFO  - Computation of ACF...
+2015-12-18 11:19:05 INFO  - Computation of STDEV...
+2015-12-18 11:19:05 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/normalized/lai2200_ALS.txt was written.
+2015-12-18 11:19:05 INFO  - Simulation is finished.
+2015-12-18 14:03:22 INFO  - Building transmittance functions table
+2015-12-18 14:03:22 INFO  - Transmittance functions table is built
+2015-12-18 14:03:22 INFO  - allocate!!!!!!!!
+2015-12-18 14:03:22 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2015-12-18 14:03:22 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2015-12-18 14:04:25 INFO  - Laz file is closed
+2015-12-18 14:04:38 INFO  - Shots processed: 1000000
+2015-12-18 14:04:40 INFO  - Shots processed: 2000000
+2015-12-18 14:04:42 INFO  - Shots processed: 3000000
+2015-12-18 14:04:44 INFO  - Shots processed: 4000000
+2015-12-18 14:04:46 INFO  - Shots processed: 5000000
+2015-12-18 14:04:48 INFO  - Shots processed: 6000000
+2015-12-18 14:04:50 INFO  - Shots processed: 7000000
+2015-12-18 14:04:52 INFO  - Shots processed: 8000000
+2015-12-18 14:04:54 INFO  - Shots processed: 9000000
+2015-12-18 14:04:56 INFO  - Shots processed: 10000000
+2015-12-18 14:04:58 INFO  - Shots processed: 11000000
+2015-12-18 14:05:00 INFO  - Shots processed: 12000000
+2015-12-18 14:05:00 INFO  - Shots processed: 12345659
+2015-12-18 14:05:00 INFO  - Maximum neighborhood range : 2
+2015-12-18 14:05:00 INFO  - Maximum neighborhood range : 3
+2015-12-18 14:05:00 INFO  - Maximum neighborhood range : 4
+2015-12-18 14:05:00 INFO  - Maximum neighborhood range : 13
+2015-12-18 14:05:03 INFO  - Time : 2960 ms
+2015-12-18 14:05:03 INFO  - writing file: /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt
+2015-12-18 14:05:07 INFO  - file written ( 4.0 s )
+2015-12-18 14:05:07 INFO  - las voxelisation finished in 124.0 s
+2015-12-18 14:11:59 INFO  - Computing directions...
+2015-12-18 14:11:59 INFO  - Nb shots ring 1 = 1205
+2015-12-18 14:11:59 INFO  - Nb shots ring 2 = 1711
+2015-12-18 14:11:59 INFO  - Nb shots ring 3 = 2049
+2015-12-18 14:11:59 INFO  - Nb shots ring 4 = 2334
+2015-12-18 14:11:59 INFO  - Nb shots ring 5 = 2701
+2015-12-18 14:12:02 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt =====
+2015-12-18 14:12:02 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 14:12:02 INFO  - allocate Voxels
+2015-12-18 14:12:02 INFO  - allocate MNT
+2015-12-18 14:12:04 INFO  - nb positions= 64
+2015-12-18 14:12:04 INFO  - Computation of transmittance
+2015-12-18 14:12:14 INFO  - Computation of AVGTRANS...
+2015-12-18 14:12:14 INFO  - Computation of CNTC#...
+2015-12-18 14:12:14 INFO  - Computation of LAI...
+2015-12-18 14:12:14 INFO  - Computation of GAPS...
+2015-12-18 14:12:14 INFO  - Computation of ACFS...
+2015-12-18 14:12:14 INFO  - Computation of ACF...
+2015-12-18 14:12:14 INFO  - Computation of STDEV...
+2015-12-18 14:12:14 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/lai2200_ALS.txt was written.
+2015-12-18 14:12:14 INFO  - Simulation is finished.
+2015-12-18 14:12:14 INFO  - Computing directions...
+2015-12-18 14:12:14 INFO  - Nb shots ring 1 = 1205
+2015-12-18 14:12:14 INFO  - Nb shots ring 2 = 1711
+2015-12-18 14:12:14 INFO  - Nb shots ring 3 = 2049
+2015-12-18 14:12:14 INFO  - Nb shots ring 4 = 2334
+2015-12-18 14:12:14 INFO  - Nb shots ring 5 = 2701
+2015-12-18 14:12:16 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraTLS.txt =====
+2015-12-18 14:12:16 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 14:12:16 INFO  - allocate Voxels
+2015-12-18 14:12:16 INFO  - allocate MNT
+2015-12-18 14:12:18 INFO  - nb positions= 64
+2015-12-18 14:12:18 INFO  - Computation of transmittance
+2015-12-18 14:12:27 INFO  - Computation of AVGTRANS...
+2015-12-18 14:12:27 INFO  - Computation of CNTC#...
+2015-12-18 14:12:27 INFO  - Computation of LAI...
+2015-12-18 14:12:27 INFO  - Computation of GAPS...
+2015-12-18 14:12:27 INFO  - Computation of ACFS...
+2015-12-18 14:12:27 INFO  - Computation of ACF...
+2015-12-18 14:12:27 INFO  - Computation of STDEV...
+2015-12-18 14:12:27 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/lai2200_TLS.txt was written.
+2015-12-18 14:12:27 INFO  - Simulation is finished.
+2015-12-18 14:15:50 INFO  - Computing directions...
+2015-12-18 14:15:50 INFO  - Nb shots ring 1 = 1205
+2015-12-18 14:15:50 INFO  - Nb shots ring 2 = 1711
+2015-12-18 14:15:50 INFO  - Nb shots ring 3 = 2049
+2015-12-18 14:15:50 INFO  - Nb shots ring 4 = 2334
+2015-12-18 14:15:50 INFO  - Nb shots ring 5 = 2701
+2015-12-18 14:15:53 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt =====
+2015-12-18 14:15:53 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 14:15:53 INFO  - allocate Voxels
+2015-12-18 14:15:53 INFO  - allocate MNT
+2015-12-18 14:15:55 INFO  - nb positions= 64
+2015-12-18 14:15:55 INFO  - Computation of transmittance
+2015-12-18 14:16:04 INFO  - Computation of AVGTRANS...
+2015-12-18 14:16:04 INFO  - Computation of CNTC#...
+2015-12-18 14:16:04 INFO  - Computation of LAI...
+2015-12-18 14:16:04 INFO  - Computation of GAPS...
+2015-12-18 14:16:04 INFO  - Computation of ACFS...
+2015-12-18 14:16:04 INFO  - Computation of ACF...
+2015-12-18 14:16:04 INFO  - Computation of STDEV...
+2015-12-18 14:16:04 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/normalized/lai2200_ALS.txt was written.
+2015-12-18 14:16:04 INFO  - Simulation is finished.
+2015-12-18 14:16:04 INFO  - Computing directions...
+2015-12-18 14:16:04 INFO  - Nb shots ring 1 = 1205
+2015-12-18 14:16:04 INFO  - Nb shots ring 2 = 1711
+2015-12-18 14:16:04 INFO  - Nb shots ring 3 = 2049
+2015-12-18 14:16:04 INFO  - Nb shots ring 4 = 2334
+2015-12-18 14:16:04 INFO  - Nb shots ring 5 = 2701
+2015-12-18 14:16:07 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraTLS.txt =====
+2015-12-18 14:16:07 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 14:16:07 INFO  - allocate Voxels
+2015-12-18 14:16:07 INFO  - allocate MNT
+2015-12-18 14:16:09 INFO  - nb positions= 64
+2015-12-18 14:16:09 INFO  - Computation of transmittance
+2015-12-18 14:16:18 INFO  - Computation of AVGTRANS...
+2015-12-18 14:16:18 INFO  - Computation of CNTC#...
+2015-12-18 14:16:18 INFO  - Computation of LAI...
+2015-12-18 14:16:18 INFO  - Computation of GAPS...
+2015-12-18 14:16:18 INFO  - Computation of ACFS...
+2015-12-18 14:16:18 INFO  - Computation of ACF...
+2015-12-18 14:16:18 INFO  - Computation of STDEV...
+2015-12-18 14:16:18 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/normalized/lai2200_TLS.txt was written.
+2015-12-18 14:16:18 INFO  - Simulation is finished.
+2015-12-18 14:19:25 INFO  - Computing directions...
+2015-12-18 14:19:25 INFO  - Nb shots ring 1 = 1205
+2015-12-18 14:19:25 INFO  - Nb shots ring 2 = 1711
+2015-12-18 14:19:25 INFO  - Nb shots ring 3 = 2049
+2015-12-18 14:19:25 INFO  - Nb shots ring 4 = 2334
+2015-12-18 14:19:25 INFO  - Nb shots ring 5 = 2701
+2015-12-18 14:19:28 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt =====
+2015-12-18 14:19:28 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 14:19:28 INFO  - allocate Voxels
+2015-12-18 14:19:28 INFO  - allocate MNT
+2015-12-18 14:19:30 INFO  - nb positions= 64
+2015-12-18 14:19:30 INFO  - Computation of transmittance
+2015-12-18 14:19:40 INFO  - Computation of AVGTRANS...
+2015-12-18 14:19:40 INFO  - Computation of CNTC#...
+2015-12-18 14:19:40 INFO  - Computation of LAI...
+2015-12-18 14:19:40 INFO  - Computation of GAPS...
+2015-12-18 14:19:40 INFO  - Computation of ACFS...
+2015-12-18 14:19:40 INFO  - Computation of ACF...
+2015-12-18 14:19:40 INFO  - Computation of STDEV...
+2015-12-18 14:19:40 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/normalized/lai2200_ALS.txt was written.
+2015-12-18 14:19:40 INFO  - Simulation is finished.
+2015-12-18 14:19:40 INFO  - Computing directions...
+2015-12-18 14:19:40 INFO  - Nb shots ring 1 = 1205
+2015-12-18 14:19:40 INFO  - Nb shots ring 2 = 1711
+2015-12-18 14:19:40 INFO  - Nb shots ring 3 = 2049
+2015-12-18 14:19:40 INFO  - Nb shots ring 4 = 2334
+2015-12-18 14:19:40 INFO  - Nb shots ring 5 = 2701
+2015-12-18 14:19:42 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraTLS.txt =====
+2015-12-18 14:19:42 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 14:19:42 INFO  - allocate Voxels
+2015-12-18 14:19:42 INFO  - allocate MNT
+2015-12-18 14:19:44 INFO  - nb positions= 64
+2015-12-18 14:19:44 INFO  - Computation of transmittance
+2015-12-18 14:19:54 INFO  - Computation of AVGTRANS...
+2015-12-18 14:19:54 INFO  - Computation of CNTC#...
+2015-12-18 14:19:54 INFO  - Computation of LAI...
+2015-12-18 14:19:54 INFO  - Computation of GAPS...
+2015-12-18 14:19:54 INFO  - Computation of ACFS...
+2015-12-18 14:19:54 INFO  - Computation of ACF...
+2015-12-18 14:19:54 INFO  - Computation of STDEV...
+2015-12-18 14:19:54 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/normalized/lai2200_TLS.txt was written.
+2015-12-18 14:19:54 INFO  - Simulation is finished.
+2015-12-18 14:48:52 INFO  - Computing directions...
+2015-12-18 14:48:52 INFO  - Nb shots ring 1 = 1205
+2015-12-18 14:48:52 INFO  - Nb shots ring 2 = 1711
+2015-12-18 14:48:52 INFO  - Nb shots ring 3 = 2049
+2015-12-18 14:48:52 INFO  - Nb shots ring 4 = 2334
+2015-12-18 14:48:52 INFO  - Nb shots ring 5 = 2701
+2015-12-18 14:48:54 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt =====
+2015-12-18 14:48:54 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 14:48:54 INFO  - allocate Voxels
+2015-12-18 14:48:54 INFO  - allocate MNT
+2015-12-18 14:48:56 INFO  - nb positions= 64
+2015-12-18 14:48:56 INFO  - Computation of transmittance
+2015-12-18 14:50:08 INFO  - Computation of AVGTRANS...
+2015-12-18 14:50:08 INFO  - Computation of CNTC#...
+2015-12-18 14:50:08 INFO  - Computation of LAI...
+2015-12-18 14:50:08 INFO  - Computation of GAPS...
+2015-12-18 14:50:08 INFO  - Computation of ACFS...
+2015-12-18 14:50:08 INFO  - Computation of ACF...
+2015-12-18 14:50:08 INFO  - Computation of STDEV...
+2015-12-18 14:50:08 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/normalized/lai2200_ALS.txt was written.
+2015-12-18 14:50:08 INFO  - Simulation is finished.
+2015-12-18 14:50:16 INFO  - Computing directions...
+2015-12-18 14:50:16 INFO  - Nb shots ring 1 = 1205
+2015-12-18 14:50:16 INFO  - Nb shots ring 2 = 1711
+2015-12-18 14:50:16 INFO  - Nb shots ring 3 = 2049
+2015-12-18 14:50:16 INFO  - Nb shots ring 4 = 2334
+2015-12-18 14:50:16 INFO  - Nb shots ring 5 = 2701
+2015-12-18 14:50:17 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt =====
+2015-12-18 14:50:17 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 14:50:17 INFO  - allocate Voxels
+2015-12-18 14:50:17 INFO  - allocate MNT
+2015-12-18 14:50:19 INFO  - nb positions= 64
+2015-12-18 14:50:19 INFO  - Computation of transmittance
+2015-12-18 14:51:14 INFO  - Computation of AVGTRANS...
+2015-12-18 14:51:14 INFO  - Computation of CNTC#...
+2015-12-18 14:51:14 INFO  - Computation of LAI...
+2015-12-18 14:51:14 INFO  - Computation of GAPS...
+2015-12-18 14:51:14 INFO  - Computation of ACFS...
+2015-12-18 14:51:14 INFO  - Computation of ACF...
+2015-12-18 14:51:14 INFO  - Computation of STDEV...
+2015-12-18 14:51:14 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/normalized/lai2200_ALS.txt was written.
+2015-12-18 14:51:14 INFO  - Simulation is finished.
+2015-12-18 14:52:37 INFO  - Computing directions...
+2015-12-18 14:52:37 INFO  - Nb shots ring 1 = 1205
+2015-12-18 14:52:37 INFO  - Nb shots ring 2 = 1711
+2015-12-18 14:52:37 INFO  - Nb shots ring 3 = 2049
+2015-12-18 14:52:37 INFO  - Nb shots ring 4 = 2334
+2015-12-18 14:52:37 INFO  - Nb shots ring 5 = 2701
+2015-12-18 14:52:40 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt =====
+2015-12-18 14:52:40 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 14:52:40 INFO  - allocate Voxels
+2015-12-18 14:52:40 INFO  - allocate MNT
+2015-12-18 14:52:41 INFO  - nb positions= 64
+2015-12-18 14:52:41 INFO  - Computation of transmittance
+2015-12-18 14:53:11 INFO  - Computation of AVGTRANS...
+2015-12-18 14:53:11 INFO  - Computation of CNTC#...
+2015-12-18 14:53:11 INFO  - Computation of LAI...
+2015-12-18 14:53:11 INFO  - Computation of GAPS...
+2015-12-18 14:53:11 INFO  - Computation of ACFS...
+2015-12-18 14:53:11 INFO  - Computation of ACF...
+2015-12-18 14:53:11 INFO  - Computation of STDEV...
+2015-12-18 14:53:11 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/normalized/lai2200_ALS.txt was written.
+2015-12-18 14:53:11 INFO  - Simulation is finished.
+2015-12-18 14:53:46 INFO  - Computing directions...
+2015-12-18 14:53:46 INFO  - Nb shots ring 1 = 1205
+2015-12-18 14:53:46 INFO  - Nb shots ring 2 = 1711
+2015-12-18 14:53:46 INFO  - Nb shots ring 3 = 2049
+2015-12-18 14:53:46 INFO  - Nb shots ring 4 = 2334
+2015-12-18 14:53:46 INFO  - Nb shots ring 5 = 2701
+2015-12-18 14:53:49 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraTLS.txt =====
+2015-12-18 14:53:49 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 14:53:49 INFO  - allocate Voxels
+2015-12-18 14:53:49 INFO  - allocate MNT
+2015-12-18 14:53:50 INFO  - nb positions= 64
+2015-12-18 14:53:50 INFO  - Computation of transmittance
+2015-12-18 14:54:05 INFO  - Computation of AVGTRANS...
+2015-12-18 14:54:05 INFO  - Computation of CNTC#...
+2015-12-18 14:54:05 INFO  - Computation of LAI...
+2015-12-18 14:54:05 INFO  - Computation of GAPS...
+2015-12-18 14:54:05 INFO  - Computation of ACFS...
+2015-12-18 14:54:05 INFO  - Computation of ACF...
+2015-12-18 14:54:05 INFO  - Computation of STDEV...
+2015-12-18 14:54:05 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/normalized/lai2200_TLS.txt was written.
+2015-12-18 14:54:05 INFO  - Simulation is finished.
+2015-12-18 14:56:17 INFO  - Computing directions...
+2015-12-18 14:56:17 INFO  - Nb shots ring 1 = 1205
+2015-12-18 14:56:17 INFO  - Nb shots ring 2 = 1711
+2015-12-18 14:56:17 INFO  - Nb shots ring 3 = 2049
+2015-12-18 14:56:17 INFO  - Nb shots ring 4 = 2334
+2015-12-18 14:56:17 INFO  - Nb shots ring 5 = 2701
+2015-12-18 14:56:19 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt =====
+2015-12-18 14:56:19 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 14:56:19 INFO  - allocate Voxels
+2015-12-18 14:56:19 INFO  - allocate MNT
+2015-12-18 14:56:21 INFO  - nb positions= 64
+2015-12-18 14:56:21 INFO  - Computation of transmittance
+2015-12-18 14:56:36 INFO  - Computation of AVGTRANS...
+2015-12-18 14:56:36 INFO  - Computation of CNTC#...
+2015-12-18 14:56:36 INFO  - Computation of LAI...
+2015-12-18 14:56:36 INFO  - Computation of GAPS...
+2015-12-18 14:56:36 INFO  - Computation of ACFS...
+2015-12-18 14:56:36 INFO  - Computation of ACF...
+2015-12-18 14:56:36 INFO  - Computation of STDEV...
+2015-12-18 14:56:36 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/lai2200_ALS.txt was written.
+2015-12-18 14:56:36 INFO  - Simulation is finished.
+2015-12-18 14:56:36 INFO  - Computing directions...
+2015-12-18 14:56:36 INFO  - Nb shots ring 1 = 1205
+2015-12-18 14:56:36 INFO  - Nb shots ring 2 = 1711
+2015-12-18 14:56:36 INFO  - Nb shots ring 3 = 2049
+2015-12-18 14:56:36 INFO  - Nb shots ring 4 = 2334
+2015-12-18 14:56:36 INFO  - Nb shots ring 5 = 2701
+2015-12-18 14:56:39 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraTLS.txt =====
+2015-12-18 14:56:39 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 14:56:39 INFO  - allocate Voxels
+2015-12-18 14:56:39 INFO  - allocate MNT
+2015-12-18 14:56:41 INFO  - nb positions= 64
+2015-12-18 14:56:41 INFO  - Computation of transmittance
+2015-12-18 14:56:55 INFO  - Computation of AVGTRANS...
+2015-12-18 14:56:55 INFO  - Computation of CNTC#...
+2015-12-18 14:56:55 INFO  - Computation of LAI...
+2015-12-18 14:56:55 INFO  - Computation of GAPS...
+2015-12-18 14:56:55 INFO  - Computation of ACFS...
+2015-12-18 14:56:55 INFO  - Computation of ACF...
+2015-12-18 14:56:55 INFO  - Computation of STDEV...
+2015-12-18 14:56:56 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/lai2200_TLS.txt was written.
+2015-12-18 14:56:56 INFO  - Simulation is finished.
+2015-12-18 15:00:19 INFO  - Building transmittance functions table
+2015-12-18 15:00:19 INFO  - Transmittance functions table is built
+2015-12-18 15:00:19 INFO  - allocate!!!!!!!!
+2015-12-18 15:00:19 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2015-12-18 15:00:19 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2015-12-18 15:01:24 INFO  - Laz file is closed
+2015-12-18 15:01:39 INFO  - Shots processed: 1000000
+2015-12-18 15:01:41 INFO  - Shots processed: 2000000
+2015-12-18 15:01:43 INFO  - Shots processed: 3000000
+2015-12-18 15:01:45 INFO  - Shots processed: 4000000
+2015-12-18 15:01:47 INFO  - Shots processed: 5000000
+2015-12-18 15:01:49 INFO  - Shots processed: 6000000
+2015-12-18 15:01:51 INFO  - Shots processed: 7000000
+2015-12-18 15:01:53 INFO  - Shots processed: 8000000
+2015-12-18 15:01:55 INFO  - Shots processed: 9000000
+2015-12-18 15:01:57 INFO  - Shots processed: 10000000
+2015-12-18 15:01:59 INFO  - Shots processed: 11000000
+2015-12-18 15:02:01 INFO  - Shots processed: 12000000
+2015-12-18 15:02:01 INFO  - Shots processed: 12345659
+2015-12-18 15:02:02 INFO  - Maximum neighborhood range : 2
+2015-12-18 15:02:02 INFO  - Maximum neighborhood range : 3
+2015-12-18 15:02:02 INFO  - Maximum neighborhood range : 4
+2015-12-18 15:02:02 INFO  - Maximum neighborhood range : 13
+2015-12-18 15:02:04 INFO  - Time : 2673 ms
+2015-12-18 15:02:04 INFO  - writing file: /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt
+2015-12-18 15:02:08 INFO  - file written ( 3.0 s )
+2015-12-18 15:02:08 INFO  - las voxelisation finished in 129.0 s
+2015-12-18 15:12:34 INFO  - Building transmittance functions table
+2015-12-18 15:12:34 INFO  - Transmittance functions table is built
+2015-12-18 15:12:34 INFO  - allocate!!!!!!!!
+2015-12-18 15:12:34 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2015-12-18 15:12:34 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2015-12-18 15:13:43 INFO  - Laz file is closed
+2015-12-18 15:13:52 INFO  - Shots processed: 1000000
+2015-12-18 15:13:56 INFO  - Shots processed: 2000000
+2015-12-18 15:13:58 INFO  - Shots processed: 3000000
+2015-12-18 15:14:00 INFO  - Shots processed: 4000000
+2015-12-18 15:14:02 INFO  - Shots processed: 5000000
+2015-12-18 15:14:04 INFO  - Shots processed: 6000000
+2015-12-18 15:14:06 INFO  - Shots processed: 7000000
+2015-12-18 15:14:09 INFO  - Shots processed: 8000000
+2015-12-18 15:14:11 INFO  - Shots processed: 9000000
+2015-12-18 15:14:13 INFO  - Shots processed: 10000000
+2015-12-18 15:14:15 INFO  - Shots processed: 11000000
+2015-12-18 15:14:17 INFO  - Shots processed: 12000000
+2015-12-18 15:14:18 INFO  - Shots processed: 12345659
+2015-12-18 15:14:18 INFO  - Maximum neighborhood range : 2
+2015-12-18 15:14:18 INFO  - Maximum neighborhood range : 3
+2015-12-18 15:14:18 INFO  - Maximum neighborhood range : 4
+2015-12-18 15:14:18 INFO  - Maximum neighborhood range : 13
+2015-12-18 15:14:21 INFO  - Time : 3229 ms
+2015-12-18 15:14:21 INFO  - writing file: /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt
+2015-12-18 15:14:25 INFO  - file written ( 3.0 s )
+2015-12-18 15:14:25 INFO  - las voxelisation finished in 131.0 s
+2015-12-18 15:20:51 INFO  - Building transmittance functions table
+2015-12-18 15:20:51 INFO  - Transmittance functions table is built
+2015-12-18 15:20:51 INFO  - allocate!!!!!!!!
+2015-12-18 15:20:51 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2015-12-18 15:20:51 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2015-12-18 15:21:57 INFO  - Laz file is closed
+2015-12-18 15:22:06 INFO  - Shots processed: 1000000
+2015-12-18 15:22:08 INFO  - Shots processed: 2000000
+2015-12-18 15:22:10 INFO  - Shots processed: 3000000
+2015-12-18 15:22:13 INFO  - Shots processed: 4000000
+2015-12-18 15:22:15 INFO  - Shots processed: 5000000
+2015-12-18 15:22:17 INFO  - Shots processed: 6000000
+2015-12-18 15:22:19 INFO  - Shots processed: 7000000
+2015-12-18 15:22:22 INFO  - Shots processed: 8000000
+2015-12-18 15:22:24 INFO  - Shots processed: 9000000
+2015-12-18 15:22:26 INFO  - Shots processed: 10000000
+2015-12-18 15:22:28 INFO  - Shots processed: 11000000
+2015-12-18 15:22:30 INFO  - Shots processed: 12000000
+2015-12-18 15:22:31 INFO  - Shots processed: 12345659
+2015-12-18 15:22:31 INFO  - Maximum neighborhood range : 2
+2015-12-18 15:22:31 INFO  - Maximum neighborhood range : 3
+2015-12-18 15:22:31 INFO  - Maximum neighborhood range : 4
+2015-12-18 15:22:31 INFO  - Maximum neighborhood range : 13
+2015-12-18 15:22:34 INFO  - Time : 3021 ms
+2015-12-18 15:22:34 INFO  - writing file: /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt
+2015-12-18 15:22:38 INFO  - file written ( 4.0 s )
+2015-12-18 15:22:38 INFO  - las voxelisation finished in 127.0 s
+2015-12-18 15:32:00 INFO  - Building transmittance functions table
+2015-12-18 15:32:00 INFO  - Transmittance functions table is built
+2015-12-18 15:32:00 INFO  - allocate!!!!!!!!
+2015-12-18 15:32:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2015-12-18 15:32:00 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2015-12-18 15:33:10 INFO  - Laz file is closed
+2015-12-18 15:33:19 INFO  - Shots processed: 1000000
+2015-12-18 15:33:21 INFO  - Shots processed: 2000000
+2015-12-18 15:33:24 INFO  - Shots processed: 3000000
+2015-12-18 15:33:26 INFO  - Shots processed: 4000000
+2015-12-18 15:33:28 INFO  - Shots processed: 5000000
+2015-12-18 15:33:30 INFO  - Shots processed: 6000000
+2015-12-18 15:33:32 INFO  - Shots processed: 7000000
+2015-12-18 15:33:35 INFO  - Shots processed: 8000000
+2015-12-18 15:33:37 INFO  - Shots processed: 9000000
+2015-12-18 15:33:39 INFO  - Shots processed: 10000000
+2015-12-18 15:33:41 INFO  - Shots processed: 11000000
+2015-12-18 15:33:43 INFO  - Shots processed: 12000000
+2015-12-18 15:33:44 INFO  - Shots processed: 12345659
+2015-12-18 15:33:44 INFO  - Maximum neighborhood range : 2
+2015-12-18 15:33:44 INFO  - Maximum neighborhood range : 3
+2015-12-18 15:33:44 INFO  - Maximum neighborhood range : 4
+2015-12-18 15:33:44 INFO  - Maximum neighborhood range : 13
+2015-12-18 15:33:47 INFO  - Time : 3173 ms
+2015-12-18 15:33:47 INFO  - writing file: /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt
+2015-12-18 15:33:51 INFO  - file written ( 4.0 s )
+2015-12-18 15:33:51 INFO  - las voxelisation finished in 131.0 s
+2015-12-18 15:35:05 INFO  - Building transmittance functions table
+2015-12-18 15:35:05 INFO  - Transmittance functions table is built
+2015-12-18 15:35:05 INFO  - allocate!!!!!!!!
+2015-12-18 15:35:05 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2015-12-18 15:35:05 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2015-12-18 15:36:10 INFO  - Laz file is closed
+2015-12-18 15:36:19 INFO  - Shots processed: 1000000
+2015-12-18 15:36:23 INFO  - Shots processed: 2000000
+2015-12-18 15:36:26 INFO  - Shots processed: 3000000
+2015-12-18 15:36:28 INFO  - Shots processed: 4000000
+2015-12-18 15:36:30 INFO  - Shots processed: 5000000
+2015-12-18 15:36:32 INFO  - Shots processed: 6000000
+2015-12-18 15:36:34 INFO  - Shots processed: 7000000
+2015-12-18 15:36:37 INFO  - Shots processed: 8000000
+2015-12-18 15:36:39 INFO  - Shots processed: 9000000
+2015-12-18 15:36:41 INFO  - Shots processed: 10000000
+2015-12-18 15:36:43 INFO  - Shots processed: 11000000
+2015-12-18 15:36:46 INFO  - Shots processed: 12000000
+2015-12-18 15:36:46 INFO  - Shots processed: 12345659
+2015-12-18 15:36:46 INFO  - Maximum neighborhood range : 2
+2015-12-18 15:38:24 INFO  - Maximum neighborhood range : 3
+2015-12-18 15:38:41 INFO  - Maximum neighborhood range : 4
+2015-12-18 15:38:41 INFO  - Maximum neighborhood range : 13
+2015-12-18 16:53:11 INFO  - Building transmittance functions table
+2015-12-18 16:53:11 INFO  - Transmittance functions table is built
+2015-12-18 16:53:11 INFO  - allocate!!!!!!!!
+2015-12-18 16:53:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2015-12-18 16:53:11 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2015-12-18 16:54:17 INFO  - Laz file is closed
+2015-12-18 16:54:25 INFO  - Shots processed: 1000000
+2015-12-18 16:54:28 INFO  - Shots processed: 2000000
+2015-12-18 16:54:30 INFO  - Shots processed: 3000000
+2015-12-18 16:54:32 INFO  - Shots processed: 4000000
+2015-12-18 16:54:34 INFO  - Shots processed: 5000000
+2015-12-18 16:54:37 INFO  - Shots processed: 6000000
+2015-12-18 16:54:39 INFO  - Shots processed: 7000000
+2015-12-18 16:54:41 INFO  - Shots processed: 8000000
+2015-12-18 16:54:43 INFO  - Shots processed: 9000000
+2015-12-18 16:54:45 INFO  - Shots processed: 10000000
+2015-12-18 16:54:47 INFO  - Shots processed: 11000000
+2015-12-18 16:54:50 INFO  - Shots processed: 12000000
+2015-12-18 16:54:50 INFO  - Shots processed: 12345659
+2015-12-18 16:54:50 INFO  - Maximum neighborhood range : 2
+2015-12-18 16:54:50 INFO  - Maximum neighborhood range : 3
+2015-12-18 16:54:50 INFO  - Maximum neighborhood range : 4
+2015-12-18 16:54:50 INFO  - Maximum neighborhood range : 13
+2015-12-18 16:54:54 INFO  - Time : 3504 ms
+2015-12-18 16:54:54 INFO  - writing file: /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt
+2015-12-18 16:54:58 INFO  - file written ( 3.0 s )
+2015-12-18 16:54:58 INFO  - las voxelisation finished in 127.0 s
+2015-12-18 16:55:29 INFO  - Computing directions...
+2015-12-18 16:55:29 INFO  - Nb shots ring 1 = 1205
+2015-12-18 16:55:29 INFO  - Nb shots ring 2 = 1711
+2015-12-18 16:55:29 INFO  - Nb shots ring 3 = 2049
+2015-12-18 16:55:29 INFO  - Nb shots ring 4 = 2334
+2015-12-18 16:55:29 INFO  - Nb shots ring 5 = 2701
+2015-12-18 16:55:30 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt =====
+2015-12-18 16:55:30 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 16:55:30 INFO  - allocate Voxels
+2015-12-18 16:55:30 INFO  - allocate MNT
+2015-12-18 16:55:32 INFO  - nb positions= 64
+2015-12-18 16:55:32 INFO  - Computation of transmittance
+2015-12-18 16:55:48 INFO  - Computation of AVGTRANS...
+2015-12-18 16:55:48 INFO  - Computation of CNTC#...
+2015-12-18 16:55:48 INFO  - Computation of LAI...
+2015-12-18 16:55:48 INFO  - Computation of GAPS...
+2015-12-18 16:55:48 INFO  - Computation of ACFS...
+2015-12-18 16:55:48 INFO  - Computation of ACF...
+2015-12-18 16:55:48 INFO  - Computation of STDEV...
+2015-12-18 16:55:48 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/normalized/lai2200_ALS.txt was written.
+2015-12-18 16:55:48 INFO  - Simulation is finished.
+2015-12-18 16:56:54 INFO  - Computing directions...
+2015-12-18 16:56:54 INFO  - Nb shots ring 1 = 1205
+2015-12-18 16:56:54 INFO  - Nb shots ring 2 = 1711
+2015-12-18 16:56:54 INFO  - Nb shots ring 3 = 2049
+2015-12-18 16:56:54 INFO  - Nb shots ring 4 = 2334
+2015-12-18 16:56:54 INFO  - Nb shots ring 5 = 2701
+2015-12-18 16:56:56 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt =====
+2015-12-18 16:56:56 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 16:56:56 INFO  - allocate Voxels
+2015-12-18 16:56:56 INFO  - allocate MNT
+2015-12-18 16:56:58 INFO  - nb positions= 64
+2015-12-18 16:56:58 INFO  - Computation of transmittance
+2015-12-18 16:59:15 INFO  - Computation of AVGTRANS...
+2015-12-18 16:59:15 INFO  - Computation of CNTC#...
+2015-12-18 16:59:15 INFO  - Computation of LAI...
+2015-12-18 16:59:15 INFO  - Computation of GAPS...
+2015-12-18 16:59:15 INFO  - Computation of ACFS...
+2015-12-18 16:59:15 INFO  - Computation of ACF...
+2015-12-18 16:59:15 INFO  - Computation of STDEV...
+2015-12-18 16:59:15 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/normalized/lai2200_ALS.txt was written.
+2015-12-18 16:59:15 INFO  - Simulation is finished.
+2015-12-18 16:59:22 INFO  - Computing directions...
+2015-12-18 16:59:22 INFO  - Nb shots ring 1 = 1205
+2015-12-18 16:59:22 INFO  - Nb shots ring 2 = 1711
+2015-12-18 16:59:22 INFO  - Nb shots ring 3 = 2049
+2015-12-18 16:59:22 INFO  - Nb shots ring 4 = 2334
+2015-12-18 16:59:22 INFO  - Nb shots ring 5 = 2701
+2015-12-18 16:59:24 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt =====
+2015-12-18 16:59:24 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 16:59:24 INFO  - allocate Voxels
+2015-12-18 16:59:24 INFO  - allocate MNT
+2015-12-18 16:59:25 INFO  - nb positions= 64
+2015-12-18 16:59:25 INFO  - Computation of transmittance
+2015-12-18 17:00:41 INFO  - Computation of AVGTRANS...
+2015-12-18 17:00:41 INFO  - Computation of CNTC#...
+2015-12-18 17:00:41 INFO  - Computation of LAI...
+2015-12-18 17:00:41 INFO  - Computation of GAPS...
+2015-12-18 17:00:41 INFO  - Computation of ACFS...
+2015-12-18 17:00:41 INFO  - Computation of ACF...
+2015-12-18 17:00:41 INFO  - Computation of STDEV...
+2015-12-18 17:00:41 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/normalized/lai2200_ALS.txt was written.
+2015-12-18 17:00:41 INFO  - Simulation is finished.
+2015-12-18 17:00:47 INFO  - Computing directions...
+2015-12-18 17:00:47 INFO  - Nb shots ring 1 = 1205
+2015-12-18 17:00:47 INFO  - Nb shots ring 2 = 1711
+2015-12-18 17:00:47 INFO  - Nb shots ring 3 = 2049
+2015-12-18 17:00:47 INFO  - Nb shots ring 4 = 2334
+2015-12-18 17:00:47 INFO  - Nb shots ring 5 = 2701
+2015-12-18 17:00:49 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt =====
+2015-12-18 17:00:49 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 17:00:49 INFO  - allocate Voxels
+2015-12-18 17:00:49 INFO  - allocate MNT
+2015-12-18 17:00:50 INFO  - nb positions= 64
+2015-12-18 17:00:50 INFO  - Computation of transmittance
+2015-12-18 17:11:09 INFO  - Computation of AVGTRANS...
+2015-12-18 17:11:09 INFO  - Computation of CNTC#...
+2015-12-18 17:11:09 INFO  - Computation of LAI...
+2015-12-18 17:11:09 INFO  - Computation of GAPS...
+2015-12-18 17:11:09 INFO  - Computation of ACFS...
+2015-12-18 17:11:09 INFO  - Computation of ACF...
+2015-12-18 17:11:09 INFO  - Computation of STDEV...
+2015-12-18 17:11:09 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/normalized/lai2200_ALS.txt was written.
+2015-12-18 17:11:09 INFO  - Simulation is finished.
+2015-12-18 17:11:14 INFO  - Computing directions...
+2015-12-18 17:11:14 INFO  - Nb shots ring 1 = 1205
+2015-12-18 17:11:14 INFO  - Nb shots ring 2 = 1711
+2015-12-18 17:11:14 INFO  - Nb shots ring 3 = 2049
+2015-12-18 17:11:14 INFO  - Nb shots ring 4 = 2334
+2015-12-18 17:11:14 INFO  - Nb shots ring 5 = 2701
+2015-12-18 17:11:16 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt =====
+2015-12-18 17:11:16 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 17:11:16 INFO  - allocate Voxels
+2015-12-18 17:11:16 INFO  - allocate MNT
+2015-12-18 17:11:17 INFO  - nb positions= 64
+2015-12-18 17:11:17 INFO  - Computation of transmittance
+2015-12-18 17:15:12 INFO  - Computation of AVGTRANS...
+2015-12-18 17:15:12 INFO  - Computation of CNTC#...
+2015-12-18 17:15:12 INFO  - Computation of LAI...
+2015-12-18 17:15:12 INFO  - Computation of GAPS...
+2015-12-18 17:15:12 INFO  - Computation of ACFS...
+2015-12-18 17:15:12 INFO  - Computation of ACF...
+2015-12-18 17:15:12 INFO  - Computation of STDEV...
+2015-12-18 17:15:12 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/normalized/lai2200_ALS.txt was written.
+2015-12-18 17:15:12 INFO  - Simulation is finished.
+2015-12-18 17:15:16 INFO  - Computing directions...
+2015-12-18 17:15:16 INFO  - Nb shots ring 1 = 1205
+2015-12-18 17:15:16 INFO  - Nb shots ring 2 = 1711
+2015-12-18 17:15:16 INFO  - Nb shots ring 3 = 2049
+2015-12-18 17:15:16 INFO  - Nb shots ring 4 = 2334
+2015-12-18 17:15:16 INFO  - Nb shots ring 5 = 2701
+2015-12-18 17:15:18 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt =====
+2015-12-18 17:15:18 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 17:15:18 INFO  - allocate Voxels
+2015-12-18 17:15:18 INFO  - allocate MNT
+2015-12-18 17:15:20 INFO  - nb positions= 64
+2015-12-18 17:15:20 INFO  - Computation of transmittance
+2015-12-18 17:16:09 INFO  - Computation of AVGTRANS...
+2015-12-18 17:16:09 INFO  - Computation of CNTC#...
+2015-12-18 17:16:09 INFO  - Computation of LAI...
+2015-12-18 17:16:09 INFO  - Computation of GAPS...
+2015-12-18 17:16:09 INFO  - Computation of ACFS...
+2015-12-18 17:16:09 INFO  - Computation of ACF...
+2015-12-18 17:16:09 INFO  - Computation of STDEV...
+2015-12-18 17:16:09 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/normalized/lai2200_ALS.txt was written.
+2015-12-18 17:16:09 INFO  - Simulation is finished.
+2015-12-18 17:16:18 INFO  - Computing directions...
+2015-12-18 17:16:18 INFO  - Nb shots ring 1 = 1205
+2015-12-18 17:16:18 INFO  - Nb shots ring 2 = 1711
+2015-12-18 17:16:18 INFO  - Nb shots ring 3 = 2049
+2015-12-18 17:16:18 INFO  - Nb shots ring 4 = 2334
+2015-12-18 17:16:18 INFO  - Nb shots ring 5 = 2701
+2015-12-18 17:16:20 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt =====
+2015-12-18 17:16:20 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 17:16:20 INFO  - allocate Voxels
+2015-12-18 17:16:20 INFO  - allocate MNT
+2015-12-18 17:16:22 INFO  - nb positions= 64
+2015-12-18 17:16:22 INFO  - Computation of transmittance
+2015-12-18 17:20:32 INFO  - Computing directions...
+2015-12-18 17:20:32 INFO  - Nb shots ring 1 = 1205
+2015-12-18 17:20:32 INFO  - Nb shots ring 2 = 1711
+2015-12-18 17:20:32 INFO  - Nb shots ring 3 = 2049
+2015-12-18 17:20:32 INFO  - Nb shots ring 4 = 2334
+2015-12-18 17:20:32 INFO  - Nb shots ring 5 = 2701
+2015-12-18 17:20:35 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt =====
+2015-12-18 17:20:35 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 17:20:35 INFO  - allocate Voxels
+2015-12-18 17:20:35 INFO  - allocate MNT
+2015-12-18 17:20:37 INFO  - nb positions= 64
+2015-12-18 17:20:37 INFO  - Computation of transmittance
+2015-12-18 17:26:58 INFO  - Computing directions...
+2015-12-18 17:26:58 INFO  - Nb shots ring 1 = 1205
+2015-12-18 17:26:58 INFO  - Nb shots ring 2 = 1711
+2015-12-18 17:26:58 INFO  - Nb shots ring 3 = 2049
+2015-12-18 17:26:58 INFO  - Nb shots ring 4 = 2334
+2015-12-18 17:26:58 INFO  - Nb shots ring 5 = 2701
+2015-12-18 17:27:00 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt =====
+2015-12-18 17:27:00 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 17:27:00 INFO  - allocate Voxels
+2015-12-18 17:27:00 INFO  - allocate MNT
+2015-12-18 17:27:02 INFO  - nb positions= 64
+2015-12-18 17:27:02 INFO  - Computation of transmittance
+2015-12-18 17:27:18 INFO  - Computation of AVGTRANS...
+2015-12-18 17:27:18 INFO  - Computation of CNTC#...
+2015-12-18 17:27:18 INFO  - Computation of LAI...
+2015-12-18 17:27:18 INFO  - Computation of GAPS...
+2015-12-18 17:27:18 INFO  - Computation of ACFS...
+2015-12-18 17:27:18 INFO  - Computation of ACF...
+2015-12-18 17:27:18 INFO  - Computation of STDEV...
+2015-12-18 17:27:18 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/normalized/lai2200_ALS.txt was written.
+2015-12-18 17:27:18 INFO  - Simulation is finished.
+2015-12-18 17:29:44 INFO  - Computing directions...
+2015-12-18 17:29:44 INFO  - Nb shots ring 1 = 1205
+2015-12-18 17:29:44 INFO  - Nb shots ring 2 = 1711
+2015-12-18 17:29:44 INFO  - Nb shots ring 3 = 2049
+2015-12-18 17:29:44 INFO  - Nb shots ring 4 = 2334
+2015-12-18 17:29:44 INFO  - Nb shots ring 5 = 2701
+2015-12-18 17:29:45 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/p9inraALS.txt =====
+2015-12-18 17:29:45 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2015-12-18 17:29:45 INFO  - allocate Voxels
+2015-12-18 17:29:45 INFO  - allocate MNT
+2015-12-18 17:29:47 INFO  - nb positions= 64
+2015-12-18 17:29:47 INFO  - Computation of transmittance
+2015-12-18 17:31:27 INFO  - Computation of AVGTRANS...
+2015-12-18 17:31:27 INFO  - Computation of CNTC#...
+2015-12-18 17:31:27 INFO  - Computation of LAI...
+2015-12-18 17:31:27 INFO  - Computation of GAPS...
+2015-12-18 17:31:27 INFO  - Computation of ACFS...
+2015-12-18 17:31:27 INFO  - Computation of ACF...
+2015-12-18 17:31:27 INFO  - Computation of STDEV...
+2015-12-18 17:31:27 INFO  - File /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_mesure_als_tls_tls_buffer_als/small_area_comparison/normalized/lai2200_ALS.txt was written.
+2015-12-18 17:31:27 INFO  - Simulation is finished.

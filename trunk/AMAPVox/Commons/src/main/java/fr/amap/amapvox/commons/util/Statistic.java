@@ -65,7 +65,7 @@ public class Statistic {
     }
     
     public double getMean(){
-        return mean / nbValues;
+        return mean / (nbValues);
     }
 
     public int getNbNaNValues() {

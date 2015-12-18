@@ -60,8 +60,6 @@ public abstract class LAI2xxx {
      *
      */
     protected Vector3f[] directions;
-    protected float[] azimuthAngles;
-    protected float[] elevationAngles;
     protected int[] ringOffsetID;
     
     private int[] shotNumberByRing;
@@ -198,6 +196,7 @@ public abstract class LAI2xxx {
             
            shotNumberByRing[i] = (shotNumberByRing[i] + nbDirectionForOneRing)/2;
            rings[i].setNbDirections(shotNumberByRing[i]);
+           logger.info("Nb shots ring "+(i+1)+" = "+shotNumberByRing[i]);
         }
         
         int nbSubRings=3;
@@ -325,14 +324,10 @@ public abstract class LAI2xxx {
         }
         
         directions = new Vector3f[directionList.size()];
-        azimuthAngles = new float[azimuthAnglesList.size()];
-        elevationAngles = new float[elevationAnglesList.size()];
         
         for(int i=0;i<directionList.size();i++){
             
             directions[i] = directionList.get(i);
-            azimuthAngles[i] = (float) Math.toRadians(azimuthAnglesList.get(i));
-            elevationAngles[i] = (float) Math.toRadians(elevationAnglesList.get(i));
         }
         
 //        try {
@@ -360,14 +355,6 @@ public abstract class LAI2xxx {
     public Vector3f[] getDirections() {
         return directions;
     }
-
-    public float[] getAzimuthAngles() {
-        return azimuthAngles;
-    }
-
-    public float[] getElevationAngles() {
-        return elevationAngles;
-    }  
     
     public int getRingNumber(){
         return rings.length;

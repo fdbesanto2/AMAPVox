@@ -1176,7 +1176,7 @@ public class VoxelAnalysis {
 
                             if(count > 0 && sumBVEntering > 0 && neighbours.size() > 0){
                                 
-                                meanTransmittance = (float) Math.pow((sumBVEntering-sumBVIntercepted)/sumBVEntering, sumBVEntering/sumLgTotal);
+                                meanTransmittance = (float) Math.pow((sumBVEntering-sumBVIntercepted)/sumBVEntering, meanEffectiveNbSampling/sumLgTotal);
                                 meanEffectiveNbSampling /= (float)neighbours.size();
                                 
                                 currentNbSampling = meanEffectiveNbSampling;
@@ -1198,21 +1198,19 @@ public class VoxelAnalysis {
 
                         if(neighbours.size() > 0){
 
-                            float meanPAD = 0;
-
-                            int count = 0;
+                            Statistic PADStatistic = new Statistic();
+                            
                             for(Voxel neighbour : neighbours){
 
                                 if(!Float.isNaN(neighbour.transmittance) && neighbour.transmittance != 0){
-                                    meanPAD += neighbour.PadBVTotal;
-                                    count++;
+                                    PADStatistic.addValue(neighbour.PadBVTotal);
                                 }
                             }
                             
-                            if(count != 0){
-                                voxels[x][y][z].neighboursNumber = count;
+                            if((PADStatistic.getNbValues()) != 0){
+                                voxels[x][y][z].neighboursNumber = neighbours.size();
                                 voxels[x][y][z].passNumber = passID;
-                                voxels[x][y][z].PadBVTotal = meanPAD /count/* /ponderationCoeffSum*/;
+                                voxels[x][y][z].PadBVTotal = (float)PADStatistic.getMean()/* /ponderationCoeffSum*/;
                                 voxels[x][y][z].nbSampling = (int)currentNbSampling;
                                 voxels[x][y][z].transmittance = currentTransmittance;
                             }
