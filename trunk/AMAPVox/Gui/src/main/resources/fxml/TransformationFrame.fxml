@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -7,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="413.0" prefWidth="449.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.amapvox.gui.TransformationFrameController">
+<AnchorPane id="AnchorPane" prefHeight="429.0" prefWidth="449.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.amapvox.gui.TransformationFrameController">
    <children>
       <VBox prefHeight="286.0" prefWidth="449.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -141,7 +142,7 @@
                   </Tab>
               </tabs>
             </TabPane>
-            <VBox>
+            <VBox spacing="5.0">
                <children>
                   <TitledPane collapsible="false" layoutX="14.0" layoutY="220.0" text="Transformation matrix">
                      <content>
@@ -189,11 +190,39 @@
                         <Insets left="10.0" top="10.0" />
                      </VBox.margin>
                   </HBox>
-                  <AnchorPane>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="8.0" prefWidth="449.0" spacing="5.0">
                      <children>
-                        <Button fx:id="buttonConfirm" layoutX="377.0" mnemonicParsing="false" onAction="#onActionButtonConfirm" text="Accept" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                        <Button mnemonicParsing="false" onAction="#onActionButtonPasteFromClipboard" prefHeight="30.0">
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/paste.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Paste from clipboard" />
+                           </tooltip>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#onActionButtonCopyToClipboard" prefHeight="30.0">
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/copy.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Copy to clipboard" />
+                           </tooltip>
+                        </Button>
+                        <Button fx:id="buttonConfirm" mnemonicParsing="false" onAction="#onActionButtonConfirm" prefHeight="30.0" text="Accept" />
                      </children>
-                  </AnchorPane>
+                     <VBox.margin>
+                        <Insets right="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <AnchorPane />
                </children>
             </VBox>
          </children>

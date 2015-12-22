@@ -14,6 +14,7 @@ public class Statistic {
     private double minValue;
     private double maxValue;
     private double mean;
+    private double sum;
     private int nbValues;
     private int nbNaNValues;
     private int nbInfiniteValues;
@@ -41,7 +42,7 @@ public class Statistic {
                 maxValue = Double.max(maxValue, value);
             }
 
-            mean += value;
+            sum += value;
             nbValues++;
 
             firstValue = false;
@@ -65,7 +66,11 @@ public class Statistic {
     }
     
     public double getMean(){
-        return mean / (nbValues);
+        return sum / (nbValues);
+    }
+
+    public double getSum() {
+        return sum;
     }
 
     public int getNbNaNValues() {

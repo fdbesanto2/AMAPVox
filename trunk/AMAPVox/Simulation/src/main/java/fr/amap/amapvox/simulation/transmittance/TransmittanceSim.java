@@ -3,24 +3,14 @@
  */
 package fr.amap.amapvox.simulation.transmittance;
 
-import fr.amap.amapvox.jeeb.raytracing.util.BoundingBox3d;
 import fr.amap.amapvox.jeeb.raytracing.voxel.DirectionalTransmittance;
-import fr.amap.amapvox.jeeb.raytracing.voxel.Scene;
 import fr.amap.amapvox.jeeb.raytracing.voxel.VoxelSpace;
 import fr.amap.amapvox.jeeb.workspace.sunrapp.light.IncidentRadiation;
 import fr.amap.amapvox.jeeb.workspace.sunrapp.light.SolarRadiation;
 import fr.amap.amapvox.jeeb.workspace.sunrapp.light.Turtle;
 import fr.amap.amapvox.jeeb.workspace.sunrapp.util.Colouring;
 import fr.amap.amapvox.jeeb.workspace.sunrapp.util.Time;
-import fr.amap.amapvox.simulation.transmittance.TransmittanceParameters.Mode;
-import fr.amap.amapvox.simulation.transmittance.lai2xxx.LAI2000;
-import fr.amap.amapvox.simulation.transmittance.lai2xxx.LAI2200;
-import fr.amap.amapvox.simulation.transmittance.lai2xxx.LAI2xxx;
-import static fr.amap.amapvox.simulation.transmittance.lai2xxx.LAI2xxx.ViewCap.CAP_360;
 import fr.amap.amapvox.simulation.transmittance.util.Period;
-import fr.amap.amapvox.voxcommons.Voxel;
-import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
-import fr.amap.amapvox.voxreader.VoxelFileReader;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -30,19 +20,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.vecmath.Point3i;
 import javax.vecmath.Vector3d;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Calendar;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.TreeSet;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
 

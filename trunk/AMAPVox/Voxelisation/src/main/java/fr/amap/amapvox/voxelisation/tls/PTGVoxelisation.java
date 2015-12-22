@@ -7,9 +7,9 @@ package fr.amap.amapvox.voxelisation.tls;
 
 import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
 import fr.amap.amapvox.io.tls.rxp.Shot;
-import fr.amap.amapvox.jleica.ptg.LShot;
+import fr.amap.amapvox.jleica.LShot;
 import fr.amap.amapvox.jleica.ptg.PTGScan;
-import fr.amap.amapvox.jleica.ptg.PTGShots;
+import fr.amap.amapvox.jleica.LPointShotExtractor;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
 import fr.amap.amapvox.math.matrix.Mat3D;
 import fr.amap.amapvox.math.matrix.Mat4D;
@@ -50,7 +50,7 @@ public class PTGVoxelisation extends TLSVoxelisation{
             PTGScan pTGScan = new PTGScan();
             pTGScan.openScanFile(inputFile);
             
-            PTGShots pTGShots = new PTGShots(pTGScan);
+            LPointShotExtractor pTGShots = new LPointShotExtractor(pTGScan);
             
             Iterator<LShot> iterator = pTGShots.iterator();
 

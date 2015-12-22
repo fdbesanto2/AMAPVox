@@ -33,6 +33,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.vecmath.Matrix4d;
@@ -689,5 +691,85 @@ public class TransformationFrameController implements Initializable {
             
         }
         
+    }
+
+    @FXML
+    private void onActionButtonPasteFromClipboard(ActionEvent event) {
+        
+        Clipboard systemClipboard = Clipboard.getSystemClipboard();
+        
+        if(systemClipboard.hasString()){
+            
+            String string = systemClipboard.getString();
+            string = string.replaceAll(";", " ");
+            string = string.replaceAll("\n", " ");
+            
+            String[] split = string.split(" ");
+            
+            if(split.length != 16){
+                string = string.replaceAll(",", " ");
+            }
+            
+            if(split.length == 16){
+                String[] matrixElements = string.split(" ");
+                
+                try{
+                    
+                    double m00 = Double.valueOf(matrixElements[0]);
+                    double m01 = Double.valueOf(matrixElements[1]);
+                    double m02 = Double.valueOf(matrixElements[2]);
+                    double m03 = Double.valueOf(matrixElements[3]);
+                    double m10 = Double.valueOf(matrixElements[4]);
+                    double m11 = Double.valueOf(matrixElements[5]);
+                    double m12 = Double.valueOf(matrixElements[6]);
+                    double m13 = Double.valueOf(matrixElements[7]);
+                    double m20 = Double.valueOf(matrixElements[8]);
+                    double m21 = Double.valueOf(matrixElements[9]);
+                    double m22 = Double.valueOf(matrixElements[10]);
+                    double m23 = Double.valueOf(matrixElements[11]);
+                    double m30 = Double.valueOf(matrixElements[12]);
+                    double m31 = Double.valueOf(matrixElements[13]);
+                    double m32 = Double.valueOf(matrixElements[14]);
+                    double m33 = Double.valueOf(matrixElements[15]);
+                    
+                    matrixM00.setText(String.valueOf(m00));
+                    matrixM01.setText(String.valueOf(m01));
+                    matrixM02.setText(String.valueOf(m02));
+                    matrixM03.setText(String.valueOf(m03));
+                    matrixM10.setText(String.valueOf(m10));
+                    matrixM11.setText(String.valueOf(m11));
+                    matrixM12.setText(String.valueOf(m12));
+                    matrixM13.setText(String.valueOf(m13));
+                    matrixM20.setText(String.valueOf(m20));
+                    matrixM21.setText(String.valueOf(m21));
+                    matrixM22.setText(String.valueOf(m22));
+                    matrixM23.setText(String.valueOf(m23));
+                    matrixM30.setText(String.valueOf(m30));
+                    matrixM31.setText(String.valueOf(m31));
+                    matrixM32.setText(String.valueOf(m32));
+                    matrixM33.setText(String.valueOf(m33));
+                    
+                }catch(Exception e){
+                    logger.info("Cannot get matrices elements from clipboard!");
+                }
+            }else{
+                logger.info("Cannot get matrices elements from clipboard!");
+            }
+            
+        }
+    }
+
+    @FXML
+    private void onActionButtonCopyToClipboard(ActionEvent event) {
+        
+        final Clipboard clipboard = Clipboard.getSystemClipboard();
+        final ClipboardContent content = new ClipboardContent();
+        
+        content.putString(matrixM00.getText()+" "+matrixM01.getText()+" "+matrixM02.getText()+" "+matrixM03.getText()+"\n"+
+                            matrixM10.getText()+" "+matrixM11.getText()+" "+matrixM12.getText()+" "+matrixM13.getText()+"\n"+
+                            matrixM20.getText()+" "+matrixM21.getText()+" "+matrixM22.getText()+" "+matrixM23.getText()+"\n"+
+                            matrixM30.getText()+" "+matrixM31.getText()+" "+matrixM32.getText()+" "+matrixM33.getText());
+        
+        clipboard.setContent(content);
     }
 }

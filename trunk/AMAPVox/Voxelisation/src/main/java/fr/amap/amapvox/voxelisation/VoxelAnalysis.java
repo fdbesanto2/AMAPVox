@@ -1067,7 +1067,6 @@ public class VoxelAnalysis {
                         float currentNbSampling = voxel.nbSampling;
                         float currentTransmittance = voxel.transmittance;
 
-                        //List<Voxel> neighboursNew = new ArrayList<>();
                         List<Voxel> neighbours = new ArrayList<>();
                         int nbRemovedNeighbors = 0;
 
@@ -1089,29 +1088,6 @@ public class VoxelAnalysis {
                             int maxX = Integer.min(x+passID, parameters.split.x-1);
                             int maxY = Integer.min(y+passID, parameters.split.y-1);
                             int maxZ = Integer.min(z+passID, parameters.split.z-1);
-                            
-                            //List<Point3I> neighboursList = getIndicesFromPassID(new Point3I(x, y, z), passID+1, new Point3I(0, 0, 0), new Point3I(parameters.split.x-1, parameters.split.y-1, parameters.split.z-1));
-//                            List<Point3I> neighboursList = getNeighboursList(passID, x, y, z, parameters.split.x, parameters.split.y, parameters.split.z);
-//                            
-//                            for(Point3I neighbor : neighboursList){
-//                                
-//                                int i = neighbor.x;
-//                                int j = neighbor.y;
-//                                int k = neighbor.z;
-//                                
-//                                if (k <= canopeeArray[i][j]) {
-//
-//                                    Voxel neighbour = voxels[i][j][k];
-//
-//                                    if (neighbour.ground_distance >= -(parameters.resolution / 2.0f)) {
-//                                        neighbours.add(neighbour);
-//                                    }else{
-//                                        nbRemovedNeighbors++;
-//                                    }
-//                                }else{
-//                                    nbRemovedNeighbors++;
-//                                }
-//                            }
                             
                             //get neighbors
                             for(int i = minX ; i<= maxX ; i++){
@@ -1142,13 +1118,11 @@ public class VoxelAnalysis {
                                                 }
                                             }
                                         }
-                                        //}
-                                        
                                     }
                                 }
                             }
                             
-                            float meanEffectiveNbSampling = 0;
+                            Statistic nbSamplingStat = new Statistic();
                             float meanTransmittance = 0;
                             
                             float sumBVEntering = 0;
@@ -1163,23 +1137,22 @@ public class VoxelAnalysis {
                                 /*les voxels de transmittance nuls sont traités comme étant non échantillonné,
                                 tous les voisins sont considérés indépendamment de l'échantillonnage*/
                                 
-                                sumBVEntering += neighbour.bvEntering;
-                                sumBVIntercepted += neighbour.bvIntercepted;
-                                sumLgTotal += neighbour.lgTotal;
-                                meanEffectiveNbSampling += neighbour.nbSampling;
                                 if(!Float.isNaN(neighbour.transmittance) && neighbour.transmittance != 0){
-                                    //meanEffectiveNbSampling += neighbour.nbSampling;
-                                    //meanTransmittance *= neighbour.transmittance;
+                                    
+                                    sumBVEntering += neighbour.bvEntering;
+                                    sumBVIntercepted += neighbour.bvIntercepted;
+                                    sumLgTotal += neighbour.lgTotal;
+                                    nbSamplingStat.addValue(neighbour.nbSampling);
+
                                     count++;
                                 }
                             }
 
-                            if(count > 0 && sumBVEntering > 0 && neighbours.size() > 0){
+                            if(count > 0){
                                 
-                                meanTransmittance = (float) Math.pow((sumBVEntering-sumBVIntercepted)/sumBVEntering, meanEffectiveNbSampling/sumLgTotal);
-                                meanEffectiveNbSampling /= (float)neighbours.size();
-                                
-                                currentNbSampling = meanEffectiveNbSampling;
+                                meanTransmittance = (float) Math.pow((sumBVEntering-sumBVIntercepted)/sumBVEntering, nbSamplingStat.getSum()/sumLgTotal);
+                                                                
+                                currentNbSampling = (float) nbSamplingStat.getMean();
                                 currentTransmittance = meanTransmittance;
 
                             
@@ -1210,11 +1183,10 @@ public class VoxelAnalysis {
                             if((PADStatistic.getNbValues()) != 0){
                                 voxels[x][y][z].neighboursNumber = neighbours.size();
                                 voxels[x][y][z].passNumber = passID;
-                                voxels[x][y][z].PadBVTotal = (float)PADStatistic.getMean()/* /ponderationCoeffSum*/;
+                                voxels[x][y][z].PadBVTotal = (float)PADStatistic.getMean();
                                 voxels[x][y][z].nbSampling = (int)currentNbSampling;
                                 voxels[x][y][z].transmittance = currentTransmittance;
-                            }
-                            
+                            }                           
                             
                         }
                     }

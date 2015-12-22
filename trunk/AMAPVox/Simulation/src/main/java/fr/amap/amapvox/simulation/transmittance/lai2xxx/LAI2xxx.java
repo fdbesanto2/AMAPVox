@@ -48,8 +48,6 @@ public abstract class LAI2xxx {
      */
     protected int directionNumber;
     protected int positionNumber;
-    
-    protected int nbObservations;
 
     /**
      *
@@ -80,6 +78,11 @@ public abstract class LAI2xxx {
     protected float[] acfsByRing;
     
     public float[][] transmittances;
+    
+    //test
+//    public float[][] normalizedTransmittances;
+//    public float[][] pathLengths;
+//    protected int[][] countByPositionAndRing2;
     
     protected float[] byPosition_LAI;
     protected float global_LAI; //lai for all positions
@@ -150,16 +153,27 @@ public abstract class LAI2xxx {
         
         transmittances = new float[rings.length][positionNumber];
         countByPositionAndRing = new int[positionNumber][rings.length];
+        
+        //test
+//        normalizedTransmittances = new float[rings.length][positionNumber];
+//        pathLengths = new float[rings.length][positionNumber];
+//        countByPositionAndRing2 = new int[positionNumber][rings.length];
     }
+    
+//    public void addNormalizedTransmittance(int ringID, int position, float transmittance, float pathLength){
+//        
+//        if(ringID < rings.length && position < positionNumber){
+//            normalizedTransmittances[ringID][position] += transmittance;
+//            countByPositionAndRing2[position][ringID] ++;
+//            pathLengths[ringID][position] += pathLength;
+//        }
+//    }
     
     public void addTransmittance(int ringID, int position, float transmittance){
         
         if(ringID < rings.length && position < positionNumber){
             transmittances[ringID][position] += transmittance;
             countByPositionAndRing[position][ringID] ++;
-            if(!Float.isNaN(transmittance)){
-                nbObservations++;
-            }
         }
         
         /*if(!Float.isNaN(transmittance)){
@@ -368,6 +382,10 @@ public abstract class LAI2xxx {
             for(int i=0;i<rings.length;i++){
                 
                 transmittances[i][j] /= (float)countByPositionAndRing[j][i];
+                
+//                //test
+//                normalizedTransmittances[i][j] /= (float)countByPositionAndRing2[j][i];
+//                pathLengths[i][j] /= (float)countByPositionAndRing2[j][i];
             }
         }
         
@@ -496,8 +514,6 @@ public abstract class LAI2xxx {
         //calcul des indices K
         for(int j=0;j<positionNumber;j++){
             for(int i=0;i<5;i++){
-
-                //on détermine ici quel est le ring concerné
                 
                 if(transmittances[i][j] != 0){
                     
@@ -670,6 +686,15 @@ public abstract class LAI2xxx {
     public float[][] getGapsByRingAndPosition() {
         return gapsByRingAndPosition;
     }    
+
+//    //test
+//    public float[][] getNormalizedTransmittances() {
+//        return normalizedTransmittances;
+//    }
+//    //test
+//    public float[][] getPathLengths() {
+//        return pathLengths;
+//    }
     
     public abstract void writeOutput(File outputFile);
 }

@@ -14,7 +14,6 @@ import fr.amap.amapvox.jeeb.raytracing.voxel.Scene;
 import fr.amap.amapvox.jeeb.raytracing.voxel.VoxelManager;
 import fr.amap.amapvox.jeeb.raytracing.voxel.VoxelManagerSettings;
 import fr.amap.amapvox.jeeb.raytracing.voxel.VoxelSpace;
-import fr.amap.amapvox.jeeb.workspace.sunrapp.light.Turtle;
 import fr.amap.amapvox.simulation.transmittance.TransmittanceCfg;
 import fr.amap.amapvox.simulation.transmittance.TransmittanceParameters;
 import static fr.amap.amapvox.simulation.transmittance.lai2xxx.LAI2xxx.ViewCap.CAP_360;
@@ -29,8 +28,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
 import javax.vecmath.Vector3d;
@@ -74,25 +75,49 @@ public class Lai2xxxSim {
         
         //*******début du test
         //lecture du fichier voxel
-        VoxelFileReader voxReader = new VoxelFileReader(parameters.getInputFile());
-        VoxelSpaceInfos infos = voxReader.getVoxelSpaceInfos();
-
-        Iterator<Voxel> iterator = voxReader.iterator();
-        Voxel voxels[][][] = new Voxel[infos.getSplit().x][infos.getSplit().y][infos.getSplit().z];
-
-        //conversion de la liste de voxels en tableau 3d
-        while (iterator.hasNext()) {
-            Voxel voxel = iterator.next();
-            voxels[voxel.$i][voxel.$j][voxel.$k] = voxel;
-        }
-        //initialisation de la scène
-        Scene scene = new Scene();
-        scene.setBoundingBox(new BoundingBox3d(infos.getMinCorner(), infos.getMaxCorner()));
-        
-
-        //création d'un nouveau VoxelManager avec les paramètres du fichier voxel
-        VoxelManager vm = new VoxelManager(scene, new VoxelManagerSettings(infos.getSplit(), 0));
-        
+//        VoxelFileReader voxReader = new VoxelFileReader(parameters.getInputFile());
+//        VoxelSpaceInfos infos = voxReader.getVoxelSpaceInfos();
+//
+//        Iterator<Voxel> iterator = voxReader.iterator();
+//        Voxel voxels[][][] = new Voxel[infos.getSplit().x][infos.getSplit().y][infos.getSplit().z];
+//
+//        //conversion de la liste de voxels en tableau 3d
+//        while (iterator.hasNext()) {
+//            Voxel voxel = iterator.next();
+//            voxels[voxel.$i][voxel.$j][voxel.$k] = voxel;
+//        }
+//        //initialisation de la scène
+//        Scene scene = new Scene();
+//        scene.setBoundingBox(new BoundingBox3d(infos.getMinCorner(), infos.getMaxCorner()));
+//        
+//
+//        //création d'un nouveau VoxelManager avec les paramètres du fichier voxel
+//        VoxelManager vm = new VoxelManager(scene, new VoxelManagerSettings(infos.getSplit(), 0));
+//        
+//        List<Double[]> l = new ArrayList<>();
+//        
+//        
+//        try (BufferedReader reader = new BufferedReader(new FileReader(new File("/media/forestview01/partageLidar/FTH2014_LAI2200/data/LAI_P9_M_fusion_new.txt")))) {
+//            reader.readLine();
+//            
+//            String line;
+//                    
+//            while((line = reader.readLine()) != null){
+//                String[] split = line.split("\t");
+//                l.add(new Double[]{Double.valueOf(split[4]), Double.valueOf(split[5]), Double.valueOf(split[6]), Double.valueOf(split[7]), Double.valueOf(split[8])});
+//            }
+//        }
+//        
+//        Statistic[][] tranStattistics = new Statistic[l.size()][5];
+//        for(int i=0;i<tranStattistics.length;i++){
+//            for(int j=0;j<5;j++){
+//                tranStattistics[i][j] = new Statistic();
+//            }
+//        }
+//        
+//        BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/pos_ring_shots_path_length_arrays/als.txt")));
+//        writer.write("position.ID"+" "+"position.x"+" "+"position.y"+" "+"position.z"+" "+"ring"+" "+"pathLength"+" "+"transmittance"+"\n");
+//        
         //*******fin du test
         
         logger.info("===== " + parameters.getInputFile().getAbsolutePath() + " =====");
@@ -125,72 +150,77 @@ public class Lai2xxxSim {
                 int ring = lai2xxx.getRingIDFromDirectionID(t);
                 
                 
-                //test
-                LineElement lineElement = new LineSegment(position, new Vector3d(dir), 99999999);
-                //distance cumulée
-                double distance = 0;
-
-
-                //dernière distance valide (sortie de canopée)
-                double lastValidDistance = 0;
-
-                //get the first voxel cross by the line
-                VoxelManager.VoxelCrossingContext context = vm.getFirstVoxel(lineElement);
-
-                double distanceToHit = lineElement.getLength();
-                boolean gotOneNaN = false;
-
-                while ((context != null) && (context.indices != null)) {
-
-                    //current voxel
-                    Point3i indices = context.indices;
-                    Voxel voxel = voxels[indices.x][indices.y][indices.z];
-                    
-                    if(voxel.ground_distance < 0.0f){
-                        break;
-                    }
-                    
-                    if(Float.isNaN(voxel.PadBVTotal)){
-                        gotOneNaN = true;
-                        break;
-                    }
-
-                    if(voxel.PadBVTotal > 0){
-                        lastValidDistance = distance;
-                    }
-
-                    //distance from the last origin to the point in which the ray enter the voxel
-                    double d1 = context.length;
-
-                    context = vm.CrossVoxel(lineElement, indices);
-
-                    //distance from the last origin to the point in which the ray exit the voxel
-                    double d2 = context.length;
-
-                    if (d2 < distanceToHit) {
-
-                        distance += (d2 - d1);
-
-                    }else if (d1 >= distanceToHit) {
-
-                    }else {
-                        distance += (d2 - d1);
-                    }
-                }
-
-                double pathLength = lastValidDistance;
+//                //test
+//                LineElement lineElement = new LineSegment(position, new Vector3d(dir), 99999999);
+//                //distance cumulée
+//                double distance = 0;
+//
+//
+//                //dernière distance valide (sortie de canopée)
+//                double lastValidDistance = 0;
+//
+//                //get the first voxel cross by the line
+//                VoxelManager.VoxelCrossingContext context = vm.getFirstVoxel(lineElement);
+//
+//                double distanceToHit = lineElement.getLength();
+//                boolean gotOneNaN = false;
+//
+//                while ((context != null) && (context.indices != null)) {
+//
+//                    //current voxel
+//                    Point3i indices = context.indices;
+//                    Voxel voxel = voxels[indices.x][indices.y][indices.z];
+//                    
+//                    if(voxel.ground_distance < 0.0f){
+//                        break;
+//                    }
+//                    
+//                    if(Float.isNaN(voxel.PadBVTotal)){
+//                        gotOneNaN = true;
+//                        break;
+//                    }
+//
+//                    if(voxel.PadBVTotal > 0){
+//                        lastValidDistance = distance;
+//                    }
+//
+//                    //distance from the last origin to the point in which the ray enter the voxel
+//                    double d1 = context.length;
+//
+//                    context = vm.CrossVoxel(lineElement, indices);
+//
+//                    //distance from the last origin to the point in which the ray exit the voxel
+//                    double d2 = context.length;
+//
+//                    if (d2 < distanceToHit) {
+//
+//                        distance += (d2 - d1);
+//
+//                    }else if (d1 >= distanceToHit) {
+//
+//                    }else {
+//                        distance += (d2 - d1);
+//                    }
+//                }
+//
+//                double pathLength = lastValidDistance;
+//                
+//                //test
+//                if(!gotOneNaN && pathLength != 0){
+//                    
+//                    NaNCounter.addValue(transmitted);
+//                    
+//                    lai2xxx.addNormalizedTransmittance(ring, positionID, (float) (Math.pow(transmitted, 1/pathLength)), (float) pathLength);
+//                    lai2xxx.addTransmittance(ring, positionID, (float) transmitted);
+//                    
+//                    tranStattistics[positionID][ring].addValue((Math.pow(l.get(positionID)[ring], 1/pathLength)));
+//                    
+//                    writer.write(positionID+" "+position.x+" "+position.y+" "+position.z+" "+(ring+1)+" "+pathLength+" "+transmitted+"\n");
+//                }else{
+//                    NaNCounter.addValue(Double.NaN);
+//                }
                 
-                //test
-                if(!gotOneNaN && pathLength != 0){
-                    
-                    NaNCounter.addValue(transmitted);
-                    lai2xxx.addTransmittance(ring, positionID, (float) (Math.pow(transmitted, 1/pathLength)));
-                    //lai2xxx.addTransmittance(ring, positionID, (float) transmitted);
-                }else{
-                    NaNCounter.addValue(Double.NaN);
-                }
-                
-                //lai2xxx.addTransmittance(ring, positionID, (float) transmitted);
+                lai2xxx.addTransmittance(ring, positionID, (float) transmitted);
                 
             }
 
@@ -202,8 +232,26 @@ public class Lai2xxxSim {
         }
         
         //test
-        System.out.println("Nb values : "+NaNCounter.getNbValues());
-        System.out.println("Nb NaN values : "+NaNCounter.getNbNaNValues());
+//        System.out.println("Nb values : "+NaNCounter.getNbValues());
+//        System.out.println("Nb NaN values : "+NaNCounter.getNbNaNValues());
+//        
+//        writer.close();
+        
+        /*try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/normalisation_mesure/methode2/transmittances.txt")))) {
+            
+            for(int i=0;i<tranStattistics.length;i++){
+                
+                String line = i+"";
+                
+                for(int j=0;j<5;j++){
+                    line += "\t"+tranStattistics[i][j].getMean();
+                }
+                
+                writer.write(line+"\n");
+                
+            }
+        }*/
+        
         
         if(parameters.isGenerateTextFile()){
             writeTransmittance();
@@ -327,8 +375,12 @@ public class Lai2xxxSim {
 
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(parameters.getTextFile()))) {
 
-                bw.write("posX\tposY\tposZ\tLAI\tGAP[1]\tGAP[2]\tGAP[3]\tGAP[4]\tGAP[5]\n");
-
+                //bw.write("posX\tposY\tposZ\tLAI\tGAP[1]\tGAP[2]\tGAP[3]\tGAP[4]\tGAP[5]\n");
+                //test
+                bw.write("posX\tposY\tposZ\tLAI\tGAP[1]\tGAP[2]\tGAP[3]\tGAP[4]\tGAP[5]"
+                        + "\tGAP[1]_normalized\tGAP[2]_normalized\tGAP[3]_normalized\tGAP[4]_normalized\tGAP[5]_normalized"
+                        + "\tGAP[1]_mean_pathLength\tGAP[2]_mean_pathLength\tGAP[3]_mean_pathLength\tGAP[4]_mean_pathLength\tGAP[5]_mean_pathLength\n");
+                
                 for(int i =0 ; i<positions.size() ; i++){
 
                     Point3d position = positions.get(i);
@@ -338,6 +390,16 @@ public class Lai2xxxSim {
                     for(int r=0;r<lai2xxx.getRingNumber();r++){
                         line += "\t"+lai2xxx.getGapsByRingAndPosition()[r][i];
                     }
+//                    
+//                    //test
+//                    for(int r=0;r<lai2xxx.getRingNumber();r++){
+//                        line += "\t"+lai2xxx.getNormalizedTransmittances()[r][i];
+//                    }
+//                    
+//                    //test
+//                    for(int r=0;r<lai2xxx.getRingNumber();r++){
+//                        line += "\t"+lai2xxx.getPathLengths()[r][i];
+//                    }
 
                     bw.write(line+"\n");
 
