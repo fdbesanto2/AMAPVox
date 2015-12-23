@@ -766,7 +766,7 @@ public class VoxelisationConfiguration extends Configuration{
                                     Matrix4d mat = getMatrixFromData(e.getChildText("matrix"));
                                     File f = new File(e.getAttributeValue("src"));
 
-                                    matricesAndFiles.add(new LidarScan(f, mat));
+                                    matricesAndFiles.add(new LidarScan(f, mat, f.getName()));
                                 }
 
                                 Element mergingElement = processElement.getChild("merging");

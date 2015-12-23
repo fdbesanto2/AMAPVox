@@ -5,27 +5,22 @@
  */
 package fr.amap.amapvox.gui;
 
+import fr.amap.amapvox.commons.util.LidarScan;
+import fr.amap.amapvox.commons.util.MatrixUtility;
 import fr.amap.amapvox.io.tls.rsp.Rsp;
 import fr.amap.amapvox.io.tls.rsp.Scans;
 import fr.amap.amapvox.math.matrix.Mat4D;
-import fr.amap.amapvox.math.point.Point3F;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckBoxTreeItem;
@@ -34,15 +29,11 @@ import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.Border;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javax.vecmath.Point3d;
-import javax.vecmath.Vector3d;
 
 /**
  * FXML Controller class
@@ -52,9 +43,9 @@ import javax.vecmath.Vector3d;
 public class RspExtractorFrameController implements Initializable {
     
     @FXML
-    private TreeView<Scan> treeViewRspContent;
+    private HBox hboxSelection;
     @FXML
-    private CheckBox checkboxSwitchFullDecimated;
+    private TreeView<LidarScan> treeViewLidarProjectContent;
 
     @FXML
     private void onActionButtonImportSelectedScans(ActionEvent event) {
@@ -74,25 +65,24 @@ public class RspExtractorFrameController implements Initializable {
         root.setSelected(false);
     }
     
-    final CheckBoxTreeItem<Scan> root = new CheckBoxTreeItem<>(new Scan("Scan positions", null, null));
-    private List<Scan> selectedScans;
+    final CheckBoxTreeItem<LidarScan> root = new CheckBoxTreeItem<>(new LidarScan(null, null, "Scan positions"));
+    private List<LidarScan> selectedScans;
     private Stage stage;
     private Rsp rsp;
 
     @FXML
     private void onActionButtonVizualizeScansPositions(ActionEvent event) {
         
-        if(rsp != null){
-            ArrayList<Scans> rxpList = rsp.getRxpList();
+        List<LidarScan> selectedScans = getSelectedScans(root, new ArrayList<>());
         
             double minX = 0, minY = 0, minZ = 0;
             double maxX = 0, maxY = 0, maxZ = 0;
 
-            for(int i1=0 ; i1 < rxpList.size();i1++){
+            for(int i1=0 ; i1 < selectedScans.size();i1++){
 
-                Scans scans1 = rxpList.get(i1);
+                LidarScan scan = selectedScans.get(i1);
 
-                Mat4D sopMatrix1 = scans1.getSopMatrix();
+                Mat4D sopMatrix1 = MatrixUtility.convertMatrix4dToMat4D(scan.getMatrix());
                 double x1 = sopMatrix1.mat[3];
                 double y1 = sopMatrix1.mat[7];
                 double z1 = sopMatrix1.mat[11];
@@ -141,11 +131,11 @@ public class RspExtractorFrameController implements Initializable {
             NodeGestures nodeGestures = new NodeGestures( canvas);        
 
             //searching same scanner locations
-            for(int i1=0 ; i1 < rxpList.size();i1++){
+            for(int i1=0 ; i1 < selectedScans.size();i1++){
 
-                Scans scans1 = rxpList.get(i1);
+                LidarScan scan = selectedScans.get(i1);
 
-                Mat4D sopMatrix1 = scans1.getSopMatrix();
+                Mat4D sopMatrix1 = MatrixUtility.convertMatrix4dToMat4D(scan.getMatrix());
                 double x1 = sopMatrix1.mat[3];
                 double y1 = sopMatrix1.mat[7];
                 double z1 = sopMatrix1.mat[11];
@@ -186,7 +176,7 @@ public class RspExtractorFrameController implements Initializable {
 
                 canvas.getChildren().add(circle1);
 
-                Label label1 = new Label(scans1.getName()+" ("+((Math.round(position.x*10000))/10000.0)+
+                Label label1 = new Label(scan.getName()+" ("+((Math.round(position.x*10000))/10000.0)+
                                                                                                     " "+((Math.round(position.y*10000))/10000.0)+
                                                                                                     " "+((Math.round(position.z*10000))/10000.0)+")");
 
@@ -236,39 +226,6 @@ public class RspExtractorFrameController implements Initializable {
 
             stageTest.hide();
             stageTest.show();
-        }
-        
-    }
-    
-    public class Scan{
-        
-        private final String name;
-        private final File file;
-        private final Mat4D sop;
-
-        public Scan(String name, File file, Mat4D sop) {
-            this.name = name;
-            this.file = file;
-            this.sop = sop;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public File getFile() {
-            return file;
-        }
-
-        public Mat4D getSop() {
-            return sop;
-        }
-        
-        
-        @Override
-        public String toString(){
-            return name;
-        }
         
     }
     
@@ -279,98 +236,13 @@ public class RspExtractorFrameController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
     
         selectedScans = new ArrayList<>();
-        
-        checkboxSwitchFullDecimated.selectedProperty().addListener(new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                
-                selectLeavesContainingString(root, "mon", newValue);
-            }
-        });
-        
     } 
     
     public void setStage(Stage stage){
         this.stage = stage;
     }
     
-    public void init(Rsp rsp){
-        
-        root.setExpanded(true);
-        this.rsp = rsp;
-        
-        ArrayList<Scans> rxpList = rsp.getRxpList();
-        
-        
-//        ArrayList<Scans> rxpList = rsp.getRxpList();
-//        
-//        Map<Integer, Integer> m = new HashMap<>();
-//        List<Integer[]> l = new ArrayList<>();
-//        
-//        //searching same scanner locations
-//        for(int i1=0 ; i1 < rxpList.size();i1++){
-//            
-//            Scans scans1 = rxpList.get(i1);
-//            
-//            Mat4D sopMatrix1 = scans1.getSopMatrix();
-//            double x1 = sopMatrix1.mat[3];
-//            double y1 = sopMatrix1.mat[7];
-//            double z1 = sopMatrix1.mat[11];
-//            
-//            Point3d canvasPosition = new Point3d(x1, y1, z1);
-//            
-//            
-//            for(int i2=0 ; i2 < rxpList.size();i2++){
-//                
-//                Scans scans2 = rxpList.get(i2);
-//                
-//                Mat4D sopMatrix2 = scans2.getSopMatrix();
-//                
-//                double x2 = sopMatrix2.mat[3];
-//                double y2 = sopMatrix2.mat[7];
-//                double z2 = sopMatrix2.mat[11];
-//                
-//                Point3d position2 = new Point3d(x2, y2, z2);
-//                double distance = canvasPosition.distance(position2);
-//                
-//                if(distance < 0.5){
-//                    m.put(i1, i2);
-//                    break;
-//                }
-//            }
-//        }
-        
-        root.getChildren().clear();
-        
-        for(Scans scans : rxpList){
-            
-            
-            CheckBoxTreeItem<Scan> item = new CheckBoxTreeItem<>(
-                    new Scan(scans.getName(), null, null));
-            
-            CheckBoxTreeItem<Scan> checkBoxTreeItemFull = new CheckBoxTreeItem<>(
-                    new Scan(scans.getScanFull().getName(), scans.getScanFull().getFile(), scans.getScanFull().getSopMatrix()));
-            
-            CheckBoxTreeItem<Scan> checkBoxTreeItemLite = new CheckBoxTreeItem<>(new Scan(
-                    scans.getScanLite().getName(), scans.getScanLite().getFile(), scans.getScanLite().getSopMatrix()));
-            
-            checkBoxTreeItemFull.setSelected(true);
-            
-            item.getChildren().add(checkBoxTreeItemFull);
-            item.getChildren().add(checkBoxTreeItemLite);
-            
-            item.setExpanded(true);
-            
-            root.getChildren().add(item);
-        }
-        
-        treeViewRspContent.setCellFactory(CheckBoxTreeCell.<Scan>forTreeView());
-        treeViewRspContent.setRoot(root);
-        
-    }
-    
-    private List<Scan> getSelectedScans(CheckBoxTreeItem item, List<Scan> indices){
+    private List<LidarScan> getSelectedScans(CheckBoxTreeItem item, List<LidarScan> indices){
                 
         ObservableList<CheckBoxTreeItem> childrens = item.getChildren();
         
@@ -379,7 +251,7 @@ public class RspExtractorFrameController implements Initializable {
             if(children.isLeaf()){
                 
                 if(children.isSelected()){
-                    indices.add((Scan)children.getValue());
+                    indices.add((LidarScan)children.getValue());
                 }
                 
             }else{
@@ -398,7 +270,7 @@ public class RspExtractorFrameController implements Initializable {
             
             if(children.isLeaf()){
                 
-                if(((Scan)children.getValue()).name.contains(string)){
+                if(((LidarScan)children.getValue()).getName().contains(string)){
                     children.setSelected(contains);
                 }else{
                     children.setSelected(!contains);
@@ -409,8 +281,19 @@ public class RspExtractorFrameController implements Initializable {
         }
     }
 
-    public List<Scan> getSelectedScans() {
+    public List<LidarScan> getSelectedScans() {
         return selectedScans;
     }
-    
+
+    public HBox getHboxSelection() {
+        return hboxSelection;
+    }
+
+    public TreeView<LidarScan> getTreeViewLidarProjectContent() {
+        return treeViewLidarProjectContent;
+    }
+
+    public CheckBoxTreeItem<LidarScan> getRoot() {
+        return root;
+    }
 }

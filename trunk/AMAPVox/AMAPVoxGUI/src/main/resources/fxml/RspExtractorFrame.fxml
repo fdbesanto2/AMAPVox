@@ -12,12 +12,12 @@
    <children>
       <VBox prefHeight="451.0" prefWidth="523.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TreeView fx:id="treeViewRspContent" prefHeight="481.0" prefWidth="523.0" />
+            <TreeView fx:id="treeViewLidarProjectContent" prefHeight="481.0" prefWidth="523.0" />
             <AnchorPane>
                <children>
                   <VBox layoutX="5.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                        <HBox fx:id="hboxSelection" alignment="CENTER_LEFT" spacing="20.0">
                            <children>
                               <MenuButton mnemonicParsing="false" text="Selection">
                                  <items>
@@ -25,8 +25,10 @@
                                     <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemSelectNone" text="None" />
                                  </items>
                               </MenuButton>
-                              <CheckBox fx:id="checkboxSwitchFullDecimated" mnemonicParsing="false" text="Switch full/decimated" />
                            </children>
+                           <VBox.margin>
+                              <Insets left="10.0" />
+                           </VBox.margin>
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" spacing="40.0">
                            <children>

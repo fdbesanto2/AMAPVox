@@ -15,6 +15,8 @@ For further information, please contact Gregoire Vincent.
 package fr.amap.amapvox.voxelisation.configuration;
 
 import fr.amap.amapvox.commons.util.LidarScan;
+import fr.amap.amapvox.jleica.ptx.PTXHeader;
+import fr.amap.amapvox.jleica.ptx.PTXScan;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +32,7 @@ import org.jdom2.Element;
 
 public class TLSVoxCfg extends VoxCfg{
     
-    private List<LidarScan> matricesAndFiles;
+    private List<LidarScan> lidarScans;
     
     @Override
     public void readConfiguration(File inputParametersFile) throws Exception {
@@ -39,18 +41,40 @@ public class TLSVoxCfg extends VoxCfg{
         
         processMode = ProcessMode.VOXELISATION_TLS;
         
-        if (inputType == InputType.RSP_PROJECT || inputType == InputType.PTX_PROJECT || inputType == InputType.PTG_PROJECT) {
+        if (inputType == InputType.RSP_PROJECT || inputType == InputType.PTX_PROJECT
+                || inputType == InputType.PTG_PROJECT
+                || inputType == InputType.PTX_PROJECT) {
 
             Element filesElement = processElement.getChild("files");
             List<Element> childrens = filesElement.getChildren("file");
-            matricesAndFiles = new ArrayList<>();
+            lidarScans = new ArrayList<>();
 
+            int count = 0;
+            
             for (Element e : childrens) {
 
                 Matrix4d mat = getMatrixFromData(e.getChildText("matrix"));
                 File f = new File(e.getAttributeValue("src"));
 
-                matricesAndFiles.add(new LidarScan(f, mat));
+                if(inputType == InputType.PTX_PROJECT){
+                    
+                    long offset = Long.valueOf(e.getAttributeValue("offset"));
+                    int numRows = Integer.valueOf(e.getAttributeValue("numRows"));
+                    int numCols = Integer.valueOf(e.getAttributeValue("numCols"));
+                    PTXHeader header = new PTXHeader();
+                    header.setNumRows(numRows);
+                    header.setNumCols(numCols);
+                    header.setPointInDoubleFormat(true);
+                    
+                    PTXScan scan = new PTXScan(f, header, offset);
+                    
+                    lidarScans.add(new PTXLidarScan(f, mat, scan, count));
+                    
+                }else{
+                    lidarScans.add(new LidarScan(f, mat, f.getAbsolutePath()));
+                }
+                
+                count++;
             }
 
             Element mergingElement = processElement.getChild("merging");
@@ -74,7 +98,9 @@ public class TLSVoxCfg extends VoxCfg{
         processElement.setAttribute(new Attribute("mode","voxelisation"));
         processElement.setAttribute(new Attribute("type","TLS"));
         
-        if(inputType == InputType.RSP_PROJECT || inputType == InputType.PTX_PROJECT || inputType == InputType.PTG_PROJECT){
+        if(inputType == InputType.RSP_PROJECT || inputType == InputType.PTX_PROJECT 
+                || inputType == InputType.PTG_PROJECT
+                || inputType == InputType.PTX_PROJECT){
                 
             /***MERGING***/
 
@@ -89,11 +115,19 @@ public class TLSVoxCfg extends VoxCfg{
             /***FILE LIST TO PROCESS***/
 
             Element filesElement = new Element("files");
-            if(matricesAndFiles != null){
-                for(LidarScan f : matricesAndFiles){
+            if(lidarScans != null){
+                for(LidarScan scan : lidarScans){
                     Element fileElement = new Element("file");
-                    fileElement.setAttribute("src", f.file.getAbsolutePath());
-                    fileElement.addContent(new Element("matrix").setText(f.matrix.toString()));
+                    fileElement.setAttribute("src", scan.file.getAbsolutePath());
+                    
+                    if(inputType == InputType.PTX_PROJECT){
+                        
+                        fileElement.setAttribute("offset", String.valueOf(((PTXLidarScan)scan).getScan().offset));
+                        fileElement.setAttribute("numRows", String.valueOf(((PTXLidarScan)scan).getScan().getHeader().getNumRows()));
+                        fileElement.setAttribute("numCols", String.valueOf(((PTXLidarScan)scan).getScan().getHeader().getNumCols()));
+                    }
+                    
+                    fileElement.addContent(new Element("matrix").setText(scan.matrix.toString()));
                     filesElement.addContent(fileElement);
                 }
             }
@@ -103,11 +137,11 @@ public class TLSVoxCfg extends VoxCfg{
         writeDocument(outputParametersFile);
     }
 
-    public List<LidarScan> getMatricesAndFiles() {
-        return matricesAndFiles;
+    public List<LidarScan> getLidarScans() {
+        return lidarScans;
     }
 
-    public void setMatricesAndFiles(List<LidarScan> matricesAndFiles) {
-        this.matricesAndFiles = matricesAndFiles;
+    public void setLidarScans(List<LidarScan> matricesAndFiles) {
+        this.lidarScans = matricesAndFiles;
     }    
 }

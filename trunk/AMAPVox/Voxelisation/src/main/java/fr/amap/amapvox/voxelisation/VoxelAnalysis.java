@@ -46,7 +46,8 @@ public class VoxelAnalysis {
         
         DEFAULT_ALS(0.0003, 0.0005),
         VZ_400(0.007, 0.00035),
-        LEICA_SCANSTATION_P30_40(0.0035, 0.00023);
+        LEICA_SCANSTATION_P30_40(0.0035, 0.00023),
+        LEICA_SCANSTATION_C10(0.004, 0.0001);
     
         private final double beamDiameterAtExit;
         private final double beamDivergence;

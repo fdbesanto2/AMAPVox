@@ -49,6 +49,8 @@ import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.amapvox.jdart.DartPlotsXMLWriter;
 import fr.amap.amapvox.jleica.ptg.PTGReader;
 import fr.amap.amapvox.jleica.ptg.PTGScan;
+import fr.amap.amapvox.jleica.ptx.PTXReader;
+import fr.amap.amapvox.jleica.ptx.PTXScan;
 import fr.amap.amapvox.jraster.asc.DtmLoader;
 import fr.amap.amapvox.jraster.asc.RegularDtm;
 import fr.amap.amapvox.math.geometry.BoundingBox2F;
@@ -76,6 +78,7 @@ import fr.amap.amapvox.voxelisation.configuration.ALSVoxCfg;
 import fr.amap.amapvox.voxelisation.configuration.Input;
 import fr.amap.amapvox.voxelisation.configuration.MultiResCfg;
 import fr.amap.amapvox.voxelisation.configuration.MultiVoxCfg;
+import fr.amap.amapvox.voxelisation.configuration.PTXLidarScan;
 import fr.amap.amapvox.voxelisation.configuration.TLSVoxCfg;
 import fr.amap.amapvox.voxelisation.configuration.VoxCfg;
 import fr.amap.amapvox.voxelisation.configuration.VoxMergingCfg;
@@ -115,7 +118,6 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Observable;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -221,7 +223,7 @@ public class MainFrameController implements Initializable {
     
     private Stage stage;
 
-    private Stage rspExtractorFrame;
+    //private Stage rspExtractorFrame;
     private Stage calculateMatrixFrame;
     private Stage filterFrame;
     private Stage transformationFrame;
@@ -231,7 +233,10 @@ public class MainFrameController implements Initializable {
     private Stage attributsImporterFrame;
     private Stage positionImporterFrame;
     
-    private RspExtractorFrameController rspExtractorFrameController;
+    private RiscanProjectExtractor riscanProjectExtractor;
+    private PTXProjectExtractor ptxProjectExtractor;
+    private PTGProjectExtractor ptgProjectExtractor;
+    //private RspExtractorFrameController rspExtractorFrameController;
     private UpdaterFrameController updaterFrameController;
     private TransformationFrameController transformationFrameController;
     private DateChooserFrameController dateChooserFrameController;
@@ -1344,7 +1349,7 @@ public class MainFrameController implements Initializable {
         cfg.setFilters(listviewFilters.getItems());
 
         if (it == InputType.RSP_PROJECT || it == InputType.PTG_PROJECT || it == InputType.PTX_PROJECT) {
-            cfg.setMatricesAndFiles(listviewRxpScans.getItems());
+            cfg.setLidarScans(listviewRxpScans.getItems());
         }
 
         cfg.setEchoFilters(filteringPaneController.getFilterList());
@@ -2195,7 +2200,11 @@ public class MainFrameController implements Initializable {
             logger.error("Cannot load fxml file", ex);
         }
         
-        rspExtractorFrame = new Stage();
+        riscanProjectExtractor = new RiscanProjectExtractor();
+        ptxProjectExtractor = new PTXProjectExtractor();
+        ptgProjectExtractor = new PTGProjectExtractor();
+        
+        /*rspExtractorFrame = new Stage();
         
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/RspExtractorFrame.fxml"));
@@ -2206,7 +2215,7 @@ public class MainFrameController implements Initializable {
         
         } catch (IOException ex) {
             logger.error("Cannot load fxml file", ex);
-        }
+        }*/
         
         dateChooserFrame = new Stage();
                 
@@ -2221,7 +2230,7 @@ public class MainFrameController implements Initializable {
         }
 
         comboboxModeALS.getItems().addAll("Las file", "Laz file", "Points file (unavailable)", "Shots file (unavailable)");
-        comboboxModeTLS.getItems().addAll("Rxp scan", "Rsp project", "ptx","ptg","Points file (unavailable)", "Shots file (unavailable)");
+        comboboxModeTLS.getItems().addAll("Rxp scan", "Rsp project", "PTX","PTG","Points file (unavailable)", "Shots file (unavailable)");
         comboboxWeighting.getItems().addAll("From the echo number", "From a matrix file", "Local recalculation (unavailable)");
         comboboxGroundEnergyOutputFormat.getItems().addAll("txt", "png");
 
@@ -2749,25 +2758,43 @@ public class MainFrameController implements Initializable {
             Rsp selectedProject = new Rsp();
             try {
                 selectedProject.read(selectedFile);
+                
+                riscanProjectExtractor.init(selectedProject);
+                riscanProjectExtractor.getFrame().show();
+                
+                riscanProjectExtractor.getFrame().setOnHidden(new EventHandler<WindowEvent>() {
 
-                rspExtractorFrameController.init(selectedProject);
+                    @Override
+                    public void handle(WindowEvent event) {
+                        List<LidarScan> selectedScans = riscanProjectExtractor.getController().getSelectedScans();
+                        
+                        ObservableList<LidarScan> items1 = listViewHemiPhotoScans.getItems();
+                        
+                        for(LidarScan scan : selectedScans){
+                            scan.name = scan.file.getAbsolutePath();
+                            items1.add(scan);
+                        }
+                    }
+                });
+
+                /*rspExtractorFrameController.init(selectedProject);
                 rspExtractorFrame.show();
 
                 rspExtractorFrame.setOnHidden(new EventHandler<WindowEvent>() {
 
                     @Override
                     public void handle(WindowEvent event) {
-                        List<RspExtractorFrameController.Scan> selectedScans = rspExtractorFrameController.getSelectedScans();
+                        List<Scan> selectedScans = rspExtractorFrameController.getSelectedScans();
                         
                         ObservableList<LidarScan> items1 = listViewHemiPhotoScans.getItems();
                         
-                        for(RspExtractorFrameController.Scan scan : selectedScans){
+                        for(Scan scan : selectedScans){
                             items1.add(new LidarScan(scan.getFile(), MatrixUtility.convertMat4DToMatrix4d(scan.getSop())));
                         }
                         
 
                     }
-                });
+                });*/
 
             } catch (JDOMException | IOException ex) {
                 showErrorDialog(ex);
@@ -3734,7 +3761,7 @@ public class MainFrameController implements Initializable {
                     comboboxModeTLS.getSelectionModel().select(0);
                     
                     items = new ArrayList<>();
-                    items.add(new LidarScan(selectedFile, MatrixUtility.convertMat4DToMatrix4d(Mat4D.identity())));
+                    items.add(new LidarScan(selectedFile, MatrixUtility.convertMat4DToMatrix4d(Mat4D.identity()), selectedFile.getName()));
                     
                     listviewRxpScans.getItems().setAll(items);
                     
@@ -3748,21 +3775,22 @@ public class MainFrameController implements Initializable {
                         comboboxModeTLS.getSelectionModel().select(1);
                         
                         textFieldInputFileTLS.setText(selectedFile.getAbsolutePath());
+                        
+                        riscanProjectExtractor.init(rsp);
+                        riscanProjectExtractor.getFrame().show();
 
-                        rspExtractorFrameController.init(rsp);
-                        rspExtractorFrame.show();
-
-                        rspExtractorFrame.setOnHidden(new EventHandler<WindowEvent>() {
+                        riscanProjectExtractor.getFrame().setOnHidden(new EventHandler<WindowEvent>() {
 
                             @Override
                             public void handle(WindowEvent event) {
                                 
-                                final List<RspExtractorFrameController.Scan> selectedScans = rspExtractorFrameController.getSelectedScans();
+                                final List<LidarScan> selectedScans = riscanProjectExtractor.getController().getSelectedScans();
                                 
                                 items = new ArrayList<>();
-
-                                for(RspExtractorFrameController.Scan scan : selectedScans){
-                                    items.add(new LidarScan(scan.getFile(), MatrixUtility.convertMat4DToMatrix4d(scan.getSop())));
+                                
+                                for(LidarScan scan : selectedScans){
+                                    scan.name = scan.file.getAbsolutePath();
+                                    items.add(scan);
                                 }
 
                                 popMatrix = MatrixUtility.convertMat4DToMatrix4d(rsp.getPopMatrix());
@@ -3778,32 +3806,69 @@ public class MainFrameController implements Initializable {
 
                     break;
                 case ".ptg":
-                    PTGReader pTGReader = new PTGReader();
                     try {
                         
-                        pTGReader.openPTGFile(selectedFile);
-                        
                         comboboxModeTLS.getSelectionModel().select(3);
+                        textFieldInputFileTLS.setText(selectedFile.getAbsolutePath());
+                        
+                        ptgProjectExtractor.init(selectedFile);
+                        ptgProjectExtractor.getFrame().show();
 
-                        if(pTGReader.isAsciiFile()){
-                            
-                            textFieldInputFileTLS.setText(selectedFile.getAbsolutePath());
+                        ptgProjectExtractor.getFrame().setOnHidden(new EventHandler<WindowEvent>() {
 
-                            List<File> ptgList = pTGReader.getScanList();
+                            @Override
+                            public void handle(WindowEvent event) {
+                                
+                                final List<LidarScan> selectedScans = ptgProjectExtractor.getController().getSelectedScans();
+                                
+                                items = new ArrayList<>();
+                                
+                                for(LidarScan scan : selectedScans){
+                                    scan.name = scan.file.getAbsolutePath();
+                                    items.add(scan);
+                                }
 
-                            items = new ArrayList<>();
-
-                            for (File file : ptgList) {
-
-                                PTGScan pTGScan = new PTGScan();
-                                pTGScan.openScanFile(file);
-
-                                items.add(new LidarScan(file, MatrixUtility.convertMat4DToMatrix4d(pTGScan.getHeader().getTransfMatrix())));
+                                updateResultMatrix();
+                                listviewRxpScans.getItems().setAll(items);
                             }
+                        });  
 
-                            updateResultMatrix();
-                            listviewRxpScans.getItems().setAll(items);
-                        }
+                    } catch (IOException ex) {
+                        showErrorDialog(ex);
+                    } catch (Exception ex) {
+                        showErrorDialog(ex);
+                    }
+
+                    break;
+                case ".ptx":
+                    
+                    try {
+                        
+                        comboboxModeTLS.getSelectionModel().select(2);
+                        textFieldInputFileTLS.setText(selectedFile.getAbsolutePath());
+                        
+                        ptxProjectExtractor.init(selectedFile);
+                        ptxProjectExtractor.getFrame().show();
+
+                        ptxProjectExtractor.getFrame().setOnHidden(new EventHandler<WindowEvent>() {
+
+                            @Override
+                            public void handle(WindowEvent event) {
+                                
+                                final List<LidarScan> selectedScans = ptxProjectExtractor.getController().getSelectedScans();
+                                
+                                items = new ArrayList<>();
+                                
+                                for(LidarScan scan : selectedScans){
+                                    
+                                    scan.name = ((PTXLidarScan)scan).toString();
+                                    items.add(scan);
+                                }
+
+                                updateResultMatrix();
+                                listviewRxpScans.getItems().setAll(items);
+                            }
+                        });                        
 
                     } catch (IOException ex) {
                         showErrorDialog(ex);
@@ -4467,7 +4532,7 @@ public class MainFrameController implements Initializable {
                                                 break;
                                                 
                                             case PTG_PROJECT:
-                                                
+
                                                 final ArrayList<File> outputFiles = voxTool.voxeliseFromPTG(tLSVoxCfg);
 
                                                 if (tLSVoxCfg.getVoxelParameters().isMergingAfter()) {
@@ -4508,6 +4573,58 @@ public class MainFrameController implements Initializable {
 
                                                         if (!voxTool.isCancelled()) {
                                                             for (File file : outputFiles) {
+                                                                addFileToProductsList(file);
+                                                            }
+                                                            if (tLSVoxCfg.getVoxelParameters().isMergingAfter()) {
+                                                                addFileToProductsList(tLSVoxCfg.getVoxelParameters().getMergedFile());
+                                                            }
+                                                        }
+                                                    }
+                                                });
+                                                break;
+                                                
+                                            case PTX_PROJECT:
+
+                                                final ArrayList<File> outputFiles2 = voxTool.voxeliseFromPTX(tLSVoxCfg);
+
+                                                if (tLSVoxCfg.getVoxelParameters().isMergingAfter()) {
+
+                                                    voxTool.addProcessToolListener(new ProcessToolListener() {
+
+                                                        @Override
+                                                        public void processProgress(String progress, int ratio) {
+                                                            Platform.runLater(new Runnable() {
+
+                                                                @Override
+                                                                public void run() {
+
+                                                                    updateMessage(msgTask + "\n" + progress);
+                                                                }
+                                                            });
+                                                        }
+
+                                                        @Override
+                                                        public void processFinished(float duration) {
+
+                                                            logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
+                                                        }
+                                                    });
+
+                                                    VoxMergingCfg mergingCfg = new VoxMergingCfg(tLSVoxCfg.getVoxelParameters().getMergedFile(), tLSVoxCfg.getVoxelParameters(), outputFiles2);
+
+                                                    //if(!voxTool.isCancelled()){
+                                                    voxTool.mergeVoxelFiles(mergingCfg/*outputFiles, tLSVoxCfg.getVoxelParameters().getMergedFile(), tLSVoxCfg.getVoxelParameters().getTransmittanceMode(), tLSVoxCfg.getVoxelParameters().getMaxPAD()*/);
+                                                    //}
+
+                                                }
+
+                                                Platform.runLater(new Runnable() {
+
+                                                    @Override
+                                                    public void run() {
+
+                                                        if (!voxTool.isCancelled()) {
+                                                            for (File file : outputFiles2) {
                                                                 addFileToProductsList(file);
                                                             }
                                                             if (tLSVoxCfg.getVoxelParameters().isMergingAfter()) {
@@ -4729,6 +4846,7 @@ public class MainFrameController implements Initializable {
         }
         
         voxelParameters.setLadType(comboboxLADChoice.getSelectionModel().getSelectedItem());
+        voxelParameters.setLaserSpecification(comboboxLaserSpecification.getSelectionModel().getSelectedItem());
             
         if(radiobuttonLADHomogeneous.isSelected()){
             voxelParameters.setLadEstimationMode(0);
@@ -4951,6 +5069,11 @@ public class MainFrameController implements Initializable {
                         textfieldRasterResolution.setText(String.valueOf(voxelParameters.getRasterResolution()));
                         checkboxDiscardVoxelFileWriting.setSelected(voxelParameters.isShortcutVoxelFileWriting());
                     }
+                    
+                    LaserSpecification laserSpecification = voxelParameters.getLaserSpecification();
+                    if(laserSpecification != null){
+                        comboboxLaserSpecification.getSelectionModel().select(laserSpecification);
+                    }
 
                     textFieldResolution.setText(String.valueOf(voxelParameters.resolution));
 
@@ -5109,7 +5232,13 @@ public class MainFrameController implements Initializable {
                                 comboboxModeTLS.getSelectionModel().select(2);
                                 break;
                             case SHOTS_FILE:
+                                comboboxModeTLS.getSelectionModel().select(5);
+                                break;
+                            case PTG_PROJECT:
                                 comboboxModeTLS.getSelectionModel().select(3);
+                                break;
+                            case PTX_PROJECT:
+                                comboboxModeTLS.getSelectionModel().select(2);
                                 break;
                         }
 
@@ -5119,7 +5248,7 @@ public class MainFrameController implements Initializable {
                             textFieldMergedFileName.setText(((TLSVoxCfg)cfg).getVoxelParameters().getMergedFile().getName());
                         }
 
-                        List<LidarScan> matricesAndFiles = ((TLSVoxCfg)cfg).getMatricesAndFiles();
+                        List<LidarScan> matricesAndFiles = ((TLSVoxCfg)cfg).getLidarScans();
                         if (matricesAndFiles != null) {
                             items = matricesAndFiles;
                             listviewRxpScans.getItems().setAll(items);
@@ -6611,20 +6740,20 @@ public class MainFrameController implements Initializable {
 
                 Rsp rsp = new Rsp();
                 rsp.read(file);
+                
+                riscanProjectExtractor.init(rsp);
+                riscanProjectExtractor.getFrame().show();
 
-                rspExtractorFrameController.init(rsp);
-                rspExtractorFrame.show();
-
-                rspExtractorFrame.setOnHidden(new EventHandler<WindowEvent>() {
+                riscanProjectExtractor.getFrame().setOnHidden(new EventHandler<WindowEvent>() {
 
                     @Override
                     public void handle(WindowEvent event) {
 
-                        final List<RspExtractorFrameController.Scan> selectedScans = rspExtractorFrameController.getSelectedScans();
+                        final List<LidarScan> selectedScans = riscanProjectExtractor.getController().getSelectedScans();
 
                         final int lastListIndex = listviewTreeSceneObjects.getItems().size();
-                        for (RspExtractorFrameController.Scan scan : selectedScans) {
-                            listviewTreeSceneObjects.getItems().add(new SceneObjectWrapper(scan.getFile(), new ProgressBar()));
+                        for (LidarScan scan : selectedScans) {
+                            listviewTreeSceneObjects.getItems().add(new SceneObjectWrapper(scan.file, new ProgressBar()));
                         }
 
                         Service s = new Service() {
@@ -6638,15 +6767,15 @@ public class MainFrameController implements Initializable {
 
                                         final List<SceneObject> sceneObjects = new ArrayList<>(selectedScans.size());
 
-                                        for (RspExtractorFrameController.Scan scan : selectedScans) {
+                                        for (LidarScan scan : selectedScans) {
 
                                             PointCloudSceneObject pointCloud = new PointCloudSceneObject();
 
                                             RxpExtraction reader = new RxpExtraction();
-                                            reader.openRxpFile(scan.getFile(), RxpExtraction.REFLECTANCE, RxpExtraction.AMPLITUDE, RxpExtraction.DEVIATION, RxpExtraction.TIME);
+                                            reader.openRxpFile(scan.file, RxpExtraction.REFLECTANCE, RxpExtraction.AMPLITUDE, RxpExtraction.DEVIATION, RxpExtraction.TIME);
                                             final Iterator<Shot> iterator = reader.iterator();
 
-                                            Mat4D sopMatrix = scan.getSop();
+                                            Mat4D sopMatrix = MatrixUtility.convertMatrix4dToMat4D(scan.getMatrix());
 
                                             while (iterator.hasNext()) {
 
@@ -7447,4 +7576,5 @@ public class MainFrameController implements Initializable {
         viewer.insertChart(ChartViewer.createBasicChart("GTheta ~ Beam direction zenithal angle", dataset, "Beam direction zenithal angle (degrees)", "GTheta"));
         viewer.show();
     }
+    
 }

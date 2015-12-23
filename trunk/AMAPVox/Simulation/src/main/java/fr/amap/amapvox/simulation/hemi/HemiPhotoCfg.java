@@ -93,7 +93,8 @@ public class HemiPhotoCfg extends Configuration{
                 }
                 
                 if(inputFileSrc != null){
-                    scans.add(new LidarScan(new File(inputFileSrc), sopMatrix));
+                    File f = new File(inputFileSrc);
+                    scans.add(new LidarScan(f, sopMatrix, f.getName()));
                 }
             }
             

@@ -71,6 +71,7 @@ public class VoxelParameters {
     
     private VoxelAnalysis.LaserSpecification laserSpecification = null;
     
+    
     public static float[][] DEFAULT_ALS_WEIGHTING = new float[][]{
                         {1.00f, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
                         {0.62f, 0.38f, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN},

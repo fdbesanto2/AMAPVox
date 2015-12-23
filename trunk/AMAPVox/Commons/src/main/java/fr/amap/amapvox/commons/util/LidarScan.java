@@ -5,6 +5,7 @@
  */
 package fr.amap.amapvox.commons.util;
 
+import fr.amap.amapvox.math.matrix.Mat4D;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,15 +20,25 @@ public class LidarScan{
     public File file;
     public Matrix4d matrix;
     public List<Filter> filters;
+    public String name;
 
-    public LidarScan(File file, Matrix4d matrix) {
+    public LidarScan(File file, Matrix4d matrix, String name) {
         this.file = file;
         this.matrix = matrix;
+        this.name = name;
         filters = new ArrayList<>();
     }
     
     @Override
     public String toString(){
-        return file.getAbsolutePath();
+        return name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Matrix4d getMatrix() {
+        return matrix;
     }
 }

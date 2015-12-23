@@ -20,6 +20,8 @@ import fr.amap.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.amapvox.voxelisation.EchoFilter;
 import fr.amap.amapvox.voxelisation.LeafAngleDistribution.Type;
 import fr.amap.amapvox.voxelisation.ShotFilter;
+import fr.amap.amapvox.voxelisation.VoxelAnalysis;
+import fr.amap.amapvox.voxelisation.VoxelAnalysis.LaserSpecification;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -279,6 +281,31 @@ public class VoxCfg extends Configuration{
             }
         }
         
+        Element laserSpecElement = processElement.getChild("laser-specification");  
+        
+        if(laserSpecElement != null){
+            
+            String laserSpecName = laserSpecElement.getAttributeValue("name");
+        
+            switch(laserSpecName){
+                case "DEFAULT_ALS":
+                    voxelParameters.setLaserSpecification(LaserSpecification.DEFAULT_ALS);
+                    break;
+                case "LEICA_SCANSTATION_C10":
+                    voxelParameters.setLaserSpecification(LaserSpecification.LEICA_SCANSTATION_C10);
+                    break;
+                case "VZ_400":
+                    voxelParameters.setLaserSpecification(LaserSpecification.VZ_400);
+                    break;
+                case "LEICA_SCANSTATION_P30_40":
+                    voxelParameters.setLaserSpecification(LaserSpecification.LEICA_SCANSTATION_P30_40);
+                    break;
+                default:
+                    voxelParameters.setLaserSpecification(null);
+            }
+        }
+        
+        
         Element ladElement = processElement.getChild("leaf-angle-distribution");
         if(ladElement != null){
             voxelParameters.setLadEstimationMode(Integer.valueOf(ladElement.getAttributeValue("mode")));
@@ -390,7 +417,16 @@ public class VoxCfg extends Configuration{
         }
 
         processElement.addContent(dtmFilterElement);
-
+        
+        /***LASER SPECIFICATION***/
+        
+        Element laserSpecElement = new Element("laser-specification");        
+        laserSpecElement.setAttribute("name", voxelParameters.getLaserSpecification().name());
+        laserSpecElement.setAttribute("beam-diameter-at-exit", String.valueOf(voxelParameters.getLaserSpecification().getBeamDiameterAtExit()));
+        laserSpecElement.setAttribute("beam-divergence", String.valueOf(voxelParameters.getLaserSpecification().getBeamDivergence()));
+        
+        processElement.addContent(laserSpecElement);
+        
         Element pointcloudFiltersElement = new Element("pointcloud-filters");
         pointcloudFiltersElement.setAttribute(new Attribute("enabled",String.valueOf(voxelParameters.isUsePointCloudFilter())));
 
