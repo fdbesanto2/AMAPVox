@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import fr.amap.amapvox.gui.*?>
 <?import java.net.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.chart.*?>
@@ -1475,7 +1476,10 @@
                                           </Tab>
                                         <Tab text="2D projection">
                                           <content>
-                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                   <children>
+                                                      <EditableListViewController fx:id="customListView" layoutX="21.0" layoutY="13.0" prefHeight="388.0" />
+                                                   </children></AnchorPane>
                                           </content>
                                         </Tab>
                                           <Tab text="Histogram">

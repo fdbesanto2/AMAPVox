@@ -721,859 +721,9 @@ public class MainFrameController implements Initializable {
     private MenuItem menuItemExportDartPlots;
     @FXML
     private ListView<File> listViewProductsFiles;
-
     @FXML
-    private void onActionButtonOpenVoxelFileCanopyAnalyzer(ActionEvent event) {
-        
-        File selectedFile = fileChooserOpenCanopyAnalyserInputFile.showOpenDialog(stage);
-        
-        if(selectedFile != null){
-            textfieldVoxelFilePathCanopyAnalyzer.setText(selectedFile.getAbsolutePath());
-        }
-    }
+    private EditableListViewController customListView;
 
-    @FXML
-    private void onActionMenuItemPositionsCanopyAnalyzerSelectionAll(ActionEvent event) {
-        listViewCanopyAnalyzerSensorPositions.getSelectionModel().selectAll();
-    }
-
-    @FXML
-    private void onActionMenuItemPositionsCanopyAnalyzerSelectionNone(ActionEvent event) {
-        listViewCanopyAnalyzerSensorPositions.getSelectionModel().clearSelection();
-    }
-
-    @FXML
-    private void onActionButtonRemovePositionCanopyAnalyzer(ActionEvent event) {
-        ObservableList<?> selectedItems = listViewCanopyAnalyzerSensorPositions.getSelectionModel().getSelectedItems();
-        listViewCanopyAnalyzerSensorPositions.getItems().removeAll(selectedItems);
-    }
-
-    @FXML
-    private void onActionButtonAddPositionCanopyAnalyzer(ActionEvent event) {
-        
-        positionImporterFrame.show();
-        positionImporterFrame.setOnHidden(new EventHandler<WindowEvent>() {
-
-            @Override
-            public void handle(WindowEvent event) {
-                listViewCanopyAnalyzerSensorPositions.getItems().addAll(positionImporterFrameController.getPositions());
-            }
-        });
-    }
-
-    @FXML
-    private void onActionButtonOpenOutputCanopyAnalyzerTextFile(ActionEvent event) {
-        
-        File selectedFile = fileChooserSaveCanopyAnalyserOutputFile.showSaveDialog(stage);
-        
-        if(selectedFile != null){
-            
-            textfieldOutputCanopyAnalyzerTextFile.setText(selectedFile.getAbsolutePath());
-        }
-    }
-
-    @FXML
-    private void onActionButtonExecuteCanopyAnalyzerSimulation(ActionEvent event) {
-        
-        File temporaryFile;
-        try{
-            temporaryFile  = File.createTempFile("cfg_temp", ".xml");
-            saveCanopyAnalyzerSimulation(temporaryFile);
-            logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
-            
-        }catch(IOException e){
-            showErrorDialog(e);
-            return;
-        }catch(Exception e){
-            showErrorDialog(e);
-            return;
-        }
-        
-        executeProcess(temporaryFile);
-    }
-
-    @FXML
-    private void onActionButtonSaveCanopyAnalyzerSimulation(ActionEvent event) {
-        
-        File selectedFile = fileChooserSaveCanopyAnalyserCfgFile.showSaveDialog(stage);
-        
-        if(selectedFile != null){
-
-            try {
-                saveCanopyAnalyzerSimulation(selectedFile);
-                addFileToTaskList(selectedFile);
-            } catch (Exception ex) {
-                logger.error("Cannot write simulation file", ex);
-                return;
-            }
-        }
-    }
-    
-    private void saveCanopyAnalyzerSimulation(File file) throws Exception{
-        
-            
-        TransmittanceParameters transmParameters = new TransmittanceParameters();
-
-        transmParameters.setShotNumber(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem());
-
-        if(toggleButtonLAI2000Choice.isSelected()){
-            transmParameters.setMode(TransmittanceParameters.Mode.LAI2000);
-        }else{
-            transmParameters.setMode(TransmittanceParameters.Mode.LAI2200);
-        }
-
-        transmParameters.setMasks(new boolean[]{toggleButtonCanopyAnalyzerRingMask1.isSelected(),
-                                                toggleButtonCanopyAnalyzerRingMask2.isSelected(),
-                                                toggleButtonCanopyAnalyzerRingMask3.isSelected(),
-                                                toggleButtonCanopyAnalyzerRingMask4.isSelected(),
-                                                toggleButtonCanopyAnalyzerRingMask5.isSelected()});
-
-        transmParameters.setGenerateLAI2xxxTypeFormat(checkboxGenerateLAI2xxxFormat.isSelected());
-
-        transmParameters.setInputFile(new File(textfieldVoxelFilePathCanopyAnalyzer.getText()));
-        transmParameters.setGenerateTextFile(checkboxGenerateTextFile.isSelected());
-
-        if(checkboxGenerateCanopyAnalyzerTextFile.isSelected()){
-            transmParameters.setTextFile(new File(textfieldOutputCanopyAnalyzerTextFile.getText()));
-        }
-        if(comboboxChooseCanopyAnalyzerSampling.isEditable()){
-            transmParameters.setDirectionsNumber(Integer.valueOf(comboboxChooseCanopyAnalyzerSampling.getEditor().getText()));
-        }else{
-            transmParameters.setDirectionsNumber(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem());
-        }
-
-        transmParameters.setPositions(listViewCanopyAnalyzerSensorPositions.getItems());
-
-        //to remove later
-        /*transmParameters.setUseScanPositionsFile(radiobuttonScannerPosFile.isSelected());
-
-        if(radiobuttonScannerPosFile.isSelected()){
-            transmParameters.setPointsPositionsFile(new File(textfieldScannerPointsPositionsFile.getText()));
-        }else{
-            transmParameters.setCenterPoint(new Point3f(Float.valueOf(textfieldScannerPosCenterX.getText()), 
-                                                        Float.valueOf(textfieldScannerPosCenterY.getText()),
-                                                        Float.valueOf(textfieldScannerPosCenterZ.getText())));
-
-            transmParameters.setWidth(Float.valueOf(textfieldScannerWidthArea.getText()));
-            transmParameters.setStep(Float.valueOf(textfieldScannerStepArea.getText()));
-        }*/
-
-        TransmittanceCfg cfg = new TransmittanceCfg(transmParameters);
-        try {
-            cfg.writeConfiguration(file);
-            
-        } catch (Exception ex) {
-            throw ex;
-        }
-    }
-
-    @FXML
-    private void onActionButtonSaveExecuteCanopyAnalyzerSimulation(ActionEvent event) {
-        
-        File selectedFile;
-        
-        try {
-            
-            selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
-            if (selectedFile != null) {
-
-                saveCanopyAnalyzerSimulation(selectedFile);
-                addFileToTaskList(selectedFile);
-            }
-            
-        } catch (Exception ex) {
-            logger.error("Cannot write simulation file", ex);
-            return;
-        }
-        
-        executeProcess(selectedFile);
-    }
-    
-    private boolean checkALSVoxelizationParametersValidity(){
-        
-        boolean check1 = checkEntriesAsNumber(textFieldEnterXMin,
-                textFieldEnterYMin,
-                textFieldEnterZMin,
-                textFieldEnterXMax,
-                textFieldEnterYMax,
-                textFieldEnterZMax,
-                textFieldResolution);
-
-        boolean check2;
-        if(checkboxMultiFiles.isSelected()){
-            check2 = checkEntriesAsFile(textFieldInputFileALS, textFieldTrajectoryFileALS, textFieldOutputFileALS);
-        }else{
-            check2 = checkEntriesAsFile(textFieldTrajectoryFileALS, textFieldOutputFileALS);
-        }
-
-        if ((!check1 && !checkboxMultiFiles.isSelected())  || !check2) {
-
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Warning");
-            alert.setHeaderText("Check entries");
-            alert.setContentText("Some parameters are not set up,\nplease fill the missing arguments");
-
-            alert.showAndWait();
-
-            return false;
-        }
-
-        if (checkboxCalculateGroundEnergy.isSelected() && !checkboxUseDTMFilter.isSelected()) {
-
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setResizable(true);
-            alert.setTitle("INFORMATION");
-            alert.setHeaderText("Incoherence");
-            alert.setContentText("Calculation of ground energy is enabled\nbut DTM filter is not!");
-
-            alert.showAndWait();
-            
-            return false;
-        }
-        
-        return true;
-    }
-    
-    private void saveALSVoxelization(File selectedFile){
-        
-        if(!checkALSVoxelizationParametersValidity()){
-            return;
-        }
-            
-        VoxelParameters voxelParameters = new VoxelParameters();
-
-        if(!checkboxMultiFiles.isSelected()){ 
-            voxelParameters = getVoxelParametersFromUI();
-        }
-
-        boolean correctNaNs = checkboxMultiResAfterMode2.isSelected();
-
-        voxelParameters.setCorrectNaNsMode2(correctNaNs);
-        voxelParameters.setCorrectNaNsNbSamplingThreshold(Float.valueOf(textfieldNbSamplingThresholdMultires.getText()));
-
-        InputType it;
-
-        switch (comboboxModeALS.getSelectionModel().getSelectedIndex()) {
-            case 0:
-                it = InputType.LAS_FILE;
-                break;
-            case 1:
-                it = InputType.LAZ_FILE;
-                break;
-            case 2:
-                it = InputType.POINTS_FILE;
-                break;
-            case 3:
-                it = InputType.SHOTS_FILE;
-                break;
-            default:
-                it = InputType.LAS_FILE;
-        }
-
-        voxelParameters.setUseDTMCorrection(checkboxUseDTMFilter.isSelected());
-        if(checkboxUseDTMFilter.isSelected()){
-            voxelParameters.minDTMDistance = Float.valueOf(textfieldDTMValue.getText());
-            voxelParameters.setDtmFile(new File(textfieldDTMPath.getText()));
-        }
-
-        voxelParameters.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
-        voxelParameters.setTransmittanceMode(0);
-
-        if(checkboxEnableWeighting.isSelected()){
-            voxelParameters.setWeighting(comboboxWeighting.getSelectionModel().getSelectedIndex() + 1);
-        }else{
-            voxelParameters.setWeighting(0);
-        }
-
-        voxelParameters.setWeightingData(VoxelParameters.DEFAULT_ALS_WEIGHTING);
-
-        voxelParameters.setCalculateGroundEnergy(checkboxCalculateGroundEnergy.isSelected());
-        String extension = "";
-
-        if(checkboxCalculateGroundEnergy.isSelected()){
-
-                voxelParameters.setGroundEnergyFile(new File(textFieldOutputFileGroundEnergy.getText()));
-
-                switch (comboboxGroundEnergyOutputFormat.getSelectionModel().getSelectedIndex()) {
-                case 0:
-                    voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_TXT);
-                    extension = ".txt";
-                    break;
-                case 1:
-                    voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_PNG);
-                    extension = ".png";
-                    break;
-                default:
-                    voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_TXT);
-                    extension = ".png";
-            }
-        }
-
-        voxelParameters.setGenerateMultiBandRaster(checkboxGenerateMultiBandRaster.isSelected());
-
-        if(checkboxGenerateMultiBandRaster.isSelected()){
-
-            voxelParameters.setRasterStartingHeight(Float.valueOf(textfieldRasterStartingHeight.getText()));
-            voxelParameters.setRasterHeightStep(Float.valueOf(textfieldRasterHeightStep.getText()));
-            voxelParameters.setShortcutVoxelFileWriting(checkboxDiscardVoxelFileWriting.isSelected());
-            voxelParameters.setRasterResolution(Integer.valueOf(textfieldRasterResolution.getText()));
-            voxelParameters.setRasterBandNumber(Integer.valueOf(textfieldRasterBandNumber.getText()));
-        }
-
-        VoxCfg cfg = null;
-
-        if(!checkboxMultiFiles.isSelected()){
-
-            cfg = new ALSVoxCfg();
-            ((ALSVoxCfg)cfg).setTrajectoryFile(new File(textFieldTrajectoryFileALS.getText()));
-            cfg.setVoxelParameters(voxelParameters);
-            cfg.setInputType(it);
-            cfg.setInputFile(new File(textFieldInputFileALS.getText()));
-
-            /*cfg.setCorrectNaNs(correctNaNs);
-
-            try{
-                float padMax1m = Float.valueOf(textFieldPadMax1m.getText());
-                float padMax2m = Float.valueOf(textFieldPadMax2m.getText());
-                float padMax3m = Float.valueOf(textFieldPadMax3m.getText());
-                float padMax4m = Float.valueOf(textFieldPadMax4m.getText());
-                float padMax5m = Float.valueOf(textFieldPadMax5m.getText());
-                cfg.setMultiResPadMax(new float[]{padMax1m, padMax2m, padMax3m, padMax4m, padMax5m});
-            }catch(Exception e){}
-
-            cfg.setMultiResUseDefaultMaxPad(!checkboxOverwritePadLimit.isSelected());*/
-
-
-        }else{
-
-            File outputPathFile = new File(textFieldOutputFileALS.getText());
-
-            List<File> selectedFiles = new ArrayList<>();
-            String[] split = textFieldInputFileALS.getText().split(";");
-
-            for(String s : split){
-                selectedFiles.add(new File(s));
-            }
-
-            if (selectedFiles.size() > 0) {
-
-                boolean generateRasters = false;
-
-                if (checkboxUseDTMFilter.isSelected()) {
-
-                    ButtonType buttonTypeGenerateRasters = new ButtonType("Yes, generate one raster by file");
-                    ButtonType buttonTypeNo = new ButtonType("No");
-
-                    Alert alert = new Alert(AlertType.CONFIRMATION, "A DTM filter has been detected\n"
-                            + "Would you like to generate one DTM raster file for each point file?\n"
-                            +"This feature is advised to save memory but the process will be slower.",
-                    buttonTypeGenerateRasters, buttonTypeNo);
-
-                    alert.setResizable(true);
-                    alert.setWidth(300);
-                    alert.setTitle("DTM");
-
-                    Optional<ButtonType> result = alert.showAndWait();
-
-                    if(result.get() == buttonTypeGenerateRasters){
-                        generateRasters = true;
-                    }
-                }
-
-                List<Input> inputList = new ArrayList<>();
-                boolean quick = getListOfClassificationPointToDiscard().isEmpty();
-
-                int size = selectedFiles.size();
-                int count = 1;
-
-                RegularDtm dtm = null;
-
-                if(generateRasters){
-
-                    logger.info("Loading DTM file "+voxelParameters.getDtmFile().getAbsolutePath());
-                    try {
-                        dtm = DtmLoader.readFromAscFile(voxelParameters.getDtmFile());
-                        dtm.setTransformationMatrix(MatrixUtility.convertMatrix4dToMat4D(vopMatrix));
-                    } catch (Exception ex) {
-                        logger.error("Cannot read dtm file", ex);
-                    }
-                }
-
-                for (File file : selectedFiles) {
-
-                    logger.info("calculate bounding-box of file "+count+"/"+size);
-
-                    BoundingBox3d boundingBox = calculateAutomaticallyMinAndMax(file, quick);
-
-                    VoxelParameters individualVoxelParameters = new VoxelParameters();
-
-                    individualVoxelParameters.setBottomCorner(boundingBox.min);
-                    individualVoxelParameters.setTopCorner(boundingBox.max);
-
-                    double resolution = Double.valueOf(textFieldResolution.getText());
-
-                    int splitX = (int) Math.ceil((boundingBox.max.x - boundingBox.min.x) / resolution);
-                    int splitY = (int) Math.ceil((boundingBox.max.y - boundingBox.min.y) / resolution);
-                    int splitZ = (int) Math.ceil((boundingBox.max.z - boundingBox.min.z) / resolution);
-
-                    individualVoxelParameters.setSplit(new Point3i(splitX, splitY, splitZ));
-                    individualVoxelParameters.setResolution(resolution);
-
-                    individualVoxelParameters.setCalculateGroundEnergy(checkboxCalculateGroundEnergy.isSelected());
-                    if(voxelParameters.isCalculateGroundEnergy()){
-                        individualVoxelParameters.setGroundEnergyFile(new File(outputPathFile.getAbsolutePath() + "/" + file.getName() + extension));
-                    }
-
-                    List<Input> subList = null;
-
-
-
-                    File dtmFile = null;
-
-                    if(generateRasters && dtm != null){
-
-                        logger.info("Generate DTM raster of file "+count+"/"+size);
-
-                        RegularDtm dtmSubset = dtm.subset(new BoundingBox2F(
-                                new Point2F((float)individualVoxelParameters.getBottomCorner().x, (float)individualVoxelParameters.getBottomCorner().y), 
-                                new Point2F((float)individualVoxelParameters.getTopCorner().x, (float)individualVoxelParameters.getTopCorner().y)), 0);
-
-                        dtmFile = new File(outputPathFile.getAbsolutePath() + File.separator + file.getName() +".asc");
-                        try {
-                            dtmSubset.write(dtmFile);
-                        } catch (IOException ex) {
-                            logger.error("Cannot write dtm file", ex);
-                        }
-                    }
-
-                    File voxFile = new File(outputPathFile.getAbsolutePath() + File.separator + file.getName() +".vox");
-                    inputList.add(new Input(individualVoxelParameters, file, dtmFile, voxFile, subList, new File(outputPathFile.getAbsolutePath() + File.separator + file.getName() +"_multires_.vox")));
-
-                    count++;
-                }
-
-                cfg = new MultiVoxCfg();
-
-                ((MultiVoxCfg)cfg).setMultiProcessInputs(inputList);
-                ((MultiVoxCfg)cfg).setTrajectoryFile(new File(textFieldTrajectoryFileALS.getText()));
-            }
-
-            removeWarnings = false;
-        }
-
-        if(cfg != null){
-
-            cfg.setOutputFile(new File(textFieldOutputFileALS.getText()));
-
-            cfg.setUsePopMatrix(false);
-            cfg.setUseSopMatrix(false);
-            cfg.setUseVopMatrix(checkboxUseVopMatrix.isSelected());
-
-            cfg.setPopMatrix(popMatrix);
-            cfg.setSopMatrix(sopMatrix);
-            cfg.setVopMatrix(vopMatrix);
-
-            cfg.setVoxelParameters(voxelParameters);
-
-            ((ALSVoxCfg)cfg).setClassifiedPointsToDiscard(getListOfClassificationPointToDiscard());
-            cfg.setFilters(listviewFilters.getItems());
-
-            try {
-                cfg.writeConfiguration(selectedFile);
-                
-            } catch (Exception ex) {
-                logger.error("Cannot write configuration file", ex);
-            }
-        }
-    }
-
-    @FXML
-    private void onActionButtonSaveALSVoxelization(ActionEvent event) {
-        
-        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
-        
-        if (selectedFile != null) {
-            saveALSVoxelization(selectedFile);
-            addFileToTaskList(selectedFile);
-        }
-    }
-
-    @FXML
-    private void onActionButtonSaveExecuteALSVoxelization(ActionEvent event) {
-        
-        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
-        
-        if (selectedFile != null) {
-            saveALSVoxelization(selectedFile);
-            addFileToTaskList(selectedFile);
-            executeProcess(selectedFile);
-        }
-        
-    }
-
-    @FXML
-    private void onActionButtonExecuteALSVoxelization(ActionEvent event) {
-        
-        File temporaryFile;
-        try{
-            temporaryFile  = File.createTempFile("cfg_temp", ".xml");
-            saveALSVoxelization(temporaryFile);
-            logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
-            
-        }catch(IOException e){
-            showErrorDialog(e);
-            return;
-        }catch(Exception e){
-            showErrorDialog(e);
-            return;
-        }
-        
-        executeProcess(temporaryFile);
-    }
-
-    @FXML
-    private void onActionButtonExecuteTLSVoxelization(ActionEvent event) {
-        
-        File temporaryFile;
-        try{
-            temporaryFile  = File.createTempFile("cfg_temp", ".xml");
-            saveTLSVoxelization(temporaryFile);
-            logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
-            
-        }catch(IOException e){
-            showErrorDialog(e);
-            return;
-        }catch(Exception e){
-            showErrorDialog(e);
-            return;
-        }
-        
-        executeProcess(temporaryFile);
-    }
-    
-    private boolean checkTLSVoxelizationParametersValidity(){
-        
-        boolean check1 = checkEntriesAsNumber(textFieldEnterXMin,
-                textFieldEnterYMin,
-                textFieldEnterZMin,
-                textFieldEnterXMax,
-                textFieldEnterYMax,
-                textFieldEnterZMax,
-                textFieldResolution);
-
-        boolean check2 = checkEntriesAsFile(textFieldInputFileTLS, textFieldOutputPathTLS);
-
-        if (!check1 || !check2) {
-
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.setTitle("Warning");
-            alert.setHeaderText("Check entries");
-            alert.setContentText("Some parameters are not set up, please fill the missing arguments");
-
-            alert.showAndWait();
-
-            return false;
-        }
-        
-        return true;
-    }
-    
-    private void saveTLSVoxelization(File selectedFile){
-        
-        if(!checkTLSVoxelizationParametersValidity()){
-            return;
-        }
-        
-        VoxelParameters voxelParameters = getVoxelParametersFromUI();
-
-        voxelParameters.setMergingAfter(checkboxMergeAfter.isSelected());
-        voxelParameters.setMergedFile(new File(textFieldOutputPathTLS.getText(), textFieldMergedFileName.getText()));
-
-        if (checkboxEnableWeighting.isSelected()) {
-            voxelParameters.setWeighting(comboboxWeighting.getSelectionModel().getSelectedIndex() + 1);
-            voxelParameters.setWeightingData(VoxelParameters.DEFAULT_TLS_WEIGHTING);
-        } else {
-            voxelParameters.setWeighting(0);
-        }
-
-        InputType it;
-
-        switch (comboboxModeTLS.getSelectionModel().getSelectedIndex()) {
-            case 0:
-                it = InputType.RXP_SCAN;
-                break;
-            case 1:
-                it = InputType.RSP_PROJECT;
-                break;
-            case 2:
-                it = InputType.PTX_PROJECT;
-                break;
-            case 3:
-                it = InputType.PTG_PROJECT;
-                break;
-            case 4:
-                it = InputType.POINTS_FILE;
-                break;
-            case 5:
-                it = InputType.SHOTS_FILE;
-                break;
-            default:
-                it = InputType.RSP_PROJECT;
-        }
-
-        TLSVoxCfg cfg = new TLSVoxCfg();
-        /*
-        VoxelisationConfiguration cfg = new VoxelisationConfiguration(ProcessMode.VOXELISATION_TLS, it,
-                new File(textFieldInputFileTLS.getText()),
-                new File(textFieldTrajectoryFileALS.getText()),
-                new File(textFieldOutputPathTLS.getText()),
-                voxelParameters,
-                checkboxUsePopMatrix.isSelected(), popMatrix,
-                checkboxUseSopMatrix.isSelected(), sopMatrix,
-                checkboxUseVopMatrix.isSelected(), vopMatrix);*/
-
-        cfg.setInputFile(new File(textFieldInputFileTLS.getText()));
-        cfg.setOutputFile(new File(textFieldOutputPathTLS.getText()));
-        cfg.setInputType(it);
-
-        cfg.setUsePopMatrix(checkboxUsePopMatrix.isSelected());
-        cfg.setUseSopMatrix(checkboxUseSopMatrix.isSelected());
-        cfg.setUseVopMatrix(checkboxUseVopMatrix.isSelected());
-
-        cfg.setPopMatrix(popMatrix);
-        cfg.setSopMatrix(sopMatrix);
-        cfg.setVopMatrix(vopMatrix);
-
-        cfg.setVoxelParameters(voxelParameters);
-
-        cfg.setFilters(listviewFilters.getItems());
-
-        if (it == InputType.RSP_PROJECT || it == InputType.PTG_PROJECT || it == InputType.PTX_PROJECT) {
-            cfg.setLidarScans(listviewRxpScans.getItems());
-        }
-
-        cfg.setEchoFilters(filteringPaneController.getFilterList());
-
-        try {
-            cfg.writeConfiguration(selectedFile);
-        } catch (Exception ex) {
-            logger.error("Cannot write configuration file");
-        }
-
-        
-    }
-
-    @FXML
-    private void onActionButtonSaveTLSVoxelization(ActionEvent event) {
-        
-        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
-        if (selectedFile != null) {
-
-            saveTLSVoxelization(selectedFile);
-            addFileToTaskList(selectedFile);
-        }
-    }
-
-    @FXML
-    private void onActionButtonSaveExecuteTLSVoxelization(ActionEvent event) {
-        
-        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
-        if (selectedFile != null) {
-
-            saveTLSVoxelization(selectedFile);
-            executeProcess(selectedFile);
-        }
-    }
-
-    @FXML
-    private void onActionButtonExecuteMergingProcess(ActionEvent event) {
-        
-        File temporaryFile;
-        try{
-            temporaryFile  = File.createTempFile("cfg_temp", ".xml");
-            saveMergingProcess(temporaryFile);
-            logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
-            
-        }catch(IOException e){
-            showErrorDialog(e);
-            return;
-        }catch(Exception e){
-            showErrorDialog(e);
-            return;
-        }
-        
-        executeProcess(temporaryFile);
-    }
-    
-    private void saveMergingProcess(File selectedFile){
-        
-        VoxelParameters voxParameters = new VoxelParameters();
-        voxParameters.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
-
-        VoxMergingCfg cfg = new VoxMergingCfg(new File(textFieldOutputFileMerging.getText()),
-                voxParameters,
-                listViewProductsFiles.getSelectionModel().getSelectedItems());
-
-        try {
-            cfg.writeConfiguration(selectedFile);
-            addFileToTaskList(selectedFile);
-        } catch (Exception ex) {
-            logger.error("Cannot write configuration file", ex);
-        }
-    }
-
-    @FXML
-    private void onActionButtonSaveMergingProcess(ActionEvent event) {
-        
-        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
-        if (selectedFile != null) {
-            saveMergingProcess(selectedFile);
-        }
-    }
-
-    @FXML
-    private void onActionButtonSaveExecuteMergingProcess(ActionEvent event) {
-        
-        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
-        if (selectedFile != null) {
-            saveMergingProcess(selectedFile);
-            executeProcess(selectedFile);
-        }
-    }
-
-    @FXML
-    private void onActionButtonSaveCanopyAnalyzerDirections(ActionEvent event) {
-        
-        
-        ChoiceDialog<String> choiceDialog = new ChoiceDialog<>();
-        choiceDialog.getItems().addAll("OBJ", "CSV (spherical coordinates)", "CSV (cartesian coordinates)");
-        choiceDialog.setSelectedItem("OBJ");
-
-        choiceDialog.setTitle("Output format");
-        choiceDialog.setContentText("Choose the output format");
-
-        Optional<String> result = choiceDialog.showAndWait();
-        
-        if (result.isPresent()) {
-
-            String format = result.get();
-
-            boolean csv = (format.equals("csv (spherical coordinates)") || format.equals("csv (cartesian coordinates)"));
-
-            boolean cartesian = format.equals("csv (cartesian coordinates)") && csv;
-
-            FileChooser fc = new FileChooser();
-            File selectedFile = fc.showSaveDialog(stage);
-
-            if (selectedFile != null) {
-                
-                LAI2xxx lAi2xxx = new LAI2200(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem(),
-                        LAI2xxx.ViewCap.CAP_360, new boolean[]{false, false, false, false, false});
-
-                lAi2xxx.computeDirections();
-                Vector3f[] directions = lAi2xxx.getDirections();
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile))) {
-
-                    if (csv) {
-                        if (cartesian) {
-                            writer.write("X_cartesian Y_cartesian Z_cartesian");
-                        } else {
-                            writer.write("azimut elevation");
-                        }
-                    }
-
-                    SphericalCoordinates sc = new SphericalCoordinates();
-
-                    for (Vector3f direction : directions) {
-
-                        if (csv) {
-                            if (cartesian) {
-                                writer.write(direction.x + " " + direction.y + " " + direction.z + "\n");
-                            } else {
-                                sc.toSpherical(new Vector3d(direction));
-                                writer.write(sc.getAzimuth() + " " + sc.getElevation() + "\n");
-                            }
-                        } else {
-                            writer.write("v " + direction.x + " " + direction.y + " " + direction.z + "\n");
-                        }
-                    }
-
-                } catch (IOException ex) {
-                    showErrorDialog(ex);
-                }
-            }
-        }
-        
-    }
-    
-    private class SceneObjectProperty{
-        
-        private String name;
-        private String value;
-
-        public SceneObjectProperty(String name, String value) {
-            this.name = name;
-            this.value = value;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getValue() {
-            return value;
-        }
-    }
-    
-    private void addMenuItemPadValue(MenuItem menuItem, final float value){
-                
-        menuItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                textFieldPADMax.setText(String.valueOf(value));
-            }
-        });
-    }
-    
-    private void showImage(File file){
-        
-        try {
-            ImageView iv = new ImageView(new Image(Files.newInputStream(file.toPath())));
-            iv.setPreserveRatio(true);
-            Stage stage = new Stage();
-            
-            final DoubleProperty zoomProperty = new SimpleDoubleProperty(200);
-            
-            zoomProperty.addListener(new InvalidationListener() {
-                @Override
-                public void invalidated(javafx.beans.Observable observable) {
-                    iv.setFitWidth(zoomProperty.get() * 4);
-                    iv.setFitHeight(zoomProperty.get() * 3);
-                }
-            });
-            
-            ScrollPane sp = new ScrollPane(iv);
-            stage.addEventFilter(ScrollEvent.ANY, new EventHandler<ScrollEvent>() {
-                @Override
-                public void handle(ScrollEvent event) {
-                    if (event.getDeltaY() > 0) {
-                        zoomProperty.set(zoomProperty.get() * 1.1);
-                    } else if (event.getDeltaY() < 0) {
-                        zoomProperty.set(zoomProperty.get() / 1.1);
-                    }
-                }
-            });
-            
-            
-            stage.setScene(new Scene(new Group(sp)));
-
-            stage.sizeToScene();
-            stage.show();
-        } catch (IOException ex) {
-            showErrorDialog(ex);
-        }
-        
-    }
     
     /**
      * Initializes the controller class.
@@ -1581,26 +731,14 @@ public class MainFrameController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-//        TableColumn<SceneObjectWrapper, String> propertyNameColumn = new TableColumn<>("Property");
-//        TableColumn<SceneObjectWrapper, String> propertyValueColumn = new TableColumn<>("State/value");
-//        
-//        propertyNameColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<SceneObjectWrapper, String>, ObservableValue<String>>() {
-//
-//            @Override
-//            public ObservableValue<String> call(TableColumn.CellDataFeatures<SceneObjectWrapper, String> param) {
-//                return new SimpleStringProperty(param.getValue().getPropertyList());
-//            }
-//        });
-//        
-//        propertyValueColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<SceneObjectWrapper, String>, ObservableValue<String>>() {
-//
-//            @Override
-//            public ObservableValue<String> call(TableColumn.CellDataFeatures<SceneObjectWrapper, String> param) {
-//                return new SimpleStringProperty(param.getValue().getValue());
-//            }
-//        });
-//        
-//        tableviewSceneObjectProperties.getColumns().addAll(propertyNameColumn, propertyValueColumn);
+        /*customListView.getButtonAddItemToList().setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Alert a = new Alert(AlertType.INFORMATION);
+                a.setContentText("test");
+                a.show();
+            }
+        });*/
 
         MenuItem menuItemPadValue1m = new MenuItem("1m voxel size");
         addMenuItemPadValue(menuItemPadValue1m, 3.536958f);
@@ -2654,6 +1792,859 @@ public class MainFrameController implements Initializable {
                 buttonSetTransformationMatrix.setDisable(!newValue);
             }
         });
+    }
+    
+    @FXML
+    private void onActionButtonOpenVoxelFileCanopyAnalyzer(ActionEvent event) {
+        
+        File selectedFile = fileChooserOpenCanopyAnalyserInputFile.showOpenDialog(stage);
+        
+        if(selectedFile != null){
+            textfieldVoxelFilePathCanopyAnalyzer.setText(selectedFile.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    private void onActionMenuItemPositionsCanopyAnalyzerSelectionAll(ActionEvent event) {
+        listViewCanopyAnalyzerSensorPositions.getSelectionModel().selectAll();
+    }
+
+    @FXML
+    private void onActionMenuItemPositionsCanopyAnalyzerSelectionNone(ActionEvent event) {
+        listViewCanopyAnalyzerSensorPositions.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    private void onActionButtonRemovePositionCanopyAnalyzer(ActionEvent event) {
+        ObservableList<?> selectedItems = listViewCanopyAnalyzerSensorPositions.getSelectionModel().getSelectedItems();
+        listViewCanopyAnalyzerSensorPositions.getItems().removeAll(selectedItems);
+    }
+
+    @FXML
+    private void onActionButtonAddPositionCanopyAnalyzer(ActionEvent event) {
+        
+        positionImporterFrame.show();
+        positionImporterFrame.setOnHidden(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+                listViewCanopyAnalyzerSensorPositions.getItems().addAll(positionImporterFrameController.getPositions());
+            }
+        });
+    }
+
+    @FXML
+    private void onActionButtonOpenOutputCanopyAnalyzerTextFile(ActionEvent event) {
+        
+        File selectedFile = fileChooserSaveCanopyAnalyserOutputFile.showSaveDialog(stage);
+        
+        if(selectedFile != null){
+            
+            textfieldOutputCanopyAnalyzerTextFile.setText(selectedFile.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    private void onActionButtonExecuteCanopyAnalyzerSimulation(ActionEvent event) {
+        
+        File temporaryFile;
+        try{
+            temporaryFile  = File.createTempFile("cfg_temp", ".xml");
+            saveCanopyAnalyzerSimulation(temporaryFile);
+            logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
+            
+        }catch(IOException e){
+            showErrorDialog(e);
+            return;
+        }catch(Exception e){
+            showErrorDialog(e);
+            return;
+        }
+        
+        executeProcess(temporaryFile);
+    }
+
+    @FXML
+    private void onActionButtonSaveCanopyAnalyzerSimulation(ActionEvent event) {
+        
+        File selectedFile = fileChooserSaveCanopyAnalyserCfgFile.showSaveDialog(stage);
+        
+        if(selectedFile != null){
+
+            try {
+                saveCanopyAnalyzerSimulation(selectedFile);
+                addFileToTaskList(selectedFile);
+            } catch (Exception ex) {
+                logger.error("Cannot write simulation file", ex);
+                return;
+            }
+        }
+    }
+    
+    private void saveCanopyAnalyzerSimulation(File file) throws Exception{
+        
+            
+        TransmittanceParameters transmParameters = new TransmittanceParameters();
+
+        transmParameters.setShotNumber(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem());
+
+        if(toggleButtonLAI2000Choice.isSelected()){
+            transmParameters.setMode(TransmittanceParameters.Mode.LAI2000);
+        }else{
+            transmParameters.setMode(TransmittanceParameters.Mode.LAI2200);
+        }
+
+        transmParameters.setMasks(new boolean[]{toggleButtonCanopyAnalyzerRingMask1.isSelected(),
+                                                toggleButtonCanopyAnalyzerRingMask2.isSelected(),
+                                                toggleButtonCanopyAnalyzerRingMask3.isSelected(),
+                                                toggleButtonCanopyAnalyzerRingMask4.isSelected(),
+                                                toggleButtonCanopyAnalyzerRingMask5.isSelected()});
+
+        transmParameters.setGenerateLAI2xxxTypeFormat(checkboxGenerateLAI2xxxFormat.isSelected());
+
+        transmParameters.setInputFile(new File(textfieldVoxelFilePathCanopyAnalyzer.getText()));
+        transmParameters.setGenerateTextFile(checkboxGenerateTextFile.isSelected());
+
+        if(checkboxGenerateCanopyAnalyzerTextFile.isSelected()){
+            transmParameters.setTextFile(new File(textfieldOutputCanopyAnalyzerTextFile.getText()));
+        }
+        if(comboboxChooseCanopyAnalyzerSampling.isEditable()){
+            transmParameters.setDirectionsNumber(Integer.valueOf(comboboxChooseCanopyAnalyzerSampling.getEditor().getText()));
+        }else{
+            transmParameters.setDirectionsNumber(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem());
+        }
+
+        transmParameters.setPositions(listViewCanopyAnalyzerSensorPositions.getItems());
+
+        //to remove later
+        /*transmParameters.setUseScanPositionsFile(radiobuttonScannerPosFile.isSelected());
+
+        if(radiobuttonScannerPosFile.isSelected()){
+            transmParameters.setPointsPositionsFile(new File(textfieldScannerPointsPositionsFile.getText()));
+        }else{
+            transmParameters.setCenterPoint(new Point3f(Float.valueOf(textfieldScannerPosCenterX.getText()), 
+                                                        Float.valueOf(textfieldScannerPosCenterY.getText()),
+                                                        Float.valueOf(textfieldScannerPosCenterZ.getText())));
+
+            transmParameters.setWidth(Float.valueOf(textfieldScannerWidthArea.getText()));
+            transmParameters.setStep(Float.valueOf(textfieldScannerStepArea.getText()));
+        }*/
+
+        TransmittanceCfg cfg = new TransmittanceCfg(transmParameters);
+        try {
+            cfg.writeConfiguration(file);
+            
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+
+    @FXML
+    private void onActionButtonSaveExecuteCanopyAnalyzerSimulation(ActionEvent event) {
+        
+        File selectedFile;
+        
+        try {
+            
+            selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
+            if (selectedFile != null) {
+
+                saveCanopyAnalyzerSimulation(selectedFile);
+                addFileToTaskList(selectedFile);
+            }
+            
+        } catch (Exception ex) {
+            logger.error("Cannot write simulation file", ex);
+            return;
+        }
+        
+        executeProcess(selectedFile);
+    }
+    
+    private boolean checkALSVoxelizationParametersValidity(){
+        
+        boolean check1 = checkEntriesAsNumber(textFieldEnterXMin,
+                textFieldEnterYMin,
+                textFieldEnterZMin,
+                textFieldEnterXMax,
+                textFieldEnterYMax,
+                textFieldEnterZMax,
+                textFieldResolution);
+
+        boolean check2;
+        if(checkboxMultiFiles.isSelected()){
+            check2 = checkEntriesAsFile(textFieldInputFileALS, textFieldTrajectoryFileALS, textFieldOutputFileALS);
+        }else{
+            check2 = checkEntriesAsFile(textFieldTrajectoryFileALS, textFieldOutputFileALS);
+        }
+
+        if ((!check1 && !checkboxMultiFiles.isSelected())  || !check2) {
+
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Check entries");
+            alert.setContentText("Some parameters are not set up,\nplease fill the missing arguments");
+
+            alert.showAndWait();
+
+            return false;
+        }
+
+        if (checkboxCalculateGroundEnergy.isSelected() && !checkboxUseDTMFilter.isSelected()) {
+
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setResizable(true);
+            alert.setTitle("INFORMATION");
+            alert.setHeaderText("Incoherence");
+            alert.setContentText("Calculation of ground energy is enabled\nbut DTM filter is not!");
+
+            alert.showAndWait();
+            
+            return false;
+        }
+        
+        return true;
+    }
+    
+    private void saveALSVoxelization(File selectedFile){
+        
+        if(!checkALSVoxelizationParametersValidity()){
+            return;
+        }
+            
+        VoxelParameters voxelParameters = new VoxelParameters();
+
+        if(!checkboxMultiFiles.isSelected()){ 
+            voxelParameters = getVoxelParametersFromUI();
+        }
+
+        boolean correctNaNs = checkboxMultiResAfterMode2.isSelected();
+
+        voxelParameters.setCorrectNaNsMode2(correctNaNs);
+        voxelParameters.setCorrectNaNsNbSamplingThreshold(Float.valueOf(textfieldNbSamplingThresholdMultires.getText()));
+
+        InputType it;
+
+        switch (comboboxModeALS.getSelectionModel().getSelectedIndex()) {
+            case 0:
+                it = InputType.LAS_FILE;
+                break;
+            case 1:
+                it = InputType.LAZ_FILE;
+                break;
+            case 2:
+                it = InputType.POINTS_FILE;
+                break;
+            case 3:
+                it = InputType.SHOTS_FILE;
+                break;
+            default:
+                it = InputType.LAS_FILE;
+        }
+
+        voxelParameters.setUseDTMCorrection(checkboxUseDTMFilter.isSelected());
+        if(checkboxUseDTMFilter.isSelected()){
+            voxelParameters.minDTMDistance = Float.valueOf(textfieldDTMValue.getText());
+            voxelParameters.setDtmFile(new File(textfieldDTMPath.getText()));
+        }
+
+        voxelParameters.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
+        voxelParameters.setTransmittanceMode(0);
+
+        if(checkboxEnableWeighting.isSelected()){
+            voxelParameters.setWeighting(comboboxWeighting.getSelectionModel().getSelectedIndex() + 1);
+        }else{
+            voxelParameters.setWeighting(0);
+        }
+
+        voxelParameters.setWeightingData(VoxelParameters.DEFAULT_ALS_WEIGHTING);
+
+        voxelParameters.setCalculateGroundEnergy(checkboxCalculateGroundEnergy.isSelected());
+        String extension = "";
+
+        if(checkboxCalculateGroundEnergy.isSelected()){
+
+                voxelParameters.setGroundEnergyFile(new File(textFieldOutputFileGroundEnergy.getText()));
+
+                switch (comboboxGroundEnergyOutputFormat.getSelectionModel().getSelectedIndex()) {
+                case 0:
+                    voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_TXT);
+                    extension = ".txt";
+                    break;
+                case 1:
+                    voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_PNG);
+                    extension = ".png";
+                    break;
+                default:
+                    voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_TXT);
+                    extension = ".png";
+            }
+        }
+
+        voxelParameters.setGenerateMultiBandRaster(checkboxGenerateMultiBandRaster.isSelected());
+
+        if(checkboxGenerateMultiBandRaster.isSelected()){
+
+            voxelParameters.setRasterStartingHeight(Float.valueOf(textfieldRasterStartingHeight.getText()));
+            voxelParameters.setRasterHeightStep(Float.valueOf(textfieldRasterHeightStep.getText()));
+            voxelParameters.setShortcutVoxelFileWriting(checkboxDiscardVoxelFileWriting.isSelected());
+            voxelParameters.setRasterResolution(Integer.valueOf(textfieldRasterResolution.getText()));
+            voxelParameters.setRasterBandNumber(Integer.valueOf(textfieldRasterBandNumber.getText()));
+        }
+
+        VoxCfg cfg = null;
+
+        if(!checkboxMultiFiles.isSelected()){
+
+            cfg = new ALSVoxCfg();
+            ((ALSVoxCfg)cfg).setTrajectoryFile(new File(textFieldTrajectoryFileALS.getText()));
+            cfg.setVoxelParameters(voxelParameters);
+            cfg.setInputType(it);
+            cfg.setInputFile(new File(textFieldInputFileALS.getText()));
+
+            /*cfg.setCorrectNaNs(correctNaNs);
+
+            try{
+                float padMax1m = Float.valueOf(textFieldPadMax1m.getText());
+                float padMax2m = Float.valueOf(textFieldPadMax2m.getText());
+                float padMax3m = Float.valueOf(textFieldPadMax3m.getText());
+                float padMax4m = Float.valueOf(textFieldPadMax4m.getText());
+                float padMax5m = Float.valueOf(textFieldPadMax5m.getText());
+                cfg.setMultiResPadMax(new float[]{padMax1m, padMax2m, padMax3m, padMax4m, padMax5m});
+            }catch(Exception e){}
+
+            cfg.setMultiResUseDefaultMaxPad(!checkboxOverwritePadLimit.isSelected());*/
+
+
+        }else{
+
+            File outputPathFile = new File(textFieldOutputFileALS.getText());
+
+            List<File> selectedFiles = new ArrayList<>();
+            String[] split = textFieldInputFileALS.getText().split(";");
+
+            for(String s : split){
+                selectedFiles.add(new File(s));
+            }
+
+            if (selectedFiles.size() > 0) {
+
+                boolean generateRasters = false;
+
+                if (checkboxUseDTMFilter.isSelected()) {
+
+                    ButtonType buttonTypeGenerateRasters = new ButtonType("Yes, generate one raster by file");
+                    ButtonType buttonTypeNo = new ButtonType("No");
+
+                    Alert alert = new Alert(AlertType.CONFIRMATION, "A DTM filter has been detected\n"
+                            + "Would you like to generate one DTM raster file for each point file?\n"
+                            +"This feature is advised to save memory but the process will be slower.",
+                    buttonTypeGenerateRasters, buttonTypeNo);
+
+                    alert.setResizable(true);
+                    alert.setWidth(300);
+                    alert.setTitle("DTM");
+
+                    Optional<ButtonType> result = alert.showAndWait();
+
+                    if(result.get() == buttonTypeGenerateRasters){
+                        generateRasters = true;
+                    }
+                }
+
+                List<Input> inputList = new ArrayList<>();
+                boolean quick = getListOfClassificationPointToDiscard().isEmpty();
+
+                int size = selectedFiles.size();
+                int count = 1;
+
+                RegularDtm dtm = null;
+
+                if(generateRasters){
+
+                    logger.info("Loading DTM file "+voxelParameters.getDtmFile().getAbsolutePath());
+                    try {
+                        dtm = DtmLoader.readFromAscFile(voxelParameters.getDtmFile());
+                        dtm.setTransformationMatrix(MatrixUtility.convertMatrix4dToMat4D(vopMatrix));
+                    } catch (Exception ex) {
+                        logger.error("Cannot read dtm file", ex);
+                    }
+                }
+
+                for (File file : selectedFiles) {
+
+                    logger.info("calculate bounding-box of file "+count+"/"+size);
+
+                    BoundingBox3d boundingBox = calculateAutomaticallyMinAndMax(file, quick);
+
+                    VoxelParameters individualVoxelParameters = new VoxelParameters();
+
+                    individualVoxelParameters.setBottomCorner(boundingBox.min);
+                    individualVoxelParameters.setTopCorner(boundingBox.max);
+
+                    double resolution = Double.valueOf(textFieldResolution.getText());
+
+                    int splitX = (int) Math.ceil((boundingBox.max.x - boundingBox.min.x) / resolution);
+                    int splitY = (int) Math.ceil((boundingBox.max.y - boundingBox.min.y) / resolution);
+                    int splitZ = (int) Math.ceil((boundingBox.max.z - boundingBox.min.z) / resolution);
+
+                    individualVoxelParameters.setSplit(new Point3i(splitX, splitY, splitZ));
+                    individualVoxelParameters.setResolution(resolution);
+
+                    individualVoxelParameters.setCalculateGroundEnergy(checkboxCalculateGroundEnergy.isSelected());
+                    if(voxelParameters.isCalculateGroundEnergy()){
+                        individualVoxelParameters.setGroundEnergyFile(new File(outputPathFile.getAbsolutePath() + "/" + file.getName() + extension));
+                    }
+
+                    List<Input> subList = null;
+
+
+
+                    File dtmFile = null;
+
+                    if(generateRasters && dtm != null){
+
+                        logger.info("Generate DTM raster of file "+count+"/"+size);
+
+                        RegularDtm dtmSubset = dtm.subset(new BoundingBox2F(
+                                new Point2F((float)individualVoxelParameters.getBottomCorner().x, (float)individualVoxelParameters.getBottomCorner().y), 
+                                new Point2F((float)individualVoxelParameters.getTopCorner().x, (float)individualVoxelParameters.getTopCorner().y)), 0);
+
+                        dtmFile = new File(outputPathFile.getAbsolutePath() + File.separator + file.getName() +".asc");
+                        try {
+                            dtmSubset.write(dtmFile);
+                        } catch (IOException ex) {
+                            logger.error("Cannot write dtm file", ex);
+                        }
+                    }
+
+                    File voxFile = new File(outputPathFile.getAbsolutePath() + File.separator + file.getName() +".vox");
+                    inputList.add(new Input(individualVoxelParameters, file, dtmFile, voxFile, subList, new File(outputPathFile.getAbsolutePath() + File.separator + file.getName() +"_multires_.vox")));
+
+                    count++;
+                }
+
+                cfg = new MultiVoxCfg();
+
+                ((MultiVoxCfg)cfg).setMultiProcessInputs(inputList);
+                ((MultiVoxCfg)cfg).setTrajectoryFile(new File(textFieldTrajectoryFileALS.getText()));
+            }
+
+            removeWarnings = false;
+        }
+
+        if(cfg != null){
+
+            cfg.setOutputFile(new File(textFieldOutputFileALS.getText()));
+
+            cfg.setUsePopMatrix(false);
+            cfg.setUseSopMatrix(false);
+            cfg.setUseVopMatrix(checkboxUseVopMatrix.isSelected());
+
+            cfg.setPopMatrix(popMatrix);
+            cfg.setSopMatrix(sopMatrix);
+            cfg.setVopMatrix(vopMatrix);
+
+            cfg.setVoxelParameters(voxelParameters);
+
+            ((ALSVoxCfg)cfg).setClassifiedPointsToDiscard(getListOfClassificationPointToDiscard());
+            cfg.setFilters(listviewFilters.getItems());
+
+            try {
+                cfg.writeConfiguration(selectedFile);
+                
+            } catch (Exception ex) {
+                logger.error("Cannot write configuration file", ex);
+            }
+        }
+    }
+
+    @FXML
+    private void onActionButtonSaveALSVoxelization(ActionEvent event) {
+        
+        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
+        
+        if (selectedFile != null) {
+            saveALSVoxelization(selectedFile);
+            addFileToTaskList(selectedFile);
+        }
+    }
+
+    @FXML
+    private void onActionButtonSaveExecuteALSVoxelization(ActionEvent event) {
+        
+        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
+        
+        if (selectedFile != null) {
+            saveALSVoxelization(selectedFile);
+            addFileToTaskList(selectedFile);
+            executeProcess(selectedFile);
+        }
+        
+    }
+
+    @FXML
+    private void onActionButtonExecuteALSVoxelization(ActionEvent event) {
+        
+        File temporaryFile;
+        try{
+            temporaryFile  = File.createTempFile("cfg_temp", ".xml");
+            saveALSVoxelization(temporaryFile);
+            logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
+            
+        }catch(IOException e){
+            showErrorDialog(e);
+            return;
+        }catch(Exception e){
+            showErrorDialog(e);
+            return;
+        }
+        
+        executeProcess(temporaryFile);
+    }
+
+    @FXML
+    private void onActionButtonExecuteTLSVoxelization(ActionEvent event) {
+        
+        File temporaryFile;
+        try{
+            temporaryFile  = File.createTempFile("cfg_temp", ".xml");
+            saveTLSVoxelization(temporaryFile);
+            logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
+            
+        }catch(IOException e){
+            showErrorDialog(e);
+            return;
+        }catch(Exception e){
+            showErrorDialog(e);
+            return;
+        }
+        
+        executeProcess(temporaryFile);
+    }
+    
+    private boolean checkTLSVoxelizationParametersValidity(){
+        
+        boolean check1 = checkEntriesAsNumber(textFieldEnterXMin,
+                textFieldEnterYMin,
+                textFieldEnterZMin,
+                textFieldEnterXMax,
+                textFieldEnterYMax,
+                textFieldEnterZMax,
+                textFieldResolution);
+
+        boolean check2 = checkEntriesAsFile(textFieldInputFileTLS, textFieldOutputPathTLS);
+
+        if (!check1 || !check2) {
+
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Warning");
+            alert.setHeaderText("Check entries");
+            alert.setContentText("Some parameters are not set up, please fill the missing arguments");
+
+            alert.showAndWait();
+
+            return false;
+        }
+        
+        return true;
+    }
+    
+    private void saveTLSVoxelization(File selectedFile){
+        
+        if(!checkTLSVoxelizationParametersValidity()){
+            return;
+        }
+        
+        VoxelParameters voxelParameters = getVoxelParametersFromUI();
+
+        voxelParameters.setMergingAfter(checkboxMergeAfter.isSelected());
+        voxelParameters.setMergedFile(new File(textFieldOutputPathTLS.getText(), textFieldMergedFileName.getText()));
+
+        if (checkboxEnableWeighting.isSelected()) {
+            voxelParameters.setWeighting(comboboxWeighting.getSelectionModel().getSelectedIndex() + 1);
+            voxelParameters.setWeightingData(VoxelParameters.DEFAULT_TLS_WEIGHTING);
+        } else {
+            voxelParameters.setWeighting(0);
+        }
+
+        InputType it;
+
+        switch (comboboxModeTLS.getSelectionModel().getSelectedIndex()) {
+            case 0:
+                it = InputType.RXP_SCAN;
+                break;
+            case 1:
+                it = InputType.RSP_PROJECT;
+                break;
+            case 2:
+                it = InputType.PTX_PROJECT;
+                break;
+            case 3:
+                it = InputType.PTG_PROJECT;
+                break;
+            case 4:
+                it = InputType.POINTS_FILE;
+                break;
+            case 5:
+                it = InputType.SHOTS_FILE;
+                break;
+            default:
+                it = InputType.RSP_PROJECT;
+        }
+
+        TLSVoxCfg cfg = new TLSVoxCfg();
+        /*
+        VoxelisationConfiguration cfg = new VoxelisationConfiguration(ProcessMode.VOXELISATION_TLS, it,
+                new File(textFieldInputFileTLS.getText()),
+                new File(textFieldTrajectoryFileALS.getText()),
+                new File(textFieldOutputPathTLS.getText()),
+                voxelParameters,
+                checkboxUsePopMatrix.isSelected(), popMatrix,
+                checkboxUseSopMatrix.isSelected(), sopMatrix,
+                checkboxUseVopMatrix.isSelected(), vopMatrix);*/
+
+        cfg.setInputFile(new File(textFieldInputFileTLS.getText()));
+        cfg.setOutputFile(new File(textFieldOutputPathTLS.getText()));
+        cfg.setInputType(it);
+
+        cfg.setUsePopMatrix(checkboxUsePopMatrix.isSelected());
+        cfg.setUseSopMatrix(checkboxUseSopMatrix.isSelected());
+        cfg.setUseVopMatrix(checkboxUseVopMatrix.isSelected());
+
+        cfg.setPopMatrix(popMatrix);
+        cfg.setSopMatrix(sopMatrix);
+        cfg.setVopMatrix(vopMatrix);
+
+        cfg.setVoxelParameters(voxelParameters);
+
+        cfg.setFilters(listviewFilters.getItems());
+
+        if (it == InputType.RSP_PROJECT || it == InputType.PTG_PROJECT || it == InputType.PTX_PROJECT) {
+            cfg.setLidarScans(listviewRxpScans.getItems());
+        }
+
+        cfg.setEchoFilters(filteringPaneController.getFilterList());
+
+        try {
+            cfg.writeConfiguration(selectedFile);
+        } catch (Exception ex) {
+            logger.error("Cannot write configuration file");
+        }
+
+        
+    }
+
+    @FXML
+    private void onActionButtonSaveTLSVoxelization(ActionEvent event) {
+        
+        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
+        if (selectedFile != null) {
+
+            saveTLSVoxelization(selectedFile);
+            addFileToTaskList(selectedFile);
+        }
+    }
+
+    @FXML
+    private void onActionButtonSaveExecuteTLSVoxelization(ActionEvent event) {
+        
+        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
+        if (selectedFile != null) {
+
+            saveTLSVoxelization(selectedFile);
+            executeProcess(selectedFile);
+        }
+    }
+
+    @FXML
+    private void onActionButtonExecuteMergingProcess(ActionEvent event) {
+        
+        File temporaryFile;
+        try{
+            temporaryFile  = File.createTempFile("cfg_temp", ".xml");
+            saveMergingProcess(temporaryFile);
+            logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
+            
+        }catch(IOException e){
+            showErrorDialog(e);
+            return;
+        }catch(Exception e){
+            showErrorDialog(e);
+            return;
+        }
+        
+        executeProcess(temporaryFile);
+    }
+    
+    private void saveMergingProcess(File selectedFile){
+        
+        VoxelParameters voxParameters = new VoxelParameters();
+        voxParameters.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
+
+        VoxMergingCfg cfg = new VoxMergingCfg(new File(textFieldOutputFileMerging.getText()),
+                voxParameters,
+                listViewProductsFiles.getSelectionModel().getSelectedItems());
+
+        try {
+            cfg.writeConfiguration(selectedFile);
+            addFileToTaskList(selectedFile);
+        } catch (Exception ex) {
+            logger.error("Cannot write configuration file", ex);
+        }
+    }
+
+    @FXML
+    private void onActionButtonSaveMergingProcess(ActionEvent event) {
+        
+        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
+        if (selectedFile != null) {
+            saveMergingProcess(selectedFile);
+        }
+    }
+
+    @FXML
+    private void onActionButtonSaveExecuteMergingProcess(ActionEvent event) {
+        
+        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
+        if (selectedFile != null) {
+            saveMergingProcess(selectedFile);
+            executeProcess(selectedFile);
+        }
+    }
+
+    @FXML
+    private void onActionButtonSaveCanopyAnalyzerDirections(ActionEvent event) {
+        
+        
+        ChoiceDialog<String> choiceDialog = new ChoiceDialog<>();
+        choiceDialog.getItems().addAll("OBJ", "CSV (spherical coordinates)", "CSV (cartesian coordinates)");
+        choiceDialog.setSelectedItem("OBJ");
+
+        choiceDialog.setTitle("Output format");
+        choiceDialog.setContentText("Choose the output format");
+
+        Optional<String> result = choiceDialog.showAndWait();
+        
+        if (result.isPresent()) {
+
+            String format = result.get();
+
+            boolean csv = (format.equals("csv (spherical coordinates)") || format.equals("csv (cartesian coordinates)"));
+
+            boolean cartesian = format.equals("csv (cartesian coordinates)") && csv;
+
+            FileChooser fc = new FileChooser();
+            File selectedFile = fc.showSaveDialog(stage);
+
+            if (selectedFile != null) {
+                
+                LAI2xxx lAi2xxx = new LAI2200(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem(),
+                        LAI2xxx.ViewCap.CAP_360, new boolean[]{false, false, false, false, false});
+
+                lAi2xxx.computeDirections();
+                Vector3f[] directions = lAi2xxx.getDirections();
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile))) {
+
+                    if (csv) {
+                        if (cartesian) {
+                            writer.write("X_cartesian Y_cartesian Z_cartesian");
+                        } else {
+                            writer.write("azimut elevation");
+                        }
+                    }
+
+                    SphericalCoordinates sc = new SphericalCoordinates();
+
+                    for (Vector3f direction : directions) {
+
+                        if (csv) {
+                            if (cartesian) {
+                                writer.write(direction.x + " " + direction.y + " " + direction.z + "\n");
+                            } else {
+                                sc.toSpherical(new Vector3d(direction));
+                                writer.write(sc.getAzimuth() + " " + sc.getElevation() + "\n");
+                            }
+                        } else {
+                            writer.write("v " + direction.x + " " + direction.y + " " + direction.z + "\n");
+                        }
+                    }
+
+                } catch (IOException ex) {
+                    showErrorDialog(ex);
+                }
+            }
+        }
+        
+    }
+    
+    private class SceneObjectProperty{
+        
+        private String name;
+        private String value;
+
+        public SceneObjectProperty(String name, String value) {
+            this.name = name;
+            this.value = value;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+    
+    private void addMenuItemPadValue(MenuItem menuItem, final float value){
+                
+        menuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                textFieldPADMax.setText(String.valueOf(value));
+            }
+        });
+    }
+    
+    private void showImage(File file){
+        
+        try {
+            ImageView iv = new ImageView(new Image(Files.newInputStream(file.toPath())));
+            iv.setPreserveRatio(true);
+            Stage stage = new Stage();
+            
+            final DoubleProperty zoomProperty = new SimpleDoubleProperty(200);
+            
+            zoomProperty.addListener(new InvalidationListener() {
+                @Override
+                public void invalidated(javafx.beans.Observable observable) {
+                    iv.setFitWidth(zoomProperty.get() * 4);
+                    iv.setFitHeight(zoomProperty.get() * 3);
+                }
+            });
+            
+            ScrollPane sp = new ScrollPane(iv);
+            stage.addEventFilter(ScrollEvent.ANY, new EventHandler<ScrollEvent>() {
+                @Override
+                public void handle(ScrollEvent event) {
+                    if (event.getDeltaY() > 0) {
+                        zoomProperty.set(zoomProperty.get() * 1.1);
+                    } else if (event.getDeltaY() < 0) {
+                        zoomProperty.set(zoomProperty.get() / 1.1);
+                    }
+                }
+            });
+            
+            
+            stage.setScene(new Scene(new Group(sp)));
+
+            stage.sizeToScene();
+            stage.show();
+        } catch (IOException ex) {
+            showErrorDialog(ex);
+        }
+        
     }
     
     private void initEchoFiltering(){
