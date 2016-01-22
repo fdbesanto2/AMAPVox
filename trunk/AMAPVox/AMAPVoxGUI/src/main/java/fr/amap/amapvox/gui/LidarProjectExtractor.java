@@ -5,7 +5,7 @@
  */
 package fr.amap.amapvox.gui;
 
-import fr.amap.amapvox.math.matrix.Mat4D;
+import fr.amap.commons.math.matrix.Mat4D;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;

@@ -15,7 +15,7 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.amapvox.datastructure.voxel;
 
-import fr.amap.amapvox.commons.io.file.FileManager;
+import fr.amap.commons.util.io.file.FileManager;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;

@@ -7,8 +7,8 @@ package fr.amap.amapvox.voxviewer.object.scene;
 
 import fr.amap.amapvox.commons.util.Statistic;
 import fr.amap.amapvox.datastructure.octree.Octree;
-import fr.amap.amapvox.math.point.Point3F;
-import fr.amap.amapvox.math.vector.Vec3F;
+import fr.amap.commons.math.point.Point3F;
+import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.amapvox.voxviewer.mesh.GLMeshFactory;
 import fr.amap.amapvox.voxviewer.mesh.PointCloudGLMesh;
 import gnu.trove.list.array.TFloatArrayList;

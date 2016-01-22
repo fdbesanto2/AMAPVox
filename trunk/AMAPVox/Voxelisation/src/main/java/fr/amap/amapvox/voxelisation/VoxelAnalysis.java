@@ -1,7 +1,7 @@
 package fr.amap.amapvox.voxelisation;
 
 import fr.amap.amapvox.commons.util.Statistic;
-import fr.amap.amapvox.math.point.Point3I;
+import fr.amap.commons.math.point.Point3I;
 import fr.amap.amapvox.commons.util.TimeCounter;
 import fr.amap.amapvox.datastructure.octree.Octree;
 import fr.amap.amapvox.io.tls.rxp.Shot;
@@ -13,11 +13,11 @@ import fr.amap.amapvox.jeeb.raytracing.voxel.VoxelManager;
 import fr.amap.amapvox.jeeb.raytracing.voxel.VoxelManager.VoxelCrossingContext;
 import fr.amap.amapvox.jeeb.raytracing.voxel.VoxelManagerSettings;
 import fr.amap.amapvox.jeeb.raytracing.voxel.VoxelSpace;
-import fr.amap.amapvox.jraster.asc.RegularDtm;
-import fr.amap.amapvox.jraster.braster.BCommon;
-import fr.amap.amapvox.jraster.braster.BHeader;
-import fr.amap.amapvox.jraster.braster.BSQ;
-import fr.amap.amapvox.math.point.Point3D;
+import fr.amap.commons.raster.asc.RegularDtm;
+import fr.amap.commons.raster.multiband.BCommon;
+import fr.amap.commons.raster.multiband.BHeader;
+import fr.amap.commons.raster.multiband.BSQ;
+import fr.amap.commons.math.point.Point3D;
 import fr.amap.amapvox.voxelisation.configuration.VoxCfg;
 import fr.amap.amapvox.voxelisation.configuration.VoxelParameters;
 import java.io.BufferedWriter;

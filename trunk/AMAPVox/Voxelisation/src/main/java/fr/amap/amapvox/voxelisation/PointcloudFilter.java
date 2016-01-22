@@ -15,8 +15,8 @@ For further information, please contact Gregoire Vincent.
 package fr.amap.amapvox.voxelisation;
 
 import fr.amap.amapvox.datastructure.octree.Octree;
-import fr.amap.amapvox.math.point.Point3D;
-import fr.amap.amapvox.math.point.Point3F;
+import fr.amap.commons.math.point.Point3D;
+import fr.amap.commons.math.point.Point3F;
 import java.io.File;
 import javax.vecmath.Point3d;
 

@@ -15,10 +15,10 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.amapvox.datastructure.pointcloud;
 
-import fr.amap.amapvox.math.geometry.BoundingBox3F;
-import fr.amap.amapvox.math.matrix.Mat4D;
-import fr.amap.amapvox.math.point.Point3F;
-import fr.amap.amapvox.math.vector.Vec4D;
+import fr.amap.commons.math.geometry.BoundingBox3F;
+import fr.amap.commons.math.matrix.Mat4D;
+import fr.amap.commons.math.point.Point3F;
+import fr.amap.commons.math.vector.Vec4D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;

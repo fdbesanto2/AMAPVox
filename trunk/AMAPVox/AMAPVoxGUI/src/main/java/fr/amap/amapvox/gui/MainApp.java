@@ -1,7 +1,7 @@
 package fr.amap.amapvox.gui;
 
 import com.sun.management.OperatingSystemMXBean;
-import fr.amap.amapvox.chart.ChartViewer;
+import fr.amap.commons.javafx.chart.ChartViewer;
 import fr.amap.amapvox.chart.VoxelsToChart;
 import java.io.File;
 import java.lang.management.ManagementFactory;

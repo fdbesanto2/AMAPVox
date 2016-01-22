@@ -15,9 +15,9 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.amapvox.datastructure.octree;
 
-import fr.amap.amapvox.math.point.Point3D;
-import fr.amap.amapvox.math.point.Point3F;
-import fr.amap.amapvox.math.point.Point3I;
+import fr.amap.commons.math.point.Point3D;
+import fr.amap.commons.math.point.Point3F;
+import fr.amap.commons.math.point.Point3I;
 import java.util.Arrays;
 
 /**

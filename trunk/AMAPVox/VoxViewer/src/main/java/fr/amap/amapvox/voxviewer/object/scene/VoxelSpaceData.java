@@ -5,8 +5,8 @@
  */
 package fr.amap.amapvox.voxviewer.object.scene;
 
-import fr.amap.amapvox.math.point.Point3F;
-import fr.amap.amapvox.math.point.Point3I;
+import fr.amap.commons.math.point.Point3F;
+import fr.amap.commons.math.point.Point3I;
 import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
 import java.util.ArrayList;
 

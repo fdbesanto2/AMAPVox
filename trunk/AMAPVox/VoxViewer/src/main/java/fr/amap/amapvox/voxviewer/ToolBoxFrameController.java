@@ -6,7 +6,7 @@ package fr.amap.amapvox.voxviewer;
  * and open the template in the editor.
  */
 
-import fr.amap.amapvox.math.vector.Vec3F;
+import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.amapvox.commons.util.ColorGradient;
 import fr.amap.amapvox.commons.util.CombinedFilter;
 import fr.amap.amapvox.commons.util.Filter;

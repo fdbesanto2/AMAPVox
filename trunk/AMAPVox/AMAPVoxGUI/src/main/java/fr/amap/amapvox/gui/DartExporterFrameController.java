@@ -14,7 +14,7 @@ For further information, please contact Gregoire Vincent.
  */
 
 
-import fr.amap.amapvox.math.matrix.Mat4D;
+import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.amapvox.commons.util.MatrixFileParser;
 import fr.amap.amapvox.commons.util.MatrixUtility;
 import fr.amap.amapvox.jdart.DartWriter;

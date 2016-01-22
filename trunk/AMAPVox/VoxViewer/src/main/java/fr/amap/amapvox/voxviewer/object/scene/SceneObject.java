@@ -6,10 +6,10 @@
 package fr.amap.amapvox.voxviewer.object.scene;
 
 import com.jogamp.opengl.GL3;
-import fr.amap.amapvox.math.matrix.Mat4F;
-import fr.amap.amapvox.math.point.Point3F;
-import fr.amap.amapvox.math.vector.Vec3F;
-import fr.amap.amapvox.math.vector.Vec4F;
+import fr.amap.commons.math.matrix.Mat4F;
+import fr.amap.commons.math.point.Point3F;
+import fr.amap.commons.math.vector.Vec3F;
+import fr.amap.commons.math.vector.Vec4F;
 import fr.amap.amapvox.voxviewer.loading.shader.Shader;
 import fr.amap.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.amapvox.voxviewer.mesh.GLMesh;

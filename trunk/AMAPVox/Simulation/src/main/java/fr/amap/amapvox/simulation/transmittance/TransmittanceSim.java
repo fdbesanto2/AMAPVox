@@ -10,7 +10,7 @@ import fr.amap.amapvox.jeeb.workspace.sunrapp.light.SolarRadiation;
 import fr.amap.amapvox.jeeb.workspace.sunrapp.light.Turtle;
 import fr.amap.amapvox.jeeb.workspace.sunrapp.util.Colouring;
 import fr.amap.amapvox.jeeb.workspace.sunrapp.util.Time;
-import fr.amap.amapvox.math.matrix.Mat4D;
+import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.amapvox.simulation.transmittance.util.Period;
 import java.awt.Color;
 import java.awt.Graphics2D;

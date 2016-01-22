@@ -1,5 +1,6 @@
 package fr.amap.amapvox.gui;
 
+import fr.amap.commons.javafx.io.TextFileParserFrameController;
 import java.io.File;
 import java.util.List;
 import javafx.application.Application;

@@ -6,7 +6,7 @@
 package fr.amap.amapvox.voxviewer.loading.shader;
 
 import com.jogamp.opengl.GL3;
-import fr.amap.amapvox.math.vector.Vec3F;
+import fr.amap.commons.math.vector.Vec3F;
 
 /**
  *

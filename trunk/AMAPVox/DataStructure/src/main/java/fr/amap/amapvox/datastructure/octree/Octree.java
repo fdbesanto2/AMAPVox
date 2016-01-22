@@ -15,11 +15,11 @@ For further information, please contact Gregoire Vincent.
 package fr.amap.amapvox.datastructure.octree;
 
 import fr.amap.amapvox.commons.util.Statistic;
-import fr.amap.amapvox.math.geometry.BoundingBox3D;
-import fr.amap.amapvox.math.geometry.BoundingBox3F;
-import fr.amap.amapvox.math.geometry.Intersection;
-import fr.amap.amapvox.math.point.Point3D;
-import fr.amap.amapvox.math.point.Point3F;
+import fr.amap.commons.math.geometry.BoundingBox3D;
+import fr.amap.commons.math.geometry.BoundingBox3F;
+import fr.amap.commons.math.geometry.Intersection;
+import fr.amap.commons.math.point.Point3D;
+import fr.amap.commons.math.point.Point3F;
 import java.util.ArrayList;
 import java.util.List;
 

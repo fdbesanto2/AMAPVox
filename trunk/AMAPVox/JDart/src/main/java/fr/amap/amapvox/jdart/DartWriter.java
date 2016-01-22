@@ -5,15 +5,15 @@
  */
 package fr.amap.amapvox.jdart;
 
-import fr.amap.amapvox.math.matrix.Mat4D;
-import fr.amap.amapvox.math.point.Point2F;
-import fr.amap.amapvox.math.point.Point3F;
-import fr.amap.amapvox.math.point.Point3I;
-import fr.amap.amapvox.math.geometry.BoundingBox2F;
-import fr.amap.amapvox.jraster.asc.DTMPoint;
-import fr.amap.amapvox.jraster.asc.DtmLoader;
-import fr.amap.amapvox.jraster.asc.Face;
-import fr.amap.amapvox.jraster.asc.RegularDtm;
+import fr.amap.commons.math.matrix.Mat4D;
+import fr.amap.commons.math.point.Point2F;
+import fr.amap.commons.math.point.Point3F;
+import fr.amap.commons.math.point.Point3I;
+import fr.amap.commons.math.geometry.BoundingBox2F;
+import fr.amap.commons.raster.asc.DTMPoint;
+import fr.amap.commons.raster.asc.DtmLoader;
+import fr.amap.commons.raster.asc.Face;
+import fr.amap.commons.raster.asc.RegularDtm;
 import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelObject;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;

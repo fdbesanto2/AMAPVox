@@ -7,7 +7,7 @@ package fr.amap.amapvox.voxviewer.loading.shader;
 
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL3;
-import fr.amap.amapvox.math.matrix.Mat4F;
+import fr.amap.commons.math.matrix.Mat4F;
 import java.nio.FloatBuffer;
 
 /**

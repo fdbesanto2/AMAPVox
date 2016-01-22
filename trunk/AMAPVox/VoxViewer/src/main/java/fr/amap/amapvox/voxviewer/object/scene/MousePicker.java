@@ -6,11 +6,11 @@
 package fr.amap.amapvox.voxviewer.object.scene;
 
 import fr.amap.amapvox.commons.util.MatrixUtility;
-import fr.amap.amapvox.math.matrix.Mat4F;
-import fr.amap.amapvox.math.point.Point3F;
-import fr.amap.amapvox.math.vector.Vec2F;
-import fr.amap.amapvox.math.vector.Vec3F;
-import fr.amap.amapvox.math.vector.Vec4F;
+import fr.amap.commons.math.matrix.Mat4F;
+import fr.amap.commons.math.point.Point3F;
+import fr.amap.commons.math.vector.Vec2F;
+import fr.amap.commons.math.vector.Vec3F;
+import fr.amap.commons.math.vector.Vec4F;
 import fr.amap.amapvox.voxviewer.object.camera.Camera;
 import javax.vecmath.Matrix4f;
 

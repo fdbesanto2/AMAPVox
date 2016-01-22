@@ -6,8 +6,8 @@
 package fr.amap.amapvox.voxviewer.event;
 
 import com.jogamp.opengl.util.FPSAnimator;
-import fr.amap.amapvox.math.point.Point3F;
-import fr.amap.amapvox.math.vector.Vec3F;
+import fr.amap.commons.math.point.Point3F;
+import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.SceneObject;
 import fr.amap.amapvox.voxviewer.renderer.JoglListener;

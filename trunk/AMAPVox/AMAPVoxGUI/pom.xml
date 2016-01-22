@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>fr.amap.amapvox</groupId>
-        <artifactId>AMAPVox</artifactId>
+        <groupId>fr.amap.lidar</groupId>
+        <artifactId>amapvox</artifactId>
         <version>1.0</version>
     </parent>
     <artifactId>AMAPVoxGUI</artifactId>
@@ -186,18 +186,18 @@
             <version>8.40.9</version>
         </dependency>
         <dependency>
-            <groupId>javax.vecmath</groupId>
-            <artifactId>vecmath</artifactId>
-            <version>1.5.2</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.amap.amapvox</groupId>
-            <artifactId>commons</artifactId>
+            <groupId>fr.amap.commons</groupId>
+            <artifactId>commons-util</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.amapvox</groupId>
-            <artifactId>Math</artifactId>
+            <groupId>fr.amap.commons</groupId>
+            <artifactId>commons-math</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.amap.commons</groupId>
+            <artifactId>commons-javafx</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
@@ -206,13 +206,13 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.amapvox</groupId>
-            <artifactId>JLas</artifactId>
+            <groupId>fr.amap.lidar</groupId>
+            <artifactId>format-las</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.amapvox.LidarFormat</groupId>
-            <artifactId>LidarFormat-JRiegl</artifactId>
+            <groupId>fr.amap.lidar</groupId>
+            <artifactId>format-riegl</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
@@ -231,8 +231,8 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.amapvox</groupId>
-            <artifactId>JLeica</artifactId>
+            <groupId>fr.amap.lidar</groupId>
+            <artifactId>format-gridded</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
@@ -268,11 +268,6 @@
         <dependency>
             <groupId>fr.amap.amapvox</groupId>
             <artifactId>Chart</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.amap.amapvox</groupId>
-            <artifactId>Gui</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>

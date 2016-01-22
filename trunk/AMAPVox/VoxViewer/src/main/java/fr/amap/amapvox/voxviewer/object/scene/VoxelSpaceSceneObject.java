@@ -7,11 +7,11 @@ package fr.amap.amapvox.voxviewer.object.scene;
 
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL3;
-import fr.amap.amapvox.math.geometry.AABB;
-import fr.amap.amapvox.math.geometry.Plane;
-import fr.amap.amapvox.math.point.Point3F;
-import fr.amap.amapvox.math.vector.Vec3F;
-import fr.amap.amapvox.math.geometry.BoundingBox3F;
+import fr.amap.commons.math.geometry.AABB;
+import fr.amap.commons.math.geometry.Plane;
+import fr.amap.commons.math.point.Point3F;
+import fr.amap.commons.math.vector.Vec3F;
+import fr.amap.commons.math.geometry.BoundingBox3F;
 import fr.amap.amapvox.commons.util.ColorGradient;
 import fr.amap.amapvox.commons.util.CombinedFilter;
 import fr.amap.amapvox.commons.util.CombinedFilters;

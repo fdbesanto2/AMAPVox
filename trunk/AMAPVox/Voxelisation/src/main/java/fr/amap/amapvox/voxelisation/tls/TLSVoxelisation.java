@@ -5,9 +5,9 @@
  */
 package fr.amap.amapvox.voxelisation.tls;
 
-import fr.amap.amapvox.jraster.asc.RegularDtm;
-import fr.amap.amapvox.math.matrix.Mat3D;
-import fr.amap.amapvox.math.matrix.Mat4D;
+import fr.amap.commons.raster.asc.RegularDtm;
+import fr.amap.commons.math.matrix.Mat3D;
+import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.amapvox.voxelisation.SimpleShotFilter;
 import fr.amap.amapvox.voxelisation.VoxelAnalysis;

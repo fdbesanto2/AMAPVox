@@ -13,7 +13,7 @@
  */
 package fr.amap.amapvox.jdart;
 
-import fr.amap.amapvox.commons.io.file.FileManager;
+import fr.amap.commons.util.io.file.FileManager;
 import fr.amap.amapvox.commons.util.Cancellable;
 import fr.amap.amapvox.datastructure.voxel.VoxelSpaceHeader;
 import java.io.BufferedReader;

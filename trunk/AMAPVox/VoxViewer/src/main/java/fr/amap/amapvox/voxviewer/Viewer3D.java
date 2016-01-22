@@ -159,7 +159,6 @@ public class Viewer3D {
         //Application.launch(FXViewer3D.class, "--width=853", "--height=512", "--input=/home/calcul/Documents/Julien/Sortie voxels/ALS/Paracou/2013/dalle9/las_2m.vox" ,"--attribut=PadBVTotal");
         //Application.launch(FXViewer3D.class, "--width=853", "--height=512", "--input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox" ,"--attribut=PadBVTotal");
         
-        TmpClass.execute();
     }
     
     

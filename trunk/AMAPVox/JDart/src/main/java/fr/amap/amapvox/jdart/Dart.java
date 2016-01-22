@@ -5,8 +5,8 @@
  */
 package fr.amap.amapvox.jdart;
 
-import fr.amap.amapvox.math.point.Point3F;
-import fr.amap.amapvox.math.point.Point3I;
+import fr.amap.commons.math.point.Point3F;
+import fr.amap.commons.math.point.Point3I;
 
 
 /**

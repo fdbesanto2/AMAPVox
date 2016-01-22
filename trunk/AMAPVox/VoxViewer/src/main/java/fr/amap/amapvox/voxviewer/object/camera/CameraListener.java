@@ -4,8 +4,8 @@
  */
 package fr.amap.amapvox.voxviewer.object.camera;
 
-import fr.amap.amapvox.math.matrix.Mat4F;
-import fr.amap.amapvox.math.vector.Vec3F;
+import fr.amap.commons.math.matrix.Mat4F;
+import fr.amap.commons.math.vector.Vec3F;
 import java.util.EventListener;
 
 /**

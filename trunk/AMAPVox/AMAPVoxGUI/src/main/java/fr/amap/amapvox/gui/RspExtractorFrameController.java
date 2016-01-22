@@ -9,7 +9,7 @@ import fr.amap.amapvox.commons.util.LidarScan;
 import fr.amap.amapvox.commons.util.MatrixUtility;
 import fr.amap.amapvox.io.tls.rsp.Rsp;
 import fr.amap.amapvox.io.tls.rsp.Scans;
-import fr.amap.amapvox.math.matrix.Mat4D;
+import fr.amap.commons.math.matrix.Mat4D;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;

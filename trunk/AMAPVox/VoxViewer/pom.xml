@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>fr.amap.amapvox</groupId>
-        <artifactId>AMAPVox</artifactId>
+        <groupId>fr.amap.lidar</groupId>
+        <artifactId>amapvox</artifactId>
         <version>1.0</version>
     </parent>
     <artifactId>VoxViewer</artifactId>
@@ -38,8 +38,8 @@
             <version>2.3.2</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.amapvox</groupId>
-            <artifactId>Math</artifactId>
+            <groupId>fr.amap.commons</groupId>
+            <artifactId>commons-math</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
@@ -53,8 +53,8 @@
             <version>2.0.1</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.amapvox</groupId>
-            <artifactId>JRaster</artifactId>
+            <groupId>fr.amap.commons</groupId>
+            <artifactId>commons-raster</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
@@ -84,13 +84,13 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.amapvox</groupId>
-            <artifactId>JLas</artifactId>
+            <groupId>fr.amap.lidar</groupId>
+            <artifactId>format-las</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.amapvox</groupId>
-            <artifactId>JRiegl</artifactId>
+            <groupId>fr.amap.lidar</groupId>
+            <artifactId>format-riegl</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>

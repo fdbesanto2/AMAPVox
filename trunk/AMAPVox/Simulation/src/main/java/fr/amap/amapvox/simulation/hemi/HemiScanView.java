@@ -25,10 +25,10 @@ import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 
 import fr.amap.amapvox.jeeb.workspace.sunrapp.geometry.Transformations;
-import fr.amap.amapvox.math.matrix.Mat3D;
-import fr.amap.amapvox.math.matrix.Mat4D;
-import fr.amap.amapvox.math.vector.Vec3D;
-import fr.amap.amapvox.math.vector.Vec4D;
+import fr.amap.commons.math.matrix.Mat3D;
+import fr.amap.commons.math.matrix.Mat4D;
+import fr.amap.commons.math.vector.Vec3D;
+import fr.amap.commons.math.vector.Vec4D;
 import fr.amap.amapvox.simulation.transmittance.TransmittanceParameters;
 import fr.amap.amapvox.simulation.transmittance.TransmittanceSim;
 import fr.amap.amapvox.voxelisation.EchoFilter;

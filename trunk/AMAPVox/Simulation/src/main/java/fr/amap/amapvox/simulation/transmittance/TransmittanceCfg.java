@@ -14,7 +14,7 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.amapvox.simulation.transmittance;
 
-import fr.amap.amapvox.commons.configuration.Configuration;
+import fr.amap.commons.util.configuration.Configuration;
 import static fr.amap.amapvox.simulation.transmittance.TransmittanceParameters.Mode.LAI2000;
 import static fr.amap.amapvox.simulation.transmittance.TransmittanceParameters.Mode.LAI2200;
 import fr.amap.amapvox.simulation.transmittance.util.Period;

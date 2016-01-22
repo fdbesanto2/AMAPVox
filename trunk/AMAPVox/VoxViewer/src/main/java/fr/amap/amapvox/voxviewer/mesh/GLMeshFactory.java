@@ -6,12 +6,12 @@
 package fr.amap.amapvox.voxviewer.mesh;
 
 import com.jogamp.common.nio.Buffers;
-import fr.amap.amapvox.math.vector.Vec3F;
-import fr.amap.amapvox.math.vector.Vec3I;
+import fr.amap.commons.math.vector.Vec3F;
+import fr.amap.commons.math.vector.Vec3I;
 import fr.amap.amapvox.commons.util.ColorGradient;
-import fr.amap.amapvox.jraster.asc.DTMPoint;
-import fr.amap.amapvox.jraster.asc.Face;
-import fr.amap.amapvox.jraster.asc.RegularDtm;
+import fr.amap.commons.raster.asc.DTMPoint;
+import fr.amap.commons.raster.asc.Face;
+import fr.amap.commons.raster.asc.RegularDtm;
 import fr.amap.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.amapvox.voxviewer.object.mesh.Grid;
 import java.awt.Color;

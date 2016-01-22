@@ -5,7 +5,7 @@
  */
 package fr.amap.amapvox.voxcommons;
 
-import fr.amap.amapvox.math.point.Point3I;
+import fr.amap.commons.math.point.Point3I;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

@@ -5,12 +5,12 @@
  */
 package fr.amap.amapvox.voxelisation.als;
 
-import fr.amap.amapvox.math.matrix.Mat4D;
+import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.amapvox.commons.util.Filter;
 import fr.amap.amapvox.commons.util.Processing;
 import fr.amap.amapvox.commons.util.ProcessingListener;
 import fr.amap.amapvox.io.tls.rxp.Shot;
-import fr.amap.amapvox.jraster.asc.RegularDtm;
+import fr.amap.commons.raster.asc.RegularDtm;
 import fr.amap.amapvox.voxelisation.SimpleShotFilter;
 import fr.amap.amapvox.voxelisation.VoxelAnalysis;
 import fr.amap.amapvox.voxelisation.configuration.VoxCfg;

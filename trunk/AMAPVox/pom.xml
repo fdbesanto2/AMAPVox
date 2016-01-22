@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>fr.amap.amapvox</groupId>
-    <artifactId>AMAPVox</artifactId>
+    <groupId>fr.amap.lidar</groupId>
+    <artifactId>amapvox</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
     <properties>
@@ -12,24 +12,17 @@
     
     <modules>
         <module>DataStructure</module>
-        <module>JLas</module>
-        <module>JRaster</module>
         <module>VoxViewer</module>
         <module>Simulation</module>
         <module>AMAPVoxGUI</module>
         <module>JDart</module>
         <module>Voxelisation</module>
         <module>JeebLight</module>
-        <module>Commons</module>
         <module>Chart</module>
         <module>VoxCommons</module>
         <module>VoxReader</module>
         <module>VoxWriter</module>
         <module>VoxChecking</module>
-        <module>Math</module>
-        <module>Gui</module>
-        <module>JLeica</module>
-        <module>JRiegl</module>
     </modules>
     
     <distributionManagement>        

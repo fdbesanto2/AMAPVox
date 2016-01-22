@@ -8,7 +8,7 @@ package fr.amap.amapvox.voxviewer.loading.texture;
 import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
-import fr.amap.amapvox.commons.util.image.ScaleGradient;
+import fr.amap.commons.util.image.ScaleGradient;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;

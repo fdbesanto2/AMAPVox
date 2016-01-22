@@ -5,7 +5,7 @@
  */
 package fr.amap.amapvox.voxelisation;
 
-import fr.amap.amapvox.commons.configuration.Configuration;
+import fr.amap.commons.util.configuration.Configuration;
 import fr.amap.amapvox.commons.util.CommandLineParser;
 import java.io.File;
 import java.io.IOException;
