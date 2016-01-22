@@ -1,6 +1,6 @@
 #!/bin/sh
 
-freeMemory=`cat /proc/meminfo | grep MemFree | awk '{ print $2 }'`
+freeMemory=`free | grep Mem | awk '{print $4}'`
 offset=2097152
 maxMemory=$(($freeMemory - $offset))
 echo Java max heap size fixed to ${maxMemory}k

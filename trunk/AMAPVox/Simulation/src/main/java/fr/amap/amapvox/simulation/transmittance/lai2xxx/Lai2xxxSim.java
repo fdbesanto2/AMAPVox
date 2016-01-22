@@ -377,9 +377,9 @@ public class Lai2xxxSim {
 
                 //bw.write("posX\tposY\tposZ\tLAI\tGAP[1]\tGAP[2]\tGAP[3]\tGAP[4]\tGAP[5]\n");
                 //test
-                bw.write("posX\tposY\tposZ\tLAI\tGAP[1]\tGAP[2]\tGAP[3]\tGAP[4]\tGAP[5]"
+                bw.write("posX\tposY\tposZ\tLAI\tGAP[1]\tGAP[2]\tGAP[3]\tGAP[4]\tGAP[5]"/*
                         + "\tGAP[1]_normalized\tGAP[2]_normalized\tGAP[3]_normalized\tGAP[4]_normalized\tGAP[5]_normalized"
-                        + "\tGAP[1]_mean_pathLength\tGAP[2]_mean_pathLength\tGAP[3]_mean_pathLength\tGAP[4]_mean_pathLength\tGAP[5]_mean_pathLength\n");
+                        + "\tGAP[1]_mean_pathLength\tGAP[2]_mean_pathLength\tGAP[3]_mean_pathLength\tGAP[4]_mean_pathLength\tGAP[5]_mean_pathLength*/+"\n");
                 
                 for(int i =0 ; i<positions.size() ; i++){
 

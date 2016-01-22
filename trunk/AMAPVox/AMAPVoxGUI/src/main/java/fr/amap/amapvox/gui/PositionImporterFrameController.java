@@ -125,7 +125,7 @@ public class PositionImporterFrameController implements Initializable {
         
         if(selectedFile != null){
             textFileParserFrameController.setColumnAssignment(true);
-            textFileParserFrameController.setColumnAssignmentValues("X", "Y", "Z");
+            textFileParserFrameController.setColumnAssignmentValues("X", "Y", "Z", "Ignore");
             textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(0, 0);
             textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(1, 1);
             textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(2, 2);
@@ -209,20 +209,26 @@ public class PositionImporterFrameController implements Initializable {
                                                 }
 
                                                 String[] lineSplitted = line.split(separator);
-                                                
+                                                                                                
                                                 double x = 0, y = 0, z = 0;
-                                                if(finalXIndex != -1){
-                                                    x = Double.valueOf(lineSplitted[finalXIndex]);
-                                                }
-                                                if(finalYIndex != -1){
-                                                    y = Double.valueOf(lineSplitted[finalYIndex]);
-                                                }
-                                                if(finalZIndex != -1){
-                                                    z = Double.valueOf(lineSplitted[finalZIndex]);
+                                                
+                                                try {
+
+                                                    if (finalXIndex != -1) {
+                                                        x = Double.valueOf(lineSplitted[finalXIndex]);
+                                                    }
+                                                    if (finalYIndex != -1) {
+                                                        y = Double.valueOf(lineSplitted[finalYIndex]);
+                                                    }
+                                                    if (finalZIndex != -1) {
+                                                        z = Double.valueOf(lineSplitted[finalZIndex]);
+                                                    }
+
+                                                    positions.add(new Point3d(x, y, z));
+                                                } catch (Exception e) {
+                                                    logger.error("Cannot parse line "+(count+1));
                                                 }
                                                 
-                                                positions.add(new Point3d(x, y, z));
-
                                                 count++;
                                             }
 

@@ -29,6 +29,7 @@
         <module>Math</module>
         <module>Gui</module>
         <module>JLeica</module>
+        <module>JRiegl</module>
     </modules>
     
     <distributionManagement>        
