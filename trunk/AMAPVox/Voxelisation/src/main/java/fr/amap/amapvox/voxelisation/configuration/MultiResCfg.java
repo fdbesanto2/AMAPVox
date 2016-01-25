@@ -14,7 +14,7 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.amapvox.voxelisation.configuration;
 
-import fr.amap.commons.util.configuration.Configuration;
+import fr.amap.lidar.amapvox.commons.Configuration;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

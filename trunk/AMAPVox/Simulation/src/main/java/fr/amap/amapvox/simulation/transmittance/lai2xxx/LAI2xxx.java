@@ -80,9 +80,9 @@ public abstract class LAI2xxx {
     public float[][] transmittances;
     
     //test
-//    public float[][] normalizedTransmittances;
-//    public float[][] pathLengths;
-//    protected int[][] countByPositionAndRing2;
+    public float[][] normalizedTransmittances;
+    public float[][] pathLengths;
+    protected int[][] countByPositionAndRing2;
     
     protected float[] byPosition_LAI;
     protected float global_LAI; //lai for all positions
@@ -160,14 +160,14 @@ public abstract class LAI2xxx {
 //        countByPositionAndRing2 = new int[positionNumber][rings.length];
     }
     
-//    public void addNormalizedTransmittance(int ringID, int position, float transmittance, float pathLength){
-//        
-//        if(ringID < rings.length && position < positionNumber){
-//            normalizedTransmittances[ringID][position] += transmittance;
-//            countByPositionAndRing2[position][ringID] ++;
-//            pathLengths[ringID][position] += pathLength;
-//        }
-//    }
+    public void addNormalizedTransmittance(int ringID, int position, float transmittance, float pathLength){
+        
+        if(ringID < rings.length && position < positionNumber){
+            normalizedTransmittances[ringID][position] += transmittance;
+            countByPositionAndRing2[position][ringID] ++;
+            pathLengths[ringID][position] += pathLength;
+        }
+    }
     
     public void addTransmittance(int ringID, int position, float transmittance){
         

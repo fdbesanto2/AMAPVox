@@ -5,7 +5,7 @@
  */
 package fr.amap.amapvox.voxreader;
 
-import fr.amap.amapvox.voxcommons.Voxel;
+import fr.amap.lidar.amapvox.commons.Voxel;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.Iterator;

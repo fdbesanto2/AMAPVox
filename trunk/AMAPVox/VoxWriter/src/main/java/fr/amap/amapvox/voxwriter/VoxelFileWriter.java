@@ -5,9 +5,9 @@
  */
 package fr.amap.amapvox.voxwriter;
 
-import fr.amap.amapvox.voxcommons.RawVoxel;
-import fr.amap.amapvox.voxcommons.Voxel;
-import fr.amap.amapvox.voxcommons.VoxelSpace;
+import fr.amap.lidar.amapvox.commons.RawVoxel;
+import fr.amap.lidar.amapvox.commons.Voxel;
+import fr.amap.lidar.amapvox.commons.VoxelSpace;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

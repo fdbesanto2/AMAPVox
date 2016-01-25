@@ -19,10 +19,10 @@
         <module>Voxelisation</module>
         <module>JeebLight</module>
         <module>Chart</module>
-        <module>VoxCommons</module>
         <module>VoxReader</module>
         <module>VoxWriter</module>
         <module>VoxChecking</module>
+        <module>commons</module>
     </modules>
     
     <distributionManagement>        
@@ -34,7 +34,9 @@
     </distributionManagement>   
     
     <scm>
-        <connection>scm:git:voxeidar.git</connection>
+        <connection>scm:git:http://amap-dev.cirad.fr/git/voxelidar.git</connection>
+        <url>http://amap-dev.cirad.fr/git/voxelidar.git</url>
+        <developerConnection>scm:git:http://amap-dev.cirad.fr/git/voxelidar.git</developerConnection>
     </scm>
     
     <build>
@@ -81,7 +83,7 @@
                                 <goal>jar</goal>
                             </goals>
                             <configuration>
-                                <jarOutputDirectory>${project.basedir}/../mvn-repo/fr/amap/amapvox/${project.artifactId}/${project.version}</jarOutputDirectory>
+                                <jarOutputDirectory>${project.basedir}/../mvn-repo/fr/amap/lidar/amapvox/${project.artifactId}/${project.version}</jarOutputDirectory>
                             </configuration>
                         </execution>
                     </executions>

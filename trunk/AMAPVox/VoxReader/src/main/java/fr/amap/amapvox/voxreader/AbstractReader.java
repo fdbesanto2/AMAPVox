@@ -5,8 +5,8 @@
  */
 package fr.amap.amapvox.voxreader;
 
-import fr.amap.amapvox.voxcommons.VoxelSpace;
-import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
+import fr.amap.lidar.amapvox.commons.VoxelSpace;
+import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import java.io.BufferedReader;
 import java.io.File;
 import java.util.ArrayList;

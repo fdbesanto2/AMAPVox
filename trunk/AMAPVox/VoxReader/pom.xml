@@ -14,8 +14,8 @@
             <artifactId>log4j</artifactId>
         </dependency>
         <dependency>
-            <groupId>fr.amap.amapvox</groupId>
-            <artifactId>VoxCommons</artifactId>
+            <groupId>fr.amap.lidar.amapvox</groupId>
+            <artifactId>amapvox-commons</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>

@@ -79,7 +79,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>fr.amap.amapvox</groupId>
+            <groupId>fr.amap.lidar</groupId>
             <artifactId>VoxReader</artifactId>
             <version>1.0</version>
         </dependency>
@@ -94,12 +94,12 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.amapvox</groupId>
+            <groupId>fr.amap.lidar</groupId>
             <artifactId>JeebLight</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.amapvox</groupId>
+            <groupId>fr.amap.lidar</groupId>
             <artifactId>DataStructure</artifactId>
             <version>1.0</version>
         </dependency>

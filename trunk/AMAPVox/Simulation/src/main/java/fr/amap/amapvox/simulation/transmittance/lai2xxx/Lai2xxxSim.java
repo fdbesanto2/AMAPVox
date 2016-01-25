@@ -17,8 +17,8 @@ import fr.amap.amapvox.jeeb.raytracing.voxel.VoxelSpace;
 import fr.amap.amapvox.simulation.transmittance.TransmittanceCfg;
 import fr.amap.amapvox.simulation.transmittance.TransmittanceParameters;
 import static fr.amap.amapvox.simulation.transmittance.lai2xxx.LAI2xxx.ViewCap.CAP_360;
-import fr.amap.amapvox.voxcommons.Voxel;
-import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
+import fr.amap.lidar.amapvox.commons.Voxel;
+import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.amapvox.voxreader.VoxelFileReader;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -73,8 +73,57 @@ public class Lai2xxxSim {
     
     public void process() throws Exception{
         
-        //*******début du test
-        //lecture du fichier voxel
+        logger.info("===== " + parameters.getInputFile().getAbsolutePath() + " =====");
+
+        direcTransmittance = new DirectionalTransmittance(parameters.getInputFile());
+        voxSpace = direcTransmittance.getVoxSpace();
+        
+        getSensorPositions();
+
+        // TRANSMITTANCE
+        logger.info("Computation of transmittance");
+        
+        
+        lai2xxx.initPositions(positions.size());
+        
+        int positionID = 0;
+        double transmitted;
+        
+        for (Point3d position : positions) {
+            
+            for (int t = 0; t < directions.length; t++) {
+                
+                Vector3d dir = new Vector3d(directions[t]);
+                dir.normalize();
+
+                transmitted = direcTransmittance.directionalTransmittance(position, dir);
+                    
+                int ring = lai2xxx.getRingIDFromDirectionID(t);
+                
+                lai2xxx.addTransmittance(ring, positionID, (float) transmitted);
+                
+            }
+
+            positionID++;
+
+            if (positionID % 1000 == 0) {
+                logger.info(positionID + "/" + positions.size());
+            }
+        }
+        
+        
+        if(parameters.isGenerateTextFile()){
+            writeTransmittance();
+            logger.info("File "+parameters.getTextFile().getAbsolutePath()+" was written.");
+        }
+
+        logger.info("Simulation is finished.");   
+    }
+    
+//    public void process() throws Exception{
+//        
+//        //*******début du test
+//        //lecture du fichier voxel
 //        VoxelFileReader voxReader = new VoxelFileReader(parameters.getInputFile());
 //        VoxelSpaceInfos infos = voxReader.getVoxelSpaceInfos();
 //
@@ -97,7 +146,7 @@ public class Lai2xxxSim {
 //        List<Double[]> l = new ArrayList<>();
 //        
 //        
-//        try (BufferedReader reader = new BufferedReader(new FileReader(new File("/media/forestview01/partageLidar/FTH2014_LAI2200/data/LAI_P9_M_fusion_new.txt")))) {
+//        /*try (BufferedReader reader = new BufferedReader(new FileReader(new File("/media/forestview01/partageLidar/FTH2014_LAI2200/data/LAI_P9_M_fusion_new.txt")))) {
 //            reader.readLine();
 //            
 //            String line;
@@ -106,50 +155,50 @@ public class Lai2xxxSim {
 //                String[] split = line.split("\t");
 //                l.add(new Double[]{Double.valueOf(split[4]), Double.valueOf(split[5]), Double.valueOf(split[6]), Double.valueOf(split[7]), Double.valueOf(split[8])});
 //            }
-//        }
+//        }*/
 //        
-//        Statistic[][] tranStattistics = new Statistic[l.size()][5];
+//        /*Statistic[][] tranStattistics = new Statistic[l.size()][5];
 //        for(int i=0;i<tranStattistics.length;i++){
 //            for(int j=0;j<5;j++){
 //                tranStattistics[i][j] = new Statistic();
 //            }
-//        }
+//        }*/
 //        
-//        BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/pos_ring_shots_path_length_arrays/als.txt")));
-//        writer.write("position.ID"+" "+"position.x"+" "+"position.y"+" "+"position.z"+" "+"ring"+" "+"pathLength"+" "+"transmittance"+"\n");
+//        BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/als_300x300.txt")));
+//        writer.write("position.ID"+" "+"position.x"+" "+"position.y"+" "+"position.z"+" "+"ring"+" "+"pathLength"+" "+"transmittance"+" "+"isOut"+"\n");
 //        
-        //*******fin du test
-        
-        logger.info("===== " + parameters.getInputFile().getAbsolutePath() + " =====");
-
-        direcTransmittance = new DirectionalTransmittance(parameters.getInputFile());
-        voxSpace = direcTransmittance.getVoxSpace();
-        
-        getSensorPositions();
-
-        // TRANSMITTANCE
-        logger.info("Computation of transmittance");
-        
-        
-        lai2xxx.initPositions(positions.size());
-        
-        int positionID = 0;
-        double transmitted;
-        
-        Statistic NaNCounter = new Statistic();
-        
-        for (Point3d position : positions) {
-            
-            for (int t = 0; t < directions.length; t++) {
-                
-                Vector3d dir = new Vector3d(directions[t]);
-                dir.normalize();
-
-                transmitted = direcTransmittance.directionalTransmittance(position, dir);
-                    
-                int ring = lai2xxx.getRingIDFromDirectionID(t);
-                
-                
+//        //*******fin du test
+//        
+//        logger.info("===== " + parameters.getInputFile().getAbsolutePath() + " =====");
+//
+//        direcTransmittance = new DirectionalTransmittance(parameters.getInputFile());
+//        voxSpace = direcTransmittance.getVoxSpace();
+//        
+//        getSensorPositions();
+//
+//        // TRANSMITTANCE
+//        logger.info("Computation of transmittance");
+//        
+//        
+//        lai2xxx.initPositions(positions.size());
+//        
+//        int positionID = 0;
+//        double transmitted;
+//        
+//        Statistic NaNCounter = new Statistic();
+//        
+//        for (Point3d position : positions) {
+//            
+//            for (int t = 0; t < directions.length; t++) {
+//                
+//                Vector3d dir = new Vector3d(directions[t]);
+//                dir.normalize();
+//
+//                transmitted = direcTransmittance.directionalTransmittance(position, dir);
+//                    
+//                int ring = lai2xxx.getRingIDFromDirectionID(t);
+//                
+//                
 //                //test
 //                LineElement lineElement = new LineSegment(position, new Vector3d(dir), 99999999);
 //                //distance cumulée
@@ -164,6 +213,8 @@ public class Lai2xxxSim {
 //
 //                double distanceToHit = lineElement.getLength();
 //                boolean gotOneNaN = false;
+//                
+//                boolean wasOutside = false;
 //
 //                while ((context != null) && (context.indices != null)) {
 //
@@ -188,6 +239,16 @@ public class Lai2xxxSim {
 //                    double d1 = context.length;
 //
 //                    context = vm.CrossVoxel(lineElement, indices);
+//                    
+//                    
+//                    if(context != null && context.indices == null){
+//                        if(voxel.$k == infos.getSplit().z -1){
+//                            wasOutside = false;
+//                        }else{
+//                            wasOutside = true;
+//                        }
+//                        
+//                    }
 //
 //                    //distance from the last origin to the point in which the ray exit the voxel
 //                    double d2 = context.length;
@@ -210,56 +271,57 @@ public class Lai2xxxSim {
 //                    
 //                    NaNCounter.addValue(transmitted);
 //                    
-//                    lai2xxx.addNormalizedTransmittance(ring, positionID, (float) (Math.pow(transmitted, 1/pathLength)), (float) pathLength);
+//                    //lai2xxx.addNormalizedTransmittance(ring, positionID, (float) (Math.pow(transmitted, 1/pathLength)), (float) pathLength);
 //                    lai2xxx.addTransmittance(ring, positionID, (float) transmitted);
 //                    
-//                    tranStattistics[positionID][ring].addValue((Math.pow(l.get(positionID)[ring], 1/pathLength)));
+//                    //tranStattistics[positionID][ring].addValue((Math.pow(l.get(positionID)[ring], 1/pathLength)));
 //                    
-//                    writer.write(positionID+" "+position.x+" "+position.y+" "+position.z+" "+(ring+1)+" "+pathLength+" "+transmitted+"\n");
+//                    
+//                    writer.write(positionID+" "+position.x+" "+position.y+" "+position.z+" "+(ring+1)+" "+pathLength+" "+transmitted+" "+wasOutside+"\n");
 //                }else{
 //                    NaNCounter.addValue(Double.NaN);
 //                }
-                
-                lai2xxx.addTransmittance(ring, positionID, (float) transmitted);
-                
-            }
-
-            positionID++;
-
-            if (positionID % 1000 == 0) {
-                logger.info(positionID + "/" + positions.size());
-            }
-        }
-        
-        //test
+//                
+//                lai2xxx.addTransmittance(ring, positionID, (float) transmitted);
+//                
+//            }
+//
+//            positionID++;
+//
+//            if (positionID % 1000 == 0) {
+//                logger.info(positionID + "/" + positions.size());
+//            }
+//        }
+//        
+//        //test
 //        System.out.println("Nb values : "+NaNCounter.getNbValues());
 //        System.out.println("Nb NaN values : "+NaNCounter.getNbNaNValues());
 //        
 //        writer.close();
-        
-        /*try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/normalisation_mesure/methode2/transmittances.txt")))) {
-            
-            for(int i=0;i<tranStattistics.length;i++){
-                
-                String line = i+"";
-                
-                for(int j=0;j<5;j++){
-                    line += "\t"+tranStattistics[i][j].getMean();
-                }
-                
-                writer.write(line+"\n");
-                
-            }
-        }*/
-        
-        
-        if(parameters.isGenerateTextFile()){
-            writeTransmittance();
-            logger.info("File "+parameters.getTextFile().getAbsolutePath()+" was written.");
-        }
-
-        logger.info("Simulation is finished.");        
-    }
+//        
+////        try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/normalisation_mesure/methode2/transmittances.txt")))) {
+////            
+////            for(int i=0;i<tranStattistics.length;i++){
+////                
+////                String line = i+"";
+////                
+////                for(int j=0;j<5;j++){
+////                    line += "\t"+tranStattistics[i][j].getMean();
+////                }
+////                
+////                writer.write(line+"\n");
+////                
+////            }
+////        }
+//        
+//        
+//        if(parameters.isGenerateTextFile()){
+//            writeTransmittance();
+//            logger.info("File "+parameters.getTextFile().getAbsolutePath()+" was written.");
+//        }
+//
+//        logger.info("Simulation is finished.");        
+//    }
     
     //doublon (même méthode dans TransmittanceSim, à nettoyer)
     private void getSensorPositions() {

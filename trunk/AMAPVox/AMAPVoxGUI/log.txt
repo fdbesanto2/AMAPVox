@@ -65024,3 +65024,269 @@ Caused by: java.lang.ClassNotFoundException: fr.amap.amapvox.gui.TransformationF
 	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
 	at javafx.fxml.FXMLLoader$ValueElement.processAttribute(FXMLLoader.java:920)
 	... 22 more
+2016-01-25 15:08:51 ERROR - Cannot write simulation file
+java.lang.Exception: Cannot get manifest file
+	at fr.amap.commons.util.configuration.Configuration.createCommonData(Configuration.java:132)
+	at fr.amap.amapvox.simulation.transmittance.TransmittanceCfg.writeConfiguration(TransmittanceCfg.java:263)
+	at fr.amap.amapvox.gui.MainFrameController.saveCanopyAnalyzerSimulation(MainFrameController.java:1931)
+	at fr.amap.amapvox.gui.MainFrameController.onActionButtonSaveCanopyAnalyzerSimulation(MainFrameController.java:1871)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.Trampoline.invoke(MethodUtil.java:71)
+	at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.MethodUtil.invoke(MethodUtil.java:275)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1769)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1657)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.control.MenuItem.fire(MenuItem.java:462)
+	at com.sun.javafx.scene.control.skin.ContextMenuContent$MenuItemContainer.doSelect(ContextMenuContent.java:1405)
+	at com.sun.javafx.scene.control.skin.ContextMenuContent$MenuItemContainer.lambda$createChildren$343(ContextMenuContent.java:1358)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:218)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:3757)
+	at javafx.scene.Scene$MouseHandler.access$1500(Scene.java:3485)
+	at javafx.scene.Scene.impl_processMouseEvent(Scene.java:1762)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2494)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:352)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:275)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$354(GlassViewEventHandler.java:388)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:389)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:555)
+	at com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$49(GtkApplication.java:139)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.Exception: Cannot get Implementation-Build property in manifest file
+	at fr.amap.commons.util.configuration.Configuration.createCommonData(Configuration.java:129)
+	... 56 more
+2016-01-25 16:25:18 ERROR - Cannot write simulation file
+java.lang.Exception: Cannot get manifest file
+	at fr.amap.lidar.amapvox.commons.Configuration.createCommonData(Configuration.java:132)
+	at fr.amap.amapvox.simulation.transmittance.TransmittanceCfg.writeConfiguration(TransmittanceCfg.java:263)
+	at fr.amap.amapvox.gui.MainFrameController.saveCanopyAnalyzerSimulation(MainFrameController.java:1931)
+	at fr.amap.amapvox.gui.MainFrameController.onActionButtonSaveCanopyAnalyzerSimulation(MainFrameController.java:1871)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.Trampoline.invoke(MethodUtil.java:71)
+	at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.MethodUtil.invoke(MethodUtil.java:275)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1769)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1657)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.control.MenuItem.fire(MenuItem.java:462)
+	at com.sun.javafx.scene.control.skin.ContextMenuContent$MenuItemContainer.doSelect(ContextMenuContent.java:1405)
+	at com.sun.javafx.scene.control.skin.ContextMenuContent$MenuItemContainer.lambda$createChildren$343(ContextMenuContent.java:1358)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:218)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:3757)
+	at javafx.scene.Scene$MouseHandler.access$1500(Scene.java:3485)
+	at javafx.scene.Scene.impl_processMouseEvent(Scene.java:1762)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2494)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:352)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:275)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$354(GlassViewEventHandler.java:388)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:389)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:555)
+	at com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$49(GtkApplication.java:139)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.Exception: Cannot get Implementation-Build property in manifest file
+	at fr.amap.lidar.amapvox.commons.Configuration.createCommonData(Configuration.java:129)
+	... 56 more
+2016-01-25 16:35:47 INFO  - Computing directions...
+2016-01-25 16:35:47 INFO  - Nb shots ring 1 = 60
+2016-01-25 16:35:47 INFO  - Nb shots ring 2 = 86
+2016-01-25 16:35:47 INFO  - Nb shots ring 3 = 102
+2016-01-25 16:35:47 INFO  - Nb shots ring 4 = 117
+2016-01-25 16:35:47 INFO  - Nb shots ring 5 = 135
+2016-01-25 16:35:51 INFO  - ===== /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als.vox =====
+2016-01-25 16:35:51 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-25 16:35:51 INFO  - allocate Voxels
+2016-01-25 16:35:51 INFO  - allocate MNT
+2016-01-25 16:35:53 INFO  - nb positions= 64
+2016-01-25 16:35:53 INFO  - Computation of transmittance
+2016-01-25 16:36:09 INFO  - Computation of AVGTRANS...
+2016-01-25 16:36:09 INFO  - Computation of CNTC#...
+2016-01-25 16:36:09 INFO  - Computation of LAI...
+2016-01-25 16:36:09 INFO  - Computation of GAPS...
+2016-01-25 16:36:09 INFO  - Computation of ACFS...
+2016-01-25 16:36:09 INFO  - Computation of ACF...
+2016-01-25 16:36:09 INFO  - Computation of STDEV...
+2016-01-25 16:36:09 INFO  - File /home/calcul/Documents/Julien/Dossier_pour_papier_lai2200_marilyne/test/lai2200.txt was written.
+2016-01-25 16:36:09 INFO  - Simulation is finished.
+2016-01-25 16:48:41 INFO  - Computing directions...
+2016-01-25 16:48:41 INFO  - Nb shots ring 1 = 60
+2016-01-25 16:48:41 INFO  - Nb shots ring 2 = 86
+2016-01-25 16:48:41 INFO  - Nb shots ring 3 = 102
+2016-01-25 16:48:41 INFO  - Nb shots ring 4 = 117
+2016-01-25 16:48:41 INFO  - Nb shots ring 5 = 135
+2016-01-25 16:48:44 INFO  - ===== /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als.vox =====
+2016-01-25 16:48:44 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-25 16:48:44 INFO  - allocate Voxels
+2016-01-25 16:48:44 INFO  - allocate MNT
+2016-01-25 16:48:46 INFO  - nb positions= 64
+2016-01-25 16:48:46 INFO  - Computation of transmittance
+2016-01-25 16:49:00 INFO  - Computation of AVGTRANS...
+2016-01-25 16:49:00 INFO  - Computation of CNTC#...
+2016-01-25 16:49:00 INFO  - Computation of LAI...
+2016-01-25 16:49:00 INFO  - Computation of GAPS...
+2016-01-25 16:49:00 INFO  - Computation of ACFS...
+2016-01-25 16:49:00 INFO  - Computation of ACF...
+2016-01-25 16:49:00 INFO  - Computation of STDEV...
+2016-01-25 16:49:00 INFO  - File /home/calcul/Documents/Julien/Dossier_pour_papier_lai2200_marilyne/test/lai2200.txt was written.
+2016-01-25 16:49:00 INFO  - Simulation is finished.
+2016-01-25 16:49:34 INFO  - Computing directions...
+2016-01-25 16:49:34 INFO  - Nb shots ring 1 = 60
+2016-01-25 16:49:34 INFO  - Nb shots ring 2 = 86
+2016-01-25 16:49:34 INFO  - Nb shots ring 3 = 102
+2016-01-25 16:49:34 INFO  - Nb shots ring 4 = 117
+2016-01-25 16:49:34 INFO  - Nb shots ring 5 = 135
+2016-01-25 16:49:36 INFO  - ===== /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als.vox =====
+2016-01-25 16:49:36 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-25 16:49:36 INFO  - allocate Voxels
+2016-01-25 16:49:36 INFO  - allocate MNT
+2016-01-25 16:49:38 INFO  - nb positions= 64
+2016-01-25 16:49:38 INFO  - Computation of transmittance
+2016-01-25 16:50:05 INFO  - Computation of AVGTRANS...
+2016-01-25 16:50:05 INFO  - Computation of CNTC#...
+2016-01-25 16:50:05 INFO  - Computation of LAI...
+2016-01-25 16:50:05 INFO  - Computation of GAPS...
+2016-01-25 16:50:05 INFO  - Computation of ACFS...
+2016-01-25 16:50:05 INFO  - Computation of ACF...
+2016-01-25 16:50:05 INFO  - Computation of STDEV...
+2016-01-25 16:50:05 INFO  - File /home/calcul/Documents/Julien/Dossier_pour_papier_lai2200_marilyne/test/lai2200.txt was written.
+2016-01-25 16:50:05 INFO  - Simulation is finished.
+2016-01-25 16:59:55 INFO  - Building transmittance functions table
+2016-01-25 16:59:55 INFO  - Transmittance functions table is built
+2016-01-25 16:59:55 INFO  - allocate!!!!!!!!
+2016-01-25 16:59:55 INFO  - Voxel space informations:
+			Corner Inf	:	(-115.0, -115.0, 18.0)
+			Corner Sup	:	(185.0, 185.0, 65.0)
+			Dimensions	:	(300, 300, 47)
+			Toricity 	:	false
+
+2016-01-25 16:59:55 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-01-25 17:00:59 INFO  - Laz file is closed
+2016-01-25 17:01:13 INFO  - Shots processed: 1000000
+2016-01-25 17:01:16 INFO  - Shots processed: 2000000
+2016-01-25 17:01:18 INFO  - Shots processed: 3000000
+2016-01-25 17:01:22 INFO  - Shots processed: 4000000
+2016-01-25 17:01:26 INFO  - Shots processed: 5000000
+2016-01-25 17:01:30 INFO  - Shots processed: 6000000
+2016-01-25 17:01:32 INFO  - Shots processed: 7000000
+2016-01-25 17:01:37 INFO  - Shots processed: 8000000
+2016-01-25 17:01:39 INFO  - Shots processed: 9000000
+2016-01-25 17:01:41 INFO  - Shots processed: 10000000
+2016-01-25 17:01:44 INFO  - Shots processed: 11000000
+2016-01-25 17:01:46 INFO  - Shots processed: 12000000
+2016-01-25 17:01:47 INFO  - Shots processed: 12345659
+2016-01-25 17:01:48 INFO  - Maximum neighborhood range : 3
+2016-01-25 17:01:48 INFO  - Maximum neighborhood range : 4
+2016-01-25 17:01:48 INFO  - Maximum neighborhood range : 5
+2016-01-25 17:01:50 INFO  - Maximum neighborhood range : 6
+2016-01-25 17:01:50 INFO  - Maximum neighborhood range : 7
+2016-01-25 17:01:50 INFO  - Maximum neighborhood range : 8
+2016-01-25 17:01:51 INFO  - Time : 3649 ms
+2016-01-25 17:01:51 INFO  - writing file: /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als_300m.vox
+2016-01-25 17:02:37 INFO  - file written ( 45.0 s )
+2016-01-25 17:02:37 INFO  - las voxelisation finished in 181.0 s
+2016-01-25 17:27:06 INFO  - Computing directions...
+2016-01-25 17:27:06 INFO  - Nb shots ring 1 = 60
+2016-01-25 17:27:06 INFO  - Nb shots ring 2 = 86
+2016-01-25 17:27:06 INFO  - Nb shots ring 3 = 102
+2016-01-25 17:27:06 INFO  - Nb shots ring 4 = 117
+2016-01-25 17:27:06 INFO  - Nb shots ring 5 = 135
+2016-01-25 17:27:40 INFO  - ===== /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als_300m.vox =====
+2016-01-25 17:27:40 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 65.0
+#split: 300 300 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-25 17:27:40 INFO  - allocate Voxels
+2016-01-25 17:27:40 INFO  - allocate MNT
+2016-01-25 17:28:08 INFO  - nb positions= 64
+2016-01-25 17:28:08 INFO  - Computation of transmittance
+2016-01-25 17:28:10 INFO  - Computation of AVGTRANS...
+2016-01-25 17:28:10 INFO  - Computation of CNTC#...
+2016-01-25 17:28:10 INFO  - Computation of LAI...
+2016-01-25 17:28:10 INFO  - Computation of GAPS...
+2016-01-25 17:28:10 INFO  - Computation of ACFS...
+2016-01-25 17:28:10 INFO  - Computation of ACF...
+2016-01-25 17:28:10 INFO  - Computation of STDEV...
+2016-01-25 17:28:10 INFO  - File /home/calcul/Documents/Julien/Dossier_pour_papier_lai2200_marilyne/test/lai2200.txt was written.
+2016-01-25 17:28:10 INFO  - Simulation is finished.

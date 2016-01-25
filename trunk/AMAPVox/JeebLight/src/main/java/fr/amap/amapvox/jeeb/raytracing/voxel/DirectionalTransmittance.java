@@ -6,8 +6,8 @@
 package fr.amap.amapvox.jeeb.raytracing.voxel;
 
 import fr.amap.amapvox.jeeb.raytracing.util.BoundingBox3d;
-import fr.amap.amapvox.voxcommons.Voxel;
-import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
+import fr.amap.lidar.amapvox.commons.Voxel;
+import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.amapvox.voxreader.VoxelFileReader;
 import java.io.File;
 import java.io.IOException;

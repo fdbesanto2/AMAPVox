@@ -16,7 +16,7 @@
             <version>1.0.19</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.amapvox</groupId>
+            <groupId>fr.amap.lidar</groupId>
             <artifactId>VoxReader</artifactId>
             <version>1.0</version>
         </dependency>
@@ -31,8 +31,8 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.amapvox</groupId>
-            <artifactId>VoxCommons</artifactId>
+            <groupId>fr.amap.lidar.amapvox</groupId>
+            <artifactId>amapvox-commons</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>

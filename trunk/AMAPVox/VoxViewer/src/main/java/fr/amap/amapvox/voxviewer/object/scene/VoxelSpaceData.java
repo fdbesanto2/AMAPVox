@@ -7,7 +7,7 @@ package fr.amap.amapvox.voxviewer.object.scene;
 
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.point.Point3I;
-import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
+import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import java.util.ArrayList;
 
 
@@ -15,7 +15,7 @@ import java.util.ArrayList;
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class VoxelSpaceData extends fr.amap.amapvox.voxcommons.VoxelSpace{
+public class VoxelSpaceData extends fr.amap.lidar.amapvox.commons.VoxelSpace{
 
     public VoxelSpaceData(VoxelSpaceInfos voxelSpaceInfos) {
         

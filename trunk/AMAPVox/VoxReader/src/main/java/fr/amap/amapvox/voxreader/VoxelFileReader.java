@@ -5,7 +5,7 @@
  */
 package fr.amap.amapvox.voxreader;
 
-import fr.amap.amapvox.voxcommons.Voxel;
+import fr.amap.lidar.amapvox.commons.Voxel;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;

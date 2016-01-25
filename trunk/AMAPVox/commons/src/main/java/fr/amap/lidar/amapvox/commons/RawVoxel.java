@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.amap.amapvox.voxcommons;
+package fr.amap.lidar.amapvox.commons;
 
 /**
  *

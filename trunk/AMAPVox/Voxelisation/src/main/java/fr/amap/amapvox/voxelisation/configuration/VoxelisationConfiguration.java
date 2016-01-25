@@ -5,7 +5,7 @@
  */
 package fr.amap.amapvox.voxelisation.configuration;
 
-import fr.amap.commons.util.configuration.Configuration;
+import fr.amap.lidar.amapvox.commons.Configuration;
 import fr.amap.amapvox.commons.util.Filter;
 import fr.amap.amapvox.commons.util.LidarScan;
 import fr.amap.amapvox.voxelisation.PointcloudFilter;

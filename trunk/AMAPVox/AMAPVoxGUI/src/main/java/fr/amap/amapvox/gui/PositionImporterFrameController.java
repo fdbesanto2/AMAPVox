@@ -6,7 +6,7 @@
 package fr.amap.amapvox.gui;
 
 import fr.amap.commons.math.point.Point3F;
-import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
+import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.amapvox.voxreader.VoxelFileReader;
 import fr.amap.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.commons.javafx.io.TextFileParserFrameController;

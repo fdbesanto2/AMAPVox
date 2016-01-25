@@ -5,7 +5,7 @@
  */
 package fr.amap.amapvox.voxviewer.object.scene;
 
-import fr.amap.amapvox.voxcommons.RawVoxel;
+import fr.amap.lidar.amapvox.commons.RawVoxel;
 import java.awt.Color;
 import javax.vecmath.Point3i;
 

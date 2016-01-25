@@ -5,7 +5,7 @@
  */
 package fr.amap.amapvox.chart;
 
-import fr.amap.amapvox.voxcommons.Voxel;
+import fr.amap.lidar.amapvox.commons.Voxel;
 import fr.amap.amapvox.voxreader.VoxelFileReader;
 import java.awt.Font;
 import java.awt.Paint;

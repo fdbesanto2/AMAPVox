@@ -14,7 +14,7 @@ import fr.amap.commons.raster.asc.DTMPoint;
 import fr.amap.commons.raster.asc.DtmLoader;
 import fr.amap.commons.raster.asc.Face;
 import fr.amap.commons.raster.asc.RegularDtm;
-import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
+import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelObject;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceData;

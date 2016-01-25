@@ -19,7 +19,7 @@ import fr.amap.commons.math.vector.Vec4D;
 import fr.amap.commons.util.image.ScaleGradient;
 import fr.amap.commons.raster.asc.DtmLoader;
 import fr.amap.commons.raster.asc.RegularDtm;
-import fr.amap.amapvox.voxcommons.VoxelSpaceInfos;
+import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.amapvox.voxreader.VoxelFileReader;
 import fr.amap.amapvox.voxviewer.event.BasicEvent;
 import fr.amap.amapvox.voxviewer.loading.shader.SimpleShader;
