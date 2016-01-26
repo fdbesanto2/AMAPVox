@@ -65290,3 +65290,1225 @@ i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal l
 2016-01-25 17:28:10 INFO  - Computation of STDEV...
 2016-01-25 17:28:10 INFO  - File /home/calcul/Documents/Julien/Dossier_pour_papier_lai2200_marilyne/test/lai2200.txt was written.
 2016-01-25 17:28:10 INFO  - Simulation is finished.
+2016-01-26 08:56:04 INFO  - Computing directions...
+2016-01-26 08:56:04 INFO  - Nb shots ring 1 = 60
+2016-01-26 08:56:04 INFO  - Nb shots ring 2 = 86
+2016-01-26 08:56:04 INFO  - Nb shots ring 3 = 102
+2016-01-26 08:56:04 INFO  - Nb shots ring 4 = 117
+2016-01-26 08:56:04 INFO  - Nb shots ring 5 = 135
+2016-01-26 08:56:12 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-26 08:56:12 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-26 08:56:12 INFO  - allocate Voxels
+2016-01-26 08:56:12 INFO  - allocate MNT
+2016-01-26 08:56:17 INFO  - nb positions= 1
+2016-01-26 08:56:17 INFO  - Computation of transmittance
+2016-01-26 08:56:18 INFO  - Computation of AVGTRANS...
+2016-01-26 08:56:18 INFO  - Computation of CNTC#...
+2016-01-26 08:56:18 INFO  - Computation of LAI...
+2016-01-26 08:56:18 INFO  - Computation of GAPS...
+2016-01-26 08:56:18 INFO  - Computation of ACFS...
+2016-01-26 08:56:18 INFO  - Computation of ACF...
+2016-01-26 08:56:18 INFO  - Computation of STDEV...
+2016-01-26 08:56:18 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-26 08:56:18 INFO  - Simulation is finished.
+2016-01-26 08:56:53 INFO  - Computing directions...
+2016-01-26 08:56:53 INFO  - Nb shots ring 1 = 60
+2016-01-26 08:56:53 INFO  - Nb shots ring 2 = 86
+2016-01-26 08:56:53 INFO  - Nb shots ring 3 = 102
+2016-01-26 08:56:53 INFO  - Nb shots ring 4 = 117
+2016-01-26 08:56:53 INFO  - Nb shots ring 5 = 135
+2016-01-26 08:56:58 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-26 08:56:58 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-26 08:56:58 INFO  - allocate Voxels
+2016-01-26 08:56:58 INFO  - allocate MNT
+2016-01-26 08:57:03 INFO  - nb positions= 1
+2016-01-26 08:57:03 INFO  - Computation of transmittance
+2016-01-26 08:57:03 INFO  - Computation of AVGTRANS...
+2016-01-26 08:57:03 INFO  - Computation of CNTC#...
+2016-01-26 08:57:03 INFO  - Computation of LAI...
+2016-01-26 08:57:03 INFO  - Computation of GAPS...
+2016-01-26 08:57:03 INFO  - Computation of ACFS...
+2016-01-26 08:57:03 INFO  - Computation of ACF...
+2016-01-26 08:57:03 INFO  - Computation of STDEV...
+2016-01-26 08:57:03 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-26 08:57:03 INFO  - Simulation is finished.
+2016-01-26 08:59:29 INFO  - Computing directions...
+2016-01-26 08:59:29 INFO  - Nb shots ring 1 = 120
+2016-01-26 08:59:29 INFO  - Nb shots ring 2 = 171
+2016-01-26 08:59:29 INFO  - Nb shots ring 3 = 205
+2016-01-26 08:59:29 INFO  - Nb shots ring 4 = 233
+2016-01-26 08:59:29 INFO  - Nb shots ring 5 = 270
+2016-01-26 08:59:34 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-26 08:59:34 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-26 08:59:34 INFO  - allocate Voxels
+2016-01-26 08:59:34 INFO  - allocate MNT
+2016-01-26 08:59:39 INFO  - nb positions= 1
+2016-01-26 08:59:39 INFO  - Computation of transmittance
+2016-01-26 08:59:39 INFO  - Computation of AVGTRANS...
+2016-01-26 08:59:39 INFO  - Computation of CNTC#...
+2016-01-26 08:59:39 INFO  - Computation of LAI...
+2016-01-26 08:59:39 INFO  - Computation of GAPS...
+2016-01-26 08:59:39 INFO  - Computation of ACFS...
+2016-01-26 08:59:39 INFO  - Computation of ACF...
+2016-01-26 08:59:39 INFO  - Computation of STDEV...
+2016-01-26 08:59:39 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-26 08:59:39 INFO  - Simulation is finished.
+2016-01-26 09:00:13 INFO  - Computing directions...
+2016-01-26 09:00:13 INFO  - Nb shots ring 1 = 1205
+2016-01-26 09:00:13 INFO  - Nb shots ring 2 = 1711
+2016-01-26 09:00:13 INFO  - Nb shots ring 3 = 2049
+2016-01-26 09:00:13 INFO  - Nb shots ring 4 = 2334
+2016-01-26 09:00:13 INFO  - Nb shots ring 5 = 2701
+2016-01-26 09:00:18 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-26 09:00:18 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-26 09:00:18 INFO  - allocate Voxels
+2016-01-26 09:00:18 INFO  - allocate MNT
+2016-01-26 09:00:23 INFO  - nb positions= 1
+2016-01-26 09:00:23 INFO  - Computation of transmittance
+2016-01-26 09:00:24 INFO  - Computation of AVGTRANS...
+2016-01-26 09:00:24 INFO  - Computation of CNTC#...
+2016-01-26 09:00:24 INFO  - Computation of LAI...
+2016-01-26 09:00:24 INFO  - Computation of GAPS...
+2016-01-26 09:00:24 INFO  - Computation of ACFS...
+2016-01-26 09:00:24 INFO  - Computation of ACF...
+2016-01-26 09:00:24 INFO  - Computation of STDEV...
+2016-01-26 09:00:24 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-26 09:00:24 INFO  - Simulation is finished.
+2016-01-26 09:06:25 INFO  - Computing directions...
+2016-01-26 09:06:25 INFO  - Nb shots ring 1 = 60
+2016-01-26 09:06:25 INFO  - Nb shots ring 2 = 86
+2016-01-26 09:06:25 INFO  - Nb shots ring 3 = 102
+2016-01-26 09:06:25 INFO  - Nb shots ring 4 = 117
+2016-01-26 09:06:25 INFO  - Nb shots ring 5 = 135
+2016-01-26 09:06:33 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-26 09:06:33 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-26 09:06:33 INFO  - allocate Voxels
+2016-01-26 09:06:33 INFO  - allocate MNT
+2016-01-26 09:06:38 INFO  - nb positions= 1
+2016-01-26 09:06:38 INFO  - Computation of transmittance
+2016-01-26 09:06:38 INFO  - Computation of AVGTRANS...
+2016-01-26 09:06:38 INFO  - Computation of CNTC#...
+2016-01-26 09:06:38 INFO  - Computation of LAI...
+2016-01-26 09:06:38 INFO  - Computation of GAPS...
+2016-01-26 09:06:38 INFO  - Computation of ACFS...
+2016-01-26 09:06:38 INFO  - Computation of ACF...
+2016-01-26 09:06:38 INFO  - Computation of STDEV...
+2016-01-26 09:06:38 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-26 09:06:38 INFO  - Simulation is finished.
+2016-01-26 09:08:13 INFO  - Computing directions...
+2016-01-26 09:08:13 INFO  - Nb shots ring 1 = 60
+2016-01-26 09:08:13 INFO  - Nb shots ring 2 = 86
+2016-01-26 09:08:13 INFO  - Nb shots ring 3 = 102
+2016-01-26 09:08:13 INFO  - Nb shots ring 4 = 117
+2016-01-26 09:08:13 INFO  - Nb shots ring 5 = 135
+2016-01-26 09:08:21 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-26 09:08:21 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-26 09:08:21 INFO  - allocate Voxels
+2016-01-26 09:08:21 INFO  - allocate MNT
+2016-01-26 09:08:26 INFO  - nb positions= 1
+2016-01-26 09:08:26 INFO  - Computation of transmittance
+2016-01-26 09:08:26 INFO  - Computation of AVGTRANS...
+2016-01-26 09:08:26 INFO  - Computation of CNTC#...
+2016-01-26 09:08:26 INFO  - Computation of LAI...
+2016-01-26 09:08:26 INFO  - Computation of GAPS...
+2016-01-26 09:08:26 INFO  - Computation of ACFS...
+2016-01-26 09:08:26 INFO  - Computation of ACF...
+2016-01-26 09:08:26 INFO  - Computation of STDEV...
+2016-01-26 09:08:26 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-26 09:08:26 INFO  - Simulation is finished.
+2016-01-26 09:16:05 INFO  - Computing directions...
+2016-01-26 09:16:05 INFO  - Nb shots ring 1 = 60
+2016-01-26 09:16:05 INFO  - Nb shots ring 2 = 86
+2016-01-26 09:16:05 INFO  - Nb shots ring 3 = 102
+2016-01-26 09:16:05 INFO  - Nb shots ring 4 = 117
+2016-01-26 09:16:05 INFO  - Nb shots ring 5 = 135
+2016-01-26 09:16:11 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-26 09:16:11 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-26 09:16:11 INFO  - allocate Voxels
+2016-01-26 09:16:11 INFO  - allocate MNT
+2016-01-26 09:16:16 INFO  - nb positions= 1
+2016-01-26 09:16:16 INFO  - Computation of transmittance
+2016-01-26 09:20:02 INFO  - Computation of AVGTRANS...
+2016-01-26 09:20:02 INFO  - Computation of CNTC#...
+2016-01-26 09:20:02 INFO  - Computation of LAI...
+2016-01-26 09:20:02 INFO  - Computation of GAPS...
+2016-01-26 09:20:02 INFO  - Computation of ACFS...
+2016-01-26 09:20:02 INFO  - Computation of ACF...
+2016-01-26 09:20:02 INFO  - Computation of STDEV...
+2016-01-26 09:20:02 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-26 09:20:02 INFO  - Simulation is finished.
+2016-01-26 09:42:02 ERROR - Cannot parse line 65
+2016-01-26 09:42:59 ERROR - Cannot parse line 1
+2016-01-26 09:42:59 ERROR - Cannot parse line 2
+2016-01-26 09:42:59 ERROR - Cannot parse line 3
+2016-01-26 09:42:59 ERROR - Cannot parse line 4
+2016-01-26 09:42:59 ERROR - Cannot parse line 5
+2016-01-26 09:42:59 ERROR - Cannot parse line 6
+2016-01-26 09:42:59 ERROR - Cannot parse line 7
+2016-01-26 09:42:59 ERROR - Cannot parse line 8
+2016-01-26 09:42:59 ERROR - Cannot parse line 9
+2016-01-26 09:42:59 ERROR - Cannot parse line 10
+2016-01-26 09:42:59 ERROR - Cannot parse line 11
+2016-01-26 09:42:59 ERROR - Cannot parse line 12
+2016-01-26 09:42:59 ERROR - Cannot parse line 13
+2016-01-26 09:42:59 ERROR - Cannot parse line 14
+2016-01-26 09:42:59 ERROR - Cannot parse line 15
+2016-01-26 09:42:59 ERROR - Cannot parse line 16
+2016-01-26 09:42:59 ERROR - Cannot parse line 17
+2016-01-26 09:42:59 ERROR - Cannot parse line 18
+2016-01-26 09:42:59 ERROR - Cannot parse line 19
+2016-01-26 09:42:59 ERROR - Cannot parse line 20
+2016-01-26 09:42:59 ERROR - Cannot parse line 21
+2016-01-26 09:42:59 ERROR - Cannot parse line 22
+2016-01-26 09:42:59 ERROR - Cannot parse line 23
+2016-01-26 09:42:59 ERROR - Cannot parse line 24
+2016-01-26 09:42:59 ERROR - Cannot parse line 25
+2016-01-26 09:42:59 ERROR - Cannot parse line 26
+2016-01-26 09:42:59 ERROR - Cannot parse line 27
+2016-01-26 09:42:59 ERROR - Cannot parse line 28
+2016-01-26 09:42:59 ERROR - Cannot parse line 29
+2016-01-26 09:42:59 ERROR - Cannot parse line 30
+2016-01-26 09:42:59 ERROR - Cannot parse line 31
+2016-01-26 09:42:59 ERROR - Cannot parse line 32
+2016-01-26 09:42:59 ERROR - Cannot parse line 33
+2016-01-26 09:42:59 ERROR - Cannot parse line 34
+2016-01-26 09:42:59 ERROR - Cannot parse line 35
+2016-01-26 09:42:59 ERROR - Cannot parse line 36
+2016-01-26 09:42:59 ERROR - Cannot parse line 37
+2016-01-26 09:42:59 ERROR - Cannot parse line 38
+2016-01-26 09:42:59 ERROR - Cannot parse line 39
+2016-01-26 09:42:59 ERROR - Cannot parse line 40
+2016-01-26 09:42:59 ERROR - Cannot parse line 41
+2016-01-26 09:42:59 ERROR - Cannot parse line 42
+2016-01-26 09:42:59 ERROR - Cannot parse line 43
+2016-01-26 09:42:59 ERROR - Cannot parse line 44
+2016-01-26 09:42:59 ERROR - Cannot parse line 45
+2016-01-26 09:42:59 ERROR - Cannot parse line 46
+2016-01-26 09:42:59 ERROR - Cannot parse line 47
+2016-01-26 09:42:59 ERROR - Cannot parse line 48
+2016-01-26 09:42:59 ERROR - Cannot parse line 49
+2016-01-26 09:42:59 ERROR - Cannot parse line 50
+2016-01-26 09:42:59 ERROR - Cannot parse line 51
+2016-01-26 09:42:59 ERROR - Cannot parse line 52
+2016-01-26 09:42:59 ERROR - Cannot parse line 53
+2016-01-26 09:42:59 ERROR - Cannot parse line 54
+2016-01-26 09:42:59 ERROR - Cannot parse line 55
+2016-01-26 09:42:59 ERROR - Cannot parse line 56
+2016-01-26 09:42:59 ERROR - Cannot parse line 57
+2016-01-26 09:42:59 ERROR - Cannot parse line 58
+2016-01-26 09:42:59 ERROR - Cannot parse line 59
+2016-01-26 09:42:59 ERROR - Cannot parse line 60
+2016-01-26 09:42:59 ERROR - Cannot parse line 61
+2016-01-26 09:42:59 ERROR - Cannot parse line 62
+2016-01-26 09:42:59 ERROR - Cannot parse line 63
+2016-01-26 09:42:59 ERROR - Cannot parse line 64
+2016-01-26 09:42:59 ERROR - Cannot parse line 65
+2016-01-26 09:42:59 ERROR - Cannot parse line 66
+2016-01-26 09:42:59 ERROR - Cannot parse line 67
+2016-01-26 09:42:59 ERROR - Cannot parse line 68
+2016-01-26 09:42:59 ERROR - Cannot parse line 69
+2016-01-26 09:44:19 INFO  - Computing directions...
+2016-01-26 09:44:19 INFO  - Nb shots ring 1 = 60
+2016-01-26 09:44:19 INFO  - Nb shots ring 2 = 86
+2016-01-26 09:44:19 INFO  - Nb shots ring 3 = 102
+2016-01-26 09:44:19 INFO  - Nb shots ring 4 = 117
+2016-01-26 09:44:19 INFO  - Nb shots ring 5 = 135
+2016-01-26 09:44:21 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring1/merged.vox =====
+2016-01-26 09:44:21 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 09:44:21 INFO  - allocate Voxels
+2016-01-26 09:44:21 INFO  - allocate MNT
+2016-01-26 09:44:23 INFO  - nb positions= 64
+2016-01-26 09:44:23 INFO  - Computation of transmittance
+2016-01-26 09:44:24 INFO  - Computation of AVGTRANS...
+2016-01-26 09:44:24 INFO  - Computation of CNTC#...
+2016-01-26 09:44:24 INFO  - Computation of LAI...
+2016-01-26 09:44:24 INFO  - Computation of GAPS...
+2016-01-26 09:44:24 INFO  - Computation of ACFS...
+2016-01-26 09:44:24 INFO  - Computation of ACF...
+2016-01-26 09:44:24 INFO  - Computation of STDEV...
+2016-01-26 09:44:24 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_1.txt was written.
+2016-01-26 09:44:24 INFO  - Simulation is finished.
+2016-01-26 09:48:09 INFO  - Computing directions...
+2016-01-26 09:48:09 INFO  - Nb shots ring 1 = 60
+2016-01-26 09:48:09 INFO  - Nb shots ring 2 = 86
+2016-01-26 09:48:09 INFO  - Nb shots ring 3 = 102
+2016-01-26 09:48:09 INFO  - Nb shots ring 4 = 117
+2016-01-26 09:48:09 INFO  - Nb shots ring 5 = 135
+2016-01-26 09:48:11 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring2/merged.vox =====
+2016-01-26 09:48:11 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 09:48:11 INFO  - allocate Voxels
+2016-01-26 09:48:11 INFO  - allocate MNT
+2016-01-26 09:48:13 INFO  - nb positions= 64
+2016-01-26 09:48:13 INFO  - Computation of transmittance
+2016-01-26 09:48:14 INFO  - Computation of AVGTRANS...
+2016-01-26 09:48:14 INFO  - Computation of CNTC#...
+2016-01-26 09:48:14 INFO  - Computation of LAI...
+2016-01-26 09:48:14 INFO  - Computation of GAPS...
+2016-01-26 09:48:14 INFO  - Computation of ACFS...
+2016-01-26 09:48:14 INFO  - Computation of ACF...
+2016-01-26 09:48:14 INFO  - Computation of STDEV...
+2016-01-26 09:48:14 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_2.txt was written.
+2016-01-26 09:48:14 INFO  - Simulation is finished.
+2016-01-26 09:48:14 INFO  - Computing directions...
+2016-01-26 09:48:14 INFO  - Nb shots ring 1 = 60
+2016-01-26 09:48:14 INFO  - Nb shots ring 2 = 86
+2016-01-26 09:48:14 INFO  - Nb shots ring 3 = 102
+2016-01-26 09:48:14 INFO  - Nb shots ring 4 = 117
+2016-01-26 09:48:14 INFO  - Nb shots ring 5 = 135
+2016-01-26 09:48:17 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring3/merged.vox =====
+2016-01-26 09:48:17 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 09:48:17 INFO  - allocate Voxels
+2016-01-26 09:48:17 INFO  - allocate MNT
+2016-01-26 09:48:18 INFO  - nb positions= 64
+2016-01-26 09:48:18 INFO  - Computation of transmittance
+2016-01-26 09:48:19 INFO  - Computation of AVGTRANS...
+2016-01-26 09:48:19 INFO  - Computation of CNTC#...
+2016-01-26 09:48:19 INFO  - Computation of LAI...
+2016-01-26 09:48:19 INFO  - Computation of GAPS...
+2016-01-26 09:48:19 INFO  - Computation of ACFS...
+2016-01-26 09:48:19 INFO  - Computation of ACF...
+2016-01-26 09:48:19 INFO  - Computation of STDEV...
+2016-01-26 09:48:19 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_3.txt was written.
+2016-01-26 09:48:19 INFO  - Simulation is finished.
+2016-01-26 09:48:19 INFO  - Computing directions...
+2016-01-26 09:48:19 INFO  - Nb shots ring 1 = 60
+2016-01-26 09:48:19 INFO  - Nb shots ring 2 = 86
+2016-01-26 09:48:19 INFO  - Nb shots ring 3 = 102
+2016-01-26 09:48:19 INFO  - Nb shots ring 4 = 117
+2016-01-26 09:48:19 INFO  - Nb shots ring 5 = 135
+2016-01-26 09:48:22 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring4/merged.vox =====
+2016-01-26 09:48:22 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 09:48:22 INFO  - allocate Voxels
+2016-01-26 09:48:22 INFO  - allocate MNT
+2016-01-26 09:48:24 INFO  - nb positions= 64
+2016-01-26 09:48:24 INFO  - Computation of transmittance
+2016-01-26 09:48:25 INFO  - Computation of AVGTRANS...
+2016-01-26 09:48:25 INFO  - Computation of CNTC#...
+2016-01-26 09:48:25 INFO  - Computation of LAI...
+2016-01-26 09:48:25 INFO  - Computation of GAPS...
+2016-01-26 09:48:25 INFO  - Computation of ACFS...
+2016-01-26 09:48:25 INFO  - Computation of ACF...
+2016-01-26 09:48:25 INFO  - Computation of STDEV...
+2016-01-26 09:48:25 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_4.txt was written.
+2016-01-26 09:48:25 INFO  - Simulation is finished.
+2016-01-26 09:48:25 INFO  - Computing directions...
+2016-01-26 09:48:25 INFO  - Nb shots ring 1 = 60
+2016-01-26 09:48:25 INFO  - Nb shots ring 2 = 86
+2016-01-26 09:48:25 INFO  - Nb shots ring 3 = 102
+2016-01-26 09:48:25 INFO  - Nb shots ring 4 = 117
+2016-01-26 09:48:25 INFO  - Nb shots ring 5 = 135
+2016-01-26 09:48:28 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring5/merged.vox =====
+2016-01-26 09:48:28 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 09:48:28 INFO  - allocate Voxels
+2016-01-26 09:48:28 INFO  - allocate MNT
+2016-01-26 09:48:30 INFO  - nb positions= 64
+2016-01-26 09:48:30 INFO  - Computation of transmittance
+2016-01-26 09:48:31 INFO  - Computation of AVGTRANS...
+2016-01-26 09:48:31 INFO  - Computation of CNTC#...
+2016-01-26 09:48:31 INFO  - Computation of LAI...
+2016-01-26 09:48:31 INFO  - Computation of GAPS...
+2016-01-26 09:48:31 INFO  - Computation of ACFS...
+2016-01-26 09:48:31 INFO  - Computation of ACF...
+2016-01-26 09:48:31 INFO  - Computation of STDEV...
+2016-01-26 09:48:31 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_5.txt was written.
+2016-01-26 09:48:31 INFO  - Simulation is finished.
+2016-01-26 09:49:35 INFO  - Computing directions...
+2016-01-26 09:49:35 INFO  - Nb shots ring 1 = 60
+2016-01-26 09:49:35 INFO  - Nb shots ring 2 = 86
+2016-01-26 09:49:35 INFO  - Nb shots ring 3 = 102
+2016-01-26 09:49:35 INFO  - Nb shots ring 4 = 117
+2016-01-26 09:49:35 INFO  - Nb shots ring 5 = 135
+2016-01-26 09:49:38 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring2/merged.vox =====
+2016-01-26 09:49:38 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 09:49:38 INFO  - allocate Voxels
+2016-01-26 09:49:38 INFO  - allocate MNT
+2016-01-26 09:49:39 INFO  - nb positions= 64
+2016-01-26 09:49:39 INFO  - Computation of transmittance
+2016-01-26 09:49:40 INFO  - Computation of AVGTRANS...
+2016-01-26 09:49:40 INFO  - Computation of CNTC#...
+2016-01-26 09:49:40 INFO  - Computation of LAI...
+2016-01-26 09:49:40 INFO  - Computation of GAPS...
+2016-01-26 09:49:40 INFO  - Computation of ACFS...
+2016-01-26 09:49:40 INFO  - Computation of ACF...
+2016-01-26 09:49:40 INFO  - Computation of STDEV...
+2016-01-26 09:49:40 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_2.txt was written.
+2016-01-26 09:49:40 INFO  - Simulation is finished.
+2016-01-26 09:49:40 INFO  - Computing directions...
+2016-01-26 09:49:40 INFO  - Nb shots ring 1 = 60
+2016-01-26 09:49:40 INFO  - Nb shots ring 2 = 86
+2016-01-26 09:49:40 INFO  - Nb shots ring 3 = 102
+2016-01-26 09:49:40 INFO  - Nb shots ring 4 = 117
+2016-01-26 09:49:40 INFO  - Nb shots ring 5 = 135
+2016-01-26 09:49:43 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring3/merged.vox =====
+2016-01-26 09:49:43 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 09:49:43 INFO  - allocate Voxels
+2016-01-26 09:49:43 INFO  - allocate MNT
+2016-01-26 09:49:45 INFO  - nb positions= 64
+2016-01-26 09:49:45 INFO  - Computation of transmittance
+2016-01-26 09:49:45 INFO  - Computation of AVGTRANS...
+2016-01-26 09:49:45 INFO  - Computation of CNTC#...
+2016-01-26 09:49:45 INFO  - Computation of LAI...
+2016-01-26 09:49:45 INFO  - Computation of GAPS...
+2016-01-26 09:49:45 INFO  - Computation of ACFS...
+2016-01-26 09:49:45 INFO  - Computation of ACF...
+2016-01-26 09:49:45 INFO  - Computation of STDEV...
+2016-01-26 09:49:45 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_3.txt was written.
+2016-01-26 09:49:45 INFO  - Simulation is finished.
+2016-01-26 09:49:46 INFO  - Computing directions...
+2016-01-26 09:49:46 INFO  - Nb shots ring 1 = 60
+2016-01-26 09:49:46 INFO  - Nb shots ring 2 = 86
+2016-01-26 09:49:46 INFO  - Nb shots ring 3 = 102
+2016-01-26 09:49:46 INFO  - Nb shots ring 4 = 117
+2016-01-26 09:49:46 INFO  - Nb shots ring 5 = 135
+2016-01-26 09:49:48 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring4/merged.vox =====
+2016-01-26 09:49:48 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 09:49:48 INFO  - allocate Voxels
+2016-01-26 09:49:48 INFO  - allocate MNT
+2016-01-26 09:49:50 INFO  - nb positions= 64
+2016-01-26 09:49:50 INFO  - Computation of transmittance
+2016-01-26 09:49:51 INFO  - Computation of AVGTRANS...
+2016-01-26 09:49:51 INFO  - Computation of CNTC#...
+2016-01-26 09:49:51 INFO  - Computation of LAI...
+2016-01-26 09:49:51 INFO  - Computation of GAPS...
+2016-01-26 09:49:51 INFO  - Computation of ACFS...
+2016-01-26 09:49:51 INFO  - Computation of ACF...
+2016-01-26 09:49:51 INFO  - Computation of STDEV...
+2016-01-26 09:49:51 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_4.txt was written.
+2016-01-26 09:49:51 INFO  - Simulation is finished.
+2016-01-26 09:49:51 INFO  - Computing directions...
+2016-01-26 09:49:51 INFO  - Nb shots ring 1 = 60
+2016-01-26 09:49:51 INFO  - Nb shots ring 2 = 86
+2016-01-26 09:49:51 INFO  - Nb shots ring 3 = 102
+2016-01-26 09:49:51 INFO  - Nb shots ring 4 = 117
+2016-01-26 09:49:51 INFO  - Nb shots ring 5 = 135
+2016-01-26 09:49:53 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring5/merged.vox =====
+2016-01-26 09:49:53 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 09:49:53 INFO  - allocate Voxels
+2016-01-26 09:49:53 INFO  - allocate MNT
+2016-01-26 09:49:55 INFO  - nb positions= 64
+2016-01-26 09:49:55 INFO  - Computation of transmittance
+2016-01-26 09:49:56 INFO  - Computation of AVGTRANS...
+2016-01-26 09:49:56 INFO  - Computation of CNTC#...
+2016-01-26 09:49:56 INFO  - Computation of LAI...
+2016-01-26 09:49:56 INFO  - Computation of GAPS...
+2016-01-26 09:49:56 INFO  - Computation of ACFS...
+2016-01-26 09:49:56 INFO  - Computation of ACF...
+2016-01-26 09:49:56 INFO  - Computation of STDEV...
+2016-01-26 09:49:56 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_5.txt was written.
+2016-01-26 09:49:56 INFO  - Simulation is finished.
+2016-01-26 09:49:57 INFO  - Computing directions...
+2016-01-26 09:49:57 INFO  - Nb shots ring 1 = 60
+2016-01-26 09:49:57 INFO  - Nb shots ring 2 = 86
+2016-01-26 09:49:57 INFO  - Nb shots ring 3 = 102
+2016-01-26 09:49:57 INFO  - Nb shots ring 4 = 117
+2016-01-26 09:49:57 INFO  - Nb shots ring 5 = 135
+2016-01-26 09:49:59 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraTLS.txt =====
+2016-01-26 09:49:59 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 09:49:59 INFO  - allocate Voxels
+2016-01-26 09:49:59 INFO  - allocate MNT
+2016-01-26 09:50:01 INFO  - nb positions= 64
+2016-01-26 09:50:01 INFO  - Computation of transmittance
+2016-01-26 09:50:02 INFO  - Computation of AVGTRANS...
+2016-01-26 09:50:02 INFO  - Computation of CNTC#...
+2016-01-26 09:50:02 INFO  - Computation of LAI...
+2016-01-26 09:50:02 INFO  - Computation of GAPS...
+2016-01-26 09:50:02 INFO  - Computation of ACFS...
+2016-01-26 09:50:02 INFO  - Computation of ACF...
+2016-01-26 09:50:02 INFO  - Computation of STDEV...
+2016-01-26 09:50:02 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_omni.txt was written.
+2016-01-26 09:50:02 INFO  - Simulation is finished.
+2016-01-26 11:23:08 INFO  - Computing directions...
+2016-01-26 11:23:08 INFO  - Nb shots ring 1 = 60
+2016-01-26 11:23:08 INFO  - Nb shots ring 2 = 86
+2016-01-26 11:23:08 INFO  - Nb shots ring 3 = 102
+2016-01-26 11:23:08 INFO  - Nb shots ring 4 = 117
+2016-01-26 11:23:08 INFO  - Nb shots ring 5 = 135
+2016-01-26 11:23:10 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring2/merged.vox =====
+2016-01-26 11:23:10 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 11:23:10 INFO  - allocate Voxels
+2016-01-26 11:23:10 INFO  - allocate MNT
+2016-01-26 11:23:12 INFO  - nb positions= 136
+2016-01-26 11:23:12 INFO  - Computation of transmittance
+2016-01-26 11:23:13 INFO  - Computation of AVGTRANS...
+2016-01-26 11:23:13 INFO  - Computation of CNTC#...
+2016-01-26 11:23:13 INFO  - Computation of LAI...
+2016-01-26 11:23:13 INFO  - Computation of GAPS...
+2016-01-26 11:23:13 INFO  - Computation of ACFS...
+2016-01-26 11:23:13 INFO  - Computation of ACF...
+2016-01-26 11:23:13 INFO  - Computation of STDEV...
+2016-01-26 11:23:13 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_2.txt was written.
+2016-01-26 11:23:13 INFO  - Simulation is finished.
+2016-01-26 11:23:13 INFO  - Computing directions...
+2016-01-26 11:23:13 INFO  - Nb shots ring 1 = 60
+2016-01-26 11:23:13 INFO  - Nb shots ring 2 = 86
+2016-01-26 11:23:13 INFO  - Nb shots ring 3 = 102
+2016-01-26 11:23:13 INFO  - Nb shots ring 4 = 117
+2016-01-26 11:23:13 INFO  - Nb shots ring 5 = 135
+2016-01-26 11:23:16 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring3/merged.vox =====
+2016-01-26 11:23:16 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 11:23:16 INFO  - allocate Voxels
+2016-01-26 11:23:16 INFO  - allocate MNT
+2016-01-26 11:23:18 INFO  - nb positions= 136
+2016-01-26 11:23:18 INFO  - Computation of transmittance
+2016-01-26 11:23:20 INFO  - Computation of AVGTRANS...
+2016-01-26 11:23:20 INFO  - Computation of CNTC#...
+2016-01-26 11:23:20 INFO  - Computation of LAI...
+2016-01-26 11:23:20 INFO  - Computation of GAPS...
+2016-01-26 11:23:20 INFO  - Computation of ACFS...
+2016-01-26 11:23:20 INFO  - Computation of ACF...
+2016-01-26 11:23:20 INFO  - Computation of STDEV...
+2016-01-26 11:23:20 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_3.txt was written.
+2016-01-26 11:23:20 INFO  - Simulation is finished.
+2016-01-26 11:23:20 INFO  - Computing directions...
+2016-01-26 11:23:20 INFO  - Nb shots ring 1 = 60
+2016-01-26 11:23:20 INFO  - Nb shots ring 2 = 86
+2016-01-26 11:23:20 INFO  - Nb shots ring 3 = 102
+2016-01-26 11:23:20 INFO  - Nb shots ring 4 = 117
+2016-01-26 11:23:20 INFO  - Nb shots ring 5 = 135
+2016-01-26 11:23:22 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring4/merged.vox =====
+2016-01-26 11:23:22 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 11:23:22 INFO  - allocate Voxels
+2016-01-26 11:23:22 INFO  - allocate MNT
+2016-01-26 11:23:24 INFO  - nb positions= 136
+2016-01-26 11:23:24 INFO  - Computation of transmittance
+2016-01-26 11:23:26 INFO  - Computation of AVGTRANS...
+2016-01-26 11:23:26 INFO  - Computation of CNTC#...
+2016-01-26 11:23:26 INFO  - Computation of LAI...
+2016-01-26 11:23:26 INFO  - Computation of GAPS...
+2016-01-26 11:23:26 INFO  - Computation of ACFS...
+2016-01-26 11:23:26 INFO  - Computation of ACF...
+2016-01-26 11:23:26 INFO  - Computation of STDEV...
+2016-01-26 11:23:26 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_4.txt was written.
+2016-01-26 11:23:26 INFO  - Simulation is finished.
+2016-01-26 11:23:26 INFO  - Computing directions...
+2016-01-26 11:23:26 INFO  - Nb shots ring 1 = 60
+2016-01-26 11:23:26 INFO  - Nb shots ring 2 = 86
+2016-01-26 11:23:26 INFO  - Nb shots ring 3 = 102
+2016-01-26 11:23:26 INFO  - Nb shots ring 4 = 117
+2016-01-26 11:23:26 INFO  - Nb shots ring 5 = 135
+2016-01-26 11:23:29 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring5/merged.vox =====
+2016-01-26 11:23:29 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 11:23:29 INFO  - allocate Voxels
+2016-01-26 11:23:29 INFO  - allocate MNT
+2016-01-26 11:23:31 INFO  - nb positions= 136
+2016-01-26 11:23:31 INFO  - Computation of transmittance
+2016-01-26 11:23:33 INFO  - Computation of AVGTRANS...
+2016-01-26 11:23:33 INFO  - Computation of CNTC#...
+2016-01-26 11:23:33 INFO  - Computation of LAI...
+2016-01-26 11:23:33 INFO  - Computation of GAPS...
+2016-01-26 11:23:33 INFO  - Computation of ACFS...
+2016-01-26 11:23:33 INFO  - Computation of ACF...
+2016-01-26 11:23:33 INFO  - Computation of STDEV...
+2016-01-26 11:23:33 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_5.txt was written.
+2016-01-26 11:23:33 INFO  - Simulation is finished.
+2016-01-26 11:23:34 INFO  - Computing directions...
+2016-01-26 11:23:34 INFO  - Nb shots ring 1 = 60
+2016-01-26 11:23:34 INFO  - Nb shots ring 2 = 86
+2016-01-26 11:23:34 INFO  - Nb shots ring 3 = 102
+2016-01-26 11:23:34 INFO  - Nb shots ring 4 = 117
+2016-01-26 11:23:34 INFO  - Nb shots ring 5 = 135
+2016-01-26 11:23:36 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraTLS.txt =====
+2016-01-26 11:23:36 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 11:23:36 INFO  - allocate Voxels
+2016-01-26 11:23:36 INFO  - allocate MNT
+2016-01-26 11:23:38 INFO  - nb positions= 136
+2016-01-26 11:23:38 INFO  - Computation of transmittance
+2016-01-26 11:23:41 INFO  - Computation of AVGTRANS...
+2016-01-26 11:23:41 INFO  - Computation of CNTC#...
+2016-01-26 11:23:41 INFO  - Computation of LAI...
+2016-01-26 11:23:41 INFO  - Computation of GAPS...
+2016-01-26 11:23:41 INFO  - Computation of ACFS...
+2016-01-26 11:23:41 INFO  - Computation of ACF...
+2016-01-26 11:23:41 INFO  - Computation of STDEV...
+2016-01-26 11:23:41 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_omni.txt was written.
+2016-01-26 11:23:41 INFO  - Simulation is finished.
+2016-01-26 11:23:41 INFO  - Computing directions...
+2016-01-26 11:23:41 INFO  - Nb shots ring 1 = 60
+2016-01-26 11:23:41 INFO  - Nb shots ring 2 = 86
+2016-01-26 11:23:41 INFO  - Nb shots ring 3 = 102
+2016-01-26 11:23:41 INFO  - Nb shots ring 4 = 117
+2016-01-26 11:23:41 INFO  - Nb shots ring 5 = 135
+2016-01-26 11:23:43 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring1/merged.vox =====
+2016-01-26 11:23:43 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 11:23:43 INFO  - allocate Voxels
+2016-01-26 11:23:43 INFO  - allocate MNT
+2016-01-26 11:23:44 INFO  - nb positions= 136
+2016-01-26 11:23:44 INFO  - Computation of transmittance
+2016-01-26 11:23:46 INFO  - Computation of AVGTRANS...
+2016-01-26 11:23:46 INFO  - Computation of CNTC#...
+2016-01-26 11:23:46 INFO  - Computation of LAI...
+2016-01-26 11:23:46 INFO  - Computation of GAPS...
+2016-01-26 11:23:46 INFO  - Computation of ACFS...
+2016-01-26 11:23:46 INFO  - Computation of ACF...
+2016-01-26 11:23:46 INFO  - Computation of STDEV...
+2016-01-26 11:23:46 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_1.txt was written.
+2016-01-26 11:23:46 INFO  - Simulation is finished.
+2016-01-26 13:46:14 INFO  - temporary file created : /tmp/cfg_temp2712308994069654842.xml
+2016-01-26 13:46:15 INFO  - Total shots processed : 104959
+2016-01-26 13:46:15 INFO  - Total shots processed : 104959
+2016-01-26 13:46:16 INFO  - Total shots processed : 116119
+2016-01-26 13:46:16 INFO  - Total shots processed : 116119
+2016-01-26 13:47:43 INFO  - Total shots processed : 104959
+2016-01-26 13:47:44 INFO  - Total shots processed : 116119
+2016-01-26 13:47:58 INFO  - Total shots processed : 104959
+2016-01-26 13:47:59 INFO  - Total shots processed : 116119
+2016-01-26 13:50:55 INFO  - temporary file created : /tmp/cfg_temp2680512714027293242.xml
+2016-01-26 13:50:56 INFO  - Total shots processed : 104959
+2016-01-26 13:50:57 INFO  - Total shots processed : 116119
+2016-01-26 13:51:18 INFO  - temporary file created : /tmp/cfg_temp1641699586156634490.xml
+2016-01-26 13:51:18 INFO  - Total shots processed : 104959
+2016-01-26 13:51:19 INFO  - Total shots processed : 116119
+2016-01-26 15:00:19 INFO  - Computing directions...
+2016-01-26 15:00:19 INFO  - Nb shots ring 1 = 60
+2016-01-26 15:00:19 INFO  - Nb shots ring 2 = 86
+2016-01-26 15:00:19 INFO  - Nb shots ring 3 = 102
+2016-01-26 15:00:19 INFO  - Nb shots ring 4 = 117
+2016-01-26 15:00:19 INFO  - Nb shots ring 5 = 135
+2016-01-26 15:00:33 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-26 15:00:33 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-26 15:00:33 INFO  - allocate Voxels
+2016-01-26 15:00:33 INFO  - allocate MNT
+2016-01-26 15:00:39 INFO  - nb positions= 1
+2016-01-26 15:00:39 INFO  - Computation of transmittance
+2016-01-26 15:06:04 INFO  - Computation of AVGTRANS...
+2016-01-26 15:06:04 INFO  - Computation of CNTC#...
+2016-01-26 15:06:04 INFO  - Computation of LAI...
+2016-01-26 15:06:04 INFO  - Computation of GAPS...
+2016-01-26 15:06:04 INFO  - Computation of ACFS...
+2016-01-26 15:06:04 INFO  - Computation of ACF...
+2016-01-26 15:06:04 INFO  - Computation of STDEV...
+2016-01-26 15:06:04 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-26 15:06:04 INFO  - Simulation is finished.
+2016-01-26 15:06:24 INFO  - Computing directions...
+2016-01-26 15:06:24 INFO  - Nb shots ring 1 = 60
+2016-01-26 15:06:24 INFO  - Nb shots ring 2 = 86
+2016-01-26 15:06:24 INFO  - Nb shots ring 3 = 102
+2016-01-26 15:06:24 INFO  - Nb shots ring 4 = 117
+2016-01-26 15:06:24 INFO  - Nb shots ring 5 = 135
+2016-01-26 15:06:30 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-26 15:06:30 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-26 15:06:30 INFO  - allocate Voxels
+2016-01-26 15:06:30 INFO  - allocate MNT
+2016-01-26 15:06:35 INFO  - nb positions= 1
+2016-01-26 15:06:35 INFO  - Computation of transmittance
+2016-01-26 15:12:10 INFO  - Computation of AVGTRANS...
+2016-01-26 15:12:10 INFO  - Computation of CNTC#...
+2016-01-26 15:12:10 INFO  - Computation of LAI...
+2016-01-26 15:12:10 INFO  - Computation of GAPS...
+2016-01-26 15:12:10 INFO  - Computation of ACFS...
+2016-01-26 15:12:10 INFO  - Computation of ACF...
+2016-01-26 15:12:10 INFO  - Computation of STDEV...
+2016-01-26 15:12:10 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-26 15:12:10 INFO  - Simulation is finished.
+2016-01-26 15:27:20 INFO  - Computing directions...
+2016-01-26 15:27:20 INFO  - Nb shots ring 1 = 60
+2016-01-26 15:27:20 INFO  - Nb shots ring 2 = 86
+2016-01-26 15:27:20 INFO  - Nb shots ring 3 = 102
+2016-01-26 15:27:20 INFO  - Nb shots ring 4 = 117
+2016-01-26 15:27:20 INFO  - Nb shots ring 5 = 135
+2016-01-26 15:27:32 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-26 15:27:32 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-26 15:27:32 INFO  - allocate Voxels
+2016-01-26 15:27:33 INFO  - allocate MNT
+2016-01-26 15:27:38 INFO  - nb positions= 1
+2016-01-26 15:27:38 INFO  - Computation of transmittance
+2016-01-26 15:27:38 INFO  - Computation of AVGTRANS...
+2016-01-26 15:27:38 INFO  - Computation of CNTC#...
+2016-01-26 15:27:38 INFO  - Computation of LAI...
+2016-01-26 15:27:38 INFO  - Computation of GAPS...
+2016-01-26 15:27:38 INFO  - Computation of ACFS...
+2016-01-26 15:27:38 INFO  - Computation of ACF...
+2016-01-26 15:27:38 INFO  - Computation of STDEV...
+2016-01-26 15:27:38 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-26 15:27:38 INFO  - Simulation is finished.
+2016-01-26 15:44:34 INFO  - Computing directions...
+2016-01-26 15:44:34 INFO  - Nb shots ring 1 = 60
+2016-01-26 15:44:34 INFO  - Nb shots ring 2 = 86
+2016-01-26 15:44:34 INFO  - Nb shots ring 3 = 102
+2016-01-26 15:44:34 INFO  - Nb shots ring 4 = 117
+2016-01-26 15:44:34 INFO  - Nb shots ring 5 = 135
+2016-01-26 15:44:39 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-26 15:44:39 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-26 15:44:39 INFO  - allocate Voxels
+2016-01-26 15:44:39 INFO  - allocate MNT
+2016-01-26 15:44:45 INFO  - nb positions= 1
+2016-01-26 15:44:45 INFO  - Computation of transmittance
+2016-01-26 15:44:45 INFO  - Computation of AVGTRANS...
+2016-01-26 15:44:45 INFO  - Computation of CNTC#...
+2016-01-26 15:44:45 INFO  - Computation of LAI...
+2016-01-26 15:44:45 INFO  - Computation of GAPS...
+2016-01-26 15:44:45 INFO  - Computation of ACFS...
+2016-01-26 15:44:45 INFO  - Computation of ACF...
+2016-01-26 15:44:45 INFO  - Computation of STDEV...
+2016-01-26 15:44:45 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-26 15:44:45 INFO  - Simulation is finished.
+2016-01-26 15:45:21 INFO  - Computing directions...
+2016-01-26 15:45:21 INFO  - Nb shots ring 1 = 60
+2016-01-26 15:45:21 INFO  - Nb shots ring 2 = 86
+2016-01-26 15:45:21 INFO  - Nb shots ring 3 = 102
+2016-01-26 15:45:21 INFO  - Nb shots ring 4 = 117
+2016-01-26 15:45:21 INFO  - Nb shots ring 5 = 135
+2016-01-26 15:45:26 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-26 15:45:26 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-26 15:45:26 INFO  - allocate Voxels
+2016-01-26 15:45:26 INFO  - allocate MNT
+2016-01-26 15:45:31 INFO  - nb positions= 1
+2016-01-26 15:45:31 INFO  - Computation of transmittance
+2016-01-26 15:45:32 INFO  - Computation of AVGTRANS...
+2016-01-26 15:45:32 INFO  - Computation of CNTC#...
+2016-01-26 15:45:32 INFO  - Computation of LAI...
+2016-01-26 15:45:32 INFO  - Computation of GAPS...
+2016-01-26 15:45:32 INFO  - Computation of ACFS...
+2016-01-26 15:45:32 INFO  - Computation of ACF...
+2016-01-26 15:45:32 INFO  - Computation of STDEV...
+2016-01-26 15:45:32 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-26 15:45:32 INFO  - Simulation is finished.
+2016-01-26 15:45:54 INFO  - Computing directions...
+2016-01-26 15:45:54 INFO  - Nb shots ring 1 = 60
+2016-01-26 15:45:54 INFO  - Nb shots ring 2 = 86
+2016-01-26 15:45:54 INFO  - Nb shots ring 3 = 102
+2016-01-26 15:45:54 INFO  - Nb shots ring 4 = 117
+2016-01-26 15:45:54 INFO  - Nb shots ring 5 = 135
+2016-01-26 15:45:59 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-26 15:45:59 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-26 15:45:59 INFO  - allocate Voxels
+2016-01-26 15:45:59 INFO  - allocate MNT
+2016-01-26 15:46:05 INFO  - nb positions= 1
+2016-01-26 15:46:05 INFO  - Computation of transmittance
+2016-01-26 15:46:26 INFO  - Computation of AVGTRANS...
+2016-01-26 15:46:26 INFO  - Computation of CNTC#...
+2016-01-26 15:46:26 INFO  - Computation of LAI...
+2016-01-26 15:46:26 INFO  - Computation of GAPS...
+2016-01-26 15:46:26 INFO  - Computation of ACFS...
+2016-01-26 15:46:26 INFO  - Computation of ACF...
+2016-01-26 15:46:26 INFO  - Computation of STDEV...
+2016-01-26 15:46:26 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-26 15:46:26 INFO  - Simulation is finished.
+2016-01-26 15:46:38 INFO  - Computing directions...
+2016-01-26 15:46:38 INFO  - Nb shots ring 1 = 60
+2016-01-26 15:46:38 INFO  - Nb shots ring 2 = 86
+2016-01-26 15:46:38 INFO  - Nb shots ring 3 = 102
+2016-01-26 15:46:38 INFO  - Nb shots ring 4 = 117
+2016-01-26 15:46:38 INFO  - Nb shots ring 5 = 135
+2016-01-26 15:46:43 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-26 15:46:43 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-26 15:46:43 INFO  - allocate Voxels
+2016-01-26 15:46:43 INFO  - allocate MNT
+2016-01-26 15:46:49 INFO  - nb positions= 1
+2016-01-26 15:46:49 INFO  - Computation of transmittance
+2016-01-26 15:46:49 INFO  - Computation of AVGTRANS...
+2016-01-26 15:46:49 INFO  - Computation of CNTC#...
+2016-01-26 15:46:49 INFO  - Computation of LAI...
+2016-01-26 15:46:49 INFO  - Computation of GAPS...
+2016-01-26 15:46:49 INFO  - Computation of ACFS...
+2016-01-26 15:46:49 INFO  - Computation of ACF...
+2016-01-26 15:46:49 INFO  - Computation of STDEV...
+2016-01-26 15:46:49 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-26 15:46:49 INFO  - Simulation is finished.
+2016-01-26 15:47:40 INFO  - Computing directions...
+2016-01-26 15:47:40 INFO  - Nb shots ring 1 = 60
+2016-01-26 15:47:40 INFO  - Nb shots ring 2 = 86
+2016-01-26 15:47:40 INFO  - Nb shots ring 3 = 102
+2016-01-26 15:47:40 INFO  - Nb shots ring 4 = 117
+2016-01-26 15:47:40 INFO  - Nb shots ring 5 = 135
+2016-01-26 15:47:45 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-26 15:47:45 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-26 15:47:45 INFO  - allocate Voxels
+2016-01-26 15:47:45 INFO  - allocate MNT
+2016-01-26 15:47:51 INFO  - nb positions= 1
+2016-01-26 15:47:51 INFO  - Computation of transmittance
+2016-01-26 15:48:34 INFO  - Computation of AVGTRANS...
+2016-01-26 15:48:34 INFO  - Computation of CNTC#...
+2016-01-26 15:48:34 INFO  - Computation of LAI...
+2016-01-26 15:48:34 INFO  - Computation of GAPS...
+2016-01-26 15:48:34 INFO  - Computation of ACFS...
+2016-01-26 15:48:34 INFO  - Computation of ACF...
+2016-01-26 15:48:34 INFO  - Computation of STDEV...
+2016-01-26 15:48:34 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-26 15:48:34 INFO  - Simulation is finished.
+2016-01-26 15:52:00 INFO  - Computing directions...
+2016-01-26 15:52:00 INFO  - Nb shots ring 1 = 60
+2016-01-26 15:52:00 INFO  - Nb shots ring 2 = 86
+2016-01-26 15:52:00 INFO  - Nb shots ring 3 = 102
+2016-01-26 15:52:00 INFO  - Nb shots ring 4 = 117
+2016-01-26 15:52:00 INFO  - Nb shots ring 5 = 135
+2016-01-26 15:52:12 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-26 15:52:12 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-26 15:52:12 INFO  - allocate Voxels
+2016-01-26 15:52:12 INFO  - allocate MNT
+2016-01-26 15:52:18 INFO  - nb positions= 1
+2016-01-26 15:52:18 INFO  - Computation of transmittance
+2016-01-26 15:52:18 INFO  - Computation of AVGTRANS...
+2016-01-26 15:52:18 INFO  - Computation of CNTC#...
+2016-01-26 15:52:18 INFO  - Computation of LAI...
+2016-01-26 15:52:18 INFO  - Computation of GAPS...
+2016-01-26 15:52:18 INFO  - Computation of ACFS...
+2016-01-26 15:52:18 INFO  - Computation of ACF...
+2016-01-26 15:52:18 INFO  - Computation of STDEV...
+2016-01-26 15:52:18 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-26 15:52:18 INFO  - Simulation is finished.
+2016-01-26 16:35:31 INFO  - Computing directions...
+2016-01-26 16:35:31 INFO  - Nb shots ring 1 = 60
+2016-01-26 16:35:31 INFO  - Nb shots ring 2 = 86
+2016-01-26 16:35:31 INFO  - Nb shots ring 3 = 102
+2016-01-26 16:35:31 INFO  - Nb shots ring 4 = 117
+2016-01-26 16:35:31 INFO  - Nb shots ring 5 = 135
+2016-01-26 16:35:36 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/p9inraTLSfull_withbufferALS/p9inraTLS.txt =====
+2016-01-26 16:35:36 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 16:35:36 INFO  - allocate Voxels
+2016-01-26 16:35:36 INFO  - allocate MNT
+2016-01-26 16:35:38 INFO  - nb positions= 136
+2016-01-26 16:35:38 INFO  - Computation of transmittance
+2016-01-26 16:35:42 INFO  - Computation of AVGTRANS...
+2016-01-26 16:35:42 INFO  - Computation of CNTC#...
+2016-01-26 16:35:42 INFO  - Computation of LAI...
+2016-01-26 16:35:42 INFO  - Computation of GAPS...
+2016-01-26 16:35:42 INFO  - Computation of ACFS...
+2016-01-26 16:35:42 INFO  - Computation of ACF...
+2016-01-26 16:35:42 INFO  - Computation of STDEV...
+2016-01-26 16:35:42 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_omni.txt was written.
+2016-01-26 16:35:42 INFO  - Simulation is finished.
+2016-01-26 16:35:43 INFO  - Computing directions...
+2016-01-26 16:35:43 INFO  - Nb shots ring 1 = 60
+2016-01-26 16:35:43 INFO  - Nb shots ring 2 = 86
+2016-01-26 16:35:43 INFO  - Nb shots ring 3 = 102
+2016-01-26 16:35:43 INFO  - Nb shots ring 4 = 117
+2016-01-26 16:35:43 INFO  - Nb shots ring 5 = 135
+2016-01-26 16:35:46 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring1/merged.vox =====
+2016-01-26 16:35:46 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 16:35:46 INFO  - allocate Voxels
+2016-01-26 16:35:46 INFO  - allocate MNT
+2016-01-26 16:35:48 INFO  - nb positions= 136
+2016-01-26 16:35:48 INFO  - Computation of transmittance
+2016-01-26 16:35:49 INFO  - Computation of AVGTRANS...
+2016-01-26 16:35:49 INFO  - Computation of CNTC#...
+2016-01-26 16:35:49 INFO  - Computation of LAI...
+2016-01-26 16:35:49 INFO  - Computation of GAPS...
+2016-01-26 16:35:49 INFO  - Computation of ACFS...
+2016-01-26 16:35:49 INFO  - Computation of ACF...
+2016-01-26 16:35:49 INFO  - Computation of STDEV...
+2016-01-26 16:35:50 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_1.txt was written.
+2016-01-26 16:35:50 INFO  - Simulation is finished.
+2016-01-26 16:35:50 INFO  - Computing directions...
+2016-01-26 16:35:50 INFO  - Nb shots ring 1 = 60
+2016-01-26 16:35:50 INFO  - Nb shots ring 2 = 86
+2016-01-26 16:35:50 INFO  - Nb shots ring 3 = 102
+2016-01-26 16:35:50 INFO  - Nb shots ring 4 = 117
+2016-01-26 16:35:50 INFO  - Nb shots ring 5 = 135
+2016-01-26 16:35:54 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring2/merged.vox =====
+2016-01-26 16:35:54 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 16:35:54 INFO  - allocate Voxels
+2016-01-26 16:35:54 INFO  - allocate MNT
+2016-01-26 16:35:56 INFO  - nb positions= 136
+2016-01-26 16:35:56 INFO  - Computation of transmittance
+2016-01-26 16:35:58 INFO  - Computation of AVGTRANS...
+2016-01-26 16:35:58 INFO  - Computation of CNTC#...
+2016-01-26 16:35:58 INFO  - Computation of LAI...
+2016-01-26 16:35:58 INFO  - Computation of GAPS...
+2016-01-26 16:35:58 INFO  - Computation of ACFS...
+2016-01-26 16:35:58 INFO  - Computation of ACF...
+2016-01-26 16:35:58 INFO  - Computation of STDEV...
+2016-01-26 16:35:58 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_2.txt was written.
+2016-01-26 16:35:58 INFO  - Simulation is finished.
+2016-01-26 16:35:58 INFO  - Computing directions...
+2016-01-26 16:35:58 INFO  - Nb shots ring 1 = 60
+2016-01-26 16:35:58 INFO  - Nb shots ring 2 = 86
+2016-01-26 16:35:58 INFO  - Nb shots ring 3 = 102
+2016-01-26 16:35:58 INFO  - Nb shots ring 4 = 117
+2016-01-26 16:35:58 INFO  - Nb shots ring 5 = 135
+2016-01-26 16:36:03 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring3/merged.vox =====
+2016-01-26 16:36:03 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 16:36:03 INFO  - allocate Voxels
+2016-01-26 16:36:03 INFO  - allocate MNT
+2016-01-26 16:36:05 INFO  - nb positions= 136
+2016-01-26 16:36:05 INFO  - Computation of transmittance
+2016-01-26 16:36:10 INFO  - Computation of AVGTRANS...
+2016-01-26 16:36:10 INFO  - Computation of CNTC#...
+2016-01-26 16:36:10 INFO  - Computation of LAI...
+2016-01-26 16:36:10 INFO  - Computation of GAPS...
+2016-01-26 16:36:10 INFO  - Computation of ACFS...
+2016-01-26 16:36:10 INFO  - Computation of ACF...
+2016-01-26 16:36:10 INFO  - Computation of STDEV...
+2016-01-26 16:36:10 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_3.txt was written.
+2016-01-26 16:36:10 INFO  - Simulation is finished.
+2016-01-26 16:36:10 INFO  - Computing directions...
+2016-01-26 16:36:10 INFO  - Nb shots ring 1 = 60
+2016-01-26 16:36:10 INFO  - Nb shots ring 2 = 86
+2016-01-26 16:36:10 INFO  - Nb shots ring 3 = 102
+2016-01-26 16:36:10 INFO  - Nb shots ring 4 = 117
+2016-01-26 16:36:10 INFO  - Nb shots ring 5 = 135
+2016-01-26 16:36:16 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring4/merged.vox =====
+2016-01-26 16:36:16 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 16:36:16 INFO  - allocate Voxels
+2016-01-26 16:36:16 INFO  - allocate MNT
+2016-01-26 16:36:17 INFO  - nb positions= 136
+2016-01-26 16:36:17 INFO  - Computation of transmittance
+2016-01-26 16:36:20 INFO  - Computation of AVGTRANS...
+2016-01-26 16:36:20 INFO  - Computation of CNTC#...
+2016-01-26 16:36:20 INFO  - Computation of LAI...
+2016-01-26 16:36:20 INFO  - Computation of GAPS...
+2016-01-26 16:36:20 INFO  - Computation of ACFS...
+2016-01-26 16:36:20 INFO  - Computation of ACF...
+2016-01-26 16:36:20 INFO  - Computation of STDEV...
+2016-01-26 16:36:20 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_4.txt was written.
+2016-01-26 16:36:20 INFO  - Simulation is finished.
+2016-01-26 16:36:20 INFO  - Computing directions...
+2016-01-26 16:36:20 INFO  - Nb shots ring 1 = 60
+2016-01-26 16:36:20 INFO  - Nb shots ring 2 = 86
+2016-01-26 16:36:20 INFO  - Nb shots ring 3 = 102
+2016-01-26 16:36:20 INFO  - Nb shots ring 4 = 117
+2016-01-26 16:36:20 INFO  - Nb shots ring 5 = 135
+2016-01-26 16:36:26 INFO  - ===== /media/forestview01/partageLidar/FTH2014_LAI2200/data/tests/comparaison_secteurs_angulaires/1m_filtered_ring5/merged.vox =====
+2016-01-26 16:36:26 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: TLS #res: 1.0 #MAX_PAD: 99999.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 16:36:26 INFO  - allocate Voxels
+2016-01-26 16:36:26 INFO  - allocate MNT
+2016-01-26 16:36:28 INFO  - nb positions= 136
+2016-01-26 16:36:28 INFO  - Computation of transmittance
+2016-01-26 16:36:31 INFO  - Computation of AVGTRANS...
+2016-01-26 16:36:31 INFO  - Computation of CNTC#...
+2016-01-26 16:36:31 INFO  - Computation of LAI...
+2016-01-26 16:36:31 INFO  - Computation of GAPS...
+2016-01-26 16:36:31 INFO  - Computation of ACFS...
+2016-01-26 16:36:31 INFO  - Computation of ACF...
+2016-01-26 16:36:31 INFO  - Computation of STDEV...
+2016-01-26 16:36:31 INFO  - File /media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/tls_ring_5.txt was written.
+2016-01-26 16:36:31 INFO  - Simulation is finished.
+2016-01-26 16:37:57 INFO  - Computing directions...
+2016-01-26 16:37:57 INFO  - Nb shots ring 1 = 60
+2016-01-26 16:37:57 INFO  - Nb shots ring 2 = 86
+2016-01-26 16:37:57 INFO  - Nb shots ring 3 = 102
+2016-01-26 16:37:57 INFO  - Nb shots ring 4 = 117
+2016-01-26 16:37:57 INFO  - Nb shots ring 5 = 135
+2016-01-26 16:39:04 INFO  - ===== /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als_300m.vox =====
+2016-01-26 16:39:04 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 65.0
+#split: 300 300 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 16:39:04 INFO  - allocate Voxels
+2016-01-26 16:39:04 INFO  - allocate MNT
+2016-01-26 16:39:32 INFO  - nb positions= 64
+2016-01-26 16:39:32 INFO  - Computation of transmittance
+2016-01-26 16:39:34 INFO  - Computation of AVGTRANS...
+2016-01-26 16:39:34 INFO  - Computation of CNTC#...
+2016-01-26 16:39:34 INFO  - Computation of LAI...
+2016-01-26 16:39:34 INFO  - Computation of GAPS...
+2016-01-26 16:39:34 INFO  - Computation of ACFS...
+2016-01-26 16:39:34 INFO  - Computation of ACF...
+2016-01-26 16:39:34 INFO  - Computation of STDEV...
+2016-01-26 16:39:34 INFO  - File /home/calcul/Documents/Julien/Dossier_pour_papier_lai2200_marilyne/test/lai2200.txt was written.
+2016-01-26 16:39:34 INFO  - Simulation is finished.
+2016-01-26 16:39:34 INFO  - Computing directions...
+2016-01-26 16:39:34 INFO  - Nb shots ring 1 = 60
+2016-01-26 16:39:34 INFO  - Nb shots ring 2 = 86
+2016-01-26 16:39:34 INFO  - Nb shots ring 3 = 102
+2016-01-26 16:39:34 INFO  - Nb shots ring 4 = 117
+2016-01-26 16:39:34 INFO  - Nb shots ring 5 = 135
+2016-01-26 16:39:34 ERROR - Service failed : 
+java.lang.Exception: Cannot find voxel file
+	at fr.amap.lidar.amapvox.commons.VoxelSpaceInfos.readFromVoxelFile(VoxelSpaceInfos.java:84)
+	at fr.amap.amapvox.voxreader.AbstractReader.<init>(AbstractReader.java:51)
+	at fr.amap.amapvox.voxreader.VoxelFileReader.<init>(VoxelFileReader.java:33)
+	at fr.amap.amapvox.simulation.transmittance.lai2xxx.Lai2xxxSim.process(Lai2xxxSim.java:128)
+	at fr.amap.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4353)
+	at fr.amap.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4329)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$492(Service.java:725)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$493(Service.java:724)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.io.FileNotFoundException: /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als.vox (Aucun fichier ou dossier de ce type)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at java.io.FileReader.<init>(FileReader.java:72)
+	at fr.amap.lidar.amapvox.commons.VoxelSpaceInfos.readFromVoxelFile(VoxelSpaceInfos.java:37)
+	... 13 more
+2016-01-26 16:40:24 INFO  - Computing directions...
+2016-01-26 16:40:24 INFO  - Nb shots ring 1 = 60
+2016-01-26 16:40:24 INFO  - Nb shots ring 2 = 86
+2016-01-26 16:40:24 INFO  - Nb shots ring 3 = 102
+2016-01-26 16:40:24 INFO  - Nb shots ring 4 = 117
+2016-01-26 16:40:24 INFO  - Nb shots ring 5 = 135
+2016-01-26 16:40:29 INFO  - ===== /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als_80m.vox =====
+2016-01-26 16:40:29 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 16:40:29 INFO  - allocate Voxels
+2016-01-26 16:40:29 INFO  - allocate MNT
+2016-01-26 16:40:31 INFO  - nb positions= 64
+2016-01-26 16:40:31 INFO  - Computation of transmittance
+2016-01-26 16:40:32 INFO  - Computation of AVGTRANS...
+2016-01-26 16:40:32 INFO  - Computation of CNTC#...
+2016-01-26 16:40:32 INFO  - Computation of LAI...
+2016-01-26 16:40:32 INFO  - Computation of GAPS...
+2016-01-26 16:40:32 INFO  - Computation of ACFS...
+2016-01-26 16:40:32 INFO  - Computation of ACF...
+2016-01-26 16:40:32 INFO  - Computation of STDEV...
+2016-01-26 16:40:32 INFO  - File /home/calcul/Documents/Julien/Dossier_pour_papier_lai2200_marilyne/test/lai2200.txt was written.
+2016-01-26 16:40:32 INFO  - Simulation is finished.
+2016-01-26 16:42:04 INFO  - Computing directions...
+2016-01-26 16:42:04 INFO  - Nb shots ring 1 = 60
+2016-01-26 16:42:04 INFO  - Nb shots ring 2 = 86
+2016-01-26 16:42:04 INFO  - Nb shots ring 3 = 102
+2016-01-26 16:42:04 INFO  - Nb shots ring 4 = 117
+2016-01-26 16:42:04 INFO  - Nb shots ring 5 = 135
+2016-01-26 16:42:33 INFO  - ===== /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als_300m.vox =====
+2016-01-26 16:42:33 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 65.0
+#split: 300 300 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-26 16:42:33 INFO  - allocate Voxels
+2016-01-26 16:42:33 INFO  - allocate MNT
+2016-01-26 16:43:04 INFO  - nb positions= 64
+2016-01-26 16:43:04 INFO  - Computation of transmittance
+2016-01-26 16:43:06 INFO  - Computation of AVGTRANS...
+2016-01-26 16:43:06 INFO  - Computation of CNTC#...
+2016-01-26 16:43:06 INFO  - Computation of LAI...
+2016-01-26 16:43:06 INFO  - Computation of GAPS...
+2016-01-26 16:43:06 INFO  - Computation of ACFS...
+2016-01-26 16:43:06 INFO  - Computation of ACF...
+2016-01-26 16:43:06 INFO  - Computation of STDEV...
+2016-01-26 16:43:06 INFO  - File /home/calcul/Documents/Julien/Dossier_pour_papier_lai2200_marilyne/test/lai2200.txt was written.
+2016-01-26 16:43:06 INFO  - Simulation is finished.
+2016-01-26 17:54:45 ERROR - File is not a voxel file: /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS

@@ -1128,9 +1128,9 @@
                                                                   <Font name="System Bold" size="12.0" />
                                                                </font>
                                                             </Label>
-                                                            <VBox prefHeight="44.0" prefWidth="358.0" spacing="2.0">
+                                                            <VBox disable="true" prefHeight="44.0" prefWidth="358.0" spacing="2.0">
                                                                <children>
-                                                                  <CheckBox fx:id="checkboxGenerateSectorsTextFileHemiPhoto" mnemonicParsing="false" selected="true" text="Generate sector text file" />
+                                                                  <CheckBox fx:id="checkboxGenerateSectorsTextFileHemiPhoto" mnemonicParsing="false" text="Generate sector text file" />
                                                                   <HBox>
                                                                      <children>
                                                                         <TextField fx:id="textfieldHemiPhotoOutputTextFile" prefHeight="26.0" prefWidth="308.0" />
@@ -1163,7 +1163,7 @@
                                                       </VBox>
                                                       <HBox layoutX="673.0" layoutY="348.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
                                                          <children>
-                                                            <Button mnemonicParsing="false" onAction="#onActionButtonExecuteCanopyAnalyzerSimulation" text="Execute">
+                                                            <Button mnemonicParsing="false" onAction="#onActionButtonExecuteHemiPhotoSimulation" text="Execute">
                                                                <graphic>
                                                                   <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                                      <image>
@@ -1177,7 +1177,7 @@
                                                                   <Insets left="-8.0" />
                                                                </padding>
                                                                <items>
-                                                                  <MenuItem mnemonicParsing="false" onAction="#onActionButtonSaveCanopyAnalyzerSimulation" text="Save">
+                                                                  <MenuItem mnemonicParsing="false" onAction="#onActionButtonSaveHemiPhotoSimulation" text="Save">
                                                                      <graphic>
                                                                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                                            <image>

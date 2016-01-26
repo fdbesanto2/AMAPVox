@@ -5,6 +5,7 @@
  */
 package fr.amap.amapvox.simulation.transmittance.lai2xxx;
 
+import fr.amap.amapvox.commons.util.SphericalCoordinates;
 import fr.amap.amapvox.commons.util.Statistic;
 import fr.amap.amapvox.jeeb.raytracing.geometry.LineElement;
 import fr.amap.amapvox.jeeb.raytracing.geometry.LineSegment;
@@ -164,8 +165,8 @@ public class Lai2xxxSim {
 //            }
 //        }*/
 //        
-//        BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/media/forestview01/partageLidar/PapierLidarLAI/Data/part2 - validation/anisotropie_de_la_transmittance/trajets_optiques_par_ring/als_300x300.txt")));
-//        writer.write("position.ID"+" "+"position.x"+" "+"position.y"+" "+"position.z"+" "+"ring"+" "+"pathLength"+" "+"transmittance"+" "+"isOut"+"\n");
+//        BufferedWriter writer = new BufferedWriter(new FileWriter(new File(parameters.getTextFile().getAbsolutePath()+"_test.txt")));
+//        writer.write("position.ID"+" "+"position.x"+" "+"position.y"+" "+"position.z"+" "+"ring"+" "+"pathLength"+" "+"transmittance"+" "+"isOut"+" "+"azimut"+" "+"elevation"+"\n");
 //        
 //        //*******fin du test
 //        
@@ -215,6 +216,9 @@ public class Lai2xxxSim {
 //                boolean gotOneNaN = false;
 //                
 //                boolean wasOutside = false;
+//                
+//                SphericalCoordinates sc = new SphericalCoordinates();
+//                sc.toSpherical(dir);
 //
 //                while ((context != null) && (context.indices != null)) {
 //
@@ -229,10 +233,6 @@ public class Lai2xxxSim {
 //                    if(Float.isNaN(voxel.PadBVTotal)){
 //                        gotOneNaN = true;
 //                        break;
-//                    }
-//
-//                    if(voxel.PadBVTotal > 0){
-//                        lastValidDistance = distance;
 //                    }
 //
 //                    //distance from the last origin to the point in which the ray enter the voxel
@@ -262,6 +262,10 @@ public class Lai2xxxSim {
 //                    }else {
 //                        distance += (d2 - d1);
 //                    }
+//                    
+//                    if(voxel.PadBVTotal > 0){
+//                        lastValidDistance = distance;
+//                    }
 //                }
 //
 //                double pathLength = lastValidDistance;
@@ -277,7 +281,7 @@ public class Lai2xxxSim {
 //                    //tranStattistics[positionID][ring].addValue((Math.pow(l.get(positionID)[ring], 1/pathLength)));
 //                    
 //                    
-//                    writer.write(positionID+" "+position.x+" "+position.y+" "+position.z+" "+(ring+1)+" "+pathLength+" "+transmitted+" "+wasOutside+"\n");
+//                    writer.write(positionID+" "+position.x+" "+position.y+" "+position.z+" "+(ring+1)+" "+pathLength+" "+transmitted+" "+wasOutside+" "+(float)Math.toDegrees(sc.getAzimuth())+" "+(float)Math.toDegrees(sc.getElevation())+"\n");
 //                }else{
 //                    NaNCounter.addValue(Double.NaN);
 //                }

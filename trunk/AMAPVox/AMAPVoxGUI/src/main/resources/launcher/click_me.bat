@@ -18,4 +18,4 @@ GOTO :common
 :common
 echo Java max heap size fixed to %maxJVMMemory%
 
-java -jar -Xmx%maxJVMMemory%k %~dp0%AMAPVoxGUI-1.0-r$BUILD_NUMBER$.jar
+java -jar -Xmx%maxJVMMemory%k "%~dp0%AMAPVoxGUI-1.0-r$BUILD_NUMBER$.jar"

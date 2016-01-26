@@ -5,7 +5,7 @@
  */
 package fr.amap.amapvox.rxptolaz;
 
-import fr.amap.amapvox.math.matrix.Mat4D;
+import fr.amap.commons.math.matrix.Mat4D;
 import java.io.File;
 
 /**

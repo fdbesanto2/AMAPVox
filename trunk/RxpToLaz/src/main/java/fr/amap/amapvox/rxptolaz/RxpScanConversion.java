@@ -7,10 +7,10 @@ package fr.amap.amapvox.rxptolaz;
 
 import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
 import fr.amap.amapvox.io.tls.rxp.Shot;
-import fr.amap.amapvox.math.matrix.Mat3D;
-import fr.amap.amapvox.math.matrix.Mat4D;
-import fr.amap.amapvox.math.vector.Vec3D;
-import fr.amap.amapvox.math.vector.Vec4D;
+import fr.amap.commons.math.matrix.Mat3D;
+import fr.amap.commons.math.matrix.Mat4D;
+import fr.amap.commons.math.vector.Vec3D;
+import fr.amap.commons.math.vector.Vec4D;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

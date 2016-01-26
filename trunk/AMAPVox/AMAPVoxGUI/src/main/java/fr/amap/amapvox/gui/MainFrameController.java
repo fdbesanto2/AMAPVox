@@ -96,6 +96,7 @@ import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject;
 import fr.amap.amapvox.voxviewer.object.scene.SimpleSceneObject2;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceAdapter;
 import fr.amap.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
+import fr.amap.commons.javafx.EditableListViewController;
 import fr.amap.commons.javafx.io.TextFileParserFrameController;
 import fr.amap.commons.javafx.matrix.TransformationFrameController;
 import java.awt.image.BufferedImage;
@@ -296,8 +297,9 @@ public class MainFrameController implements Initializable {
     private FileChooser fileChooserOpenPointsPositionFile;
     private FileChooser fileChooserSaveTransmittanceTextFile;
     private DirectoryChooser directoryChooserSaveTransmittanceBitmapFile;
-    private FileChooser fileChooserSaveHemiPhotoOutputBitmapFile;
+    //private FileChooser fileChooserSaveHemiPhotoOutputBitmapFile;
     private FileChooser fileChooserSaveHemiPhotoOutputTextFile;
+    private FileChooserContext fileChooserSaveHemiPhotoOutputBitmapFile;
     private FileChooserContext fileChooserOpenCanopyAnalyserInputFile;
     private FileChooserContext fileChooserSaveCanopyAnalyserOutputFile;
     private FileChooserContext fileChooserSaveCanopyAnalyserCfgFile;
@@ -719,6 +721,8 @@ public class MainFrameController implements Initializable {
     private MenuItem menuItemExportDartPlots;
     @FXML
     private ListView<File> listViewProductsFiles;
+    @FXML
+    private EditableListViewController customListView;
 
     
     /**
@@ -735,6 +739,8 @@ public class MainFrameController implements Initializable {
                 a.show();
             }
         });*/
+        
+        listViewTaskList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         MenuItem menuItemPadValue1m = new MenuItem("1m voxel size");
         addMenuItemPadValue(menuItemPadValue1m, 3.536958f);
@@ -1171,8 +1177,8 @@ public class MainFrameController implements Initializable {
         directoryChooserSaveTransmittanceBitmapFile = new DirectoryChooser();
         directoryChooserSaveTransmittanceBitmapFile.setTitle("Choose output directory");
         
-        fileChooserSaveHemiPhotoOutputBitmapFile = new FileChooser();
-        fileChooserSaveHemiPhotoOutputBitmapFile.setTitle("Save bitmap file");
+        fileChooserSaveHemiPhotoOutputBitmapFile = new FileChooserContext("*.png");
+        fileChooserSaveHemiPhotoOutputBitmapFile.fc.setTitle("Save bitmap file");
         
         fileChooserSaveHemiPhotoOutputTextFile = new FileChooser();
         fileChooserSaveHemiPhotoOutputTextFile.setTitle("Save text file");
@@ -1934,6 +1940,61 @@ public class MainFrameController implements Initializable {
             throw ex;
         }
     }
+    
+    private void saveHemiPhotoSimulation(File file) throws Exception{
+        
+        if (file != null) {
+            
+            HemiParameters hemiParameters = new HemiParameters();
+                
+            hemiParameters.setPixelNumber(Integer.valueOf(textfieldPixelNumber.getText()));
+            hemiParameters.setAzimutsNumber(Integer.valueOf(textfieldAzimutsNumber.getText()));
+            hemiParameters.setZenithsNumber(Integer.valueOf(textfieldZenithsNumber.getText()));
+
+            int selectedMode = tabpaneHemiPhotoMode.getSelectionModel().getSelectedIndex();
+
+            switch(selectedMode){
+                case 0 :
+                    hemiParameters.setMode(HemiParameters.Mode.ECHOS);
+                    hemiParameters.setRxpScansList(listViewHemiPhotoScans.getItems());
+                    break;
+                case 1:
+                    hemiParameters.setMode(HemiParameters.Mode.PAD);
+
+                    hemiParameters.setVoxelFile(new File(textfieldVoxelFilePathHemiPhoto.getText()));
+                    hemiParameters.setSensorPosition(new Point3d(Double.valueOf(textfieldSensorPositionX.getText()),
+                                                                Double.valueOf(textfieldSensorPositionY.getText()),
+                                                                Double.valueOf(textfieldSensorPositionZ.getText())));
+                    break;
+            }
+
+            hemiParameters.setGenerateBitmapFile(checkboxHemiPhotoGenerateBitmapFile.isSelected());
+
+            if(checkboxHemiPhotoGenerateBitmapFile.isSelected()){
+                hemiParameters.setOutputBitmapFile(new File(textfieldHemiPhotoOutputBitmapFile.getText()));
+
+                int selectedIndex = comboboxHemiPhotoBitmapOutputMode.getSelectionModel().getSelectedIndex();
+                switch(selectedIndex){
+                    case 0:
+                        hemiParameters.setBitmapMode(HemiParameters.BitmapMode.PIXEL);
+                        break;
+                    case 1:
+                        hemiParameters.setBitmapMode(HemiParameters.BitmapMode.COLOR);
+                        break;
+                }
+
+            }
+
+            hemiParameters.setGenerateTextFile(checkboxGenerateSectorsTextFileHemiPhoto.isSelected());
+
+            if(checkboxGenerateSectorsTextFileHemiPhoto.isSelected()){
+                hemiParameters.setOutputTextFile(new File(textfieldHemiPhotoOutputTextFile.getText()));
+            }
+
+            HemiPhotoCfg hemiPhotoCfg = new HemiPhotoCfg(hemiParameters);
+            hemiPhotoCfg.writeConfiguration(file);
+        }
+    }
 
     @FXML
     private void onActionButtonSaveExecuteCanopyAnalyzerSimulation(ActionEvent event) {
@@ -2573,6 +2634,7 @@ public class MainFrameController implements Initializable {
         }
         
     }
+
     
     private class SceneObjectProperty{
         
@@ -2809,63 +2871,52 @@ public class MainFrameController implements Initializable {
         File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
         
         if (selectedFile != null) {
-            
-            HemiParameters hemiParameters = new HemiParameters();
+
             try {
-                
-                hemiParameters.setPixelNumber(Integer.valueOf(textfieldPixelNumber.getText()));
-                hemiParameters.setAzimutsNumber(Integer.valueOf(textfieldAzimutsNumber.getText()));
-                hemiParameters.setZenithsNumber(Integer.valueOf(textfieldZenithsNumber.getText()));
-                
-                int selectedMode = tabpaneHemiPhotoMode.getSelectionModel().getSelectedIndex();
-                
-                switch(selectedMode){
-                    case 0 :
-                        hemiParameters.setMode(HemiParameters.Mode.ECHOS);
-                        hemiParameters.setRxpScansList(listViewHemiPhotoScans.getItems());
-                        break;
-                    case 1:
-                        hemiParameters.setMode(HemiParameters.Mode.PAD);
-                        
-                        hemiParameters.setVoxelFile(new File(textfieldVoxelFilePathHemiPhoto.getText()));
-                        hemiParameters.setSensorPosition(new Point3d(Double.valueOf(textfieldSensorPositionX.getText()),
-                                                                    Double.valueOf(textfieldSensorPositionY.getText()),
-                                                                    Double.valueOf(textfieldSensorPositionZ.getText())));
-                        break;
-                }
-                
-                hemiParameters.setGenerateBitmapFile(checkboxHemiPhotoGenerateBitmapFile.isSelected());
-                
-                if(checkboxHemiPhotoGenerateBitmapFile.isSelected()){
-                    hemiParameters.setOutputBitmapFile(new File(textfieldHemiPhotoOutputBitmapFile.getText()));
-                    
-                    int selectedIndex = comboboxHemiPhotoBitmapOutputMode.getSelectionModel().getSelectedIndex();
-                    switch(selectedIndex){
-                        case 0:
-                            hemiParameters.setBitmapMode(HemiParameters.BitmapMode.PIXEL);
-                            break;
-                        case 1:
-                            hemiParameters.setBitmapMode(HemiParameters.BitmapMode.COLOR);
-                            break;
-                    }
-                    
-                }
-                
-                hemiParameters.setGenerateTextFile(checkboxGenerateSectorsTextFileHemiPhoto.isSelected());
-                
-                if(checkboxGenerateSectorsTextFileHemiPhoto.isSelected()){
-                    hemiParameters.setOutputTextFile(new File(textfieldHemiPhotoOutputTextFile.getText()));
-                }
-                
-                HemiPhotoCfg hemiPhotoCfg = new HemiPhotoCfg(hemiParameters);
-                hemiPhotoCfg.writeConfiguration(selectedFile);
-                addTasksToTaskList(selectedFile);
-                
+                saveHemiPhotoSimulation(selectedFile);
+                addFileToTaskList(selectedFile);
+                executeProcess(selectedFile);
             } catch (Exception ex) {
                 showErrorDialog(ex);
             }
         }
     }
+    
+    @FXML
+    private void onActionButtonExecuteHemiPhotoSimulation(ActionEvent event) {
+        
+        File temporaryFile;
+        try{
+            temporaryFile  = File.createTempFile("cfg_temp", ".xml");
+            saveHemiPhotoSimulation(temporaryFile);
+            
+            logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
+            
+            executeProcess(temporaryFile);
+            
+        }catch(IOException e){
+            showErrorDialog(e);
+        }catch(Exception e){
+            showErrorDialog(e);
+        }
+    }
+
+    @FXML
+    private void onActionButtonSaveHemiPhotoSimulation(ActionEvent event) {
+        
+        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
+        
+        if (selectedFile != null) {
+
+            try {
+                saveHemiPhotoSimulation(selectedFile);
+                addFileToTaskList(selectedFile);
+            } catch (Exception ex) {
+                showErrorDialog(ex);
+            }
+        }
+    }
+    
 
     @FXML
     private void onActionButtonOpenHemiPhotoOutputTextFile(ActionEvent event) {
@@ -2884,10 +2935,6 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionButtonOpenHemiPhotoOutputBitmapFile(ActionEvent event) {
-        
-        if(lastFCOpenHemiPhotoOutputBitmapFile != null){
-            fileChooserSaveHemiPhotoOutputBitmapFile.setInitialDirectory(lastFCOpenHemiPhotoOutputBitmapFile.getParentFile());
-        }
         
         File selectedFile = fileChooserSaveHemiPhotoOutputBitmapFile.showSaveDialog(stage);
         
