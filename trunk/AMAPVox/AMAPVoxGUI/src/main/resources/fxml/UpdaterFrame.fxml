@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="235.0" prefWidth="479.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.amapvox.gui.UpdaterFrameController">
+<AnchorPane id="AnchorPane" prefHeight="235.0" prefWidth="479.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.lidar.amapvox.gui.UpdaterFrameController">
    <children>
       <TitledPane collapsible="false" layoutX="12.0" layoutY="14.0" text="Releases available" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
          <content>

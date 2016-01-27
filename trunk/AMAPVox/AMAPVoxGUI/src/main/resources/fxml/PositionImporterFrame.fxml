@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="623.0" prefWidth="504.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.amapvox.gui.PositionImporterFrameController">
+<AnchorPane id="AnchorPane" prefHeight="623.0" prefWidth="504.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.lidar.amapvox.gui.PositionImporterFrameController">
    <children>
       <VBox layoutX="14.0" layoutY="14.0" prefHeight="102.0" prefWidth="431.0">
          <children>

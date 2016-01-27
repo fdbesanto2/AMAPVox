@@ -66512,3 +66512,450 @@ i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal l
 2016-01-26 16:43:06 INFO  - File /home/calcul/Documents/Julien/Dossier_pour_papier_lai2200_marilyne/test/lai2200.txt was written.
 2016-01-26 16:43:06 INFO  - Simulation is finished.
 2016-01-26 17:54:45 ERROR - File is not a voxel file: /home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS
+2016-01-27 08:40:12 INFO  - Computing directions...
+2016-01-27 08:40:12 INFO  - Nb shots ring 1 = 60
+2016-01-27 08:40:12 INFO  - Nb shots ring 2 = 86
+2016-01-27 08:40:12 INFO  - Nb shots ring 3 = 102
+2016-01-27 08:40:12 INFO  - Nb shots ring 4 = 117
+2016-01-27 08:40:12 INFO  - Nb shots ring 5 = 135
+2016-01-27 08:40:12 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-27 08:40:13 ERROR - Service failed : 
+java.lang.Exception: Cannot find voxel file
+	at fr.amap.lidar.amapvox.commons.VoxelSpaceInfos.readFromVoxelFile(VoxelSpaceInfos.java:84)
+	at fr.amap.amapvox.voxreader.AbstractReader.<init>(AbstractReader.java:51)
+	at fr.amap.amapvox.voxreader.VoxelFileReader.<init>(VoxelFileReader.java:33)
+	at fr.amap.amapvox.jeeb.raytracing.voxel.DirectionalTransmittance.<init>(DirectionalTransmittance.java:50)
+	at fr.amap.amapvox.simulation.transmittance.lai2xxx.Lai2xxxSim.process(Lai2xxxSim.java:79)
+	at fr.amap.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4355)
+	at fr.amap.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4331)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$492(Service.java:725)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$493(Service.java:724)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.io.FileNotFoundException: /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox (Aucun fichier ou dossier de ce type)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at java.io.FileReader.<init>(FileReader.java:72)
+	at fr.amap.lidar.amapvox.commons.VoxelSpaceInfos.readFromVoxelFile(VoxelSpaceInfos.java:37)
+	... 14 more
+2016-01-27 08:40:27 INFO  - Computing directions...
+2016-01-27 08:40:27 INFO  - Nb shots ring 1 = 60
+2016-01-27 08:40:27 INFO  - Nb shots ring 2 = 86
+2016-01-27 08:40:27 INFO  - Nb shots ring 3 = 102
+2016-01-27 08:40:27 INFO  - Nb shots ring 4 = 117
+2016-01-27 08:40:27 INFO  - Nb shots ring 5 = 135
+2016-01-27 08:40:27 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-27 08:40:27 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-27 08:40:27 INFO  - allocate Voxels
+2016-01-27 08:40:27 INFO  - allocate MNT
+2016-01-27 08:40:40 INFO  - nb positions= 1
+2016-01-27 08:40:40 INFO  - Computation of transmittance
+2016-01-27 08:40:40 INFO  - Computation of AVGTRANS...
+2016-01-27 08:40:40 INFO  - Computation of CNTC#...
+2016-01-27 08:40:40 INFO  - Computation of LAI...
+2016-01-27 08:40:40 INFO  - Computation of GAPS...
+2016-01-27 08:40:40 INFO  - Computation of ACFS...
+2016-01-27 08:40:40 INFO  - Computation of ACF...
+2016-01-27 08:40:40 INFO  - Computation of STDEV...
+2016-01-27 08:40:40 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300_tmp.txt was written.
+2016-01-27 08:40:40 INFO  - Simulation is finished.
+2016-01-27 08:41:22 INFO  - Computing directions...
+2016-01-27 08:41:22 INFO  - Nb shots ring 1 = 60
+2016-01-27 08:41:22 INFO  - Nb shots ring 2 = 86
+2016-01-27 08:41:22 INFO  - Nb shots ring 3 = 102
+2016-01-27 08:41:22 INFO  - Nb shots ring 4 = 117
+2016-01-27 08:41:22 INFO  - Nb shots ring 5 = 135
+2016-01-27 08:41:22 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-27 08:41:22 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-27 08:41:22 INFO  - allocate Voxels
+2016-01-27 08:41:22 INFO  - allocate MNT
+2016-01-27 08:41:27 INFO  - nb positions= 1
+2016-01-27 08:41:27 INFO  - Computation of transmittance
+2016-01-27 08:41:28 INFO  - Computation of AVGTRANS...
+2016-01-27 08:41:28 INFO  - Computation of CNTC#...
+2016-01-27 08:41:28 INFO  - Computation of LAI...
+2016-01-27 08:41:28 INFO  - Computation of GAPS...
+2016-01-27 08:42:43 INFO  - Computation of ACFS...
+2016-01-27 08:42:43 INFO  - Computation of ACF...
+2016-01-27 08:42:43 INFO  - Computation of STDEV...
+2016-01-27 08:42:43 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300_tmp.txt was written.
+2016-01-27 08:42:43 INFO  - Simulation is finished.
+2016-01-27 08:42:46 INFO  - Computing directions...
+2016-01-27 08:42:46 INFO  - Nb shots ring 1 = 60
+2016-01-27 08:42:46 INFO  - Nb shots ring 2 = 86
+2016-01-27 08:42:46 INFO  - Nb shots ring 3 = 102
+2016-01-27 08:42:46 INFO  - Nb shots ring 4 = 117
+2016-01-27 08:42:46 INFO  - Nb shots ring 5 = 135
+2016-01-27 08:42:46 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-27 08:42:46 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-27 08:42:46 INFO  - allocate Voxels
+2016-01-27 08:42:46 INFO  - allocate MNT
+2016-01-27 08:42:51 INFO  - nb positions= 1
+2016-01-27 08:42:51 INFO  - Computation of transmittance
+2016-01-27 08:44:13 INFO  - Computation of AVGTRANS...
+2016-01-27 08:44:13 INFO  - Computation of CNTC#...
+2016-01-27 08:44:13 INFO  - Computation of LAI...
+2016-01-27 08:44:13 INFO  - Computation of GAPS...
+2016-01-27 08:44:15 INFO  - Computation of ACFS...
+2016-01-27 08:44:15 INFO  - Computation of ACF...
+2016-01-27 08:44:15 INFO  - Computation of STDEV...
+2016-01-27 08:44:15 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300_tmp.txt was written.
+2016-01-27 08:44:15 INFO  - Simulation is finished.
+2016-01-27 08:45:55 INFO  - Computing directions...
+2016-01-27 08:45:55 INFO  - Nb shots ring 1 = 60
+2016-01-27 08:45:55 INFO  - Nb shots ring 2 = 86
+2016-01-27 08:45:55 INFO  - Nb shots ring 3 = 102
+2016-01-27 08:45:55 INFO  - Nb shots ring 4 = 117
+2016-01-27 08:45:55 INFO  - Nb shots ring 5 = 135
+2016-01-27 08:45:55 INFO  - ===== /media/forestview01/partageLidar/FTH2014_TLS/p9inraTLSfullwithbufferALS_091115b.txt =====
+2016-01-27 08:45:55 INFO  - VOXEL SPACE
+#min_corner: -100.0 -100.0 0.0
+#max_corner: 170.0 170.0 60.0
+#split: 270 270 60
+#type: ALS #res: 1.0 #MAX_PAD: 5.0
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-27 08:45:55 INFO  - allocate Voxels
+2016-01-27 08:45:55 INFO  - allocate MNT
+2016-01-27 08:46:48 INFO  - nb positions= 64
+2016-01-27 08:46:48 INFO  - Computation of transmittance
+2016-01-27 08:46:49 INFO  - Computation of AVGTRANS...
+2016-01-27 08:46:49 INFO  - Computation of CNTC#...
+2016-01-27 08:46:49 INFO  - Computation of LAI...
+2016-01-27 08:46:49 INFO  - Computation of GAPS...
+2016-01-27 09:13:25 INFO  - Computing directions...
+2016-01-27 09:13:25 INFO  - Nb shots ring 1 = 61
+2016-01-27 09:13:25 INFO  - Nb shots ring 2 = 84
+2016-01-27 09:13:25 INFO  - Nb shots ring 3 = 100
+2016-01-27 09:13:25 INFO  - Nb shots ring 4 = 115
+2016-01-27 09:13:25 INFO  - Nb shots ring 5 = 140
+2016-01-27 09:13:25 INFO  - ===== /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als_300m.vox =====
+2016-01-27 09:13:25 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 65.0
+#split: 300 300 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-27 09:13:25 INFO  - allocate Voxels
+2016-01-27 09:13:25 INFO  - allocate MNT
+2016-01-27 09:14:33 INFO  - nb positions= 64
+2016-01-27 09:14:33 INFO  - Computation of transmittance
+2016-01-27 09:14:34 INFO  - Computation of AVGTRANS...
+2016-01-27 09:14:34 INFO  - Computation of CNTC#...
+2016-01-27 09:14:34 INFO  - Computation of LAI...
+2016-01-27 09:14:34 INFO  - Computation of GAPS...
+2016-01-27 09:14:37 INFO  - Computation of ACFS...
+2016-01-27 09:14:37 INFO  - Computation of ACF...
+2016-01-27 09:14:37 INFO  - Computation of STDEV...
+2016-01-27 09:14:37 INFO  - File /home/calcul/Documents/Julien/test_lai2200/als.txt was written.
+2016-01-27 09:14:37 INFO  - Simulation is finished.
+2016-01-27 11:40:02 INFO  - Computing directions...
+2016-01-27 11:40:02 INFO  - Nb shots ring 1 = 61
+2016-01-27 11:40:02 INFO  - Nb shots ring 2 = 84
+2016-01-27 11:40:02 INFO  - Nb shots ring 3 = 100
+2016-01-27 11:40:02 INFO  - Nb shots ring 4 = 115
+2016-01-27 11:40:02 INFO  - Nb shots ring 5 = 140
+2016-01-27 11:40:02 INFO  - ===== /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als_300m.vox =====
+2016-01-27 11:40:02 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 65.0
+#split: 300 300 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-27 11:40:02 INFO  - allocate Voxels
+2016-01-27 11:40:02 INFO  - allocate MNT
+2016-01-27 11:41:15 INFO  - nb positions= 64
+2016-01-27 11:41:15 INFO  - Computation of transmittance
+2016-01-27 11:41:16 INFO  - Computation of AVGTRANS...
+2016-01-27 11:41:16 INFO  - Computation of CNTC#...
+2016-01-27 11:41:16 INFO  - Computation of LAI...
+2016-01-27 11:41:16 INFO  - Computation of GAPS...
+2016-01-27 11:41:16 INFO  - Computation of ACFS...
+2016-01-27 11:41:16 INFO  - Computation of ACF...
+2016-01-27 11:41:16 INFO  - Computation of STDEV...
+2016-01-27 11:41:16 INFO  - File /home/calcul/Documents/Julien/test_lai2200/als_transmittances.txt was written.
+2016-01-27 11:41:16 INFO  - Simulation is finished.
+2016-01-27 11:42:52 INFO  - Computing directions...
+2016-01-27 11:42:52 INFO  - Nb shots ring 1 = 61
+2016-01-27 11:42:52 INFO  - Nb shots ring 2 = 84
+2016-01-27 11:42:52 INFO  - Nb shots ring 3 = 100
+2016-01-27 11:42:52 INFO  - Nb shots ring 4 = 115
+2016-01-27 11:42:52 INFO  - Nb shots ring 5 = 140
+2016-01-27 11:42:52 INFO  - ===== /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als_300m.vox =====
+2016-01-27 11:42:52 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 65.0
+#split: 300 300 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-01-27 11:42:52 INFO  - allocate Voxels
+2016-01-27 11:42:52 INFO  - allocate MNT
+2016-01-27 11:44:13 INFO  - nb positions= 64
+2016-01-27 11:44:13 INFO  - Computation of transmittance
+2016-01-27 11:44:14 INFO  - Computation of AVGTRANS...
+2016-01-27 11:44:14 INFO  - Computation of CNTC#...
+2016-01-27 11:44:14 INFO  - Computation of LAI...
+2016-01-27 11:44:14 INFO  - Computation of GAPS...
+2016-01-27 11:44:14 INFO  - Computation of ACFS...
+2016-01-27 11:44:14 INFO  - Computation of ACF...
+2016-01-27 11:44:14 INFO  - Computation of STDEV...
+2016-01-27 11:44:14 INFO  - File /home/calcul/Documents/Julien/test_lai2200/als_gaps.txt was written.
+2016-01-27 11:44:14 INFO  - Simulation is finished.
+2016-01-27 13:36:09 ERROR - Configuration file cannot be load
+org.jdom2.input.JDOMParseException: Error on line 1 of document file:/home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt_test.txt: Contenu non autorisé dans le prologue.
+	at org.jdom2.input.sax.SAXBuilderEngine.build(SAXBuilderEngine.java:228)
+	at org.jdom2.input.sax.SAXBuilderEngine.build(SAXBuilderEngine.java:277)
+	at org.jdom2.input.sax.SAXBuilderEngine.build(SAXBuilderEngine.java:264)
+	at org.jdom2.input.SAXBuilder.build(SAXBuilder.java:1116)
+	at fr.amap.lidar.amapvox.commons.Configuration.readType(Configuration.java:94)
+	at fr.amap.amapvox.gui.MainFrameController.onActionButtonLoadSelectedTask(MainFrameController.java:4933)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.Trampoline.invoke(MethodUtil.java:71)
+	at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at sun.reflect.misc.MethodUtil.invoke(MethodUtil.java:275)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1769)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1657)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Node.fireEvent(Node.java:8411)
+	at javafx.scene.control.Button.fire(Button.java:185)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:182)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:96)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:89)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:218)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:3757)
+	at javafx.scene.Scene$MouseHandler.access$1500(Scene.java:3485)
+	at javafx.scene.Scene.impl_processMouseEvent(Scene.java:1762)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2494)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:352)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:275)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$354(GlassViewEventHandler.java:388)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:389)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:387)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:555)
+	at com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$49(GtkApplication.java:139)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: org.xml.sax.SAXParseException; systemId: file:/home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt_test.txt; lineNumber: 1; columnNumber: 1; Contenu non autorisé dans le prologue.
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.createSAXParseException(ErrorHandlerWrapper.java:203)
+	at com.sun.org.apache.xerces.internal.util.ErrorHandlerWrapper.fatalError(ErrorHandlerWrapper.java:177)
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:400)
+	at com.sun.org.apache.xerces.internal.impl.XMLErrorReporter.reportError(XMLErrorReporter.java:327)
+	at com.sun.org.apache.xerces.internal.impl.XMLScanner.reportFatalError(XMLScanner.java:1437)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl$PrologDriver.next(XMLDocumentScannerImpl.java:999)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentScannerImpl.next(XMLDocumentScannerImpl.java:606)
+	at com.sun.org.apache.xerces.internal.impl.XMLNSDocumentScannerImpl.next(XMLNSDocumentScannerImpl.java:118)
+	at com.sun.org.apache.xerces.internal.impl.XMLDocumentFragmentScannerImpl.scanDocument(XMLDocumentFragmentScannerImpl.java:510)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:848)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:777)
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:141)
+	at com.sun.org.apache.xerces.internal.parsers.AbstractSAXParser.parse(AbstractSAXParser.java:1213)
+	at com.sun.org.apache.xerces.internal.jaxp.SAXParserImpl$JAXPSAXParser.parse(SAXParserImpl.java:643)
+	at org.jdom2.input.sax.SAXBuilderEngine.build(SAXBuilderEngine.java:217)
+	... 75 more
+2016-01-27 13:37:26 INFO  - Computing directions...
+2016-01-27 13:37:26 INFO  - Nb shots ring 1 = 60
+2016-01-27 13:37:26 INFO  - Nb shots ring 2 = 86
+2016-01-27 13:37:26 INFO  - Nb shots ring 3 = 102
+2016-01-27 13:37:26 INFO  - Nb shots ring 4 = 117
+2016-01-27 13:37:26 INFO  - Nb shots ring 5 = 135
+2016-01-27 13:37:26 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-27 13:37:26 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-27 13:37:26 INFO  - allocate Voxels
+2016-01-27 13:37:26 INFO  - allocate MNT
+2016-01-27 13:37:41 INFO  - nb positions= 1
+2016-01-27 13:37:41 INFO  - Computation of transmittance
+2016-01-27 13:37:42 INFO  - Computation of AVGTRANS...
+2016-01-27 13:37:42 INFO  - Computation of CNTC#...
+2016-01-27 13:37:42 INFO  - Computation of LAI...
+2016-01-27 13:37:42 INFO  - Computation of GAPS...
+2016-01-27 13:37:42 INFO  - Computation of ACFS...
+2016-01-27 13:37:42 INFO  - Computation of ACF...
+2016-01-27 13:37:42 INFO  - Computation of STDEV...
+2016-01-27 13:37:42 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-27 13:37:42 INFO  - Simulation is finished.
+2016-01-27 13:45:17 INFO  - Computing directions...
+2016-01-27 13:45:17 INFO  - Nb shots ring 1 = 60
+2016-01-27 13:45:17 INFO  - Nb shots ring 2 = 86
+2016-01-27 13:45:17 INFO  - Nb shots ring 3 = 102
+2016-01-27 13:45:17 INFO  - Nb shots ring 4 = 117
+2016-01-27 13:45:17 INFO  - Nb shots ring 5 = 135
+2016-01-27 13:45:17 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-27 13:45:17 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-27 13:45:17 INFO  - allocate Voxels
+2016-01-27 13:45:18 INFO  - allocate MNT
+2016-01-27 13:45:23 INFO  - nb positions= 1
+2016-01-27 13:45:23 INFO  - Computation of transmittance
+2016-01-27 13:45:23 INFO  - Computation of AVGTRANS...
+2016-01-27 13:45:23 INFO  - Computation of CNTC#...
+2016-01-27 13:45:23 INFO  - Computation of LAI...
+2016-01-27 13:45:23 INFO  - Computation of GAPS...
+2016-01-27 13:45:23 INFO  - Computation of ACFS...
+2016-01-27 13:45:23 INFO  - Computation of ACF...
+2016-01-27 13:45:23 INFO  - Computation of STDEV...
+2016-01-27 13:45:23 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-27 13:45:23 INFO  - Simulation is finished.
+2016-01-27 13:46:56 INFO  - Computing directions...
+2016-01-27 13:46:56 INFO  - Nb shots ring 1 = 60
+2016-01-27 13:46:56 INFO  - Nb shots ring 2 = 86
+2016-01-27 13:46:56 INFO  - Nb shots ring 3 = 102
+2016-01-27 13:46:56 INFO  - Nb shots ring 4 = 117
+2016-01-27 13:46:56 INFO  - Nb shots ring 5 = 135
+2016-01-27 13:46:56 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-27 13:46:56 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-27 13:46:56 INFO  - allocate Voxels
+2016-01-27 13:46:56 INFO  - allocate MNT
+2016-01-27 13:47:02 INFO  - nb positions= 1
+2016-01-27 13:47:02 INFO  - Computation of transmittance
+2016-01-27 13:50:12 INFO  - Computation of AVGTRANS...
+2016-01-27 13:50:12 INFO  - Computation of CNTC#...
+2016-01-27 13:50:12 INFO  - Computation of LAI...
+2016-01-27 13:50:12 INFO  - Computation of GAPS...
+2016-01-27 13:50:12 INFO  - Computation of ACFS...
+2016-01-27 13:50:12 INFO  - Computation of ACF...
+2016-01-27 13:50:12 INFO  - Computation of STDEV...
+2016-01-27 13:50:12 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-27 13:50:12 INFO  - Simulation is finished.
+2016-01-27 13:50:41 INFO  - Computing directions...
+2016-01-27 13:50:41 INFO  - Nb shots ring 1 = 60
+2016-01-27 13:50:41 INFO  - Nb shots ring 2 = 86
+2016-01-27 13:50:41 INFO  - Nb shots ring 3 = 102
+2016-01-27 13:50:41 INFO  - Nb shots ring 4 = 117
+2016-01-27 13:50:41 INFO  - Nb shots ring 5 = 135
+2016-01-27 13:50:41 INFO  - ===== /media/forestview01/partageLidar/Voxelisation/test_amapVOX/procedural_voxel_spaces/test_2.vox =====
+2016-01-27 13:50:41 INFO  - VOXEL SPACE
+#min_corner: -115.0 -115.0 18.0
+#max_corner: 185.0 185.0 43.0
+#split: 300 300 25
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal ground_distance transmittance
+
+2016-01-27 13:50:41 INFO  - allocate Voxels
+2016-01-27 13:50:41 INFO  - allocate MNT
+2016-01-27 13:50:47 INFO  - nb positions= 1
+2016-01-27 13:50:47 INFO  - Computation of transmittance
+2016-01-27 13:50:50 INFO  - Computation of AVGTRANS...
+2016-01-27 13:50:50 INFO  - Computation of CNTC#...
+2016-01-27 13:50:50 INFO  - Computation of LAI...
+2016-01-27 13:50:50 INFO  - Computation of GAPS...
+2016-01-27 13:50:50 INFO  - Computation of ACFS...
+2016-01-27 13:50:50 INFO  - Computation of ACF...
+2016-01-27 13:50:50 INFO  - Computation of STDEV...
+2016-01-27 13:50:50 INFO  - File /home/calcul/Documents/Julien/test_procedural_vs_lai2200/lai2200_300x300.txt was written.
+2016-01-27 13:50:50 INFO  - Simulation is finished.
+2016-01-27 18:38:06 ERROR - Loading ToolBarFrame.fxml failed
+javafx.fxml.LoadException: 
+file:/home/calcul/Documents/Julien/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/target/release/lib/amapvox-voxviewer-1.0.jar!/fxml/ToolBoxFrame.fxml:11
+
+	at javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2601)
+	at javafx.fxml.FXMLLoader.access$700(FXMLLoader.java:103)
+	at javafx.fxml.FXMLLoader$ValueElement.processAttribute(FXMLLoader.java:922)
+	at javafx.fxml.FXMLLoader$InstanceDeclarationElement.processAttribute(FXMLLoader.java:971)
+	at javafx.fxml.FXMLLoader$Element.processStartElement(FXMLLoader.java:220)
+	at javafx.fxml.FXMLLoader$ValueElement.processStartElement(FXMLLoader.java:744)
+	at javafx.fxml.FXMLLoader.processStartElement(FXMLLoader.java:2707)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2527)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2441)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:2409)
+	at fr.amap.lidar.amapvox.gui.MainFrameController$49$1$3.run(MainFrameController.java:3431)
+	at com.sun.javafx.application.PlatformImpl.lambda$null$173(PlatformImpl.java:295)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.application.PlatformImpl.lambda$runLater$174(PlatformImpl.java:294)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$49(GtkApplication.java:139)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.ClassNotFoundException: fr.amap.amapvox.voxviewer.ToolBoxFrameController
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:381)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:331)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	at javafx.fxml.FXMLLoader$ValueElement.processAttribute(FXMLLoader.java:920)
+	... 15 more

@@ -5,7 +5,7 @@
             <goals>
                 <goal>clean</goal>
                 <goal>package</goal>
-                <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.4.0:exec</goal>
             </goals>
             <properties>
                 <runfx.args>-Xmx10g -classpath "${project.build.directory}/lib" -jar "${project.build.directory}/release/${project.build.finalName}.jar"</runfx.args>
@@ -26,8 +26,7 @@
         <action>
             <actionName>debug</actionName>
             <goals>
-                <goal>clean</goal>
-                <goal>package</goal>
+                <goal>org.codehaus.mojo:buildnumber-maven-plugin:create</goal>
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.4.0:exec</goal>
             </goals>
             <properties>
@@ -50,5 +49,13 @@
                 <exec.classpathScope>${classPathScope}${path.separator}${sun.boot.class.path}${path.separator}${java.home}/lib/jfxrt.jar</exec.classpathScope>
                 <jpda.listen>true</jpda.listen>
             </properties>
+        </action>     
+        <action>
+            <actionName>CUSTOM-makeZIP</actionName>
+            <displayName>makeZIP</displayName>
+            <goals>
+                <goal>org.codehaus.mojo:buildnumber-maven-plugin:create</goal>
+                <goal>org.apache.maven.plugins:maven-assembly-plugin:single</goal>
+            </goals>
         </action>        
     </actions>

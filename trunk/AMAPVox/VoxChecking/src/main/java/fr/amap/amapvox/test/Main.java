@@ -6,7 +6,7 @@
 package fr.amap.amapvox.test;
 
 import fr.amap.lidar.amapvox.commons.Voxel;
-import fr.amap.amapvox.voxreader.VoxelFileReader;
+import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.Iterator;

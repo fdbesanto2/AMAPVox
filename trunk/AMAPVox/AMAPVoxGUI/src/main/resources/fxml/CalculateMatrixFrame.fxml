@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="143.0" prefWidth="461.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="fr.amap.amapvox.gui.CalculateMatrixFrameController">
+<AnchorPane id="AnchorPane" prefHeight="143.0" prefWidth="461.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="fr.amap.lidar.amapvox.gui.CalculateMatrixFrameController">
     <stylesheets>
         <URL value="@/styles/calculatematrixframe.css" />
     </stylesheets>

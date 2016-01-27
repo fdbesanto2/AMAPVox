@@ -1,0 +1,7 @@
+***************************
+Rev. be171529 - 27/01/2016:
+-Correction du launcher click_me.bat qui ne fonctionnait pas si le chemin vers le .jar contenait un espace.
+
+***************************
+Rev. 98fc69f3 - 26/01/2016:
+

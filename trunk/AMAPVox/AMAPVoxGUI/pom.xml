@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>fr.amap.lidar</groupId>
+        <groupId>fr.amap.lidar.amapvox</groupId>
         <artifactId>amapvox</artifactId>
         <version>1.0</version>
     </parent>
-    <artifactId>AMAPVoxGUI</artifactId>
+    <artifactId>amapvox-gui</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
@@ -15,7 +15,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mainClass>fr.amap.amapvox.gui.MainApp</mainClass>
+        <mainClass>fr.amap.lidar.amapvox.gui.MainApp</mainClass>
     </properties>
 
     <scm>
@@ -128,6 +128,14 @@
                                     <directory>${basedir}/src/main/resources/launcher/</directory>
                                     <filtering>true</filtering>
                                 </resource>
+                                <resource>
+                                    <directory>../../</directory>
+                                    <filtering>false</filtering>
+                                    <includes>
+                                        <include>**/AMAPVox user's manual.pdf</include>
+                                        <include>**/changes_log.txt</include>
+                                    </includes>
+                                </resource>
                             </resources>              
                         </configuration>            
                     </execution>
@@ -139,7 +147,7 @@
                 <version>1.5.3</version>
                 <executions>
                     <execution>
-                        <phase>install</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>replace</goal>
                         </goals>                    
@@ -156,6 +164,25 @@
                     <token>$BUILD_NUMBER$</token>
                     <value>${buildNumber}</value>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <descriptor>src/assembly/zip.xml</descriptor>
+                    <finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <outputDirectory>${basedir}/target/release/</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -201,8 +228,8 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.lidar</groupId>
-            <artifactId>simulation</artifactId>
+            <groupId>fr.amap.lidar.amapvox</groupId>
+            <artifactId>amapvox-simulation</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
@@ -216,18 +243,18 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.lidar</groupId>
-            <artifactId>DataStructure</artifactId>
+            <groupId>fr.amap.lidar.amapvox</groupId>
+            <artifactId>amapvox-datastructure</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.lidar</groupId>
-            <artifactId>VoxViewer</artifactId>
+            <groupId>fr.amap.lidar.amapvox</groupId>
+            <artifactId>amapvox-voxviewer</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.lidar</groupId>
-            <artifactId>JDart</artifactId>
+            <groupId>fr.amap.lidar.amapvox</groupId>
+            <artifactId>amapvox-dart</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
@@ -236,8 +263,8 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.lidar</groupId>
-            <artifactId>Voxelisation</artifactId>
+            <groupId>fr.amap.lidar.amapvox</groupId>
+            <artifactId>amapvox-voxelisation</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
@@ -266,8 +293,8 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.lidar</groupId>
-            <artifactId>Chart</artifactId>
+            <groupId>fr.amap.lidar.amapvox</groupId>
+            <artifactId>amapvox-chart</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>

@@ -12,7 +12,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
-<AnchorPane fx:id="anchorpaneRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="659.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.amapvox.gui.MainFrameController">
+<AnchorPane fx:id="anchorpaneRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="659.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.lidar.amapvox.gui.MainFrameController">
    <children>
       <MenuBar maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="25.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <menus>
@@ -1523,7 +1523,7 @@
                <children>
                   <SplitPane dividerPositions="0.5201005025125628" prefHeight="155.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>
-                        <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" minWidth="325.0" pickOnBounds="false" text="Tasks">
+                        <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" minWidth="325.0" pickOnBounds="false" text="Tasks (configuration files)">
                            <content>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                  <children>

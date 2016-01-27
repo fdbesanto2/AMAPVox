@@ -7,9 +7,9 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import fr.amap.amapvox.gui.*?>
+<?import fr.amap.lidar.amapvox.gui.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="220.0" prefWidth="429.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.amapvox.gui.DateChooserFrameController">
+<AnchorPane id="AnchorPane" prefHeight="220.0" prefWidth="429.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.lidar.amapvox.gui.DateChooserFrameController">
    <children>
       <GridPane layoutX="5.0" layoutY="45.0" prefHeight="126.0" prefWidth="409.0" vgap="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="30.0">
         <columnConstraints>

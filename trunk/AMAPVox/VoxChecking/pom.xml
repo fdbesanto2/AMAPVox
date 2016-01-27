@@ -2,20 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>fr.amap.lidar</groupId>
+        <groupId>fr.amap.lidar.amapvox</groupId>
         <artifactId>amapvox</artifactId>
         <version>1.0</version>
     </parent>
-    <artifactId>VoxChecking</artifactId>
+    <name>VoxChecking</name>
+    <artifactId>amapvox-voxchecking</artifactId>
     <packaging>jar</packaging>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mainClass>fr.amap.amapvox.test.Main</mainClass>
     </properties>
-    
-    
-    <name>VoxChecking</name>
     
     <build>
         <plugins>
@@ -54,8 +52,8 @@
     
     <dependencies>
         <dependency>
-            <groupId>fr.amap.lidar</groupId>
-            <artifactId>VoxReader</artifactId>
+            <groupId>fr.amap.lidar.amapvox</groupId>
+            <artifactId>amapvox-voxreader</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>

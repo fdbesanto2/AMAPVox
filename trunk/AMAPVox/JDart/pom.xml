@@ -2,17 +2,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>fr.amap.lidar</groupId>
+        <groupId>fr.amap.lidar.amapvox</groupId>
         <artifactId>amapvox</artifactId>
         <version>1.0</version>
     </parent>
-    <artifactId>JDart</artifactId>
+    <artifactId>amapvox-dart</artifactId>
     <packaging>jar</packaging>
+    
+    <name>JDart</name>
+    
     <properties>
+        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+    
     <dependencies>
         <dependency>
             <groupId>fr.amap.commons</groupId>
@@ -20,8 +25,8 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.lidar</groupId>
-            <artifactId>DataStructure</artifactId>
+            <groupId>fr.amap.lidar.amapvox</groupId>
+            <artifactId>amapvox-datastructure</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
@@ -35,8 +40,8 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.lidar</groupId>
-            <artifactId>VoxViewer</artifactId>
+            <groupId>fr.amap.lidar.amapvox</groupId>
+            <artifactId>amapvox-voxviewer</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
@@ -45,8 +50,8 @@
             <version>9.6.0-6</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.lidar</groupId>
-            <artifactId>VoxReader</artifactId>
+            <groupId>fr.amap.lidar.amapvox</groupId>
+            <artifactId>amapvox-voxreader</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>

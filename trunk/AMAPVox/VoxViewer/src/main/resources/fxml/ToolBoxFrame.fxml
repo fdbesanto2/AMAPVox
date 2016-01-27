@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" minHeight="0.0" prefHeight="541.0" prefWidth="219.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.amapvox.voxviewer.ToolBoxFrameController">
+<AnchorPane id="AnchorPane" minHeight="0.0" prefHeight="541.0" prefWidth="219.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.lidar.amapvox.voxviewer.ToolBoxFrameController">
     <stylesheets>
         <URL value="@/styles/toolbarframe.css" />
     </stylesheets>

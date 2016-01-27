@@ -5,9 +5,11 @@
  */
 package fr.amap.amapvox.voxelisation;
 
+import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
+import fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution;
 import fr.amap.amapvox.io.tls.rxp.Shot;
-import fr.amap.amapvox.voxelisation.configuration.VoxCfg;
-import fr.amap.amapvox.voxelisation.configuration.VoxelParameters;
+import fr.amap.lidar.amapvox.voxelisation.configuration.VoxCfg;
+import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelParameters;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
