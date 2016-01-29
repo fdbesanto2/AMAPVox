@@ -5,7 +5,7 @@
  */
 package fr.amap.lidar.amapvox.voxviewer.object.scene;
 
-import fr.amap.amapvox.commons.util.MatrixUtility;
+import fr.amap.commons.util.MatrixUtility;
 import fr.amap.commons.math.matrix.Mat4F;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec2F;

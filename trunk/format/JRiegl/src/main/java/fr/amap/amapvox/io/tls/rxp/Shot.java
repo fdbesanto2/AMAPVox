@@ -1,6 +1,6 @@
 package fr.amap.amapvox.io.tls.rxp;
 
-import fr.amap.amapvox.commons.util.Filter;
+import fr.amap.commons.util.Filter;
 import java.util.List;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;

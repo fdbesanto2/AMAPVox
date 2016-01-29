@@ -5,8 +5,8 @@
  */
 package fr.amap.lidar.amapvox.gui;
 
-import fr.amap.amapvox.commons.util.LidarScan;
-import fr.amap.amapvox.commons.util.MatrixUtility;
+import fr.amap.commons.util.LidarScan;
+import fr.amap.commons.util.MatrixUtility;
 import fr.amap.amapvox.io.tls.rsp.RxpScan;
 import fr.amap.amapvox.jleica.ptg.PTGReader;
 import fr.amap.amapvox.jleica.ptg.PTGScan;

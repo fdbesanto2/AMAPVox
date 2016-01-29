@@ -6,8 +6,8 @@
 package fr.amap.lidar.amapvox.voxelisation.configuration;
 
 import fr.amap.lidar.amapvox.commons.Configuration;
-import fr.amap.amapvox.commons.util.Filter;
-import fr.amap.amapvox.commons.util.LidarScan;
+import fr.amap.commons.util.Filter;
+import fr.amap.commons.util.LidarScan;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import java.io.BufferedOutputStream;
 import java.io.File;

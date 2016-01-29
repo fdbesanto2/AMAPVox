@@ -5,7 +5,7 @@
  */
 package fr.amap.lidar.amapvox.voxelisation.configuration;
 
-import fr.amap.amapvox.commons.util.LidarScan;
+import fr.amap.commons.util.LidarScan;
 import fr.amap.amapvox.jleica.ptx.PTXScan;
 import java.io.File;
 import javax.vecmath.Matrix4d;

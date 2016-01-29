@@ -12,25 +12,36 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
-import org.apache.log4j.Logger;
 
 /**
  *
  * @author calcul
  */
 public class VoxelSpaceInfos {
-    
-    private final static Logger logger = Logger.getLogger(VoxelSpaceInfos.class);
-    
+        
     private Point3d minCorner;
     private Point3d maxCorner;
     private Point3i split;
-    private String type; //ALS ou TLS
+    private Type type; //ALS ou TLS
     private float resolution;
     private float maxPAD;
     private String[] columnNames;
+    private List<String> columnNamesList;
+    
+    public enum Type{
+        ALS(1),
+        TLS(2);
+        
+        private final int type;
+        Type(int type){
+            this.type = type;
+        }
+    }
     
     public void readFromVoxelFile(File voxelFile) throws Exception{
         
@@ -65,7 +76,13 @@ public class VoxelSpaceInfos {
                 String otherValuesLine = reader.readLine();
                 String[] otherValuesArray = otherValuesLine.split(" ");
                 
-                type = otherValuesArray[1];
+                String typeStr = otherValuesArray[1];
+                if(typeStr.equals("ALS")){
+                    type = Type.ALS;
+                }else{
+                    type = Type.TLS;
+                }
+                
                 resolution = Float.valueOf(otherValuesArray[3]);
                 maxPAD = Float.valueOf(otherValuesArray[5]);
                 
@@ -77,6 +94,9 @@ public class VoxelSpaceInfos {
             }
             
             columnNames = reader.readLine().split(" ");
+            
+            columnNamesList = new ArrayList<>(columnNames.length);
+            columnNamesList.addAll(Arrays.asList(columnNames));
             
             reader.close();
             
@@ -99,7 +119,7 @@ public class VoxelSpaceInfos {
         return split;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
@@ -114,6 +134,11 @@ public class VoxelSpaceInfos {
     public String[] getColumnNames() {
         return columnNames;
     }
+    
+    public List<String> getColumnNamesList() {
+        
+        return columnNamesList;
+    }
 
     public void setMinCorner(Point3d minCorner) {
         this.minCorner = minCorner;
@@ -127,7 +152,7 @@ public class VoxelSpaceInfos {
         this.split = split;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 

@@ -6,9 +6,9 @@
 package fr.amap.lidar.amapvox.voxelisation.als;
 
 import fr.amap.commons.math.matrix.Mat4D;
-import fr.amap.amapvox.commons.util.Filter;
-import fr.amap.amapvox.commons.util.Processing;
-import fr.amap.amapvox.commons.util.ProcessingListener;
+import fr.amap.commons.util.Filter;
+import fr.amap.commons.util.Processing;
+import fr.amap.commons.util.ProcessingListener;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.commons.raster.asc.RegularDtm;
 import fr.amap.lidar.amapvox.voxelisation.SimpleShotFilter;

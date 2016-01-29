@@ -14,8 +14,8 @@
 package fr.amap.lidar.amapvox.dart;
 
 import fr.amap.commons.util.io.file.FileManager;
-import fr.amap.amapvox.commons.util.Cancellable;
-import fr.amap.lidar.amapvox.datastructure.voxel.VoxelSpaceHeader;
+import fr.amap.commons.util.Cancellable;
+import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -51,13 +51,14 @@ public class DartPlotsXMLWriter implements Cancellable{
 
     public void writeFromVoxelFile(File voxelFile, File plotFile, boolean globalCoordinates) throws FileNotFoundException, IOException, Exception {
 
-        VoxelSpaceHeader header = VoxelSpaceHeader.readVoxelFileHeader(voxelFile);
+        VoxelSpaceInfos header = new VoxelSpaceInfos();
+        header.readFromVoxelFile(voxelFile);
 
-        int indiceIIndex = header.attributsNames.indexOf("i");
-        int indiceJIndex = header.attributsNames.indexOf("j");
-        int indiceKIndex = header.attributsNames.indexOf("k");
+        int indiceIIndex = header.getColumnNamesList().indexOf("i");
+        int indiceJIndex = header.getColumnNamesList().indexOf("j");
+        int indiceKIndex = header.getColumnNamesList().indexOf("k");
 
-        int padIndex = header.attributsNames.indexOf("PadBVTotal");
+        int padIndex = header.getColumnNamesList().indexOf("PadBVTotal");
             
         XMLOutputFactory factory = XMLOutputFactory.newInstance();
 
@@ -108,19 +109,19 @@ public class DartPlotsXMLWriter implements Cancellable{
                                 /**
                                  * *CORNERS POSITIONS**
                                  */
-                                float baseHeight = (k * header.res);
+                                float baseHeight = (k * header.getResolution());
 
-                                Point2f bottomLeft = new Point2f(i * (header.res), j * (header.res));
+                                Point2f bottomLeft = new Point2f(i * (header.getResolution()), j * (header.getResolution()));
 
                                 if (globalCoordinates) {
-                                    bottomLeft.x += (float) header.bottomCorner.x;
-                                    bottomLeft.y += (float) header.bottomCorner.y;
-                                    baseHeight += (float) header.bottomCorner.z;
+                                    bottomLeft.x += (float) header.getMinCorner().x;
+                                    bottomLeft.y += (float) header.getMinCorner().y;
+                                    baseHeight += (float) header.getMinCorner().z;
                                 }
 
-                                Point2f topRight = new Point2f(bottomLeft.x + header.res, bottomLeft.y + header.res);
-                                Point2f topLeft = new Point2f(bottomLeft.x, bottomLeft.y + header.res);
-                                Point2f bottomRight = new Point2f(bottomLeft.x + header.res, bottomLeft.y);
+                                Point2f topRight = new Point2f(bottomLeft.x + header.getResolution(), bottomLeft.y + header.getResolution());
+                                Point2f topLeft = new Point2f(bottomLeft.x, bottomLeft.y + header.getResolution());
+                                Point2f bottomRight = new Point2f(bottomLeft.x + header.getResolution(), bottomLeft.y);
 
                                 writer.writeStartElement("Polygon2D");
 
@@ -160,7 +161,7 @@ public class DartPlotsXMLWriter implements Cancellable{
                                 writer.writeStartElement("PlotVegetationProperties");
 
                                     writer.writeAttribute("baseheight", String.valueOf(baseHeight));
-                                    writer.writeAttribute("height", String.valueOf(header.res));
+                                    writer.writeAttribute("height", String.valueOf(header.getResolution()));
 
                                     //le signe moins indique que l'attribut lai est en fait un lad??
                                     writer.writeAttribute("lai", String.valueOf(-lad));

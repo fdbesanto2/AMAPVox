@@ -14,7 +14,7 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx;
 
-import fr.amap.amapvox.commons.util.SphericalCoordinates;
+import fr.amap.commons.util.SphericalCoordinates;
 import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.light.IncidentRadiation;
 import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.light.SolarRadiation;
 import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.util.Time;
@@ -64,13 +64,17 @@ public abstract class LAI2xxx {
     protected float[] avgTransByRing;
     protected float[] meanContactNumber;
     protected float[] gapsByRing;
-    protected float[][] gapsByRingAndPosition;
+    
     protected float[] contactNumberByRing;
+    protected float[][] contactNumberPerRingAndPos;
     
     /**
      * standard deviation of the contact numbers for each ring
      */
     protected float[] stdevByRing;
+    protected float sel;
+    
+    protected float DIFN;
     
     /**
      * apparent clumping factor for each ring
@@ -85,12 +89,12 @@ public abstract class LAI2xxx {
     protected int[][] countByPositionAndRing2;
     
     protected float[] byPosition_LAI;
-    protected float global_LAI; //lai for all positions
+    protected float LAI; //lai for all positions
     protected float acf;
     
     protected ViewCap viewCap;
     
-    protected int[][] countByPositionAndRing;
+    protected int[][] countPerPositionAndRing;
     
     /**
      * Create a LAI2000-2200 device
@@ -100,6 +104,37 @@ public abstract class LAI2xxx {
      */
     protected LAI2xxx(int shotNumber, ViewCap viewCap, Ring... rings){
         
+        /***Sum of non masked rings weighting factor should be equals to 1
+         and sum of non masked rings weighting factor prime should be equals to 0.5***/
+        
+        float residualWeightingFac = 0;
+        float residualWeightingFacPrime = 0;
+        
+        int nbMaskedRings = 0;
+        
+        for(Ring ring : rings){
+            if(ring.isMasked()){
+                residualWeightingFac += ring.getWeightingFactor();
+                residualWeightingFacPrime += ring.getWeightingFactorPrime();
+                nbMaskedRings++;
+            }
+        }
+        
+        int nbNotMaskedRings = rings.length - nbMaskedRings;
+        if(residualWeightingFac > 0){
+            
+            float fac = residualWeightingFac/nbNotMaskedRings;
+            float facPrime = residualWeightingFacPrime/nbNotMaskedRings;
+            
+            for(Ring ring : rings){
+                if(!ring.isMasked()){
+                    ring.setWeightingFactor(ring.getWeightingFactor()+fac);
+                    ring.setWeightingFactorPrime(ring.getWeightingFactorPrime()+facPrime);
+                }
+            }
+        }
+        
+        
         this.directionNumber = shotNumber;
         this.viewCap = viewCap;
         this.avgTransByRing = new float[rings.length];
@@ -107,25 +142,6 @@ public abstract class LAI2xxx {
         this.meanContactNumber = new float[rings.length];
         
         this.rings = rings;
-        
-        /****normalize weighting factor to sum to 1****/
-        float residualWeigtingFactor = 0;
-        int nbOfMaskedRings = 0;
-        
-        for(Ring ring : rings){
-            if(ring.isMasked()){
-                residualWeigtingFactor += ring.getWeightingFactor();
-                nbOfMaskedRings++;
-            }
-        }
-        
-        int nbRingsLeft = rings.length-nbOfMaskedRings;
-                
-        for(Ring ring : rings){
-            if(!ring.isMasked()){
-                ring.setWeightingFactor(ring.getWeightingFactor()+(residualWeigtingFactor / nbRingsLeft));
-            }
-        }
     }
     
     public enum ViewCap{
@@ -152,7 +168,7 @@ public abstract class LAI2xxx {
         this.positionNumber = positionNumber;
         
         transmittances = new float[rings.length][positionNumber];
-        countByPositionAndRing = new int[positionNumber][rings.length];
+        countPerPositionAndRing = new int[positionNumber][rings.length];
         
         //test
 //        normalizedTransmittances = new float[rings.length][positionNumber];
@@ -172,13 +188,16 @@ public abstract class LAI2xxx {
     public void addTransmittance(int ringID, int position, float transmittance){
         
         if(ringID < rings.length && position < positionNumber){
-            transmittances[ringID][position] += transmittance;
-            countByPositionAndRing[position][ringID] ++;
+            
+            if(!Float.isNaN(transmittance)/* && transmittance != 0*/){
+                
+                if(transmittance == 0){
+                    transmittance = 0.0000000001f;
+                }
+                transmittances[ringID][position] += transmittance;
+                countPerPositionAndRing[position][ringID] ++;
+            }
         }
-        
-        /*if(!Float.isNaN(transmittance)){
-            avgTransByRing[ringID] += transmittance;
-        }*/
     }
     
     /**
@@ -374,220 +393,154 @@ public abstract class LAI2xxx {
         return rings.length;
     }
     
+    public float computeLAIForOneMeasure(double[] contactNumberPerRing){
+        
+        float lai = 0.0f;
+
+        for(int i=0;i<5;i++){
+            lai += contactNumberPerRing[i] * rings[i].getWeightingFactor();
+        }
+
+        lai *= 2;
+        
+        return lai;
+    }
+    
+    public float computeContactNumber(float transmittance, int ringID){
+        
+        float contactNumber = (float) (-Math.log(transmittance) / rings[ringID].getDist());
+        return contactNumber;
+    }
+    
+    public float computeSkyDIFN(float[][] aboveReadingsPerRingAndPos, float[] gapsByRing){
+        
+        int nbAboveReadings = aboveReadingsPerRingAndPos[0].length;
+        
+        float[] aboveReadingsPerRing = new float[rings.length];
+        float skyDIFN = 0;
+        
+        float numerateur = 0, denominateur = 0;
+        
+        for(int i=0;i<rings.length;i++){
+            
+            for(int j=0;j<nbAboveReadings;j++){
+                aboveReadingsPerRing[i] += aboveReadingsPerRingAndPos[i][j];
+            }
+            
+            aboveReadingsPerRing[i] /= nbAboveReadings;
+            
+            numerateur += (aboveReadingsPerRing[i] * gapsByRing[i] * rings[i].getWeightingFactorPrime());
+            denominateur += (aboveReadingsPerRing[i] * rings[i].getWeightingFactorPrime());
+
+        }
+        
+        skyDIFN = numerateur / denominateur;
+        
+        return skyDIFN;
+        
+    }
+    
     public void computeValues(){
         
-        
-        
-        for(int j=0;j<positionNumber;j++){
-            for(int i=0;i<rings.length;i++){
-                
-                transmittances[i][j] /= (float)countByPositionAndRing[j][i];
-                
-//                //test
-//                normalizedTransmittances[i][j] /= (float)countByPositionAndRing2[j][i];
-//                pathLengths[i][j] /= (float)countByPositionAndRing2[j][i];
-            }
-        }
-        
-        //compute avgtrans
-        logger.info("Computation of AVGTRANS...");
-        int[] countByRing = new int[rings.length];
-        
-        //int[][] countByPositionAndRing = new int[positionNumber][rings.length];
-        avgTransByRing = new float[rings.length];
-        
-        float[][] avgTransByPosAndRing = new float[positionNumber][rings.length];
-            
-        for(int j=0;j<positionNumber;j++){
-            for(int i=0;i<rings.length;i++){
-                //for(int d=0;d<directionNumber;d++){
-
-                //on détermine ici quel est le ring concerné
-                //int i = getRingIDFromDirectionID(d);
-                
-                if(!Float.isNaN(transmittances[i][j])){
-                    avgTransByRing[i] += transmittances[i][j];
-                    avgTransByPosAndRing[j][i] += transmittances[i][j];
-                    countByRing[i]++;
-                    countByPositionAndRing[j][i]++;
-                }
-            //}
-            }
-            
-        }
-        
-        //moyenne
-        for(int i=0;i<rings.length;i++){
-            avgTransByRing[i] /= countByRing[i];
-        }
-        
-        for(int j=0;j<positionNumber;j++){
-            for(int i=0;i<rings.length;i++){
-                avgTransByPosAndRing[j][i] /= countByPositionAndRing[j][i];
-            }
-        }
-        
-        //compute contact numbers (CNTC#)
-        logger.info("Computation of CNTC#...");
-        contactNumberByRing = new float[rings.length]; //Ki
-        
-        float[][] meanContactNumberByPositionAndRing = new float[positionNumber][rings.length]; //Ki
-        
-        //contact value for the pair for each ring (Kij)
-        float[][] contactValueForPairByRing = new float[rings.length][positionNumber];
-
-        countByRing = new int[rings.length];
-        countByPositionAndRing = new int[positionNumber][rings.length];
-
-        //calcul des indices K
-        for(int j=0;j<positionNumber;j++){
-            
-            for(int i=0;i<5;i++){
-
-                float pathLength = rings[i].getDist();
-                
-                if(transmittances[i][j] != 0){
-                    
-                    contactValueForPairByRing[i][j] = (float) (-Math.log(transmittances[i][j]) / pathLength);
-                    
-                    float contactNumber = (float) (-Math.log(transmittances[i][j]) / pathLength);
-                    contactNumberByRing[i] += contactNumber;
-                    meanContactNumberByPositionAndRing[j][i] += contactNumber;
-                    
-                    countByRing[i]++;
-                    countByPositionAndRing[j][i]++;
-                }else{
-                    contactValueForPairByRing[i][j] = Float.NaN;
-                }
-            }
-        }
-        
-        for(int i=0;i<rings.length;i++){
-            contactNumberByRing[i] /= countByRing[i];
-        }
-        
-        //mean contact number for each position
-        for(int j=0;j<positionNumber;j++){
-            for(int i=0;i<rings.length;i++){
-                meanContactNumberByPositionAndRing[j][i] /= countByPositionAndRing[j][i];
-            }
-        }
-        
-        //compute global_LAI
-        logger.info("Computation of LAI...");
-        global_LAI = 0.0f;
-
-        for(int i=0;i<rings.length;i++){
-            if(!rings[i].isMasked()){
-                global_LAI += contactNumberByRing[i] * rings[i].getWeightingFactor();
-            }
-        }
-
-        global_LAI *= 2;
-        
-        //compute one LAI by position
-        byPosition_LAI = new float[positionNumber];
-        
-        for(int j=0;j<positionNumber;j++){
-            
-            float position_LAI = 0;
-            
-            for(int i=0;i<rings.length;i++){
-                if(!rings[i].isMasked()){
-                    position_LAI += meanContactNumberByPositionAndRing[j][i] * rings[i].getWeightingFactor();
-                }
-            }
-            
-            position_LAI *= 2;
-            byPosition_LAI[j] = position_LAI;
-        }
-        
-        
-        //compute Gaps
-        logger.info("Computation of GAPS...");
-        gapsByRing = new float[rings.length]; //Ki
-        gapsByRingAndPosition = new float[rings.length][positionNumber];
-
-        countByRing = new int[rings.length];
-        countByPositionAndRing = new int[positionNumber][rings.length];
-
-        //calcul des indices K
-        for(int j=0;j<positionNumber;j++){
-            for(int i=0;i<5;i++){
-                
-                if(transmittances[i][j] != 0){
-                    
-                    double gap = Math.log(transmittances[i][j]);
-                    
-                    gapsByRing[i] += gap;
-                    gapsByRingAndPosition[i][j] += gap;
-                    
-                    countByRing[i]++;
-                    countByPositionAndRing[j][i]++;
-                }
-            }
-        }
-        
-        //moyenne des ln des transmittances pour chaque ring
-        float[] meanLnTransByring = new float[rings.length];
-        
-        for(int i=0;i<rings.length;i++){
-            gapsByRing[i] /= countByRing[i];
-            meanLnTransByring[i] = gapsByRing[i];
-            gapsByRing[i] = (float) Math.exp(gapsByRing[i]);
-        }
-        
-        //moyenne des ln des transmittances pour chaque ring et position
-        for(int j=0;j<positionNumber;j++){
-            for(int i=0;i<rings.length;i++){
-                
-                gapsByRingAndPosition[i][j] /= countByPositionAndRing[j][i];
-                gapsByRingAndPosition[i][j] = (float) Math.exp(gapsByRingAndPosition[i][j]);
-            }
-        }
-        
-        //compute acfs
-        logger.info("Computation of ACFS...");
         acfsByRing = new float[rings.length];
-        for(int i=0;i<rings.length;i++){
-            acfsByRing[i] = (float) (Math.log(avgTransByRing[i]) / meanLnTransByring[i]);
+        contactNumberByRing = new float[rings.length]; //Ki
+        avgTransByRing = new float[rings.length];
+        gapsByRing = new float[rings.length];
+        byPosition_LAI = new float[positionNumber];
+        contactNumberPerRingAndPos = new float[rings.length][positionNumber];
+        
+        logger.info("Computation of AVGTRANS, ACFS, CNTCT#, GAPS, DIFN ...");
+        
+        float lai;
+        
+        for(int j=0;j<positionNumber;j++){
+            
+            lai = 0;
+            
+            for(int i=0;i<rings.length;i++){
+                
+                transmittances[i][j] /= (float)countPerPositionAndRing[j][i];
+                
+                float contactNumber = computeContactNumber(transmittances[i][j], i);
+                contactNumberPerRingAndPos[i][j] = contactNumber;
+                
+                contactNumberByRing[i] += contactNumber;
+                
+                avgTransByRing[i] += transmittances[i][j];
+                
+                double gap = Math.log(transmittances[i][j]);
+                gapsByRing[i] += gap;
+            
+                if(!rings[i].isMasked()){
+                    lai += contactNumber * rings[i].getWeightingFactor();
+                }
+            }
+            
+            lai *= 2;
+            byPosition_LAI[j] = lai;
+            
+            this.LAI += lai;
         }
+        
+        DIFN = 0;
+        
+        for(int i=0;i<rings.length;i++){
+            
+            contactNumberByRing[i] /= positionNumber;
+            
+            avgTransByRing[i] /= positionNumber;
+            
+            gapsByRing[i] /= positionNumber;
+            
+            acfsByRing[i] = (float) (Math.log(avgTransByRing[i])) / gapsByRing[i];
+            
+            gapsByRing[i] = (float) Math.exp(gapsByRing[i]);
+            
+            DIFN += gapsByRing[i] * rings[i].getWeightingFactorPrime();
+        }
+        
+        LAI /= positionNumber;
+        DIFN *= 2;
         
         //compute acf
         logger.info("Computation of ACF...");
         
         float numerateur = 0;
-        float denominateur = 0;
         
         for(int i=0;i<rings.length;i++){
             numerateur += -(Math.log(avgTransByRing[i])/rings[i].getDist()) * rings[i].getWeightingFactor();
-            denominateur += contactNumberByRing[i] * rings[i].getWeightingFactor();
         }
         
         numerateur *= 2;
-        denominateur *= 2;
         
-        acf = numerateur/denominateur;
+        acf = numerateur/LAI;
         
-        //compute STDEV
-        logger.info("Computation of STDEV...");
+        logger.info("Computation of STDEV, SEL...");
         
         stdevByRing = new float[rings.length];
-        countByRing = new int[rings.length];
         
         for(int i=0;i<rings.length;i++){
             for(int j=0;j<positionNumber;j++){
-                if(!Float.isNaN(contactValueForPairByRing[i][j])){
-                    stdevByRing[i] += Math.pow(contactValueForPairByRing[i][j] - contactNumberByRing[i], 2);
-                    countByRing[i]++;
-                }
+                
+                stdevByRing[i] += Math.pow(contactNumberPerRingAndPos[i][j] - contactNumberByRing[i], 2);
+                
             }
         }
         
         for(int i=0;i<rings.length;i++){
-            stdevByRing[i] = (float) Math.sqrt((1/(float)(countByRing[i]-1))*stdevByRing[i]);
+            stdevByRing[i] = (float) Math.sqrt((1/(float)(positionNumber-1))*stdevByRing[i]);
         }
         
+        //compute sel
+        sel = 0;
+        
+        for(int j=0;j<positionNumber;j++){
+                
+            sel +=((byPosition_LAI[j] * byPosition_LAI[j])  - (LAI* LAI));
+        }
+        
+        sel /= positionNumber;
+        sel = (float) Math.sqrt(sel/positionNumber);
     }
     
     public int getRingIDFromDirectionID(int directionID){
@@ -681,11 +634,11 @@ public abstract class LAI2xxx {
 
     public float[] getByPosition_LAI() {
         return byPosition_LAI;
-    }    
+    }
 
-    public float[][] getGapsByRingAndPosition() {
-        return gapsByRingAndPosition;
-    }    
+    public float[] getGapsByRing() {
+        return gapsByRing;
+    }
 
 //    //test
 //    public float[][] getNormalizedTransmittances() {

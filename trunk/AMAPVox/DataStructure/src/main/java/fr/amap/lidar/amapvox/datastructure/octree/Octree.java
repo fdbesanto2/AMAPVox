@@ -14,7 +14,7 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.lidar.amapvox.datastructure.octree;
 
-import fr.amap.amapvox.commons.util.Statistic;
+import fr.amap.commons.util.Statistic;
 import fr.amap.commons.math.geometry.BoundingBox3D;
 import fr.amap.commons.math.geometry.BoundingBox3F;
 import fr.amap.commons.math.geometry.Intersection;

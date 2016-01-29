@@ -6,7 +6,7 @@ package fr.amap.lidar.amapvox.gui;
  * and open the template in the editor.
  */
 
-import fr.amap.amapvox.commons.util.MatrixUtility;
+import fr.amap.commons.util.MatrixUtility;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;

@@ -5,7 +5,7 @@
  */
 package fr.amap.lidar.amapvox.voxelisation;
 
-import fr.amap.amapvox.commons.util.Filter;
+import fr.amap.commons.util.Filter;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import java.util.List;
 

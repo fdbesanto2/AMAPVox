@@ -15,7 +15,7 @@ import fr.amap.amapvox.als.laz.LazExtraction;
 import fr.amap.commons.util.io.file.FileManager;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.vector.Vec4D;
-import fr.amap.amapvox.commons.util.Processing;
+import fr.amap.commons.util.Processing;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import java.io.File;
 import java.io.IOException;

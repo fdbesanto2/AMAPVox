@@ -15,7 +15,7 @@ For further information, please contact Gregoire Vincent.
 package fr.amap.lidar.amapvox.simulation.hemi;
 
 import fr.amap.lidar.amapvox.commons.Configuration;
-import fr.amap.amapvox.commons.util.LidarScan;
+import fr.amap.commons.util.LidarScan;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

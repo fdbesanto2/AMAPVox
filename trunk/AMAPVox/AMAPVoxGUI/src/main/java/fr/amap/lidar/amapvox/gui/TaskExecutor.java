@@ -8,7 +8,7 @@ package fr.amap.lidar.amapvox.gui;
 //package fr.amap.amapvox.gui;
 //
 //import fr.amap.lidar.amapvox.commons.configuration.Configuration;
-//import fr.amap.amapvox.commons.util.TimeCounter;
+//import fr.amap.commons.util.TimeCounter;
 //import fr.amap.amapvox.simulation.transmittance.TransmittanceSim;
 //import fr.amap.amapvox.simulation.transmittance.VirtualMeasuresCfg;
 //import fr.amap.amapvox.voxelisation.ProcessTool;

@@ -31,12 +31,12 @@ import java.util.Calendar;
 public class LAI2200 extends LAI2xxx{
 
     public LAI2200(int shotNumber, ViewCap viewCap, boolean[] masked){
-        
-         super(shotNumber, viewCap, new Ring(12.3f, 0, masked[0]),
-                                    new Ring(28.6f, 16.7f, masked[1]),
-                                    new Ring(43.4f, 32.4f, masked[2]),
-                                    new Ring(58.1f, 47.3f, masked[3]),
-                                    new Ring(74.1f, 62.3f, masked[4]));
+                
+        super(shotNumber, viewCap, new Ring(12.3f, 0, 7, masked[0], 0.041f, 0.033f),
+                                    new Ring(28.6f, 16.7f, 23, masked[1], 0.131f, 0.097f),
+                                    new Ring(43.4f, 32.4f, 38, masked[2], 0.201f, 0.127f),
+                                    new Ring(58.1f, 47.3f, 53, masked[3], 0.290f, 0.141f),
+                                    new Ring(74.1f, 62.3f, 68, masked[4], 0.337f, 0.102f));
      
         //le lai2200 a 5 plages angulaires
         
@@ -58,7 +58,7 @@ public class LAI2200 extends LAI2xxx{
                 computeValues();
 
                 //leaf area index
-                writer.write("LAI\t"+global_LAI+"\n");
+                writer.write("LAI\t"+LAI+"\n");
 
                 //standard error lai
                 writer.write("SEL\t"+Float.NaN+"\n");
@@ -93,7 +93,7 @@ public class LAI2200 extends LAI2xxx{
 
                 int mask = (rings[i].isMasked())? 1 : 0;
                 maskLine += (mask+"\t");
-                anglesLine += rings[i].getMeanAngle()+"\t";
+                anglesLine += rings[i].getViewAngle()+"\t";
                 avgTransLine += avgTransByRing[i]+"\t";
                 acfsLine += acfsByRing[i]+"\t";
                 cntcLine += contactNumberByRing[i]+"\t";

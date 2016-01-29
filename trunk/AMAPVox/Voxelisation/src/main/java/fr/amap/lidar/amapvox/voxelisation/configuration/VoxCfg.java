@@ -15,7 +15,7 @@ For further information, please contact Gregoire Vincent.
 package fr.amap.lidar.amapvox.voxelisation.configuration;
 
 import fr.amap.lidar.amapvox.commons.Configuration;
-import fr.amap.amapvox.commons.util.Filter;
+import fr.amap.commons.util.Filter;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.EchoFilter;
 import fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution.Type;

@@ -5,7 +5,7 @@
  */
 package fr.amap.lidar.amapvox.gui;
 
-import fr.amap.amapvox.commons.util.Statistic;
+import fr.amap.commons.util.Statistic;
 import java.util.ArrayList;
 import java.util.List;
 

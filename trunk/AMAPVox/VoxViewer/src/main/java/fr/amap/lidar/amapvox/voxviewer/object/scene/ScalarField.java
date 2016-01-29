@@ -5,8 +5,8 @@
  */
 package fr.amap.lidar.amapvox.voxviewer.object.scene;
 
-import fr.amap.amapvox.commons.util.ColorGradient;
-import fr.amap.amapvox.commons.util.Statistic;
+import fr.amap.commons.util.ColorGradient;
+import fr.amap.commons.util.Statistic;
 import gnu.trove.list.array.TFloatArrayList;
 import java.awt.Color;
 import java.util.Comparator;

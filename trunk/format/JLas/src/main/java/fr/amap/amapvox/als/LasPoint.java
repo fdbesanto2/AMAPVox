@@ -5,7 +5,7 @@
  */
 package fr.amap.amapvox.als;
 
-import fr.amap.amapvox.commons.util.ByteConverter;
+import fr.amap.commons.util.ByteConverter;
 
 
 /**

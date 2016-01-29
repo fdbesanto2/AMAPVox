@@ -24,9 +24,10 @@ public class Ring {
     
     private final float lowerZenithalAngle;
     private final float upperZenithalAngle;
-    private final float meanAngle;
+    private final float viewAngle;
     private final float width;
     private float weightingFactor;
+    private float weightingFactorPrime;
     private final float solidAngle;
     private int nbDirections;
     private float sumTrans;
@@ -38,16 +39,20 @@ public class Ring {
     private boolean masked;
     
 
-    public Ring(float lowerZenithalAngle, float upperZenithalAngle, boolean masked) {
+    public Ring(float lowerZenithalAngle, float upperZenithalAngle, float viewAngle, boolean masked, float weightingFactor, float weightingFactorPrime) {
         
         this.lowerZenithalAngle = lowerZenithalAngle;
         this.upperZenithalAngle = upperZenithalAngle;
         this.masked = masked;
         
-        this.meanAngle = (lowerZenithalAngle+upperZenithalAngle) / 2.0f;
+        //this.viewAngle = (int)((lowerZenithalAngle+upperZenithalAngle) / 2.0f);
+        this.viewAngle = viewAngle;
+        
         this.width = (float) (Math.toRadians(lowerZenithalAngle) - Math.toRadians(upperZenithalAngle));
-        this.weightingFactor = (float) (this.width * Math.toRadians(this.meanAngle));
-        this.dist = (float) (1/Math.cos(Math.toRadians(meanAngle)));
+        this.weightingFactor = weightingFactor;
+        this.weightingFactorPrime = weightingFactorPrime;
+        this.dist = (float) (1/Math.cos(Math.toRadians(this.viewAngle)));
+        
         //calcul de l'angle solide
         solidAngle = (float) (2* Math.PI * (Math.cos(Math.toRadians(upperZenithalAngle)) - Math.cos(Math.toRadians(lowerZenithalAngle))));
     }   
@@ -64,8 +69,8 @@ public class Ring {
         return solidAngle;
     }
 
-    public float getMeanAngle() {
-        return meanAngle;
+    public float getViewAngle() {
+        return viewAngle;
     }
 
     public float getAvgtrans() {
@@ -139,5 +144,12 @@ public class Ring {
     public void setWeightingFactor(float weightingFactor) {
         this.weightingFactor = weightingFactor;
     }
-    
+
+    public float getWeightingFactorPrime() {
+        return weightingFactorPrime;
+    }
+
+    public void setWeightingFactorPrime(float weightingFactorPrime) {
+        this.weightingFactorPrime = weightingFactorPrime;
+    }
 }

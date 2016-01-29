@@ -8,7 +8,7 @@ package fr.amap.lidar.amapvox.voxviewer.mesh;
 import com.jogamp.common.nio.Buffers;
 import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.commons.math.vector.Vec3I;
-import fr.amap.amapvox.commons.util.ColorGradient;
+import fr.amap.commons.util.ColorGradient;
 import fr.amap.commons.raster.asc.DTMPoint;
 import fr.amap.commons.raster.asc.Face;
 import fr.amap.commons.raster.asc.RegularDtm;

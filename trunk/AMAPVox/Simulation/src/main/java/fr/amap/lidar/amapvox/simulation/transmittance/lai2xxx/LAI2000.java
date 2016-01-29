@@ -33,11 +33,11 @@ public class LAI2000 extends LAI2xxx{
     
     public LAI2000(int shotNumber, ViewCap viewCap, boolean[] masked){
         
-        super(shotNumber, viewCap, new Ring(13, 0, masked[0]),
-                                    new Ring(28, 16, masked[1]),
-                                    new Ring(43, 32, masked[2]),
-                                    new Ring(58, 47, masked[3]),
-                                    new Ring(74, 61, masked[4]));
+        super(shotNumber, viewCap, new Ring(13, 0, 7, masked[0], 0.034f, 0.033f),
+                                    new Ring(28, 16, 23, masked[1], 0.104f, 0.097f),
+                                    new Ring(43, 32, 38, masked[2], 0.160f, 0.127f),
+                                    new Ring(58, 47, 53, masked[3], 0.218f, 0.141f),
+                                    new Ring(74, 61, 68, masked[4], 0.494f, 0.102f));
         
     }
 
@@ -62,7 +62,7 @@ public class LAI2000 extends LAI2xxx{
 
             computeValues();
 
-            writer.write(file+"\t"+dateAndTime+"\t"+crop+"\t"+plot+"\t"+global_LAI+"\t"+sel+"\t"+difn+"\t"+mta+"\t"+sem+"\t"+smp+"\n");
+            writer.write(file+"\t"+dateAndTime+"\t"+crop+"\t"+plot+"\t"+LAI+"\t"+sel+"\t"+difn+"\t"+mta+"\t"+sem+"\t"+smp+"\n");
             
             /*****write statistics*****/
                 
@@ -74,7 +74,7 @@ public class LAI2000 extends LAI2xxx{
 
             for(int i=0;i<rings.length;i++){
 
-                anglesLine += rings[i].getMeanAngle()+"\t";
+                anglesLine += rings[i].getViewAngle()+"\t";
                 cntcLine += contactNumberByRing[i]+"\t";
                 stddevLine += stdevByRing[i]+"\t";
                 distsLine += rings[i].getDist()+"\t";

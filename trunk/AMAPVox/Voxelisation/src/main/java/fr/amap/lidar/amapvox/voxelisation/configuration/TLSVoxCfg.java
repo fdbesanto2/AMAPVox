@@ -14,7 +14,7 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.lidar.amapvox.voxelisation.configuration;
 
-import fr.amap.amapvox.commons.util.LidarScan;
+import fr.amap.commons.util.LidarScan;
 import fr.amap.amapvox.jleica.ptx.PTXHeader;
 import fr.amap.amapvox.jleica.ptx.PTXScan;
 import java.io.File;

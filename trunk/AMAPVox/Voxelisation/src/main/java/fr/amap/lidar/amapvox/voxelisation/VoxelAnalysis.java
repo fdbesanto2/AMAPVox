@@ -1,8 +1,8 @@
 package fr.amap.lidar.amapvox.voxelisation;
 
-import fr.amap.amapvox.commons.util.Statistic;
+import fr.amap.commons.util.Statistic;
 import fr.amap.commons.math.point.Point3I;
-import fr.amap.amapvox.commons.util.TimeCounter;
+import fr.amap.commons.util.TimeCounter;
 import fr.amap.lidar.amapvox.datastructure.octree.Octree;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.lidar.amapvox.jeeb.raytracing.geometry.LineElement;

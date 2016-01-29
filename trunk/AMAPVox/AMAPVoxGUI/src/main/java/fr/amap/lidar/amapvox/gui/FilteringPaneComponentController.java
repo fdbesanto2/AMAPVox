@@ -5,7 +5,7 @@
  */
 package fr.amap.lidar.amapvox.gui;
 
-import fr.amap.amapvox.commons.util.Filter;
+import fr.amap.commons.util.Filter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;

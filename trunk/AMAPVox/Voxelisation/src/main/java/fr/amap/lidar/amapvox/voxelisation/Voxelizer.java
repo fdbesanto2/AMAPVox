@@ -6,7 +6,7 @@
 package fr.amap.lidar.amapvox.voxelisation;
 
 import fr.amap.lidar.amapvox.commons.Configuration;
-import fr.amap.amapvox.commons.util.CommandLineParser;
+import fr.amap.commons.util.CommandLineParser;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;

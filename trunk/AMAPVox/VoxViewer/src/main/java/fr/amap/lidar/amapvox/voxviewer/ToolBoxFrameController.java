@@ -7,9 +7,9 @@ package fr.amap.lidar.amapvox.voxviewer;
  */
 
 import fr.amap.commons.math.vector.Vec3F;
-import fr.amap.amapvox.commons.util.ColorGradient;
-import fr.amap.amapvox.commons.util.CombinedFilter;
-import fr.amap.amapvox.commons.util.Filter;
+import fr.amap.commons.util.ColorGradient;
+import fr.amap.commons.util.CombinedFilter;
+import fr.amap.commons.util.Filter;
 import fr.amap.lidar.amapvox.voxviewer.object.camera.TrackballCamera;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.renderer.JoglListener;

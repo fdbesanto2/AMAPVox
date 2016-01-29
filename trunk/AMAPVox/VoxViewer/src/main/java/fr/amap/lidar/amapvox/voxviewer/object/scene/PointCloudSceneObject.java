@@ -5,7 +5,7 @@
  */
 package fr.amap.lidar.amapvox.voxviewer.object.scene;
 
-import fr.amap.amapvox.commons.util.Statistic;
+import fr.amap.commons.util.Statistic;
 import fr.amap.lidar.amapvox.datastructure.octree.Octree;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec3F;

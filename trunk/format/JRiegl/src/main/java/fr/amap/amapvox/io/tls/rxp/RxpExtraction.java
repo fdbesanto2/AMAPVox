@@ -1,7 +1,7 @@
 package fr.amap.amapvox.io.tls.rxp;
 
 
-import fr.amap.amapvox.commons.util.NativeLoader;
+import fr.amap.commons.util.NativeLoader;
 import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;

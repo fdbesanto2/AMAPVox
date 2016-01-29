@@ -14,18 +14,18 @@ import fr.amap.commons.util.io.file.FileManager;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.vector.Vec2D;
 import fr.amap.commons.math.vector.Vec4D;
-import fr.amap.amapvox.commons.util.BoundingBox3d;
-import fr.amap.amapvox.commons.util.Cancellable;
-import fr.amap.amapvox.commons.util.DataSet.Mode;
-import static fr.amap.amapvox.commons.util.DataSet.Mode.SUM;
-import fr.amap.amapvox.commons.util.Filter;
-import fr.amap.amapvox.commons.util.LidarScan;
-import fr.amap.amapvox.commons.util.MatrixUtility;
-import fr.amap.amapvox.commons.util.ProcessingListener;
-import fr.amap.amapvox.commons.util.TimeCounter;
+import fr.amap.commons.util.BoundingBox3d;
+import fr.amap.commons.util.Cancellable;
+import fr.amap.commons.util.DataSet.Mode;
+import static fr.amap.commons.util.DataSet.Mode.SUM;
+import fr.amap.commons.util.Filter;
+import fr.amap.commons.util.LidarScan;
+import fr.amap.commons.util.MatrixUtility;
+import fr.amap.commons.util.ProcessingListener;
+import fr.amap.commons.util.TimeCounter;
 import fr.amap.lidar.amapvox.datastructure.octree.Octree;
 import fr.amap.lidar.amapvox.datastructure.octree.OctreeFactory;
-import fr.amap.lidar.amapvox.datastructure.voxel.VoxelSpaceHeader;
+import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.amapvox.io.tls.rsp.RxpScan;
 import fr.amap.commons.raster.asc.DtmLoader;
 import fr.amap.commons.raster.asc.RegularDtm;
@@ -766,14 +766,14 @@ public class ProcessTool implements Cancellable{
         return boundingBox;
     }    
     
-    public void mergeVoxelFiles(VoxMergingCfg cfg) {
+    public void mergeVoxelFiles(VoxMergingCfg cfg) throws Exception {
                 
         cancelled = false;
         
         startTime = System.currentTimeMillis();
         Mode[] toMerge;
         int size;
-        VoxelSpaceHeader voxelSpaceHeader;
+        VoxelSpaceInfos voxelSpaceHeader = new VoxelSpaceInfos();
 
         float[][] nbSamplingMultiplyAngleMean;
         float[][] resultingFile;
@@ -791,15 +791,19 @@ public class ProcessTool implements Cancellable{
         
         if(cfg.getFiles().size() > 0){
             
-            voxelSpaceHeader = VoxelSpaceHeader.readVoxelFileHeader(cfg.getFiles().get(0));
-            size = voxelSpaceHeader.split.x * voxelSpaceHeader.split.y * voxelSpaceHeader.split.z;
-            columnNumber = voxelSpaceHeader.attributsNames.size();
+            try {
+                voxelSpaceHeader.readFromVoxelFile(cfg.getFiles().get(0));
+            } catch (Exception ex) {
+                throw ex;
+            }
+            size = voxelSpaceHeader.getSplit().x * voxelSpaceHeader.getSplit().y * voxelSpaceHeader.getSplit().z;
+            columnNumber = voxelSpaceHeader.getColumnNamesList().size();
             resultingFile = new float[size][columnNumber];
             toMerge = new Mode[columnNumber];
             
             for(int i=0;i<toMerge.length;i++){
                 
-                String columnName = voxelSpaceHeader.attributsNames.get(i);
+                String columnName = voxelSpaceHeader.getColumnNamesList().get(i);
                                 
                 switch(columnName){
                     case "i":
@@ -994,15 +998,15 @@ public class ProcessTool implements Cancellable{
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(cfg.getOutputFile()))) {
 
             writer.write("VOXEL SPACE" + "\n");
-            writer.write("#min_corner: " + (float) voxelSpaceHeader.bottomCorner.x + " " + (float) voxelSpaceHeader.bottomCorner.y + " " + (float) voxelSpaceHeader.bottomCorner.z + "\n");
-            writer.write("#max_corner: " + (float) voxelSpaceHeader.topCorner.x + " " + (float) voxelSpaceHeader.topCorner.y + " " + (float) voxelSpaceHeader.topCorner.z + "\n");
-            writer.write("#split: " + voxelSpaceHeader.split.x + " " + voxelSpaceHeader.split.y + " " + voxelSpaceHeader.split.z + "\n");
+            writer.write("#min_corner: " + (float) voxelSpaceHeader.getMinCorner().x + " " + (float) voxelSpaceHeader.getMinCorner().y + " " + (float) voxelSpaceHeader.getMinCorner().z + "\n");
+            writer.write("#max_corner: " + (float) voxelSpaceHeader.getMaxCorner().x + " " + (float) voxelSpaceHeader.getMaxCorner().y + " " + (float) voxelSpaceHeader.getMaxCorner().z + "\n");
+            writer.write("#split: " + voxelSpaceHeader.getSplit().x + " " + voxelSpaceHeader.getSplit().y + " " + voxelSpaceHeader.getSplit().z + "\n");
 
-            writer.write("#type: TLS" + " #res: "+voxelSpaceHeader.res+" "+"#MAX_PAD: "+cfg.getVoxelParameters().getMaxPAD()+"\n");
+            writer.write("#type: TLS" + " #res: "+voxelSpaceHeader.getResolution()+" "+"#MAX_PAD: "+cfg.getVoxelParameters().getMaxPAD()+"\n");
 
             String header = "";
             
-            for (String columnName : voxelSpaceHeader.attributsNames) {
+            for (String columnName : voxelSpaceHeader.getColumnNamesList()) {
                 header += columnName + " ";
             }
             header = header.trim();

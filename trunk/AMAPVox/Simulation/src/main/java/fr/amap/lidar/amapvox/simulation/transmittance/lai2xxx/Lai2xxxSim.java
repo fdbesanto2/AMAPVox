@@ -5,8 +5,8 @@
  */
 package fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx;
 
-import fr.amap.amapvox.commons.util.SphericalCoordinates;
-import fr.amap.amapvox.commons.util.Statistic;
+import fr.amap.commons.util.SphericalCoordinates;
+import fr.amap.commons.util.Statistic;
 import fr.amap.lidar.amapvox.jeeb.raytracing.geometry.LineElement;
 import fr.amap.lidar.amapvox.jeeb.raytracing.geometry.LineSegment;
 import fr.amap.lidar.amapvox.jeeb.raytracing.util.BoundingBox3d;

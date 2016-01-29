@@ -14,10 +14,10 @@ import fr.amap.commons.raster.asc.DTMPoint;
 import fr.amap.commons.raster.asc.DtmLoader;
 import fr.amap.commons.raster.asc.Face;
 import fr.amap.commons.raster.asc.RegularDtm;
+import fr.amap.lidar.amapvox.commons.Voxel;
+import fr.amap.lidar.amapvox.commons.VoxelSpace;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceData;
+import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -330,12 +330,16 @@ public class DartWriter {
     
     public void writeFromVoxelFile(File voxelFile, File outputFile) throws IOException, Exception{
         
-        VoxelSpaceSceneObject voxelSpace = new VoxelSpaceSceneObject();
-        voxelSpace.loadFromFile(voxelFile);
-        writeFromVoxelSpace(voxelSpace.data, outputFile);
+        VoxelFileReader reader = new VoxelFileReader(voxelFile, true);
+        Iterator<Voxel> iterator = reader.iterator(); //load voxel space into memory
+        while(iterator.hasNext()){
+            iterator.next();
+        }
+        
+        writeFromVoxelSpace(reader.voxelSpace, outputFile);
     }
     
-    public void writeFromVoxelSpace(VoxelSpaceData data, File outputFile) throws Exception{
+    public void writeFromVoxelSpace(VoxelSpace data, File outputFile) throws Exception{
         
         VoxelSpaceInfos infos = data.getVoxelSpaceInfos();
         
@@ -393,11 +397,11 @@ public class DartWriter {
         
         for (Iterator it = data.voxels.iterator(); it.hasNext();) {
             
-            VoxelObject voxel = (VoxelObject) it.next();
-            float[] attributs = voxel.attributs;
+            Voxel voxel = (Voxel) it.next();
+            
             float densite;
             try{
-                densite = attributs[attributsNames.indexOf("PadBVTotal")];
+                densite = voxel.PadBVTotal;
             }catch(Exception e){ 
                 throw new Exception("could not find attribut PadBflTotal or PadBVTotal", e);
             }

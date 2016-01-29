@@ -5,8 +5,8 @@
  */
 package fr.amap.commons.util.image;
 
-import fr.amap.amapvox.commons.util.ColorGradient;
-import fr.amap.amapvox.commons.util.DecimalScientificFormat;
+import fr.amap.commons.util.ColorGradient;
+import fr.amap.commons.util.DecimalScientificFormat;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
@@ -43,8 +43,8 @@ public class ScaleGradient {
     }
     
     /**
-     * @see fr.amap.amapvox.commons.util.ColorGradient
-     * @see fr.amap.amapvox.commons.util.image.ScaleGradient.Orientation
+     * @see fr.amap.commons.util.ColorGradient
+     * @see fr.amap.commons.util.image.ScaleGradient.Orientation
      * @param gradientColor array of color values
      * @param min min value
      * @param max max value
@@ -88,8 +88,8 @@ public class ScaleGradient {
     }
     
     /**
-     * @see fr.amap.amapvox.commons.util.ColorGradient
-     * @see fr.amap.amapvox.commons.util.image.ScaleGradient.Orientation
+     * @see fr.amap.commons.util.ColorGradient
+     * @see fr.amap.commons.util.image.ScaleGradient.Orientation
      * @param gradientColor array of color values
      * @param minValue min scale value
      * @param maxValue max scale value

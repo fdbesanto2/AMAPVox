@@ -5,7 +5,7 @@
  */
 package fr.amap.lidar.amapvox.simulation.hemi;
 
-import fr.amap.amapvox.commons.util.LidarScan;
+import fr.amap.commons.util.LidarScan;
 import fr.amap.lidar.amapvox.voxelisation.EchoFilter;
 import java.io.File;
 import java.util.List;

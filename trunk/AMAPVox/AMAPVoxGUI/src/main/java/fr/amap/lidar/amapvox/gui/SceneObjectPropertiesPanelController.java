@@ -5,7 +5,7 @@
  */
 package fr.amap.lidar.amapvox.gui;
 
-import fr.amap.amapvox.commons.util.ColorGradient;
+import fr.amap.commons.util.ColorGradient;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.ScalarField;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;

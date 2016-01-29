@@ -17,8 +17,8 @@ For further information, please contact Gregoire Vincent.
  */
 
 
-import fr.amap.amapvox.commons.util.MatrixFileParser;
-import fr.amap.amapvox.commons.util.MatrixUtility;
+import fr.amap.commons.util.MatrixFileParser;
+import fr.amap.commons.util.MatrixUtility;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
