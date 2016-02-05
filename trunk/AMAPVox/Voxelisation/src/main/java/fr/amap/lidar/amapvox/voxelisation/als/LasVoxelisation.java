@@ -7,15 +7,21 @@ package fr.amap.lidar.amapvox.voxelisation.als;
 
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.util.Filter;
-import fr.amap.commons.util.Processing;
+import fr.amap.commons.util.Progression;
 import fr.amap.commons.util.ProcessingListener;
 import fr.amap.amapvox.io.tls.rxp.Shot;
-import fr.amap.commons.raster.asc.RegularDtm;
+import fr.amap.commons.raster.asc.AsciiGridHelper;
+import fr.amap.commons.raster.asc.Raster;
+import fr.amap.commons.util.MatrixUtility;
 import fr.amap.lidar.amapvox.voxelisation.SimpleShotFilter;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
+import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxCfg;
-import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelParameters;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.RasterParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -24,76 +30,109 @@ import org.apache.log4j.Logger;
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class LasVoxelisation extends Processing {
+public class LasVoxelisation extends Progression {
     
     private final static Logger logger = Logger.getLogger(LasVoxelisation.class);
     
-    private File alsFile;
-    private final Mat4D transfMatrix;
-    private File outputFile;
-    private VoxelParameters parameters;
-    private final List<Trajectory> trajectoryList;
-    private final List<Integer> classifiedPointsToDiscard;
-    private final VoxCfg cfg;
-    private boolean updateALS;
+    private List<Integer> classifiedPointsToDiscard;
+    private static boolean update;
     private PointsToShot conversion;
-    private final RegularDtm terrain;
+    private Raster terrain = null;
 
-    public LasVoxelisation(File alsFile, File outputFile, Mat4D transfMatrix, VoxelParameters parameters, VoxCfg cfg, List<Integer> classifiedPointsToDiscard, RegularDtm terrain, List<Trajectory> trajectoryList) {
-
-        this.alsFile = alsFile;
-        this.outputFile = outputFile;
-        this.transfMatrix = transfMatrix;
-        this.parameters = parameters;
-        this.classifiedPointsToDiscard = classifiedPointsToDiscard;
-        this.cfg = cfg;
-        this.terrain = terrain;
-        this.trajectoryList = trajectoryList;
-        this.updateALS = true;
+    public LasVoxelisation() {
+        
+        LasVoxelisation.update = true;
+        super.setProgressionStep(100);
     }
     
-    public boolean isUpdateALS() {
-        return updateALS;
+    /**
+     * 
+     * @return if true, las file, trajectory file and DTM file will not be reloaded
+     */
+    public boolean isUpdate() {
+        return update;
     }
 
-    public void setUpdateALS(boolean updateALS) {
-        this.updateALS = updateALS;
+    /**
+     * 
+     * @param update if true, las file, trajectory file and DTM file will not be reloaded
+     */
+    public void setUpdate(boolean update) {
+        LasVoxelisation.update = update;
     }
 
-    @Override
-    public File process() {
-                
-        cfg.setEchoFilter(new LasEchoFilter(cfg.getFilters()));
-        cfg.setShotFilter(new SimpleShotFilter(cfg.getFilters()));
+    public File process(ALSVoxCfg cfg) throws Exception {
+        
+        if(cfg.getClassifiedPointsToDiscard() == null){
+           this.classifiedPointsToDiscard = new ArrayList<>();
+        }else{
+           this.classifiedPointsToDiscard = cfg.getClassifiedPointsToDiscard();
+        }
+        
+        if(!this.classifiedPointsToDiscard.contains(2)){ //work around for old cfg file version
+            this.classifiedPointsToDiscard.add(2);
+        }
+        
+        cfg.setEchoFilter(new LasEchoFilter(cfg.getEchoFilters(), classifiedPointsToDiscard));
+        cfg.setShotFilter(new SimpleShotFilter(cfg.getShotFilters()));
+        
+        Mat4D transfMatrix = MatrixUtility.convertMatrix4dToMat4D(cfg.getVopMatrix());
+        if (transfMatrix == null) {
+            transfMatrix = Mat4D.identity();
+        }
+        
+        if(update || terrain == null){
+            
+            if(cfg.getVoxelParameters().getDtmFilteringParams().getDtmFile() != null && cfg.getVoxelParameters().getDtmFilteringParams().useDTMCorrection() ){
+            
+                fireProgress("Reading DTM file", 0, 100);
+
+                try {
+                    terrain = AsciiGridHelper.readFromAscFile(cfg.getVoxelParameters().getDtmFilteringParams().getDtmFile());
+                    terrain.setTransformationMatrix(transfMatrix);
+                } catch (Exception ex) {
+                    throw ex;
+                }
+            } 
+        }
         
         VoxelAnalysis voxelAnalysis = new VoxelAnalysis(terrain, null, cfg);
-        voxelAnalysis.init(parameters, outputFile);
+        voxelAnalysis.init(cfg.getVoxelParameters(), cfg.getOutputFile());
         voxelAnalysis.createVoxelSpace();
         
-        
-        if(updateALS || conversion == null){
+        if(update || conversion == null){
             
-            conversion = new PointsToShot(trajectoryList, alsFile, transfMatrix, classifiedPointsToDiscard);
+            conversion = new PointsToShot(cfg.getTrajectoryFile(), cfg.getInputFile(), transfMatrix, classifiedPointsToDiscard);
+            conversion.setProgressionStep(20);
             
             conversion.addProcessingListener(new ProcessingListener() {
 
                 @Override
-                public void processingStepProgress(String progress, int ratio) {
-                    fireProgress(progress, ratio);
+                public void processingStepProgress(String progressMsg, long progress, long max) {
+                    fireProgress(progressMsg, progress, 100);
                 }
 
                 @Override
-                public void processingFinished() {
-                    fireFinished();
+                public void processingFinished(float duration) {
+                    fireFinished(duration);
                 }
             });
             
-        }else if(!updateALS){
-            conversion.setUpdateALS(updateALS);
+            try {
+                conversion.init();
+            } catch (IOException ex) {
+                logger.error(ex);
+                return null;
+            } catch (Exception ex) {
+                logger.error(ex);
+                return null;
+            }
+        }else{
+            
         }
-        
-        conversion.init();
                     
+        fireProgress("Voxelisation", 0, 100);
+        
         Iterator<Shot> iterator = conversion.iterator();
         
         Shot shot;
@@ -105,54 +144,43 @@ public class LasVoxelisation extends Processing {
         
         logger.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());
         
+        RasterParams rasterParameters = cfg.getVoxelParameters().getRasterParams();
+            
+        boolean write = false;
         
-        if(parameters.isGenerateMultiBandRaster()){
-            voxelAnalysis.generateMultiBandsRaster(new File(outputFile.getAbsolutePath()+".bsq"), 
-                    parameters.getRasterStartingHeight(), parameters.getRasterHeightStep(),
-                    parameters.getRasterBandNumber(), parameters.getRasterResolution());
+        if(rasterParameters != null){
+
+            if(rasterParameters.isGenerateMultiBandRaster()){
+
+                voxelAnalysis.generateMultiBandsRaster(new File(cfg.getOutputFile().getAbsolutePath()+".bsq"), 
+                rasterParameters.getRasterStartingHeight(), rasterParameters.getRasterHeightStep(), 
+                rasterParameters.getRasterBandNumber(), rasterParameters.getRasterResolution());
+
+                if(!rasterParameters.isShortcutVoxelFileWriting()){
+                    write = true;
+                }
+            }
+        }else{
+            
+            write = true;
         }
         
-        if((parameters.isGenerateMultiBandRaster() && !parameters.isShortcutVoxelFileWriting()) || !parameters.isGenerateMultiBandRaster()){
-            
+        if(write){
             voxelAnalysis.computePADs();
-            if(parameters.isCorrectNaNsMode2()){
+                    
+            if(cfg.getVoxelParameters().getNaNsCorrectionParams().isActivate()){
                 voxelAnalysis.correctNaNs();
             }
-            
+
             voxelAnalysis.write();
-            //voxelAnalysis.calculatePADAndWrite(0);
         }
 
-        if(parameters.isCalculateGroundEnergy() && !parameters.isTLS()){
+        if(cfg.getVoxelParameters().getGroundEnergyParams() != null &&
+                cfg.getVoxelParameters().getGroundEnergyParams().isCalculateGroundEnergy()){
             voxelAnalysis.writeGroundEnergy();
         }
 
-        return outputFile;
-    }   
-
-    public File getAlsFile() {
-        return alsFile;
-    }
-
-    public void setAlsFile(File alsFile) {
-        this.alsFile = alsFile;
-        
-    }
-
-    public File getOutputFile() {
-        return outputFile;
-    }
-
-    public void setOutputFile(File outputFile) {
-        this.outputFile = outputFile;
-    }
-
-    public VoxelParameters getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(VoxelParameters parameters) {
-        this.parameters = parameters;
+        return cfg.getOutputFile();
     }
     
 }

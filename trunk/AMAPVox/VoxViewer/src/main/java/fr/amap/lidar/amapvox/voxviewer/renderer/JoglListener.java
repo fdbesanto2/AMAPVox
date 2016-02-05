@@ -10,7 +10,7 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.util.FPSAnimator;
 import fr.amap.commons.math.vector.Vec3F;
-import fr.amap.commons.raster.asc.RegularDtm;
+import fr.amap.commons.raster.asc.Raster;
 import fr.amap.lidar.amapvox.voxviewer.event.EventManager;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.MousePicker;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.Scene;
@@ -40,7 +40,7 @@ public class JoglListener implements GLEventListener {
     private boolean justOnce = true;
     private final FPSAnimator animator;
     private boolean isInit;
-    
+    private boolean dynamicDraw = false;
     
     public Scene getScene() {
         return scene;
@@ -149,7 +149,7 @@ public class JoglListener implements GLEventListener {
         
         scene.draw(gl);
         
-        if(justOnce){ //draw one single frame
+        if(justOnce && !dynamicDraw){ //draw one single frame
             animator.pause();
             justOnce = false;
         }
@@ -169,7 +169,6 @@ public class JoglListener implements GLEventListener {
     public void updateMousePicker(){
         
         scene.updateMousePicker(eventListener.getMouseXCurrentLocation(), eventListener.getMouseYCurrentLocation(), viewportWidth, viewportHeight);
-        
     }
 
     @Override
@@ -235,5 +234,12 @@ public class JoglListener implements GLEventListener {
     public void setStartY(int startY) {
         this.startY = startY;
     }
-    
+
+    public boolean isDynamicDraw() {
+        return dynamicDraw;
+    }
+
+    public void setDynamicDraw(boolean dynamicDraw) {
+        this.dynamicDraw = dynamicDraw;
+    }
 }

@@ -43,6 +43,11 @@
             <version>1.0</version>
         </dependency>
         <dependency>
+            <groupId>fr.amap.commons</groupId>
+            <artifactId>commons-format</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.jdom</groupId>
             <artifactId>jdom2</artifactId>
             <version>2.0.6</version>
@@ -99,8 +104,8 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.lidar.amapvox</groupId>
-            <artifactId>amapvox-datastructure</artifactId>
+            <groupId>fr.amap.commons</groupId>
+            <artifactId>commons-structure</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>

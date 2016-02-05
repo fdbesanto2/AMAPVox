@@ -37,6 +37,7 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -48,7 +49,7 @@ public class Lai2xxxSim {
     private final static Logger logger = Logger.getLogger(Lai2xxxSim.class);
     
     private final LAI2xxx lai2xxx;
-    private final TransmittanceParameters parameters;
+    private TransmittanceParameters parameters;
     
     private DirectionalTransmittance direcTransmittance;
     private List<Point3d> positions;
@@ -67,6 +68,7 @@ public class Lai2xxxSim {
         }
 
         logger.info("Computing directions...");
+        
         lai2xxx.computeDirections();
         
         directions = lai2xxx.getDirections();
@@ -76,14 +78,16 @@ public class Lai2xxxSim {
         
         logger.info("===== " + parameters.getInputFile().getAbsolutePath() + " =====");
 
-        direcTransmittance = new DirectionalTransmittance(parameters.getInputFile());
+        if(direcTransmittance == null){
+            direcTransmittance = new DirectionalTransmittance(parameters.getInputFile());
+        }
+        
         voxSpace = direcTransmittance.getVoxSpace();
         
         getSensorPositions();
 
         // TRANSMITTANCE
         logger.info("Computation of transmittance");
-        
         
         lai2xxx.initPositions(positions.size());
         
@@ -118,7 +122,7 @@ public class Lai2xxxSim {
             logger.info("File "+parameters.getTextFile().getAbsolutePath()+" was written.");
         }
 
-        logger.info("Simulation is finished.");   
+        logger.info("Simulation is finished.");
     }
     
 //    public void process() throws Exception{
@@ -427,7 +431,6 @@ public class Lai2xxxSim {
             }
         }
         
-        
         logger.info("nb positions= " + positions.size());
     }
     
@@ -476,4 +479,21 @@ public class Lai2xxxSim {
 
         }
     }
+
+    public void setParameters(TransmittanceParameters parameters) {
+        this.parameters = parameters;
+    }
+
+    public LAI2xxx getLai2xxx() {
+        return lai2xxx;
+    }
+
+    public void setQuiet(boolean quiet) {
+        
+        if(quiet){
+            logger.setLevel(Level.ERROR);
+        }else{
+            logger.setLevel(Level.INFO);
+        }        
+    }    
 }

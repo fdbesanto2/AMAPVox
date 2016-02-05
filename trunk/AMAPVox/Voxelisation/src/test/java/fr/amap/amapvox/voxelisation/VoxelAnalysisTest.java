@@ -9,7 +9,9 @@ import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
 import fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxCfg;
-import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelParameters;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.LADParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +41,8 @@ public class VoxelAnalysisTest {
         parameters.setResolution(1.0);
         parameters.setMaxPAD(3.5f);
         parameters.setTLS(false);
-        parameters.setWeightingData(VoxelParameters.DEFAULT_ALS_WEIGHTING);
-        parameters.setLadType(LeafAngleDistribution.Type.SPHERIC);
+        parameters.getEchoesWeightParams().setWeightingData(EchoesWeightParams.DEFAULT_ALS_WEIGHTING);
+        parameters.setLadParams(new LADParams());
         
         
         voxelAnalysis.init(parameters, new File("/home/calcul/Documents/Julien/test.vox"));

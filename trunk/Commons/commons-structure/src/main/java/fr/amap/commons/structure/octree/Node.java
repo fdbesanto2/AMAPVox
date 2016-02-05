@@ -13,7 +13,7 @@ Authors:
 For further information, please contact Gregoire Vincent.
  */
 
-package fr.amap.lidar.amapvox.datastructure.octree;
+package fr.amap.commons.structure.octree;
 
 import fr.amap.commons.math.point.Point3D;
 import fr.amap.commons.math.point.Point3F;

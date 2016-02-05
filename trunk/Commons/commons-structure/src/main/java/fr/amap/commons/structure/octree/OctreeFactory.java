@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.amap.lidar.amapvox.datastructure.octree;
+package fr.amap.commons.structure.octree;
 
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.point.Point3D;
@@ -76,48 +76,6 @@ public class OctreeFactory {
         
         Point3D[] points = new Point3D[pointList.size()];
         
-        double minPointX = 0, minPointY = 0, minPointZ = 0;
-        double maxPointX = 0, maxPointY = 0, maxPointZ = 0;
-        
-        boolean init = false;
-        for(Point3D point : pointList){
-            
-            if(!init){
-                minPointX = point.x;
-                minPointY = point.y;
-                minPointZ = point.z;
-                
-                maxPointX = point.x;
-                maxPointY = point.y;
-                maxPointZ = point.z;
-                
-                init = true;
-                
-            }else{
-                
-                if(point.x > maxPointX){
-                    maxPointX = point.x;
-                }else if(point.x < minPointX){
-                    minPointX = point.x;
-                }
-                
-                if(point.y > maxPointY){
-                    maxPointY = point.y;
-                }else if(point.y < minPointY){
-                    minPointY = point.y;
-                }
-                
-                if(point.z > maxPointZ){
-                    maxPointZ = point.z;
-                }else if(point.z < minPointZ){
-                    minPointZ = point.z;
-                }
-            }
-        }
-        
-        Point3D minPoint = new Point3D(minPointX, minPointY, minPointZ);
-        Point3D maxPoint = new Point3D(maxPointX, maxPointY, maxPointZ);
-        
         if(sortPoints){
             Collections.sort(pointList);
         }
@@ -127,8 +85,6 @@ public class OctreeFactory {
         Octree octree = new Octree(maximumPointNumber);
         
         octree.setPoints(points);
-        octree.setMinPoint(minPoint);
-        octree.setMaxPoint(maxPoint);
         
         return octree;
     }

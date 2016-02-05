@@ -7,6 +7,8 @@ package fr.amap.lidar.amapvox.voxviewer.mesh;
 
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL3;
+import fr.amap.commons.math.point.Point3F;
+import fr.amap.commons.util.Statistic;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -44,23 +46,27 @@ public abstract class GLMesh {
     long totalBuffersSize;
     public DrawType drawType = DrawType.TRIANGLES;
     
-    public FloatBuffer vertexBuffer;
+    protected FloatBuffer vertexBuffer;
     public FloatBuffer normalBuffer;
     public IntBuffer indexBuffer;
     public FloatBuffer colorBuffer;
     public int vertexCount;
     public int dimensions = 3;
     
+    private Statistic xValues;
+    private Statistic yValues;
+    private Statistic zValues;
+    
     
     /**
      * Vertex Buffer Object identifier
-     * @see <a href="https://www.opengl.org/wiki/Vertex_Specification#Vertex_Buffer_Object">https://www.opengl.org/wiki/Vertex_Specification#Vertex_Buffer_Object</a>
+     * @link <a href="https://www.opengl.org/wiki/Vertex_Specification#Vertex_Buffer_Object">https://www.opengl.org/wiki/Vertex_Specification#Vertex_Buffer_Object</a>
      */
     private int vboId;
 
     /**
      * Index Buffer Object Identifier
-     * @see <a href="https://www.opengl.org/wiki/Vertex_Specification#Index_buffers">https://www.opengl.org/wiki/Vertex_Specification#Index_buffers</a>
+     * @link <a href="https://www.opengl.org/wiki/Vertex_Specification#Index_buffers">https://www.opengl.org/wiki/Vertex_Specification#Index_buffers</a>
      */
     private int iboId;
     
@@ -73,6 +79,10 @@ public abstract class GLMesh {
         offset = 0;
         offsets = new ArrayList<>();
         buffersSizes = new ArrayList<>();
+        
+        xValues = new Statistic();
+        yValues = new Statistic();
+        zValues = new Statistic();
     }
     
     
@@ -283,5 +293,50 @@ public abstract class GLMesh {
     
     public void setColorData(float[] colors){
         colorBuffer = Buffers.newDirectFloatBuffer(colors);
+    }
+
+    public FloatBuffer getVertexBuffer() {
+        return vertexBuffer;
+    }
+
+    public void setVertexBuffer(FloatBuffer vertexBuffer) {
+        
+        this.vertexBuffer = vertexBuffer;
+        
+        computeGravityCenter();
+    }
+    
+    public void computeGravityCenter(){
+        
+        if(vertexBuffer != null){
+            
+            xValues = new Statistic();
+            yValues = new Statistic();
+            zValues = new Statistic();
+            
+            for(int j = 0 ; j<this.vertexBuffer.capacity(); j+=3){
+            
+                xValues.addValue(this.vertexBuffer.get(j));
+                yValues.addValue(this.vertexBuffer.get(j+1));
+                zValues.addValue(this.vertexBuffer.get(j+2));
+            }
+        }
+    }
+    
+    public Point3F getGravityCenter(){
+        
+        return new Point3F((float)xValues.getMean(), (float)yValues.getMean(), (float)zValues.getMean());
+    }
+
+    public Statistic getxValues() {
+        return xValues;
+    }
+
+    public Statistic getyValues() {
+        return yValues;
+    }
+
+    public Statistic getzValues() {
+        return zValues;
     }
 }

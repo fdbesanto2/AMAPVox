@@ -6,7 +6,9 @@
 package fr.amap.lidar.amapvox.voxviewer.object.scene;
 
 import com.jogamp.opengl.GL3;
+import fr.amap.commons.math.geometry.Intersection;
 import fr.amap.commons.math.matrix.Mat4F;
+import fr.amap.commons.math.point.Point3D;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.lidar.amapvox.voxviewer.loading.shader.AxisShader;
@@ -27,11 +29,13 @@ import fr.amap.lidar.amapvox.voxviewer.object.lighting.Light;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.apache.log4j.Logger;
 
 /**
@@ -46,14 +50,15 @@ public class Scene {
         ??optimisation 
     */
     
-    public final List<SceneObject> objectsList;
-    public final Map<Integer, Shader> shadersList;
+    public final CopyOnWriteArrayList<SceneObject> objectsList;
+    public final Map<String, Shader> shadersList;
     public final List<Texture> textureList;
     
     public TrackballCamera camera;
     private Light light;
     
     private MousePicker mousePicker;
+    private boolean mousePickerIsDirty; //the mouse picker has been updated
     
     public boolean canDraw;
     
@@ -61,14 +66,14 @@ public class Scene {
     private int height;
     
     //default shaders
-    public Shader noTranslationShader = new AxisShader("noTranslationShader");
+    public static Shader noTranslationShader = new AxisShader("noTranslationShader");
     public static Shader instanceLightedShader = new InstanceLightedShader("instanceLightedShader");
-    public Shader instanceShader = new InstanceShader("instanceShader");
-    public Shader texturedShader = new TextureShader("textureShader");
-    public Shader labelShader = new TextureShader("labelShader");
-    public Shader lightedShader = new LightedShader("lightShader");
-    public Shader simpleShader = new SimpleShader("simpleShader");
-    public static Shader colorShader = new ColorShader("colorShader");
+    public static Shader instanceShader = new InstanceShader("instanceShader");
+    public static Shader texturedShader = new TextureShader("textureShader");
+    public static Shader labelShader = new TextureShader("labelShader");
+    public static Shader lightedShader = new LightedShader("lightShader");
+    public static Shader simpleShader = new SimpleShader("simpleShader");
+    public static ColorShader colorShader = new ColorShader("colorShader");
     
     //global uniforms, can be used inside shaders files
     public UniformMat4F viewMatrixUniform = new UniformMat4F("viewMatrix");
@@ -86,12 +91,11 @@ public class Scene {
     
     public Scene(){
         
-        objectsList = new ArrayList<>();
+        objectsList = new CopyOnWriteArrayList<>();
         shadersList = new HashMap<>();
         textureList = new ArrayList<>();
         canDraw = false;
         light = new Light();
-        
         
         uniforms.put(viewMatrixUniform.getName(), viewMatrixUniform);
         uniforms.put(projMatrixUniform.getName(), projMatrixUniform);
@@ -107,10 +111,10 @@ public class Scene {
     
     private void initUniforms(){
         
-        Iterator<Entry<Integer, Shader>> iterator = shadersList.entrySet().iterator();
+        Iterator<Entry<String, Shader>> iterator = shadersList.entrySet().iterator();
         
         while(iterator.hasNext()){ //pour tous les shaders
-            Entry<Integer, Shader> shaderEntry = iterator.next();
+            Entry<String, Shader> shaderEntry = iterator.next();
             
             Iterator<Entry<String, Integer>> iterator2 = shaderEntry.getValue().uniformMap.entrySet().iterator();
             
@@ -133,6 +137,15 @@ public class Scene {
     public void init(GL3 gl){
         
         try {
+            
+            Iterator<Entry<String, Shader>> iterator = shadersList.entrySet().iterator();
+
+            while(iterator.hasNext()){
+                Entry<String, Shader> next = iterator.next();
+                Shader shader = next.getValue();
+                shader.init(gl);
+            }
+            
             noTranslationShader.init(gl);
             instanceLightedShader.init(gl);
             instanceShader.init(gl);
@@ -202,7 +215,7 @@ public class Scene {
         
     }
 
-    public Map<Integer, Shader> getShadersList() {
+    public Map<String, Shader> getShadersList() {
         return shadersList;
     }
     
@@ -212,14 +225,6 @@ public class Scene {
         if(sceneObject.texture != null){
             addTexture(sceneObject.texture);
         }
-    }
-    
-    public void addObject(SceneObject sceneObject, GL3 gl){
-        
-        sceneObject.initBuffers(gl);
-        sceneObject.initVao(gl);
-        sceneObject.setId(objectsList.size());
-        objectsList.add(sceneObject);
     }
     
     public SceneObject getFirstSceneObject(){
@@ -233,6 +238,7 @@ public class Scene {
     
     public void updateMousePicker(float mouseX, float mouseY, float viewportWidth, float viewportHeight){
         mousePicker.update(mouseX, mouseY, viewportWidth, viewportHeight);
+        mousePickerIsDirty = true;
     }
     
     
@@ -243,35 +249,47 @@ public class Scene {
     
     public void addShader(Shader shader) {
         
-        shadersList.put(shader.getProgramId(),shader);
+        shadersList.put(shader.name,shader);
     }
     
     public void addTexture(Texture texture){
         textureList.add(texture);
     }
     
-    public int getShaderByName(String name){
-        
-        for(Entry<Integer, Shader> shader : shadersList.entrySet()) {
-
-            if(shader.getValue().name.equals(name)){
-                
-                return shader.getKey();
-            }
-        }
-        
-        return -1;
-    }
-    
     public void draw(final GL3 gl){
         
         camera.updateViewMatrix();
         
+        //update picking
+        if(mousePickerIsDirty){
+            
+            //test for intersection (simple method, need to use an octree later)
+            for(SceneObject object : objectsList){
+                
+                
+                System.out.println(mousePicker.getCurrentRay().x+" "+mousePicker.getCurrentRay().y+" "+mousePicker.getCurrentRay().z);
+                
+                Point3F startPoint = mousePicker.getPointOnray(mousePicker.getCamPosition(), mousePicker.getCurrentRay(), 1);
+                Point3F endPoint = mousePicker.getPointOnray(mousePicker.getCamPosition(), mousePicker.getCurrentRay(), 999);
+                
+                Point3D intersection = Intersection.getIntersectionLineBoundingBox(new Point3D(startPoint.x, startPoint.y, startPoint.z),
+                        new Point3D(endPoint.x, endPoint.y, endPoint.z),
+                        object.getBoundingBox());
+                
+                if(intersection != null){
+                    //object.fireClicked(mousePicker.getCurrentRay());
+                }
+                object.fireClicked(mousePicker.getCurrentRay());
+            }
+            
+            mousePickerIsDirty = false;
+        }
+        
         //update shader variables
-        Iterator<Entry<Integer, Shader>> iterator = shadersList.entrySet().iterator();
+        Iterator<Entry<String, Shader>> iterator = shadersList.entrySet().iterator();
 
         while(iterator.hasNext()){
-            Entry<Integer, Shader> next = iterator.next();
+            Entry<String, Shader> next = iterator.next();
             Shader shader = next.getValue();
             shader.updateProgram(gl);
         }
@@ -290,24 +308,23 @@ public class Scene {
         /***draw scene objects***/
 
         gl.glEnable(GL3.GL_BLEND);
-
+            
         for(SceneObject object : objectsList){
+            
+            if(object.vaoId == -1){
+                object.initBuffers(gl);
+                object.initVao(gl);
+            }
 
             if(!object.depthTest){
                 gl.glClear(GL3.GL_DEPTH_BUFFER_BIT);
-            }
-            
-            if(object.isMousePickable()){
-                object.updateMousePicker(mousePicker);
-                object.doPicking();
-                //System.out.println(object.doPicking());
             }
 
             gl.glUseProgram(object.getShaderId());
                 object.draw(gl);
             gl.glUseProgram(0);
 
-        }
+        }    
     }
 
     public Light getLight() {

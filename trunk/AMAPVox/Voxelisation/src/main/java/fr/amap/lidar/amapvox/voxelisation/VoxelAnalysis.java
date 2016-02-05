@@ -3,7 +3,7 @@ package fr.amap.lidar.amapvox.voxelisation;
 import fr.amap.commons.util.Statistic;
 import fr.amap.commons.math.point.Point3I;
 import fr.amap.commons.util.TimeCounter;
-import fr.amap.lidar.amapvox.datastructure.octree.Octree;
+import fr.amap.commons.structure.octree.Octree;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.lidar.amapvox.jeeb.raytracing.geometry.LineElement;
 import fr.amap.lidar.amapvox.jeeb.raytracing.geometry.LineSegment;
@@ -13,13 +13,16 @@ import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelManager;
 import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelManager.VoxelCrossingContext;
 import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelManagerSettings;
 import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelSpace;
-import fr.amap.commons.raster.asc.RegularDtm;
+import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.raster.multiband.BCommon;
 import fr.amap.commons.raster.multiband.BHeader;
 import fr.amap.commons.raster.multiband.BSQ;
 import fr.amap.commons.math.point.Point3D;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxCfg;
-import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelParameters;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.LADParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightParams;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -91,7 +94,7 @@ public class VoxelAnalysis {
 
     private boolean isSet = false;
 
-    private RegularDtm terrain;
+    private Raster terrain;
     //private List<Octree> pointcloudList;
 
     private boolean shotChanged = false;
@@ -179,14 +182,14 @@ public class VoxelAnalysis {
 
         float distance = 0;
 
-        if (terrain != null && parameters.useDTMCorrection()) {
+        if (terrain != null && parameters.getDtmFilteringParams().useDTMCorrection()) {
             distance = z - (float) (terrain.getSimpleHeight(x, y));
         }
 
         return distance;
     }
             
-    public VoxelAnalysis(RegularDtm terrain, List<PointcloudFilter> pointcloudFilters, VoxCfg cfg) {
+    public VoxelAnalysis(Raster terrain, List<PointcloudFilter> pointcloudFilters, VoxCfg cfg) {
 
         nbShotsProcessed = 0;
         this.terrain = terrain;
@@ -224,8 +227,8 @@ public class VoxelAnalysis {
         this.parameters = parameters;
         this.outputFile = outputFile;
         
-        if(parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE){
-            weighting = parameters.getWeightingData();
+        if(parameters.getEchoesWeightParams().getWeightingMode() != EchoesWeightParams.WEIGHTING_NONE){
+            weighting = parameters.getEchoesWeightParams().getWeightingData();
             generateResidualEnergyTable();
         }else{
             
@@ -244,10 +247,15 @@ public class VoxelAnalysis {
                 laserSpec = LaserSpecification.DEFAULT_ALS;
             }
         }
+        
+        LADParams ladParameters = parameters.getLadParams();
+        if(ladParameters == null){
+            ladParameters = new LADParams();
+        }
 
-        LeafAngleDistribution distribution = new LeafAngleDistribution(parameters.getLadType(), 
-                                                                        parameters.getLadBetaFunctionAlphaParameter(),
-                                                                        parameters.getLadBetaFunctionBetaParameter());
+        LeafAngleDistribution distribution = new LeafAngleDistribution(ladParameters.getLadType(), 
+                                                                        ladParameters.getLadBetaFunctionAlphaParameter(),
+                                                                        ladParameters.getLadBetaFunctionBetaParameter());
         
         direcTransmittance = new DirectionalTransmittance(distribution);
         
@@ -320,7 +328,7 @@ public class VoxelAnalysis {
 
                     } else {
 
-                        if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
+                        if (parameters.getEchoesWeightParams().getWeightingMode() != EchoesWeightParams.WEIGHTING_NONE) {
                             beamFraction = weighting[shot.nbEchos - 1][i] + lastEchoBeamFraction;
 
                             if(wasMultiple){
@@ -433,7 +441,9 @@ public class VoxelAnalysis {
 //        }
         
         keepEcho = keepEchoOfShot(shot, echoID) &&
-                (echoDistance >= parameters.minDTMDistance && echoDistance != Float.NaN && parameters.useDTMCorrection()) || !parameters.useDTMCorrection() &&
+                (echoDistance >= parameters.getDtmFilteringParams().getMinDTMDistance() &&
+                !Float.isNaN(echoDistance) && parameters.getDtmFilteringParams().useDTMCorrection()) ||
+                !parameters.getDtmFilteringParams().useDTMCorrection() &&
                 keepEchoPointCloudFiltering;
 
         while ((context != null) && (context.indices != null)) {
@@ -462,7 +472,7 @@ public class VoxelAnalysis {
             double distance = getPosition(new Point3i(indices.x, indices.y, indices.z), parameters.split, parameters.bottomCorner).distance(shot.origin);
             
             //surface de la section du faisceau à la distance de la source
-            if (parameters.getWeighting() != VoxelParameters.WEIGHTING_NONE) {
+            if (parameters.getEchoesWeightParams().getWeightingMode() != EchoesWeightParams.WEIGHTING_NONE) {
                 surface = Math.pow((Math.tan(laserSpec.getBeamDivergence() / 2.0) * distance) + laserSpec.getBeamDiameterAtExit(), 2) * Math.PI;
             } else {
                 surface = 1;
@@ -522,9 +532,10 @@ public class VoxelAnalysis {
                 //on peut chercher ici la distance jusqu'au prochain voxel "sol"
                 if (shotChanged) {
 
-                    if (parameters.isCalculateGroundEnergy() && !parameters.isTLS()) {
+                    if (parameters.getGroundEnergyParams() != null && 
+                            parameters.getGroundEnergyParams().isCalculateGroundEnergy() && !parameters.isTLS()) {
 
-                        if (vox.ground_distance < parameters.minDTMDistance) {
+                        if (vox.ground_distance < parameters.getDtmFilteringParams().getMinDTMDistance()) {
                             groundEnergy[vox.$i][vox.$j].groundEnergyPotential++;
                             shotChanged = false;
                             context = null;
@@ -595,7 +606,8 @@ public class VoxelAnalysis {
 
                 } else {
 
-                    if (parameters.isCalculateGroundEnergy() && !parameters.isTLS() && !isSet) {
+                    if (parameters.getGroundEnergyParams() != null && 
+                            parameters.getGroundEnergyParams().isCalculateGroundEnergy() && !parameters.isTLS() && !isSet) {
                         groundEnergy[vox.$i][vox.$j].groundEnergyActual += residualEnergy;
                         groundEnergy[vox.$i][vox.$j].groundEnergyPotential++;
 
@@ -1074,7 +1086,7 @@ public class VoxelAnalysis {
                         int passID = 1;
 
                         //testloop:
-                        while(currentNbSampling <= parameters.getCorrectNaNsNbSamplingThreshold() || currentTransmittance == 0 ){
+                        while(currentNbSampling <= parameters.getNaNsCorrectionParams().getNbSamplingThreshold() || currentTransmittance == 0 ){
                             
                                                         
                             if(passID > passLimit){
@@ -1135,10 +1147,10 @@ public class VoxelAnalysis {
 
                             for(Voxel neighbour : neighbours){
                                 
-                                /*les voxels de transmittance nuls sont traités comme étant non échantillonné,
+                                /*les voxels de transmittance nulle sont traités comme étant non échantillonné,
                                 tous les voisins sont considérés indépendamment de l'échantillonnage*/
                                 
-                                if(!Float.isNaN(neighbour.transmittance) && neighbour.transmittance != 0){
+                                if(!Float.isNaN(neighbour.transmittance) /*&& neighbour.transmittance != 0*/){
                                     
                                     sumBVEntering += neighbour.bvEntering;
                                     sumBVIntercepted += neighbour.bvIntercepted;
@@ -1207,11 +1219,11 @@ public class VoxelAnalysis {
 
             long start_time = System.currentTimeMillis();
 
-            logger.info("writing file: " + parameters.getGroundEnergyFile().getAbsolutePath());
+            logger.info("writing file: " + parameters.getGroundEnergyParams().getGroundEnergyFile().getAbsolutePath());
 
             try {
 
-                if (parameters.getGroundEnergyFileFormat() == VoxelParameters.FILE_FORMAT_PNG) {
+                if (parameters.getGroundEnergyParams().getGroundEnergyFileFormat() == GroundEnergyParams.FILE_FORMAT_PNG) {
 
                     BufferedImage image = new BufferedImage(parameters.split.x, parameters.split.y, BufferedImage.TYPE_INT_ARGB);
 
@@ -1238,10 +1250,10 @@ public class VoxelAnalysis {
                         }
                     }
 
-                    ImageIO.write(image, "png", new File(parameters.getGroundEnergyFile().getAbsolutePath()));
+                    ImageIO.write(image, "png", new File(parameters.getGroundEnergyParams().getGroundEnergyFile().getAbsolutePath()));
 
                 } else {
-                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(parameters.getGroundEnergyFile()))) {
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(parameters.getGroundEnergyParams().getGroundEnergyFile()))) {
                         writer.write("i j groundEnergyActual groundEnergyPotential transmittance\n");
 
                         for (int i = 0; i < parameters.split.x; i++) {
@@ -1270,7 +1282,11 @@ public class VoxelAnalysis {
     public void createVoxelSpace() {
 
         try {
-            if (parameters.isCalculateGroundEnergy()) {
+            
+            
+            if (parameters.getGroundEnergyParams() != null && 
+                    parameters.getGroundEnergyParams().isCalculateGroundEnergy()) {
+                
                 groundEnergy = new GroundEnergy[parameters.split.x][parameters.split.y];
             }
 
@@ -1283,7 +1299,9 @@ public class VoxelAnalysis {
 
             try {
 
-                if (parameters.isCalculateGroundEnergy() && !parameters.isTLS()) {
+                if (parameters.getGroundEnergyParams() != null && 
+                        parameters.getGroundEnergyParams().isCalculateGroundEnergy() && !parameters.isTLS()) {
+                    
                     for (int i = 0; i < parameters.split.x; i++) {
                         for (int j = 0; j < parameters.split.y; j++) {
                             groundEnergy[i][j] = new GroundEnergy();
@@ -1319,7 +1337,7 @@ public class VoxelAnalysis {
 
         float dist;
 
-        if (terrain != null && parameters.useDTMCorrection()) {
+        if (terrain != null && parameters.getDtmFilteringParams().useDTMCorrection()) {
 
             float dtmHeightXY = terrain.getSimpleHeight((float) position.x, (float) position.y);
             if (Float.isNaN(dtmHeightXY)) {
@@ -1365,7 +1383,7 @@ public class VoxelAnalysis {
 //        parameters.setResolution(1.0);
 //        parameters.setMaxPAD(3.5f);
 //        parameters.setTLS(true);
-//        parameters.setWeighting(VoxelParameters.WEIGHTING_ECHOS_NUMBER);
+//        parameters.setWeightingMode(VoxelParameters.WEIGHTING_ECHOS_NUMBER);
 //        parameters.setWeightingData(VoxelParameters.DEFAULT_ALS_WEIGHTING);
 //        parameters.setLadType(LeafAngleDistribution.Type.SPHERIC);
 //

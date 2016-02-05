@@ -180,7 +180,7 @@ public class TrackballCamera extends Camera{
     
     public void setPivot(SceneObject sceneObject){
         
-        this.target = new Vec3F(sceneObject.getPosition().x, sceneObject.getPosition().y, sceneObject.getPosition().z);
+        this.target = new Vec3F(sceneObject.getGravityCenter().x, sceneObject.getGravityCenter().y, sceneObject.getGravityCenter().z);
         this.pivot = sceneObject;
     }
     
@@ -544,9 +544,9 @@ public class TrackballCamera extends Camera{
     
     private float getTargetDistance(){
         
-        Vec3F center = new Vec3F(getPivot().getPosition().x, 
-                                getPivot().getPosition().y,
-                                getPivot().getPosition().z);
+        Vec3F center = new Vec3F(getPivot().getGravityCenter().x, 
+                                getPivot().getGravityCenter().y,
+                                getPivot().getGravityCenter().z);
         
         return Vec3F.length(Vec3F.substract(location, center));
     }
@@ -554,12 +554,12 @@ public class TrackballCamera extends Camera{
     public void setViewToBack(){
         
         project(
-                        new Vec3F(getPivot().getPosition().x,
-                                 getPivot().getPosition().y + getTargetDistance(),
-                                 getPivot().getPosition().z),
-                        new Vec3F(getPivot().getPosition().x,
-                                 getPivot().getPosition().y,
-                                 getPivot().getPosition().z));
+                        new Vec3F(getPivot().getGravityCenter().x,
+                                 getPivot().getGravityCenter().y + getTargetDistance(),
+                                 getPivot().getGravityCenter().z),
+                        new Vec3F(getPivot().getGravityCenter().x,
+                                 getPivot().getGravityCenter().y,
+                                 getPivot().getGravityCenter().z));
         
         updateViewMatrix();
     }
@@ -567,13 +567,13 @@ public class TrackballCamera extends Camera{
     public void setViewToFront(){
         
         project(
-                        new Vec3F(getPivot().getPosition().x, 
-                                getPivot().getPosition().y-getTargetDistance(),
-                                getPivot().getPosition().z), 
+                        new Vec3F(getPivot().getGravityCenter().x, 
+                                getPivot().getGravityCenter().y-getTargetDistance(),
+                                getPivot().getGravityCenter().z), 
                 
-                        new Vec3F(getPivot().getPosition().x, 
-                                getPivot().getPosition().y,
-                                getPivot().getPosition().z));
+                        new Vec3F(getPivot().getGravityCenter().x, 
+                                getPivot().getGravityCenter().y,
+                                getPivot().getGravityCenter().z));
         
         updateViewMatrix();
     }
@@ -581,11 +581,11 @@ public class TrackballCamera extends Camera{
     public void setViewToLeft(){
         
         setLocation(new Vec3F(
-                getPivot().getPosition().x-getTargetDistance(), 
-                getPivot().getPosition().y, 
-                getPivot().getPosition().z));
+                getPivot().getGravityCenter().x-getTargetDistance(), 
+                getPivot().getGravityCenter().y, 
+                getPivot().getGravityCenter().z));
         
-        setTarget(new Vec3F(getPivot().getPosition().x, 
+        setTarget(new Vec3F(getPivot().getGravityCenter().x, 
                                             getLocation().y,
                                             getLocation().z));
         
@@ -595,11 +595,11 @@ public class TrackballCamera extends Camera{
         public void setViewToRight(){
         
         setLocation(new Vec3F(
-                getPivot().getPosition().x+getTargetDistance(),
-                getPivot().getPosition().y,
-                getPivot().getPosition().z));
+                getPivot().getGravityCenter().x+getTargetDistance(),
+                getPivot().getGravityCenter().y,
+                getPivot().getGravityCenter().z));
         
-        setTarget(new Vec3F(getPivot().getPosition().x, 
+        setTarget(new Vec3F(getPivot().getGravityCenter().x, 
                                                       getLocation().y,
                                                       getLocation().z));
         
@@ -608,24 +608,24 @@ public class TrackballCamera extends Camera{
     
     public void setViewToBottom(){
         
-        project(new Vec3F(getPivot().getPosition().x, 
-                                    getPivot().getPosition().y,
-                                    getPivot().getPosition().z-getTargetDistance()), 
-                      new Vec3F(getPivot().getPosition().x, 
-                                    getPivot().getPosition().y,
-                                    getPivot().getPosition().z));
+        project(new Vec3F(getPivot().getGravityCenter().x, 
+                                    getPivot().getGravityCenter().y,
+                                    getPivot().getGravityCenter().z-getTargetDistance()), 
+                      new Vec3F(getPivot().getGravityCenter().x, 
+                                    getPivot().getGravityCenter().y,
+                                    getPivot().getGravityCenter().z));
         
         updateViewMatrix();
     }
     
     public void setViewToTop(){
         
-        project(new Vec3F(getPivot().getPosition().x, 
-                                                      getPivot().getPosition().y,
-                                                      getPivot().getPosition().z+getTargetDistance()), 
-                                        new Vec3F(getPivot().getPosition().x, 
-                                                      getPivot().getPosition().y,
-                                                      getPivot().getPosition().z));
+        project(new Vec3F(getPivot().getGravityCenter().x, 
+                                                      getPivot().getGravityCenter().y,
+                                                      getPivot().getGravityCenter().z+getTargetDistance()), 
+                                        new Vec3F(getPivot().getGravityCenter().x, 
+                                                      getPivot().getGravityCenter().y,
+                                                      getPivot().getGravityCenter().z));
         
         updateViewMatrix();
     }

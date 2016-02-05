@@ -6,16 +6,22 @@
 package fr.amap.lidar.amapvox.voxviewer.mesh;
 
 import com.jogamp.common.nio.Buffers;
+import fr.amap.commons.format.mesh3d.Obj;
+import fr.amap.commons.format.mesh3d.ObjHelper;
+import fr.amap.commons.math.point.Point3F;
+import fr.amap.commons.math.point.Point3I;
 import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.commons.math.vector.Vec3I;
 import fr.amap.commons.util.ColorGradient;
 import fr.amap.commons.raster.asc.DTMPoint;
 import fr.amap.commons.raster.asc.Face;
-import fr.amap.commons.raster.asc.RegularDtm;
+import fr.amap.commons.raster.asc.Raster;
 import fr.amap.lidar.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.lidar.amapvox.voxviewer.object.mesh.Grid;
 import java.awt.Color;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -33,6 +40,8 @@ import org.jdom2.input.SAXBuilder;
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class GLMeshFactory {
+    
+    private final static Logger LOGGER = Logger.getLogger(GLMeshFactory.class);
     
     public static TexturedGLMesh createTexturedCube(float size){
         
@@ -52,11 +61,29 @@ public class GLMeshFactory {
     public static GLMesh createPointCloud(float[] vertexData, float[] colorData){
         
         GLMesh pointcloud = new PointCloudGLMesh();
-        pointcloud.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
+        pointcloud.setVertexBuffer(Buffers.newDirectFloatBuffer(vertexData));
         pointcloud.vertexCount = vertexData.length/3;
         pointcloud.colorBuffer = Buffers.newDirectFloatBuffer(colorData);
         
         return pointcloud;
+    }
+    
+    public static GLMesh createLineSegment(Point3F startPoint, Point3F endPoint){
+        
+        float[] vertexData = new float[]{
+            startPoint.x, startPoint.y, startPoint.z,
+            endPoint.x, endPoint.y, endPoint.z
+        }; 
+        
+        int indexData[] = new int[]{0, 1};
+        
+        GLMesh segmentLine = new SimpleGLMesh();
+        //cube.aoBuffer =  Buffers.newDirectFloatBuffer(aoData);
+        segmentLine.setVertexBuffer(Buffers.newDirectFloatBuffer(vertexData));
+        segmentLine.indexBuffer = Buffers.newDirectIntBuffer(indexData);
+        segmentLine.vertexCount = indexData.length;
+        
+        return segmentLine;
     }
     
     public static GLMesh createCube(float size){
@@ -99,7 +126,7 @@ public class GLMeshFactory {
         
         GLMesh cube = new SimpleGLMesh();
         //cube.aoBuffer =  Buffers.newDirectFloatBuffer(aoData);
-        cube.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
+        cube.setVertexBuffer(Buffers.newDirectFloatBuffer(vertexData));
         cube.indexBuffer = Buffers.newDirectIntBuffer(indexData);
         cube.vertexCount = indexData.length;
         cube.normalBuffer  = Buffers.newDirectFloatBuffer(normalData);
@@ -135,7 +162,7 @@ public class GLMeshFactory {
         meshBuffer.setBuffer(MeshBuffer.INDEX_BUFFER, Buffers.newDirectShortBuffer(indexData));
         plane.meshBuffer = meshBuffer;
         */
-        plane.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
+        plane.setVertexBuffer(Buffers.newDirectFloatBuffer(vertexData));
         plane.textureCoordinatesBuffer = Buffers.newDirectFloatBuffer(textCoordData);
         plane.indexBuffer = Buffers.newDirectIntBuffer(indexData);
         plane.vertexCount = indexData.length;
@@ -220,7 +247,7 @@ public class GLMeshFactory {
         }
         
         Grid grid = new Grid();
-        grid.vertexBuffer = Buffers.newDirectFloatBuffer(pointsArray);
+        grid.setVertexBuffer(Buffers.newDirectFloatBuffer(pointsArray));
         grid.indexBuffer = Buffers.newDirectIntBuffer(indexArray);
         grid.vertexCount = indexArrayIndex;
         
@@ -258,7 +285,7 @@ public class GLMeshFactory {
             4, 5
         };
         
-        mesh.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
+        mesh.setVertexBuffer(Buffers.newDirectFloatBuffer(vertexData));
         mesh.colorBuffer = Buffers.newDirectFloatBuffer(colorData);
         mesh.indexBuffer = Buffers.newDirectIntBuffer(indexData);
         
@@ -277,7 +304,7 @@ public class GLMeshFactory {
         return GLMeshFactory.createPlane(startPoint, width, height);
     }
     
-    public static GLMesh createMeshFromX3D(InputStreamReader x3dFile) throws JDOMException, IOException{
+    /*public static GLMesh createMeshFromX3D(InputStreamReader x3dFile) throws JDOMException, IOException{
         
         SAXBuilder sxb = new SAXBuilder();
         sxb.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
@@ -291,8 +318,8 @@ public class GLMeshFactory {
                                         .getChildren("Shape");
             
             List<Integer> faces = new ArrayList<>();
-            List<Vec3F> vertices = new ArrayList<>();
-            List<Vec3F> normales = new ArrayList<>();
+            List<Point3F> vertices = new ArrayList<>();
+            List<Point3F> normales = new ArrayList<>();
             Map<Integer, Vec3F> colors = new HashMap<>();
             
             int facesOffset = 0;
@@ -357,7 +384,7 @@ public class GLMeshFactory {
                                     break;
                                 case 2:
                                     z = value;
-                                    vertices.add(new Vec3F(x, y, z));
+                                    vertices.add(new Point3F(x, y, z));
                                     count = -1;
                                     tmp++;
                                     break;
@@ -394,7 +421,7 @@ public class GLMeshFactory {
                                     break;
                                 case 2:
                                     z = value;
-                                    normales.add(new Vec3F(x, y, z));
+                                    normales.add(new Point3F(x, y, z));
                                     count = -1;
                                     break;
                             }
@@ -405,7 +432,12 @@ public class GLMeshFactory {
                 
             }
             
-            GLMesh mesh = GLMeshFactory.createMeshWithNormales(vertices, normales, faces);
+            int[] facesArray = new int[faces.size()];
+            for(int i=0;i<faces.size();i++){
+                facesArray[i] = faces.get(i);
+            }
+            
+            GLMesh mesh = GLMeshFactory.createMesh(vertices, normales, facesArray);
             
             float colorData[] = new float[vertices.size()*3];
             for(int i=0, j=0;i<vertices.size();i++,j+=3){
@@ -424,7 +456,7 @@ public class GLMeshFactory {
         } catch (JDOMException | IOException ex) {
             throw ex;
         }
-    }
+    }*/
     
     public static GLMesh createBoundingBox(float minX, float minY, float minZ, float maxX, float maxY, float maxZ){
         
@@ -454,55 +486,87 @@ public class GLMeshFactory {
         3, 7,
         0, 3};
         
-        mesh.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
+        mesh.setVertexBuffer(Buffers.newDirectFloatBuffer(vertexData));
         mesh.indexBuffer = Buffers.newDirectIntBuffer(indexData);
         mesh.vertexCount = indexData.length;
         
         return mesh;
     }
     
-    public static GLMesh createMeshFromObj(InputStreamReader objFile, InputStreamReader objMaterial) throws FileNotFoundException, IOException{
+    public static GLMesh createMeshFromObj(File objFile, File mtlFile) throws FileNotFoundException, IOException{
+        
+        Obj obj = ObjHelper.readObj(objFile, mtlFile);
+        
+                
+        GLMesh mesh = GLMeshFactory.createMesh(obj.getPoints(), obj.getNormals(), obj.get1DFaces());
+        
+        int nbPoints = obj.getPoints().length;
+        float colorData[] = new float[nbPoints * 3];
+        
+        for(int i=0, j=0;i<nbPoints;i++,j+=3){
+            
+            colorData[j] = 0;
+            colorData[j+1] = 0;
+            colorData[j+2] = 0;
+        }
+        
+        mesh.colorBuffer = Buffers.newDirectFloatBuffer(colorData);
+        
+        return mesh;
+    }
+    
+    /*public static GLMesh createMeshFromObj(File objFile) throws FileNotFoundException, IOException{
+        
+        return createMeshFromObj(new InputStreamReader(new FileInputStream(objFile)), null);
+    }*/
+    
+    /*public static GLMesh createMeshFromObj(InputStreamReader objFile, InputStreamReader objMaterial) throws FileNotFoundException, IOException{
         
         GLMesh mesh;
         
-        ArrayList<Vec3F> vertices = new ArrayList<>();
-        ArrayList<Vec3F> normales = new ArrayList<>();
+        ArrayList<Point3F> vertices = new ArrayList<>();
+        ArrayList<Point3F> normales = new ArrayList<>();
         Map<Integer, Vec3F> colors = new HashMap<>();
         ArrayList<Integer> faces = new ArrayList<>();
         Map<String, Vec3F> materials = new HashMap<>();
         
         
-        int lineNumber = 100000;
+        Point3F[] normalesArray = new Point3F[0];
         
-        Vec3F[] normalesArray = new Vec3F[lineNumber];
+        boolean hasAMaterial = false;
+        Vec3F defaultColor = new Vec3F(0, 0, 0);
         
-        try {
-            BufferedReader reader = new BufferedReader(objMaterial);
-            
-            String line;
-            String currentMaterial="";
-            
-            while((line = reader.readLine()) != null){
-                
-                if(line.startsWith("newmtl ")){
-                    
-                    String[] material = line.split(" ");
-                    currentMaterial = material[1];
-                    
-                }else if(line.startsWith("Kd ")){
-                    String[] diffuse = line.split(" ");
-                    materials.put(currentMaterial, new Vec3F(Float.valueOf(diffuse[1]), Float.valueOf(diffuse[2]), Float.valueOf(diffuse[3])));
+        if (objMaterial == null) {
+            LOGGER.info("Obj material not set");
+        } else {
+            try (BufferedReader reader = new BufferedReader(objMaterial)) {
+                String line;
+                String currentMaterial = "";
+
+                while ((line = reader.readLine()) != null) {
+
+                    if (line.startsWith("newmtl ")) {
+
+                        String[] material = line.split(" ");
+                        currentMaterial = material[1];
+
+                    } else if (line.startsWith("Kd ")) {
+                        String[] diffuse = line.split(" ");
+                        materials.put(currentMaterial, new Vec3F(Float.valueOf(diffuse[1]), Float.valueOf(diffuse[2]), Float.valueOf(diffuse[3])));
+                    }
                 }
+
+                hasAMaterial = true;
+
+            } catch (FileNotFoundException ex) {
+                throw ex;
+            } catch (IOException ex) {
+                throw ex;
             }
-            
-            reader.close();
-        } catch (FileNotFoundException ex) {
-            throw ex;
-        } catch (IOException ex) {
-            throw ex;
         }
         
         int count = 0;
+        boolean firstFace = true;
         
         try{
                         
@@ -517,14 +581,19 @@ public class GLMeshFactory {
                 if(line.startsWith("v ")){
                     
                     String[] vertex = line.split(" ");
-                    vertices.add(new Vec3F(Float.valueOf(vertex[1]), Float.valueOf(vertex[2]), Float.valueOf(vertex[3])));
+                    vertices.add(new Point3F(Float.valueOf(vertex[1]), Float.valueOf(vertex[2]), Float.valueOf(vertex[3])));
                     
                 }else if(line.startsWith("vn ")){
                     
                     String[] normale = line.split(" ");
-                    normales.add(new Vec3F(Float.valueOf(normale[1]), Float.valueOf(normale[2]), Float.valueOf(normale[3])));
+                    normales.add(new Point3F(Float.valueOf(normale[1]), Float.valueOf(normale[2]), Float.valueOf(normale[3])));
                     
                 }else if(line.startsWith("f ")){
+                    
+                    if(firstFace){
+                        normalesArray = new Point3F[vertices.size()];
+                        firstFace = false;
+                    }
                     
                     String[] faceSplit = line.replaceAll("//", " ").split(" ");
                     
@@ -544,7 +613,11 @@ public class GLMeshFactory {
                     faces.add(face.z-1);
                     
                 }else if(line.startsWith("usemtl ")){
-                    currentColor = materials.get(line.split(" ")[1]);
+                    if(hasAMaterial){
+                        currentColor = materials.get(line.split(" ")[1]);
+                    }else{
+                        currentColor = defaultColor;
+                    }
                 }
             }
             
@@ -558,25 +631,36 @@ public class GLMeshFactory {
         
         normales = new ArrayList<>();
         
-        for (int i=0;i<vertices.size();i++){
-            normales.add(normalesArray[i]);
+        for (int i=0;i<normalesArray.length;i++){
+            if(normalesArray[i] == null){
+                normales.add(new Point3F(0, 0, 0));
+            }else{
+                normales.add(normalesArray[i]);
+            }
         }
         
-        mesh = GLMeshFactory.createMeshWithNormales(vertices, normales, faces);
+        mesh = GLMeshFactory.createMesh(vertices, normales, faces);
         
         float colorData[] = new float[vertices.size()*3];
         for(int i=0, j=0;i<vertices.size();i++,j+=3){
             
-            colorData[j] = colors.get(i).x;
-            colorData[j+1] = colors.get(i).y;
-            colorData[j+2] = colors.get(i).z;
+            if(colors.get(i) == null){
+                colorData[j] = defaultColor.x;
+                colorData[j+1] = defaultColor.y;
+                colorData[j+2] = defaultColor.z;
+            }else{
+                colorData[j] = colors.get(i).x;
+                colorData[j+1] = colors.get(i).y;
+                colorData[j+2] = colors.get(i).z;
+            }
+            
             
         }
         
         mesh.colorBuffer = Buffers.newDirectFloatBuffer(colorData);
         
         return mesh;
-    }
+    }*/
     
     public static GLMesh createMesh(ArrayList<Vec3F> points, ArrayList<Integer> faces){
         
@@ -605,7 +689,7 @@ public class GLMeshFactory {
             indexData[i] = faces.get(i);
         }
         
-        mesh.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
+        mesh.setVertexBuffer(Buffers.newDirectFloatBuffer(vertexData));
         mesh.indexBuffer = Buffers.newDirectIntBuffer(indexData);
         
         mesh.vertexCount = indexData.length;
@@ -613,7 +697,7 @@ public class GLMeshFactory {
         return mesh;
     }
     
-    public static GLMesh createMeshAndComputeNormalesFromDTM(RegularDtm dtm){
+    public static GLMesh createMeshAndComputeNormalesFromDTM(Raster dtm){
         
         List<DTMPoint> points = dtm.getPoints();
         List<Face> faces = dtm.getFaces();
@@ -663,7 +747,7 @@ public class GLMeshFactory {
             indexData[j+2] = faces.get(i).getPoint3();
         }
         
-        mesh.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
+        mesh.setVertexBuffer(Buffers.newDirectFloatBuffer(vertexData));
         mesh.indexBuffer = Buffers.newDirectIntBuffer(indexData);
         mesh.normalBuffer = Buffers.newDirectFloatBuffer(normalData);
         mesh.vertexCount = indexData.length;
@@ -686,38 +770,36 @@ public class GLMeshFactory {
         return mesh;
     }
     
-    public static GLMesh createMeshWithNormales(List<Vec3F> points, List<Vec3F> normales, List<Integer> faces){
+    public static GLMesh createMesh(Point3F[] points, Point3F[] normales, int[] faces){
         
         GLMesh mesh = new SimpleGLMesh();
         
         
-        float[] vertexData = new float[points.size()*3];
-        for(int i=0,j=0 ; i<points.size(); i++, j+=3){
+        float[] vertexData = new float[points.length*3];
+        for(int i=0,j=0 ; i<points.length; i++, j+=3){
             
-            vertexData[j] = points.get(i).x;
-            vertexData[j+1] = points.get(i).y;
-            vertexData[j+2] = points.get(i).z;
+            vertexData[j] = points[i].x;
+            vertexData[j+1] = points[i].y;
+            vertexData[j+2] = points[i].z;
         }
         
-        float[] normalData = new float[normales.size()*3];
-        for(int i=0,j=0 ; i<normales.size(); i++, j+=3){
+        mesh.setVertexBuffer(Buffers.newDirectFloatBuffer(vertexData));
+        
+        if(normales != null){
+            float[] normalData = new float[normales.length*3];
             
-            normalData[j] = normales.get(i).x;
-            normalData[j+1] = normales.get(i).y;
-            normalData[j+2] = normales.get(i).z;
+            for(int i=0,j=0 ; i<normales.length; i++, j+=3){
+
+                normalData[j] = normales[i].x;
+                normalData[j+1] = normales[i].y;
+                normalData[j+2] = normales[i].z;
+            }
+            
+            mesh.normalBuffer = Buffers.newDirectFloatBuffer(normalData);
         }
         
-        int indexData[] = new int[faces.size()];
-        
-        for(int i=0 ; i<faces.size() ; i ++){
-            
-            indexData[i] = faces.get(i);
-        }
-        
-        mesh.vertexBuffer = Buffers.newDirectFloatBuffer(vertexData);
-        mesh.indexBuffer = Buffers.newDirectIntBuffer(indexData);
-        mesh.normalBuffer = Buffers.newDirectFloatBuffer(normalData);
-        mesh.vertexCount = indexData.length;
+        mesh.indexBuffer = Buffers.newDirectIntBuffer(faces);
+        mesh.vertexCount = faces.length;
         
         return mesh;
     }

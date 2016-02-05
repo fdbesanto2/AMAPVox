@@ -14,9 +14,15 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.lidar.amapvox.voxelisation.configuration;
 
+import fr.amap.commons.util.io.file.CSVFile;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.jdom2.Attribute;
 import org.jdom2.Element;
 
@@ -28,7 +34,7 @@ import org.jdom2.Element;
 
 public class ALSVoxCfg extends VoxCfg{
 
-    private File trajectoryFile;
+    private CSVFile trajectoryFile;
     private List<Integer> classifiedPointsToDiscard;
     
     
@@ -38,18 +44,53 @@ public class ALSVoxCfg extends VoxCfg{
         super.readConfiguration(inputParametersFile);
         
         Element trajectoryFileElement = processElement.getChild("trajectory");
-        trajectoryFile = new File(trajectoryFileElement.getAttributeValue("src"));
+        
+        trajectoryFile = new CSVFile(trajectoryFileElement.getAttributeValue("src"));
+        
+        try{
+            String columnSeparator = trajectoryFileElement.getAttributeValue("column-separator");
+            String headerIndex = trajectoryFileElement.getAttributeValue("header-index");
+            String hasHeader = trajectoryFileElement.getAttributeValue("has-header");
+            String nbOfLinesToRead = trajectoryFileElement.getAttributeValue("nb-of-lines-to-read");
+            String nbOfLinesToSkip = trajectoryFileElement.getAttributeValue("nb-of-lines-to-skip");
+            String columnAssignment = trajectoryFileElement.getAttributeValue("column-assignment");
+            
+            trajectoryFile.setColumnSeparator(columnSeparator);
+            trajectoryFile.setHeaderIndex(Long.valueOf(headerIndex));
+            trajectoryFile.setHasHeader(Boolean.valueOf(hasHeader));
+            trajectoryFile.setNbOfLinesToRead(Long.valueOf(nbOfLinesToRead));
+            trajectoryFile.setNbOfLinesToSkip(Long.valueOf(nbOfLinesToSkip));
+            
+            Map<String, Integer> colMap = new HashMap<>();
+            String[] split = columnAssignment.split(",");
+            for(String s : split){
+                int indexOfSep = s.indexOf("=");
+                String key = s.substring(0, indexOfSep);
+                String value = s.substring(indexOfSep+1, s.length());
+                colMap.put(key, Integer.valueOf(value));
+            }
+            
+            trajectoryFile.setColumnAssignment(colMap);
+            
+        }catch(Exception e){
+            logger.warn("Old trajectory file element detected, keep default old read parameters.");
+        }
         
         processMode = ProcessMode.VOXELISATION_ALS;
         
         Element groundEnergyElement = processElement.getChild("ground-energy");
         if(groundEnergyElement != null){
-            voxelParameters.setCalculateGroundEnergy(Boolean.valueOf(groundEnergyElement.getAttributeValue("generate")));
+            
+            GroundEnergyParams groundEnergyParameters = new GroundEnergyParams();
+            
+            groundEnergyParameters.setCalculateGroundEnergy(Boolean.valueOf(groundEnergyElement.getAttributeValue("generate")));
 
-            if(voxelParameters.isCalculateGroundEnergy()){
-                voxelParameters.setGroundEnergyFileFormat(Short.valueOf(groundEnergyElement.getAttributeValue("type")));
-                voxelParameters.setGroundEnergyFile(new File(groundEnergyElement.getAttributeValue("src")));
+            if(groundEnergyParameters.isCalculateGroundEnergy()){
+                groundEnergyParameters.setGroundEnergyFileFormat(Short.valueOf(groundEnergyElement.getAttributeValue("type")));
+                groundEnergyParameters.setGroundEnergyFile(new File(groundEnergyElement.getAttributeValue("src")));
             }
+            
+            voxelParameters.setGroundEnergyParams(groundEnergyParameters);
         }
         
         classifiedPointsToDiscard = new ArrayList<>();
@@ -71,10 +112,10 @@ public class ALSVoxCfg extends VoxCfg{
         
         Element correctNaNsElement = processElement.getChild("correct-NaNs");
         if(correctNaNsElement != null){
-            voxelParameters.setCorrectNaNsMode2(Boolean.valueOf(correctNaNsElement.getAttributeValue("enabled")));
+            voxelParameters.getNaNsCorrectionParams().setActivate(Boolean.valueOf(correctNaNsElement.getAttributeValue("enabled")));
             
             try{
-                voxelParameters.setCorrectNaNsNbSamplingThreshold(Float.valueOf(correctNaNsElement.getAttributeValue("threshold")));
+                voxelParameters.getNaNsCorrectionParams().setNbSamplingThreshold(Float.valueOf(correctNaNsElement.getAttributeValue("threshold")));
             }catch(Exception e){ 
                 System.err.println(e.fillInStackTrace());
             }
@@ -94,17 +135,40 @@ public class ALSVoxCfg extends VoxCfg{
         
         Element trajectoryFileElement = new Element("trajectory");
         trajectoryFileElement.setAttribute(new Attribute("src",trajectoryFile.getAbsolutePath()));
+        trajectoryFileElement.setAttribute(new Attribute("column-separator",trajectoryFile.getColumnSeparator()));
+        trajectoryFileElement.setAttribute(new Attribute("header-index",String.valueOf(trajectoryFile.getHeaderIndex())));
+        trajectoryFileElement.setAttribute(new Attribute("has-header", String.valueOf(trajectoryFile.isHasHeader())));
+        trajectoryFileElement.setAttribute(new Attribute("nb-of-lines-to-read", String.valueOf(trajectoryFile.getNbOfLinesToRead())));
+        trajectoryFileElement.setAttribute(new Attribute("nb-of-lines-to-skip", String.valueOf(trajectoryFile.getNbOfLinesToSkip())));
+        
+        Map<String, Integer> columnAssignment = trajectoryFile.getColumnAssignment();
+        Iterator<Map.Entry<String, Integer>> iterator = columnAssignment.entrySet().iterator();
+        String colAssignment = new String();
+        
+        while(iterator.hasNext()){
+            Map.Entry<String, Integer> entry = iterator.next();
+            colAssignment += entry.getKey()+"="+entry.getValue()+",";
+        }
+        
+        trajectoryFileElement.setAttribute(new Attribute("column-assignment", colAssignment));
+        
         processElement.addContent(trajectoryFileElement);
         
-        Element groundEnergyElement = new Element("ground-energy");
-        groundEnergyElement.setAttribute("generate", String.valueOf(voxelParameters.isCalculateGroundEnergy()));
-
-        if(voxelParameters.getGroundEnergyFile() != null){
-            groundEnergyElement.setAttribute("src", voxelParameters.getGroundEnergyFile().getAbsolutePath());
-            groundEnergyElement.setAttribute("type", String.valueOf(voxelParameters.getGroundEnergyFileFormat()));
-        }    
+        GroundEnergyParams groundEnergyParameters = voxelParameters.getGroundEnergyParams();
         
-        processElement.addContent(groundEnergyElement);
+        if(groundEnergyParameters != null){
+            
+            Element groundEnergyElement = new Element("ground-energy");
+            groundEnergyElement.setAttribute("generate", String.valueOf(groundEnergyParameters.isCalculateGroundEnergy()));
+            
+            if(groundEnergyParameters.getGroundEnergyFile() != null){
+                groundEnergyElement.setAttribute("src", groundEnergyParameters.getGroundEnergyFile().getAbsolutePath());
+                groundEnergyElement.setAttribute("type", String.valueOf(groundEnergyParameters.getGroundEnergyFileFormat()));
+            }    
+
+            processElement.addContent(groundEnergyElement);
+        }
+        
         
         if(classifiedPointsToDiscard != null){
             
@@ -124,19 +188,19 @@ public class ALSVoxCfg extends VoxCfg{
         
         
         Element correctNaNsElement = new Element("correct-NaNs");
-        correctNaNsElement.setAttribute("enabled", String.valueOf(voxelParameters.isCorrectNaNsMode2()));
-        correctNaNsElement.setAttribute("threshold", String.valueOf(voxelParameters.getCorrectNaNsNbSamplingThreshold()));
+        correctNaNsElement.setAttribute("enabled", String.valueOf(voxelParameters.getNaNsCorrectionParams().isActivate()));
+        correctNaNsElement.setAttribute("threshold", String.valueOf(voxelParameters.getNaNsCorrectionParams().getNbSamplingThreshold()));
         processElement.addContent(correctNaNsElement);
         
         
         writeDocument(outputParametersFile);
     }
     
-    public File getTrajectoryFile() {
+    public CSVFile getTrajectoryFile() {
         return trajectoryFile;
     }
 
-    public void setTrajectoryFile(File trajectoryFile) {
+    public void setTrajectoryFile(CSVFile trajectoryFile) {
         this.trajectoryFile = trajectoryFile;
     }
     

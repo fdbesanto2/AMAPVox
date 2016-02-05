@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -455,10 +457,31 @@ public class TextFileParserFrameController implements Initializable{
         return list;
     }
     
+    public Map<String, Integer> getAssignedColumnsItemsMap(){
+        
+        ObservableList<Node> childs = columnsGridPane.getChildren();
+        
+        Map<String, Integer> columnAssignation = new HashMap<>();
+        
+        int index = 0;
+        
+        for(Node child : childs){
+            columnAssignation.put((String)(((ComboBox)child).getSelectionModel().getSelectedItem()), index);
+            index++;
+        }
+        
+        return columnAssignation;
+    }
+    
+    /**
+     * @deprecated 
+     * @return 
+     */
     public List<String> getAssignedColumnsItems(){
         
         ObservableList<Node> childs = columnsGridPane.getChildren();
         List<String> list = new ArrayList<>();
+        
         
         for(Node child : childs){
             list.add((String)(((ComboBox)child).getSelectionModel().getSelectedItem()));

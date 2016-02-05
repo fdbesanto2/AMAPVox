@@ -28,7 +28,7 @@ import org.apache.commons.lang3.ArrayUtils;
  * It allows to get the header in a simple basic format (V1.0) and get an iterator on the points of the file.<br>
  * It uses a native library compiled for 64 bits systems, Linux and Windows.<br><br>
  * 
- * @see <a href="http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html">ASPRS Specification</a><br>
+ * @see <a href="http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html">ASPRS Specification</a>
  * 
  * 
  * @author Julien Heurtebize (julienhtbe@gmail.com)

@@ -433,7 +433,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
             centerY = (firstVoxelPosition.y + lastVoxelPosition.y)/2.0f;
             centerZ = (firstVoxelPosition.z + lastVoxelPosition.z)/2.0f;
             
-            position = new Point3F(centerX, centerY, centerZ);
+            gravityCenter = new Point3F(centerX, centerY, centerZ);
             
         }
         
@@ -862,11 +862,11 @@ public class VoxelSpaceSceneObject extends SceneObject{
                 gl.glVertexAttribPointer(shader.attributeMap.get("position"), 3, GL3.GL_FLOAT, false, 0, 0);
                 
                 gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_position"));
-                gl.glVertexAttribPointer(shader.attributeMap.get("instance_position"), 3, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE);
+                gl.glVertexAttribPointer(shader.attributeMap.get("instance_position"), 3, GL3.GL_FLOAT, false, 0, mesh.getVertexBuffer().capacity()*FLOAT_SIZE);
                 gl.glVertexAttribDivisor(shader.attributeMap.get("instance_position"), 1);
                 
                 gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_color"));
-                gl.glVertexAttribPointer(shader.attributeMap.get("instance_color"), 4, GL3.GL_FLOAT, false, 0, (mesh.vertexBuffer.capacity()+((InstancedGLMesh)mesh).instancePositionsBuffer.capacity())*FLOAT_SIZE);
+                gl.glVertexAttribPointer(shader.attributeMap.get("instance_color"), 4, GL3.GL_FLOAT, false, 0, (mesh.getVertexBuffer().capacity()+((InstancedGLMesh)mesh).instancePositionsBuffer.capacity())*FLOAT_SIZE);
                 gl.glVertexAttribDivisor(shader.attributeMap.get("instance_color"), 1);
                  
             gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, mesh.getIboId());
@@ -914,9 +914,9 @@ public class VoxelSpaceSceneObject extends SceneObject{
                 
                 
                 /*
-                instancePositionsList.add(voxel.position.x);
-                instancePositionsList.add(voxel.position.y);
-                instancePositionsList.add(voxel.position.z);
+                instancePositionsList.add(voxel.gravityCenter.x);
+                instancePositionsList.add(voxel.gravityCenter.y);
+                instancePositionsList.add(voxel.gravityCenter.z);
                 
                 instanceColorsList.add(voxel.getRed());
                 instanceColorsList.add(voxel.getGreen());
@@ -951,7 +951,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
         
         //mesh = new SimpleGLMesh(gl);
         
-        int maxSize = (mesh.vertexBuffer.capacity()*GLMesh.FLOAT_SIZE)+(data.voxels.size()*3*GLMesh.FLOAT_SIZE)+(data.voxels.size()*4*GLMesh.FLOAT_SIZE);
+        int maxSize = (mesh.getVertexBuffer().capacity()*GLMesh.FLOAT_SIZE)+(data.voxels.size()*3*GLMesh.FLOAT_SIZE)+(data.voxels.size()*4*GLMesh.FLOAT_SIZE);
         mesh.initBuffers(gl, maxSize);
         
         updateVao();
@@ -971,15 +971,15 @@ public class VoxelSpaceSceneObject extends SceneObject{
         
                 gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, mesh.getVboId());
 
-                    /*gl.glEnableVertexAttribArray(shader.attributeMap.get("position"));
-                    gl.glVertexAttribPointer(shader.attributeMap.get("position"), 3, GL3.GL_FLOAT, false, 0, 0);*/
+                    /*gl.glEnableVertexAttribArray(shader.attributeMap.get("gravityCenter"));
+                    gl.glVertexAttribPointer(shader.attributeMap.get("gravityCenter"), 3, GL3.GL_FLOAT, false, 0, 0);*/
 
                     gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_position"));
-                    gl.glVertexAttribPointer(shader.attributeMap.get("instance_position"), 3, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE);
+                    gl.glVertexAttribPointer(shader.attributeMap.get("instance_position"), 3, GL3.GL_FLOAT, false, 0, mesh.getVertexBuffer().capacity()*FLOAT_SIZE);
                     gl.glVertexAttribDivisor(shader.attributeMap.get("instance_position"), 1);
 
                     gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_color"));
-                    gl.glVertexAttribPointer(shader.attributeMap.get("instance_color"), 4, GL3.GL_FLOAT, false, 0, (mesh.vertexBuffer.capacity()+((InstancedGLMesh)mesh).instancePositionsBuffer.capacity())*FLOAT_SIZE);
+                    gl.glVertexAttribPointer(shader.attributeMap.get("instance_color"), 4, GL3.GL_FLOAT, false, 0, (mesh.getVertexBuffer().capacity()+((InstancedGLMesh)mesh).instancePositionsBuffer.capacity())*FLOAT_SIZE);
                     gl.glVertexAttribDivisor(shader.attributeMap.get("instance_color"), 1);
 
                 gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, mesh.getIboId());
@@ -1021,7 +1021,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
         if(!cubeSizeUpdated){
             
             GLMesh cube = GLMeshFactory.createCube(cubeSize);
-            mesh.updateBuffer(gl, 0, cube.vertexBuffer);
+            mesh.updateBuffer(gl, 0, cube.getVertexBuffer());
             
             cubeSizeUpdated = true;
         }

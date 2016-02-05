@@ -13,7 +13,7 @@ Authors:
 For further information, please contact Gregoire Vincent.
  */
 
-package fr.amap.lidar.amapvox.datastructure.pointcloud;
+package fr.amap.commons.structure.pointcloud;
 
 import fr.amap.commons.math.geometry.BoundingBox3F;
 import fr.amap.commons.math.matrix.Mat4D;

@@ -60,11 +60,6 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.lidar.amapvox</groupId>
-            <artifactId>amapvox-datastructure</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.10</version>
@@ -78,6 +73,11 @@
         <dependency>
             <groupId>fr.amap.lidar.amapvox</groupId>
             <artifactId>amapvox-voxreader</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.amap.commons</groupId>
+            <artifactId>commons-structure</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>

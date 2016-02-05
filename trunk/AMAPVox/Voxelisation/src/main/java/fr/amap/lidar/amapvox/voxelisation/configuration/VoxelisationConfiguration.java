@@ -5,10 +5,14 @@
  */
 package fr.amap.lidar.amapvox.voxelisation.configuration;
 
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import fr.amap.lidar.amapvox.commons.Configuration;
 import fr.amap.commons.util.Filter;
 import fr.amap.commons.util.LidarScan;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.RasterParams;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -189,11 +193,11 @@ public class VoxelisationConfiguration extends Configuration{
             
             /***PONDERATION***/
             Element ponderationElement = new Element("ponderation");
-            ponderationElement.setAttribute(new Attribute("mode",String.valueOf(voxelParameters.getWeighting())));
+            ponderationElement.setAttribute(new Attribute("mode",String.valueOf(voxelParameters.getEchoesWeightParams().getWeightingMode())));
             
-            if(voxelParameters.getWeighting() > 0){
+            if(voxelParameters.getEchoesWeightParams().getWeightingMode() > 0){
                 StringBuilder weightingDataString = new StringBuilder();
-                float[][] weightingData = voxelParameters.getWeightingData();
+                float[][] weightingData = voxelParameters.getEchoesWeightParams().getWeightingData();
                 for(int i=0;i<weightingData.length;i++){
                     for(int j=0;j<weightingData[0].length;j++){
                         weightingDataString.append(weightingData[i][j]).append(" ");
@@ -208,13 +212,13 @@ public class VoxelisationConfiguration extends Configuration{
             /***DTM FILTER***/
             
             Element dtmFilterElement = new Element("dtm-filter");
-            dtmFilterElement.setAttribute(new Attribute("enabled",String.valueOf(voxelParameters.useDTMCorrection())));
-            if(voxelParameters.useDTMCorrection()){
-                if(voxelParameters.getDtmFile() != null){
-                    dtmFilterElement.setAttribute(new Attribute("src", voxelParameters.getDtmFile().getAbsolutePath()));
+            dtmFilterElement.setAttribute(new Attribute("enabled",String.valueOf(voxelParameters.getDtmFilteringParams().useDTMCorrection())));
+            if(voxelParameters.getDtmFilteringParams().useDTMCorrection()){
+                if(voxelParameters.getDtmFilteringParams().getDtmFile() != null){
+                    dtmFilterElement.setAttribute(new Attribute("src", voxelParameters.getDtmFilteringParams().getDtmFile().getAbsolutePath()));
                 }
                 
-                dtmFilterElement.setAttribute(new Attribute("height-min",String.valueOf(voxelParameters.minDTMDistance)));
+                dtmFilterElement.setAttribute(new Attribute("height-min",String.valueOf(voxelParameters.getDtmFilteringParams().getMinDTMDistance())));
             }
             
             processElement.addContent(dtmFilterElement);
@@ -376,16 +380,23 @@ public class VoxelisationConfiguration extends Configuration{
                             inputElement.addContent(outputFileElement);
                         }
                         
-                        if(input.voxelParameters.getGroundEnergyFile() != null){
-                            groundEnergyElement = new Element("ground-energy");
-                            groundEnergyElement.setAttribute("generate", String.valueOf(input.voxelParameters.isCalculateGroundEnergy()));
+                        GroundEnergyParams groundEnergyParameters = input.voxelParameters.getGroundEnergyParams();
+                        
+                        if(groundEnergyParameters != null){
+                            
+                            if(groundEnergyParameters.getGroundEnergyFile() != null){
+                            
+                                groundEnergyElement = new Element("ground-energy");
+                                groundEnergyElement.setAttribute("generate", String.valueOf(groundEnergyParameters.isCalculateGroundEnergy()));
 
-                            if(input.voxelParameters.getGroundEnergyFile() != null){
-                                groundEnergyElement.setAttribute("src", input.voxelParameters.getGroundEnergyFile().getAbsolutePath());
-                                groundEnergyElement.setAttribute("type", String.valueOf(input.voxelParameters.getGroundEnergyFileFormat()));
+                                groundEnergyElement.setAttribute("src", groundEnergyParameters.getGroundEnergyFile().getAbsolutePath());
+                                groundEnergyElement.setAttribute("type", String.valueOf(groundEnergyParameters.getGroundEnergyFileFormat()));
+
+                                inputElement.addContent(groundEnergyElement);
                             }
-                            inputElement.addContent(groundEnergyElement);
                         }
+                        
+                        
                         
                         if(input.multiResList != null){
                             
@@ -432,16 +443,18 @@ public class VoxelisationConfiguration extends Configuration{
                 processElement.addContent(inputsElement);
             }
             
-            if(voxelParameters.isGenerateMultiBandRaster()){
+            RasterParams rasterParameters = voxelParameters.getRasterParams();
+            
+            if(rasterParameters != null && rasterParameters.isGenerateMultiBandRaster()){
                 
                 Element generateMultiBandRasterElement = new Element("multi-band-raster");
-                generateMultiBandRasterElement.setAttribute("generate", String.valueOf(voxelParameters.isGenerateMultiBandRaster()));
-                generateMultiBandRasterElement.setAttribute("discard_voxel_file_writing", String.valueOf(voxelParameters.isShortcutVoxelFileWriting()));
+                generateMultiBandRasterElement.setAttribute("generate", String.valueOf(rasterParameters.isGenerateMultiBandRaster()));
+                generateMultiBandRasterElement.setAttribute("discard_voxel_file_writing", String.valueOf(rasterParameters.isShortcutVoxelFileWriting()));
                 
-                generateMultiBandRasterElement.setAttribute("starting-height", String.valueOf(voxelParameters.getRasterStartingHeight()));
-                generateMultiBandRasterElement.setAttribute("step", String.valueOf(voxelParameters.getRasterHeightStep()));
-                generateMultiBandRasterElement.setAttribute("band-number", String.valueOf(voxelParameters.getRasterBandNumber()));
-                generateMultiBandRasterElement.setAttribute("resolution", String.valueOf(voxelParameters.getRasterResolution()));
+                generateMultiBandRasterElement.setAttribute("starting-height", String.valueOf(rasterParameters.getRasterStartingHeight()));
+                generateMultiBandRasterElement.setAttribute("step", String.valueOf(rasterParameters.getRasterHeightStep()));
+                generateMultiBandRasterElement.setAttribute("band-number", String.valueOf(rasterParameters.getRasterBandNumber()));
+                generateMultiBandRasterElement.setAttribute("resolution", String.valueOf(rasterParameters.getRasterResolution()));
                 
                 processElement.addContent(generateMultiBandRasterElement);
             }
@@ -449,13 +462,19 @@ public class VoxelisationConfiguration extends Configuration{
             
             if(processMode == ProcessMode.VOXELISATION_ALS){
                 
-                groundEnergyElement = new Element("ground-energy");
-                groundEnergyElement.setAttribute("generate", String.valueOf(voxelParameters.isCalculateGroundEnergy()));
+                GroundEnergyParams groundEnergyParameters = voxelParameters.getGroundEnergyParams();
                 
-                if(voxelParameters.getGroundEnergyFile() != null){
-                    groundEnergyElement.setAttribute("src", voxelParameters.getGroundEnergyFile().getAbsolutePath());
-                    groundEnergyElement.setAttribute("type", String.valueOf(voxelParameters.getGroundEnergyFileFormat()));
-                }                
+                if(groundEnergyParameters != null){
+                    
+                    groundEnergyElement = new Element("ground-energy");
+                    groundEnergyElement.setAttribute("generate", String.valueOf(groundEnergyParameters.isCalculateGroundEnergy()));
+                
+                    if(groundEnergyParameters.getGroundEnergyFile() != null){
+                        groundEnergyElement.setAttribute("src", groundEnergyParameters.getGroundEnergyFile().getAbsolutePath());
+                        groundEnergyElement.setAttribute("type", String.valueOf(groundEnergyParameters.getGroundEnergyFileFormat()));
+                    }  
+                }
+                             
                 
                 processElement.addContent(groundEnergyElement);
                 
@@ -485,13 +504,7 @@ public class VoxelisationConfiguration extends Configuration{
                 processElement.addContent(filesElement);
             }
             
-        }
-        
-        //Element transmittanceFormula = new Element("transmittance");
-        //transmittanceFormula.setAttribute("mode", String.valueOf(voxelParameters.getTransmittanceMode()));
-        
-        //processElement.addContent(new Element("formula").addContent(transmittanceFormula));
-        
+        }        
         
         XMLOutputter output = new XMLOutputter(Format.getPrettyFormat());
         try {
@@ -588,9 +601,9 @@ public class VoxelisationConfiguration extends Configuration{
                     
                     if(ponderationElement != null){
                         
-                        voxelParameters.setWeighting(Integer.valueOf(ponderationElement.getAttributeValue("mode")));
+                        voxelParameters.getEchoesWeightParams().setWeightingMode(Integer.valueOf(ponderationElement.getAttributeValue("mode")));
                         
-                        if(voxelParameters.getWeighting() > 0){
+                        if(voxelParameters.getEchoesWeightParams().getWeightingMode() > 0){
                             Element matrixElement = ponderationElement.getChild("matrix");
                             int rowNumber = 7;
                             int colNumber = 7;
@@ -606,7 +619,7 @@ public class VoxelisationConfiguration extends Configuration{
                                 }
                             }
                             
-                            voxelParameters.setWeightingData(weightingData);
+                            voxelParameters.getEchoesWeightParams().setWeightingData(weightingData);
                         }
                         
                         
@@ -616,10 +629,10 @@ public class VoxelisationConfiguration extends Configuration{
                     
                     if(dtmFilterElement != null){
                         boolean useDTM = Boolean.valueOf(dtmFilterElement.getAttributeValue("enabled"));
-                        voxelParameters.setUseDTMCorrection(useDTM);
+                        voxelParameters.getDtmFilteringParams().setActivate(useDTM);
                         if(useDTM){
-                            voxelParameters.setDtmFile(new File(dtmFilterElement.getAttributeValue("src")));
-                            voxelParameters.minDTMDistance = Float.valueOf(dtmFilterElement.getAttributeValue("height-min"));
+                            voxelParameters.getDtmFilteringParams().setDtmFile(new File(dtmFilterElement.getAttributeValue("src")));
+                            voxelParameters.getDtmFilteringParams().setMinDTMDistance(Float.valueOf(dtmFilterElement.getAttributeValue("height-min")));
                         }                        
                     }
                     
@@ -783,15 +796,21 @@ public class VoxelisationConfiguration extends Configuration{
                         case "ALS":
                             try{
                                 groundEnergyElement = processElement.getChild("ground-energy");
+                                
                                 if(groundEnergyElement != null){
-                                    voxelParameters.setCalculateGroundEnergy(Boolean.valueOf(groundEnergyElement.getAttributeValue("generate")));
+                                    
+                                    GroundEnergyParams groundEnergyParameters = new GroundEnergyParams();
+                                    
+                                    groundEnergyParameters.setCalculateGroundEnergy(Boolean.valueOf(groundEnergyElement.getAttributeValue("generate")));
 
                                     if(mode.equals("voxelisation")){
-                                        if(voxelParameters.isCalculateGroundEnergy()){
-                                            voxelParameters.setGroundEnergyFileFormat(Short.valueOf(groundEnergyElement.getAttributeValue("type")));
-                                            voxelParameters.setGroundEnergyFile(new File(groundEnergyElement.getAttributeValue("src")));
+                                        if(groundEnergyParameters.isCalculateGroundEnergy()){
+                                            groundEnergyParameters.setGroundEnergyFileFormat(Short.valueOf(groundEnergyElement.getAttributeValue("type")));
+                                            groundEnergyParameters.setGroundEnergyFile(new File(groundEnergyElement.getAttributeValue("src")));
                                         }
                                     }
+                                    
+                                    voxelParameters.setGroundEnergyParams(groundEnergyParameters);
                                 }
                             }catch(Exception e){
                                 //logger.warn("Parameters are missing");
@@ -940,24 +959,21 @@ public class VoxelisationConfiguration extends Configuration{
                 if(generateMultiBandRasterElement != null){
                     
                     boolean generateMultiBandRaster = Boolean.valueOf(generateMultiBandRasterElement.getAttributeValue("generate"));
-                    voxelParameters.setGenerateMultiBandRaster(generateMultiBandRaster);
                     
                     if(generateMultiBandRaster){
-                        voxelParameters.setShortcutVoxelFileWriting(Boolean.valueOf(generateMultiBandRasterElement.getAttributeValue("discard_voxel_file_writing")));
-                        voxelParameters.setRasterStartingHeight(Float.valueOf(generateMultiBandRasterElement.getAttributeValue("starting-height")));
-                        voxelParameters.setRasterHeightStep(Float.valueOf(generateMultiBandRasterElement.getAttributeValue("step")));
-                        voxelParameters.setRasterBandNumber(Integer.valueOf(generateMultiBandRasterElement.getAttributeValue("band-number")));
-                        voxelParameters.setRasterResolution(Integer.valueOf(generateMultiBandRasterElement.getAttributeValue("resolution")));
-                    }
-                }
-            }
-            
-            Element formulaElement = processElement.getChild("formula");
+                        
+                        RasterParams rasterParameters = new RasterParams();
                     
-            if(formulaElement != null){
-                Element transmittanceElement = formulaElement.getChild("transmittance");
-                if(transmittanceElement != null){
-                    voxelParameters.setTransmittanceMode(Integer.valueOf(transmittanceElement.getAttributeValue("mode")));
+                        rasterParameters.setGenerateMultiBandRaster(generateMultiBandRaster);
+                    
+                        rasterParameters.setShortcutVoxelFileWriting(Boolean.valueOf(generateMultiBandRasterElement.getAttributeValue("discard_voxel_file_writing")));
+                        rasterParameters.setRasterStartingHeight(Float.valueOf(generateMultiBandRasterElement.getAttributeValue("starting-height")));
+                        rasterParameters.setRasterHeightStep(Float.valueOf(generateMultiBandRasterElement.getAttributeValue("step")));
+                        rasterParameters.setRasterBandNumber(Integer.valueOf(generateMultiBandRasterElement.getAttributeValue("band-number")));
+                        rasterParameters.setRasterResolution(Integer.valueOf(generateMultiBandRasterElement.getAttributeValue("resolution")));
+                        
+                        voxelParameters.setRasterParams(rasterParameters);
+                    }
                 }
             }
             

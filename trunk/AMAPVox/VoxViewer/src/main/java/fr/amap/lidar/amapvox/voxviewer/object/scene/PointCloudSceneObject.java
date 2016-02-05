@@ -6,7 +6,7 @@
 package fr.amap.lidar.amapvox.voxviewer.object.scene;
 
 import fr.amap.commons.util.Statistic;
-import fr.amap.lidar.amapvox.datastructure.octree.Octree;
+import fr.amap.commons.structure.octree.Octree;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMeshFactory;
@@ -185,7 +185,7 @@ public class PointCloudSceneObject extends SimpleSceneObject{
     
     public void initMesh(){
         
-        this.position = new Point3F((float)(xPositionStatistic.getMean()),
+        this.gravityCenter = new Point3F((float)(xPositionStatistic.getMean()),
                                     (float)(yPositionStatistic.getMean()),
                                     (float)(zPositionStatistic.getMean()));
         

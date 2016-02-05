@@ -17,16 +17,19 @@ import java.util.List;
 public class LasEchoFilter implements EchoFilter{
     
     private final List<Filter> echoFilters;
-
-    public LasEchoFilter(List<Filter> echoFilters) {
+    private final List<Integer> classifiedPointsToDiscard;
+        
+        
+    public LasEchoFilter(List<Filter> echoFilters, List<Integer> classifiedPointsToDiscard) {
 
         this.echoFilters = echoFilters;
+        this.classifiedPointsToDiscard = classifiedPointsToDiscard;
     }
     
     @Override
     public boolean doFiltering(Shot shot, int echoID) {
         
-        if(shot.classifications != null && shot.classifications[echoID] != 2){
+        if(shot.classifications != null && !classifiedPointsToDiscard.contains(shot.classifications[echoID])/*shot.classifications[echoID] != 2*/){
             return true;
         }else{
             return false;

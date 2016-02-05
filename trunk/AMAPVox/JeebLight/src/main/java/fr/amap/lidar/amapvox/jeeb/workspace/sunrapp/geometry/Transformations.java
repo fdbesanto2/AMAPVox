@@ -11,7 +11,7 @@ import javax.vecmath.Vector3f;
 /**
  * Construct a 4x4 transformation matrix combining successive transformations
  * (rotations, translations and ISOTROPIC scaling).
- * <li>The "apply" method applies the transformation to the tuple in argument.
+ * The "apply" method applies the transformation to the tuple in argument.
  * @author Dauzat  -August 2012
  */
 public class Transformations {

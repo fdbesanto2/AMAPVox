@@ -23,12 +23,13 @@ import fr.amap.commons.util.LidarScan;
 import fr.amap.commons.util.MatrixUtility;
 import fr.amap.commons.util.ProcessingListener;
 import fr.amap.commons.util.TimeCounter;
-import fr.amap.lidar.amapvox.datastructure.octree.Octree;
-import fr.amap.lidar.amapvox.datastructure.octree.OctreeFactory;
+import fr.amap.commons.structure.octree.Octree;
+import fr.amap.commons.structure.octree.OctreeFactory;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.amapvox.io.tls.rsp.RxpScan;
-import fr.amap.commons.raster.asc.DtmLoader;
-import fr.amap.commons.raster.asc.RegularDtm;
+import fr.amap.commons.raster.asc.AsciiGridHelper;
+import fr.amap.commons.raster.asc.Raster;
+import fr.amap.commons.util.Progression;
 import fr.amap.lidar.amapvox.voxelisation.als.LasVoxelisation;
 import fr.amap.lidar.amapvox.voxelisation.als.Trajectory;
 import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
@@ -37,8 +38,8 @@ import fr.amap.lidar.amapvox.voxelisation.configuration.MultiVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.PTXLidarScan;
 import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxMergingCfg;
-import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelParameters;
-import fr.amap.lidar.amapvox.voxelisation.multires.ProcessingMultiRes;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.LADParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import fr.amap.lidar.amapvox.voxelisation.tls.PTGVoxelisation;
 import fr.amap.lidar.amapvox.voxelisation.tls.PTXVoxelisation;
 import fr.amap.lidar.amapvox.voxelisation.tls.RxpEchoFilter;
@@ -74,38 +75,20 @@ import org.apache.log4j.Logger;
  */
 
 
-public class ProcessTool implements Cancellable{
+public class ProcessTool extends Progression implements Cancellable{
     
     private final static Logger logger = Logger.getLogger(ProcessTool.class);
     
-    private final EventListenerList listeners;
     private long startTime;
     private boolean cancelled;
     private ExecutorService exec;
     private int coresNumber;
 
     public ProcessTool() {
-        listeners = new EventListenerList();
         cancelled = false;
+        super.setProgressionStep(10);
     }
-
-    public void addProcessToolListener(ProcessToolListener listener) {
-        listeners.add(ProcessToolListener.class, listener);
-    }
-
-    public void fireProgress(String progress, int ratio) {
-        for (ProcessToolListener processToolListener : listeners.getListeners(ProcessToolListener.class)) {
-            processToolListener.processProgress(progress, ratio);
-        }
-    }
-
-    public void fireFinished(float duration) {
-
-        for (ProcessToolListener processToolListener : listeners.getListeners(ProcessToolListener.class)) {
-            processToolListener.processFinished(duration);
-        }
-    }
-
+    
     @Override
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
@@ -120,14 +103,14 @@ public class ProcessTool implements Cancellable{
         return cancelled;
     }
 
-    private RegularDtm loadDTM(File dtmFile) {
+    private Raster loadDTM(File dtmFile) {
 
-        RegularDtm terrain = null;
+        Raster terrain = null;
 
         if (dtmFile != null) {
 
             try {
-                terrain = DtmLoader.readFromAscFile(dtmFile);
+                terrain = AsciiGridHelper.readFromAscFile(dtmFile);
             } catch (Exception ex) {
                 logger.error(ex);
             }
@@ -178,9 +161,9 @@ public class ProcessTool implements Cancellable{
 
         parameters.setTLS(true);
         
-        RegularDtm dtm = null;
-        if (parameters.useDTMCorrection()) {
-            dtm = loadDTM(parameters.getDtmFile());
+        Raster dtm = null;
+        if (parameters.getDtmFilteringParams().useDTMCorrection()) {
+            dtm = loadDTM(parameters.getDtmFilteringParams().getDtmFile());
         }
         
         List<PointcloudFilter> pointcloudFilters = parameters.getPointcloudFilters();
@@ -228,7 +211,6 @@ public class ProcessTool implements Cancellable{
             
         }
         
-
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
 
         return files;
@@ -258,9 +240,9 @@ public class ProcessTool implements Cancellable{
 
         parameters.setTLS(true);
         
-        RegularDtm dtm = null;
-        if (parameters.useDTMCorrection()) {
-            dtm = loadDTM(parameters.getDtmFile());
+        Raster dtm = null;
+        if (parameters.getDtmFilteringParams().useDTMCorrection()) {
+            dtm = loadDTM(parameters.getDtmFilteringParams().getDtmFile());
         }
         
         List<PointcloudFilter> pointcloudFilters = parameters.getPointcloudFilters();
@@ -338,9 +320,9 @@ public class ProcessTool implements Cancellable{
 
         parameters.setTLS(true);
         
-        RegularDtm dtm = null;
-        if (parameters.useDTMCorrection()) {
-            dtm = loadDTM(parameters.getDtmFile());
+        Raster dtm = null;
+        if (parameters.getDtmFilteringParams().useDTMCorrection()) {
+            dtm = loadDTM(parameters.getDtmFilteringParams().getDtmFile());
         }
         
         List<PointcloudFilter> pointcloudFilters = parameters.getPointcloudFilters();
@@ -428,11 +410,11 @@ public class ProcessTool implements Cancellable{
         RxpScan scan = new RxpScan();
         scan.setFile(input);
 
-        fireProgress(output.getAbsolutePath(), 1);
+        fireProgress(output.getAbsolutePath(), 0, 100);
 
-        RegularDtm dtm = null;
-        if (parameters.useDTMCorrection()) {
-            dtm = loadDTM(parameters.getDtmFile());
+        Raster dtm = null;
+        if (parameters.getDtmFilteringParams().useDTMCorrection()) {
+            dtm = loadDTM(parameters.getDtmFilteringParams().getDtmFile());
         }
         
         List<PointcloudFilter> pointcloudFilters = parameters.getPointcloudFilters();
@@ -466,87 +448,28 @@ public class ProcessTool implements Cancellable{
 
     public void voxeliseFromAls(ALSVoxCfg cfg) throws IOException, Exception {
 
-        File output = cfg.getOutputFile();
-        File input = cfg.getInputFile();
-        File trajectoryFile = cfg.getTrajectoryFile();
-        VoxelParameters parameters = cfg.getVoxelParameters();
-        Mat4D vop = MatrixUtility.convertMatrix4dToMat4D(cfg.getVopMatrix());
-        List<Filter> filters = cfg.getFilters();
-        List<Integer> classifiedPointsToDiscard = cfg.getClassifiedPointsToDiscard();
-                
         startTime = System.currentTimeMillis();
 
-        parameters.setTLS(false);
+        cfg.getVoxelParameters().setTLS(false);
 
-        if (vop == null) {
-            vop = Mat4D.identity();
-        }
-
-        RegularDtm terrain = null;
         
-        if(parameters.getDtmFile() != null && parameters.useDTMCorrection() ){
-            
-            fireProgress("Reading DTM file", 0);
-            
-            try {
-                terrain = DtmLoader.readFromAscFile(parameters.getDtmFile());
-                terrain.setTransformationMatrix(vop);
-            } catch (Exception ex) {
-                throw ex;
-            }
-        } 
-        
-        fireProgress("Reading trajectory file", 0);
-        
-        List<Trajectory> trajectoryList = new ArrayList<>();
-        
-        try {            
-            
-            BufferedReader reader = new BufferedReader(new FileReader(trajectoryFile));
-
-            String line;
-
-            //skip header
-            reader.readLine();
-
-            while ((line = reader.readLine()) != null) {
-                
-                line = line.replaceAll(",", " ");
-                String[] lineSplit = line.split(" ");
-                
-                Double time = Double.valueOf(lineSplit[3]);
-                
-                Trajectory traj = new Trajectory(Double.valueOf(lineSplit[0]), Double.valueOf(lineSplit[1]),
-                        Double.valueOf(lineSplit[2]), time);
-
-                //troncate unused values
-                //if(time >= minTime-0.01 && time <= maxTime+0.01){
-                    trajectoryList.add(traj);
-                //}
-            }
-
-        } catch (FileNotFoundException ex) {
-            throw ex;
-        } catch (IOException ex) {
-            throw ex;
-        }
-        
-        LasVoxelisation voxelisation = new LasVoxelisation(input, output, vop, parameters, cfg, classifiedPointsToDiscard, terrain, trajectoryList);
+        LasVoxelisation voxelisation = new LasVoxelisation();
+        voxelisation.setProgressionStep(20);
         
         voxelisation.addProcessingListener(new ProcessingListener() {
 
             @Override
-            public void processingStepProgress(String progress, int ratio) {
-                fireProgress(progress, ratio);
+            public void processingStepProgress(String progressMsg, long progress, long max) {
+                fireProgress(progressMsg, progress, max);
             }
 
             @Override
-            public void processingFinished() {
+            public void processingFinished(float duration) {
 
             }
         });
 
-        voxelisation.process();
+        voxelisation.process(cfg);
 
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
 
@@ -875,7 +798,7 @@ public class ProcessTool implements Cancellable{
 
             String msg = "Merging in progress, file " + (i + 1) + " : " + cfg.getFiles().size();
             logger.info(msg);
-            fireProgress(msg, i);
+            fireProgress(msg, (i+1), cfg.getFiles().size());
             
             try (BufferedReader reader = new BufferedReader(new FileReader(cfg.getFiles().get(i)))){
                 
@@ -972,9 +895,13 @@ public class ProcessTool implements Cancellable{
         logger.info("Compute transmittance and PAD");
         
         //LeafAngleDistribution distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.PLANOPHILE);
-        LeafAngleDistribution distribution = new LeafAngleDistribution(cfg.getVoxelParameters().getLadType(), 
-                cfg.getVoxelParameters().getLadBetaFunctionAlphaParameter(),
-                cfg.getVoxelParameters().getLadBetaFunctionBetaParameter());
+        LADParams ladParameters = cfg.getVoxelParameters().getLadParams();
+        if(ladParameters == null){
+            ladParameters = new LADParams();
+        }
+        LeafAngleDistribution distribution = new LeafAngleDistribution(ladParameters.getLadType(), 
+                ladParameters.getLadBetaFunctionAlphaParameter(),
+                ladParameters.getLadBetaFunctionBetaParameter());
         
         DirectionalTransmittance direcTransmittance = new DirectionalTransmittance(distribution);
         
@@ -1044,7 +971,7 @@ public class ProcessTool implements Cancellable{
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
     }
     
-    public void multiVoxelisation(MultiVoxCfg configuration){
+    public void multiVoxelisation(MultiVoxCfg configuration) throws Exception{
         
         startTime = System.currentTimeMillis();
         configuration.getVoxelParameters().setTLS(false);
@@ -1055,7 +982,7 @@ public class ProcessTool implements Cancellable{
             return;
         }
         
-        RegularDtm terrain = null;
+        Raster terrain = null;
         Mat4D vopMatrix = MatrixUtility.convertMatrix4dToMat4D(configuration.getVopMatrix());
         if(vopMatrix == null){
             vopMatrix = Mat4D.identity();
@@ -1065,12 +992,13 @@ public class ProcessTool implements Cancellable{
             
             
             
-        }else if(configuration.getVoxelParameters().getDtmFile() != null && configuration.getVoxelParameters().useDTMCorrection() ){
+        }else if(configuration.getVoxelParameters().getDtmFilteringParams().getDtmFile() != null && 
+                configuration.getVoxelParameters().getDtmFilteringParams().useDTMCorrection() ){
             
-            fireProgress("Reading DTM file", 0);
+            fireProgress("Reading DTM file", 0, 100);
             
             try {
-                terrain = DtmLoader.readFromAscFile(configuration.getVoxelParameters().getDtmFile());
+                terrain = AsciiGridHelper.readFromAscFile(configuration.getVoxelParameters().getDtmFilteringParams().getDtmFile());
                 terrain.setTransformationMatrix(vopMatrix);
                 
             } catch (Exception ex) {
@@ -1078,55 +1006,9 @@ public class ProcessTool implements Cancellable{
             }
         } 
         
-        fireProgress("Reading trajectory file", 0);
         
         if(configuration.getTrajectoryFile() == null){
             logger.error("Trajectory file is null");
-            return;
-        }
-        
-        List<Trajectory> trajectoryList = new ArrayList<>();
-        
-        try {
-            //maxIterations = FileManager.getLineNumber(trajectoryFile.getAbsolutePath());
-            //step = (int) (maxIterations/10);
-            //iterations = 0;
-            
-            BufferedReader reader = new BufferedReader(new FileReader(configuration.getTrajectoryFile()));
-
-            String line;
-
-            //skip header
-            reader.readLine();
-
-            while ((line = reader.readLine()) != null) {
-                /*
-                if(iterations % step == 0){
-                    fireProgress("Reading trajectory file", (int) ((iterations*100)/(float)maxIterations));
-                }*/
-                
-                line = line.replaceAll(",", " ");
-                String[] lineSplit = line.split(" ");
-                
-                Double time = Double.valueOf(lineSplit[3]);
-                
-                Trajectory traj = new Trajectory(Double.valueOf(lineSplit[0]), Double.valueOf(lineSplit[1]),
-                        Double.valueOf(lineSplit[2]), time);
-
-                //troncate unused values
-                //if(time >= minTime-0.01 && time <= maxTime+0.01){
-                    trajectoryList.add(traj);
-                    //trajectoryMap.put(time, traj);
-                //}
-                
-                //iterations++;
-            }
-
-        } catch (FileNotFoundException ex) {
-            logger.error(ex);
-            return;
-        } catch (IOException ex) {
-            logger.error(ex);
             return;
         }
         
@@ -1139,53 +1021,19 @@ public class ProcessTool implements Cancellable{
                 return;
             }
             
-            if(input.dtmFile != null){
-                
-                try {
-                    fireProgress("Reading DTM file : "+input.dtmFile.getAbsolutePath(), 0);
-                    terrain = DtmLoader.readFromAscFile(input.dtmFile);
-                    terrain.setTransformationMatrix(vopMatrix);
-                } catch (Exception ex) {
-                    logger.error(ex);
-                    return;
-                }                
-            }
-            
-            List<Input> multiResInputs = input.multiResList;
-            
-            fireProgress("Processing file "+count+"/"+inputs.size()+" : "+input.inputFile.getAbsolutePath(), 0);
+            fireProgress("Processing file "+count+"/"+inputs.size()+" : "+input.inputFile.getAbsolutePath(), 0, 100);
             
             params.setBottomCorner(input.voxelParameters.getBottomCorner());
             params.setTopCorner(input.voxelParameters.getTopCorner());
             params.setSplit(input.voxelParameters.getSplit());
             params.setResolution(input.voxelParameters.getResolution());
             
-            LasVoxelisation voxelisation = new LasVoxelisation(input.inputFile, input.outputFile, vopMatrix, params, configuration, configuration.getClassifiedPointsToDiscard(), terrain, trajectoryList);
+            configuration.setInputFile(input.inputFile);
+            configuration.setOutputFile(input.outputFile);
             
-            voxelisation.process();
+            LasVoxelisation voxelisation = new LasVoxelisation();
             
-            List<File> files = new ArrayList<>();
-            files.add(input.outputFile);
-            
-            if(multiResInputs != null){
-                
-                for(Input multiResInput : multiResInputs){
-                    
-                    params.setSplit(multiResInput.voxelParameters.getSplit());
-                    params.setResolution(multiResInput.voxelParameters.getResolution());
-                    voxelisation.setOutputFile(multiResInput.outputFile);
-                    voxelisation.setParameters(params);
-                    voxelisation.setUpdateALS(false);
-                    
-                    voxelisation.process();
-                    
-                    files.add(multiResInput.outputFile);
-                }
-                
-                ProcessingMultiRes processingMultiRes = new ProcessingMultiRes(configuration.getMultiResPadMax(), false);
-                processingMultiRes.process(files);
-                processingMultiRes.write(input.outputFileMultiRes);
-            }
+            voxelisation.process(configuration);
             
             count++;
         }

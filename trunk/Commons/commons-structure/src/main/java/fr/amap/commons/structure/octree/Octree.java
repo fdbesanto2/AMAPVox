@@ -12,7 +12,7 @@ Authors:
 For further information, please contact Gregoire Vincent.
  */
 
-package fr.amap.lidar.amapvox.datastructure.octree;
+package fr.amap.commons.structure.octree;
 
 import fr.amap.commons.util.Statistic;
 import fr.amap.commons.math.geometry.BoundingBox3D;
@@ -185,7 +185,7 @@ public class Octree {
         
         switch(type){
             case BINARY_SEARCH:
-                return binarySearchNearestPoint(point, errorMargin);
+                throw new UnsupportedOperationException("The binary search has not been implemented yet, use the incremental search instead");
             case INCREMENTAL_SEARCH:
                 return incrementalSearchNearestPoint(point, errorMargin);
         }
@@ -213,133 +213,7 @@ public class Octree {
     
     private Point3D binarySearchNearestPoint(Point3D point, float errorMargin){
         
-        Point3D nearestPoint = null;
-        
-        if(root != null){
-            
-            int[] nearestPoints;
-            double distance = 99999999;
-            
-            List<Node> nodesIntersectingSphere = new ArrayList<>();
-
-            Sphere searchArea = new Sphere(point, errorMargin);
-
-            incrementalSphereIntersectionSearch(nodesIntersectingSphere, root, searchArea);
-
-            for(Node node : nodesIntersectingSphere){
-
-                nearestPoints = node.getPoints();
-
-                if(nearestPoints != null && nearestPoints.length > 0){
-                    
-                    int closestIndexX = -1, closestIndexY = -1, closestIndexZ = -1;
-                    
-                    int low = 0;
-                    int high = nearestPoints.length-1;
-                    
-
-                    while (low <= high) {
-                        int mid = (low + high) >>> 1;
-                        double midValX = points[nearestPoints[mid]].x;
-                        
-                        if(point.x > midValX){
-                            low = mid + 1;
-                        }else if(point.x < midValX){
-                            high = mid - 1;
-                        }else{
-                            closestIndexX = mid;
-                            break;
-                        }
-                    }
-                    
-                    if(low > high){
-                        closestIndexX = low;
-                    }
-                    
-                    low = 0;
-                    high = nearestPoints.length-1;
-                    
-
-                    while (low <= high) {
-                        int mid = (low + high) >>> 1;
-                        double midValY = points[nearestPoints[mid]].y;
-                        
-                        if(point.y > midValY){
-                            low = mid + 1;
-                        }else if(point.y < midValY){
-                            high = mid - 1;
-                        }else{
-                            closestIndexY = mid;
-                            break;
-                        }
-                    }
-                    
-                    if(low > high){
-                        closestIndexY = low;
-                    }
-                    
-                    low = 0;
-                    high = nearestPoints.length-1;
-                    
-
-                    while (low <= high) {
-                        int mid = (low + high) >>> 1;
-                        double midValZ = points[nearestPoints[mid]].z;
-                        
-                        if(point.z > midValZ){
-                            low = mid + 1;
-                        }else if(point.z < midValZ){
-                            high = mid - 1;
-                        }else{
-                            closestIndexZ = mid;
-                            break;
-                        }
-                    }
-                    
-                    if(low > high){
-                        closestIndexZ = low;
-                    }
-                    
-                    int indexMin;
-                    int indexMax;
-                    
-                    if(closestIndexX == -1 || closestIndexY == -1 || closestIndexZ == -1){
-                        if(closestIndexX == -1){
-                            closestIndexX = closestIndexY;
-                        }
-                        if(closestIndexY == -1){
-                            closestIndexY = closestIndexX;
-                        }
-                        if(closestIndexZ == -1){
-                            closestIndexZ = closestIndexY;
-                        }
-                    }
-                    
-                    int tmp = Integer.min(closestIndexX, closestIndexY);
-                    indexMin = Integer.min(tmp, closestIndexZ);
-
-                    tmp = Integer.max(closestIndexX, closestIndexY);
-                    indexMax = Integer.max(tmp, closestIndexZ);
-                    
-                    
-                    if(indexMin != -1 && indexMax != -1){
-                        for (int i=indexMin;i < indexMax;i++) {
-                            
-                            double dist = point.distanceTo(points[nearestPoints[i]]);
-
-                            if(dist < distance){
-                                distance = dist;
-                                nearestPoint = points[nearestPoints[i]];
-                            }
-                        }
-                    }else{
-                        System.out.println("test");
-                    }
-                }
-            }
-        }
-        
-        return nearestPoint;
+        return null;
     }
     
     private Point3D incrementalSearchNearestPoint(Point3D point, float errorMargin){
@@ -350,57 +224,31 @@ public class Octree {
             
             int[] nearestPoints;
             double distance = 99999999;
-            
-            /*
-            Node leaf = traverse(point);
-            
-            if(leaf == null){
-                return null;
-            }
-            
-            nearestPoints = leaf.getPoints();
-            
-            if(nearestPoints != null){
                 
-                for (int pointToTest : nearestPoints) {
-                    
-                    float dist = point.distanceTo(points[pointToTest]);
-                    
-                    if(dist < distance){
-                        distance = dist;
-                        nearestPoint = points[pointToTest];
-                    }
-                }
-            }
-            */
-            //if(distance > errorMargin){
-                
-                List<Node> nodesIntersectingSphere = new ArrayList<>();
-                
-                Sphere searchArea = new Sphere(point, errorMargin);
-                
-                incrementalSphereIntersectionSearch(nodesIntersectingSphere, root, searchArea);
-                
-                for(Node node : nodesIntersectingSphere){
-                    
-                    nearestPoints = node.getPoints();
+            List<Node> nodesIntersectingSphere = new ArrayList<>();
 
-                    if(nearestPoints != null){
+            Sphere searchArea = new Sphere(point, errorMargin);
 
-                        for (int pointToTest : nearestPoints) {
+            incrementalSphereIntersectionSearch(nodesIntersectingSphere, root, searchArea);
 
-                            double dist = point.distanceTo(points[pointToTest]);
+            for(Node node : nodesIntersectingSphere){
 
-                            if(dist < distance){
-                                distance = dist;
-                                nearestPoint = points[pointToTest];
-                            }
+                nearestPoints = node.getPoints();
+
+                if(nearestPoints != null){
+
+                    for (int pointToTest : nearestPoints) {
+
+                        double dist = point.distanceTo(points[pointToTest]);
+
+                        if(dist < distance){
+                            distance = dist;
+                            nearestPoint = points[pointToTest];
                         }
                     }
                 }
             }
-            
-        //}
+        }
         
         return nearestPoint;
     }
@@ -475,7 +323,52 @@ public class Octree {
     }
 
     public void setPoints(Point3D[] points) {
+        
+        double minPointX = 0, minPointY = 0, minPointZ = 0;
+        double maxPointX = 0, maxPointY = 0, maxPointZ = 0;
+                
+        boolean init = false;
+        
+        for(Point3D point : points){
+            
+            if(!init){
+                minPointX = point.x;
+                minPointY = point.y;
+                minPointZ = point.z;
+                
+                maxPointX = point.x;
+                maxPointY = point.y;
+                maxPointZ = point.z;
+                
+                init = true;
+                
+            }else{
+                
+                if(point.x > maxPointX){
+                    maxPointX = point.x;
+                }else if(point.x < minPointX){
+                    minPointX = point.x;
+                }
+                
+                if(point.y > maxPointY){
+                    maxPointY = point.y;
+                }else if(point.y < minPointY){
+                    minPointY = point.y;
+                }
+                
+                if(point.z > maxPointZ){
+                    maxPointZ = point.z;
+                }else if(point.z < minPointZ){
+                    minPointZ = point.z;
+                }
+            }
+        }
+        
         this.points = points;
+        
+        setMinPoint(new Point3D(minPointX, minPointY, minPointZ));
+        setMaxPoint(new Point3D(maxPointX, maxPointY, maxPointZ));
+        
     }
     
     public void setPoints(float[] points) {

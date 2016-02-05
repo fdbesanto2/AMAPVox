@@ -25,8 +25,8 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.lidar.amapvox</groupId>
-            <artifactId>amapvox-datastructure</artifactId>
+            <groupId>fr.amap.commons</groupId>
+            <artifactId>commons-structure</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>

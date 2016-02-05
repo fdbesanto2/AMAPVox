@@ -15,14 +15,19 @@ import fr.amap.amapvox.als.laz.LazExtraction;
 import fr.amap.commons.util.io.file.FileManager;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.vector.Vec4D;
-import fr.amap.commons.util.Processing;
+import fr.amap.commons.util.Progression;
 import fr.amap.amapvox.io.tls.rxp.Shot;
+import fr.amap.commons.util.io.file.CSVFile;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.vecmath.Point3d;
@@ -32,134 +37,182 @@ import javax.vecmath.Vector3d;
  * This class merge trajectory file with point file (las, laz)
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class PointsToShot extends Processing implements Iterable<Shot>{
+public class PointsToShot extends Progression implements Iterable<Shot>{
     
     
     private final float RATIO_REFLECTANCE_VEGETATION_SOL = 0.4f;
     
     private Las las;
+    
     private final File alsFile;
+    private final CSVFile trajectoryFile;
+    
     private final Mat4D vopMatrix;
     List<Integer> classifiedPointsToDiscard;
+    
     private List<Trajectory> trajectoryList;
-    private boolean updateALS = true;
     private List<LasPoint> lasPointList;
     
-    public PointsToShot(List<Trajectory> trajectoryList, File alsFile, Mat4D vopMatrix, List<Integer> classifiedPointsToDiscard){
+    public PointsToShot(CSVFile trajectoryFile, File alsFile, Mat4D vopMatrix, List<Integer> classifiedPointsToDiscard){
 
-        this.trajectoryList = trajectoryList;
+        this.trajectoryFile = trajectoryFile;
         this.vopMatrix = vopMatrix;
         this.alsFile = alsFile;
         this.classifiedPointsToDiscard = classifiedPointsToDiscard;
     }
 
-    public boolean isUpdateALS() {
-        return updateALS;
-    }
-
-    public void setUpdateALS(boolean updateALS) {
-        this.updateALS = updateALS;
-    }
-
-    public void init() {
+    public void init() throws FileNotFoundException, IOException, Exception {
         
         setStepNumber(3);
-        
-        fireProgress("Reading *.las", 0);
-        
-        int iterations = 0;
-        long maxIterations;
-        int step;
-        
-        if(updateALS){
             
-            /***reading las***/
-            
-            lasPointList = new ArrayList<>();
-            
-            LasHeader header;
+        /***reading las***/
 
-            switch(FileManager.getExtension(alsFile)){
-                case ".las":
+        lasPointList = new ArrayList<>();
 
-                    LasReader lasReader = new LasReader();
-                    try {
-                        lasReader.open(alsFile);
-                    } catch (IOException ex) {
-                        Logger.getLogger(PointsToShot.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (Exception ex) {
-                        Logger.getLogger(PointsToShot.class.getName()).log(Level.SEVERE, null, ex);
+        LasHeader header;
+
+        switch(FileManager.getExtension(alsFile)){
+            case ".las":
+
+                LasReader lasReader = new LasReader();
+                try {
+                    lasReader.open(alsFile);
+                } catch (IOException ex) {
+                    throw ex;
+                } catch (Exception ex) {
+                    throw ex;
+                }
+                header = lasReader.getHeader();
+
+                long maxIterations = header.getNumberOfPointrecords();
+
+                int iterations = 0;
+
+                for (PointDataRecordFormat p : lasReader) {
+
+                    fireProgress("Reading *.las", iterations, maxIterations);
+
+                    if(p.isHasQLineExtrabytes()){
+                        QLineExtrabytes qLineExtrabytes = p.getQLineExtrabytes();
+                        //logger.info("QLineExtrabytes" + qLineExtrabytes.getAmplitude()+" "+qLineExtrabytes.getPulseWidth());
                     }
-                    header = lasReader.getHeader();
-
-                    maxIterations = header.getNumberOfPointrecords();
-                    step = (int) (maxIterations/10);
-
-                    for (PointDataRecordFormat p : lasReader) {
-
-                        if(iterations % step == 0){
-                            fireProgress("Reading *.las", (int) ((iterations*100)/(float)maxIterations));
-                        }
-
-                        if(p.isHasQLineExtrabytes()){
-                            QLineExtrabytes qLineExtrabytes = p.getQLineExtrabytes();
-                            //logger.info("QLineExtrabytes" + qLineExtrabytes.getAmplitude()+" "+qLineExtrabytes.getPulseWidth());
-                        }
-                        Vector3d location = new Vector3d((p.getX() * header.getxScaleFactor()) + header.getxOffset(), (p.getY() * header.getyScaleFactor()) + header.getyOffset(), (p.getZ() * header.getzScaleFactor()) + header.getzOffset());
-                        
-                        
-                        if(!classifiedPointsToDiscard.contains(new Integer(p.getClassification()))){
-                            
-                            LasPoint point = new LasPoint(location.x, location.y, location.z, p.getReturnNumber(), p.getNumberOfReturns(), p.getIntensity(), p.getClassification(), p.getGpsTime());
-                            lasPointList.add(point);
-                        }
+                    Vector3d location = new Vector3d((p.getX() * header.getxScaleFactor()) + header.getxOffset(), (p.getY() * header.getyScaleFactor()) + header.getyOffset(), (p.getZ() * header.getzScaleFactor()) + header.getzOffset());
 
 
-                        iterations++;
-                    }
-                    break;
+                    LasPoint point = new LasPoint(location.x, location.y, location.z, p.getReturnNumber(), p.getNumberOfReturns(), p.getIntensity(), p.getClassification(), p.getGpsTime());
+                    lasPointList.add(point);
 
-                case ".laz":
 
-                    LazExtraction laz = new LazExtraction();
-                    try {
-                        laz.openLazFile(alsFile);
-                    } catch (Exception ex) {
-                        Logger.getLogger(PointsToShot.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    iterations++;
+                }
+                break;
 
-                    header = laz.getHeader();
+            case ".laz":
 
-                    for (LasPoint p : laz) {
+                LazExtraction laz = new LazExtraction();
+                try {
+                    laz.openLazFile(alsFile);
+                } catch (Exception ex) {
+                    Logger.getLogger(PointsToShot.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-                        p.x = (p.x * header.getxScaleFactor()) + header.getxOffset();
-                        p.y = (p.y * header.getyScaleFactor()) + header.getyOffset();
-                        p.z = (p.z * header.getzScaleFactor()) + header.getzOffset();
+                header = laz.getHeader();
 
-                        if(!classifiedPointsToDiscard.contains(new Integer(p.classification))){
-                            lasPointList.add(p);
-                        }
+                long numberOfPointrecords = header.getNumberOfPointrecords();
 
-                    }
-                    laz.close();
+                int count = 0;
 
-                    break;
-            }
+                for (LasPoint p : laz) {
 
-            /***sort las by time***/
-            //lasPointList.sort(null);
-            Collections.sort(lasPointList);
+                    fireProgress("Reading *.las", count, numberOfPointrecords);
 
-            double minTime = lasPointList.get(0).t;
-            double maxTime = lasPointList.get(lasPointList.size()-1).t;
+                    p.x = (p.x * header.getxScaleFactor()) + header.getxOffset();
+                    p.y = (p.y * header.getyScaleFactor()) + header.getyOffset();
+                    p.z = (p.z * header.getzScaleFactor()) + header.getzOffset();
 
-            if(minTime == maxTime){
-                //logger.error("ALS file doesn't contains time relative information, minimum and maximum time = "+minTime);
-                return;
-            }
+
+                    lasPointList.add(p);
+                    count++;
+                }
+                laz.close();
+
+                break;
         }
-                
-        fireProgress("Voxelisation", getProgression());       
+
+        /***sort las by time***/
+        //lasPointList.sort(null);
+        Collections.sort(lasPointList);
+
+        double minTime = lasPointList.get(0).t;
+        double maxTime = lasPointList.get(lasPointList.size()-1).t;
+
+        if(minTime == maxTime){
+            //logger.error("ALS file doesn't contains time relative information, minimum and maximum time = "+minTime);
+            return;
+        }
+
+        fireProgress("Reading trajectory file", 0, 100);
+
+        trajectoryList = new ArrayList<>();
+
+        try {            
+
+            BufferedReader reader = new BufferedReader(new FileReader(trajectoryFile));
+
+            String line;
+
+            for(long l = 0; l < trajectoryFile.getNbOfLinesToSkip();l++){
+                reader.readLine();
+            }
+            
+            Map<String, Integer> columnAssignment = trajectoryFile.getColumnAssignment();
+            Integer timeIndex = columnAssignment.get("Time");
+            
+            if(timeIndex == null){
+                timeIndex = 3;
+            }
+            
+            Integer eastingIndex = columnAssignment.get("Easting");
+            if(eastingIndex == null){
+                eastingIndex = 0;
+            }
+            
+            Integer northingIndex = columnAssignment.get("Northing");
+            if(northingIndex == null){
+                northingIndex = 1;
+            }
+            
+            Integer elevationIndex = columnAssignment.get("Elevation");
+            if(elevationIndex == null){
+                elevationIndex = 2;
+            }
+
+            while ((line = reader.readLine()) != null) {
+
+                String[] lineSplit = line.split(trajectoryFile.getColumnSeparator());
+
+                double time = Double.valueOf(lineSplit[timeIndex]);
+
+                //discard unused values
+
+                //offsets to keep a bounding nearest time
+                minTime -= 0.1; 
+                maxTime += 0.1;
+
+                if(time >= minTime && time <= maxTime){
+
+                    Trajectory traj = new Trajectory(Double.valueOf(lineSplit[eastingIndex]), Double.valueOf(lineSplit[northingIndex]),
+                        Double.valueOf(lineSplit[elevationIndex]), time);
+
+                    trajectoryList.add(traj);
+                }
+            }
+
+        } catch (FileNotFoundException ex) {
+            throw ex;
+        } catch (IOException ex) {
+            throw ex;
+        }
         
     }
     
@@ -238,11 +291,6 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
         }
         
         return index;
-    }
-
-    @Override
-    public File process() {
-        return null;
     }
 
     @Override
@@ -347,7 +395,9 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
                             isNewExp = false;
                             wasReturned = true;
                             
-                            return shot;
+                            if(shot.nbEchos != 0){ //handle the case (file bug) when an echo has a nbEchos equals to 0
+                                return shot;
+                            }
                         //}
                         
                         //count = 0;
@@ -404,7 +454,7 @@ public class PointsToShot extends Processing implements Iterable<Shot>{
                     wasReturned = false;
                 }
 
-                fireFinished();
+                fireFinished(0);
                 
                 return null;
             }

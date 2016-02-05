@@ -10,14 +10,15 @@ import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.amapvox.jleica.LShot;
 import fr.amap.amapvox.jleica.ptg.PTGScan;
 import fr.amap.amapvox.jleica.LPointShotExtractor;
-import fr.amap.commons.raster.asc.RegularDtm;
+import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.math.matrix.Mat3D;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.commons.math.vector.Vec4D;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxCfg;
-import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelParameters;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.RasterParams;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
@@ -33,7 +34,7 @@ public class PTGVoxelisation extends TLSVoxelisation{
     
     private final static Logger logger = Logger.getLogger(PTGVoxelisation.class);
 
-    public PTGVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, RegularDtm terrain, List<PointcloudFilter> pointcloud, VoxCfg cfg) {
+    public PTGVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, Raster terrain, List<PointcloudFilter> pointcloud, VoxCfg cfg) {
         super(inputFile, outputFile, vopMatrix, popMatrix, sopMatrix, parameters, terrain, pointcloud, cfg);
     }
 
@@ -75,23 +76,32 @@ public class PTGVoxelisation extends TLSVoxelisation{
 
             }
             
-            logger.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());
+            logger.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());   
             
-            if(parameters.isGenerateMultiBandRaster()){
-                voxelAnalysis.generateMultiBandsRaster(new File(outputFile.getAbsolutePath()+".bsq"), 
-                        parameters.getRasterStartingHeight(), parameters.getRasterHeightStep(), 
-                        parameters.getRasterBandNumber(), parameters.getRasterResolution());
+            RasterParams rasterParameters = parameters.getRasterParams();
+            
+            boolean write = false;
+
+            if(rasterParameters != null){
+
+                if(rasterParameters.isGenerateMultiBandRaster()){
+
+                    voxelAnalysis.generateMultiBandsRaster(new File(outputFile.getAbsolutePath()+".bsq"), 
+                    rasterParameters.getRasterStartingHeight(), rasterParameters.getRasterHeightStep(), 
+                    rasterParameters.getRasterBandNumber(), rasterParameters.getRasterResolution());
+
+                    if(!rasterParameters.isShortcutVoxelFileWriting()){
+                        write = true;
+                    }
+                }
+            }else{
+
+                write = true;
             }
 
-            if((parameters.isGenerateMultiBandRaster() && !parameters.isShortcutVoxelFileWriting()) || !parameters.isGenerateMultiBandRaster()){
+            if(write){
                 voxelAnalysis.computePADs();
                 voxelAnalysis.write();
-                //voxelAnalysis.calculatePADAndWrite(0);
-            }
-            
-
-            if(voxelAnalysis.parameters.isCalculateGroundEnergy() && !voxelAnalysis.parameters.isTLS()){
-                voxelAnalysis.writeGroundEnergy();
             }
             
             //VoxelAnalysisData resultData = voxelAnalysis.getResultData();

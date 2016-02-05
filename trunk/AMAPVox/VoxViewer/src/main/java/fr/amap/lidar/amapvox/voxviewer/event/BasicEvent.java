@@ -254,7 +254,7 @@ public class BasicEvent extends EventManager{
             joglContext.refresh();
         }
         
-        if(!animator.isPaused() && (!leftMousePressed && !rightMousePressed)){
+        if(!animator.isPaused() && !joglContext.isDynamicDraw() && (!leftMousePressed && !rightMousePressed)){
             animator.pause();
         }
         

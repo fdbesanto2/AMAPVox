@@ -24,7 +24,7 @@
 
     <build>
         <finalName>
-            ${project.artifactId}-${project.version}-r${buildNumber}
+            ${project.name}-${project.version}-r${buildNumber}
         </finalName>
         <plugins>
             <plugin>
@@ -67,7 +67,7 @@
                             <Implementation-Build>${buildNumber}</Implementation-Build>
                         </manifestEntries>
                     </archive>
-                    
+                    <finalName>${project.name}-${project.version}-r${buildNumber}</finalName>
                     <useDefaultManifestFile>false</useDefaultManifestFile>
                     
                 </configuration>
@@ -84,7 +84,7 @@
                         </goals>
                         <configuration>
                             <executable>${java.home}/bin/java</executable>
-                            <commandlineArgs>-XX:MinHeapFreeRatio=30 -XX:MaxHeapFreeRatio=60 ${debug.parameters} -classpath "${project.build.directory}/lib" -jar "${project.build.directory}/release/${project.build.finalName}.jar"</commandlineArgs>
+                            <commandlineArgs>-Xmx15g ${debug.parameters} -classpath "${project.build.directory}/lib" -jar "${project.build.directory}/release/${project.build.finalName}.jar"</commandlineArgs>
                         </configuration>
                     </execution>
                 </executions>  
@@ -171,7 +171,7 @@
                 <version>2.6</version>
                 <configuration>
                     <descriptor>src/assembly/zip.xml</descriptor>
-                    <finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName>
+                    <finalName>${project.name}-${project.version}-r${buildNumber}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <outputDirectory>${basedir}/target/release/</outputDirectory>
                 </configuration>
@@ -244,8 +244,8 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.lidar.amapvox</groupId>
-            <artifactId>amapvox-datastructure</artifactId>
+            <groupId>fr.amap.commons</groupId>
+            <artifactId>commons-structure</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>

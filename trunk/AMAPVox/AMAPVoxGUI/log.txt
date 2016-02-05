@@ -70752,3 +70752,1684 @@ i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal l
 2016-01-29 20:02:22 INFO  - Computation of STDEV, SEL...
 2016-01-29 20:02:22 INFO  - File /home/calcul/Bureau/tmp.txt was written.
 2016-01-29 20:02:22 INFO  - Simulation is finished.
+2016-02-02 14:24:53 INFO  - Laz file /home/calcul/Bureau/850215_172246.mon.rxp.laz is opened
+2016-02-02 14:24:53 INFO  - Laz file is closed
+2016-02-02 18:50:09 INFO  - Laz file /media/forestview01/partageLidar/projetNouragues/PCloud_HOBO/hobo_8_100m.laz is opened
+2016-02-02 18:50:09 INFO  - Laz file is closed
+2016-02-02 18:51:56 INFO  - Building transmittance functions table
+2016-02-02 18:51:56 INFO  - Transmittance functions table is built
+2016-02-02 18:51:56 INFO  - allocate!!!!!!!!
+2016-02-02 18:51:56 INFO  - Voxel space informations:
+			Corner Inf	:	(312895.01, 451387.01, 102.46000000000001)
+			Corner Sup	:	(313094.99, 451586.99, 173.41)
+			Dimensions	:	(100, 100, 36)
+			Toricity 	:	false
+
+2016-02-02 18:51:56 INFO  - Laz file /media/forestview01/partageLidar/projetNouragues/PCloud_HOBO/hobo_8_100m.laz is opened
+2016-02-02 18:51:58 INFO  - Laz file is closed
+2016-02-02 18:52:01 INFO  - Shots processed: 442376
+2016-02-02 18:52:01 INFO  - Maximum neighborhood range : 2
+2016-02-02 18:52:01 INFO  - Maximum neighborhood range : 3
+2016-02-02 18:52:01 INFO  - Maximum neighborhood range : 4
+2016-02-02 18:52:02 INFO  - Maximum neighborhood range : 5
+2016-02-02 18:52:02 INFO  - Time : 1101 ms
+2016-02-02 18:52:02 INFO  - writing file: /home/calcul/Documents/Julien/test_nouragues/hobo_8.vox
+2016-02-02 18:52:04 INFO  - file written ( 2.0 s )
+2016-02-02 18:52:04 INFO  - las voxelisation finished in 25.0 s
+2016-02-02 18:53:51 INFO  - Building transmittance functions table
+2016-02-02 18:53:51 INFO  - Transmittance functions table is built
+2016-02-02 18:53:51 INFO  - allocate!!!!!!!!
+2016-02-02 18:53:51 INFO  - Voxel space informations:
+			Corner Inf	:	(312895.01, 451387.01, 102.46000000000001)
+			Corner Sup	:	(313094.99, 451586.99, 173.41)
+			Dimensions	:	(200, 200, 71)
+			Toricity 	:	false
+
+2016-02-02 18:53:51 INFO  - Laz file /media/forestview01/partageLidar/projetNouragues/PCloud_HOBO/hobo_8_100m.laz is opened
+2016-02-02 18:53:53 INFO  - Laz file is closed
+2016-02-02 18:53:57 INFO  - Shots processed: 442376
+2016-02-02 18:53:58 INFO  - Maximum neighborhood range : 5
+2016-02-02 18:53:58 INFO  - Maximum neighborhood range : 6
+2016-02-02 18:53:58 INFO  - Maximum neighborhood range : 7
+2016-02-02 18:53:58 INFO  - Maximum neighborhood range : 8
+2016-02-02 18:53:58 INFO  - Maximum neighborhood range : 9
+2016-02-02 18:53:58 INFO  - Maximum neighborhood range : 10
+2016-02-02 18:53:58 INFO  - Maximum neighborhood range : 11
+2016-02-02 18:53:58 INFO  - Maximum neighborhood range : 12
+2016-02-02 18:53:58 INFO  - Maximum neighborhood range : 13
+2016-02-02 18:53:58 INFO  - Maximum neighborhood range : 14
+2016-02-02 18:53:58 INFO  - Maximum neighborhood range : 15
+2016-02-02 18:54:00 INFO  - Maximum neighborhood range : 16
+2016-02-02 18:54:00 INFO  - Maximum neighborhood range : 17
+2016-02-02 18:54:00 INFO  - Maximum neighborhood range : 18
+2016-02-02 18:54:00 INFO  - Maximum neighborhood range : 19
+2016-02-02 18:54:00 INFO  - Maximum neighborhood range : 20
+2016-02-02 18:54:04 INFO  - Time : 6237 ms
+2016-02-02 18:54:04 INFO  - writing file: /home/calcul/Documents/Julien/test_nouragues/hobo_8.vox
+2016-02-02 18:54:18 INFO  - file written ( 13.0 s )
+2016-02-02 18:54:18 INFO  - las voxelisation finished in 39.0 s
+2016-02-02 18:56:13 INFO  - Building transmittance functions table
+2016-02-02 18:56:13 INFO  - Transmittance functions table is built
+2016-02-02 18:56:13 INFO  - allocate!!!!!!!!
+2016-02-02 18:56:13 INFO  - Voxel space informations:
+			Corner Inf	:	(312895.01, 451387.01, 102.46000000000001)
+			Corner Sup	:	(313094.99, 451586.99, 173.41)
+			Dimensions	:	(100, 100, 36)
+			Toricity 	:	false
+
+2016-02-02 18:56:13 INFO  - Laz file /media/forestview01/partageLidar/projetNouragues/PCloud_HOBO/hobo_8_100m.laz is opened
+2016-02-02 18:56:14 INFO  - Laz file is closed
+2016-02-02 18:56:17 INFO  - Shots processed: 442376
+2016-02-02 18:56:17 INFO  - Maximum neighborhood range : 2
+2016-02-02 18:56:17 INFO  - Maximum neighborhood range : 3
+2016-02-02 18:56:17 INFO  - Maximum neighborhood range : 4
+2016-02-02 18:56:17 INFO  - Maximum neighborhood range : 5
+2016-02-02 18:56:17 INFO  - Time : 127 ms
+2016-02-02 18:56:17 INFO  - writing file: /home/calcul/Documents/Julien/test_nouragues/hobo_8_2m.vox
+2016-02-02 18:56:19 INFO  - file written ( 1.0 s )
+2016-02-02 18:56:19 INFO  - las voxelisation finished in 24.0 s
+2016-02-02 18:59:44 INFO  - Building transmittance functions table
+2016-02-02 18:59:44 INFO  - Transmittance functions table is built
+2016-02-02 18:59:44 INFO  - allocate!!!!!!!!
+2016-02-02 18:59:44 INFO  - Voxel space informations:
+			Corner Inf	:	(312895.01, 451387.01, 102.46000000000001)
+			Corner Sup	:	(313094.99, 451586.99, 173.41)
+			Dimensions	:	(100, 100, 36)
+			Toricity 	:	false
+
+2016-02-02 18:59:44 INFO  - Laz file /media/forestview01/partageLidar/projetNouragues/PCloud_HOBO/hobo_8_100m.laz is opened
+2016-02-02 18:59:46 INFO  - Laz file is closed
+2016-02-02 18:59:49 INFO  - Shots processed: 442376
+2016-02-02 18:59:49 INFO  - writing file: /home/calcul/Documents/Julien/test_nouragues/hobo_8_2m.vox
+2016-02-02 18:59:51 INFO  - file written ( 1.0 s )
+2016-02-02 18:59:51 INFO  - las voxelisation finished in 23.0 s
+2016-02-02 19:00:03 INFO  - Building transmittance functions table
+2016-02-02 19:00:03 INFO  - Transmittance functions table is built
+2016-02-02 19:00:03 INFO  - allocate!!!!!!!!
+2016-02-02 19:00:03 INFO  - Voxel space informations:
+			Corner Inf	:	(312895.01, 451387.01, 102.46000000000001)
+			Corner Sup	:	(313094.99, 451586.99, 173.41)
+			Dimensions	:	(200, 200, 71)
+			Toricity 	:	false
+
+2016-02-02 19:00:03 INFO  - Laz file /media/forestview01/partageLidar/projetNouragues/PCloud_HOBO/hobo_8_100m.laz is opened
+2016-02-02 19:00:04 INFO  - Laz file is closed
+2016-02-02 19:00:09 INFO  - Shots processed: 442376
+2016-02-02 19:00:09 INFO  - writing file: /home/calcul/Documents/Julien/test_nouragues/hobo_8.vox
+2016-02-02 19:00:22 INFO  - file written ( 12.0 s )
+2016-02-02 19:00:22 INFO  - las voxelisation finished in 31.0 s
+2016-02-03 18:28:12 INFO  - Building transmittance functions table
+2016-02-03 18:28:12 INFO  - Transmittance functions table is built
+2016-02-03 18:28:12 INFO  - allocate!!!!!!!!
+2016-02-03 18:28:12 INFO  - Voxel space informations:
+			Corner Inf	:	(312607.0, 452879.0, 316.85)
+			Corner Sup	:	(312806.99, 453078.99, 426.45)
+			Dimensions	:	(100, 100, 55)
+			Toricity 	:	false
+
+2016-02-03 18:28:12 INFO  - Laz file /home/calcul/Documents/Julien/test_nouragues/bug_blaise/data_filtered46_200m.laz is opened
+2016-02-03 18:28:15 INFO  - Laz file is closed
+2016-02-03 18:28:18 ERROR - -1
+java.lang.ArrayIndexOutOfBoundsException: -1
+	at fr.amap.lidar.amapvox.voxelisation.als.LasEchoFilter.doFiltering(LasEchoFilter.java:29)
+	at fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis.keepEchoOfShot(VoxelAnalysis.java:613)
+	at fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis.propagate(VoxelAnalysis.java:435)
+	at fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis.processOneShot(VoxelAnalysis.java:281)
+	at fr.amap.lidar.amapvox.voxelisation.als.LasVoxelisation.process(LasVoxelisation.java:103)
+	at fr.amap.lidar.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:549)
+	at fr.amap.lidar.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4440)
+	at fr.amap.lidar.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4331)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$492(Service.java:725)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$493(Service.java:724)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-02-03 18:29:14 INFO  - Building transmittance functions table
+2016-02-03 18:29:14 INFO  - Transmittance functions table is built
+2016-02-03 18:29:14 INFO  - allocate!!!!!!!!
+2016-02-03 18:29:14 INFO  - Voxel space informations:
+			Corner Inf	:	(312607.0, 452879.0, 316.85)
+			Corner Sup	:	(312806.99, 453078.99, 426.45)
+			Dimensions	:	(100, 100, 55)
+			Toricity 	:	false
+
+2016-02-03 18:29:14 INFO  - Laz file /home/calcul/Documents/Julien/test_nouragues/bug_blaise/data_filtered46_200m.laz is opened
+2016-02-03 18:29:18 INFO  - Laz file is closed
+2016-02-03 19:09:16 INFO  - Building transmittance functions table
+2016-02-03 19:09:16 INFO  - Transmittance functions table is built
+2016-02-03 19:09:16 INFO  - allocate!!!!!!!!
+2016-02-03 19:09:16 INFO  - Voxel space informations:
+			Corner Inf	:	(312607.0, 452879.0, 316.85)
+			Corner Sup	:	(312806.99, 453078.99, 426.45)
+			Dimensions	:	(100, 100, 55)
+			Toricity 	:	false
+
+2016-02-03 19:09:16 INFO  - Laz file /home/calcul/Documents/Julien/test_nouragues/bug_blaise/corrected.laz is opened
+2016-02-03 19:09:19 INFO  - Laz file is closed
+2016-02-03 19:09:23 ERROR - 
+java.lang.ArrayIndexOutOfBoundsException
+2016-02-03 19:09:39 ERROR - 
+java.lang.ArrayIndexOutOfBoundsException
+2016-02-03 19:11:59 INFO  - Building transmittance functions table
+2016-02-03 19:11:59 INFO  - Transmittance functions table is built
+2016-02-03 19:11:59 INFO  - allocate!!!!!!!!
+2016-02-03 19:11:59 INFO  - Voxel space informations:
+			Corner Inf	:	(312607.0, 452879.0, 316.85)
+			Corner Sup	:	(312806.99, 453078.99, 426.45)
+			Dimensions	:	(100, 100, 55)
+			Toricity 	:	false
+
+2016-02-03 19:11:59 INFO  - Laz file /home/calcul/Documents/Julien/test_nouragues/bug_blaise/corrected.laz is opened
+2016-02-03 19:12:02 INFO  - Laz file is closed
+2016-02-03 19:12:08 ERROR - -1
+java.lang.ArrayIndexOutOfBoundsException: -1
+	at fr.amap.lidar.amapvox.voxelisation.als.LasEchoFilter.doFiltering(LasEchoFilter.java:29)
+	at fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis.keepEchoOfShot(VoxelAnalysis.java:613)
+	at fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis.propagate(VoxelAnalysis.java:435)
+	at fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis.processOneShot(VoxelAnalysis.java:281)
+	at fr.amap.lidar.amapvox.voxelisation.als.LasVoxelisation.process(LasVoxelisation.java:103)
+	at fr.amap.lidar.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:549)
+	at fr.amap.lidar.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4440)
+	at fr.amap.lidar.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4331)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$492(Service.java:725)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$493(Service.java:724)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-02-03 19:13:47 INFO  - Building transmittance functions table
+2016-02-03 19:13:47 INFO  - Transmittance functions table is built
+2016-02-03 19:13:47 INFO  - allocate!!!!!!!!
+2016-02-03 19:13:47 INFO  - Voxel space informations:
+			Corner Inf	:	(312607.0, 452879.0, 316.85)
+			Corner Sup	:	(312806.99, 453078.99, 426.45)
+			Dimensions	:	(100, 100, 55)
+			Toricity 	:	false
+
+2016-02-03 19:13:47 INFO  - Laz file /home/calcul/Documents/Julien/test_nouragues/bug_blaise/corrected.laz is opened
+2016-02-03 19:13:51 INFO  - Laz file is closed
+2016-02-03 19:15:33 INFO  - Building transmittance functions table
+2016-02-03 19:15:33 INFO  - Transmittance functions table is built
+2016-02-03 19:15:33 INFO  - allocate!!!!!!!!
+2016-02-03 19:15:33 INFO  - Voxel space informations:
+			Corner Inf	:	(312607.0, 452879.0, 316.85)
+			Corner Sup	:	(312806.99, 453078.99, 426.45)
+			Dimensions	:	(100, 100, 55)
+			Toricity 	:	false
+
+2016-02-03 19:15:33 INFO  - Laz file /home/calcul/Documents/Julien/test_nouragues/bug_blaise/corrected.laz is opened
+2016-02-03 19:15:36 INFO  - Laz file is closed
+2016-02-03 19:17:13 INFO  - Building transmittance functions table
+2016-02-03 19:17:13 INFO  - Transmittance functions table is built
+2016-02-03 19:17:13 INFO  - allocate!!!!!!!!
+2016-02-03 19:17:13 INFO  - Voxel space informations:
+			Corner Inf	:	(312607.0, 452879.0, 316.85)
+			Corner Sup	:	(312806.99, 453078.99, 426.45)
+			Dimensions	:	(100, 100, 55)
+			Toricity 	:	false
+
+2016-02-03 19:17:13 INFO  - Laz file /home/calcul/Documents/Julien/test_nouragues/bug_blaise/corrected.laz is opened
+2016-02-03 19:17:17 INFO  - Laz file is closed
+2016-02-03 19:20:34 INFO  - Building transmittance functions table
+2016-02-03 19:20:34 INFO  - Transmittance functions table is built
+2016-02-03 19:20:34 INFO  - allocate!!!!!!!!
+2016-02-03 19:20:34 INFO  - Voxel space informations:
+			Corner Inf	:	(312607.0, 452879.0, 316.85)
+			Corner Sup	:	(312806.99, 453078.99, 426.45)
+			Dimensions	:	(100, 100, 55)
+			Toricity 	:	false
+
+2016-02-03 19:20:34 INFO  - Laz file /home/calcul/Documents/Julien/test_nouragues/bug_blaise/data_filtered46_200m.laz is opened
+2016-02-03 19:20:37 INFO  - Laz file is closed
+2016-02-03 19:20:42 INFO  - Shots processed: 941099
+2016-02-03 19:20:42 INFO  - Maximum neighborhood range : 1
+2016-02-03 19:20:42 INFO  - Maximum neighborhood range : 2
+2016-02-03 19:20:42 INFO  - Maximum neighborhood range : 3
+2016-02-03 19:20:42 INFO  - Maximum neighborhood range : 16
+2016-02-03 19:20:42 INFO  - Maximum neighborhood range : 17
+2016-02-03 19:20:42 INFO  - Maximum neighborhood range : 18
+2016-02-03 19:20:42 INFO  - Maximum neighborhood range : 19
+2016-02-03 19:20:43 INFO  - Time : 515 ms
+2016-02-03 19:20:43 INFO  - writing file: /home/calcul/Documents/Julien/test_nouragues/bug_blaise/las.vox
+2016-02-03 19:20:45 INFO  - file written ( 2.0 s )
+2016-02-03 19:20:45 INFO  - las voxelisation finished in 27.0 s
+2016-02-04 08:23:13 ERROR - /media/forestview01/BDLidar/ALS/Paracou/2013/MNT1m.asc (Aucun fichier ou dossier de ce type)
+java.io.FileNotFoundException: /media/forestview01/BDLidar/ALS/Paracou/2013/MNT1m.asc (Aucun fichier ou dossier de ce type)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at java.io.FileReader.<init>(FileReader.java:72)
+	at fr.amap.commons.raster.asc.AsciiGridHelper.readFromAscFile(AsciiGridHelper.java:29)
+	at fr.amap.lidar.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:492)
+	at fr.amap.lidar.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4440)
+	at fr.amap.lidar.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4331)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$492(Service.java:725)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$493(Service.java:724)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-02-04 08:23:43 INFO  - Building transmittance functions table
+2016-02-04 08:23:43 INFO  - Transmittance functions table is built
+2016-02-04 08:23:43 INFO  - allocate!!!!!!!!
+2016-02-04 08:23:43 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-04 08:23:43 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 08:24:51 INFO  - Laz file is closed
+2016-02-04 08:25:00 INFO  - Shots processed: 1000000
+2016-02-04 08:25:02 INFO  - Shots processed: 2000000
+2016-02-04 08:25:04 INFO  - Shots processed: 3000000
+2016-02-04 08:25:06 INFO  - Shots processed: 4000000
+2016-02-04 08:25:08 INFO  - Shots processed: 5000000
+2016-02-04 08:25:11 INFO  - Shots processed: 6000000
+2016-02-04 08:25:13 INFO  - Shots processed: 7000000
+2016-02-04 08:25:15 INFO  - Shots processed: 8000000
+2016-02-04 08:25:17 INFO  - Shots processed: 9000000
+2016-02-04 08:25:20 INFO  - Shots processed: 10000000
+2016-02-04 08:25:22 INFO  - Shots processed: 11000000
+2016-02-04 08:25:24 INFO  - Shots processed: 12000000
+2016-02-04 08:25:25 INFO  - Shots processed: 12345659
+2016-02-04 08:25:25 INFO  - Maximum neighborhood range : 2
+2016-02-04 08:25:25 INFO  - Maximum neighborhood range : 3
+2016-02-04 08:25:25 INFO  - Maximum neighborhood range : 4
+2016-02-04 08:25:26 INFO  - Maximum neighborhood range : 5
+2016-02-04 08:25:26 INFO  - Maximum neighborhood range : 6
+2016-02-04 08:25:26 INFO  - Time : 1100 ms
+2016-02-04 08:25:26 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als.vox
+2016-02-04 08:25:28 INFO  - file written ( 1.0 s )
+2016-02-04 08:25:28 INFO  - las voxelisation finished in 125.0 s
+2016-02-04 08:31:50 INFO  - Building transmittance functions table
+2016-02-04 08:31:50 INFO  - Transmittance functions table is built
+2016-02-04 08:31:50 INFO  - allocate!!!!!!!!
+2016-02-04 08:31:50 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-04 08:31:50 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 08:32:59 INFO  - Laz file is closed
+2016-02-04 08:33:07 INFO  - Shots processed: 1000000
+2016-02-04 08:33:09 INFO  - Shots processed: 2000000
+2016-02-04 08:33:12 INFO  - Shots processed: 3000000
+2016-02-04 08:33:14 INFO  - Shots processed: 4000000
+2016-02-04 08:33:16 INFO  - Shots processed: 5000000
+2016-02-04 08:33:19 INFO  - Shots processed: 6000000
+2016-02-04 08:33:21 INFO  - Shots processed: 7000000
+2016-02-04 08:33:23 INFO  - Shots processed: 8000000
+2016-02-04 08:33:25 INFO  - Shots processed: 9000000
+2016-02-04 08:33:28 INFO  - Shots processed: 10000000
+2016-02-04 08:33:30 INFO  - Shots processed: 11000000
+2016-02-04 08:33:32 INFO  - Shots processed: 12000000
+2016-02-04 08:33:33 INFO  - Shots processed: 12345659
+2016-02-04 08:33:33 INFO  - Maximum neighborhood range : 2
+2016-02-04 08:33:33 INFO  - Maximum neighborhood range : 3
+2016-02-04 08:33:33 INFO  - Maximum neighborhood range : 4
+2016-02-04 08:33:34 INFO  - Maximum neighborhood range : 5
+2016-02-04 08:33:34 INFO  - Maximum neighborhood range : 6
+2016-02-04 08:33:34 INFO  - Time : 949 ms
+2016-02-04 08:33:34 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_2.vox
+2016-02-04 08:33:35 INFO  - file written ( 1.0 s )
+2016-02-04 08:33:35 INFO  - las voxelisation finished in 125.0 s
+2016-02-04 08:42:29 INFO  - Building transmittance functions table
+2016-02-04 08:42:29 INFO  - Transmittance functions table is built
+2016-02-04 08:42:29 INFO  - allocate!!!!!!!!
+2016-02-04 08:42:29 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-04 08:42:29 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 08:43:37 INFO  - Laz file is closed
+2016-02-04 08:43:46 INFO  - Shots processed: 1000000
+2016-02-04 08:43:48 INFO  - Shots processed: 2000000
+2016-02-04 08:43:51 INFO  - Shots processed: 3000000
+2016-02-04 08:43:53 INFO  - Shots processed: 4000000
+2016-02-04 08:43:55 INFO  - Shots processed: 5000000
+2016-02-04 08:43:58 INFO  - Shots processed: 6000000
+2016-02-04 08:44:00 INFO  - Shots processed: 7000000
+2016-02-04 08:44:02 INFO  - Shots processed: 8000000
+2016-02-04 08:44:04 INFO  - Shots processed: 9000000
+2016-02-04 08:44:07 INFO  - Shots processed: 10000000
+2016-02-04 08:44:09 INFO  - Shots processed: 11000000
+2016-02-04 08:44:11 INFO  - Shots processed: 12000000
+2016-02-04 08:44:12 INFO  - Shots processed: 12345659
+2016-02-04 08:44:12 INFO  - Maximum neighborhood range : 2
+2016-02-04 08:44:12 INFO  - Maximum neighborhood range : 3
+2016-02-04 08:44:12 INFO  - Maximum neighborhood range : 4
+2016-02-04 08:44:13 INFO  - Maximum neighborhood range : 5
+2016-02-04 08:44:13 INFO  - Maximum neighborhood range : 6
+2016-02-04 08:44:13 INFO  - Time : 1125 ms
+2016-02-04 08:44:13 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_3.vox
+2016-02-04 08:44:15 INFO  - file written ( 1.0 s )
+2016-02-04 08:44:15 INFO  - las voxelisation finished in 126.0 s
+2016-02-04 08:47:22 INFO  - Building transmittance functions table
+2016-02-04 08:47:22 INFO  - Transmittance functions table is built
+2016-02-04 08:47:22 INFO  - allocate!!!!!!!!
+2016-02-04 08:47:22 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-04 08:47:22 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 08:48:30 INFO  - Laz file is closed
+2016-02-04 08:48:39 INFO  - Shots processed: 1000000
+2016-02-04 08:48:41 INFO  - Shots processed: 2000000
+2016-02-04 08:48:43 INFO  - Shots processed: 3000000
+2016-02-04 08:48:46 INFO  - Shots processed: 4000000
+2016-02-04 08:48:48 INFO  - Shots processed: 5000000
+2016-02-04 08:48:50 INFO  - Shots processed: 6000000
+2016-02-04 08:48:52 INFO  - Shots processed: 7000000
+2016-02-04 08:48:55 INFO  - Shots processed: 8000000
+2016-02-04 08:48:57 INFO  - Shots processed: 9000000
+2016-02-04 08:48:59 INFO  - Shots processed: 10000000
+2016-02-04 08:49:01 INFO  - Shots processed: 11000000
+2016-02-04 08:49:04 INFO  - Shots processed: 12000000
+2016-02-04 08:49:04 INFO  - Shots processed: 12345659
+2016-02-04 08:49:04 INFO  - Maximum neighborhood range : 2
+2016-02-04 08:49:04 INFO  - Maximum neighborhood range : 3
+2016-02-04 08:49:04 INFO  - Maximum neighborhood range : 4
+2016-02-04 08:49:06 INFO  - Maximum neighborhood range : 5
+2016-02-04 08:49:06 INFO  - Maximum neighborhood range : 6
+2016-02-04 08:49:06 INFO  - Time : 1783 ms
+2016-02-04 08:49:06 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_3.vox
+2016-02-04 08:49:08 INFO  - file written ( 1.0 s )
+2016-02-04 08:49:08 INFO  - las voxelisation finished in 126.0 s
+2016-02-04 09:13:24 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 09:13:24 INFO  - Laz file is closed
+2016-02-04 10:28:38 ERROR - For input string: ""1""
+java.lang.NumberFormatException: For input string: ""1""
+	at sun.misc.FloatingDecimal.readJavaFormatString(FloatingDecimal.java:2043)
+	at sun.misc.FloatingDecimal.parseDouble(FloatingDecimal.java:110)
+	at java.lang.Double.parseDouble(Double.java:538)
+	at java.lang.Double.valueOf(Double.java:502)
+	at fr.amap.lidar.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:519)
+	at fr.amap.lidar.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4440)
+	at fr.amap.lidar.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4331)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$492(Service.java:725)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$493(Service.java:724)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-02-04 10:32:56 INFO  - Building transmittance functions table
+2016-02-04 10:32:56 INFO  - Transmittance functions table is built
+2016-02-04 10:32:56 INFO  - allocate!!!!!!!!
+2016-02-04 10:32:56 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-04 10:32:56 INFO  - Laz file /home/calcul/Documents/Julien/test_paracou_2015/paracou_2015_dalles_22_23_15_14.laz is opened
+2016-02-04 10:36:09 INFO  - Laz file is closed
+2016-02-04 10:36:17 INFO  - Shots processed: 1000000
+2016-02-04 10:36:20 INFO  - Shots processed: 2000000
+2016-02-04 10:36:23 INFO  - Shots processed: 3000000
+2016-02-04 10:36:26 INFO  - Shots processed: 4000000
+2016-02-04 10:36:28 INFO  - Shots processed: 5000000
+2016-02-04 10:36:30 INFO  - Shots processed: 6000000
+2016-02-04 10:36:33 INFO  - Shots processed: 7000000
+2016-02-04 10:36:35 INFO  - Shots processed: 8000000
+2016-02-04 10:42:48 INFO  - Building transmittance functions table
+2016-02-04 10:42:48 INFO  - Transmittance functions table is built
+2016-02-04 10:42:48 INFO  - allocate!!!!!!!!
+2016-02-04 10:42:48 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-04 10:42:48 INFO  - Laz file /home/calcul/Documents/Julien/test_paracou_2015/paracou_2015_dalles_22_23_15_14.laz is opened
+2016-02-04 10:45:41 INFO  - Laz file is closed
+2016-02-04 10:46:03 INFO  - Shots processed: 1000000
+2016-02-04 10:46:06 INFO  - Shots processed: 2000000
+2016-02-04 10:46:09 INFO  - Shots processed: 3000000
+2016-02-04 10:46:11 INFO  - Shots processed: 4000000
+2016-02-04 10:46:14 INFO  - Shots processed: 5000000
+2016-02-04 10:46:16 INFO  - Shots processed: 6000000
+2016-02-04 10:46:18 INFO  - Shots processed: 7000000
+2016-02-04 10:46:21 INFO  - Shots processed: 8000000
+2016-02-04 10:57:20 INFO  - Building transmittance functions table
+2016-02-04 10:57:20 INFO  - Transmittance functions table is built
+2016-02-04 10:57:20 INFO  - allocate!!!!!!!!
+2016-02-04 10:57:21 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-04 10:57:21 INFO  - Laz file /home/calcul/Documents/Julien/test_paracou_2015/paracou_2015_dalles_22_23_15_14.laz is opened
+2016-02-04 11:00:07 INFO  - Laz file is closed
+2016-02-04 11:00:42 INFO  - Shots processed: 1000000
+2016-02-04 11:00:57 INFO  - Shots processed: 2000000
+2016-02-04 11:01:08 INFO  - Shots processed: 3000000
+2016-02-04 11:01:18 INFO  - Shots processed: 4000000
+2016-02-04 11:01:27 INFO  - Shots processed: 5000000
+2016-02-04 11:01:37 INFO  - Shots processed: 6000000
+2016-02-04 11:01:47 INFO  - Shots processed: 7000000
+2016-02-04 11:01:56 INFO  - Shots processed: 8000000
+2016-02-04 11:30:57 INFO  - Building transmittance functions table
+2016-02-04 11:30:57 INFO  - Transmittance functions table is built
+2016-02-04 11:30:57 INFO  - allocate!!!!!!!!
+2016-02-04 11:30:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-04 11:30:57 INFO  - Laz file /home/calcul/Documents/Julien/test_paracou_2015/paracou_2015_dalles_22_23_15_14.laz is opened
+2016-02-04 11:33:48 INFO  - Laz file is closed
+2016-02-04 11:34:01 INFO  - Shots processed: 1000000
+2016-02-04 11:34:13 INFO  - Shots processed: 2000000
+2016-02-04 11:34:16 INFO  - Shots processed: 3000000
+2016-02-04 11:34:18 INFO  - Shots processed: 4000000
+2016-02-04 11:34:20 INFO  - Shots processed: 5000000
+2016-02-04 11:34:22 INFO  - Shots processed: 6000000
+2016-02-04 11:34:25 INFO  - Shots processed: 7000000
+2016-02-04 11:34:27 INFO  - Shots processed: 8000000
+2016-02-04 11:34:29 INFO  - Shots processed: 9000000
+2016-02-04 11:34:30 INFO  - Shots processed: 10000000
+2016-02-04 11:34:32 INFO  - Shots processed: 11000000
+2016-02-04 11:34:34 INFO  - Shots processed: 12000000
+2016-02-04 11:34:35 INFO  - Shots processed: 13000000
+2016-02-04 11:34:37 INFO  - Shots processed: 14000000
+2016-02-04 11:34:39 INFO  - Shots processed: 15000000
+2016-02-04 11:34:40 INFO  - Shots processed: 16000000
+2016-02-04 11:34:42 INFO  - Shots processed: 17000000
+2016-02-04 11:34:44 INFO  - Shots processed: 18000000
+2016-02-04 11:34:46 INFO  - Shots processed: 19000000
+2016-02-04 11:34:48 INFO  - Shots processed: 20000000
+2016-02-04 11:34:50 INFO  - Shots processed: 21000000
+2016-02-04 11:34:52 INFO  - Shots processed: 22000000
+2016-02-04 11:34:53 INFO  - Shots processed: 23000000
+2016-02-04 11:34:55 INFO  - Shots processed: 24000000
+2016-02-04 11:34:57 INFO  - Shots processed: 25000000
+2016-02-04 11:34:59 INFO  - Shots processed: 26000000
+2016-02-04 11:35:01 INFO  - Shots processed: 27000000
+2016-02-04 11:35:02 INFO  - Shots processed: 28000000
+2016-02-04 11:35:04 INFO  - Shots processed: 29000000
+2016-02-04 11:35:06 INFO  - Shots processed: 30000000
+2016-02-04 11:35:08 INFO  - Shots processed: 31000000
+2016-02-04 11:35:10 INFO  - Shots processed: 32000000
+2016-02-04 11:35:11 INFO  - Shots processed: 33000000
+2016-02-04 11:35:13 INFO  - Shots processed: 34000000
+2016-02-04 11:35:15 INFO  - Shots processed: 35000000
+2016-02-04 11:35:16 INFO  - Shots processed: 36000000
+2016-02-04 11:35:18 INFO  - Shots processed: 37000000
+2016-02-04 11:35:20 INFO  - Shots processed: 38000000
+2016-02-04 11:35:21 INFO  - Shots processed: 39000000
+2016-02-04 11:35:23 INFO  - Shots processed: 40000000
+2016-02-04 11:35:25 INFO  - Shots processed: 40955688
+2016-02-04 11:35:25 INFO  - Maximum neighborhood range : 1
+2016-02-04 11:35:25 INFO  - Maximum neighborhood range : 2
+2016-02-04 11:35:25 INFO  - Maximum neighborhood range : 3
+2016-02-04 11:35:25 INFO  - Maximum neighborhood range : 4
+2016-02-04 11:35:26 INFO  - Time : 813 ms
+2016-02-04 11:35:26 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2015/als.vox
+2016-02-04 11:35:28 INFO  - file written ( 1.0 s )
+2016-02-04 11:35:28 INFO  - las voxelisation finished in 292.0 s
+2016-02-04 16:09:42 INFO  - Building transmittance functions table
+2016-02-04 16:09:42 INFO  - Transmittance functions table is built
+2016-02-04 16:09:42 INFO  - allocate!!!!!!!!
+2016-02-04 16:09:42 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-04 16:09:42 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 16:10:50 INFO  - Laz file is closed
+2016-02-04 16:10:59 INFO  - Shots processed: 1000000
+2016-02-04 16:11:01 INFO  - Shots processed: 2000000
+2016-02-04 16:11:03 INFO  - Shots processed: 3000000
+2016-02-04 16:11:05 INFO  - Shots processed: 4000000
+2016-02-04 16:11:08 INFO  - Shots processed: 5000000
+2016-02-04 16:11:10 INFO  - Shots processed: 6000000
+2016-02-04 16:11:12 INFO  - Shots processed: 7000000
+2016-02-04 16:11:14 INFO  - Shots processed: 8000000
+2016-02-04 16:11:16 INFO  - Shots processed: 9000000
+2016-02-04 16:11:18 INFO  - Shots processed: 10000000
+2016-02-04 16:11:20 INFO  - Shots processed: 11000000
+2016-02-04 16:11:23 INFO  - Shots processed: 12000000
+2016-02-04 16:11:23 INFO  - Shots processed: 12345659
+2016-02-04 16:11:23 INFO  - Maximum neighborhood range : 2
+2016-02-04 16:11:23 INFO  - Maximum neighborhood range : 3
+2016-02-04 16:11:23 INFO  - Maximum neighborhood range : 4
+2016-02-04 16:11:24 INFO  - Maximum neighborhood range : 5
+2016-02-04 16:11:25 INFO  - Maximum neighborhood range : 6
+2016-02-04 16:11:25 INFO  - Time : 1084 ms
+2016-02-04 16:11:25 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4.vox
+2016-02-04 16:11:26 INFO  - file written ( 1.0 s )
+2016-02-04 16:11:26 INFO  - las voxelisation finished in 124.0 s
+2016-02-04 16:33:16 INFO  - Building transmittance functions table
+2016-02-04 16:33:16 INFO  - Transmittance functions table is built
+2016-02-04 16:33:16 INFO  - allocate!!!!!!!!
+2016-02-04 16:33:16 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-04 16:33:16 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 16:34:21 INFO  - Laz file is closed
+2016-02-04 16:34:29 INFO  - Shots processed: 1000000
+2016-02-04 16:34:32 INFO  - Shots processed: 2000000
+2016-02-04 16:34:34 INFO  - Shots processed: 3000000
+2016-02-04 16:34:36 INFO  - Shots processed: 4000000
+2016-02-04 16:34:38 INFO  - Shots processed: 5000000
+2016-02-04 16:34:40 INFO  - Shots processed: 6000000
+2016-02-04 16:34:43 INFO  - Shots processed: 7000000
+2016-02-04 16:34:45 INFO  - Shots processed: 8000000
+2016-02-04 16:34:47 INFO  - Shots processed: 9000000
+2016-02-04 16:34:49 INFO  - Shots processed: 10000000
+2016-02-04 16:34:51 INFO  - Shots processed: 11000000
+2016-02-04 16:34:53 INFO  - Shots processed: 12000000
+2016-02-04 16:34:53 INFO  - Shots processed: 12237349
+2016-02-04 16:34:53 INFO  - Maximum neighborhood range : 2
+2016-02-04 16:34:53 INFO  - Maximum neighborhood range : 3
+2016-02-04 16:34:53 INFO  - Maximum neighborhood range : 4
+2016-02-04 16:34:53 INFO  - Maximum neighborhood range : 5
+2016-02-04 16:34:53 INFO  - Maximum neighborhood range : 6
+2016-02-04 16:34:54 INFO  - Time : 1180 ms
+2016-02-04 16:34:54 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4.vox
+2016-02-04 16:34:56 INFO  - file written ( 1.0 s )
+2016-02-04 16:34:56 INFO  - las voxelisation finished in 119.0 s
+2016-02-04 16:38:07 INFO  - Building transmittance functions table
+2016-02-04 16:38:07 INFO  - Transmittance functions table is built
+2016-02-04 16:38:07 INFO  - allocate!!!!!!!!
+2016-02-04 16:38:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-04 16:38:07 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 16:40:05 INFO  - Building transmittance functions table
+2016-02-04 16:40:05 INFO  - Transmittance functions table is built
+2016-02-04 16:40:05 INFO  - allocate!!!!!!!!
+2016-02-04 16:40:05 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-04 16:40:05 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 16:41:48 INFO  - Laz file is closed
+2016-02-04 16:42:03 INFO  - Shots processed: 1000000
+2016-02-04 16:42:04 INFO  - Shots processed: 2000000
+2016-02-04 16:43:19 INFO  - Building transmittance functions table
+2016-02-04 16:43:19 INFO  - Transmittance functions table is built
+2016-02-04 16:43:19 INFO  - allocate!!!!!!!!
+2016-02-04 16:43:19 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-04 16:43:19 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 16:44:18 INFO  - Laz file is closed
+2016-02-04 16:44:33 INFO  - Shots processed: 1000000
+2016-02-04 16:44:36 INFO  - Shots processed: 2000000
+2016-02-04 16:44:38 INFO  - Shots processed: 3000000
+2016-02-04 16:44:41 INFO  - Shots processed: 4000000
+2016-02-04 16:44:43 INFO  - Shots processed: 5000000
+2016-02-04 16:44:45 INFO  - Shots processed: 6000000
+2016-02-04 16:44:47 INFO  - Shots processed: 7000000
+2016-02-04 16:44:50 INFO  - Shots processed: 8000000
+2016-02-04 16:44:52 INFO  - Shots processed: 9000000
+2016-02-04 16:44:54 INFO  - Shots processed: 10000000
+2016-02-04 16:44:56 INFO  - Shots processed: 11000000
+2016-02-04 16:44:58 INFO  - Shots processed: 12000000
+2016-02-04 16:44:59 INFO  - Shots processed: 12237349
+2016-02-04 16:44:59 INFO  - Maximum neighborhood range : 2
+2016-02-04 16:44:59 INFO  - Maximum neighborhood range : 3
+2016-02-04 16:44:59 INFO  - Maximum neighborhood range : 4
+2016-02-04 16:44:59 INFO  - Maximum neighborhood range : 5
+2016-02-04 16:44:59 INFO  - Maximum neighborhood range : 6
+2016-02-04 16:45:00 INFO  - Time : 1242 ms
+2016-02-04 16:45:00 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4.vox
+2016-02-04 16:45:02 INFO  - file written ( 1.0 s )
+2016-02-04 16:45:02 INFO  - las voxelisation finished in 122.0 s
+2016-02-04 16:58:15 INFO  - Building transmittance functions table
+2016-02-04 16:58:15 INFO  - Transmittance functions table is built
+2016-02-04 16:58:15 INFO  - allocate!!!!!!!!
+2016-02-04 16:58:15 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-04 16:58:15 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 16:59:18 INFO  - Laz file is closed
+2016-02-04 16:59:32 INFO  - Shots processed: 1000000
+2016-02-04 16:59:35 INFO  - Shots processed: 2000000
+2016-02-04 16:59:37 INFO  - Shots processed: 3000000
+2016-02-04 16:59:40 INFO  - Shots processed: 4000000
+2016-02-04 16:59:42 INFO  - Shots processed: 5000000
+2016-02-04 16:59:45 INFO  - Shots processed: 6000000
+2016-02-04 16:59:47 INFO  - Shots processed: 7000000
+2016-02-04 16:59:49 INFO  - Shots processed: 8000000
+2016-02-04 16:59:52 INFO  - Shots processed: 9000000
+2016-02-04 16:59:54 INFO  - Shots processed: 10000000
+2016-02-04 16:59:56 INFO  - Shots processed: 11000000
+2016-02-04 16:59:58 INFO  - Shots processed: 12000000
+2016-02-04 16:59:59 INFO  - Shots processed: 12345659
+2016-02-04 16:59:59 INFO  - Maximum neighborhood range : 2
+2016-02-04 16:59:59 INFO  - Maximum neighborhood range : 3
+2016-02-04 16:59:59 INFO  - Maximum neighborhood range : 4
+2016-02-04 17:00:00 INFO  - Maximum neighborhood range : 5
+2016-02-04 17:00:00 INFO  - Maximum neighborhood range : 6
+2016-02-04 17:00:00 INFO  - Time : 981 ms
+2016-02-04 17:00:00 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4.vox
+2016-02-04 17:00:02 INFO  - file written ( 1.0 s )
+2016-02-04 17:00:02 INFO  - las voxelisation finished in 140.0 s
+2016-02-04 17:30:55 INFO  - Building transmittance functions table
+2016-02-04 17:30:55 INFO  - Transmittance functions table is built
+2016-02-04 17:30:55 INFO  - allocate!!!!!!!!
+2016-02-04 17:30:55 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-04 17:30:55 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 17:31:57 INFO  - Laz file is closed
+2016-02-04 17:32:11 INFO  - Shots processed: 1000000
+2016-02-04 17:32:14 INFO  - Shots processed: 2000000
+2016-02-04 17:32:16 INFO  - Shots processed: 3000000
+2016-02-04 17:32:19 INFO  - Shots processed: 4000000
+2016-02-04 17:32:21 INFO  - Shots processed: 5000000
+2016-02-04 17:32:23 INFO  - Shots processed: 6000000
+2016-02-04 17:32:25 INFO  - Shots processed: 7000000
+2016-02-04 17:32:27 INFO  - Shots processed: 8000000
+2016-02-04 17:32:29 INFO  - Shots processed: 9000000
+2016-02-04 17:32:31 INFO  - Shots processed: 10000000
+2016-02-04 17:32:33 INFO  - Shots processed: 11000000
+2016-02-04 17:32:35 INFO  - Shots processed: 12000000
+2016-02-04 17:32:36 INFO  - Shots processed: 12345659
+2016-02-04 17:32:36 INFO  - Maximum neighborhood range : 2
+2016-02-04 17:32:36 INFO  - Maximum neighborhood range : 3
+2016-02-04 17:32:36 INFO  - Maximum neighborhood range : 4
+2016-02-04 17:32:38 INFO  - Maximum neighborhood range : 5
+2016-02-04 17:32:38 INFO  - Maximum neighborhood range : 6
+2016-02-04 17:32:38 INFO  - Time : 1225 ms
+2016-02-04 17:32:38 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4.vox
+2016-02-04 17:32:39 INFO  - file written ( 1.0 s )
+2016-02-04 17:32:39 INFO  - las voxelisation finished in 137.0 s
+2016-02-04 18:01:55 INFO  - Building transmittance functions table
+2016-02-04 18:01:55 INFO  - Transmittance functions table is built
+2016-02-04 18:01:55 INFO  - allocate!!!!!!!!
+2016-02-04 18:01:55 INFO  - Voxel space informations:
+			Corner Inf	:	(-115.0, -115.0, 18.0)
+			Corner Sup	:	(185.0, 185.0, 65.0)
+			Dimensions	:	(300, 300, 47)
+			Toricity 	:	false
+
+2016-02-04 18:01:55 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 18:02:55 INFO  - Laz file is closed
+2016-02-04 18:03:09 INFO  - Shots processed: 1000000
+2016-02-04 18:03:12 INFO  - Shots processed: 2000000
+2016-02-04 18:03:14 INFO  - Shots processed: 3000000
+2016-02-04 18:03:21 INFO  - Shots processed: 4000000
+2016-02-04 18:03:26 INFO  - Shots processed: 5000000
+2016-02-04 18:03:32 INFO  - Shots processed: 6000000
+2016-02-04 18:03:34 INFO  - Shots processed: 7000000
+2016-02-04 18:03:42 INFO  - Shots processed: 8000000
+2016-02-04 18:03:44 INFO  - Shots processed: 9000000
+2016-02-04 18:03:46 INFO  - Shots processed: 10000000
+2016-02-04 18:03:48 INFO  - Shots processed: 11000000
+2016-02-04 18:03:50 INFO  - Shots processed: 12000000
+2016-02-04 18:03:51 INFO  - Shots processed: 12345659
+2016-02-04 18:03:52 INFO  - Maximum neighborhood range : 3
+2016-02-04 18:03:52 INFO  - Maximum neighborhood range : 4
+2016-02-04 18:03:52 INFO  - Maximum neighborhood range : 5
+2016-02-04 18:03:53 INFO  - Maximum neighborhood range : 6
+2016-02-04 18:03:53 INFO  - Maximum neighborhood range : 7
+2016-02-04 18:03:53 INFO  - Maximum neighborhood range : 8
+2016-02-04 18:03:54 INFO  - Time : 2447 ms
+2016-02-04 18:03:54 INFO  - writing file: /home/calcul/Documents/Julien/test_ground_energy/als_300m.vox
+2016-02-04 18:04:13 INFO  - file written ( 18.0 s )
+2016-02-04 18:04:13 INFO  - writing file: /home/calcul/Documents/Julien/test_ground_energy/ground_energy.txt
+2016-02-04 18:04:13 INFO  - file written ( 0.0 s )
+2016-02-04 18:04:13 INFO  - las voxelisation finished in 157.0 s
+2016-02-04 18:05:36 INFO  - Building transmittance functions table
+2016-02-04 18:05:36 INFO  - Transmittance functions table is built
+2016-02-04 18:05:36 INFO  - allocate!!!!!!!!
+2016-02-04 18:05:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-115.0, -115.0, 18.0)
+			Corner Sup	:	(185.0, 185.0, 65.0)
+			Dimensions	:	(300, 300, 47)
+			Toricity 	:	false
+
+2016-02-04 18:05:36 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 18:06:35 INFO  - Laz file is closed
+2016-02-04 18:06:48 INFO  - Shots processed: 1000000
+2016-02-04 18:06:51 INFO  - Shots processed: 2000000
+2016-02-04 18:06:53 INFO  - Shots processed: 3000000
+2016-02-04 18:07:00 INFO  - Shots processed: 4000000
+2016-02-04 18:07:05 INFO  - Shots processed: 5000000
+2016-02-04 18:07:11 INFO  - Shots processed: 6000000
+2016-02-04 18:07:13 INFO  - Shots processed: 7000000
+2016-02-04 18:07:22 INFO  - Shots processed: 8000000
+2016-02-04 18:07:23 INFO  - Shots processed: 9000000
+2016-02-04 18:07:26 INFO  - Shots processed: 10000000
+2016-02-04 18:07:28 INFO  - Shots processed: 11000000
+2016-02-04 18:07:30 INFO  - Shots processed: 12000000
+2016-02-04 18:07:30 INFO  - Shots processed: 12345659
+2016-02-04 18:07:31 INFO  - Maximum neighborhood range : 3
+2016-02-04 18:07:31 INFO  - Maximum neighborhood range : 4
+2016-02-04 18:07:31 INFO  - Maximum neighborhood range : 5
+2016-02-04 18:07:32 INFO  - Maximum neighborhood range : 6
+2016-02-04 18:07:32 INFO  - Maximum neighborhood range : 7
+2016-02-04 18:07:32 INFO  - Maximum neighborhood range : 8
+2016-02-04 18:07:33 INFO  - Time : 2427 ms
+2016-02-04 18:07:33 INFO  - writing file: /home/calcul/Documents/Julien/test_ground_energy/als_300m.vox
+2016-02-04 18:07:54 INFO  - file written ( 20.0 s )
+2016-02-04 18:07:54 INFO  - writing file: /home/calcul/Documents/Julien/test_ground_energy/ground_energy.txt
+2016-02-04 18:07:54 INFO  - file written ( 0.0 s )
+2016-02-04 18:07:54 INFO  - las voxelisation finished in 157.0 s
+2016-02-04 18:34:11 INFO  - Building transmittance functions table
+2016-02-04 18:34:11 INFO  - Transmittance functions table is built
+2016-02-04 18:34:11 INFO  - allocate!!!!!!!!
+2016-02-04 18:34:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-04 18:34:11 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 18:35:15 INFO  - Laz file is closed
+2016-02-04 18:35:29 INFO  - Shots processed: 1000000
+2016-02-04 18:35:31 INFO  - Shots processed: 2000000
+2016-02-04 18:35:34 INFO  - Shots processed: 3000000
+2016-02-04 18:35:36 INFO  - Shots processed: 4000000
+2016-02-04 18:35:38 INFO  - Shots processed: 5000000
+2016-02-04 18:35:40 INFO  - Shots processed: 6000000
+2016-02-04 18:35:42 INFO  - Shots processed: 7000000
+2016-02-04 18:35:44 INFO  - Shots processed: 8000000
+2016-02-04 18:35:46 INFO  - Shots processed: 9000000
+2016-02-04 18:35:47 INFO  - Shots processed: 10000000
+2016-02-04 18:35:49 INFO  - Shots processed: 11000000
+2016-02-04 18:35:51 INFO  - Shots processed: 12000000
+2016-02-04 18:35:52 INFO  - Shots processed: 12345659
+2016-02-04 18:35:52 INFO  - Maximum neighborhood range : 2
+2016-02-04 18:35:52 INFO  - Maximum neighborhood range : 3
+2016-02-04 18:35:52 INFO  - Maximum neighborhood range : 4
+2016-02-04 18:35:53 INFO  - Maximum neighborhood range : 5
+2016-02-04 18:35:53 INFO  - Maximum neighborhood range : 6
+2016-02-04 18:35:53 INFO  - Time : 1277 ms
+2016-02-04 18:35:53 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4.vox
+2016-02-04 18:35:55 INFO  - file written ( 1.0 s )
+2016-02-04 18:35:55 INFO  - las voxelisation finished in 123.0 s
+2016-02-04 18:37:14 INFO  - Building transmittance functions table
+2016-02-04 18:37:14 INFO  - Transmittance functions table is built
+2016-02-04 18:37:14 INFO  - allocate!!!!!!!!
+2016-02-04 18:37:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-04 18:37:14 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 18:38:18 INFO  - Laz file is closed
+2016-02-04 18:38:32 INFO  - Shots processed: 1000000
+2016-02-04 18:38:34 INFO  - Shots processed: 2000000
+2016-02-04 18:38:36 INFO  - Shots processed: 3000000
+2016-02-04 18:38:38 INFO  - Shots processed: 4000000
+2016-02-04 18:38:41 INFO  - Shots processed: 5000000
+2016-02-04 18:38:43 INFO  - Shots processed: 6000000
+2016-02-04 18:38:45 INFO  - Shots processed: 7000000
+2016-02-04 18:38:48 INFO  - Shots processed: 8000000
+2016-02-04 18:38:50 INFO  - Shots processed: 9000000
+2016-02-04 18:38:52 INFO  - Shots processed: 10000000
+2016-02-04 18:38:54 INFO  - Shots processed: 11000000
+2016-02-04 18:38:56 INFO  - Shots processed: 12000000
+2016-02-04 18:38:57 INFO  - Shots processed: 12345659
+2016-02-04 18:38:57 INFO  - Maximum neighborhood range : 2
+2016-02-04 18:38:57 INFO  - Maximum neighborhood range : 3
+2016-02-04 18:38:57 INFO  - Maximum neighborhood range : 4
+2016-02-04 18:38:57 INFO  - Maximum neighborhood range : 5
+2016-02-04 18:38:57 INFO  - Maximum neighborhood range : 6
+2016-02-04 18:38:57 INFO  - Time : 207 ms
+2016-02-04 18:38:57 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4.vox
+2016-02-04 18:38:58 INFO  - file written ( 1.0 s )
+2016-02-04 18:38:58 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4_ground_energy.png
+2016-02-04 18:38:58 INFO  - file written ( 0.0 s )
+2016-02-04 18:38:58 INFO  - las voxelisation finished in 123.0 s
+2016-02-04 19:07:46 INFO  - Building transmittance functions table
+2016-02-04 19:07:46 INFO  - Transmittance functions table is built
+2016-02-04 19:07:46 INFO  - allocate!!!!!!!!
+2016-02-04 19:07:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-115.0, -115.0, 0.0)
+			Corner Sup	:	(185.0, 185.0, 65.0)
+			Dimensions	:	(300, 300, 65)
+			Toricity 	:	false
+
+2016-02-04 19:07:46 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 19:08:48 INFO  - Laz file is closed
+2016-02-04 19:08:57 INFO  - Shots processed: 1000000
+2016-02-04 19:09:07 INFO  - Shots processed: 2000000
+2016-02-04 19:09:09 INFO  - Shots processed: 3000000
+2016-02-04 19:09:16 INFO  - Shots processed: 4000000
+2016-02-04 19:09:22 INFO  - Shots processed: 5000000
+2016-02-04 19:09:29 INFO  - Shots processed: 6000000
+2016-02-04 19:09:31 INFO  - Shots processed: 7000000
+2016-02-04 19:09:40 INFO  - Shots processed: 8000000
+2016-02-04 19:09:42 INFO  - Shots processed: 9000000
+2016-02-04 19:09:44 INFO  - Shots processed: 10000000
+2016-02-04 19:09:46 INFO  - Shots processed: 11000000
+2016-02-04 19:09:48 INFO  - Shots processed: 12000000
+2016-02-04 19:09:49 INFO  - Shots processed: 12345659
+2016-02-04 19:09:50 INFO  - Maximum neighborhood range : 3
+2016-02-04 19:09:50 INFO  - Maximum neighborhood range : 4
+2016-02-04 19:09:50 INFO  - Maximum neighborhood range : 5
+2016-02-04 19:09:51 INFO  - Maximum neighborhood range : 6
+2016-02-04 19:09:52 INFO  - Maximum neighborhood range : 7
+2016-02-04 19:09:52 INFO  - Maximum neighborhood range : 8
+2016-02-04 19:09:53 INFO  - Time : 3659 ms
+2016-02-04 19:09:53 INFO  - writing file: /home/calcul/Documents/Julien/test_ground_energy/als_300m.vox
+2016-02-04 19:10:17 INFO  - file written ( 23.0 s )
+2016-02-04 19:10:17 INFO  - writing file: /home/calcul/Documents/Julien/test_ground_energy/ground_energy.txt
+2016-02-04 19:10:18 INFO  - file written ( 0.0 s )
+2016-02-04 19:10:18 INFO  - las voxelisation finished in 172.0 s
+2016-02-04 19:16:05 INFO  - Building transmittance functions table
+2016-02-04 19:16:05 INFO  - Transmittance functions table is built
+2016-02-04 19:16:05 INFO  - allocate!!!!!!!!
+2016-02-04 19:16:05 INFO  - Voxel space informations:
+			Corner Inf	:	(-115.0, -115.0, 0.0)
+			Corner Sup	:	(185.0, 185.0, 65.0)
+			Dimensions	:	(300, 300, 65)
+			Toricity 	:	false
+
+2016-02-04 19:16:05 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 19:17:07 INFO  - Laz file is closed
+2016-02-04 19:17:22 INFO  - Shots processed: 1000000
+2016-02-04 19:17:26 INFO  - Shots processed: 2000000
+2016-02-04 19:17:28 INFO  - Shots processed: 3000000
+2016-02-04 19:17:36 INFO  - Shots processed: 4000000
+2016-02-04 19:17:42 INFO  - Shots processed: 5000000
+2016-02-04 19:17:49 INFO  - Shots processed: 6000000
+2016-02-04 19:17:52 INFO  - Shots processed: 7000000
+2016-02-04 19:18:01 INFO  - Shots processed: 8000000
+2016-02-04 19:18:03 INFO  - Shots processed: 9000000
+2016-02-04 19:18:05 INFO  - Shots processed: 10000000
+2016-02-04 19:18:07 INFO  - Shots processed: 11000000
+2016-02-04 19:18:09 INFO  - Shots processed: 12000000
+2016-02-04 19:18:10 INFO  - Shots processed: 12345659
+2016-02-04 19:18:11 INFO  - Maximum neighborhood range : 3
+2016-02-04 19:18:11 INFO  - Maximum neighborhood range : 4
+2016-02-04 19:18:11 INFO  - Maximum neighborhood range : 5
+2016-02-04 19:18:12 INFO  - Maximum neighborhood range : 6
+2016-02-04 19:18:13 INFO  - Maximum neighborhood range : 7
+2016-02-04 19:18:13 INFO  - Maximum neighborhood range : 8
+2016-02-04 19:18:14 INFO  - Time : 2956 ms
+2016-02-04 19:18:14 INFO  - writing file: /home/calcul/Documents/Julien/test_ground_energy/als_300m.vox
+2016-02-04 19:18:39 INFO  - file written ( 24.0 s )
+2016-02-04 19:18:39 INFO  - writing file: /home/calcul/Documents/Julien/test_ground_energy/ground_energy.txt
+2016-02-04 19:18:39 INFO  - file written ( 0.0 s )
+2016-02-04 19:18:39 INFO  - las voxelisation finished in 175.0 s
+2016-02-04 19:19:00 INFO  - Building transmittance functions table
+2016-02-04 19:19:00 INFO  - Transmittance functions table is built
+2016-02-04 19:19:00 INFO  - allocate!!!!!!!!
+2016-02-04 19:19:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-115.0, -115.0, 0.0)
+			Corner Sup	:	(185.0, 185.0, 65.0)
+			Dimensions	:	(300, 300, 65)
+			Toricity 	:	false
+
+2016-02-04 19:19:00 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-04 19:20:01 INFO  - Laz file is closed
+2016-02-04 19:20:14 INFO  - Shots processed: 1000000
+2016-02-04 19:20:18 INFO  - Shots processed: 2000000
+2016-02-04 19:20:20 INFO  - Shots processed: 3000000
+2016-02-04 19:20:28 INFO  - Shots processed: 4000000
+2016-02-04 19:20:34 INFO  - Shots processed: 5000000
+2016-02-04 19:20:41 INFO  - Shots processed: 6000000
+2016-02-04 19:20:43 INFO  - Shots processed: 7000000
+2016-02-04 19:20:53 INFO  - Shots processed: 8000000
+2016-02-04 19:20:54 INFO  - Shots processed: 9000000
+2016-02-04 19:20:56 INFO  - Shots processed: 10000000
+2016-02-04 19:20:58 INFO  - Shots processed: 11000000
+2016-02-04 19:21:00 INFO  - Shots processed: 12000000
+2016-02-04 19:21:01 INFO  - Shots processed: 12345659
+2016-02-04 19:21:02 INFO  - Maximum neighborhood range : 3
+2016-02-04 19:21:02 INFO  - Maximum neighborhood range : 4
+2016-02-04 19:21:02 INFO  - Maximum neighborhood range : 5
+2016-02-04 19:21:02 INFO  - Maximum neighborhood range : 6
+2016-02-04 19:21:03 INFO  - Maximum neighborhood range : 7
+2016-02-04 19:21:03 INFO  - Maximum neighborhood range : 8
+2016-02-04 19:21:05 INFO  - Time : 2843 ms
+2016-02-04 19:21:05 INFO  - writing file: /home/calcul/Documents/Julien/test_ground_energy/als_300m.vox
+2016-02-04 19:21:29 INFO  - file written ( 23.0 s )
+2016-02-04 19:21:29 INFO  - writing file: /home/calcul/Documents/Julien/test_ground_energy/ground_energy.txt
+2016-02-04 19:21:29 INFO  - file written ( 0.0 s )
+2016-02-04 19:21:29 INFO  - las voxelisation finished in 168.0 s
+2016-02-05 08:58:32 ERROR - /media/forestview01/BDLidar/ALS/Paracou/2013/MNT1m.asc (Aucun fichier ou dossier de ce type)
+java.io.FileNotFoundException: /media/forestview01/BDLidar/ALS/Paracou/2013/MNT1m.asc (Aucun fichier ou dossier de ce type)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at java.io.FileReader.<init>(FileReader.java:72)
+	at fr.amap.commons.raster.asc.AsciiGridHelper.readFromAscFile(AsciiGridHelper.java:29)
+	at fr.amap.lidar.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:492)
+	at fr.amap.lidar.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4460)
+	at fr.amap.lidar.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4351)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$492(Service.java:725)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$493(Service.java:724)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-02-05 08:59:13 INFO  - Building transmittance functions table
+2016-02-05 08:59:13 INFO  - Transmittance functions table is built
+2016-02-05 08:59:13 INFO  - allocate!!!!!!!!
+2016-02-05 08:59:13 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 08:59:13 ERROR - 
+java.lang.NullPointerException
+	at fr.amap.amapvox.als.laz.LazExtraction.iterator(LazExtraction.java:117)
+	at fr.amap.lidar.amapvox.voxelisation.als.PointsToShot.init(PointsToShot.java:130)
+	at fr.amap.lidar.amapvox.voxelisation.als.LasVoxelisation.process(LasVoxelisation.java:99)
+	at fr.amap.lidar.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:549)
+	at fr.amap.lidar.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4460)
+	at fr.amap.lidar.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4351)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$492(Service.java:725)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$493(Service.java:724)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-02-05 09:00:00 INFO  - Building transmittance functions table
+2016-02-05 09:00:00 INFO  - Transmittance functions table is built
+2016-02-05 09:00:00 INFO  - allocate!!!!!!!!
+2016-02-05 09:00:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 09:00:00 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 09:01:06 INFO  - Laz file is closed
+2016-02-05 09:01:15 INFO  - Shots processed: 1000000
+2016-02-05 09:01:17 INFO  - Shots processed: 2000000
+2016-02-05 09:01:19 INFO  - Shots processed: 3000000
+2016-02-05 09:01:22 INFO  - Shots processed: 4000000
+2016-02-05 09:01:24 INFO  - Shots processed: 5000000
+2016-02-05 09:01:27 INFO  - Shots processed: 6000000
+2016-02-05 09:01:29 INFO  - Shots processed: 7000000
+2016-02-05 09:01:31 INFO  - Shots processed: 8000000
+2016-02-05 09:01:33 INFO  - Shots processed: 9000000
+2016-02-05 09:01:35 INFO  - Shots processed: 10000000
+2016-02-05 09:01:38 INFO  - Shots processed: 11000000
+2016-02-05 09:01:40 INFO  - Shots processed: 12000000
+2016-02-05 09:01:41 INFO  - Shots processed: 12345659
+2016-02-05 09:01:41 INFO  - Maximum neighborhood range : 2
+2016-02-05 09:01:41 INFO  - Maximum neighborhood range : 3
+2016-02-05 09:01:41 INFO  - Maximum neighborhood range : 4
+2016-02-05 09:01:42 INFO  - Maximum neighborhood range : 5
+2016-02-05 09:01:42 INFO  - Maximum neighborhood range : 6
+2016-02-05 09:01:42 INFO  - Time : 1369 ms
+2016-02-05 09:01:42 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4.vox
+2016-02-05 09:01:44 INFO  - file written ( 1.0 s )
+2016-02-05 09:01:44 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4_ground_energy.png
+2016-02-05 09:01:44 INFO  - file written ( 0.0 s )
+2016-02-05 09:01:44 INFO  - las voxelisation finished in 125.0 s
+2016-02-05 10:15:38 INFO  - Computing directions...
+2016-02-05 10:15:38 INFO  - Nb shots ring 1 = 60
+2016-02-05 10:15:38 INFO  - Nb shots ring 2 = 86
+2016-02-05 10:15:38 INFO  - Nb shots ring 3 = 102
+2016-02-05 10:15:38 INFO  - Nb shots ring 4 = 117
+2016-02-05 10:15:38 INFO  - Nb shots ring 5 = 135
+2016-02-05 10:15:41 INFO  - ===== /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als_80m.vox =====
+2016-02-05 10:15:41 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-02-05 10:15:41 INFO  - allocate Voxels
+2016-02-05 10:15:41 INFO  - allocate MNT
+2016-02-05 10:15:43 INFO  - nb positions= 1
+2016-02-05 10:15:43 INFO  - Computation of transmittance
+2016-02-05 10:16:37 INFO  - Computation of AVGTRANS, ACFS, CNTCT#, GAPS, DIFN ...
+2016-02-05 10:16:37 INFO  - Computation of ACF...
+2016-02-05 10:16:37 INFO  - Computation of STDEV, SEL...
+2016-02-05 10:16:37 INFO  - File /home/calcul/Documents/Julien/test_bug_als/lai2200.txt was written.
+2016-02-05 10:16:37 INFO  - Simulation is finished.
+2016-02-05 10:16:46 INFO  - Computing directions...
+2016-02-05 10:16:46 INFO  - Nb shots ring 1 = 60
+2016-02-05 10:16:46 INFO  - Nb shots ring 2 = 86
+2016-02-05 10:16:46 INFO  - Nb shots ring 3 = 102
+2016-02-05 10:16:46 INFO  - Nb shots ring 4 = 117
+2016-02-05 10:16:46 INFO  - Nb shots ring 5 = 135
+2016-02-05 10:16:48 INFO  - ===== /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als_80m.vox =====
+2016-02-05 10:16:48 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-02-05 10:16:48 INFO  - allocate Voxels
+2016-02-05 10:16:48 INFO  - allocate MNT
+2016-02-05 10:16:49 INFO  - nb positions= 1
+2016-02-05 10:16:49 INFO  - Computation of transmittance
+2016-02-05 10:17:41 INFO  - Computation of AVGTRANS, ACFS, CNTCT#, GAPS, DIFN ...
+2016-02-05 10:17:41 INFO  - Computation of ACF...
+2016-02-05 10:17:41 INFO  - Computation of STDEV, SEL...
+2016-02-05 10:17:41 INFO  - File /home/calcul/Documents/Julien/test_bug_als/lai2200.txt was written.
+2016-02-05 10:17:41 INFO  - Simulation is finished.
+2016-02-05 10:17:45 INFO  - Computing directions...
+2016-02-05 10:17:45 INFO  - Nb shots ring 1 = 60
+2016-02-05 10:17:45 INFO  - Nb shots ring 2 = 86
+2016-02-05 10:17:45 INFO  - Nb shots ring 3 = 102
+2016-02-05 10:17:45 INFO  - Nb shots ring 4 = 117
+2016-02-05 10:17:45 INFO  - Nb shots ring 5 = 135
+2016-02-05 10:17:47 INFO  - ===== /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als_80m.vox =====
+2016-02-05 10:17:47 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-02-05 10:17:47 INFO  - allocate Voxels
+2016-02-05 10:17:47 INFO  - allocate MNT
+2016-02-05 10:17:49 INFO  - nb positions= 1
+2016-02-05 10:17:49 INFO  - Computation of transmittance
+2016-02-05 10:19:59 INFO  - Computing directions...
+2016-02-05 10:19:59 INFO  - Nb shots ring 1 = 60
+2016-02-05 10:19:59 INFO  - Nb shots ring 2 = 86
+2016-02-05 10:19:59 INFO  - Nb shots ring 3 = 102
+2016-02-05 10:19:59 INFO  - Nb shots ring 4 = 117
+2016-02-05 10:19:59 INFO  - Nb shots ring 5 = 135
+2016-02-05 10:20:02 INFO  - ===== /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als_80m.vox =====
+2016-02-05 10:20:02 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-02-05 10:20:02 INFO  - allocate Voxels
+2016-02-05 10:20:02 INFO  - allocate MNT
+2016-02-05 10:20:04 INFO  - nb positions= 1
+2016-02-05 10:20:04 INFO  - Computation of transmittance
+2016-02-05 10:22:13 INFO  - Computation of AVGTRANS, ACFS, CNTCT#, GAPS, DIFN ...
+2016-02-05 10:22:13 INFO  - Computation of ACF...
+2016-02-05 10:22:13 INFO  - Computation of STDEV, SEL...
+2016-02-05 10:22:13 INFO  - File /home/calcul/Documents/Julien/test_bug_als/lai2200.txt was written.
+2016-02-05 10:22:13 INFO  - Simulation is finished.
+2016-02-05 10:22:21 INFO  - Computing directions...
+2016-02-05 10:22:21 INFO  - Nb shots ring 1 = 60
+2016-02-05 10:22:21 INFO  - Nb shots ring 2 = 86
+2016-02-05 10:22:21 INFO  - Nb shots ring 3 = 102
+2016-02-05 10:22:21 INFO  - Nb shots ring 4 = 117
+2016-02-05 10:22:21 INFO  - Nb shots ring 5 = 135
+2016-02-05 10:22:23 INFO  - ===== /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als_80m.vox =====
+2016-02-05 10:22:23 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-02-05 10:22:23 INFO  - allocate Voxels
+2016-02-05 10:22:23 INFO  - allocate MNT
+2016-02-05 10:22:25 INFO  - nb positions= 1
+2016-02-05 10:22:25 INFO  - Computation of transmittance
+2016-02-05 10:22:39 INFO  - Computation of AVGTRANS, ACFS, CNTCT#, GAPS, DIFN ...
+2016-02-05 10:22:39 INFO  - Computation of ACF...
+2016-02-05 10:22:39 INFO  - Computation of STDEV, SEL...
+2016-02-05 10:22:39 INFO  - File /home/calcul/Documents/Julien/test_bug_als/lai2200.txt was written.
+2016-02-05 10:22:39 INFO  - Simulation is finished.
+2016-02-05 10:22:42 INFO  - Computing directions...
+2016-02-05 10:22:42 INFO  - Nb shots ring 1 = 60
+2016-02-05 10:22:42 INFO  - Nb shots ring 2 = 86
+2016-02-05 10:22:42 INFO  - Nb shots ring 3 = 102
+2016-02-05 10:22:42 INFO  - Nb shots ring 4 = 117
+2016-02-05 10:22:42 INFO  - Nb shots ring 5 = 135
+2016-02-05 10:22:44 INFO  - ===== /media/forestview01/partageLidar/PapierLidarLAI/Data/voxels/ALS/als_80m.vox =====
+2016-02-05 10:22:44 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.5
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling neighboursNumber passNumber transmittance
+
+2016-02-05 10:22:44 INFO  - allocate Voxels
+2016-02-05 10:22:44 INFO  - allocate MNT
+2016-02-05 10:22:45 INFO  - nb positions= 1
+2016-02-05 10:22:45 INFO  - Computation of transmittance
+2016-02-05 11:16:04 INFO  - Building transmittance functions table
+2016-02-05 11:16:04 INFO  - Transmittance functions table is built
+2016-02-05 11:16:04 INFO  - allocate!!!!!!!!
+2016-02-05 11:16:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 11:16:05 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 11:17:07 INFO  - Laz file is closed
+2016-02-05 11:17:38 INFO  - Shots processed: 1000000
+2016-02-05 11:17:39 INFO  - Shots processed: 2000000
+2016-02-05 11:17:41 INFO  - Shots processed: 3000000
+2016-02-05 11:17:44 INFO  - Shots processed: 4000000
+2016-02-05 11:17:46 INFO  - Shots processed: 5000000
+2016-02-05 11:17:48 INFO  - Shots processed: 6000000
+2016-02-05 11:17:50 INFO  - Shots processed: 7000000
+2016-02-05 11:17:52 INFO  - Shots processed: 8000000
+2016-02-05 11:17:54 INFO  - Shots processed: 9000000
+2016-02-05 11:17:57 INFO  - Shots processed: 10000000
+2016-02-05 11:17:59 INFO  - Shots processed: 11000000
+2016-02-05 11:18:01 INFO  - Shots processed: 12000000
+2016-02-05 11:18:02 INFO  - Shots processed: 12345659
+2016-02-05 11:18:02 INFO  - Maximum neighborhood range : 2
+2016-02-05 11:18:02 INFO  - Maximum neighborhood range : 3
+2016-02-05 11:18:02 INFO  - Maximum neighborhood range : 4
+2016-02-05 11:18:03 INFO  - Maximum neighborhood range : 5
+2016-02-05 11:18:03 INFO  - Maximum neighborhood range : 6
+2016-02-05 11:18:03 INFO  - Time : 1146 ms
+2016-02-05 11:18:03 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4.vox
+2016-02-05 11:18:04 INFO  - file written ( 1.0 s )
+2016-02-05 11:18:04 INFO  - las voxelisation finished in 143.0 s
+2016-02-05 11:26:27 INFO  - Building transmittance functions table
+2016-02-05 11:26:27 INFO  - Transmittance functions table is built
+2016-02-05 11:26:27 INFO  - allocate!!!!!!!!
+2016-02-05 11:26:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 11:26:27 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 11:27:34 INFO  - Laz file is closed
+2016-02-05 11:27:57 INFO  - Shots processed: 0
+2016-02-05 11:28:03 INFO  - Maximum neighborhood range : 81
+2016-02-05 12:23:13 INFO  - Building transmittance functions table
+2016-02-05 12:23:13 INFO  - Transmittance functions table is built
+2016-02-05 12:23:13 INFO  - allocate!!!!!!!!
+2016-02-05 12:23:13 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 12:23:13 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 12:24:20 INFO  - Laz file is closed
+2016-02-05 12:24:46 INFO  - Shots processed: 0
+2016-02-05 12:24:46 INFO  - Maximum neighborhood range : 81
+2016-02-05 13:43:11 INFO  - Building transmittance functions table
+2016-02-05 13:43:11 INFO  - Transmittance functions table is built
+2016-02-05 13:43:11 INFO  - allocate!!!!!!!!
+2016-02-05 13:43:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 13:43:12 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 13:44:30 INFO  - Laz file is closed
+2016-02-05 13:47:00 INFO  - Shots processed: 0
+2016-02-05 13:47:00 INFO  - Maximum neighborhood range : 81
+2016-02-05 13:47:57 INFO  - Building transmittance functions table
+2016-02-05 13:47:57 INFO  - Transmittance functions table is built
+2016-02-05 13:47:57 INFO  - allocate!!!!!!!!
+2016-02-05 13:47:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 13:47:57 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 13:49:02 INFO  - Laz file is closed
+2016-02-05 13:53:44 INFO  - Building transmittance functions table
+2016-02-05 13:53:44 INFO  - Transmittance functions table is built
+2016-02-05 13:53:44 INFO  - allocate!!!!!!!!
+2016-02-05 13:53:44 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 13:53:44 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 13:54:49 INFO  - Laz file is closed
+2016-02-05 13:55:19 INFO  - Shots processed: 1000000
+2016-02-05 13:55:21 INFO  - Shots processed: 2000000
+2016-02-05 13:55:23 INFO  - Shots processed: 3000000
+2016-02-05 13:55:26 INFO  - Shots processed: 4000000
+2016-02-05 13:55:28 INFO  - Shots processed: 5000000
+2016-02-05 13:55:30 INFO  - Shots processed: 6000000
+2016-02-05 13:55:32 INFO  - Shots processed: 7000000
+2016-02-05 13:55:34 INFO  - Shots processed: 8000000
+2016-02-05 13:55:36 INFO  - Shots processed: 9000000
+2016-02-05 13:55:38 INFO  - Shots processed: 10000000
+2016-02-05 13:55:40 INFO  - Shots processed: 11000000
+2016-02-05 13:55:42 INFO  - Shots processed: 12000000
+2016-02-05 13:55:43 INFO  - Shots processed: 12345659
+2016-02-05 13:55:43 INFO  - Maximum neighborhood range : 2
+2016-02-05 13:55:43 INFO  - Maximum neighborhood range : 3
+2016-02-05 13:55:43 INFO  - Maximum neighborhood range : 4
+2016-02-05 13:55:44 INFO  - Maximum neighborhood range : 5
+2016-02-05 13:55:45 INFO  - Maximum neighborhood range : 6
+2016-02-05 13:55:45 INFO  - Time : 1550 ms
+2016-02-05 13:55:45 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4.vox
+2016-02-05 13:55:46 INFO  - file written ( 1.0 s )
+2016-02-05 13:55:46 INFO  - las voxelisation finished in 144.0 s
+2016-02-05 13:56:48 INFO  - Building transmittance functions table
+2016-02-05 13:56:48 INFO  - Transmittance functions table is built
+2016-02-05 13:56:48 INFO  - allocate!!!!!!!!
+2016-02-05 13:56:48 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 13:56:48 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 13:57:49 INFO  - Laz file is closed
+2016-02-05 14:10:43 INFO  - Building transmittance functions table
+2016-02-05 14:10:43 INFO  - Transmittance functions table is built
+2016-02-05 14:10:43 INFO  - allocate!!!!!!!!
+2016-02-05 14:10:43 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 14:10:43 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 14:11:47 INFO  - Laz file is closed
+2016-02-05 14:12:18 INFO  - Shots processed: 1000000
+2016-02-05 14:12:20 INFO  - Shots processed: 2000000
+2016-02-05 14:43:13 INFO  - Building transmittance functions table
+2016-02-05 14:43:13 INFO  - Transmittance functions table is built
+2016-02-05 14:43:13 INFO  - allocate!!!!!!!!
+2016-02-05 14:43:13 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 14:43:14 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 14:45:40 INFO  - Building transmittance functions table
+2016-02-05 14:45:40 INFO  - Transmittance functions table is built
+2016-02-05 14:45:40 INFO  - allocate!!!!!!!!
+2016-02-05 14:45:40 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 14:45:40 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 14:47:56 INFO  - Laz file is closed
+2016-02-05 14:48:26 INFO  - Shots processed: 1000000
+2016-02-05 14:48:28 INFO  - Shots processed: 2000000
+2016-02-05 14:48:30 INFO  - Shots processed: 3000000
+2016-02-05 14:48:33 INFO  - Shots processed: 4000000
+2016-02-05 14:48:35 INFO  - Shots processed: 5000000
+2016-02-05 14:48:37 INFO  - Shots processed: 6000000
+2016-02-05 14:48:39 INFO  - Shots processed: 7000000
+2016-02-05 14:48:42 INFO  - Shots processed: 8000000
+2016-02-05 14:48:44 INFO  - Shots processed: 9000000
+2016-02-05 14:48:46 INFO  - Shots processed: 10000000
+2016-02-05 14:48:48 INFO  - Shots processed: 11000000
+2016-02-05 14:48:51 INFO  - Shots processed: 12000000
+2016-02-05 14:48:51 INFO  - Shots processed: 12345659
+2016-02-05 14:48:51 INFO  - Maximum neighborhood range : 2
+2016-02-05 14:48:52 INFO  - Maximum neighborhood range : 3
+2016-02-05 14:48:52 INFO  - Maximum neighborhood range : 4
+2016-02-05 14:48:52 INFO  - Maximum neighborhood range : 5
+2016-02-05 14:48:52 INFO  - Maximum neighborhood range : 6
+2016-02-05 14:48:52 INFO  - Time : 850 ms
+2016-02-05 14:48:52 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4.vox
+2016-02-05 14:48:54 INFO  - file written ( 1.0 s )
+2016-02-05 14:48:54 INFO  - las voxelisation finished in 216.0 s
+2016-02-05 14:52:26 INFO  - Building transmittance functions table
+2016-02-05 14:52:26 INFO  - Transmittance functions table is built
+2016-02-05 14:52:26 INFO  - allocate!!!!!!!!
+2016-02-05 14:52:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 14:52:26 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 14:54:43 INFO  - Building transmittance functions table
+2016-02-05 14:54:43 INFO  - Transmittance functions table is built
+2016-02-05 14:54:43 INFO  - allocate!!!!!!!!
+2016-02-05 14:54:43 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 14:54:44 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 14:57:30 INFO  - Building transmittance functions table
+2016-02-05 14:57:30 INFO  - Transmittance functions table is built
+2016-02-05 14:57:30 INFO  - allocate!!!!!!!!
+2016-02-05 14:57:30 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 14:57:30 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 14:59:53 INFO  - Building transmittance functions table
+2016-02-05 14:59:53 INFO  - Transmittance functions table is built
+2016-02-05 14:59:53 INFO  - allocate!!!!!!!!
+2016-02-05 14:59:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 14:59:54 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 15:02:20 INFO  - Laz file is closed
+2016-02-05 15:06:14 INFO  - Building transmittance functions table
+2016-02-05 15:06:14 INFO  - Transmittance functions table is built
+2016-02-05 15:06:14 INFO  - allocate!!!!!!!!
+2016-02-05 15:06:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 15:06:15 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 15:08:03 INFO  - Building transmittance functions table
+2016-02-05 15:08:03 INFO  - Transmittance functions table is built
+2016-02-05 15:08:03 INFO  - allocate!!!!!!!!
+2016-02-05 15:08:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 15:08:03 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 15:11:34 INFO  - Building transmittance functions table
+2016-02-05 15:11:34 INFO  - Transmittance functions table is built
+2016-02-05 15:11:34 INFO  - allocate!!!!!!!!
+2016-02-05 15:11:34 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 15:11:34 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 15:13:18 INFO  - Building transmittance functions table
+2016-02-05 15:13:18 INFO  - Transmittance functions table is built
+2016-02-05 15:13:18 INFO  - allocate!!!!!!!!
+2016-02-05 15:13:18 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 15:13:18 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 15:15:18 INFO  - Laz file is closed
+2016-02-05 15:15:48 INFO  - Shots processed: 1000000
+2016-02-05 15:15:50 INFO  - Shots processed: 2000000
+2016-02-05 15:15:52 INFO  - Shots processed: 3000000
+2016-02-05 15:15:54 INFO  - Shots processed: 4000000
+2016-02-05 15:15:56 INFO  - Shots processed: 5000000
+2016-02-05 15:15:59 INFO  - Shots processed: 6000000
+2016-02-05 15:16:01 INFO  - Shots processed: 7000000
+2016-02-05 15:16:04 INFO  - Shots processed: 8000000
+2016-02-05 15:16:05 INFO  - Shots processed: 9000000
+2016-02-05 15:16:08 INFO  - Shots processed: 10000000
+2016-02-05 15:16:10 INFO  - Shots processed: 11000000
+2016-02-05 15:16:12 INFO  - Shots processed: 12000000
+2016-02-05 15:16:13 INFO  - Shots processed: 12345659
+2016-02-05 15:16:13 INFO  - Maximum neighborhood range : 2
+2016-02-05 15:16:13 INFO  - Maximum neighborhood range : 3
+2016-02-05 15:16:13 INFO  - Maximum neighborhood range : 4
+2016-02-05 15:16:14 INFO  - Maximum neighborhood range : 5
+2016-02-05 15:16:14 INFO  - Maximum neighborhood range : 6
+2016-02-05 15:16:14 INFO  - Time : 1706 ms
+2016-02-05 15:16:14 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4.vox
+2016-02-05 15:16:16 INFO  - file written ( 1.0 s )
+2016-02-05 15:16:16 INFO  - las voxelisation finished in 203.0 s
+2016-02-05 15:20:31 INFO  - Building transmittance functions table
+2016-02-05 15:20:31 INFO  - Transmittance functions table is built
+2016-02-05 15:20:31 INFO  - allocate!!!!!!!!
+2016-02-05 15:20:31 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 15:20:31 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 15:23:19 INFO  - Building transmittance functions table
+2016-02-05 15:23:19 INFO  - Transmittance functions table is built
+2016-02-05 15:23:19 INFO  - allocate!!!!!!!!
+2016-02-05 15:23:19 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 15:23:19 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 15:28:04 INFO  - Building transmittance functions table
+2016-02-05 15:28:04 INFO  - Transmittance functions table is built
+2016-02-05 15:28:04 INFO  - allocate!!!!!!!!
+2016-02-05 15:28:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 15:28:04 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 15:32:49 INFO  - Building transmittance functions table
+2016-02-05 15:32:49 INFO  - Transmittance functions table is built
+2016-02-05 15:32:49 INFO  - allocate!!!!!!!!
+2016-02-05 15:32:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 15:32:49 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 15:34:39 INFO  - Building transmittance functions table
+2016-02-05 15:34:39 INFO  - Transmittance functions table is built
+2016-02-05 15:34:39 INFO  - allocate!!!!!!!!
+2016-02-05 15:34:39 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 15:34:39 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 15:36:30 INFO  - Laz file is closed
+2016-02-05 15:37:01 INFO  - Shots processed: 1000000
+2016-02-05 15:37:03 INFO  - Shots processed: 2000000
+2016-02-05 15:37:05 INFO  - Shots processed: 3000000
+2016-02-05 15:51:38 INFO  - Building transmittance functions table
+2016-02-05 15:51:38 INFO  - Transmittance functions table is built
+2016-02-05 15:51:38 INFO  - allocate!!!!!!!!
+2016-02-05 15:51:38 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 15:51:38 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 15:53:23 INFO  - Building transmittance functions table
+2016-02-05 15:53:23 INFO  - Transmittance functions table is built
+2016-02-05 15:53:23 INFO  - allocate!!!!!!!!
+2016-02-05 15:53:23 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 15:53:23 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 15:54:31 INFO  - Laz file is closed
+2016-02-05 15:55:08 INFO  - Shots processed: 1000000
+2016-02-05 15:55:10 INFO  - Shots processed: 2000000
+2016-02-05 15:55:12 INFO  - Shots processed: 3000000
+2016-02-05 15:55:14 INFO  - Shots processed: 4000000
+2016-02-05 15:55:16 INFO  - Shots processed: 5000000
+2016-02-05 15:55:19 INFO  - Shots processed: 6000000
+2016-02-05 15:55:21 INFO  - Shots processed: 7000000
+2016-02-05 15:55:23 INFO  - Building transmittance functions table
+2016-02-05 15:55:23 INFO  - Transmittance functions table is built
+2016-02-05 15:55:23 INFO  - allocate!!!!!!!!
+2016-02-05 15:55:23 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 15:55:23 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 15:55:23 INFO  - Shots processed: 8000000
+2016-02-05 15:55:25 INFO  - Shots processed: 9000000
+2016-02-05 15:55:27 INFO  - Shots processed: 10000000
+2016-02-05 15:55:30 INFO  - Shots processed: 11000000
+2016-02-05 15:55:32 INFO  - Shots processed: 12000000
+2016-02-05 15:55:33 INFO  - Shots processed: 12345659
+2016-02-05 15:55:33 INFO  - Maximum neighborhood range : 2
+2016-02-05 15:55:33 INFO  - Maximum neighborhood range : 3
+2016-02-05 15:55:33 INFO  - Maximum neighborhood range : 4
+2016-02-05 15:55:34 INFO  - Maximum neighborhood range : 5
+2016-02-05 15:55:34 INFO  - Maximum neighborhood range : 6
+2016-02-05 15:55:34 INFO  - Time : 1210 ms
+2016-02-05 15:55:34 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4.vox
+2016-02-05 15:55:35 INFO  - file written ( 1.0 s )
+2016-02-05 15:55:35 INFO  - las voxelisation finished in 156.0 s
+2016-02-05 17:01:16 INFO  - Building transmittance functions table
+2016-02-05 17:01:16 INFO  - Transmittance functions table is built
+2016-02-05 17:01:16 INFO  - allocate!!!!!!!!
+2016-02-05 17:01:16 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 17:01:16 ERROR - 
+java.lang.NullPointerException
+	at fr.amap.lidar.amapvox.voxelisation.als.LasVoxelisation.process(LasVoxelisation.java:117)
+	at fr.amap.lidar.amapvox.voxelisation.ProcessTool.voxeliseFromAls(ProcessTool.java:480)
+	at fr.amap.lidar.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4463)
+	at fr.amap.lidar.amapvox.gui.MainFrameController$54$1.call(MainFrameController.java:4353)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$492(Service.java:725)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$493(Service.java:724)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2016-02-05 17:03:45 INFO  - Building transmittance functions table
+2016-02-05 17:03:45 INFO  - Transmittance functions table is built
+2016-02-05 17:03:45 INFO  - allocate!!!!!!!!
+2016-02-05 17:03:45 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 17:03:45 INFO  - Laz file /media/forestview01/partageLidar/FTH2014_LAI2200/data/DonneesLidarVoxels/merged_40_41_48_49.laz is opened
+2016-02-05 17:04:48 INFO  - Laz file is closed
+2016-02-05 17:05:16 INFO  - Shots processed: 1000000
+2016-02-05 17:05:18 INFO  - Shots processed: 2000000
+2016-02-05 17:05:20 INFO  - Shots processed: 3000000
+2016-02-05 17:05:23 INFO  - Shots processed: 4000000
+2016-02-05 17:05:25 INFO  - Shots processed: 5000000
+2016-02-05 17:05:27 INFO  - Shots processed: 6000000
+2016-02-05 17:05:30 INFO  - Shots processed: 7000000
+2016-02-05 17:05:32 INFO  - Shots processed: 8000000
+2016-02-05 17:05:34 INFO  - Shots processed: 9000000
+2016-02-05 17:05:36 INFO  - Shots processed: 10000000
+2016-02-05 17:05:38 INFO  - Shots processed: 11000000
+2016-02-05 17:05:41 INFO  - Shots processed: 12000000
+2016-02-05 17:05:41 INFO  - Shots processed: 12345659
+2016-02-05 17:05:42 INFO  - Maximum neighborhood range : 2
+2016-02-05 17:05:42 INFO  - Maximum neighborhood range : 3
+2016-02-05 17:05:42 INFO  - Maximum neighborhood range : 4
+2016-02-05 17:05:43 INFO  - Maximum neighborhood range : 5
+2016-02-05 17:05:43 INFO  - Maximum neighborhood range : 6
+2016-02-05 17:05:43 INFO  - Time : 1525 ms
+2016-02-05 17:05:43 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4.vox
+2016-02-05 17:05:45 INFO  - file written ( 1.0 s )
+2016-02-05 17:05:45 INFO  - las voxelisation finished in 145.0 s
+2016-02-05 17:31:41 INFO  - Laz file /media/calcul/4823-5B15/paracou.laz is opened
+2016-02-05 17:31:44 INFO  - Laz file is closed
+2016-02-05 17:31:59 INFO  - Laz file /media/calcul/4823-5B15/paracou.laz is opened
+2016-02-05 17:32:01 INFO  - Laz file is closed
+2016-02-05 17:32:14 INFO  - Laz file /media/calcul/4823-5B15/paracou.laz is opened
+2016-02-05 17:32:16 INFO  - Laz file is closed
+2016-02-05 17:38:02 INFO  - Laz file /media/calcul/4823-5B15/paracou2.laz is opened
+2016-02-05 17:38:05 INFO  - Laz file is closed
+2016-02-05 17:38:21 INFO  - Laz file /media/calcul/4823-5B15/paracou2.laz is opened
+2016-02-05 17:38:23 INFO  - Laz file is closed
+2016-02-05 17:41:00 INFO  - Laz file /media/calcul/4823-5B15/paracou.laz is opened
+2016-02-05 17:41:03 INFO  - Laz file is closed
+2016-02-05 19:29:39 INFO  - Building transmittance functions table
+2016-02-05 19:29:39 INFO  - Transmittance functions table is built
+2016-02-05 19:29:39 INFO  - allocate!!!!!!!!
+2016-02-05 19:29:39 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 19:29:39 INFO  - Laz file /home/calcul/Documents/Julien/Sensitivity analysis/paracou.laz is opened
+2016-02-05 19:29:42 INFO  - Laz file is closed
+2016-02-05 19:29:53 INFO  - Shots processed: 625428
+2016-02-05 19:29:53 INFO  - Maximum neighborhood range : 2
+2016-02-05 19:29:53 INFO  - Maximum neighborhood range : 3
+2016-02-05 19:29:53 INFO  - Maximum neighborhood range : 4
+2016-02-05 19:29:54 INFO  - Maximum neighborhood range : 5
+2016-02-05 19:29:54 INFO  - Maximum neighborhood range : 6
+2016-02-05 19:29:54 INFO  - Time : 987 ms
+2016-02-05 19:29:54 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4.vox
+2016-02-05 19:29:55 INFO  - file written ( 1.0 s )
+2016-02-05 19:29:55 INFO  - las voxelisation finished in 27.0 s
+2016-02-05 19:30:38 INFO  - Building transmittance functions table
+2016-02-05 19:30:38 INFO  - Transmittance functions table is built
+2016-02-05 19:30:38 INFO  - allocate!!!!!!!!
+2016-02-05 19:30:38 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, 18.0)
+			Corner Sup	:	(75.0, 75.0, 65.0)
+			Dimensions	:	(80, 80, 47)
+			Toricity 	:	false
+
+2016-02-05 19:30:38 INFO  - Laz file /home/calcul/Documents/Julien/Sensitivity analysis/paracou.laz is opened
+2016-02-05 19:30:41 INFO  - Laz file is closed
+2016-02-05 19:31:09 INFO  - Shots processed: 625428
+2016-02-05 19:31:09 INFO  - Maximum neighborhood range : 2
+2016-02-05 19:31:09 INFO  - Maximum neighborhood range : 3
+2016-02-05 19:31:09 INFO  - Maximum neighborhood range : 4
+2016-02-05 19:31:10 INFO  - Maximum neighborhood range : 5
+2016-02-05 19:31:10 INFO  - Maximum neighborhood range : 6
+2016-02-05 19:31:10 INFO  - Time : 188 ms
+2016-02-05 19:31:10 INFO  - writing file: /home/calcul/Documents/Julien/test_paracou_2014/als_4.vox
+2016-02-05 19:31:11 INFO  - file written ( 1.0 s )
+2016-02-05 19:31:11 INFO  - las voxelisation finished in 45.0 s
+2016-02-05 19:53:44 WARN  - Old trajectory file element detected, keep default old read parameters.
+2016-02-05 19:54:08 WARN  - Old trajectory file element detected, keep default old read parameters.
+2016-02-05 19:55:39 WARN  - Old trajectory file element detected, keep default old read parameters.

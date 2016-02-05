@@ -41,14 +41,14 @@ import fr.amap.commons.util.SphericalCoordinates;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.commons.util.TimeCounter;
 import fr.amap.commons.util.image.ScaleGradient;
-import fr.amap.lidar.amapvox.datastructure.pointcloud.PointCloud;
+import fr.amap.commons.structure.pointcloud.PointCloud;
 import fr.amap.amapvox.io.tls.rsp.Rsp;
 import fr.amap.amapvox.io.tls.rsp.RxpScan;
 import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.lidar.amapvox.dart.DartPlotsXMLWriter;
-import fr.amap.commons.raster.asc.DtmLoader;
-import fr.amap.commons.raster.asc.RegularDtm;
+import fr.amap.commons.raster.asc.AsciiGridHelper;
+import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.math.geometry.BoundingBox2F;
 import fr.amap.commons.math.geometry.BoundingBox3F;
 import fr.amap.commons.math.vector.Vec4D;
@@ -68,7 +68,6 @@ import fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution;
 import static fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution.Type.TWO_PARAMETER_BETA;
 import static fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution.Type.ELLIPSOIDAL;
 import fr.amap.lidar.amapvox.voxelisation.ProcessTool;
-import fr.amap.lidar.amapvox.voxelisation.ProcessToolListener;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis.LaserSpecification;
 import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.Input;
@@ -78,8 +77,7 @@ import fr.amap.lidar.amapvox.voxelisation.configuration.PTXLidarScan;
 import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxMergingCfg;
-import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelParameters;
-import fr.amap.lidar.amapvox.voxelisation.multires.ProcessingMultiRes;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
 import fr.amap.lidar.amapvox.voxviewer.ToolBoxFrameController;
 import fr.amap.lidar.amapvox.voxviewer.Viewer3D;
@@ -99,6 +97,14 @@ import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import fr.amap.commons.javafx.EditableListViewController;
 import fr.amap.commons.javafx.io.TextFileParserFrameController;
 import fr.amap.commons.javafx.matrix.TransformationFrameController;
+import fr.amap.commons.util.ProcessingListener;
+import fr.amap.commons.util.io.file.CSVFile;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.RasterParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.DTMFilteringParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.LADParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.NaNsCorrectionParams;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -117,6 +123,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -270,6 +277,8 @@ public class MainFrameController implements Initializable {
     private File lastDCSaveTransmittanceBitmapFile;
     private File lastFCOpenHemiPhotoOutputBitmapFile;
     private File lastFCOpenHemiPhotoOutputTextFile;
+    
+    private CSVFile trajectoryFile;
 
     private FileChooser fileChooserOpenConfiguration;
     private FileChooserContext fileChooserSaveConfiguration;
@@ -2077,8 +2086,10 @@ public class MainFrameController implements Initializable {
 
         boolean correctNaNs = checkboxMultiResAfterMode2.isSelected();
 
-        voxelParameters.setCorrectNaNsMode2(correctNaNs);
-        voxelParameters.setCorrectNaNsNbSamplingThreshold(Float.valueOf(textfieldNbSamplingThresholdMultires.getText()));
+        if(correctNaNs){
+            voxelParameters.setNaNsCorrectionParams(new NaNsCorrectionParams(
+                    Float.valueOf(textfieldNbSamplingThresholdMultires.getText())));
+        }
 
         InputType it;
 
@@ -2099,54 +2110,60 @@ public class MainFrameController implements Initializable {
                 it = InputType.LAS_FILE;
         }
 
-        voxelParameters.setUseDTMCorrection(checkboxUseDTMFilter.isSelected());
+        voxelParameters.getDtmFilteringParams().setActivate(checkboxUseDTMFilter.isSelected());
         if(checkboxUseDTMFilter.isSelected()){
-            voxelParameters.minDTMDistance = Float.valueOf(textfieldDTMValue.getText());
-            voxelParameters.setDtmFile(new File(textfieldDTMPath.getText()));
+            voxelParameters.getDtmFilteringParams().setMinDTMDistance(Float.valueOf(textfieldDTMValue.getText()));
+            voxelParameters.getDtmFilteringParams().setDtmFile(new File(textfieldDTMPath.getText()));
         }
 
         voxelParameters.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
-        voxelParameters.setTransmittanceMode(0);
 
-        if(checkboxEnableWeighting.isSelected()){
-            voxelParameters.setWeighting(comboboxWeighting.getSelectionModel().getSelectedIndex() + 1);
-        }else{
-            voxelParameters.setWeighting(0);
+        EchoesWeightParams echoesWeightingParams = new EchoesWeightParams();
+        
+        if (checkboxEnableWeighting.isSelected()) {
+            echoesWeightingParams.setWeightingMode(comboboxWeighting.getSelectionModel().getSelectedIndex() + 1);
+            echoesWeightingParams.setWeightingData(EchoesWeightParams.DEFAULT_ALS_WEIGHTING);
+        } else {
+            echoesWeightingParams.setWeightingMode(EchoesWeightParams.WEIGHTING_NONE);
         }
+        
+        voxelParameters.setEchoesWeightParams(echoesWeightingParams);
 
-        voxelParameters.setWeightingData(VoxelParameters.DEFAULT_ALS_WEIGHTING);
-
-        voxelParameters.setCalculateGroundEnergy(checkboxCalculateGroundEnergy.isSelected());
+        GroundEnergyParams groundEnergyParameters = new GroundEnergyParams();
+        
+        groundEnergyParameters.setCalculateGroundEnergy(checkboxCalculateGroundEnergy.isSelected());
         String extension = "";
 
         if(checkboxCalculateGroundEnergy.isSelected()){
 
-                voxelParameters.setGroundEnergyFile(new File(textFieldOutputFileGroundEnergy.getText()));
+                groundEnergyParameters.setGroundEnergyFile(new File(textFieldOutputFileGroundEnergy.getText()));
 
                 switch (comboboxGroundEnergyOutputFormat.getSelectionModel().getSelectedIndex()) {
-                case 0:
-                    voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_TXT);
-                    extension = ".txt";
-                    break;
-                case 1:
-                    voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_PNG);
-                    extension = ".png";
-                    break;
-                default:
-                    voxelParameters.setGroundEnergyFileFormat(VoxelParameters.FILE_FORMAT_TXT);
-                    extension = ".png";
+                    case 1:
+                        groundEnergyParameters.setGroundEnergyFileFormat(GroundEnergyParams.FILE_FORMAT_PNG);
+                        extension = ".png";
+                        break;
+                    case 0:
+                    default:
+                        groundEnergyParameters.setGroundEnergyFileFormat(GroundEnergyParams.FILE_FORMAT_TXT);
+                        extension = ".png";
             }
         }
-
-        voxelParameters.setGenerateMultiBandRaster(checkboxGenerateMultiBandRaster.isSelected());
+        
+        voxelParameters.setGroundEnergyParams(groundEnergyParameters);
 
         if(checkboxGenerateMultiBandRaster.isSelected()){
-
-            voxelParameters.setRasterStartingHeight(Float.valueOf(textfieldRasterStartingHeight.getText()));
-            voxelParameters.setRasterHeightStep(Float.valueOf(textfieldRasterHeightStep.getText()));
-            voxelParameters.setShortcutVoxelFileWriting(checkboxDiscardVoxelFileWriting.isSelected());
-            voxelParameters.setRasterResolution(Integer.valueOf(textfieldRasterResolution.getText()));
-            voxelParameters.setRasterBandNumber(Integer.valueOf(textfieldRasterBandNumber.getText()));
+            
+            RasterParams rasterParameters = new RasterParams();
+            
+            rasterParameters.setGenerateMultiBandRaster(checkboxGenerateMultiBandRaster.isSelected());
+            rasterParameters.setRasterStartingHeight(Float.valueOf(textfieldRasterStartingHeight.getText()));
+            rasterParameters.setRasterHeightStep(Float.valueOf(textfieldRasterHeightStep.getText()));
+            rasterParameters.setShortcutVoxelFileWriting(checkboxDiscardVoxelFileWriting.isSelected());
+            rasterParameters.setRasterResolution(Integer.valueOf(textfieldRasterResolution.getText()));
+            rasterParameters.setRasterBandNumber(Integer.valueOf(textfieldRasterBandNumber.getText()));
+            
+            voxelParameters.setRasterParams(rasterParameters);
         }
 
         VoxCfg cfg = null;
@@ -2154,7 +2171,18 @@ public class MainFrameController implements Initializable {
         if(!checkboxMultiFiles.isSelected()){
 
             cfg = new ALSVoxCfg();
-            ((ALSVoxCfg)cfg).setTrajectoryFile(new File(textFieldTrajectoryFileALS.getText()));
+            
+            CSVFile trajFile = new CSVFile(textFieldTrajectoryFileALS.getText());
+            if(trajectoryFile != null){
+                trajFile.setColumnAssignment(trajectoryFile.getColumnAssignment());
+                trajFile.setColumnSeparator(trajectoryFile.getColumnSeparator());
+                trajFile.setHasHeader(trajectoryFile.isHasHeader());
+                trajFile.setHeaderIndex(trajectoryFile.getHeaderIndex());
+                trajFile.setNbOfLinesToRead(trajectoryFile.getNbOfLinesToRead());
+                trajFile.setNbOfLinesToSkip(trajectoryFile.getNbOfLinesToSkip());
+            }
+            
+            ((ALSVoxCfg)cfg).setTrajectoryFile(trajFile);
             cfg.setVoxelParameters(voxelParameters);
             cfg.setInputType(it);
             cfg.setInputFile(new File(textFieldInputFileALS.getText()));
@@ -2215,13 +2243,13 @@ public class MainFrameController implements Initializable {
                 int size = selectedFiles.size();
                 int count = 1;
 
-                RegularDtm dtm = null;
+                Raster dtm = null;
 
                 if(generateRasters){
 
-                    logger.info("Loading DTM file "+voxelParameters.getDtmFile().getAbsolutePath());
+                    logger.info("Loading DTM file "+voxelParameters.getDtmFilteringParams().getDtmFile().getAbsolutePath());
                     try {
-                        dtm = DtmLoader.readFromAscFile(voxelParameters.getDtmFile());
+                        dtm = AsciiGridHelper.readFromAscFile(voxelParameters.getDtmFilteringParams().getDtmFile());
                         dtm.setTransformationMatrix(MatrixUtility.convertMatrix4dToMat4D(vopMatrix));
                     } catch (Exception ex) {
                         logger.error("Cannot read dtm file", ex);
@@ -2248,14 +2276,17 @@ public class MainFrameController implements Initializable {
                     individualVoxelParameters.setSplit(new Point3i(splitX, splitY, splitZ));
                     individualVoxelParameters.setResolution(resolution);
 
-                    individualVoxelParameters.setCalculateGroundEnergy(checkboxCalculateGroundEnergy.isSelected());
-                    if(voxelParameters.isCalculateGroundEnergy()){
-                        individualVoxelParameters.setGroundEnergyFile(new File(outputPathFile.getAbsolutePath() + "/" + file.getName() + extension));
+                    GroundEnergyParams groundEnergyParams = new GroundEnergyParams();
+                    
+                    groundEnergyParams.setCalculateGroundEnergy(checkboxCalculateGroundEnergy.isSelected());
+                    
+                    if(groundEnergyParams.isCalculateGroundEnergy()){
+                        groundEnergyParams.setGroundEnergyFile(new File(outputPathFile.getAbsolutePath() + "/" + file.getName() + extension));
                     }
+                    
+                    individualVoxelParameters.setGroundEnergyParams(groundEnergyParams);
 
                     List<Input> subList = null;
-
-
 
                     File dtmFile = null;
 
@@ -2263,13 +2294,13 @@ public class MainFrameController implements Initializable {
 
                         logger.info("Generate DTM raster of file "+count+"/"+size);
 
-                        RegularDtm dtmSubset = dtm.subset(new BoundingBox2F(
+                        Raster dtmSubset = dtm.subset(new BoundingBox2F(
                                 new Point2F((float)individualVoxelParameters.getBottomCorner().x, (float)individualVoxelParameters.getBottomCorner().y), 
                                 new Point2F((float)individualVoxelParameters.getTopCorner().x, (float)individualVoxelParameters.getTopCorner().y)), 0);
 
                         dtmFile = new File(outputPathFile.getAbsolutePath() + File.separator + file.getName() +".asc");
                         try {
-                            dtmSubset.write(dtmFile);
+                            AsciiGridHelper.write(dtmFile, dtmSubset);
                         } catch (IOException ex) {
                             logger.error("Cannot write dtm file", ex);
                         }
@@ -2284,7 +2315,7 @@ public class MainFrameController implements Initializable {
                 cfg = new MultiVoxCfg();
 
                 ((MultiVoxCfg)cfg).setMultiProcessInputs(inputList);
-                ((MultiVoxCfg)cfg).setTrajectoryFile(new File(textFieldTrajectoryFileALS.getText()));
+                ((MultiVoxCfg)cfg).setTrajectoryFile(new CSVFile(textFieldTrajectoryFileALS.getText()));
             }
 
             removeWarnings = false;
@@ -2305,7 +2336,7 @@ public class MainFrameController implements Initializable {
             cfg.setVoxelParameters(voxelParameters);
 
             ((ALSVoxCfg)cfg).setClassifiedPointsToDiscard(getListOfClassificationPointToDiscard());
-            cfg.setFilters(listviewFilters.getItems());
+            cfg.setShotFilters(listviewFilters.getItems());
 
             try {
                 cfg.writeConfiguration(selectedFile);
@@ -2418,12 +2449,16 @@ public class MainFrameController implements Initializable {
         voxelParameters.setMergingAfter(checkboxMergeAfter.isSelected());
         voxelParameters.setMergedFile(new File(textFieldOutputPathTLS.getText(), textFieldMergedFileName.getText()));
 
+        EchoesWeightParams echoesWeightingParameters = new EchoesWeightParams();
+        
         if (checkboxEnableWeighting.isSelected()) {
-            voxelParameters.setWeighting(comboboxWeighting.getSelectionModel().getSelectedIndex() + 1);
-            voxelParameters.setWeightingData(VoxelParameters.DEFAULT_TLS_WEIGHTING);
+            echoesWeightingParameters.setWeightingMode(comboboxWeighting.getSelectionModel().getSelectedIndex() + 1);
+            echoesWeightingParameters.setWeightingData(EchoesWeightParams.DEFAULT_TLS_WEIGHTING);
         } else {
-            voxelParameters.setWeighting(0);
+            echoesWeightingParameters.setWeightingMode(EchoesWeightParams.WEIGHTING_NONE);
         }
+        
+        voxelParameters.setEchoesWeightParams(echoesWeightingParameters);
 
         InputType it;
 
@@ -2475,7 +2510,7 @@ public class MainFrameController implements Initializable {
 
         cfg.setVoxelParameters(voxelParameters);
 
-        cfg.setFilters(listviewFilters.getItems());
+        cfg.setShotFilters(listviewFilters.getItems());
 
         if (it == InputType.RSP_PROJECT || it == InputType.PTG_PROJECT || it == InputType.PTX_PROJECT) {
             cfg.setLidarScans(listviewRxpScans.getItems());
@@ -2716,7 +2751,7 @@ public class MainFrameController implements Initializable {
                         Classification.CREATED_NEVER_CLASSIFIED.getDescription()),
                 createSelectedCheckbox(Classification.UNCLASSIFIED.getValue()+" - "+
                         Classification.UNCLASSIFIED.getDescription()),
-                createSelectedCheckbox(Classification.GROUND.getValue()+" - "+
+                new CheckBox(Classification.GROUND.getValue()+" - "+ //by default unselected, ground point will be removed
                         Classification.GROUND.getDescription()),
                 createSelectedCheckbox(Classification.LOW_VEGETATION.getValue()+" - "+
                         Classification.LOW_VEGETATION.getDescription()),
@@ -3245,7 +3280,7 @@ public class MainFrameController implements Initializable {
                                 SceneObject root = sceneObjects.get(0).getSceneObject();
                                 TrackballCamera trackballCamera = new TrackballCamera();
                                 trackballCamera.setPivot(root);
-                                trackballCamera.setLocation(new Vec3F(root.getPosition().x +50, root.getPosition().y, root.getPosition().z+50));
+                                trackballCamera.setLocation(new Vec3F(root.getGravityCenter().x +50, root.getGravityCenter().y, root.getGravityCenter().z+50));
                                 viewer3D.getScene().setCamera(trackballCamera);
                                 
                                 viewer3D.show();                               
@@ -3333,7 +3368,7 @@ public class MainFrameController implements Initializable {
                                     updateMessage("Loading DTM");
                                     updateProgress(0, 100);
 
-                                    RegularDtm dtm = DtmLoader.readFromAscFile(dtmFile);
+                                    Raster dtm = AsciiGridHelper.readFromAscFile(dtmFile);
 
                                     if (transform && dtmTransfMatrix != null) {
                                         dtm.setTransformationMatrix(dtmTransfMatrix);
@@ -3407,14 +3442,14 @@ public class MainFrameController implements Initializable {
                                 /**
                                  * *light**
                                  */
-                                scene.setLightPosition(new Point3F(voxelSpace.getPosition().x, voxelSpace.getPosition().y, voxelSpace.getPosition().z + voxelSpace.widthZ + 100));
+                                scene.setLightPosition(new Point3F(voxelSpace.getGravityCenter().x, voxelSpace.getGravityCenter().y, voxelSpace.getGravityCenter().z + voxelSpace.widthZ + 100));
 
                                 /**
                                  * *camera**
                                  */
                                 TrackballCamera trackballCamera = new TrackballCamera();
                                 trackballCamera.setPivot(voxelSpace);
-                                trackballCamera.setLocation(new Vec3F(voxelSpace.getPosition().x + voxelSpace.widthX, voxelSpace.getPosition().y + voxelSpace.widthY, voxelSpace.getPosition().z + voxelSpace.widthZ));
+                                trackballCamera.setLocation(new Vec3F(voxelSpace.getGravityCenter().x + voxelSpace.widthX, voxelSpace.getGravityCenter().y + voxelSpace.widthY, voxelSpace.getGravityCenter().z + voxelSpace.widthZ));
                                 viewer3D.getScene().setCamera(trackballCamera);
 
                                 Platform.runLater(new Runnable() {
@@ -3633,10 +3668,46 @@ public class MainFrameController implements Initializable {
             }
         }
 
-        File selectedFile = fileChooserOpenTrajectoryFileALS.showOpenDialog(stage);
+        final File selectedFile = fileChooserOpenTrajectoryFileALS.showOpenDialog(stage);
+        
         if (selectedFile != null) {
+            
             lastFCOpenTrajectoryFileALS = selectedFile;
-            textFieldTrajectoryFileALS.setText(selectedFile.getAbsolutePath());
+            
+            textFileParserFrameController.setColumnAssignment(true);
+            textFileParserFrameController.setColumnAssignmentValues("Ignore", "Easting", "Northing", "Elevation", "Time");
+
+            textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(0, 1);
+            textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(1, 2);
+            textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(2, 3);
+            textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(3, 4);
+
+            try{
+                textFileParserFrameController.setTextFile(selectedFile);
+            }catch(IOException ex){
+                showErrorDialog(ex);
+                return;
+            }
+
+            Stage textFileParserFrame = textFileParserFrameController.getStage();
+            textFileParserFrame.show();
+            
+            textFileParserFrame.setOnHidden(new EventHandler<WindowEvent>() {
+                
+                @Override
+                public void handle(WindowEvent event) {
+                    
+                    trajectoryFile = new CSVFile(selectedFile.getAbsolutePath());
+                    trajectoryFile.setColumnSeparator(textFileParserFrameController.getSeparator());
+                    trajectoryFile.setColumnAssignment(textFileParserFrameController.getAssignedColumnsItemsMap());
+                    trajectoryFile.setNbOfLinesToRead(textFileParserFrameController.getNumberOfLines());
+                    trajectoryFile.setNbOfLinesToSkip(textFileParserFrameController.getSkipLinesNumber());
+                    trajectoryFile.setHasHeader(textFileParserFrameController.getHeaderIndex() != -1);
+                    trajectoryFile.setHeaderIndex(textFileParserFrameController.getHeaderIndex());
+                    
+                    textFieldTrajectoryFileALS.setText(selectedFile.getAbsolutePath());
+                }
+            });
         }
     }
 
@@ -4319,6 +4390,7 @@ public class MainFrameController implements Initializable {
             final Service<Void> service;
             
             final ProcessTool voxTool = new ProcessTool();
+            voxTool.setProgressionStep(10);
             voxTool.setCoresNumber((int) sliderRSPCoresToUse.getValue());
             
             final long start_time = System.currentTimeMillis();
@@ -4415,22 +4487,23 @@ public class MainFrameController implements Initializable {
                                         final ALSVoxCfg aLSVoxCfg = new ALSVoxCfg();
                                         aLSVoxCfg.readConfiguration(file);
                                         
-                                        voxTool.addProcessToolListener(new ProcessToolListener() {
+                                        voxTool.addProcessingListener(new ProcessingListener() {
 
                                             @Override
-                                            public void processProgress(String progress, int ratio) {
+                                            public void processingStepProgress(String progressMsg, long progress, long max) {
                                                 Platform.runLater(new Runnable() {
 
                                                     @Override
                                                     public void run() {
 
-                                                        updateMessage(msgTask + "\n" + progress);
+                                                        updateMessage(msgTask + "\n" + progressMsg);
+                                                        updateProgress(progress, max);
                                                     }
                                                 });
                                             }
 
                                             @Override
-                                            public void processFinished(float duration) {
+                                            public void processingFinished(float duration) {
 
                                                 logger.info("las voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
                                             }
@@ -4469,22 +4542,22 @@ public class MainFrameController implements Initializable {
                                     try {
                                         tLSVoxCfg.readConfiguration(file);
                                         
-                                        voxTool.addProcessToolListener(new ProcessToolListener() {
+                                        voxTool.addProcessingListener(new ProcessingListener() {
 
                                             @Override
-                                            public void processProgress(String progress, int ratio) {
+                                            public void processingStepProgress(String progressMsg, long progress, long max) {
                                                 Platform.runLater(new Runnable() {
 
                                                     @Override
                                                     public void run() {
 
-                                                        updateMessage(msgTask + "\n" + progress);
+                                                        updateMessage(msgTask + "\n" + progressMsg);
                                                     }
                                                 });
                                             }
 
                                             @Override
-                                            public void processFinished(float duration) {
+                                            public void processingFinished(float duration) {
 
                                                 logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
                                             }
@@ -4499,22 +4572,22 @@ public class MainFrameController implements Initializable {
 
                                                     if (tLSVoxCfg.getVoxelParameters().isMergingAfter()) {
 
-                                                        voxTool.addProcessToolListener(new ProcessToolListener() {
+                                                        voxTool.addProcessingListener(new ProcessingListener() {
 
                                                             @Override
-                                                            public void processProgress(String progress, int ratio) {
+                                                            public void processingStepProgress(String progressMsg, long progress, long max) {
                                                                 Platform.runLater(new Runnable() {
 
                                                                     @Override
                                                                     public void run() {
 
-                                                                        updateMessage(msgTask + "\n" + progress);
+                                                                        updateMessage(msgTask + "\n" + progressMsg);
                                                                     }
                                                                 });
                                                             }
 
                                                             @Override
-                                                            public void processFinished(float duration) {
+                                                            public void processingFinished(float duration) {
 
                                                                 logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
                                                             }
@@ -4523,7 +4596,7 @@ public class MainFrameController implements Initializable {
                                                         VoxMergingCfg mergingCfg = new VoxMergingCfg(tLSVoxCfg.getVoxelParameters().getMergedFile(), tLSVoxCfg.getVoxelParameters(), outputFiles);
 
                                                         //if(!voxTool.isCancelled()){
-                                                        voxTool.mergeVoxelFiles(mergingCfg/*outputFiles, tLSVoxCfg.getVoxelParameters().getMergedFile(), tLSVoxCfg.getVoxelParameters().getTransmittanceMode(), tLSVoxCfg.getVoxelParameters().getMaxPAD()*/);
+                                                        voxTool.mergeVoxelFiles(mergingCfg);
                                                         //}
 
                                                     }
@@ -4571,22 +4644,22 @@ public class MainFrameController implements Initializable {
 
                                                 if (tLSVoxCfg.getVoxelParameters().isMergingAfter()) {
 
-                                                    voxTool.addProcessToolListener(new ProcessToolListener() {
+                                                    voxTool.addProcessingListener(new ProcessingListener() {
 
-                                                        @Override
-                                                        public void processProgress(String progress, int ratio) {
-                                                            Platform.runLater(new Runnable() {
+                                                            @Override
+                                                            public void processingStepProgress(String progressMsg, long progress, long max) {
+                                                                Platform.runLater(new Runnable() {
 
                                                                 @Override
                                                                 public void run() {
 
-                                                                    updateMessage(msgTask + "\n" + progress);
+                                                                    updateMessage(msgTask + "\n" + progressMsg);
                                                                 }
                                                             });
                                                         }
 
                                                         @Override
-                                                        public void processFinished(float duration) {
+                                                        public void processingFinished(float duration) {
 
                                                             logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
                                                         }
@@ -4595,7 +4668,7 @@ public class MainFrameController implements Initializable {
                                                     VoxMergingCfg mergingCfg = new VoxMergingCfg(tLSVoxCfg.getVoxelParameters().getMergedFile(), tLSVoxCfg.getVoxelParameters(), outputFiles);
 
                                                     //if(!voxTool.isCancelled()){
-                                                    voxTool.mergeVoxelFiles(mergingCfg/*outputFiles, tLSVoxCfg.getVoxelParameters().getMergedFile(), tLSVoxCfg.getVoxelParameters().getTransmittanceMode(), tLSVoxCfg.getVoxelParameters().getMaxPAD()*/);
+                                                    voxTool.mergeVoxelFiles(mergingCfg);
                                                     //}
 
                                                 }
@@ -4623,22 +4696,22 @@ public class MainFrameController implements Initializable {
 
                                                 if (tLSVoxCfg.getVoxelParameters().isMergingAfter()) {
 
-                                                    voxTool.addProcessToolListener(new ProcessToolListener() {
+                                                    voxTool.addProcessingListener(new ProcessingListener() {
 
                                                         @Override
-                                                        public void processProgress(String progress, int ratio) {
+                                                        public void processingStepProgress(String progressMsg, long progress, long max) {
                                                             Platform.runLater(new Runnable() {
 
                                                                 @Override
                                                                 public void run() {
 
-                                                                    updateMessage(msgTask + "\n" + progress);
+                                                                    updateMessage(msgTask + "\n" + progressMsg);
                                                                 }
                                                             });
                                                         }
 
                                                         @Override
-                                                        public void processFinished(float duration) {
+                                                        public void processingFinished(float duration) {
 
                                                             logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
                                                         }
@@ -4647,7 +4720,7 @@ public class MainFrameController implements Initializable {
                                                     VoxMergingCfg mergingCfg = new VoxMergingCfg(tLSVoxCfg.getVoxelParameters().getMergedFile(), tLSVoxCfg.getVoxelParameters(), outputFiles2);
 
                                                     //if(!voxTool.isCancelled()){
-                                                    voxTool.mergeVoxelFiles(mergingCfg/*outputFiles, tLSVoxCfg.getVoxelParameters().getMergedFile(), tLSVoxCfg.getVoxelParameters().getTransmittanceMode(), tLSVoxCfg.getVoxelParameters().getMaxPAD()*/);
+                                                    voxTool.mergeVoxelFiles(mergingCfg);
                                                     //}
 
                                                 }
@@ -4675,60 +4748,29 @@ public class MainFrameController implements Initializable {
 
                                     break;
 
-                                case "multi-resolutions":
-
-                                    final MultiResCfg multiResCfg = new MultiResCfg();
-                                    
-                                    try {
-                                        multiResCfg.readConfiguration(file);
-                                        
-                                        ProcessingMultiRes process = new ProcessingMultiRes(multiResCfg.getMultiResPadMax(), multiResCfg.isMultiResUseDefaultMaxPad());
-
-                                        process.process(multiResCfg.getFiles());
-                                        process.write(multiResCfg.getOutputFile());
-
-                                        Platform.runLater(new Runnable() {
-
-                                            @Override
-                                            public void run() {
-
-                                                addFileToProductsList(multiResCfg.getOutputFile());
-                                            }
-                                        });
-                                    
-                                    } catch (JDOMException ex) {
-                                        logger.error("Cannot parse configuration file", ex);
-                                    } catch (IOException ex) {
-                                        logger.error("Cannot read configuration file", ex);
-                                    }
-
-                                    
-
-                                    break;
-
                                 case "multi-voxelisation":
 
                                     MultiVoxCfg multiVoxCfg = new MultiVoxCfg();
                                     try {
                                         multiVoxCfg.readConfiguration(file);
                                         
-                                        voxTool.addProcessToolListener(new ProcessToolListener() {
+                                        voxTool.addProcessingListener(new ProcessingListener() {
 
                                             @Override
-                                            public void processProgress(String progress, int ratio) {
+                                            public void processingStepProgress(String progressMsg, long progress, long max) {
                                                 Platform.runLater(new Runnable() {
 
                                                     @Override
                                                     public void run() {
 
-                                                        updateMessage(msgTask + "\n" + progress);
+                                                        updateMessage(msgTask + "\n" + progressMsg);
                                                     }
                                                 });
 
                                             }
 
                                             @Override
-                                            public void processFinished(float duration) {
+                                            public void processingFinished(float duration) {
 
                                                 logger.info("las voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
                                             }
@@ -4846,11 +4888,15 @@ public class MainFrameController implements Initializable {
 
         voxelParameters.setResolution(Double.valueOf(textFieldResolution.getText()));
 
-        voxelParameters.setUseDTMCorrection(checkboxUseDTMFilter.isSelected());
+        DTMFilteringParams dtmFilteringParams = new DTMFilteringParams();
+        
+        dtmFilteringParams.setActivate(checkboxUseDTMFilter.isSelected());
         if (checkboxUseDTMFilter.isSelected()) {
-            voxelParameters.minDTMDistance = Float.valueOf(textfieldDTMValue.getText());
-            voxelParameters.setDtmFile(new File(textfieldDTMPath.getText()));
+            dtmFilteringParams.setMinDTMDistance(Float.valueOf(textfieldDTMValue.getText()));
+            dtmFilteringParams.setDtmFile(new File(textfieldDTMPath.getText()));
         }
+        
+        voxelParameters.setDtmFilteringParams(dtmFilteringParams);
 
         voxelParameters.setUsePointCloudFilter(checkboxUsePointcloudFilter.isSelected());
         if (checkboxUsePointcloudFilter.isSelected()) {
@@ -4879,28 +4925,32 @@ public class MainFrameController implements Initializable {
             //voxelParameters.setPointcloudFile(new File(textfieldPointCloudPath.getText()));
         }
         
-        voxelParameters.setLadType(comboboxLADChoice.getSelectionModel().getSelectedItem());
         voxelParameters.setLaserSpecification(comboboxLaserSpecification.getSelectionModel().getSelectedItem());
+        
+        LADParams ladParameters = new LADParams();
+        
+        ladParameters.setLadType(comboboxLADChoice.getSelectionModel().getSelectedItem());
             
         if(radiobuttonLADHomogeneous.isSelected()){
-            voxelParameters.setLadEstimationMode(0);
+            ladParameters.setLadEstimationMode(0);
         }else{
-            voxelParameters.setLadEstimationMode(1);
+            ladParameters.setLadEstimationMode(1);
         }
         
         if(comboboxLADChoice.getSelectionModel().getSelectedItem() == TWO_PARAMETER_BETA){
             try{
-                voxelParameters.setLadBetaFunctionAlphaParameter(Float.valueOf(textFieldTwoBetaAlphaParameter.getText()));
-                voxelParameters.setLadBetaFunctionBetaParameter(Float.valueOf(textFieldTwoBetaBetaParameter.getText()));
+                ladParameters.setLadBetaFunctionAlphaParameter(Float.valueOf(textFieldTwoBetaAlphaParameter.getText()));
+                ladParameters.setLadBetaFunctionBetaParameter(Float.valueOf(textFieldTwoBetaBetaParameter.getText()));
             }catch(Exception ex){
                 Exception e = new Exception("Two-parameter beta function selected but alpha and beta parameters are not valid", ex);
                 logger.error(e.getMessage(), e);
                 showErrorDialog(e);
             }
         }
+        
+        voxelParameters.setLadParams(ladParameters);
 
         voxelParameters.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
-        voxelParameters.setTransmittanceMode(0);
 
         return voxelParameters;
     }
@@ -5093,15 +5143,25 @@ public class MainFrameController implements Initializable {
                     //VoxelisationConfiguration cfg = new VoxelisationConfiguration();
                                 
                     VoxelParameters voxelParameters = ((VoxCfg)cfg).getVoxelParameters();
-                    checkboxGenerateMultiBandRaster.setSelected(voxelParameters.isGenerateMultiBandRaster());
-
-                    if (voxelParameters.isGenerateMultiBandRaster()) {
-
-                        textfieldRasterStartingHeight.setText(String.valueOf(voxelParameters.getRasterStartingHeight()));
-                        textfieldRasterHeightStep.setText(String.valueOf(voxelParameters.getRasterHeightStep()));
-                        textfieldRasterBandNumber.setText(String.valueOf(voxelParameters.getRasterBandNumber()));
-                        textfieldRasterResolution.setText(String.valueOf(voxelParameters.getRasterResolution()));
-                        checkboxDiscardVoxelFileWriting.setSelected(voxelParameters.isShortcutVoxelFileWriting());
+                    
+                    RasterParams rasterParameters = voxelParameters.getRasterParams();
+                    
+                    if(rasterParameters != null){
+                        
+                        if(rasterParameters.isGenerateMultiBandRaster()){
+                            
+                            checkboxGenerateMultiBandRaster.setSelected(true);
+                            
+                            textfieldRasterStartingHeight.setText(String.valueOf(rasterParameters.getRasterStartingHeight()));
+                            textfieldRasterHeightStep.setText(String.valueOf(rasterParameters.getRasterHeightStep()));
+                            textfieldRasterBandNumber.setText(String.valueOf(rasterParameters.getRasterBandNumber()));
+                            textfieldRasterResolution.setText(String.valueOf(rasterParameters.getRasterResolution()));
+                            checkboxDiscardVoxelFileWriting.setSelected(rasterParameters.isShortcutVoxelFileWriting());
+                        
+                        }
+                        
+                    }else{
+                        checkboxGenerateMultiBandRaster.setSelected(false);
                     }
                     
                     LaserSpecification laserSpecification = voxelParameters.getLaserSpecification();
@@ -5111,12 +5171,19 @@ public class MainFrameController implements Initializable {
 
                     textFieldResolution.setText(String.valueOf(voxelParameters.resolution));
 
-                    checkboxUseDTMFilter.setSelected(voxelParameters.useDTMCorrection());
-                    File tmpFile = voxelParameters.getDtmFile();
+                    DTMFilteringParams dtmFilteringParams = voxelParameters.getDtmFilteringParams();
+                    if(dtmFilteringParams == null){
+                        dtmFilteringParams = new DTMFilteringParams();
+                    }
+                    
+                    checkboxUseDTMFilter.setSelected(dtmFilteringParams.useDTMCorrection());
+                    File tmpFile = dtmFilteringParams.getDtmFile();
                     if (tmpFile != null) {
                         textfieldDTMPath.setText(tmpFile.getAbsolutePath());
-                        textfieldDTMValue.setText(String.valueOf(voxelParameters.minDTMDistance));
+                        textfieldDTMValue.setText(String.valueOf(dtmFilteringParams.getMinDTMDistance()));
                     }
+                    
+                    
 
                     checkboxUsePointcloudFilter.setSelected(voxelParameters.isUsePointCloudFilter());
                     List<PointcloudFilter> pointcloudFilters = voxelParameters.getPointcloudFilters();
@@ -5178,28 +5245,34 @@ public class MainFrameController implements Initializable {
 
                     updateResultMatrix();
 
-                    List<Filter> filters = ((VoxCfg)cfg).getFilters();
+                    List<Filter> filters = ((VoxCfg)cfg).getShotFilters();
                     if (filters != null) {
                         listviewFilters.getItems().clear();
                         listviewFilters.getItems().addAll(filters);
                     }
 
-                    if (((VoxCfg)cfg).getVoxelParameters().getWeighting() == 0) {
+                    if (((VoxCfg)cfg).getVoxelParameters().getEchoesWeightParams().getWeightingMode() == EchoesWeightParams.WEIGHTING_NONE) {
                         checkboxEnableWeighting.setSelected(false);
                     } else {
                         checkboxEnableWeighting.setSelected(true);
-                        comboboxWeighting.getSelectionModel().select(((VoxCfg)cfg).getVoxelParameters().getWeighting() - 1);
+                        comboboxWeighting.getSelectionModel().select(((VoxCfg)cfg).getVoxelParameters().getEchoesWeightParams().getWeightingMode() - 1);
                     }
                     
-                    comboboxLADChoice.getSelectionModel().select(voxelParameters.getLadType());
-                    radiobuttonLADHomogeneous.setSelected(voxelParameters.getLadEstimationMode() == 0);
-                    textFieldTwoBetaAlphaParameter.setText(String.valueOf(voxelParameters.getLadBetaFunctionAlphaParameter()));
-                    textFieldTwoBetaBetaParameter.setText(String.valueOf(voxelParameters.getLadBetaFunctionBetaParameter()));
+                    LADParams ladParameters = voxelParameters.getLadParams();
+                    if(ladParameters == null){
+                        ladParameters = new LADParams();
+                    }
+                    
+                    comboboxLADChoice.getSelectionModel().select(ladParameters.getLadType());
+                    radiobuttonLADHomogeneous.setSelected(ladParameters.getLadEstimationMode() == 0);
+                    textFieldTwoBetaAlphaParameter.setText(String.valueOf(ladParameters.getLadBetaFunctionAlphaParameter()));
+                    textFieldTwoBetaBetaParameter.setText(String.valueOf(ladParameters.getLadBetaFunctionBetaParameter()));
                     
                     if(type.equals("voxelisation-ALS") || type.equals("multi-voxelisation")){
                         
                         tabPaneVoxelisation.getSelectionModel().select(0);
                         textFieldTrajectoryFileALS.setText(((ALSVoxCfg)cfg).getTrajectoryFile().getAbsolutePath());
+                        trajectoryFile = new CSVFile(((ALSVoxCfg)cfg).getTrajectoryFile().getAbsolutePath());
 
                         switch (((ALSVoxCfg)cfg).getInputType()) {
                             case LAS_FILE:
@@ -5216,18 +5289,23 @@ public class MainFrameController implements Initializable {
                                 break;
                         }
 
-                        checkboxCalculateGroundEnergy.setSelected(((ALSVoxCfg)cfg).getVoxelParameters().isCalculateGroundEnergy());
-                        if (((ALSVoxCfg)cfg).getVoxelParameters().getGroundEnergyFile() != null) {
-                            comboboxGroundEnergyOutputFormat.getSelectionModel().select(((ALSVoxCfg)cfg).getVoxelParameters().getGroundEnergyFileFormat());
-                            textFieldOutputFileGroundEnergy.setText(((ALSVoxCfg)cfg).getVoxelParameters().getGroundEnergyFile().getAbsolutePath());
+                        GroundEnergyParams groundEnergyParameters = ((ALSVoxCfg)cfg).getVoxelParameters().getGroundEnergyParams();
+                        if(groundEnergyParameters == null){
+                            groundEnergyParameters = new GroundEnergyParams();
+                        }
+                        
+                        checkboxCalculateGroundEnergy.setSelected(groundEnergyParameters.isCalculateGroundEnergy());
+                        if (groundEnergyParameters.getGroundEnergyFile() != null) {
+                            comboboxGroundEnergyOutputFormat.getSelectionModel().select(groundEnergyParameters.getGroundEnergyFileFormat());
+                            textFieldOutputFileGroundEnergy.setText(groundEnergyParameters.getGroundEnergyFile().getAbsolutePath());
                         }
 
                         if(type.equals("voxelisation-ALS")){
                             
                             textFieldInputFileALS.setText(((ALSVoxCfg)cfg).getInputFile().getAbsolutePath());
                             textFieldOutputFileALS.setText(((ALSVoxCfg)cfg).getOutputFile().getAbsolutePath());
-                            checkboxMultiResAfterMode2.setSelected(((ALSVoxCfg)cfg).getVoxelParameters().isCorrectNaNsMode2());
-                            textfieldNbSamplingThresholdMultires.setText(String.valueOf(((ALSVoxCfg)cfg).getVoxelParameters().getCorrectNaNsNbSamplingThreshold()));
+                            checkboxMultiResAfterMode2.setSelected(((ALSVoxCfg)cfg).getVoxelParameters().getNaNsCorrectionParams().isActivate());
+                            textfieldNbSamplingThresholdMultires.setText(String.valueOf(((ALSVoxCfg)cfg).getVoxelParameters().getNaNsCorrectionParams().getNbSamplingThreshold()));
                             checkboxMultiFiles.setSelected(false);
                             
                         }else if(type.equals("multi-voxelisation")){
@@ -6551,7 +6629,7 @@ public class MainFrameController implements Initializable {
 
                                                 LasHeader header = reader.getHeader();
 
-                                                sceneObject.setPosition(new Point3F((float) (header.getMinX() + (header.getMaxX() - header.getMinX()) / 2.0),
+                                                sceneObject.setGravityCenter(new Point3F((float) (header.getMinX() + (header.getMaxX() - header.getMinX()) / 2.0),
                                                         (float) (header.getMinY() + (header.getMaxY() - header.getMinY()) / 2.0),
                                                         (float) (header.getMinZ() + (header.getMaxZ() - header.getMinZ()) / 2.0)));
 
@@ -6686,7 +6764,7 @@ public class MainFrameController implements Initializable {
 
                                                 LasHeader header = lazExtraction.getHeader();
 
-                                                sceneObject.setPosition(new Point3F((float) (header.getMinX() + (header.getMaxX() - header.getMinX()) / 2.0),
+                                                sceneObject.setGravityCenter(new Point3F((float) (header.getMinX() + (header.getMaxX() - header.getMinX()) / 2.0),
                                                         (float) (header.getMinY() + (header.getMaxY() - header.getMinY()) / 2.0),
                                                         (float) (header.getMinZ() + (header.getMaxZ() - header.getMinZ()) / 2.0)));
 
@@ -7026,7 +7104,7 @@ public class MainFrameController implements Initializable {
                                     voxelSpace.changeCurrentAttribut("transmittance");
                                     voxelSpace.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.instanceLightedShader);
                                     voxelSpace.setDrawType(GLMesh.DrawType.TRIANGLES);
-                                    voxelSpace.setPosition(new Point3F(0, 0, 0));
+                                    voxelSpace.setGravityCenter(new Point3F(0, 0, 0));
                                     
                                     
 
@@ -7175,7 +7253,7 @@ public class MainFrameController implements Initializable {
                                     protected Object call() throws Exception {
 
                                         PointCloudSceneObject sceneObject = new PointCloudSceneObject();
-                                        sceneObject.setPosition(new Point3F(0, 0, 0));
+                                        sceneObject.setGravityCenter(new Point3F(0, 0, 0));
 
                                         BufferedReader reader;
                                         try {

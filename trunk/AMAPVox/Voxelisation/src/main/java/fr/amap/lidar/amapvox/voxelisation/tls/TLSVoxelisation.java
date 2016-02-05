@@ -5,14 +5,14 @@
  */
 package fr.amap.lidar.amapvox.voxelisation.tls;
 
-import fr.amap.commons.raster.asc.RegularDtm;
+import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.math.matrix.Mat3D;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.SimpleShotFilter;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxCfg;
-import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelParameters;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -31,7 +31,7 @@ public abstract class TLSVoxelisation implements Callable{
     protected final VoxelParameters parameters;
     protected final File outputFile;
     
-    public TLSVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, RegularDtm terrain, List<PointcloudFilter> pointcloud, VoxCfg cfg){
+    public TLSVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, Raster terrain, List<PointcloudFilter> pointcloud, VoxCfg cfg){
         nbVoxelisationFinished = 0;
         this.inputFile = inputFile;
         this.parameters = parameters;
@@ -57,7 +57,7 @@ public abstract class TLSVoxelisation implements Callable{
             terrain.setTransformationMatrix(vopMatrix);
         }
         
-        cfg.setShotFilter(new SimpleShotFilter(cfg.getFilters()));
+        cfg.setShotFilter(new SimpleShotFilter(cfg.getShotFilters()));
         
         voxelAnalysis = new VoxelAnalysis(terrain, pointcloud, cfg);
         voxelAnalysis.init(parameters, outputFile);

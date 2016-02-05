@@ -17,8 +17,8 @@ import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.commons.math.vector.Vec4D;
 import fr.amap.commons.util.image.ScaleGradient;
-import fr.amap.commons.raster.asc.DtmLoader;
-import fr.amap.commons.raster.asc.RegularDtm;
+import fr.amap.commons.raster.asc.AsciiGridHelper;
+import fr.amap.commons.raster.asc.Raster;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
 import fr.amap.lidar.amapvox.voxviewer.event.BasicEvent;
@@ -276,7 +276,7 @@ public class FXViewer3D extends Application {
                             VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
                             
                             /***DTM***/
-                            RegularDtm dtm = DtmLoader.readFromAscFile(new File("/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc"));
+                            Raster dtm = AsciiGridHelper.readFromAscFile(new File("/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/ALSbuf_xyzirncapt_dtm.asc"));
 
                             //dtm.setTransformationMatrix(transfMatrix);
                             dtm.buildMesh();
@@ -296,7 +296,7 @@ public class FXViewer3D extends Application {
                             /*if (drawDTM && dtmFile != null) {
 
                                 updateMessage("Loading DTM");
-                                RegularDtm dtm = DtmLoader.readFromAscFile(dtmFile);
+                                Raster dtm = AsciiGridHelper.readFromAscFile(dtmFile);
 
                                 if (transform && dtmTransfMatrix != null) {
                                     dtm.setTransformationMatrix(dtmTransfMatrix);
@@ -364,14 +364,14 @@ public class FXViewer3D extends Application {
                             /**
                              * *light**
                              */
-                            scene.setLightPosition(new Point3F(voxelSpace.getPosition().x, voxelSpace.getPosition().y, voxelSpace.getPosition().z + voxelSpace.widthZ + 100));
+                            scene.setLightPosition(new Point3F(voxelSpace.getGravityCenter().x, voxelSpace.getGravityCenter().y, voxelSpace.getGravityCenter().z + voxelSpace.widthZ + 100));
 
                             /**
                              * *camera**
                              */
                             TrackballCamera trackballCamera = new TrackballCamera();
                             trackballCamera.setPivot(dtmSceneObject);
-                            trackballCamera.setLocation(new Vec3F(dtmSceneObject.getPosition().x-50, dtmSceneObject.getPosition().y, dtmSceneObject.getPosition().z+50));
+                            trackballCamera.setLocation(new Vec3F(dtmSceneObject.getGravityCenter().x-50, dtmSceneObject.getGravityCenter().y, dtmSceneObject.getGravityCenter().z+50));
                             viewer3D.getScene().setCamera(trackballCamera);
                             
                             

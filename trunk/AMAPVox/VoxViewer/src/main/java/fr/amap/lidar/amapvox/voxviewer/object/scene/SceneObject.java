@@ -6,7 +6,10 @@
 package fr.amap.lidar.amapvox.voxviewer.object.scene;
 
 import com.jogamp.opengl.GL3;
+import fr.amap.commons.math.geometry.BoundingBox3D;
+import fr.amap.commons.math.geometry.BoundingBox3F;
 import fr.amap.commons.math.matrix.Mat4F;
+import fr.amap.commons.math.point.Point3D;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.commons.math.vector.Vec4F;
@@ -16,6 +19,7 @@ import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh.DrawType;
 import java.io.File;
 import java.nio.FloatBuffer;
+import javax.swing.event.EventListenerList;
 
 /**
  *
@@ -31,11 +35,13 @@ public abstract class SceneObject{
     public boolean depthTest = true;
     public Texture texture;
     protected Shader shader;
-    protected Point3F position;
+    protected Point3F gravityCenter;
     private int id;
     protected boolean colorNeedUpdate = false;
     protected boolean mousePickable;
     protected MousePicker mousePicker;
+    
+    private final EventListenerList listeners = new EventListenerList();
 
     public void setId(int id) {
         this.id = id;
@@ -63,6 +69,7 @@ public abstract class SceneObject{
         this.mesh = mesh;
         this.drawType = DrawType.TRIANGLES;
         this.isAlphaRequired = isAlphaRequired;
+        this.gravityCenter = mesh.getGravityCenter();
     }
 
     public void setDrawType(DrawType drawType) {
@@ -93,46 +100,72 @@ public abstract class SceneObject{
         textureId = texture.getId();
     }
 
-    public Point3F getPosition() {
-        return position;
+    public Point3F getGravityCenter() {
+        return gravityCenter;
     }
 
-    public void setPosition(Point3F position) {
-        this.position = position;
+    public void setGravityCenter(Point3F position) {
+        this.gravityCenter = position;
     }
     
     public void translate(Vec3F translation){
         
-        for(int j = 0 ; j<mesh.vertexBuffer.capacity(); j+=3){
+        FloatBuffer vertexBuffer = mesh.getVertexBuffer();
+        
+        for(int j = 0 ; j<vertexBuffer.capacity(); j+=3){
             
             
-            float x = mesh.vertexBuffer.get(j);
-            float y = mesh.vertexBuffer.get(j+1);
-            float z = mesh.vertexBuffer.get(j+2);
+            float x = vertexBuffer.get(j);
+            float y = vertexBuffer.get(j+1);
+            float z = vertexBuffer.get(j+2);
             
-            mesh.vertexBuffer.put(j, x+translation.x);
-            mesh.vertexBuffer.put(j+1, y+translation.y);
-            mesh.vertexBuffer.put(j+2, z+translation.z);
+            vertexBuffer.put(j, x+translation.x);
+            vertexBuffer.put(j+1, y+translation.y);
+            vertexBuffer.put(j+2, z+translation.z);
             
         }
+        
+        mesh.setVertexBuffer(vertexBuffer);
+    }
+    
+    public void scale(Vec3F scale){
+        
+        FloatBuffer vertexBuffer = mesh.getVertexBuffer();
+        
+        for(int j = 0 ; j<vertexBuffer.capacity(); j+=3){
+            
+            
+            float x = vertexBuffer.get(j);
+            float y = vertexBuffer.get(j+1);
+            float z = vertexBuffer.get(j+2);
+            
+            vertexBuffer.put(j, x*scale.x);
+            vertexBuffer.put(j+1, y*scale.y);
+            vertexBuffer.put(j+2, z*scale.z);
+        }
+        
+        mesh.setVertexBuffer(vertexBuffer);
+        
     }
     
     public void rotate(Mat4F rotation){
         
-        for(int j = 0 ; j<mesh.vertexBuffer.capacity(); j+=3){
+        FloatBuffer vertexBuffer = mesh.getVertexBuffer();
+        
+        for(int j = 0 ; j<vertexBuffer.capacity(); j+=3){
             
-            
-            float x = mesh.vertexBuffer.get(j);
-            float y = mesh.vertexBuffer.get(j+1);
-            float z = mesh.vertexBuffer.get(j+2);
+            float x = vertexBuffer.get(j);
+            float y = vertexBuffer.get(j+1);
+            float z = vertexBuffer.get(j+2);
             
                 
             Vec4F result = Mat4F.multiply(rotation, new Vec4F(x, y, z, 1));
-            mesh.vertexBuffer.put(j, result.x);
-            mesh.vertexBuffer.put(j+1, result.y);
-            mesh.vertexBuffer.put(j+2, result.z);
-            
+            vertexBuffer.put(j, result.x);
+            vertexBuffer.put(j+1, result.y);
+            vertexBuffer.put(j+2, result.z);
         }
+        
+        mesh.setVertexBuffer(vertexBuffer);
     }
     
     public void setMousePickable(boolean isPickable){
@@ -146,6 +179,39 @@ public abstract class SceneObject{
     
     public void updateMousePicker(MousePicker mousePicker){
         this.mousePicker = mousePicker;
+    }
+
+    public GLMesh getMesh() {
+        return mesh;
+    }
+    
+    public void addSceneObjectListener(SceneObjectListener listener){
+        listeners.add(SceneObjectListener.class, listener);
+    }
+    
+    public void removeSceneObjectListener(SceneObjectListener listener){
+        listeners.remove(SceneObjectListener.class, listener);
+    }
+    
+    public void fireClicked(Vec3F ray){
+        
+        for(SceneObjectListener listener : listeners.getListeners(SceneObjectListener.class)){
+            
+            listener.clicked(this, ray);
+        }
+    }
+    
+    public BoundingBox3D getBoundingBox(){
+        
+        BoundingBox3D bb = new BoundingBox3D(
+                new Point3D(mesh.getxValues().getMinValue(),
+                        mesh.getyValues().getMinValue(),
+                        mesh.getzValues().getMinValue()),
+                new Point3D(mesh.getxValues().getMaxValue(),
+                        mesh.getyValues().getMaxValue(),
+                        mesh.getzValues().getMaxValue()));
+        
+        return bb;
     }
     
     public abstract void initBuffers(GL3 gl);

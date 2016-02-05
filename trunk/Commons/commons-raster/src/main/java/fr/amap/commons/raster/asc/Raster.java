@@ -23,7 +23,7 @@ import javafx.geometry.Point3D;
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class RegularDtm {
+public class Raster {
         
     private ArrayList<DTMPoint> points;
     private ArrayList<Face> faces;
@@ -51,7 +51,7 @@ public class RegularDtm {
     /**
      *
      */
-    public RegularDtm(){
+    public Raster(){
         
     }
     
@@ -104,7 +104,7 @@ public class RegularDtm {
      * @param nbCols Column number
      * @param nbRows Row number
      */
-    public RegularDtm(String path, float[][] zArray, float xLeftLowerCorner, float yLeftLowerCorner, float cellSize, int nbCols, int nbRows){
+    public Raster(String path, float[][] zArray, float xLeftLowerCorner, float yLeftLowerCorner, float cellSize, int nbCols, int nbRows){
         
         this.transformationMatrix = Mat4D.identity();
         this.inverseTransfMat = Mat4D.identity();
@@ -231,9 +231,9 @@ public class RegularDtm {
      * @param offset
      * @return
      */
-    public RegularDtm subset(BoundingBox2F boundingBox2F, int offset){
+    public Raster subset(BoundingBox2F boundingBox2F, int offset){
         
-        RegularDtm dtm = new RegularDtm();
+        Raster dtm = new Raster();
         
         //calculate the 4 corners
         
@@ -283,47 +283,6 @@ public class RegularDtm {
         }
         
         return dtm;
-    }
-    
-    /**
-     * Write the raster in ascii grid format (*.asc)
-     * @param output Output file
-     * @throws IOException Throws an IOException when output path is invalid or other
-     */
-    public void write(File output) throws IOException{
-        
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))){
-            
-            float noDataValue = -9999.000000f;
-            writer.write("ncols "+colNumber+"\n");
-            writer.write("nrows "+rowNumber+"\n");
-            writer.write("xllcorner "+xLeftLowerCorner+"\n");
-            writer.write("yllcorner "+yLeftLowerCorner+"\n");
-            writer.write("cellsize "+cellSize+"\n");
-            writer.write("nodata_value "+noDataValue+"\n");
-            
-            for(int j = 0;j<rowNumber;j++){
-            
-                StringBuilder stringBuilder = new StringBuilder();
-
-                for(int i = 0 ; i<colNumber ; i++){
-
-                    if(Float.isNaN(zArray[i][j])){
-                        stringBuilder.append(noDataValue);
-                    }else{
-                        stringBuilder.append(zArray[i][j]);
-                    }
-                    
-                    stringBuilder.append(" ");
-                }
-
-                writer.write(stringBuilder.toString()+"\n");
-            }
-            
-            
-        } catch (IOException ex) {
-            throw new IOException("Cannot write dtm file "+output.getAbsolutePath(), ex);
-        }
     }
     
     /**
@@ -448,6 +407,10 @@ public class RegularDtm {
      */
     public void exportObj(File outputFile) throws FileNotFoundException, IOException{
         
+        if(points == null || faces == null){
+            buildMesh();
+        }
+        
         BufferedWriter writer;
         try {
             writer = new BufferedWriter(new FileWriter(outputFile));
@@ -503,4 +466,29 @@ public class RegularDtm {
     public float getzMax() {
         return zMax;
     }
+
+    public float[][] getzArray() {
+        return zArray;
+    }
+
+    public float getxLeftLowerCorner() {
+        return xLeftLowerCorner;
+    }
+
+    public float getyLeftLowerCorner() {
+        return yLeftLowerCorner;
+    }
+
+    public float getCellSize() {
+        return cellSize;
+    }
+
+    public int getRowNumber() {
+        return rowNumber;
+    }
+
+    public int getColNumber() {
+        return colNumber;
+    }
+    
 }

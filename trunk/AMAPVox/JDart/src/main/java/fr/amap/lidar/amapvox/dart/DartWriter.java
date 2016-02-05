@@ -11,9 +11,9 @@ import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.point.Point3I;
 import fr.amap.commons.math.geometry.BoundingBox2F;
 import fr.amap.commons.raster.asc.DTMPoint;
-import fr.amap.commons.raster.asc.DtmLoader;
+import fr.amap.commons.raster.asc.AsciiGridHelper;
 import fr.amap.commons.raster.asc.Face;
-import fr.amap.commons.raster.asc.RegularDtm;
+import fr.amap.commons.raster.asc.Raster;
 import fr.amap.lidar.amapvox.commons.Voxel;
 import fr.amap.lidar.amapvox.commons.VoxelSpace;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
@@ -163,7 +163,7 @@ public class DartWriter {
                 new Point3F(infos.getResolution(), infos.getResolution(), infos.getResolution()),
                 infos.getSplit().x*infos.getSplit().y);
         
-        RegularDtm dtm = null;
+        Raster dtm = null;
         
         Set<Integer>[][][] faces = null;
         
@@ -172,7 +172,7 @@ public class DartWriter {
             try {
                 //logger.info("Reading DTM : "+dtmFile.getAbsolutePath());
                 
-                dtm = DtmLoader.readFromAscFile(dtmFile);
+                dtm = AsciiGridHelper.readFromAscFile(dtmFile);
                 dtm.setTransformationMatrix(transfMatrix);
                 
                 dtm.setLimits(new BoundingBox2F(new Point2F((float)infos.getMinCorner().x, (float)infos.getMinCorner().y), 
@@ -354,7 +354,7 @@ public class DartWriter {
             attributsNames.add(s);
         }
         
-        RegularDtm dtm = null;
+        Raster dtm = null;
         
         Set<Integer>[][][] faces = null; //faces of a voxel
         
@@ -363,7 +363,7 @@ public class DartWriter {
             try {
                 //logger.info("Reading DTM : "+dtmFile.getAbsolutePath());
                 
-                dtm = DtmLoader.readFromAscFile(dtmFile);
+                dtm = AsciiGridHelper.readFromAscFile(dtmFile);
                 dtm.setTransformationMatrix(transfMatrix);
                 
                 dtm.setLimits(new BoundingBox2F(new Point2F((float)infos.getMinCorner().x, (float)infos.getMinCorner().y), 

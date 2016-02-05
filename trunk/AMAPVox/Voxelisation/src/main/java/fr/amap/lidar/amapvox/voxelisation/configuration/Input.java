@@ -15,6 +15,7 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.lidar.amapvox.voxelisation.configuration;
 
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import java.io.File;
 import java.util.List;
 

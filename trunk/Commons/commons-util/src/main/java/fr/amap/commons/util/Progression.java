@@ -12,59 +12,65 @@ import javax.swing.event.EventListenerList;
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public abstract class Processing {
+public abstract class Progression {
     
     private final EventListenerList listeners= new EventListenerList();
     private String progress;
     private boolean finished;
     private int stepNumber = 1;
     private int currentStep = 0;
+    private double progressStepPercentage;
+    private long count;
 
     public void setStepNumber(int stepNumber) {
         currentStep = 0;
         this.stepNumber = stepNumber;
     }
     
-    public Processing(){
-    }
-    
-    public void setProgress(String progress, int ratio) {
-        this.progress = progress;
-        fireProgress(progress, ratio);
-    }
-    
     public void setFinished(boolean isFinished) {
         this.finished = isFinished;
         
         if(isFinished){
-            fireFinished();
+            fireFinished(0);
         }
+    }
+    
+    public void setProgressionStep(float percentage){
+        this.progressStepPercentage = percentage;
     }
     
     protected int getProgression(){
         return (currentStep*100)/stepNumber;
     }
     
-    public void fireProgress(String progress, int ratio){
+    public void fireProgress(String progressMsg, long progress, long max){
         
-        currentStep ++;
-        for(ProcessingListener listener :listeners.getListeners(ProcessingListener.class)){
+        count++;
+        
+        int progressStep = (int) ((max/100) * progressStepPercentage);
+        
+        if(progressStep == count){
             
-            listener.processingStepProgress(progress, ratio);
+            for(ProcessingListener listener :listeners.getListeners(ProcessingListener.class)){
+
+                listener.processingStepProgress(progressMsg, progress, max);
+            }
+            
+            count = 0;
         }
     }
     
-    public void fireFinished(){
+    public void fireFinished(float duration){
         
         for(ProcessingListener listener :listeners.getListeners(ProcessingListener.class)){
             
-            listener.processingFinished();
+            listener.processingFinished(duration);
         }
+        
+        count = 0;
     }
     
     public void addProcessingListener(ProcessingListener listener){
         listeners.add(ProcessingListener.class, listener);
     }
-    
-    public abstract File process();
 }

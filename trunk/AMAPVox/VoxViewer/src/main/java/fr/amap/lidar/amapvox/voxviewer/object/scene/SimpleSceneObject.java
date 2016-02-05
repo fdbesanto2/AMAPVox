@@ -22,13 +22,13 @@ import java.nio.IntBuffer;
 public class SimpleSceneObject extends SceneObject{
     
     public SimpleSceneObject(){
-        this.position = new Point3F();
+        this.gravityCenter = new Point3F();
     }
     
     public SimpleSceneObject(GLMesh mesh, boolean isAlphaRequired, Point3F position){
         
         super(mesh, isAlphaRequired);
-        this.position = position;
+        this.gravityCenter = position;
     }
     
     public SimpleSceneObject(GLMesh mesh, boolean isAlphaRequired){
@@ -65,16 +65,16 @@ public class SimpleSceneObject extends SceneObject{
                 if(mesh.colorBuffer != null){
                     try{
                         gl.glEnableVertexAttribArray(shader.attributeMap.get("color"));
-                        gl.glVertexAttribPointer(shader.attributeMap.get("color"), mesh.dimensions, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE);
+                        gl.glVertexAttribPointer(shader.attributeMap.get("color"), mesh.dimensions, GL3.GL_FLOAT, false, 0, mesh.getVertexBuffer().capacity()*FLOAT_SIZE);
                         
                     }catch(Exception e){}
                     try{
                         gl.glEnableVertexAttribArray(shader.attributeMap.get("normal"));
-                        gl.glVertexAttribPointer(shader.attributeMap.get("normal"), mesh.dimensions, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE+mesh.normalBuffer.capacity()*FLOAT_SIZE);
+                        gl.glVertexAttribPointer(shader.attributeMap.get("normal"), mesh.dimensions, GL3.GL_FLOAT, false, 0, mesh.getVertexBuffer().capacity()*FLOAT_SIZE+mesh.normalBuffer.capacity()*FLOAT_SIZE);
                     }catch(Exception e){}
                 }else if(mesh instanceof TexturedGLMesh){
                     gl.glEnableVertexAttribArray(shader.attributeMap.get("textureCoordinates"));
-                    gl.glVertexAttribPointer(shader.attributeMap.get("textureCoordinates"), 2, GL3.GL_FLOAT, false, 0, mesh.vertexBuffer.capacity()*FLOAT_SIZE);
+                    gl.glVertexAttribPointer(shader.attributeMap.get("textureCoordinates"), 2, GL3.GL_FLOAT, false, 0, mesh.getVertexBuffer().capacity()*FLOAT_SIZE);
                 }
                 
                 if(textureId != -1){

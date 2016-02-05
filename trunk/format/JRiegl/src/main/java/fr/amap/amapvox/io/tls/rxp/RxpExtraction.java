@@ -56,8 +56,9 @@ public class RxpExtraction implements Iterable<Shot>{
     /**
      * Open a rxp file and instantiate a pointer
      * @param file Rxp file to read
-     * @param shotTypes <p>Type of shot, can be RxpExtraction.SIMPLE_SHOT or RxpExtraction.SHOT_WITH_REFLECTANCE</p>
-     * <p>One having simple informations and the other having reflectance value for each echo</p>
+     * @param shotTypes Echoes attributes to import, variable parameters, can be {@link #REFLECTANCE},
+     * {@link #DEVIATION}, {@link #AMPLITUDE}, {@link #TIME}.
+     * Import only attributes you need.
      * @return -1 if an exception has occured, 0 if everything if fine and other value for unknown exception
      * @throws IOException if path of the file is invalid
      * @throws Exception if an unknown exception occured when trying to open the file 

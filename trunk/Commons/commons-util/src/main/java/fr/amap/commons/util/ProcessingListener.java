@@ -13,7 +13,7 @@ import java.util.EventListener;
  */
 public interface ProcessingListener extends EventListener{
     
-    void processingStepProgress(String progress, int ratio);
-    void processingFinished();
+    void processingStepProgress(String progressMsg, long progress, long max);
+    void processingFinished(float duration);
 }
 

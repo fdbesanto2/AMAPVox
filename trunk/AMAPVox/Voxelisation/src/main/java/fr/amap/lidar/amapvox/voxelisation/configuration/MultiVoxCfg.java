@@ -14,6 +14,8 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.lidar.amapvox.voxelisation.configuration;
 
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -174,14 +176,6 @@ public class MultiVoxCfg extends ALSVoxCfg{
         processElement.setAttribute(new Attribute("mode","multi-voxelisation"));
         processElement.setAttribute(new Attribute("type","ALS"));
 
-        if(multiResPadMax != null){
-            limitsElement.addContent(createLimitElement("PAD_1m", "", String.valueOf(multiResPadMax[0])));
-            limitsElement.addContent(createLimitElement("PAD_2m", "", String.valueOf(multiResPadMax[1])));
-            limitsElement.addContent(createLimitElement("PAD_3m", "", String.valueOf(multiResPadMax[2])));
-            limitsElement.addContent(createLimitElement("PAD_4m", "", String.valueOf(multiResPadMax[3])));
-            limitsElement.addContent(createLimitElement("PAD_5m", "", String.valueOf(multiResPadMax[4])));
-        }
-
         Element inputsElement = new Element("inputs");
 
         if(multiProcessInputs != null){
@@ -224,24 +218,30 @@ public class MultiVoxCfg extends ALSVoxCfg{
                     outputFileElement.setAttribute(new Attribute("src",input.outputFile.getAbsolutePath()));
                     inputElement.addContent(outputFileElement);
                 }
+                
+                GroundEnergyParams groundEnergyParameters = input.voxelParameters.getGroundEnergyParams();
+                
+                if(groundEnergyParameters != null){
+                    
+                    if(groundEnergyParameters.getGroundEnergyFile() != null){
+                        Element groundEnergyElement = new Element("ground-energy");
+                        groundEnergyElement.setAttribute("generate", String.valueOf(groundEnergyParameters.isCalculateGroundEnergy()));
 
-                if(input.voxelParameters.getGroundEnergyFile() != null){
-                    Element groundEnergyElement = new Element("ground-energy");
-                    groundEnergyElement.setAttribute("generate", String.valueOf(input.voxelParameters.isCalculateGroundEnergy()));
-
-                    if(input.voxelParameters.getGroundEnergyFile() != null){
-                        groundEnergyElement.setAttribute("src", input.voxelParameters.getGroundEnergyFile().getAbsolutePath());
-                        groundEnergyElement.setAttribute("type", String.valueOf(input.voxelParameters.getGroundEnergyFileFormat()));
+                        if(groundEnergyParameters.getGroundEnergyFile() != null){
+                            groundEnergyElement.setAttribute("src", groundEnergyParameters.getGroundEnergyFile().getAbsolutePath());
+                            groundEnergyElement.setAttribute("type", String.valueOf(groundEnergyParameters.getGroundEnergyFileFormat()));
+                        }
+                        inputElement.addContent(groundEnergyElement);
                     }
-                    inputElement.addContent(groundEnergyElement);
                 }
+                
 
                 if(input.multiResList != null){
 
                     Element multiResElement = new Element("multi-res");
-                    multiResElement.setAttribute("enabled", String.valueOf(correctNaNs));
+                    multiResElement.setAttribute("enabled", String.valueOf(voxelParameters.getNaNsCorrectionParams().isActivate()));
 
-                    if(correctNaNs){
+                    if(voxelParameters.getNaNsCorrectionParams().isActivate()){
 
                         Element multiResInputsElement = new Element("inputs");
 

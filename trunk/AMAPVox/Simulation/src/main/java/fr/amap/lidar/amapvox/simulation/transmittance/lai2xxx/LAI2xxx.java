@@ -639,6 +639,15 @@ public abstract class LAI2xxx {
     public float[] getGapsByRing() {
         return gapsByRing;
     }
+    
+    public void setQuiet(boolean quiet) {
+        
+        if(quiet){
+            logger.setLevel(org.apache.log4j.Level.ERROR);
+        }else{
+            logger.setLevel(org.apache.log4j.Level.INFO);
+        }        
+    }   
 
 //    //test
 //    public float[][] getNormalizedTransmittances() {

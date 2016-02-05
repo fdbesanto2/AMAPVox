@@ -14,6 +14,7 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.lidar.amapvox.voxelisation.configuration;
 
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import fr.amap.lidar.amapvox.commons.Configuration;
 import fr.amap.commons.util.Filter;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
@@ -22,6 +23,8 @@ import fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution.Type;
 import fr.amap.lidar.amapvox.voxelisation.ShotFilter;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis.LaserSpecification;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.LADParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.RasterParams;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +43,7 @@ import org.jdom2.Element;
 
 public class VoxCfg extends Configuration{
 
-    private final static Logger logger = Logger.getLogger(VoxCfg.class);
+    protected final static Logger logger = Logger.getLogger(VoxCfg.class);
     
     protected File inputFile;
     protected File outputFile;
@@ -51,15 +54,11 @@ public class VoxCfg extends Configuration{
     protected Matrix4d sopMatrix;
     protected Matrix4d vopMatrix;
     protected VoxelParameters voxelParameters;
-    protected float[] multiResPadMax;
-    protected List<Filter> filters;
+    protected List<Filter> shotFilters;
     protected List<Filter> echoFilters;
     
     protected ShotFilter shotFilter;
     protected EchoFilter echoFilter;
-    
-    protected boolean correctNaNs;
-    protected boolean multiResUseDefaultMaxPad;
     
     protected Element limitsElement;
     protected Element filtersElement;
@@ -120,9 +119,9 @@ public class VoxCfg extends Configuration{
                     
         if(ponderationElement != null){
 
-            voxelParameters.setWeighting(Integer.valueOf(ponderationElement.getAttributeValue("mode")));
+            voxelParameters.getEchoesWeightParams().setWeightingMode(Integer.valueOf(ponderationElement.getAttributeValue("mode")));
 
-            if(voxelParameters.getWeighting() > 0){
+            if(voxelParameters.getEchoesWeightParams().getWeightingMode() > 0){
                 Element matrixElement = ponderationElement.getChild("matrix");
                 int rowNumber = 7;
                 int colNumber = 7;
@@ -138,7 +137,7 @@ public class VoxCfg extends Configuration{
                     }
                 }
 
-                voxelParameters.setWeightingData(weightingData);
+                voxelParameters.getEchoesWeightParams().setWeightingData(weightingData);
             }
 
 
@@ -148,10 +147,10 @@ public class VoxCfg extends Configuration{
 
         if(dtmFilterElement != null){
             boolean useDTM = Boolean.valueOf(dtmFilterElement.getAttributeValue("enabled"));
-            voxelParameters.setUseDTMCorrection(useDTM);
+            voxelParameters.getDtmFilteringParams().setActivate(useDTM);
             if(useDTM){
-                voxelParameters.setDtmFile(new File(dtmFilterElement.getAttributeValue("src")));
-                voxelParameters.minDTMDistance = Float.valueOf(dtmFilterElement.getAttributeValue("height-min"));
+                voxelParameters.getDtmFilteringParams().setDtmFile(new File(dtmFilterElement.getAttributeValue("src")));
+                voxelParameters.getDtmFilteringParams().setMinDTMDistance(Float.valueOf(dtmFilterElement.getAttributeValue("height-min")));
             }                        
         }
 
@@ -223,23 +222,13 @@ public class VoxCfg extends Configuration{
                 if(limitChildrensElement.size() > 0){
                     voxelParameters.setMaxPAD(Float.valueOf(limitChildrensElement.get(0).getAttributeValue("max")));
                 }
-
-                if(limitChildrensElement.size() >= 6){
-                    multiResPadMax = new float[5];
-                    multiResPadMax[0] = Float.valueOf(limitChildrensElement.get(1).getAttributeValue("max"));
-                    multiResPadMax[1] = Float.valueOf(limitChildrensElement.get(2).getAttributeValue("max"));
-                    multiResPadMax[2] = Float.valueOf(limitChildrensElement.get(3).getAttributeValue("max"));
-                    multiResPadMax[3] = Float.valueOf(limitChildrensElement.get(4).getAttributeValue("max"));
-                    multiResPadMax[4] = Float.valueOf(limitChildrensElement.get(5).getAttributeValue("max"));
-
-                }
             }
 
         }
 
 
         filtersElement = processElement.getChild("filters");
-        filters = new ArrayList<>();
+        shotFilters = new ArrayList<>();
         echoFilters = new ArrayList<>();
 
         if(filtersElement != null){
@@ -257,7 +246,7 @@ public class VoxCfg extends Configuration{
                         String inequality = e.getAttributeValue("inequality");
                         String value = e.getAttributeValue("value");
 
-                        filters.add(new Filter(variable, Float.valueOf(value), Filter.getConditionFromString(inequality)));
+                        shotFilters.add(new Filter(variable, Float.valueOf(value), Filter.getConditionFromString(inequality)));
                     }
                 }
             }
@@ -308,19 +297,25 @@ public class VoxCfg extends Configuration{
         
         Element ladElement = processElement.getChild("leaf-angle-distribution");
         if(ladElement != null){
-            voxelParameters.setLadEstimationMode(Integer.valueOf(ladElement.getAttributeValue("mode")));
-            voxelParameters.setLadType(Type.fromString(ladElement.getAttributeValue("type")));
+            
+            LADParams ladParameters = new LADParams();
+            
+            
+            ladParameters.setLadEstimationMode(Integer.valueOf(ladElement.getAttributeValue("mode")));
+            ladParameters.setLadType(Type.fromString(ladElement.getAttributeValue("type")));
 
             String alphaValue = ladElement.getAttributeValue("alpha");
             String betaValue = ladElement.getAttributeValue("beta");
 
             if(alphaValue != null){
-                voxelParameters.setLadBetaFunctionAlphaParameter(Float.valueOf(alphaValue));
+                ladParameters.setLadBetaFunctionAlphaParameter(Float.valueOf(alphaValue));
             }
 
             if(betaValue != null){
-                voxelParameters.setLadBetaFunctionBetaParameter(Float.valueOf(betaValue));
+                ladParameters.setLadBetaFunctionBetaParameter(Float.valueOf(betaValue));
             }
+            
+            voxelParameters.setLadParams(ladParameters);
         }
 
         Element generateMultiBandRasterElement = processElement.getChild("multi-band-raster");
@@ -328,23 +323,18 @@ public class VoxCfg extends Configuration{
         if(generateMultiBandRasterElement != null){
 
             boolean generateMultiBandRaster = Boolean.valueOf(generateMultiBandRasterElement.getAttributeValue("generate"));
-            voxelParameters.setGenerateMultiBandRaster(generateMultiBandRaster);
-
+            
             if(generateMultiBandRaster){
-                voxelParameters.setShortcutVoxelFileWriting(Boolean.valueOf(generateMultiBandRasterElement.getAttributeValue("discard_voxel_file_writing")));
-                voxelParameters.setRasterStartingHeight(Float.valueOf(generateMultiBandRasterElement.getAttributeValue("starting-height")));
-                voxelParameters.setRasterHeightStep(Float.valueOf(generateMultiBandRasterElement.getAttributeValue("step")));
-                voxelParameters.setRasterBandNumber(Integer.valueOf(generateMultiBandRasterElement.getAttributeValue("band-number")));
-                voxelParameters.setRasterResolution(Integer.valueOf(generateMultiBandRasterElement.getAttributeValue("resolution")));
-            }
-        }
-
-        Element formulaElement = processElement.getChild("formula");
-
-        if(formulaElement != null){
-            Element transmittanceElement = formulaElement.getChild("transmittance");
-            if(transmittanceElement != null){
-                voxelParameters.setTransmittanceMode(Integer.valueOf(transmittanceElement.getAttributeValue("mode")));
+                RasterParams rasterParameters = new RasterParams();
+                
+                rasterParameters.setGenerateMultiBandRaster(generateMultiBandRaster);
+                rasterParameters.setShortcutVoxelFileWriting(Boolean.valueOf(generateMultiBandRasterElement.getAttributeValue("discard_voxel_file_writing")));
+                rasterParameters.setRasterStartingHeight(Float.valueOf(generateMultiBandRasterElement.getAttributeValue("starting-height")));
+                rasterParameters.setRasterHeightStep(Float.valueOf(generateMultiBandRasterElement.getAttributeValue("step")));
+                rasterParameters.setRasterBandNumber(Integer.valueOf(generateMultiBandRasterElement.getAttributeValue("band-number")));
+                rasterParameters.setRasterResolution(Integer.valueOf(generateMultiBandRasterElement.getAttributeValue("resolution")));
+                
+                voxelParameters.setRasterParams(rasterParameters);
             }
         }
           
@@ -388,11 +378,11 @@ public class VoxCfg extends Configuration{
         
         /***PONDERATION***/
         Element ponderationElement = new Element("ponderation");
-        ponderationElement.setAttribute(new Attribute("mode",String.valueOf(voxelParameters.getWeighting())));
+        ponderationElement.setAttribute(new Attribute("mode",String.valueOf(voxelParameters.getEchoesWeightParams().getWeightingMode())));
 
-        if(voxelParameters.getWeighting() > 0){
+        if(voxelParameters.getEchoesWeightParams().getWeightingMode() > 0){
             StringBuilder weightingDataString = new StringBuilder();
-            float[][] weightingData = voxelParameters.getWeightingData();
+            float[][] weightingData = voxelParameters.getEchoesWeightParams().getWeightingData();
             for(int i=0;i<weightingData.length;i++){
                 for(int j=0;j<weightingData[0].length;j++){
                     weightingDataString.append(weightingData[i][j]).append(" ");
@@ -407,13 +397,13 @@ public class VoxCfg extends Configuration{
         /***DTM FILTER***/
 
         Element dtmFilterElement = new Element("dtm-filter");
-        dtmFilterElement.setAttribute(new Attribute("enabled",String.valueOf(voxelParameters.useDTMCorrection())));
-        if(voxelParameters.useDTMCorrection()){
-            if(voxelParameters.getDtmFile() != null){
-                dtmFilterElement.setAttribute(new Attribute("src", voxelParameters.getDtmFile().getAbsolutePath()));
+        dtmFilterElement.setAttribute(new Attribute("enabled",String.valueOf(voxelParameters.getDtmFilteringParams().useDTMCorrection())));
+        if(voxelParameters.getDtmFilteringParams().useDTMCorrection()){
+            if(voxelParameters.getDtmFilteringParams().getDtmFile() != null){
+                dtmFilterElement.setAttribute(new Attribute("src", voxelParameters.getDtmFilteringParams().getDtmFile().getAbsolutePath()));
             }
 
-            dtmFilterElement.setAttribute(new Attribute("height-min",String.valueOf(voxelParameters.minDTMDistance)));
+            dtmFilterElement.setAttribute(new Attribute("height-min",String.valueOf(voxelParameters.getDtmFilteringParams().getMinDTMDistance())));
         }
 
         processElement.addContent(dtmFilterElement);
@@ -500,11 +490,11 @@ public class VoxCfg extends Configuration{
 
         filtersElement = new Element("filters");
 
-        if(filters != null && !filters.isEmpty()){
+        if(shotFilters != null && !shotFilters.isEmpty()){
 
             Element shotFilterElement = new Element("shot-filters");
 
-            for(Filter f : filters){
+            for(Filter f : shotFilters){
                 Element filterElement = new Element("filter");
                 filterElement.setAttribute("variable", f.getVariable());
                 filterElement.setAttribute("inequality", f.getConditionString());
@@ -532,29 +522,40 @@ public class VoxCfg extends Configuration{
         
         processElement.addContent(filtersElement);
         
-        Element ladElement = new Element("leaf-angle-distribution");
-        ladElement.setAttribute("mode", String.valueOf(voxelParameters.getLadEstimationMode()));
-        ladElement.setAttribute("type", voxelParameters.getLadType().toString());
+        LADParams ladParameters = voxelParameters.getLadParams();
         
-        if(voxelParameters.getLadType() == Type.TWO_PARAMETER_BETA){
-            ladElement.setAttribute("alpha", String.valueOf(voxelParameters.getLadBetaFunctionAlphaParameter()));
-            ladElement.setAttribute("beta", String.valueOf(voxelParameters.getLadBetaFunctionBetaParameter()));
+        if(ladParameters != null){
+            
+            Element ladElement = new Element("leaf-angle-distribution");
+            ladElement.setAttribute("mode", String.valueOf(ladParameters.getLadEstimationMode()));
+            ladElement.setAttribute("type", ladParameters.getLadType().toString());
+
+            if(ladParameters.getLadType() == Type.TWO_PARAMETER_BETA){
+                ladElement.setAttribute("alpha", String.valueOf(ladParameters.getLadBetaFunctionAlphaParameter()));
+                ladElement.setAttribute("beta", String.valueOf(ladParameters.getLadBetaFunctionBetaParameter()));
+            }
+
+            processElement.addContent(ladElement);
         }
         
-        processElement.addContent(ladElement);
         
-        if(voxelParameters.isGenerateMultiBandRaster()){
+        if(voxelParameters.getRasterParams() != null){
                 
-            Element generateMultiBandRasterElement = new Element("multi-band-raster");
-            generateMultiBandRasterElement.setAttribute("generate", String.valueOf(voxelParameters.isGenerateMultiBandRaster()));
-            generateMultiBandRasterElement.setAttribute("discard_voxel_file_writing", String.valueOf(voxelParameters.isShortcutVoxelFileWriting()));
+            RasterParams rasterParameters = voxelParameters.getRasterParams();
+            
+            if(rasterParameters.isGenerateMultiBandRaster()){
+                Element generateMultiBandRasterElement = new Element("multi-band-raster");
+                generateMultiBandRasterElement.setAttribute("generate", String.valueOf(rasterParameters.isGenerateMultiBandRaster()));
+                generateMultiBandRasterElement.setAttribute("discard_voxel_file_writing", String.valueOf(rasterParameters.isShortcutVoxelFileWriting()));
 
-            generateMultiBandRasterElement.setAttribute("starting-height", String.valueOf(voxelParameters.getRasterStartingHeight()));
-            generateMultiBandRasterElement.setAttribute("step", String.valueOf(voxelParameters.getRasterHeightStep()));
-            generateMultiBandRasterElement.setAttribute("band-number", String.valueOf(voxelParameters.getRasterBandNumber()));
-            generateMultiBandRasterElement.setAttribute("resolution", String.valueOf(voxelParameters.getRasterResolution()));
+                generateMultiBandRasterElement.setAttribute("starting-height", String.valueOf(rasterParameters.getRasterStartingHeight()));
+                generateMultiBandRasterElement.setAttribute("step", String.valueOf(rasterParameters.getRasterHeightStep()));
+                generateMultiBandRasterElement.setAttribute("band-number", String.valueOf(rasterParameters.getRasterBandNumber()));
+                generateMultiBandRasterElement.setAttribute("resolution", String.valueOf(rasterParameters.getRasterResolution()));
 
-            processElement.addContent(generateMultiBandRasterElement);
+                processElement.addContent(generateMultiBandRasterElement);
+            }
+            
         }
     }
     
@@ -638,32 +639,16 @@ public class VoxCfg extends Configuration{
         this.vopMatrix = vopMatrix;
     }
 
-    public List<Filter> getFilters() {
-        return filters;
+    public List<Filter> getShotFilters() {
+        return shotFilters;
     }
     
     public void setEchoFilters(List<Filter> filters){
         this.echoFilters = filters;
     }
 
-    public void setFilters(List<Filter> filters) {
-        this.filters = filters;
-    }
-
-    public float[] getMultiResPadMax() {
-        return multiResPadMax;
-    }
-
-    public void setMultiResPadMax(float[] multiResPadMax) {
-        this.multiResPadMax = multiResPadMax;
-    }   
-
-    public void setCorrectNaNs(boolean correctNaNs) {
-        this.correctNaNs = correctNaNs;
-    }
-
-    public void setMultiResUseDefaultMaxPad(boolean multiResUseDefaultMaxPad) {
-        this.multiResUseDefaultMaxPad = multiResUseDefaultMaxPad;
+    public void setShotFilters(List<Filter> shotFilters) {
+        this.shotFilters = shotFilters;
     }
 
     public List<Filter> getEchoFilters() {
