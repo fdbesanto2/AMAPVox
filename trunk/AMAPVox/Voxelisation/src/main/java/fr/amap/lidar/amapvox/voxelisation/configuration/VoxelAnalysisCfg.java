@@ -17,6 +17,7 @@ package fr.amap.lidar.amapvox.voxelisation.configuration;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import fr.amap.lidar.amapvox.commons.Configuration;
 import fr.amap.commons.util.Filter;
+import fr.amap.commons.util.io.file.CSVFile;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.EchoFilter;
 import fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution.Type;
@@ -27,7 +28,10 @@ import fr.amap.lidar.amapvox.voxelisation.configuration.params.LADParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.RasterParams;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
@@ -41,9 +45,9 @@ import org.jdom2.Element;
  */
 
 
-public class VoxCfg extends Configuration{
+public class VoxelAnalysisCfg extends Configuration{
 
-    protected final static Logger logger = Logger.getLogger(VoxCfg.class);
+    protected final static Logger logger = Logger.getLogger(VoxelAnalysisCfg.class);
     
     protected File inputFile;
     protected File outputFile;
@@ -91,23 +95,23 @@ public class VoxCfg extends Configuration{
         Element voxelSpaceElement = processElement.getChild("voxelspace");
 
         if(voxelSpaceElement != null){
-            voxelParameters.setBottomCorner(new Point3d(
+            voxelParameters.infos.setMinCorner(new Point3d(
                         Double.valueOf(voxelSpaceElement.getAttributeValue("xmin")), 
                         Double.valueOf(voxelSpaceElement.getAttributeValue("ymin")), 
                         Double.valueOf(voxelSpaceElement.getAttributeValue("zmin"))));
 
-            voxelParameters.setTopCorner(new Point3d(
+            voxelParameters.infos.setMaxCorner(new Point3d(
                                 Double.valueOf(voxelSpaceElement.getAttributeValue("xmax")), 
                                 Double.valueOf(voxelSpaceElement.getAttributeValue("ymax")), 
                                 Double.valueOf(voxelSpaceElement.getAttributeValue("zmax"))));
 
-            voxelParameters.setSplit(new Point3i(
+            voxelParameters.infos.setSplit(new Point3i(
                                 Integer.valueOf(voxelSpaceElement.getAttributeValue("splitX")), 
                                 Integer.valueOf(voxelSpaceElement.getAttributeValue("splitY")), 
                                 Integer.valueOf(voxelSpaceElement.getAttributeValue("splitZ"))));
 
             try{
-                voxelParameters.setResolution(Double.valueOf(voxelSpaceElement.getAttributeValue("resolution")));
+                voxelParameters.infos.setResolution(Double.valueOf(voxelSpaceElement.getAttributeValue("resolution")));
             }catch(Exception e){}
             
         }else{
@@ -166,6 +170,38 @@ public class VoxCfg extends Configuration{
                 if(childrens != null){
                     List<PointcloudFilter> pointcloudFilters = new ArrayList<>();
                     for(Element e : childrens){
+                        
+        
+                        CSVFile file = new CSVFile(e.getAttributeValue("src"));
+
+                        try{
+                            String columnSeparator = e.getAttributeValue("column-separator");
+                            String headerIndex = e.getAttributeValue("header-index");
+                            String hasHeader = e.getAttributeValue("has-header");
+                            String nbOfLinesToRead = e.getAttributeValue("nb-of-lines-to-read");
+                            String nbOfLinesToSkip = e.getAttributeValue("nb-of-lines-to-skip");
+                            String columnAssignment = e.getAttributeValue("column-assignment");
+
+                            file.setColumnSeparator(columnSeparator);
+                            file.setHeaderIndex(Long.valueOf(headerIndex));
+                            file.setHasHeader(Boolean.valueOf(hasHeader));
+                            file.setNbOfLinesToRead(Long.valueOf(nbOfLinesToRead));
+                            file.setNbOfLinesToSkip(Long.valueOf(nbOfLinesToSkip));
+
+                            Map<String, Integer> colMap = new HashMap<>();
+                            String[] split = columnAssignment.split(",");
+                            for(String s : split){
+                                int indexOfSep = s.indexOf("=");
+                                String key = s.substring(0, indexOfSep);
+                                String value = s.substring(indexOfSep+1, s.length());
+                                colMap.put(key, Integer.valueOf(value));
+                            }
+
+                            file.setColumnAssignment(colMap);
+
+                        }catch(Exception ex){
+                            logger.warn("Old file element detected, keep default old read parameters.");
+                        }
 
                         boolean keep;
                         String operationType = e.getAttributeValue("operation-type");
@@ -174,8 +210,7 @@ public class VoxCfg extends Configuration{
                         }else{
                             keep = false;
                         }
-                        pointcloudFilters.add(new PointcloudFilter(new File(e.getAttributeValue("src")), 
-                                Float.valueOf(e.getAttributeValue("error-margin")), keep));
+                        pointcloudFilters.add(new PointcloudFilter(file, Float.valueOf(e.getAttributeValue("error-margin")), keep));
                     }
 
                     voxelParameters.setPointcloudFilters(pointcloudFilters);
@@ -220,7 +255,7 @@ public class VoxCfg extends Configuration{
             if(limitChildrensElement != null){
 
                 if(limitChildrensElement.size() > 0){
-                    voxelParameters.setMaxPAD(Float.valueOf(limitChildrensElement.get(0).getAttributeValue("max")));
+                    voxelParameters.infos.setMaxPAD(Float.valueOf(limitChildrensElement.get(0).getAttributeValue("max")));
                 }
             }
 
@@ -357,18 +392,18 @@ public class VoxCfg extends Configuration{
         outputFileElement.setAttribute(new Attribute("src",outputFile.getAbsolutePath()));
         processElement.addContent(outputFileElement);
         
-        if(voxelParameters != null && voxelParameters.bottomCorner !=null && voxelParameters.topCorner != null){
+        if(voxelParameters != null && voxelParameters.infos.getMinCorner() !=null && voxelParameters.infos.getMaxCorner() != null){
             Element voxelSpaceElement = new Element("voxelspace");
-            voxelSpaceElement.setAttribute("xmin", String.valueOf(voxelParameters.bottomCorner.x));
-            voxelSpaceElement.setAttribute("ymin", String.valueOf(voxelParameters.bottomCorner.y));
-            voxelSpaceElement.setAttribute("zmin", String.valueOf(voxelParameters.bottomCorner.z));
-            voxelSpaceElement.setAttribute("xmax", String.valueOf(voxelParameters.topCorner.x));
-            voxelSpaceElement.setAttribute("ymax", String.valueOf(voxelParameters.topCorner.y));
-            voxelSpaceElement.setAttribute("zmax", String.valueOf(voxelParameters.topCorner.z));
-            voxelSpaceElement.setAttribute("splitX", String.valueOf(voxelParameters.split.x));
-            voxelSpaceElement.setAttribute("splitY", String.valueOf(voxelParameters.split.y));
-            voxelSpaceElement.setAttribute("splitZ", String.valueOf(voxelParameters.split.z));
-            voxelSpaceElement.setAttribute("resolution", String.valueOf(voxelParameters.resolution));
+            voxelSpaceElement.setAttribute("xmin", String.valueOf(voxelParameters.infos.getMinCorner().x));
+            voxelSpaceElement.setAttribute("ymin", String.valueOf(voxelParameters.infos.getMinCorner().y));
+            voxelSpaceElement.setAttribute("zmin", String.valueOf(voxelParameters.infos.getMinCorner().z));
+            voxelSpaceElement.setAttribute("xmax", String.valueOf(voxelParameters.infos.getMaxCorner().x));
+            voxelSpaceElement.setAttribute("ymax", String.valueOf(voxelParameters.infos.getMaxCorner().y));
+            voxelSpaceElement.setAttribute("zmax", String.valueOf(voxelParameters.infos.getMaxCorner().z));
+            voxelSpaceElement.setAttribute("splitX", String.valueOf(voxelParameters.infos.getSplit().x));
+            voxelSpaceElement.setAttribute("splitY", String.valueOf(voxelParameters.infos.getSplit().y));
+            voxelSpaceElement.setAttribute("splitZ", String.valueOf(voxelParameters.infos.getSplit().z));
+            voxelSpaceElement.setAttribute("resolution", String.valueOf(voxelParameters.infos.getResolution()));
             processElement.addContent(voxelSpaceElement);
             
         }else{
@@ -439,6 +474,24 @@ public class VoxCfg extends Configuration{
                     }
 
                     pointcloudFilterElement.setAttribute(new Attribute("operation-type",operationType));
+                    
+                    pointcloudFilterElement.setAttribute(new Attribute("column-separator",filter.getPointcloudFile().getColumnSeparator()));
+                    pointcloudFilterElement.setAttribute(new Attribute("header-index",String.valueOf(filter.getPointcloudFile().getHeaderIndex())));
+                    pointcloudFilterElement.setAttribute(new Attribute("has-header", String.valueOf(filter.getPointcloudFile().isHasHeader())));
+                    pointcloudFilterElement.setAttribute(new Attribute("nb-of-lines-to-read", String.valueOf(filter.getPointcloudFile().getNbOfLinesToRead())));
+                    pointcloudFilterElement.setAttribute(new Attribute("nb-of-lines-to-skip", String.valueOf(filter.getPointcloudFile().getNbOfLinesToSkip())));
+
+                    Map<String, Integer> columnAssignment = filter.getPointcloudFile().getColumnAssignment();
+                    Iterator<Map.Entry<String, Integer>> iterator = columnAssignment.entrySet().iterator();
+                    String colAssignment = new String();
+
+                    while(iterator.hasNext()){
+                        Map.Entry<String, Integer> entry = iterator.next();
+                        colAssignment += entry.getKey()+"="+entry.getValue()+",";
+                    }
+
+                    pointcloudFilterElement.setAttribute(new Attribute("column-assignment", colAssignment));
+
                     pointcloudFiltersElement.addContent(pointcloudFilterElement);
                 }
             }
@@ -483,7 +536,7 @@ public class VoxCfg extends Configuration{
         Element limitElement = new Element("limit");
         limitElement.setAttribute("name", "PAD");
         limitElement.setAttribute("min", "");
-        limitElement.setAttribute("max", String.valueOf(voxelParameters.getMaxPAD()));
+        limitElement.setAttribute("max", String.valueOf(voxelParameters.infos.getMaxPAD()));
         limitsElement.addContent(limitElement);
 
         processElement.addContent(limitsElement);

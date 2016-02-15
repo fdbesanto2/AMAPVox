@@ -10,6 +10,7 @@ import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.commons.javafx.io.TextFileParserFrameController;
+import fr.amap.lidar.amapvox.commons.Voxel;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,6 +18,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -55,31 +57,19 @@ public class PositionImporterFrameController implements Initializable {
     private float mnt[][];
     
     @FXML
-    private Button onActionButtonImportFromFile;
-    @FXML
-    private TextField textfieldScannerPosCenterX;
-    @FXML
-    private TextField textfieldScannerPosCenterY;
-    @FXML
-    private TextField textfieldScannerPosCenterZ;
-    @FXML
-    private TextField textfieldScannerWidthArea;
-    @FXML
-    private TextField textfieldScannerStepArea;
-    @FXML
     private TextField textfieldVoxelFile;
     @FXML
     private ListView<Point3d> listViewCanopyAnalyzerSensorPositions;
-    @FXML
-    private MenuItem menuItemSelectionNone1;
-    @FXML
-    private Button onActionButtonImportFromFile1;
     @FXML
     private TextField textFieldXPosition;
     @FXML
     private TextField textFieldYPosition;
     @FXML
     private TextField textFieldZPosition;
+    @FXML
+    private TextField textfieldScannerHeightOffset;
+    @FXML
+    private TextField textfieldScannerSeedPosition;
 
     /**
      * Initializes the controller class.
@@ -280,6 +270,98 @@ public class PositionImporterFrameController implements Initializable {
     public void setStage(Stage stage){
         this.stage = stage;
     }
+    
+    private List<Point3d> generateGridPositions() throws Exception{
+        
+        float step = Float.valueOf(textfieldScannerSeedPosition.getText());
+        float zOffset = Float.valueOf(textfieldScannerHeightOffset.getText());
+
+        final List<Point3d> positions = new ArrayList<>();
+
+        VoxelFileReader reader = new VoxelFileReader(new File(textfieldVoxelFile.getText()));
+        VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
+        Point3d voxSize = new Point3d();
+        voxSize.x = (infos.getMaxCorner().x - infos.getMinCorner().x) / (double) infos.getSplit().x;
+        voxSize.y = (infos.getMaxCorner().y - infos.getMinCorner().y) / (double) infos.getSplit().y;
+        voxSize.z = (infos.getMaxCorner().z - infos.getMinCorner().z) / (double) infos.getSplit().z;
+
+        // allocate MNT
+        logger.info("allocate MNT");
+        mnt = new float[infos.getSplit().x][];
+        for (int x = 0; x < infos.getSplit().x; x++) {
+            mnt[x] = new float[infos.getSplit().y];
+            for (int y = 0; y < infos.getSplit().y; y++) {
+                mnt[x][y] = 999999999;
+            }
+        }
+        
+        Voxel[][][] voxels = new Voxel[infos.getSplit().x][infos.getSplit().y][infos.getSplit().z];
+        
+        Iterator<Voxel> iterator = reader.iterator();
+        while(iterator.hasNext()){
+            Voxel voxel = iterator.next();
+            voxels[voxel.$i][voxel.$j][voxel.$k] = voxel;
+        }
+        
+        for(int i=0;i<infos.getSplit().x;i++){
+
+            for(int j=0;j<infos.getSplit().y;j++){
+                
+                for(int k = infos.getSplit().z-1 ; k >= 0 ; k--){
+                    
+                    if(voxels[i][j][k].ground_distance > 0){
+
+                        double posZ = infos.getMinCorner().z + (infos.getResolution() / 2.0d) + (k * infos.getResolution());
+                        double diff = voxels[i][j][k].ground_distance;
+                        mnt[i][j] = (float) (posZ - diff + (infos.getResolution() / 2.0d));
+                        
+                    }else if(voxels[i][j][k].ground_distance < 0){
+                        k = 0;
+                    }
+                }
+                
+            }
+        }
+        
+
+        double middleX = infos.getMinCorner().x + (infos.getMaxCorner().x - infos.getMinCorner().x);
+        double middleY = infos.getMinCorner().y + (infos.getMaxCorner().y - infos.getMinCorner().y);
+
+        //calcul du x min
+        double xWidth = (infos.getMaxCorner().x - infos.getMinCorner().x) / 2.0;
+        int nbPossibleXStep = (int) (xWidth / step) * 2;
+        double xStart = middleX - (nbPossibleXStep * step);
+
+        double yWidth = (infos.getMaxCorner().y - infos.getMinCorner().y) / 2.0;
+        int nbPossibleYStep = (int) (yWidth / step) * 2;
+        double yStart = middleY - (nbPossibleYStep * step);
+
+
+
+        for(int i=0;i <= nbPossibleXStep;i++){
+
+            for(int j=0;j <= nbPossibleYStep;j++){
+
+                double posX = xStart + i*step; 
+                double posY = yStart + j*step;
+
+                int indiceX = (int)((posX-infos.getMinCorner().x)/infos.getResolution());
+                int indiceY = (int)((posY-infos.getMinCorner().y)/infos.getResolution());
+                
+                if(indiceX == infos.getSplit().x){
+                    indiceX--;
+                }
+                
+                if(indiceY == infos.getSplit().y){
+                    indiceY--;
+                }
+
+                positions.add(new Point3d(posX, posY, mnt[indiceX][indiceY] + zOffset));
+            }
+        }
+        
+        return positions;
+    }
 
     @FXML
     private void onActionButtonGenerateGridPosition(ActionEvent event) {
@@ -292,67 +374,23 @@ public class PositionImporterFrameController implements Initializable {
 
                     @Override
                     protected Object call() throws Exception {
-                        
-                        int size = Integer.valueOf(textfieldScannerWidthArea.getText());
 
-                        int middleX = (int) Integer.valueOf(textfieldScannerPosCenterX.getText());
-                        int middleY = (int) Integer.valueOf(textfieldScannerPosCenterY.getText());
-                        float zOffset = Float.valueOf(textfieldScannerPosCenterZ.getText());
-                        
-                        final List<Point3d> positions = new ArrayList<>();
+                        try {
 
-                        VoxelFileReader reader = new VoxelFileReader(new File(textfieldVoxelFile.getText()));
-                        VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
-                        Point3d voxSize = new Point3d();
-                        voxSize.x = (infos.getMaxCorner().x - infos.getMinCorner().x) / (double) infos.getSplit().x;
-                        voxSize.y = (infos.getMaxCorner().y - infos.getMinCorner().y) / (double) infos.getSplit().y;
-                        voxSize.z = (infos.getMaxCorner().z - infos.getMinCorner().z) / (double) infos.getSplit().z;
+                            List<Point3d> positions = generateGridPositions();
 
-                        // allocate MNT
-                        logger.info("allocate MNT");
-                        mnt = new float[infos.getSplit().x][];
-                        for (int x = 0; x < infos.getSplit().x; x++) {
-                            mnt[x] = new float[infos.getSplit().y];
-                            for (int y = 0; y < infos.getSplit().y; y++) {
-                                mnt[x][y] = (float) infos.getMinCorner().z;
-                            }
+                            Platform.runLater(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    listViewCanopyAnalyzerSensorPositions.getItems().addAll(positions);
+                                }
+                            });
+
+                        } catch (Exception e) {
+                            logger.error(e);
                         }
-
-                        int xMin = middleX - size;
-                        int yMin = middleY - size;
-
-                        int xMax = middleX + size;
-                        int yMax = middleY + size;
-
-                        xMin = Integer.max(xMin, 0);
-                        yMin = Integer.max(yMin, 0);
-
-                        xMax = Integer.min(xMax, infos.getSplit().x - 1);
-                        yMax = Integer.min(yMax, infos.getSplit().y - 1);
-
-                        for (int i = xMin; i < xMax; i++) {
-
-                            double tx = (0.5f + (double) i) * voxSize.x;
-
-                            for (int j = yMin; j < yMax; j++) {
-
-                                double ty = (0.5f + (double) j) * voxSize.y;
-                                Point3d pos = new Point3d(infos.getMinCorner());
-                                pos.add(new Point3d(tx, ty, mnt[i][j] + zOffset));
-                                positions.add(pos);
-                            }
-                        }
-
-                        Platform.runLater(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                listViewCanopyAnalyzerSensorPositions.getItems().addAll(positions);
-                            }
-                        });
                         
-                        
-
                         return null;
                     }
                 };

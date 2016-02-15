@@ -19,6 +19,7 @@ import fr.amap.commons.math.geometry.BoundingBox3F;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec4D;
+import fr.amap.commons.util.io.file.CSVFile;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -83,16 +85,32 @@ public class PointCloud {
         //return Collections.binarySearch(points, point);
     }
     
-    public void readFromFile(File file, Mat4D transfMatrix) throws FileNotFoundException, IOException{
+    public void readFromFile(CSVFile file, Mat4D transfMatrix) throws FileNotFoundException, IOException{
         
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                
                 points = new ArrayList<>();
                 String line;
+                
+                if(file.isHasHeader()){
+                    reader.readLine();
+                }
+                
+                for(int i=0;i<file.getNbOfLinesToSkip();i++){
+                    reader.readLine();
+                }
+                
+                Map<String, Integer> columnAssignment = file.getColumnAssignment();
+                
                 while((line = reader.readLine()) != null){
                     
-                    String[] split = line.split(",");
+                    String[] split = line.split(file.getColumnSeparator());
                     
-                    Vec4D transformedPoint = Mat4D.multiply(transfMatrix, new Vec4D(Float.valueOf(split[0]), Float.valueOf(split[1]), Float.valueOf(split[2]), 1));
+                    Vec4D transformedPoint = Mat4D.multiply(transfMatrix, 
+                            new Vec4D(Float.valueOf(split[columnAssignment.get("X")]),
+                                    Float.valueOf(split[columnAssignment.get("Y")]),
+                                    Float.valueOf(split[columnAssignment.get("Z")]),
+                                    1));
                 
                     points.add(new Point3F((float) transformedPoint.x, (float) transformedPoint.y, (float) transformedPoint.z));
                 }

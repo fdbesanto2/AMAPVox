@@ -224,5 +224,5 @@ public abstract class SceneObject{
 
     public abstract void load(File file);
     
-    public abstract String doPicking();
+    public abstract Object doPicking(Point3F camPosition, Vec3F ray);
 }

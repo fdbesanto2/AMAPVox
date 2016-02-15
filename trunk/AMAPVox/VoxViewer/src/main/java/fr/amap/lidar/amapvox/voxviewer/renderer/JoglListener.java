@@ -168,7 +168,7 @@ public class JoglListener implements GLEventListener {
     
     public void updateMousePicker(){
         
-        scene.updateMousePicker(eventListener.getMouseXCurrentLocation(), eventListener.getMouseYCurrentLocation(), viewportWidth, viewportHeight);
+        scene.updateMousePicker(eventListener.getMouseXCurrentLocation(), eventListener.getMouseYCurrentLocation(), startX, startY, viewportWidth, viewportHeight);
     }
 
     @Override
@@ -201,7 +201,8 @@ public class JoglListener implements GLEventListener {
         } else {
             //camera.initOrtho(0, width, height, 0, camera.getNearOrtho(), camera.getFarOrtho());
 
-
+            scene.getCamera().setViewportWidth(viewportWidth);
+            scene.getCamera().setViewportHeight(viewportHeight);
             //camera.initOrtho(-camera.getWidth()*0.5f, camera.getWidth()*0.5f, camera.getHeight()*0.5f, -camera.getHeight()*0.5f, camera.getNearOrtho(), camera.getFarOrtho());
             scene.getCamera().initOrtho(-((viewportWidth) / 100), (viewportWidth) / 100, viewportHeight / 100, -(viewportHeight) / 100, scene.getCamera().getNearOrtho(), scene.getCamera().getFarOrtho());
 

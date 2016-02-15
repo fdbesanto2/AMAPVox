@@ -51,6 +51,7 @@ public class Scene {
     */
     
     public final CopyOnWriteArrayList<SceneObject> objectsList;
+    public final CopyOnWriteArrayList<SceneObject> hudList;
     public final Map<String, Shader> shadersList;
     public final List<Texture> textureList;
     
@@ -66,13 +67,13 @@ public class Scene {
     private int height;
     
     //default shaders
-    public static Shader noTranslationShader = new AxisShader("noTranslationShader");
+    public static AxisShader noTranslationShader = new AxisShader("noTranslationShader");
     public static Shader instanceLightedShader = new InstanceLightedShader("instanceLightedShader");
-    public static Shader instanceShader = new InstanceShader("instanceShader");
-    public static Shader texturedShader = new TextureShader("textureShader");
-    public static Shader labelShader = new TextureShader("labelShader");
-    public static Shader lightedShader = new LightedShader("lightShader");
-    public static Shader simpleShader = new SimpleShader("simpleShader");
+    public static InstanceShader instanceShader = new InstanceShader("instanceShader");
+    public static TextureShader texturedShader = new TextureShader("textureShader");
+    public static TextureShader labelShader = new TextureShader("labelShader");
+    public static LightedShader lightedShader = new LightedShader("lightShader");
+    public static SimpleShader simpleShader = new SimpleShader("simpleShader");
     public static ColorShader colorShader = new ColorShader("colorShader");
     
     //global uniforms, can be used inside shaders files
@@ -92,6 +93,7 @@ public class Scene {
     public Scene(){
         
         objectsList = new CopyOnWriteArrayList<>();
+        hudList = new CopyOnWriteArrayList<>();
         shadersList = new HashMap<>();
         textureList = new ArrayList<>();
         canDraw = false;
@@ -203,9 +205,17 @@ public class Scene {
         }
             
         for(SceneObject sceneObject : objectsList){
+            
             sceneObject.initBuffers(gl);
             sceneObject.initVao(gl);
             sceneObject.setId(objectsList.size());
+            
+        }
+        
+        for(SceneObject sceneObject : hudList){
+            sceneObject.initBuffers(gl);
+            sceneObject.initVao(gl);
+            sceneObject.setId(objectsList.size()+hudList.size());
             
         }
         
@@ -217,6 +227,14 @@ public class Scene {
 
     public Map<String, Shader> getShadersList() {
         return shadersList;
+    }
+    
+    public void addSceneObjectAsHud(SceneObject sceneObject){
+        
+        hudList.add(sceneObject);
+        if(sceneObject.texture != null){
+            addTexture(sceneObject.texture);
+        }
     }
     
     public void addSceneObject(SceneObject sceneObject){
@@ -236,15 +254,9 @@ public class Scene {
         return null;
     }
     
-    public void updateMousePicker(float mouseX, float mouseY, float viewportWidth, float viewportHeight){
-        mousePicker.update(mouseX, mouseY, viewportWidth, viewportHeight);
+    public void updateMousePicker(float mouseX, float mouseY, int startX, int startY, float viewportWidth, float viewportHeight){
+        mousePicker.update(mouseX, mouseY, startX, startY, viewportWidth, viewportHeight);
         mousePickerIsDirty = true;
-    }
-    
-    
-    public void changeObjectTexture(int idObject, Texture texture){
-        
-        objectsList.get(idObject).attachTexture(texture);
     }
     
     public void addShader(Shader shader) {
@@ -267,7 +279,7 @@ public class Scene {
             for(SceneObject object : objectsList){
                 
                 
-                System.out.println(mousePicker.getCurrentRay().x+" "+mousePicker.getCurrentRay().y+" "+mousePicker.getCurrentRay().z);
+                //System.out.println(mousePicker.getCurrentRay().x+" "+mousePicker.getCurrentRay().y+" "+mousePicker.getCurrentRay().z);
                 
                 Point3F startPoint = mousePicker.getPointOnray(mousePicker.getCamPosition(), mousePicker.getCurrentRay(), 1);
                 Point3F endPoint = mousePicker.getPointOnray(mousePicker.getCamPosition(), mousePicker.getCurrentRay(), 999);
@@ -324,7 +336,22 @@ public class Scene {
                 object.draw(gl);
             gl.glUseProgram(0);
 
-        }    
+        } 
+        
+        for(SceneObject object : hudList){
+            if(object.vaoId == -1){
+                object.initBuffers(gl);
+                object.initVao(gl);
+            }
+
+            if(!object.depthTest){
+                gl.glClear(GL3.GL_DEPTH_BUFFER_BIT);
+            }
+
+            gl.glUseProgram(object.getShaderId());
+                object.draw(gl);
+            gl.glUseProgram(0);
+        }
     }
 
     public Light getLight() {

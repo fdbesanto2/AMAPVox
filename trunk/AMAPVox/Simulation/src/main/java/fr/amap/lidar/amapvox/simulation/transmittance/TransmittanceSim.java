@@ -11,6 +11,7 @@ import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.light.Turtle;
 import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.util.Colouring;
 import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.util.Time;
 import fr.amap.commons.math.matrix.Mat4D;
+import fr.amap.commons.util.Cancellable;
 import fr.amap.lidar.amapvox.simulation.transmittance.util.Period;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -36,7 +37,7 @@ import org.apache.log4j.Logger;
  * @author dauzat
  *
  */
-public class TransmittanceSim {
+public class TransmittanceSim implements Cancellable{
 
     private final static Logger logger = Logger.getLogger(TransmittanceSim.class);
     
@@ -48,60 +49,60 @@ public class TransmittanceSim {
     private float mntZmax;
     private float mntZmin;
     private Turtle turtle;
+    private List<File> outputBitmapFiles;
 
-    private ArrayList<Point3d> positions;
+    private List<Point3d> positions;
     
     private TransmittanceParameters parameters;
+    private TransmittanceCfg cfg;
     private VoxelSpace voxSpace;
+    
+    private boolean cancelled;
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
 
     private class TLSVoxel {
 
         float padBV;
     }
     
-    public static void simulationProcess(TransmittanceCfg cfg) throws IOException, Exception{
+    public TransmittanceSim(){
         
-        TransmittanceParameters parameters = cfg.getParameters();
+        outputBitmapFiles = new ArrayList<>();
+    }
+    
+    public void simulationProcess(TransmittanceCfg cfg) throws Exception{
         
-        TransmittanceSim padTransmittance;
-        try {
-            padTransmittance = new TransmittanceSim(parameters);
-            padTransmittance.process();
-        
-            if(parameters.isGenerateTextFile()){
-                padTransmittance.writeTransmittance();
-            }
+        parameters = cfg.getParameters();
+        init(parameters);
+        process();
 
-            if(parameters.isGenerateBitmapFile()){
-                padTransmittance.writeBitmaps();
-            }
-            
-        } catch (IOException ex) {
-            throw ex;
+        if(parameters.isGenerateTextFile()){
+            writeTransmittance();
         }
-        
+
+        if(parameters.isGenerateBitmapFile()){
+            writeBitmaps();
+        }
     }
     
-    public TransmittanceSim() throws IOException{
-        
-        
-    }
-    
-    public TransmittanceSim(TransmittanceParameters parameters) throws IOException{
+    private void init(TransmittanceParameters parameters) throws IOException{
         
         this.parameters = parameters;
-        
-        /*LeafAngleDistribution distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.TWO_PARAMETER_BETA, 62.21, 0.045);
-        direcTransmittance = new DirectionalTransmittance(distribution);
-        direcTransmittance.buildTable(DirectionalTransmittance.DEFAULT_STEP_NUMBER);*/
-        
-        //parameters.setShotNumber(300);
-        //parameters.setMode(Mode.LAI2200);
         
         turtle = new Turtle(parameters.getDirectionsNumber());
         
         logger.info("Turtle built with " + turtle.getNbDirections() + " directions");
         
+        outputBitmapFiles = new ArrayList<>();
     }
     
     public void process() throws IOException, Exception{
@@ -154,6 +155,10 @@ public class TransmittanceSim {
             
             for (int t = 0; t < turtle.getNbDirections(); t++) {
                 
+                if(cancelled){
+                    return;
+                }
+                
                 Vector3d dir = new Vector3d(ir.directions[t]);
                 dir.normalize();
 
@@ -185,8 +190,8 @@ public class TransmittanceSim {
     
     public void writeBitmaps() throws IOException{
         
-        int zoom = (int) (1*direcTransmittance.getInfos().getResolution());
-        
+        float zoom = (1*direcTransmittance.getInfos().getResolution());
+                
         parameters.getBitmapFile().mkdirs();
         
         for(int k=0;k<nbPeriods;k++){
@@ -198,14 +203,16 @@ public class TransmittanceSim {
             periodString = periodString.replaceAll(":", "");
             
             File outputFile = new File(parameters.getBitmapFile()+File.separator+"period_"+periodString+".bmp");
+            outputBitmapFiles.add(outputFile);
+            
             logger.info("Writing file "+outputFile);
             
-            BufferedImage bimg = new BufferedImage(voxSpace.getSplitting().x * zoom, voxSpace.getSplitting().y * zoom, BufferedImage.TYPE_INT_RGB);
+            BufferedImage bimg = new BufferedImage((int)(voxSpace.getSplitting().x * zoom), (int)(voxSpace.getSplitting().y * zoom), BufferedImage.TYPE_INT_RGB);
             Graphics2D g = bimg.createGraphics();
 
             // background
             g.setColor(new Color(80, 30, 0));
-            g.fillRect(0, 0, voxSpace.getSplitting().x * zoom, voxSpace.getSplitting().y * zoom);
+            g.fillRect(0, 0, (int)(voxSpace.getSplitting().x * zoom), (int)(voxSpace.getSplitting().y * zoom));
             
             for(int p = 0;p<positions.size();p++){
                 
@@ -217,7 +224,7 @@ public class TransmittanceSim {
                 Color c = Colouring.rainbow(col);
                 g.setColor(c);
                 int jj = voxSpace.getSplitting().y - j - 1;
-                g.fillRect(i * zoom, jj * zoom, zoom, zoom);
+                g.fillRect((int)(i * zoom), (int)(jj * zoom), 1, 1);
             }
             /*
             for(Point3d position : positions){
@@ -257,97 +264,104 @@ public class TransmittanceSim {
 
     private void getSensorPositions() {
         
-        positions = new ArrayList<>();
-        
-        if(parameters.isUseScanPositionsFile()){
-            
-            File pointPositionsFile = parameters.getPointsPositionsFile();
-            
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader(pointPositionsFile));
-                
-                String line;
-                boolean firstLineParsed = false;
-                
-                while((line = reader.readLine()) != null){
-                    
-                    line = line.replaceAll(" ", ",");
-                    line = line.replaceAll("\t", ",");
-                    
-                    String[] split = line.split(",");
-                    
-                    if(split != null && split.length >= 3){
-                        
-                        if(split.length > 3 && !firstLineParsed){
-                            logger.info("Sensor position file contains more than three columns, parsing the three first");
-                        }
-                        
-                        Point3d position = new Point3d(Double.valueOf(split[0]), Double.valueOf(split[1]), Double.valueOf(split[2]));
-                    
-                        int i = (int) ((position.x - voxSpace.getBoundingBox().min.x) / voxSpace.getVoxelSize().x);
-                        int j = (int) ((position.y - voxSpace.getBoundingBox().min.y) / voxSpace.getVoxelSize().y);
-
-                        if(i < voxSpace.getSplitting().x && i >= 0 && j < voxSpace.getSplitting().y && j >= 0){
-                            positions.add(position);
-                        }else{
-                            logger.warn("Position "+position.toString() +" ignored because out of voxel space!");
-                        }
-                    }
-                    
-                    if(!firstLineParsed){
-                        firstLineParsed = true;
-                    }
-                }
-                
-            } catch (FileNotFoundException ex) {
-                logger.error("File "+ parameters.getPointsPositionsFile()+" not found", ex);
-            } catch (IOException ex) {
-                logger.error("An error occured when reading file", ex);
-            }
-            
+        if(parameters.getPositions() != null){
+            positions = parameters.getPositions();
         }else{
-            // Smaller plot at center
-            int size = (int)parameters.getWidth();
-
-            int middleX = (int)parameters.getCenterPoint().x;
-            int middleY = (int)parameters.getCenterPoint().y;
-
-            int xMin = middleX - size;
-            int yMin = middleY - size;
-
-            int xMax = middleX + size;
-            int yMax = middleY + size;
-                        
-            xMin = Integer.max(xMin, 0);
-            yMin = Integer.max(yMin, 0);
             
-            xMax = Integer.min(xMax, voxSpace.getSplitting().x -1);
-            yMax = Integer.min(yMax, voxSpace.getSplitting().y -1);
-
-            for (int i = xMin; i < xMax; i++) {
-
-                double tx = (0.5f + (double) i) * voxSpace.getVoxelSize().x;
-
-                for (int j = yMin; j < yMax; j++) {
-
-                    double ty = (0.5f + (double) j) * voxSpace.getVoxelSize().y;
-                    Point3d pos = new Point3d(voxSpace.getBoundingBox().min);
-                    pos.add(new Point3d(tx, ty, mnt[i][j] + parameters.getCenterPoint().z));
-                    positions.add(pos);
-                }
-            }
+            positions = new ArrayList<>();
             
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(parameters.getTextFile().getParentFile()+File.separator+"positions.txt")))) {
-                
-                for(Point3d position : positions){
-                    writer.write(position.x + " " + position.y + " " + position.z + "\n");
+            if(parameters.isUseScanPositionsFile()){
+            
+                File pointPositionsFile = parameters.getPointsPositionsFile();
+
+                try {
+                    BufferedReader reader = new BufferedReader(new FileReader(pointPositionsFile));
+
+                    String line;
+                    boolean firstLineParsed = false;
+
+                    while((line = reader.readLine()) != null){
+
+                        line = line.replaceAll(" ", ",");
+                        line = line.replaceAll("\t", ",");
+
+                        String[] split = line.split(",");
+
+                        if(split != null && split.length >= 3){
+
+                            if(split.length > 3 && !firstLineParsed){
+                                logger.info("Sensor position file contains more than three columns, parsing the three first");
+                            }
+
+                            Point3d position = new Point3d(Double.valueOf(split[0]), Double.valueOf(split[1]), Double.valueOf(split[2]));
+
+                            int i = (int) ((position.x - voxSpace.getBoundingBox().min.x) / voxSpace.getVoxelSize().x);
+                            int j = (int) ((position.y - voxSpace.getBoundingBox().min.y) / voxSpace.getVoxelSize().y);
+
+                            if(i < voxSpace.getSplitting().x && i >= 0 && j < voxSpace.getSplitting().y && j >= 0){
+                                positions.add(position);
+                            }else{
+                                logger.warn("Position "+position.toString() +" ignored because out of voxel space!");
+                            }
+                        }
+
+                        if(!firstLineParsed){
+                            firstLineParsed = true;
+                        }
+                    }
+
+                } catch (FileNotFoundException ex) {
+                    logger.error("File "+ parameters.getPointsPositionsFile()+" not found", ex);
+                } catch (IOException ex) {
+                    logger.error("An error occured when reading file", ex);
                 }
-                
-                writer.close();
-            }catch (IOException ex) {
-            logger.error("Cannot write positions.txt file in output directory", ex);
+
+            }else{
+                // Smaller plot at center
+                int size = (int)parameters.getWidth();
+
+                int middleX = (int)parameters.getCenterPoint().x;
+                int middleY = (int)parameters.getCenterPoint().y;
+
+                int xMin = middleX - size;
+                int yMin = middleY - size;
+
+                int xMax = middleX + size;
+                int yMax = middleY + size;
+
+                xMin = Integer.max(xMin, 0);
+                yMin = Integer.max(yMin, 0);
+
+                xMax = Integer.min(xMax, voxSpace.getSplitting().x -1);
+                yMax = Integer.min(yMax, voxSpace.getSplitting().y -1);
+
+                for (int i = xMin; i < xMax; i++) {
+
+                    double tx = (0.5f + (double) i) * voxSpace.getVoxelSize().x;
+
+                    for (int j = yMin; j < yMax; j++) {
+
+                        double ty = (0.5f + (double) j) * voxSpace.getVoxelSize().y;
+                        Point3d pos = new Point3d(voxSpace.getBoundingBox().min);
+                        pos.add(new Point3d(tx, ty, mnt[i][j] + parameters.getCenterPoint().z));
+                        positions.add(pos);
+                    }
+                }
+
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(parameters.getTextFile().getParentFile()+File.separator+"positions.txt")))) {
+
+                    for(Point3d position : positions){
+                        writer.write(position.x + " " + position.y + " " + position.z + "\n");
+                    }
+
+                    writer.close();
+                }catch (IOException ex) {
+                logger.error("Cannot write positions.txt file in output directory", ex);
+                }
             }
         }
+        
+        
         
         logger.info("nb positions= " + positions.size());
     }
@@ -453,6 +467,10 @@ public class TransmittanceSim {
                 g.fillRect(i * zoom, jj * zoom, zoom, zoom);
             }
         }
+    }
+
+    public List<File> getOutputBitmapFiles() {
+        return outputBitmapFiles;
     }
 
 }

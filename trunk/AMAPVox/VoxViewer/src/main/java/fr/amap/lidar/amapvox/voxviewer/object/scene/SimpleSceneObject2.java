@@ -6,6 +6,8 @@
 package fr.amap.lidar.amapvox.voxviewer.object.scene;
 
 import com.jogamp.opengl.GL3;
+import fr.amap.commons.math.point.Point3F;
+import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.lidar.amapvox.voxviewer.loading.shader.Shader;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
 import java.io.File;
@@ -69,7 +71,7 @@ public class SimpleSceneObject2 extends SceneObject{
     }
 
     @Override
-    public String doPicking() {
+    public String doPicking(Point3F camPosition, Vec3F ray) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

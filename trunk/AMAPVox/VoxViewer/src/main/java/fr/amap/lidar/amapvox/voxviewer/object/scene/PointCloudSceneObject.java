@@ -32,6 +32,12 @@ public class PointCloudSceneObject extends SimpleSceneObject{
     private String currentAttribut;
     
     private Octree octree;
+    
+    /*
+     * TODO : implement LOD
+     * just load inside the list a point for each 100 points loaded
+     * Switch point cloud draw to LOD when user interacts with the scene (camera translation, zoom)
+     */
             
     public PointCloudSceneObject(PointCloudGLMesh mesh, boolean isAlphaRequired){
         super(mesh, isAlphaRequired, new Point3F());
@@ -229,9 +235,8 @@ public class PointCloudSceneObject extends SimpleSceneObject{
     }
 
     @Override
-    public String doPicking() {
+    public String doPicking(Point3F camPosition, Vec3F ray) {
         
-        Point3F camPosition = mousePicker.getCamPosition();
         Vec3F currentRay = mousePicker.getCurrentRay();
         
         Point3F closestPoint = mousePicker.getPointOnray(camPosition, currentRay, 1);
@@ -241,4 +246,7 @@ public class PointCloudSceneObject extends SimpleSceneObject{
         return ("ray direction : "+currentRay.x+" "+currentRay.y+ " " +currentRay.z);
     }
 
+    public Octree getOctree() {
+        return octree;
+    }
 }

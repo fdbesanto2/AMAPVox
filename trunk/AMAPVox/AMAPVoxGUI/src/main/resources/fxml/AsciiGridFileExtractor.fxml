@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="215.0" prefWidth="473.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.40" fx:controller="fr.amap.lidar.amapvox.gui.AsciiGridFileExtractorController">
+   <children>
+      <VBox layoutX="14.0" layoutY="14.0" spacing="10.0">
+         <children>
+            <VBox>
+               <children>
+                  <Label text="Raster" />
+                  <HBox>
+                     <children>
+                        <TextField fx:id="textfieldRasterFilePath" editable="false" prefHeight="25.0" prefWidth="316.0" />
+                        <Button mnemonicParsing="false" onAction="#onActionButtonSelectRasterFile" text="Select" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox spacing="10.0">
+               <children>
+                  <CheckBox fx:id="checkboxUseTransformationMatrix" mnemonicParsing="false" onAction="#onActionCheckboxUseTransformationMatrix" prefHeight="30.0" prefWidth="184.0">
+                     <graphic>
+                        <HBox alignment="CENTER" spacing="10.0">
+                           <children>
+                              <Label text="Transformation" />
+                              <Button fx:id="buttonSetTransformationMatrix" mnemonicParsing="false" onAction="#onActionButtonSetTransformationMatrix">
+                                 <graphic>
+                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@icons/Interaction_Transformation.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </HBox>
+                     </graphic>
+                  </CheckBox>
+                  <VBox alignment="CENTER_LEFT" spacing="5.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                           <children>
+                              <CheckBox fx:id="checkboxFitRasterToVoxelSpace" mnemonicParsing="false" text="Fit to voxel space" />
+                           </children>
+                        </HBox>
+                        <HBox fx:id="hboxFitToVoxelSpaceParams" alignment="CENTER_LEFT" disable="true" spacing="5.0">
+                           <children>
+                              <Label text="Voxel space" />
+                              <ComboBox fx:id="comboboxSelectVoxelSpaceToFitTo" prefHeight="26.0" prefWidth="142.0" />
+                              <Label text="Margin (cell number)" />
+                              <TextField fx:id="textfieldRasterFittingMargin" prefHeight="25.0" prefWidth="60.0" text="0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+      <Button layoutX="524.0" layoutY="205.0" mnemonicParsing="false" onAction="#onActionButtonImport" text="Import" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+   </children>
+</AnchorPane>

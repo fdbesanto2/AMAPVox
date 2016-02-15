@@ -124,7 +124,7 @@ public class PointsToShot extends Progression implements Iterable<Shot>{
 
                 for (LasPoint p : laz) {
 
-                    fireProgress("Reading *.las", count, numberOfPointrecords);
+                    fireProgress("Reading *.laz", count, numberOfPointrecords);
 
                     p.x = (p.x * header.getxScaleFactor()) + header.getxOffset();
                     p.y = (p.y * header.getyScaleFactor()) + header.getyOffset();
@@ -145,7 +145,7 @@ public class PointsToShot extends Progression implements Iterable<Shot>{
 
         double minTime = lasPointList.get(0).t;
         double maxTime = lasPointList.get(lasPointList.size()-1).t;
-
+        
         if(minTime == maxTime){
             //logger.error("ALS file doesn't contains time relative information, minimum and maximum time = "+minTime);
             return;
@@ -160,6 +160,10 @@ public class PointsToShot extends Progression implements Iterable<Shot>{
             BufferedReader reader = new BufferedReader(new FileReader(trajectoryFile));
 
             String line;
+            
+            if(trajectoryFile.isHasHeader()){
+                reader.readLine();
+            }
 
             for(long l = 0; l < trajectoryFile.getNbOfLinesToSkip();l++){
                 reader.readLine();
@@ -430,10 +434,6 @@ public class PointsToShot extends Progression implements Iterable<Shot>{
                         }else if(mix.lasPoint.r <= mix.lasPoint.n){
 
                             int currentEchoIndex = mix.lasPoint.r-1; //rang de l'écho
-                            
-                            if(currentEchoIndex == shot.ranges.length){
-                                System.out.println("test");
-                            }
 
                             shot.ranges[currentEchoIndex] = mix.range;
                             shot.classifications[currentEchoIndex] = mix.lasPoint.classification;

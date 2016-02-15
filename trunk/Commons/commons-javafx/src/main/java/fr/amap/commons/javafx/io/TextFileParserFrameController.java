@@ -511,6 +511,10 @@ public class TextFileParserFrameController implements Initializable{
         checkboxExtractScalarFieldNames.setSelected(value);
     }
     
+    public void setSeparator(String separator){
+        textfieldSeparator.setText(separator);
+    }
+    
     public int getHeaderIndex(){
         
         if(checkboxExtractScalarFieldNames.isSelected()){            

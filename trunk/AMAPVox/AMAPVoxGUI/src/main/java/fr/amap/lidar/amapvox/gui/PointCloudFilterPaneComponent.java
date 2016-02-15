@@ -15,6 +15,7 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.lidar.amapvox.gui;
 
+import fr.amap.commons.util.io.file.CSVFile;
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.FXML;
@@ -56,6 +57,8 @@ public class PointCloudFilterPaneComponent extends AnchorPane{
     
     private Pane root;
     
+    private CSVFile csvFile;
+    
     public PointCloudFilterPaneComponent(Pane root){
         
         this.root = root;
@@ -72,9 +75,17 @@ public class PointCloudFilterPaneComponent extends AnchorPane{
         comboboxPointCloudFilteringType.getItems().addAll("Keep","Discard");
         comboboxPointCloudFilteringType.getSelectionModel().selectFirst();
     }
+    
+    public void setCSVFile(CSVFile file){
+        
+        if(file != null){
+            csvFile = file;
+            textfieldPointCloudPath.setText(csvFile.getAbsolutePath());
+        }
+    }
 
-    public TextField getTextfieldPointCloudPath() {
-        return textfieldPointCloudPath;
+    public CSVFile getCsvFile() {
+        return csvFile;
     }
 
     public Label getLabelPointCloudErrorMarginValue() {

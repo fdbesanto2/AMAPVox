@@ -33,6 +33,28 @@ public class VoxelFileReader extends AbstractReader implements Iterable<Voxel>{
         super(voxelFile);
     }
     
+    public static boolean isFileAVoxelFile(File file){
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))){
+            
+            String identifier = reader.readLine();
+            
+            if(!identifier.equals("VOXEL SPACE")){
+                reader.close();
+                return false;
+            }
+            
+            reader.close();
+            
+            return true;
+            
+        } catch (FileNotFoundException ex) {
+            return false;
+        } catch (IOException ex) {
+            return false;
+        }
+    }
+    
     @Override
     public Iterator<Voxel> iterator() {
         

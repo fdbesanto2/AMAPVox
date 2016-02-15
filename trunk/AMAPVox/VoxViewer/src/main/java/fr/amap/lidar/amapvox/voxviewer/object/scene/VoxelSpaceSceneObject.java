@@ -37,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -63,6 +64,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
     public static final int VOXELSPACE_FORMAT2 = 2;
     
     private Map<String, ScalarField> scalarFieldsList;
+    private String[] columnsNames;
 
     @Override
     public void updateBuffers(GL3 gl, int index, FloatBuffer buffer) {
@@ -75,98 +77,29 @@ public class VoxelSpaceSceneObject extends SceneObject{
     }
 
     @Override
-    public String doPicking() {
+    public  VoxelObject doPicking(Point3F camPosition, Vec3F ray) {
         
-//        Point3F camPosition = mousePicker.getCamPosition();
-//        Vec3F currentRay = mousePicker.getCurrentRay();
-//
-//        //System.out.println(currentRay.x+" "+currentRay.y+" "+currentRay.z);
-//
-//        Point3F closestPoint = mousePicker.getPointOnray(camPosition, currentRay, 1);
-//        Point3F farestPoint = mousePicker.getPointOnray(camPosition, currentRay, 999);
-//
-//        LineSegment lineSegment = new LineSegment(
-//                new Point3d(closestPoint.x, closestPoint.y, closestPoint.z),
-//                new Point3d(farestPoint.x, farestPoint.y, farestPoint.z));
-//
-//        VoxelManager.VoxelCrossingContext context = voxelManager.getFirstVoxelV2(lineSegment);
-//
-//        while ((context != null) && (context.indices != null)) {
-//
-//            VoxelObject voxel = data.getVoxel(context.indices.x, context.indices.y, context.indices.z);
-//
-//            if(voxel.getAlpha() > 0){
-//                return (voxel.$i + " "+voxel.$j+" "+voxel.$k);
-//            }else{
-//                context = voxelManager.CrossVoxel(lineSegment, context.indices);
-//            }
-//        }
-//        return "no voxel intersected";
-                    
-        boolean drawImage = false;
-        
-        if(drawImage){
-            int width = (int) ((TrackballCamera)mousePicker.getCamera()).getViewportWidth();
-            int height = (int) ((TrackballCamera)mousePicker.getCamera()).getViewportHeight();
-            
-            Color full = new Color(255, 0, 0);
-            Color empty = new Color(0, 0, 0);
+        Point3F closestPoint = MousePicker.getPointOnray(camPosition, ray, 1);
+        Point3F farestPoint = MousePicker.getPointOnray(camPosition, ray, 999);
 
-            BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        LineSegment lineSegment = new LineSegment(
+                new Point3d(closestPoint.x, closestPoint.y, closestPoint.z),
+                new Point3d(farestPoint.x, farestPoint.y, farestPoint.z));
 
-            for(int i=0;i<width;i++){
-                for(int j=0;j<height;j++){
-                    
-                    mousePicker.update(i, j, width, height);
+        VoxelManager.VoxelCrossingContext context = voxelManager.getFirstVoxelV2(lineSegment);
 
-                    //Point3F camPosition = new Point3F();
-                    Point3F camPosition = mousePicker.getCamPosition();
-                    Vec3F currentRay = mousePicker.getCurrentRay();
+        while ((context != null) && (context.indices != null)) {
 
-                    //System.out.println(currentRay.x+" "+currentRay.y+" "+currentRay.z);
+            VoxelObject voxel = data.getVoxel(context.indices.x, context.indices.y, context.indices.z);
 
-                    Point3F closestPoint = mousePicker.getPointOnray(camPosition, currentRay, 1);
-                    Point3F farestPoint = mousePicker.getPointOnray(camPosition, currentRay, 999);
-
-                    LineSegment lineSegment = new LineSegment(
-                            new Point3d(closestPoint.x, closestPoint.y, closestPoint.z),
-                            new Point3d(farestPoint.x, farestPoint.y, farestPoint.z));
-
-                    VoxelManager.VoxelCrossingContext context = voxelManager.getFirstVoxelV2(lineSegment);
-
-                    boolean hasResult = false;
-                    
-                    while ((context != null) && (context.indices != null)) {
-
-                        VoxelObject voxel = data.getVoxel(context.indices.x, context.indices.y, context.indices.z);
-
-                        if(voxel.getAlpha() > 0){
-                            image.setRGB(i, height-j-1, full.getRGB());
-                            hasResult = true;
-                            break;
-                            //return (voxel.$i+" "+voxel.$j+" "+voxel.$k);
-                        }else{
-                            context = voxelManager.CrossVoxel(lineSegment, context.indices);
-                        }
-                    }
-                    
-                    if(!hasResult){
-                        image.setRGB(i, height-j-1, empty.getRGB());
-                    }
-                    
-                }
-            }
-            
-            try {
-                ImageIO.write(image, "png", new File("C:\\Users\\Julien\\Documents\\tmp.png"));
-                
-            } catch (IOException ex) {
-                Logger.getLogger(VoxelSpaceSceneObject.class.getName()).log(Level.SEVERE, null, ex);
+            if(voxel.getAlpha() > 0){
+                return voxel;
+            }else{
+                context = voxelManager.CrossVoxel(lineSegment, context.indices);
             }
         }
         
-        
-        return "";
+        return null;
     }
     
     public enum Format{
@@ -190,7 +123,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
     public float min;
     public float max;
     
-    private File voxelsFile;
+    private File voxelFile;
     
     public boolean arrayLoaded;
     private Map<String,Attribut> mapAttributs;
@@ -232,20 +165,6 @@ public class VoxelSpaceSceneObject extends SceneObject{
     private final PropertyChangeSupport props = new PropertyChangeSupport(this);
     private VoxelManager voxelManager;
     
-    public VoxelSpaceSceneObject(){
-        
-        //filteredValues = new TreeSet<>();
-        //filteredValues.add(new Filter("x", Float.NaN, Filter.EQUAL));
-        //filteredValues.add(new Filter("x", 0.0f, Filter.EQUAL));
-        combinedFilters = new CombinedFilters();
-        combinedFilters.addFilter(new CombinedFilter(new Filter("x", Float.NaN, Filter.EQUAL), null, CombinedFilter.AND));
-        combinedFilters.addFilter(new CombinedFilter(new Filter("x", 0.0f, Filter.EQUAL), null, CombinedFilter.AND));
-        mapAttributs = new LinkedHashMap<>();
-        variables = new TreeSet<>();
-        listeners = new EventListenerList();
-        fileLoaded = false;
-    }
-    
     public VoxelSpaceSceneObject(File voxelSpace){
         
         //filteredValues = new TreeSet<>();
@@ -259,9 +178,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
         listeners = new EventListenerList();
         fileLoaded = false;
         
-        this.voxelsFile = voxelSpace;
-        
-        this.mousePickable = true;
+        this.voxelFile = voxelSpace;
     }
     
     public void addPropertyChangeListener(String propName, PropertyChangeListener l) {
@@ -296,7 +213,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
     
     public void loadVoxels() throws IOException, Exception{
         
-        loadFromFile(voxelsFile);
+        loadFromFile(voxelFile);
         
         cubeSize = (float) (data.getVoxelSpaceInfos().getResolution()/2.0f);
         
@@ -309,6 +226,13 @@ public class VoxelSpaceSceneObject extends SceneObject{
             scene.setBoundingBox(new BoundingBox3d(infos.getMinCorner(), infos.getMaxCorner()));
             voxelManager = new VoxelManager(scene,  new VoxelManagerSettings(infos.getSplit(), VoxelManagerSettings.NON_TORIC_FINITE_BOX_TOPOLOGY));
         }
+        
+        /*Iterator<Map.Entry<String, ScalarField>> iterator = scalarFieldsList.entrySet().iterator();
+        
+        while(iterator.hasNext()){
+            
+            iterator.next().getValue().buildHistogram();
+        }*/
     }
 
     public Map<String, Attribut> getMapAttributs() {
@@ -442,6 +366,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
     public void initAttributs(String[] columnsNames){
         
         scalarFieldsList = new HashMap<>();
+        this.columnsNames = columnsNames;
         
         for(String name : columnsNames){
             variables.add(name);
@@ -449,6 +374,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
         
         for(String name : columnsNames){
             mapAttributs.put(name, new Attribut(name, name, variables));
+            scalarFieldsList.put(name, new ScalarField(name));
         }
     }
     
@@ -486,6 +412,11 @@ public class VoxelSpaceSceneObject extends SceneObject{
 
                     Point3i indice = new Point3i(voxel.$i, voxel.$j, voxel.$k);               
 
+                    /*for(int i=0;i<mapAttrs.length;i++){
+                        
+                        addValue(columnsNames[i], mapAttrs[i]);
+                    }*/
+                    
                     data.voxels.add(new VoxelObject(indice, mapAttrs, 1.0f));
 
                     lineNumber++;
@@ -499,7 +430,103 @@ public class VoxelSpaceSceneObject extends SceneObject{
         }
     }
     
-    private Point3f getVoxelPosition(int i, int j, int k){
+//    public void addValue(String index, float value){
+//        
+//        if(!scalarFieldsList.containsKey(index)){
+//            
+//            scalarFieldsList.put(index, new ScalarField(index));
+//        }
+//        
+//        scalarFieldsList.get(index).addValue(value);
+//    }
+//    
+//    public void switchColor(String colorAttributIndex){
+//        
+//                
+//        if(scalarFieldsList.containsKey(colorAttributIndex)){
+//            
+//            ScalarField scalarField = scalarFieldsList.get(colorAttributIndex);
+//            
+//            currentAttribut = scalarField.getName();
+//            updateColor();
+//        }
+//    }
+//    
+//    public void updateColor(){
+//        
+//        ScalarField scalarField = scalarFieldsList.get(currentAttribut);
+//        
+//        int nbValues;
+//        float[] colorDataArray;
+//        
+//        if(scalarField.hasColorGradient){
+//            
+//            nbValues = scalarField.getNbValues()*3;
+//            colorDataArray = new float[nbValues];
+//            
+//            for(int i=0, j=0;i<scalarField.getNbValues();i++, j+=3){
+//
+//                colorDataArray[j] = scalarField.getColor(i).getRed()/255.0f;
+//                colorDataArray[j+1] = scalarField.getColor(i).getGreen()/255.0f;
+//                colorDataArray[j+2] = scalarField.getColor(i).getBlue()/255.0f;
+//            }
+//        }else{
+//            
+//            nbValues = scalarField.getNbValues();
+//            colorDataArray = new float[nbValues];
+//            
+//            for(int i=0;i<scalarField.getNbValues();i++){
+//                colorDataArray[i] = scalarField.getValue(i)/255.0f;
+//            }
+//        }
+//
+//        mesh.setColorData(colorDataArray);
+//        colorNeedUpdate = true;
+//        
+//        float[] instancePositions = new float[voxelNumberToDraw*3];
+//        float[] instanceColors = new float[voxelNumberToDraw*4];
+//
+//        int positionCount = 0;
+//        int colorCount = 0;
+//        
+//        for(int i=0;i<data.voxels.size();i++){
+//            
+//            VoxelObject voxel = (VoxelObject)data.voxels.get(i);
+//            
+//            if(voxel.getAlpha() != 0 && !voxel.isHidden){
+//                
+//                if(positionCount < instancePositions.length && colorCount < instanceColors.length){
+//                    
+//                    Point3f position = getVoxelPosition(voxel.$i, voxel.$j, voxel.$k);
+//                    
+//                    instancePositions[positionCount] = position.x;
+//                    instancePositions[positionCount+1] = position.y;
+//                    instancePositions[positionCount+2] = position.z;
+//
+//                    instanceColors[colorCount] = voxel.getRed();
+//                    instanceColors[colorCount+1] = voxel.getGreen();
+//                    instanceColors[colorCount+2] = voxel.getBlue();
+//                    instanceColors[colorCount+3] = voxel.getAlpha();
+//
+//                    positionCount += 3;
+//                    colorCount += 4;
+//                }
+//            }
+//        }
+//        
+//        ((InstancedGLMesh)mesh).instancePositionsBuffer = Buffers.newDirectFloatBuffer(instancePositions);
+//        ((InstancedGLMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(instanceColors);
+//        
+//        ((InstancedGLMesh)mesh).setInstanceNumber(instancePositions.length/3);
+//        
+//        instancesUpdated = false;
+//    }
+    
+    public Map<String, ScalarField> getScalarFieldsList() {
+        return scalarFieldsList;
+    }
+    
+    public Point3f getVoxelPosition(int i, int j, int k){
         
         VoxelSpaceInfos infos = data.getVoxelSpaceInfos();
         double posX = infos.getMinCorner().x + (infos.getResolution() / 2.0d) + (i * infos.getResolution());
@@ -1067,5 +1094,17 @@ public class VoxelSpaceSceneObject extends SceneObject{
             return attributValueMin;
         }
     }
+
+    public File getVoxelFile() {
+        return voxelFile;
+    }
     
+    @Override
+    public String toString(){
+        return voxelFile.getAbsolutePath();
+    }
+
+    public String[] getColumnsNames() {
+        return columnsNames;
+    }
 }

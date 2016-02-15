@@ -63,23 +63,23 @@ public class MultiVoxCfg extends ALSVoxCfg{
                         multiProcessVoxelParameters = new VoxelParameters();
                         double resolution = Double.valueOf(subVoxelSpaceElement.getAttributeValue("resolution"));
 
-                        multiProcessVoxelParameters.setBottomCorner(new Point3d(
+                        multiProcessVoxelParameters.infos.setMinCorner(new Point3d(
                                         Double.valueOf(subVoxelSpaceElement.getAttributeValue("xmin")), 
                                         Double.valueOf(subVoxelSpaceElement.getAttributeValue("ymin")), 
                                         Double.valueOf(subVoxelSpaceElement.getAttributeValue("zmin"))));
 
-                        multiProcessVoxelParameters.setTopCorner(new Point3d(
+                        multiProcessVoxelParameters.infos.setMaxCorner(new Point3d(
                                             Double.valueOf(subVoxelSpaceElement.getAttributeValue("xmax")), 
                                             Double.valueOf(subVoxelSpaceElement.getAttributeValue("ymax")), 
                                             Double.valueOf(subVoxelSpaceElement.getAttributeValue("zmax"))));
 
-                        multiProcessVoxelParameters.setSplit(new Point3i(
+                        multiProcessVoxelParameters.infos.setSplit(new Point3i(
                                             Integer.valueOf(subVoxelSpaceElement.getAttributeValue("splitX")), 
                                             Integer.valueOf(subVoxelSpaceElement.getAttributeValue("splitY")), 
                                             Integer.valueOf(subVoxelSpaceElement.getAttributeValue("splitZ"))));
 
 
-                        multiProcessVoxelParameters.setResolution(resolution);
+                        multiProcessVoxelParameters.infos.setResolution(resolution);
                     }
 
                     File inputFileChild = null;
@@ -135,7 +135,7 @@ public class MultiVoxCfg extends ALSVoxCfg{
                                     double resolution = Double.valueOf(subSubVoxelSpaceElement.getAttributeValue("resolution"));
 
                                     subVoxelParameters = new VoxelParameters(null, null, new Point3i(splitX, splitY, splitZ));
-                                    subVoxelParameters.setResolution(resolution);
+                                    subVoxelParameters.infos.setResolution(resolution);
                                 }
 
                                 Element subSubOutputFileElement = element.getChild("output-file");
@@ -186,16 +186,16 @@ public class MultiVoxCfg extends ALSVoxCfg{
 
                 if(input.voxelParameters != null){
                     Element voxelSpaceElement = new Element("voxelspace");
-                    voxelSpaceElement.setAttribute("xmin", String.valueOf(input.voxelParameters.bottomCorner.x));
-                    voxelSpaceElement.setAttribute("ymin", String.valueOf(input.voxelParameters.bottomCorner.y));
-                    voxelSpaceElement.setAttribute("zmin", String.valueOf(input.voxelParameters.bottomCorner.z));
-                    voxelSpaceElement.setAttribute("xmax", String.valueOf(input.voxelParameters.topCorner.x));
-                    voxelSpaceElement.setAttribute("ymax", String.valueOf(input.voxelParameters.topCorner.y));
-                    voxelSpaceElement.setAttribute("zmax", String.valueOf(input.voxelParameters.topCorner.z));
-                    voxelSpaceElement.setAttribute("splitX", String.valueOf(input.voxelParameters.split.x));
-                    voxelSpaceElement.setAttribute("splitY", String.valueOf(input.voxelParameters.split.y));
-                    voxelSpaceElement.setAttribute("splitZ", String.valueOf(input.voxelParameters.split.z));
-                    voxelSpaceElement.setAttribute("resolution", String.valueOf(input.voxelParameters.resolution));
+                    voxelSpaceElement.setAttribute("xmin", String.valueOf(input.voxelParameters.infos.getMinCorner().x));
+                    voxelSpaceElement.setAttribute("ymin", String.valueOf(input.voxelParameters.infos.getMinCorner().y));
+                    voxelSpaceElement.setAttribute("zmin", String.valueOf(input.voxelParameters.infos.getMinCorner().z));
+                    voxelSpaceElement.setAttribute("xmax", String.valueOf(input.voxelParameters.infos.getMaxCorner().x));
+                    voxelSpaceElement.setAttribute("ymax", String.valueOf(input.voxelParameters.infos.getMaxCorner().y));
+                    voxelSpaceElement.setAttribute("zmax", String.valueOf(input.voxelParameters.infos.getMaxCorner().z));
+                    voxelSpaceElement.setAttribute("splitX", String.valueOf(input.voxelParameters.infos.getSplit().x));
+                    voxelSpaceElement.setAttribute("splitY", String.valueOf(input.voxelParameters.infos.getSplit().y));
+                    voxelSpaceElement.setAttribute("splitZ", String.valueOf(input.voxelParameters.infos.getSplit().z));
+                    voxelSpaceElement.setAttribute("resolution", String.valueOf(input.voxelParameters.infos.getResolution()));
                     inputElement.addContent(voxelSpaceElement);
                 }
                 if(input.inputFile != null){
@@ -249,10 +249,10 @@ public class MultiVoxCfg extends ALSVoxCfg{
 
                             Element multiResInputElement = new Element("input");
                             Element subVoxelSpaceElement = new Element("voxelspace");
-                            subVoxelSpaceElement.setAttribute("splitX", String.valueOf(subInput.voxelParameters.split.x));
-                            subVoxelSpaceElement.setAttribute("splitY", String.valueOf(subInput.voxelParameters.split.y));
-                            subVoxelSpaceElement.setAttribute("splitZ", String.valueOf(subInput.voxelParameters.split.z));
-                            subVoxelSpaceElement.setAttribute("resolution", String.valueOf(subInput.voxelParameters.resolution));
+                            subVoxelSpaceElement.setAttribute("splitX", String.valueOf(subInput.voxelParameters.infos.getSplit().x));
+                            subVoxelSpaceElement.setAttribute("splitY", String.valueOf(subInput.voxelParameters.infos.getSplit().y));
+                            subVoxelSpaceElement.setAttribute("splitZ", String.valueOf(subInput.voxelParameters.infos.getSplit().z));
+                            subVoxelSpaceElement.setAttribute("resolution", String.valueOf(subInput.voxelParameters.infos.getResolution()));
                             multiResInputElement.addContent(subVoxelSpaceElement);
 
                             Element subOutputFileElement = new Element("output-file");

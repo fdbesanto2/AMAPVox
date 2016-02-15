@@ -51,6 +51,15 @@ public abstract class BRaster {
         }
     }
     
+    public void setOutputFile(File outputFile){
+        
+        if(!outputFile.getName().endsWith(".bsq")){
+            outputFile = new File(outputFile.getAbsolutePath()+".bsq");
+        }
+        
+        this.outputFile = outputFile;
+    }
+    
     public void writeHeader() throws IOException{
         
         String rasterPath = outputFile.getAbsolutePath();

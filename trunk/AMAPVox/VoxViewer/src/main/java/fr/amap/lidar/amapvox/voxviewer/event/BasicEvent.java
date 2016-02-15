@@ -87,6 +87,7 @@ public class BasicEvent extends EventManager{
         if(middleMousePressed){
             
             joglContext.updateMousePicker();
+            middleMousePressed = false;
         }
         
         

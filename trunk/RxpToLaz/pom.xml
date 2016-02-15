@@ -21,8 +21,8 @@
     
     <dependencies>
         <dependency>
-            <groupId>fr.amap.amapvox</groupId>
-            <artifactId>JRiegl</artifactId>
+            <groupId>fr.amap.lidar</groupId>
+            <artifactId>format-riegl</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
@@ -73,7 +73,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>fr.amap.amapvox.rxptolaz.MainApp</mainClass>
+                            <mainClass>${mainClass}</mainClass>
                         </manifest>
                     </archive>
                     

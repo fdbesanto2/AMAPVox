@@ -71,7 +71,7 @@ public class VoxMergingCfg extends Configuration{
 
         if(limitsElement != null){
             Element limitElement = limitsElement.getChild("limit");
-            voxelParameters.setMaxPAD(Float.valueOf(limitElement.getAttributeValue("max")));
+            voxelParameters.infos.setMaxPAD(Float.valueOf(limitElement.getAttributeValue("max")));
         }
 
     }
@@ -91,7 +91,7 @@ public class VoxMergingCfg extends Configuration{
         Element limitElement = new Element("limit");
         limitElement.setAttribute("name", "PAD");
         limitElement.setAttribute("min", "");
-        limitElement.setAttribute("max", String.valueOf(voxelParameters.getMaxPAD()));
+        limitElement.setAttribute("max", String.valueOf(voxelParameters.infos.getMaxPAD()));
         limitsElement.addContent(limitElement);
         processElement.addContent(limitsElement);
 

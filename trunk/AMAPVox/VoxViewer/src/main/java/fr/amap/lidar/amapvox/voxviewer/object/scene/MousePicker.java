@@ -25,6 +25,8 @@ public class MousePicker {
     private Mat4F projectionMatrix;
     private Mat4F viewMatrix;
     private Camera camera;
+    
+    private final static boolean DEBUG = false;
 
     public MousePicker(Camera camera) {
         currentRay = new Vec3F();
@@ -33,15 +35,15 @@ public class MousePicker {
         this.camera = camera;
     }
     
-    public void update(float mouseX, float mouseY, float displayWidth, float displayHeight){
-        currentRay = calculateMouseRay(mouseX, mouseY, displayWidth, displayHeight);
+    public void update(float mouseX, float mouseY, int startX, int startY, float displayWidth, float displayHeight){
+        currentRay = calculateMouseRay(mouseX, mouseY, startX, startY, displayWidth, displayHeight);
     }
     
     public Vec3F getCurrentRay(){
         return currentRay;
     }
     
-    public Point3F getPointOnray(Point3F camPosition, Vec3F ray, float distance){
+    public static Point3F getPointOnray(Point3F camPosition, Vec3F ray, float distance){
         
         Vec3F start = new Vec3F(camPosition.x, camPosition.y, camPosition.z);
         Vec3F scaledRay = new Vec3F(ray.x * distance, ray.y * distance, ray.z * distance);
@@ -50,9 +52,14 @@ public class MousePicker {
         return new Point3F(tmp.x, tmp.y, tmp.z);
     }
     
-    public Vec3F calculateMouseRay(float mouseX, float mouseY, float displayWidth, float displayHeight){
+    public Vec3F calculateMouseRay(float mouseX, float mouseY, int startX, int startY, float displayWidth, float displayHeight){
         
-        Vec2F normalizedCoords = getNormalizedDeviceCoords(mouseX, mouseY, displayWidth, displayHeight);
+        Vec2F normalizedCoords = getNormalizedDeviceCoords(mouseX, mouseY, startX, startY, displayWidth, displayHeight);
+        
+        if(DEBUG){
+            System.out.println("Normalized device coord : "+normalizedCoords.x+"\t"+normalizedCoords.y);
+        }
+        
         Vec4F clipCoords = new Vec4F(normalizedCoords.x,  normalizedCoords.y, -1, 1f);
         Vec4F eyeCoords = toEyeCoords(clipCoords);
         Vec3F worldRay = toWorldCoords(eyeCoords);
@@ -76,10 +83,21 @@ public class MousePicker {
         return new Vec4F(eyeCoords.x, eyeCoords.y, -1, 0);
     }   
     
-    public Vec2F getNormalizedDeviceCoords(float mouseX, float mouseY, float displayWidth, float displayHeight){
+    /**
+     * Get the normalized device coordinates of the mouse from -1 to 1.
+     * The left lower corner of the screen is -1 and the right upper corner of the screen is 1 on both axis.
+     * @param mouseX
+     * @param mouseY
+     * @param startX
+     * @param startY
+     * @param displayWidth
+     * @param displayHeight
+     * @return 
+     */
+    public Vec2F getNormalizedDeviceCoords(float mouseX, float mouseY, int startX, int startY, float displayWidth, float displayHeight){
         
-        float x = (2f*mouseX) / displayWidth - 1;
-        float y = (2f*mouseY) / displayHeight - 1;
+        float x = (2f*(mouseX - startX)) / displayWidth - 1 ;
+        float y = -((2f*(mouseY - startY)) / displayHeight - 1);
         
         return new Vec2F(x, y);
     }

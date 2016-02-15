@@ -30,7 +30,7 @@ import org.jdom2.Element;
  */
 
 
-public class TLSVoxCfg extends VoxCfg{
+public class TLSVoxCfg extends VoxelAnalysisCfg{
     
     private List<LidarScan> lidarScans;
     

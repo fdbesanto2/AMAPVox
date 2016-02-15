@@ -150,6 +150,20 @@ public class Octree {
         //pour chaque noeud qui intersecte la droite, 
     }
     
+    /**
+     * Get the closest point to the given line.
+     * @param source
+     * @param end
+     * @return 
+     */
+    public Point3D getClosestPointToLine(Point3D source, Point3D end){
+        
+        //récupère dans l'ordre d'interception la liste des noeuds feuille traversés par la droite
+        //pour chaque noeud feuille on récupère le point le plus proche
+        
+        return null;
+    }
+    
     //retourne le noeud intersecté le plus proche
     public Node rayTraversal(Node node, Point3D source, Point3D end){
                 

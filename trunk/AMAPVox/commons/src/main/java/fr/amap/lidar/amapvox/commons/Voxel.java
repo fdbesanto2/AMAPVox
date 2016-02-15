@@ -144,6 +144,8 @@ public class Voxel{
         public float passNumber;
         public float neighboursNumber;
         
+        public boolean _lastEcho = true;
+        
 
         protected static Set<String> fieldsNames;
         protected static Set<Field> _fields;

@@ -12,12 +12,14 @@ import fr.amap.commons.math.vector.Vec4D;
 import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.commons.raster.asc.Raster;
+import fr.amap.commons.raster.multiband.BSQ;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.SimpleShotFilter;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
-import fr.amap.lidar.amapvox.voxelisation.configuration.VoxCfg;
+import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.RasterParams;
+import fr.amap.lidar.amapvox.voxelisation.postproc.MultiBandRaster;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +36,7 @@ public class RxpVoxelisation extends TLSVoxelisation{
     
     private final static Logger logger = Logger.getLogger(RxpVoxelisation.class);
     
-    public RxpVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, Raster terrain, List<PointcloudFilter> pointcloud, VoxCfg cfg) {
+    public RxpVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg) {
         super(inputFile, outputFile, vopMatrix, popMatrix, sopMatrix, parameters, terrain, pointcloud, cfg);
     }
 
@@ -95,9 +97,15 @@ public class RxpVoxelisation extends TLSVoxelisation{
 
                 if(rasterParameters.isGenerateMultiBandRaster()){
 
-                    voxelAnalysis.generateMultiBandsRaster(new File(outputFile.getAbsolutePath()+".bsq"), 
-                    rasterParameters.getRasterStartingHeight(), rasterParameters.getRasterHeightStep(), 
-                    rasterParameters.getRasterBandNumber(), rasterParameters.getRasterResolution());
+                    BSQ raster = MultiBandRaster.computeRaster(rasterParameters.getRasterStartingHeight(),
+                                                rasterParameters.getRasterHeightStep(), 
+                                                rasterParameters.getRasterBandNumber(), 
+                                                rasterParameters.getRasterResolution(),
+                                                parameters.infos,
+                                                voxelAnalysis.getVoxels(),
+                                                voxelAnalysis.getDtm());
+                    
+                    MultiBandRaster.writeRaster(new File(outputFile.getAbsolutePath()+".bsq"), raster);
 
                     if(!rasterParameters.isShortcutVoxelFileWriting()){
                         write = true;

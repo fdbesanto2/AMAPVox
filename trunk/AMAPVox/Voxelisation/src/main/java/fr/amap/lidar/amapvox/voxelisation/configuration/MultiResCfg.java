@@ -117,7 +117,7 @@ public class MultiResCfg extends Configuration{
         Element limitElement = new Element("limit");
         limitElement.setAttribute("name", "PAD");
         limitElement.setAttribute("min", "");
-        limitElement.setAttribute("max", String.valueOf(voxelParameters.getMaxPAD()));
+        limitElement.setAttribute("max", String.valueOf(voxelParameters.infos.getMaxPAD()));
         
         limitsElement.addContent(limitElement);
 

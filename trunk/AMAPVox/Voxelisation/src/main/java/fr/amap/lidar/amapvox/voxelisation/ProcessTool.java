@@ -30,6 +30,7 @@ import fr.amap.amapvox.io.tls.rsp.RxpScan;
 import fr.amap.commons.raster.asc.AsciiGridHelper;
 import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.util.Progression;
+import fr.amap.commons.util.io.file.CSVFile;
 import fr.amap.lidar.amapvox.voxelisation.als.LasVoxelisation;
 import fr.amap.lidar.amapvox.voxelisation.als.Trajectory;
 import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
@@ -119,7 +120,7 @@ public class ProcessTool extends Progression implements Cancellable{
         return terrain;
     }
     
-    private Octree loadOctree(File pointcloudFile, Mat4D vopMatrix) {
+    private Octree loadOctree(CSVFile pointcloudFile, Mat4D vopMatrix) {
 
         Octree octree = null;
         
@@ -159,7 +160,7 @@ public class ProcessTool extends Progression implements Cancellable{
 
         startTime = System.currentTimeMillis();
 
-        parameters.setTLS(true);
+        parameters.infos.setType(VoxelSpaceInfos.Type.TLS);
         
         Raster dtm = null;
         if (parameters.getDtmFilteringParams().useDTMCorrection()) {
@@ -238,7 +239,7 @@ public class ProcessTool extends Progression implements Cancellable{
 
         startTime = System.currentTimeMillis();
 
-        parameters.setTLS(true);
+        parameters.infos.setType(VoxelSpaceInfos.Type.TLS);
         
         Raster dtm = null;
         if (parameters.getDtmFilteringParams().useDTMCorrection()) {
@@ -318,7 +319,7 @@ public class ProcessTool extends Progression implements Cancellable{
 
         startTime = System.currentTimeMillis();
 
-        parameters.setTLS(true);
+        parameters.infos.setType(VoxelSpaceInfos.Type.TLS);
         
         Raster dtm = null;
         if (parameters.getDtmFilteringParams().useDTMCorrection()) {
@@ -405,7 +406,7 @@ public class ProcessTool extends Progression implements Cancellable{
         Mat4D sop = MatrixUtility.convertMatrix4dToMat4D(cfg.getSopMatrix());
         //List<Filter> filters = cfg.getFilters();        
         
-        parameters.setTLS(true);
+        parameters.infos.setType(VoxelSpaceInfos.Type.TLS);
 
         RxpScan scan = new RxpScan();
         scan.setFile(input);
@@ -450,8 +451,7 @@ public class ProcessTool extends Progression implements Cancellable{
 
         startTime = System.currentTimeMillis();
 
-        cfg.getVoxelParameters().setTLS(false);
-
+        cfg.getVoxelParameters().infos.setType(VoxelSpaceInfos.Type.ALS);
         
         LasVoxelisation voxelisation = new LasVoxelisation();
         voxelisation.setProgressionStep(20);
@@ -929,7 +929,7 @@ public class ProcessTool extends Progression implements Cancellable{
             writer.write("#max_corner: " + (float) voxelSpaceHeader.getMaxCorner().x + " " + (float) voxelSpaceHeader.getMaxCorner().y + " " + (float) voxelSpaceHeader.getMaxCorner().z + "\n");
             writer.write("#split: " + voxelSpaceHeader.getSplit().x + " " + voxelSpaceHeader.getSplit().y + " " + voxelSpaceHeader.getSplit().z + "\n");
 
-            writer.write("#type: TLS" + " #res: "+voxelSpaceHeader.getResolution()+" "+"#MAX_PAD: "+cfg.getVoxelParameters().getMaxPAD()+"\n");
+            writer.write("#type: TLS" + " #res: "+voxelSpaceHeader.getResolution()+" "+"#MAX_PAD: "+cfg.getVoxelParameters().infos.getMaxPAD()+"\n");
 
             String header = "";
             
@@ -974,7 +974,7 @@ public class ProcessTool extends Progression implements Cancellable{
     public void multiVoxelisation(MultiVoxCfg configuration) throws Exception{
         
         startTime = System.currentTimeMillis();
-        configuration.getVoxelParameters().setTLS(false);
+        configuration.getVoxelParameters().infos.setType(VoxelSpaceInfos.Type.ALS);
         
         List<Input> inputs = configuration.getMultiProcessInputs();
         
@@ -1023,10 +1023,10 @@ public class ProcessTool extends Progression implements Cancellable{
             
             fireProgress("Processing file "+count+"/"+inputs.size()+" : "+input.inputFile.getAbsolutePath(), 0, 100);
             
-            params.setBottomCorner(input.voxelParameters.getBottomCorner());
-            params.setTopCorner(input.voxelParameters.getTopCorner());
-            params.setSplit(input.voxelParameters.getSplit());
-            params.setResolution(input.voxelParameters.getResolution());
+            params.infos.setMinCorner(input.voxelParameters.infos.getMinCorner());
+            params.infos.setMaxCorner(input.voxelParameters.infos.getMaxCorner());
+            params.infos.setSplit(input.voxelParameters.infos.getSplit());
+            params.infos.setResolution(input.voxelParameters.infos.getResolution());
             
             configuration.setInputFile(input.inputFile);
             configuration.setOutputFile(input.outputFile);

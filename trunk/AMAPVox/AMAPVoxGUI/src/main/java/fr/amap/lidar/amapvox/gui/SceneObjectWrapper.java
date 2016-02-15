@@ -5,6 +5,7 @@
  */
 package fr.amap.lidar.amapvox.gui;
 
+import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
 import java.io.File;
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ public class SceneObjectWrapper extends GridPane{
         //properties
         private String name;
         private String path;
+        
+        private Mat4D transfMatrix;
         
 
         public SceneObjectWrapper(File file, ProgressBar progressBar) {
@@ -72,6 +75,14 @@ public class SceneObjectWrapper extends GridPane{
 
         public void setSceneObject(SceneObject sceneObject) {
             this.sceneObject = sceneObject;
+        }
+
+        public Mat4D getTransfMatrix() {
+            return transfMatrix;
+        }
+
+        public void setTransfMatrix(Mat4D transfMatrix) {
+            this.transfMatrix = transfMatrix;
         }
         
     }

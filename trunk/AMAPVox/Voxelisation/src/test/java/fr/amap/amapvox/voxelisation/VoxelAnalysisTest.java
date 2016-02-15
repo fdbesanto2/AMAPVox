@@ -8,7 +8,9 @@ package fr.amap.amapvox.voxelisation;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
 import fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution;
 import fr.amap.amapvox.io.tls.rxp.Shot;
-import fr.amap.lidar.amapvox.voxelisation.configuration.VoxCfg;
+import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
+import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos.Type;
+import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.LADParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
@@ -33,14 +35,14 @@ public class VoxelAnalysisTest {
     
     public VoxelAnalysisTest() {
         
-        VoxelAnalysis voxelAnalysis = new VoxelAnalysis(null, null, new VoxCfg());
+        VoxelAnalysis voxelAnalysis = new VoxelAnalysis(null, null, new VoxelAnalysisCfg());
         VoxelParameters parameters = new VoxelParameters(new Point3d(-10, -10, -10),
                                                         new Point3d(10, 10, 10),
                                                         new Point3i(20, 20, 20));
         
-        parameters.setResolution(1.0);
-        parameters.setMaxPAD(3.5f);
-        parameters.setTLS(false);
+        parameters.infos.setResolution(1.0);
+        parameters.infos.setMaxPAD(3.5f);
+        parameters.infos.setType(Type.ALS);
         parameters.getEchoesWeightParams().setWeightingData(EchoesWeightParams.DEFAULT_ALS_WEIGHTING);
         parameters.setLadParams(new LADParams());
         

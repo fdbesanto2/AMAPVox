@@ -127,7 +127,7 @@ public class RxpScanConversion {
             txtToLasPath = txtToLasPath+".exe";
         }
 
-        File outputLazFile = new File(outputDirectory.getAbsolutePath()+File.separator+scan.file.getName()+".laz");
+        File outputLazFile = new File(outputDirectory.getAbsolutePath()+File.separator+scan.file.getName()+".las");
 
         String[] commandLine = new String[]{txtToLasPath, "-i", outputTxtFile.getAbsolutePath(),
                                                                          "-o", outputLazFile.getAbsolutePath(),

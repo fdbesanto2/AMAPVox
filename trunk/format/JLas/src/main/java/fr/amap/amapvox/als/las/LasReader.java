@@ -848,6 +848,9 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
                     short difference = 0;
                     switch (pointFormatID) {
 
+                        case 0:
+                            length = PointDataRecordFormat.LENGTH;
+                            break;
                         case 1:
                             gpsTime = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                                     dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
@@ -906,6 +909,7 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
                     }
                 
                 } catch (IOException ex) {
+                    System.err.println("error");
                 }
                 
                 count++;

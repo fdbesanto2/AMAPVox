@@ -108,22 +108,22 @@
                                     <RowConstraints minHeight="10.0" percentHeight="25.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <TextField alignment="CENTER" text="0" GridPane.rowIndex="1" />
-                                    <TextField alignment="CENTER" text="1" />
-                                    <TextField alignment="CENTER" text="0" GridPane.columnIndex="1" />
-                                    <TextField alignment="CENTER" text="0" GridPane.columnIndex="2" />
-                                    <TextField alignment="CENTER" text="0" GridPane.columnIndex="3" />
-                                    <TextField alignment="CENTER" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                    <TextField alignment="CENTER" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                    <TextField alignment="CENTER" text="0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                    <TextField alignment="CENTER" text="0" GridPane.rowIndex="3" />
-                                    <TextField alignment="CENTER" text="0" GridPane.rowIndex="2" />
-                                    <TextField alignment="CENTER" text="0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                                    <TextField alignment="CENTER" text="1" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <TextField alignment="CENTER" text="0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                                    <TextField alignment="CENTER" text="1" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                                    <TextField alignment="CENTER" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                    <TextField alignment="CENTER" text="1" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                    <TextField fx:id="textFieldM10" alignment="CENTER" text="0" GridPane.rowIndex="1" />
+                                    <TextField fx:id="textFieldM00" alignment="CENTER" text="1" />
+                                    <TextField fx:id="textFieldM01" alignment="CENTER" text="0" GridPane.columnIndex="1" />
+                                    <TextField fx:id="textFieldM02" alignment="CENTER" text="0" GridPane.columnIndex="2" />
+                                    <TextField fx:id="textFieldM03" alignment="CENTER" text="0" GridPane.columnIndex="3" />
+                                    <TextField fx:id="textFieldM21" alignment="CENTER" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <TextField fx:id="textFieldM31" alignment="CENTER" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <TextField fx:id="textFieldM13" alignment="CENTER" text="0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                    <TextField fx:id="textFieldM30" alignment="CENTER" text="0" GridPane.rowIndex="3" />
+                                    <TextField fx:id="textFieldM20" alignment="CENTER" text="0" GridPane.rowIndex="2" />
+                                    <TextField fx:id="textFieldM23" alignment="CENTER" text="0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                    <TextField fx:id="textFieldM11" alignment="CENTER" text="1" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <TextField fx:id="textFieldM32" alignment="CENTER" text="0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                    <TextField fx:id="textFieldM33" alignment="CENTER" text="1" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                    <TextField fx:id="textFieldM12" alignment="CENTER" text="0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                    <TextField fx:id="textFieldM22" alignment="CENTER" text="1" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                  </children>
                               </GridPane>
                               <Button fx:id="buttonConfigureMatrix" mnemonicParsing="false" prefHeight="20.0" prefWidth="35.0">

@@ -26,6 +26,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -81,7 +83,6 @@ public class DateChooserFrameController implements Initializable {
         
         numberFormat = NumberFormat.getInstance();
         numberFormat.setMinimumIntegerDigits(2);
-        
     }    
 
     @FXML

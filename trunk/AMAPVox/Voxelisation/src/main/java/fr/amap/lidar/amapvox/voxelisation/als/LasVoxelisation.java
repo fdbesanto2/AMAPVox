@@ -12,13 +12,16 @@ import fr.amap.commons.util.ProcessingListener;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.commons.raster.asc.AsciiGridHelper;
 import fr.amap.commons.raster.asc.Raster;
+import fr.amap.commons.raster.multiband.BSQ;
 import fr.amap.commons.util.MatrixUtility;
 import fr.amap.lidar.amapvox.voxelisation.SimpleShotFilter;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
 import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
-import fr.amap.lidar.amapvox.voxelisation.configuration.VoxCfg;
+import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.RasterParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
+import fr.amap.lidar.amapvox.voxelisation.postproc.MultiBandRaster;
+import fr.amap.lidar.amapvox.voxelisation.postproc.NaNsCorrection;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -152,9 +155,15 @@ public class LasVoxelisation extends Progression {
 
             if(rasterParameters.isGenerateMultiBandRaster()){
 
-                voxelAnalysis.generateMultiBandsRaster(new File(cfg.getOutputFile().getAbsolutePath()+".bsq"), 
-                rasterParameters.getRasterStartingHeight(), rasterParameters.getRasterHeightStep(), 
-                rasterParameters.getRasterBandNumber(), rasterParameters.getRasterResolution());
+                BSQ raster = MultiBandRaster.computeRaster(rasterParameters.getRasterStartingHeight(),
+                                                rasterParameters.getRasterHeightStep(), 
+                                                rasterParameters.getRasterBandNumber(), 
+                                                rasterParameters.getRasterResolution(),
+                                                cfg.getVoxelParameters().infos,
+                                                voxelAnalysis.getVoxels(),
+                                                voxelAnalysis.getDtm());
+                    
+                MultiBandRaster.writeRaster(new File(cfg.getOutputFile().getAbsolutePath()+".bsq"), raster);
 
                 if(!rasterParameters.isShortcutVoxelFileWriting()){
                     write = true;
@@ -169,7 +178,7 @@ public class LasVoxelisation extends Progression {
             voxelAnalysis.computePADs();
                     
             if(cfg.getVoxelParameters().getNaNsCorrectionParams().isActivate()){
-                voxelAnalysis.correctNaNs();
+                NaNsCorrection.correct(cfg.getVoxelParameters(), voxelAnalysis.getVoxels());
             }
 
             voxelAnalysis.write();

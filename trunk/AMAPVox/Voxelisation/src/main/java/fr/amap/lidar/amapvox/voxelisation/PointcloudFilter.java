@@ -17,6 +17,7 @@ package fr.amap.lidar.amapvox.voxelisation;
 import fr.amap.commons.structure.octree.Octree;
 import fr.amap.commons.math.point.Point3D;
 import fr.amap.commons.math.point.Point3F;
+import fr.amap.commons.util.io.file.CSVFile;
 import java.io.File;
 import javax.vecmath.Point3d;
 
@@ -28,23 +29,23 @@ import javax.vecmath.Point3d;
 
 public class PointcloudFilter {
     
-    private File pointcloudFile;
+    private CSVFile pointcloudFile;
     private float pointcloudErrorMargin;
     private boolean keep;
     private Octree octree;
 
 
-    public PointcloudFilter(File pointcloudFile, float pointcloudErrorMargin, boolean keep) {
+    public PointcloudFilter(CSVFile pointcloudFile, float pointcloudErrorMargin, boolean keep) {
         this.pointcloudFile = pointcloudFile;
         this.pointcloudErrorMargin = pointcloudErrorMargin;
         this.keep = keep;
     }
 
-    public File getPointcloudFile() {
+    public CSVFile getPointcloudFile() {
         return pointcloudFile;
     }
 
-    public void setPointcloudFile(File pointcloudFile) {
+    public void setPointcloudFile(CSVFile pointcloudFile) {
         this.pointcloudFile = pointcloudFile;
     }
 

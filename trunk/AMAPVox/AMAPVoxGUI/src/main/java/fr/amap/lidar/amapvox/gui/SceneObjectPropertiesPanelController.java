@@ -5,6 +5,7 @@
  */
 package fr.amap.lidar.amapvox.gui;
 
+import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.util.ColorGradient;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.ScalarField;
@@ -29,6 +30,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
 import org.apache.log4j.Logger;
 
@@ -59,6 +61,38 @@ public class SceneObjectPropertiesPanelController implements Initializable {
     private final static Logger logger = Logger.getLogger(SceneObjectPropertiesPanelController.class);
     @FXML
     private AreaChart<Number, Number> areaChartScalarFieldValues;
+    @FXML
+    private TextField textFieldM10;
+    @FXML
+    private TextField textFieldM00;
+    @FXML
+    private TextField textFieldM01;
+    @FXML
+    private TextField textFieldM02;
+    @FXML
+    private TextField textFieldM03;
+    @FXML
+    private TextField textFieldM21;
+    @FXML
+    private TextField textFieldM31;
+    @FXML
+    private TextField textFieldM13;
+    @FXML
+    private TextField textFieldM30;
+    @FXML
+    private TextField textFieldM20;
+    @FXML
+    private TextField textFieldM23;
+    @FXML
+    private TextField textFieldM11;
+    @FXML
+    private TextField textFieldM32;
+    @FXML
+    private TextField textFieldM33;
+    @FXML
+    private TextField textFieldM12;
+    @FXML
+    private TextField textFieldM22;
     
     private class ColorString{
         
@@ -112,11 +146,17 @@ public class SceneObjectPropertiesPanelController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 
-                if(((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).getScalarFieldsList().containsKey(newValue)){
+                if(sceneObjectWrapper.getSceneObject() instanceof PointCloudSceneObject){
+                    if(((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).getScalarFieldsList().containsKey(newValue)){
                     
-                    updateValues(((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).getScalarFieldsList().get(newValue));
+                        updateValues(((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).getScalarFieldsList().get(newValue));
+
+                        ((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).switchColor(newValue);
+                    }
+                }else if(sceneObjectWrapper.getSceneObject() instanceof VoxelSpaceSceneObject){
                     
-                    ((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).switchColor(newValue);
+                    //updateValues(((VoxelSpaceSceneObject)sceneObjectWrapper.getSceneObject()).getScalarFieldsList().get(newValue));
+                    //((VoxelSpaceSceneObject)sceneObjectWrapper.getSceneObject()).switchColor(newValue);
                 }
                
             }
@@ -127,9 +167,11 @@ public class SceneObjectPropertiesPanelController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends ColorString> observable, ColorString oldValue, ColorString newValue) {
                 
-                if(((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()) instanceof PointCloudSceneObject){
+                if(sceneObjectWrapper.getSceneObject() instanceof PointCloudSceneObject){
                     ((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).getScalarFieldsList().get(comboboxActiveScalarField.getSelectionModel().getSelectedItem()).setGradientColor(newValue.color);
                     ((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).updateColor();
+                }else if(sceneObjectWrapper.getSceneObject() instanceof SceneObject){
+                    
                 }
             }
         });
@@ -154,7 +196,33 @@ public class SceneObjectPropertiesPanelController implements Initializable {
             
         }
         
+        setTransfMatrix(selectedItem.getTransfMatrix());
+        
         comboboxActiveScalarField.getSelectionModel().selectFirst();
+    }
+    
+    private void setTransfMatrix(Mat4D matrix){
+        
+        if(matrix == null){
+            matrix = Mat4D.identity();
+        }
+        
+        textFieldM00.setText(String.valueOf(matrix.mat[0]));
+        textFieldM01.setText(String.valueOf(matrix.mat[1]));
+        textFieldM02.setText(String.valueOf(matrix.mat[2]));
+        textFieldM03.setText(String.valueOf(matrix.mat[3]));
+        textFieldM10.setText(String.valueOf(matrix.mat[4]));
+        textFieldM11.setText(String.valueOf(matrix.mat[5]));
+        textFieldM12.setText(String.valueOf(matrix.mat[6]));
+        textFieldM13.setText(String.valueOf(matrix.mat[7]));
+        textFieldM20.setText(String.valueOf(matrix.mat[8]));
+        textFieldM21.setText(String.valueOf(matrix.mat[9]));
+        textFieldM22.setText(String.valueOf(matrix.mat[10]));
+        textFieldM23.setText(String.valueOf(matrix.mat[11]));
+        textFieldM30.setText(String.valueOf(matrix.mat[12]));
+        textFieldM31.setText(String.valueOf(matrix.mat[13]));
+        textFieldM32.setText(String.valueOf(matrix.mat[14]));
+        textFieldM33.setText(String.valueOf(matrix.mat[15]));
     }
     
     private void updateValues(ScalarField scalarField){

@@ -1,18 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import fr.amap.commons.javafx.*?>
-<?import java.net.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.chart.*?>
-<?import org.controlsfx.control.textfield.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.layout.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorpaneRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="659.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.lidar.amapvox.gui.MainFrameController">
+<AnchorPane fx:id="anchorpaneRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="659.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.lidar.amapvox.gui.MainFrameController">
    <children>
       <MenuBar maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="25.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <menus>
@@ -54,7 +76,7 @@
                                                                         <HBox alignment="CENTER_LEFT">
                                                                            <children>
                                                                               <Label text="Threshold" />
-                                                                              <TextField fx:id="textfieldNbSamplingThresholdMultires" prefHeight="26.0" prefWidth="60.0" text="2" />
+                                                                              <TextField fx:id="textfieldNbSamplingThresholdMultires" prefHeight="26.0" prefWidth="60.0" text="1" />
                                                                            </children>
                                                                         </HBox>
                                                                      </children>
@@ -123,7 +145,7 @@
                                                                   <Label layoutX="14.0" layoutY="58.0" text="Input file" />
                                                                   <Button layoutX="14.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileTLS" text="Import scans" AnchorPane.topAnchor="100.0" />
                                                                   <ListView fx:id="listviewRxpScans" layoutX="14.0" layoutY="129.0" maxWidth="1.7976931348623157E308" prefHeight="91.0" prefWidth="300.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
-                                                                  <CheckBox fx:id="checkboxMergeAfter" layoutX="99.0" layoutY="309.0" mnemonicParsing="false" text="Merge after" />
+                                                                  <CheckBox fx:id="checkboxMergeAfter" layoutX="99.0" layoutY="309.0" mnemonicParsing="false" selected="true" text="Merge after" />
                                                                   <TextField fx:id="textFieldMergedFileName" layoutX="230.0" layoutY="305.0" prefHeight="25.0" prefWidth="103.0" text="merged.vox" AnchorPane.rightAnchor="24.0" />
                                                                   <HBox layoutX="13.0" layoutY="335.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                                      <children>
@@ -166,51 +188,138 @@
                                                                </children></AnchorPane>
                                                       </content>
                                                     </Tab>
-                                                      <Tab text="Merging">
+                                                      <Tab text="Post-process">
                                                          <content>
                                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                <children>
-                                                                  <Button layoutX="15.0" layoutY="275.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileMerging" text="Open" AnchorPane.leftAnchor="14.0" />
-                                                                  <Label layoutX="23.0" layoutY="235.0" text="Output file" AnchorPane.leftAnchor="14.0" />
-                                                                  <TextField fx:id="textFieldOutputFileMerging" editable="false" layoutX="20.0" layoutY="250.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
-                                                                  <HBox layoutX="196.0" layoutY="339.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
-                                                                     <children>
-                                                                        <Button mnemonicParsing="false" onAction="#onActionButtonExecuteMergingProcess" text="Execute">
-                                                                           <graphic>
-                                                                              <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                                 <image>
-                                                                                    <Image url="@icons/gnome-run.png" />
-                                                                                 </image>
-                                                                              </ImageView>
-                                                                           </graphic>
-                                                                        </Button>
-                                                                        <MenuButton contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onActionButtonExecuteALSVoxelization">
-                                                                           <padding>
-                                                                              <Insets left="-8.0" />
-                                                                           </padding>
-                                                                           <items>
-                                                                              <MenuItem mnemonicParsing="false" onAction="#onActionButtonSaveMergingProcess" text="Save">
-                                                                                 <graphic>
-                                                                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                                       <image>
-                                                                                          <Image url="@icons/save.png" />
-                                                                                       </image>
-                                                                                    </ImageView>
-                                                                                 </graphic>
-                                                                              </MenuItem>
-                                                                              <MenuItem mnemonicParsing="false" onAction="#onActionButtonSaveExecuteMergingProcess" text="Save and execute">
-                                                                                 <graphic>
-                                                                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                                       <image>
-                                                                                          <Image url="@icons/save_execute.png" />
-                                                                                       </image>
-                                                                                    </ImageView>
-                                                                                 </graphic>
-                                                                              </MenuItem>
-                                                                           </items>
-                                                                        </MenuButton>
-                                                                     </children>
-                                                                  </HBox>
+                                                                  <TabPane layoutX="69.0" layoutY="8.0" prefHeight="379.0" prefWidth="338.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                    <tabs>
+                                                                      <Tab text="Merging">
+                                                                           <content>
+                                                                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                                                 <children>
+                                                                                    <VBox layoutX="14.0" layoutY="14.0">
+                                                                                       <children>
+                                                                                          <Label text="Output file" />
+                                                                                          <TextField fx:id="textFieldOutputFileMerging" editable="false" prefHeight="25.0" prefWidth="280.0" />
+                                                                                          <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileMerging" text="Open" />
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <HBox layoutX="206.0" layoutY="306.0">
+                                                                                       <children>
+                                                                                          <Button mnemonicParsing="false" onAction="#onActionButtonExecuteMergingProcess" text="Execute">
+                                                                                             <graphic>
+                                                                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                   <image>
+                                                                                                      <Image url="@icons/gnome-run.png" />
+                                                                                                   </image>
+                                                                                                </ImageView>
+                                                                                             </graphic>
+                                                                                          </Button>
+                                                                                          <MenuButton contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onActionButtonExecuteALSVoxelization">
+                                                                                             <padding>
+                                                                                                <Insets left="-8.0" />
+                                                                                             </padding>
+                                                                                             <items>
+                                                                                                <MenuItem mnemonicParsing="false" onAction="#onActionButtonSaveMergingProcess" text="Save">
+                                                                                                   <graphic>
+                                                                                                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                         <image>
+                                                                                                            <Image url="@icons/save.png" />
+                                                                                                         </image>
+                                                                                                      </ImageView>
+                                                                                                   </graphic>
+                                                                                                </MenuItem>
+                                                                                                <MenuItem mnemonicParsing="false" onAction="#onActionButtonSaveExecuteMergingProcess" text="Save and execute">
+                                                                                                   <graphic>
+                                                                                                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                         <image>
+                                                                                                            <Image url="@icons/save_execute.png" />
+                                                                                                         </image>
+                                                                                                      </ImageView>
+                                                                                                   </graphic>
+                                                                                                </MenuItem>
+                                                                                             </items>
+                                                                                          </MenuButton>
+                                                                                       </children>
+                                                                                    </HBox>
+                                                                                 </children>
+                                                                              </AnchorPane>
+                                                                           </content>
+                                                                           <tooltip>
+                                                                              <Tooltip text="Merge a list of voxel files into a single" />
+                                                                           </tooltip>
+                                                                        </Tab>
+                                                                      <Tab text="NaNs-correction">
+                                                                           <tooltip>
+                                                                              <Tooltip text="Fill non-informed voxels with mean voxel's values in an incremental Moore neighborhood" />
+                                                                           </tooltip>
+                                                                           <content>
+                                                                              <AnchorPane>
+                                                                                 <children>
+                                                                                    <VBox layoutX="10.0" layoutY="22.0" AnchorPane.leftAnchor="10.0">
+                                                                                       <children>
+                                                                                          <Label text="Input file" />
+                                                                                          <TextField fx:id="textFieldInputFileNaNsCorrection" editable="false" prefHeight="25.0" prefWidth="280.0" />
+                                                                                          <Button mnemonicParsing="false" onAction="#onActionButtonOpenInputFileNaNsCorrection" text="Open" />
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <VBox layoutX="10.0" layoutY="107.0" AnchorPane.leftAnchor="10.0">
+                                                                                       <children>
+                                                                                          <Label text="Output file" />
+                                                                                          <TextField fx:id="textFieldOutputFileNaNsCorrection" editable="false" prefHeight="25.0" prefWidth="280.0" />
+                                                                                          <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileNaNsCorrection" text="Open" />
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <Button layoutX="234.0" layoutY="306.0" mnemonicParsing="false" onAction="#onActionButtonExecuteNaNsCorrection" text="Execute" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                                                       <graphic>
+                                                                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                             <image>
+                                                                                                <Image url="@icons/gnome-run.png" />
+                                                                                             </image>
+                                                                                          </ImageView>
+                                                                                       </graphic>
+                                                                                    </Button>
+                                                                                 </children>
+                                                                              </AnchorPane>
+                                                                           </content>
+                                                                        </Tab>
+                                                                        <Tab text="Butterfly-remover">
+                                                                          <content>
+                                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                                                 <children>
+                                                                                    <VBox layoutX="7.0" layoutY="20.0" AnchorPane.leftAnchor="10.0">
+                                                                                       <children>
+                                                                                          <Label text="Input file" />
+                                                                                          <TextField fx:id="textFieldInputFileButterflyRemover" editable="false" prefHeight="25.0" prefWidth="280.0" />
+                                                                                          <Button mnemonicParsing="false" onAction="#onActionButtonOpenInputFileButterflyRemover" text="Open" />
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <VBox layoutX="7.0" layoutY="96.0" AnchorPane.leftAnchor="10.0">
+                                                                                       <children>
+                                                                                          <Label text="Output file" />
+                                                                                          <TextField fx:id="textFieldOutputFileButterflyRemover" editable="false" prefHeight="25.0" prefWidth="280.0" />
+                                                                                          <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileButterflyRemover" text="Open" />
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <Button layoutX="234.0" layoutY="306.0" mnemonicParsing="false" onAction="#onActionButtonExecuteButterflyRemover" text="Execute" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                                                       <graphic>
+                                                                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                             <image>
+                                                                                                <Image url="@icons/gnome-run.png" />
+                                                                                             </image>
+                                                                                          </ImageView>
+                                                                                       </graphic>
+                                                                                    </Button>
+                                                                                 </children>
+                                                                              </AnchorPane>
+                                                                          </content>
+                                                                           <tooltip>
+                                                                              <Tooltip text="Tool to remove isolated voxels" />
+                                                                           </tooltip>
+                                                                        </Tab>
+                                                                    </tabs>
+                                                                  </TabPane>
                                                                </children></AnchorPane>
                                                          </content>
                                                       </Tab>
@@ -591,204 +700,6 @@
                                     <TabPane fx:id="tabPaneVirtualMeasures" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <tabs>
                                           <Tab text="Transmittance light map">
-                                             <content>
-                                                <AnchorPane prefHeight="405.0" prefWidth="787.0">
-                                                   <children>
-                                                      <VBox layoutX="15.0" layoutY="14.0">
-                                                         <children>
-                                                            <Label text="Input">
-                                                               <font>
-                                                                  <Font name="System Bold" size="12.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <Label text="Voxel file" />
-                                                            <HBox>
-                                                               <children>
-                                                                  <TextField fx:id="textfieldVoxelFilePathTransmittance" prefHeight="25.0" prefWidth="240.0" />
-                                                                  <Button fx:id="buttonOpenVoxelFileTransmittance" mnemonicParsing="false" onAction="#onActionButtonOpenVoxelFileTransmittance" text="Open" />
-                                                               </children>
-                                                            </HBox>
-                                                         </children>
-                                                      </VBox>
-                                                      <VBox layoutX="398.0" layoutY="75.0" spacing="5.0">
-                                                         <children>
-                                                            <Label text="Sun">
-                                                               <font>
-                                                                  <Font name="System Bold" size="12.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                                               <children>
-                                                                  <Label text="Latitude (degrees)" />
-                                                                  <TextField fx:id="textfieldLatitudeRadians" prefHeight="25.0" prefWidth="87.0" />
-                                                               </children>
-                                                            </HBox>
-                                                            <VBox minWidth="-Infinity" prefHeight="152.0" prefWidth="362.0">
-                                                               <children>
-                                                                  <AnchorPane prefHeight="27.0" prefWidth="332.0">
-                                                                     <children>
-                                                                        <Label layoutY="6.0" text="Simulation periods" />
-                                                                        <Button layoutX="303.0" mnemonicParsing="false" onAction="#onActionButtonAddPeriodToPeriodList">
-                                                                           <graphic>
-                                                                              <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                                 <image>
-                                                                                    <Image url="@icons/gnome_list_add.png" />
-                                                                                 </image>
-                                                                              </ImageView>
-                                                                           </graphic>
-                                                                        </Button>
-                                                                        <Button layoutX="263.0" mnemonicParsing="false" onAction="#onActionButtonRemovePeriodFromPeriodList">
-                                                                           <graphic>
-                                                                              <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                                 <image>
-                                                                                    <Image url="@icons/gnome_list_remove.png" />
-                                                                                 </image>
-                                                                              </ImageView>
-                                                                           </graphic>
-                                                                        </Button>
-                                                                        <MenuButton fx:id="menuButtonSelectionPeriodsList" layoutX="142.0" layoutY="1.0" mnemonicParsing="false" text="Selection">
-                                                                           <items>
-                                                                              <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemSelectAllPeriods" text="All" />
-                                                                              <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemUnselectAllPeriods" text="None" />
-                                                                           </items>
-                                                                        </MenuButton>
-                                                                     </children>
-                                                                  </AnchorPane>
-                                                                  <TableView fx:id="tableViewSimulationPeriods" editable="true" layoutX="379.0" layoutY="14.0" prefHeight="157.0" prefWidth="336.0" AnchorPane.topAnchor="14.0">
-                                                                     <columns>
-                                                                        <TableColumn fx:id="tableColumnPeriod" prefWidth="282.0" text="Period" />
-                                                                        <TableColumn fx:id="tableColumnClearness" minWidth="0.0" prefWidth="79.0" text="Clearness" />
-                                                                     </columns>
-                                                                     <VBox.margin>
-                                                                        <Insets top="1.0" />
-                                                                     </VBox.margin>
-                                                                  </TableView>
-                                                               </children>
-                                                               <padding>
-                                                                  <Insets top="2.0" />
-                                                               </padding>
-                                                            </VBox>
-                                                         </children>
-                                                      </VBox>
-                                                      <Separator layoutX="399.0" layoutY="212.0" prefHeight="8.0" prefWidth="359.0" />
-                                                      <ScrollPane layoutX="15.0" layoutY="218.0" prefHeight="248.0" prefWidth="373.0" AnchorPane.bottomAnchor="-85.0" AnchorPane.topAnchor="218.0">
-                                                         <content>
-                                                            <Accordion>
-                                                               <panes>
-                                                                  <TitledPane prefHeight="200.0" prefWidth="371.0" text="Scanners positions">
-                                                                     <content>
-                                                                        <AnchorPane>
-                                                                           <children>
-                                                                              <Label layoutX="161.0" layoutY="90.0" text="Step" />
-                                                                              <HBox layoutX="33.0" layoutY="165.0">
-                                                                                 <children>
-                                                                                    <TextField fx:id="textfieldScannerPointsPositionsFile" prefHeight="25.0" prefWidth="251.0" />
-                                                                                    <Button fx:id="buttonOpenScannerPointsPositionsFile" mnemonicParsing="false" onAction="#onActionButtonOpenScannerPointsPositionsFile" text="Open" />
-                                                                                 </children>
-                                                                              </HBox>
-                                                                              <Label layoutX="33.0" layoutY="61.0" text="Point (relative)" />
-                                                                              <TextField fx:id="textfieldScannerPosCenterX" layoutX="142.0" layoutY="56.0" prefHeight="25.0" prefWidth="63.0" promptText="X" />
-                                                                              <TextField fx:id="textfieldScannerPosCenterY" layoutX="213.0" layoutY="56.0" prefHeight="25.0" prefWidth="63.0" promptText="Y" />
-                                                                              <TextField fx:id="textfieldScannerPosCenterZ" layoutX="285.0" layoutY="56.0" prefHeight="25.0" prefWidth="63.0" promptText="Z offset" />
-                                                                              <TextField fx:id="textfieldScannerWidthArea" layoutX="79.0" layoutY="85.0" prefHeight="25.0" prefWidth="63.0" text="10" />
-                                                                              <TextField fx:id="textfieldScannerStepArea" layoutX="202.0" layoutY="85.0" prefHeight="25.0" prefWidth="63.0" text="0.5" />
-                                                                              <RadioButton fx:id="radiobuttonScannerPosSquaredArea" layoutX="18.0" layoutY="30.0" mnemonicParsing="false" selected="true" text="Squared area around a point" />
-                                                                              <Label layoutX="33.0" layoutY="90.0" text="Width" />
-                                                                              <RadioButton fx:id="radiobuttonScannerPosFile" layoutX="18.0" layoutY="137.0" mnemonicParsing="false" text="Points positions file" />
-                                                                           </children>
-                                                                        </AnchorPane>
-                                                                     </content>
-                                                                  </TitledPane>
-                                                               </panes>
-                                                            </Accordion>
-                                                         </content>
-                                                      </ScrollPane>
-                                                      <VBox layoutX="15.0" layoutY="89.0" spacing="5.0">
-                                                         <children>
-                                                            <Label text="Output">
-                                                               <font>
-                                                                  <Font name="System Bold" size="12.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <VBox prefHeight="44.0" prefWidth="358.0" spacing="2.0">
-                                                               <children>
-                                                                  <HBox spacing="10.0">
-                                                                     <children>
-                                                                        <CheckBox fx:id="checkboxGenerateTextFile" mnemonicParsing="false" selected="true" text="Generate text file" />
-                                                                     </children>
-                                                                  </HBox>
-                                                                  <HBox>
-                                                                     <children>
-                                                                        <TextField fx:id="textfieldOutputTextFilePath" prefHeight="26.0" prefWidth="308.0" />
-                                                                        <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenOutputTextFile" text="Open" />
-                                                                     </children>
-                                                                  </HBox>
-                                                               </children>
-                                                            </VBox>
-                                                            <VBox fx:id="vBoxGenerateBitmapFiles" spacing="2.0">
-                                                               <children>
-                                                                  <CheckBox fx:id="checkboxGenerateBitmapFile" mnemonicParsing="false" text="Generate bitmap files" />
-                                                                  <HBox>
-                                                                     <children>
-                                                                        <TextField fx:id="textfieldOutputBitmapFilePath" prefHeight="26.0" prefWidth="309.0" />
-                                                                        <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenOutputBitmapFile" text="Open" />
-                                                                     </children>
-                                                                  </HBox>
-                                                               </children>
-                                                            </VBox>
-                                                         </children>
-                                                      </VBox>
-                                                      <HBox alignment="CENTER_LEFT" layoutX="398.0" layoutY="31.0" spacing="10.0">
-                                                         <children>
-                                                            <Label fx:id="labelDirectionsNumber" text="Directions number">
-                                                               <font>
-                                                                  <Font name="System Bold" size="12.0" />
-                                                               </font>
-                                                            </Label>
-                                                            <ComboBox fx:id="comboboxChooseDirectionsNumber" prefHeight="26.0" prefWidth="75.0" />
-                                                         </children>
-                                                      </HBox>
-                                                      <HBox layoutX="684.0" layoutY="351.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
-                                                         <children>
-                                                            <Button mnemonicParsing="false" onAction="#onActionButtonExecuteCanopyAnalyzerSimulation" text="Execute">
-                                                               <graphic>
-                                                                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                     <image>
-                                                                        <Image url="@icons/gnome-run.png" />
-                                                                     </image>
-                                                                  </ImageView>
-                                                               </graphic>
-                                                            </Button>
-                                                            <MenuButton contentDisplay="RIGHT" mnemonicParsing="false">
-                                                               <padding>
-                                                                  <Insets left="-8.0" />
-                                                               </padding>
-                                                               <items>
-                                                                  <MenuItem mnemonicParsing="false" onAction="#onActionButtonSaveCanopyAnalyzerSimulation" text="Save">
-                                                                     <graphic>
-                                                                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                           <image>
-                                                                              <Image url="@icons/save.png" />
-                                                                           </image>
-                                                                        </ImageView>
-                                                                     </graphic>
-                                                                  </MenuItem>
-                                                                  <MenuItem mnemonicParsing="false" onAction="#onActionButtonSaveExecuteLightMapTransmittanceSimulation" text="Save and execute">
-                                                                     <graphic>
-                                                                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                           <image>
-                                                                              <Image url="@icons/save_execute.png" />
-                                                                           </image>
-                                                                        </ImageView>
-                                                                     </graphic>
-                                                                  </MenuItem>
-                                                               </items>
-                                                            </MenuButton>
-                                                         </children>
-                                                      </HBox>
-                                                   </children>
-                                                </AnchorPane>
-                                             </content>
                                              <graphic>
                                                 <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
@@ -796,6 +707,256 @@
                                                    </image>
                                                 </ImageView>
                                              </graphic>
+                                             <content>
+                                                <SplitPane dividerPositions="0.5">
+                                                   <items>
+                                                      <AnchorPane>
+                                                         <children>
+                                                            <VBox>
+                                                               <children>
+                                                                  <VBox>
+                                                                     <children>
+                                                                        <Label text="Input">
+                                                                           <font>
+                                                                              <Font name="System Bold" size="12.0" />
+                                                                           </font>
+                                                                        </Label>
+                                                                        <Label text="Voxel file" />
+                                                                        <HBox>
+                                                                           <children>
+                                                                              <TextField fx:id="textfieldVoxelFilePathTransmittance" prefHeight="26.0" prefWidth="306.0" />
+                                                                              <Button fx:id="buttonOpenVoxelFileTransmittance" mnemonicParsing="false" onAction="#onActionButtonOpenVoxelFileTransmittance" text="Open" />
+                                                                           </children>
+                                                                        </HBox>
+                                                                     </children>
+                                                                     <VBox.margin>
+                                                                        <Insets top="10.0" />
+                                                                     </VBox.margin>
+                                                                  </VBox>
+                                                                  <VBox spacing="5.0">
+                                                                     <children>
+                                                                        <Label text="Output">
+                                                                           <font>
+                                                                              <Font name="System Bold" size="12.0" />
+                                                                           </font>
+                                                                        </Label>
+                                                                        <VBox prefHeight="44.0" prefWidth="358.0" spacing="2.0">
+                                                                           <children>
+                                                                              <HBox spacing="10.0">
+                                                                                 <children>
+                                                                                    <CheckBox fx:id="checkboxGenerateTextFile" mnemonicParsing="false" text="Generate text file" />
+                                                                                 </children>
+                                                                              </HBox>
+                                                                              <HBox fx:id="hboxGenerateTextFile" disable="true">
+                                                                                 <children>
+                                                                                    <TextField fx:id="textfieldOutputTextFilePath" prefHeight="26.0" prefWidth="308.0" />
+                                                                                    <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenOutputTextFile" text="Open" />
+                                                                                 </children>
+                                                                              </HBox>
+                                                                           </children>
+                                                                        </VBox>
+                                                                        <VBox fx:id="vBoxGenerateBitmapFiles" spacing="2.0">
+                                                                           <children>
+                                                                              <CheckBox fx:id="checkboxGenerateBitmapFile" mnemonicParsing="false" selected="true" text="Generate bitmap files" />
+                                                                              <HBox fx:id="hboxGenerateBitmapFiles">
+                                                                                 <children>
+                                                                                    <TextField fx:id="textfieldOutputBitmapFilePath" prefHeight="26.0" prefWidth="309.0" />
+                                                                                    <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenOutputBitmapFile" text="Open" />
+                                                                                 </children>
+                                                                              </HBox>
+                                                                           </children>
+                                                                        </VBox>
+                                                                     </children>
+                                                                  </VBox>
+                                                               </children>
+                                                               <padding>
+                                                                  <Insets left="10.0" />
+                                                               </padding>
+                                                            </VBox>
+                                                            <HBox layoutX="263.0" layoutY="341.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                               <children>
+                                                                  <Button mnemonicParsing="false" onAction="#onActionButtonExecuteTransmittanceMapSimulation" text="Execute">
+                                                                     <graphic>
+                                                                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                           <image>
+                                                                              <Image url="@icons/gnome-run.png" />
+                                                                           </image>
+                                                                        </ImageView>
+                                                                     </graphic>
+                                                                  </Button>
+                                                                  <MenuButton contentDisplay="RIGHT" mnemonicParsing="false">
+                                                                     <padding>
+                                                                        <Insets left="-8.0" />
+                                                                     </padding>
+                                                                     <items>
+                                                                        <MenuItem mnemonicParsing="false" onAction="#onActionButtonSaveTransmittanceMapSimulation" text="Save">
+                                                                           <graphic>
+                                                                              <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@icons/save.png" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                           </graphic>
+                                                                        </MenuItem>
+                                                                        <MenuItem mnemonicParsing="false" onAction="#onActionButtonSaveExecuteTransmittanceMapSimulation" text="Save and execute">
+                                                                           <graphic>
+                                                                              <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@icons/save_execute.png" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                           </graphic>
+                                                                        </MenuItem>
+                                                                     </items>
+                                                                  </MenuButton>
+                                                               </children>
+                                                            </HBox>
+                                                         </children>
+                                                      </AnchorPane>
+                                                      <ScrollPane fitToWidth="true" vbarPolicy="ALWAYS">
+                                                         <content>
+                                                            <VBox>
+                                                               <children>
+                                                                  <TitledPane text="Sensor(s)">
+                                                                     <content>
+                                                                        <VBox prefHeight="195.0" prefWidth="369.0" spacing="10.0">
+                                                                           <children>
+                                                                              <VBox>
+                                                                                 <children>
+                                                                                    <Label text="Sensor(s) positions">
+                                                                                       <font>
+                                                                                          <Font name="System Bold" size="12.0" />
+                                                                                       </font>
+                                                                                    </Label>
+                                                                                    <ListView fx:id="listViewTransmittanceMapSensorPositions" prefWidth="315.0" />
+                                                                                    <HBox spacing="10.0">
+                                                                                       <children>
+                                                                                          <MenuButton mnemonicParsing="false" text="Selection">
+                                                                                             <items>
+                                                                                                <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemPositionsTransmittanceMapSelectionAll" text="All" />
+                                                                                                <MenuItem fx:id="menuItemSelectionNone11" mnemonicParsing="false" onAction="#onActionMenuItemPositionsTransmittanceMapSelectionNone" text="None" />
+                                                                                             </items>
+                                                                                          </MenuButton>
+                                                                                          <HBox spacing="5.0">
+                                                                                             <children>
+                                                                                                <Button mnemonicParsing="false" onAction="#onActionButtonRemovePositionTransmittanceMap">
+                                                                                                   <graphic>
+                                                                                                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                         <image>
+                                                                                                            <Image url="@icons/gnome_list_remove.png" />
+                                                                                                         </image>
+                                                                                                      </ImageView>
+                                                                                                   </graphic>
+                                                                                                </Button>
+                                                                                                <Button mnemonicParsing="false" onAction="#onActionButtonAddPositionTransmittanceMap">
+                                                                                                   <graphic>
+                                                                                                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                         <image>
+                                                                                                            <Image url="@icons/gnome_list_add.png" />
+                                                                                                         </image>
+                                                                                                      </ImageView>
+                                                                                                   </graphic>
+                                                                                                </Button>
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                       </children>
+                                                                                    </HBox>
+                                                                                 </children>
+                                                                              </VBox>
+                                                                              <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                                                 <children>
+                                                                                    <Label fx:id="labelDirectionsNumber" text="Directions number">
+                                                                                       <font>
+                                                                                          <Font name="System Bold" size="12.0" />
+                                                                                       </font>
+                                                                                    </Label>
+                                                                                    <ComboBox fx:id="comboboxChooseDirectionsNumber" prefHeight="26.0" prefWidth="75.0" />
+                                                                                 </children>
+                                                                              </HBox>
+                                                                           </children>
+                                                                        </VBox>
+                                                                     </content>
+                                                                  </TitledPane>
+                                                                  <TitledPane text="Sun">
+                                                                     <content>
+                                                                        <VBox spacing="10.0">
+                                                                           <children>
+                                                                              <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                                                                 <children>
+                                                                                    <Label text="Latitude (degrees)">
+                                                                                       <font>
+                                                                                          <Font name="System Bold" size="12.0" />
+                                                                                       </font>
+                                                                                    </Label>
+                                                                                    <TextField fx:id="textfieldLatitudeRadians" prefHeight="25.0" prefWidth="87.0" />
+                                                                                 </children>
+                                                                              </HBox>
+                                                                              <VBox>
+                                                                                 <children>
+                                                                                    <AnchorPane prefHeight="27.0" prefWidth="332.0">
+                                                                                       <children>
+                                                                                          <HBox alignment="CENTER_LEFT">
+                                                                                             <children>
+                                                                                                <Label text="Simulation periods">
+                                                                                                   <font>
+                                                                                                      <Font name="System Bold" size="12.0" />
+                                                                                                   </font>
+                                                                                                </Label>
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                       </children>
+                                                                                    </AnchorPane>
+                                                                                    <TableView fx:id="tableViewSimulationPeriods" editable="true" prefHeight="157.0" prefWidth="336.0">
+                                                                                       <columns>
+                                                                                          <TableColumn fx:id="tableColumnPeriod" prefWidth="248.0" text="Period" />
+                                                                                          <TableColumn fx:id="tableColumnClearness" minWidth="0.0" prefWidth="113.0" text="Clearness" />
+                                                                                       </columns>
+                                                                                    </TableView>
+                                                                                    <HBox spacing="10.0">
+                                                                                       <children>
+                                                                                          <MenuButton fx:id="menuButtonSelectionPeriodsList" mnemonicParsing="false" text="Selection">
+                                                                                             <items>
+                                                                                                <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemSelectAllPeriods" text="All" />
+                                                                                                <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemUnselectAllPeriods" text="None" />
+                                                                                             </items>
+                                                                                          </MenuButton>
+                                                                                          <HBox spacing="5.0">
+                                                                                             <children>
+                                                                                                <Button mnemonicParsing="false" onAction="#onActionButtonRemovePeriodFromPeriodList">
+                                                                                                   <graphic>
+                                                                                                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                         <image>
+                                                                                                            <Image url="@icons/gnome_list_remove.png" />
+                                                                                                         </image>
+                                                                                                      </ImageView>
+                                                                                                   </graphic>
+                                                                                                </Button>
+                                                                                                <Button mnemonicParsing="false" onAction="#onActionButtonAddPeriodToPeriodList">
+                                                                                                   <graphic>
+                                                                                                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                         <image>
+                                                                                                            <Image url="@icons/gnome_list_add.png" />
+                                                                                                         </image>
+                                                                                                      </ImageView>
+                                                                                                   </graphic>
+                                                                                                </Button>
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                       </children>
+                                                                                    </HBox>
+                                                                                 </children>
+                                                                              </VBox>
+                                                                           </children>
+                                                                        </VBox>
+                                                                     </content>
+                                                                  </TitledPane>
+                                                               </children>
+                                                            </VBox>
+                                                         </content>
+                                                      </ScrollPane>
+                                                   </items>
+                                                </SplitPane>
+                                             </content>
                                           </Tab>
                                           <Tab text="Canopy analyzer">
                                              <content>
@@ -817,7 +978,7 @@
                                                             </HBox>
                                                          </children>
                                                       </VBox>
-                                                      <VBox layoutX="399.0" layoutY="51.0" spacing="10.0">
+                                                      <VBox layoutX="399.0" layoutY="51.0" spacing="10.0" AnchorPane.rightAnchor="127.0">
                                                          <children>
                                                             <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                <children>
@@ -1242,7 +1403,6 @@
                                                                         <AnchorPane fx:id="anchorPaneRasterParameters" disable="true" prefHeight="135.0" prefWidth="375.0">
                                                                            <children>
                                                                               <TextField fx:id="textfieldRasterFilePath" layoutX="6.0" prefHeight="25.0" prefWidth="316.0" AnchorPane.leftAnchor="0.0" />
-                                                                              <HBox layoutY="39.0" />
                                                                               <Button layoutX="322.0" mnemonicParsing="false" onAction="#onActionButtonOpenRasterFile" text="Open" />
                                                                               <CheckBox fx:id="checkboxUseTransformationMatrix" layoutX="63.0" layoutY="31.0" mnemonicParsing="false" onAction="#onActionCheckboxUseTransformationMatrix" prefHeight="30.0" prefWidth="184.0" AnchorPane.leftAnchor="0.0">
                                                                                  <graphic>
@@ -1476,10 +1636,7 @@
                                           </Tab>
                                         <Tab text="2D projection">
                                           <content>
-                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                                   <children>
-                                                      <EditableListViewController fx:id="customListView" layoutX="21.0" layoutY="13.0" prefHeight="388.0" />
-                                                   </children></AnchorPane>
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                           </content>
                                         </Tab>
                                           <Tab text="Histogram">
@@ -1521,50 +1678,63 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="798.0">
                <children>
-                  <SplitPane dividerPositions="0.5201005025125628" prefHeight="155.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane dividerPositions="0.5" prefHeight="155.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>
                         <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" minWidth="325.0" pickOnBounds="false" text="Tasks (configuration files)">
                            <content>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                  <children>
                                     <ListView fx:id="listViewTaskList" layoutX="32.4" layoutY="30.4" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                    <MenuButton layoutX="5.0" layoutY="93.0" mnemonicParsing="false" text="Selection" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
-                                      <items>
-                                        <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemTaskSelectionAll" text="All" />
-                                        <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemTaskSelectionNone" text="None" />
-                                      </items>
-                                    </MenuButton>
-                                    <Button layoutX="125.0" layoutY="108.0" mnemonicParsing="false" onAction="#onActionButtonRemoveTaskFromListView" AnchorPane.bottomAnchor="0.0">
-                                       <graphic>
-                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@icons/gnome_list_remove.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button layoutX="286.0" layoutY="92.0" mnemonicParsing="false" onAction="#onActionButtonExecute" text="Execute" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                                       <graphic>
-                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@icons/gnome-run.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button layoutX="165.0" layoutY="110.0" mnemonicParsing="false" onAction="#onActionButtonAddTaskToListView" AnchorPane.bottomAnchor="0.0">
-                                       <graphic>
-                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@icons/gnome_list_add.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button fx:id="buttonLoadSelectedTask" disable="true" layoutX="235.0" layoutY="109.0" mnemonicParsing="false" onAction="#onActionButtonLoadSelectedTask" text="Load" AnchorPane.bottomAnchor="0.0">
-                                       <tooltip>
-                                          <Tooltip text="Load the selected task parameters into the frame" />
-                                       </tooltip></Button>
+                                    <HBox layoutX="10.399999618530273" layoutY="107.5999984741211" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                       <children>
+                                          <MenuButton mnemonicParsing="false" text="Selection">
+                                            <items>
+                                              <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemTaskSelectionAll" text="All" />
+                                              <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemTaskSelectionNone" text="None" />
+                                            </items>
+                                          </MenuButton>
+                                          <HBox spacing="5.0">
+                                             <children>
+                                                <Button mnemonicParsing="false" onAction="#onActionButtonRemoveTaskFromListView">
+                                                   <graphic>
+                                                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@icons/gnome_list_remove.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </Button>
+                                                <Button mnemonicParsing="false" onAction="#onActionButtonAddTaskToListView">
+                                                   <graphic>
+                                                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@icons/gnome_list_add.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </Button>
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                             <children>
+                                                <Button fx:id="buttonLoadSelectedTask" disable="true" mnemonicParsing="false" onAction="#onActionButtonLoadSelectedTask" text="Load">
+                                                   <tooltip>
+                                                      <Tooltip text="Load the selected task parameters into the frame" />
+                                                   </tooltip>
+                                                </Button>
+                                                <Button mnemonicParsing="false" onAction="#onActionButtonExecute" text="Execute">
+                                                   <graphic>
+                                                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@icons/gnome-run.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </Button>
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </HBox>
                                  </children>
                               </AnchorPane>
                            </content>
@@ -1577,7 +1747,8 @@
                                     <Button fx:id="buttonLoadSelectedVoxelFile" disable="true" layoutX="316.0" layoutY="88.0" mnemonicParsing="false" onAction="#onActionButtonLoadSelectedVoxelFile" text="Load" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                        <tooltip>
                                           <Tooltip text="Load header of selected voxel file " />
-                                       </tooltip></Button>
+                                       </tooltip>
+                                    </Button>
                                     <Button layoutX="125.0" layoutY="108.0" mnemonicParsing="false" onAction="#onActionButtonRemoveVoxelFileFromListView" AnchorPane.bottomAnchor="0.0">
                                        <graphic>
                                           <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">

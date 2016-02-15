@@ -18,7 +18,10 @@ import fr.amap.commons.raster.multiband.BCommon;
 import fr.amap.commons.raster.multiband.BHeader;
 import fr.amap.commons.raster.multiband.BSQ;
 import fr.amap.commons.math.point.Point3D;
-import fr.amap.lidar.amapvox.voxelisation.configuration.VoxCfg;
+import fr.amap.lidar.amapvox.commons.Voxel;
+import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
+import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos.Type;
+import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.LADParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
@@ -42,8 +45,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 
 public class VoxelAnalysis {
-    
-    final static boolean DEBUG = false;
 
     public enum LaserSpecification{
         
@@ -70,7 +71,7 @@ public class VoxelAnalysis {
         
     }
     
-    private final static Logger logger = Logger.getLogger(VoxelAnalysis.class);
+    private final static Logger LOGGER = Logger.getLogger(VoxelAnalysis.class);
 
     private VoxelSpace voxSpace;
     private Voxel voxels[][][];
@@ -85,17 +86,11 @@ public class VoxelAnalysis {
     private float[][] residualEnergyTable;
 
     private GroundEnergy[][] groundEnergy;
-    int count1 = 0;
-    int count2 = 0;
-    int count3 = 0;
-    int nbEchosSol = 0;
-    public VoxelParameters parameters;
-    private VoxCfg cfg;
+    private VoxelParameters parameters;
 
     private boolean isSet = false;
 
-    private Raster terrain;
-    //private List<Octree> pointcloudList;
+    private Raster dtm;
 
     private boolean shotChanged = false;
     private Voxel lastVoxelSampled;
@@ -107,9 +102,7 @@ public class VoxelAnalysis {
     private EchoFilter echoFilter;
     private List<PointcloudFilter> pointcloudFilters;
     
-    private boolean padWasCalculated;
-
-    int nbSamplingTotal = 0;
+    private boolean padComputed;
     
     //directional transmittance (GTheta)
     private DirectionalTransmittance direcTransmittance;
@@ -182,23 +175,21 @@ public class VoxelAnalysis {
 
         float distance = 0;
 
-        if (terrain != null && parameters.getDtmFilteringParams().useDTMCorrection()) {
-            distance = z - (float) (terrain.getSimpleHeight(x, y));
+        if (dtm != null && parameters.getDtmFilteringParams().useDTMCorrection()) {
+            distance = z - (float) (dtm.getSimpleHeight(x, y));
         }
 
         return distance;
     }
             
-    public VoxelAnalysis(Raster terrain, List<PointcloudFilter> pointcloudFilters, VoxCfg cfg) {
+    public VoxelAnalysis(Raster terrain, List<PointcloudFilter> pointcloudFilters, VoxelAnalysisCfg cfg) {
 
         nbShotsProcessed = 0;
-        this.terrain = terrain;
+        this.dtm = terrain;
         this.pointcloudFilters = pointcloudFilters;
         
         shotFilter = cfg.getShotFilter();
         echoFilter = cfg.getEchoFilter();
-        
-        this.cfg = cfg;
     }
     
     public VoxelAnalysis() {
@@ -215,9 +206,9 @@ public class VoxelAnalysis {
      */
     public Point3d getPosition(Point3i indices, Point3i splitting, Point3d minCorner) {
         
-        double posX = minCorner.x + (parameters.resolution / 2.0d) + (indices.x * parameters.resolution);
-        double posY = minCorner.y + (parameters.resolution / 2.0d) + (indices.y * parameters.resolution);
-        double posZ = minCorner.z + (parameters.resolution / 2.0d) + (indices.z * parameters.resolution);
+        double posX = minCorner.x + (parameters.infos.getResolution() / 2.0d) + (indices.x * parameters.infos.getResolution());
+        double posY = minCorner.y + (parameters.infos.getResolution() / 2.0d) + (indices.y * parameters.infos.getResolution());
+        double posZ = minCorner.z + (parameters.infos.getResolution() / 2.0d) + (indices.z * parameters.infos.getResolution());
 
         return new Point3d(posX, posY, posZ);
     }
@@ -236,12 +227,12 @@ public class VoxelAnalysis {
             generateNoPonderationTables();
         }
         
-        MAX_PAD = parameters.getMaxPAD();
+        MAX_PAD = parameters.infos.getMaxPAD();
         
         laserSpec = parameters.getLaserSpecification();
         
         if(laserSpec == null){
-            if(parameters.isTLS()){
+            if(parameters.infos.getType() == VoxelSpaceInfos.Type.TLS){
                 laserSpec = LaserSpecification.VZ_400;
             }else{
                 laserSpec = LaserSpecification.DEFAULT_ALS;
@@ -259,25 +250,23 @@ public class VoxelAnalysis {
         
         direcTransmittance = new DirectionalTransmittance(distribution);
         
-        logger.info("Building transmittance functions table");
+        LOGGER.info("Building transmittance functions table");
         direcTransmittance.buildTable(DirectionalTransmittance.DEFAULT_STEP_NUMBER);
-        logger.info("Transmittance functions table is built");
+        LOGGER.info("Transmittance functions table is built");
     }
 
     public void processOneShot(final Shot shot) {
 
         if (voxelManager == null) {
-            logger.error("VoxelManager not initialized, what happened??");
+            LOGGER.error("VoxelManager not initialized, what happened??");
             return;
         }
         
         if((shotFilter != null && shotFilter.doFiltering(shot)) || shotFilter == null ){
             
             if (nbShotsProcessed % 1000000 == 0 && nbShotsProcessed != 0) {
-                logger.info("Shots processed: " + nbShotsProcessed);
+                LOGGER.info("Shots processed: " + nbShotsProcessed);
             }
-
-            count1 += shot.nbEchos;
 
             shot.direction.normalize();
             Point3d origin = new Point3d(shot.origin);
@@ -469,7 +458,7 @@ public class VoxelAnalysis {
             double surface;
 
             //recalculé pour éviter le stockage de trois doubles (24 octets) par voxel.
-            double distance = getPosition(new Point3i(indices.x, indices.y, indices.z), parameters.split, parameters.bottomCorner).distance(shot.origin);
+            double distance = getPosition(new Point3i(indices.x, indices.y, indices.z), parameters.infos.getSplit(), parameters.infos.getMinCorner()).distance(shot.origin);
             
             //surface de la section du faisceau à la distance de la source
             if (parameters.getEchoesWeightParams().getWeightingMode() != EchoesWeightParams.WEIGHTING_NONE) {
@@ -504,7 +493,6 @@ public class VoxelAnalysis {
                     vox.lgTotal += longueur;
                 
                     vox.nbSampling++;
-                    nbSamplingTotal++;
 
                     vox.angleMean += shot.angle;
                     
@@ -533,7 +521,8 @@ public class VoxelAnalysis {
                 if (shotChanged) {
 
                     if (parameters.getGroundEnergyParams() != null && 
-                            parameters.getGroundEnergyParams().isCalculateGroundEnergy() && !parameters.isTLS()) {
+                            parameters.getGroundEnergyParams().isCalculateGroundEnergy() &&
+                            parameters.infos.getType() != VoxelSpaceInfos.Type.TLS) {
 
                         if (vox.ground_distance < parameters.getDtmFilteringParams().getMinDTMDistance()) {
                             groundEnergy[vox.$i][vox.$j].groundEnergyPotential++;
@@ -572,8 +561,6 @@ public class VoxelAnalysis {
                 }else{
                     vox.nbSampling++;
 
-                    nbSamplingTotal++;
-
                     vox.lgTotal += longueur;
 
                     vox.angleMean += shot.angle;
@@ -607,7 +594,8 @@ public class VoxelAnalysis {
                 } else {
 
                     if (parameters.getGroundEnergyParams() != null && 
-                            parameters.getGroundEnergyParams().isCalculateGroundEnergy() && !parameters.isTLS() && !isSet) {
+                            parameters.getGroundEnergyParams().isCalculateGroundEnergy() &&
+                            parameters.infos.getType() != VoxelSpaceInfos.Type.TLS && !isSet) {
                         groundEnergy[vox.$i][vox.$j].groundEnergyActual += residualEnergy;
                         groundEnergy[vox.$i][vox.$j].groundEnergyPotential++;
 
@@ -625,122 +613,6 @@ public class VoxelAnalysis {
             return echoFilter.doFiltering(shot, echoID);
         }else{
             return true;
-        }
-    }
-
-    public void generateMultiBandsRaster(File outputFile, float startingHeight, float step, int bandNumber, int resolution) {
-
-        float[] altitudes = new float[bandNumber];
-        for (int i = 0; i < bandNumber; i++) {
-            altitudes[i] = startingHeight + (i * step);
-        }
-
-        float scale = (float) (resolution / parameters.resolution);
-
-        int rasterXSize = (int) (Math.ceil(voxSpace.getSplitting().x / scale));
-        int rasterYSize = (int) (Math.ceil(voxSpace.getSplitting().y / scale));
-
-        BHeader header = new BHeader(rasterXSize, rasterYSize, altitudes.length, BCommon.NumberOfBits.N_BITS_32);
-        header.setUlxmap(voxSpace.getBoundingBox().getMin().x + (resolution / 2.0f));
-        header.setUlymap(voxSpace.getBoundingBox().getMin().y - (parameters.resolution / 2.0f) + (voxSpace.getSplitting().y * parameters.resolution));
-        header.setXdim(resolution);
-        header.setYdim(resolution);
-
-        BSQ raster = new BSQ(outputFile, header);
-
-        Statistic[][][] padMean = new Statistic[rasterXSize][rasterYSize][altitudes.length];
-
-        if (terrain != null) {
-
-            if (altitudes.length > 0) {
-
-                float altitudeMin = altitudes[0];
-
-                for (int i = 0; i < parameters.split.x; i++) {
-                    for (int j = parameters.split.y - 1; j >= 0; j--) {
-                        for (int k = 0; k < parameters.split.z; k++) {
-
-                            Voxel vox;
-
-                            if (!padWasCalculated) {
-                                voxels[i][j][k] = computePADFromVoxel(voxels[i][j][k], i, j, k);
-                            }
-
-                            vox = voxels[i][j][k];
-
-                            //on calcule l'indice de la couche auquel appartient le voxel
-                            if (vox != null && vox.ground_distance > altitudeMin) {
-                                int layer = (int) ((vox.ground_distance - altitudeMin) / step);
-
-                                if (layer < altitudes.length) {
-
-                                    int indiceI = (int) (i / scale);
-                                    int indiceJ = (int) (j / scale);
-
-                                    if (padMean[indiceI][indiceJ][layer] == null) {
-                                        padMean[indiceI][indiceJ][layer] = new Statistic();
-                                    }
-
-                                    if (!Float.isNaN(vox.PadBVTotal)) {
-                                        padMean[indiceI][indiceJ][layer].addValue(vox.PadBVTotal);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                padWasCalculated = true;
-
-                long l = 4294967295L;
-
-                try {
-                    //on écrit la moyenne
-                    for (int i = 0; i < rasterXSize; i++) {
-                        for (int j = rasterYSize - 1, j2 = 0; j >= 0; j--, j2++) {
-                            for (int k = 0; k < altitudes.length; k++) {
-
-                                if (padMean[i][j][k] != null) {
-
-                                    double meanPAD = padMean[i][j][k].getMean();
-                                    //float value = (meanOfPAD-0)/(MAX_PAD-0);
-
-                                    long value = (long) ((meanPAD / (double) MAX_PAD) * (l));
-                                    String binaryString = Long.toBinaryString(value);
-                                    byte[] bval = new BigInteger(binaryString, 2).toByteArray();
-                                    ArrayUtils.reverse(bval);
-                                    byte b0 = 0x0, b1 = 0x0, b2 = 0x0, b3 = 0x0;
-                                    if (bval.length > 0) {
-                                        b0 = bval[0];
-                                    }
-                                    if (bval.length > 1) {
-                                        b1 = bval[1];
-                                    }
-                                    if (bval.length > 2) {
-                                        b2 = bval[2];
-                                    }
-                                    if (bval.length > 3) {
-                                        b3 = bval[3];
-                                    }
-                                    raster.setPixel(i, j2, k, b0, b1, b2, b3);
-
-                                }
-                            }
-                        }
-                    }
-
-                } catch (Exception ex) {
-                    logger.error(ex);
-                }
-
-                try {
-                    raster.writeImage();
-                    raster.writeHeader();
-                } catch (IOException ex) {
-                    logger.error("Cannot write raster file", ex);
-                }
-            }
-
         }
     }
     
@@ -851,7 +723,7 @@ public class VoxelAnalysis {
 //            
 //        }else if(voxel.bvIntercepted > voxel.bvEntering){
 //            
-//            logger.error("Voxel : " + voxel.$i + " " + voxel.$j + " " + voxel.$k + " -> bvInterceptes > bvEntering, NaN assigné, difference: " + (voxel.bvEntering - voxel.bvIntercepted));
+//            LOGGER.error("Voxel : " + voxel.$i + " " + voxel.$j + " " + voxel.$k + " -> bvInterceptes > bvEntering, NaN assigné, difference: " + (voxel.bvEntering - voxel.bvIntercepted));
 //
 //            pad1 = Float.NaN;
 //            voxel.transmittance = Float.NaN;
@@ -874,7 +746,7 @@ public class VoxelAnalysis {
 //                float coefficientGTheta = (float) direcTransmittance.getTransmittanceFromAngle(voxel.angleMean, true);
 //
 //                if(coefficientGTheta == 0){
-//                    logger.error("Voxel : " + voxel.$i + " " + voxel.$j + " " + voxel.$k + " -> coefficient GTheta nul, angle = "+voxel.angleMean);
+//                    LOGGER.error("Voxel : " + voxel.$i + " " + voxel.$j + " " + voxel.$k + " -> coefficient GTheta nul, angle = "+voxel.angleMean);
 //                }
 //                
 //                pad1 = (float) (Math.log(voxel.transmittance) / (-coefficientGTheta));
@@ -896,9 +768,9 @@ public class VoxelAnalysis {
     
     public void computePADs(){
         
-        for (int i = 0; i < parameters.split.x; i++) {
-            for (int j = 0; j < parameters.split.y; j++) {
-                for (int k = 0; k < parameters.split.z; k++) {
+        for (int i = 0; i < parameters.infos.getSplit().x; i++) {
+            for (int j = 0; j < parameters.infos.getSplit().y; j++) {
+                for (int k = 0; k < parameters.infos.getSplit().z; k++) {
 
                     Voxel voxel = voxels[i][j][k];
                     voxels[i][j][k] = computePADFromVoxel(voxel, i, j, k);
@@ -906,14 +778,14 @@ public class VoxelAnalysis {
             }
         }
         
-        padWasCalculated = true;
+        padComputed = true;
     }
     
     public void write(){
         
         long start_time = System.currentTimeMillis();
 
-        logger.info("writing file: " + outputFile.getAbsolutePath());
+        LOGGER.info("writing file: " + outputFile.getAbsolutePath());
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
 
@@ -925,10 +797,10 @@ public class VoxelAnalysis {
             String metadata = "";
             String type = "";
 
-            metadata += "#res: " + parameters.resolution + " ";
-            metadata += "#MAX_PAD: " + parameters.getMaxPAD();
+            metadata += "#res: " + parameters.infos.getResolution() + " ";
+            metadata += "#MAX_PAD: " + parameters.infos.getMaxPAD();
 
-            if (parameters.isTLS()) {
+            if(parameters.infos.getType() == VoxelSpaceInfos.Type.TLS){
                 type += "#type: " + "TLS" + " ";
             } else {
                 type += "#type: " + "ALS" + " ";
@@ -938,13 +810,13 @@ public class VoxelAnalysis {
             writer.write(type);
             writer.write(Voxel.getHeader(Voxel.class) + "\n");
 
-            for (int i = 0; i < parameters.split.x; i++) {
-                for (int j = 0; j < parameters.split.y; j++) {
-                    for (int k = 0; k < parameters.split.z; k++) {
+            for (int i = 0; i < parameters.infos.getSplit().x; i++) {
+                for (int j = 0; j < parameters.infos.getSplit().y; j++) {
+                    for (int k = 0; k < parameters.infos.getSplit().z; k++) {
 
                         Voxel voxel = voxels[i][j][k];
                         
-                        if (!padWasCalculated) {
+                        if (!padComputed) {
                             voxel = computePADFromVoxel(voxel, i, j, k);
                         }
                         
@@ -955,262 +827,22 @@ public class VoxelAnalysis {
 
             writer.close();
             
-            padWasCalculated = true;
+            padComputed = true;
 
-            logger.info("file written ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
+            LOGGER.info("file written ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
 
         } catch (FileNotFoundException e) {
-            logger.error("Error: " + e);
+            LOGGER.error("Error: " + e);
         } catch (Exception e) {
-            logger.error("Error: " + e);
+            LOGGER.error("Error: " + e);
         }
     }
     
-    //moore neighborhood
-    private List<Point3I> getIndicesFromPassID(Point3I middleID, int passID, Point3I minLimit, Point3I maxLimit){
-        
-        
-        List<Point3I> indices = new ArrayList<>();
-        
-        int minI = Math.max(middleID.x - passID, minLimit.x);
-        int maxI = Math.min(middleID.x + passID, maxLimit.x);
-        int minJ = Math.max(middleID.y - passID, minLimit.y);
-        int maxJ = Math.min(middleID.y + passID, maxLimit.y);
-        int minK = Math.max(middleID.z - passID, minLimit.z);
-        int maxK = Math.min(middleID.z + passID, maxLimit.z);
-        
-        for (int i = minI; i <= maxI; i++) {
-            for (int j = minJ; j <= maxJ; j++) {
-                indices.add(new Point3I(i, j, minK));
-                indices.add(new Point3I(i, j, maxK));
-            }
-        }
-
-        for (int k = minK; k <= maxK; k++) {
-            for (int j = minJ+1; j <= maxJ-1; j++) {
-
-                indices.add(new Point3I(minI, j, k));
-                indices.add(new Point3I(maxI, j, k));
-            }
-        }
-
-        for (int k = minK+1; k <= maxK-1; k++) {
-            for (int i = minI + 1; i <= maxI - 1; i++) {
-                indices.add(new Point3I(i, minJ, k));
-                indices.add(new Point3I(i, maxJ, k));
-            }
-        }
-        
-        for (int k = minK+1; k <= maxK-1; k++) {
-            for (int i = minI; i <= maxI; i++) {
-                for (int j = minJ+1; j <= maxJ-1; j++) {
-                   indices.add(new Point3I(i, j, k));
-                   indices.add(new Point3I(i, j, k));
-                }
-            }
-        }
-        
-        return indices;
-    }
-    
-    //moore neighborhood
-    private List<Point3I> getIndicesFromPassIDV2(Point3I middleID, int passID, Point3I minLimit, Point3I maxLimit){
-        
-        
-        List<Point3I> indices = new ArrayList<>();
-        
-        int minI = Math.max(middleID.x - passID, minLimit.x);
-        int maxI = Math.min(middleID.x + passID, maxLimit.x);
-        int minJ = Math.max(middleID.y - passID, minLimit.y);
-        int maxJ = Math.min(middleID.y + passID, maxLimit.y);
-        int minK = Math.max(middleID.z - passID, minLimit.z);
-        int maxK = Math.min(middleID.z + passID, maxLimit.z);
-                
-        for (int x = -passID; x <= passID; ++x) {
-            int r_x = passID - Math.abs(x);
-            for (int y = -r_x; y <= r_x; ++y) {
-                int r_y = r_x - Math.abs(y);
-                for (int z = -r_y; z <= r_y; ++z) {
-                    System.out.println(x + " " + y + " " + z);
-                }
-            }
-        }
-        
-        return indices;
-    }    
+      
     
     public static void cleanIsolatedVoxels(File voxelFile, int nbEchosThreshold, int neighboursRange){
         
         //VoxelFileReader 
-    }
-    
-    public void correctNaNs(){
-        
-        /**A faire : corriger de manière parallèle**/
-        
-        int[][] canopeeArray = new int[parameters.split.x][parameters.split.y];
-        for (int x = 0; x < parameters.split.x; x++) {
-            for (int y = 0; y <parameters.split.y; y++) {
-                for (int z = parameters.split.z-1; z >= 0; z--) {
-                    
-                    Voxel voxel = voxels[x][y][z];
-                    
-                    if (voxel.nbSampling > 0 && voxel.nbEchos > 0) {
-                        canopeeArray[x][y] = z;
-                        break;
-                    }
-                }
-            }
-        }
-        
-        int passLimit = Integer.max(Integer.max(parameters.split.x, parameters.split.y), parameters.split.z);
-        
-        int passMax = 0;
-        
-        long startTime = System.currentTimeMillis();
-        
-        for (int x = 0; x < parameters.split.x; x++) {
-            for (int y = 0; y < parameters.split.y; y++) {
-                for (int z = 0; z < parameters.split.z; z++) {
-                    
-                    Voxel voxel = voxels[x][y][z];
-                    
-                    if(voxel.ground_distance >= (parameters.resolution / 2.0f)){
-                        
-                        float currentNbSampling = voxel.nbSampling;
-                        float currentTransmittance = voxel.transmittance;
-
-                        List<Voxel> neighbours = new ArrayList<>();
-                        int nbRemovedNeighbors = 0;
-
-                        int passID = 1;
-
-                        //testloop:
-                        while(currentNbSampling <= parameters.getNaNsCorrectionParams().getNbSamplingThreshold() || currentTransmittance == 0 ){
-                            
-                                                        
-                            if(passID > passLimit){
-                                break;
-                            }
-                            
-                            
-                            int minX = Integer.max(x-passID, 0);
-                            int minY = Integer.max(y-passID, 0);
-                            int minZ = Integer.max(z-passID, 0);
-                            
-                            int maxX = Integer.min(x+passID, parameters.split.x-1);
-                            int maxY = Integer.min(y+passID, parameters.split.y-1);
-                            int maxZ = Integer.min(z+passID, parameters.split.z-1);
-                            
-                            //get neighbors
-                            for(int i = minX ; i<= maxX ; i++){
-                                for(int j = minY ; j<= maxY ; j++){
-                                    for(int k = minZ ; k<= maxZ ; k++){
-
-                                            //on n'ajoute pas les voxels de la passe précédente
-                                        if(passID != 1 && (i >= x-(passID-1) && i <= x+(passID-1))
-                                                && (j >= y-(passID-1) && j <= y+(passID-1))
-                                                && (k >= z-(passID-1) && k <= z+(passID-1))){
-
-                                        } else {
-
-                                            if (i == x && j == y && k == z) {
-
-                                            } else {
-                                                if (k <= canopeeArray[i][j]) {
-
-                                                    Voxel neighbour = voxels[i][j][k];
-
-                                                    if (neighbour.ground_distance >= -(parameters.resolution / 2.0f)) {
-                                                        neighbours.add(neighbour);
-                                                    }else{
-                                                        nbRemovedNeighbors++;
-                                                    }
-                                                }else{
-                                                    nbRemovedNeighbors++;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            
-                            Statistic nbSamplingStat = new Statistic();
-                            float meanTransmittance = 0;
-                            
-                            float sumBVEntering = 0;
-                            float sumBVIntercepted = 0;
-                            float sumLgTotal = 0;
-                            
-                            
-                            int count = 0;
-
-                            for(Voxel neighbour : neighbours){
-                                
-                                /*les voxels de transmittance nulle sont traités comme étant non échantillonné,
-                                tous les voisins sont considérés indépendamment de l'échantillonnage*/
-                                
-                                if(!Float.isNaN(neighbour.transmittance) /*&& neighbour.transmittance != 0*/){
-                                    
-                                    sumBVEntering += neighbour.bvEntering;
-                                    sumBVIntercepted += neighbour.bvIntercepted;
-                                    sumLgTotal += neighbour.lgTotal;
-                                    nbSamplingStat.addValue(neighbour.nbSampling);
-
-                                    count++;
-                                }
-                            }
-
-                            if(count > 0){
-                                
-                                meanTransmittance = (float) Math.pow((sumBVEntering-sumBVIntercepted)/sumBVEntering, nbSamplingStat.getSum()/sumLgTotal);
-                                                                
-                                currentNbSampling = (float) nbSamplingStat.getMean();
-                                currentTransmittance = meanTransmittance;
-
-                            
-                            }else{
-                                currentNbSampling = 0;
-                            }
-                            
-                            passID++;
-                            
-                        }
-
-                        if(passID > passMax){
-                            passMax = passID;
-                            logger.info("Maximum neighborhood range : "+passMax);
-                        }
-
-                        if(neighbours.size() > 0){
-
-                            Statistic PADStatistic = new Statistic();
-                            
-                            for(Voxel neighbour : neighbours){
-
-                                if(!Float.isNaN(neighbour.transmittance) && neighbour.transmittance != 0){
-                                    PADStatistic.addValue(neighbour.PadBVTotal);
-                                }
-                            }
-                            
-                            if((PADStatistic.getNbValues()) != 0){
-                                voxels[x][y][z].neighboursNumber = neighbours.size();
-                                voxels[x][y][z].passNumber = passID;
-                                voxels[x][y][z].PadBVTotal = (float)PADStatistic.getMean();
-                                voxels[x][y][z].nbSampling = (int)currentNbSampling;
-                                voxels[x][y][z].transmittance = currentTransmittance;
-                            }                           
-                            
-                        }
-                    }
-                    
-                }
-            }
-        }
-        
-        long endTime = System.currentTimeMillis();
-        long time = endTime - startTime;
-        logger.info("Time : "+time+" ms");
     }
 
     public void writeGroundEnergy() {
@@ -1219,16 +851,16 @@ public class VoxelAnalysis {
 
             long start_time = System.currentTimeMillis();
 
-            logger.info("writing file: " + parameters.getGroundEnergyParams().getGroundEnergyFile().getAbsolutePath());
+            LOGGER.info("writing file: " + parameters.getGroundEnergyParams().getGroundEnergyFile().getAbsolutePath());
 
             try {
 
                 if (parameters.getGroundEnergyParams().getGroundEnergyFileFormat() == GroundEnergyParams.FILE_FORMAT_PNG) {
 
-                    BufferedImage image = new BufferedImage(parameters.split.x, parameters.split.y, BufferedImage.TYPE_INT_ARGB);
+                    BufferedImage image = new BufferedImage(parameters.infos.getSplit().x, parameters.infos.getSplit().y, BufferedImage.TYPE_INT_ARGB);
 
-                    for (int i = 0; i < parameters.split.x; i++) {
-                        for (int j = 0; j < parameters.split.y; j++) {
+                    for (int i = 0; i < parameters.infos.getSplit().x; i++) {
+                        for (int j = 0; j < parameters.infos.getSplit().y; j++) {
 
                             float transmittance = groundEnergy[i][j].groundEnergyActual / groundEnergy[i][j].groundEnergyPotential;
 
@@ -1245,7 +877,7 @@ public class VoxelAnalysis {
                                 c = new Color(0.0f, 0.0f, 1.0f, 1.0f);
                             }
 
-                            image.setRGB(i, parameters.split.y - 1 - j, c.getRGB());
+                            image.setRGB(i, parameters.infos.getSplit().y - 1 - j, c.getRGB());
 
                         }
                     }
@@ -1256,8 +888,8 @@ public class VoxelAnalysis {
                     try (BufferedWriter writer = new BufferedWriter(new FileWriter(parameters.getGroundEnergyParams().getGroundEnergyFile()))) {
                         writer.write("i j groundEnergyActual groundEnergyPotential transmittance\n");
 
-                        for (int i = 0; i < parameters.split.x; i++) {
-                            for (int j = 0; j < parameters.split.y; j++) {
+                        for (int i = 0; i < parameters.infos.getSplit().x; i++) {
+                            for (int j = 0; j < parameters.infos.getSplit().y; j++) {
 
                                 float transmittance = groundEnergy[i][j].groundEnergyActual / groundEnergy[i][j].groundEnergyPotential;
                                 writer.write(i + " " + j + " " + groundEnergy[i][j].groundEnergyActual + " " + groundEnergy[i][j].groundEnergyPotential + " " + transmittance + "\n");
@@ -1266,15 +898,15 @@ public class VoxelAnalysis {
                     }
                 }
 
-                logger.info("file written ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
+                LOGGER.info("file written ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
 
             } catch (IOException ex) {
-                logger.error(ex);
+                LOGGER.error(ex);
             }
 
         } else {
 
-            logger.warn("Ground energy is set up but no values are available");
+            LOGGER.warn("Ground energy is set up but no values are available");
         }
 
     }
@@ -1283,27 +915,26 @@ public class VoxelAnalysis {
 
         try {
             
-            
             if (parameters.getGroundEnergyParams() != null && 
                     parameters.getGroundEnergyParams().isCalculateGroundEnergy()) {
                 
-                groundEnergy = new GroundEnergy[parameters.split.x][parameters.split.y];
+                groundEnergy = new GroundEnergy[parameters.infos.getSplit().x][parameters.infos.getSplit().y];
             }
 
-            voxSpace = new VoxelSpace(new BoundingBox3d(parameters.bottomCorner, parameters.topCorner), parameters.split, VoxelManagerSettings.NON_TORIC_FINITE_BOX_TOPOLOGY);
+            voxSpace = new VoxelSpace(new BoundingBox3d(parameters.infos.getMinCorner(), parameters.infos.getMaxCorner()), parameters.infos.getSplit(), VoxelManagerSettings.NON_TORIC_FINITE_BOX_TOPOLOGY);
 
             // allocate voxels
-            logger.info("allocate!!!!!!!!");
+            LOGGER.info("allocate!!!!!!!!");
 
-            voxels = new Voxel[parameters.split.x][parameters.split.y][parameters.split.z];
+            voxels = new Voxel[parameters.infos.getSplit().x][parameters.infos.getSplit().y][parameters.infos.getSplit().z];
 
             try {
 
                 if (parameters.getGroundEnergyParams() != null && 
-                        parameters.getGroundEnergyParams().isCalculateGroundEnergy() && !parameters.isTLS()) {
+                        parameters.getGroundEnergyParams().isCalculateGroundEnergy() && parameters.infos.getType() != Type.TLS) {
                     
-                    for (int i = 0; i < parameters.split.x; i++) {
-                        for (int j = 0; j < parameters.split.y; j++) {
+                    for (int i = 0; i < parameters.infos.getSplit().x; i++) {
+                        for (int j = 0; j < parameters.infos.getSplit().y; j++) {
                             groundEnergy[i][j] = new GroundEnergy();
                         }
                     }
@@ -1316,14 +947,14 @@ public class VoxelAnalysis {
             }
 
             Scene scene = new Scene();
-            scene.setBoundingBox(new BoundingBox3d(parameters.bottomCorner, parameters.topCorner));
+            scene.setBoundingBox(new BoundingBox3d(parameters.infos.getMinCorner(), parameters.infos.getMaxCorner()));
 
-            voxelManager = new VoxelManager(scene, new VoxelManagerSettings(parameters.split, VoxelManagerSettings.NON_TORIC_FINITE_BOX_TOPOLOGY));
+            voxelManager = new VoxelManager(scene, new VoxelManagerSettings(parameters.infos.getSplit(), VoxelManagerSettings.NON_TORIC_FINITE_BOX_TOPOLOGY));
 
-            logger.info(voxelManager.getInformations());
+            LOGGER.info(voxelManager.getInformations());
 
         } catch (Exception e) {
-            logger.error(e + " " + this.getClass().getName());
+            LOGGER.error(e + " " + this.getClass().getName());
         }
 
     }
@@ -1333,13 +964,13 @@ public class VoxelAnalysis {
         Voxel vox = new Voxel(i, j, k);
 
         Point3d position = getPosition(new Point3i(i, j, k),
-                parameters.split, parameters.bottomCorner);
+                parameters.infos.getSplit(), parameters.infos.getMinCorner());
 
         float dist;
 
-        if (terrain != null && parameters.getDtmFilteringParams().useDTMCorrection()) {
+        if (dtm != null && parameters.getDtmFilteringParams().useDTMCorrection()) {
 
-            float dtmHeightXY = terrain.getSimpleHeight((float) position.x, (float) position.y);
+            float dtmHeightXY = dtm.getSimpleHeight((float) position.x, (float) position.y);
             if (Float.isNaN(dtmHeightXY)) {
                 dist = (float) (position.z);
             } else {
@@ -1347,7 +978,7 @@ public class VoxelAnalysis {
             }
 
         } else {
-            dist = (float) (position.z - parameters.getBottomCorner().z);
+            dist = (float) (position.z - parameters.infos.getMinCorner().z);
         }
 
         vox.ground_distance = dist;
@@ -1358,53 +989,9 @@ public class VoxelAnalysis {
     public int getNbShotsProcessed() {
         return nbShotsProcessed;
     }
-    
-    public static void main(String[] args) {
-        
-        
-//        VoxelAnalysis voxelAnalysis = new VoxelAnalysis(null, null, null);
-//        
-//        List<Point3I> neighboursList = voxelAnalysis.getNeighboursList(2, 2, 2, 2, 3, 3, 3);
-//        
-//        int neighboursNumber = VoxTool.getNeighboursNumber(2, 2, 2, 2, 3, 3, 3);
-//        Collections.sort(neighboursList);
-//        
-//        if(neighboursNumber != neighboursList.size()){
-//            System.out.println("erreur");
-//        }else{
-//            System.out.println("correct");
-//        }
-        
-        
-//        VoxelParameters parameters = new VoxelParameters(new Point3d(0, 0, 0),
-//                                                        new Point3d(20, 20, 20),
-//                                                        new Point3i(20, 20, 20));
-//        
-//        parameters.setResolution(1.0);
-//        parameters.setMaxPAD(3.5f);
-//        parameters.setTLS(true);
-//        parameters.setWeightingMode(VoxelParameters.WEIGHTING_ECHOS_NUMBER);
-//        parameters.setWeightingData(VoxelParameters.DEFAULT_ALS_WEIGHTING);
-//        parameters.setLadType(LeafAngleDistribution.Type.SPHERIC);
-//
-//        
-//        voxelAnalysis.init(parameters, new File("/home/calcul/Documents/Julien/test.vox"));
-//        voxelAnalysis.createVoxelSpace();
-//        
-//        List<Shot> shots = new ArrayList<>();
-//        //shots.add(new Shot(4, new Point3d(10, 10, 15), new Vector3d(0, 0, -1), new double[]{6, 14, 18, 21}, new int[4], new int[4]));
-//        
-//        //shots.add(new Shot(1, new Point3d(10.5, 10.5, 10.99), new Vector3d(0, 0, -1), new double[]{8}, new int[1], new int[1]));
-//        //shots.add(new Shot(4, new Point3d(10.5, 10.5, 10.99), new Vector3d(0, 0, -1), new double[]{2, 4, 6, 8}, new int[4], new int[4]));
-//        //shots.add(new Shot(4, new Point3d(10, 10, 24), new Vector3d(0, 0, -1), new double[]{6.1, 6.2, 6.3, 10}, new int[1], new int[1]));
-//        shots.add(new Shot(1, new Point3d(0.5, 0.01, 19.9), new Vector3d(1, 0, -1), new double[]{100}, new int[1], new int[1]));
-//        
-//        for(Shot shot : shots){
-//            voxelAnalysis.processOneShot(shot);
-//        }
-//        
-//        voxelAnalysis.computePADs();
-//        voxelAnalysis.write();
+
+    public Voxel[][][] getVoxels() {
+        return voxels;
     }
 
     public ShotFilter getShotFilter() {
@@ -1429,5 +1016,9 @@ public class VoxelAnalysis {
 
     public void setPointcloudFilters(List<PointcloudFilter> pointcloudFilters) {
         this.pointcloudFilters = pointcloudFilters;
+    }
+
+    public Raster getDtm() {
+        return dtm;
     }
 }

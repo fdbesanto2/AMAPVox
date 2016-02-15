@@ -5,6 +5,7 @@
  */
 package fr.amap.lidar.amapvox.voxelisation.configuration.params;
 
+import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution.Type;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
@@ -20,17 +21,18 @@ import javax.vecmath.Point3i;
 public class VoxelParameters {
         
     //voxel space parameters
-    public Point3d bottomCorner;
+    public final VoxelSpaceInfos infos;
+    /*public Point3d bottomCorner;
     public Point3d topCorner;
     public Point3i split;
     public double resolution;
+    private float maxPAD = 5;
+    private boolean TLS;*/
     
     //echoes filtering
     private List<PointcloudFilter> pointcloudFilters;
     private boolean usePointCloudFilter;
     
-    private boolean TLS;
-    private float maxPAD = 5;
     private boolean mergingAfter;
     private File mergedFile;
     
@@ -45,8 +47,8 @@ public class VoxelParameters {
     
     public VoxelParameters() {
         
-        TLS = false;
-        
+        infos = new VoxelSpaceInfos();
+        infos.setType(VoxelSpaceInfos.Type.ALS);
         ladParams = new LADParams();
         echoesWeightParams = new EchoesWeightParams();
         dtmFilteringParams = new DTMFilteringParams();
@@ -55,9 +57,10 @@ public class VoxelParameters {
     
     public VoxelParameters(Point3d bottomCorner, Point3d topCorner, Point3i split) {
         
-        this.bottomCorner = bottomCorner;
+        /*this.bottomCorner = bottomCorner;
         this.topCorner = topCorner;
-        this.split = split;
+        this.split = split;*/
+        infos = new VoxelSpaceInfos(bottomCorner, topCorner, split);
         
         ladParams = new LADParams();
         echoesWeightParams = new EchoesWeightParams();
@@ -88,11 +91,9 @@ public class VoxelParameters {
             DTMFilteringParams dtmFilteringParams,
             boolean TLS) {
 
-        this.bottomCorner = bottomCorner;
-        this.topCorner = topCorner;
-        this.split = split;
-        this.resolution = resolution;
-        this.maxPAD = maxPAD;
+        infos = new VoxelSpaceInfos(bottomCorner, topCorner, split);
+        infos.setResolution(resolution);
+        infos.setMaxPAD(maxPAD);
         
         //check all parameters, if null set to default
         if (ladParams == null) {
@@ -126,11 +127,11 @@ public class VoxelParameters {
         }
         this.dtmFilteringParams = dtmFilteringParams;
         
-        
-        this.TLS = TLS;
+        this.infos.setType(VoxelSpaceInfos.Type.TLS);
+        //this.TLS = TLS;
     }
 
-    public Point3d getBottomCorner() {
+    /*public Point3d getBottomCorner() {
         return bottomCorner;
     }
 
@@ -148,23 +149,23 @@ public class VoxelParameters {
 
     public Point3i getSplit() {
         return split;
-    }
+    }*/
 
     /**
      * 
      * @param split Be careful, it is advised to use {@link #setResolution(double) } instead
      * because anyway you gonna need to change the resolution manually.
      */
-    public void setSplit(Point3i split) {
+    /*public void setSplit(Point3i split) {
         
         this.split = split;        
     }
     
     public double getResolution() {
         return resolution;
-    }
+    }*/
 
-    public void setResolution(double resolution) {
+    /*public void setResolution(double resolution) {
         
         this.resolution = resolution;
         
@@ -175,20 +176,20 @@ public class VoxelParameters {
                     (int) Math.ceil((topCorner.getY() - bottomCorner.getY()) / resolution),
                     (int) Math.ceil((topCorner.getZ() - bottomCorner.getZ()) / resolution));
         }
-    }
+    }*/
 
     /**
      * @return if true, the lidar is a Terrestrial Laser Scanner, if false, an Airborne Laser Scanner
      */
-    public boolean isTLS() {
+    /*public boolean isTLS() {
         return TLS;
-    }
+    }*/
 
     /**
      * 
      * @param TLS if true, the lidar is a Terrestrial Laser Scanner, if false, an Airborne Laser Scanner
      */
-    public void setTLS(boolean TLS) {
+    /*public void setTLS(boolean TLS) {
         this.TLS = TLS;
     }
 
@@ -198,7 +199,7 @@ public class VoxelParameters {
 
     public void setMaxPAD(float maxPAD) {
         this.maxPAD = maxPAD;
-    }
+    }*/
 
     public boolean isMergingAfter() {
         return mergingAfter;

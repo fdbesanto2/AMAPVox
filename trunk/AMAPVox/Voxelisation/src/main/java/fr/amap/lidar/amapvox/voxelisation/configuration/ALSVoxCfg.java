@@ -32,7 +32,7 @@ import org.jdom2.Element;
  */
 
 
-public class ALSVoxCfg extends VoxCfg{
+public class ALSVoxCfg extends VoxelAnalysisCfg{
 
     private CSVFile trajectoryFile;
     private List<Integer> classifiedPointsToDiscard;

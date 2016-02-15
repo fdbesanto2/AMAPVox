@@ -42,6 +42,16 @@ public class VoxelSpaceInfos {
             this.type = type;
         }
     }
+
+    public VoxelSpaceInfos(){
+        
+    }
+    
+    public VoxelSpaceInfos(Point3d minCorner, Point3d maxCorner, Point3i split) {
+        this.minCorner = minCorner;
+        this.maxCorner = maxCorner;
+        this.split = split;
+    }
     
     public void readFromVoxelFile(File voxelFile) throws Exception{
         
@@ -158,6 +168,19 @@ public class VoxelSpaceInfos {
 
     public void setResolution(float resolution) {
         this.resolution = resolution;
+    }
+    
+    public void setResolution(double resolution) {
+        
+        this.resolution = (float) resolution;
+        
+        if(minCorner != null && maxCorner != null){
+            
+            split = new Point3i(
+                    (int) Math.ceil((maxCorner.getX() - minCorner.getX()) / resolution),
+                    (int) Math.ceil((maxCorner.getY() - minCorner.getY()) / resolution),
+                    (int) Math.ceil((maxCorner.getZ() - minCorner.getZ()) / resolution));
+        }
     }
 
     public void setMaxPAD(float maxPAD) {

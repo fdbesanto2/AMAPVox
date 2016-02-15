@@ -5,6 +5,8 @@
  */
 package fr.amap.commons.util;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author calcul
@@ -22,8 +24,7 @@ public class Statistic {
     private boolean firstValue = true;
 
     public Statistic() {
-        
-        
+        sum = 0;
     }
     
     public void addValue(double value){
@@ -66,7 +67,7 @@ public class Statistic {
     }
     
     public double getMean(){
-        return sum / (nbValues);
+        return sum / nbValues;
     }
 
     public double getSum() {
