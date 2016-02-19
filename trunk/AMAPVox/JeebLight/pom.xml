@@ -48,5 +48,10 @@
             <artifactId>amapvox-commons</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>fr.amap.commons</groupId>
+            <artifactId>commons-util</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 </project>

@@ -48,7 +48,6 @@ public class TransmittanceParameters {
     private File bitmapFile;
     
     private Mode mode;
-    private int shotNumber;
     
     //lai2xxx specific
     private boolean[] masks; //ring masks
@@ -70,6 +69,7 @@ public class TransmittanceParameters {
     public TransmittanceParameters(){
         simulationPeriods = new ArrayList<>();
         mode = Mode.TRANSMITTANCE;
+        masks = new boolean[]{false, false, false, false, false};
     }
     
     public File getInputFile() {
@@ -188,17 +188,9 @@ public class TransmittanceParameters {
         return mode;
     }
 
-    public int getShotNumber() {
-        return shotNumber;
-    }
-
     public void setMode(Mode mode) {
         this.mode = mode;
     }
-
-    public void setShotNumber(int shotNumber) {
-        this.shotNumber = shotNumber;
-    }    
 
     public boolean[] getMasks() {
         return masks;

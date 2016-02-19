@@ -35,6 +35,8 @@ public class Viewer3D {
     private int width;
     private int height;
     
+    private boolean dynamicDraw = false;
+    private MinimalMouseAdapter minimalMouseAdapter;
     
     public Viewer3D(int posX, int posY, int width, int height, String title) throws Exception{
         
@@ -49,7 +51,15 @@ public class Viewer3D {
             
             renderFrame = new GLRenderFrame(caps, posX, posY, width, height, title);
             //renderFrame = GLRenderFrame.create(caps, posX, posY, width, height, title);
-            animator = new FPSAnimator(renderFrame, 60);
+            animator = new FPSAnimator(60);
+            
+            /* From doc : 
+            An Animator can be attached to one or more GLAutoDrawables to drive their display() methods in a loop.
+            The Animator class creates a background thread in which the calls to display() are performed.
+            After each drawable has been redrawn, a brief pause is performed to avoid swamping the CPU,
+            unless setRunAsFastAsPossible(boolean) has been called.
+            */
+            animator.add(renderFrame);
 
             joglContext = new JoglListener(animator);
             joglContext.getScene().setWidth(width);
@@ -61,7 +71,9 @@ public class Viewer3D {
             
             //basic input adapters for waking up animator if necessary
             renderFrame.addKeyListener(new MinimalKeyAdapter(animator));
-            renderFrame.addMouseListener(new MinimalMouseAdapter(animator));      
+            
+            minimalMouseAdapter = new MinimalMouseAdapter(animator, dynamicDraw);
+            renderFrame.addMouseListener(minimalMouseAdapter);      
             
             animator.start();
             
@@ -209,5 +221,16 @@ public class Viewer3D {
     public void setIsFocused(boolean focused) {
         this.focused = focused;
     }
+
+    public boolean isDynamicDraw() {
+        return dynamicDraw;
+    }
+
+    public void setDynamicDraw(boolean dynamicDraw) {
+        this.dynamicDraw = dynamicDraw;
+        joglContext.setDynamicDraw(dynamicDraw);
+        minimalMouseAdapter.setDynamicDraw(dynamicDraw);
+    }
+    
 
 }

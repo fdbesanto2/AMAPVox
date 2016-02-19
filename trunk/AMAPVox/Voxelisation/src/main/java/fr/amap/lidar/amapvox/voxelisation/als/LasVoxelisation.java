@@ -66,6 +66,8 @@ public class LasVoxelisation extends Progression {
 
     public File process(ALSVoxCfg cfg) throws Exception {
         
+        setCancelled(false);
+        
         if(cfg.getClassifiedPointsToDiscard() == null){
            this.classifiedPointsToDiscard = new ArrayList<>();
         }else{
@@ -112,7 +114,8 @@ public class LasVoxelisation extends Progression {
 
                 @Override
                 public void processingStepProgress(String progressMsg, long progress, long max) {
-                    fireProgress(progressMsg, progress, 100);
+                    
+                    fireProgress(progressMsg, progress, max);
                 }
 
                 @Override
@@ -141,7 +144,11 @@ public class LasVoxelisation extends Progression {
         Shot shot;
         
         while((shot = iterator.next()) != null){
-                        
+            
+            if(isCancelled()){
+                return null;
+            }
+            
             voxelAnalysis.processOneShot(shot);
         }
         

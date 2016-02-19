@@ -3,21 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.amap.lidar.amapvox.voxelisation;
+package fr.amap.commons.util.vegetation;
 
 import org.apache.commons.math3.distribution.BetaDistribution;
 
 /**
- *
- * @author calcul
+ * <p>Based on formulas in paper intitulated "Comparison of leaf angle distribution functions :
+ * Effects on extinction coefficient and fraction of sunlit foliage" from W-M. Wang and Zhao-Liang Li.</p>
+ * Link to the paper : <a href = "http://mercury.ornl.gov/metadata/ornldaac/daac_citations/2006/wang_li_su.pdf">
+ * http://mercury.ornl.gov/metadata/ornldaac/daac_citations/2006/wang_li_su.pdf</a>
+ * @author Julien Heurtebize
  */
 public class LeafAngleDistribution {
 
+    /**
+     * Enumeration defining the type of the leaf angle distribution.
+     */
     public enum Type {
 
         UNIFORM(0),
         SPHERIC(1),
-        ERECTOPHILE(2),
+        ERECTOPHILE(2), //grass for example
         PLANOPHILE(3),
         EXTREMOPHILE(4),
         PLAGIOPHILE(5),
@@ -58,7 +64,7 @@ public class LeafAngleDistribution {
                 case 9:
                     return "Elliptical";
                 case 10:
-                    return "Two-parameter beta distribution";
+                    return "Two-parameter-beta";
                 default:
                     return "Unknown";
             }
@@ -87,7 +93,7 @@ public class LeafAngleDistribution {
                     return Type.ELLIPSOIDAL;
                 case "Elliptical":
                     return Type.ELLIPTICAL;
-                case "Two-parameter beta distribution":
+                case "Two-parameter-beta":
                     return Type.TWO_PARAMETER_BETA;
                 default:
                     return Type.SPHERIC;
@@ -101,6 +107,11 @@ public class LeafAngleDistribution {
     private double x; //needed for ellipsoidal type
     
 
+    /**
+     * Declares a new Leaf Angle Distribution
+     * @param type Type of LAD
+     * @param params Optional, required for the two-beta LAD type
+     */
     public LeafAngleDistribution(Type type, double... params) {
 
         if(type == null){
@@ -128,19 +139,21 @@ public class LeafAngleDistribution {
 
     private void setupBetaDistribution(double param1, double param2) {
 
-        double alphamean = Math.toRadians(param1);
+        /*double alphamean = Math.toRadians(param1);
         double tvar = param2;
         double tmean = 2 * (alphamean / Math.PI);
         double sigma0 = tmean * (1 - tmean);
 
         double v = tmean * ((sigma0 / tvar) - 1);
         double m = (1 - tmean) * ((sigma0 / tvar) - 1);
+        
+        distribution = new BetaDistribution(null, m, v);*/
 
-        distribution = new BetaDistribution(null, m, v);
+        distribution = new BetaDistribution(null, param1, param2);
     }
 
     /**
-     *
+     * Get the density probability from angle
      * @param angle must be in radians from in [0,2pi]
      * @return pdf function
      */
@@ -158,10 +171,10 @@ public class LeafAngleDistribution {
         switch(type){
             
             case PLANOPHILE:
-                density = (2.0/Math.PI) * (1-Math.cos(2 * angle));
+                density = (2.0/Math.PI) * (1+Math.cos(2 * angle));
                 break;
             case ERECTOPHILE:
-                density = (2.0/Math.PI) * (1+Math.cos(2 * angle));
+                density = (2.0/Math.PI) * (1-Math.cos(2 * angle));
                 break;
             case PLAGIOPHILE:
                 density = (2.0/Math.PI) * (1-Math.cos(4 * angle));
@@ -218,6 +231,10 @@ public class LeafAngleDistribution {
         return density;
     }
 
+    /**
+     * Get the Leaf Angle Distribution type
+     * @return The type of distribution
+     */
     public Type getType() {
         return type;
     }

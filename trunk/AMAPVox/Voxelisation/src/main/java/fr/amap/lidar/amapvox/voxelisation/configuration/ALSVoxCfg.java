@@ -47,33 +47,38 @@ public class ALSVoxCfg extends VoxelAnalysisCfg{
         
         trajectoryFile = new CSVFile(trajectoryFileElement.getAttributeValue("src"));
         
-        try{
-            String columnSeparator = trajectoryFileElement.getAttributeValue("column-separator");
-            String headerIndex = trajectoryFileElement.getAttributeValue("header-index");
-            String hasHeader = trajectoryFileElement.getAttributeValue("has-header");
-            String nbOfLinesToRead = trajectoryFileElement.getAttributeValue("nb-of-lines-to-read");
-            String nbOfLinesToSkip = trajectoryFileElement.getAttributeValue("nb-of-lines-to-skip");
-            String columnAssignment = trajectoryFileElement.getAttributeValue("column-assignment");
-            
-            trajectoryFile.setColumnSeparator(columnSeparator);
-            trajectoryFile.setHeaderIndex(Long.valueOf(headerIndex));
-            trajectoryFile.setHasHeader(Boolean.valueOf(hasHeader));
-            trajectoryFile.setNbOfLinesToRead(Long.valueOf(nbOfLinesToRead));
-            trajectoryFile.setNbOfLinesToSkip(Long.valueOf(nbOfLinesToSkip));
-            
-            Map<String, Integer> colMap = new HashMap<>();
-            String[] split = columnAssignment.split(",");
-            for(String s : split){
-                int indexOfSep = s.indexOf("=");
-                String key = s.substring(0, indexOfSep);
-                String value = s.substring(indexOfSep+1, s.length());
-                colMap.put(key, Integer.valueOf(value));
-            }
-            
-            trajectoryFile.setColumnAssignment(colMap);
-            
-        }catch(Exception e){
+        String columnSeparator = trajectoryFileElement.getAttributeValue("column-separator");
+        String headerIndex = trajectoryFileElement.getAttributeValue("header-index");
+        String hasHeader = trajectoryFileElement.getAttributeValue("has-header");
+        String nbOfLinesToRead = trajectoryFileElement.getAttributeValue("nb-of-lines-to-read");
+        String nbOfLinesToSkip = trajectoryFileElement.getAttributeValue("nb-of-lines-to-skip");
+        String columnAssignment = trajectoryFileElement.getAttributeValue("column-assignment");
+
+        if (columnSeparator == null) {
             logger.warn("Old trajectory file element detected, keep default old read parameters.");
+        } else {
+
+            try {
+
+                trajectoryFile.setColumnSeparator(columnSeparator);
+                trajectoryFile.setHeaderIndex(Long.valueOf(headerIndex));
+                trajectoryFile.setHasHeader(Boolean.valueOf(hasHeader));
+                trajectoryFile.setNbOfLinesToRead(Long.valueOf(nbOfLinesToRead));
+                trajectoryFile.setNbOfLinesToSkip(Long.valueOf(nbOfLinesToSkip));
+
+                Map<String, Integer> colMap = new HashMap<>();
+                String[] split = columnAssignment.split(",");
+                for (String s : split) {
+                    int indexOfSep = s.indexOf("=");
+                    String key = s.substring(0, indexOfSep);
+                    String value = s.substring(indexOfSep + 1, s.length());
+                    colMap.put(key, Integer.valueOf(value));
+                }
+
+                trajectoryFile.setColumnAssignment(colMap);
+            } catch (Exception e) {
+                logger.warn("Old trajectory file element detected, keep default old read parameters.");
+            }
         }
         
         processMode = ProcessMode.VOXELISATION_ALS;

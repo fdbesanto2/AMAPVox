@@ -5,6 +5,8 @@
  */
 package fr.amap.lidar.amapvox.voxviewer.event;
 
+import com.jogamp.newt.event.KeyListener;
+import com.jogamp.newt.event.MouseListener;
 import com.jogamp.opengl.util.FPSAnimator;
 import fr.amap.lidar.amapvox.voxviewer.input.InputKeyListener;
 import fr.amap.lidar.amapvox.voxviewer.input.InputMouseAdapter;
@@ -68,13 +70,11 @@ public abstract class EventManager {
     public boolean rightMouseWasReleased;
     public boolean isMouseLocationUpdated;
     
-    /**
-     * 
-     */
-    protected final FPSAnimator animator;
+    private KeyListener keyListener;
+    private MouseListener mouseListener;
     
-    EventManager(FPSAnimator animator) {
-        this.animator = animator;
+    
+    public EventManager() {
     }
 
     public void setMouseXCurrentLocation(int mouseXCurrentLocation) {
@@ -100,5 +100,5 @@ public abstract class EventManager {
     /**
      * update events
      */
-    public void updateEvents(){};
+    public abstract void updateEvents();
 }

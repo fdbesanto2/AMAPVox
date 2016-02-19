@@ -5,8 +5,6 @@
  */
 package fr.amap.lidar.amapvox.voxviewer.loading.shader;
 
-import com.jogamp.opengl.GL3;
-
 /**
  *
  * @author calcul
@@ -18,18 +16,9 @@ public class InstanceShader extends Shader{
         
         super(name);
         
-        vertexShaderStreamPath = "shaders/InstanceVertexShader.txt";
-        fragmentShaderStreamPath = "shaders/InstanceFragmentShader.txt";
-        attributes = new String[] {"position", "instance_position", "instance_color"};
-        //uniforms = new String[]{"viewMatrix","projMatrix"};
-    }
-    
-    public InstanceShader(GL3 m_gl, String name){
+        setVertexShaderCode(loadCodeFromInputStream(getStream("shaders/InstanceVertexShader.txt")));
+        setFragmentShaderCode(loadCodeFromInputStream(getStream("shaders/InstanceFragmentShader.txt")));
         
-        super(m_gl, name);
         
-        load(vertexShaderStreamPath, fragmentShaderStreamPath);
-        setAttributeLocations(attributes);
-        setUniformLocations(uniforms);
     }
 }

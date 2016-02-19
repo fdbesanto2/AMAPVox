@@ -5,12 +5,12 @@
  */
 package fr.amap.lidar.amapvox.jeeb.raytracing.voxel;
 
+import fr.amap.commons.util.vegetation.LeafAngleDistribution;
 import fr.amap.lidar.amapvox.jeeb.raytracing.util.BoundingBox3d;
 import fr.amap.lidar.amapvox.commons.Voxel;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -18,6 +18,7 @@ import java.util.List;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
 import javax.vecmath.Vector3d;
+import org.apache.commons.math3.util.FastMath;
 import org.apache.log4j.Logger;
 
 /**
@@ -40,6 +41,8 @@ public class DirectionalTransmittance {
     private TLSVoxel voxels[][][];
     private float mnt[][];
     
+    private fr.amap.commons.util.vegetation.DirectionalTransmittance direcTrans;
+    
     private class TLSVoxel {
 
         float padBV;
@@ -60,7 +63,10 @@ public class DirectionalTransmittance {
         voxSize.z = (max.z - min.z) / (double) splitting.z;
         
         logger.info(infos.toString()+"\n");
-
+        
+        direcTrans = new fr.amap.commons.util.vegetation.DirectionalTransmittance(new LeafAngleDistribution(infos.getLadType(), infos.getLadParams()));
+        direcTrans.buildTable(180);
+        
         voxSpace = new VoxelSpace(new BoundingBox3d(min, max), splitting, 0);
         
         createVoxelTable();
@@ -77,11 +83,11 @@ public class DirectionalTransmittance {
                     mnt[voxel.$i][voxel.$j] = (float) (/*min.z - */voxel.ground_distance);
                 }
 
-                if (Float.isNaN(voxel.PadBVTotal)) {
+                /*if (Float.isNaN(voxel.PadBVTotal)) {
                     voxels[voxel.$i][voxel.$j][voxel.$k].padBV = 0;
-                } else {
+                } else {*/
                     voxels[voxel.$i][voxel.$j][voxel.$k].padBV = voxel.PadBVTotal;
-                }
+                //}
             }else{
                 logger.warn("Voxel null");
             }
@@ -147,7 +153,8 @@ public class DirectionalTransmittance {
         
         List<Double> distances = distToVoxelWalls(origin, direction);
         
-        //double directionAngle = FastMath.toDegrees(FastMath.acos(direction.z));
+        //we can optimize this by storing the angle value to avoid repeating this for each position
+        double directionAngle = FastMath.toDegrees(FastMath.acos(direction.z)); 
         
         double dMoy;
         Point3d pMoy;
@@ -175,9 +182,13 @@ public class DirectionalTransmittance {
             if (pMoy.z < mnt[i][j]) {
                 transmitted = 0;
             } else {
-                //float coefficientGTheta = (float) direcTransmittance.getTransmittanceFromAngle(directionAngle, true);
-                //transmitted *= Math.exp(-coefficientGTheta * voxels[i][j][k].padBV * pathLength);
-                transmitted *= Math.exp(-0.5 * voxels[i][j][k].padBV * pathLength);
+                if(Float.isNaN(voxels[i][j][k].padBV)){
+                    return Double.NaN;
+                }
+                
+                float coefficientGTheta = (float) direcTrans.getTransmittanceFromAngle(directionAngle, true);
+                transmitted *= Math.exp(-coefficientGTheta * voxels[i][j][k].padBV * pathLength);
+                //transmitted *= Math.exp(-0.5 * voxels[i][j][k].padBV * pathLength);
             }
             d1 = d2;
         }

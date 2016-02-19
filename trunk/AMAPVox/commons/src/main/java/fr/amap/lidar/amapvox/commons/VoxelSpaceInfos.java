@@ -7,6 +7,7 @@ package fr.amap.lidar.amapvox.commons;
  */
 
 
+import fr.amap.commons.util.vegetation.LeafAngleDistribution;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,6 +31,8 @@ public class VoxelSpaceInfos {
     private Type type; //ALS ou TLS
     private float resolution;
     private float maxPAD;
+    private LeafAngleDistribution.Type ladType = LeafAngleDistribution.Type.SPHERIC;
+    private double[] ladParams;
     private String[] columnNames;
     private List<String> columnNamesList;
     
@@ -95,6 +98,31 @@ public class VoxelSpaceInfos {
                 
                 resolution = Float.valueOf(otherValuesArray[3]);
                 maxPAD = Float.valueOf(otherValuesArray[5]);
+                
+                //test for leaf angle distribution parameter
+                if(otherValuesArray.length >= 8){
+                    String ladStr = otherValuesArray[7];
+                    
+                    if(ladStr.contains("=")){
+                        
+                        String[] split = ladStr.split("=");
+                        String ladTypeName = split[0];
+                        ladType = LeafAngleDistribution.Type.fromString(ladTypeName);
+                        
+                        split[1] = split[1].replace("[", "");
+                        split[1] = split[1].replace("]", "");
+                        
+                        String[] params = split[1].split(";");
+                        ladParams = new double[params.length];
+                        
+                        for(int i = 0;i<params.length;i++){
+                            ladParams[i] = Double.valueOf(params[i]);
+                        }
+                        
+                    }else{
+                        ladType = LeafAngleDistribution.Type.fromString(ladStr);
+                    }
+                }
                 
                 
             }catch(IOException | NumberFormatException e){
@@ -190,6 +218,51 @@ public class VoxelSpaceInfos {
     public void setColumnNames(String[] columnNames) {
         this.columnNames = columnNames;
     }
+
+    public LeafAngleDistribution.Type getLadType() {
+        return ladType;
+    }
+
+    public void setLadType(LeafAngleDistribution.Type ladType) {
+        this.ladType = ladType;
+    }
+
+    public double[] getLadParams() {
+        return ladParams;
+    }
+
+    public void setLadParams(double[] ladParams) {
+        this.ladParams = ladParams;
+    }
+    
+    public String headerToString(){
+        
+        String metadata = "#type: "+type+" #res: "+resolution+" #MAX_PAD: "+maxPAD;
+        
+        metadata += " #LAD_TYPE: " + ladType.toString();
+            
+        if (ladType == LeafAngleDistribution.Type.TWO_PARAMETER_BETA) {
+            
+            metadata += "=[";
+
+            for (int i = 0; i < ladParams.length; i++) {
+                if (i != 0) {
+                    metadata += ";";
+                }
+                metadata += ladParams[i];
+            }
+
+            metadata += "]";
+        }
+        
+        String result = "VOXEL SPACE\n"+
+                        "#min_corner: "+minCorner.x+" "+minCorner.y+" "+minCorner.z+"\n"+
+                        "#max_corner: "+maxCorner.x+" "+maxCorner.y+" "+maxCorner.z+"\n"+
+                        "#split: "+split.x+" "+split.y+" "+split.z+"\n"+
+                        metadata;
+        
+        return result;
+    }
     
     @Override
     public String toString(){
@@ -201,11 +274,29 @@ public class VoxelSpaceInfos {
         
         columns = columns.substring(0, columns.length()-1);
         
+        String metadata = "#type: "+type+" #res: "+resolution+" #MAX_PAD: "+maxPAD;
+        
+        metadata += " #LAD_TYPE: " + ladType.toString();
+            
+        if (ladType == LeafAngleDistribution.Type.TWO_PARAMETER_BETA) {
+            
+            metadata += "=[";
+
+            for (int i = 0; i < ladParams.length; i++) {
+                if (i != 0) {
+                    metadata += ";";
+                }
+                metadata += ladParams[i];
+            }
+
+            metadata += "]";
+        }
+        
         String result = "VOXEL SPACE\n"+
                         "#min_corner: "+minCorner.x+" "+minCorner.y+" "+minCorner.z+"\n"+
                         "#max_corner: "+maxCorner.x+" "+maxCorner.y+" "+maxCorner.z+"\n"+
                         "#split: "+split.x+" "+split.y+" "+split.z+"\n"+
-                        "#type: "+type+" #res: "+resolution+" #MAX_PAD: "+maxPAD+"\n"+
+                        metadata+"\n"+
                         columns;
         
         return result;

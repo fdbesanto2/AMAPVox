@@ -65,10 +65,6 @@ public class Rsp {
         return rxpList;
     }
     
-    public ArrayList<Scans> getFilteredRxpList() {
-        return rxpList;
-    }
-    
     private Mat4D extractMat4D(String matString){
         
         String[] matSplit = matString.split(" ");

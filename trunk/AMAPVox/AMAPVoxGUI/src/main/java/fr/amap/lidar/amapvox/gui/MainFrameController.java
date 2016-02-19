@@ -69,10 +69,10 @@ import fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx.LAI2200;
 import fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx.LAI2xxx;
 import fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx.Lai2xxxSim;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
-import fr.amap.lidar.amapvox.voxelisation.DirectionalTransmittance;
-import fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution;
-import static fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution.Type.TWO_PARAMETER_BETA;
-import static fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution.Type.ELLIPSOIDAL;
+import fr.amap.commons.util.vegetation.DirectionalTransmittance;
+import fr.amap.commons.util.vegetation.LeafAngleDistribution;
+import static fr.amap.commons.util.vegetation.LeafAngleDistribution.Type.TWO_PARAMETER_BETA;
+import static fr.amap.commons.util.vegetation.LeafAngleDistribution.Type.ELLIPSOIDAL;
 import fr.amap.lidar.amapvox.voxelisation.ProcessTool;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis.LaserSpecification;
 import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
@@ -85,7 +85,6 @@ import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxMergingCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
-import fr.amap.lidar.amapvox.voxviewer.ToolBoxFrameController;
 import fr.amap.lidar.amapvox.voxviewer.Viewer3D;
 import fr.amap.lidar.amapvox.voxviewer.event.BasicEvent;
 import fr.amap.lidar.amapvox.voxviewer.loading.shader.SimpleShader;
@@ -108,7 +107,8 @@ import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightParam
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.RasterParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.DTMFilteringParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.LADParams;
+import fr.amap.commons.util.vegetation.LADParams;
+import fr.amap.lidar.amapvox.gui.task.ALSVoxelizationService;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.NaNsCorrectionParams;
 import fr.amap.lidar.amapvox.voxviewer.loading.texture.StringToImage;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObjectListener;
@@ -218,13 +218,10 @@ import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.controlsfx.dialog.ProgressDialog;
 import org.controlsfx.validation.ValidationResult;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
-import org.controlsfx.validation.decoration.GraphicValidationDecoration;
-import org.controlsfx.validation.decoration.ValidationDecoration;
 import org.jdom2.JDOMException;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.xy.XYSeries;
@@ -253,9 +250,11 @@ public class MainFrameController implements Initializable {
     private Stage updaterFrame;
     private Stage attributsImporterFrame;
     private Stage positionImporterFrame;
+    private Stage progressFrame;
     
     private Validator fieldDoubleValidator;
-    private Validator fieldFileValidator;
+    private Validator fileExistValidator;
+    private Validator fileValidValidator;
     
     private ValidationSupport voxSpaceValidationSupport;
     private ValidationSupport alsVoxValidationSupport;
@@ -276,6 +275,7 @@ public class MainFrameController implements Initializable {
     private SceneObjectPropertiesPanelController sceneObjectPropertiesPanelController;
     private FilteringPaneComponentController filteringPaneController;
     private PositionImporterFrameController positionImporterFrameController;
+    private ProgressFrameController progressFrameController;
     
     private BlockingQueue<File> queue = new ArrayBlockingQueue<>(100);
     private int taskNumber = 0;
@@ -777,7 +777,7 @@ public class MainFrameController implements Initializable {
             }
         };
         
-        fieldFileValidator = new Validator<String>() {
+        fileExistValidator = new Validator<String>() {
             @Override
             public ValidationResult apply(Control t, String s) {
                 
@@ -785,6 +785,25 @@ public class MainFrameController implements Initializable {
                     return ValidationResult.fromErrorIf(t, "A value is required", s.isEmpty());
                 }else{
                     return ValidationResult.fromErrorIf(t, "Invalid value", !Files.exists(new File(s).toPath()));
+                }
+            }
+        };
+        
+        fileValidValidator = new Validator<String>() {
+            @Override
+            public ValidationResult apply(Control t, String s) {
+                if(s.isEmpty()){
+                    return ValidationResult.fromErrorIf(t, "A value is required", s.isEmpty());
+                }else{
+                    
+                    File file = new File(s);
+                    if(!file.isDirectory()){
+                        file = file.getParentFile();
+                        return ValidationResult.fromErrorIf(t, "Invalid value", !file.exists());
+                    }else{
+                        return ValidationResult.fromError(t, "The given file is a directory.");
+                    }
+                    
                 }
             }
         };
@@ -797,12 +816,12 @@ public class MainFrameController implements Initializable {
         voxSpaceValidationSupport.registerValidator(textFieldEnterZMax, false, fieldDoubleValidator);
         voxSpaceValidationSupport.registerValidator(textFieldResolution, false, fieldDoubleValidator);
         
-        alsVoxValidationSupport.registerValidator(textFieldInputFileALS, false, fieldFileValidator);
-        alsVoxValidationSupport.registerValidator(textFieldTrajectoryFileALS, false, fieldFileValidator);
-        alsVoxValidationSupport.registerValidator(textFieldOutputFileALS, false, fieldFileValidator);
+        alsVoxValidationSupport.registerValidator(textFieldInputFileALS, false, fileExistValidator);
+        alsVoxValidationSupport.registerValidator(textFieldTrajectoryFileALS, false, fileExistValidator);
+        alsVoxValidationSupport.registerValidator(textFieldOutputFileALS, false, fileValidValidator);
         
-        tlsVoxValidationSupport.registerValidator(textFieldInputFileTLS, false, fieldFileValidator);
-        tlsVoxValidationSupport.registerValidator(textFieldOutputPathTLS, false, fieldFileValidator);
+        tlsVoxValidationSupport.registerValidator(textFieldInputFileTLS, false, fileExistValidator);
+        tlsVoxValidationSupport.registerValidator(textFieldOutputPathTLS, false, fileExistValidator);
     }
     /**
      * Initializes the controller class.
@@ -820,6 +839,7 @@ public class MainFrameController implements Initializable {
         });*/
         
         //Decorator.addDecoration(textFieldEnterXMin, new StyleClassDecoration("warning"));
+        
         
         initValidationSupport();
         
@@ -1404,7 +1424,16 @@ public class MainFrameController implements Initializable {
         } catch (IOException ex) {
             logger.error("Cannot load fxml file", ex);
         }
-            
+           
+        try {
+            progressFrame = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProgressFrame.fxml"));
+            Parent root = loader.load();
+            progressFrameController = loader.getController();
+            progressFrame.setScene(new Scene(root));
+        } catch (IOException ex) {
+            logger.error("Cannot load fxml file", ex);
+        }
             
         try {
             attributsImporterFrame = new Stage();
@@ -2031,7 +2060,7 @@ public class MainFrameController implements Initializable {
             
         TransmittanceParameters transmParameters = new TransmittanceParameters();
 
-        transmParameters.setShotNumber(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem());
+        transmParameters.setDirectionsNumber(comboboxChooseCanopyAnalyzerSampling.getSelectionModel().getSelectedItem());
 
         if(toggleButtonLAI2000Choice.isSelected()){
             transmParameters.setMode(TransmittanceParameters.Mode.LAI2000);
@@ -2048,7 +2077,7 @@ public class MainFrameController implements Initializable {
         transmParameters.setGenerateLAI2xxxTypeFormat(checkboxGenerateLAI2xxxFormat.isSelected());
 
         transmParameters.setInputFile(new File(textfieldVoxelFilePathCanopyAnalyzer.getText()));
-        transmParameters.setGenerateTextFile(checkboxGenerateTextFile.isSelected());
+        transmParameters.setGenerateTextFile(checkboxGenerateCanopyAnalyzerTextFile.isSelected());
 
         if(checkboxGenerateCanopyAnalyzerTextFile.isSelected()){
             transmParameters.setTextFile(new File(textfieldOutputCanopyAnalyzerTextFile.getText()));
@@ -2171,7 +2200,7 @@ public class MainFrameController implements Initializable {
             alsVoxValidationSupport.initInitialDecoration();
         }
 
-        if (voxSpaceValidationSupport.isInvalid() || voxSpaceValidationSupport.isInvalid()) {
+        if (alsVoxValidationSupport.isInvalid() || voxSpaceValidationSupport.isInvalid()) {
 
             Alert alert = new Alert(AlertType.WARNING);
             alert.setTitle("Warning");
@@ -2199,10 +2228,10 @@ public class MainFrameController implements Initializable {
         return true;
     }
     
-    private void saveALSVoxelization(File selectedFile){
+    private boolean saveALSVoxelization(File selectedFile){
         
         if(!checkALSVoxelizationParametersValidity()){
-            return;
+            return false;
         }
             
         VoxelParameters voxelParameters = new VoxelParameters();
@@ -2467,11 +2496,13 @@ public class MainFrameController implements Initializable {
 
             try {
                 cfg.writeConfiguration(selectedFile);
-                
+                return true;
             } catch (Exception ex) {
                 logger.error("Cannot write configuration file", ex);
             }
         }
+        
+        return false;
     }
 
     @FXML
@@ -2480,8 +2511,10 @@ public class MainFrameController implements Initializable {
         File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
         
         if (selectedFile != null) {
-            saveALSVoxelization(selectedFile);
-            addFileToTaskList(selectedFile);
+            if(saveALSVoxelization(selectedFile)){
+                addFileToTaskList(selectedFile);
+            }
+            
         }
     }
 
@@ -2491,8 +2524,9 @@ public class MainFrameController implements Initializable {
         File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
         
         if (selectedFile != null) {
-            saveALSVoxelization(selectedFile);
-            addFileToTaskList(selectedFile);
+            if(saveALSVoxelization(selectedFile)){
+                addFileToTaskList(selectedFile);
+            }
             executeProcess(selectedFile);
         }
         
@@ -2504,8 +2538,10 @@ public class MainFrameController implements Initializable {
         File temporaryFile;
         try{
             temporaryFile  = File.createTempFile("cfg_temp", ".xml");
-            saveALSVoxelization(temporaryFile);
-            logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
+            
+            if(saveALSVoxelization(temporaryFile)){
+                logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
+            }
             
         }catch(IOException e){
             showErrorDialog(e);
@@ -2780,7 +2816,7 @@ public class MainFrameController implements Initializable {
                                 writer.write(direction.x + " " + direction.y + " " + direction.z + "\n");
                             } else {
                                 sc.toSpherical(new Vector3d(direction));
-                                writer.write(sc.getAzimuth() + " " + sc.getElevation() + "\n");
+                                writer.write(sc.getAzimut() + " " + sc.getZenith() + "\n");
                             }
                         } else {
                             writer.write("v " + direction.x + " " + direction.y + " " + direction.z + "\n");
@@ -3617,7 +3653,7 @@ public class MainFrameController implements Initializable {
 
                                 SceneObject boundingBox = new SimpleSceneObject2(boundingBoxMesh, false);
 
-                                SimpleShader s = (SimpleShader) scene.simpleShader;
+                                SimpleShader s = scene.simpleShader;
                                 s.setColor(new Vec3F(1, 0, 0));
                                 boundingBox.setShader(s);
                                 boundingBox.setDrawType(GLMesh.DrawType.LINES);
@@ -4233,8 +4269,6 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonAddVoxelFileToListView(ActionEvent event) {
 
-        textFieldInputFileALS.getStyleClass().remove("invalidEntry");
-
         if (lastFCOpenVoxelFile != null) {
             fileChooserOpenVoxelFile.setInitialDirectory(lastFCOpenVoxelFile.getParentFile());
         }
@@ -4542,10 +4576,53 @@ public class MainFrameController implements Initializable {
         });
         
     }
+    
+    private void executeProcessV2(final File file) {
+        
+        String type;
+        
+        
+        try {
+            type = Configuration.readType(file);            
+        } catch (JDOMException | IOException ex) {
+            showErrorDialog(ex);
+            return;
+        }
+        
+        switch (type) {
+
+            case "voxelisation-ALS":
+                ALSVoxCfg cfg = new ALSVoxCfg();
+                
+                try{
+                    cfg.readConfiguration(file);
+                }catch(Exception e){
+                    showErrorDialog(e);
+                    return;
+                }
+                
+                ALSVoxelizationService s = new ALSVoxelizationService(file.getAbsolutePath(), cfg);
+                progressFrameController.addTask(s);
+                s.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+                        addFileToProductsList(cfg.getOutputFile());
+                    }
+                });
+                
+                //new Thread(trMapTask).start();
+                
+                break;
+        }
+
+        progressFrame.showAndWait();
+        
+    }
 
     private void executeProcess(final File file) {
 
-
+        executeProcessV2(file);
+                        
         try {
             final String type = Configuration.readType(file);
             
@@ -6516,7 +6593,7 @@ public class MainFrameController implements Initializable {
         
             if(toggleButtonLAI2000Choice.isSelected() || toggleButtonLAI2200Choice.isSelected()){
                 
-                transmParameters.setShotNumber(comboboxChooseDirectionsNumber.getSelectionModel().getSelectedItem());
+                transmParameters.setDirectionsNumber(comboboxChooseDirectionsNumber.getSelectionModel().getSelectedItem());
                 
                 if(toggleButtonLAI2000Choice.isSelected()){
                     transmParameters.setMode(TransmittanceParameters.Mode.LAI2000);

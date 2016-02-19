@@ -402,8 +402,9 @@ public class HemiScanView {
                         System.out.println("test");
                     }*/
                     double transmittance = dt.directionalTransmittance(position, new Vector3d(direction.x, direction.y, direction.z));
-                    
-                    pixTab[i][j].updatePixel((float)transmittance);
+                    if(!Double.isNaN(transmittance)){
+                        pixTab[i][j].updatePixel((float)transmittance);
+                    }                    
                 }
             }
         }

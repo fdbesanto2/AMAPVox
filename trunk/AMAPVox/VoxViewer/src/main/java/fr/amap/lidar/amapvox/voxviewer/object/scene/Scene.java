@@ -55,7 +55,7 @@ public class Scene {
     public final Map<String, Shader> shadersList;
     public final List<Texture> textureList;
     
-    public TrackballCamera camera;
+    private TrackballCamera camera;
     private Light light;
     
     private MousePicker mousePicker;
@@ -98,6 +98,8 @@ public class Scene {
         textureList = new ArrayList<>();
         canDraw = false;
         light = new Light();
+        camera = new TrackballCamera();
+        mousePicker = new MousePicker(camera);
         
         uniforms.put(viewMatrixUniform.getName(), viewMatrixUniform);
         uniforms.put(projMatrixUniform.getName(), projMatrixUniform);
@@ -117,21 +119,39 @@ public class Scene {
         
         while(iterator.hasNext()){ //pour tous les shaders
             Entry<String, Shader> shaderEntry = iterator.next();
+            initUniforms(shaderEntry.getValue());
+        }
+    }
+    
+    private void initUniforms(Shader shader){
+        
+        Iterator<Entry<String, Integer>> iterator2 = shader.uniformMap.entrySet().iterator();
             
-            Iterator<Entry<String, Integer>> iterator2 = shaderEntry.getValue().uniformMap.entrySet().iterator();
-            
-            while(iterator2.hasNext()){ //pour chaque uniform d'un shader
-                Entry<String, Integer> uniformEntry = iterator2.next();
-                        
-                //on ajout la variable uniform à la map uniforms
-                if(uniforms.containsKey(uniformEntry.getKey())){
-                    uniforms.get(uniformEntry.getKey()).addOwner(shaderEntry.getValue(), uniformEntry.getValue());
-                    
-                    //handle the case when uniform has been updated before shader has been initialized
-                    if(uniforms.get(uniformEntry.getKey()).isDirty()){
-                        shaderEntry.getValue().notifyDirty(uniforms.get(uniformEntry.getKey()));
-                    }
+        while(iterator2.hasNext()){ //pour chaque uniform d'un shader
+            Entry<String, Integer> uniformEntry = iterator2.next();
+
+            //on ajoute la variable uniform à la map uniforms
+            if(uniforms.containsKey(uniformEntry.getKey())){
+                uniforms.get(uniformEntry.getKey()).addOwner(shader, uniformEntry.getValue());
+
+                //handle the case when uniform has been updated before shader has been initialized
+                if(uniforms.get(uniformEntry.getKey()).isDirty()){
+                    shader.notifyDirty(uniforms.get(uniformEntry.getKey()));
                 }
+            }
+        }
+    }
+    
+    private void notifyShaderDirtyUniforms(Shader shader){
+        
+        Iterator<Entry<String, Integer>> iterator2 = shader.uniformMap.entrySet().iterator();
+            
+        while(iterator2.hasNext()){ //pour chaque uniform d'un shader
+            Entry<String, Integer> uniformEntry = iterator2.next();
+
+            //on ajoute la variable uniform à la map uniforms
+            if(uniforms.containsKey(uniformEntry.getKey())){
+                shader.notifyDirty(uniforms.get(uniformEntry.getKey()));
             }
         }
     }
@@ -206,10 +226,18 @@ public class Scene {
             
         for(SceneObject sceneObject : objectsList){
             
-            sceneObject.initBuffers(gl);
-            sceneObject.initVao(gl);
-            sceneObject.setId(objectsList.size());
-            
+            if(sceneObject.getShaderId() != -1){
+                
+                if(sceneObject.getMesh().getVboId() == -1){
+                    sceneObject.initBuffers(gl);
+                }
+                
+                if(sceneObject.getVaoId() == -1){
+                    sceneObject.initVao(gl);
+                }
+                
+                sceneObject.setId(objectsList.size());
+            }            
         }
         
         for(SceneObject sceneObject : hudList){
@@ -297,6 +325,23 @@ public class Scene {
             mousePickerIsDirty = false;
         }
         
+        //add possible new shaders
+        for(SceneObject object : objectsList){
+            
+            if(object.getShaderId() == -1){
+                Shader shader = object.getShader();
+                shader.init(gl);
+                initUniforms(shader);
+                addShader(shader);
+                notifyShaderDirtyUniforms(shader);
+            }
+            
+            if(object.vaoId == -1){
+                object.initBuffers(gl);
+                object.initVao(gl);
+            }
+        }
+        
         //update shader variables
         Iterator<Entry<String, Shader>> iterator = shadersList.entrySet().iterator();
 
@@ -323,11 +368,6 @@ public class Scene {
             
         for(SceneObject object : objectsList){
             
-            if(object.vaoId == -1){
-                object.initBuffers(gl);
-                object.initVao(gl);
-            }
-
             if(!object.depthTest){
                 gl.glClear(GL3.GL_DEPTH_BUFFER_BIT);
             }

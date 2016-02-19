@@ -19,7 +19,7 @@ public class Grid extends GLMesh{
     }
 
     @Override
-    public void draw(GL3 gl) {
+    public void draw(GL3 gl, DrawType drawType) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -3,27 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.amap.lidar.amapvox.voxelisation;
+package fr.amap.commons.util.vegetation;
 
-import static fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution.Type.SPHERIC;
-import static fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution.Type.TWO_PARAMETER_BETA;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import static fr.amap.commons.util.vegetation.LeafAngleDistribution.Type.SPHERIC;
 import org.apache.commons.math3.analysis.UnivariateFunction;
 import org.apache.commons.math3.analysis.integration.TrapezoidIntegrator;
 
 /**
- * References:
+ * <p>Get the directional transmittance for a specified Leaf Angle Distribution and angle.</p>
+ * <h3><u>References:</u></h3>
  *      -Wang W. M., Li Z.-L. and Su H.-B., 2007,
  *          Comparison of leaf angle distribution functions: 
  *          effects on extinction coefficient and sunlit foliage, 
  *          Agricultural and Forest Meteorology, 2007, Vol. 143, NO. 1-2, pp. 106-122.
  * 
- * @author calcul
+ * @author Julien Heurtebize
  */
 public class DirectionalTransmittance {
     
@@ -40,6 +34,9 @@ public class DirectionalTransmittance {
     public static int MIN_STEP_NUMBER = 91;
     public static int DEFAULT_STEP_NUMBER = 181;
     
+    /**
+     * Case where |cot(theta)*cot(thetaL)| &gt; 1
+     */
     private class CustomFunction1 implements UnivariateFunction{
 
         private final double thetaRad;
@@ -55,6 +52,9 @@ public class DirectionalTransmittance {
         
     }
     
+    /**
+     * Case where |cot(theta)*cot(thetaL)| &lt; 1
+     */
     private class CustomFunction2 implements UnivariateFunction{
 
         private final double thetaRad;
@@ -69,7 +69,7 @@ public class DirectionalTransmittance {
             double tmp = (Math.tan(thetaRad)*Math.tan(x));
             
             //patch to avoid acos(1.000000000001), causing psi result equals to NaN
-            if(Math.abs(1-tmp) < 0.00000001){
+            if(Math.abs(1-tmp) < 0.01){
                 tmp = 1;
             }
             double psi = Math.acos(1/tmp);
@@ -82,18 +82,24 @@ public class DirectionalTransmittance {
     }
     
     
-    
+    /**
+     * Constructs a new DirectionalTransmittance object with the specified Leaf Angle Distribution
+     * @param leafAngleDistribution The Leaf Angle Distribution (LAD)
+     */
     public DirectionalTransmittance(LeafAngleDistribution leafAngleDistribution){
         
         this.distribution = leafAngleDistribution;
         
     }
     
+    /**
+     * Generate the probability density array.
+     * @param stepNumber Number of intervals
+     */
     private void setupDensityProbabilityArray(int stepNumber){
                 
-        //calcul des bornes des classes d'angles foliaires
         
-        //contient des angles foliaires de 0 à 90°
+        //contains angles from 0 to 90°
         serie_angulaire = new double[stepNumber];
         
         double step = (Math.round((90/(float)(stepNumber-1))*100))/100.0;
@@ -108,7 +114,6 @@ public class DirectionalTransmittance {
             }
             
             totalStep += step;
-            //System.out.println(serie_angulaire[i]);
         }
         
         nbIntervals = serie_angulaire.length-1;
@@ -123,7 +128,7 @@ public class DirectionalTransmittance {
     }
     
     /**
-     *
+     * Computes a Look Up Table of transmittance functions (optional operation, speeds up processing time)
      * @param stepNumber must be greater or equals than 91
      */
     public void buildTable(int stepNumber){
@@ -148,9 +153,10 @@ public class DirectionalTransmittance {
     }
     
     /**
-     *
-     * @param theta
-     * @param degrees if passed angle is in degrees, otherwise it is radians
+     * <p>Get the transmittance from the specified angle (radians or degrees) and the specified Leaf Angle Distribution.</p>
+     * 0° is vertical, 90° is horizontal (zenithal angle, measured from vertical).
+     * @param theta Angle
+     * @param degrees true if the given angle is in degrees, false otherwise
      * @return directional transmittance (GTheta)
      */
     public double getTransmittanceFromAngle(double theta, boolean degrees){
@@ -190,7 +196,7 @@ public class DirectionalTransmittance {
             }
             if (distribution.getType() == SPHERIC) {
 
-                return 0.5;
+                return 0.5; //the result for spherical distribution is always 0.5, saving processing time
 
             } else {
 
@@ -239,36 +245,21 @@ public class DirectionalTransmittance {
     }
     
     public static void main(String[] args) {
-     
-        //LeafAngleDistribution distribution = new LeafAngleDistribution(TWO_PARAMETER_BETA, Math.toRadians(60), 0.03);
-        LeafAngleDistribution distribution = new LeafAngleDistribution(TWO_PARAMETER_BETA, 60, 0.03);
-        DirectionalTransmittance m = new DirectionalTransmittance(distribution);
-        m.buildTable(181);
         
-        //DirectionalTransmittance m = new DirectionalTransmittance(distribution);
+        LeafAngleDistribution distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.TWO_PARAMETER_BETA, 1.13, 1.62);
         
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/home/calcul/DART/user_data/database/LADFile.txt")));
-            writer.write("Thetaf g_sinThetaf\n");
-            for(int i=0;i<181;i++){
-                writer.write((Math.round(Math.toDegrees(m.serie_angulaire[i])*1000)/1000.0)+" "+m.pdfArray[i]+"\n");
-            }
-            writer.close();
-        } catch (IOException ex) {
-            Logger.getLogger(DirectionalTransmittance.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        System.out.println("Thetaf g_sinThetaf");
         
+        System.out.println("0.001"+" "+distribution.getDensityProbability(Math.toRadians(0.001)));
         
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/home/calcul/Documents/Julien/GTheta_extremophile.txt")));
-            for(int i = 0 ; i < 180 ; i++){
-                double GTheta = m.getTransmittanceFromAngle(i/2.0, true);
-                writer.write(GTheta+" "+i/2.0+"\n");
-                System.out.println(i+" : "+GTheta);
-            }
-            writer.close();
-        } catch (IOException ex) {
-            Logger.getLogger(DirectionalTransmittance.class.getName()).log(Level.SEVERE, null, ex);
+        for(int i=1;i<=180;i++){
+            
+            double angle = i/2.0;
+            double angleRad = Math.toRadians(angle);
+            double densityProbability = distribution.getDensityProbability(angleRad);
+            
+            
+            System.out.println(angle+" "+densityProbability);
         }
         
     }

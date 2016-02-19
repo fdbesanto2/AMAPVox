@@ -15,9 +15,8 @@ public class ColorShader extends Shader{
         
         super(name);
         
-        vertexShaderStreamPath = "shaders/ColorVertexShader.txt";
-        fragmentShaderStreamPath = "shaders/ColorFragmentShader.txt";
-        attributes = new String[] {"position","color"};
+        setVertexShaderCode(loadCodeFromInputStream(getStream("shaders/ColorVertexShader.txt")));
+        setFragmentShaderCode(loadCodeFromInputStream(getStream("shaders/ColorFragmentShader.txt")));
     }
     
 }

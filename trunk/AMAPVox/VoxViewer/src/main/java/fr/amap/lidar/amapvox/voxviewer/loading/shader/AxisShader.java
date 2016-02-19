@@ -5,8 +5,6 @@
  */
 package fr.amap.lidar.amapvox.voxviewer.loading.shader;
 
-import com.jogamp.opengl.GL3;
-
 /**
  *
  * @author calcul
@@ -17,19 +15,8 @@ public class AxisShader extends Shader{
         
         super(name);
         
-        vertexShaderStreamPath = "shaders/NoTranslationVertexShader.txt";
-        fragmentShaderStreamPath = "shaders/NoTranslationFragmentShader.txt";
-        attributes = new String[] {"position", "normal"};
-        //uniforms = new String[]{"viewMatrix","projMatrix", "normalMatrix", "Material", "Light", "eye"};
-    }
-    
-    public AxisShader(GL3 m_gl, String name) throws Exception {
-        
-        super(m_gl, name);
-        
-        load(vertexShaderStreamPath, fragmentShaderStreamPath);
-        setAttributeLocations(attributes);
-        setUniformLocations(uniforms);
+        setVertexShaderCode(loadCodeFromInputStream(getStream("shaders/NoTranslationVertexShader.txt")));
+        setFragmentShaderCode(loadCodeFromInputStream(getStream("shaders/NoTranslationFragmentShader.txt")));
     }
     
 }

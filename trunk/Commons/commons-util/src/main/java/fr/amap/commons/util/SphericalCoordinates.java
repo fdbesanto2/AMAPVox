@@ -28,8 +28,8 @@ import org.apache.commons.math3.util.FastMath;
 
 public class SphericalCoordinates {
     
-    private double azimuth;
-    private double elevation;
+    private double azimut;
+    private double zenith;
     private double radius = 1;
     
     private Tuple3d cartesianCoordinates;
@@ -37,23 +37,23 @@ public class SphericalCoordinates {
     public SphericalCoordinates() {
     }
 
-    public SphericalCoordinates(double azimuth, double elevation) {
-        this.azimuth = azimuth;
-        this.elevation = elevation;
+    public SphericalCoordinates(double azimut, double zenith) {
+        this.azimut = azimut;
+        this.zenith = zenith;
     }
     
-    public SphericalCoordinates(double azimuth, double elevation, double radius) {
-        this.azimuth = azimuth;
-        this.elevation = elevation;
+    public SphericalCoordinates(double azimut, double zenith, double radius) {
+        this.azimut = azimut;
+        this.zenith = zenith;
         this.radius = radius;
     }
 
-    public double getAzimuth() {
-        return azimuth;
+    public double getAzimut() {
+        return azimut;
     }
 
-    public double getElevation() {
-        return elevation;
+    public double getZenith() {
+        return zenith;
     }
 
     public double getRadius() {
@@ -62,9 +62,9 @@ public class SphericalCoordinates {
     
     public Point3d toCartesian(){
         
-        Point3d point = new Point3d(radius * FastMath.sin(elevation) * FastMath.cos(azimuth), 
-                            radius * FastMath.sin(elevation) * FastMath.sin(azimuth), 
-                            radius * FastMath.cos(elevation));
+        Point3d point = new Point3d(radius * FastMath.sin(zenith) * FastMath.cos(azimut), 
+                            radius * FastMath.sin(zenith) * FastMath.sin(azimut), 
+                            radius * FastMath.cos(zenith));
         
         cartesianCoordinates = point;
         
@@ -74,9 +74,9 @@ public class SphericalCoordinates {
     public void toSpherical(Tuple3d point) {
         
         radius = FastMath.sqrt((point.x * point.x) + (point.y * point.y)+ (point.z * point.z));
-        azimuth = FastMath.atan2(point.y, point.x);
+        azimut = FastMath.atan2(point.y, point.x);
         
-        elevation = FastMath.acos(point.z/radius);
+        zenith = FastMath.acos(point.z/radius);
         //elevation = Math.atan(Math.sqrt((point.x*point.x) + (point.y*point.y))/point.z);
         
         

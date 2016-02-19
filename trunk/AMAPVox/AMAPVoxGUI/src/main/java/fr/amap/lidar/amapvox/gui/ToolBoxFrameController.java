@@ -1,4 +1,4 @@
-package fr.amap.lidar.amapvox.voxviewer;
+package fr.amap.lidar.amapvox.gui;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

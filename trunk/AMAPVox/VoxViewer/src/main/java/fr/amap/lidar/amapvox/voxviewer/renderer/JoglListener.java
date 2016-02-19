@@ -124,6 +124,7 @@ public class JoglListener implements GLEventListener {
         GL3 gl = drawable.getGL().getGL3();
         
         /*
+        From doc:
         glViewport specifies the affine transformation of x and y from normalized 
         device coordinates to window coordinates. 
         Let x nd y nd be normalized device coordinates. 
@@ -132,18 +133,19 @@ public class JoglListener implements GLEventListener {
         x w = x nd + 1 ⁢* width * 2 + x
         y w = y nd + 1 ⁢* height * 2 + y
         */
-        gl.glViewport(startX, startY, viewportWidth, viewportHeight);
-        
-        gl.glClear(GL3.GL_DEPTH_BUFFER_BIT|GL3.GL_COLOR_BUFFER_BIT);
-        gl.glClearColor(worldColor.x, worldColor.y, worldColor.z, 1.0f);
-        
-        gl.glDisable(GL3.GL_BLEND);
         
         if(eventListener != null){
             eventListener.updateEvents();
         }
         
+        gl.glViewport(startX, startY, viewportWidth, viewportHeight);
         
+        //specify clear values for the color buffers (must be called before glClear)
+        gl.glClearColor(worldColor.x, worldColor.y, worldColor.z, 1.0f);
+        
+        gl.glClear(GL3.GL_DEPTH_BUFFER_BIT|GL3.GL_COLOR_BUFFER_BIT);
+        
+        gl.glDisable(GL3.GL_BLEND);
         
         isInit = false;
         

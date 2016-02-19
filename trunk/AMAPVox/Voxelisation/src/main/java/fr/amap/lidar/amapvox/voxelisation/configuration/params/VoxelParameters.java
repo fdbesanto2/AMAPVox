@@ -5,9 +5,9 @@
  */
 package fr.amap.lidar.amapvox.voxelisation.configuration.params;
 
+import fr.amap.commons.util.vegetation.LADParams;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
-import fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution.Type;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
 import java.io.File;
 import java.util.List;
@@ -271,6 +271,9 @@ public class VoxelParameters {
      */
     public void setLadParams(LADParams ladParams) {
         this.ladParams = ladParams;
+        
+        infos.setLadType(ladParams.getLadType());
+        infos.setLadParams(new double[]{ladParams.getLadBetaFunctionAlphaParameter(), ladParams.getLadBetaFunctionBetaParameter()});
     }
 
     /**

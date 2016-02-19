@@ -10,7 +10,6 @@ import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.light.SolarRadiation;
 import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.light.Turtle;
 import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.util.Colouring;
 import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.util.Time;
-import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.util.Cancellable;
 import fr.amap.lidar.amapvox.simulation.transmittance.util.Period;
 import java.awt.Color;
@@ -164,14 +163,17 @@ public class TransmittanceSim implements Cancellable{
 
                 transmitted = direcTransmittance.directionalTransmittance(position, dir);
                 
-                for(int m=0 ; m < solRad.size();m++){
-                    ir = solRad.get(m);
+                if(!Double.isNaN(transmitted)){
                     
-                    //transmittance for the direction
-                    double transmittance = transmitted * ir.directionalGlobals[t];
-                    
-                    transmissionPeriod[positionID][m] += transmittance;
-                }
+                    for(int m=0 ; m < solRad.size();m++){
+                        ir = solRad.get(m);
+
+                        //transmittance for the direction
+                        double transmittance = transmitted * ir.directionalGlobals[t];
+
+                        transmissionPeriod[positionID][m] += transmittance;
+                    }
+                }                
             }
             
             for(int m=0 ; m < solRad.size();m++){

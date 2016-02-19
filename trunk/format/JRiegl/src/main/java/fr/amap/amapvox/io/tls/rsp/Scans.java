@@ -52,16 +52,8 @@ public class Scans {
         this.fold = fold;
     }
 
-    public File getRxpLiteFile() {
-        return rxpLiteFile;
-    }
-
     public void setRxpLiteFile(File rxpLiteFile) {
         this.rxpLiteFile = rxpLiteFile;
-    }
-
-    public File getRxpFullFile() {
-        return rxpFullFile;
     }
 
     public void setRxpFullFile(File rxpFullFile) {

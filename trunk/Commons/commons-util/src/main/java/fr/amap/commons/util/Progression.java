@@ -21,6 +21,7 @@ public abstract class Progression {
     private int currentStep = 0;
     private double progressStepPercentage;
     private long count;
+    private boolean cancelled;
 
     public void setStepNumber(int stepNumber) {
         currentStep = 0;
@@ -34,6 +35,14 @@ public abstract class Progression {
             fireFinished(0);
         }
     }
+
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
     
     public void setProgressionStep(float percentage){
         this.progressStepPercentage = percentage;
@@ -45,11 +54,11 @@ public abstract class Progression {
     
     public void fireProgress(String progressMsg, long progress, long max){
         
-        count++;
+        /*count++;
         
         int progressStep = (int) ((max/100) * progressStepPercentage);
         
-        if(progressStep == count){
+        if(progressStep == count){*/
             
             for(ProcessingListener listener :listeners.getListeners(ProcessingListener.class)){
 
@@ -57,7 +66,7 @@ public abstract class Progression {
             }
             
             count = 0;
-        }
+        //}
     }
     
     public void fireFinished(float duration){

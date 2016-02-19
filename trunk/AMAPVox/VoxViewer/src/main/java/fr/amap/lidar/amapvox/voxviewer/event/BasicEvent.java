@@ -11,7 +11,6 @@ import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
 import fr.amap.lidar.amapvox.voxviewer.renderer.JoglListener;
-import java.awt.Robot;
 
 /**
  * Describes user input behavior
@@ -23,10 +22,16 @@ public class BasicEvent extends EventManager{
     
     private int currentColorIndex = 0;
     
+    /**
+     * 
+     */
+    protected final FPSAnimator animator;
+    
     public BasicEvent(FPSAnimator animator, JoglListener context){
         
-        super(animator);
+        super();
         
+        this.animator = animator;
         this.joglContext = context;
         
         mouseMoved = false;

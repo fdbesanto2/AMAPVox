@@ -5,8 +5,6 @@
  */
 package fr.amap.lidar.amapvox.voxviewer.loading.shader;
 
-import com.jogamp.opengl.GL3;
-
 /**
  *
  * @author calcul
@@ -17,18 +15,7 @@ public class TextureShader extends Shader{
         
         super(name);
         
-        vertexShaderStreamPath = "shaders/billboardVertexShader.txt";
-        fragmentShaderStreamPath = "shaders/TextureFragmentShader.txt";
-        attributes = new String[] {"position", "textureCoordinates"};
-        //uniforms = new String[]{"viewMatrix","projMatrix", "texture", "eye"};
-    }
-    
-    public TextureShader(GL3 m_gl, String name) throws Exception {
-        
-        super(m_gl, name);
-        
-        load(vertexShaderStreamPath, fragmentShaderStreamPath);
-        setAttributeLocations(attributes);
-        setUniformLocations(uniforms);
+        setVertexShaderCode(loadCodeFromInputStream(getStream("shaders/billboardVertexShader.txt")));
+        setFragmentShaderCode(loadCodeFromInputStream(getStream("shaders/TextureFragmentShader.txt")));
     }
 }

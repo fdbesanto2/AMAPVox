@@ -30,7 +30,7 @@ public abstract class SceneObject{
     //public Mesh mesh ;
     protected GLMesh mesh;
     protected int vaoId = -1, textureId = -1;
-    private DrawType drawType;
+    protected DrawType drawType;
     public boolean isAlphaRequired;
     public boolean depthTest = true;
     public Texture texture;
@@ -43,6 +43,19 @@ public abstract class SceneObject{
     
     private final EventListenerList listeners = new EventListenerList();
 
+    public SceneObject(){
+        vaoId = -1;
+    }
+    
+    public SceneObject(GLMesh mesh, boolean isAlphaRequired){
+        
+        this.mesh = mesh;
+        this.drawType = DrawType.LINES;
+        this.isAlphaRequired = isAlphaRequired;
+        this.gravityCenter = mesh.getGravityCenter();
+        vaoId = -1;
+    }
+    
     public void setId(int id) {
         this.id = id;
     }
@@ -59,22 +72,13 @@ public abstract class SceneObject{
     public int getId() {
         return id;
     }
-    
-    public SceneObject(){
-        
-    }
-    
-    public SceneObject(GLMesh mesh, boolean isAlphaRequired){
-        
-        this.mesh = mesh;
-        this.drawType = DrawType.TRIANGLES;
-        this.isAlphaRequired = isAlphaRequired;
-        this.gravityCenter = mesh.getGravityCenter();
+
+    public int getVaoId() {
+        return vaoId;
     }
 
     public void setDrawType(DrawType drawType) {
         this.drawType = drawType;
-        this.mesh.drawType = drawType;
     }
 
     public DrawType getDrawType() {

@@ -75,7 +75,7 @@ public class SimpleGLMesh extends GLMesh{
     }
 
     @Override
-    public void draw(GL3 gl) {
+    public void draw(GL3 gl, DrawType drawType) {
         gl.glDrawElements(drawType.get(), vertexCount, GL3.GL_UNSIGNED_INT, 0);
     }
     

@@ -12,11 +12,13 @@ import java.util.List;
 import java.util.Map;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.slf4j.Logger;
@@ -51,6 +53,13 @@ public class MainApp extends Application {
             }
             
         }else{
+            
+            ObservableList<Screen> screens = Screen.getScreensForRectangle(0, 0, 10, 10);
+
+            if(screens != null && screens.size() > 0){
+                stage.setWidth(screens.get(0).getBounds().getWidth());
+                stage.setHeight(screens.get(0).getBounds().getHeight());
+            }
             
             Scene scene = new Scene(root);
             

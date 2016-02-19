@@ -5,8 +5,6 @@
  */
 package fr.amap.lidar.amapvox.voxviewer.loading.shader;
 
-import com.jogamp.opengl.GL3;
-
 /**
  *
  * @author calcul
@@ -18,18 +16,8 @@ public class LightedShader extends Shader{
         
         super(name);
         
-        vertexShaderStreamPath = "shaders/LightVertexShader.txt";
-        fragmentShaderStreamPath = "shaders/LightFragmentShader.txt";
-        attributes = new String[] {"position", "color", "normal"};
-        //uniforms = new String[]{"viewMatrix","projMatrix", "normalMatrix", "Material", "Light", "eyeCoordinates", "lightPosition"};
-    }
-    
-    public LightedShader(GL3 m_gl, String name){
+        setVertexShaderCode(loadCodeFromInputStream(getStream("shaders/LightVertexShader.txt")));
+        setFragmentShaderCode(loadCodeFromInputStream(getStream("shaders/LightFragmentShader.txt")));
         
-        super(m_gl, name);
-        
-        load(vertexShaderStreamPath, fragmentShaderStreamPath);
-        setAttributeLocations(attributes);
-        setUniformLocations(uniforms);
     }
 }

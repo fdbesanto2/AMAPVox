@@ -10,15 +10,17 @@ import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.opengl.util.FPSAnimator;
 
 /**
- *
- * @author calcul
+ * Handle 3d view non-dynamic draw
+ * @author Julien Heurtebize
  */
 public class MinimalMouseAdapter extends MouseAdapter{
 
     private final FPSAnimator animator;
+    private boolean dynamicDraw;
     
-    public MinimalMouseAdapter(FPSAnimator animator) {
+    public MinimalMouseAdapter(FPSAnimator animator, boolean dynamicDraw) {
         this.animator = animator;
+        this.dynamicDraw = dynamicDraw;
     }
     
     @Override
@@ -33,7 +35,9 @@ public class MinimalMouseAdapter extends MouseAdapter{
             if(animator.isPaused()){
                 animator.resume();
             }else{
-                animator.pause();
+                if(!dynamicDraw){
+                    animator.pause();
+                }
             }
             
         }
@@ -49,7 +53,7 @@ public class MinimalMouseAdapter extends MouseAdapter{
     @Override
     public void mouseReleased(MouseEvent me) {
         
-        if(!animator.isPaused()){
+        if(!animator.isPaused() && !dynamicDraw){
             animator.pause();
         }
     }
@@ -66,6 +70,14 @@ public class MinimalMouseAdapter extends MouseAdapter{
         if(animator.isPaused()){
             animator.resume();
         }
+    }
+
+    public boolean isDynamicDraw() {
+        return dynamicDraw;
+    }
+
+    public void setDynamicDraw(boolean dynamicDraw) {
+        this.dynamicDraw = dynamicDraw;
     }
     
 }

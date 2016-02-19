@@ -1,9 +1,6 @@
 package fr.amap.lidar.amapvox.voxelisation;
 
-import fr.amap.commons.util.Statistic;
-import fr.amap.commons.math.point.Point3I;
 import fr.amap.commons.util.TimeCounter;
-import fr.amap.commons.structure.octree.Octree;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.lidar.amapvox.jeeb.raytracing.geometry.LineElement;
 import fr.amap.lidar.amapvox.jeeb.raytracing.geometry.LineSegment;
@@ -14,16 +11,14 @@ import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelManager.VoxelCrossingCon
 import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelManagerSettings;
 import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelSpace;
 import fr.amap.commons.raster.asc.Raster;
-import fr.amap.commons.raster.multiband.BCommon;
-import fr.amap.commons.raster.multiband.BHeader;
-import fr.amap.commons.raster.multiband.BSQ;
-import fr.amap.commons.math.point.Point3D;
+import fr.amap.commons.util.vegetation.DirectionalTransmittance;
+import fr.amap.commons.util.vegetation.LADParams;
+import fr.amap.commons.util.vegetation.LeafAngleDistribution;
 import fr.amap.lidar.amapvox.commons.Voxel;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos.Type;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.LADParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightParams;
 import java.io.BufferedWriter;
@@ -36,12 +31,9 @@ import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.vecmath.Point3d;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 
 public class VoxelAnalysis {
@@ -789,7 +781,8 @@ public class VoxelAnalysis {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
 
-            writer.write("VOXEL SPACE" + "\n");
+            writer.write(parameters.infos.headerToString()+"\n");
+            /*writer.write("VOXEL SPACE" + "\n");
             writer.write("#min_corner: " + voxSpace.getBoundingBox().min.x + " " + voxSpace.getBoundingBox().min.y + " " + voxSpace.getBoundingBox().min.z + "\n");
             writer.write("#max_corner: " + voxSpace.getBoundingBox().max.x + " " + voxSpace.getBoundingBox().max.y + " " + voxSpace.getBoundingBox().max.z + "\n");
             writer.write("#split: " + voxSpace.getSplitting().x + " " + voxSpace.getSplitting().y + " " + voxSpace.getSplitting().z + "\n");
@@ -798,7 +791,21 @@ public class VoxelAnalysis {
             String type = "";
 
             metadata += "#res: " + parameters.infos.getResolution() + " ";
-            metadata += "#MAX_PAD: " + parameters.infos.getMaxPAD();
+            metadata += "#MAX_PAD: " + parameters.infos.getMaxPAD()+" ";
+            metadata += "#LAD_TYPE: " + parameters.infos.getLadType().toString();
+            
+            if (parameters.infos.getLadType() == LeafAngleDistribution.Type.TWO_PARAMETER_BETA) {
+                metadata += "=[";
+
+                for (int i = 0; i < parameters.infos.getLadParams().length; i++) {
+                    if (i != 0) {
+                        metadata += ";";
+                    }
+                    metadata += parameters.infos.getLadParams()[i];
+                }
+
+                metadata += "]";
+            }
 
             if(parameters.infos.getType() == VoxelSpaceInfos.Type.TLS){
                 type += "#type: " + "TLS" + " ";
@@ -807,7 +814,7 @@ public class VoxelAnalysis {
             }
             
             type += metadata + "\n";
-            writer.write(type);
+            writer.write(type);*/
             writer.write(Voxel.getHeader(Voxel.class) + "\n");
 
             for (int i = 0; i < parameters.infos.getSplit().x; i++) {

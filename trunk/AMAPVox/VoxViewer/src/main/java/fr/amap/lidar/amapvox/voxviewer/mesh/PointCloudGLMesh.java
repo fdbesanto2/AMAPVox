@@ -17,7 +17,7 @@ import java.util.List;
 public class PointCloudGLMesh extends GLMesh{
 
     @Override
-    public void draw(GL3 gl) {
+    public void draw(GL3 gl, DrawType drawType) {
         gl.glDrawArrays(GL3.GL_POINTS, 0, vertexCount);
     }
 

@@ -26,7 +26,7 @@ public abstract class GLMesh {
         POINTS(GL3.GL_POINTS),
         LINES(GL3.GL_LINES);
         
-        private int type;
+        private final int type;
 
         private DrawType(int type) {
             this.type = type;
@@ -44,7 +44,6 @@ public abstract class GLMesh {
     
     long offset = 0;
     long totalBuffersSize;
-    public DrawType drawType = DrawType.TRIANGLES;
     
     protected FloatBuffer vertexBuffer;
     public FloatBuffer normalBuffer;
@@ -77,6 +76,7 @@ public abstract class GLMesh {
         
         totalBuffersSize = 0;
         offset = 0;
+        vboId = -1;
         offsets = new ArrayList<>();
         buffersSizes = new ArrayList<>();
         
@@ -89,8 +89,9 @@ public abstract class GLMesh {
     /**
      *
      * @param gl opengl context
+     * @param drawType
      */
-    public abstract void draw(GL3 gl);
+    public abstract void draw(GL3 gl, DrawType drawType);
     public abstract void initBuffers(GL3 gl, long maximumTotalBufferSize);
     /*
     public void initBuffers(GL3 gl, int maxSize, ShortBuffer indexBuffer, FloatBuffer... floatBuffers){

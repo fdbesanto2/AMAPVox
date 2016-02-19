@@ -1,18 +1,23 @@
+package fr.amap.lidar.amapvox.voxelisation;
+
+
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.amap.amapvox.voxelisation;
+
 
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
-import fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution;
+import fr.amap.commons.util.vegetation.LeafAngleDistribution;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos.Type;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightParams;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.LADParams;
+import fr.amap.commons.util.vegetation.LADParams;
+import fr.amap.commons.util.vegetation.LADParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import java.io.File;
 import java.util.ArrayList;

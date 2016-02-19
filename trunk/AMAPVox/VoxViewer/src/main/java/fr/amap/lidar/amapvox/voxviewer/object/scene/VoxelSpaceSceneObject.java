@@ -218,6 +218,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
         cubeSize = (float) (data.getVoxelSpaceInfos().getResolution()/2.0f);
         
         int instanceNumber = data.voxels.size();    
+        //mesh = new InstancedGLMesh(GLMeshFactory.createBoundingBox(-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f), instanceNumber);
         mesh = new InstancedGLMesh(GLMeshFactory.createCube(cubeSize), instanceNumber);
         
         if(mousePickable){
@@ -1057,7 +1058,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
             if(texture != null){
                 gl.glBindTexture(GL3.GL_TEXTURE_2D, textureId);
             }
-            mesh.draw(gl);
+            mesh.draw(gl, drawType);
 
             if(texture != null){
                 gl.glBindTexture(GL3.GL_TEXTURE_2D, 0);

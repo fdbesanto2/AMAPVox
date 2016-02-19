@@ -7,6 +7,7 @@ package fr.amap.lidar.amapvox.chart;
 
 import fr.amap.lidar.amapvox.commons.Voxel;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Paint;
 import java.awt.geom.Ellipse2D;
@@ -386,12 +387,19 @@ public class VoxelsToChart {
         if (r instanceof XYLineAndShapeRenderer) {
             XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) r;
             renderer.setBaseShapesVisible(true);
-
+            renderer.setSeriesPaint(0, renderer.lookupSeriesPaint(0));
+            renderer.setSeriesPaint(1, renderer.lookupSeriesPaint(1));
+            renderer.setSeriesPaint(2, renderer.lookupSeriesPaint(2));
+            renderer.setSeriesPaint(3, new Color(255, 171, 87));
+            renderer.setSeriesPaint(4, new Color(255, 87, 171));
+            renderer.setSeriesPaint(5, new Color(0, 219, 110));
+            
             Ellipse2D.Float shape = new Ellipse2D.Float(-2.5f, -2.5f, 5.0f, 5.0f);
 
             for (int i = 0; i < voxelFiles.length; i++) {
                 renderer.setSeriesShape(i, shape);
                 Paint seriesPaint = renderer.lookupSeriesPaint(i);
+                
                 renderer.setLegendTextPaint(i, seriesPaint);
             }
         }

@@ -102,7 +102,7 @@ public class SimpleSceneObject extends SceneObject{
                 gl.glBindTexture(GL3.GL_TEXTURE_2D, texture.getId());
             }
             
-            mesh.draw(gl);
+            mesh.draw(gl, drawType);
 
             if(texture != null){
                 gl.glBindTexture(GL3.GL_TEXTURE_2D, 0);

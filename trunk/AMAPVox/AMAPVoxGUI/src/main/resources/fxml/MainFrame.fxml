@@ -70,6 +70,9 @@
                                                       <content>
                                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                <children>
+                                                                  <Button layoutX="14.0" layoutY="260.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="260.0" />
+                                                                  <Button layoutX="14.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="100.0" />
+                                                                  <Button layoutX="14.0" layoutY="183.0" mnemonicParsing="false" onAction="#onActionButtonOpenTrajectoryFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="183.0" />
                                                                   <HBox alignment="CENTER_LEFT" layoutX="15.0" layoutY="300.0" spacing="20.0">
                                                                      <children>
                                                                         <CheckBox fx:id="checkboxMultiResAfterMode2" mnemonicParsing="false" text="Correct NaNs" />
@@ -81,16 +84,13 @@
                                                                         </HBox>
                                                                      </children>
                                                                   </HBox>
-                                                                  <Button layoutX="14.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="100.0" />
                                                                   <ComboBox fx:id="comboboxModeALS" layoutX="14.0" layoutY="14.0" prefWidth="150.0" promptText="Choose mode..." />
                                                                   <Label layoutX="14.0" layoutY="58.0" text="Input file(s)" />
                                                                   <TextField fx:id="textFieldInputFileALS" layoutX="14.0" layoutY="73.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
                                                                   <TextField fx:id="textFieldTrajectoryFileALS" layoutX="14.0" layoutY="155.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
                                                                   <Label layoutX="14.0" layoutY="138.0" text="Trajectory file" AnchorPane.leftAnchor="14.0" />
-                                                                  <Button layoutX="14.0" layoutY="183.0" mnemonicParsing="false" onAction="#onActionButtonOpenTrajectoryFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="183.0" />
                                                                   <TextField fx:id="textFieldOutputFileALS" layoutX="14.0" layoutY="233.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
                                                                   <Label layoutX="14.0" layoutY="218.0" text="Output file/path" AnchorPane.leftAnchor="14.0" />
-                                                                  <Button layoutX="14.0" layoutY="260.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="260.0" />
                                                                   <CheckBox fx:id="checkboxMultiFiles" layoutX="188.0" layoutY="18.0" mnemonicParsing="false" text="Multi-files" />
                                                                   <HBox layoutX="196.0" layoutY="339.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                                      <children>
@@ -1088,7 +1088,7 @@
                                                                <children>
                                                                   <HBox spacing="10.0">
                                                                      <children>
-                                                                        <CheckBox fx:id="checkboxGenerateCanopyAnalyzerTextFile" disable="true" mnemonicParsing="false" selected="true" text="Generate text file" />
+                                                                        <CheckBox fx:id="checkboxGenerateCanopyAnalyzerTextFile" mnemonicParsing="false" selected="true" text="Generate text file" />
                                                                         <CheckBox fx:id="checkboxGenerateLAI2xxxFormat" mnemonicParsing="false" selected="true" text="LAI2xxx format" />
                                                                      </children>
                                                                   </HBox>

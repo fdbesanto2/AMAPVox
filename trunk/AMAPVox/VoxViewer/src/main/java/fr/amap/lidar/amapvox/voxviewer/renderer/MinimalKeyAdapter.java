@@ -10,8 +10,8 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.opengl.util.FPSAnimator;
 
 /**
- *
- * @author calcul
+ * Handle 3d view non-dynamic draw
+ * @author Julien Heurtebize
  */
 public class MinimalKeyAdapter extends KeyAdapter{
 

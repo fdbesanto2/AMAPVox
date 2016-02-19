@@ -56,7 +56,7 @@ public class SimpleSceneObject2 extends SceneObject{
     public void draw(GL3 gl){
         
         gl.glBindVertexArray(vaoId);
-        mesh.draw(gl);
+        mesh.draw(gl, drawType);
         gl.glBindVertexArray(0);
     }
 

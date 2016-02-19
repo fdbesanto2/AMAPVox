@@ -3,9 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.amap.lidar.amapvox.voxelisation.configuration.params;
-
-import fr.amap.lidar.amapvox.voxelisation.LeafAngleDistribution;
+package fr.amap.commons.util.vegetation;
 
 /**
  *
