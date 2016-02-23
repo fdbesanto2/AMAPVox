@@ -430,4 +430,8 @@ public class PositionImporterFrameController implements Initializable {
         }
     }
     
+    public void setInitialVoxelFile(File file){
+        textfieldVoxelFile.setText(file.getAbsolutePath());
+    }
+    
 }

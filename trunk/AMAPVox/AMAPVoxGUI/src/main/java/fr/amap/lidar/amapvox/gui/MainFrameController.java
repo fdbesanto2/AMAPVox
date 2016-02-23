@@ -2036,6 +2036,13 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonAddPositionCanopyAnalyzer(ActionEvent event) {
         
+        if(!textfieldVoxelFilePathCanopyAnalyzer.getText().isEmpty()){
+            File voxelFile = new File(textfieldVoxelFilePathCanopyAnalyzer.getText());
+            if(voxelFile != null && voxelFile.exists()){
+                positionImporterFrameController.setInitialVoxelFile(voxelFile);
+            }
+        }
+        
         positionImporterFrame.show();
         positionImporterFrame.setOnHidden(new EventHandler<WindowEvent>() {
 
@@ -2938,6 +2945,13 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionButtonAddPositionTransmittanceMap(ActionEvent event) {
+        
+        if(!textfieldVoxelFilePathTransmittance.getText().isEmpty()){
+            File voxelFile = new File(textfieldVoxelFilePathTransmittance.getText());
+            if(voxelFile.exists()){
+                positionImporterFrameController.setInitialVoxelFile(voxelFile);
+            }
+        }
         
         positionImporterFrame.show();
         positionImporterFrame.setOnHidden(new EventHandler<WindowEvent>() {

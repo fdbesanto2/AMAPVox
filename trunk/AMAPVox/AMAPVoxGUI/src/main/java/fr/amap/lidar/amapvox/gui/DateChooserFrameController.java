@@ -31,9 +31,14 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.controlsfx.validation.ValidationResult;
+import org.controlsfx.validation.ValidationSupport;
+import org.controlsfx.validation.Validator;
 
 /**
  * FXML Controller class
@@ -51,6 +56,10 @@ public class DateChooserFrameController implements Initializable {
     private int currentEndHour;
     private int currentEndMinute;
     
+    private Validator<LocalDate> fieldValidator;
+    private Validator<String> numberValidator;
+    private ValidationSupport validationSupport;
+    
     private NumberFormat numberFormat;
     
     @FXML
@@ -67,6 +76,8 @@ public class DateChooserFrameController implements Initializable {
     private TextField textfieldStartHour;
     @FXML
     private TextField textfieldStartMinute;
+    @FXML
+    private Button buttonAccept;
 
     /**
      * Initializes the controller class.
@@ -83,6 +94,59 @@ public class DateChooserFrameController implements Initializable {
         
         numberFormat = NumberFormat.getInstance();
         numberFormat.setMinimumIntegerDigits(2);
+        
+        datepickerStartDate.valueProperty().addListener(new ChangeListener<LocalDate>() {
+            @Override
+            public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
+                if(datepickerEndDate.getValue() == null){
+                    datepickerEndDate.setValue(newValue);
+                }
+            }
+        });
+        
+        fieldValidator = new Validator<LocalDate>() {
+            @Override
+            public ValidationResult apply(Control t, LocalDate s) {                
+                return ValidationResult.fromErrorIf(t, "A value is required", (s == null));
+            }
+        };
+        
+        numberValidator = new Validator<String>() {
+            @Override
+            public ValidationResult apply(Control t, String s) {
+                
+                if(s == null || s.isEmpty()){
+                    return ValidationResult.fromErrorIf(t, "A value is required", true);
+                }else{
+                    boolean valid;
+                    try{
+                        Float value = Float.valueOf(s);
+                        valid = value >= 0;
+                    }catch(Exception e){
+                        valid = false;
+                    }
+                
+                    return ValidationResult.fromErrorIf(t, "A number is required", !valid);
+                }
+            }
+        };
+        
+        validationSupport = new ValidationSupport();
+        
+        validationSupport.registerValidator(datepickerStartDate, fieldValidator);
+        validationSupport.registerValidator(datepickerEndDate, fieldValidator);
+        validationSupport.registerValidator(textfieldClearnessCoefficient, numberValidator);
+        
+        validationSupport.validationResultProperty().addListener(new ChangeListener<ValidationResult>() {
+            @Override
+            public void changed(ObservableValue<? extends ValidationResult> observable, ValidationResult oldValue, ValidationResult newValue) {
+                if(newValue.getErrors().isEmpty() && newValue.getMessages().isEmpty() && newValue.getWarnings().isEmpty()){
+                    buttonAccept.setDisable(false);
+                }else{
+                    buttonAccept.setDisable(true);
+                }
+            }
+        });
     }    
 
     @FXML

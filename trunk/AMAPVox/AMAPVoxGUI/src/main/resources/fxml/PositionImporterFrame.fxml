@@ -122,7 +122,7 @@
             </HBox>
          </children>
       </VBox>
-      <Button layoutX="402.0" layoutY="547.0" mnemonicParsing="false" onAction="#onActionButtonImportPositions" text="Import positions" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+      <Button layoutX="402.0" layoutY="547.0" mnemonicParsing="false" onAction="#onActionButtonImportPositions" text="Load" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
       <Button layoutX="14.0" layoutY="277.0" mnemonicParsing="false" onAction="#onActionButtonGenerateGridPosition" prefHeight="23.0" prefWidth="151.0" text="Generate positions">
          <font>
             <Font name="System Bold" size="12.0" />
