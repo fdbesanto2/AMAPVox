@@ -91,11 +91,15 @@ public class PointsToShot extends Progression implements Iterable<Shot>{
                 for (PointDataRecordFormat p : lasReader) {
 
                     fireProgress("Reading *.las", iterations, maxIterations);
+                    
+                    if(isCancelled()){
+                        return;
+                    }
 
-                    if(p.isHasQLineExtrabytes()){
+                    /*if(p.isHasQLineExtrabytes()){
                         QLineExtrabytes qLineExtrabytes = p.getQLineExtrabytes();
                         //logger.info("QLineExtrabytes" + qLineExtrabytes.getAmplitude()+" "+qLineExtrabytes.getPulseWidth());
-                    }
+                    }*/
                     Vector3d location = new Vector3d((p.getX() * header.getxScaleFactor()) + header.getxOffset(), (p.getY() * header.getyScaleFactor()) + header.getyOffset(), (p.getZ() * header.getzScaleFactor()) + header.getzOffset());
 
 
@@ -125,6 +129,10 @@ public class PointsToShot extends Progression implements Iterable<Shot>{
                 for (LasPoint p : laz) {
 
                     fireProgress("Reading *.laz", count, numberOfPointrecords);
+                    
+                    if(isCancelled()){
+                        return;
+                    }
 
                     p.x = (p.x * header.getxScaleFactor()) + header.getxOffset();
                     p.y = (p.y * header.getyScaleFactor()) + header.getyOffset();

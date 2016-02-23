@@ -141,7 +141,7 @@
                                                                   <Label fx:id="labelTLSOutputPath" layoutX="14.0" layoutY="254.0" text="Output path" />
                                                                   <TextField fx:id="textFieldOutputPathTLS" layoutX="14.0" layoutY="269.0" prefHeight="25.0" prefWidth="300.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
                                                                   <ComboBox fx:id="comboboxModeTLS" layoutX="14.0" layoutY="14.0" prefWidth="150.0" promptText="Choose mode..." />
-                                                                  <TextField fx:id="textFieldInputFileTLS" layoutX="14.0" layoutY="73.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                                  <TextField fx:id="textFieldInputFileTLS" disable="true" editable="false" layoutX="14.0" layoutY="73.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
                                                                   <Label layoutX="14.0" layoutY="58.0" text="Input file" />
                                                                   <Button layoutX="14.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileTLS" text="Import scans" AnchorPane.topAnchor="100.0" />
                                                                   <ListView fx:id="listviewRxpScans" layoutX="14.0" layoutY="129.0" maxWidth="1.7976931348623157E308" prefHeight="91.0" prefWidth="300.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
@@ -1722,7 +1722,7 @@
                                                       <Tooltip text="Load the selected task parameters into the frame" />
                                                    </tooltip>
                                                 </Button>
-                                                <Button mnemonicParsing="false" onAction="#onActionButtonExecute" text="Execute">
+                                                <Button fx:id="buttonExecute" disable="true" mnemonicParsing="false" onAction="#onActionButtonExecute" text="Execute">
                                                    <graphic>
                                                       <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -1739,7 +1739,7 @@
                               </AnchorPane>
                            </content>
                         </TitledPane>
-                        <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" minWidth="380.0" text="Voxels files">
+                        <TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" minWidth="380.0" text="Output files">
                            <content>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                  <children>

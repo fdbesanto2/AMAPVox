@@ -12,6 +12,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
@@ -69,7 +70,7 @@ public class StringToImage {
         image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         graphics = (Graphics2D)image.createGraphics();
 
-        setFont(new Font(Font.MONOSPACED, Font.PLAIN, 40));
+        setFont(new Font("Courier", Font.BOLD, 40));
 
         canvas = new Canvas();
     }
@@ -78,12 +79,12 @@ public class StringToImage {
         
         //fill with opaque color
         graphics.setPaint(new Color(255, 255, 255, 255));
-        graphics.fillRect(0, 0, 512, 512);
+        graphics.fillRect(0, 0, width, height);
 
         //fill with transparency (or not)
         graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
         graphics.setPaint(backgroundColor);
-        graphics.fillRect(0, 0, 512, 512);
+        graphics.fillRect(0, 0, width, height);
         
         //draw strings
         FontMetrics fontMetrics = canvas.getFontMetrics(font);

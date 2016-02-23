@@ -773,7 +773,7 @@ public class VoxelAnalysis {
         padComputed = true;
     }
     
-    public void write(){
+    public void write() throws FileNotFoundException, Exception{
         
         long start_time = System.currentTimeMillis();
 
@@ -839,9 +839,9 @@ public class VoxelAnalysis {
             LOGGER.info("file written ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
 
         } catch (FileNotFoundException e) {
-            LOGGER.error("Error: " + e);
+            throw e;
         } catch (Exception e) {
-            LOGGER.error("Error: " + e);
+            throw e;
         }
     }
     
@@ -852,7 +852,7 @@ public class VoxelAnalysis {
         //VoxelFileReader 
     }
 
-    public void writeGroundEnergy() {
+    public void writeGroundEnergy() throws IOException {
 
         if (groundEnergy.length > 0 && groundEnergy[0].length > 0) {
 
@@ -908,7 +908,7 @@ public class VoxelAnalysis {
                 LOGGER.info("file written ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
 
             } catch (IOException ex) {
-                LOGGER.error(ex);
+                throw ex;
             }
 
         } else {

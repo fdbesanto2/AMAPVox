@@ -19,8 +19,8 @@ public class Uniform1I extends Uniform{
         super(name);
     }
     
-    public Uniform1I(String name, Shader shader, int location) {
-        super(name, shader, location);
+    public Uniform1I(String name, Shader shader) {
+        super(name, shader);
     }
 
     @Override

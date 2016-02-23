@@ -235,15 +235,15 @@ public class PointCloudSceneObject extends SimpleSceneObject{
     }
 
     @Override
-    public String doPicking(Point3F camPosition, Vec3F ray) {
+    public String doPicking(MousePicker mousePicker) {
         
-        Vec3F currentRay = mousePicker.getCurrentRay();
+        /*Vec3F currentRay = mousePicker.getCurrentRay();
         
         Point3F closestPoint = mousePicker.getPointOnray(camPosition, currentRay, 1);
-        Point3F farestPoint = mousePicker.getPointOnray(camPosition, currentRay, 99999);
+        Point3F farestPoint = mousePicker.getPointOnray(camPosition, currentRay, 99999);*/
         
         
-        return ("ray direction : "+currentRay.x+" "+currentRay.y+ " " +currentRay.z);
+        return ("");
     }
 
     public Octree getOctree() {

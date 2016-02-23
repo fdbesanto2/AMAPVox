@@ -98,7 +98,7 @@ public class ProcessTool extends Progression implements Cancellable{
         return cancelled;
     }
 
-    private Raster loadDTM(File dtmFile) {
+    public static Raster loadDTM(File dtmFile) {
 
         Raster terrain = null;
 
@@ -114,7 +114,7 @@ public class ProcessTool extends Progression implements Cancellable{
         return terrain;
     }
     
-    private Octree loadOctree(CSVFile pointcloudFile, Mat4D vopMatrix) {
+    public static Octree loadOctree(CSVFile pointcloudFile, Mat4D vopMatrix) {
 
         Octree octree = null;
         
@@ -388,7 +388,7 @@ public class ProcessTool extends Progression implements Cancellable{
         return files;
     }
 
-    public void voxeliseFromRxp(TLSVoxCfg cfg) {
+    public void voxeliseFromRxp(TLSVoxCfg cfg) throws Exception {
 
         startTime = System.currentTimeMillis();
         

@@ -7,7 +7,10 @@ package fr.amap.lidar.amapvox.voxviewer.mesh;
 
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL3;
+import fr.amap.commons.math.matrix.Mat4F;
 import fr.amap.commons.math.point.Point3F;
+import fr.amap.commons.math.vector.Vec3F;
+import fr.amap.commons.math.vector.Vec4F;
 import fr.amap.commons.util.Statistic;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -327,6 +330,58 @@ public abstract class GLMesh {
     public Point3F getGravityCenter(){
         
         return new Point3F((float)xValues.getMean(), (float)yValues.getMean(), (float)zValues.getMean());
+    }
+    
+    /**
+     * Translate the vertices contained inside the vertex buffer
+     * @param translation The translation vector
+     */
+    public void translate(Vec3F translation){
+                
+        for(int j = 0 ; j<vertexBuffer.capacity(); j+=3){
+            
+            
+            float x = vertexBuffer.get(j);
+            float y = vertexBuffer.get(j+1);
+            float z = vertexBuffer.get(j+2);
+            
+            vertexBuffer.put(j, x+translation.x);
+            vertexBuffer.put(j+1, y+translation.y);
+            vertexBuffer.put(j+2, z+translation.z);
+            
+        }
+    }
+    
+    public void scale(Vec3F scale){
+                
+        for(int j = 0 ; j<vertexBuffer.capacity(); j+=3){
+            
+            
+            float x = vertexBuffer.get(j);
+            float y = vertexBuffer.get(j+1);
+            float z = vertexBuffer.get(j+2);
+            
+            vertexBuffer.put(j, x*scale.x);
+            vertexBuffer.put(j+1, y*scale.y);
+            vertexBuffer.put(j+2, z*scale.z);
+        }
+        
+    }
+    
+    public void rotate(Mat4F rotation){
+                
+        for(int j = 0 ; j<vertexBuffer.capacity(); j+=3){
+            
+            float x = vertexBuffer.get(j);
+            float y = vertexBuffer.get(j+1);
+            float z = vertexBuffer.get(j+2);
+            
+                
+            Vec4F result = Mat4F.multiply(rotation, new Vec4F(x, y, z, 1));
+            vertexBuffer.put(j, result.x);
+            vertexBuffer.put(j+1, result.y);
+            vertexBuffer.put(j+2, result.z);
+        }
     }
 
     public Statistic getxValues() {

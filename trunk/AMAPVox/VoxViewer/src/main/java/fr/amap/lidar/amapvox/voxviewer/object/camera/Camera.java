@@ -23,8 +23,8 @@ public abstract class Camera {
     protected Mat4F viewMatrix;
     protected float fovy;
     protected float aspect;
-    protected float nearPersp;
-    protected float farPersp;
+    protected float nearPersp = 1;
+    protected float farPersp = 1000;
     protected float nearOrtho = 1;
     protected float farOrtho = 1000;
     protected float left = Float.NaN;
@@ -178,6 +178,10 @@ public abstract class Camera {
         
         fireProjectionMatrixChanged(projectionMatrix);
         props.firePropertyChange("projMatrix", oldValue, projectionMatrix);
+    }
+
+    public boolean isPerspective() {
+        return perspective;
     }
     
     /**

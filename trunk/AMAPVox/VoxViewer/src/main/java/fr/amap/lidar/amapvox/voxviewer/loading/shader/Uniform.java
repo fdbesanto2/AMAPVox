@@ -17,32 +17,27 @@ public abstract class Uniform {
     
     protected final String name;
     protected final List<Shader> owners;
-    protected final List<Integer> locations;
     protected boolean dirty; //if true it means no shaders has updated the uniform
     
     public Uniform(String name){
         
-        locations = new ArrayList<>();
         owners = new ArrayList<>();
         
         this.name = name;
     }
     
-    public Uniform(String name, Shader shader, int location){
+    public Uniform(String name, Shader shader){
         
-        locations = new ArrayList<>();
         owners = new ArrayList<>();
         
         this.name = name;
         
         owners.add(shader);
-        locations.add(location);
         
     }
     
-    public void addOwner(Shader shader, int location){
+    public void addOwner(Shader shader){
         owners.add(shader);
-        locations.add(location);
     }
     
     public void notifyOwners(){

@@ -10,13 +10,10 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.util.FPSAnimator;
 import fr.amap.commons.math.vector.Vec3F;
-import fr.amap.commons.raster.asc.Raster;
 import fr.amap.lidar.amapvox.voxviewer.event.EventManager;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.MousePicker;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.Scene;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.event.EventListenerList;
 
 /**
  *
@@ -27,6 +24,7 @@ public class JoglListener implements GLEventListener {
     private EventManager eventListener;
     private final Scene scene;
     private Vec3F worldColor;
+    private final static Vec3F DEFAULT_WORLD_COLOR = new Vec3F(0.78f, 0.78f, 0.78f);
     
     private int width;
     private int height;
@@ -64,7 +62,7 @@ public class JoglListener implements GLEventListener {
         
         scene = new Scene();
         this.animator = animator;
-        worldColor = new Vec3F(0.78f, 0.78f, 0.78f);
+        worldColor = DEFAULT_WORLD_COLOR;
     }
     
     public void attachEventListener(EventManager eventListener){
@@ -79,12 +77,12 @@ public class JoglListener implements GLEventListener {
                 
         GL3 gl = drawable.getGL().getGL3();
         
-        String extensions = gl.glGetString(GL3.GL_EXTENSIONS);
+        //String extensions = gl.glGetString(GL3.GL_EXTENSIONS);
         
         try {
             scene.init(gl);
         } catch (Exception ex) {
-            Logger.getLogger(JoglListener.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
         }
         
         gl.glBlendFunc(GL3.GL_SRC_ALPHA, GL3.GL_ONE_MINUS_SRC_ALPHA );
@@ -186,28 +184,26 @@ public class JoglListener implements GLEventListener {
         
         gl.glViewport(startX, startY, viewportWidth, viewportHeight);
         
-        if(isInit){
+        /*if(isInit){
             scene.getCamera().setPerspective(60.0f, (1.0f*this.width-startX)/height, 1.0f, 1000.0f);
-        }
+        }*/
         
         updateCamera();
     }
     
     
     public void updateCamera() {
+        
+        scene.getCamera().setViewportWidth(viewportWidth);
+        scene.getCamera().setViewportHeight(viewportHeight);
 
         if (scene.getCamera().isPerspective()) {
-            scene.getCamera().setViewportWidth(viewportWidth);
-            scene.getCamera().setViewportHeight(viewportHeight);
+            
             scene.getCamera().setPerspective(60.0f, (1.0f * this.width - startX) / height, scene.getCamera().getNearPersp(), scene.getCamera().getFarPersp());
         } else {
-            //camera.initOrtho(0, width, height, 0, camera.getNearOrtho(), camera.getFarOrtho());
 
-            scene.getCamera().setViewportWidth(viewportWidth);
-            scene.getCamera().setViewportHeight(viewportHeight);
-            //camera.initOrtho(-camera.getWidth()*0.5f, camera.getWidth()*0.5f, camera.getHeight()*0.5f, -camera.getHeight()*0.5f, camera.getNearOrtho(), camera.getFarOrtho());
+            //scene.getCamera().initOrtho(-1, 1, 1, -1, scene.getCamera().getNearOrtho(), scene.getCamera().getFarOrtho());
             scene.getCamera().initOrtho(-((viewportWidth) / 100), (viewportWidth) / 100, viewportHeight / 100, -(viewportHeight) / 100, scene.getCamera().getNearOrtho(), scene.getCamera().getFarOrtho());
-
             scene.getCamera().setOrthographic(scene.getCamera().getNearOrtho(), scene.getCamera().getFarOrtho());
         }
 
@@ -224,10 +220,12 @@ public class JoglListener implements GLEventListener {
         viewportWidth = this.width-startX;
         viewportHeight = this.height;
         
-        scene.getCamera().setViewportWidth(viewportWidth);
+        updateCamera();
+        
+        /*scene.getCamera().setViewportWidth(viewportWidth);
         scene.getCamera().setViewportHeight(viewportHeight);
         
-        scene.getCamera().setPerspective(60.0f, (1.0f*this.width-startX)/height, 1.0f, 1000.0f);
+        scene.getCamera().setPerspective(60.0f, (1.0f*this.width-startX)/height, 1.0f, 1000.0f);*/
     }
 
     public int getStartY() {

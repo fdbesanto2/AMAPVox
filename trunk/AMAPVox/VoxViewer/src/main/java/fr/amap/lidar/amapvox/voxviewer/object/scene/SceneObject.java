@@ -14,6 +14,7 @@ import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.commons.math.vector.Vec4F;
 import fr.amap.lidar.amapvox.voxviewer.loading.shader.Shader;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.UniformMat4F;
 import fr.amap.lidar.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh.DrawType;
@@ -36,24 +37,31 @@ public abstract class SceneObject{
     public Texture texture;
     protected Shader shader;
     protected Point3F gravityCenter;
+    protected Mat4F transformation;
+    private UniformMat4F transfoUniform = new UniformMat4F("transformation");
     private int id;
     protected boolean colorNeedUpdate = false;
     protected boolean mousePickable;
-    protected MousePicker mousePicker;
     
-    private final EventListenerList listeners = new EventListenerList();
+    private final EventListenerList listeners;
 
     public SceneObject(){
         vaoId = -1;
+        transformation = Mat4F.identity();
+        //setPosition(new Point3F());
+        listeners = new EventListenerList();
     }
     
     public SceneObject(GLMesh mesh, boolean isAlphaRequired){
         
         this.mesh = mesh;
-        this.drawType = DrawType.LINES;
+        this.drawType = DrawType.TRIANGLES;
         this.isAlphaRequired = isAlphaRequired;
         this.gravityCenter = mesh.getGravityCenter();
         vaoId = -1;
+        transformation = Mat4F.identity();
+        //setPosition(new Point3F());
+        listeners = new EventListenerList();
     }
     
     public void setId(int id) {
@@ -91,6 +99,7 @@ public abstract class SceneObject{
 
     public void setShader(Shader shader) {
         this.shader = shader;
+        transfoUniform.addOwner(this.shader);
     }
     
     public void attachTexture(int textureId){
@@ -112,66 +121,6 @@ public abstract class SceneObject{
         this.gravityCenter = position;
     }
     
-    public void translate(Vec3F translation){
-        
-        FloatBuffer vertexBuffer = mesh.getVertexBuffer();
-        
-        for(int j = 0 ; j<vertexBuffer.capacity(); j+=3){
-            
-            
-            float x = vertexBuffer.get(j);
-            float y = vertexBuffer.get(j+1);
-            float z = vertexBuffer.get(j+2);
-            
-            vertexBuffer.put(j, x+translation.x);
-            vertexBuffer.put(j+1, y+translation.y);
-            vertexBuffer.put(j+2, z+translation.z);
-            
-        }
-        
-        mesh.setVertexBuffer(vertexBuffer);
-    }
-    
-    public void scale(Vec3F scale){
-        
-        FloatBuffer vertexBuffer = mesh.getVertexBuffer();
-        
-        for(int j = 0 ; j<vertexBuffer.capacity(); j+=3){
-            
-            
-            float x = vertexBuffer.get(j);
-            float y = vertexBuffer.get(j+1);
-            float z = vertexBuffer.get(j+2);
-            
-            vertexBuffer.put(j, x*scale.x);
-            vertexBuffer.put(j+1, y*scale.y);
-            vertexBuffer.put(j+2, z*scale.z);
-        }
-        
-        mesh.setVertexBuffer(vertexBuffer);
-        
-    }
-    
-    public void rotate(Mat4F rotation){
-        
-        FloatBuffer vertexBuffer = mesh.getVertexBuffer();
-        
-        for(int j = 0 ; j<vertexBuffer.capacity(); j+=3){
-            
-            float x = vertexBuffer.get(j);
-            float y = vertexBuffer.get(j+1);
-            float z = vertexBuffer.get(j+2);
-            
-                
-            Vec4F result = Mat4F.multiply(rotation, new Vec4F(x, y, z, 1));
-            vertexBuffer.put(j, result.x);
-            vertexBuffer.put(j+1, result.y);
-            vertexBuffer.put(j+2, result.z);
-        }
-        
-        mesh.setVertexBuffer(vertexBuffer);
-    }
-    
     public void setMousePickable(boolean isPickable){
         
         this.mousePickable = isPickable;
@@ -179,10 +128,6 @@ public abstract class SceneObject{
 
     public boolean isMousePickable() {
         return mousePickable;
-    }  
-    
-    public void updateMousePicker(MousePicker mousePicker){
-        this.mousePicker = mousePicker;
     }
 
     public GLMesh getMesh() {
@@ -205,15 +150,33 @@ public abstract class SceneObject{
         }
     }
     
+    public void setPosition(Point3F position){
+        
+        transformation.mat[3] = position.x;
+        transformation.mat[7] = position.y;
+        transformation.mat[11] = position.z;
+        
+        transfoUniform.setValue(Mat4F.transpose(transformation));
+    }
+    
     public BoundingBox3D getBoundingBox(){
         
+        Vec4F min = Mat4F.multiply(transformation, new Vec4F(
+                (float)mesh.getxValues().getMinValue(),
+                (float)mesh.getyValues().getMinValue(),
+                (float)mesh.getzValues().getMinValue(),
+                1));
+        
+        Vec4F max = Mat4F.multiply(transformation, new Vec4F(
+                (float)mesh.getxValues().getMaxValue(),
+                (float)mesh.getyValues().getMaxValue(),
+                (float)mesh.getzValues().getMaxValue(),
+                1));
+        
+        
         BoundingBox3D bb = new BoundingBox3D(
-                new Point3D(mesh.getxValues().getMinValue(),
-                        mesh.getyValues().getMinValue(),
-                        mesh.getzValues().getMinValue()),
-                new Point3D(mesh.getxValues().getMaxValue(),
-                        mesh.getyValues().getMaxValue(),
-                        mesh.getzValues().getMaxValue()));
+                new Point3D(min.x,min.y,min.z),
+                new Point3D(max.x,max.y,max.z));
         
         return bb;
     }
@@ -228,5 +191,5 @@ public abstract class SceneObject{
 
     public abstract void load(File file);
     
-    public abstract Object doPicking(Point3F camPosition, Vec3F ray);
+    public abstract Object doPicking(MousePicker mousePicker);
 }

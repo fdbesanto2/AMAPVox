@@ -1,6 +1,6 @@
 #version 140
 
-uniform mat4 viewMatrix, projMatrix;
+uniform mat4 viewMatrix, projMatrix, transformation;
 
 in vec3 position;
 in vec3 normal;
@@ -16,5 +16,5 @@ void main()
     fragPosition = position.xyz;
     fragColor = color;
 
-    gl_Position = projMatrix * viewMatrix  * vec4(position, 1);
+    gl_Position = projMatrix * viewMatrix  * transformation * vec4(position, 1);
 }

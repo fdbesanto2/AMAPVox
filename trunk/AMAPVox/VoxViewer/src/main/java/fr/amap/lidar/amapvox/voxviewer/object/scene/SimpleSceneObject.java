@@ -121,7 +121,7 @@ public class SimpleSceneObject extends SceneObject{
     }
 
     @Override
-    public String doPicking(Point3F camPosition, Vec3F ray) {
+    public String doPicking(MousePicker mousePicker) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

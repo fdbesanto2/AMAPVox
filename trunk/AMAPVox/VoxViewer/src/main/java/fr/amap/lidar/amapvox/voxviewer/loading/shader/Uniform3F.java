@@ -20,8 +20,8 @@ public class Uniform3F extends Uniform{
         super(name);
     }
 
-    public Uniform3F(String name, Shader shader, int location) {
-        super(name, shader, location);
+    public Uniform3F(String name, Shader shader) {
+        super(name, shader);
     }
 
     @Override

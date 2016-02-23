@@ -189,17 +189,28 @@ public class ScaleGradient {
         
         //scale labels (values)
         currentTickRectXOffset = 0 + leftXMargin;
-        for(int i=0;i<majorTickNumber;i++){
-            
-            String text = format.format(tickValues[i]);
+        
+        if(minValue == maxValue){ //display on value at center
+                        
+            String text = format.format(minValue);
             int textWidth = fm.stringWidth(text);
-            int x = (int) (currentTickRectXOffset - ((int) (textWidth/2.0f)));
-            
+            int x = (int) ((currentTickRectXOffset+(width/2.0)) - ((int) (textWidth/2.0f)));
+
             graphics.drawString(text, x, y);
             
-            currentTickRectXOffset += majorTickSpace;
+        }else{
+            
+            for(int i=0;i<majorTickNumber;i++){
+            
+                String text = format.format(tickValues[i]);
+                int textWidth = fm.stringWidth(text);
+                int x = (int) (currentTickRectXOffset - ((int) (textWidth/2.0f)));
+
+                graphics.drawString(text, x, y);
+
+                currentTickRectXOffset += majorTickSpace;
+            }
         }
-        
         
         return imageWithTextcaption;
     }

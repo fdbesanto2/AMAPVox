@@ -8,6 +8,7 @@ package fr.amap.lidar.amapvox.voxelisation.tls;
 import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.math.matrix.Mat3D;
 import fr.amap.commons.math.matrix.Mat4D;
+import fr.amap.commons.util.CallableTask;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.SimpleShotFilter;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
@@ -21,7 +22,7 @@ import java.util.concurrent.Callable;
  *
  * @author calcul
  */
-public abstract class TLSVoxelisation implements Callable{
+public abstract class TLSVoxelisation extends CallableTask{
 
     protected int nbVoxelisationFinished;
     protected final File inputFile;
@@ -69,6 +70,6 @@ public abstract class TLSVoxelisation implements Callable{
 
     public void setNbVoxelisationFinished(int nbVoxelisationFinished) {
         this.nbVoxelisationFinished = nbVoxelisationFinished;
-    }   
+    }
     
 }

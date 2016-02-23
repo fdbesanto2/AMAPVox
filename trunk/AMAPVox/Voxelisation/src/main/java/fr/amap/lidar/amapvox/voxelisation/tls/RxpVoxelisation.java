@@ -41,7 +41,7 @@ public class RxpVoxelisation extends TLSVoxelisation{
     }
 
     @Override
-    public Object call() {
+    public Object call() throws Exception {
         
         System.out.println(Thread.currentThread().getName());
         
@@ -126,14 +126,16 @@ public class RxpVoxelisation extends TLSVoxelisation{
             //permet de signaler au garbage collector que cet élément peut être supprimé
             voxelAnalysis = null;
             
+            fireSucceeded();
+            
             //return resultData;
         
-        }catch(OutOfMemoryError ex){
-            logger.error("Unsufficient memory, you need to allocate more to the JVM, change the Xmx value!",ex);
-        }catch(Exception ex){
-            logger.error("Unknow exception in RXPVoxelisation.class in thread : "+Thread.currentThread().getName()+", retrying",ex);
-            this.call();
+        }catch(OutOfMemoryError | Exception ex){
+            throw ex;
+            //logger.error("Unsufficient memory, you need to allocate more to the JVM, change the Xmx value!",ex);
         }
+        //logger.error("Unknow exception in RXPVoxelisation.class in thread : "+Thread.currentThread().getName()+", retrying",ex);
+        //this.call();
         
         return null;
     }

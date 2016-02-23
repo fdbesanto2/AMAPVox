@@ -8,10 +8,14 @@ package fr.amap.lidar.amapvox.voxviewer.object.scene;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL3;
 import fr.amap.commons.math.geometry.AABB;
+import fr.amap.commons.math.geometry.BoundingBox3D;
 import fr.amap.commons.math.geometry.Plane;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.commons.math.geometry.BoundingBox3F;
+import fr.amap.commons.math.matrix.Mat4F;
+import fr.amap.commons.math.point.Point3D;
+import fr.amap.commons.math.vector.Vec4F;
 import fr.amap.commons.util.ColorGradient;
 import fr.amap.commons.util.CombinedFilter;
 import fr.amap.commons.util.CombinedFilters;
@@ -77,10 +81,10 @@ public class VoxelSpaceSceneObject extends SceneObject{
     }
 
     @Override
-    public  VoxelObject doPicking(Point3F camPosition, Vec3F ray) {
+    public  VoxelObject doPicking(MousePicker mousePicker) {
         
-        Point3F closestPoint = MousePicker.getPointOnray(camPosition, ray, 1);
-        Point3F farestPoint = MousePicker.getPointOnray(camPosition, ray, 999);
+        Point3F closestPoint = mousePicker.getPointOnray(-100);
+        Point3F farestPoint = mousePicker.getPointOnray(999);
 
         LineSegment lineSegment = new LineSegment(
                 new Point3d(closestPoint.x, closestPoint.y, closestPoint.z),
@@ -100,6 +104,16 @@ public class VoxelSpaceSceneObject extends SceneObject{
         }
         
         return null;
+    }
+    
+    @Override
+    public BoundingBox3D getBoundingBox(){
+        
+        BoundingBox3D bb = new BoundingBox3D(
+                new Point3D(voxelSpaceInfos.getMinCorner().x, voxelSpaceInfos.getMinCorner().y, voxelSpaceInfos.getMinCorner().z),
+                new Point3D(voxelSpaceInfos.getMaxCorner().x, voxelSpaceInfos.getMaxCorner().y, voxelSpaceInfos.getMaxCorner().z));
+        
+        return bb;
     }
     
     public enum Format{
@@ -124,6 +138,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
     public float max;
     
     private File voxelFile;
+    private VoxelSpaceInfos voxelSpaceInfos;
     
     public boolean arrayLoaded;
     private Map<String,Attribut> mapAttributs;
@@ -152,7 +167,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
     private CombinedFilters combinedFilters;
     private boolean displayValues;
     
-    private final EventListenerList listeners;
+    private final EventListenerList loadingListeners;
     float sdValue;
     float average;
     
@@ -167,6 +182,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
     
     public VoxelSpaceSceneObject(File voxelSpace){
         
+        super();
         //filteredValues = new TreeSet<>();
         //filteredValues.add(new Filter("x", Float.NaN, Filter.EQUAL));
         //filteredValues.add(new Filter("x", 0.0f, Filter.EQUAL));
@@ -175,7 +191,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
         combinedFilters.addFilter(new CombinedFilter(new Filter("x", 0.0f, Filter.EQUAL), null, CombinedFilter.AND));
         mapAttributs = new LinkedHashMap<>();
         variables = new TreeSet<>();
-        listeners = new EventListenerList();
+        loadingListeners = new EventListenerList();
         fileLoaded = false;
         
         this.voxelFile = voxelSpace;
@@ -215,6 +231,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
         
         loadFromFile(voxelFile);
         
+        voxelSpaceInfos = data.getVoxelSpaceInfos();
         cubeSize = (float) (data.getVoxelSpaceInfos().getResolution()/2.0f);
         
         int instanceNumber = data.voxels.size();    
@@ -254,7 +271,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
     
     public void fireReadFileProgress(int progress){
         
-        for(VoxelSpaceListener listener :listeners.getListeners(VoxelSpaceListener.class)){
+        for(VoxelSpaceListener listener :loadingListeners.getListeners(VoxelSpaceListener.class)){
             
             listener.voxelSpaceCreationProgress(progress);
         }
@@ -282,14 +299,14 @@ public class VoxelSpaceSceneObject extends SceneObject{
     
     public void firefileLoaded(){
         
-        for(VoxelSpaceListener listener :listeners.getListeners(VoxelSpaceListener.class)){
+        for(VoxelSpaceListener listener :loadingListeners.getListeners(VoxelSpaceListener.class)){
             
             listener.voxelSpaceCreationFinished();
         }
     }
     
     public void addVoxelSpaceListener(VoxelSpaceListener listener){
-        listeners.add(VoxelSpaceListener.class, listener);
+        loadingListeners.add(VoxelSpaceListener.class, listener);
     }
     
     public File file;

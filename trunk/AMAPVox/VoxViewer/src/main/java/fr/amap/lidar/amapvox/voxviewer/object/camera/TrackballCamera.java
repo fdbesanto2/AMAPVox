@@ -528,6 +528,7 @@ public class TrackballCamera extends Camera{
         }
     }
 
+    @Override
     public boolean isPerspective() {
         return perspective;
     }

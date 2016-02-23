@@ -29,6 +29,7 @@ import fr.amap.commons.math.matrix.Mat3D;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.commons.math.vector.Vec4D;
+import fr.amap.commons.util.Cancellable;
 import fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceParameters;
 import fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceSim;
 import fr.amap.lidar.amapvox.voxelisation.EchoFilter;
@@ -54,7 +55,7 @@ import org.jdom2.JDOMException;
  * @author dauzat
  *
  */
-public class HemiScanView {
+public class HemiScanView implements Cancellable{
 
     private final static Logger logger = Logger.getLogger(HemiScanView.class);
     
@@ -77,6 +78,18 @@ public class HemiScanView {
     private Mat3D rotationFromTransf;
     
     private HemiParameters parameters;
+    
+    private boolean cancelled;
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
 
     public class Pixel {
 
@@ -197,9 +210,11 @@ public class HemiScanView {
         switch(parameters.getMode()){
             case ECHOS:
                 
-                
-                
                 for(LidarScan scan : parameters.getRxpScansList()){
+                    
+                    if(cancelled){
+                        return;
+                    }
                 
                     setTransformation(MatrixUtility.convertMatrix4dToMat4D(scan.matrix));
                     setScan(scan.file, parameters.getEchoFilter());
@@ -216,6 +231,10 @@ public class HemiScanView {
         
         if(parameters.isGenerateBitmapFile()){
                 
+            if(cancelled){
+                return;
+            }
+            
             switch(parameters.getBitmapMode()){
                 case PIXEL:
                     writeHemiPhoto(parameters.getOutputBitmapFile());
@@ -247,11 +266,11 @@ public class HemiScanView {
         return rotation;
     }
     
-    public void setScan(File scan){
+    public void setScan(File scan) throws Exception{
         setScan(scan, null);
     }
     
-    public void setScan(File scan, EchoFilter filter){
+    public void setScan(File scan, EchoFilter filter) throws Exception{
         
         int count = 0;
         int totalShots = 0;
@@ -264,6 +283,10 @@ public class HemiScanView {
             Iterator<Shot> iterator = extraction.iterator();
             
             while(iterator.hasNext()){
+                
+                if(cancelled){
+                    return;
+                }
                 
                 Shot shot = iterator.next();
                 
@@ -297,7 +320,7 @@ public class HemiScanView {
             
             extraction.close();
         } catch (Exception ex) {
-            logger.error(ex);
+            throw ex;
         }
     }
 
@@ -317,7 +340,7 @@ public class HemiScanView {
         hemiScanView.writeHemiPhoto(new File("/home/calcul/Documents/Julien/Test_photos_hemispheriques/tmp/hemiFromPAD.png"));
     }
 
-    private void sectorTable(File outputFile) {
+    private void sectorTable(File outputFile) throws IOException {
 
         float radius = nbPixels / 2f;
         float zenithWidth = (float) ((Math.PI / 2) / nbZeniths);
@@ -368,6 +391,10 @@ public class HemiScanView {
         
         for (int i = 0; i < nbPixels; i++) {
             for (int j = 0; j < nbPixels; j++) {
+                
+                if(cancelled){
+                    return;
+                }
                 
                 float deltaX = i + 0.5f - center;
                 float deltaY = j + 0.5f - center;
@@ -451,7 +478,7 @@ public class HemiScanView {
         }
     }
 
-    public void writeHemiPhoto(File outputFile) {
+    public void writeHemiPhoto(File outputFile) throws IOException {
 
         int border = 30;
         int nbPixImage = pixTab.length + (2 * border); //= 600;
@@ -517,7 +544,7 @@ public class HemiScanView {
         try {
             ImageIO.write(bimg, "png", outputFile);
         } catch (IOException ex) {
-            logger.error(ex);
+            throw ex;
         }
     }
 

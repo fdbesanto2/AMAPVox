@@ -162,6 +162,8 @@ public class LasVoxelisation extends Progression {
 
             if(rasterParameters.isGenerateMultiBandRaster()){
 
+                fireProgress("Compute multi-band raster", 0, 100);
+                
                 BSQ raster = MultiBandRaster.computeRaster(rasterParameters.getRasterStartingHeight(),
                                                 rasterParameters.getRasterHeightStep(), 
                                                 rasterParameters.getRasterBandNumber(), 
@@ -170,6 +172,8 @@ public class LasVoxelisation extends Progression {
                                                 voxelAnalysis.getVoxels(),
                                                 voxelAnalysis.getDtm());
                     
+                fireProgress("Write multi-band raster", 0, 100);
+                
                 MultiBandRaster.writeRaster(new File(cfg.getOutputFile().getAbsolutePath()+".bsq"), raster);
 
                 if(!rasterParameters.isShortcutVoxelFileWriting()){
@@ -182,11 +186,17 @@ public class LasVoxelisation extends Progression {
         }
         
         if(write){
+            
             voxelAnalysis.computePADs();
                     
             if(cfg.getVoxelParameters().getNaNsCorrectionParams().isActivate()){
+                
+                fireProgress("NA correction", 0, 100);
+                
                 NaNsCorrection.correct(cfg.getVoxelParameters(), voxelAnalysis.getVoxels());
             }
+            
+            fireProgress("Write voxel space", 0, 100);
 
             voxelAnalysis.write();
         }

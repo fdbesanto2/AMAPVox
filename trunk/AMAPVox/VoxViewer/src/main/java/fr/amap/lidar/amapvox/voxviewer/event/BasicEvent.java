@@ -258,6 +258,7 @@ public class BasicEvent extends EventManager{
             joglContext.updateCamera();
             resetMouseLocation();
             joglContext.refresh();
+            number5KeyPressed = false;
         }
         
         if(!animator.isPaused() && !joglContext.isDynamicDraw() && (!leftMousePressed && !rightMousePressed)){

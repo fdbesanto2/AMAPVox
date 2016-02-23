@@ -5,6 +5,7 @@
  */
 package fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx;
 
+import fr.amap.commons.util.Cancellable;
 import fr.amap.commons.util.SphericalCoordinates;
 import fr.amap.commons.util.Statistic;
 import fr.amap.lidar.amapvox.jeeb.raytracing.geometry.LineElement;
@@ -44,7 +45,7 @@ import org.apache.log4j.Logger;
  *
  * @author Julien
  */
-public class Lai2xxxSim {
+public class Lai2xxxSim implements Cancellable{
     
     private final static Logger logger = Logger.getLogger(Lai2xxxSim.class);
     
@@ -58,6 +59,8 @@ public class Lai2xxxSim {
     private VoxelSpace voxSpace;
     
     private Statistic transmittedStatistic;
+    
+    private boolean cancelled;
     
     //temporaire, pour test
     private final static boolean TRANSMITTANCE_NORMALISEE = true;
@@ -104,6 +107,10 @@ public class Lai2xxxSim {
             for (Point3d position : positions) {
 
                 for (int t = 0; t < directions.length; t++) {
+                    
+                    if(cancelled){
+                        return;
+                    }
 
                     Vector3d dir = new Vector3d(directions[t]);
                     dir.normalize();
@@ -206,6 +213,10 @@ public class Lai2xxxSim {
 
                 for (int t = 0; t < directions.length; t++) {
 
+                    if(cancelled){
+                        return;
+                    }
+                    
                     Vector3d dir = new Vector3d(directions[t]);
                     dir.normalize();
 
@@ -235,6 +246,10 @@ public class Lai2xxxSim {
                     sc.toSpherical(dir);
 
                     while ((context != null) && (context.indices != null)) {
+                        
+                        if(cancelled){
+                            return;
+                        }
 
                         //current voxel
                         Point3i indices = context.indices;
@@ -338,6 +353,11 @@ public class Lai2xxxSim {
 
 
             if(parameters.isGenerateTextFile()){
+                
+                if(cancelled){
+                    return;
+                }
+
                 writeTransmittance();
                 logger.info("File "+parameters.getTextFile().getAbsolutePath()+" was written.");
             }
@@ -512,4 +532,14 @@ public class Lai2xxxSim {
             logger.setLevel(Level.INFO);
         }        
     }    
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
 }

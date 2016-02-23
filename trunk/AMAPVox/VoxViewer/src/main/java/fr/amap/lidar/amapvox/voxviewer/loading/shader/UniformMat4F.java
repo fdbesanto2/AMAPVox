@@ -22,8 +22,8 @@ public class UniformMat4F extends Uniform{
         super(name);
     }
     
-    public UniformMat4F(String name, Shader shader, int location) {
-        super(name, shader, location);
+    public UniformMat4F(String name, Shader shader) {
+        super(name, shader);
     }
 
     @Override

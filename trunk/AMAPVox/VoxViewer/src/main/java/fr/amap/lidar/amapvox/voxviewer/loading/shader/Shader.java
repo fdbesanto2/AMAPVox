@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
 import org.apache.commons.lang3.ArrayUtils;
@@ -38,7 +39,6 @@ public class Shader {
     private int vertexShaderId;
     private int fragmentShaderId;
     private int programId;
-    public boolean isOrtho;
     public String name;
     
     private final Stack<Uniform> dirtyUniforms = new Stack();
@@ -67,7 +67,7 @@ public class Shader {
         
         this.gl=m_gl;
         
-        linkProgram(vertexShaderCode, fragmentShaderCode);  
+        linkProgram(vertexShaderCode, fragmentShaderCode);
     }
 
     public String[] getVertexShaderCode() {
@@ -274,7 +274,14 @@ public class Shader {
             while(!dirtyUniforms.empty() ){
 
                 Uniform uniform = dirtyUniforms.pop();
+                
                 uniform.update(gl, uniformMap.get(uniform.getName()));
+                /*if(index != null){
+                    uniform.update(gl, index);
+                }else{
+                    System.out.println("test");
+                }*/
+                
             }
 
             gl.glUseProgram(0);

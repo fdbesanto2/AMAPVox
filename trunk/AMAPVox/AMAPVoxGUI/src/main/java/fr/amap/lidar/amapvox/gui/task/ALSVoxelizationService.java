@@ -6,12 +6,9 @@
 package fr.amap.lidar.amapvox.gui.task;
 
 import fr.amap.commons.util.ProcessingListener;
-import fr.amap.commons.util.TimeCounter;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.als.LasVoxelisation;
 import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
-import java.io.IOException;
-import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
@@ -22,11 +19,9 @@ import javafx.concurrent.Task;
 public class ALSVoxelizationService extends Service<Void> {
 
     private final ALSVoxCfg cfg;
-    private final String title;
     private LasVoxelisation voxelization;
     
-    public ALSVoxelizationService(String title, ALSVoxCfg cfg){
-        this.title = title;
+    public ALSVoxelizationService(ALSVoxCfg cfg){
         this.cfg = cfg;
     }
     
@@ -37,8 +32,6 @@ public class ALSVoxelizationService extends Service<Void> {
                         
             @Override
             protected Object call() throws Exception {
-                
-                updateTitle(title);
                 
                 updateMessage("Started!");
                 

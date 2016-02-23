@@ -15,7 +15,7 @@ import fr.amap.lidar.amapvox.voxviewer.loading.shader.AxisShader;
 import fr.amap.lidar.amapvox.voxviewer.loading.shader.ColorShader;
 import fr.amap.lidar.amapvox.voxviewer.loading.shader.InstanceLightedShader;
 import fr.amap.lidar.amapvox.voxviewer.loading.shader.InstanceShader;
-import fr.amap.lidar.amapvox.voxviewer.loading.shader.LightedShader;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.PhongShader;
 import fr.amap.lidar.amapvox.voxviewer.loading.shader.Shader;
 import fr.amap.lidar.amapvox.voxviewer.loading.shader.SimpleShader;
 import fr.amap.lidar.amapvox.voxviewer.loading.shader.TextureShader;
@@ -72,7 +72,7 @@ public class Scene {
     public static InstanceShader instanceShader = new InstanceShader("instanceShader");
     public static TextureShader texturedShader = new TextureShader("textureShader");
     public static TextureShader labelShader = new TextureShader("labelShader");
-    public static LightedShader lightedShader = new LightedShader("lightShader");
+    public static PhongShader phongShader = new PhongShader("lightShader");
     public static SimpleShader simpleShader = new SimpleShader("simpleShader");
     public static ColorShader colorShader = new ColorShader("colorShader");
     
@@ -80,6 +80,7 @@ public class Scene {
     public UniformMat4F viewMatrixUniform = new UniformMat4F("viewMatrix");
     public UniformMat4F projMatrixUniform = new UniformMat4F("projMatrix");
     public UniformMat4F normalMatrixUniform;
+    public UniformMat4F transformationUniform = new UniformMat4F("transformation");
     public Uniform3F lightPositionUniform = new Uniform3F("lightPosition");
     public Uniform3F lambientUniform = new Uniform3F("lambient");
     public Uniform3F ldiffuseUniform = new Uniform3F("ldiffuse");
@@ -103,6 +104,7 @@ public class Scene {
         
         uniforms.put(viewMatrixUniform.getName(), viewMatrixUniform);
         uniforms.put(projMatrixUniform.getName(), projMatrixUniform);
+        uniforms.put(transformationUniform.getName(), transformationUniform);
         uniforms.put(projMatrixOrthoUniform.getName(), projMatrixOrthoUniform);
         uniforms.put(viewMatrixOrthoUniform.getName(), viewMatrixOrthoUniform);
         uniforms.put(textureUniform.getName(), textureUniform);
@@ -132,7 +134,7 @@ public class Scene {
 
             //on ajoute la variable uniform à la map uniforms
             if(uniforms.containsKey(uniformEntry.getKey())){
-                uniforms.get(uniformEntry.getKey()).addOwner(shader, uniformEntry.getValue());
+                uniforms.get(uniformEntry.getKey()).addOwner(shader);
 
                 //handle the case when uniform has been updated before shader has been initialized
                 if(uniforms.get(uniformEntry.getKey()).isDirty()){
@@ -173,7 +175,7 @@ public class Scene {
             instanceShader.init(gl);
             texturedShader.init(gl);
             labelShader.init(gl);
-            lightedShader.init(gl);
+            phongShader.init(gl);
             simpleShader.init(gl);
             colorShader.init(gl);
             
@@ -182,7 +184,7 @@ public class Scene {
             addShader(instanceShader);
             addShader(texturedShader);
             addShader(simpleShader);
-            addShader(lightedShader);
+            addShader(phongShader);
             addShader(labelShader);
             addShader(colorShader);
             
@@ -190,6 +192,7 @@ public class Scene {
             
             projMatrixOrthoUniform.setValue(Mat4F.ortho(0, width, 0, height, -10, 1000));
             viewMatrixOrthoUniform.setValue(Mat4F.lookAt(new Vec3F(0,0,0), new Vec3F(0,0,0), new Vec3F(0,1,0)));
+            transformationUniform.setValue(Mat4F.identity());
             
             textureUniform.setValue(0);
             
@@ -309,17 +312,16 @@ public class Scene {
                 
                 //System.out.println(mousePicker.getCurrentRay().x+" "+mousePicker.getCurrentRay().y+" "+mousePicker.getCurrentRay().z);
                 
-                Point3F startPoint = mousePicker.getPointOnray(mousePicker.getCamPosition(), mousePicker.getCurrentRay(), 1);
-                Point3F endPoint = mousePicker.getPointOnray(mousePicker.getCamPosition(), mousePicker.getCurrentRay(), 999);
+                Point3F startPoint = mousePicker.getPointOnray(1);
+                Point3F endPoint = mousePicker.getPointOnray(1000);
                 
                 Point3D intersection = Intersection.getIntersectionLineBoundingBox(new Point3D(startPoint.x, startPoint.y, startPoint.z),
                         new Point3D(endPoint.x, endPoint.y, endPoint.z),
                         object.getBoundingBox());
                 
                 if(intersection != null){
-                    //object.fireClicked(mousePicker.getCurrentRay());
+                    object.fireClicked(mousePicker.getCurrentRay());
                 }
-                object.fireClicked(mousePicker.getCurrentRay());
             }
             
             mousePickerIsDirty = false;
@@ -443,5 +445,8 @@ public class Scene {
     public void setHeight(int height) {
         this.height = height;
     }
-    
+
+    public MousePicker getMousePicker() {
+        return mousePicker;
+    }
 }

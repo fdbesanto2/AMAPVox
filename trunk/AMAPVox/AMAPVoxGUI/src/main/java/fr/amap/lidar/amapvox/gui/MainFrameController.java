@@ -5,6 +5,7 @@
  */
 package fr.amap.lidar.amapvox.gui;
 
+import fr.amap.lidar.amapvox.gui.task.TaskElement;
 import com.jogamp.newt.Window;
 import com.jogamp.newt.event.WindowAdapter;
 import fr.amap.amapvox.als.LasHeader;
@@ -96,7 +97,6 @@ import fr.amap.lidar.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObjectFactory;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SimpleSceneObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.SimpleSceneObject2;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceAdapter;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import fr.amap.commons.javafx.io.TextFileParserFrameController;
@@ -109,12 +109,21 @@ import fr.amap.lidar.amapvox.voxelisation.configuration.params.DTMFilteringParam
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
 import fr.amap.commons.util.vegetation.LADParams;
 import fr.amap.lidar.amapvox.gui.task.ALSVoxelizationService;
+import fr.amap.lidar.amapvox.gui.task.HemiPhotoSimService;
+import fr.amap.lidar.amapvox.gui.task.Lai2xxxSimService;
+import fr.amap.lidar.amapvox.gui.task.PTGVoxelizationService;
+import fr.amap.lidar.amapvox.gui.task.PTXVoxelizationService;
+import fr.amap.lidar.amapvox.gui.task.RSPVoxelizationService;
+import fr.amap.lidar.amapvox.gui.task.RXPVoxelizationService;
+import fr.amap.lidar.amapvox.gui.task.TaskAdapter;
+import fr.amap.lidar.amapvox.gui.task.TaskElementExecutor;
+import fr.amap.lidar.amapvox.gui.task.TransmittanceSimService;
+import fr.amap.lidar.amapvox.gui.task.VoxFileMergingService;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.NaNsCorrectionParams;
 import fr.amap.lidar.amapvox.voxviewer.loading.texture.StringToImage;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObjectListener;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelObject;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -137,6 +146,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
@@ -254,7 +265,8 @@ public class MainFrameController implements Initializable {
     
     private Validator fieldDoubleValidator;
     private Validator fileExistValidator;
-    private Validator fileValidValidator;
+    private Validator fileValidityValidator;
+    private Validator directoryValidator;
     
     private ValidationSupport voxSpaceValidationSupport;
     private ValidationSupport alsVoxValidationSupport;
@@ -367,6 +379,12 @@ public class MainFrameController implements Initializable {
     
     //echo filtering for rxp files
     private AnchorPane anchorPaneEchoFilteringRxp;
+    
+    private final static Image VOXELIZATION_IMG = new Image(TaskElement.class.getResourceAsStream("/fxml/icons/voxels.png"));
+    private final static Image TRANSMITTANCE_IMG = new Image(TaskElement.class.getResourceAsStream("/fxml/icons/sun.png"));
+    private final static Image HEMI_IMG = new Image(TaskElement.class.getResourceAsStream("/fxml/icons/hemispherical.png"));
+    private final static Image CANOPEE_ANALYZER_IMG = new Image(TaskElement.class.getResourceAsStream("/fxml/icons/lai2200.png"));
+    private final static Image MISC_IMG = new Image(TaskElement.class.getResourceAsStream("/fxml/icons/configure.png"));
     
     @FXML
     private RadioButton radiobuttonLADHomogeneous;
@@ -545,7 +563,7 @@ public class MainFrameController implements Initializable {
     @FXML
     private ComboBox<String> comboboxWeighting;
     @FXML
-    private ListView<File> listViewTaskList;
+    private ListView<TaskElement> listViewTaskList;
     @FXML
     private Label labelDTMPath;
     @FXML
@@ -751,6 +769,8 @@ public class MainFrameController implements Initializable {
     private HBox hboxGenerateTextFile;
     @FXML
     private HBox hboxGenerateBitmapFiles;
+    @FXML
+    private Button buttonExecute;
 
     
     private void initValidationSupport(){
@@ -789,7 +809,7 @@ public class MainFrameController implements Initializable {
             }
         };
         
-        fileValidValidator = new Validator<String>() {
+        fileValidityValidator = new Validator<String>() {
             @Override
             public ValidationResult apply(Control t, String s) {
                 if(s.isEmpty()){
@@ -808,6 +828,24 @@ public class MainFrameController implements Initializable {
             }
         };
         
+        directoryValidator = new Validator<String>() {
+            @Override
+            public ValidationResult apply(Control t, String s) {
+                if(s.isEmpty()){
+                    return ValidationResult.fromErrorIf(t, "A value is required", s.isEmpty());
+                }else{
+                    
+                    File file = new File(s);
+                    if(!file.isDirectory()){
+                        return ValidationResult.fromError(t, "The given file is not a directory.");
+                    }else{
+                        return ValidationResult.fromErrorIf(t, "Invalid value", !Files.exists(new File(s).toPath()));
+                    }
+                    
+                }
+            }
+        };
+        
         voxSpaceValidationSupport.registerValidator(textFieldEnterXMin, false, fieldDoubleValidator);
         voxSpaceValidationSupport.registerValidator(textFieldEnterYMin, false, fieldDoubleValidator);
         voxSpaceValidationSupport.registerValidator(textFieldEnterZMin, false, fieldDoubleValidator);
@@ -818,10 +856,10 @@ public class MainFrameController implements Initializable {
         
         alsVoxValidationSupport.registerValidator(textFieldInputFileALS, false, fileExistValidator);
         alsVoxValidationSupport.registerValidator(textFieldTrajectoryFileALS, false, fileExistValidator);
-        alsVoxValidationSupport.registerValidator(textFieldOutputFileALS, false, fileValidValidator);
+        alsVoxValidationSupport.registerValidator(textFieldOutputFileALS, false, fileValidityValidator);
         
         tlsVoxValidationSupport.registerValidator(textFieldInputFileTLS, false, fileExistValidator);
-        tlsVoxValidationSupport.registerValidator(textFieldOutputPathTLS, false, fileExistValidator);
+        tlsVoxValidationSupport.registerValidator(textFieldOutputPathTLS, false, directoryValidator);
     }
     /**
      * Initializes the controller class.
@@ -839,7 +877,6 @@ public class MainFrameController implements Initializable {
         });*/
         
         //Decorator.addDecoration(textFieldEnterXMin, new StyleClassDecoration("warning"));
-        
         
         initValidationSupport();
         
@@ -1562,9 +1599,11 @@ public class MainFrameController implements Initializable {
 
                 if (size == 1) {
                     buttonLoadSelectedTask.setDisable(false);
-                } else {
+                }else {
                     buttonLoadSelectedTask.setDisable(true);
                 }
+                
+                buttonExecute.setDisable(size == 0);
             }
         });
 
@@ -2035,7 +2074,11 @@ public class MainFrameController implements Initializable {
             return;
         }
         
-        executeProcess(temporaryFile);
+        TaskElement taskElement = addFileToTaskList(temporaryFile);
+        if(taskElement != null){
+            executeProcess(taskElement);
+        }
+        
     }
 
     @FXML
@@ -2179,15 +2222,17 @@ public class MainFrameController implements Initializable {
             if (selectedFile != null) {
 
                 saveCanopyAnalyzerSimulation(selectedFile);
-                addFileToTaskList(selectedFile);
+                
+                TaskElement taskElement = addFileToTaskList(selectedFile);
+                if(taskElement != null){
+                    executeProcess(taskElement);
+                }
             }
             
         } catch (Exception ex) {
             logger.error("Cannot write simulation file", ex);
             return;
-        }
-        
-        executeProcess(selectedFile);
+        }        
     }
     
     private boolean checkALSVoxelizationParametersValidity(){
@@ -2525,9 +2570,11 @@ public class MainFrameController implements Initializable {
         
         if (selectedFile != null) {
             if(saveALSVoxelization(selectedFile)){
-                addFileToTaskList(selectedFile);
+                TaskElement taskElement = addFileToTaskList(selectedFile);
+                if(taskElement != null){
+                    executeProcess(taskElement);
+                }
             }
-            executeProcess(selectedFile);
         }
         
     }
@@ -2541,6 +2588,11 @@ public class MainFrameController implements Initializable {
             
             if(saveALSVoxelization(temporaryFile)){
                 logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
+                
+                TaskElement taskElement = addFileToTaskList(temporaryFile);
+                if(taskElement != null){
+                    executeProcess(taskElement);
+                }
             }
             
         }catch(IOException e){
@@ -2551,7 +2603,6 @@ public class MainFrameController implements Initializable {
             return;
         }
         
-        executeProcess(temporaryFile);
     }
 
     @FXML
@@ -2563,6 +2614,11 @@ public class MainFrameController implements Initializable {
             saveTLSVoxelization(temporaryFile);
             logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
             
+            TaskElement taskElement = addFileToTaskList(temporaryFile);
+            if(taskElement != null){
+                executeProcess(taskElement);
+            }
+            
         }catch(IOException e){
             showErrorDialog(e);
             return;
@@ -2570,8 +2626,6 @@ public class MainFrameController implements Initializable {
             showErrorDialog(e);
             return;
         }
-        
-        executeProcess(temporaryFile);
     }
     
     private boolean checkTLSVoxelizationParametersValidity(){
@@ -2706,7 +2760,11 @@ public class MainFrameController implements Initializable {
         if (selectedFile != null) {
 
             saveTLSVoxelization(selectedFile);
-            executeProcess(selectedFile);
+            
+            TaskElement taskElement = addFileToTaskList(selectedFile);
+            if(taskElement != null){
+                executeProcess(taskElement);
+            }
         }
     }
 
@@ -2719,6 +2777,11 @@ public class MainFrameController implements Initializable {
             saveMergingProcess(temporaryFile);
             logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
             
+            TaskElement taskElement = addFileToTaskList(temporaryFile);
+            if(taskElement != null){
+                executeProcess(taskElement);
+            }
+            
         }catch(IOException e){
             showErrorDialog(e);
             return;
@@ -2726,8 +2789,6 @@ public class MainFrameController implements Initializable {
             showErrorDialog(e);
             return;
         }
-        
-        executeProcess(temporaryFile);
     }
     
     private void saveMergingProcess(File selectedFile){
@@ -2762,7 +2823,11 @@ public class MainFrameController implements Initializable {
         File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
         if (selectedFile != null) {
             saveMergingProcess(selectedFile);
-            executeProcess(selectedFile);
+            
+            TaskElement taskElement = addFileToTaskList(selectedFile);
+            if(taskElement != null){
+                executeProcess(taskElement);
+            }
         }
     }
 
@@ -3115,8 +3180,11 @@ public class MainFrameController implements Initializable {
 
             try {
                 saveHemiPhotoSimulation(selectedFile);
-                addFileToTaskList(selectedFile);
-                executeProcess(selectedFile);
+                
+                TaskElement taskElement = addFileToTaskList(selectedFile);
+                if(taskElement != null){
+                    executeProcess(taskElement);
+                }
             } catch (Exception ex) {
                 showErrorDialog(ex);
             }
@@ -3133,7 +3201,10 @@ public class MainFrameController implements Initializable {
             
             logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
             
-            executeProcess(temporaryFile);
+            TaskElement taskElement = addFileToTaskList(temporaryFile);
+            if(taskElement != null){
+                executeProcess(taskElement);
+            }
             
         }catch(IOException e){
             showErrorDialog(e);
@@ -3521,14 +3592,13 @@ public class MainFrameController implements Initializable {
                                 /*
                                  * Voxel information
                                  */
-                                StringToImage stringToImage = new StringToImage(512, 512);
+                                StringToImage stringToImage = new StringToImage(1024, 1024);
                                 stringToImage.setAdaptableFontSize(true);
                                 stringToImage.setBackgroundColor(new Color(255, 255, 255, 127));
                                 stringToImage.setTextColor(new Color(0, 0, 0, 255));
-                                stringToImage.setFont(new Font(Font.MONOSPACED,Font.PLAIN, 40));
 
 
-                                BufferedImage image = new BufferedImage(512, 512, BufferedImage.TYPE_INT_ARGB);
+                                BufferedImage image = new BufferedImage(1024, 1024, BufferedImage.TYPE_INT_ARGB);
                                 
                                 Texture texture = new Texture(image);
                                 
@@ -3540,13 +3610,21 @@ public class MainFrameController implements Initializable {
                                 pickingInfoObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.texturedShader);
                                 pickingInfoObject.setDrawType(GLMesh.DrawType.TRIANGLES);
                                 
+                                SceneObject sceneObjectSelectedVox = new SimpleSceneObject(GLMeshFactory.createBoundingBox(-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f), false);
+                                SimpleShader simpleShader = new SimpleShader("selectedVoxShader");
+                                simpleShader.setColor(new Vec3F(1, 0, 0));
+                                sceneObjectSelectedVox.setShader(simpleShader);
+                                sceneObjectSelectedVox.setDrawType(GLMesh.DrawType.LINES);
+                                
+                                viewer3D.getScene().addSceneObject(sceneObjectSelectedVox);
+                                
                                 SceneObjectListener listener = new SceneObjectListener() {
                                     @Override
                                     public void clicked(SceneObject sceneObject, Vec3F ray) {
 
                                         Vec3F camLocation = viewer3D.getScene().getCamera().getLocation();
 
-                                        VoxelObject selectedVoxel = voxelSpace.doPicking(new Point3F(camLocation.x, camLocation.y, camLocation.z), ray);
+                                        VoxelObject selectedVoxel = voxelSpace.doPicking(viewer3D.getScene().getMousePicker());
 
                                         if(selectedVoxel != null){
 
@@ -3572,12 +3650,7 @@ public class MainFrameController implements Initializable {
                                             texture.setBufferedImage(stringToImage.buildImage());
                                             Point3f voxelPosition = voxelSpace.getVoxelPosition(selectedVoxel.$i, selectedVoxel.$j, selectedVoxel.$k);
 
-                                            SceneObject sceneObjectCube = new SimpleSceneObject(GLMeshFactory.createBoundingBox(-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f), false);
-                                            sceneObjectCube.translate(new Vec3F(voxelPosition.x, voxelPosition.y, voxelPosition.z));
-
-                                            sceneObjectCube.setDrawType(GLMesh.DrawType.LINES);
-                                            sceneObjectCube.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.simpleShader);
-                                            viewer3D.getScene().addSceneObject(sceneObjectCube);
+                                            sceneObjectSelectedVox.setPosition(new Point3F(voxelPosition.x, voxelPosition.y, voxelPosition.z));
                                         }
                                     }
                                 };
@@ -3619,7 +3692,7 @@ public class MainFrameController implements Initializable {
 
                                     GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormalesFromDTM(dtm);
                                     SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, false);
-                                    dtmSceneObject.setShader(scene.lightedShader);
+                                    dtmSceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.phongShader);
                                     scene.addSceneObject(dtmSceneObject);
 
                                     updateProgress(100, 100);
@@ -3642,7 +3715,7 @@ public class MainFrameController implements Initializable {
 
                                 scalePlane.setShader(scene.texturedShader);
                                 scalePlane.setDrawType(GLMesh.DrawType.TRIANGLES);
-                                scene.addSceneObject(scalePlane);
+                                scene.addSceneObjectAsHud(scalePlane);
 
                                 GLMesh boundingBoxMesh = GLMeshFactory.createBoundingBox((float) infos.getMinCorner().x,
                                         (float) infos.getMinCorner().y,
@@ -3651,7 +3724,7 @@ public class MainFrameController implements Initializable {
                                         (float) infos.getMaxCorner().y,
                                         (float) infos.getMaxCorner().z);
 
-                                SceneObject boundingBox = new SimpleSceneObject2(boundingBoxMesh, false);
+                                SceneObject boundingBox = new SimpleSceneObject(boundingBoxMesh, false);
 
                                 SimpleShader s = scene.simpleShader;
                                 s.setColor(new Vec3F(1, 0, 0));
@@ -4494,11 +4567,321 @@ public class MainFrameController implements Initializable {
         return pointClassificationsToDiscard;
     }
 
-    private void addFileToTaskList(File file) {
+    private TaskElement addFileToTaskList(File file) {
 
-        if (!listViewTaskList.getItems().contains(file)) {
-            listViewTaskList.getItems().add(file);
+        ObservableList<TaskElement> taskElements = listViewTaskList.getItems();
+        
+        int idxCfgToReplace = -1;
+        
+        //don't add the task if it is already inside the task list
+        int index = 0;
+        for(TaskElement taskElement : taskElements){
+            if(file.equals(taskElement.getLinkedFile())){
+                idxCfgToReplace = index; 
+                break;
+            }
+            index++;
         }
+        
+        //get the task type
+        String type;
+        
+        try {
+            type = Configuration.readType(file);
+        } catch (JDOMException | IOException ex) {
+            showErrorDialog(ex);
+            return null;
+        }
+            
+        TaskElement element = null;
+        
+        switch (type) {
+                                
+            case "voxelisation-ALS":
+                
+                ALSVoxCfg cfg = new ALSVoxCfg();
+                try {
+                    cfg.readConfiguration(file);
+                } catch (Exception ex) {
+                    showErrorDialog(ex);
+                    return null;
+                }
+
+                ALSVoxelizationService s = new ALSVoxelizationService(cfg);
+
+                element = new TaskElement(s, file);
+                element.setTaskIcon(VOXELIZATION_IMG);
+
+                element.addTaskListener(new TaskAdapter() {
+                    @Override
+                    public void onSucceeded() {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                addFileToProductsList(cfg.getOutputFile());
+                            }
+                        });
+                    }
+                });
+                
+                break;
+                
+            case "voxelisation-TLS":
+
+                final TLSVoxCfg tLSVoxCfg = new TLSVoxCfg();
+                try {
+                    tLSVoxCfg.readConfiguration(file);
+                } catch (Exception ex) {
+                    showErrorDialog(ex);
+                    return null;
+                }
+                
+                switch (tLSVoxCfg.getInputType()) {
+
+                    case RSP_PROJECT:
+                        
+                        RSPVoxelizationService rspVoxService = new RSPVoxelizationService(tLSVoxCfg, (int)sliderRSPCoresToUse.getValue());
+                
+                        element = new TaskElement(rspVoxService, file);
+                        element.setTaskIcon(VOXELIZATION_IMG);
+
+                        element.addTaskListener(new TaskAdapter() {
+                            @Override
+                            public void onSucceeded() {
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        List<File> voxFiles = rspVoxService.getValue();
+
+                                        for(File voxFile : voxFiles){
+                                            addFileToProductsList(voxFile);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+
+                        break;
+                        
+                    case RXP_SCAN:
+
+                        RXPVoxelizationService rxpVoxService = new RXPVoxelizationService(tLSVoxCfg);
+                
+                        element = new TaskElement(rxpVoxService, file);
+                        element.setTaskIcon(VOXELIZATION_IMG);
+
+                        element.addTaskListener(new TaskAdapter() {
+                            @Override
+                            public void onSucceeded() {
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        addFileToProductsList(tLSVoxCfg.getOutputFile());
+                                    }
+                                });
+                            }
+                        });
+
+                        break;
+                        
+                    case PTG_PROJECT:
+                        
+                        PTGVoxelizationService ptgVoxService = new PTGVoxelizationService(tLSVoxCfg, (int)sliderRSPCoresToUse.getValue());
+                
+                        element = new TaskElement(ptgVoxService, file);
+                        element.setTaskIcon(VOXELIZATION_IMG);
+
+                        element.addTaskListener(new TaskAdapter() {
+                            @Override
+                            public void onSucceeded() {
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        List<File> voxFiles = ptgVoxService.getValue();
+
+                                        for(File voxFile : voxFiles){
+                                            addFileToProductsList(voxFile);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        break;
+                        
+                    case PTX_PROJECT:
+                        
+                        PTXVoxelizationService ptxVoxService = new PTXVoxelizationService(tLSVoxCfg, (int)sliderRSPCoresToUse.getValue());
+                
+                        element = new TaskElement(ptxVoxService, file);
+                        element.setTaskIcon(VOXELIZATION_IMG);
+
+                        element.addTaskListener(new TaskAdapter() {
+                            @Override
+                            public void onSucceeded() {
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        List<File> voxFiles = ptxVoxService.getValue();
+
+                                        for(File voxFile : voxFiles){
+                                            addFileToProductsList(voxFile);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        break;
+                }
+                
+                break;
+                
+            case "transmittance":
+                
+                TransmittanceCfg transCfg = new TransmittanceCfg(new TransmittanceParameters());
+                
+                try {
+                    transCfg.readConfiguration(file);
+                } catch (JDOMException | IOException ex) {
+                    showErrorDialog(ex);
+                    return null;
+                }
+                
+                TransmittanceSimService transService = new TransmittanceSimService(transCfg);
+                element = new TaskElement(transService, file);
+                element.setTaskIcon(TRANSMITTANCE_IMG);
+
+                element.addTaskListener(new TaskAdapter() {
+                    @Override
+                    public void onSucceeded() {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                
+                                if(transCfg.getParameters().isGenerateBitmapFile()){
+
+                                    List<File> bitmapFiles = transService.getValue().getOutputBitmapFiles();
+
+                                    if(bitmapFiles != null){
+
+                                        for(File file : bitmapFiles){
+                                            addFileToProductsList(file);
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+                
+                break;
+                
+            case "LAI2000":
+            case "LAI2200":
+                
+                TransmittanceCfg lai2xxxCfg = new TransmittanceCfg(new TransmittanceParameters());
+                
+                try {
+                    lai2xxxCfg.readConfiguration(file);
+                } catch (JDOMException | IOException ex) {
+                    showErrorDialog(ex);
+                    return null;
+                }
+                
+                Lai2xxxSimService lai2xxxSimService = new Lai2xxxSimService(lai2xxxCfg);
+                element = new TaskElement(lai2xxxSimService, file);
+                element.setTaskIcon(CANOPEE_ANALYZER_IMG);
+
+                break;
+
+            case "Hemi-Photo":
+                
+                HemiPhotoCfg hemiPhotoCfg = new HemiPhotoCfg(new HemiParameters());
+                
+                try {
+                    hemiPhotoCfg.readConfiguration(file);
+                } catch (JDOMException | IOException ex) {
+                    showErrorDialog(ex);
+                    return null;
+                }
+                
+                HemiPhotoSimService hemiPhotoSimService = new HemiPhotoSimService(hemiPhotoCfg);
+                element = new TaskElement(hemiPhotoSimService, file);
+                element.setTaskIcon(HEMI_IMG);
+                
+                element.addTaskListener(new TaskAdapter() {
+                    @Override
+                    public void onSucceeded() {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                
+                                if(hemiPhotoCfg.getParameters().isGenerateBitmapFile()){
+
+                                    addFileToProductsList(hemiPhotoCfg.getParameters().getOutputBitmapFile());
+                                }
+                            }
+                        });
+                    }
+                });
+
+                break;
+
+            case "merging":
+
+                final VoxMergingCfg voxMergingCfg = new VoxMergingCfg();
+                
+                try {
+                    voxMergingCfg.readConfiguration(file);
+                } catch (JDOMException | IOException ex) {
+                    showErrorDialog(ex);
+                    return null;
+                }
+                
+                VoxFileMergingService voxFileMergingService = new VoxFileMergingService(voxMergingCfg);
+                element = new TaskElement(voxFileMergingService, file);
+                element.setTaskIcon(MISC_IMG);
+                
+                element.addTaskListener(new TaskAdapter() {
+                    @Override
+                    public void onSucceeded() {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                
+                                addFileToProductsList(voxMergingCfg.getOutputFile());
+                            }
+                        });
+                    }
+                });
+
+                break;
+        }
+        
+        if(element != null){
+            
+            if(idxCfgToReplace != -1){
+                if(listViewTaskList.getItems().get(idxCfgToReplace).getButtonType() == TaskElement.ButtonType.CANCEL){
+                    Alert alert = new Alert(AlertType.WARNING);
+                    alert.setContentText("This task is currently running, cancel the operation first.");
+                    alert.show();
+                }else{
+                    listViewTaskList.getItems().set(idxCfgToReplace, element);
+                }
+                
+            }else{
+                listViewTaskList.getItems().add(element);
+            }
+            
+            element.addTaskListener(new TaskAdapter() {
+
+                @Override
+                public void onFailed(Exception ex) {
+                    showErrorDialog(ex);
+                }
+            });
+        }
+        
+        return element;
     }
 
     private void addFileToProductsList(File file) {
@@ -4537,10 +4920,40 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonExecute(ActionEvent event) {
 
-        executeTaskList(listViewTaskList.getItems());
+        TaskElementExecutor executor;
+        
+        ObservableList<TaskElement> taskElements = listViewTaskList.getSelectionModel().getSelectedItems();
+        if(taskElements.size() == 1){
+            executor = new TaskElementExecutor(1, taskElements);
+            executor.execute();
+        }else{
+            ChoiceDialog<String> choiceDialog = new ChoiceDialog<>("Sequential execution",
+                "Sequential execution", "Parallel execution");
+        
+            choiceDialog.showAndWait();
+
+            String result = choiceDialog.getResult();
+
+            if(result != null){
+                switch(result){
+                    case "Sequential execution":
+                        executor = new TaskElementExecutor(1, taskElements);
+                        executor.execute();
+                        break;
+                    case "Parallel execution":
+
+                        executor = new TaskElementExecutor((int)sliderRSPCoresToUse.getValue(), taskElements);
+                        executor.execute();
+                        break;
+                }
+            }
+        }
+        
     }
     
     private void showErrorDialog(final Exception e){
+        
+        logger.error("An error occured", e);
         
         Platform.runLater(new Runnable() {
 
@@ -4577,51 +4990,12 @@ public class MainFrameController implements Initializable {
         
     }
     
-    private void executeProcessV2(final File file) {
+    private void executeProcess(final TaskElement taskElement) {
         
-        String type;
-        
-        
-        try {
-            type = Configuration.readType(file);            
-        } catch (JDOMException | IOException ex) {
-            showErrorDialog(ex);
-            return;
-        }
-        
-        switch (type) {
-
-            case "voxelisation-ALS":
-                ALSVoxCfg cfg = new ALSVoxCfg();
-                
-                try{
-                    cfg.readConfiguration(file);
-                }catch(Exception e){
-                    showErrorDialog(e);
-                    return;
-                }
-                
-                ALSVoxelizationService s = new ALSVoxelizationService(file.getAbsolutePath(), cfg);
-                progressFrameController.addTask(s);
-                s.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-                    @Override
-                    public void handle(WorkerStateEvent event) {
-                        addFileToProductsList(cfg.getOutputFile());
-                    }
-                });
-                
-                //new Thread(trMapTask).start();
-                
-                break;
-        }
-
-        progressFrame.showAndWait();
-        
+        taskElement.startTask();
     }
 
     private void executeProcess(final File file) {
-
-        executeProcessV2(file);
                         
         try {
             final String type = Configuration.readType(file);
@@ -5229,14 +5603,19 @@ public class MainFrameController implements Initializable {
         if (selectedFiles != null) {
 
             lastFCAddTask = selectedFiles.get(0).getParentFile();
-            listViewTaskList.getItems().addAll(selectedFiles);
+            
+            for(File f : selectedFiles){
+                addFileToTaskList(f);
+            }
+            
+            //listViewTaskList.getItems().addAll(selectedFiles);
         }
     }
 
     @FXML
     private void onActionButtonLoadSelectedTask(ActionEvent event) {
 
-        File selectedFile = listViewTaskList.getSelectionModel().getSelectedItem();
+        File selectedFile = listViewTaskList.getSelectionModel().getSelectedItem().getLinkedFile();
 
         if (selectedFile != null) {
 
@@ -5664,7 +6043,7 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonRemoveTaskFromListView(ActionEvent event) {
 
-        ObservableList<File> selectedItems = listViewTaskList.getSelectionModel().getSelectedItems();
+        ObservableList<TaskElement> selectedItems = listViewTaskList.getSelectionModel().getSelectedItems();
         listViewTaskList.getItems().removeAll(selectedItems);
     }
 
@@ -6570,7 +6949,10 @@ public class MainFrameController implements Initializable {
     private void saveExecuteTransmittanceLightMapSim(File file) throws Exception{
         
         saveTransmittanceLightMapSim(file);
-        executeProcess(file);
+        TaskElement taskElement = addFileToTaskList(file);
+        if(taskElement != null){
+            executeProcess(taskElement);
+        }
     }
     
     private void executeTransmittanceLightMapSim() throws Exception{
@@ -6579,66 +6961,11 @@ public class MainFrameController implements Initializable {
         saveTransmittanceLightMapSim(temporaryFile);
         logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
         
-        executeProcess(temporaryFile);
-        
-    }
-    
-    private void onActionButtonSaveExecuteLightMapTransmittanceSimulation(ActionEvent event) {
-        
-        File selectedFile = fileChooserSaveConfiguration.showSaveDialog(stage);
-        
-        if (selectedFile != null) {
-            
-            TransmittanceParameters transmParameters = new TransmittanceParameters();
-        
-            if(toggleButtonLAI2000Choice.isSelected() || toggleButtonLAI2200Choice.isSelected()){
-                
-                transmParameters.setDirectionsNumber(comboboxChooseDirectionsNumber.getSelectionModel().getSelectedItem());
-                
-                if(toggleButtonLAI2000Choice.isSelected()){
-                    transmParameters.setMode(TransmittanceParameters.Mode.LAI2000);
-                }else{
-                    transmParameters.setMode(TransmittanceParameters.Mode.LAI2200);
-                }
-                
-                transmParameters.setMasks(new boolean[]{toggleButtonCanopyAnalyzerRingMask1.isSelected(),
-                                                        toggleButtonCanopyAnalyzerRingMask2.isSelected(),
-                                                        toggleButtonCanopyAnalyzerRingMask3.isSelected(),
-                                                        toggleButtonCanopyAnalyzerRingMask4.isSelected(),
-                                                        toggleButtonCanopyAnalyzerRingMask5.isSelected()});
-                
-                transmParameters.setGenerateLAI2xxxTypeFormat(checkboxGenerateLAI2xxxTypeFormat.isSelected());
-            }
-            
-            transmParameters.setInputFile(new File(textfieldVoxelFilePathTransmittance.getText()));
-            transmParameters.setGenerateBitmapFile(checkboxGenerateBitmapFile.isSelected());
-            transmParameters.setGenerateTextFile(checkboxGenerateTextFile.isSelected());
-            
-            if(checkboxGenerateBitmapFile.isSelected()){
-                transmParameters.setBitmapFile(new File(textfieldOutputBitmapFilePath.getText()));
-            }
-            
-            if(checkboxGenerateTextFile.isSelected()){
-                transmParameters.setTextFile(new File(textfieldOutputTextFilePath.getText()));
-            }
-            if(comboboxChooseDirectionsNumber.isEditable()){
-                transmParameters.setDirectionsNumber(Integer.valueOf(comboboxChooseDirectionsNumber.getEditor().getText()));
-            }else{
-                transmParameters.setDirectionsNumber(comboboxChooseDirectionsNumber.getSelectionModel().getSelectedItem());
-            }
-            
-            transmParameters.setLatitudeInDegrees(Float.valueOf(textfieldLatitudeRadians.getText()));
-            
-            transmParameters.setSimulationPeriods(tableViewSimulationPeriods.getItems());
-            
-            TransmittanceCfg cfg = new TransmittanceCfg(transmParameters);
-            try {
-                cfg.writeConfiguration(selectedFile);
-                addFileToTaskList(selectedFile);
-            } catch (Exception ex) {
-                logger.error("Cannot write configuration file", ex);
-            }
+        TaskElement taskElement = addFileToTaskList(temporaryFile);
+        if(taskElement != null){
+            executeProcess(taskElement);
         }
+        
     }
 
     @FXML
@@ -7228,7 +7555,7 @@ public class MainFrameController implements Initializable {
 
                                 GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormalesFromDTM(dtm);
                                 SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, false);
-                                dtmSceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.lightedShader);
+                                dtmSceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.phongShader);
                                 
                                 listviewTreeSceneObjects.getItems().add(sceneObjectWrapper);
                                 
