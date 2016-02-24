@@ -9,16 +9,14 @@ import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.util.ColorGradient;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.ScalarField;
+import fr.amap.lidar.amapvox.voxviewer.object.scene.ScalarSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import java.awt.Color;
 import java.lang.reflect.Field;
 import java.net.URL;
-import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -31,7 +29,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
-import javafx.util.StringConverter;
 import org.apache.log4j.Logger;
 
 /**
@@ -55,7 +52,8 @@ public class SceneObjectPropertiesPanelController implements Initializable {
 
     private ArrayList<String> gradientColorNames;
     private ArrayList<Color[]> gradientColors;
-    private SceneObjectWrapper sceneObjectWrapper;
+    private SceneObjectWrapper currentSceneObjectWrapper;
+    private List<SceneObjectWrapper> sceneObjectWrappers;
     private MainFrameController context;
     
     private final static Logger logger = Logger.getLogger(SceneObjectPropertiesPanelController.class);
@@ -146,18 +144,39 @@ public class SceneObjectPropertiesPanelController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 
-                if(sceneObjectWrapper.getSceneObject() instanceof PointCloudSceneObject){
-                    if(((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).getScalarFieldsList().containsKey(newValue)){
+                if(sceneObjectWrappers != null){
+                    for(SceneObjectWrapper wrapper : sceneObjectWrappers){
+                        
+                        if(wrapper.getSceneObject() instanceof ScalarSceneObject){
                     
-                        updateValues(((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).getScalarFieldsList().get(newValue));
+                            if(((ScalarSceneObject)wrapper.getSceneObject()).getScalarFieldsList().containsKey(newValue)){
 
-                        ((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).switchColor(newValue);
+                                updateValues(((ScalarSceneObject)wrapper.getSceneObject()).getScalarFieldsList().get(newValue));
+
+                                ((ScalarSceneObject)wrapper.getSceneObject()).switchColor(newValue);
+                            }
+
+                        }else if(wrapper.getSceneObject() instanceof VoxelSpaceSceneObject){
+
+                            //updateValues(((VoxelSpaceSceneObject)sceneObjectWrapper.getSceneObject()).getScalarFieldsList().get(newValue));
+                            //((VoxelSpaceSceneObject)sceneObjectWrapper.getSceneObject()).switchColor(newValue);
+                        }
                     }
-                }else if(sceneObjectWrapper.getSceneObject() instanceof VoxelSpaceSceneObject){
+                }
+                /*if(currentSceneObjectWrapper.getSceneObject() instanceof ScalarSceneObject){
+                    
+                    if(((ScalarSceneObject)currentSceneObjectWrapper.getSceneObject()).getScalarFieldsList().containsKey(newValue)){
+                    
+                        updateValues(((ScalarSceneObject)currentSceneObjectWrapper.getSceneObject()).getScalarFieldsList().get(newValue));
+
+                        ((ScalarSceneObject)currentSceneObjectWrapper.getSceneObject()).switchColor(newValue);
+                    }
+                    
+                }else if(currentSceneObjectWrapper.getSceneObject() instanceof VoxelSpaceSceneObject){
                     
                     //updateValues(((VoxelSpaceSceneObject)sceneObjectWrapper.getSceneObject()).getScalarFieldsList().get(newValue));
                     //((VoxelSpaceSceneObject)sceneObjectWrapper.getSceneObject()).switchColor(newValue);
-                }
+                }*/
                
             }
         });
@@ -167,33 +186,50 @@ public class SceneObjectPropertiesPanelController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends ColorString> observable, ColorString oldValue, ColorString newValue) {
                 
-                if(sceneObjectWrapper.getSceneObject() instanceof PointCloudSceneObject){
-                    ((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).getScalarFieldsList().get(comboboxActiveScalarField.getSelectionModel().getSelectedItem()).setGradientColor(newValue.color);
-                    ((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).updateColor();
-                }else if(sceneObjectWrapper.getSceneObject() instanceof SceneObject){
-                    
+                if(sceneObjectWrappers != null){
+                    for(SceneObjectWrapper wrapper : sceneObjectWrappers){
+                        if (wrapper.getSceneObject() instanceof ScalarSceneObject) {
+
+                            ((ScalarSceneObject) wrapper.getSceneObject()).getScalarFieldsList().get(comboboxActiveScalarField.getSelectionModel().getSelectedItem()).setGradientColor(newValue.color);
+                            ((ScalarSceneObject) wrapper.getSceneObject()).updateColor();
+
+                        } else if (wrapper.getSceneObject() instanceof SceneObject) {
+
+                        }
+                    }
                 }
+                /*if(currentSceneObjectWrapper.getSceneObject() instanceof ScalarSceneObject){
+                    
+                    ((ScalarSceneObject)currentSceneObjectWrapper.getSceneObject()).getScalarFieldsList().get(comboboxActiveScalarField.getSelectionModel().getSelectedItem()).setGradientColor(newValue.color);
+                    ((ScalarSceneObject)currentSceneObjectWrapper.getSceneObject()).updateColor();
+                    
+                }else if(currentSceneObjectWrapper.getSceneObject() instanceof SceneObject){
+                    
+                }*/
             }
         });
     }
     
+    
 
     public void setSceneObjectWrapper(final SceneObjectWrapper selectedItem) {
         
-        sceneObjectWrapper = selectedItem;
+        currentSceneObjectWrapper = selectedItem;
         
-        if(sceneObjectWrapper.getSceneObject() instanceof PointCloudSceneObject){
+        if(currentSceneObjectWrapper.getSceneObject() instanceof VoxelSpaceSceneObject){
             
-            comboboxActiveScalarField.getItems().setAll(((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).getScalarFieldsList().keySet());
+            comboboxActiveScalarField.getItems().setAll(((VoxelSpaceSceneObject)currentSceneObjectWrapper.getSceneObject()).getVariables());
             
-            if(!((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).getScalarFieldsList().isEmpty()){
-                updateValues(((PointCloudSceneObject)sceneObjectWrapper.getSceneObject()).getScalarFieldsList().get(comboboxActiveScalarField.getItems().get(0)));
+        }else if(currentSceneObjectWrapper.getSceneObject() instanceof ScalarSceneObject){
+            
+            comboboxActiveScalarField.getItems().setAll(((ScalarSceneObject)currentSceneObjectWrapper.getSceneObject()).getScalarFieldsList().keySet());
+            
+            if(!((ScalarSceneObject)currentSceneObjectWrapper.getSceneObject()).getScalarFieldsList().isEmpty()){
+                updateValues(((ScalarSceneObject)currentSceneObjectWrapper.getSceneObject()).getScalarFieldsList().get(comboboxActiveScalarField.getItems().get(0)));
             }
-            
-        }else if(sceneObjectWrapper.getSceneObject() instanceof VoxelSpaceSceneObject){
-            
-            comboboxActiveScalarField.getItems().setAll(((VoxelSpaceSceneObject)sceneObjectWrapper.getSceneObject()).getVariables());
-            
+        }
+        else{
+            comboboxActiveScalarField.getItems().setAll();
         }
         
         setTransfMatrix(selectedItem.getTransfMatrix());
@@ -247,5 +283,8 @@ public class SceneObjectPropertiesPanelController implements Initializable {
         
         areaChartScalarFieldValues.getData().setAll(seriesValues);
     }
-    
+
+    public void setSceneObjectWrappers(List<SceneObjectWrapper> sceneObjectWrappers) {
+        this.sceneObjectWrappers = sceneObjectWrappers;
+    }
 }

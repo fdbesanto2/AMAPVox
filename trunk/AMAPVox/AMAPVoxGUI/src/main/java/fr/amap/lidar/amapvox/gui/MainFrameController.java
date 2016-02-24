@@ -121,6 +121,7 @@ import fr.amap.lidar.amapvox.gui.task.TransmittanceSimService;
 import fr.amap.lidar.amapvox.gui.task.VoxFileMergingService;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.NaNsCorrectionParams;
 import fr.amap.lidar.amapvox.voxviewer.loading.texture.StringToImage;
+import fr.amap.lidar.amapvox.voxviewer.object.scene.RasterSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObjectListener;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelObject;
 import java.awt.Color;
@@ -142,12 +143,14 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Function;
 import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
@@ -187,6 +190,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
@@ -200,6 +204,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -264,13 +269,30 @@ public class MainFrameController implements Initializable {
     private Stage progressFrame;
     
     private Validator fieldDoubleValidator;
+    
+    //determines if the file exists
     private Validator fileExistValidator;
+    
+    //determines if the specified file can be written
     private Validator fileValidityValidator;
+    
+    //determines if the directory exists
     private Validator directoryValidator;
+    
+    //determines if the list is empty
+    private Validator emptyListValidator;
+    
+    //determines if a table view is empty
+    private Validator emptyTableValidator;
+    
+    //unregister validator (patch because unregister doesn't exist yet)
+    private Validator unregisterValidator;
     
     private ValidationSupport voxSpaceValidationSupport;
     private ValidationSupport alsVoxValidationSupport;
     private ValidationSupport tlsVoxValidationSupport;
+    
+    private ValidationSupport transLightMapValidationSupport;
     
     
     private AsciiGridFileExtractorController ascExtractor;
@@ -553,8 +575,6 @@ public class MainFrameController implements Initializable {
     @FXML
     private ComboBox<String> comboboxModeTLS;
     @FXML
-    private Button buttonLoadSelectedVoxelFile;
-    @FXML
     private Button buttonOpen3DView;
     @FXML
     private ComboBox<String> comboboxAttributeToView;
@@ -771,13 +791,17 @@ public class MainFrameController implements Initializable {
     private HBox hboxGenerateBitmapFiles;
     @FXML
     private Button buttonExecute;
+    @FXML
+    private ListView<?> listViewVoxMergingVoxelFiles;
+    @FXML
+    private MenuItem menuItemSelectionNone111;
+    @FXML
+    private HBox buttonGroupExecutionTransLightMap;
 
     
     private void initValidationSupport(){
         
-        voxSpaceValidationSupport = new ValidationSupport();
-        alsVoxValidationSupport = new ValidationSupport();
-        tlsVoxValidationSupport = new ValidationSupport();
+        
         
         fieldDoubleValidator = new Validator<String>() {
             @Override
@@ -846,6 +870,33 @@ public class MainFrameController implements Initializable {
             }
         };
         
+        emptyListValidator = new Validator<ObservableList<Point3d>>() {
+            @Override
+            public ValidationResult apply(Control t, ObservableList<Point3d> u) {
+                return ValidationResult.fromErrorIf(t, "The list is empty", u.size() == 0);
+            }
+        };
+        
+        emptyTableValidator = new Validator<ObservableList>() {
+            @Override
+            public ValidationResult apply(Control t, ObservableList u) {
+                return ValidationResult.fromErrorIf(t, "The list is empty", u.isEmpty());
+            }
+        };
+        
+        unregisterValidator = new Validator<Object>() {
+            @Override
+            public ValidationResult apply(Control t, Object u) {
+                return ValidationResult.fromErrorIf(t, "", false);
+            }
+        };
+        
+        //voxelization fields validation
+        
+        voxSpaceValidationSupport = new ValidationSupport();
+        alsVoxValidationSupport = new ValidationSupport();
+        tlsVoxValidationSupport = new ValidationSupport();
+        
         voxSpaceValidationSupport.registerValidator(textFieldEnterXMin, false, fieldDoubleValidator);
         voxSpaceValidationSupport.registerValidator(textFieldEnterYMin, false, fieldDoubleValidator);
         voxSpaceValidationSupport.registerValidator(textFieldEnterZMin, false, fieldDoubleValidator);
@@ -860,6 +911,51 @@ public class MainFrameController implements Initializable {
         
         tlsVoxValidationSupport.registerValidator(textFieldInputFileTLS, false, fileExistValidator);
         tlsVoxValidationSupport.registerValidator(textFieldOutputPathTLS, false, directoryValidator);
+        
+        //transmittance light map fields validation
+        
+        transLightMapValidationSupport = new ValidationSupport();
+        transLightMapValidationSupport.registerValidator(textfieldVoxelFilePathTransmittance, true, fileExistValidator);
+        
+        transLightMapValidationSupport.registerValidator(textfieldOutputBitmapFilePath, true, directoryValidator);
+        
+        checkboxGenerateBitmapFile.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    transLightMapValidationSupport.registerValidator(textfieldOutputBitmapFilePath, true, directoryValidator);
+                }else{
+                    //unregister the validator
+                    transLightMapValidationSupport.registerValidator(textfieldOutputBitmapFilePath, false, unregisterValidator);
+                }
+            }
+        });
+        
+        checkboxGenerateTextFile.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    transLightMapValidationSupport.registerValidator(textfieldOutputTextFilePath, true, fileValidityValidator);
+                }else{
+                    //unregister the validator
+                    transLightMapValidationSupport.registerValidator(textfieldOutputTextFilePath, false, unregisterValidator);
+                }
+            }
+        });
+        
+        transLightMapValidationSupport.registerValidator(textfieldLatitudeRadians, true, fieldDoubleValidator);
+        transLightMapValidationSupport.registerValidator(listViewTransmittanceMapSensorPositions, true, emptyListValidator);
+        transLightMapValidationSupport.registerValidator(tableViewSimulationPeriods, true, emptyTableValidator);
+        
+        //transLightMapValidationSupport.
+        transLightMapValidationSupport.invalidProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                buttonGroupExecutionTransLightMap.setDisable(newValue);
+            }
+        });
+        
+        
     }
     /**
      * Initializes the controller class.
@@ -967,13 +1063,22 @@ public class MainFrameController implements Initializable {
             }
         });
         
+        
         listviewTreeSceneObjects.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<SceneObjectWrapper>() {
 
             @Override
             public void changed(ObservableValue<? extends SceneObjectWrapper> observable, SceneObjectWrapper oldValue, SceneObjectWrapper newValue) {
                 
-                if(newValue != null){
-                    sceneObjectPropertiesPanelController.setSceneObjectWrapper(newValue);
+                ObservableList<SceneObjectWrapper> list = listviewTreeSceneObjects.getSelectionModel().getSelectedItems();
+                
+                if(list.size() > 0){
+                    
+                    sceneObjectPropertiesPanelController.setSceneObjectWrappers(list);
+                    
+                    SceneObjectWrapper lastSelectedItem = list.get(list.size() - 1);
+                    if(lastSelectedItem.getSceneObject() != null){
+                        sceneObjectPropertiesPanelController.setSceneObjectWrapper(lastSelectedItem);
+                    }
                 }
                 
             }
@@ -1237,7 +1342,7 @@ public class MainFrameController implements Initializable {
         tableViewSimulationPeriods.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         
         comboboxChooseDirectionsNumber.getItems().addAll(1, 6, 16, 46, 136, 406);
-        comboboxChooseDirectionsNumber.getSelectionModel().selectFirst();
+        comboboxChooseDirectionsNumber.getSelectionModel().select(4);
         
         ToggleGroup scannerPositionsMode = new ToggleGroup();
         
@@ -1582,10 +1687,9 @@ public class MainFrameController implements Initializable {
                 int size = listViewProductsFiles.getSelectionModel().getSelectedIndices().size();
 
                 if (size == 1) {
-                    buttonLoadSelectedVoxelFile.setDisable(false);
+                    loadSelectedVoxelFile();
                     menuButtonExport.setDisable(false);
                 } else {
-                    buttonLoadSelectedVoxelFile.setDisable(true);
                     menuButtonExport.setDisable(true);
                 }
             }
@@ -2939,8 +3043,14 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionButtonRemovePositionTransmittanceMap(ActionEvent event) {
+        
         ObservableList<Point3d> selectedItems = listViewTransmittanceMapSensorPositions.getSelectionModel().getSelectedItems();
-        listViewTransmittanceMapSensorPositions.getItems().removeAll(selectedItems);
+        
+        if(selectedItems.size() == listViewTransmittanceMapSensorPositions.getItems().size()){
+            listViewTransmittanceMapSensorPositions.getItems().clear();
+        }else{
+            listViewTransmittanceMapSensorPositions.getItems().removeAll(selectedItems);
+        }
     }
 
     @FXML
@@ -2959,6 +3069,7 @@ public class MainFrameController implements Initializable {
             @Override
             public void handle(WindowEvent event) {
                 listViewTransmittanceMapSensorPositions.getItems().addAll(positionImporterFrameController.getPositions());
+                listViewTransmittanceMapSensorPositions.setItems(listViewTransmittanceMapSensorPositions.getItems());
             }
         });
     }
@@ -3000,6 +3111,22 @@ public class MainFrameController implements Initializable {
             }
             
         }
+    }
+
+    @FXML
+    private void onActionMenuItemSelectAllVoxFileFromMergeList(ActionEvent event) {
+    }
+
+    @FXML
+    private void onActionMenuItemUnselectAllVoxFileFromMergeList(ActionEvent event) {
+    }
+
+    @FXML
+    private void onActionButtonRemoveVoxFileFromMergingList(ActionEvent event) {
+    }
+
+    @FXML
+    private void onActionButtonAddVoxFileToMergingList(ActionEvent event) {
     }
 
     
@@ -3510,6 +3637,7 @@ public class MainFrameController implements Initializable {
                                 for(SceneObjectWrapper sceneObjectWrapper : sceneObjects){
                                     
                                     SceneObject sceneObject = sceneObjectWrapper.getSceneObject();
+                                    sceneObject.resetIds();
                                     
                                     /*if(sceneObject instanceof PointCloudSceneObject){
                                         sceneObject.setShader(viewer3D.getScene().colorShader);
@@ -3518,31 +3646,38 @@ public class MainFrameController implements Initializable {
                                     viewer3D.getScene().addSceneObject(sceneObject);
                                 }
                                 
-                                /**
-                                 * *light**
-                                 */
-                                //scene.setLightPosition(new Point3F(voxelSpace.getPosition().x, voxelSpace.getPosition().y, voxelSpace.getPosition().z + voxelSpace.widthZ + 100));
-
-                                /**
-                                 * *camera**
-                                 */
                                 
-                                SceneObject root = sceneObjects.get(0).getSceneObject();
-                                TrackballCamera trackballCamera = new TrackballCamera();
-                                trackballCamera.setPivot(root);
-                                trackballCamera.setLocation(new Vec3F(root.getGravityCenter().x +50, root.getGravityCenter().y, root.getGravityCenter().z+50));
-                                viewer3D.getScene().setCamera(trackballCamera);
+                                if(sceneObjects.size() > 0){
+                                    
+                                    SceneObject root = sceneObjects.get(0).getSceneObject();
+                                    
+                                    /**
+                                     * *light**
+                                     */
+                                    
+                                    viewer3D.getScene().setLightPosition(new Point3F(root.getGravityCenter().x, root.getGravityCenter().y,
+                                            root.getGravityCenter().z + (float)(root.getBoundingBox().max.z-root.getBoundingBox().min.z)));
+                                    
+                                     
+                                    /**
+                                     * *camera**
+                                     */
+                                    
+                                    TrackballCamera trackballCamera = new TrackballCamera();
+                                    trackballCamera.setPivot(root);
+                                    trackballCamera.setLocation(new Vec3F(root.getGravityCenter().x + 50, root.getGravityCenter().y, root.getGravityCenter().z + 50));
+                                    viewer3D.getScene().setCamera(trackballCamera);
+                                }
+                               
                                 
-                                viewer3D.show();                               
+                                
+                                viewer3D.show();
 
                                 return null;
                             }
                         };
                     }
                 };
-
-                ProgressDialog d = new ProgressDialog(s);
-                d.show();
 
                 s.start();
 
@@ -4309,10 +4444,9 @@ public class MainFrameController implements Initializable {
         
         return valid;
     }
-
-    @FXML
-    private void onActionButtonLoadSelectedVoxelFile(ActionEvent event) {
-
+    
+    private void loadSelectedVoxelFile(){
+        
         File voxelFile = listViewProductsFiles.getSelectionModel().getSelectedItem();
 
         if (!checkVoxelFile(voxelFile)) {
@@ -4338,12 +4472,11 @@ public class MainFrameController implements Initializable {
             }
 
             buttonOpen3DView.setDisable(false);
-            tabPaneMain.getSelectionModel().select(2);
         } catch (Exception ex) {
             logger.error("Cannot read voxel file", ex);
         }
-        
     }
+
 
     @FXML
     private void onActionButtonRemoveVoxelFileFromListView(ActionEvent event) {
@@ -7245,7 +7378,7 @@ public class MainFrameController implements Initializable {
     private void addSceneObjectToList(final File file) throws Exception{
         
         //if(isFileTypeKnown(file)){
-            
+        
             SceneObjectWrapper sceneObjectWrapper = new SceneObjectWrapper(file, new ProgressBar(0));
             
             
@@ -7253,13 +7386,11 @@ public class MainFrameController implements Initializable {
             
             LazAttributs lazAttributs = new LazAttributs();
             
-            
             switch (extension) {
 
             case ".las":
 
                 listviewTreeSceneObjects.getItems().add(sceneObjectWrapper);
-
                 //select attributs to import in the attributs importer frame
                 attributsImporterFrame.show();
 
@@ -7268,6 +7399,7 @@ public class MainFrameController implements Initializable {
                 LasHeader header = reader.getHeader();
 
                 LasAttributs lasAttributs = new LasAttributs(header.getPointDataFormatID());
+                
 
                 attributsImporterFrameController.setAttributsList(lasAttributs.getAttributsNames());
 
@@ -7568,7 +7700,10 @@ public class MainFrameController implements Initializable {
                                 dtm.buildMesh();
 
                                 GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormalesFromDTM(dtm);
-                                SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, false);
+                                
+                                //SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, false);
+                                
+                                SceneObject dtmSceneObject = new RasterSceneObject(dtmMesh, false);
                                 dtmSceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.phongShader);
                                 
                                 listviewTreeSceneObjects.getItems().add(sceneObjectWrapper);

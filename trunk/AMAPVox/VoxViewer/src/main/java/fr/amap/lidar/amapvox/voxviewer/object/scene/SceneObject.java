@@ -64,6 +64,11 @@ public abstract class SceneObject{
         listeners = new EventListenerList();
     }
     
+    public void resetIds(){
+        vaoId = -1;
+        mesh.resetIds();
+    }
+    
     public void setId(int id) {
         this.id = id;
     }

@@ -56,7 +56,8 @@ public class DateChooserFrameController implements Initializable {
     private int currentEndHour;
     private int currentEndMinute;
     
-    private Validator<LocalDate> fieldValidator;
+    private Validator<LocalDate> startDateValidator;
+    private Validator<LocalDate> endDateValidator;
     private Validator<String> numberValidator;
     private ValidationSupport validationSupport;
     
@@ -104,10 +105,30 @@ public class DateChooserFrameController implements Initializable {
             }
         });
         
-        fieldValidator = new Validator<LocalDate>() {
+        startDateValidator = new Validator<LocalDate>() {
             @Override
-            public ValidationResult apply(Control t, LocalDate s) {                
-                return ValidationResult.fromErrorIf(t, "A value is required", (s == null));
+            public ValidationResult apply(Control t, LocalDate s) {
+                
+                if(datepickerEndDate.getValue() != null && s != null){
+                    return ValidationResult.fromErrorIf(t, "The start period should be before the end period",
+                            (datepickerEndDate.getValue().compareTo(s) < 0));
+                }
+                
+                return ValidationResult.fromErrorIf(t, "A value is required", s == null);
+            }
+        };
+        
+        endDateValidator = new Validator<LocalDate>() {
+            @Override
+            public ValidationResult apply(Control t, LocalDate u) {
+                
+                if(datepickerStartDate.getValue() != null && u != null){
+                    
+                    int compare = datepickerStartDate.getValue().compareTo(u);
+                    return ValidationResult.fromErrorIf(t, "The end period should be after the start period",compare > 0);
+                }
+                
+                return ValidationResult.fromErrorIf(t, "A value is required", u == null);
             }
         };
         
@@ -133,8 +154,8 @@ public class DateChooserFrameController implements Initializable {
         
         validationSupport = new ValidationSupport();
         
-        validationSupport.registerValidator(datepickerStartDate, fieldValidator);
-        validationSupport.registerValidator(datepickerEndDate, fieldValidator);
+        validationSupport.registerValidator(datepickerStartDate, startDateValidator);
+        validationSupport.registerValidator(datepickerEndDate, endDateValidator);
         validationSupport.registerValidator(textfieldClearnessCoefficient, numberValidator);
         
         validationSupport.validationResultProperty().addListener(new ChangeListener<ValidationResult>() {

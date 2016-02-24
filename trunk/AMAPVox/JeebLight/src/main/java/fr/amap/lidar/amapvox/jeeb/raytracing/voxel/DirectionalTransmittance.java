@@ -187,8 +187,19 @@ public class DirectionalTransmittance {
                 }
                 
                 float coefficientGTheta = (float) direcTrans.getTransmittanceFromAngle(directionAngle, true);
+                
+                //input transmittance
+                //double transmittedBefore = transmitted;
+                
                 transmitted *= Math.exp(-coefficientGTheta * voxels[i][j][k].padBV * pathLength);
-                //transmitted *= Math.exp(-0.5 * voxels[i][j][k].padBV * pathLength);
+                
+                //output transmittance
+                //double transmittedAfter = transmitted;
+                
+                //intercepted transmittance
+                //double interceptedTrans = transmittedAfter - transmittedBefore;
+                
+                //transmitted *= Math.exp(-0.5 * voxels[i][j][k].padBV * pathLength)/*(default coeff)*/;
             }
             d1 = d2;
         }

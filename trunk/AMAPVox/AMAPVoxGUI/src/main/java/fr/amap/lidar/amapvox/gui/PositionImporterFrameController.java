@@ -36,6 +36,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.vecmath.Point3d;
@@ -70,6 +71,10 @@ public class PositionImporterFrameController implements Initializable {
     private TextField textfieldScannerHeightOffset;
     @FXML
     private TextField textfieldScannerSeedPosition;
+    @FXML
+    private Button buttonGenerateGridPosition;
+    @FXML
+    private ImageView imageViewLoading;
 
     /**
      * Initializes the controller class.
@@ -259,7 +264,12 @@ public class PositionImporterFrameController implements Initializable {
     @FXML
     private void onActionButtonRemovePosition(ActionEvent event) {
         ObservableList<Point3d> selectedItems = listViewCanopyAnalyzerSensorPositions.getSelectionModel().getSelectedItems();
-        listViewCanopyAnalyzerSensorPositions.getItems().removeAll(selectedItems);
+        
+        if(selectedItems.size() == listViewCanopyAnalyzerSensorPositions.getItems().size()){
+            listViewCanopyAnalyzerSensorPositions.getItems().clear();
+        }else{
+            listViewCanopyAnalyzerSensorPositions.getItems().removeAll(selectedItems);
+        }
     }
 
     @FXML
@@ -366,6 +376,9 @@ public class PositionImporterFrameController implements Initializable {
     @FXML
     private void onActionButtonGenerateGridPosition(ActionEvent event) {
 
+        buttonGenerateGridPosition.setDisable(true);
+        imageViewLoading.setVisible(true);
+        
         Service s = new Service() {
 
             @Override
@@ -384,6 +397,8 @@ public class PositionImporterFrameController implements Initializable {
                                 @Override
                                 public void run() {
                                     listViewCanopyAnalyzerSensorPositions.getItems().addAll(positions);
+                                    buttonGenerateGridPosition.setDisable(false);
+                                    imageViewLoading.setVisible(false);
                                 }
                             });
 

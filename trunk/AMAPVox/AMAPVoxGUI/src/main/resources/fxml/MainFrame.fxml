@@ -194,13 +194,16 @@
                                                                <children>
                                                                   <TabPane layoutX="69.0" layoutY="8.0" prefHeight="379.0" prefWidth="338.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                     <tabs>
-                                                                      <Tab text="Merging">
+                                                                      <Tab text="Vox-merging">
                                                                            <content>
                                                                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                                                  <children>
-                                                                                    <VBox layoutX="14.0" layoutY="14.0">
+                                                                                    <VBox layoutX="14.0" layoutY="200.0">
                                                                                        <children>
-                                                                                          <Label text="Output file" />
+                                                                                          <Label text="Output file">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="12.0" />
+                                                                                             </font></Label>
                                                                                           <TextField fx:id="textFieldOutputFileMerging" editable="false" prefHeight="25.0" prefWidth="280.0" />
                                                                                           <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileMerging" text="Open" />
                                                                                        </children>
@@ -243,6 +246,48 @@
                                                                                           </MenuButton>
                                                                                        </children>
                                                                                     </HBox>
+                                                                                    <VBox layoutX="14.0" layoutY="14.0" prefHeight="171.0" prefWidth="315.0">
+                                                                                       <children>
+                                                                                          <Label text="Voxel files">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="12.0" />
+                                                                                             </font>
+                                                                                          </Label>
+                                                                                          <ListView fx:id="listViewVoxMergingVoxelFiles" prefHeight="140.0" prefWidth="315.0" />
+                                                                                          <HBox spacing="10.0">
+                                                                                             <children>
+                                                                                                <MenuButton mnemonicParsing="false" text="Selection">
+                                                                                                   <items>
+                                                                                                      <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemSelectAllVoxFileFromMergeList" text="All" />
+                                                                                                      <MenuItem fx:id="menuItemSelectionNone111" mnemonicParsing="false" onAction="#onActionMenuItemUnselectAllVoxFileFromMergeList" text="None" />
+                                                                                                   </items>
+                                                                                                </MenuButton>
+                                                                                                <HBox spacing="5.0">
+                                                                                                   <children>
+                                                                                                      <Button mnemonicParsing="false" onAction="#onActionButtonRemoveVoxFileFromMergingList">
+                                                                                                         <graphic>
+                                                                                                            <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                               <image>
+                                                                                                                  <Image url="@icons/gnome_list_remove.png" />
+                                                                                                               </image>
+                                                                                                            </ImageView>
+                                                                                                         </graphic>
+                                                                                                      </Button>
+                                                                                                      <Button mnemonicParsing="false" onAction="#onActionButtonAddVoxFileToMergingList">
+                                                                                                         <graphic>
+                                                                                                            <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                               <image>
+                                                                                                                  <Image url="@icons/gnome_list_add.png" />
+                                                                                                               </image>
+                                                                                                            </ImageView>
+                                                                                                         </graphic>
+                                                                                                      </Button>
+                                                                                                   </children>
+                                                                                                </HBox>
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                       </children>
+                                                                                    </VBox>
                                                                                  </children>
                                                                               </AnchorPane>
                                                                            </content>
@@ -259,14 +304,20 @@
                                                                                  <children>
                                                                                     <VBox layoutX="10.0" layoutY="22.0" AnchorPane.leftAnchor="10.0">
                                                                                        <children>
-                                                                                          <Label text="Input file" />
+                                                                                          <Label text="Input file">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="12.0" />
+                                                                                             </font></Label>
                                                                                           <TextField fx:id="textFieldInputFileNaNsCorrection" editable="false" prefHeight="25.0" prefWidth="280.0" />
                                                                                           <Button mnemonicParsing="false" onAction="#onActionButtonOpenInputFileNaNsCorrection" text="Open" />
                                                                                        </children>
                                                                                     </VBox>
                                                                                     <VBox layoutX="10.0" layoutY="107.0" AnchorPane.leftAnchor="10.0">
                                                                                        <children>
-                                                                                          <Label text="Output file" />
+                                                                                          <Label text="Output file">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="12.0" />
+                                                                                             </font></Label>
                                                                                           <TextField fx:id="textFieldOutputFileNaNsCorrection" editable="false" prefHeight="25.0" prefWidth="280.0" />
                                                                                           <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileNaNsCorrection" text="Open" />
                                                                                        </children>
@@ -290,14 +341,20 @@
                                                                                  <children>
                                                                                     <VBox layoutX="7.0" layoutY="20.0" AnchorPane.leftAnchor="10.0">
                                                                                        <children>
-                                                                                          <Label text="Input file" />
+                                                                                          <Label text="Input file">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="12.0" />
+                                                                                             </font></Label>
                                                                                           <TextField fx:id="textFieldInputFileButterflyRemover" editable="false" prefHeight="25.0" prefWidth="280.0" />
                                                                                           <Button mnemonicParsing="false" onAction="#onActionButtonOpenInputFileButterflyRemover" text="Open" />
                                                                                        </children>
                                                                                     </VBox>
                                                                                     <VBox layoutX="7.0" layoutY="96.0" AnchorPane.leftAnchor="10.0">
                                                                                        <children>
-                                                                                          <Label text="Output file" />
+                                                                                          <Label text="Output file">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="12.0" />
+                                                                                             </font></Label>
                                                                                           <TextField fx:id="textFieldOutputFileButterflyRemover" editable="false" prefHeight="25.0" prefWidth="280.0" />
                                                                                           <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileButterflyRemover" text="Open" />
                                                                                        </children>
@@ -712,7 +769,7 @@
                                                    <items>
                                                       <AnchorPane>
                                                          <children>
-                                                            <VBox>
+                                                            <VBox spacing="20.0">
                                                                <children>
                                                                   <VBox>
                                                                      <children>
@@ -773,7 +830,7 @@
                                                                   <Insets left="10.0" />
                                                                </padding>
                                                             </VBox>
-                                                            <HBox layoutX="263.0" layoutY="341.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                            <HBox fx:id="buttonGroupExecutionTransLightMap" layoutX="263.0" layoutY="341.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
                                                                <children>
                                                                   <Button mnemonicParsing="false" onAction="#onActionButtonExecuteTransmittanceMapSimulation" text="Execute">
                                                                      <graphic>
@@ -911,6 +968,9 @@
                                                                                           <TableColumn fx:id="tableColumnPeriod" prefWidth="248.0" text="Period" />
                                                                                           <TableColumn fx:id="tableColumnClearness" minWidth="0.0" prefWidth="113.0" text="Clearness" />
                                                                                        </columns>
+                                                                                       <columnResizePolicy>
+                                                                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                                                       </columnResizePolicy>
                                                                                     </TableView>
                                                                                     <HBox spacing="10.0">
                                                                                        <children>
@@ -978,7 +1038,7 @@
                                                             </HBox>
                                                          </children>
                                                       </VBox>
-                                                      <VBox layoutX="399.0" layoutY="51.0" spacing="10.0" AnchorPane.rightAnchor="127.0">
+                                                      <VBox layoutX="399.0" layoutY="51.0" spacing="10.0">
                                                          <children>
                                                             <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                <children>
@@ -1376,7 +1436,7 @@
                                  </children></AnchorPane>
                         </content>
                       </Tab>
-                        <Tab text="Vizualisation">
+                        <Tab text="Visualization">
                            <content>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
@@ -1744,11 +1804,6 @@
                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                  <children>
                                     <ListView fx:id="listViewProductsFiles" layoutX="32.4" layoutY="30.4" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                    <Button fx:id="buttonLoadSelectedVoxelFile" disable="true" layoutX="316.0" layoutY="88.0" mnemonicParsing="false" onAction="#onActionButtonLoadSelectedVoxelFile" text="Load" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                                       <tooltip>
-                                          <Tooltip text="Load header of selected voxel file " />
-                                       </tooltip>
-                                    </Button>
                                     <Button layoutX="125.0" layoutY="108.0" mnemonicParsing="false" onAction="#onActionButtonRemoveVoxelFileFromListView" AnchorPane.bottomAnchor="0.0">
                                        <graphic>
                                           <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">

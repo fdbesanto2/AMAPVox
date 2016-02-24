@@ -88,6 +88,11 @@ public abstract class GLMesh {
         zValues = new Statistic();
     }
     
+    public void resetIds(){
+        vboId = -1;
+        iboId = -1;
+    }
+    
     
     /**
      *

@@ -71,7 +71,7 @@ public class TaskElement extends GridPane{
         listeners = new EventListenerList();
         this.linkedFile = linkedFile;
         
-        cancelImage = new ImageView(new Image(TaskElement.class.getResourceAsStream("/fxml/icons/gnome_delete_element.png")));
+        cancelImage = new ImageView(new Image(TaskElement.class.getResourceAsStream("/fxml/icons/gnome_list_remove.png")));
         startImage = new ImageView(new Image(TaskElement.class.getResourceAsStream("/fxml/icons/start_2.png")));
         restartImage = new ImageView(new Image(TaskElement.class.getResourceAsStream("/fxml/icons/restart_3.png")));
         
