@@ -76,11 +76,6 @@ public class VoxelSpaceSceneObject extends SceneObject{
     }
 
     @Override
-    public void load(File file) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public  VoxelObject doPicking(MousePicker mousePicker) {
         
         Point3F closestPoint = mousePicker.getPointOnray(-100);

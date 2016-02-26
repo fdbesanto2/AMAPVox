@@ -14,5 +14,5 @@ import java.util.EventListener;
  */
 public interface SceneObjectListener extends EventListener{
     
-    void clicked(SceneObject sceneObject, Vec3F ray);
+    void clicked(SceneObject sceneObject, MousePicker mousePicker);
 }

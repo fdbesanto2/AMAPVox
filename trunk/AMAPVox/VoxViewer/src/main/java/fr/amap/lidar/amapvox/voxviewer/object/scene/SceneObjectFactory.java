@@ -5,10 +5,20 @@
  */
 package fr.amap.lidar.amapvox.voxviewer.object.scene;
 
+import com.jogamp.common.nio.Buffers;
+import fr.amap.commons.format.mesh3d.Obj;
+import fr.amap.commons.format.mesh3d.ObjHelper;
+import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec3F;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.SimpleShader;
 import fr.amap.lidar.amapvox.voxviewer.loading.texture.Texture;
+import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMeshFactory;
+import static fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import org.apache.log4j.Logger;
 
 
@@ -37,20 +47,43 @@ public class SceneObjectFactory {
         return sceneObject;
     }
     
-    public static VoxelSpaceSceneObject createVoxelSpace(File voxelSpaceFile){
+    public static SceneObject createGizmo(){
         
-        VoxelSpaceSceneObject voxelSpace = new VoxelSpaceSceneObject(voxelSpaceFile);
+        SceneObject sceneObject = new SimpleSceneObject(GLMeshFactory.createLandmark(-5, 5), false);
+        sceneObject.setPosition(new Point3F());
         
-        try {
-            voxelSpace.load(null);
+        SimpleShader colorShader = new SimpleShader("col");
+        colorShader.setColor(new Vec3F(0, 0, 1));
+        
+        sceneObject.setShader(colorShader);
+        sceneObject.setDrawType(GLMesh.DrawType.LINES);
+        return sceneObject;
+    }
+    
+    public static SimpleSceneObject createFlag() throws IOException{
+        
+        InputStream flag = SceneObjectFactory.class.getResourceAsStream("/mesh/flag.obj");
+        InputStreamReader isr = new InputStreamReader(flag);
+        
+        Obj obj = ObjHelper.readObj(isr);
+                
+        GLMesh mesh = GLMeshFactory.createMesh(obj.getPoints(), obj.getNormals(), obj.get1DFaces());
+        
+        int nbPoints = obj.getPoints().length;
+        float colorData[] = new float[nbPoints * 3];
+        
+        for(int i=0, j=0;i<nbPoints;i++,j+=3){
             
-            return voxelSpace;
-            
-        } catch (Exception ex) {
-            logger.error("Cannot load voxel space", ex);
+            colorData[j] = 0;
+            colorData[j+1] = 0;
+            colorData[j+2] = 0;
         }
         
-        return null;
+        mesh.colorBuffer = Buffers.newDirectFloatBuffer(colorData);
+        
+        SimpleSceneObject sceneObjectFlag = new SimpleSceneObject(mesh, false);
+        
+        return sceneObjectFlag;
     }
     
 }

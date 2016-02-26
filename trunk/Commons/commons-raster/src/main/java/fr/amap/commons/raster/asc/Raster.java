@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javafx.geometry.Point3D;
 
@@ -315,34 +316,35 @@ public class Raster {
                         
                         float z ;
                         
-                        if(!Float.isNaN(zArray[i][j])){
+                        //if(!Float.isNaN(zArray[i][j])){
                             z = zArray[i][j];
-                            
-                        }else{
-                            z = -10.0f;
-                        }
-                        
-                        DTMPoint point = new DTMPoint((i*cellSize+xLeftLowerCorner),  (-j+rowNumber)*cellSize+yLeftLowerCorner, z);
-                        Vec4D result = Mat4D.multiply(transformationMatrix, new Vec4D(point.x, point.y, point.z, 1));
-                        
-                        point.x = (float) result.x;
-                        point.y = (float) result.y;
+                            DTMPoint point = new DTMPoint((i*cellSize+xLeftLowerCorner),  (-j+rowNumber)*cellSize+yLeftLowerCorner, z);
+                            Vec4D result = Mat4D.multiply(transformationMatrix, new Vec4D(point.x, point.y, point.z, 1));
 
+                            point.x = (float) result.x;
+                            point.y = (float) result.y;
 
-                        if(i == 0 && j == 0){
-                            zMin = (float) result.z;
-                            zMax = (float) result.z;
-                        }else{
-                            if(result.z < zMin){
-                                zMin = (float) result.z;
+                            if(!Float.isNaN(z)){
+                                if(i == 0 && j == 0){
+                                    zMin = (float) result.z;
+                                    zMax = (float) result.z;
+                                }else{
+                                    if(result.z < zMin){
+                                        zMin = (float) result.z;
+                                    }
+                                    if(result.z > zMax){
+                                        zMax = (float) result.z;
+                                    }
+                                }
                             }
-                            if(result.z > zMax){
-                                zMax = (float) result.z;
-                            }
-                        }
 
-                        point.z = (float) result.z;
-                        points.add(point);                     
+                            point.z = (float) result.z;
+                            points.add(point);  
+                        /*}else{
+                            //z = -10.0f;
+                        }*/
+                        
+                                           
                     }
                 }
                 

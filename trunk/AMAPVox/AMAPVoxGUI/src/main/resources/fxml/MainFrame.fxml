@@ -1148,7 +1148,7 @@
                                                                <children>
                                                                   <HBox spacing="10.0">
                                                                      <children>
-                                                                        <CheckBox fx:id="checkboxGenerateCanopyAnalyzerTextFile" mnemonicParsing="false" selected="true" text="Generate text file" />
+                                                                        <CheckBox fx:id="checkboxGenerateCanopyAnalyzerTextFile" disable="true" mnemonicParsing="false" selected="true" text="Generate text file" />
                                                                         <CheckBox fx:id="checkboxGenerateLAI2xxxFormat" mnemonicParsing="false" selected="true" text="LAI2xxx format" />
                                                                      </children>
                                                                   </HBox>
@@ -1162,7 +1162,7 @@
                                                             </VBox>
                                                          </children>
                                                       </VBox>
-                                                      <HBox layoutX="684.0" layoutY="351.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                      <HBox fx:id="buttongroupExecutionLai2xxxSim" disable="true" layoutX="684.0" layoutY="351.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
                                                          <children>
                                                             <Button mnemonicParsing="false" onAction="#onActionButtonExecuteCanopyAnalyzerSimulation" text="Execute">
                                                                <graphic>
@@ -1221,16 +1221,21 @@
                                              <content>
                                                 <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                    <children>
-                                                      <VBox layoutX="14.0" layoutY="14.0">
+                                                      <VBox layoutX="14.0" layoutY="14.0" spacing="2.0">
                                                          <children>
-                                                            <Label text="Input">
-                                                               <font>
-                                                                  <Font name="System Bold" size="12.0" />
-                                                               </font>
-                                                            </Label>
+                                                            <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                                               <children>
+                                                                  <Label text="Input">
+                                                                     <font>
+                                                                        <Font name="System Bold" size="12.0" />
+                                                                     </font>
+                                                                  </Label>
+                                                                  <fx:include fx:id="helpButtonHemiPhoto" source="HelpButton.fxml" />
+                                                               </children>
+                                                            </HBox>
                                                             <TabPane fx:id="tabpaneHemiPhotoMode" tabClosingPolicy="UNAVAILABLE">
                                                                <tabs>
-                                                                  <Tab text="From hemi scans">
+                                                                  <Tab fx:id="tabHemiFromScans" text="From hemi scans">
                                                                      <content>
                                                                         <VBox prefHeight="141.0" prefWidth="349.0" spacing="4.0">
                                                                            <children>
@@ -1266,7 +1271,7 @@
                                                                         </VBox>
                                                                      </content>
                                                                   </Tab>
-                                                                  <Tab text="From PAD">
+                                                                  <Tab fx:id="tabHemiFromPAD" text="From PAD">
                                                                     <content>
                                                                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                            <children>
@@ -1342,7 +1347,7 @@
                                                                </font></Label>
                                                          </children>
                                                       </GridPane>
-                                                      <VBox layoutX="14.0" layoutY="223.0" spacing="5.0">
+                                                      <VBox layoutX="14.0" layoutY="242.0" spacing="5.0">
                                                          <children>
                                                             <Label text="Output">
                                                                <font>
@@ -1364,7 +1369,7 @@
                                                                <children>
                                                                   <HBox prefHeight="26.0" prefWidth="309.0" spacing="20.0">
                                                                      <children>
-                                                                        <CheckBox fx:id="checkboxHemiPhotoGenerateBitmapFile" mnemonicParsing="false" text="Generate bitmap file" />
+                                                                        <CheckBox fx:id="checkboxHemiPhotoGenerateBitmapFile" disable="true" mnemonicParsing="false" selected="true" text="Generate bitmap file" />
                                                                         <Label contentDisplay="RIGHT" text="Mode">
                                                                            <graphic>
                                                                               <ComboBox fx:id="comboboxHemiPhotoBitmapOutputMode" prefHeight="26.0" prefWidth="95.0" />
@@ -1382,7 +1387,7 @@
                                                             </VBox>
                                                          </children>
                                                       </VBox>
-                                                      <HBox layoutX="673.0" layoutY="348.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                      <HBox fx:id="buttonGroupExecutionHemiPhotoSim" layoutX="673.0" layoutY="348.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
                                                          <children>
                                                             <Button mnemonicParsing="false" onAction="#onActionButtonExecuteHemiPhotoSimulation" text="Execute">
                                                                <graphic>
@@ -1443,94 +1448,11 @@
                                     <TabPane layoutX="56.0" layoutY="42.0" prefHeight="414.0" prefWidth="798.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <tabs>
                                         <Tab text="3D view">
-                                          <content>
-                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                                   <children>
-                                                      <SplitPane dividerPositions="0.5" layoutX="33.0" layoutY="50.0" prefHeight="414.0" prefWidth="765.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                         <items>
-                                                            <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                                               <children>
-                                                                  <HBox alignment="CENTER" layoutX="32.0" layoutY="90.0" spacing="15.0">
-                                                                     <children>
-                                                                        <CheckBox fx:id="checkboxRaster1" disable="true" mnemonicParsing="false" selected="true" text="Voxels" />
-                                                                        <Label text="Attribute to view" />
-                                                                        <ComboBox fx:id="comboboxAttributeToView" prefWidth="150.0" />
-                                                                     </children>
-                                                                  </HBox>
-                                                                  <HBox layoutX="32.0" layoutY="138.0" spacing="10.0">
-                                                                     <children>
-                                                                        <CheckBox fx:id="checkboxRaster" mnemonicParsing="false" text="Raster" />
-                                                                        <AnchorPane fx:id="anchorPaneRasterParameters" disable="true" prefHeight="135.0" prefWidth="375.0">
-                                                                           <children>
-                                                                              <TextField fx:id="textfieldRasterFilePath" layoutX="6.0" prefHeight="25.0" prefWidth="316.0" AnchorPane.leftAnchor="0.0" />
-                                                                              <Button layoutX="322.0" mnemonicParsing="false" onAction="#onActionButtonOpenRasterFile" text="Open" />
-                                                                              <CheckBox fx:id="checkboxUseTransformationMatrix" layoutX="63.0" layoutY="31.0" mnemonicParsing="false" onAction="#onActionCheckboxUseTransformationMatrix" prefHeight="30.0" prefWidth="184.0" AnchorPane.leftAnchor="0.0">
-                                                                                 <graphic>
-                                                                                    <HBox alignment="CENTER" spacing="10.0">
-                                                                                       <children>
-                                                                                          <Label text="Transformation" />
-                                                                                          <Button fx:id="buttonSetTransformationMatrix" mnemonicParsing="false" onAction="#onActionButtonSetTransformationMatrix">
-                                                                                             <graphic>
-                                                                                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                                                                                   <image>
-                                                                                                      <Image url="@icons/Interaction_Transformation.png" />
-                                                                                                   </image>
-                                                                                                </ImageView>
-                                                                                             </graphic>
-                                                                                          </Button>
-                                                                                       </children>
-                                                                                    </HBox>
-                                                                                 </graphic>
-                                                                              </CheckBox>
-                                                                              <CheckBox fx:id="checkboxFitRasterToVoxelSpace" layoutX="11.0" layoutY="72.0" mnemonicParsing="false" selected="true" text="Fit to voxel space" AnchorPane.leftAnchor="0.0" />
-                                                                              <Label layoutX="166.0" layoutY="74.0" text="Margin (cell number)" />
-                                                                              <TextField fx:id="textfieldRasterFittingMargin" layoutX="309.0" layoutY="69.0" prefHeight="25.0" prefWidth="60.0" text="0" />
-                                                                           </children>
-                                                                        </AnchorPane>
-                                                                     </children>
-                                                                  </HBox>
-                                                                  <Button fx:id="buttonOpen3DView" layoutX="207.0" layoutY="373.0" mnemonicParsing="false" onAction="#onActionButtonVizualize" text="Open display window" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                                                                  <ListView fx:id="listviewTreeSceneObjects" layoutX="10.0" layoutY="257.0" prefHeight="87.0" prefWidth="465.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-                                                                  <HBox layoutX="14.0" layoutY="344.0" spacing="30.0">
-                                                                     <children>
-                                                                        <MenuButton mnemonicParsing="false" text="Selection">
-                                                                           <items>
-                                                                              <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemSelectAllSceneObjects" text="All" />
-                                                                              <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemUnselectAllSceneObjects" text="None" />
-                                                                           </items>
-                                                                        </MenuButton>
-                                                                        <HBox spacing="5.0">
-                                                                           <children>
-                                                                              <Button mnemonicParsing="false" onAction="#onActionButtonRemoveSceneObject">
-                                                                                 <graphic>
-                                                                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                                       <image>
-                                                                                          <Image url="@icons/gnome_list_remove.png" />
-                                                                                       </image>
-                                                                                    </ImageView>
-                                                                                 </graphic>
-                                                                              </Button>
-                                                                           </children>
-                                                                        </HBox>
-                                                                     </children>
-                                                                  </HBox>
-                                                               </children>
-                                                            </AnchorPane>
-                                                            <AnchorPane prefHeight="359.0" prefWidth="271.0">
-                                                               <children>
-                                                                  <TitledPane fx:id="titledPaneSceneObjectProperties" collapsible="false" prefHeight="471.0" prefWidth="271.0" text="Properties" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                                     <content>
-                                                                        <ScrollPane fx:id="scrollPaneSceneObjectProperties" fitToHeight="true" fitToWidth="true" />
-                                                                     </content>
-                                                                  </TitledPane>
-                                                               </children>
-                                                            </AnchorPane>
-                                                         </items>
-                                                      </SplitPane>
-                                                   </children>
-                                                </AnchorPane>
-                                          </content>
+                                            <content>
+                                                <fx:include fx:id="viewer3DPanel" source="Viewer3DPanel.fxml" />
+                                            </content>
                                         </Tab>
+                                        
                                           <Tab text="Chart">
                                              <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -1786,10 +1708,13 @@
                                                    <graphic>
                                                       <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
-                                                            <Image url="@icons/gnome-run.png" />
+                                                            <Image url="@icons/start_2.png" />
                                                          </image>
                                                       </ImageView>
                                                    </graphic>
+                                                   <tooltip>
+                                                      <Tooltip text="Execute the selected tasks" />
+                                                   </tooltip>
                                                 </Button>
                                              </children>
                                           </HBox>

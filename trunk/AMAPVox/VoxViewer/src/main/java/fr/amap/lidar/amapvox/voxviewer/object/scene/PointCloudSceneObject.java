@@ -5,6 +5,7 @@
  */
 package fr.amap.lidar.amapvox.voxviewer.object.scene;
 
+import fr.amap.commons.math.point.Point3D;
 import fr.amap.commons.util.Statistic;
 import fr.amap.commons.structure.octree.Octree;
 import fr.amap.commons.math.point.Point3F;
@@ -16,6 +17,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -23,6 +25,8 @@ import java.util.Map;
  */
 public class PointCloudSceneObject extends ScalarSceneObject{
 
+    private final static Logger LOGGER = Logger.getLogger(PointCloudSceneObject.class);
+            
     private Statistic xPositionStatistic;
     private Statistic yPositionStatistic;
     private Statistic zPositionStatistic;
@@ -45,12 +49,6 @@ public class PointCloudSceneObject extends ScalarSceneObject{
         xPositionStatistic = new Statistic();
         yPositionStatistic = new Statistic();
         zPositionStatistic = new Statistic();
-        
-        this.mousePickable = false;
-        
-        if(mousePickable){
-            octree = new Octree(50);
-        }
     }
     
     public void addPoint(float x, float y, float z){
@@ -98,8 +96,14 @@ public class PointCloudSceneObject extends ScalarSceneObject{
         
         currentAttribut = scalarField.getName();
         
-        if(octree != null){
+        if(mousePickable){
+            octree = new Octree(50);
             octree.setPoints(points);
+            try {
+                octree.build();
+            } catch (Exception ex) {
+                LOGGER.error("The octree build failed.");
+            }
         }
         
     }
@@ -111,22 +115,29 @@ public class PointCloudSceneObject extends ScalarSceneObject{
         }
         return vertexDataList.size()/3;
     }
-    
-    @Override
-    public void load(File file) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
+    /**
+     * When picking a pointcloud scene object, the element returned is the nearest point to the ray.
+     * @param mousePicker The current mouse picker.
+     * @return The nearest point or null if elements were not closed enough
+     */
     @Override
-    public String doPicking(MousePicker mousePicker) {
-        
-        /*Vec3F currentRay = mousePicker.getCurrentRay();
-        
-        Point3F closestPoint = mousePicker.getPointOnray(camPosition, currentRay, 1);
-        Point3F farestPoint = mousePicker.getPointOnray(camPosition, currentRay, 99999);*/
+    public Point3F doPicking(MousePicker mousePicker) {
         
         
-        return ("");
+        Point3F startPoint = MousePicker.getPointOnray(mousePicker.getCamPosition(), mousePicker.getCurrentRay(), 0);
+        Point3F endPoint = MousePicker.getPointOnray(mousePicker.getCamPosition(), mousePicker.getCurrentRay(), 600);
+        
+        int closestElement = octree.getClosestElement(new Point3D(startPoint.x, startPoint.y, startPoint.z),
+                new Point3D(endPoint.x, endPoint.y, endPoint.z), 0.1f);
+        
+        if(closestElement > 0){
+            
+            Point3D point = octree.getPoints()[closestElement];
+            return new Point3F((float)point.x, (float)point.y, (float)point.z);
+        }
+        
+        return null;
     }
 
     public Octree getOctree() {

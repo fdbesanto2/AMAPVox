@@ -14,12 +14,10 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.commons.structure.octree;
 
-import fr.amap.commons.util.Statistic;
 import fr.amap.commons.math.geometry.BoundingBox3D;
-import fr.amap.commons.math.geometry.BoundingBox3F;
+import fr.amap.commons.math.geometry.Distance;
 import fr.amap.commons.math.geometry.Intersection;
 import fr.amap.commons.math.point.Point3D;
-import fr.amap.commons.math.point.Point3F;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +56,9 @@ public class Octree {
             
             for(int i=0;i<points.length;i++){
                 
-                root.insertPoint(this, i);
+                if(points[i] != null){
+                    root.insertElement(this, i);
+                }
             }
             
         }else{
@@ -93,108 +93,13 @@ public class Octree {
         }
     }
     
-    public Node traverse(Point3D point){
-        
-        Node node = null;
-        
-        if(root != null){
-            
-            node = root;
-            
-            while(node.hasChilds()){
-                short indice = node.get1DIndiceFromPoint(point);
-                
-                //le point est à l'extérieur de la bounding-box
-                if(indice == -1){
-                    return null;
-                }
-                
-                Node child = node.getChild(indice);
-                node = child;
-                
-            }
-        }
-        
-        return node;
-    }
-    
-    public Node traverse(Node node, Point3D source, Point3D end){
-                
-        BoundingBox3D boundingBox3D = new BoundingBox3D(node.getMinPoint(), node.getMaxPoint());
-        Point3D intersection = Intersection.getIntersectionLineBoundingBox(source, end, boundingBox3D);
-
-        while(node.hasChilds() && intersection != null){
-
-            if(node.getPoints().length != 0){
-
-            }else{
-                for(int i=0;i<8;i++){
-                    Node child = node.getChild((short) i);
-                    node = traverse(child, source, end);
-                }
-            }
-        }
-        
-        return node;
-    }
-    
-    public Point3D rayIntersectNode(Node node, Point3D source, Point3D end){
-                
-        //on vérifie l'intersection avec le noeud root
-        BoundingBox3D boundingBox3D = new BoundingBox3D(node.getMinPoint(), node.getMaxPoint());
-        Point3D intersection = Intersection.getIntersectionLineBoundingBox(source, end, boundingBox3D);
-        
-        return intersection;
-        //si la droite intersecte le noeud, on vérifie l'intersection avec tous les noeuds du root
-        //dès qu'il y a intersection dans un ou plusieurs des enfants du noeud, on arrête le processus
-        //pour chaque noeud qui intersecte la droite, 
-    }
-    
     /**
-     * Get the closest point to the given line.
-     * @param source
-     * @param end
+     * 
+     * @param point
+     * @param type
+     * @param errorMargin
      * @return 
      */
-    public Point3D getClosestPointToLine(Point3D source, Point3D end){
-        
-        //récupère dans l'ordre d'interception la liste des noeuds feuille traversés par la droite
-        //pour chaque noeud feuille on récupère le point le plus proche
-        
-        return null;
-    }
-    
-    //retourne le noeud intersecté le plus proche
-    public Node rayTraversal(Node node, Point3D source, Point3D end){
-                
-        //on vérifie l'intersection avec le noeud root
-        
-        Node nearestIntersectedNode = null;
-        
-        Point3D intersection = rayIntersectNode(node, source, end);
-            
-        if(intersection != null){
-
-            if(node.hasChilds()){ //le noeud a des enfants, on continue la recherche
-                for(int i=0;i<8;i++){
-                    Node child = node.getChild((short) i);
-                    nearestIntersectedNode = rayTraversal(child, source, end);
-                }
-            }else if(node.getPoints().length > 0){ //le noeud n'a pas d'enfants et il contient des points
-                nearestIntersectedNode = node;
-            }else{ //le noeud n'a pas d'enfants et ne contient pas de points
-                return null;
-            }
-
-        }
-        
-        return nearestIntersectedNode;
-        
-        //si la droite intersecte le noeud, on vérifie l'intersection avec tous les noeuds du root
-        //dès qu'il y a intersection dans un ou plusieurs des enfants du noeud, on arrête le processus
-        //pour chaque noeud qui intersecte la droite, 
-    }
-    
     public Point3D searchNearestPoint(Point3D point, short type, float errorMargin){
         
         switch(type){
@@ -207,6 +112,13 @@ public class Octree {
         return null;
     }
     
+    /**
+     * 
+     * @param point
+     * @param errorMargin
+     * @param type
+     * @return 
+     */
     public boolean isPointBelongsToPointcloud(Point3D point, float errorMargin, short type){
         
         Point3D incrementalSearchNearestPoint = searchNearestPoint(point, type, errorMargin);
@@ -225,11 +137,23 @@ public class Octree {
         return test;
     }
     
+    /**
+     * 
+     * @param point
+     * @param errorMargin
+     * @return 
+     */
     private Point3D binarySearchNearestPoint(Point3D point, float errorMargin){
         
         return null;
     }
     
+    /**
+     * 
+     * @param point
+     * @param errorMargin
+     * @return 
+     */
     private Point3D incrementalSearchNearestPoint(Point3D point, float errorMargin){
         
         Point3D nearestPoint = null;
@@ -247,7 +171,7 @@ public class Octree {
 
             for(Node node : nodesIntersectingSphere){
 
-                nearestPoints = node.getPoints();
+                nearestPoints = node.getElements();
 
                 if(nearestPoints != null){
 
@@ -267,6 +191,12 @@ public class Octree {
         return nearestPoint;
     }
     
+    /**
+     * 
+     * @param nodesIntersectingSphere
+     * @param node
+     * @param sphere 
+     */
     private void incrementalSphereIntersectionSearch(List<Node> nodesIntersectingSphere, Node node, Sphere sphere){
         
         if(sphereIntersection(node, sphere)){
@@ -290,6 +220,12 @@ public class Octree {
         }
     }
     
+    /**
+     * 
+     * @param node
+     * @param sphere
+     * @return 
+     */
     private boolean sphereIntersection(Node node, Sphere sphere){
         
         float dist_squared = sphere.getRadius()*sphere.getRadius();
@@ -318,6 +254,88 @@ public class Octree {
         }
         
         return dist_squared > 0;
+    }
+    
+    /**
+     * Get the closest element to a ray as a line segment.
+     * @param source The line element start point
+     * @param end The line element end point
+     * @param limit The maximal distance between the line and the element
+     * @return <p>Negative value if no element was found 
+     * (-2 if octree was not built, -3 if the element if greater than the limit, -1 if no intersection was found)</p>
+     * Positive value if an element was found, the returned value if the element index.
+     */
+    public int getClosestElement(Point3D source, Point3D end, float limit){
+        
+        if(root != null){
+            
+            List<Node> intersectedNodes = new ArrayList<>();
+            intersectedNodes = getIntersectedNodesOfRay(intersectedNodes, root, source, end);
+            
+            float minDistance = 999999999;
+            int closestElement = -1;
+            
+            if(intersectedNodes.isEmpty()){
+                return -1;
+            }
+            
+            for(Node node : intersectedNodes){
+                
+                int[] elements = node.getElements();
+                
+                for(int elementID : elements){
+                    float currentDistance = Distance.getPointLineDistance(points[elementID], source, end);
+                    if(currentDistance < minDistance){
+                        minDistance = currentDistance;
+                        closestElement = elementID;
+                    }
+                }
+            }
+            
+            if(minDistance <= limit){
+                return closestElement;
+            }else{
+                return -3;
+            }
+        }else{
+            return -2;
+        }
+    }
+    
+    private List<Node> getIntersectedNodesOfRay(List<Node> intersectedNodes, Node currentNode, Point3D source, Point3D end){
+        
+        Point3D intersection = isRayIntersectNode(currentNode, source, end);
+            
+        if(intersection != null){
+
+            if(currentNode.hasChilds()){
+                for(int i=0;i<8;i++){
+
+                    Node child = currentNode.getChild((short)i);
+                    if(child.hasChilds()){
+                        //on teste les enfants
+                        intersectedNodes = getIntersectedNodesOfRay(intersectedNodes, child, source, end);
+
+                    }else{
+                        if(child.getElements() != null){
+                            //on ajoute le noeud à la liste
+                            intersectedNodes.add(child);
+                        }
+                        
+                    }
+                }
+            }
+        }
+        
+        return intersectedNodes;
+    }
+    
+    public Point3D isRayIntersectNode(Node node, Point3D source, Point3D end){
+                
+        BoundingBox3D boundingBox3D = new BoundingBox3D(node.getMinPoint(), node.getMaxPoint());
+        Point3D intersection = Intersection.getIntersectionLineBoundingBox(source, end, boundingBox3D);
+        
+        return intersection;
     }
 
     public int getMaximumPoints() {
@@ -386,36 +404,61 @@ public class Octree {
     }
     
     public void setPoints(float[] points) {
+                
+        double minPointX = 0, minPointY = 0, minPointZ = 0;
+        double maxPointX = 0, maxPointY = 0, maxPointZ = 0;
         
-        Point3D minPoint = null;
-        Point3D maxPoint = null;
+        boolean init = false;
         
         this.points = new Point3D[points.length/3];
         
-        for(int i=0, j=0;i<points.length;i++,j+=3){
+        for(int i=0, j=0;i<this.points.length;i++, j+=3){
             
-            this.points[i] = new Point3D(points[i], points[i+1], points[i+2]);
+            float x = points[j];
+            float y = points[j+1];
+            float z = points[j+2];
             
-            if(i == 0){
-                minPoint = this.points[i];
-                maxPoint = this.points[i];
+            if(Float.isNaN(x)||Float.isNaN(y)||Float.isNaN(z)){
+                
             }else{
-                int minPointComparison = minPoint.compareTo(this.points[i]);
-                int maxPointComparison = maxPoint.compareTo(this.points[i]);
-                
-                if(minPointComparison < 0){
-                    minPoint = this.points[i];
+                this.points[i] = new Point3D(x, y, z);
+            
+                if(!init){
+                    minPointX = this.points[i].x;
+                    minPointY = this.points[i].y;
+                    minPointZ = this.points[i].z;
+
+                    maxPointX = this.points[i].x;
+                    maxPointY = this.points[i].y;
+                    maxPointZ = this.points[i].z;
+
+                    init = true;
+
+                }else{
+
+                    if(this.points[i].x > maxPointX){
+                        maxPointX = this.points[i].x;
+                    }else if(this.points[i].x < minPointX){
+                        minPointX = this.points[i].x;
+                    }
+
+                    if(this.points[i].y > maxPointY){
+                        maxPointY = this.points[i].y;
+                    }else if(this.points[i].y < minPointY){
+                        minPointY = this.points[i].y;
+                    }
+
+                    if(this.points[i].z > maxPointZ){
+                        maxPointZ = this.points[i].z;
+                    }else if(this.points[i].z < minPointZ){
+                        minPointZ = this.points[i].z;
+                    }
                 }
-                
-                if(maxPointComparison > 0){
-                    maxPoint = this.points[i];
-                }
-                
             }
         }
         
-        this.setMinPoint(minPoint);
-        this.setMaxPoint(maxPoint);
+        setMinPoint(new Point3D(minPointX, minPointY, minPointZ));
+        setMaxPoint(new Point3D(maxPointX, maxPointY, maxPointZ));
     }
 
     public void setMinPoint(Point3D minPoint) {

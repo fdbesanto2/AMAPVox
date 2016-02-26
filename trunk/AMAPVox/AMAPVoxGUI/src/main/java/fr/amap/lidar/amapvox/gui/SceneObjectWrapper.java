@@ -8,55 +8,60 @@ package fr.amap.lidar.amapvox.gui;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.geometry.Pos;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 /**
  *
  * @author calcul
  */
-public class SceneObjectWrapper extends GridPane{
+public class SceneObjectWrapper extends VBox{
         
         private SceneObject sceneObject;
         private final Label label;
         private final ProgressBar progressBar;
+        private final CheckBox checkbox;
+        private final HBox hbox;
         
         //properties
-        private String name;
-        private String path;
+        private final String name;
+        private final String path;
         
         private Mat4D transfMatrix;
         
 
         public SceneObjectWrapper(File file, ProgressBar progressBar) {
             
-            this.label = new Label(file.getName());
-            this.path = file.getAbsolutePath();
-            this.name = file.getName();
+            label = new Label(file.getName());
+            path = file.getAbsolutePath();
+            name = file.getName();
             this.progressBar = progressBar;
+            checkbox = new CheckBox();
+            checkbox.setSelected(true);
+            hbox = new HBox();
+            hbox.getChildren().add(checkbox);
+            hbox.getChildren().add(label);
             
-            HBox labelWrapper = new HBox(this.label);
-            HBox progressBarWrapper = new HBox(this.progressBar);
+            super.setSpacing(5.0);
+            super.getChildren().add(hbox);
+            super.getChildren().add(this.progressBar);
             
-            labelWrapper.setAlignment(Pos.CENTER_LEFT);
-            progressBarWrapper.setAlignment(Pos.CENTER_RIGHT);
+            //addColumn(0, labelWrapper);
+            //addColumn(1, progressBarWrapper);
             
-            this.addColumn(0, labelWrapper);
-            this.addColumn(1, progressBarWrapper);
-            
-            ColumnConstraints columnConstraints1 = new ColumnConstraints();
+            /*ColumnConstraints columnConstraints1 = new ColumnConstraints();
             columnConstraints1.setPercentWidth(50);
             
             ColumnConstraints columnConstraints2 = new ColumnConstraints();
             columnConstraints1.setPercentWidth(50);
             
-            this.getColumnConstraints().addAll(columnConstraints1, columnConstraints2);
+            this.getColumnConstraints().addAll(columnConstraints1, columnConstraints2);*/
             
             //this.prefWidthProperty().bind(listviewTreeSceneObjects.widthProperty());
         }
@@ -83,6 +88,14 @@ public class SceneObjectWrapper extends GridPane{
 
         public void setTransfMatrix(Mat4D transfMatrix) {
             this.transfMatrix = transfMatrix;
+        }
+        
+        public boolean isSelected(){
+            return checkbox.isSelected();
+        }
+        
+        public void setSelected(boolean selected){
+            checkbox.setSelected(selected);
         }
         
     }

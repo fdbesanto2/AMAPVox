@@ -66,11 +66,6 @@ public class SimpleSceneObject2 extends SceneObject{
     }
 
     @Override
-    public void load(File file) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public String doPicking(MousePicker mousePicker) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

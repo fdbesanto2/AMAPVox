@@ -32,6 +32,7 @@ public class HemiPhotoSimService extends Service<Void>{
                 hemiScanView = new HemiScanView(cfg.getParameters());
                 
                 try{
+                    updateMessage("Simulation in progress...");
                     hemiScanView.launchSimulation();
                 }catch(Exception ex){
                     throw ex;

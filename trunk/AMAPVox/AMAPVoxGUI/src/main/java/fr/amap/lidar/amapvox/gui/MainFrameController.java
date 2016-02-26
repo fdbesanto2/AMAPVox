@@ -6,15 +6,7 @@
 package fr.amap.lidar.amapvox.gui;
 
 import fr.amap.lidar.amapvox.gui.task.TaskElement;
-import com.jogamp.newt.Window;
-import com.jogamp.newt.event.WindowAdapter;
-import fr.amap.amapvox.als.LasHeader;
-import fr.amap.amapvox.als.LasPoint;
-import fr.amap.amapvox.als.las.LasReader;
-import fr.amap.amapvox.als.las.PointDataRecordFormat;
 import fr.amap.amapvox.als.las.PointDataRecordFormat.Classification;
-import fr.amap.amapvox.als.las.PointDataRecordFormat2;
-import fr.amap.amapvox.als.laz.LazExtraction;
 import fr.amap.commons.javafx.chart.ChartViewer;
 import fr.amap.lidar.amapvox.chart.VoxelFileChart;
 import fr.amap.lidar.amapvox.chart.VoxelsToChart;
@@ -30,10 +22,7 @@ import static fr.amap.lidar.amapvox.commons.Configuration.InputType.SHOTS_FILE;
 import fr.amap.commons.util.io.file.FileManager;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.point.Point2F;
-import fr.amap.commons.math.point.Point3F;
-import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.commons.util.BoundingBox3d;
-import fr.amap.commons.util.ColorGradient;
 import fr.amap.commons.util.Filter;
 import fr.amap.commons.util.LidarScan;
 import fr.amap.commons.util.MatrixFileParser;
@@ -41,24 +30,14 @@ import fr.amap.commons.util.MatrixUtility;
 import fr.amap.commons.util.SphericalCoordinates;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.commons.util.TimeCounter;
-import fr.amap.commons.util.image.ScaleGradient;
 import fr.amap.commons.structure.pointcloud.PointCloud;
 import fr.amap.amapvox.io.tls.rsp.Rsp;
 import fr.amap.amapvox.io.tls.rsp.RxpScan;
-import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
-import fr.amap.amapvox.io.tls.rxp.Shot;
-import fr.amap.amapvox.jleica.LDoublePoint;
-import fr.amap.amapvox.jleica.LFloatPoint;
-import fr.amap.amapvox.jleica.LPoint;
-import fr.amap.amapvox.jleica.ptg.PTGHeader;
-import fr.amap.amapvox.jleica.ptg.PTGReader;
-import fr.amap.amapvox.jleica.ptg.PTGScan;
 import fr.amap.lidar.amapvox.dart.DartPlotsXMLWriter;
 import fr.amap.commons.raster.asc.AsciiGridHelper;
 import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.math.geometry.BoundingBox2F;
 import fr.amap.commons.math.geometry.BoundingBox3F;
-import fr.amap.commons.math.vector.Vec4D;
 import fr.amap.lidar.amapvox.simulation.hemi.HemiParameters;
 import fr.amap.lidar.amapvox.simulation.hemi.HemiPhotoCfg;
 import fr.amap.lidar.amapvox.simulation.hemi.HemiScanView;
@@ -86,19 +65,6 @@ import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxMergingCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
-import fr.amap.lidar.amapvox.voxviewer.Viewer3D;
-import fr.amap.lidar.amapvox.voxviewer.event.BasicEvent;
-import fr.amap.lidar.amapvox.voxviewer.loading.shader.SimpleShader;
-import fr.amap.lidar.amapvox.voxviewer.loading.texture.Texture;
-import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
-import fr.amap.lidar.amapvox.voxviewer.mesh.GLMeshFactory;
-import fr.amap.lidar.amapvox.voxviewer.object.camera.TrackballCamera;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.PointCloudSceneObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObjectFactory;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.SimpleSceneObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceAdapter;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import fr.amap.commons.javafx.io.TextFileParserFrameController;
 import fr.amap.commons.javafx.matrix.TransformationFrameController;
 import fr.amap.commons.util.ProcessingListener;
@@ -119,20 +85,10 @@ import fr.amap.lidar.amapvox.gui.task.TaskAdapter;
 import fr.amap.lidar.amapvox.gui.task.TaskElementExecutor;
 import fr.amap.lidar.amapvox.gui.task.TransmittanceSimService;
 import fr.amap.lidar.amapvox.gui.task.VoxFileMergingService;
+import fr.amap.lidar.amapvox.gui.viewer3d.Viewer3DPanelController;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.NaNsCorrectionParams;
-import fr.amap.lidar.amapvox.voxviewer.loading.texture.StringToImage;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.RasterSceneObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObjectListener;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelObject;
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
@@ -141,16 +97,11 @@ import java.nio.file.LinkOption;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.function.Function;
 import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
@@ -184,27 +135,22 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.MultipleSelectionModel;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -215,9 +161,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -225,19 +169,15 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Point3d;
-import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 import org.controlsfx.dialog.ProgressDialog;
-import org.controlsfx.validation.ValidationResult;
 import org.controlsfx.validation.ValidationSupport;
-import org.controlsfx.validation.Validator;
 import org.jdom2.JDOMException;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.xy.XYSeries;
@@ -256,8 +196,8 @@ public class MainFrameController implements Initializable {
     final Logger logger = LoggerFactory.getLogger(MainFrameController.class);
     
     private Stage stage;
+    private ResourceBundle resourceBundle;
 
-    //private Stage rspExtractorFrame;
     private Stage calculateMatrixFrame;
     private Stage filterFrame;
     private Stage transformationFrame;
@@ -268,32 +208,15 @@ public class MainFrameController implements Initializable {
     private Stage positionImporterFrame;
     private Stage progressFrame;
     
-    private Validator fieldDoubleValidator;
     
-    //determines if the file exists
-    private Validator fileExistValidator;
-    
-    //determines if the specified file can be written
-    private Validator fileValidityValidator;
-    
-    //determines if the directory exists
-    private Validator directoryValidator;
-    
-    //determines if the list is empty
-    private Validator emptyListValidator;
-    
-    //determines if a table view is empty
-    private Validator emptyTableValidator;
-    
-    //unregister validator (patch because unregister doesn't exist yet)
-    private Validator unregisterValidator;
     
     private ValidationSupport voxSpaceValidationSupport;
     private ValidationSupport alsVoxValidationSupport;
     private ValidationSupport tlsVoxValidationSupport;
     
     private ValidationSupport transLightMapValidationSupport;
-    
+    private ValidationSupport lai2xxxSimValidationSupport;
+    private ValidationSupport hemiPhotoSimValidationSupport;
     
     private AsciiGridFileExtractorController ascExtractor;
     private RiscanProjectExtractor riscanProjectExtractor;
@@ -306,7 +229,7 @@ public class MainFrameController implements Initializable {
     private ViewCapsSetupFrameController viewCapsSetupFrameController;
     private AttributsImporterFrameController attributsImporterFrameController;
     private TextFileParserFrameController textFileParserFrameController;
-    private SceneObjectPropertiesPanelController sceneObjectPropertiesPanelController;
+    //private SceneObjectPropertiesPanelController sceneObjectPropertiesPanelController;
     private FilteringPaneComponentController filteringPaneController;
     private PositionImporterFrameController positionImporterFrameController;
     private ProgressFrameController progressFrameController;
@@ -340,12 +263,10 @@ public class MainFrameController implements Initializable {
 
     private FileChooser fileChooserOpenConfiguration;
     private FileChooserContext fileChooserSaveConfiguration;
-    //private FileChooser fileChooserSaveConfiguration;
     private FileChooser fileChooserOpenInputFileALS;
     private FileChooser fileChooserOpenTrajectoryFileALS;
     private FileChooser fileChooserOpenOutputFileALS;
     private FileChooserContext fileChooserOpenInputFileTLS;
-    //private FileChooser fileChooserOpenInputFileTLS;
     private FileChooser fileChooserOpenVoxelFile;
     private FileChooser fileChooserOpenPopMatrixFile;
     private FileChooser fileChooserOpenSopMatrixFile;
@@ -364,7 +285,6 @@ public class MainFrameController implements Initializable {
     private FileChooser fileChooserOpenPointsPositionFile;
     private FileChooser fileChooserSaveTransmittanceTextFile;
     private DirectoryChooser directoryChooserSaveTransmittanceBitmapFile;
-    //private FileChooser fileChooserSaveHemiPhotoOutputBitmapFile;
     private FileChooser fileChooserSaveHemiPhotoOutputTextFile;
     private FileChooserContext fileChooserSaveHemiPhotoOutputBitmapFile;
     private FileChooserContext fileChooserOpenCanopyAnalyserInputFile;
@@ -381,8 +301,6 @@ public class MainFrameController implements Initializable {
     private Matrix4d resultMatrix;
     
     private Matrix4d rasterTransfMatrix;
-    
-    //private boolean alsMultiFile;
 
     private List<LidarScan> items;
     private Rsp rsp;
@@ -458,8 +376,8 @@ public class MainFrameController implements Initializable {
     private TextField textfieldHemiPhotoOutputTextFile;
     @FXML
     private TextField textfieldHemiPhotoOutputBitmapFile;
-    @FXML
-    private ListView<SceneObjectWrapper> listviewTreeSceneObjects;
+    /*@FXML
+    private ListView<SceneObjectWrapper> listviewTreeSceneObjects;*/
     @FXML
     private ComboBox<LeafAngleDistribution.Type> comboboxLADChoice;
     @FXML
@@ -474,20 +392,6 @@ public class MainFrameController implements Initializable {
     private Button buttonAddPointcloudFilter;
     @FXML
     private AnchorPane anchorpanePointCloudFiltering;
-    @FXML
-    private CheckBox checkboxRaster;
-    @FXML
-    private TextField textfieldRasterFilePath;
-    @FXML
-    private CheckBox checkboxUseTransformationMatrix;
-    @FXML
-    private AnchorPane anchorPaneRasterParameters;
-    @FXML
-    private CheckBox checkboxFitRasterToVoxelSpace;
-    @FXML
-    private TextField textfieldRasterFittingMargin;
-    @FXML
-    private Button buttonSetTransformationMatrix;
     @FXML
     private TableView<SimulationPeriod> tableViewSimulationPeriods;
     @FXML
@@ -575,10 +479,6 @@ public class MainFrameController implements Initializable {
     @FXML
     private ComboBox<String> comboboxModeTLS;
     @FXML
-    private Button buttonOpen3DView;
-    @FXML
-    private ComboBox<String> comboboxAttributeToView;
-    @FXML
     private Button buttonOpenPopMatrixFile;
     @FXML
     private ComboBox<String> comboboxWeighting;
@@ -636,8 +536,6 @@ public class MainFrameController implements Initializable {
     private TextField textfieldLatitudeRadians;
     @FXML
     private TextField textfieldOutputBitmapFilePath;
-    @FXML
-    private CheckBox checkboxRaster1;
     @FXML
     private Button buttonOpenVoxelFileTransmittance;
     @FXML
@@ -714,11 +612,6 @@ public class MainFrameController implements Initializable {
     private MenuItem menuItemUpdate;
     @FXML
     private Label labelOutputFileGroundEnergy;
-    private CheckBox checkboxGenerateLAI2xxxTypeFormat;
-    @FXML
-    private TitledPane titledPaneSceneObjectProperties;
-    @FXML
-    private ScrollPane scrollPaneSceneObjectProperties;
     @FXML
     private AnchorPane anchorPaneEchoFiltering;
     @FXML
@@ -797,99 +690,24 @@ public class MainFrameController implements Initializable {
     private MenuItem menuItemSelectionNone111;
     @FXML
     private HBox buttonGroupExecutionTransLightMap;
-
+    @FXML
+    private HBox buttongroupExecutionLai2xxxSim;
+    @FXML
+    private HBox buttonGroupExecutionHemiPhotoSim;
+    @FXML
+    private Tab tabHemiFromScans;
+    @FXML
+    private Tab tabHemiFromPAD;
+    @FXML
+    private Button helpButtonHemiPhoto;
+    @FXML
+    private AnchorPane viewer3DPanel;
+    @FXML
+    private Viewer3DPanelController viewer3DPanelController;
+    @FXML
+    private HelpButtonController helpButtonHemiPhotoController;
     
     private void initValidationSupport(){
-        
-        
-        
-        fieldDoubleValidator = new Validator<String>() {
-            @Override
-            public ValidationResult apply(Control t, String s) {
-                
-                if(s.isEmpty()){
-                    return ValidationResult.fromErrorIf(t, "A value is required", s.isEmpty());
-                }else{
-                    boolean valid = false;
-                    try{
-                        Double.valueOf(s);
-                        valid = true;
-                    }catch(NumberFormatException ex){}
-                    
-                    return ValidationResult.fromErrorIf(t, "Invalid value", !valid);
-                }
-            }
-        };
-        
-        fileExistValidator = new Validator<String>() {
-            @Override
-            public ValidationResult apply(Control t, String s) {
-                
-                if(s.isEmpty()){
-                    return ValidationResult.fromErrorIf(t, "A value is required", s.isEmpty());
-                }else{
-                    return ValidationResult.fromErrorIf(t, "Invalid value", !Files.exists(new File(s).toPath()));
-                }
-            }
-        };
-        
-        fileValidityValidator = new Validator<String>() {
-            @Override
-            public ValidationResult apply(Control t, String s) {
-                if(s.isEmpty()){
-                    return ValidationResult.fromErrorIf(t, "A value is required", s.isEmpty());
-                }else{
-                    
-                    File file = new File(s);
-                    if(!file.isDirectory()){
-                        file = file.getParentFile();
-                        return ValidationResult.fromErrorIf(t, "Invalid value", !file.exists());
-                    }else{
-                        return ValidationResult.fromError(t, "The given file is a directory.");
-                    }
-                    
-                }
-            }
-        };
-        
-        directoryValidator = new Validator<String>() {
-            @Override
-            public ValidationResult apply(Control t, String s) {
-                if(s.isEmpty()){
-                    return ValidationResult.fromErrorIf(t, "A value is required", s.isEmpty());
-                }else{
-                    
-                    File file = new File(s);
-                    if(!file.isDirectory()){
-                        return ValidationResult.fromError(t, "The given file is not a directory.");
-                    }else{
-                        return ValidationResult.fromErrorIf(t, "Invalid value", !Files.exists(new File(s).toPath()));
-                    }
-                    
-                }
-            }
-        };
-        
-        emptyListValidator = new Validator<ObservableList<Point3d>>() {
-            @Override
-            public ValidationResult apply(Control t, ObservableList<Point3d> u) {
-                return ValidationResult.fromErrorIf(t, "The list is empty", u.size() == 0);
-            }
-        };
-        
-        emptyTableValidator = new Validator<ObservableList>() {
-            @Override
-            public ValidationResult apply(Control t, ObservableList u) {
-                return ValidationResult.fromErrorIf(t, "The list is empty", u.isEmpty());
-            }
-        };
-        
-        unregisterValidator = new Validator<Object>() {
-            @Override
-            public ValidationResult apply(Control t, Object u) {
-                return ValidationResult.fromErrorIf(t, "", false);
-            }
-        };
         
         //voxelization fields validation
         
@@ -897,36 +715,36 @@ public class MainFrameController implements Initializable {
         alsVoxValidationSupport = new ValidationSupport();
         tlsVoxValidationSupport = new ValidationSupport();
         
-        voxSpaceValidationSupport.registerValidator(textFieldEnterXMin, false, fieldDoubleValidator);
-        voxSpaceValidationSupport.registerValidator(textFieldEnterYMin, false, fieldDoubleValidator);
-        voxSpaceValidationSupport.registerValidator(textFieldEnterZMin, false, fieldDoubleValidator);
-        voxSpaceValidationSupport.registerValidator(textFieldEnterXMax, false, fieldDoubleValidator);
-        voxSpaceValidationSupport.registerValidator(textFieldEnterYMax, false, fieldDoubleValidator);
-        voxSpaceValidationSupport.registerValidator(textFieldEnterZMax, false, fieldDoubleValidator);
-        voxSpaceValidationSupport.registerValidator(textFieldResolution, false, fieldDoubleValidator);
+        voxSpaceValidationSupport.registerValidator(textFieldEnterXMin, false, Validators.fieldDoubleValidator);
+        voxSpaceValidationSupport.registerValidator(textFieldEnterYMin, false, Validators.fieldDoubleValidator);
+        voxSpaceValidationSupport.registerValidator(textFieldEnterZMin, false, Validators.fieldDoubleValidator);
+        voxSpaceValidationSupport.registerValidator(textFieldEnterXMax, false, Validators.fieldDoubleValidator);
+        voxSpaceValidationSupport.registerValidator(textFieldEnterYMax, false, Validators.fieldDoubleValidator);
+        voxSpaceValidationSupport.registerValidator(textFieldEnterZMax, false, Validators.fieldDoubleValidator);
+        voxSpaceValidationSupport.registerValidator(textFieldResolution, false, Validators.fieldDoubleValidator);
         
-        alsVoxValidationSupport.registerValidator(textFieldInputFileALS, false, fileExistValidator);
-        alsVoxValidationSupport.registerValidator(textFieldTrajectoryFileALS, false, fileExistValidator);
-        alsVoxValidationSupport.registerValidator(textFieldOutputFileALS, false, fileValidityValidator);
+        alsVoxValidationSupport.registerValidator(textFieldInputFileALS, false, Validators.fileExistValidator);
+        alsVoxValidationSupport.registerValidator(textFieldTrajectoryFileALS, false, Validators.fileExistValidator);
+        alsVoxValidationSupport.registerValidator(textFieldOutputFileALS, false, Validators.fileValidityValidator);
         
-        tlsVoxValidationSupport.registerValidator(textFieldInputFileTLS, false, fileExistValidator);
-        tlsVoxValidationSupport.registerValidator(textFieldOutputPathTLS, false, directoryValidator);
+        tlsVoxValidationSupport.registerValidator(textFieldInputFileTLS, false, Validators.fileExistValidator);
+        tlsVoxValidationSupport.registerValidator(textFieldOutputPathTLS, false, Validators.directoryValidator);
         
         //transmittance light map fields validation
         
         transLightMapValidationSupport = new ValidationSupport();
-        transLightMapValidationSupport.registerValidator(textfieldVoxelFilePathTransmittance, true, fileExistValidator);
+        transLightMapValidationSupport.registerValidator(textfieldVoxelFilePathTransmittance, true, Validators.fileExistValidator);
         
-        transLightMapValidationSupport.registerValidator(textfieldOutputBitmapFilePath, true, directoryValidator);
+        transLightMapValidationSupport.registerValidator(textfieldOutputBitmapFilePath, true, Validators.directoryValidator);
         
         checkboxGenerateBitmapFile.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if(newValue){
-                    transLightMapValidationSupport.registerValidator(textfieldOutputBitmapFilePath, true, directoryValidator);
+                    transLightMapValidationSupport.registerValidator(textfieldOutputBitmapFilePath, true, Validators.directoryValidator);
                 }else{
                     //unregister the validator
-                    transLightMapValidationSupport.registerValidator(textfieldOutputBitmapFilePath, false, unregisterValidator);
+                    transLightMapValidationSupport.registerValidator(textfieldOutputBitmapFilePath, false, Validators.unregisterValidator);
                 }
             }
         });
@@ -935,17 +753,21 @@ public class MainFrameController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if(newValue){
-                    transLightMapValidationSupport.registerValidator(textfieldOutputTextFilePath, true, fileValidityValidator);
+                    transLightMapValidationSupport.registerValidator(textfieldOutputTextFilePath, true, Validators.fileValidityValidator);
                 }else{
                     //unregister the validator
-                    transLightMapValidationSupport.registerValidator(textfieldOutputTextFilePath, false, unregisterValidator);
+                    transLightMapValidationSupport.registerValidator(textfieldOutputTextFilePath, false, Validators.unregisterValidator);
                 }
             }
         });
         
-        transLightMapValidationSupport.registerValidator(textfieldLatitudeRadians, true, fieldDoubleValidator);
-        transLightMapValidationSupport.registerValidator(listViewTransmittanceMapSensorPositions, true, emptyListValidator);
-        transLightMapValidationSupport.registerValidator(tableViewSimulationPeriods, true, emptyTableValidator);
+        ObservableList<Point3d> content = FXCollections.observableArrayList();
+        listViewTransmittanceMapSensorPositions.setItems(content);
+        
+        
+        transLightMapValidationSupport.registerValidator(textfieldLatitudeRadians, true, Validators.fieldDoubleValidator);
+        //transLightMapValidationSupport.registerValidator(listViewTransmittanceMapSensorPositions, true, emptyListValidator);
+        //transLightMapValidationSupport.registerValidator(tableViewSimulationPeriods, true, emptyTableValidator);
         
         //transLightMapValidationSupport.
         transLightMapValidationSupport.invalidProperty().addListener(new ChangeListener<Boolean>() {
@@ -955,6 +777,68 @@ public class MainFrameController implements Initializable {
             }
         });
         
+        //lai2200 simulations validation support
+        lai2xxxSimValidationSupport = new ValidationSupport();
+        lai2xxxSimValidationSupport.registerValidator(textfieldVoxelFilePathCanopyAnalyzer, true, Validators.fileExistValidator);
+        lai2xxxSimValidationSupport.registerValidator(textfieldOutputCanopyAnalyzerTextFile, true, Validators.fileValidityValidator);
+        
+        lai2xxxSimValidationSupport.invalidProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                buttongroupExecutionLai2xxxSim.setDisable(newValue);
+            }
+        });
+        
+        //hemi photo simulation
+        hemiPhotoSimValidationSupport = new ValidationSupport();
+        hemiPhotoSimValidationSupport.registerValidator(textfieldPixelNumber, true, Validators.fieldIntegerValidator);
+        hemiPhotoSimValidationSupport.registerValidator(textfieldAzimutsNumber, true, Validators.fieldIntegerValidator);
+        hemiPhotoSimValidationSupport.registerValidator(textfieldZenithsNumber, true, Validators.fieldIntegerValidator);
+        hemiPhotoSimValidationSupport.registerValidator(textfieldHemiPhotoOutputBitmapFile, true, Validators.fileValidityValidator);
+        
+        checkboxHemiPhotoGenerateBitmapFile.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    hemiPhotoSimValidationSupport.registerValidator(textfieldHemiPhotoOutputBitmapFile, true, Validators.fileValidityValidator);
+                }else{
+                    //unregister the validator
+                    hemiPhotoSimValidationSupport.registerValidator(textfieldHemiPhotoOutputBitmapFile, false, Validators.unregisterValidator);
+                }
+            }
+        });
+        
+        tabHemiFromScans.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    //unregister the validators
+                    hemiPhotoSimValidationSupport.registerValidator(textfieldVoxelFilePathHemiPhoto, false, Validators.unregisterValidator);
+                    hemiPhotoSimValidationSupport.registerValidator(textfieldSensorPositionX, false, Validators.unregisterValidator);
+                    hemiPhotoSimValidationSupport.registerValidator(textfieldSensorPositionY, false, Validators.unregisterValidator);
+                    hemiPhotoSimValidationSupport.registerValidator(textfieldSensorPositionZ, false, Validators.unregisterValidator);
+                }
+            }
+        });
+        
+        tabHemiFromPAD.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    hemiPhotoSimValidationSupport.registerValidator(textfieldVoxelFilePathHemiPhoto, true, Validators.fileExistValidator);
+                    hemiPhotoSimValidationSupport.registerValidator(textfieldSensorPositionX, true, Validators.fieldDoubleValidator);
+                    hemiPhotoSimValidationSupport.registerValidator(textfieldSensorPositionY, true, Validators.fieldDoubleValidator);
+                    hemiPhotoSimValidationSupport.registerValidator(textfieldSensorPositionZ, true, Validators.fieldDoubleValidator);
+                }
+            }
+        });
+        
+        hemiPhotoSimValidationSupport.invalidProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                buttonGroupExecutionHemiPhotoSim.setDisable(newValue);
+            }
+        });
         
     }
     /**
@@ -963,16 +847,17 @@ public class MainFrameController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        /*customListView.getButtonAddItemToList().setOnAction(new EventHandler<ActionEvent>() {
+        this.resourceBundle = rb;
+        
+        viewer3DPanelController.setResourceBundle(rb);
+        
+        helpButtonHemiPhoto.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Alert a = new Alert(AlertType.INFORMATION);
-                a.setContentText("test");
-                a.show();
+                helpButtonHemiPhotoController.showHelpDialog(resourceBundle.getString("help_hemiphoto"));
             }
-        });*/
+        });
         
-        //Decorator.addDecoration(textFieldEnterXMin, new StyleClassDecoration("warning"));
         
         initValidationSupport();
         
@@ -1018,71 +903,6 @@ public class MainFrameController implements Initializable {
                 }
             }
         };
-        
-        listviewTreeSceneObjects.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        listviewTreeSceneObjects.setCellFactory(new Callback<ListView<SceneObjectWrapper>, ListCell<SceneObjectWrapper>>() {
-
-            @Override
-            public ListCell<SceneObjectWrapper> call(ListView<SceneObjectWrapper> param) {
-                
-                ListCell<SceneObjectWrapper> cell = new ListCell<SceneObjectWrapper>(){
-                    
-                    @Override
-                    protected void updateItem(SceneObjectWrapper t, boolean bln) {
-                        
-                        super.updateItem(t, bln);                        
-                        setGraphic(t);
-                    }
-                };
-                
-                return cell;
-            }
-        });
-        
-        listviewTreeSceneObjects.setOnDragOver(dragOverEvent);
-        listviewTreeSceneObjects.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent event) {
-                Dragboard db = event.getDragboard();
-                boolean success = false;
-                if (db.hasFiles() && db.getFiles().size() == 1) {
-                    success = true;
-                    for (File file : db.getFiles()) {
-                        if (file != null) {
-                            
-                            try {
-                                addSceneObjectToList(file);
-                            } catch (Exception ex) {
-                                showErrorDialog(ex);
-                            }
-                        }
-                    }
-                }
-                event.setDropCompleted(success);
-                event.consume();
-            }
-        });
-        
-        
-        listviewTreeSceneObjects.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<SceneObjectWrapper>() {
-
-            @Override
-            public void changed(ObservableValue<? extends SceneObjectWrapper> observable, SceneObjectWrapper oldValue, SceneObjectWrapper newValue) {
-                
-                ObservableList<SceneObjectWrapper> list = listviewTreeSceneObjects.getSelectionModel().getSelectedItems();
-                
-                if(list.size() > 0){
-                    
-                    sceneObjectPropertiesPanelController.setSceneObjectWrappers(list);
-                    
-                    SceneObjectWrapper lastSelectedItem = list.get(list.size() - 1);
-                    if(lastSelectedItem.getSceneObject() != null){
-                        sceneObjectPropertiesPanelController.setSceneObjectWrapper(lastSelectedItem);
-                    }
-                }
-                
-            }
-        });
         
         ContextMenu contextMenuProductsList = new ContextMenu();
         MenuItem openImageItem = new MenuItem("Open image");
@@ -1290,16 +1110,6 @@ public class MainFrameController implements Initializable {
             }
         });
         
-        /*listViewVoxelsFilesChart.setCellFactory(new Callback<ListView<VoxelFileChart>, ListCell<VoxelFileChart>>() {
-
-            @Override
-            public ListCell<VoxelFileChart> call(ListView<VoxelFileChart> param) {
-                
-                return new ColorRectCell();
-            }
-        });*/
-        
-        
         anchorpaneQuadrats.disableProperty().bind(checkboxMakeQuadrats.selectedProperty().not());
         
         comboboxSelectAxisForQuadrats.getItems().addAll("X", "Y", "Z");
@@ -1364,18 +1174,6 @@ public class MainFrameController implements Initializable {
                 return new SimpleStringProperty(String.valueOf(param.getValue().getClearnessCoefficient()));
             }
         });
-        /*
-        textFieldInputFileALS.textProperty().addListener(new ChangeListener<String>() {
-
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                
-                alsMultiFile = newValue.contains(";");
-                anchorpaneBoundingBoxParameters.setDisable(alsMultiFile);
-                //checkboxMultiResAfter.setDisable(!alsMultiFile);
-                //textfieldResMultiRes.setDisable(!alsMultiFile);
-            }
-        });*/
         
         checkboxMultiFiles.selectedProperty().addListener(new ChangeListener<Boolean>() {
 
@@ -1539,15 +1337,6 @@ public class MainFrameController implements Initializable {
         }
         
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SceneObjectPropertiesPanel.fxml"));
-            AnchorPane sceneObjectPropertiesPane = loader.load();
-            sceneObjectPropertiesPanelController = loader.getController();
-            scrollPaneSceneObjectProperties.setContent(sceneObjectPropertiesPane);
-        } catch (IOException ex) {
-            logger.error("Cannot load fxml file", ex);
-        }
-        
-        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/FilteringPaneComponent.fxml"));
             anchorPaneEchoFilteringRxp = loader.load();
             filteringPaneController = loader.getController();
@@ -1623,19 +1412,6 @@ public class MainFrameController implements Initializable {
         ptxProjectExtractor = new PTXProjectExtractor();
         ptgProjectExtractor = new PTGProjectExtractor();
         
-        /*rspExtractorFrame = new Stage();
-        
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/RspExtractorFrame.fxml"));
-            Parent root = loader.load();
-            rspExtractorFrameController = loader.getController();
-            rspExtractorFrame.setScene(new Scene(root));
-            rspExtractorFrameController.setStage(rspExtractorFrame);
-        
-        } catch (IOException ex) {
-            logger.error("Cannot load fxml file", ex);
-        }*/
-        
         dateChooserFrame = new Stage();
                 
         try {
@@ -1687,7 +1463,7 @@ public class MainFrameController implements Initializable {
                 int size = listViewProductsFiles.getSelectionModel().getSelectedIndices().size();
 
                 if (size == 1) {
-                    loadSelectedVoxelFile();
+                    viewer3DPanelController.updateCurrentVoxelFile(listViewProductsFiles.getSelectionModel().getSelectedItem());
                     menuButtonExport.setDisable(false);
                 } else {
                     menuButtonExport.setDisable(true);
@@ -1965,13 +1741,11 @@ public class MainFrameController implements Initializable {
         textFieldOutputFileGroundEnergy.setOnDragOver(dragOverEvent);
         listViewTaskList.setOnDragOver(dragOverEvent);
         listViewProductsFiles.setOnDragOver(dragOverEvent);
-        textfieldRasterFilePath.setOnDragOver(dragOverEvent);
         textfieldVoxelFilePathTransmittance.setOnDragOver(dragOverEvent);
         textfieldOutputTextFilePath.setOnDragOver(dragOverEvent);
         textfieldOutputBitmapFilePath.setOnDragOver(dragOverEvent);
 
         setDragDroppedSingleFileEvent(textFieldInputFileALS);
-        //setDragDroppedSingleFileEvent(textFieldTrajectoryFileALS);
         
         textFieldTrajectoryFileALS.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
@@ -2010,11 +1784,9 @@ public class MainFrameController implements Initializable {
         });
         
         setDragDroppedSingleFileEvent(textFieldOutputFileALS);
-        //setDragDroppedSingleFileEvent(textFieldInputFileTLS);
         setDragDroppedSingleFileEvent(textFieldOutputFileMerging);
         setDragDroppedSingleFileEvent(textfieldDTMPath);
         setDragDroppedSingleFileEvent(textFieldOutputFileGroundEnergy);
-        setDragDroppedSingleFileEvent(textfieldRasterFilePath);
         setDragDroppedSingleFileEvent(textfieldVoxelFilePathTransmittance);
         setDragDroppedSingleFileEvent(textfieldOutputTextFilePath);
         setDragDroppedSingleFileEvent(textfieldOutputBitmapFilePath);
@@ -2088,25 +1860,6 @@ public class MainFrameController implements Initializable {
 
                 buttonAddPointcloudFilter.setDisable(!newValue);
 
-            }
-        });
-        
-        checkboxRaster.selectedProperty().addListener(new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                anchorPaneRasterParameters.setDisable(!newValue);
-            }
-        });
-        
-        rasterTransfMatrix = new Matrix4d();
-        rasterTransfMatrix.setIdentity();
-        
-        checkboxUseTransformationMatrix.selectedProperty().addListener(new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                buttonSetTransformationMatrix.setDisable(!newValue);
             }
         });
     }
@@ -2498,20 +2251,6 @@ public class MainFrameController implements Initializable {
             cfg.setVoxelParameters(voxelParameters);
             cfg.setInputType(it);
             cfg.setInputFile(new File(textFieldInputFileALS.getText()));
-
-            /*cfg.setCorrectNaNs(correctNaNs);
-
-            try{
-                float padMax1m = Float.valueOf(textFieldPadMax1m.getText());
-                float padMax2m = Float.valueOf(textFieldPadMax2m.getText());
-                float padMax3m = Float.valueOf(textFieldPadMax3m.getText());
-                float padMax4m = Float.valueOf(textFieldPadMax4m.getText());
-                float padMax5m = Float.valueOf(textFieldPadMax5m.getText());
-                cfg.setMultiResPadMax(new float[]{padMax1m, padMax2m, padMax3m, padMax4m, padMax5m});
-            }catch(Exception e){}
-
-            cfg.setMultiResUseDefaultMaxPad(!checkboxOverwritePadLimit.isSelected());*/
-
 
         }else{
 
@@ -3068,8 +2807,8 @@ public class MainFrameController implements Initializable {
 
             @Override
             public void handle(WindowEvent event) {
+                
                 listViewTransmittanceMapSensorPositions.getItems().addAll(positionImporterFrameController.getPositions());
-                listViewTransmittanceMapSensorPositions.setItems(listViewTransmittanceMapSensorPositions.getItems());
             }
         });
     }
@@ -3413,24 +3152,7 @@ public class MainFrameController implements Initializable {
         ObservableList<LidarScan> selectedItems = listViewHemiPhotoScans.getSelectionModel().getSelectedItems();
         listViewHemiPhotoScans.getItems().removeAll(selectedItems);
     }
-
-    @FXML
-    private void onActionMenuItemSelectAllSceneObjects(ActionEvent event) {
-        listviewTreeSceneObjects.getSelectionModel().selectAll();
-    }
-
-    @FXML
-    private void onActionMenuItemUnselectAllSceneObjects(ActionEvent event) {
-        listviewTreeSceneObjects.getSelectionModel().clearSelection();
-    }
-
-    @FXML
-    private void onActionButtonRemoveSceneObject(ActionEvent event) {
-        
-        ObservableList<SceneObjectWrapper> selectedItems = listviewTreeSceneObjects.getSelectionModel().getSelectedItems();
-        listviewTreeSceneObjects.getItems().removeAll(selectedItems);
-    }
-
+    
     public void setStage(final Stage stage) {
         
         this.stage = stage;
@@ -3448,7 +3170,7 @@ public class MainFrameController implements Initializable {
             }
         });
         
-        
+        viewer3DPanelController.setStage(stage);
     }
 
     private CheckBox createSelectedCheckbox(String text){
@@ -3611,468 +3333,6 @@ public class MainFrameController implements Initializable {
         }
         
         return lines;
-    }
-
-    @FXML
-    private void onActionButtonVizualize(ActionEvent event) {
-
-        if (listviewTreeSceneObjects.getItems().size() > 0) {
-            
-            ObservableList<SceneObjectWrapper> sceneObjects = listviewTreeSceneObjects.getItems();
-            
-            try {
-
-                Service s = new Service() {
-
-                    @Override
-                    protected Task createTask() {
-                        return new Task() {
-
-                            @Override
-                            protected Object call() throws Exception {
-
-                                Viewer3D viewer3D = new Viewer3D((int) (SCREEN_WIDTH / 4.0d), (int) (SCREEN_HEIGHT / 4.0d), (int) (SCREEN_WIDTH / 1.5d), (int) (SCREEN_HEIGHT / 2.0d), "3d view");
-                                viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
-
-                                for(SceneObjectWrapper sceneObjectWrapper : sceneObjects){
-                                    
-                                    SceneObject sceneObject = sceneObjectWrapper.getSceneObject();
-                                    sceneObject.resetIds();
-                                    
-                                    /*if(sceneObject instanceof PointCloudSceneObject){
-                                        sceneObject.setShader(viewer3D.getScene().colorShader);
-                                    }*/
-                                    
-                                    viewer3D.getScene().addSceneObject(sceneObject);
-                                }
-                                
-                                
-                                if(sceneObjects.size() > 0){
-                                    
-                                    SceneObject root = sceneObjects.get(0).getSceneObject();
-                                    
-                                    /**
-                                     * *light**
-                                     */
-                                    
-                                    viewer3D.getScene().setLightPosition(new Point3F(root.getGravityCenter().x, root.getGravityCenter().y,
-                                            root.getGravityCenter().z + (float)(root.getBoundingBox().max.z-root.getBoundingBox().min.z)));
-                                    
-                                     
-                                    /**
-                                     * *camera**
-                                     */
-                                    
-                                    TrackballCamera trackballCamera = new TrackballCamera();
-                                    trackballCamera.setPivot(root);
-                                    trackballCamera.setLocation(new Vec3F(root.getGravityCenter().x + 50, root.getGravityCenter().y, root.getGravityCenter().z + 50));
-                                    viewer3D.getScene().setCamera(trackballCamera);
-                                }
-                               
-                                
-                                
-                                viewer3D.show();
-
-                                return null;
-                            }
-                        };
-                    }
-                };
-
-                s.start();
-
-            } catch (Exception ex) {
-                logger.error("Cannot launch 3d view", ex);
-            }
-
-        } else {
-            final File voxelFile = listViewProductsFiles.getSelectionModel().getSelectedItem();
-            final String attributeToView = comboboxAttributeToView.getSelectionModel().getSelectedItem();
-
-            final boolean drawDTM = checkboxRaster.isSelected();
-            final File dtmFile = new File(textfieldRasterFilePath.getText());
-            final Mat4D dtmTransfMatrix = MatrixUtility.convertMatrix4dToMat4D(rasterTransfMatrix);
-            final boolean fitDTMToVoxelSpace = checkboxFitRasterToVoxelSpace.isSelected();
-            final int mntFittingMargin = Integer.valueOf(textfieldRasterFittingMargin.getText());
-            final boolean transform = checkboxUseTransformationMatrix.isSelected();
-
-            //window size
-            ObservableList<Screen> screens = Screen.getScreens();
-
-            if (screens != null && screens.size() > 0) {
-                SCREEN_WIDTH = screens.get(0).getBounds().getWidth();
-                SCREEN_HEIGHT = screens.get(0).getBounds().getHeight();
-            }
-
-            try {
-
-                Service s = new Service() {
-
-                    @Override
-                    protected Task createTask() {
-                        return new Task() {
-
-                            @Override
-                            protected Object call() throws Exception {
-
-                                Viewer3D viewer3D = new Viewer3D((int) (SCREEN_WIDTH / 4.0d), (int) (SCREEN_HEIGHT / 4.0d), (int) (SCREEN_WIDTH / 1.5d), (int) (SCREEN_HEIGHT / 2.0d), voxelFile.toString());
-                                viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
-
-                                fr.amap.lidar.amapvox.voxviewer.object.scene.Scene scene = viewer3D.getScene();
-
-                                /**
-                                 * *VOXEL SPACE**
-                                 */
-                                updateMessage("Loading voxel space: " + voxelFile.getAbsolutePath());
-
-                                VoxelSpaceSceneObject voxelSpace = new VoxelSpaceSceneObject(voxelFile);
-                                voxelSpace.setMousePickable(true);
-
-                                voxelSpace.addVoxelSpaceListener(new VoxelSpaceAdapter() {
-
-                                    @Override
-                                    public void voxelSpaceCreationProgress(int progress) {
-                                        updateProgress(progress, 100);
-                                    }
-                                });
-
-                                voxelSpace.loadVoxels();
-                                
-                                /*
-                                 * Voxel information
-                                 */
-                                StringToImage stringToImage = new StringToImage(1024, 1024);
-                                stringToImage.setAdaptableFontSize(true);
-                                stringToImage.setBackgroundColor(new Color(255, 255, 255, 127));
-                                stringToImage.setTextColor(new Color(0, 0, 0, 255));
-
-
-                                BufferedImage image = new BufferedImage(1024, 1024, BufferedImage.TYPE_INT_ARGB);
-                                
-                                Texture texture = new Texture(image);
-                                
-                                int pickingInfoObjectWidth = viewer3D.getWidth()/5;
-                                int pickingInfoObjectHeight = viewer3D.getHeight()/5;
-                                
-                                SceneObject pickingInfoObject = SceneObjectFactory.createTexturedPlane(new Vec3F(viewer3D.getWidth()-pickingInfoObjectWidth, viewer3D.getHeight()-pickingInfoObjectHeight, 0), pickingInfoObjectWidth, pickingInfoObjectHeight, texture);
-            
-                                pickingInfoObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.texturedShader);
-                                pickingInfoObject.setDrawType(GLMesh.DrawType.TRIANGLES);
-                                
-                                SceneObject sceneObjectSelectedVox = new SimpleSceneObject(GLMeshFactory.createBoundingBox(-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f), false);
-                                SimpleShader simpleShader = new SimpleShader("selectedVoxShader");
-                                simpleShader.setColor(new Vec3F(1, 0, 0));
-                                sceneObjectSelectedVox.setShader(simpleShader);
-                                sceneObjectSelectedVox.setDrawType(GLMesh.DrawType.LINES);
-                                
-                                viewer3D.getScene().addSceneObject(sceneObjectSelectedVox);
-                                
-                                SceneObjectListener listener = new SceneObjectListener() {
-                                    @Override
-                                    public void clicked(SceneObject sceneObject, Vec3F ray) {
-
-                                        Vec3F camLocation = viewer3D.getScene().getCamera().getLocation();
-
-                                        VoxelObject selectedVoxel = voxelSpace.doPicking(viewer3D.getScene().getMousePicker());
-
-                                        if(selectedVoxel != null){
-
-                                            String[][] lines = new String[voxelSpace.getColumnsNames().length][2];
-
-                                            for(int i=0;i<voxelSpace.getColumnsNames().length;i++){
-
-                                                lines[i][0] = voxelSpace.getColumnsNames()[i];
-                                                lines[i][1] = String.valueOf(Math.round(selectedVoxel.getAttributs()[i]*1000.0f)/1000.0f);
-                                            }
-
-                                            arrangeText(lines);
-
-                                            String text = "";
-                                            for(int i=0;i<voxelSpace.getColumnsNames().length;i++){
-
-                                                String attribut = lines[i][0]+" "+lines[i][1];
-                                                text += attribut+"\n";
-                                            }
-
-                                            stringToImage.setText(text, 0, 0);
-
-                                            texture.setBufferedImage(stringToImage.buildImage());
-                                            Point3f voxelPosition = voxelSpace.getVoxelPosition(selectedVoxel.$i, selectedVoxel.$j, selectedVoxel.$k);
-
-                                            sceneObjectSelectedVox.setPosition(new Point3F(voxelPosition.x, voxelPosition.y, voxelPosition.z));
-                                        }
-                                    }
-                                };
-
-                                voxelSpace.addSceneObjectListener(listener);
-
-                                voxelSpace.changeCurrentAttribut(attributeToView);
-                                voxelSpace.setShader(scene.instanceLightedShader);
-                                voxelSpace.setDrawType(GLMesh.DrawType.TRIANGLES);
-                                scene.addSceneObject(voxelSpace);
-
-                                VoxelFileReader reader = new VoxelFileReader(voxelFile);
-                                VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
-                                scene.addSceneObjectAsHud(pickingInfoObject);
-            
-
-                                /**
-                                 * *DTM**
-                                 */
-                                if (drawDTM && dtmFile != null) {
-
-                                    updateMessage("Loading DTM");
-                                    updateProgress(0, 100);
-
-                                    Raster dtm = AsciiGridHelper.readFromAscFile(dtmFile);
-
-                                    if (transform && dtmTransfMatrix != null) {
-                                        dtm.setTransformationMatrix(dtmTransfMatrix);
-                                    }
-
-                                    if (fitDTMToVoxelSpace) {
-
-                                        dtm.setLimits(new BoundingBox2F(new Point2F((float) infos.getMinCorner().x, (float) infos.getMinCorner().y),
-                                                new Point2F((float) infos.getMaxCorner().x, (float) infos.getMaxCorner().y)), mntFittingMargin);
-                                    }
-
-                                    updateMessage("Converting raster to mesh");
-                                    dtm.buildMesh();
-
-                                    GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormalesFromDTM(dtm);
-                                    SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, false);
-                                    dtmSceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.phongShader);
-                                    scene.addSceneObject(dtmSceneObject);
-
-                                    updateProgress(100, 100);
-
-                                }
-
-                                /**
-                                 * *scale**
-                                 */
-                                updateMessage("Generating scale");
-                                final Texture scaleTexture = new Texture(ScaleGradient.createColorScaleBufferedImage(voxelSpace.getGradient(),
-                                        voxelSpace.getAttributValueMin(), voxelSpace.getAttributValueMax(),
-                                        viewer3D.getWidth() - 80, (int) (viewer3D.getHeight() / 20),
-                                        ScaleGradient.Orientation.HORIZONTAL, 5, 8));
-
-                                SceneObject scalePlane = SceneObjectFactory.createTexturedPlane(new Vec3F(40, 20, 0),
-                                        (int) (viewer3D.getWidth() - 80),
-                                        (int) (viewer3D.getHeight() / 20),
-                                        scaleTexture);
-
-                                scalePlane.setShader(scene.texturedShader);
-                                scalePlane.setDrawType(GLMesh.DrawType.TRIANGLES);
-                                scene.addSceneObjectAsHud(scalePlane);
-
-                                GLMesh boundingBoxMesh = GLMeshFactory.createBoundingBox((float) infos.getMinCorner().x,
-                                        (float) infos.getMinCorner().y,
-                                        (float) infos.getMinCorner().z,
-                                        (float) infos.getMaxCorner().x,
-                                        (float) infos.getMaxCorner().y,
-                                        (float) infos.getMaxCorner().z);
-
-                                SceneObject boundingBox = new SimpleSceneObject(boundingBoxMesh, false);
-
-                                SimpleShader s = scene.simpleShader;
-                                s.setColor(new Vec3F(1, 0, 0));
-                                boundingBox.setShader(s);
-                                boundingBox.setDrawType(GLMesh.DrawType.LINES);
-                                scene.addSceneObject(boundingBox);
-
-                                voxelSpace.addPropertyChangeListener("gradientUpdated", new PropertyChangeListener() {
-
-                                    @Override
-                                    public void propertyChange(PropertyChangeEvent evt) {
-
-                                        BufferedImage image = ScaleGradient.createColorScaleBufferedImage(voxelSpace.getGradient(),
-                                                voxelSpace.getAttributValueMin(), voxelSpace.getAttributValueMax(),
-                                                viewer3D.getWidth() - 80, (int) (viewer3D.getHeight() / 20),
-                                                ScaleGradient.Orientation.HORIZONTAL, 5, 8);
-
-                                        scaleTexture.setBufferedImage(image);
-                                    }
-                                });
-
-                                /**
-                                 * *light**
-                                 */
-                                scene.setLightPosition(new Point3F(voxelSpace.getGravityCenter().x, voxelSpace.getGravityCenter().y, voxelSpace.getGravityCenter().z + voxelSpace.widthZ + 100));
-
-                                /**
-                                 * *camera**
-                                 */
-                                TrackballCamera trackballCamera = new TrackballCamera();
-                                trackballCamera.setPivot(voxelSpace);
-                                trackballCamera.setLocation(new Vec3F(voxelSpace.getGravityCenter().x + voxelSpace.widthX, voxelSpace.getGravityCenter().y + voxelSpace.widthY, voxelSpace.getGravityCenter().z + voxelSpace.widthZ));
-                                viewer3D.getScene().setCamera(trackballCamera);
-
-                                Platform.runLater(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-
-                                        final Stage toolBarFrameStage = new Stage();
-                                        final FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ToolBoxFrame.fxml"));
-
-                                        try {
-                                            stage.setAlwaysOnTop(false);
-
-                                            Parent root = loader.load();
-                                            toolBarFrameStage.setScene(new Scene(root));
-                                            toolBarFrameStage.initStyle(StageStyle.UNDECORATED);
-
-                                            toolBarFrameStage.setAlwaysOnTop(true);
-
-                                            ToolBoxFrameController toolBarFrameController = loader.getController();
-                                            toolBarFrameController.setStage(toolBarFrameStage);
-                                            toolBarFrameStage.setX(viewer3D.getPosition().getX());
-                                            toolBarFrameStage.setY(viewer3D.getPosition().getY());
-                                            toolBarFrameController.setJoglListener(viewer3D.getJoglContext());
-                                            toolBarFrameController.setAttributes(attributeToView, voxelSpace.data.getVoxelSpaceInfos().getColumnNames());
-
-                                            toolBarFrameStage.focusedProperty().addListener(new ChangeListener<Boolean>() {
-
-                                                @Override
-                                                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                                                    if (newValue) {
-                                                        toolBarFrameStage.setAlwaysOnTop(true);
-
-                                                        toolBarFrameStage.setX(viewer3D.getPosition().getX());
-                                                        toolBarFrameStage.setY(viewer3D.getPosition().getY());
-                                                    } else if (!viewer3D.isFocused()) {
-                                                        toolBarFrameStage.setAlwaysOnTop(false);
-                                                    }
-                                                }
-                                            });
-
-                                            toolBarFrameController.initContent(voxelSpace);
-                                            toolBarFrameStage.setAlwaysOnTop(true);
-
-                                            toolBarFrameStage.show();
-
-                                            double maxToolBoxHeight = toolBarFrameStage.getHeight();
-                                            viewer3D.getJoglContext().setStartX((int) toolBarFrameStage.getWidth());
-
-                                            viewer3D.addWindowListener(new WindowAdapter() {
-
-                                                @Override
-                                                public void windowResized(com.jogamp.newt.event.WindowEvent we) {
-
-                                                    Window window = (Window) we.getSource();
-                                                    final int height = window.getHeight();
-
-                                                    Platform.runLater(new Runnable() {
-
-                                                        @Override
-                                                        public void run() {
-
-                                                            if (height < maxToolBoxHeight) {
-                                                                toolBarFrameStage.setHeight(height);
-                                                            } else {
-                                                                toolBarFrameStage.setHeight(maxToolBoxHeight);
-                                                            }
-
-                                                            toolBarFrameStage.setX(viewer3D.getPosition().getX());
-                                                            toolBarFrameStage.setY(viewer3D.getPosition().getY());
-                                                        }
-                                                    });
-                                                }
-
-                                                @Override
-                                                public void windowMoved(com.jogamp.newt.event.WindowEvent we) {
-
-                                                    Platform.runLater(new Runnable() {
-
-                                                        @Override
-                                                        public void run() {
-                                                            toolBarFrameStage.setX(viewer3D.getPosition().getX());
-                                                            toolBarFrameStage.setY(viewer3D.getPosition().getY());
-                                                        }
-                                                    });
-                                                }
-
-                                                @Override
-                                                public void windowDestroyed(com.jogamp.newt.event.WindowEvent we) {
-
-                                                    Platform.runLater(new Runnable() {
-
-                                                        @Override
-                                                        public void run() {
-                                                            toolBarFrameStage.close();
-                                                        }
-                                                    });
-                                                }
-
-                                                @Override
-                                                public void windowGainedFocus(com.jogamp.newt.event.WindowEvent we) {
-
-                                                    viewer3D.setIsFocused(true);
-
-                                                    Platform.runLater(new Runnable() {
-
-                                                        @Override
-                                                        public void run() {
-
-                                                            if (!toolBarFrameStage.isShowing()) {
-                                                                toolBarFrameStage.toFront();
-                                                            }
-
-                                                            toolBarFrameStage.setIconified(false);
-                                                            toolBarFrameStage.setAlwaysOnTop(true);
-
-                                                            toolBarFrameStage.setX(viewer3D.getPosition().getX());
-                                                            toolBarFrameStage.setY(viewer3D.getPosition().getY());
-                                                        }
-                                                    });
-                                                }
-
-                                                @Override
-                                                public void windowLostFocus(com.jogamp.newt.event.WindowEvent e) {
-
-                                                    viewer3D.setIsFocused(false);
-                                                    Platform.runLater(new Runnable() {
-
-                                                        @Override
-                                                        public void run() {
-                                                            if (!toolBarFrameStage.focusedProperty().get()) {
-                                                                toolBarFrameStage.setIconified(true);
-                                                                toolBarFrameStage.setAlwaysOnTop(false);
-                                                            }
-                                                        }
-                                                    });
-                                                }
-                                            });
-
-                                            viewer3D.show();
-
-                                            toolBarFrameStage.setAlwaysOnTop(true);
-
-                                        } catch (IOException e) {
-                                            logger.error("Loading ToolBarFrame.fxml failed", e);
-                                        } catch (Exception e) {
-                                            logger.error("Error during toolbar init", e);
-                                        }
-                                    }
-                                });
-
-                                return null;
-                            }
-                        };
-                    }
-                };
-
-                ProgressDialog d = new ProgressDialog(s);
-                d.show();
-
-                s.start();
-
-            } catch (Exception ex) {
-                logger.error("Cannot launch 3d view", ex);
-            }
-        }
-
     }
     
     @FXML
@@ -4427,54 +3687,7 @@ public class MainFrameController implements Initializable {
             valid = false;
         }
         
-        if(!valid){
-            
-            logger.error("File is not a voxel file: " + voxelFile.getAbsolutePath());
-            Alert alert = new Alert(AlertType.CONFIRMATION);
-            alert.setHeaderText("Incorrect file");
-            alert.setContentText("File is corrupted or cannot be read!\n"
-                    + "Do you want to keep it?");
-
-            Optional<ButtonType> result = alert.showAndWait();
-
-            if (result.get() == ButtonType.CANCEL) {
-                listViewProductsFiles.getItems().remove(voxelFile);
-            }
-        }
-        
         return valid;
-    }
-    
-    private void loadSelectedVoxelFile(){
-        
-        File voxelFile = listViewProductsFiles.getSelectionModel().getSelectedItem();
-
-        if (!checkVoxelFile(voxelFile)) {
-            return;
-        }
-        
-        VoxelFileReader reader;
-        try {
-            reader = new VoxelFileReader(listViewProductsFiles.getSelectionModel().getSelectedItem());
-            String[] parameters = reader.getVoxelSpaceInfos().getColumnNames();
-
-            for (int i = 0; i < parameters.length; i++) {
-
-                parameters[i] = parameters[i].replaceAll(" ", "");
-                parameters[i] = parameters[i].replaceAll("#", "");
-            }
-
-            comboboxAttributeToView.getItems().clear();
-            comboboxAttributeToView.getItems().addAll(parameters);
-
-            if (parameters.length > 3) {
-                comboboxAttributeToView.getSelectionModel().select(3);
-            }
-
-            buttonOpen3DView.setDisable(false);
-        } catch (Exception ex) {
-            logger.error("Cannot read voxel file", ex);
-        }
     }
 
 
@@ -5102,39 +4315,7 @@ public class MainFrameController implements Initializable {
         
         logger.error("An error occured", e);
         
-        Platform.runLater(new Runnable() {
-
-            @Override
-            public void run() {
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setContentText(e.getLocalizedMessage());
-                alert.setResizable(true);
-                alert.getDialogPane().setPrefSize(500, 200);
-                alert.initOwner(stage);
-                
-                TextArea textArea = new TextArea(e.toString());
-                textArea.setEditable(false);
-                textArea.setWrapText(true);
-                
-                Label label = new Label("The exception stacktrace was:");
-
-                textArea.setMaxWidth(Double.MAX_VALUE);
-                textArea.setMaxHeight(Double.MAX_VALUE);
-                GridPane.setVgrow(textArea, Priority.ALWAYS);
-                GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-                GridPane expContent = new GridPane();
-                expContent.setMaxWidth(Double.MAX_VALUE);
-                expContent.add(label, 0, 0);
-                expContent.add(textArea, 0, 1);
-
-                // Set expandable Exception into the dialog pane.
-                alert.getDialogPane().setExpandableContent(expContent);
-
-                alert.showAndWait();
-            }
-        });
-        
+        DialogHelper.showErrorDialog(stage, e);
     }
     
     private void executeProcess(final TaskElement taskElement) {
@@ -6230,6 +5411,19 @@ public class MainFrameController implements Initializable {
             }
 
             exportDartFrame.show();
+        }else{
+            
+            logger.error("File is not a voxel file: " + voxelFile.getAbsolutePath());
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setHeaderText("Incorrect file");
+            alert.setContentText("File is corrupted or cannot be read!\n"
+                    + "Do you want to keep it?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.get() == ButtonType.CANCEL) {
+                listViewProductsFiles.getItems().remove(voxelFile);
+            }
         }
     }
 
@@ -6387,66 +5581,7 @@ public class MainFrameController implements Initializable {
 
         getBoundingBoxOfPoints(true);
     }
-
-    /*private Point3d[] getLasMinMax(File file) {
-
-        if (textFieldInputFileALS.getText().equals("") && !removeWarnings) {
-
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Information");
-            alert.setHeaderText("An ALS file has to be open");
-            alert.setContentText("An ALS file has to be open.\nTo proceed select ALS tab and choose a *.las file.");
-
-            alert.showAndWait();
-
-        } else {
-            if (!Files.exists(file.toPath(), LinkOption.NOFOLLOW_LINKS)) {
-
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Error");
-                alert.setHeaderText("File not found");
-                alert.setContentText("The file " + file.getAbsolutePath() + " cannot be found.");
-
-                alert.showAndWait();
-
-            } else {
-
-                LasHeader header = null;
-
-                switch (FileManager.getExtension(file)) {
-                    case ".las":
-                        LasReader lasReader = new LasReader();
-                        header = lasReader.readHeader(file);
-                        break;
-
-                    case ".laz":
-                        LazExtraction laz = new LazExtraction();
-                        laz.openLazFile(file);
-                        header = laz.getHeader();
-                        laz.close();
-                        break;
-                }
-
-                if (header != null) {
-
-                    double minX = header.getMinX();
-                    double minY = header.getMinY();
-                    double minZ = header.getMinZ();
-
-                    double maxX = header.getMaxX();
-                    double maxY = header.getMaxY();
-                    double maxZ = header.getMaxZ();
-
-                    return new Point3d[]{new Point3d(minX, minY, minZ), new Point3d(maxX, maxY, maxZ)};
-                }
-
-                return null;
-            }
-        }
-
-        return null;
-    }*/
-
+    
     private void onActionButtonTransformationAutomatic(ActionEvent event) {
 
         ProcessTool processTool = new ProcessTool();
@@ -6770,44 +5905,6 @@ public class MainFrameController implements Initializable {
         updaterFrame.show();
         updaterFrameController.load();
         
-//        Service<Void> service = new Service<Void>() {
-//            @Override
-//            protected Task<Void> createTask() {
-//                return new Task<Void>() {
-//                    @Override
-//                    protected Void call() throws InterruptedException {
-//
-//                            final Updater updater = new Updater();
-//                            
-//                            updater.connect();
-//                            updater.getFileList();
-//                            
-//                            //updater.update();
-//                            
-//                            Platform.runLater(new Runnable() {
-//
-//                                @Override
-//                                public void run() {
-//                                    Alert alert = new Alert(AlertType.INFORMATION);
-//                                    alert.setTitle("Information");
-//                                    alert.setHeaderText("About the Update");
-//                                    alert.setContentText("AmapVox needs to be restarted in order to apply update!");
-//                                    alert.show();
-//                                }
-//                            });
-//                            
-//                            return null;
-//                    }
-//                };
-//            }
-//        };
-//
-//        ProgressDialog d = new ProgressDialog(service);
-//        d.initOwner(stage);
-//        d.show();
-//
-//        service.start();
-        
     }
 
     @FXML
@@ -6883,15 +5980,24 @@ public class MainFrameController implements Initializable {
                 });
                 
             }
+        }else{
+            logger.error("File is not a voxel file: " + voxelFile.getAbsolutePath());
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setHeaderText("Incorrect file");
+            alert.setContentText("File is corrupted or cannot be read!\n"
+                    + "Do you want to keep it?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.get() == ButtonType.CANCEL) {
+                listViewProductsFiles.getItems().remove(voxelFile);
+            }
         }
         
         
         
     }
 
-    @FXML
-    private void onActionCheckboxUseTransformationMatrix(ActionEvent event) {
-    }
 
     private void onActionButtonOpenTransformationMatrixFile(ActionEvent event) {
         
@@ -6923,7 +6029,7 @@ public class MainFrameController implements Initializable {
         }
     }
 
-    @FXML
+    /*@FXML
     private void onActionButtonOpenRasterFile(ActionEvent event) {
         
         File selectedVoxelFile = listViewProductsFiles.getSelectionModel().getSelectedItem();
@@ -6937,9 +6043,8 @@ public class MainFrameController implements Initializable {
         if(selectedFile != null){
             textfieldRasterFilePath.setText(selectedFile.getAbsolutePath());
         }
-    }
+    }*/
 
-    @FXML
     private void onActionButtonSetTransformationMatrix(ActionEvent event) {
                 
         transformationFrameController.reset();
@@ -7373,943 +6478,6 @@ public class MainFrameController implements Initializable {
             return false;
         }
     }
-    
-    
-    private void addSceneObjectToList(final File file) throws Exception{
-        
-        //if(isFileTypeKnown(file)){
-        
-            SceneObjectWrapper sceneObjectWrapper = new SceneObjectWrapper(file, new ProgressBar(0));
-            
-            
-            String extension = FileManager.getExtension(file);
-            
-            LazAttributs lazAttributs = new LazAttributs();
-            
-            switch (extension) {
-
-            case ".las":
-
-                listviewTreeSceneObjects.getItems().add(sceneObjectWrapper);
-                //select attributs to import in the attributs importer frame
-                attributsImporterFrame.show();
-
-                LasReader reader = new LasReader();
-                reader.open(file);
-                LasHeader header = reader.getHeader();
-
-                LasAttributs lasAttributs = new LasAttributs(header.getPointDataFormatID());
-                
-
-                attributsImporterFrameController.setAttributsList(lasAttributs.getAttributsNames());
-
-                //create scene object and set attributs colors
-                attributsImporterFrame.setOnHidden(new EventHandler<WindowEvent>() {
-
-                    @Override
-                    public void handle(WindowEvent event) {
-
-                        if (attributsImporterFrameController.getSelectedAttributs() != null
-                                && !attributsImporterFrameController.getSelectedAttributs().isEmpty()) {
-
-                            Service s = new Service() {
-
-                                @Override
-                                protected Task createTask() {
-                                    return new Task() {
-
-                                        @Override
-                                        protected Object call() throws Exception {
-
-                                            lasAttributs.processList(attributsImporterFrameController.getSelectedAttributs());
-
-                                            PointCloudSceneObject sceneObject = new PointCloudSceneObject();
-
-                                            LasReader reader = new LasReader();
-
-                                            try {
-                                                reader.open(file);
-
-                                                LasHeader header = reader.getHeader();
-
-                                                sceneObject.setGravityCenter(new Point3F((float) (header.getMinX() + (header.getMaxX() - header.getMinX()) / 2.0),
-                                                        (float) (header.getMinY() + (header.getMaxY() - header.getMinY()) / 2.0),
-                                                        (float) (header.getMinZ() + (header.getMaxZ() - header.getMinZ()) / 2.0)));
-
-                                                long pointNumber = header.getNumberOfPointrecords();
-
-                                                long step = (1 * pointNumber) / 100;
-
-                                                long count = 0;
-                                                long pointsProcessed = 0;
-
-                                                Iterator<PointDataRecordFormat> lasIterator = reader.iterator();
-
-                                                count = 0;
-                                                pointsProcessed = 0;
-
-                                                lasIterator = reader.iterator();
-
-                                                while (lasIterator.hasNext()) {
-
-                                                    PointDataRecordFormat point = lasIterator.next();
-
-                                                    sceneObject.addPoint((float) ((point.getX() * header.getxScaleFactor()) + header.getxOffset()),
-                                                            (float) ((point.getY() * header.getyScaleFactor()) + header.getyOffset()),
-                                                            (float) ((point.getZ() * header.getzScaleFactor()) + header.getzOffset()));
-
-                                                    if (lasAttributs.isExportClassification()) {
-                                                        sceneObject.addValue("classification", (float) point.getClassification());
-                                                    }
-
-                                                    if (lasAttributs.isExportIntensity()) {
-                                                        sceneObject.addValue("intensity", (float) point.getIntensity());
-                                                    }
-
-                                                    if (lasAttributs.isExportNumberOfReturns()) {
-                                                        sceneObject.addValue("number of returns", (float) point.getNumberOfReturns());
-                                                    }
-
-                                                    if (lasAttributs.isExportReturnNumber()) {
-                                                        sceneObject.addValue("return number", (float) point.getReturnNumber());
-                                                    }
-
-                                                    if (lasAttributs.isExportTime()) {
-                                                        sceneObject.addValue("GPS time", (float) point.getGpsTime());
-                                                    }
-
-                                                    if (header.getPointDataFormatID() == 2 || header.getPointDataFormatID() == 3) {
-
-                                                        if (lasAttributs.isExportRed() || lasAttributs.isExportGreen() || lasAttributs.isExportBlue()) {
-
-                                                            int red = 0;
-                                                            int green = 0;
-                                                            int blue = 0;
-                                                            if (lasAttributs.isExportRed()) {
-                                                                red = ((PointDataRecordFormat2) point).getRed();
-                                                            }
-                                                            if (lasAttributs.isExportGreen()) {
-                                                                green = ((PointDataRecordFormat2) point).getGreen();
-                                                            }
-                                                            if (lasAttributs.isExportBlue()) {
-                                                                blue = ((PointDataRecordFormat2) point).getBlue();
-                                                            }
-
-                                                            sceneObject.addValue("RGB color", red, false);
-                                                            sceneObject.addValue("RGB color", green, false);
-                                                            sceneObject.addValue("RGB color", blue, false);
-                                                        }
-
-                                                    }
-
-                                                    count++;
-                                                    pointsProcessed++;
-
-                                                    if (count == step) {
-                                                        updateProgress(pointsProcessed, pointNumber);
-                                                        count = 0;
-                                                    }
-                                                }
-
-                                                sceneObject.initMesh();
-                                                sceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader);
-                                                sceneObjectWrapper.setSceneObject(sceneObject);
-
-                                            } catch (Exception ex) {
-                                                java.util.logging.Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
-                                            }
-                                            return null;
-                                        }
-                                    };
-                                }
-                            };
-
-                            sceneObjectWrapper.getProgressBar().progressProperty().bind(s.progressProperty());
-                            s.start();
-                        }
-                    }
-                });
-
-                break;
-            case ".laz":
-
-                listviewTreeSceneObjects.getItems().add(sceneObjectWrapper);
-
-                //select attributs to import in the attributs importer frame
-                attributsImporterFrame.show();
-                attributsImporterFrameController.setAttributsList(lazAttributs.getAttributsNames());
-
-                //create scene object and set attributs colors
-                attributsImporterFrame.setOnHidden(new EventHandler<WindowEvent>() {
-
-                    @Override
-                    public void handle(WindowEvent event) {
-
-                        if (attributsImporterFrameController.getSelectedAttributs() != null
-                                && !attributsImporterFrameController.getSelectedAttributs().isEmpty()) {
-
-                            Service s = new Service() {
-
-                                @Override
-                                protected Task createTask() {
-                                    return new Task() {
-
-                                        @Override
-                                        protected Object call() throws Exception {
-
-                                            lazAttributs.processList(attributsImporterFrameController.getSelectedAttributs());
-
-                                            PointCloudSceneObject sceneObject = new PointCloudSceneObject();
-
-                                            LazExtraction lazExtraction = new LazExtraction();
-                                            try {
-                                                lazExtraction.openLazFile(file);
-
-                                                LasHeader header = lazExtraction.getHeader();
-
-                                                sceneObject.setGravityCenter(new Point3F((float) (header.getMinX() + (header.getMaxX() - header.getMinX()) / 2.0),
-                                                        (float) (header.getMinY() + (header.getMaxY() - header.getMinY()) / 2.0),
-                                                        (float) (header.getMinZ() + (header.getMaxZ() - header.getMinZ()) / 2.0)));
-
-                                                long pointNumber = header.getNumberOfPointrecords();
-
-                                                long step = (1 * pointNumber) / 100;
-
-                                                long count = 0;
-                                                long pointsProcessed = 0;
-
-                                                ColorGradient cg = new ColorGradient(0, 1);
-                                                cg.setGradientColor(ColorGradient.GRADIENT_RAINBOW3);
-                                                Iterator<LasPoint> lazIterator = lazExtraction.iterator();
-
-                                                count = 0;
-                                                pointsProcessed = 0;
-
-                                                /*lazExtraction = new LazExtraction();
-                                            lazExtraction.openLazFile(file);
-                                            lazIterator = lazExtraction.iterator();*/
-                                                while (lazIterator.hasNext()) {
-
-                                                    LasPoint point = lazIterator.next();
-
-                                                    point.x = (point.x * header.getxScaleFactor()) + header.getxOffset();
-                                                    point.y = (point.y * header.getyScaleFactor()) + header.getyOffset();
-                                                    point.z = (point.z * header.getzScaleFactor()) + header.getzOffset();
-
-                                                    sceneObject.addPoint((float) point.x, (float) point.y, (float) point.z);
-
-                                                    if (lazAttributs.isExportClassification()) {
-                                                        sceneObject.addValue("classification", (float) point.classification);
-                                                    }
-
-                                                    if (lazAttributs.isExportIntensity()) {
-                                                        sceneObject.addValue("intensity", (float) point.i);
-                                                    }
-
-                                                    if (lazAttributs.isExportNumberOfReturns()) {
-                                                        sceneObject.addValue("number of returns", (float) point.n);
-                                                    }
-
-                                                    if (lazAttributs.isExportReturnNumber()) {
-                                                        sceneObject.addValue("number of returns", (float) point.r);
-                                                    }
-
-                                                    if (lazAttributs.isExportTime()) {
-                                                        sceneObject.addValue("GPS time", (float) point.t);
-                                                    }
-
-                                                    count++;
-                                                    pointsProcessed++;
-
-                                                    if (count == step) {
-                                                        updateProgress(pointsProcessed, pointNumber);
-                                                        count = 0;
-                                                    }
-                                                }
-
-                                                lazExtraction.close();
-
-                                                sceneObject.initMesh();
-                                                sceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader);
-                                                sceneObjectWrapper.setSceneObject(sceneObject);
-
-                                            } catch (Exception ex) {
-                                                java.util.logging.Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
-                                            }
-                                            return null;
-                                        }
-                                    };
-                                }
-                            };
-
-                            sceneObjectWrapper.getProgressBar().progressProperty().bind(s.progressProperty());
-                            s.start();
-                        }
-                    }
-                });
-
-                break;
-            case ".asc":
-                
-                ObservableList<SceneObjectWrapper> scObjectsList = listviewTreeSceneObjects.getItems();
-                List<VoxelSpaceSceneObject> vsScObjects = new ArrayList<>();
-                
-                for(SceneObjectWrapper sc : scObjectsList){
-                    if(sc.getSceneObject() instanceof VoxelSpaceSceneObject){
-                        vsScObjects.add((VoxelSpaceSceneObject)sc.getSceneObject());
-                    }
-                }
-                
-                ascExtractor.init(file, vsScObjects);
-                ascExtractor.getStage().show();
-                
-                ascExtractor.getStage().setOnHidden(new EventHandler<WindowEvent>() {
-                    
-                @Override
-                public void handle(WindowEvent event) {
-                    
-                    if(ascExtractor.wasHidden()){
-                        
-                        File rasterFile = ascExtractor.getRasterFile();
-                        boolean transform = ascExtractor.isTransfMatrixEnabled();
-                        Matrix4d transfMatrix = ascExtractor.getRasterTransfMatrix();
-                        boolean fitDTMToVoxelSpace = ascExtractor.isFittingToVoxelSpaceEnabled();
-                        
-                        try {
-
-                            if(rasterFile != null){
-
-                                Raster dtm = AsciiGridHelper.readFromAscFile(rasterFile);
-
-                                if (transform && transfMatrix != null) {
-                                    Mat4D transfMat = MatrixUtility.convertMatrix4dToMat4D(transfMatrix);
-                                    dtm.setTransformationMatrix(transfMat);
-                                    sceneObjectWrapper.setTransfMatrix(transfMat);
-                                }
-
-                                if (fitDTMToVoxelSpace) {
-
-                                    VoxelFileReader reader = new VoxelFileReader(ascExtractor.getVoxelSpaceToFitTo().getVoxelFile());
-                                    VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
-                                    int mntFittingMargin = ascExtractor.getFittingMargin();
-                                
-                                    dtm.setLimits(new BoundingBox2F(new Point2F((float) infos.getMinCorner().x, (float) infos.getMinCorner().y),
-                                            new Point2F((float) infos.getMaxCorner().x, (float) infos.getMaxCorner().y)), mntFittingMargin);
-                                }
-
-                                dtm.buildMesh();
-
-                                GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormalesFromDTM(dtm);
-                                
-                                //SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, false);
-                                
-                                SceneObject dtmSceneObject = new RasterSceneObject(dtmMesh, false);
-                                dtmSceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.phongShader);
-                                
-                                listviewTreeSceneObjects.getItems().add(sceneObjectWrapper);
-                                
-                                Platform.runLater(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-
-                                        sceneObjectWrapper.setSceneObject(dtmSceneObject);
-                                        sceneObjectWrapper.getProgressBar().setProgress(1);
-                                    }
-                                });
-                            }
-                        } catch (Exception ex) {
-                            showErrorDialog(ex);
-                        }
-                        
-                    }
-                }
-            });
-                
-                break;
-            case ".rsp":
-
-                Rsp rsp = new Rsp();
-                rsp.read(file);
-                
-                riscanProjectExtractor.init(rsp);
-                riscanProjectExtractor.getFrame().show();
-
-                riscanProjectExtractor.getFrame().setOnHidden(new EventHandler<WindowEvent>() {
-
-                    @Override
-                    public void handle(WindowEvent event) {
-
-                        final List<LidarScan> selectedScans = riscanProjectExtractor.getController().getSelectedScans();
-
-                        final int lastListIndex = listviewTreeSceneObjects.getItems().size();
-                        for (LidarScan scan : selectedScans) {
-                            listviewTreeSceneObjects.getItems().add(new SceneObjectWrapper(scan.file, new ProgressBar()));
-                        }
-
-                        Service s = new Service() {
-
-                            @Override
-                            protected Task createTask() {
-                                return new Task() {
-
-                                    @Override
-                                    protected Object call() throws Exception {
-
-                                        final List<SceneObject> sceneObjects = new ArrayList<>(selectedScans.size());
-
-                                        for (LidarScan scan : selectedScans) {
-
-                                            PointCloudSceneObject pointCloud = new PointCloudSceneObject();
-
-                                            RxpExtraction reader = new RxpExtraction();
-                                            reader.openRxpFile(scan.file, RxpExtraction.REFLECTANCE, RxpExtraction.AMPLITUDE, RxpExtraction.DEVIATION, RxpExtraction.TIME);
-                                            final Iterator<Shot> iterator = reader.iterator();
-
-                                            Mat4D sopMatrix = MatrixUtility.convertMatrix4dToMat4D(scan.getMatrix());
-
-                                            while (iterator.hasNext()) {
-
-                                                Shot shot = iterator.next();
-
-                                                for (int i = 0; i < shot.ranges.length; i++) {
-
-                                                    double range = shot.ranges[i];
-
-                                                    float x = (float) (shot.origin.x + shot.direction.x * range);
-                                                    float y = (float) (shot.origin.y + shot.direction.y * range);
-                                                    float z = (float) (shot.origin.z + shot.direction.z * range);
-
-                                                    Vec4D transformedPoint = Mat4D.multiply(sopMatrix, new Vec4D(x, y, z, 1));
-                                                    pointCloud.addPoint((float) transformedPoint.x, (float) transformedPoint.y, (float) transformedPoint.z);
-
-                                                    float reflectance = shot.reflectances[i];
-                                                    float deviation = shot.deviations[i];
-                                                    float amplitude = shot.amplitudes[i];
-                                                    double time = shot.times[i];
-
-                                                    pointCloud.addValue("reflectance", reflectance);
-                                                    pointCloud.addValue("deviation", deviation);
-                                                    pointCloud.addValue("amplitude", amplitude);
-                                                    pointCloud.addValue("time", (float) time);
-                                                }
-
-                                            }
-
-                                            pointCloud.initMesh();
-                                            pointCloud.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader);
-                                            sceneObjects.add(pointCloud);
-                                            //updateProgress(count, selectedScans.size());
-                                        }
-
-                                        Platform.runLater(new Runnable() {
-
-                                            @Override
-                                            public void run() {
-
-                                                for (int i = 0; i < sceneObjects.size(); i++) {
-                                                    SceneObject sceneObject = sceneObjects.get(i);
-                                                    listviewTreeSceneObjects.getItems().get(lastListIndex + i).setSceneObject(sceneObject);
-                                                    listviewTreeSceneObjects.getItems().get(lastListIndex + i).getProgressBar().setProgress(1);
-                                                }
-                                            }
-                                        });
-
-                                        return null;
-                                    }
-                                };
-                            }
-                        };
-
-                        s.start();
-                    }
-                });
-
-                break;
-            case ".rxp":
-
-                attributsImporterFrame.show();
-                attributsImporterFrameController.setAttributsList("reflectance", "deviation", "amplitude");
-
-                attributsImporterFrame.setOnHidden(new EventHandler<WindowEvent>() {
-
-                    @Override
-                    public void handle(WindowEvent event) {
-
-                        if (attributsImporterFrameController.getSelectedAttributs() != null
-                                && !attributsImporterFrameController.getSelectedAttributs().isEmpty()) {
-
-                            listviewTreeSceneObjects.getItems().add(sceneObjectWrapper);
-
-                            final List<String> selectedAttributs = attributsImporterFrameController.getSelectedAttributs();
-
-                            Service s = new Service() {
-
-                                @Override
-                                protected Task createTask() {
-                                    return new Task() {
-
-                                        @Override
-                                        protected Object call() throws Exception {
-
-                                            boolean importReflectance = false, importDeviation = false, importAmplitude = false, importTime = false;
-                                            List<Integer> typeList = new ArrayList<>();
-
-                                            if (selectedAttributs.contains("reflectance")) {
-                                                importReflectance = true;
-                                                typeList.add(RxpExtraction.REFLECTANCE);
-                                            }
-                                            if (selectedAttributs.contains("deviation")) {
-                                                importDeviation = true;
-                                                typeList.add(RxpExtraction.DEVIATION);
-                                            }
-                                            if (selectedAttributs.contains("amplitude")) {
-                                                importAmplitude = true;
-                                                typeList.add(RxpExtraction.AMPLITUDE);
-                                            }
-                                            if (selectedAttributs.contains("time")) {
-                                                importTime = true;
-                                                typeList.add(RxpExtraction.TIME);
-                                            }
-
-                                            final PointCloudSceneObject pointCloud = new PointCloudSceneObject();
-
-                                            RxpExtraction reader = new RxpExtraction();
-                                            int[] typeListNative = new int[typeList.size()];
-
-                                            for (int i = 0; i < typeList.size(); i++) {
-                                                typeListNative[i] = typeList.get(i);
-                                            }
-
-                                            reader.openRxpFile(file, typeListNative);
-
-                                            final Iterator<Shot> iterator = reader.iterator();
-
-                                            Mat4D sopMatrix = Mat4D.identity();
-
-                                            while (iterator.hasNext()) {
-
-                                                Shot shot = iterator.next();
-
-                                                for (int i = 0; i < shot.ranges.length; i++) {
-
-                                                    double range = shot.ranges[i];
-
-                                                    float x = (float) (shot.origin.x + shot.direction.x * range);
-                                                    float y = (float) (shot.origin.y + shot.direction.y * range);
-                                                    float z = (float) (shot.origin.z + shot.direction.z * range);
-
-                                                    Vec4D transformedPoint = Mat4D.multiply(sopMatrix, new Vec4D(x, y, z, 1));
-                                                    pointCloud.addPoint((float) transformedPoint.x, (float) transformedPoint.y, (float) transformedPoint.z);
-
-                                                    if (importReflectance) {
-                                                        float reflectance = shot.reflectances[i];
-                                                        pointCloud.addValue("reflectance", reflectance);
-                                                    }
-
-                                                    if (importDeviation) {
-                                                        float deviation = shot.deviations[i];
-                                                        pointCloud.addValue("deviation", deviation);
-                                                    }
-
-                                                    if (importAmplitude) {
-                                                        float amplitude = shot.amplitudes[i];
-                                                        pointCloud.addValue("amplitude", amplitude);
-                                                    }
-                                                }
-
-                                            }
-
-                                            pointCloud.initMesh();
-                                            pointCloud.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader);
-
-                                            Platform.runLater(new Runnable() {
-
-                                                @Override
-                                                public void run() {
-                                                    sceneObjectWrapper.setSceneObject(pointCloud);
-                                                    sceneObjectWrapper.getProgressBar().setProgress(1);
-                                                }
-                                            });
-
-                                            return null;
-                                        }
-                                    };
-                                }
-                            };
-
-                            s.start();
-                        }
-                    }
-                });
-
-                break;
-            case ".PTG": 
-            case ".ptg":
-
-                attributsImporterFrame.show();
-                attributsImporterFrameController.setAttributsList("intensity", "RGB");
-
-                attributsImporterFrame.setOnHidden(new EventHandler<WindowEvent>() {
-
-                    @Override
-                    public void handle(WindowEvent event) {
-
-                        if (attributsImporterFrameController.getSelectedAttributs() != null
-                                && !attributsImporterFrameController.getSelectedAttributs().isEmpty()) {
-
-                            listviewTreeSceneObjects.getItems().add(sceneObjectWrapper);
-
-                            final List<String> selectedAttributs = attributsImporterFrameController.getSelectedAttributs();
-
-                            Service s = new Service() {
-
-                                @Override
-                                protected Task createTask() {
-                                    return new Task() {
-
-                                        @Override
-                                        protected Object call() throws Exception {
-
-                                            boolean importReflectance = false, importRGB = false;
-
-                                            if (selectedAttributs.contains("intensity")) {
-                                                importReflectance = true;
-                                            }
-                                            if (selectedAttributs.contains("RGB")) {
-                                                importRGB = true;
-                                            }
-
-                                            final PointCloudSceneObject pointCloud = new PointCloudSceneObject();
-                                            
-                                            PTGReader ptgReader = new PTGReader();
-                                            ptgReader.openPTGFile(file);
-                                            
-                                            if(ptgReader.isBinaryFile()){
-                                                
-                                                PTGScan ptgScan = new PTGScan();
-                                                ptgScan.openScanFile(file);
-                                                
-                                                PTGHeader ptgHeader = ptgScan.getHeader();
-                                                Mat4D transfMatrix = ptgHeader.getTransfMatrix();
-                                                
-                                                Iterator<LPoint> iterator = ptgScan.iterator();
-                                                
-                                                while(iterator.hasNext()){
-                                                    
-                                                    LPoint point = iterator.next();
-                                                    
-                                                    float x, y, z;
-                                                    if(ptgHeader.isPointInFloatFormat()){
-                                                        x = ((LFloatPoint)point).x;
-                                                        y = ((LFloatPoint)point).y;
-                                                        z = ((LFloatPoint)point).z;
-                                                    }else{
-                                                        x = (float) ((LDoublePoint)point).x;
-                                                        y = (float) ((LDoublePoint)point).y;
-                                                        z = (float) ((LDoublePoint)point).z;
-                                                    }
-                                                    
-                                                    Vec4D transformedPoint = Mat4D.multiply(transfMatrix, new Vec4D(x, y, z, 1));
-                                                    pointCloud.addPoint((float) transformedPoint.x, (float) transformedPoint.y, (float) transformedPoint.z);
-                                                    pointCloud.addValue("intensity", point.intensity);
-                                                }
-                                            }
-
-                                            pointCloud.initMesh();
-                                            pointCloud.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader);
-
-                                            Platform.runLater(new Runnable() {
-
-                                                @Override
-                                                public void run() {
-                                                    sceneObjectWrapper.setSceneObject(pointCloud);
-                                                    sceneObjectWrapper.getProgressBar().setProgress(1);
-                                                }
-                                            });
-
-                                            return null;
-                                        }
-                                    };
-                                }
-                            };
-
-                            s.start();
-                        }
-                    }
-                });
-
-                break;
-            case ".vox":
-
-                String fileHeader = FileManager.readHeader(file.getAbsolutePath());
-
-                if (fileHeader != null && fileHeader.equals("VOXEL SPACE")) {
-                    
-                    final SceneObjectWrapper voxelSpaceScObj = new SceneObjectWrapper(file, new ProgressBar());
-                    listviewTreeSceneObjects.getItems().add(voxelSpaceScObj);
-                
-                    Service s = new Service() {
-                        @Override
-                        protected Task createTask() {
-                            return new Task() {
-                                @Override
-                                protected Object call() throws Exception {
-                                    
-                                    //window size
-                                    ObservableList<Screen> screens = Screen.getScreens();
-
-                                    if (screens != null && screens.size() > 0) {
-                                        SCREEN_WIDTH = screens.get(0).getBounds().getWidth();
-                                        SCREEN_HEIGHT = screens.get(0).getBounds().getHeight();
-                                    }
-
-                                    VoxelSpaceSceneObject voxelSpace = new VoxelSpaceSceneObject(file);
-
-                                    voxelSpace.addVoxelSpaceListener(new VoxelSpaceAdapter() {
-
-                                        @Override
-                                        public void voxelSpaceCreationProgress(int progress) {
-                                            updateProgress(progress, 100);
-                                        }
-                                    });
-
-                                    voxelSpace.loadVoxels();
-
-                                    voxelSpace.changeCurrentAttribut("transmittance");
-                                    voxelSpace.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.instanceLightedShader);
-                                    voxelSpace.setDrawType(GLMesh.DrawType.TRIANGLES);
-                                    voxelSpace.setGravityCenter(new Point3F(0, 0, 0));
-                                    
-                                    
-
-                                    VoxelFileReader reader = new VoxelFileReader(file);
-                                    VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
-
-                                    
-                                    /**
-                                     * *scale**
-                                     */
-                                    
-                                    //SceneObjectWrapper scaleScObj = new SceneObjectWrapper(file, new ProgressBar());
-                                    
-                                    /*updateMessage("Generating scale");
-                                    final Texture scaleTexture = new Texture(ScaleGradient.createColorScaleBufferedImage(voxelSpace.getGradient(),
-                                            voxelSpace.getAttributValueMin(), voxelSpace.getAttributValueMax(),
-                                            viewer3D.getWidth() - 80, (int) (viewer3D.getHeight() / 20),
-                                            ScaleGradient.Orientation.HORIZONTAL, 5, 8));
-
-                                    SceneObject scalePlane = SceneObjectFactory.createTexturedPlane(new Vec3F(40, 20, 0),
-                                            (int) (viewer3D.getWidth() - 80),
-                                            (int) (viewer3D.getHeight() / 20),
-                                            scaleTexture);
-
-                                    scalePlane.setShader(scene.texturedShader);
-                                    scalePlane.setDrawType(GLMesh.DrawType.TRIANGLES);
-                                    
-                                    scaleScObj.setSceneObject(scalePlane);
-                                    listviewTreeSceneObjects.getItems().add(scaleScObj);
-
-                                    GLMesh boundingBoxMesh = GLMeshFactory.createBoundingBox((float) infos.getMinCorner().x,
-                                            (float) infos.getMinCorner().y,
-                                            (float) infos.getMinCorner().z,
-                                            (float) infos.getMaxCorner().x,
-                                            (float) infos.getMaxCorner().y,
-                                            (float) infos.getMaxCorner().z);
-
-                                    SceneObject boundingBox = new SimpleSceneObject2(boundingBoxMesh, false);
-
-                                    SimpleShader s = (SimpleShader) scene.simpleShader;
-                                    s.setColor(new Vec3F(1, 0, 0));
-                                    boundingBox.setShader(s);
-                                    boundingBox.setDrawType(GLMesh.DrawType.LINES);
-                                    scene.addSceneObject(boundingBox);*/
-
-                                    /*voxelSpace.addPropertyChangeListener("gradientUpdated", new PropertyChangeListener() {
-
-                                        @Override
-                                        public void propertyChange(PropertyChangeEvent evt) {
-
-                                            BufferedImage image = ScaleGradient.createColorScaleBufferedImage(voxelSpace.getGradient(),
-                                                    voxelSpace.getAttributValueMin(), voxelSpace.getAttributValueMax(),
-                                                    viewer3D.getWidth() - 80, (int) (viewer3D.getHeight() / 20),
-                                                    ScaleGradient.Orientation.HORIZONTAL, 5, 8);
-
-                                            scaleTexture.setBufferedImage(image);
-                                        }
-                                    });*/
-                                    
-                                    voxelSpaceScObj.setSceneObject(voxelSpace);
-                                    voxelSpaceScObj.getProgressBar().setProgress(1);
-                                    
-                                    
-                                    return null;
-                                }
-                            };
-                        }
-                    };
-                    
-                    voxelSpaceScObj.getProgressBar().progressProperty().bind(s.progressProperty());
-                    s.start();
-                }
-                break;
-
-            case ".txt":
-            default:
-
-                listviewTreeSceneObjects.getItems().add(sceneObjectWrapper);
-
-                textFileParserFrameController.setColumnAssignment(true);
-                textFileParserFrameController.setColumnAssignmentValues("Ignore", "X", "Y", "Z", "Red", "Green", "Blue", "Scalar field");
-
-                textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(0, 1);
-                textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(1, 2);
-                textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(2, 3);
-                textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(3, 4);
-
-                textFileParserFrameController.setTextFile(file);
-
-                Stage textFileParserFrame = textFileParserFrameController.getStage();
-                textFileParserFrame.show();
-
-                textFileParserFrame.setOnHidden(new EventHandler<WindowEvent>() {
-
-                    @Override
-                    public void handle(WindowEvent event) {
-
-                        String separator = textFileParserFrameController.getSeparator();
-                        List<String> columnAssignment = textFileParserFrameController.getAssignedColumnsItems();
-                        final int numberOfLines = textFileParserFrameController.getNumberOfLines();
-
-                        final int headerIndex = textFileParserFrameController.getHeaderIndex();
-                        int skipNumber = textFileParserFrameController.getSkipLinesNumber();
-
-                        int xIndex = -1, yIndex = -1, zIndex = -1;
-                        List<Integer> otherFieldsIndices = new ArrayList<>();
-
-                        for (int i = 0; i < columnAssignment.size(); i++) {
-
-                            String item = columnAssignment.get(i);
-
-                            if (item != null) {
-                                switch (item) {
-                                    case "X":
-                                        xIndex = i;
-                                        break;
-                                    case "Y":
-                                        yIndex = i;
-                                        break;
-                                    case "Z":
-                                        zIndex = i;
-                                        break;
-                                    case "Scalar field":
-                                        otherFieldsIndices.add(i);
-                                        break;
-                                }
-                            }
-                        }
-
-                        if (headerIndex != -1) {
-                            skipNumber++;
-                        }
-
-                        final int finalSkipNumber = skipNumber;
-                        final int finalXIndex = xIndex;
-                        final int finalYIndex = yIndex;
-                        final int finalZIndex = zIndex;
-
-                        Service service = new Service() {
-
-                            @Override
-                            protected Task createTask() {
-                                return new Task() {
-
-                                    @Override
-                                    protected Object call() throws Exception {
-
-                                        PointCloudSceneObject sceneObject = new PointCloudSceneObject();
-                                        sceneObject.setGravityCenter(new Point3F(0, 0, 0));
-
-                                        BufferedReader reader;
-                                        try {
-                                            reader = new BufferedReader(new FileReader(file));
-
-                                            String line;
-                                            int count = 0;
-
-                                            for (int i = 0; i < finalSkipNumber; i++) {
-                                                reader.readLine();
-                                            }
-
-                                            while ((line = reader.readLine()) != null) {
-
-                                                if (count == numberOfLines) {
-                                                    break;
-                                                }
-
-                                                String[] lineSplitted = line.split(separator);
-
-                                                float x = 0, y = 0, z = 0;
-                                                if (finalXIndex != -1) {
-                                                    x = Float.valueOf(lineSplitted[finalXIndex]);
-                                                }
-                                                if (finalYIndex != -1) {
-                                                    y = Float.valueOf(lineSplitted[finalYIndex]);
-                                                }
-                                                if (finalZIndex != -1) {
-                                                    z = Float.valueOf(lineSplitted[finalZIndex]);
-                                                }
-
-                                                sceneObject.addPoint(x, y, z);
-
-                                                int scalarFieldIndex = 0;
-
-                                                if (!otherFieldsIndices.isEmpty()) {
-                                                    for (Integer i : otherFieldsIndices) {
-                                                        sceneObject.addValue("Scalar field " + scalarFieldIndex, Float.valueOf(lineSplitted[i]));
-                                                        scalarFieldIndex++;
-                                                    }
-                                                } else {
-                                                    sceneObject.addValue("default", count);
-                                                }
-
-                                                count++;
-                                            }
-
-                                            reader.close();
-
-                                        } catch (FileNotFoundException ex) {
-                                            logger.error("Cannot load point file", ex);
-                                        } catch (IOException ex) {
-                                            logger.error("Cannot load point file", ex);
-                                        }
-
-                                        sceneObject.initMesh();
-                                        sceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader);
-
-                                        Platform.runLater(new Runnable() {
-
-                                            @Override
-                                            public void run() {
-                                                sceneObjectWrapper.setSceneObject(sceneObject);
-                                                sceneObjectWrapper.getProgressBar().setProgress(1);
-                                            }
-                                        });
-                                        return null;
-                                    }
-                                };
-                            }
-                        };
-                        
-                        service.start();
-                    }
-                });
-
-                break;
-        }
-            
-        //}
-    }    
     
     private LeafAngleDistribution getLeafAngleDistribution(){
         

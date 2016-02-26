@@ -41,7 +41,10 @@ public abstract class SceneObject{
     private UniformMat4F transfoUniform = new UniformMat4F("transformation");
     private int id;
     protected boolean colorNeedUpdate = false;
+    
     protected boolean mousePickable;
+    private boolean selected;
+    private boolean visible = true;
     
     private final EventListenerList listeners;
 
@@ -50,6 +53,7 @@ public abstract class SceneObject{
         transformation = Mat4F.identity();
         //setPosition(new Point3F());
         listeners = new EventListenerList();
+        visible = true;
     }
     
     public SceneObject(GLMesh mesh, boolean isAlphaRequired){
@@ -62,6 +66,7 @@ public abstract class SceneObject{
         transformation = Mat4F.identity();
         //setPosition(new Point3F());
         listeners = new EventListenerList();
+        visible = true;
     }
     
     public void resetIds(){
@@ -139,6 +144,11 @@ public abstract class SceneObject{
         return mesh;
     }
     
+    public void setMesh(GLMesh mesh){
+        this.mesh = mesh;
+        this.resetIds();
+    }
+    
     public void addSceneObjectListener(SceneObjectListener listener){
         listeners.add(SceneObjectListener.class, listener);
     }
@@ -147,11 +157,11 @@ public abstract class SceneObject{
         listeners.remove(SceneObjectListener.class, listener);
     }
     
-    public void fireClicked(Vec3F ray){
+    public void fireClicked(MousePicker mousePicker){
         
         for(SceneObjectListener listener : listeners.getListeners(SceneObjectListener.class)){
             
-            listener.clicked(this, ray);
+            listener.clicked(this, mousePicker);
         }
     }
     
@@ -185,6 +195,22 @@ public abstract class SceneObject{
         
         return bb;
     }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
     
     public abstract void initBuffers(GL3 gl);
     
@@ -193,8 +219,6 @@ public abstract class SceneObject{
     public abstract void initVao(GL3 gl);
     
     public abstract void draw(GL3 gl);
-
-    public abstract void load(File file);
     
     public abstract Object doPicking(MousePicker mousePicker);
 }

@@ -190,8 +190,12 @@ public class SceneObjectPropertiesPanelController implements Initializable {
                     for(SceneObjectWrapper wrapper : sceneObjectWrappers){
                         if (wrapper.getSceneObject() instanceof ScalarSceneObject) {
 
-                            ((ScalarSceneObject) wrapper.getSceneObject()).getScalarFieldsList().get(comboboxActiveScalarField.getSelectionModel().getSelectedItem()).setGradientColor(newValue.color);
-                            ((ScalarSceneObject) wrapper.getSceneObject()).updateColor();
+                            ScalarField scalarField = ((ScalarSceneObject) wrapper.getSceneObject()).getScalarFieldsList().get(comboboxActiveScalarField.getSelectionModel().getSelectedItem());
+                            
+                            if(scalarField != null){
+                                scalarField.setGradientColor(newValue.color);
+                                ((ScalarSceneObject) wrapper.getSceneObject()).updateColor();
+                            }
 
                         } else if (wrapper.getSceneObject() instanceof SceneObject) {
 

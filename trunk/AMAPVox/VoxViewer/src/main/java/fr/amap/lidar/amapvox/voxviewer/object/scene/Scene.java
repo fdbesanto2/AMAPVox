@@ -229,7 +229,7 @@ public class Scene {
             
         for(SceneObject sceneObject : objectsList){
             
-            if(sceneObject.getShaderId() != -1){
+            if(sceneObject.getShaderId() != -1 && sceneObject.getMesh() != null){
                 
                 if(sceneObject.getMesh().getVboId() == -1){
                     sceneObject.initBuffers(gl);
@@ -271,9 +271,32 @@ public class Scene {
     public void addSceneObject(SceneObject sceneObject){
         
         objectsList.add(sceneObject);
+        sceneObject.setId(objectsList.size());
+        
         if(sceneObject.texture != null){
             addTexture(sceneObject.texture);
         }
+    }
+    
+    public SceneObject getSceneObject(SceneObject sceneObject){
+        
+        int i=0;
+        
+        for(SceneObject object : objectsList){
+            
+            if(object.equals(sceneObject)){
+                return objectsList.get(i);
+            }
+            
+            i++;
+        }
+        
+        return null;
+    }
+    
+    public void removeSceneObject(SceneObject sceneObject){
+        
+        objectsList.remove(sceneObject);
     }
     
     public SceneObject getFirstSceneObject(){
@@ -309,19 +332,19 @@ public class Scene {
             //test for intersection (simple method, need to use an octree later)
             for(SceneObject object : objectsList){
                 
-                
-                //System.out.println(mousePicker.getCurrentRay().x+" "+mousePicker.getCurrentRay().y+" "+mousePicker.getCurrentRay().z);
-                
-                Point3F startPoint = mousePicker.getPointOnray(1);
-                Point3F endPoint = mousePicker.getPointOnray(1000);
-                
-                Point3D intersection = Intersection.getIntersectionLineBoundingBox(new Point3D(startPoint.x, startPoint.y, startPoint.z),
-                        new Point3D(endPoint.x, endPoint.y, endPoint.z),
-                        object.getBoundingBox());
-                
-                if(intersection != null){
-                    object.fireClicked(mousePicker.getCurrentRay());
+                if(object.isMousePickable()){
+                    Point3F startPoint = mousePicker.getPointOnray(1);
+                    Point3F endPoint = mousePicker.getPointOnray(1000);
+
+                    Point3D intersection = Intersection.getIntersectionLineBoundingBox(new Point3D(startPoint.x, startPoint.y, startPoint.z),
+                            new Point3D(endPoint.x, endPoint.y, endPoint.z),
+                            object.getBoundingBox());
+
+                    if(intersection != null){
+                        object.fireClicked(mousePicker);
+                    }
                 }
+                
             }
             
             mousePickerIsDirty = false;
@@ -370,29 +393,35 @@ public class Scene {
             
         for(SceneObject object : objectsList){
             
-            if(!object.depthTest){
-                gl.glClear(GL3.GL_DEPTH_BUFFER_BIT);
+            if(object.isVisible()){
+                if(!object.depthTest){
+                    gl.glClear(GL3.GL_DEPTH_BUFFER_BIT);
+                }
+
+                gl.glUseProgram(object.getShaderId());
+                    object.draw(gl);
+                gl.glUseProgram(0);
             }
-
-            gl.glUseProgram(object.getShaderId());
-                object.draw(gl);
-            gl.glUseProgram(0);
-
         } 
         
         for(SceneObject object : hudList){
-            if(object.vaoId == -1){
-                object.initBuffers(gl);
-                object.initVao(gl);
-            }
+            
+            if(object.isVisible()){
+                
+                if(object.vaoId == -1){
+                    object.initBuffers(gl);
+                    object.initVao(gl);
+                }
 
-            if(!object.depthTest){
-                gl.glClear(GL3.GL_DEPTH_BUFFER_BIT);
-            }
+                if(!object.depthTest){
+                    gl.glClear(GL3.GL_DEPTH_BUFFER_BIT);
+                }
 
-            gl.glUseProgram(object.getShaderId());
-                object.draw(gl);
-            gl.glUseProgram(0);
+                gl.glUseProgram(object.getShaderId());
+                    object.draw(gl);
+                gl.glUseProgram(0);
+            }
+            
         }
     }
 

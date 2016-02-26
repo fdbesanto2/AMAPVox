@@ -30,8 +30,8 @@ public class Node {
         
     private boolean leaf;
     private Node[] childs;
-    private int[] points;
-    private int pointNumber;
+    private int[] elements;
+    private int elementNumber;
     private Point3D minPoint;
     private Point3D maxPoint;
     
@@ -99,33 +99,33 @@ public class Node {
         return leaf;
     }
     
-    public void insertPoint(Octree octree, int indice) throws Exception{
+    public void insertElement(Octree octree, int indice) throws Exception{
         
         //la condition est vraie quand aucun point n'a déjà été ajouté au noeud
-        if(childs == null && points == null){
+        if(childs == null && elements == null){
             
-            points = new int[octree.getMaximumPoints()];
-            pointNumber = 0;
+            elements = new int[octree.getMaximumPoints()];
+            elementNumber = 0;
         }
         
         
-        if(childs == null && points !=null){
+        if(childs == null && elements !=null){
             
-            if(pointNumber < points.length){ 
+            if(elementNumber < elements.length){ 
             
-                points[pointNumber] = indice;
-                pointNumber++;
+                elements[elementNumber] = indice;
+                elementNumber++;
             }else{ //la condition est vraie quand le nombre maximum de points dans le noeud a été atteint
                 
                 // on crée les enfants
                 subdivide();
                 
                 //on replace tous les points du noeud dans ses enfants
-                for(int i = 0 ; i< pointNumber;i++){
-                    insertPoint(octree, points[i]);
+                for(int i = 0 ; i< elementNumber;i++){
+                    insertElement(octree, elements[i]);
                 }
                 
-                points = null;
+                elements = null;
             }
             
             
@@ -143,7 +143,7 @@ public class Node {
 
             if(isInsideRange(childContainingPointID, 0, 7)){
                 //on ajoute le point à l'enfant
-                childs[childContainingPointID].insertPoint(octree, indice);
+                childs[childContainingPointID].insertElement(octree, indice);
             }else{
                 throw new Exception("Cannot insert point!");
                 
@@ -187,10 +187,10 @@ public class Node {
         return childs != null;
     }
 
-    public int[] getPoints() {
+    public int[] getElements() {
         
-        if(points != null){
-            return Arrays.copyOf(points, pointNumber);
+        if(elements != null){
+            return Arrays.copyOf(elements, elementNumber);
         }
         return null;
     }
@@ -228,36 +228,6 @@ public class Node {
         }
         
         return result;
-    }
-    
-    public double getTopCornerDistance(Point3D point){
-        
-        return point.distanceTo(new Point3D(point.x, point.y, maxPoint.z));
-    }
-    
-    public double getBottomCornerDistance(Point3D point){
-        
-        return point.distanceTo(new Point3D(point.x, point.y, minPoint.z));
-    }
-    
-    public double getLeftCornerDistance(Point3D point){
-        
-        return point.distanceTo(new Point3D(minPoint.x, point.y, point.z));
-    }
-    
-    public double getRightCornerDistance(Point3D point){
-        
-        return point.distanceTo(new Point3D(maxPoint.x, point.y, point.z));
-    }
-    
-    public double getFrontCornerDistance(Point3D point){
-        
-        return point.distanceTo(new Point3D(point.x, minPoint.y, point.z));
-    }
-    
-    public double getBackCornerDistance(Point3D point){
-        
-        return point.distanceTo(new Point3D(point.x, maxPoint.y, point.z));
     }
     
     public Node getChild(short indice){

@@ -4,12 +4,20 @@ import com.sun.management.OperatingSystemMXBean;
 import fr.amap.commons.javafx.chart.ChartViewer;
 import fr.amap.lidar.amapvox.chart.VoxelsToChart;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.net.URLDecoder;
 import java.security.CodeSource;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
+import java.util.ResourceBundle;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.collections.ObservableList;
@@ -31,8 +39,12 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainFrame.fxml"));
+        ResourceBundle rb = ResourceBundle.getBundle("bundle_help", Locale.ENGLISH, new URLClassLoader(new URL[]{getClass().getResource("/strings/")}));
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainFrame.fxml"), rb);
+        
         Parent root = loader.load();
+        
         MainFrameController controller = loader.getController();
                 
         Parameters parameters = getParameters();

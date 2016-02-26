@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,6 +107,282 @@ public class ObjHelper {
             }
             
             return faceItem;
+        }
+    }
+    
+    public static Obj readObj(Reader objReader) throws FileNotFoundException, IOException{
+        
+        try (BufferedReader reader = new BufferedReader(objReader)) {
+            
+            List<Point3F> vertices = new ArrayList<>();
+            List<Point3F> normals = new ArrayList<>();
+            List<Point2F> texCoordinates = new ArrayList<>();
+            
+            List<Point3I> faces = new ArrayList<>();
+            Point3F[] normalsArray = new Point3F[0];
+            Point2F[] texCoordArray = new Point2F[0];
+            
+            List<Integer> materialOffsets = new ArrayList<>();
+            
+            Obj obj = new Obj();
+
+            String line;
+
+            int faceIndex = 0;
+            
+            boolean hasFaceLine = false, hasNormalLine = false, hasVertexLine = false, hasVertexTexCoordLine = false, hasUseMtlLine = false;
+            
+            while ((line = reader.readLine()) != null) {
+
+                if (line.startsWith("v ")) {
+
+                    if(!hasVertexLine){
+                        hasVertexLine = true;
+                    }
+                    
+                    String[] vertex = line.split(" ");
+                    vertices.add(new Point3F(Float.valueOf(vertex[1]), Float.valueOf(vertex[2]), Float.valueOf(vertex[3])));
+
+                } else if (line.startsWith("vn ")) {
+
+                    if(!hasNormalLine){
+                        hasNormalLine = true;
+                    }
+                    
+                    String[] normale = line.split(" ");
+                    normals.add(new Point3F(Float.valueOf(normale[1]), Float.valueOf(normale[2]), Float.valueOf(normale[3])));
+
+                }else if (line.startsWith("vt ")) {
+
+                    if(!hasVertexTexCoordLine){
+                        hasVertexTexCoordLine = true;
+                    }
+                    
+                    String[] coordinates = line.split(" ");
+                    texCoordinates.add(new Point2F(Float.valueOf(coordinates[1]), Float.valueOf(coordinates[2])));
+
+                }else if (line.startsWith("f ")) {
+
+                    if (!hasFaceLine) {
+                        
+                        if(hasNormalLine){
+                            normalsArray = new Point3F[vertices.size()];
+                        }
+                        if(hasVertexTexCoordLine){
+                            texCoordArray = new Point2F[vertices.size()];
+                        }
+                        hasFaceLine = true;
+                    }
+                    
+                    Face face = Face.parseFromLine(line);
+                    
+                    if(face != null){
+                        
+                        faces.add(new Point3I(face.verticesIndices.x, face.verticesIndices.y, face.verticesIndices.z));
+                        
+                        if(face.hasNormalsIndices && hasNormalLine){
+                            normalsArray[face.verticesIndices.x] = normals.get(face.normalsIndices.x);
+                            normalsArray[face.verticesIndices.y] = normals.get(face.normalsIndices.y);
+                            normalsArray[face.verticesIndices.z] = normals.get(face.normalsIndices.z);
+                        }
+                        
+                        if(face.hasTexCoordIndices && hasVertexTexCoordLine){
+                            texCoordArray[face.verticesIndices.x] = texCoordinates.get(face.texCoordIndices.x);
+                            texCoordArray[face.verticesIndices.y] = texCoordinates.get(face.texCoordIndices.y);
+                            texCoordArray[face.verticesIndices.z] = texCoordinates.get(face.texCoordIndices.z);
+                        }
+                        
+                    }else{
+                        //ignore face
+                    }
+                    
+                    faceIndex++;
+
+                } else if (line.startsWith("usemtl ")) {
+                    
+                    if (!hasUseMtlLine) {
+                        hasUseMtlLine = true;
+                    }
+                    
+                    materialOffsets.add(faceIndex);
+                }
+            }
+            
+            //convert vertices list to array
+            Point3F[] verticesArray = new Point3F[vertices.size()];
+            vertices.toArray(verticesArray);
+            obj.setPoints(verticesArray);
+            
+            //convert faces list to faces array
+            Point3I[] facesArray = new Point3I[faces.size()];
+            faces.toArray(facesArray);
+            obj.setFaces(facesArray);
+            
+            //convert material offsets list to array
+            int[] materialOffsetsArray = new int[materialOffsets.size()];
+            for(int i=0;i<materialOffsets.size();i++){
+                materialOffsetsArray[i] = materialOffsets.get(i);
+            }
+            obj.setMaterialOffsets(materialOffsetsArray);
+            
+            
+            for(int i=0;i<normalsArray.length;i++){
+                if(normalsArray[i] == null){
+                    normalsArray[i] = new Point3F();
+                }
+            }
+            obj.setNormals(normalsArray);
+            
+            
+            obj.setTexCoords(texCoordArray);
+            
+            obj.setHasNormalsIndices(hasNormalLine);
+            obj.setHasTexCoordIndices(hasVertexTexCoordLine);
+            
+            return obj;
+
+        } catch (FileNotFoundException ex) {
+            throw ex;
+        } catch (IOException ex) {
+            throw ex;
+        }
+    }
+    
+    public static Obj readObj(InputStreamReader objStream) throws FileNotFoundException, IOException{
+        
+        try (BufferedReader reader = new BufferedReader(objStream)) {
+            
+            List<Point3F> vertices = new ArrayList<>();
+            List<Point3F> normals = new ArrayList<>();
+            List<Point2F> texCoordinates = new ArrayList<>();
+            
+            List<Point3I> faces = new ArrayList<>();
+            Point3F[] normalsArray = new Point3F[0];
+            Point2F[] texCoordArray = new Point2F[0];
+            
+            List<Integer> materialOffsets = new ArrayList<>();
+            
+            Obj obj = new Obj();
+
+            String line;
+
+            int faceIndex = 0;
+            
+            boolean hasFaceLine = false, hasNormalLine = false, hasVertexLine = false, hasVertexTexCoordLine = false, hasUseMtlLine = false;
+            
+            while ((line = reader.readLine()) != null) {
+
+                if (line.startsWith("v ")) {
+
+                    if(!hasVertexLine){
+                        hasVertexLine = true;
+                    }
+                    
+                    String[] vertex = line.split(" ");
+                    vertices.add(new Point3F(Float.valueOf(vertex[1]), Float.valueOf(vertex[2]), Float.valueOf(vertex[3])));
+
+                } else if (line.startsWith("vn ")) {
+
+                    if(!hasNormalLine){
+                        hasNormalLine = true;
+                    }
+                    
+                    String[] normale = line.split(" ");
+                    normals.add(new Point3F(Float.valueOf(normale[1]), Float.valueOf(normale[2]), Float.valueOf(normale[3])));
+
+                }else if (line.startsWith("vt ")) {
+
+                    if(!hasVertexTexCoordLine){
+                        hasVertexTexCoordLine = true;
+                    }
+                    
+                    String[] coordinates = line.split(" ");
+                    texCoordinates.add(new Point2F(Float.valueOf(coordinates[1]), Float.valueOf(coordinates[2])));
+
+                }else if (line.startsWith("f ")) {
+
+                    if (!hasFaceLine) {
+                        
+                        if(hasNormalLine){
+                            normalsArray = new Point3F[vertices.size()];
+                        }
+                        if(hasVertexTexCoordLine){
+                            texCoordArray = new Point2F[vertices.size()];
+                        }
+                        hasFaceLine = true;
+                    }
+                    
+                    Face face = Face.parseFromLine(line);
+                    
+                    if(face != null){
+                        
+                        faces.add(new Point3I(face.verticesIndices.x, face.verticesIndices.y, face.verticesIndices.z));
+                        
+                        if(face.hasNormalsIndices && hasNormalLine){
+                            normalsArray[face.verticesIndices.x] = normals.get(face.normalsIndices.x);
+                            normalsArray[face.verticesIndices.y] = normals.get(face.normalsIndices.y);
+                            normalsArray[face.verticesIndices.z] = normals.get(face.normalsIndices.z);
+                        }
+                        
+                        if(face.hasTexCoordIndices && hasVertexTexCoordLine){
+                            texCoordArray[face.verticesIndices.x] = texCoordinates.get(face.texCoordIndices.x);
+                            texCoordArray[face.verticesIndices.y] = texCoordinates.get(face.texCoordIndices.y);
+                            texCoordArray[face.verticesIndices.z] = texCoordinates.get(face.texCoordIndices.z);
+                        }
+                        
+                    }else{
+                        //ignore face
+                    }
+                    
+                    faceIndex++;
+
+                } else if (line.startsWith("usemtl ")) {
+                    
+                    if (!hasUseMtlLine) {
+                        hasUseMtlLine = true;
+                    }
+                    
+                    materialOffsets.add(faceIndex);
+                }
+            }
+            
+            //convert vertices list to array
+            Point3F[] verticesArray = new Point3F[vertices.size()];
+            vertices.toArray(verticesArray);
+            obj.setPoints(verticesArray);
+            
+            //convert faces list to faces array
+            Point3I[] facesArray = new Point3I[faces.size()];
+            faces.toArray(facesArray);
+            obj.setFaces(facesArray);
+            
+            //convert material offsets list to array
+            int[] materialOffsetsArray = new int[materialOffsets.size()];
+            for(int i=0;i<materialOffsets.size();i++){
+                materialOffsetsArray[i] = materialOffsets.get(i);
+            }
+            obj.setMaterialOffsets(materialOffsetsArray);
+            
+            
+            for(int i=0;i<normalsArray.length;i++){
+                if(normalsArray[i] == null){
+                    normalsArray[i] = new Point3F();
+                }
+            }
+            obj.setNormals(normalsArray);
+            
+            
+            obj.setTexCoords(texCoordArray);
+            
+            obj.setHasNormalsIndices(hasNormalLine);
+            obj.setHasTexCoordIndices(hasVertexTexCoordLine);
+            
+            return obj;
+
+        } catch (FileNotFoundException ex) {
+            throw ex;
+        } catch (IOException ex) {
+            throw ex;
         }
     }
     

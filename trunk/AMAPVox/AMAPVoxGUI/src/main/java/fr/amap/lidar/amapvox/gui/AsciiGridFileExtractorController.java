@@ -62,6 +62,8 @@ public class AsciiGridFileExtractorController implements Initializable {
     private CheckBox checkboxUseTransformationMatrix;
     @FXML
     private Button buttonSetTransformationMatrix;
+    @FXML
+    private CheckBox checkboxBuildOctree;
 
     /**
      * Initializes the controller class.
@@ -194,6 +196,10 @@ public class AsciiGridFileExtractorController implements Initializable {
     
     public int getFittingMargin(){
         return Integer.valueOf(textfieldRasterFittingMargin.getText());
-    } 
+    }
+    
+    public boolean isOctreeWanted(){
+        return checkboxBuildOctree.isSelected();
+    }
     
 }
