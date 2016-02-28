@@ -6,7 +6,7 @@ for /f "skip=1" %%p in ('wmic os get freephysicalmemory') do (
 )
 :done
 echo available memory: %availableMemory%
-set /A maxJVMMemory=availableMemory-2097152
+set /A maxJVMMemory=availableMemory-524288
 
 if %maxJVMMemory% LEQ 0 (GOTO :defaultMemory) else (GOTO :common)
 

@@ -84,6 +84,8 @@ public class PtxImportTask extends SceneObjectImportTask{
     @Override
     protected SceneObject call() throws Exception {
         
+        updateProgress(0, 100);
+        
         boolean importReflectance = false, importRGB = false;
 
         if (selectedAttributs.contains("intensity")) {
@@ -135,8 +137,12 @@ public class PtxImportTask extends SceneObjectImportTask{
             }
         }
         
+        updateProgress(99, 100);
+        
         pointCloud.initMesh();
         pointCloud.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader);
+        
+        updateProgress(100, 100);
 
         return pointCloud;
     }

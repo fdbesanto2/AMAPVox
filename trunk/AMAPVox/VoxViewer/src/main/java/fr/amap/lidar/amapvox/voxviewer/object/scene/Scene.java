@@ -308,6 +308,10 @@ public class Scene {
         return null;
     }
     
+    public CopyOnWriteArrayList<SceneObject> getSceneObjects(){
+        return objectsList;
+    }
+    
     public void updateMousePicker(float mouseX, float mouseY, int startX, int startY, float viewportWidth, float viewportHeight){
         mousePicker.update(mouseX, mouseY, startX, startY, viewportWidth, viewportHeight);
         mousePickerIsDirty = true;
