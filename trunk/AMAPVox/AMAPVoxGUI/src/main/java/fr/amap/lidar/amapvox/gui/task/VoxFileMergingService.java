@@ -29,7 +29,7 @@ public class VoxFileMergingService extends Service<Void>{
             @Override
             protected Object call() throws Exception {
                 
-                ProcessTool processTool = new ProcessTool();
+                processTool = new ProcessTool();
                 processTool.mergeVoxelFiles(cfg);
                 
                 return null;

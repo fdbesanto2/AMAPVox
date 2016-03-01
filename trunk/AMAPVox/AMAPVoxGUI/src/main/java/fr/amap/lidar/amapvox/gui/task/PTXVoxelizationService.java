@@ -10,6 +10,7 @@ import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.util.CallableTaskAdapter;
 import fr.amap.commons.util.LidarScan;
 import fr.amap.commons.util.MatrixUtility;
+import fr.amap.commons.util.ProcessingAdapter;
 import fr.amap.commons.util.TimeCounter;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
@@ -143,6 +144,15 @@ public class PTXVoxelizationService extends Service<List<File>>{
                         VoxMergingCfg mergingCfg = new VoxMergingCfg(cfg.getVoxelParameters().getMergedFile(), cfg.getVoxelParameters(), files);
 
                         tool = new ProcessTool();
+                        
+                        tool.addProcessingListener(new ProcessingAdapter() {
+                            @Override
+                            public void processingStepProgress(String progressMsg, long progress, long max) {
+                                updateMessage(progressMsg);
+                                updateProgress(progress, max);
+                            }
+                        });
+                        
                         tool.mergeVoxelFiles(mergingCfg);
 
                         files.add(cfg.getVoxelParameters().getMergedFile());

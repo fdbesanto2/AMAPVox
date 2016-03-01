@@ -27,6 +27,7 @@ public class ButterflyRemover {
     
     /**
      * Clean a voxel space of isolated voxels (butterflies, artifacts...) from a voxel file.
+     * @param outputFile
      * @see #clean(fr.amap.lidar.amapvox.commons.Voxel[][][]) 
      * @param voxelFile
      * @throws Exception 

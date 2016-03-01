@@ -5,6 +5,8 @@
  */
 package fr.amap.lidar.amapvox.gui.task;
 
+import fr.amap.commons.util.ProcessingAdapter;
+import fr.amap.commons.util.ProcessingListener;
 import fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceCfg;
 import fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceSim;
 import javafx.concurrent.Service;
@@ -30,7 +32,17 @@ public class TransmittanceSimService extends Service<TransmittanceSim>{
             @Override
             protected TransmittanceSim call() throws Exception {
                 
-                TransmittanceSim transSim = new TransmittanceSim();
+                transSim = new TransmittanceSim();
+                
+                updateMessage("Compute transmittance...");
+                
+                transSim.addProcessingListener(new ProcessingAdapter() {
+                    @Override
+                    public void processingStepProgress(String progressMsg, long progress, long max) {
+                        updateProgress(progress, max);
+                    }
+                });
+                
                 transSim.simulationProcess(cfg);
                 
                 return transSim;

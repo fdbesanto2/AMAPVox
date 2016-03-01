@@ -79,7 +79,9 @@ public class PTXVoxelisation extends TLSVoxelisation{
             
             logger.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());
             
-            RasterParams rasterParameters = parameters.getRasterParams();
+            super.postProcess();
+            
+            /*RasterParams rasterParameters = parameters.getRasterParams();
             
             boolean write = false;
 
@@ -114,15 +116,16 @@ public class PTXVoxelisation extends TLSVoxelisation{
             //VoxelAnalysisData resultData = voxelAnalysis.getResultData();
             
             //permet de signaler au garbage collector que cet élément peut être supprimé
-            voxelAnalysis = null;
+            voxelAnalysis = null;*/
             
             //return resultData;
         
         }catch(OutOfMemoryError ex){
             logger.error("Unsufficient memory, you need to allocate more to the JVM, change the Xmx value!",ex);
+            throw ex;
         }catch(Exception ex){
-            logger.error("Unknow exception in RXPVoxelisation.class in thread : "+Thread.currentThread().getName()+", retrying",ex);
-            this.call();
+            logger.error("Unknow exception in thread : "+Thread.currentThread().getName()+", retrying",ex);
+            throw ex;
         }
         
         return null;

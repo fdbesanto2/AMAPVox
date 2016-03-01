@@ -10,8 +10,8 @@ import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.light.SolarRadiation;
 import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.light.Turtle;
 import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.util.Colouring;
 import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.util.Time;
-import fr.amap.commons.util.Cancellable;
 import fr.amap.lidar.amapvox.simulation.transmittance.util.Period;
+import fr.amap.commons.util.Process;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -31,12 +31,13 @@ import java.io.FileReader;
 import java.util.Calendar;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
+import fr.amap.commons.util.Cancellable;
 
 /**
  * @author dauzat
  *
  */
-public class TransmittanceSim implements Cancellable{
+public class TransmittanceSim extends Process implements Cancellable{
 
     private final static Logger logger = Logger.getLogger(TransmittanceSim.class);
     
@@ -84,6 +85,10 @@ public class TransmittanceSim implements Cancellable{
         init(parameters);
         process();
 
+        if(cancelled){
+            return;
+        }
+        
         if(parameters.isGenerateTextFile()){
             writeTransmittance();
         }
@@ -147,10 +152,11 @@ public class TransmittanceSim implements Cancellable{
         IncidentRadiation ir = solRad.get(0);
         
         System.out.println("\n\n\n");
-        
-        
+        int count = 0;
         
         for (Point3d position : positions) {
+            
+            fireProgress("Compute transmittance", positionID, positions.size());
             
             for (int t = 0; t < turtle.getNbDirections(); t++) {
                 
@@ -182,9 +188,11 @@ public class TransmittanceSim implements Cancellable{
             }
 
             positionID++;
+            count++;
 
-            if (positionID % 1000 == 0) {
+            if (count == 1000) {
                 logger.info(positionID + "/" + positions.size());
+                count = 0;
             }
         }
         
@@ -192,8 +200,13 @@ public class TransmittanceSim implements Cancellable{
     
     public void writeBitmaps() throws IOException{
         
-        float zoom = (1*direcTransmittance.getInfos().getResolution());
-                
+        int zoom = 1;
+        float resolution = direcTransmittance.getInfos().getResolution();
+        //float zoom = (1*direcTransmittance.getInfos().getResolution());
+        
+        int nbXPixels = (int) (voxSpace.getSplitting().x * resolution);
+        int nbYPixels = (int) (voxSpace.getSplitting().y * resolution);
+        
         parameters.getBitmapFile().mkdirs();
         
         for(int k=0;k<nbPeriods;k++){
@@ -204,55 +217,31 @@ public class TransmittanceSim implements Cancellable{
             periodString = periodString.replaceAll("/", "-");
             periodString = periodString.replaceAll(":", "");
             
-            File outputFile = new File(parameters.getBitmapFile()+File.separator+"period_"+periodString+".bmp");
+            File outputFile = new File(parameters.getBitmapFile()+File.separator+periodString+"_"+period.getClearnessCoefficient()+".bmp");
             outputBitmapFiles.add(outputFile);
             
             logger.info("Writing file "+outputFile);
             
-            BufferedImage bimg = new BufferedImage((int)(voxSpace.getSplitting().x * zoom), (int)(voxSpace.getSplitting().y * zoom), BufferedImage.TYPE_INT_RGB);
+            BufferedImage bimg = new BufferedImage(nbXPixels, nbYPixels, BufferedImage.TYPE_INT_RGB);
             Graphics2D g = bimg.createGraphics();
 
             // background
             g.setColor(new Color(80, 30, 0));
-            g.fillRect(0, 0, (int)(voxSpace.getSplitting().x * zoom), (int)(voxSpace.getSplitting().y * zoom));
+            g.fillRect(0, 0, nbXPixels, nbYPixels);
             
             for(int p = 0;p<positions.size();p++){
                 
-                int i = (int) ((positions.get(p).x - voxSpace.getBoundingBox().min.x) / voxSpace.getVoxelSize().x);
-                int j = (int) ((positions.get(p).y - voxSpace.getBoundingBox().min.y) / voxSpace.getVoxelSize().y);
+                int i = (int) ((positions.get(p).x - voxSpace.getBoundingBox().min.x) /*/ voxSpace.getVoxelSize().x*/);
+                int j = (int) ((positions.get(p).y - voxSpace.getBoundingBox().min.y)/* / voxSpace.getVoxelSize().y*/);
             
                 float col = (float) (transmissionPeriod[p][k]/* / 0.1*/);
                 col = Math.min(col, 1);
                 Color c = Colouring.rainbow(col);
                 g.setColor(c);
-                int jj = voxSpace.getSplitting().y - j - 1;
-                g.fillRect((int)(i * zoom), (int)(jj * zoom), 1, 1);
+                int jj = nbYPixels - j - 1;
+                g.fillRect((int)(i * zoom), (int)(jj * zoom), zoom, zoom);
             }
-            /*
-            for(Point3d position : positions){
-                                
-                int i = (int) ((position.x - vsMin.x) / voxSpace.getVoxelSize().x);
-                int j = (int) ((position.y - vsMin.y) / voxSpace.getVoxelSize().y);
-                
-                float col = (float) (transmissionPeriod[i][j][k] / 0.1);
-                col = Math.min(col, 1);
-                Color c = Colouring.rainbow(col);
-                g.setColor(c);
-                int jj = splitting.y - j - 1;
-                g.fillRect(i * zoom, jj * zoom, zoom, zoom);
-            }*/
-/*
-            for (int i = 0; i < splitting.x; i++) {
-                for (int j = 0; j < splitting.y; j++) {
-
-                    float col = (float) (transmissionPeriod[i][j][k] / 0.1);
-                    col = Math.min(col, 1);
-                    g.setColor(Colouring.rainbow(col));
-                    int jj = splitting.y - j - 1;
-                    g.fillRect(i * zoom, jj * zoom, zoom, zoom);
-                }
-            }
-*/
+            
             try {
                 ImageIO.write(bimg, "bmp", outputFile);
                 logger.info("File "+outputFile+" written");
@@ -435,40 +424,6 @@ public class TransmittanceSim implements Cancellable{
         }
     
         logger.info("File "+parameters.getTextFile().getAbsolutePath()+" written");
-    }
-
-    public void imageMNT() {
-
-        int zoom = (int) (1*direcTransmittance.getInfos().getResolution());
-
-        BufferedImage bimg = new BufferedImage(voxSpace.getSplitting().x * zoom, voxSpace.getSplitting().y * zoom, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = bimg.createGraphics();
-
-        mntZmin = mnt[0][0];
-        mntZmax = mnt[0][0];
-        for (int i = 0; i < voxSpace.getSplitting().x; i++) {
-            for (int j = 0; j < voxSpace.getSplitting().y; j++) {
-                mntZmin = Math.min(mntZmin, mnt[i][j]);
-                mntZmax = Math.max(mntZmax, mnt[i][j]);
-            }
-        }
-
-        logger.info("MNTmin:\t" + mntZmin + "\t(VSmin= " + voxSpace.getBoundingBox().min.z + ")");
-        logger.info("MNTmax:\t" + mntZmax + "\t(VSmax= " + voxSpace.getBoundingBox().max.z + ")");
-
-        // background
-        g.setColor(new Color(80, 30, 0));
-        g.fillRect(0, 0, voxSpace.getSplitting().x * zoom, voxSpace.getSplitting().y * zoom);
-
-        for (int i = 0; i < voxSpace.getSplitting().x; i++) {
-            for (int j = 0; j < voxSpace.getSplitting().y; j++) {
-                float col = ((mnt[i][j] - mntZmin) / (mntZmax - mntZmin));
-                col = Math.min(col, 1);
-                g.setColor(Colouring.rainbow(col));
-                int jj = voxSpace.getSplitting().y - j - 1;
-                g.fillRect(i * zoom, jj * zoom, zoom, zoom);
-            }
-        }
     }
 
     public List<File> getOutputBitmapFiles() {

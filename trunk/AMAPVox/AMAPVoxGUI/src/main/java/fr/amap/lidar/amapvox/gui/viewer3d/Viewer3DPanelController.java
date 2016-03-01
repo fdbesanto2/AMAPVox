@@ -9,17 +9,12 @@ package fr.amap.lidar.amapvox.gui.viewer3d;
 import com.jogamp.newt.Window;
 import com.jogamp.newt.event.KeyAdapter;
 import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.MouseAdapter;
-import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.WindowAdapter;
-import com.jogamp.opengl.GLAutoDrawable;
-import com.jogamp.opengl.GLEventListener;
 import fr.amap.amapvox.io.tls.rsp.Rsp;
 import fr.amap.amapvox.jleica.ptg.PTGReader;
 import fr.amap.commons.math.geometry.BoundingBox2F;
 import fr.amap.commons.math.geometry.BoundingBox3D;
 import fr.amap.commons.math.matrix.Mat4D;
-import fr.amap.commons.math.matrix.Mat4F;
 import fr.amap.commons.math.point.Point2F;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec3F;
@@ -50,10 +45,8 @@ import fr.amap.lidar.amapvox.voxviewer.loading.texture.StringToImage;
 import fr.amap.lidar.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMeshFactory;
-import fr.amap.lidar.amapvox.voxviewer.object.camera.CameraAdapter;
 import fr.amap.lidar.amapvox.voxviewer.object.camera.TrackballCamera;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.MousePicker;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.RasterSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObjectFactory;
@@ -72,7 +65,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -219,6 +211,7 @@ public class Viewer3DPanelController implements Initializable {
         treeViewSceneObjects.setCellFactory(new Callback<TreeView<SceneObjectWrapper>, TreeCell<SceneObjectWrapper>>() {
             @Override
             public TreeCell<SceneObjectWrapper> call(TreeView<SceneObjectWrapper> param) {
+                
                 return new SceneObjectTreeCell();
             }
         });

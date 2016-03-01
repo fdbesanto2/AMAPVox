@@ -75,6 +75,7 @@ import fr.amap.lidar.amapvox.voxelisation.configuration.params.DTMFilteringParam
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
 import fr.amap.commons.util.vegetation.LADParams;
 import fr.amap.lidar.amapvox.gui.task.ALSVoxelizationService;
+import fr.amap.lidar.amapvox.gui.task.ButterflyRemoverService;
 import fr.amap.lidar.amapvox.gui.task.HemiPhotoSimService;
 import fr.amap.lidar.amapvox.gui.task.Lai2xxxSimService;
 import fr.amap.lidar.amapvox.gui.task.PTGVoxelizationService;
@@ -87,6 +88,7 @@ import fr.amap.lidar.amapvox.gui.task.TransmittanceSimService;
 import fr.amap.lidar.amapvox.gui.task.VoxFileMergingService;
 import fr.amap.lidar.amapvox.gui.viewer3d.Viewer3DPanelController;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.NaNsCorrectionParams;
+import fr.amap.lidar.amapvox.voxelisation.postproc.ButterflyRemoverCfg;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -144,6 +146,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -291,6 +294,10 @@ public class MainFrameController implements Initializable {
     private FileChooserContext fileChooserSaveCanopyAnalyserOutputFile;
     private FileChooserContext fileChooserSaveCanopyAnalyserCfgFile;
     private FileChooserContext fileChooserSaveTransmittanceSimCfgFile;
+    private FileChooserContext fileChooserVoxMergingList;
+    private FileChooserContext fileChooserOpenInputFileButterflyRemover;
+    private FileChooserContext fileChooserOpenOutputFileButterflyRemover;
+    private FileChooserContext fileChooserChooseOutputCfgFileButterflyRemover;
     
     private DirectoryChooser directoryChooserOpenOutputPathALS;
     private DirectoryChooser directoryChooserOpenOutputPathTLS;
@@ -685,7 +692,7 @@ public class MainFrameController implements Initializable {
     @FXML
     private Button buttonExecute;
     @FXML
-    private ListView<?> listViewVoxMergingVoxelFiles;
+    private ListView<File> listViewVoxMergingVoxelFiles;
     @FXML
     private MenuItem menuItemSelectionNone111;
     @FXML
@@ -706,6 +713,10 @@ public class MainFrameController implements Initializable {
     private Viewer3DPanelController viewer3DPanelController;
     @FXML
     private HelpButtonController helpButtonHemiPhotoController;
+    @FXML
+    private SplitPane splitPaneMain;
+    @FXML
+    private SplitPane splitPaneVoxelization;
     
     private void initValidationSupport(){
         
@@ -841,6 +852,39 @@ public class MainFrameController implements Initializable {
         });
         
     }
+    
+    private void initPostProcessTab(){
+        
+        //initialize voxel file merging panel
+        listViewVoxMergingVoxelFiles.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        
+        listViewVoxMergingVoxelFiles.setOnDragOver(DragAndDropHelper.dragOverEvent);
+        
+        listViewVoxMergingVoxelFiles.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+                if (db.hasFiles()) {
+                    success = true;
+                    for (File file : db.getFiles()) {
+                        
+                        addVoxelFileToMergingList(file);
+                    }
+                }
+                event.setDropCompleted(success);
+                event.consume();
+            }
+        });
+        
+        
+        fileChooserVoxMergingList = new FileChooserContext();
+        
+        fileChooserOpenInputFileButterflyRemover = new FileChooserContext();
+        fileChooserOpenOutputFileButterflyRemover = new FileChooserContext();
+        fileChooserChooseOutputCfgFileButterflyRemover = new FileChooserContext();
+        
+    }
     /**
      * Initializes the controller class.
      */
@@ -858,8 +902,19 @@ public class MainFrameController implements Initializable {
             }
         });
         
+        /*work around, the divider positions values are defined in the fxml,
+        but when the window is initialized the values are lost*/
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                splitPaneMain.setDividerPositions(0.75f);
+                splitPaneVoxelization.setDividerPositions(0.45f);
+            }
+        });
+        
         
         initValidationSupport();
+        initPostProcessTab();
         
         listViewTransmittanceMapSensorPositions.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listViewTaskList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -891,18 +946,7 @@ public class MainFrameController implements Initializable {
         fileChooserOpenCanopyAnalyserInputFile = new FileChooserContext();
         listViewCanopyAnalyzerSensorPositions.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         
-        EventHandler<DragEvent> dragOverEvent = new EventHandler<DragEvent>() {
-
-            @Override
-            public void handle(DragEvent event) {
-                Dragboard db = event.getDragboard();
-                if (db.hasFiles()) {
-                    event.acceptTransferModes(TransferMode.COPY);
-                } else {
-                    event.consume();
-                }
-            }
-        };
+        
         
         ContextMenu contextMenuProductsList = new ContextMenu();
         MenuItem openImageItem = new MenuItem("Open image");
@@ -1732,18 +1776,18 @@ public class MainFrameController implements Initializable {
         sliderRSPCoresToUse.setMax(availableCores);
         sliderRSPCoresToUse.setValue(availableCores);
 
-        textFieldInputFileALS.setOnDragOver(dragOverEvent);
-        textFieldTrajectoryFileALS.setOnDragOver(dragOverEvent);
-        textFieldOutputFileALS.setOnDragOver(dragOverEvent);
-        textFieldInputFileTLS.setOnDragOver(dragOverEvent);
-        textFieldOutputFileMerging.setOnDragOver(dragOverEvent);
-        textfieldDTMPath.setOnDragOver(dragOverEvent);
-        textFieldOutputFileGroundEnergy.setOnDragOver(dragOverEvent);
-        listViewTaskList.setOnDragOver(dragOverEvent);
-        listViewProductsFiles.setOnDragOver(dragOverEvent);
-        textfieldVoxelFilePathTransmittance.setOnDragOver(dragOverEvent);
-        textfieldOutputTextFilePath.setOnDragOver(dragOverEvent);
-        textfieldOutputBitmapFilePath.setOnDragOver(dragOverEvent);
+        textFieldInputFileALS.setOnDragOver(DragAndDropHelper.dragOverEvent);
+        textFieldTrajectoryFileALS.setOnDragOver(DragAndDropHelper.dragOverEvent);
+        textFieldOutputFileALS.setOnDragOver(DragAndDropHelper.dragOverEvent);
+        textFieldInputFileTLS.setOnDragOver(DragAndDropHelper.dragOverEvent);
+        textFieldOutputFileMerging.setOnDragOver(DragAndDropHelper.dragOverEvent);
+        textfieldDTMPath.setOnDragOver(DragAndDropHelper.dragOverEvent);
+        textFieldOutputFileGroundEnergy.setOnDragOver(DragAndDropHelper.dragOverEvent);
+        listViewTaskList.setOnDragOver(DragAndDropHelper.dragOverEvent);
+        listViewProductsFiles.setOnDragOver(DragAndDropHelper.dragOverEvent);
+        textfieldVoxelFilePathTransmittance.setOnDragOver(DragAndDropHelper.dragOverEvent);
+        textfieldOutputTextFilePath.setOnDragOver(DragAndDropHelper.dragOverEvent);
+        textfieldOutputBitmapFilePath.setOnDragOver(DragAndDropHelper.dragOverEvent);
 
         setDragDroppedSingleFileEvent(textFieldInputFileALS);
         
@@ -2647,8 +2691,7 @@ public class MainFrameController implements Initializable {
         voxParameters.infos.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
 
         VoxMergingCfg cfg = new VoxMergingCfg(new File(textFieldOutputFileMerging.getText()),
-                voxParameters,
-                listViewProductsFiles.getSelectionModel().getSelectedItems());
+                voxParameters, listViewVoxMergingVoxelFiles.getItems());
 
         try {
             cfg.writeConfiguration(selectedFile);
@@ -2760,14 +2803,56 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionButtonOpenInputFileButterflyRemover(ActionEvent event) {
+        
+        File selectedFile = fileChooserOpenInputFileButterflyRemover.showOpenDialog(stage);
+        
+        if(selectedFile != null){
+            textFieldInputFileButterflyRemover.setText(selectedFile.getAbsolutePath());
+        }
     }
 
     @FXML
     private void onActionButtonOpenOutputFileButterflyRemover(ActionEvent event) {
+        
+        File selectedFile = fileChooserOpenOutputFileButterflyRemover.showSaveDialog(stage);
+        
+        if(selectedFile != null){
+            textFieldOutputFileButterflyRemover.setText(selectedFile.getAbsolutePath());
+        }
     }
 
     @FXML
     private void onActionButtonExecuteButterflyRemover(ActionEvent event) {
+        
+        File temporaryFile;
+        try {
+            temporaryFile = File.createTempFile("cfg_temp", ".xml");
+            logger.info("temporary file created : "+temporaryFile.getAbsolutePath());
+            saveButterflyRemovercfg(temporaryFile);
+            
+            TaskElement taskElement = addFileToTaskList(temporaryFile);
+            if(taskElement != null){
+                executeProcess(taskElement);
+            }
+            
+        } catch (IOException ex) {
+            showErrorDialog(ex);
+        } catch (Exception ex) {
+            showErrorDialog(ex);
+        }
+    }
+    
+    private void saveButterflyRemovercfg(File file) throws Exception{
+        
+        ButterflyRemoverCfg cfg = new ButterflyRemoverCfg();
+        cfg.setInputFile(new File(textFieldInputFileButterflyRemover.getText()));
+        cfg.setOutputFile(new File(textFieldOutputFileButterflyRemover.getText()));
+        
+        try {
+            cfg.writeConfiguration(file);
+        } catch (Exception ex) {
+            throw new Exception("Cannot write configuration file", ex);
+        }
     }
 
     @FXML
@@ -2854,37 +2939,41 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionMenuItemSelectAllVoxFileFromMergeList(ActionEvent event) {
+        listViewVoxMergingVoxelFiles.getSelectionModel().selectAll();
     }
 
     @FXML
     private void onActionMenuItemUnselectAllVoxFileFromMergeList(ActionEvent event) {
+        listViewVoxMergingVoxelFiles.getSelectionModel().clearSelection();
     }
 
     @FXML
     private void onActionButtonRemoveVoxFileFromMergingList(ActionEvent event) {
+        ObservableList<File> selectedItems = listViewVoxMergingVoxelFiles.getSelectionModel().getSelectedItems();
+        listViewVoxMergingVoxelFiles.getItems().removeAll(selectedItems);
     }
 
     @FXML
     private void onActionButtonAddVoxFileToMergingList(ActionEvent event) {
-    }
-
-    
-    private class SceneObjectProperty{
         
-        private String name;
-        private String value;
-
-        public SceneObjectProperty(String name, String value) {
-            this.name = name;
-            this.value = value;
+        List<File> selectedFiles = fileChooserVoxMergingList.showOpenMultipleDialog(stage);
+        
+        if(selectedFiles != null){
+            
+            for(File file : selectedFiles){
+                addVoxelFileToMergingList(file);
+            }
+            
         }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getValue() {
-            return value;
+    }
+    
+    private void addVoxelFileToMergingList(File file){
+        
+        if(!listViewVoxMergingVoxelFiles.getItems().contains(file)){
+            
+            if(checkVoxelFile(file)){
+                listViewVoxMergingVoxelFiles.getItems().add(file);
+            }
         }
     }
     
@@ -4215,6 +4304,36 @@ public class MainFrameController implements Initializable {
                 });
 
                 break;
+                
+            case "butterfly-removing":
+                
+                final ButterflyRemoverCfg buttRmvCfg = new ButterflyRemoverCfg();
+                
+                try {
+                    buttRmvCfg.readConfiguration(file);
+                } catch (Exception ex) {
+                    showErrorDialog(ex);
+                    return null;
+                }
+                
+                ButterflyRemoverService butterflyRemoverService = new ButterflyRemoverService(buttRmvCfg);
+                element = new TaskElement(butterflyRemoverService, file);
+                element.setTaskIcon(MISC_IMG);
+                
+                element.addTaskListener(new TaskAdapter() {
+                    @Override
+                    public void onSucceeded() {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                
+                                addFileToProductsList(buttRmvCfg.getOutputFile());
+                            }
+                        });
+                    }
+                });
+                
+                break;
         }
         
         if(element != null){
@@ -4332,7 +4451,6 @@ public class MainFrameController implements Initializable {
             final Service<Void> service;
             
             final ProcessTool voxTool = new ProcessTool();
-            voxTool.setProgressionStep(10);
             voxTool.setCoresNumber((int) sliderRSPCoresToUse.getValue());
             
             final long start_time = System.currentTimeMillis();
@@ -6431,6 +6549,37 @@ public class MainFrameController implements Initializable {
         ObservableList<T> items = lsv.<T>getItems();
         lsv.<T>setItems(null);
         lsv.<T>setItems(items);
+    }
+
+    @FXML
+    private void onActionButtonSaveButterflyRemovingCfg(ActionEvent event) {
+        
+        File selectedFile = fileChooserChooseOutputCfgFileButterflyRemover.showSaveDialog(stage);
+        
+        if(selectedFile != null){
+            try {
+                saveButterflyRemovercfg(selectedFile);
+                addFileToTaskList(selectedFile);
+            } catch (Exception ex) {
+                showErrorDialog(ex);
+            }
+        }
+    }
+
+    @FXML
+    private void onActionButtonSaveExecuteButterflyRemovingCfg(ActionEvent event) {
+        
+         File selectedFile = fileChooserChooseOutputCfgFileButterflyRemover.showSaveDialog(stage);
+        
+        if(selectedFile != null){
+            try {
+                saveButterflyRemovercfg(selectedFile);
+                TaskElement task = addFileToTaskList(selectedFile);
+                executeProcess(task);
+            } catch (Exception ex) {
+                showErrorDialog(ex);
+            }
+        }
     }
     
     static class ColorRectCell extends ListCell<VoxelFileChart> {

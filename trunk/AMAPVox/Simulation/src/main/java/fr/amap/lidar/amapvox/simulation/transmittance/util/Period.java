@@ -31,7 +31,7 @@ public class Period {
     @Override
     public String toString(){
         
-        return "From "+getDate(startDate)+" to "+getDate(endDate);
+        return getDate(startDate)+"_"+getDate(endDate);
     }
     
     public static String getDate(Calendar c){

@@ -89,7 +89,9 @@ public class RxpVoxelisation extends TLSVoxelisation{
 
             rxpExtraction.close();
             
-            RasterParams rasterParameters = parameters.getRasterParams();
+            super.postProcess();
+            
+            /*RasterParams rasterParameters = parameters.getRasterParams();
             
             boolean write = false;
 
@@ -125,8 +127,8 @@ public class RxpVoxelisation extends TLSVoxelisation{
             
             //permet de signaler au garbage collector que cet élément peut être supprimé
             voxelAnalysis = null;
+            */
             
-            fireSucceeded();
             
             //return resultData;
         

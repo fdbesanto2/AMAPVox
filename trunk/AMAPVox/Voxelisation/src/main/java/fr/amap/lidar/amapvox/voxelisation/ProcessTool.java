@@ -14,7 +14,6 @@ import fr.amap.commons.util.io.file.FileManager;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.vector.Vec4D;
 import fr.amap.commons.util.BoundingBox3d;
-import fr.amap.commons.util.Cancellable;
 import fr.amap.commons.util.DataSet.Mode;
 import static fr.amap.commons.util.DataSet.Mode.SUM;
 import fr.amap.commons.util.LidarScan;
@@ -27,7 +26,7 @@ import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.amapvox.io.tls.rsp.RxpScan;
 import fr.amap.commons.raster.asc.AsciiGridHelper;
 import fr.amap.commons.raster.asc.Raster;
-import fr.amap.commons.util.Progression;
+import fr.amap.commons.util.Process;
 import fr.amap.commons.util.io.file.CSVFile;
 import fr.amap.commons.util.vegetation.DirectionalTransmittance;
 import fr.amap.commons.util.vegetation.LADParams;
@@ -63,14 +62,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 import javax.vecmath.Matrix4d;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
-
-/**
+import fr.amap.commons.util.Cancellable;/**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 
 
-public class ProcessTool extends Progression implements Cancellable{
+public class ProcessTool extends Process implements Cancellable{
     
     private final static Logger logger = Logger.getLogger(ProcessTool.class);
     
@@ -81,7 +79,6 @@ public class ProcessTool extends Progression implements Cancellable{
 
     public ProcessTool() {
         cancelled = false;
-        super.setProgressionStep(10);
     }
     
     @Override
@@ -448,7 +445,6 @@ public class ProcessTool extends Progression implements Cancellable{
         cfg.getVoxelParameters().infos.setType(VoxelSpaceInfos.Type.ALS);
         
         LasVoxelisation voxelisation = new LasVoxelisation();
-        voxelisation.setProgressionStep(20);
         
         voxelisation.addProcessingListener(new ProcessingListener() {
 
@@ -1050,10 +1046,6 @@ public class ProcessTool extends Progression implements Cancellable{
             padTransmittance.writeBitmaps();
         }
     }*/
-
-    public void addVoxelisationToolListener(ProcessingListener processingListener) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     public void setCoresNumber(int coresNumber) {
         this.coresNumber = coresNumber;

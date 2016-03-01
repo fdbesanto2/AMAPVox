@@ -56,6 +56,7 @@ public abstract class Configuration {
         MERGING(2),
         MULTI_VOXELISATION_ALS_AND_MULTI_RES(3),
         MULTI_RES(4),
+        BUTTERFLY_REMOVING(5)
         ;
         
         public final int mode;

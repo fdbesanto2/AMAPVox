@@ -38,7 +38,6 @@ public class ALSVoxelizationService extends Service<Void> {
                 cfg.getVoxelParameters().infos.setType(VoxelSpaceInfos.Type.ALS);
 
                 voxelization = new LasVoxelisation();
-                voxelization.setProgressionStep(20);
 
                 final Task t = this;
 

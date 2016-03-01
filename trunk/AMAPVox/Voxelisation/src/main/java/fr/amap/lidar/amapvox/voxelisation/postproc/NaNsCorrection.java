@@ -11,16 +11,19 @@ import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
+import fr.amap.commons.util.Cancellable;
 
 /**
  *
  * @author calcul
  */
-public class NaNsCorrection {
+public class NaNsCorrection implements Cancellable{
     
     private final static Logger LOGGER = Logger.getLogger(NaNsCorrection.class);
     
-    public static void correct(VoxelParameters parameters, Voxel voxels[][][]){
+    private boolean cancelled;
+    
+    public void correct(VoxelParameters parameters, Voxel voxels[][][]){
         
         /**A faire : corriger de manière parallèle**/
         
@@ -53,6 +56,10 @@ public class NaNsCorrection {
             for (int y = 0; y < ySplit; y++) {
                 for (int z = 0; z < zSplit; z++) {
                     
+                    if(cancelled){
+                        return;
+                    }
+                    
                     Voxel voxel = voxels[x][y][z];
                     
                     if(voxel.ground_distance >= (parameters.infos.getResolution() / 2.0f)){
@@ -68,11 +75,14 @@ public class NaNsCorrection {
                         //testloop:
                         while(currentNbSampling <= parameters.getNaNsCorrectionParams().getNbSamplingThreshold() || currentTransmittance == 0 ){
                             
-                                                        
+                                  
+                            if(cancelled){
+                                return;
+                            }
+                            
                             if(passID > passLimit){
                                 break;
                             }
-                            
                             
                             int minX = Integer.max(x-passID, 0);
                             int minY = Integer.max(y-passID, 0);
@@ -86,6 +96,10 @@ public class NaNsCorrection {
                             for(int i = minX ; i<= maxX ; i++){
                                 for(int j = minY ; j<= maxY ; j++){
                                     for(int k = minZ ; k<= maxZ ; k++){
+                                        
+                                        if (cancelled) {
+                                            return;
+                                        }
 
                                             //on n'ajoute pas les voxels de la passe précédente
                                         if(passID != 1 && (i >= x-(passID-1) && i <= x+(passID-1))
@@ -127,6 +141,10 @@ public class NaNsCorrection {
 
                             for(Voxel neighbour : neighbours){
                                 
+                                if (cancelled) {
+                                    return;
+                                }
+                                
                                 /*les voxels de transmittance nulle sont traités comme étant non échantillonné,
                                 tous les voisins sont considérés indépendamment de l'échantillonnage*/
                                 
@@ -167,6 +185,10 @@ public class NaNsCorrection {
                             Statistic PADStatistic = new Statistic();
                             
                             for(Voxel neighbour : neighbours){
+                                
+                                if (cancelled) {
+                                    return;
+                                }
 
                                 if(!Float.isNaN(neighbour.transmittance) && neighbour.transmittance != 0){
                                     PADStatistic.addValue(neighbour.PadBVTotal);
@@ -191,5 +213,15 @@ public class NaNsCorrection {
         long endTime = System.currentTimeMillis();
         long time = endTime - startTime;
         LOGGER.info("Time : "+time+" ms");
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
     }
 }

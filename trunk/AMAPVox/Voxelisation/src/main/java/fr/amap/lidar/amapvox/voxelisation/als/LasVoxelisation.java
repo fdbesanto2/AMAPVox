@@ -7,7 +7,7 @@ package fr.amap.lidar.amapvox.voxelisation.als;
 
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.util.Filter;
-import fr.amap.commons.util.Progression;
+import fr.amap.commons.util.Process;
 import fr.amap.commons.util.ProcessingListener;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.commons.raster.asc.AsciiGridHelper;
@@ -28,12 +28,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.log4j.Logger;
+import fr.amap.commons.util.Cancellable;
+import fr.amap.commons.util.ProcessingAdapter;
 
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class LasVoxelisation extends Progression {
+public class LasVoxelisation extends Process implements Cancellable{
+    
+    private boolean cancelled;
     
     private final static Logger logger = Logger.getLogger(LasVoxelisation.class);
     
@@ -41,11 +45,11 @@ public class LasVoxelisation extends Progression {
     private static boolean update;
     private PointsToShot conversion;
     private Raster terrain = null;
+    private NaNsCorrection naNsCorrection = null;
 
     public LasVoxelisation() {
         
         LasVoxelisation.update = true;
-        super.setProgressionStep(100);
     }
     
     /**
@@ -108,7 +112,6 @@ public class LasVoxelisation extends Progression {
         if(update || conversion == null){
             
             conversion = new PointsToShot(cfg.getTrajectoryFile(), cfg.getInputFile(), transfMatrix, classifiedPointsToDiscard);
-            conversion.setProgressionStep(20);
             
             conversion.addProcessingListener(new ProcessingListener() {
 
@@ -139,7 +142,7 @@ public class LasVoxelisation extends Progression {
                     
         fireProgress("Voxelisation", 0, 100);
         
-        Iterator<Shot> iterator = conversion.iterator();
+        PointsToShotIterator iterator = conversion.iterator();
         
         Shot shot;
         
@@ -148,6 +151,8 @@ public class LasVoxelisation extends Progression {
             if(isCancelled()){
                 return null;
             }
+            
+            fireProgress("Voxelisation...", iterator.getNbPointsProcessed(), iterator.getNbPoints());
             
             voxelAnalysis.processOneShot(shot);
         }
@@ -193,10 +198,16 @@ public class LasVoxelisation extends Progression {
                 
                 fireProgress("NA correction", 0, 100);
                 
-                NaNsCorrection.correct(cfg.getVoxelParameters(), voxelAnalysis.getVoxels());
+                naNsCorrection = new NaNsCorrection();
+                naNsCorrection.correct(cfg.getVoxelParameters(), voxelAnalysis.getVoxels());
             }
             
-            fireProgress("Write voxel space", 0, 100);
+            voxelAnalysis.addProcessingListener(new ProcessingAdapter() {
+                @Override
+                public void processingStepProgress(String progressMsg, long progress, long max) {
+                    fireProgress(progressMsg, progress, max);
+                }
+            });
 
             voxelAnalysis.write();
         }
@@ -207,6 +218,24 @@ public class LasVoxelisation extends Progression {
         }
 
         return cfg.getOutputFile();
+    }
+    
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+        
+        if(naNsCorrection != null){
+            naNsCorrection.setCancelled(cancelled);
+        }
+        
+        if(conversion != null){
+            conversion.setCancelled(cancelled);
+        }
     }
     
 }

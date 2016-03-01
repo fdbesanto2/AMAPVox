@@ -6,13 +6,13 @@
 package fr.amap.lidar.amapvox.gui;
 
 import java.io.File;
-import javafx.scene.control.TextField;
+import java.util.List;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
 /**
- *
- * @author Julien
+ * The filechooser methods cannot be override, this class provides a workaround
+ * @author Julien Heurtebize
  */
 public class FileChooserContext {
     
@@ -27,6 +27,20 @@ public class FileChooserContext {
     public FileChooserContext(String defaultFileName){
         fc = new FileChooser();
         this.defaultFileName = defaultFileName;
+    }
+    
+    public List<File> showOpenMultipleDialog(Window ownerWindow){
+        
+        if(lastSelectedFile != null){
+            fc.setInitialDirectory(lastSelectedFile.getParentFile());
+        }
+        
+        List<File> resultFile = fc.showOpenMultipleDialog(ownerWindow);
+        if(resultFile != null && resultFile.size() > 0){
+            lastSelectedFile = resultFile.get(0);
+        }
+        
+        return resultFile;
     }
     
     public File showOpenDialog(Window ownerWindow){

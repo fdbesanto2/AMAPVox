@@ -5,7 +5,6 @@
  */
 package fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx;
 
-import fr.amap.commons.util.Cancellable;
 import fr.amap.commons.util.SphericalCoordinates;
 import fr.amap.commons.util.Statistic;
 import fr.amap.lidar.amapvox.jeeb.raytracing.geometry.LineElement;
@@ -40,6 +39,7 @@ import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import fr.amap.commons.util.Cancellable;
 
 /**
  *

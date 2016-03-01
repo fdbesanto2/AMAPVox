@@ -50,9 +50,9 @@
           </Menu>
         </menus>
       </MenuBar>
-      <SplitPane dividerPositions="0.7175843694493783" layoutY="29.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" prefHeight="565.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0">
+      <SplitPane fx:id="splitPaneMain" dividerPositions="0.77" layoutY="29.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+          <AnchorPane minWidth="-Infinity" prefWidth="160.0">
                <children>
                   <TabPane fx:id="tabPaneMain" prefHeight="400.0" prefWidth="798.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <tabs>
@@ -60,7 +60,7 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <SplitPane dividerPositions="0.4296482412060301" layoutX="63.0" layoutY="52.0" prefHeight="367.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <SplitPane fx:id="splitPaneVoxelization" dividerPositions="0.4296482412060301" layoutX="63.0" layoutY="52.0" prefHeight="367.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <items>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                              <children>
@@ -198,7 +198,7 @@
                                                                            <content>
                                                                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                                                  <children>
-                                                                                    <VBox layoutX="14.0" layoutY="200.0">
+                                                                                    <VBox layoutX="14.0" layoutY="200.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
                                                                                        <children>
                                                                                           <Label text="Output file">
                                                                                              <font>
@@ -208,7 +208,7 @@
                                                                                           <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileMerging" text="Open" />
                                                                                        </children>
                                                                                     </VBox>
-                                                                                    <HBox layoutX="206.0" layoutY="306.0">
+                                                                                    <HBox layoutX="206.0" layoutY="306.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
                                                                                        <children>
                                                                                           <Button mnemonicParsing="false" onAction="#onActionButtonExecuteMergingProcess" text="Execute">
                                                                                              <graphic>
@@ -246,7 +246,7 @@
                                                                                           </MenuButton>
                                                                                        </children>
                                                                                     </HBox>
-                                                                                    <VBox layoutX="14.0" layoutY="14.0" prefHeight="171.0" prefWidth="315.0">
+                                                                                    <VBox layoutX="14.0" layoutY="14.0" prefHeight="171.0" prefWidth="315.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                                                                                        <children>
                                                                                           <Label text="Voxel files">
                                                                                              <font>
@@ -302,7 +302,7 @@
                                                                            <content>
                                                                               <AnchorPane>
                                                                                  <children>
-                                                                                    <VBox layoutX="10.0" layoutY="22.0" AnchorPane.leftAnchor="10.0">
+                                                                                    <VBox layoutX="10.0" layoutY="22.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                                                                                        <children>
                                                                                           <Label text="Input file">
                                                                                              <font>
@@ -312,7 +312,7 @@
                                                                                           <Button mnemonicParsing="false" onAction="#onActionButtonOpenInputFileNaNsCorrection" text="Open" />
                                                                                        </children>
                                                                                     </VBox>
-                                                                                    <VBox layoutX="10.0" layoutY="107.0" AnchorPane.leftAnchor="10.0">
+                                                                                    <VBox layoutX="10.0" layoutY="107.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
                                                                                        <children>
                                                                                           <Label text="Output file">
                                                                                              <font>
@@ -339,7 +339,7 @@
                                                                           <content>
                                                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                                  <children>
-                                                                                    <VBox layoutX="7.0" layoutY="20.0" AnchorPane.leftAnchor="10.0">
+                                                                                    <VBox layoutX="7.0" layoutY="20.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                                                                                        <children>
                                                                                           <Label text="Input file">
                                                                                              <font>
@@ -349,7 +349,7 @@
                                                                                           <Button mnemonicParsing="false" onAction="#onActionButtonOpenInputFileButterflyRemover" text="Open" />
                                                                                        </children>
                                                                                     </VBox>
-                                                                                    <VBox layoutX="7.0" layoutY="96.0" AnchorPane.leftAnchor="10.0">
+                                                                                    <VBox layoutX="7.0" layoutY="96.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
                                                                                        <children>
                                                                                           <Label text="Output file">
                                                                                              <font>
@@ -359,15 +359,44 @@
                                                                                           <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileButterflyRemover" text="Open" />
                                                                                        </children>
                                                                                     </VBox>
-                                                                                    <Button layoutX="234.0" layoutY="306.0" mnemonicParsing="false" onAction="#onActionButtonExecuteButterflyRemover" text="Execute" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
-                                                                                       <graphic>
-                                                                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                                             <image>
-                                                                                                <Image url="@icons/gnome-run.png" />
-                                                                                             </image>
-                                                                                          </ImageView>
-                                                                                       </graphic>
-                                                                                    </Button>
+                                                                                    <HBox layoutX="206.0" layoutY="304.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                                                                                       <children>
+                                                                                          <Button mnemonicParsing="false" onAction="#onActionButtonExecuteButterflyRemover" text="Execute">
+                                                                                             <graphic>
+                                                                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                   <image>
+                                                                                                      <Image url="@icons/gnome-run.png" />
+                                                                                                   </image>
+                                                                                                </ImageView>
+                                                                                             </graphic>
+                                                                                          </Button>
+                                                                                          <MenuButton contentDisplay="RIGHT" mnemonicParsing="false">
+                                                                                             <padding>
+                                                                                                <Insets left="-8.0" />
+                                                                                             </padding>
+                                                                                             <items>
+                                                                                                <MenuItem mnemonicParsing="false" onAction="#onActionButtonSaveButterflyRemovingCfg" text="Save">
+                                                                                                   <graphic>
+                                                                                                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                         <image>
+                                                                                                            <Image url="@icons/save.png" />
+                                                                                                         </image>
+                                                                                                      </ImageView>
+                                                                                                   </graphic>
+                                                                                                </MenuItem>
+                                                                                                <MenuItem mnemonicParsing="false" onAction="#onActionButtonSaveExecuteButterflyRemovingCfg" text="Save and execute">
+                                                                                                   <graphic>
+                                                                                                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                         <image>
+                                                                                                            <Image url="@icons/save_execute.png" />
+                                                                                                         </image>
+                                                                                                      </ImageView>
+                                                                                                   </graphic>
+                                                                                                </MenuItem>
+                                                                                             </items>
+                                                                                          </MenuButton>
+                                                                                       </children>
+                                                                                    </HBox>
                                                                                  </children>
                                                                               </AnchorPane>
                                                                           </content>
@@ -1658,7 +1687,7 @@
                   </TabPane>
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="798.0">
+          <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="175.0" prefWidth="798.0">
                <children>
                   <SplitPane dividerPositions="0.5" prefHeight="155.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>

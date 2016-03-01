@@ -29,7 +29,6 @@ import fr.amap.commons.math.matrix.Mat3D;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.commons.math.vector.Vec4D;
-import fr.amap.commons.util.Cancellable;
 import fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceParameters;
 import fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceSim;
 import fr.amap.lidar.amapvox.voxelisation.EchoFilter;
@@ -50,6 +49,7 @@ import javax.vecmath.Vector3d;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.log4j.Logger;
 import org.jdom2.JDOMException;
+import fr.amap.commons.util.Cancellable;
 
 /**
  * @author dauzat

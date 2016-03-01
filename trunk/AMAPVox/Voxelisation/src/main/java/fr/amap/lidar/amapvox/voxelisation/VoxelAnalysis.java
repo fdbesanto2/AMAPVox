@@ -11,6 +11,8 @@ import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelManager.VoxelCrossingCon
 import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelManagerSettings;
 import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelSpace;
 import fr.amap.commons.raster.asc.Raster;
+import fr.amap.commons.util.Cancellable;
+import fr.amap.commons.util.Process;
 import fr.amap.commons.util.vegetation.DirectionalTransmittance;
 import fr.amap.commons.util.vegetation.LADParams;
 import fr.amap.commons.util.vegetation.LeafAngleDistribution;
@@ -36,7 +38,7 @@ import javax.imageio.ImageIO;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
 
-public class VoxelAnalysis {
+public class VoxelAnalysis extends Process implements Cancellable{
 
     public enum LaserSpecification{
         
@@ -64,6 +66,8 @@ public class VoxelAnalysis {
     }
     
     private final static Logger LOGGER = Logger.getLogger(VoxelAnalysis.class);
+    
+    private boolean cancelled;
 
     private VoxelSpace voxSpace;
     private Voxel voxels[][][];
@@ -782,44 +786,20 @@ public class VoxelAnalysis {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
 
             writer.write(parameters.infos.headerToString()+"\n");
-            /*writer.write("VOXEL SPACE" + "\n");
-            writer.write("#min_corner: " + voxSpace.getBoundingBox().min.x + " " + voxSpace.getBoundingBox().min.y + " " + voxSpace.getBoundingBox().min.z + "\n");
-            writer.write("#max_corner: " + voxSpace.getBoundingBox().max.x + " " + voxSpace.getBoundingBox().max.y + " " + voxSpace.getBoundingBox().max.z + "\n");
-            writer.write("#split: " + voxSpace.getSplitting().x + " " + voxSpace.getSplitting().y + " " + voxSpace.getSplitting().z + "\n");
-
-            String metadata = "";
-            String type = "";
-
-            metadata += "#res: " + parameters.infos.getResolution() + " ";
-            metadata += "#MAX_PAD: " + parameters.infos.getMaxPAD()+" ";
-            metadata += "#LAD_TYPE: " + parameters.infos.getLadType().toString();
-            
-            if (parameters.infos.getLadType() == LeafAngleDistribution.Type.TWO_PARAMETER_BETA) {
-                metadata += "=[";
-
-                for (int i = 0; i < parameters.infos.getLadParams().length; i++) {
-                    if (i != 0) {
-                        metadata += ";";
-                    }
-                    metadata += parameters.infos.getLadParams()[i];
-                }
-
-                metadata += "]";
-            }
-
-            if(parameters.infos.getType() == VoxelSpaceInfos.Type.TLS){
-                type += "#type: " + "TLS" + " ";
-            } else {
-                type += "#type: " + "ALS" + " ";
-            }
-            
-            type += metadata + "\n";
-            writer.write(type);*/
             writer.write(Voxel.getHeader(Voxel.class) + "\n");
+            
+            int count = 0;
+            int nbLines = parameters.infos.getSplit().x * parameters.infos.getSplit().y * parameters.infos.getSplit().z;
 
             for (int i = 0; i < parameters.infos.getSplit().x; i++) {
                 for (int j = 0; j < parameters.infos.getSplit().y; j++) {
                     for (int k = 0; k < parameters.infos.getSplit().z; k++) {
+                        
+                        if(isCancelled()){
+                            return;
+                        }
+                        
+                        fireProgress("Writing file", count, nbLines);
 
                         Voxel voxel = voxels[i][j][k];
                         
@@ -828,6 +808,8 @@ public class VoxelAnalysis {
                         }
                         
                         writer.write(voxel.toString() + "\n");
+                        
+                        count++;
                     }
                 }
             }
@@ -1027,5 +1009,15 @@ public class VoxelAnalysis {
 
     public Raster getDtm() {
         return dtm;
+    }
+    
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
     }
 }

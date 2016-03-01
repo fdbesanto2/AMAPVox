@@ -8,13 +8,18 @@ package fr.amap.lidar.amapvox.voxelisation.tls;
 import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.math.matrix.Mat3D;
 import fr.amap.commons.math.matrix.Mat4D;
+import fr.amap.commons.raster.multiband.BSQ;
 import fr.amap.commons.util.CallableTask;
+import fr.amap.commons.util.ProcessingAdapter;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.SimpleShotFilter;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.RasterParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
+import fr.amap.lidar.amapvox.voxelisation.postproc.MultiBandRaster;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -70,6 +75,49 @@ public abstract class TLSVoxelisation extends CallableTask{
 
     public void setNbVoxelisationFinished(int nbVoxelisationFinished) {
         this.nbVoxelisationFinished = nbVoxelisationFinished;
+    }
+    
+    public void postProcess() throws IOException, Exception{
+        
+        RasterParams rasterParameters = parameters.getRasterParams();
+            
+        boolean write = false;
+
+        if(rasterParameters != null){
+
+            if(rasterParameters.isGenerateMultiBandRaster()){
+
+                BSQ raster = MultiBandRaster.computeRaster(rasterParameters.getRasterStartingHeight(),
+                                            rasterParameters.getRasterHeightStep(), 
+                                            rasterParameters.getRasterBandNumber(), 
+                                            rasterParameters.getRasterResolution(),
+                                            parameters.infos,
+                                            voxelAnalysis.getVoxels(),
+                                            voxelAnalysis.getDtm());
+
+                MultiBandRaster.writeRaster(new File(outputFile.getAbsolutePath()+".bsq"), raster);
+
+                if(!rasterParameters.isShortcutVoxelFileWriting()){
+                    write = true;
+                }
+            }
+        }else{
+
+            write = true;
+        }
+
+        if(write){
+            voxelAnalysis.computePADs();
+             
+            voxelAnalysis.write();
+        }
+
+        //VoxelAnalysisData resultData = voxelAnalysis.getResultData();
+
+        //permet de signaler au garbage collector que cet élément peut être supprimé
+        voxelAnalysis = null;
+        
+        fireSucceeded();
     }
     
 }

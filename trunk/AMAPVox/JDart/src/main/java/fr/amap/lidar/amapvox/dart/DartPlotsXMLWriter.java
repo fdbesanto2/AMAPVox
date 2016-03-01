@@ -14,7 +14,6 @@
 package fr.amap.lidar.amapvox.dart;
 
 import fr.amap.commons.util.io.file.FileManager;
-import fr.amap.commons.util.Cancellable;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,6 +29,7 @@ import net.sf.saxon.Configuration;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.Serializer.Property;
+import fr.amap.commons.util.Cancellable;
 
 /**
  *
