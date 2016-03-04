@@ -30,6 +30,7 @@ public class TransmittanceParameters {
     
     private File inputFile;
     private int directionsNumber;
+    private float directionsRotation;
     
     //scanner positions
     private boolean useScanPositionsFile;
@@ -206,5 +207,13 @@ public class TransmittanceParameters {
 
     public void setGenerateLAI2xxxTypeFormat(boolean generateLAI2xxxTypeFormat) {
         this.generateLAI2xxxTypeFormat = generateLAI2xxxTypeFormat;
+    }
+
+    public float getDirectionsRotation() {
+        return directionsRotation;
+    }
+
+    public void setDirectionsRotation(float directionsRotation) {
+        this.directionsRotation = directionsRotation;
     }
 }

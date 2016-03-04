@@ -3,7 +3,9 @@ package fr.amap.lidar.amapvox.gui;
 import com.sun.management.OperatingSystemMXBean;
 import fr.amap.commons.javafx.chart.ChartViewer;
 import fr.amap.lidar.amapvox.chart.VoxelsToChart;
+import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
@@ -18,6 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.collections.ObservableList;
@@ -99,7 +102,7 @@ public class MainApp extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+                
         launch(args);    
     }
 

@@ -17,7 +17,7 @@ import fr.amap.lidar.amapvox.voxviewer.input.InputMouseAdapter;
  */
 public abstract class EventManager {
     
-    public boolean mouseMoved;
+    /*public boolean mouseMoved;
     public boolean mouseMiddleButtonClicked;
     public boolean mouseWheelRotateUp;
     public boolean mouseWheelRotateDown;
@@ -51,7 +51,7 @@ public abstract class EventManager {
     public boolean escapeKeyPressed;
     public int mouseXCurrentLocation;
     public int mouseYCurrentLocation;
-    public int xrel, yrel;
+    public int xrel, yrel;*/
     
     public int mouseXOldLocation;
     public int mouseYOldLocation;
@@ -77,7 +77,7 @@ public abstract class EventManager {
     public EventManager() {
     }
 
-    public void setMouseXCurrentLocation(int mouseXCurrentLocation) {
+    /*public void setMouseXCurrentLocation(int mouseXCurrentLocation) {
         mouseXOldLocation = this.mouseXCurrentLocation;
         this.mouseXCurrentLocation = mouseXCurrentLocation;
         isMouseLocationUpdated = true;
@@ -95,7 +95,7 @@ public abstract class EventManager {
 
     public int getMouseYCurrentLocation() {
         return mouseYCurrentLocation;
-    }
+    }*/
     
     /**
      * update events

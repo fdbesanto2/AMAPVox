@@ -1,6 +1,12 @@
 package fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.light;
 
+import fr.amap.commons.math.matrix.Mat3D;
+import fr.amap.commons.math.rotation.AxisRotation;
+import fr.amap.commons.math.vector.Vec3D;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -16,12 +22,18 @@ public class Turtle {
     private float[] elevation;
     private float[] azimuth;
     
+    
+    
     public Turtle(){
+         
+    }
+    
+    static{
         
     }
 
-    public Turtle(int nbDirections) throws IOException {
-
+    public Turtle(int nbDirections, float rotation) throws IOException {
+        
         InputStream resource = Turtle.class.getClassLoader().getResourceAsStream("misc/directions");
         
         if(resource == null){
@@ -45,6 +57,19 @@ public class Turtle {
                     count++;
                 }else{
                     break;
+                }
+            }
+            
+            if(rotation != 0){
+            
+                AxisRotation axisRotation = new AxisRotation(0, 0, 1, rotation);
+                Mat3D rotationMatrix = axisRotation.getRotationMatrix();
+
+                for(int i=0;i<directions.length;i++){
+
+                    Vector3f direction = directions[i];
+                    Vec3D uVector = Mat3D.multiply(rotationMatrix, new Vec3D(direction.x, direction.y, direction.z));
+                    directions[i] = new Vector3f((float)uVector.x, (float)uVector.y, (float)uVector.z);
                 }
             }
             
@@ -73,7 +98,7 @@ public class Turtle {
 
         } catch (IOException ex) {
             
-            throw new IOException("Cannot read file misc/directions", ex);
+            throw ex;
         }
         
     }

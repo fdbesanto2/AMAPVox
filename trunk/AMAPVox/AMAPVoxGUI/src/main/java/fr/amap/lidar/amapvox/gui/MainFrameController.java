@@ -129,6 +129,8 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -140,6 +142,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
@@ -156,6 +159,8 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.DragEvent;
@@ -166,6 +171,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -717,6 +723,8 @@ public class MainFrameController implements Initializable {
     private SplitPane splitPaneMain;
     @FXML
     private SplitPane splitPaneVoxelization;
+    @FXML
+    private TextField textfieldDirectionRotationTransmittanceMap;
     
     private void initValidationSupport(){
         
@@ -747,6 +755,7 @@ public class MainFrameController implements Initializable {
         transLightMapValidationSupport.registerValidator(textfieldVoxelFilePathTransmittance, true, Validators.fileExistValidator);
         
         transLightMapValidationSupport.registerValidator(textfieldOutputBitmapFilePath, true, Validators.directoryValidator);
+        transLightMapValidationSupport.registerValidator(textfieldDirectionRotationTransmittanceMap, true, Validators.fieldDoubleValidator);
         
         checkboxGenerateBitmapFile.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -894,7 +903,7 @@ public class MainFrameController implements Initializable {
         this.resourceBundle = rb;
         
         viewer3DPanelController.setResourceBundle(rb);
-        
+                
         helpButtonHemiPhoto.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -2987,7 +2996,7 @@ public class MainFrameController implements Initializable {
         });
     }
     
-    private void showImage(File file){
+     private void showImage(File file){
         
         try {
             ImageView iv = new ImageView(new Image(Files.newInputStream(file.toPath())));
@@ -3026,6 +3035,137 @@ public class MainFrameController implements Initializable {
         }
         
     }
+    
+//    private void showImage(File file){
+//        
+//        try {
+//            final Image image = new Image(Files.newInputStream(file.toPath()));
+//            
+//            ImageView iv = new ImageView(image);
+//            iv.setPreserveRatio(true);
+//            Stage stage = new Stage();            
+//            
+//            final DoubleProperty zoomProperty = new SimpleDoubleProperty(image.getWidth());
+//            final DoubleProperty posXProperty = new SimpleDoubleProperty();
+//            final DoubleProperty posYProperty = new SimpleDoubleProperty();
+//            
+//            final Canvas canvas = new Canvas(500, 500);
+//            final Scene scene = new Scene(new Group(canvas));
+//            
+//            final GraphicsContext gc = canvas.getGraphicsContext2D();
+//            
+//            gc.setFill(Color.WHITE);
+//            gc.drawImage(image, 0, 0);
+//            
+//            zoomProperty.addListener(new ChangeListener<Number>() {
+//                @Override
+//                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+//                    /*iv.setViewport(new Rectangle2D(
+//                            posXProperty.get(),
+//                            posYProperty.get(),
+//                            500, 
+//                            200));*/
+//                    
+//                    gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+//                    /*gc.drawImage(image, 
+//                            posXProperty.get()-((zoomProperty.get() * 4)/2.0), posYProperty.get()-((zoomProperty.get() * 4)/2.0),
+//                            zoomProperty.get() * 4, zoomProperty.get() * 4);*/
+//                    
+//                    int tx = 0, ty = 0;
+//                    int sx = (int)(posXProperty.get()-((zoomProperty.get() * 4)/2.0));
+//                    int sy = (int)(posYProperty.get()-((zoomProperty.get() * 4)/2.0));
+//                    int dw = (int) (zoomProperty.get() * 4);
+//                    int dh = (int) (zoomProperty.get() * 4);
+//                    
+//                    int sw = (int) (zoomProperty.get());
+//                    int sh = (int) (zoomProperty.get());
+//                    
+//                    int Sx = (int)(dw/(float)sw);
+//                    int Sy = (int)(dh/(float)sh);
+//                    
+//                    PixelReader reader = image.getPixelReader();
+//                    PixelWriter writer = gc.getPixelWriter();
+//                    
+//                    for (int y = 0; y < sh; y++) {
+//                        for (int x = 0; x < sw; x++) {
+//                            final int argb = reader.getArgb(x, y);
+//                            
+//                            for (int dy = 0; dy < Sy; dy++) {
+//                                for (int dx = 0; dx < Sx; dx++) {
+//                                    writer.setArgb(x * Sx + dx, y * Sy + dy, argb);
+//                                }
+//                            }
+//                        }
+//                    }
+//                    
+//                    /*
+//                    
+//                    iv.setFitWidth();
+//                    iv.setFitHeight();*/
+//                    
+//                    //iv.setFitWidth(zoomProperty.get() * 4);
+//                    //iv.setFitHeight(zoomProperty.get() * 3);
+//                }
+//            });
+//            
+//            ScrollPane sp = new ScrollPane(canvas);
+//            stage.addEventFilter(ScrollEvent.ANY, new EventHandler<ScrollEvent>() {
+//                @Override
+//                public void handle(ScrollEvent event) {
+//                    if (event.getDeltaY() > 0) {
+//                        zoomProperty.set(zoomProperty.get() * 1.1);
+//                    } else if (event.getDeltaY() < 0) {
+//                        zoomProperty.set(zoomProperty.get() / 1.1);
+//                    }
+//                    
+//                    posXProperty.set(event.getSceneX());
+//                    posYProperty.set(event.getSceneY());
+//                }
+//            });
+//            
+//            stage.widthProperty().addListener(new ChangeListener<Number>() {
+//                @Override
+//                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+//                    canvas.setWidth(newValue.doubleValue());
+//                }
+//            });
+//            
+//            stage.heightProperty().addListener(new ChangeListener<Number>() {
+//                @Override
+//                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+//                    canvas.setHeight(newValue.doubleValue());
+//                }
+//            });
+//            
+//            Menu exportMenu = new Menu("Export");
+//            MenuItem exportAsBmp = new MenuItem("as bmp");
+//            exportAsBmp.setOnAction(new EventHandler<ActionEvent>() {
+//                @Override
+//                public void handle(ActionEvent event) {
+//                    
+//                }
+//            });
+//            
+//            exportMenu.getItems().add(exportAsBmp);
+//            
+//            ContextMenu contextMenu = new ContextMenu();
+//            contextMenu.getItems().add(exportMenu);
+//            
+//            sp.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+//                @Override
+//                public void handle(ContextMenuEvent event) {
+//                }
+//            });
+//            
+//            stage.setScene(scene);
+//
+//            stage.sizeToScene();
+//            stage.show();
+//        } catch (IOException ex) {
+//            showErrorDialog(ex);
+//        }
+//        
+//    }
     
     private void initEchoFiltering(){
         
@@ -5122,8 +5262,6 @@ public class MainFrameController implements Initializable {
 
                     //cfg.readConfiguration(selectedFile);
                     TransmittanceParameters params = cfg.getParameters();
-
-                    
                     
                     if(type.equals("transmittance")){
                         
@@ -5131,6 +5269,7 @@ public class MainFrameController implements Initializable {
                                 
                         tabPaneVirtualMeasures.getSelectionModel().select(0);
                         comboboxChooseDirectionsNumber.getSelectionModel().select(new Integer(params.getDirectionsNumber()));
+                        textfieldDirectionRotationTransmittanceMap.setText(String.valueOf(params.getDirectionsRotation()));
                         
                         checkboxGenerateBitmapFile.setSelected(params.isGenerateBitmapFile());
 
@@ -6298,6 +6437,7 @@ public class MainFrameController implements Initializable {
         }
         
         transmParameters.setDirectionsNumber(comboboxChooseDirectionsNumber.getSelectionModel().getSelectedItem());
+        transmParameters.setDirectionsRotation(Float.valueOf(textfieldDirectionRotationTransmittanceMap.getText()));
 
         transmParameters.setLatitudeInDegrees(Float.valueOf(textfieldLatitudeRadians.getText()));
 

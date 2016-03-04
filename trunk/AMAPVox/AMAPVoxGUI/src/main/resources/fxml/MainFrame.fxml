@@ -959,6 +959,17 @@
                                                                                     <ComboBox fx:id="comboboxChooseDirectionsNumber" prefHeight="26.0" prefWidth="75.0" />
                                                                                  </children>
                                                                               </HBox>
+                                                                              <HBox alignment="CENTER_LEFT" spacing="4.0">
+                                                                                 <children>
+                                                                                    <Label text="Directions rotation">
+                                                                                       <font>
+                                                                                          <Font name="System Bold" size="12.0" />
+                                                                                       </font>
+                                                                                    </Label>
+                                                                                    <TextField fx:id="textfieldDirectionRotationTransmittanceMap" prefHeight="26.0" prefWidth="66.0" text="0" />
+                                                                                    <Label text="degrees (anticlockwise)" />
+                                                                                 </children>
+                                                                              </HBox>
                                                                            </children>
                                                                         </VBox>
                                                                      </content>

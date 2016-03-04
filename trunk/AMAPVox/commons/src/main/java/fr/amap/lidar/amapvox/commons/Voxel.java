@@ -133,13 +133,14 @@ public class Voxel{
         //public double LMean_NoInterception = 0;
         //public double _transBeforeNorm;
         public float transmittance;
+        public double _transmittance_norm;
         //public double _transmittance_v2;
         public float angleMean;
         public float bvEntering;
         public float bvIntercepted;
         public float PadBVTotal;
         //public float _PadBVTotal_V2;
-        //public double _sumSurfaceMultiplyLength;
+        public double _sumSurfMulLength;
         
         public float passNumber;
         public float neighboursNumber;

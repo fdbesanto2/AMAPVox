@@ -43,11 +43,19 @@ public class DirectionalTransmittance {
     
     private fr.amap.commons.util.vegetation.DirectionalTransmittance direcTrans;
     
+    private boolean toricity = true;
+    private final static double EPSILON = 0.01;
+    
     private class TLSVoxel {
 
         float padBV;
     }
 
+    /**
+     * 
+     * @param inputFile voxel file
+     * @throws Exception 
+     */
     public DirectionalTransmittance(File inputFile) throws Exception {
         
         VoxelFileReader reader = new VoxelFileReader(inputFile);
@@ -94,6 +102,84 @@ public class DirectionalTransmittance {
         }
         
     }
+    
+    private List<Double> distToVoxelWallsV2(Point3d origin, Vector3d direction) {
+
+        // point where the ray exits from the top of the bounding box
+        
+        double distToTop = (max.z - origin.z) / direction.z;
+
+        List<Double> distances = new ArrayList<>();
+        
+        distances.add(distToTop);
+
+        // voxel walls in X
+       
+        if(direction.x != 0){
+            double deltaX = min.x - origin.x;
+            deltaX -= voxSize.x * ((int)(deltaX/voxSize.x));
+
+            if(direction.x > 0){
+                deltaX = voxSize.x - deltaX;
+            }
+
+            double dist = Math.abs(deltaX / direction.x);
+            distances.add(dist);
+            
+            double dX = Math.abs(voxSize.x / direction.x);
+            while(dist < distToTop){
+                //current distance
+                dist += dX;
+                distances.add(dist);
+            }
+        }
+        
+        // voyel walls in Y
+       
+        if(direction.y != 0){
+            double deltaY = min.y - origin.y;
+            deltaY -= voxSize.y * ((int)(deltaY/voxSize.y));
+
+            if(direction.y > 0){
+                deltaY = voxSize.y - deltaY;
+            }
+
+            double dist = Math.abs(deltaY / direction.y);
+            distances.add(dist);
+            
+            double dY = Math.abs(voxSize.y / direction.y);
+            while(dist < distToTop){
+                //current distance
+                dist += dY;
+                distances.add(dist);
+            }
+        }
+        
+        // vozel walls in Z
+       
+        if(direction.z != 0){
+            double deltaZ = min.z - origin.z;
+            deltaZ -= voxSize.z * ((int)(deltaZ/voxSize.z));
+
+            if(direction.z > 0){
+                deltaZ = voxSize.z - deltaZ;
+            }
+
+            double dist = Math.abs(deltaZ / direction.z);
+            distances.add(dist);
+            
+            double dZ = Math.abs(voxSize.z / direction.z);
+            while(dist < distToTop){
+                //current distance
+                dist += dZ;
+                distances.add(dist);
+            }
+        }
+
+        Collections.sort(distances);
+
+        return distances;
+    }
  
     private List<Double> distToVoxelWalls(Point3d origin, Vector3d direction) {
 
@@ -104,8 +190,8 @@ public class DirectionalTransmittance {
         exit.scale(dist);
         exit.add(origin);
 
-        Point3i o = new Point3i((int) ((origin.x - min.x) / voxSize.x), (int) ((origin.y - min.y) / voxSize.y), (int) ((origin.z - min.z) / voxSize.z));
-        Point3i e = new Point3i((int) ((exit.x - min.x) / voxSize.x), (int) ((exit.y - min.y) / voxSize.y), (int) ((exit.z - min.z) / voxSize.z));
+        Point3i originVoxel = new Point3i((int) ((origin.x - min.x) / voxSize.x), (int) ((origin.y - min.y) / voxSize.y), (int) ((origin.z - min.z) / voxSize.z));
+        Point3i exitVoxel = new Point3i((int) ((exit.x - min.x) / voxSize.x), (int) ((exit.y - min.y) / voxSize.y), (int) ((exit.z - min.z) / voxSize.z));
 
         List<Double> distances = new ArrayList<>();
 
@@ -115,8 +201,8 @@ public class DirectionalTransmittance {
         distances.add(oe.length());
 
         // voxel walls in X
-        int minX = Math.min(o.x, e.x);
-        int maxX = Math.max(o.x, e.x);
+        int minX = Math.min(originVoxel.x, exitVoxel.x);
+        int maxX = Math.max(originVoxel.x, exitVoxel.x);
         for (int m = minX; m < maxX; m++) {
             double dx = (m + 1) * voxSize.x;
             dx += min.x - origin.x;
@@ -125,8 +211,8 @@ public class DirectionalTransmittance {
         }
 
         // voxel walls in Y
-        int minY = Math.min(o.y, e.y);
-        int maxY = Math.max(o.y, e.y);
+        int minY = Math.min(originVoxel.y, exitVoxel.y);
+        int maxY = Math.max(originVoxel.y, exitVoxel.y);
         for (int m = minY; m < maxY; m++) {
             double dy = (m + 1) * voxSize.y;
             dy += min.y - origin.y;
@@ -135,8 +221,8 @@ public class DirectionalTransmittance {
         }
 
         // voxel walls in Z
-        int minZ = Math.min(o.z, e.z);
-        int maxZ = Math.max(o.z, e.z);
+        int minZ = Math.min(originVoxel.z, exitVoxel.z);
+        int maxZ = Math.max(originVoxel.z, exitVoxel.z);
         for (int m = minZ; m < maxZ; m++) {
             double dz = (m + 1) * voxSize.z;
             dz += min.z - origin.z;
@@ -151,7 +237,7 @@ public class DirectionalTransmittance {
     
     public double directionalTransmittance(Point3d origin, Vector3d direction) {
         
-        List<Double> distances = distToVoxelWalls(origin, direction);
+        List<Double> distances = distToVoxelWallsV2(origin, direction);
         
         //we can optimize this by storing the angle value to avoid repeating this for each position
         double directionAngle = FastMath.toDegrees(FastMath.acos(direction.z)); 
@@ -172,12 +258,25 @@ public class DirectionalTransmittance {
             int i = (int) Math.floor(pMoy.x / voxSize.x);
             int j = (int) Math.floor(pMoy.y / voxSize.y);
             int k = (int) Math.floor(pMoy.z / voxSize.z);
-
-            // no toricity option (rajouter des modulo pour g\E9rer l'option "torique"
+            
             if (i < 0 || j < 0 || k < 0 || i >= splitting.x || j >= splitting.y || k >= splitting.z) {
-                break;
+                
+                if(toricity){
+                    
+                    while(i < 0){i += splitting.x;}
+                    while(j < 0){j += splitting.y; }
+                    while (i >= splitting.x) { i -= splitting.x;}
+                    while (j >= splitting.y) { j -= splitting.y;}
+                    
+                    if(k < 0 || k>= splitting.z){
+                        break;
+                    }
+                    
+                }else{
+                    break;
+                }
             }
-
+            
             // Test if current voxel is below the ground level
             if (pMoy.z < mnt[i][j]) {
                 transmitted = 0;
@@ -201,6 +300,11 @@ public class DirectionalTransmittance {
                 
                 //transmitted *= Math.exp(-0.5 * voxels[i][j][k].padBV * pathLength)/*(default coeff)*/;
             }
+            
+            if(transmitted <= EPSILON){
+                break;
+            }
+            
             d1 = d2;
         }
 
@@ -246,5 +350,13 @@ public class DirectionalTransmittance {
 
     public VoxelSpaceInfos getInfos() {
         return infos;
+    }
+
+    public boolean isToricity() {
+        return toricity;
+    }
+
+    public void setToricity(boolean toricity) {
+        this.toricity = toricity;
     }
 }

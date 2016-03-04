@@ -166,9 +166,9 @@ public class JoglListener implements GLEventListener {
         
     }
     
-    public void updateMousePicker(){
+    public void updateMousePicker(int mouseXLoc, int mouseYLoc){
         
-        scene.updateMousePicker(eventListener.getMouseXCurrentLocation(), eventListener.getMouseYCurrentLocation(), startX, startY, viewportWidth, viewportHeight);
+        scene.updateMousePicker(mouseXLoc, mouseYLoc, startX, startY, viewportWidth, viewportHeight);
     }
 
     @Override

@@ -131,6 +131,14 @@ public class TransmittanceCfg extends Configuration{
                 parameters.setDirectionsNumber(Integer.valueOf(directionsNumberValue));
             }
         }
+        
+        Element directionsRotationElement = processElement.getChild("directions-rotation");
+        if(directionsRotationElement != null){
+            String directionsRotationValue = directionsRotationElement.getAttributeValue("value");
+            if(directionsRotationValue != null){
+                parameters.setDirectionsRotation(Float.valueOf(directionsRotationValue));
+            }
+        }
 
         Element scannerPositionsElement = processElement.getChild("scanners-positions");
 
@@ -308,6 +316,7 @@ public class TransmittanceCfg extends Configuration{
         
         //directions
         processElement.addContent(new Element("directions-number").setAttribute("value", String.valueOf(parameters.getDirectionsNumber())));
+        processElement.addContent(new Element("directions-rotation").setAttribute("value", String.valueOf(parameters.getDirectionsRotation())));
         
         //scanners positions
         Element scannersPositionsElement = new Element("scanners-positions");

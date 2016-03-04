@@ -549,7 +549,8 @@ public class Viewer3DPanelController implements Initializable {
                             protected Object call() throws Exception {
 
                                 Viewer3D viewer3D = new Viewer3D((int) (SCREEN_WIDTH / 4.0d), (int) (SCREEN_HEIGHT / 4.0d), (int) (SCREEN_WIDTH / 1.5d), (int) (SCREEN_HEIGHT / 2.0d), "3d view");
-                                viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
+                                viewer3D.setDynamicDraw(true);
+                                //viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
                                 
                                 final SimpleBooleanProperty spaceKeyDown = new SimpleBooleanProperty(false);
                                 
@@ -713,7 +714,7 @@ public class Viewer3DPanelController implements Initializable {
                             protected Object call() throws Exception {
 
                                 Viewer3D viewer3D = new Viewer3D((int) (SCREEN_WIDTH / 4.0d), (int) (SCREEN_HEIGHT / 4.0d), (int) (SCREEN_WIDTH / 1.5d), (int) (SCREEN_HEIGHT / 2.0d), voxelFile.toString());
-                                viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
+                                //viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
 
                                 fr.amap.lidar.amapvox.voxviewer.object.scene.Scene scene = viewer3D.getScene();
 

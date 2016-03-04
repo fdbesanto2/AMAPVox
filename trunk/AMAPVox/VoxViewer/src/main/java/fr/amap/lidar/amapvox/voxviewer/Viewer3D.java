@@ -8,6 +8,7 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLException;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.FPSAnimator;
+import fr.amap.lidar.amapvox.voxviewer.event.BasicEvent;
 import fr.amap.lidar.amapvox.voxviewer.event.EventManager;
 import fr.amap.lidar.amapvox.voxviewer.input.InputKeyListener;
 import fr.amap.lidar.amapvox.voxviewer.input.InputMouseAdapter;
@@ -70,10 +71,21 @@ public class Viewer3D {
             
             
             //basic input adapters for waking up animator if necessary
-            renderFrame.addKeyListener(new MinimalKeyAdapter(animator));
+            MinimalKeyAdapter minimalKeyAdapter = new MinimalKeyAdapter(animator);
+            renderFrame.addKeyListener(minimalKeyAdapter);
             
             minimalMouseAdapter = new MinimalMouseAdapter(animator, dynamicDraw);
-            renderFrame.addMouseListener(minimalMouseAdapter);      
+            renderFrame.addMouseListener(minimalMouseAdapter);
+            
+            InputKeyListener inputKeyListener = new InputKeyListener();
+            InputMouseAdapter inputMouseAdapter = new InputMouseAdapter();
+            
+            joglContext.attachEventListener(new BasicEvent(animator, joglContext, inputMouseAdapter, inputKeyListener));
+            renderFrame.addKeyListener(inputKeyListener);
+            renderFrame.addMouseListener(inputMouseAdapter);            
+            
+            renderFrame.addKeyListener(inputKeyListener);
+            renderFrame.addMouseListener(inputMouseAdapter);
             
             animator.start();
             
@@ -176,9 +188,9 @@ public class Viewer3D {
     
     public void attachEventManager(EventManager eventManager){
         
-        joglContext.attachEventListener(eventManager);
+        /*joglContext.attachEventListener(eventManager);
         renderFrame.addKeyListener(new InputKeyListener(eventManager));
-        renderFrame.addMouseListener(new InputMouseAdapter(eventManager));
+        renderFrame.addMouseListener(new InputMouseAdapter(eventManager));*/
     }
     
     public void addWindowListener(WindowListener listener){

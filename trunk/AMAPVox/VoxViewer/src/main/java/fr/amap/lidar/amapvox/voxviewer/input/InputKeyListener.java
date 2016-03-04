@@ -16,19 +16,37 @@ import fr.amap.lidar.amapvox.voxviewer.event.EventManager;
  */
 public class InputKeyListener implements KeyListener{
     
-    private final EventManager listener;
+    //private final EventManager listener;
+    private final boolean[] keyStates;
+    private boolean controlDown;
+    private boolean altDown;
+    private boolean altGraphDown;
+    private boolean shiftDown;
     
-    public InputKeyListener(EventManager listener){
+    public InputKeyListener(/*EventManager listener*/){
         
-        this.listener = listener;
+        //this.listener = listener;
+        this.keyStates = new boolean[256];
+    }
+    
+    private void updateSpecialKeys(KeyEvent ke){
+        
+        controlDown = ke.isControlDown();
+        shiftDown = ke.isShiftDown();
+        altDown = ke.isAltDown();
+        altGraphDown = ke.isAltGraphDown();
     }
     
     @Override
     public void keyPressed(KeyEvent ke) {
         
-        listener.ctrlPressed = ke.isControlDown();
+        //listener.ctrlPressed = ke.isControlDown();
         
-        switch(ke.getKeyCode()){
+        keyStates[ke.getKeyCode()] = true;
+        
+        updateSpecialKeys(ke);
+        
+        /*switch(ke.getKeyCode()){
             
             case KeyEvent.VK_LEFT:
                 listener.leftKeyPressed = true;
@@ -84,7 +102,7 @@ public class InputKeyListener implements KeyListener{
             case KeyEvent.VK_LEFT_PARENTHESIS:
                 listener.number5KeyPressed = true;
                 break;
-        }
+        }*/
     }
 
     @Override
@@ -94,7 +112,11 @@ public class InputKeyListener implements KeyListener{
             return;
         }
         
-        listener.ctrlPressed = ke.isControlDown();
+        updateSpecialKeys(ke);
+        
+        keyStates[ke.getKeyCode()] = false;
+        
+        /*listener.ctrlPressed = ke.isControlDown();
         
         switch(ke.getKeyCode()){
             
@@ -149,7 +171,32 @@ public class InputKeyListener implements KeyListener{
             case KeyEvent.VK_LEFT_PARENTHESIS:
                 listener.number5KeyPressed = false;
                 break;
+        }*/
+    }
+
+    public boolean isKeyDown(short key) {
+        
+        if(key < keyStates.length){
+            return keyStates[key];
+        }else{
+            return false;
         }
+    }
+
+    public boolean isControlDown() {
+        return controlDown;
+    }
+
+    public boolean isAltDown() {
+        return altDown;
+    }
+
+    public boolean isAltGraphDown() {
+        return altGraphDown;
+    }
+
+    public boolean isShiftDown() {
+        return shiftDown;
     }
     
 }

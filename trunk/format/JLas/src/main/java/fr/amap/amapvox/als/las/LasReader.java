@@ -861,15 +861,12 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
                             break;
 
                         case 2:
-                            red = LittleEndianUtility.bytesToShortInt(dis.readByte(), dis.readByte());
-                            //red = dis.readByte() + dis.readByte();
-                            ((PointDataRecordFormat2) pdr).setRed(red);
-                            green = LittleEndianUtility.bytesToShortInt(dis.readByte(), dis.readByte());
-                            //green = dis.readByte() + dis.readByte();
-                            ((PointDataRecordFormat2) pdr).setGreen(green);
-                            blue = LittleEndianUtility.bytesToShortInt(dis.readByte(), dis.readByte());
-                            //blue = dis.readByte() + dis.readByte();
-                            ((PointDataRecordFormat2) pdr).setBlue(blue);
+                            red = dis.readUnsignedByte() + dis.readUnsignedByte();
+                            ((PointDataRecordFormat3) pdr).setRed(red);
+                            green = dis.readUnsignedByte() + dis.readUnsignedByte();
+                            ((PointDataRecordFormat3) pdr).setGreen(green);
+                            blue = dis.readUnsignedByte() + dis.readUnsignedByte();
+                            ((PointDataRecordFormat3) pdr).setBlue(blue);
 
                             length = PointDataRecordFormat2.LENGTH;
 
@@ -878,11 +875,11 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
                             gpsTime = LittleEndianUtility.toDouble(dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte(),
                                     dis.readByte(), dis.readByte(), dis.readByte(), dis.readByte());
                             ((PointDataRecordFormat3) pdr).setGpsTime(gpsTime);
-                            red = dis.readByte() + dis.readByte();
+                            red = dis.readUnsignedByte() + dis.readUnsignedByte();
                             ((PointDataRecordFormat3) pdr).setRed(red);
-                            green = dis.readByte() + dis.readByte();
+                            green = dis.readUnsignedByte() + dis.readUnsignedByte();
                             ((PointDataRecordFormat3) pdr).setGreen(green);
-                            blue = dis.readByte() + dis.readByte();
+                            blue = dis.readUnsignedByte() + dis.readUnsignedByte();
                             ((PointDataRecordFormat3) pdr).setBlue(blue);
 
                             length = PointDataRecordFormat3.LENGTH;

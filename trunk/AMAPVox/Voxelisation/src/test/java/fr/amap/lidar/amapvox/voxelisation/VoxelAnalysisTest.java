@@ -25,25 +25,33 @@ import java.util.List;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
 import javax.vecmath.Vector3d;
+import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.Assert;
 
 /**
  *
  * @author calcul
  */
-public class VoxelAnalysisTest {
+public class VoxelAnalysisTest extends TestCase{
     
+    private static final VoxelAnalysis voxelAnalysis;
     
     public VoxelAnalysisTest() {
         
-        VoxelAnalysis voxelAnalysis = new VoxelAnalysis(null, null, new VoxelAnalysisCfg());
-        VoxelParameters parameters = new VoxelParameters(new Point3d(-10, -10, -10),
-                                                        new Point3d(10, 10, 10),
-                                                        new Point3i(20, 20, 20));
+        //voxelAnalysis.write();
+        
+    }
+    
+    static{
+        voxelAnalysis = new VoxelAnalysis(null, null, new VoxelAnalysisCfg());
+        VoxelParameters parameters = new VoxelParameters(new Point3d(0, 0, 0),
+                                                        new Point3d(4, 4, 4),
+                                                        new Point3i(4, 4, 4));
         
         parameters.infos.setResolution(1.0);
         parameters.infos.setMaxPAD(3.5f);
@@ -54,38 +62,55 @@ public class VoxelAnalysisTest {
         
         voxelAnalysis.init(parameters, new File("/home/calcul/Documents/Julien/test.vox"));
         voxelAnalysis.createVoxelSpace();
-        
-        List<Shot> shots = new ArrayList<>();
-        shots.add(new Shot(4, new Point3d(0, 0, 15), new Vector3d(0, 0, -1), new double[]{6, 14, 18, 21}, new int[4], new float[4]));
-        
-        for(Shot shot : shots){
-            voxelAnalysis.processOneShot(shot);
-        }
-        
-        voxelAnalysis.computePADs();
-        //voxelAnalysis.write();
-        
     }
     
     @BeforeClass
     public static void setUpClass() {
+        
+        
     }
     
     @AfterClass
     public static void tearDownClass() {
     }
     
-    @Before
-    public void setUp() {
-    }
     
-    @After
-    public void tearDown() {
+    public void allTest() throws Exception {
+        
+        testPathLength();
     }
     
     @Test
-    public void myTest() {
-        new VoxelAnalysisTest();
+    public void testPathLength() throws Exception{
+        
+        List<Shot> shots = new ArrayList<>();
+        shots.add(new Shot(3, new Point3d(0.5, 0.5, 0.5), new Vector3d(1, 0, 0), new double[]{2, 3.2, 3.4}, new int[3], new float[3]));
+        
+        for(Shot shot : shots){
+            voxelAnalysis.processOneShot(shot);
+        }
+        
+        voxelAnalysis.computePADs();
+        
+        //test optical path length
+        assertEquals(0.5, voxelAnalysis.getVoxels()[0][0][0].lMeanTotal, 0);
+        assertEquals(1.0, voxelAnalysis.getVoxels()[1][0][0].lMeanTotal, 0);
+        assertEquals(1.0, voxelAnalysis.getVoxels()[2][0][0].lMeanTotal, 0);
+        assertEquals(0.9, voxelAnalysis.getVoxels()[3][0][0].lMeanTotal, 0.0000001);
+        
+        assertEquals(0.5, voxelAnalysis.getVoxels()[0][0][0].lgTotal, 0);
+        assertEquals(1.0, voxelAnalysis.getVoxels()[1][0][0].lgTotal, 0);
+        assertEquals(1.0, voxelAnalysis.getVoxels()[2][0][0].lgTotal, 0);
+        assertEquals(0.9, voxelAnalysis.getVoxels()[3][0][0].lgTotal, 0.0000001);
+        
+        //
+        
+        voxelAnalysis.write();
+        
+    }
+    
+    public void testMultiEcho(){
+        
     }
     
 }

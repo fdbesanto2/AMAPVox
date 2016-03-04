@@ -7,6 +7,7 @@ package fr.amap.lidar.amapvox.voxviewer.object.camera;
 
 import fr.amap.commons.math.matrix.Mat4F;
 import fr.amap.commons.math.vector.Vec3F;
+import fr.amap.lidar.amapvox.voxviewer.object.scene.MousePicker;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
 import javax.swing.event.EventListenerList;
 import org.apache.commons.math3.geometry.euclidean.threed.SphericalCoordinates;
@@ -29,6 +30,7 @@ public class TrackballCamera extends Camera{
     private float height;
     
     private boolean inverseY = false;
+    private MousePicker mousePicker;
     
     
     private SceneObject pivot;
@@ -53,6 +55,7 @@ public class TrackballCamera extends Camera{
         location = new Vec3F();
         target = new Vec3F();
         up = new Vec3F(0, 0, 1);
+        mousePicker = new MousePicker(this);
     }
     
     @Override

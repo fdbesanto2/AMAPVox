@@ -12,7 +12,7 @@ import javax.swing.event.EventListenerList;
  *
  * @author Julien Heurtebize
  */
-public abstract class CallableTask implements Callable{
+public abstract class CallableTask extends Process implements Callable{
 
     private final EventListenerList listeners;
 

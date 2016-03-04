@@ -3,6 +3,9 @@
  */
 package fr.amap.lidar.amapvox.simulation.transmittance;
 
+import fr.amap.commons.math.matrix.Mat3D;
+import fr.amap.commons.math.rotation.AxisRotation;
+import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.DirectionalTransmittance;
 import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelSpace;
 import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.light.IncidentRadiation;
@@ -32,6 +35,7 @@ import java.util.Calendar;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
 import fr.amap.commons.util.Cancellable;
+import javax.vecmath.Vector3f;
 
 /**
  * @author dauzat
@@ -102,7 +106,7 @@ public class TransmittanceSim extends Process implements Cancellable{
         
         this.parameters = parameters;
         
-        turtle = new Turtle(parameters.getDirectionsNumber());
+        turtle = new Turtle(parameters.getDirectionsNumber(), parameters.getDirectionsRotation());        
         
         logger.info("Turtle built with " + turtle.getNbDirections() + " directions");
         
@@ -151,7 +155,6 @@ public class TransmittanceSim extends Process implements Cancellable{
 
         IncidentRadiation ir = solRad.get(0);
         
-        System.out.println("\n\n\n");
         int count = 0;
         
         for (Point3d position : positions) {
@@ -257,104 +260,8 @@ public class TransmittanceSim extends Process implements Cancellable{
         
         if(parameters.getPositions() != null){
             positions = parameters.getPositions();
-        }else{
-            
-            positions = new ArrayList<>();
-            
-            if(parameters.isUseScanPositionsFile()){
-            
-                File pointPositionsFile = parameters.getPointsPositionsFile();
-
-                try {
-                    BufferedReader reader = new BufferedReader(new FileReader(pointPositionsFile));
-
-                    String line;
-                    boolean firstLineParsed = false;
-
-                    while((line = reader.readLine()) != null){
-
-                        line = line.replaceAll(" ", ",");
-                        line = line.replaceAll("\t", ",");
-
-                        String[] split = line.split(",");
-
-                        if(split != null && split.length >= 3){
-
-                            if(split.length > 3 && !firstLineParsed){
-                                logger.info("Sensor position file contains more than three columns, parsing the three first");
-                            }
-
-                            Point3d position = new Point3d(Double.valueOf(split[0]), Double.valueOf(split[1]), Double.valueOf(split[2]));
-
-                            int i = (int) ((position.x - voxSpace.getBoundingBox().min.x) / voxSpace.getVoxelSize().x);
-                            int j = (int) ((position.y - voxSpace.getBoundingBox().min.y) / voxSpace.getVoxelSize().y);
-
-                            if(i < voxSpace.getSplitting().x && i >= 0 && j < voxSpace.getSplitting().y && j >= 0){
-                                positions.add(position);
-                            }else{
-                                logger.warn("Position "+position.toString() +" ignored because out of voxel space!");
-                            }
-                        }
-
-                        if(!firstLineParsed){
-                            firstLineParsed = true;
-                        }
-                    }
-
-                } catch (FileNotFoundException ex) {
-                    logger.error("File "+ parameters.getPointsPositionsFile()+" not found", ex);
-                } catch (IOException ex) {
-                    logger.error("An error occured when reading file", ex);
-                }
-
-            }else{
-                // Smaller plot at center
-                int size = (int)parameters.getWidth();
-
-                int middleX = (int)parameters.getCenterPoint().x;
-                int middleY = (int)parameters.getCenterPoint().y;
-
-                int xMin = middleX - size;
-                int yMin = middleY - size;
-
-                int xMax = middleX + size;
-                int yMax = middleY + size;
-
-                xMin = Integer.max(xMin, 0);
-                yMin = Integer.max(yMin, 0);
-
-                xMax = Integer.min(xMax, voxSpace.getSplitting().x -1);
-                yMax = Integer.min(yMax, voxSpace.getSplitting().y -1);
-
-                for (int i = xMin; i < xMax; i++) {
-
-                    double tx = (0.5f + (double) i) * voxSpace.getVoxelSize().x;
-
-                    for (int j = yMin; j < yMax; j++) {
-
-                        double ty = (0.5f + (double) j) * voxSpace.getVoxelSize().y;
-                        Point3d pos = new Point3d(voxSpace.getBoundingBox().min);
-                        pos.add(new Point3d(tx, ty, mnt[i][j] + parameters.getCenterPoint().z));
-                        positions.add(pos);
-                    }
-                }
-
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(parameters.getTextFile().getParentFile()+File.separator+"positions.txt")))) {
-
-                    for(Point3d position : positions){
-                        writer.write(position.x + " " + position.y + " " + position.z + "\n");
-                    }
-
-                    writer.close();
-                }catch (IOException ex) {
-                logger.error("Cannot write positions.txt file in output directory", ex);
-                }
-            }
+            logger.info("nb positions= " + positions.size());
         }
-        
-        
-        
-        logger.info("nb positions= " + positions.size());
     }
 
     public void writeTransmittance() throws IOException{
