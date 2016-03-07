@@ -170,7 +170,11 @@ public class RSPVoxelizationService extends Service<List<File>>{
             @Override
             protected void cancelled() {
                 super.cancelled();
-                tool.setCancelled(true);
+                
+                if(tool != null){
+                    tool.setCancelled(true);
+                }
+                
             }
         };
         

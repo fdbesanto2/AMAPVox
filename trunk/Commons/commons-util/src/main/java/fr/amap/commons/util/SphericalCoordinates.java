@@ -55,6 +55,10 @@ public class SphericalCoordinates {
     public double getZenith() {
         return zenith;
     }
+    
+    public double getElevation() {
+        return Math.PI/2.0 - zenith;
+    }
 
     public double getRadius() {
         return radius;

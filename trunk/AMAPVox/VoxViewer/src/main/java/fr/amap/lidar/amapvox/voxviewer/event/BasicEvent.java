@@ -163,7 +163,7 @@ public class BasicEvent extends EventManager{
             joglContext.getScene().setLightPosition(new Point3F(currentLightPosition.x, currentLightPosition.y, currentLightPosition.z-1));
         }
         
-        if(keyboard.isKeyDown(KeyEvent.VK_AMPERSAND) || keyboard.isKeyDown(KeyEvent.VK_NUMPAD1) ){
+        if(keyboard.isKeyClicked(KeyEvent.VK_AMPERSAND) || keyboard.isKeyClicked(KeyEvent.VK_NUMPAD1) ){
             
             if(keyboard.isControlDown()){
                 joglContext.getScene().getCamera().setViewToBack();
@@ -175,7 +175,7 @@ public class BasicEvent extends EventManager{
             joglContext.refresh();
         }
         
-        if(keyboard.isKeyDown(KeyEvent.VK_QUOTEDBL) || keyboard.isKeyDown(KeyEvent.VK_NUMPAD3) ){
+        if(keyboard.isKeyClicked(KeyEvent.VK_QUOTEDBL) || keyboard.isKeyClicked(KeyEvent.VK_NUMPAD3) ){
             
             if(keyboard.isControlDown()){
                 joglContext.getScene().getCamera().setViewToLeft();
@@ -187,7 +187,7 @@ public class BasicEvent extends EventManager{
             joglContext.refresh();
         }
         
-        if(keyboard.isKeyDown(KeyEvent.VK_NUMPAD7) ){
+        if(keyboard.isKeyClicked(KeyEvent.VK_NUMPAD7) ){
             
             if(keyboard.isControlDown()){
                 joglContext.getScene().getCamera().setViewToBottom();
@@ -200,7 +200,7 @@ public class BasicEvent extends EventManager{
             joglContext.refresh();
         }
         
-        if(keyboard.isKeyDown(KeyEvent.VK_LEFT_PARENTHESIS) || keyboard.isKeyDown(KeyEvent.VK_NUMPAD5) ){
+        if(keyboard.isKeyClicked(KeyEvent.VK_LEFT_PARENTHESIS) || keyboard.isKeyClicked(KeyEvent.VK_NUMPAD5) ){
             joglContext.getScene().getCamera().switchPerspective();
             joglContext.updateCamera();
             resetMouseLocation();

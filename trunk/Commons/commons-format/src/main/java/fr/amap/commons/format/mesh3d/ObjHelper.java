@@ -18,7 +18,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -387,7 +389,9 @@ public class ObjHelper {
     }
     
     public static Obj readObj(File objFile, File mtlFile) throws FileNotFoundException, IOException{
-                
+             
+        Obj obj = new Obj();
+        
         try (BufferedReader reader = new BufferedReader(new FileReader(objFile))) {
             
             List<Point3F> vertices = new ArrayList<>();
@@ -399,8 +403,7 @@ public class ObjHelper {
             Point2F[] texCoordArray = new Point2F[0];
             
             List<Integer> materialOffsets = new ArrayList<>();
-            
-            Obj obj = new Obj();
+            Map<Integer, String> materialLinks = new HashMap<>();
 
             String line;
 
@@ -480,6 +483,8 @@ public class ObjHelper {
                         hasUseMtlLine = true;
                     }
                     
+                    String[] split = line.split(" ");
+                    materialLinks.put(materialOffsets.size(), split[1]);
                     materialOffsets.add(faceIndex);
                 }
             }
@@ -499,8 +504,9 @@ public class ObjHelper {
             for(int i=0;i<materialOffsets.size();i++){
                 materialOffsetsArray[i] = materialOffsets.get(i);
             }
-            obj.setMaterialOffsets(materialOffsetsArray);
             
+            obj.setMaterialOffsets(materialOffsetsArray);
+            obj.setMaterialLinks(materialLinks);
             
             for(int i=0;i<normalsArray.length;i++){
                 if(normalsArray[i] == null){
@@ -515,12 +521,63 @@ public class ObjHelper {
             obj.setHasNormalsIndices(hasNormalLine);
             obj.setHasTexCoordIndices(hasVertexTexCoordLine);
             
-            return obj;
+            
 
         } catch (FileNotFoundException ex) {
             throw ex;
         } catch (IOException ex) {
             throw ex;
         }
+        
+        if (mtlFile != null) {
+            
+            
+            
+            Map<String, Mtl> materials = new HashMap<>();
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(mtlFile))) {
+
+                String line;
+                String materialName = null;
+                Vec3F ambientColor = null, diffuseColor = null, specularColor = null;
+                
+                while((line = reader.readLine()) != null){
+                    
+                    if(line.startsWith("newmtl ")){
+                        
+                        materialName = line.split(" ")[1];
+                        
+                    }else if(line.startsWith("Ka ")){
+                        
+                        String[] split = line.split(" ");
+                        ambientColor = new Vec3F(Float.valueOf(split[1]), Float.valueOf(split[2]), Float.valueOf(split[3]));
+                        
+                    }else if(line.startsWith("Kd ")){
+                        
+                        String[] split = line.split(" ");
+                        diffuseColor = new Vec3F(Float.valueOf(split[1]), Float.valueOf(split[2]), Float.valueOf(split[3]));
+                        
+                    }else if(line.startsWith("Ks ")){
+                        
+                        String[] split = line.split(" ");
+                        specularColor = new Vec3F(Float.valueOf(split[1]), Float.valueOf(split[2]), Float.valueOf(split[3]));
+                        
+                        if(materialName != null && diffuseColor != null && ambientColor != null){
+                            
+                            materials.put(materialName, new Mtl(materialName, diffuseColor, ambientColor, specularColor));
+                        }
+                    }
+                }
+                
+            } catch (FileNotFoundException ex) {
+                throw ex;
+            } catch (IOException ex) {
+                throw ex;
+            }
+            
+            obj.setMaterials(materials);
+        }
+        
+        return obj;
     }
 }

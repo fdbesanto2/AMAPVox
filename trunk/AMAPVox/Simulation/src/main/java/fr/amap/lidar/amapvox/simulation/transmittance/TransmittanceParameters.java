@@ -31,6 +31,7 @@ public class TransmittanceParameters {
     private File inputFile;
     private int directionsNumber;
     private float directionsRotation;
+    private boolean toricity;
     
     //scanner positions
     private boolean useScanPositionsFile;
@@ -215,5 +216,13 @@ public class TransmittanceParameters {
 
     public void setDirectionsRotation(float directionsRotation) {
         this.directionsRotation = directionsRotation;
+    }
+
+    public boolean isToricity() {
+        return toricity;
+    }
+
+    public void setToricity(boolean toricity) {
+        this.toricity = toricity;
     }
 }

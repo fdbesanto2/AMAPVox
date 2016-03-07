@@ -79,6 +79,10 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
     private float[][] weighting;
     private float[][] residualEnergyTable;
+    
+    private final boolean volumeWeighting = true;
+    
+    private int transMode = 1;
 
     private GroundEnergy[][] groundEnergy;
     private VoxelParameters parameters;
@@ -434,7 +438,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
             double distance = getPosition(new Point3i(indices.x, indices.y, indices.z), parameters.infos.getSplit(), parameters.infos.getMinCorner()).distance(shot.origin);
             
             //surface de la section du faisceau à la distance de la source
-            if (parameters.getEchoesWeightParams().getWeightingMode() != EchoesWeightParams.WEIGHTING_NONE) {
+            if (parameters.getEchoesWeightParams().getWeightingMode() != EchoesWeightParams.WEIGHTING_NONE && volumeWeighting) {
                 surface = Math.pow((Math.tan(laserSpec.getBeamDivergence() / 2.0) * distance) + laserSpec.getBeamDiameterAtExit(), 2) * Math.PI;
             } else {
                 surface = 1;
@@ -585,8 +589,15 @@ public class VoxelAnalysis extends Process implements Cancellable{
                 }
             }
             
-            if(test){
-                double transNorm = Math.pow(((entering - intercepted) / entering), 1/longueur) * surfMulLength;
+            if(test && (transMode == 2 || transMode == 3)){
+                double transNorm;
+                
+                if(transMode == 2){
+                    transNorm = ((entering - intercepted) / entering) * surfMulLength;
+                }else{ //mode 3
+                    transNorm = Math.pow(((entering - intercepted) / entering), 1/longueur) * surfMulLength;
+                }
+                
                 vox._transmittance_norm += transNorm;
 
                 vox._sumSurfMulLength += surfMulLength;
@@ -624,12 +635,17 @@ public class VoxelAnalysis extends Process implements Cancellable{
         return transmittance;
     }
     
+    public float computeNormTransmittanceMode2(double transmittance, double _sumSurfMulLength, double lMeanTotal){
+        float normalizedTransmittance = (float) Math.pow((transmittance / _sumSurfMulLength), 1 / lMeanTotal);
+        return normalizedTransmittance;
+    }
+    
     public float computeNormTransmittanceV2(double transmittance, double _sumSurfMulLength){
         float normalizedTransmittance = (float) (transmittance / _sumSurfMulLength);
         return normalizedTransmittance;
     }
     
-    public float computeNormTransmittance(float transmittance, double lMeanTotal){
+    public float computeNormTransmittance(double transmittance, double lMeanTotal){
         float normalizedTransmittance = (float) Math.pow(transmittance, 1 / lMeanTotal);
         return normalizedTransmittance;
     }
@@ -682,9 +698,21 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
         }
         
-        //float transmittance = computeTransmittance(voxel.bvEntering, voxel.bvIntercepted);
-        //float normalizedTransmittance = computeNormTransmittance(transmittance, voxel.lMeanTotal);
-        float normalizedTransmittance = computeNormTransmittanceV2(voxel._transmittance_norm, voxel._sumSurfMulLength);
+        float normalizedTransmittance;
+        
+        switch(transMode){
+            case 2:
+                normalizedTransmittance = computeNormTransmittanceMode2(voxel._transmittance_norm, voxel._sumSurfMulLength, voxel.lMeanTotal);
+                break;
+            case 3:
+                normalizedTransmittance = computeNormTransmittanceV2(voxel._transmittance_norm, voxel._sumSurfMulLength);
+                break;
+                
+            case 1:
+            default:
+                float transmittance = computeTransmittance(voxel.bvEntering, voxel.bvIntercepted);
+                normalizedTransmittance = computeNormTransmittance(transmittance, voxel.lMeanTotal);
+        }
         
         voxel.transmittance = normalizedTransmittance;
         voxel.PadBVTotal = computePADFromNormTransmittance(normalizedTransmittance, voxel.angleMean);

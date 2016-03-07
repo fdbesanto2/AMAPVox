@@ -30,9 +30,9 @@ import static org.junit.Assert.*;
  */
 public class VoxelAnalysisV2Test {
     
-    private static final VoxelAnalysisV2 voxelAnalysis;
+    //private static final VoxelAnalysisV2 voxelAnalysis;
     
-    static{
+    /*static{
         
         VoxelAnalysisCfg cfg = new VoxelAnalysisCfg();
         
@@ -57,7 +57,7 @@ public class VoxelAnalysisV2Test {
             voxelAnalysis.processOneShot(shot);
         }
         
-    }
+    }*/
     
     public VoxelAnalysisV2Test() {
         
@@ -83,7 +83,7 @@ public class VoxelAnalysisV2Test {
     @Test
     public void testProcessOneShot() {
         
-        new VoxelAnalysisV2(null);
+        //new VoxelAnalysisV2(null);
     }
     
 }

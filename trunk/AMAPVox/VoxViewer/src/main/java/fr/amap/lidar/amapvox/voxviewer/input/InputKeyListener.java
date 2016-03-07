@@ -18,6 +18,7 @@ public class InputKeyListener implements KeyListener{
     
     //private final EventManager listener;
     private final boolean[] keyStates;
+    private final boolean[] keysClicked;
     private boolean controlDown;
     private boolean altDown;
     private boolean altGraphDown;
@@ -27,6 +28,7 @@ public class InputKeyListener implements KeyListener{
         
         //this.listener = listener;
         this.keyStates = new boolean[256];
+        this.keysClicked = new boolean[256];
     }
     
     private void updateSpecialKeys(KeyEvent ke){
@@ -115,6 +117,7 @@ public class InputKeyListener implements KeyListener{
         updateSpecialKeys(ke);
         
         keyStates[ke.getKeyCode()] = false;
+        keysClicked[ke.getKeyCode()] = true;
         
         /*listener.ctrlPressed = ke.isControlDown();
         
@@ -179,6 +182,17 @@ public class InputKeyListener implements KeyListener{
         if(key < keyStates.length){
             return keyStates[key];
         }else{
+            return false;
+        }
+    }
+    
+    public boolean isKeyClicked(short key) {
+        
+        if (key < 256) {
+            boolean clicked = keysClicked[key];
+            keysClicked[key] = false;
+            return clicked;
+        } else {
             return false;
         }
     }

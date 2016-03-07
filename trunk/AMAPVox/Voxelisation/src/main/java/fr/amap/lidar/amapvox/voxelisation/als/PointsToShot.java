@@ -116,7 +116,7 @@ public class PointsToShot extends Process implements Iterable<Shot>, Cancellable
                 try {
                     laz.openLazFile(alsFile);
                 } catch (Exception ex) {
-                    Logger.getLogger(PointsToShot.class.getName()).log(Level.SEVERE, null, ex);
+                    throw ex;
                 }
 
                 header = laz.getHeader();

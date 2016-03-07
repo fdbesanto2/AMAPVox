@@ -43,7 +43,7 @@ public class DirectionalTransmittance {
     
     private fr.amap.commons.util.vegetation.DirectionalTransmittance direcTrans;
     
-    private boolean toricity = true;
+    private boolean toricity = false;
     private final static double EPSILON = 0.01;
     
     private class TLSVoxel {

@@ -7,11 +7,12 @@ package fr.amap.lidar.amapvox.voxviewer.object.camera;
 
 import fr.amap.commons.math.matrix.Mat4F;
 import fr.amap.commons.math.vector.Vec3F;
+import fr.amap.commons.util.SphericalCoordinates;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.MousePicker;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
 import javax.swing.event.EventListenerList;
-import org.apache.commons.math3.geometry.euclidean.threed.SphericalCoordinates;
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import javax.vecmath.Point3d;
+import org.apache.commons.math3.util.MathUtils;
 
 /**
  *
@@ -194,15 +195,16 @@ public class TrackballCamera extends Camera{
     
     private float normalizeTheta(float theta){
         
+        return (float) MathUtils.normalizeAngle(theta, 0);
         //normalize between 0 and 2pi
-        while(theta < 0){
+        /*while(theta < 0){
             theta += Math.PI * 2;
         }
         while(theta > (Math.PI * 2)){
             theta -= (Math.PI  * 2);
         } 
         
-        return theta;
+        return theta;*/
     }
     
     private float normalizePhi(float phi){
@@ -223,11 +225,12 @@ public class TrackballCamera extends Camera{
         
         
         //get current theta and phi
-        SphericalCoordinates sc1 = new SphericalCoordinates(new Vector3D(location.x - target.x, location.y - target.y, location.z - target.z));
+        SphericalCoordinates sc1 = new SphericalCoordinates();
+        sc1.toSpherical(new Point3d(location.x - target.x, location.y - target.y, location.z - target.z));
         
-        float oldTheta = (float) sc1.getTheta();
-        float oldPhi = (float) sc1.getPhi();
-    
+        float oldTheta = (float) sc1.getAzimut();
+        float oldPhi = (float) sc1.getZenith();
+            
         //theta doit être compris entre 0 et 2pi
         //phi doit être compris entre entre ]0 et pi[
         float theta = 0, phi = 0;
@@ -264,8 +267,8 @@ public class TrackballCamera extends Camera{
             }
         }
         
-        SphericalCoordinates sc = new SphericalCoordinates(radius, theta, phi);
-        Vector3D cartesian = sc.getCartesian();
+        SphericalCoordinates sc = new SphericalCoordinates(theta, phi, radius);
+        Point3d cartesian = sc.toCartesian();
         
         location.x =  target.x + (float) cartesian.getX();
         location.y =  target.y + (float) cartesian.getY();

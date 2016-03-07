@@ -8,7 +8,9 @@ package fr.amap.commons.format.mesh3d;
 import fr.amap.commons.math.point.Point2F;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.point.Point3I;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -25,6 +27,8 @@ public class Obj {
     private boolean hasNormalsIndices;
     
     private int[] materialOffsets;
+    private Map<String, Mtl> materials;
+    private Map<Integer, String> materialLinks;
 
     public Point3F[] getPoints() {
         return points;
@@ -94,4 +98,21 @@ public class Obj {
     public void setMaterialOffsets(int[] materialOffsets) {
         this.materialOffsets = materialOffsets;
     }
+
+    public Map<String, Mtl> getMaterials() {
+        return materials;
+    }
+
+    public void setMaterials(Map<String, Mtl> materials) {
+        this.materials = materials;
+    }
+
+    public Map<Integer, String> getMaterialLinks() {
+        return materialLinks;
+    }
+
+    public void setMaterialLinks(Map<Integer, String> materialLinks) {
+        this.materialLinks = materialLinks;
+    }
+    
 }

@@ -6,6 +6,7 @@
 package fr.amap.lidar.amapvox.voxviewer.mesh;
 
 import com.jogamp.common.nio.Buffers;
+import fr.amap.commons.format.mesh3d.Mtl;
 import fr.amap.commons.format.mesh3d.Obj;
 import fr.amap.commons.format.mesh3d.ObjHelper;
 import fr.amap.commons.math.point.Point3F;
@@ -499,6 +500,8 @@ public class GLMeshFactory {
         
                 
         GLMesh mesh = GLMeshFactory.createMesh(obj.getPoints(), obj.getNormals(), obj.get1DFaces());
+       
+        
         
         int nbPoints = obj.getPoints().length;
         float colorData[] = new float[nbPoints * 3];
@@ -508,6 +511,39 @@ public class GLMeshFactory {
             colorData[j] = 0;
             colorData[j+1] = 0;
             colorData[j+2] = 0;
+        }
+        
+        Point3I[] faces = obj.getFaces();
+        
+        int[] materialOffsets = obj.getMaterialOffsets();
+        Map<Integer, String> materialLinks = obj.getMaterialLinks();
+        Map<String, Mtl> materials = obj.getMaterials();
+        
+        int faceID = 0;
+        int currentMaterial = 1;
+        
+        for(Point3I face : faces){
+            
+            String materialName = materialLinks.get(currentMaterial-1);
+            Mtl mtl = materials.get(materialName);
+                    
+            colorData[face.x] = mtl.getDiffuseColor().x;
+            colorData[face.x+1] = mtl.getDiffuseColor().x;
+            colorData[face.x+2] = mtl.getDiffuseColor().x;
+            
+            colorData[face.y] = mtl.getDiffuseColor().y;
+            colorData[face.y+1] = mtl.getDiffuseColor().y;
+            colorData[face.y+2] = mtl.getDiffuseColor().y;
+            
+            colorData[face.z] = mtl.getDiffuseColor().z;
+            colorData[face.z+1] = mtl.getDiffuseColor().z;
+            colorData[face.z+2] = mtl.getDiffuseColor().z;
+            
+            faceID++;
+            
+            if(currentMaterial < materialOffsets.length && faceID >= materialOffsets[currentMaterial]){
+                currentMaterial++;
+            }
         }
         
         mesh.colorBuffer = Buffers.newDirectFloatBuffer(colorData);

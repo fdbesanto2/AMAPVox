@@ -118,6 +118,8 @@ public class TransmittanceSim extends Process implements Cancellable{
         logger.info("===== " + parameters.getInputFile().getAbsolutePath() + " =====");
 
         direcTransmittance = new DirectionalTransmittance(parameters.getInputFile());
+        direcTransmittance.setToricity(parameters.isToricity());
+        
         voxSpace = direcTransmittance.getVoxSpace();
         mnt = direcTransmittance.getMnt();
 

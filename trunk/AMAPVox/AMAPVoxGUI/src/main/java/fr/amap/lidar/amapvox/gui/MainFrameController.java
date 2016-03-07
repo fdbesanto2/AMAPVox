@@ -725,6 +725,8 @@ public class MainFrameController implements Initializable {
     private SplitPane splitPaneVoxelization;
     @FXML
     private TextField textfieldDirectionRotationTransmittanceMap;
+    @FXML
+    private CheckBox checkboxTransmittanceMapToricity;
     
     private void initValidationSupport(){
         
@@ -747,7 +749,19 @@ public class MainFrameController implements Initializable {
         alsVoxValidationSupport.registerValidator(textFieldOutputFileALS, false, Validators.fileValidityValidator);
         
         tlsVoxValidationSupport.registerValidator(textFieldInputFileTLS, false, Validators.fileExistValidator);
+        
         tlsVoxValidationSupport.registerValidator(textFieldOutputPathTLS, false, Validators.directoryValidator);
+        
+        comboboxModeTLS.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if(newValue.intValue() == 0){
+                    tlsVoxValidationSupport.registerValidator(textFieldOutputPathTLS, false, Validators.fileValidityValidator);
+                }else{
+                    tlsVoxValidationSupport.registerValidator(textFieldOutputPathTLS, false, Validators.directoryValidator);
+                }
+            }
+        });
         
         //transmittance light map fields validation
         
@@ -5270,6 +5284,7 @@ public class MainFrameController implements Initializable {
                         tabPaneVirtualMeasures.getSelectionModel().select(0);
                         comboboxChooseDirectionsNumber.getSelectionModel().select(new Integer(params.getDirectionsNumber()));
                         textfieldDirectionRotationTransmittanceMap.setText(String.valueOf(params.getDirectionsRotation()));
+                        checkboxTransmittanceMapToricity.setSelected(params.isToricity());
                         
                         checkboxGenerateBitmapFile.setSelected(params.isGenerateBitmapFile());
 
@@ -6427,6 +6442,7 @@ public class MainFrameController implements Initializable {
         transmParameters.setInputFile(new File(textfieldVoxelFilePathTransmittance.getText()));
         transmParameters.setGenerateBitmapFile(checkboxGenerateBitmapFile.isSelected());
         transmParameters.setGenerateTextFile(checkboxGenerateTextFile.isSelected());
+        transmParameters.setToricity(checkboxTransmittanceMapToricity.isSelected());
 
         if(checkboxGenerateBitmapFile.isSelected()){
             transmParameters.setBitmapFile(new File(textfieldOutputBitmapFilePath.getText()));

@@ -9,23 +9,27 @@ JNIEXPORT void JNICALL Java_fr_amap_amapvox_als_laz_LazExtraction_afficherBonjou
     return;
 }
 
+
+
 JNIEXPORT jlong JNICALL Java_fr_amap_amapvox_als_laz_LazExtraction_instantiateLasZip(JNIEnv *env, jobject obj)
 {
     laszip_dll_struct* laszip_dll = new laszip_dll_struct;
     memset(laszip_dll, 0, sizeof(laszip_dll_struct));
 
-    jclass c = env->FindClass("fr/amap/amapvox/als/LasPoint");
+    /*jclass c = env->FindClass("fr/amap/amapvox/als/LasPoint");
     if (c == NULL){
-        return -1;
+        return JNI_ERR;
     }
 
     lasPointFormat0Class = (jclass)env->NewGlobalRef(c);
+    if (lasPointFormat0Class == NULL){
+        return JNI_ERR;
+    }*/
 
-    lasPointFormat0Constructor = env->GetMethodID(lasPointFormat0Class, "<init>", "(IIIBBIBD)V");
+    /*lasPointFormat0Constructor = env->GetMethodID(lasPointFormat0Class, "<init>", "(IIIBBIBD)V");
     if (lasPointFormat0Constructor == NULL){
-        return -1;
-    }
-
+        return JNI_ERR;
+    }*/
 
     return (jlong)laszip_dll;
 }
@@ -37,8 +41,38 @@ JNIEXPORT void JNICALL Java_fr_amap_amapvox_als_laz_LazExtraction_deleteLasZip(J
 
     delete laszip_dll;
 
-    if (lasPointFormat0Class != NULL) {
+    /*if (lasPointFormat0Class != NULL) {
         env->DeleteGlobalRef(lasPointFormat0Class);
+    }*/
+}
+
+jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+    JNIEnv* env;
+    if ((vm)->GetEnv((void **) &env, JNI_VERSION_1_8) != JNI_OK) {
+        return JNI_ERR;
+    } else {
+        jclass c = env->FindClass("fr/amap/amapvox/als/LasPoint");
+        if (c == NULL){
+            return JNI_ERR;
+        }
+        lasPointFormat0Class = (jclass)env->NewGlobalRef(c);
+        lasPointFormat0Constructor = env->GetMethodID(lasPointFormat0Class, "<init>", "(IIIBBIBD)V");
+        if (lasPointFormat0Constructor == NULL){
+            return JNI_ERR;
+        }
+    }
+    return JNI_VERSION_1_8;
+}
+
+void JNI_OnUnload(JavaVM *vm, void *reserved) {
+    JNIEnv* env;
+    if ((vm)->GetEnv((void **) &env, JNI_VERSION_1_8) != JNI_OK) {
+        // Something is wrong but nothing we can do about this :(
+        return;
+    } else {
+        if (0 != NULL){
+            (env)->DeleteGlobalRef(lasPointFormat0Class);
+        }
     }
 }
 

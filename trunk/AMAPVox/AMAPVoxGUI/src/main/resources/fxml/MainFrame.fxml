@@ -970,6 +970,11 @@
                                                                                     <Label text="degrees (anticlockwise)" />
                                                                                  </children>
                                                                               </HBox>
+                                                                              <CheckBox fx:id="checkboxTransmittanceMapToricity" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Toricity">
+                                                                                 <font>
+                                                                                    <Font name="System Bold" size="12.0" />
+                                                                                 </font>
+                                                                              </CheckBox>
                                                                            </children>
                                                                         </VBox>
                                                                      </content>

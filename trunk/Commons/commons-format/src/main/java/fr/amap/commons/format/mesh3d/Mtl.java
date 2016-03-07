@@ -13,7 +13,28 @@ import fr.amap.commons.math.vector.Vec3F;
  */
 public class Mtl {
     
-    private Vec3F diffuseColor;
-    private Vec3F ambientColor;
-    private Vec3F specularColor;
+    private String name;
+    
+    private final Vec3F diffuseColor;
+    private final Vec3F ambientColor;
+    private final Vec3F specularColor;
+
+    public Mtl(String name, Vec3F diffuseColor, Vec3F ambientColor, Vec3F specularColor) {
+        this.name = name;
+        this.diffuseColor = diffuseColor;
+        this.ambientColor = ambientColor;
+        this.specularColor = specularColor;
+    }
+
+    public Vec3F getDiffuseColor() {
+        return diffuseColor;
+    }
+
+    public Vec3F getAmbientColor() {
+        return ambientColor;
+    }
+
+    public Vec3F getSpecularColor() {
+        return specularColor;
+    }
 }

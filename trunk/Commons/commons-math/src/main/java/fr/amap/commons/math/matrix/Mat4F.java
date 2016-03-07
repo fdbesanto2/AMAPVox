@@ -420,15 +420,17 @@ public class Mat4F {
             return Mat4F.identity();
         }
         
-        Vec3F forward = Vec3F.normalize(Vec3F.substract(eye, center));
+        Vec3F forward = Vec3F.normalize(Vec3F.substract(eye, center)); //z axis
         
-        Vec3F right = Vec3F.normalize(Vec3F.cross(up, forward));
+        Vec3F right = Vec3F.normalize(Vec3F.cross(up, forward)); //x axis
         
         if(Vec3F.length(right) == 0){
             right.x = 1;
         }
         
-        Vec3F newUp = Vec3F.cross(forward, right);
+        Vec3F newUp = Vec3F.cross(forward, right); //y axis
+        
+        //System.out.println("up : "+newUp.x+"\t"+newUp.y+"\t"+newUp.z+"\t"+"forward : "+forward.x+"\t"+forward.y+"\t"+forward.z+"\t"+"right : "+right.x+"\t"+right.y+"\t"+right.z+"\t");
         
         Mat4F result = new Mat4F();
         

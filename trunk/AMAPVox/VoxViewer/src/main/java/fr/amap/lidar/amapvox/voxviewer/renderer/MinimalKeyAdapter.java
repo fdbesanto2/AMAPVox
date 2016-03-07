@@ -30,4 +30,12 @@ public class MinimalKeyAdapter extends KeyAdapter{
         }
     }
     
+    @Override
+    public void keyReleased(KeyEvent e) {
+        
+        if(animator.isPaused()){
+            animator.resume();
+        }
+    }
+    
 }
