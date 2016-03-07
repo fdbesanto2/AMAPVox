@@ -69,7 +69,6 @@ public class VoxelAnalysis extends Process implements Cancellable{
     
     private boolean cancelled;
 
-    private VoxelSpace voxSpace;
     private Voxel voxels[][][];
     private VoxelManager voxelManager;
 
@@ -533,13 +532,13 @@ public class VoxelAnalysis extends Process implements Cancellable{
                  
                 test = true;
 
+                //si l'écho n'est pas un dernier écho mais au niveau distance ne sort pas du voxel courant, alors la longueur sera surestimé
                 if (lastEcho) {
                     longueur = (distanceToHit - d1);
                 } else {
                     longueur = (d2 - d1);
                 }
                     
-                //cette condition crée des cas où bvIntercepted > bvEntering
                 if(shotID == lastShotId && lastVoxelSampled != null && lastVoxelSampled == vox){
                     //pour n'échantillonner qu'une fois le voxel pour un tir
                 }else{
@@ -569,7 +568,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
                     }
                     vox.nbEchos++;
 
-                    surfMulLength += surface * longueur;
+                    surfMulLength = surface * longueur;
                     intercepted = (Math.round(beamFraction*10000)/10000.0);
                     vox.bvIntercepted += (intercepted * surfMulLength);
 
@@ -910,9 +909,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
                 
                 groundEnergy = new GroundEnergy[parameters.infos.getSplit().x][parameters.infos.getSplit().y];
             }
-
-            voxSpace = new VoxelSpace(new BoundingBox3d(parameters.infos.getMinCorner(), parameters.infos.getMaxCorner()), parameters.infos.getSplit(), VoxelManagerSettings.NON_TORIC_FINITE_BOX_TOPOLOGY);
-
+            
             // allocate voxels
             LOGGER.info("allocate!!!!!!!!");
 

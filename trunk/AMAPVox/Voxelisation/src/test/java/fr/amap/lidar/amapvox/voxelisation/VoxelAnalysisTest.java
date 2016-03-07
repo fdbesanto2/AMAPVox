@@ -60,7 +60,7 @@ public class VoxelAnalysisTest extends TestCase{
         parameters.setLadParams(new LADParams());
         
         
-        voxelAnalysis.init(parameters, new File("/home/calcul/Documents/Julien/test.vox"));
+        voxelAnalysis.init(parameters, new File("C:\\Users\\Julien\\Documents\\test.vox"));
         voxelAnalysis.createVoxelSpace();
     }
     
