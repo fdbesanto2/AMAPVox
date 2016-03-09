@@ -28,9 +28,9 @@ public class CombinedFilter{
     public final static int AND = 0;
     public final static int OR = 1;
     
-    private Filter filter1;
-    private Filter filter2;
-    private int type;
+    protected Filter filter1;
+    protected Filter filter2;
+    protected int type;
     
     public CombinedFilter(Filter filter1, Filter filter2, int type){
         
@@ -61,5 +61,16 @@ public class CombinedFilter{
         }
         
     }
-    
+
+    public Filter getFilter1() {
+        return filter1;
+    }
+
+    public Filter getFilter2() {
+        return filter2;
+    }
+
+    public int getType() {
+        return type;
+    }
 }

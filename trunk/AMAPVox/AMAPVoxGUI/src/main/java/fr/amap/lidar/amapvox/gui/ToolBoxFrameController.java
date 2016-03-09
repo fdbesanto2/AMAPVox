@@ -13,6 +13,7 @@ import fr.amap.commons.util.Filter;
 import fr.amap.lidar.amapvox.voxviewer.object.camera.TrackballCamera;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.renderer.JoglListener;
+import fr.amap.commons.util.CombinedFilterItem;
 import java.awt.Color;
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -23,6 +24,8 @@ import java.util.Set;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -32,6 +35,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
@@ -81,17 +85,16 @@ public class ToolBoxFrameController implements Initializable {
     private TextField textFieldMaxValue;
     @FXML
     private Button buttonResetMinMax;
-    @FXML
-    private TextField textFieldFilterValues;
+    /*@FXML
+    private TextField textFieldFilterValues;*/
     private CheckBox comboboxStretched;
     @FXML
     private CheckBox checkboxStretched;
-    @FXML
-    private RadioButton radiobuttonDontDisplayValues;
-    @FXML
-    private RadioButton radiobuttonDisplayValues;
-    @FXML
-    private Tooltip tooltipTextfieldFilter;
+    /*@FXML
+    private RadioButton radiobuttonDontDisplayValues;*/
+    /*@FXML
+    private RadioButton radiobuttonDisplayValues;*/
+    //private Tooltip tooltipTextfieldFilter;
     @FXML
     private Button buttonApplyMinMax;
     @FXML
@@ -122,8 +125,8 @@ public class ToolBoxFrameController implements Initializable {
     private Button buttonViewFront;
     @FXML
     private Button buttonViewIsometric;
-    @FXML
-    private Button buttonOKValidationFilter;
+    /*@FXML
+    private Button buttonOKValidationFilter;*/
     @FXML
     private ColorPicker colorpickerLightingAmbientColor;
     @FXML
@@ -142,6 +145,19 @@ public class ToolBoxFrameController implements Initializable {
     private TextField textfieldIncrementValue;
     @FXML
     private Button buttonViewBack;
+    @FXML
+    private ComboBox<String> comboBoxScalarField;
+    @FXML
+    private Tooltip tooltipTextfieldFilter1;
+    @FXML
+    private ListView<CombinedFilterItem> listviewFilters;
+    @FXML
+    private RadioButton radiobuttonDisplay;
+    @FXML
+    private RadioButton radiobuttonDontDisplay;
+    @FXML
+    private TextField textfieldFilteringRange;
+    
     
     /**
      * Initializes the controller class.
@@ -280,7 +296,7 @@ public class ToolBoxFrameController implements Initializable {
             }
         });
         
-        textFieldFilterValues.setOnKeyReleased(new EventHandler<KeyEvent>() {
+        /*textFieldFilterValues.setOnKeyReleased(new EventHandler<KeyEvent>() {
 
             @Override
             public void handle(KeyEvent event) {
@@ -289,7 +305,7 @@ public class ToolBoxFrameController implements Initializable {
                     updateValuesFilter();
                 }
             }
-        });
+        });*/
         
         checkboxStretched.selectedProperty().addListener(new ChangeListener<Boolean>() {
 
@@ -314,7 +330,7 @@ public class ToolBoxFrameController implements Initializable {
             }
         });
         
-        ToggleGroup groupDisplayValues = new ToggleGroup();
+        /*ToggleGroup groupDisplayValues = new ToggleGroup();
         radiobuttonDisplayValues.setToggleGroup(groupDisplayValues);
         radiobuttonDontDisplayValues.setToggleGroup(groupDisplayValues);
         
@@ -325,12 +341,12 @@ public class ToolBoxFrameController implements Initializable {
                 
                 updateValuesFilter();
             }
-        });
+        });*/
         
         
         
         
-        tooltipTextfieldFilter.setText("Syntax: value1, value2\nvalue can be a floating point number\nor a value range [1.0->2.0[");
+        //tooltipTextfieldFilter.setText("Syntax: value1, value2\nvalue can be a floating point number\nor a value range [1.0->2.0[");
         
         textfieldCameraFOV.textProperty().addListener(new ChangeListener<String>() {
 
@@ -435,6 +451,28 @@ public class ToolBoxFrameController implements Initializable {
             }
         });
         
+        comboBoxScalarField.setItems(comboBoxAttributeToShow.getItems());
+        comboBoxScalarField.getItems().addListener(new ListChangeListener<String>() {
+            @Override
+            public void onChanged(ListChangeListener.Change<? extends String> c) {
+                if(c.getList().size() > 0){
+                    comboBoxScalarField.getSelectionModel().selectFirst();
+                }
+            }
+        });
+        
+        ToggleGroup group = new ToggleGroup();
+        radiobuttonDisplay.setToggleGroup(group);
+        radiobuttonDontDisplay.setToggleGroup(group);
+        
+        CombinedFilter combFilter1 = new CombinedFilter(new Filter("x", 0.0f, Filter.EQUAL),  null, CombinedFilter.AND);
+        CombinedFilter combFilter2 = new CombinedFilter(new Filter("x", Float.NaN, Filter.EQUAL),  null, CombinedFilter.AND);
+        
+        listviewFilters.getItems().add(new CombinedFilterItem("PadBVTotal", false, 
+                        combFilter1.getFilter1(), combFilter1.getFilter2(), combFilter1.getType()));
+        
+        listviewFilters.getItems().add(new CombinedFilterItem("PadBVTotal", false, 
+                        combFilter2.getFilter1(), combFilter2.getFilter2(), combFilter2.getType()));
         
     }
     
@@ -460,7 +498,7 @@ public class ToolBoxFrameController implements Initializable {
         });
     }
     
-    private void updateValuesFilter(){
+    /*private void updateValuesFilter(){
         
         final String[] valuesArray = textFieldFilterValues.getText().replace(" ", "").split(",");
         
@@ -533,7 +571,7 @@ public class ToolBoxFrameController implements Initializable {
         
         new Thread(task).start();
         
-    }
+    }*/
     
     public void setJoglListener(JoglListener joglContext){
         this.joglContext = joglContext;
@@ -700,10 +738,10 @@ public class ToolBoxFrameController implements Initializable {
         joglContext.getEventListener().mouseYOldLocation = joglContext.getEventListener().mouseYCurrentLocation;
     }*/
 
-    @FXML
+    /*@FXML
     private void onActionButtonOKValidationFilter(ActionEvent event) {
         updateValuesFilter();
-    }
+    }*/
 
     @FXML
     private void onActionButtonIncreaseCutting(ActionEvent event) {
@@ -734,6 +772,111 @@ public class ToolBoxFrameController implements Initializable {
         
         
         joglContext.refresh();
+    }
+    
+
+    @FXML
+    private void onActionButtonAddFilterToList(ActionEvent event) {
+        
+        String selectedItem = comboBoxScalarField.getSelectionModel().getSelectedItem();
+        
+        if(selectedItem != null){
+            
+            final String[] valuesArray = textfieldFilteringRange.getText().replace(" ", "").split(",");
+            
+            Set<CombinedFilter> filterValues = new HashSet<>();
+            
+            for(int i=0;i<valuesArray.length;i++){
+                try{
+                    if(valuesArray[i].contains("[") || valuesArray[i].contains("]") ){
+                        int index = valuesArray[i].indexOf("->");
+
+                        if(index != -1){
+                            char firstInequality = valuesArray[i].charAt(0);
+                            char secondInequality = valuesArray[i].charAt(valuesArray[i].length()-1);
+
+
+                            float firstValue = Float.valueOf(valuesArray[i].substring(1, index));
+                            float secondValue = Float.valueOf(valuesArray[i].substring(index+2, valuesArray[i].length()-1));
+
+                            int firstInequalityID;
+                            switch(firstInequality){
+                                case ']':
+                                    firstInequalityID = Filter.GREATER_THAN;
+                                    break;
+                                case '[':
+                                    firstInequalityID = Filter.GREATER_THAN_OR_EQUAL;
+                                    break;
+                                default:
+                                    firstInequalityID = Filter.GREATER_THAN_OR_EQUAL;
+                            }
+
+                            int secondInequalityID;
+                            switch(secondInequality){
+                                case ']':
+                                    secondInequalityID = Filter.LESS_THAN_OR_EQUAL;
+                                    break;
+                                case '[':
+                                    secondInequalityID = Filter.LESS_THAN;
+                                    break;
+                                default:
+                                    secondInequalityID = Filter.LESS_THAN_OR_EQUAL;
+                            }
+
+
+                            filterValues.add(new CombinedFilter(
+                                    new Filter("x", firstValue, firstInequalityID), 
+                                    new Filter("x", secondValue, secondInequalityID), CombinedFilter.AND));
+                        }
+
+                    }else{
+                        filterValues.add(new CombinedFilter(
+                                    new Filter("x", Float.valueOf(valuesArray[i]), Filter.EQUAL), 
+                                    null, CombinedFilter.AND));
+                    }
+
+                }catch(Exception e){}
+            }
+            
+            for(CombinedFilter combinedFilter : filterValues){
+                
+                ObservableList<CombinedFilterItem> items = listviewFilters.getItems();
+                
+                CombinedFilterItem combinedFilterItem = new CombinedFilterItem(comboBoxScalarField.getSelectionModel().getSelectedItem(), radiobuttonDisplay.isSelected(), 
+                        combinedFilter.getFilter1(), combinedFilter.getFilter2(), combinedFilter.getType());
+                
+                String newFilter = combinedFilterItem.toString();
+                
+                boolean addFilter = true;
+                
+                for(CombinedFilterItem item : items){
+                    if(item.toString().equals(newFilter)){
+                        addFilter = false;
+                    }
+                }
+                
+                if(addFilter){
+                    listviewFilters.getItems().add(combinedFilterItem);
+                }
+            }
+            
+            updateScene();
+        }
+    }
+    
+    private void updateScene(){
+        voxelSpace.setFilters(listviewFilters.getItems());
+        voxelSpace.updateColorValue(voxelSpace.getGradient());
+        voxelSpace.updateVao();
+        joglContext.refresh();
+    }
+
+    @FXML
+    private void onActionButtonRemoveFilterFromList(ActionEvent event) {
+        
+        ObservableList<CombinedFilterItem> selectedItems = listviewFilters.getSelectionModel().getSelectedItems();
+        listviewFilters.getItems().removeAll(selectedItems);
+        updateScene();
     }
     
 }

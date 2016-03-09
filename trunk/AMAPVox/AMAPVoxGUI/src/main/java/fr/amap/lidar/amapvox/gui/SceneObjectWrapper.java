@@ -12,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -26,6 +27,7 @@ public class SceneObjectWrapper extends VBox{
         private SceneObject sceneObject;
         private final Label label;
         private final ProgressBar progressBar;
+        private final Label progressInfo;
         private final CheckBox checkbox;
         private final HBox hbox;
         
@@ -42,6 +44,7 @@ public class SceneObjectWrapper extends VBox{
             path = file.getAbsolutePath();
             name = file.getName();
             this.progressBar = progressBar;
+            this.progressInfo = new Label();
             checkbox = new CheckBox();
             checkbox.setSelected(true);
             hbox = new HBox();
@@ -50,7 +53,7 @@ public class SceneObjectWrapper extends VBox{
             
             super.setSpacing(5.0);
             super.getChildren().add(hbox);
-            super.getChildren().add(this.progressBar);
+            super.getChildren().add(new HBox(5, this.progressBar, this.progressInfo));
             
             //addColumn(0, labelWrapper);
             //addColumn(1, progressBarWrapper);
@@ -72,6 +75,10 @@ public class SceneObjectWrapper extends VBox{
 
         public ProgressBar getProgressBar() {
             return progressBar;
+        }
+
+        public Label getProgressInfo() {
+            return progressInfo;
         }
 
         public SceneObject getSceneObject() {

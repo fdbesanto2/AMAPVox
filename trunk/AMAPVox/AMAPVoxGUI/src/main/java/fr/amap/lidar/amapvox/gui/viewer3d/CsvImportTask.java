@@ -117,6 +117,8 @@ public class CsvImportTask extends SceneObjectImportTask{
     @Override
     protected SceneObject call() throws Exception {
         
+        updateMessage("Loading data");
+        
         int lineNumber = FileManager.getLineNumber(file.getAbsolutePath());
         
         lineNumber = Integer.min(lineNumber, numberOfLines);
@@ -178,6 +180,8 @@ public class CsvImportTask extends SceneObjectImportTask{
             }
 
             reader.close();
+            
+            updateMessage("Build 3d scene object");
             
             sceneObject.initMesh();
             sceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader);

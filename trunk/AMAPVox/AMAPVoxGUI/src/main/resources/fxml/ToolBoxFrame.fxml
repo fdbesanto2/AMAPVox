@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
-<?import java.net.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" minHeight="0.0" prefHeight="541.0" prefWidth="219.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.lidar.amapvox.gui.ToolBoxFrameController">
+<AnchorPane id="AnchorPane" minHeight="0.0" prefHeight="541.0" prefWidth="219.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.lidar.amapvox.gui.ToolBoxFrameController">
     <stylesheets>
         <URL value="@/styles/toolbarframe.css" />
     </stylesheets>
@@ -37,21 +49,39 @@
                                                       <TextField fx:id="textFieldMinValue" layoutX="96.0" layoutY="224.0" prefHeight="25.0" prefWidth="82.0" />
                                                       <TextField fx:id="textFieldMaxValue" layoutX="96.0" layoutY="251.0" prefHeight="25.0" prefWidth="82.0" />
                                                       <Button fx:id="buttonResetMinMax" layoutX="20.0" layoutY="289.0" mnemonicParsing="false" onAction="#onActionButtonResetMinMax" text="Reset" AnchorPane.leftAnchor="10.0" />
-                                                      <TextField fx:id="textFieldFilterValues" layoutX="30.4" layoutY="394.0" prefHeight="25.0" prefWidth="142.0" promptText="Example: NaN, 0, -1" text="NaN, 0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="59.0">
-                                                          <tooltip>
-                                                              <Tooltip fx:id="tooltipTextfieldFilter" />
-                                                          </tooltip>
-                                                      </TextField>
                                                       <CheckBox fx:id="checkboxStretched" layoutX="89.0" layoutY="91.0" mnemonicParsing="false" text="Stretched" />
-                                                      <RadioButton fx:id="radiobuttonDontDisplayValues" layoutX="16.0" layoutY="335.0" mnemonicParsing="false" selected="true" text="Don't display values" AnchorPane.leftAnchor="10.0" />
-                                                      <RadioButton fx:id="radiobuttonDisplayValues" layoutX="23.0" layoutY="363.0" mnemonicParsing="false" text="Display only those values" AnchorPane.leftAnchor="10.0" />
                                                       <Button fx:id="buttonApplyMinMax" layoutX="83.0" layoutY="289.0" mnemonicParsing="false" onAction="#onActionButtonApplyMinMax" text="Apply" />
-                                          <Button fx:id="buttonOKValidationFilter" layoutX="152.0" layoutY="394.0" mnemonicParsing="false" onAction="#onActionButtonOKValidationFilter" prefHeight="25.0" prefWidth="43.0" text="OK" AnchorPane.leftAnchor="145.0" />
                                                   </children>
                                               </AnchorPane>
                                           </content>
                                       </TitledPane>
-                                      <TitledPane expanded="false" text="Objects" />
+                                      <TitledPane expanded="false" text="Filtering">
+                                 <content>
+                                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox layoutX="14.0" layoutY="14.0" spacing="5.0">
+                                             <children>
+                                                <Label text="Scalar field" />
+                                                <ComboBox fx:id="comboBoxScalarField" prefHeight="26.0" prefWidth="168.0" />
+                                                <RadioButton fx:id="radiobuttonDisplay" mnemonicParsing="false" text="Display" />
+                                                <RadioButton fx:id="radiobuttonDontDisplay" mnemonicParsing="false" selected="true" text="Don't display" />
+                                                <HBox>
+                                                   <children>
+                                                      <TextField fx:id="textfieldFilteringRange" prefHeight="26.0" prefWidth="155.0" promptText="Example: NaN, 0, -1">
+                                                         <tooltip>
+                                                            <Tooltip fx:id="tooltipTextfieldFilter1" text="Syntax : [-1-&gt;5[ to filter from -1 inclusive to 5 exclusive" />
+                                                         </tooltip>
+                                                      </TextField>
+                                                      <Button mnemonicParsing="false" onAction="#onActionButtonAddFilterToList" text="Add" />
+                                                   </children>
+                                                </HBox>
+                                                <ListView fx:id="listviewFilters" prefHeight="200.0" prefWidth="200.0" />
+                                                <Button mnemonicParsing="false" onAction="#onActionButtonRemoveFilterFromList" text="Remove" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                 </content></TitledPane>
                                   </panes>
                               </Accordion>
                           </content>

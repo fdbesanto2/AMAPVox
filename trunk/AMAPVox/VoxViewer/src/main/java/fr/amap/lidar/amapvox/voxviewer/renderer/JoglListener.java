@@ -5,6 +5,7 @@
  */
 package fr.amap.lidar.amapvox.voxviewer.renderer;
 
+import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
@@ -12,14 +13,16 @@ import com.jogamp.opengl.util.FPSAnimator;
 import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.lidar.amapvox.voxviewer.event.EventManager;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.Scene;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.nio.IntBuffer;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class JoglListener implements GLEventListener {
+    
+    private final static Logger LOGGER = Logger.getLogger(JoglListener.class);
     
     private EventManager eventListener;
     private final Scene scene;
@@ -75,7 +78,21 @@ public class JoglListener implements GLEventListener {
         
         isInit = true;
                 
-        GL3 gl = drawable.getGL().getGL3();
+        GL gl_base = drawable.getGL();
+        
+        IntBuffer majorVersion = IntBuffer.allocate(1);
+        gl_base.glGetIntegerv(GL3.GL_MAJOR_VERSION, majorVersion);
+        
+        int majVersion = majorVersion.get();
+        if(majVersion < 3){
+            LOGGER.error("Opengl major version is "+majVersion+", this value should be higher than 3.\n"
+                        + "Try to update the driver of the graphic card.");
+            
+            drawable.destroy();
+            return;
+        }
+        
+        GL3 gl = gl_base.getGL3();
         
         //String extensions = gl.glGetString(GL3.GL_EXTENSIONS);
         
@@ -85,10 +102,10 @@ public class JoglListener implements GLEventListener {
             throw ex;
         }
         
-        gl.glBlendFunc(GL3.GL_SRC_ALPHA, GL3.GL_ONE_MINUS_SRC_ALPHA );
+        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA );
                 
-        gl.glEnable(GL3.GL_DEPTH_TEST);
-        gl.glDepthFunc(GL3.GL_LEQUAL);
+        gl.glEnable(GL.GL_DEPTH_TEST);
+        gl.glDepthFunc(GL.GL_LEQUAL);
                 
         gl.glClearDepthf(1.0f);
         
@@ -112,7 +129,6 @@ public class JoglListener implements GLEventListener {
 
     @Override
     public void dispose(GLAutoDrawable drawable) {
-        
         
     }
 
@@ -141,9 +157,9 @@ public class JoglListener implements GLEventListener {
         //specify clear values for the color buffers (must be called before glClear)
         gl.glClearColor(worldColor.x, worldColor.y, worldColor.z, 1.0f);
         
-        gl.glClear(GL3.GL_DEPTH_BUFFER_BIT|GL3.GL_COLOR_BUFFER_BIT);
+        gl.glClear(GL.GL_DEPTH_BUFFER_BIT|GL.GL_COLOR_BUFFER_BIT);
         
-        gl.glDisable(GL3.GL_BLEND);
+        gl.glDisable(GL.GL_BLEND);
         
         isInit = false;
         

@@ -471,7 +471,7 @@ public class Viewer3DPanelController implements Initializable {
         for(TreeItem<SceneObjectWrapper> children : childrens){
             
             SceneObjectWrapper sceneObjectWrapper = children.getValue();
-            if(sceneObjectWrapper.isSelected()){
+            if(sceneObjectWrapper.isSelected() && !(sceneObjectWrapper.getProgressBar().getProgress() < 1)){
                 sceneObjects.add(sceneObjectWrapper.getSceneObject());
             }
             
@@ -760,6 +760,7 @@ public class Viewer3DPanelController implements Initializable {
                                 SceneObject sceneObjectSelectedVox = new SimpleSceneObject(GLMeshFactory.createBoundingBox(-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f), false);
                                 SimpleShader simpleShader = new SimpleShader("selectedVoxShader");
                                 simpleShader.setColor(new Vec3F(1, 0, 0));
+                                sceneObjectSelectedVox.setVisible(false);
                                 sceneObjectSelectedVox.setShader(simpleShader);
                                 sceneObjectSelectedVox.setDrawType(GLMesh.DrawType.LINES);
                                 
@@ -798,6 +799,7 @@ public class Viewer3DPanelController implements Initializable {
                                             Point3f voxelPosition = voxelSpace.getVoxelPosition(selectedVoxel.$i, selectedVoxel.$j, selectedVoxel.$k);
 
                                             sceneObjectSelectedVox.setPosition(new Point3F(voxelPosition.x, voxelPosition.y, voxelPosition.z));
+                                            sceneObjectSelectedVox.setVisible(true);
                                         }
                                     }
                                 };
@@ -1258,6 +1260,7 @@ public class Viewer3DPanelController implements Initializable {
                 }
             };
 
+            sceneObjectWrapper.getProgressInfo().textProperty().bind(s.messageProperty());
             sceneObjectWrapper.getProgressBar().progressProperty().bind(s.progressProperty());
 
             s.setOnSucceeded(new EventHandler() {
@@ -1266,7 +1269,29 @@ public class Viewer3DPanelController implements Initializable {
 
                     if(s.getValue() != null){
                         sceneObjectWrapper.setSceneObject((SceneObject) s.getValue());
+                        
+                        if(sceneObjectWrapper.getProgressInfo().textProperty().isBound()){
+                            sceneObjectWrapper.getProgressInfo().textProperty().unbind();
+                        }
+                        
+                        sceneObjectWrapper.getProgressInfo().setText("Ready !");
                     }
+                }
+            });
+            
+            s.setOnFailed(new EventHandler() {
+                @Override
+                public void handle(Event event) {
+                    if(sceneObjectWrapper.getProgressInfo().textProperty().isBound()){
+                        sceneObjectWrapper.getProgressInfo().textProperty().unbind();
+                    }
+                    sceneObjectWrapper.getProgressInfo().setText("Ready !");
+                    
+                    if(sceneObjectWrapper.getProgressBar().progressProperty().isBound()){
+                        sceneObjectWrapper.getProgressBar().progressProperty().unbind();
+                    }
+                    
+                    sceneObjectWrapper.getProgressBar().setProgress(0);
                 }
             });
 

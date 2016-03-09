@@ -13,6 +13,7 @@ import fr.amap.commons.util.CallableTask;
 import fr.amap.commons.util.ProcessingAdapter;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.SimpleShotFilter;
+import fr.amap.lidar.amapvox.voxelisation.TmpVoxelAnalysis;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.RasterParams;
@@ -63,7 +64,9 @@ public abstract class TLSVoxelisation extends CallableTask{
             terrain.setTransformationMatrix(vopMatrix);
         }
         
-        cfg.setShotFilter(new SimpleShotFilter(cfg.getShotFilters()));
+        if(cfg.getShotFilter() == null){
+            cfg.setShotFilter(new SimpleShotFilter(cfg.getShotFilters()));
+        }
         
         voxelAnalysis = new VoxelAnalysis(terrain, pointcloud, cfg);
         voxelAnalysis.init(parameters, outputFile);

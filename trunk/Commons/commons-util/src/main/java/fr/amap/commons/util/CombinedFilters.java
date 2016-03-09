@@ -48,6 +48,11 @@ public class CombinedFilters {
         
     }
     
+    /**
+     * Do filtering
+     * @param value
+     * @return true if the value is filtered, false otherwise
+     */
     public boolean doFilter(float value){
         
         for(CombinedFilter filter : filters){

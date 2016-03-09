@@ -92,6 +92,9 @@ public class LasImportTask extends SceneObjectImportTask{
         LasReader reader = new LasReader();
 
         try {
+            
+            updateMessage("Loading data");
+            
             reader.open(file);
 
             LasHeader header = reader.getHeader();
@@ -165,6 +168,8 @@ public class LasImportTask extends SceneObjectImportTask{
                 count++;
             }
 
+            updateMessage("Build 3d scene object");
+            
             sceneObject.initMesh();
             sceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader);
             

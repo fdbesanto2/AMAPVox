@@ -15,13 +15,14 @@ import javafx.scene.control.TreeCell;
 public class SceneObjectTreeCell extends TreeCell<SceneObjectWrapper>{
     
     public SceneObjectTreeCell() {
-        
     }
     
     @Override
         public void updateItem(SceneObjectWrapper item, boolean empty) {
             
             super.updateItem(item, empty);
+            
+            
             if (empty) {
                 setText(null);
                 setGraphic(null);
@@ -30,8 +31,9 @@ public class SceneObjectTreeCell extends TreeCell<SceneObjectWrapper>{
                     setText("Scene");
                     setGraphic(null);
                 }else{
+                    
+                    disableProperty().bind(item.getProgressBar().progressProperty().lessThan(1));
                     setGraphic(item);
-                    setDisable(empty);
                     setText("");
                 }
             }

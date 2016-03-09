@@ -47,19 +47,17 @@ public class PointsToShot extends Process implements Iterable<Shot>, Cancellable
     private final CSVFile trajectoryFile;
     
     private final Mat4D vopMatrix;
-    List<Integer> classifiedPointsToDiscard;
     
     private List<Trajectory> trajectoryList;
     private List<LasPoint> lasPointList;
     
     private boolean cancelled;
     
-    public PointsToShot(CSVFile trajectoryFile, File alsFile, Mat4D vopMatrix, List<Integer> classifiedPointsToDiscard){
+    public PointsToShot(CSVFile trajectoryFile, File alsFile, Mat4D vopMatrix){
 
         this.trajectoryFile = trajectoryFile;
         this.vopMatrix = vopMatrix;
         this.alsFile = alsFile;
-        this.classifiedPointsToDiscard = classifiedPointsToDiscard;
     }
 
     public void init() throws FileNotFoundException, IOException, Exception {

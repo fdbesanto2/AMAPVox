@@ -103,6 +103,7 @@ public class AscImportTask extends SceneObjectImportTask{
         if(file != null){
 
             updateProgress(0, 100);
+            updateMessage("Loading data");
             
             Raster dtm = AsciiGridHelper.readFromAscFile(file);
 
@@ -119,11 +120,14 @@ public class AscImportTask extends SceneObjectImportTask{
                         new Point2F((float) infos.getMaxCorner().x, (float) infos.getMaxCorner().y)), mntFittingMargin);
             }
 
+            updateMessage("Build mesh");
             dtm.buildMesh();
 
+            updateMessage("Build 3d scene object");
             GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormalesFromDTM(dtm);
 
             //SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, false);
+            
 
             RasterSceneObject dtmSceneObject = new RasterSceneObject(dtmMesh, false);
             dtmSceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.phongShader);
@@ -131,6 +135,7 @@ public class AscImportTask extends SceneObjectImportTask{
             dtmSceneObject.setMousePickable(buildOctree);
             
             updateProgress(100, 100);
+            
             
             return dtmSceneObject;
         }

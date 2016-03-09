@@ -75,6 +75,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
     private float MAX_PAD = 3;
 
     private int nbShotsProcessed;
+    private int tmpNbShotsProcessed = 0;
     private File outputFile;
 
     private float[][] weighting;
@@ -184,6 +185,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
     public VoxelAnalysis(Raster terrain, List<PointcloudFilter> pointcloudFilters, VoxelAnalysisCfg cfg) {
 
         nbShotsProcessed = 0;
+        tmpNbShotsProcessed = 0;
         this.dtm = terrain;
         this.pointcloudFilters = pointcloudFilters;
         
@@ -194,6 +196,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
     public VoxelAnalysis() {
 
         nbShotsProcessed = 0;
+        tmpNbShotsProcessed = 0;
     }
 
     /**
@@ -205,9 +208,9 @@ public class VoxelAnalysis extends Process implements Cancellable{
      */
     public Point3d getPosition(Point3i indices, Point3i splitting, Point3d minCorner) {
         
-        double posX = minCorner.x + (parameters.infos.getResolution() / 2.0d) + (indices.x * parameters.infos.getResolution());
-        double posY = minCorner.y + (parameters.infos.getResolution() / 2.0d) + (indices.y * parameters.infos.getResolution());
-        double posZ = minCorner.z + (parameters.infos.getResolution() / 2.0d) + (indices.z * parameters.infos.getResolution());
+        double posX = minCorner.x + (voxelManager.getVoxelSpace().getVoxelSize().x / 2.0d) + (indices.x * voxelManager.getVoxelSpace().getVoxelSize().x);
+        double posY = minCorner.y + (voxelManager.getVoxelSpace().getVoxelSize().y / 2.0d) + (indices.y * voxelManager.getVoxelSpace().getVoxelSize().y);
+        double posZ = minCorner.z + (voxelManager.getVoxelSpace().getVoxelSize().z / 2.0d) + (indices.z * voxelManager.getVoxelSpace().getVoxelSize().z);
 
         return new Point3d(posX, posY, posZ);
     }
@@ -263,8 +266,9 @@ public class VoxelAnalysis extends Process implements Cancellable{
         
         if((shotFilter != null && shotFilter.doFiltering(shot)) || shotFilter == null ){
             
-            if (nbShotsProcessed % 1000000 == 0 && nbShotsProcessed != 0) {
+            if(tmpNbShotsProcessed == 1000000){
                 LOGGER.info("Shots processed: " + nbShotsProcessed);
+                tmpNbShotsProcessed = 0;
             }
 
             shot.direction.normalize();
@@ -345,6 +349,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
             }
 
             nbShotsProcessed++;
+            tmpNbShotsProcessed++;
         }
         
     }

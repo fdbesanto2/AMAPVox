@@ -43,7 +43,7 @@ public class Viewer3D {
         
         try{
             
-            GLProfile glp = GLProfile.getGL2GL3();
+            GLProfile glp = GLProfile.getMaximum(false);
             GLCapabilities caps = new GLCapabilities(glp);
             caps.setDoubleBuffered(true);
             

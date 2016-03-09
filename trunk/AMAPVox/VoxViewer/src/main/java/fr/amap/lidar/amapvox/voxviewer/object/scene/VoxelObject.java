@@ -27,6 +27,7 @@ public class VoxelObject extends RawVoxel{
     public boolean isHidden;
     
     private Color color;
+    
 
     public float[] getAttributs() {
         return attributs;

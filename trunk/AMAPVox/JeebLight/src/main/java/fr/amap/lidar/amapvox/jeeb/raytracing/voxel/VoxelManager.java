@@ -421,4 +421,8 @@ public class VoxelManager {
     public Point3d getRelativePoint(Point3d point) {
         return voxelSpace.getRelativePoint(point);
     }
+
+    public VoxelSpace getVoxelSpace() {
+        return voxelSpace;
+    }
 }

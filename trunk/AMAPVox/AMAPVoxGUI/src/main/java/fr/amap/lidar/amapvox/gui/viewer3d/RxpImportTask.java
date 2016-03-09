@@ -108,6 +108,8 @@ public class RxpImportTask extends SceneObjectImportTask{
         
         updateProgress(0, 100);
 
+        updateMessage("Loading data");
+        
         reader.openRxpFile(file, typeListNative);
 
         final Iterator<Shot> iterator = reader.iterator();
@@ -149,6 +151,8 @@ public class RxpImportTask extends SceneObjectImportTask{
             }
 
         }
+        
+        updateMessage("Build 3d scene object");
 
         pointCloud.initMesh();
         pointCloud.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader);

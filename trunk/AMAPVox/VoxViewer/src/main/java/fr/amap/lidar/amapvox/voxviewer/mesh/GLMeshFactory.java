@@ -515,36 +515,41 @@ public class GLMeshFactory {
         
         Point3I[] faces = obj.getFaces();
         
-        int[] materialOffsets = obj.getMaterialOffsets();
-        Map<Integer, String> materialLinks = obj.getMaterialLinks();
+        
         Map<String, Mtl> materials = obj.getMaterials();
         
-        int faceID = 0;
-        int currentMaterial = 1;
-        
-        for(Point3I face : faces){
+        if(materials != null){
+            int[] materialOffsets = obj.getMaterialOffsets();
+            Map<Integer, String> materialLinks = obj.getMaterialLinks();
             
-            String materialName = materialLinks.get(currentMaterial-1);
-            Mtl mtl = materials.get(materialName);
-                    
-            colorData[face.x] = mtl.getDiffuseColor().x;
-            colorData[face.x+1] = mtl.getDiffuseColor().x;
-            colorData[face.x+2] = mtl.getDiffuseColor().x;
-            
-            colorData[face.y] = mtl.getDiffuseColor().y;
-            colorData[face.y+1] = mtl.getDiffuseColor().y;
-            colorData[face.y+2] = mtl.getDiffuseColor().y;
-            
-            colorData[face.z] = mtl.getDiffuseColor().z;
-            colorData[face.z+1] = mtl.getDiffuseColor().z;
-            colorData[face.z+2] = mtl.getDiffuseColor().z;
-            
-            faceID++;
-            
-            if(currentMaterial < materialOffsets.length && faceID >= materialOffsets[currentMaterial]){
-                currentMaterial++;
+            int faceID = 0;
+            int currentMaterial = 1;
+
+            for(Point3I face : faces){
+
+                String materialName = materialLinks.get(currentMaterial-1);
+                Mtl mtl = materials.get(materialName);
+
+                colorData[face.x] = mtl.getDiffuseColor().x;
+                colorData[face.x+1] = mtl.getDiffuseColor().x;
+                colorData[face.x+2] = mtl.getDiffuseColor().x;
+
+                colorData[face.y] = mtl.getDiffuseColor().y;
+                colorData[face.y+1] = mtl.getDiffuseColor().y;
+                colorData[face.y+2] = mtl.getDiffuseColor().y;
+
+                colorData[face.z] = mtl.getDiffuseColor().z;
+                colorData[face.z+1] = mtl.getDiffuseColor().z;
+                colorData[face.z+2] = mtl.getDiffuseColor().z;
+
+                faceID++;
+
+                if(currentMaterial < materialOffsets.length && faceID >= materialOffsets[currentMaterial]){
+                    currentMaterial++;
+                }
             }
         }
+        
         
         mesh.colorBuffer = Buffers.newDirectFloatBuffer(colorData);
         

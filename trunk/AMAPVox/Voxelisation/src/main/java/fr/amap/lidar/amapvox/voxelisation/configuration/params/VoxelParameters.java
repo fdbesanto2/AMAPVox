@@ -95,6 +95,8 @@ public class VoxelParameters {
         infos.setResolution(resolution);
         infos.setMaxPAD(maxPAD);
         
+        infos.setType(TLS ? VoxelSpaceInfos.Type.TLS:VoxelSpaceInfos.Type.ALS);
+        
         //check all parameters, if null set to default
         if (ladParams == null) {
             ladParams = new LADParams();

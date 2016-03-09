@@ -97,6 +97,8 @@ public class PtxImportTask extends SceneObjectImportTask{
 
         final PointCloudSceneObject pointCloud = new PointCloudSceneObject();
         
+        updateMessage("Loading data");
+        
         for(PTXLidarScan scan : scans){
             
             PTXScan ptxScan = scan.getScan();
@@ -138,6 +140,7 @@ public class PtxImportTask extends SceneObjectImportTask{
         }
         
         updateProgress(99, 100);
+        updateMessage("Build 3d scene object");
         
         pointCloud.initMesh();
         pointCloud.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader);

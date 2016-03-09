@@ -18,6 +18,7 @@ import fr.amap.commons.math.point.Point3D;
 import fr.amap.commons.math.vector.Vec4F;
 import fr.amap.commons.util.ColorGradient;
 import fr.amap.commons.util.CombinedFilter;
+import fr.amap.commons.util.CombinedFilterItem;
 import fr.amap.commons.util.CombinedFilters;
 import fr.amap.commons.util.Filter;
 import fr.amap.commons.util.StandardDeviation;
@@ -40,9 +41,11 @@ import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -69,6 +72,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
     
     private Map<String, ScalarField> scalarFieldsList;
     private String[] columnsNames;
+    private Map<String, Integer> attributTable;
 
     @Override
     public void updateBuffers(GL3 gl, int index, FloatBuffer buffer) {
@@ -160,6 +164,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
     
     //private Set<Filter> filteredValues;
     private CombinedFilters combinedFilters;
+    private List<CombinedFilterItem> filters;
     private boolean displayValues;
     
     private final EventListenerList loadingListeners;
@@ -184,6 +189,17 @@ public class VoxelSpaceSceneObject extends SceneObject{
         combinedFilters = new CombinedFilters();
         combinedFilters.addFilter(new CombinedFilter(new Filter("x", Float.NaN, Filter.EQUAL), null, CombinedFilter.AND));
         combinedFilters.addFilter(new CombinedFilter(new Filter("x", 0.0f, Filter.EQUAL), null, CombinedFilter.AND));
+        
+        filters = new ArrayList<>();
+        CombinedFilter combFilter1 = new CombinedFilter(new Filter("x", 0.0f, Filter.EQUAL),  null, CombinedFilter.AND);
+        CombinedFilter combFilter2 = new CombinedFilter(new Filter("x", Float.NaN, Filter.EQUAL),  null, CombinedFilter.AND);
+        
+        filters.add(new CombinedFilterItem("PadBVTotal", false, 
+                        combFilter1.getFilter1(), combFilter1.getFilter2(), combFilter1.getType()));
+        
+        filters.add(new CombinedFilterItem("PadBVTotal", false, 
+                        combFilter2.getFilter1(), combFilter2.getFilter2(), combFilter2.getType()));
+        
         mapAttributs = new LinkedHashMap<>();
         variables = new TreeSet<>();
         loadingListeners = new EventListenerList();
@@ -380,15 +396,21 @@ public class VoxelSpaceSceneObject extends SceneObject{
         
         scalarFieldsList = new HashMap<>();
         this.columnsNames = columnsNames;
+        attributTable = new HashMap<>();
         
+        int id = 0;
         for(String name : columnsNames){
             variables.add(name);
+            attributTable.put(name, id);
+            id++;
         }
         
         for(String name : columnsNames){
             mapAttributs.put(name, new Attribut(name, name, variables));
             scalarFieldsList.put(name, new ScalarField(name));
         }
+        
+        
     }
     
     
@@ -734,6 +756,53 @@ public class VoxelSpaceSceneObject extends SceneObject{
         return new Vec3F(c.getRed()/255.0f, c.getGreen()/255.0f, c.getBlue()/255.0f);
     }
     
+    private float getAttribut(String attributName, VoxelObject voxel){
+        
+        switch(attributName){
+            case "i":
+                return voxel.$i;
+            case "j":
+                return voxel.$j;
+            case "k":
+                return voxel.$k;
+                
+            default:
+                int attributIndex = attributTable.get(attributName);
+                return voxel.attributs[attributIndex];
+        }
+    }
+    
+    private boolean doFiltering(VoxelObject voxel){
+        
+        boolean filtered = false;
+        
+        if(filters != null){
+            
+            for(CombinedFilterItem filter : filters){
+                
+                //true if the field value fit the condition, false otherwise
+                boolean doFilter = filter.doFilter(getAttribut(filter.getScalarField(), voxel));
+                
+                if(filter.isDisplay()){
+                    
+                    if(doFilter){
+                        filtered = false;
+                    }else{
+                        return true;
+                    }
+                }else{
+                    if(doFilter){
+                        return true;
+                    }else{
+                        filtered = false;
+                    }
+                }
+            }
+        }
+        
+        return filtered;
+    }
+    
     
     public void setGradientColor(Color[] gradientColor, float valMin, float valMax){
         
@@ -756,15 +825,17 @@ public class VoxelSpaceSceneObject extends SceneObject{
             voxel.setColor(colorGenerated.getRed(), colorGenerated.getGreen(), colorGenerated.getBlue());
             //values.add(voxel.attributValue);
             
-            boolean isFiltered = combinedFilters.doFilter(voxel.attributValue);
+            //boolean isFiltered = combinedFilters.doFilter(voxel.attributValue);
+            boolean isFiltered = doFiltering(voxel);
             
-            if(isFiltered && displayValues){
+            if(isFiltered /*&& displayValues*/){
+                voxel.setAlpha(0);
+                //voxelNumberToDraw++;
+            /*}else if(isFiltered && !displayValues){
+                voxel.setAlpha(0);
+            */}else if(!isFiltered/* && displayValues*/){
                 voxel.setAlpha(1);
                 voxelNumberToDraw++;
-            }else if(isFiltered && !displayValues){
-                voxel.setAlpha(0);
-            }else if(!isFiltered && displayValues){
-                voxel.setAlpha(0);
             }else{
                 voxel.setAlpha(1);
                 voxelNumberToDraw++;
@@ -1119,5 +1190,9 @@ public class VoxelSpaceSceneObject extends SceneObject{
 
     public String[] getColumnsNames() {
         return columnsNames;
+    }
+
+    public void setFilters(List<CombinedFilterItem> filters) {
+        this.filters = filters;
     }
 }

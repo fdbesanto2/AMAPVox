@@ -95,6 +95,8 @@ public class PtgImportTask extends SceneObjectImportTask{
         ptgReader.openPTGFile(file);
 
         if(ptgReader.isBinaryFile()){
+            
+            updateMessage("Loading data");
 
             PTGScan ptgScan = new PTGScan();
             ptgScan.openScanFile(file);
@@ -135,6 +137,8 @@ public class PtgImportTask extends SceneObjectImportTask{
                     pointCloud.addValue("RGB color", point.blue, false);
                 }
             }
+            
+            updateMessage("Build 3d scene object");
             
             pointCloud.initMesh();
             pointCloud.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader);

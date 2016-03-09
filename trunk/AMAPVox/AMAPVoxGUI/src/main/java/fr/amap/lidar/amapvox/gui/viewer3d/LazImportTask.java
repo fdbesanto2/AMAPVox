@@ -82,6 +82,8 @@ public class LazImportTask extends SceneObjectImportTask{
 
         LazExtraction lazExtraction = new LazExtraction();
         try {
+            updateMessage("Loading data");
+            
             lazExtraction.openLazFile(file);
 
             LasHeader header = lazExtraction.getHeader();
@@ -135,6 +137,8 @@ public class LazImportTask extends SceneObjectImportTask{
 
             lazExtraction.close();
 
+            updateMessage("Build 3d scene object");
+            
             sceneObject.initMesh();
             sceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader);
             

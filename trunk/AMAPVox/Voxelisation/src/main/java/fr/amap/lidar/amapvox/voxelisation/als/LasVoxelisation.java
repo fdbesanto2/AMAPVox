@@ -111,7 +111,7 @@ public class LasVoxelisation extends Process implements Cancellable{
         
         if(update || conversion == null){
             
-            conversion = new PointsToShot(cfg.getTrajectoryFile(), cfg.getInputFile(), transfMatrix, classifiedPointsToDiscard);
+            conversion = new PointsToShot(cfg.getTrajectoryFile(), cfg.getInputFile(), transfMatrix);
             
             conversion.addProcessingListener(new ProcessingListener() {
 
@@ -131,10 +131,10 @@ public class LasVoxelisation extends Process implements Cancellable{
                 conversion.init();
             } catch (IOException ex) {
                 logger.error(ex);
-                return null;
+                throw ex;
             } catch (Exception ex) {
                 logger.error(ex);
-                return null;
+                throw ex;
             }
         }else{
             
