@@ -14,6 +14,7 @@ import fr.amap.lidar.amapvox.voxviewer.object.camera.TrackballCamera;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.renderer.JoglListener;
 import fr.amap.commons.util.CombinedFilterItem;
+import fr.amap.lidar.amapvox.voxviewer.object.scene.Scene;
 import java.awt.Color;
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -287,9 +288,9 @@ public class ToolBoxFrameController implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 
                 if(newValue){
-                    voxelSpace.setShader(joglContext.getScene().instanceLightedShader);
+                    voxelSpace.setShader(Scene.instanceLightedShader);
                 }else{
-                    voxelSpace.setShader(joglContext.getScene().instanceShader);
+                    voxelSpace.setShader(Scene.instanceShader);
                 }
                 
                 joglContext.refresh();

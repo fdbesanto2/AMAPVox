@@ -52,7 +52,7 @@ public class SceneObjectFactory {
         SceneObject sceneObject = new SimpleSceneObject(GLMeshFactory.createLandmark(-5, 5), false);
         sceneObject.setPosition(new Point3F());
         
-        SimpleShader colorShader = new SimpleShader("col");
+        SimpleShader colorShader = new SimpleShader();
         colorShader.setColor(new Vec3F(0, 0, 1));
         
         sceneObject.setShader(colorShader);

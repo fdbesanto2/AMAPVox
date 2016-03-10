@@ -5,11 +5,21 @@
  */
 package fr.amap.lidar.amapvox.voxviewer.object.scene;
 
+import com.jogamp.common.nio.Buffers;
 import fr.amap.commons.math.point.Point3D;
 import fr.amap.commons.math.point.Point3F;
+import fr.amap.commons.math.vector.Vec3F;
+import fr.amap.commons.raster.asc.DTMPoint;
+import fr.amap.commons.raster.asc.Face;
+import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.structure.octree.Octree;
+import fr.amap.commons.util.ColorGradient;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.PhongShader;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
+import fr.amap.lidar.amapvox.voxviewer.mesh.SimpleGLMesh;
+import java.awt.Color;
 import java.nio.FloatBuffer;
+import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
@@ -22,9 +32,28 @@ public class RasterSceneObject extends ScalarSceneObject{
     
     private Octree octree;
     
-    public RasterSceneObject(GLMesh mesh, boolean isAlphaRequired) {
+    public RasterSceneObject(Raster raster){
         
-        super(mesh, isAlphaRequired);
+        super();
+        
+        mesh = new SimpleGLMesh();
+        
+        if(!raster.isBuilt()){
+            raster.buildMesh();
+        }
+        
+        initMesh(raster);
+        initColors(raster);
+        computeNormales(raster);
+        
+        this.gravityCenter = mesh.getGravityCenter();
+        
+        super.setShader(new PhongShader());
+    }
+    
+    public RasterSceneObject(GLMesh mesh) {
+        
+        super(mesh, false);
         
         getElevationsFromMesh(mesh);
         init();
@@ -71,6 +100,93 @@ public class RasterSceneObject extends ScalarSceneObject{
         }
         
         return null;
+    }
+    
+    private void initMesh(Raster raster){
+        
+        List<DTMPoint> points = raster.getPoints();
+        List<Face> faces = raster.getFaces();
+        
+        float[] vertexData = new float[points.size()*3];
+        
+        for(int i=0,j=0 ; i<points.size(); i++, j+=3){
+            
+            vertexData[j] = points.get(i).x;
+            vertexData[j+1] = points.get(i).y;
+            vertexData[j+2] = points.get(i).z;
+        }
+        
+        int indexData[] = new int[faces.size()*3];
+        for(int i=0, j=0 ; i<faces.size(); i++, j+=3){
+            
+            indexData[j] = faces.get(i).getPoint1();
+            indexData[j+1] = faces.get(i).getPoint2();
+            indexData[j+2] = faces.get(i).getPoint3();
+        }
+        
+        mesh.setVertexBuffer(Buffers.newDirectFloatBuffer(vertexData));
+        mesh.indexBuffer = Buffers.newDirectIntBuffer(indexData);
+        mesh.vertexCount = indexData.length;
+    }
+    
+    private void initColors(Raster raster){
+        
+        getElevationsFromMesh(mesh);
+        
+        init();
+        switchToNextColor();
+        
+        /*List<DTMPoint> points = raster.getPoints();
+        
+        ColorGradient gradient = new ColorGradient(raster.getzMin(), raster.getzMax());
+        gradient.setGradientColor(ColorGradient.GRADIENT_RAINBOW3);
+
+        float colorData[] = new float[points.size()*3];
+        for(int i=0, j=0;i<points.size();i++,j+=3){
+
+            Color color = gradient.getColor(points.get(i).z);
+            colorData[j] = color.getRed()/255.0f;
+            colorData[j+1] = color.getGreen()/255.0f;
+            colorData[j+2] =  color.getBlue()/255.0f;
+
+        }
+
+        mesh.colorBuffer = Buffers.newDirectFloatBuffer(colorData);*/
+    }
+    
+    private void computeNormales(Raster raster){
+        
+        List<Face> faces = raster.getFaces();
+        List<DTMPoint> points = raster.getPoints();
+        
+        float[] normalData = new float[points.size()*3];
+        for(int i=0,j=0 ; i<points.size(); i++, j+=3){
+            
+            Vec3F meanNormale = new Vec3F(0, 0, 0);
+            
+            for(Integer faceIndex : points.get(i).faces){
+                
+                Face face = faces.get(faceIndex);
+                
+                DTMPoint point1 = points.get(face.getPoint1());
+                DTMPoint point2 = points.get(face.getPoint2());
+                DTMPoint point3 = points.get(face.getPoint3());
+                
+                Vec3F vec1 = Vec3F.substract(new Vec3F(point2.x, point2.y, point2.z), new Vec3F(point1.x, point1.y, point1.z));
+                Vec3F vec2 = Vec3F.substract(new Vec3F(point3.x, point3.y, point3.z), new Vec3F(point1.x, point1.y, point1.z));
+                
+                meanNormale = Vec3F.add(meanNormale, Vec3F.normalize(Vec3F.cross(vec2, vec1)));
+                
+            }
+            
+            meanNormale = Vec3F.normalize(meanNormale);
+            
+            normalData[j] = meanNormale.x;
+            normalData[j+1] = meanNormale.y;
+            normalData[j+2] = meanNormale.z;
+        }
+        
+        mesh.normalBuffer = Buffers.newDirectFloatBuffer(normalData);
     }
     
     private void getElevationsFromMesh(GLMesh mesh){

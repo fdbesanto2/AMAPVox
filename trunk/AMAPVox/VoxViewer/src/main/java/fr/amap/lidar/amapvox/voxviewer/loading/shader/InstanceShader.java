@@ -12,9 +12,9 @@ package fr.amap.lidar.amapvox.voxviewer.loading.shader;
 public class InstanceShader extends Shader{
     
     
-    public InstanceShader(String name){
+    public InstanceShader(){
         
-        super(name);
+        super();
         
         setVertexShaderCode(loadCodeFromInputStream(getStream("shaders/InstanceVertexShader.txt")));
         setFragmentShaderCode(loadCodeFromInputStream(getStream("shaders/InstanceFragmentShader.txt")));

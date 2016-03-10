@@ -11,9 +11,9 @@ package fr.amap.lidar.amapvox.voxviewer.loading.shader;
  */
 public class AxisShader extends Shader{
     
-    public AxisShader(String name){
+    public AxisShader(){
         
-        super(name);
+        super();
         
         setVertexShaderCode(loadCodeFromInputStream(getStream("shaders/NoTranslationVertexShader.txt")));
         setFragmentShaderCode(loadCodeFromInputStream(getStream("shaders/NoTranslationFragmentShader.txt")));

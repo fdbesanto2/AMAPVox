@@ -49,6 +49,8 @@ public class Raster {
     private Mat4D transformationMatrix;
     private Mat4D inverseTransfMat;
     
+    private boolean built;
+    
     /**
      *
      */
@@ -391,6 +393,8 @@ public class Raster {
                     }
                 }
             }
+            
+            built = true;
         }
         
         zArray = null;
@@ -492,5 +496,12 @@ public class Raster {
     public int getColNumber() {
         return colNumber;
     }
-    
+
+    public boolean isBuilt() {
+        return built;
+    }
+
+    public void setBuilt(boolean built) {
+        this.built = built;
+    }
 }

@@ -11,9 +11,9 @@ package fr.amap.lidar.amapvox.voxviewer.loading.shader;
  */
 public class TextureShader extends Shader{
     
-    public TextureShader(String name){
+    public TextureShader(){
         
-        super(name);
+        super();
         
         setVertexShaderCode(loadCodeFromInputStream(getStream("shaders/billboardVertexShader.txt")));
         setFragmentShaderCode(loadCodeFromInputStream(getStream("shaders/TextureFragmentShader.txt")));

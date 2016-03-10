@@ -574,13 +574,13 @@ public class Viewer3DPanelController implements Initializable {
                                 final SceneObject boundingBox = new SimpleSceneObject();
                                 boundingBox.setMesh(GLMeshFactory.createBoundingBox(-10, -10, -10, 10, 10, 10));
                                 boundingBox.setDrawType(GLMesh.DrawType.LINES);
-                                boundingBox.setShader(new ColorShader("boundingboxShader"));
+                                boundingBox.setShader(new ColorShader());
                                 boundingBox.setVisible(false);
                                 viewer3D.getScene().addSceneObject(boundingBox);
                                 
                                 final SimpleSceneObject sceneObjectFlag = SceneObjectFactory.createFlag();
                                 sceneObjectFlag.setPosition(new Point3F());
-                                sceneObjectFlag.setShader(new SimpleShader("flagShader"));
+                                sceneObjectFlag.setShader(new SimpleShader());
                                 sceneObjectFlag.setVisible(false);
                                 viewer3D.getScene().addSceneObject(sceneObjectFlag);
                                 
@@ -758,7 +758,7 @@ public class Viewer3DPanelController implements Initializable {
                                 pickingInfoObject.setDrawType(GLMesh.DrawType.TRIANGLES);
                                 
                                 SceneObject sceneObjectSelectedVox = new SimpleSceneObject(GLMeshFactory.createBoundingBox(-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f), false);
-                                SimpleShader simpleShader = new SimpleShader("selectedVoxShader");
+                                SimpleShader simpleShader = new SimpleShader();
                                 simpleShader.setColor(new Vec3F(1, 0, 0));
                                 sceneObjectSelectedVox.setVisible(false);
                                 sceneObjectSelectedVox.setShader(simpleShader);
@@ -807,7 +807,7 @@ public class Viewer3DPanelController implements Initializable {
                                 voxelSpace.addSceneObjectListener(listener);
 
                                 voxelSpace.changeCurrentAttribut(attributeToView);
-                                voxelSpace.setShader(scene.instanceLightedShader);
+                                voxelSpace.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.instanceLightedShader);
                                 voxelSpace.setDrawType(GLMesh.DrawType.TRIANGLES);
                                 scene.addSceneObject(voxelSpace);
 
@@ -955,7 +955,7 @@ public class Viewer3DPanelController implements Initializable {
                                             double maxToolBoxHeight = toolBarFrameStage.getHeight();
                                             viewer3D.getJoglContext().setStartX((int) toolBarFrameStage.getWidth());
 
-                                            viewer3D.addWindowListener(new WindowAdapter() {
+                                            viewer3D.getRenderFrame().addWindowListener(new WindowAdapter() {
 
                                                 @Override
                                                 public void windowResized(com.jogamp.newt.event.WindowEvent we) {
@@ -1305,10 +1305,13 @@ public class Viewer3DPanelController implements Initializable {
     @FXML
     private void onActionButtonAddSceneObject(ActionEvent event) {
         
-        File selectedFile = sceneObjectChooser.showOpenDialog(stage);
+        List<File> selectedFiles = sceneObjectChooser.showOpenMultipleDialog(stage);
         
-        if(selectedFile != null){
-            addSceneObjectToTree(selectedFile, Mat4D.identity());
+        if(selectedFiles != null){
+            
+            for(File selectedFile : selectedFiles){
+                addSceneObjectToTree(selectedFile, Mat4D.identity());
+            }
         }
         
     }

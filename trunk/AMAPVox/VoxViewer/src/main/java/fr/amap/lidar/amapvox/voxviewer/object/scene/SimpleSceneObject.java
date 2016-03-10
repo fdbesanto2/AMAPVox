@@ -24,13 +24,12 @@ public class SimpleSceneObject extends SceneObject{
     
     public SimpleSceneObject(){
         this.gravityCenter = new Point3F();
-        this.setDrawType(GLMesh.DrawType.TRIANGLES);
+        super.setDrawType(GLMesh.DrawType.TRIANGLES);
     }
     
-    public SimpleSceneObject(GLMesh mesh, boolean isAlphaRequired, Point3F position){
+    public SimpleSceneObject(GLMesh mesh){
         
-        super(mesh, isAlphaRequired);
-        this.gravityCenter = position;
+        super(mesh, false);
     }
     
     public SimpleSceneObject(GLMesh mesh, boolean isAlphaRequired){

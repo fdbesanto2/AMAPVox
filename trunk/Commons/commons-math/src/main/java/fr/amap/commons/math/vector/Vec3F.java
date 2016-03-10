@@ -11,11 +11,7 @@ import fr.amap.commons.math.point.Point3F;
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class Vec3F{
-    
-    public float x;
-    public float y;
-    public float z;
+public class Vec3F extends Point3F{
     
     /**
      * Constructs and initialize a new 3d single precision vector filled with zeros

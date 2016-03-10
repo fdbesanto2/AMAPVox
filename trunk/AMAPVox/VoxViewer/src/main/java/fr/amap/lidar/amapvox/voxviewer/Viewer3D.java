@@ -1,9 +1,7 @@
 package fr.amap.lidar.amapvox.voxviewer;
 
 import com.jogamp.nativewindow.util.Point;
-import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.event.WindowListener;
-import com.jogamp.newt.event.WindowUpdateEvent;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLException;
 import com.jogamp.opengl.GLProfile;
@@ -33,128 +31,88 @@ public class Viewer3D {
     
     private boolean focused;
     
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
     
     private boolean dynamicDraw = false;
-    private MinimalMouseAdapter minimalMouseAdapter;
+    private final MinimalMouseAdapter minimalMouseAdapter;
+    private final EventManager minimalEventMgr;
     
-    public Viewer3D(int posX, int posY, int width, int height, String title) throws Exception{
+    private final BasicEvent basicEvents;
+    
+    public Viewer3D(int posX, int posY, int width, int height, String title) throws GLException{
         
-        try{
-            
-            GLProfile glp = GLProfile.getMaximum(false);
-            GLCapabilities caps = new GLCapabilities(glp);
-            caps.setDoubleBuffered(true);
-            
-            this.width = width;
-            this.height = height;
-            
-            renderFrame = new GLRenderFrame(caps, posX, posY, width, height, title);
-            //renderFrame = GLRenderFrame.create(caps, posX, posY, width, height, title);
-            animator = new FPSAnimator(60);
-            
-            /* From doc : 
-            An Animator can be attached to one or more GLAutoDrawables to drive their display() methods in a loop.
-            The Animator class creates a background thread in which the calls to display() are performed.
-            After each drawable has been redrawn, a brief pause is performed to avoid swamping the CPU,
-            unless setRunAsFastAsPossible(boolean) has been called.
-            */
-            animator.add(renderFrame);
+        GLProfile glp = GLProfile.getMaximum(false);
+        GLCapabilities caps = new GLCapabilities(glp);
+        caps.setDoubleBuffered(true);
 
-            joglContext = new JoglListener(animator);
-            joglContext.getScene().setWidth(width);
-            joglContext.getScene().setHeight(height);
-            
-            renderFrame.addGLEventListener(joglContext);
-            renderFrame.addWindowListener(new MinimalWindowAdapter(animator));
-            
-            
-            //basic input adapters for waking up animator if necessary
-            MinimalKeyAdapter minimalKeyAdapter = new MinimalKeyAdapter(animator);
-            renderFrame.addKeyListener(minimalKeyAdapter);
-            
-            minimalMouseAdapter = new MinimalMouseAdapter(animator, dynamicDraw);
-            renderFrame.addMouseListener(minimalMouseAdapter);
-            
-            InputKeyListener inputKeyListener = new InputKeyListener();
-            InputMouseAdapter inputMouseAdapter = new InputMouseAdapter();
-            
-            joglContext.attachEventListener(new BasicEvent(animator, joglContext, inputMouseAdapter, inputKeyListener));
-            renderFrame.addKeyListener(inputKeyListener);
-            renderFrame.addMouseListener(inputMouseAdapter);            
-            
-            renderFrame.addKeyListener(inputKeyListener);
-            renderFrame.addMouseListener(inputMouseAdapter);
-            
-            animator.start();
-            
-            
-            
-        }catch(GLException e){
-            throw new GLException("Cannot init opengl", e);
-        }catch(Exception e){
-            throw new Exception("Unknown error happened", e);
-        }
+        this.width = width;
+        this.height = height;
+
+        renderFrame = new GLRenderFrame(caps, posX, posY, width, height, title);
+        //renderFrame = GLRenderFrame.create(caps, posX, posY, width, height, title);
+        animator = new FPSAnimator(60);
+
+        /* From doc : 
+        An Animator can be attached to one or more GLAutoDrawables to drive their display() methods in a loop.
+        The Animator class creates a background thread in which the calls to display() are performed.
+        After each drawable has been redrawn, a brief pause is performed to avoid swamping the CPU,
+        unless setRunAsFastAsPossible(boolean) has been called.
+        */
+        animator.add(renderFrame);
+
+        joglContext = new JoglListener(animator);
+        joglContext.getScene().setWidth(width);
+        joglContext.getScene().setHeight(height);
+
+        renderFrame.addGLEventListener(joglContext);
+        renderFrame.addWindowListener(new MinimalWindowAdapter(animator));
+
+
+        //basic input adapters for waking up animator if necessary
+        MinimalKeyAdapter minimalKeyAdapter = new MinimalKeyAdapter(animator);
+        renderFrame.addKeyListener(minimalKeyAdapter);
+
+        minimalMouseAdapter = new MinimalMouseAdapter(animator, dynamicDraw);
+        renderFrame.addMouseListener(minimalMouseAdapter);
+
+        InputKeyListener inputKeyListener = new InputKeyListener();
+        InputMouseAdapter inputMouseAdapter = new InputMouseAdapter();
+        
+        minimalEventMgr = new EventManager(inputMouseAdapter, inputKeyListener) {
+            @Override
+            public void updateEvents() {
+                
+                if(!animator.isPaused() && !joglContext.isDynamicDraw() &&
+                        !mouse.isButtonDown(InputMouseAdapter.Button.LEFT) && !mouse.isButtonDown(InputMouseAdapter.Button.RIGHT)){
+
+                    //this function cost time, it should not be called at each updateEvents method call
+                    animator.pause();
+                }
+            }
+        };
+        
+        addEventListener(minimalEventMgr);
+        
+        basicEvents = new BasicEvent(joglContext, inputMouseAdapter, inputKeyListener);
+        addEventListener(basicEvents);
     }
     
-//    public Viewer3D(int width, int height, File voxelFile, String attributeToView, 
-//            boolean drawDTM, File dtmFile, boolean transformDtm, Mat4D dtmTransform, boolean fitDTMToVoxelSpace, int fittingMargin){
-//        
-//        String cmd = "--width=" + width+","+
-//                     "--height="+height+","+
-//                     "--input="+voxelFile.getAbsolutePath()+","+
-//                     "--attribut="+attributeToView+",";
-//        
-//        if(drawDTM && dtmFile != null){
-//            cmd += "--dtm="+dtmFile.getAbsolutePath()+",";
-//            
-//            if(transformDtm){
-//                cmd += "--dtm-transform"+",";
-//            }
-//            
-//            if(dtmTransform == null){
-//                dtmTransform = Mat4D.identity();
-//            }
-//            cmd += "--dtm-transf-matrix="+dtmTransform.toString()+",";
-//            
-//            if(fitDTMToVoxelSpace){
-//                cmd += "--dtm-fit"+",";
-//                cmd += "--dtm-fitting-margin="+fittingMargin+",";
-//            }
-//        }
-//        
-//        
-//        
-//        cmd = cmd.substring(0, cmd.length()-1);
-//                     
-//        //System.out.println(cmd.replaceAll(",", " "));
-//        
-//        String[] split = cmd.split(",");
-//        parameters = new ArrayList<>(split.length);
-//        
-//        for(String s : split){
-//            parameters.add(s);
-//        }
-//        
-//        //launch(cmd.split(","));
-//    }
-    
-    
-    
-    private static void usage(){
+    public final void addEventListener(EventManager eventManager){
         
-        System.out.println("Utilisation : java -jar VoxViewer.jar [PARAMETRES]\n");
-        System.out.println("Parametre\tDescription\n");
-        System.out.println("--help\tAffiche ce message");
-        System.out.println("--input=<Fichier voxel>\t\tChemin vers le fichier voxel (obligatoire)");
-        System.out.println("--attribut=<Nom de l'attribut>\tChemin vers le fichier voxel");
-        System.out.println("--dtm=<Fichier MNT>\t\tChemin vers le modele numerique de terrain associé au modèle");
-        System.out.println("--dtm-transform\t\t\tChemin vers le modele numerique de terrain associé au modèle");
-        System.out.println("--dtm-fit\t\t\tCharge uniquement la partie du MNT associee a l'espace voxel");
-        System.out.println("--dtm-transf-matrix=<Matrice>\tTransforme le MNT dans la vue 3D en translation et rotation,\n"
-                + "\t\t\t\tla valeur de Matrice doit être une liste de 16 valeurs séparées par des virgules.\n"
-                + "\t\t\t\tLa matrice s'écrit de gauche à droite et de haut en bas.");
+        renderFrame.addKeyListener(eventManager.getKeyboard());
+        renderFrame.addMouseListener(eventManager.getMouse());
+        joglContext.addEventListener(eventManager);
+    }
+    
+    /**
+     * Remove the default action listener who is handling mouse and keyboard events.
+     * You can call this method if you want to custom events.
+     */
+    public void removeDefaultEventManager(){
+        renderFrame.removeKeyListener(basicEvents.getKeyboard());
+        renderFrame.removeMouseListener(basicEvents.getMouse());
+        joglContext.removeEventListener(basicEvents);
     }
     
     public fr.amap.lidar.amapvox.voxviewer.object.scene.Scene getScene(){
@@ -167,35 +125,6 @@ public class Viewer3D {
 
     public int getHeight() {
         return height;
-    }
-    
-
-    /**
-     * The main() method is ignored in correctly deployed JavaFX application.
-     * main() serves only as fallback in case the application can not be
-     * launched through deployment artifacts, e.g., in IDEs with limited FX
-     * support. NetBeans ignores main().
-     *
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        
-        //Application.launch(FXViewer3D.class, "--width=853", "--height=512", "--input=/home/calcul/Documents/Julien/Sortie voxels/ALS/Paracou/2013/dalle9/las_2m.vox" ,"--attribut=PadBVTotal");
-        //Application.launch(FXViewer3D.class, "--width=853", "--height=512", "--input=/home/calcul/Documents/Julien/samples_transect_sud_paracou_2013_ALS/las.vox" ,"--attribut=PadBVTotal");
-        
-    }
-    
-    
-    public void attachEventManager(EventManager eventManager){
-        
-        /*joglContext.attachEventListener(eventManager);
-        renderFrame.addKeyListener(new InputKeyListener(eventManager));
-        renderFrame.addMouseListener(new InputMouseAdapter(eventManager));*/
-    }
-    
-    public void addWindowListener(WindowListener listener){
-        
-        renderFrame.addWindowListener(listener);
     }
 
     public GLRenderFrame getRenderFrame() {
@@ -210,6 +139,7 @@ public class Viewer3D {
     
     public void show(){
         this.setOnTop();
+        animator.start();
         renderFrame.setVisible(true);
     }
     
@@ -243,6 +173,5 @@ public class Viewer3D {
         joglContext.setDynamicDraw(dynamicDraw);
         minimalMouseAdapter.setDynamicDraw(dynamicDraw);
     }
-    
 
 }

@@ -52,7 +52,7 @@ public class Scene {
     
     public final CopyOnWriteArrayList<SceneObject> objectsList;
     public final CopyOnWriteArrayList<SceneObject> hudList;
-    public final Map<String, Shader> shadersList;
+    public final List<Shader> shadersList;
     public final List<Texture> textureList;
     
     private TrackballCamera camera;
@@ -67,14 +67,14 @@ public class Scene {
     private int height;
     
     //default shaders
-    public static AxisShader noTranslationShader = new AxisShader("noTranslationShader");
-    public static Shader instanceLightedShader = new InstanceLightedShader("instanceLightedShader");
-    public static InstanceShader instanceShader = new InstanceShader("instanceShader");
-    public static TextureShader texturedShader = new TextureShader("textureShader");
-    public static TextureShader labelShader = new TextureShader("labelShader");
-    public static PhongShader phongShader = new PhongShader("lightShader");
-    public static SimpleShader simpleShader = new SimpleShader("simpleShader");
-    public static ColorShader colorShader = new ColorShader("colorShader");
+    public static AxisShader noTranslationShader = new AxisShader();
+    public static Shader instanceLightedShader = new InstanceLightedShader();
+    public static InstanceShader instanceShader = new InstanceShader();
+    public static TextureShader texturedShader = new TextureShader();
+    public static TextureShader labelShader = new TextureShader();
+    public static PhongShader phongShader = new PhongShader();
+    public static SimpleShader simpleShader = new SimpleShader();
+    public static ColorShader colorShader = new ColorShader();
     
     //global uniforms, can be used inside shaders files
     public UniformMat4F viewMatrixUniform = new UniformMat4F("viewMatrix");
@@ -95,7 +95,7 @@ public class Scene {
         
         objectsList = new CopyOnWriteArrayList<>();
         hudList = new CopyOnWriteArrayList<>();
-        shadersList = new HashMap<>();
+        shadersList = new ArrayList<>();
         textureList = new ArrayList<>();
         canDraw = false;
         light = new Light();
@@ -117,11 +117,8 @@ public class Scene {
     
     private void initUniforms(){
         
-        Iterator<Entry<String, Shader>> iterator = shadersList.entrySet().iterator();
-        
-        while(iterator.hasNext()){ //pour tous les shaders
-            Entry<String, Shader> shaderEntry = iterator.next();
-            initUniforms(shaderEntry.getValue());
+        for(Shader shader : shadersList){
+            initUniforms(shader);
         }
     }
     
@@ -162,11 +159,7 @@ public class Scene {
         
         try {
             
-            Iterator<Entry<String, Shader>> iterator = shadersList.entrySet().iterator();
-
-            while(iterator.hasNext()){
-                Entry<String, Shader> next = iterator.next();
-                Shader shader = next.getValue();
+            for(Shader shader : shadersList){
                 shader.init(gl);
             }
             
@@ -255,10 +248,6 @@ public class Scene {
         setLightSpecularValue(getLight().specular);
         
     }
-
-    public Map<String, Shader> getShadersList() {
-        return shadersList;
-    }
     
     public void addSceneObjectAsHud(SceneObject sceneObject){
         
@@ -269,6 +258,34 @@ public class Scene {
     }
     
     public void addSceneObject(SceneObject sceneObject){
+        
+        if(objectsList.isEmpty()){
+            
+            if(camera.getPivot() == null){
+                camera.setPivot(sceneObject);
+            }
+            
+            Vec3F camLoc = camera.getLocation();
+            if(camLoc.x == 0 && camLoc.y == 0 && camLoc.z == 0){
+                
+                if(sceneObject.getGravityCenter() != null){
+                    camera.setLocation(new Vec3F(sceneObject.getGravityCenter().x + 20,
+                            sceneObject.getGravityCenter().y + 20, sceneObject.getGravityCenter().z + 10));
+                }
+            }
+            
+            if(light.position.x == 0 && light.position.y == 0 && light.position.z == 100){
+                
+                if(sceneObject.getGravityCenter() != null){
+                    camLoc = camera.getLocation();
+                    light.position = new Point3F(camLoc.x , camLoc.y, camLoc.z);
+                }
+            }
+        }
+        
+        if(sceneObject.getShader() == null){
+            sceneObject.setShader(Scene.simpleShader);
+        }
         
         objectsList.add(sceneObject);
         sceneObject.setId(objectsList.size());
@@ -319,7 +336,7 @@ public class Scene {
     
     public void addShader(Shader shader) {
         
-        shadersList.put(shader.name,shader);
+        shadersList.add(shader);
     }
     
     public void addTexture(Texture texture){
@@ -372,11 +389,7 @@ public class Scene {
         }
         
         //update shader variables
-        Iterator<Entry<String, Shader>> iterator = shadersList.entrySet().iterator();
-
-        while(iterator.hasNext()){
-            Entry<String, Shader> next = iterator.next();
-            Shader shader = next.getValue();
+        for(Shader shader : shadersList){
             shader.updateProgram(gl);
         }
         

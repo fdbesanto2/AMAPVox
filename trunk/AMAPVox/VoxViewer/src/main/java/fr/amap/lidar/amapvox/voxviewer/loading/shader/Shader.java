@@ -39,7 +39,6 @@ public class Shader {
     private int vertexShaderId;
     private int fragmentShaderId;
     private int programId;
-    public String name;
     
     private final Stack<Uniform> dirtyUniforms = new Stack();
     
@@ -53,9 +52,8 @@ public class Shader {
     
     protected GL3 gl;
     
-    public Shader(String name){
+    public Shader(){
         
-        this.name = name;
         attributeMap = new HashMap<>();
         uniformMap = new HashMap<>();
         vertexShaderId=0;
@@ -99,7 +97,7 @@ public class Shader {
             gl.glGetProgramiv(programId, GL3.GL_LINK_STATUS, params, 0);
             
             if(params[0] == GL3.GL_FALSE){
-                LOGGER.error("Fail link program: "+this.name);
+                LOGGER.error("Fail link program");
             }
             
             extractActiveUniforms();

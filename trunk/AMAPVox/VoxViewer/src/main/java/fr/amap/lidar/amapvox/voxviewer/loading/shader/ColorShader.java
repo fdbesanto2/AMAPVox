@@ -11,9 +11,9 @@ package fr.amap.lidar.amapvox.voxviewer.loading.shader;
  */
 public class ColorShader extends Shader{
 
-    public ColorShader(String name) {
+    public ColorShader() {
         
-        super(name);
+        super();
         
         setVertexShaderCode(loadCodeFromInputStream(getStream("shaders/ColorVertexShader.txt")));
         setFragmentShaderCode(loadCodeFromInputStream(getStream("shaders/ColorFragmentShader.txt")));

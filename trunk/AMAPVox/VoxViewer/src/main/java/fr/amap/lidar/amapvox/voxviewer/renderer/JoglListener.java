@@ -14,6 +14,8 @@ import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.lidar.amapvox.voxviewer.event.EventManager;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.Scene;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
@@ -24,7 +26,7 @@ public class JoglListener implements GLEventListener {
     
     private final static Logger LOGGER = Logger.getLogger(JoglListener.class);
     
-    private EventManager eventListener;
+    private final List<EventManager> eventListeners;
     private final Scene scene;
     private Vec3F worldColor;
     private final static Vec3F DEFAULT_WORLD_COLOR = new Vec3F(0.78f, 0.78f, 0.78f);
@@ -55,8 +57,8 @@ public class JoglListener implements GLEventListener {
         this.worldColor = worldColor;
     }
 
-    public EventManager getEventListener() {
-        return eventListener;
+    public List<EventManager> getEventListeners() {
+        return eventListeners;
     }
 
     
@@ -64,13 +66,23 @@ public class JoglListener implements GLEventListener {
     public JoglListener(FPSAnimator animator){
         
         scene = new Scene();
+        eventListeners = new ArrayList<>();
         this.animator = animator;
         worldColor = DEFAULT_WORLD_COLOR;
     }
     
-    public void attachEventListener(EventManager eventListener){
+    public void addEventListener(EventManager eventListener){
         
-        this.eventListener = eventListener;
+        if(eventListener != null){
+            eventListeners.add(eventListener);
+        }
+    }
+    
+    public void removeEventListener(EventManager eventListener){
+        
+        if(eventListener != null){
+            eventListeners.remove(eventListener);
+        }
     }
     
     @Override
@@ -148,8 +160,8 @@ public class JoglListener implements GLEventListener {
         y w = y nd + 1 ⁢* height * 2 + y
         */
         
-        if(eventListener != null){
-            eventListener.updateEvents();
+        for(EventManager eventManager : eventListeners){
+            eventManager.updateEvents();
         }
         
         gl.glViewport(startX, startY, viewportWidth, viewportHeight);

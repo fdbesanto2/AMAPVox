@@ -241,7 +241,9 @@ public class InputMouseAdapter extends MouseAdapter {
     }
 
     public boolean isDragged() {
-        return dragged;
+        boolean mouseDraggedOld = dragged;
+        dragged = false;
+        return mouseDraggedOld;
     }
 
     public boolean[] getMouseButtonDown() {

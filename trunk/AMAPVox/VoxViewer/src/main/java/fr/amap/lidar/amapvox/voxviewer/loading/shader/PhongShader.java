@@ -12,9 +12,9 @@ package fr.amap.lidar.amapvox.voxviewer.loading.shader;
 public class PhongShader extends Shader{
 
     
-    public PhongShader(String name){
+    public PhongShader(){
         
-        super(name);
+        super();
         
         setVertexShaderCode(loadCodeFromInputStream(getStream("shaders/LightVertexShader.txt")));
         setFragmentShaderCode(loadCodeFromInputStream(getStream("shaders/LightFragmentShader.txt")));

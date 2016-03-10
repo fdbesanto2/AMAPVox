@@ -124,12 +124,11 @@ public class AscImportTask extends SceneObjectImportTask{
             dtm.buildMesh();
 
             updateMessage("Build 3d scene object");
-            GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormalesFromDTM(dtm);
 
             //SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, false);
             
 
-            RasterSceneObject dtmSceneObject = new RasterSceneObject(dtmMesh, false);
+            RasterSceneObject dtmSceneObject = new RasterSceneObject(dtm);
             dtmSceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.phongShader);
 
             dtmSceneObject.setMousePickable(buildOctree);

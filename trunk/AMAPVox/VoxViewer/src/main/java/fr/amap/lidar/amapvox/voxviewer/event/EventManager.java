@@ -16,89 +16,26 @@ import fr.amap.lidar.amapvox.voxviewer.input.InputMouseAdapter;
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public abstract class EventManager {
+        
+    protected final InputMouseAdapter mouse;
+    protected final InputKeyListener keyboard;
     
-    /*public boolean mouseMoved;
-    public boolean mouseMiddleButtonClicked;
-    public boolean mouseWheelRotateUp;
-    public boolean mouseWheelRotateDown;
-    
-    public boolean leftKeyPressed;
-    public boolean rightKeyPressed;
-    public boolean upKeyPressed;
-    public boolean downKeyPressed;
-    
-    public boolean zKeyPressed;
-    public boolean sKeyPressed;
-    public boolean qKeyPressed;
-    public boolean dKeyPressed;
-    
-    public boolean plusKeyPressed;
-    public boolean minusKeyPressed;
-    
-    public boolean number1KeyPressed;
-    public boolean number3KeyPressed;
-    public boolean number5KeyPressed;
-    public boolean number7KeyPressed;
-    
-    public boolean ctrlPressed;
-    
-    public boolean leftMousePressed;
-    public boolean rightMousePressed;
-    public boolean middleMousePressed;
-    public boolean leftMouseDragged;
-    public boolean rightMouseDragged;
-    public boolean spaceKeyPressed;
-    public boolean escapeKeyPressed;
-    public int mouseXCurrentLocation;
-    public int mouseYCurrentLocation;
-    public int xrel, yrel;*/
-    
-    public int mouseXOldLocation;
-    public int mouseYOldLocation;
-    
-    
-    public int xOffsetOld;
-    public int yOffsetOld;
-    
-    public int xOffset;
-    public int yOffset;
-    
-    private int i=0;
-    protected final float mouseSpeed = 2.0f;
-    
-    public boolean leftMouseWasReleased;
-    public boolean rightMouseWasReleased;
-    public boolean isMouseLocationUpdated;
-    
-    private KeyListener keyListener;
-    private MouseListener mouseListener;
-    
-    
-    public EventManager() {
+    public EventManager(InputMouseAdapter inputMouseAdapter, InputKeyListener inputKeyListener) {
+        
+        this.mouse = inputMouseAdapter;
+        this.keyboard = inputKeyListener;
     }
-
-    /*public void setMouseXCurrentLocation(int mouseXCurrentLocation) {
-        mouseXOldLocation = this.mouseXCurrentLocation;
-        this.mouseXCurrentLocation = mouseXCurrentLocation;
-        isMouseLocationUpdated = true;
-    }
-
-    public void setMouseYCurrentLocation(int mouseYCurrentLocation) {
-        mouseYOldLocation = this.mouseYCurrentLocation;
-        this.mouseYCurrentLocation = mouseYCurrentLocation;
-        isMouseLocationUpdated = true;
-    }
-
-    public int getMouseXCurrentLocation() {
-        return mouseXCurrentLocation;
-    }
-
-    public int getMouseYCurrentLocation() {
-        return mouseYCurrentLocation;
-    }*/
     
     /**
      * update events
      */
     public abstract void updateEvents();
+
+    public InputMouseAdapter getMouse() {
+        return mouse;
+    }
+
+    public InputKeyListener getKeyboard() {
+        return keyboard;
+    }
 }

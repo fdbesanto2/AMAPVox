@@ -751,10 +751,6 @@ public class GLMeshFactory {
             vertexData[j] = points.get(i).x;
             vertexData[j+1] = points.get(i).y;
             vertexData[j+2] = points.get(i).z;
-            
-            if(points.get(i).z == -10){
-                System.out.println("test");
-            }
         }
         
         float[] normalData = new float[points.size()*3];

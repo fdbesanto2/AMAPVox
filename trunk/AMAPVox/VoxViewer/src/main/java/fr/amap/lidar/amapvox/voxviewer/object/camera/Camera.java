@@ -19,6 +19,7 @@ public abstract class Camera {
     
     protected final PropertyChangeSupport props = new PropertyChangeSupport(this);
     
+    
     protected Mat4F projectionMatrix;
     protected Mat4F viewMatrix;
     protected float fovy;
