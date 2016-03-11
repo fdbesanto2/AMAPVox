@@ -81,6 +81,7 @@ public class NaNsCorrection implements Cancellable{
                             }
                             
                             if(passID > passLimit){
+                                LOGGER.warn("Maximum neighborhood range reached");
                                 break;
                             }
                             
@@ -116,7 +117,13 @@ public class NaNsCorrection implements Cancellable{
                                                     Voxel neighbour = voxels[i][j][k];
 
                                                     if (neighbour.ground_distance >= -(parameters.infos.getResolution() / 2.0f)) {
-                                                        neighbours.add(neighbour);
+                                                        
+                                                        /*les voxels de transmittance nulle sont traités comme étant non échantillonné,
+                                                        tous les voisins sont considérés indépendamment de l'échantillonnage*/
+                                                        if(!Float.isNaN(neighbour.transmittance)){
+                                                            neighbours.add(neighbour);
+                                                        }
+                                                        
                                                     }else{
                                                         nbRemovedNeighbors++;
                                                     }
@@ -135,31 +142,20 @@ public class NaNsCorrection implements Cancellable{
                             float sumBVEntering = 0;
                             float sumBVIntercepted = 0;
                             float sumLgTotal = 0;
-                            
-                            
-                            int count = 0;
 
-                            for(Voxel neighbour : neighbours){
+                            if(neighbours.size() > 0){
                                 
-                                if (cancelled) {
-                                    return;
-                                }
+                                for(Voxel neighbour : neighbours){
                                 
-                                /*les voxels de transmittance nulle sont traités comme étant non échantillonné,
-                                tous les voisins sont considérés indépendamment de l'échantillonnage*/
-                                
-                                if(!Float.isNaN(neighbour.transmittance) /*&& neighbour.transmittance != 0*/){
-                                    
+                                    if (cancelled) {
+                                        return;
+                                    }
+
                                     sumBVEntering += neighbour.bvEntering;
                                     sumBVIntercepted += neighbour.bvIntercepted;
                                     sumLgTotal += neighbour.lgTotal;
                                     nbSamplingStat.addValue(neighbour.nbSampling);
-
-                                    count++;
                                 }
-                            }
-
-                            if(count > 0){
                                 
                                 meanTransmittance = (float) Math.pow((sumBVEntering-sumBVIntercepted)/sumBVEntering, nbSamplingStat.getSum()/sumLgTotal);
                                                                 
@@ -189,20 +185,15 @@ public class NaNsCorrection implements Cancellable{
                                 if (cancelled) {
                                     return;
                                 }
-
-                                if(!Float.isNaN(neighbour.transmittance) && neighbour.transmittance != 0){
-                                    PADStatistic.addValue(neighbour.PadBVTotal);
-                                }
+                                
+                                PADStatistic.addValue(neighbour.PadBVTotal);
                             }
                             
-                            if((PADStatistic.getNbValues()) != 0){
-                                voxels[x][y][z].neighboursNumber = neighbours.size();
-                                voxels[x][y][z].passNumber = passID;
-                                voxels[x][y][z].PadBVTotal = (float)PADStatistic.getMean();
-                                voxels[x][y][z].nbSampling = (int)currentNbSampling;
-                                voxels[x][y][z].transmittance = currentTransmittance;
-                            }                           
-                            
+                            voxels[x][y][z].neighboursNumber = neighbours.size();
+                            voxels[x][y][z].passNumber = passID;
+                            voxels[x][y][z].PadBVTotal = (float)PADStatistic.getMean();
+                            voxels[x][y][z].nbSampling = (int)currentNbSampling;
+                            voxels[x][y][z].transmittance = currentTransmittance;
                         }
                     }
                     

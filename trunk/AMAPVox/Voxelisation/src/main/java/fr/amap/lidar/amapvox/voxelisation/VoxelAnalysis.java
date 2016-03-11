@@ -200,17 +200,18 @@ public class VoxelAnalysis extends Process implements Cancellable{
     }
 
     /**
-     * Get position of center of a voxel
+     * Get position of the center of a voxel
      * @param indices
-     * @param splitting
-     * @param minCorner
      * @return
      */
-    public Point3d getPosition(Point3i indices, Point3i splitting, Point3d minCorner) {
+    public Point3d getPosition(Point3i indices) {
         
-        double posX = minCorner.x + (voxelManager.getVoxelSpace().getVoxelSize().x / 2.0d) + (indices.x * voxelManager.getVoxelSpace().getVoxelSize().x);
-        double posY = minCorner.y + (voxelManager.getVoxelSpace().getVoxelSize().y / 2.0d) + (indices.y * voxelManager.getVoxelSpace().getVoxelSize().y);
-        double posZ = minCorner.z + (voxelManager.getVoxelSpace().getVoxelSize().z / 2.0d) + (indices.z * voxelManager.getVoxelSpace().getVoxelSize().z);
+        Point3d minCorner = parameters.infos.getMinCorner();
+        Point3d voxSize = voxelManager.getVoxelSpace().getVoxelSize();
+        
+        double posX = minCorner.x + (voxSize.x / 2.0d) + (indices.x * voxSize.x);
+        double posY = minCorner.y + (voxSize.y / 2.0d) + (indices.y * voxSize.y);
+        double posZ = minCorner.z + (voxSize.z / 2.0d) + (indices.z * voxSize.z);
 
         return new Point3d(posX, posY, posZ);
     }
@@ -440,7 +441,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
             double surface;
 
             //recalculé pour éviter le stockage de trois doubles (24 octets) par voxel.
-            double distance = getPosition(new Point3i(indices.x, indices.y, indices.z), parameters.infos.getSplit(), parameters.infos.getMinCorner()).distance(shot.origin);
+            double distance = getPosition(new Point3i(indices.x, indices.y, indices.z)).distance(shot.origin);
             
             //surface de la section du faisceau à la distance de la source
             if (parameters.getEchoesWeightParams().getWeightingMode() != EchoesWeightParams.WEIGHTING_NONE && volumeWeighting) {
@@ -983,8 +984,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
         Voxel vox = new Voxel(i, j, k);
 
-        Point3d position = getPosition(new Point3i(i, j, k),
-                parameters.infos.getSplit(), parameters.infos.getMinCorner());
+        Point3d position = getPosition(new Point3i(i, j, k));
 
         float dist;
 

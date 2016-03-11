@@ -564,6 +564,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
     public Point3f getVoxelPosition(int i, int j, int k){
         
         VoxelSpaceInfos infos = data.getVoxelSpaceInfos();
+        
         double posX = infos.getMinCorner().x + (infos.getResolution() / 2.0d) + (i * infos.getResolution());
         double posY = infos.getMinCorner().y + (infos.getResolution() / 2.0d) + (j * infos.getResolution());
         double posZ = infos.getMinCorner().z + (infos.getResolution() / 2.0d) + (k * infos.getResolution());

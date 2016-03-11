@@ -29,6 +29,7 @@ public class VoxelSpaceInfos {
     private Point3d maxCorner;
     private Point3i split;
     private Type type; //ALS ou TLS
+    private final Point3d voxelSize;
     private float resolution;
     private float maxPAD;
     private LeafAngleDistribution.Type ladType = LeafAngleDistribution.Type.SPHERIC;
@@ -47,13 +48,15 @@ public class VoxelSpaceInfos {
     }
 
     public VoxelSpaceInfos(){
-        
+        this.voxelSize = new Point3d();
     }
     
     public VoxelSpaceInfos(Point3d minCorner, Point3d maxCorner, Point3i split) {
         this.minCorner = minCorner;
         this.maxCorner = maxCorner;
         this.split = split;
+        this.voxelSize = new Point3d();
+        updateVoxelSize();
     }
     
     public void readFromVoxelFile(File voxelFile) throws Exception{
@@ -143,6 +146,17 @@ public class VoxelSpaceInfos {
         } catch (IOException ex) {
             throw new Exception("Cannot read voxel file",ex);
         }
+    }
+    
+    private void updateVoxelSize(){
+        
+        double boundingBoxSizeX = maxCorner.x - minCorner.x;
+        double boundingBoxSizeY = maxCorner.y - minCorner.y;
+        double boundingBoxSizeZ = maxCorner.z - minCorner.z;
+        
+        this.voxelSize.x = boundingBoxSizeX / split.x;
+        this.voxelSize.y = boundingBoxSizeY / split.y;
+        this.voxelSize.z = boundingBoxSizeZ / split.z;
     }
 
     public Point3d getMinCorner() {
