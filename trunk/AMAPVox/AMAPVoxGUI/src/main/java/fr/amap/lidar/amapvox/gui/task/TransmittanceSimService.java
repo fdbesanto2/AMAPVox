@@ -6,9 +6,10 @@
 package fr.amap.lidar.amapvox.gui.task;
 
 import fr.amap.commons.util.ProcessingAdapter;
-import fr.amap.commons.util.ProcessingListener;
 import fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceCfg;
+import fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceParameters;
 import fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceSim;
+import java.io.File;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
@@ -18,19 +19,23 @@ import javafx.concurrent.Task;
  */
 public class TransmittanceSimService extends Service<TransmittanceSim>{
 
-    private final TransmittanceCfg cfg;
+    //private final TransmittanceCfg cfg;
+    private final File file;
     private TransmittanceSim transSim;
     
-    public TransmittanceSimService(TransmittanceCfg cfg){
-        this.cfg = cfg;
+    public TransmittanceSimService(File cfgFile){
+        this.file = cfgFile;
     }
     
     @Override
-    protected Task<TransmittanceSim> createTask() {
+    protected Task<TransmittanceSim> createTask(){
         
         return new Task<TransmittanceSim>() {
             @Override
             protected TransmittanceSim call() throws Exception {
+                
+                final TransmittanceCfg cfg = new TransmittanceCfg(new TransmittanceParameters());
+                cfg.readConfiguration(file);
                 
                 transSim = new TransmittanceSim();
                 

@@ -9,6 +9,7 @@ import fr.amap.commons.util.ProcessingListener;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.als.LasVoxelisation;
 import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
+import java.io.File;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
@@ -16,30 +17,31 @@ import javafx.concurrent.Task;
  *
  * @author calcul
  */
-public class ALSVoxelizationService extends Service<Void> {
+public class ALSVoxelizationService extends Service<File> {
 
-    private final ALSVoxCfg cfg;
-    private LasVoxelisation voxelization;
+    //private final ALSVoxCfg cfg;
+    private final File file;
     
-    public ALSVoxelizationService(ALSVoxCfg cfg){
-        this.cfg = cfg;
+    public ALSVoxelizationService(File file){
+        this.file = file;
     }
     
     @Override
-    protected Task<Void> createTask() {
+    protected Task<File> createTask() {
+        
+        final LasVoxelisation voxelization = new LasVoxelisation();
         
         Task task = new Task() {
                         
             @Override
-            protected Object call() throws Exception {
+            protected File call() throws Exception {
+                
+                ALSVoxCfg cfg = new ALSVoxCfg();
+                cfg.readConfiguration(file);
                 
                 updateMessage("Started!");
                 
                 cfg.getVoxelParameters().infos.setType(VoxelSpaceInfos.Type.ALS);
-
-                voxelization = new LasVoxelisation();
-
-                final Task t = this;
 
                 voxelization.addProcessingListener(new ProcessingListener() {
 
@@ -58,7 +60,7 @@ public class ALSVoxelizationService extends Service<Void> {
 
                 voxelization.process(cfg);
 
-                return null;
+                return cfg.getOutputFile();
             }
     
             @Override

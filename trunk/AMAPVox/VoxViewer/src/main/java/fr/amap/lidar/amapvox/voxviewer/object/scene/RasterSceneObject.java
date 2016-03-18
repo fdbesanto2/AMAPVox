@@ -9,7 +9,7 @@ import com.jogamp.common.nio.Buffers;
 import fr.amap.commons.math.point.Point3D;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec3F;
-import fr.amap.commons.raster.asc.DTMPoint;
+import fr.amap.commons.raster.asc.Point;
 import fr.amap.commons.raster.asc.Face;
 import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.structure.octree.Octree;
@@ -104,7 +104,7 @@ public class RasterSceneObject extends ScalarSceneObject{
     
     private void initMesh(Raster raster){
         
-        List<DTMPoint> points = raster.getPoints();
+        List<Point> points = raster.getPoints();
         List<Face> faces = raster.getFaces();
         
         float[] vertexData = new float[points.size()*3];
@@ -157,7 +157,7 @@ public class RasterSceneObject extends ScalarSceneObject{
     private void computeNormales(Raster raster){
         
         List<Face> faces = raster.getFaces();
-        List<DTMPoint> points = raster.getPoints();
+        List<Point> points = raster.getPoints();
         
         float[] normalData = new float[points.size()*3];
         for(int i=0,j=0 ; i<points.size(); i++, j+=3){
@@ -168,9 +168,9 @@ public class RasterSceneObject extends ScalarSceneObject{
                 
                 Face face = faces.get(faceIndex);
                 
-                DTMPoint point1 = points.get(face.getPoint1());
-                DTMPoint point2 = points.get(face.getPoint2());
-                DTMPoint point3 = points.get(face.getPoint3());
+                Point point1 = points.get(face.getPoint1());
+                Point point2 = points.get(face.getPoint2());
+                Point point3 = points.get(face.getPoint3());
                 
                 Vec3F vec1 = Vec3F.substract(new Vec3F(point2.x, point2.y, point2.z), new Vec3F(point1.x, point1.y, point1.z));
                 Vec3F vec2 = Vec3F.substract(new Vec3F(point3.x, point3.y, point3.z), new Vec3F(point1.x, point1.y, point1.z));

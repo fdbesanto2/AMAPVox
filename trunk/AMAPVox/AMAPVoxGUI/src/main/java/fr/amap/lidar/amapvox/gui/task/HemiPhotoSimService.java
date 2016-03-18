@@ -5,8 +5,10 @@
  */
 package fr.amap.lidar.amapvox.gui.task;
 
+import fr.amap.lidar.amapvox.simulation.hemi.HemiParameters;
 import fr.amap.lidar.amapvox.simulation.hemi.HemiPhotoCfg;
 import fr.amap.lidar.amapvox.simulation.hemi.HemiScanView;
+import java.io.File;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
@@ -14,20 +16,23 @@ import javafx.concurrent.Task;
  *
  * @author calcul
  */
-public class HemiPhotoSimService extends Service<Void>{
+public class HemiPhotoSimService extends Service<File>{
 
-    private final HemiPhotoCfg cfg;
+    private final File file;
     private HemiScanView hemiScanView;
     
-    public HemiPhotoSimService(HemiPhotoCfg cfg){
-        this.cfg = cfg;
+    public HemiPhotoSimService(File file){
+        this.file = file;
     }
     
     @Override
-    protected Task<Void> createTask() {
-        return new Task<Void>() {
+    protected Task<File> createTask() {
+        return new Task<File>() {
             @Override
-            protected Void call() throws Exception {
+            protected File call() throws Exception {
+                
+                HemiPhotoCfg cfg = new HemiPhotoCfg(new HemiParameters());
+                cfg.readConfiguration(file);
                 
                 hemiScanView = new HemiScanView(cfg.getParameters());
                 
@@ -36,6 +41,10 @@ public class HemiPhotoSimService extends Service<Void>{
                     hemiScanView.launchSimulation();
                 }catch(Exception ex){
                     throw ex;
+                }
+                
+                if(cfg.getParameters().isGenerateBitmapFile()){
+                    return cfg.getParameters().getOutputBitmapFile();
                 }
                 
                 return null;

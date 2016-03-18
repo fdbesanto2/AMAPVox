@@ -9,6 +9,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.concurrent.Service;
 
 /**
  *
@@ -43,9 +44,9 @@ public class TaskElementExecutor {
             }else{
                 numberOfCurrentTaskRunning.set(numberOfCurrentTaskRunning.getValue()+1);
                 
-                taskElement.addTaskListener(new TaskListener() {
+                taskElement.addTaskListener(new TaskAdapter() {
                     @Override
-                    public void onSucceeded() {
+                    public void onSucceeded(Service service) {
                         numberOfCurrentTaskRunning.set(numberOfCurrentTaskRunning.getValue()-1);
                         executeNextTask();
                     }

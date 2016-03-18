@@ -30,7 +30,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.6</version>
+                <version>2.10</version>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
@@ -84,7 +84,7 @@
                         </goals>
                         <configuration>
                             <executable>${java.home}/bin/java</executable>
-                            <commandlineArgs>-Xmx15g ${debug.parameters} -classpath "${project.build.directory}/lib" -jar "${project.build.directory}/release/${project.build.finalName}.jar"</commandlineArgs>
+                            <commandlineArgs>-Xmx1g ${debug.parameters} -classpath "${project.build.directory}/lib" -jar "${project.build.directory}/release/${project.build.finalName}.jar"</commandlineArgs>
                         </configuration>
                     </execution>
                 </executions>  
@@ -92,7 +92,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.5.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -230,7 +230,7 @@
         </dependency>
         <dependency>
             <groupId>fr.amap.lidar.amapvox</groupId>
-            <artifactId>amapvox-simulation</artifactId>
+            <artifactId>amapvox-core</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
@@ -254,18 +254,8 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.lidar.amapvox</groupId>
-            <artifactId>amapvox-dart</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>fr.amap.lidar</groupId>
             <artifactId>format-gridded</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.amap.lidar.amapvox</groupId>
-            <artifactId>amapvox-voxelisation</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
@@ -291,11 +281,6 @@
         <dependency>
             <groupId>fr.amap.lidar.amapvox</groupId>
             <artifactId>amapvox-commons</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.amap.lidar.amapvox</groupId>
-            <artifactId>amapvox-chart</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>

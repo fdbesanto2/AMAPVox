@@ -5,14 +5,14 @@
  */
 package fr.amap.commons.math.vector;
 
+import fr.amap.commons.math.point.Point4D;
+
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class Vec4D {
-    
-    public double x, y, z, w;
-    
+public class Vec4D extends Point4D{
+        
     public Vec4D(){
         
         this.x = 0;

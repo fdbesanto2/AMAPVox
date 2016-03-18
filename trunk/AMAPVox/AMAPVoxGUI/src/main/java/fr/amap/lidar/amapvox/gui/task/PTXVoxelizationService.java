@@ -11,7 +11,6 @@ import fr.amap.commons.util.CallableTaskAdapter;
 import fr.amap.commons.util.LidarScan;
 import fr.amap.commons.util.MatrixUtility;
 import fr.amap.commons.util.ProcessingAdapter;
-import fr.amap.commons.util.TimeCounter;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.ProcessTool;
@@ -39,14 +38,14 @@ import javafx.concurrent.Task;
  */
 public class PTXVoxelizationService extends Service<List<File>>{
 
-    private final TLSVoxCfg cfg;
+    private final File file;
     private ExecutorService exec;
     private final int coreNumber;
     private final SimpleIntegerProperty nbFileProcessed;
     private ProcessTool tool;
     
-    public PTXVoxelizationService(TLSVoxCfg cfg, int coreNumber){
-        this.cfg = cfg;
+    public PTXVoxelizationService(File file, int coreNumber){
+        this.file = file;
         this.coreNumber = coreNumber;
         nbFileProcessed = new SimpleIntegerProperty(0);
     }
@@ -56,6 +55,9 @@ public class PTXVoxelizationService extends Service<List<File>>{
         return new Task<List<File>>() {
             @Override
             protected List<File> call() throws Exception {
+                
+                final TLSVoxCfg cfg = new TLSVoxCfg();
+                cfg.readConfiguration(file);
                 
                 File output = cfg.getOutputFile();
                 File input = cfg.getInputFile();

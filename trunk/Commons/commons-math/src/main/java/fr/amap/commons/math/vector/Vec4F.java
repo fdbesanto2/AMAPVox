@@ -5,13 +5,13 @@
  */
 package fr.amap.commons.math.vector;
 
+import fr.amap.commons.math.point.Point4F;
+
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class Vec4F {
-    
-    public float x, y, z, w;
+public class Vec4F extends Point4F{
     
     public Vec4F(){
         

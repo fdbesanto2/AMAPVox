@@ -25,6 +25,9 @@
                 <goal>clean</goal>
                 <goal>deploy</goal>
             </goals>
+            <properties>
+                <jpda.listen>maven</jpda.listen>
+            </properties>
         </action>
         <action>
             <actionName>CUSTOM-deploy</actionName>

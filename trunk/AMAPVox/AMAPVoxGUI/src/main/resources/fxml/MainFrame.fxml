@@ -737,6 +737,20 @@
                                                             </AnchorPane>
                                                          </content>
                                                       </Tab>
+                                                      <Tab text="Transmittance">
+                                                         <content>
+                                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                               <children>
+                                                                  <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="14.0" spacing="5.0">
+                                                                     <children>
+                                                                        <Label text="Transmittance mode" />
+                                                                        <ComboBox fx:id="comboboxTransMode" prefHeight="26.0" prefWidth="89.0" />
+                                                                     </children>
+                                                                  </HBox>
+                                                               </children>
+                                                            </AnchorPane>
+                                                         </content>
+                                                      </Tab>
                                                       <Tab text="Other">
                                                          <content>
                                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -1547,7 +1561,7 @@
                                                             </AnchorPane>
                                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0" prefWidth="343.0">
                                                                <children>
-                                                                  <VBox prefHeight="361.0" prefWidth="377.0" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                  <VBox prefHeight="361.0" prefWidth="377.0" spacing="5.0" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                      <children>
                                                                         <TitledPane collapsible="false" prefHeight="160.0" prefWidth="334.0" text="Voxels files - comparison">
                                                                            <content>
@@ -1649,11 +1663,15 @@
                                                                               <CheckBox fx:id="checkboxMakeQuadrats" mnemonicParsing="false" text="Quadrats" />
                                                                            </graphic>
                                                                         </TitledPane>
+                                                                        <HBox>
+                                                                           <children>
+                                                                              <Label text="Max chart number in a row" />
+                                                                              <TextField fx:id="textfieldMaxChartNumberInARow" prefHeight="26.0" prefWidth="45.0" text="6" />
+                                                                              <Button mnemonicParsing="false" onAction="#onActionButtonDrawChart" text="Draw chart(s)" />
+                                                                           </children>
+                                                                        </HBox>
                                                                      </children>
                                                                   </VBox>
-                                                                  <Button layoutX="256.0" layoutY="372.0" mnemonicParsing="false" onAction="#onActionButtonDrawChart" text="Draw chart(s)" />
-                                                                  <Label layoutX="14.0" layoutY="377.0" text="Max chart number in a row" />
-                                                                  <TextField fx:id="textfieldMaxChartNumberInARow" layoutX="197.0" layoutY="372.0" prefHeight="26.0" prefWidth="45.0" text="6" />
                                                                </children>
                                                             </AnchorPane>
                                                         </items>

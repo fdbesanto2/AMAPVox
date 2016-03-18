@@ -26,7 +26,7 @@ import javafx.geometry.Point3D;
  */
 public class Raster {
         
-    private ArrayList<DTMPoint> points;
+    private ArrayList<Point> points;
     private ArrayList<Face> faces;
     
     private float zMin;
@@ -70,7 +70,7 @@ public class Raster {
      *
      * @return
      */
-    public List<DTMPoint> getPoints() {
+    public List<Point> getPoints() {
         return points;
     }
     
@@ -320,7 +320,7 @@ public class Raster {
                         
                         //if(!Float.isNaN(zArray[i][j])){
                             z = zArray[i][j];
-                            DTMPoint point = new DTMPoint((i*cellSize+xLeftLowerCorner),  (-j+rowNumber)*cellSize+yLeftLowerCorner, z);
+                            Point point = new Point((i*cellSize+xLeftLowerCorner),  (-j+rowNumber)*cellSize+yLeftLowerCorner, z);
                             Vec4D result = Mat4D.multiply(transformationMatrix, new Vec4D(point.x, point.y, point.z, 1));
 
                             point.x = (float) result.x;
@@ -423,7 +423,7 @@ public class Raster {
             
             writer.write("o terrain\n");
             
-            for (DTMPoint point : points) {
+            for (Point point : points) {
                 writer.write("v " + point.x + " " + point.y + " " + point.z + " " + "\n");
             }
             

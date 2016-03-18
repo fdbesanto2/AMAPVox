@@ -1,4 +1,3 @@
-
 /*
 This software is distributed WITHOUT ANY WARRANTY and without even the
 implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -13,28 +12,15 @@ Authors:
 For further information, please contact Gregoire Vincent.
  */
 
-package fr.amap.commons.raster.asc;
-
-import fr.amap.commons.math.point.Point3F;
-import java.util.ArrayList;
-import java.util.List;
+package fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx;
 
 /**
  *
- * @author Julien Heurtebize (julienhtbe@gmail.com)
+ * @author calcul
  */
 
 
-public class DTMPoint extends Point3F{
+public class LAIObservation {
     
-    /**
-     * Référence vers les faces composée de ce point
-     */
-    public List<Integer> faces;
     
-    public DTMPoint(float x, float y, float z) {
-        
-        super(x, y, z);
-        faces = new ArrayList<>();
-    }
 }

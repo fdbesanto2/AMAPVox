@@ -95,7 +95,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
 
             VoxelObject voxel = data.getVoxel(context.indices.x, context.indices.y, context.indices.z);
 
-            if(voxel.getAlpha() > 0){
+            if(voxel.getAlpha() > 0 && !voxel.isHidden){
                 return voxel;
             }else{
                 context = voxelManager.CrossVoxel(lineSegment, context.indices);

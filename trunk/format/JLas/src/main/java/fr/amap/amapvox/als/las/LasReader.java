@@ -21,6 +21,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.lang3.ArrayUtils;
 
 /**
@@ -742,8 +744,9 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
         final int pointFormatID = header.getPointDataFormatID();
         Iterator<PointDataRecordFormat> it;
         
-        try {
+        try{
             dis = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
+            
             dis.skip(start);
 
             it = new Iterator<PointDataRecordFormat>() {
@@ -753,7 +756,17 @@ public class LasReader implements Iterable<PointDataRecordFormat> {
             @Override
             public boolean hasNext() {
                 
-                return count < size;
+                boolean test = count < size;
+                
+                if(!test){
+                    try {
+                        dis.close();
+                    } catch (IOException ex) {
+                        Logger.getLogger(LasReader.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                
+                return test;
             }
 
             @Override

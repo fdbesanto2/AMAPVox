@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="MathClassDiagram">
+  <ClassDiagramComponents>
+    <Class name="Point2D" package="" visibility="public" xPosition="397.0" yPosition="105.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Point2I" package="" visibility="public" xPosition="45.0" yPosition="105.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Point2F" package="" visibility="public" xPosition="221.0" yPosition="105.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Vec2F" package="" visibility="public" xPosition="221.0" yPosition="210.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Vec2D" package="" visibility="public" xPosition="397.0" yPosition="210.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Point3I" package="" visibility="public" xPosition="45.0" yPosition="382.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Point3F" package="" visibility="public" xPosition="221.0" yPosition="382.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Point3D" package="" visibility="public" xPosition="397.0" yPosition="382.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Vec3F" package="" visibility="public" xPosition="221.0" yPosition="501.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Vec3D" package="" visibility="public" xPosition="397.0" yPosition="501.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Point4F" package="" visibility="public" xPosition="221.0" yPosition="610.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Point4D" package="" visibility="public" xPosition="397.0" yPosition="610.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Vec4F" package="" visibility="public" xPosition="221.0" yPosition="716.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Vec4D" package="" visibility="public" xPosition="397.0" yPosition="716.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <IsRelation name="is" source="Vec4D" target="Point4D"/>
+    <IsRelation name="is" source="Vec2D" target="Point2D"/>
+    <IsRelation name="is" source="Vec4F" target="Point4F"/>
+    <IsRelation name="is" source="Vec3D" target="Point3D"/>
+    <IsRelation name="is" source="Vec2F" target="Point2F"/>
+    <IsRelation name="is" source="Vec3F" target="Point3F"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

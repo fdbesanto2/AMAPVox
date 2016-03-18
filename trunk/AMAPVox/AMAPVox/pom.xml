@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>fr.amap.lidar.amapvox</groupId>
+        <artifactId>amapvox</artifactId>
+        <version>1.0</version>
+    </parent>
+    <artifactId>amapvox-core</artifactId>
+    <packaging>jar</packaging>
+    
+    <name>AMAPVox</name>
+    
+    <dependencies>
+        <dependency>
+            <groupId>fr.amap.lidar.amapvox</groupId>
+            <artifactId>amapvox-commons</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.amap.lidar</groupId>
+            <artifactId>format-riegl</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.amap.lidar</groupId>
+            <artifactId>format-las</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.amap.lidar</groupId>
+            <artifactId>format-gridded</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.amap.lidar.amapvox</groupId>
+            <artifactId>amapvox-jeeblight</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.amap.commons</groupId>
+            <artifactId>commons-structure</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.amap.commons</groupId>
+            <artifactId>commons-raster</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.0.19</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>9.6.0-6</version>
+        </dependency>
+    </dependencies>
+</project>

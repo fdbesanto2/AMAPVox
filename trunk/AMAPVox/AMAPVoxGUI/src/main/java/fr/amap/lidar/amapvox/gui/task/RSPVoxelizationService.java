@@ -39,14 +39,14 @@ import javafx.concurrent.Task;
  */
 public class RSPVoxelizationService extends Service<List<File>>{
 
-    private final TLSVoxCfg cfg;
+    private final File file;
     private final int coreNumber;
     private ExecutorService exec;
     private final SimpleIntegerProperty nbFileProcessed;
     private ProcessTool tool;
     
-    public RSPVoxelizationService(TLSVoxCfg cfg, int coreNumber){
-        this.cfg = cfg;
+    public RSPVoxelizationService(File file, int coreNumber){
+        this.file = file;
         this.coreNumber = coreNumber;
         nbFileProcessed = new SimpleIntegerProperty(0);
     }
@@ -59,6 +59,8 @@ public class RSPVoxelizationService extends Service<List<File>>{
             @Override
             protected List<File> call() throws Exception {
                 
+                final TLSVoxCfg cfg = new TLSVoxCfg();
+                cfg.readConfiguration(file);
                 
                 File output = cfg.getOutputFile();
                 File input = cfg.getInputFile();

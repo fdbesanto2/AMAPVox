@@ -193,6 +193,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import fr.amap.lidar.amapvox.gui.task.ServiceProvider;
 
 /**
  * FXML Controller class
@@ -215,7 +216,6 @@ public class MainFrameController implements Initializable {
     private Stage updaterFrame;
     private Stage attributsImporterFrame;
     private Stage positionImporterFrame;
-    private Stage progressFrame;
     
     
     
@@ -241,7 +241,6 @@ public class MainFrameController implements Initializable {
     //private SceneObjectPropertiesPanelController sceneObjectPropertiesPanelController;
     private FilteringPaneComponentController filteringPaneController;
     private PositionImporterFrameController positionImporterFrameController;
-    private ProgressFrameController progressFrameController;
     
     private BlockingQueue<File> queue = new ArrayBlockingQueue<>(100);
     private int taskNumber = 0;
@@ -332,12 +331,6 @@ public class MainFrameController implements Initializable {
     
     //echo filtering for rxp files
     private AnchorPane anchorPaneEchoFilteringRxp;
-    
-    private final static Image VOXELIZATION_IMG = new Image(TaskElement.class.getResourceAsStream("/fxml/icons/voxels.png"));
-    private final static Image TRANSMITTANCE_IMG = new Image(TaskElement.class.getResourceAsStream("/fxml/icons/sun.png"));
-    private final static Image HEMI_IMG = new Image(TaskElement.class.getResourceAsStream("/fxml/icons/hemispherical.png"));
-    private final static Image CANOPEE_ANALYZER_IMG = new Image(TaskElement.class.getResourceAsStream("/fxml/icons/lai2200.png"));
-    private final static Image MISC_IMG = new Image(TaskElement.class.getResourceAsStream("/fxml/icons/configure.png"));
     
     @FXML
     private RadioButton radiobuttonLADHomogeneous;
@@ -727,6 +720,8 @@ public class MainFrameController implements Initializable {
     private TextField textfieldDirectionRotationTransmittanceMap;
     @FXML
     private CheckBox checkboxTransmittanceMapToricity;
+    @FXML
+    private ComboBox<Integer> comboboxTransMode;
     
     private void initValidationSupport(){
         
@@ -743,6 +738,18 @@ public class MainFrameController implements Initializable {
         voxSpaceValidationSupport.registerValidator(textFieldEnterYMax, false, Validators.fieldDoubleValidator);
         voxSpaceValidationSupport.registerValidator(textFieldEnterZMax, false, Validators.fieldDoubleValidator);
         voxSpaceValidationSupport.registerValidator(textFieldResolution, false, Validators.fieldDoubleValidator);
+        voxSpaceValidationSupport.registerValidator(textfieldDTMPath, false, Validators.fileExistValidator);
+        
+        checkboxUseDTMFilter.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    voxSpaceValidationSupport.registerValidator(textfieldDTMPath, false, Validators.fileExistValidator);
+                }else{
+                    voxSpaceValidationSupport.registerValidator(textfieldDTMPath, false, Validators.unregisterValidator);
+                }
+            }
+        });
         
         alsVoxValidationSupport.registerValidator(textFieldInputFileALS, false, Validators.fileExistValidator);
         alsVoxValidationSupport.registerValidator(textFieldTrajectoryFileALS, false, Validators.fileExistValidator);
@@ -917,6 +924,9 @@ public class MainFrameController implements Initializable {
         this.resourceBundle = rb;
         
         viewer3DPanelController.setResourceBundle(rb);
+        
+        comboboxTransMode.getItems().setAll(1, 2);
+        comboboxTransMode.getSelectionModel().selectFirst();
                 
         helpButtonHemiPhoto.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -1419,16 +1429,6 @@ public class MainFrameController implements Initializable {
             positionImporterFrameController = loader.getController();
             positionImporterFrame.setScene(new Scene(root));
             positionImporterFrameController.setStage(positionImporterFrame);
-        } catch (IOException ex) {
-            logger.error("Cannot load fxml file", ex);
-        }
-           
-        try {
-            progressFrame = new Stage();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProgressFrame.fxml"));
-            Parent root = loader.load();
-            progressFrameController = loader.getController();
-            progressFrame.setScene(new Scene(root));
         } catch (IOException ex) {
             logger.error("Cannot load fxml file", ex);
         }
@@ -4170,7 +4170,7 @@ public class MainFrameController implements Initializable {
         return pointClassificationsToDiscard;
     }
 
-    private TaskElement addFileToTaskList(File file) {
+    private TaskElement addFileToTaskList(final File file) {
 
         ObservableList<TaskElement> taskElements = listViewTaskList.getItems();
         
@@ -4202,26 +4202,28 @@ public class MainFrameController implements Initializable {
                                 
             case "voxelisation-ALS":
                 
-                ALSVoxCfg cfg = new ALSVoxCfg();
-                try {
-                    cfg.readConfiguration(file);
-                } catch (Exception ex) {
-                    showErrorDialog(ex);
-                    return null;
-                }
+                element = new TaskElement(file, new ServiceProvider() {
+                    @Override
+                    public Service provide() {
+                        return new ALSVoxelizationService(file);
+                    }
+                });
 
-                ALSVoxelizationService s = new ALSVoxelizationService(cfg);
-
-                element = new TaskElement(s, file);
-                element.setTaskIcon(VOXELIZATION_IMG);
+                //element = new TaskElement(s, file);
+                element.setTaskIcon(TaskElement.VOXELIZATION_IMG);
 
                 element.addTaskListener(new TaskAdapter() {
+                    
                     @Override
-                    public void onSucceeded() {
+                    public void onSucceeded(Service service) {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                addFileToProductsList(cfg.getOutputFile());
+                                
+                                File outputFile = ((ALSVoxelizationService)service).getValue();
+                                if(outputFile != null){
+                                    addFileToProductsList(outputFile);
+                                }
                             }
                         });
                     }
@@ -4242,19 +4244,22 @@ public class MainFrameController implements Initializable {
                 switch (tLSVoxCfg.getInputType()) {
 
                     case RSP_PROJECT:
-                        
-                        RSPVoxelizationService rspVoxService = new RSPVoxelizationService(tLSVoxCfg, (int)sliderRSPCoresToUse.getValue());
                 
-                        element = new TaskElement(rspVoxService, file);
-                        element.setTaskIcon(VOXELIZATION_IMG);
+                        element = new TaskElement(file, new ServiceProvider() {
+                            @Override
+                            public Service provide() {
+                                return new RSPVoxelizationService(file, (int)sliderRSPCoresToUse.getValue());
+                            }
+                        });
+                        element.setTaskIcon(TaskElement.VOXELIZATION_IMG);
 
                         element.addTaskListener(new TaskAdapter() {
                             @Override
-                            public void onSucceeded() {
+                            public void onSucceeded(Service service) {
                                 Platform.runLater(new Runnable() {
                                     @Override
                                     public void run() {
-                                        List<File> voxFiles = rspVoxService.getValue();
+                                        List<File> voxFiles = ((RSPVoxelizationService)service).getValue();
 
                                         for(File voxFile : voxFiles){
                                             addFileToProductsList(voxFile);
@@ -4267,15 +4272,19 @@ public class MainFrameController implements Initializable {
                         break;
                         
                     case RXP_SCAN:
-
-                        RXPVoxelizationService rxpVoxService = new RXPVoxelizationService(tLSVoxCfg);
                 
-                        element = new TaskElement(rxpVoxService, file);
-                        element.setTaskIcon(VOXELIZATION_IMG);
+                        element = new TaskElement(file, new ServiceProvider() {
+                            @Override
+                            public Service provide() {
+                                return new RXPVoxelizationService(file);
+                            }
+                        });
+                        
+                        element.setTaskIcon(TaskElement.VOXELIZATION_IMG);
 
                         element.addTaskListener(new TaskAdapter() {
                             @Override
-                            public void onSucceeded() {
+                            public void onSucceeded(Service service) {
                                 Platform.runLater(new Runnable() {
                                     @Override
                                     public void run() {
@@ -4289,18 +4298,22 @@ public class MainFrameController implements Initializable {
                         
                     case PTG_PROJECT:
                         
-                        PTGVoxelizationService ptgVoxService = new PTGVoxelizationService(tLSVoxCfg, (int)sliderRSPCoresToUse.getValue());
-                
-                        element = new TaskElement(ptgVoxService, file);
-                        element.setTaskIcon(VOXELIZATION_IMG);
+                        element = new TaskElement(file, new ServiceProvider() {
+                            @Override
+                            public Service provide() {
+                                return new PTGVoxelizationService(file, (int)sliderRSPCoresToUse.getValue());
+                            }
+                        });
+                        
+                        element.setTaskIcon(TaskElement.VOXELIZATION_IMG);
 
                         element.addTaskListener(new TaskAdapter() {
                             @Override
-                            public void onSucceeded() {
+                            public void onSucceeded(Service service) {
                                 Platform.runLater(new Runnable() {
                                     @Override
                                     public void run() {
-                                        List<File> voxFiles = ptgVoxService.getValue();
+                                        List<File> voxFiles = ((PTGVoxelizationService)service).getValue();
 
                                         for(File voxFile : voxFiles){
                                             addFileToProductsList(voxFile);
@@ -4313,18 +4326,22 @@ public class MainFrameController implements Initializable {
                         
                     case PTX_PROJECT:
                         
-                        PTXVoxelizationService ptxVoxService = new PTXVoxelizationService(tLSVoxCfg, (int)sliderRSPCoresToUse.getValue());
-                
-                        element = new TaskElement(ptxVoxService, file);
-                        element.setTaskIcon(VOXELIZATION_IMG);
+                        element = new TaskElement(file, new ServiceProvider() {
+                            @Override
+                            public Service provide() {
+                                return new PTXVoxelizationService(file, (int)sliderRSPCoresToUse.getValue());
+                            }
+                        });
+                        
+                        element.setTaskIcon(TaskElement.VOXELIZATION_IMG);
 
                         element.addTaskListener(new TaskAdapter() {
                             @Override
-                            public void onSucceeded() {
+                            public void onSucceeded(Service service) {
                                 Platform.runLater(new Runnable() {
                                     @Override
                                     public void run() {
-                                        List<File> voxFiles = ptxVoxService.getValue();
+                                        List<File> voxFiles = ((PTXVoxelizationService)service).getValue();
 
                                         for(File voxFile : voxFiles){
                                             addFileToProductsList(voxFile);
@@ -4340,29 +4357,34 @@ public class MainFrameController implements Initializable {
                 
             case "transmittance":
                 
-                TransmittanceCfg transCfg = new TransmittanceCfg(new TransmittanceParameters());
+                /*TransmittanceCfg transCfg = new TransmittanceCfg(new TransmittanceParameters());
                 
                 try {
                     transCfg.readConfiguration(file);
                 } catch (JDOMException | IOException ex) {
                     showErrorDialog(ex);
                     return null;
-                }
+                }*/
                 
-                TransmittanceSimService transService = new TransmittanceSimService(transCfg);
-                element = new TaskElement(transService, file);
-                element.setTaskIcon(TRANSMITTANCE_IMG);
+                element = new TaskElement(file, new ServiceProvider() {
+                    @Override
+                    public Service provide() {
+                        return new TransmittanceSimService(file);
+                    }
+                });
+                
+                element.setTaskIcon(TaskElement.TRANSMITTANCE_IMG);
 
                 element.addTaskListener(new TaskAdapter() {
                     @Override
-                    public void onSucceeded() {
+                    public void onSucceeded(Service service) {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
                                 
-                                if(transCfg.getParameters().isGenerateBitmapFile()){
+                                //if(transCfg.getParameters().isGenerateBitmapFile()){
 
-                                    List<File> bitmapFiles = transService.getValue().getOutputBitmapFiles();
+                                    List<File> bitmapFiles = ((TransmittanceSimService)service).getValue().getOutputBitmapFiles();
 
                                     if(bitmapFiles != null){
 
@@ -4370,7 +4392,7 @@ public class MainFrameController implements Initializable {
                                             addFileToProductsList(file);
                                         }
                                     }
-                                }
+                                //}
                             }
                         });
                     }
@@ -4381,46 +4403,39 @@ public class MainFrameController implements Initializable {
             case "LAI2000":
             case "LAI2200":
                 
-                TransmittanceCfg lai2xxxCfg = new TransmittanceCfg(new TransmittanceParameters());
+                element = new TaskElement(file, new ServiceProvider() {
+                    @Override
+                    public Service provide() {
+                        return new Lai2xxxSimService(file);
+                    }
+                });
                 
-                try {
-                    lai2xxxCfg.readConfiguration(file);
-                } catch (JDOMException | IOException ex) {
-                    showErrorDialog(ex);
-                    return null;
-                }
-                
-                Lai2xxxSimService lai2xxxSimService = new Lai2xxxSimService(lai2xxxCfg);
-                element = new TaskElement(lai2xxxSimService, file);
-                element.setTaskIcon(CANOPEE_ANALYZER_IMG);
+                element.setTaskIcon(TaskElement.CANOPEE_ANALYZER_IMG);
 
                 break;
 
             case "Hemi-Photo":
+                                
+                element = new TaskElement(file, new ServiceProvider() {
+                    @Override
+                    public Service provide() {
+                        return new HemiPhotoSimService(file);
+                    }
+                });
                 
-                HemiPhotoCfg hemiPhotoCfg = new HemiPhotoCfg(new HemiParameters());
-                
-                try {
-                    hemiPhotoCfg.readConfiguration(file);
-                } catch (JDOMException | IOException ex) {
-                    showErrorDialog(ex);
-                    return null;
-                }
-                
-                HemiPhotoSimService hemiPhotoSimService = new HemiPhotoSimService(hemiPhotoCfg);
-                element = new TaskElement(hemiPhotoSimService, file);
-                element.setTaskIcon(HEMI_IMG);
+                element.setTaskIcon(TaskElement.HEMI_IMG);
                 
                 element.addTaskListener(new TaskAdapter() {
                     @Override
-                    public void onSucceeded() {
+                    public void onSucceeded(Service service) {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
                                 
-                                if(hemiPhotoCfg.getParameters().isGenerateBitmapFile()){
-
-                                    addFileToProductsList(hemiPhotoCfg.getParameters().getOutputBitmapFile());
+                                File outputFile = ((HemiPhotoSimService)service).getValue();
+                                
+                                if(outputFile != null){
+                                    addFileToProductsList(outputFile);
                                 }
                             }
                         });
@@ -4431,27 +4446,27 @@ public class MainFrameController implements Initializable {
 
             case "merging":
 
-                final VoxMergingCfg voxMergingCfg = new VoxMergingCfg();
-                
-                try {
-                    voxMergingCfg.readConfiguration(file);
-                } catch (JDOMException | IOException ex) {
-                    showErrorDialog(ex);
-                    return null;
-                }
-                
-                VoxFileMergingService voxFileMergingService = new VoxFileMergingService(voxMergingCfg);
-                element = new TaskElement(voxFileMergingService, file);
-                element.setTaskIcon(MISC_IMG);
+                element = new TaskElement(file, new ServiceProvider() {
+                    @Override
+                    public Service provide() {
+                        return new VoxFileMergingService(file);
+                    }
+                });
+
+                element.setTaskIcon(TaskElement.MISC_IMG);
                 
                 element.addTaskListener(new TaskAdapter() {
                     @Override
-                    public void onSucceeded() {
+                    public void onSucceeded(Service service) {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
                                 
-                                addFileToProductsList(voxMergingCfg.getOutputFile());
+                                File outputFile = ((VoxFileMergingService)service).getValue();
+                                if(outputFile != null){
+                                    addFileToProductsList(outputFile);
+                                }
+                                
                             }
                         });
                     }
@@ -4461,27 +4476,27 @@ public class MainFrameController implements Initializable {
                 
             case "butterfly-removing":
                 
-                final ButterflyRemoverCfg buttRmvCfg = new ButterflyRemoverCfg();
+                element = new TaskElement(file, new ServiceProvider() {
+                    @Override
+                    public Service provide() {
+                        return new ButterflyRemoverService(file);
+                    }
+                });
                 
-                try {
-                    buttRmvCfg.readConfiguration(file);
-                } catch (Exception ex) {
-                    showErrorDialog(ex);
-                    return null;
-                }
-                
-                ButterflyRemoverService butterflyRemoverService = new ButterflyRemoverService(buttRmvCfg);
-                element = new TaskElement(butterflyRemoverService, file);
-                element.setTaskIcon(MISC_IMG);
+                element.setTaskIcon(TaskElement.MISC_IMG);
                 
                 element.addTaskListener(new TaskAdapter() {
                     @Override
-                    public void onSucceeded() {
+                    public void onSucceeded(Service service) {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
                                 
-                                addFileToProductsList(buttRmvCfg.getOutputFile());
+                                File outputFile = ((ButterflyRemoverService)service).getValue();
+                                
+                                if(outputFile != null){
+                                    addFileToProductsList(outputFile);
+                                }
                             }
                         });
                     }
@@ -5187,6 +5202,7 @@ public class MainFrameController implements Initializable {
         voxelParameters.setLadParams(ladParameters);
 
         voxelParameters.infos.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
+        voxelParameters.setTransmittanceMode(comboboxTransMode.getSelectionModel().getSelectedItem());
 
         return voxelParameters;
     }

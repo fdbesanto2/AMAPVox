@@ -27,10 +27,10 @@ import javafx.concurrent.Task;
  */
 public class RXPVoxelizationService extends Service<Void>{
 
-    private final TLSVoxCfg cfg;
+    private final File file;
     
-    public RXPVoxelizationService(TLSVoxCfg cfg){
-        this.cfg = cfg;
+    public RXPVoxelizationService(File file){
+        this.file = file;
     }
     
     @Override
@@ -39,6 +39,9 @@ public class RXPVoxelizationService extends Service<Void>{
             @Override
             protected Void call() throws Exception {
         
+                final TLSVoxCfg cfg = new TLSVoxCfg();
+                cfg.readConfiguration(file);
+                
                 File output = cfg.getOutputFile();
                 File input = cfg.getInputFile();
                 VoxelParameters parameters = cfg.getVoxelParameters();

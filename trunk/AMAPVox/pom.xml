@@ -8,22 +8,21 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <github.global.server>github</github.global.server>
-        <github.site.userName>MilWolf</github.site.userName>
-        <github.global.userName>MilWolf</github.global.userName>
+        <repositoryName>amapvox</repositoryName>
+        <repositoryOwner>AMAPVox</repositoryOwner>
+        <github.site.userName>AMAPVox</github.site.userName>
+        <github.global.userName>AMAP</github.global.userName>
     </properties>
     
     <modules>
         <module>VoxViewer</module>
-        <module>Simulation</module>
         <module>AMAPVoxGUI</module>
-        <module>JDart</module>
-        <module>Voxelisation</module>
         <module>JeebLight</module>
-        <module>Chart</module>
         <module>VoxReader</module>
         <module>VoxWriter</module>
         <module>VoxChecking</module>
         <module>commons</module>
+        <module>AMAPVox</module>
     </modules>  
     
     <scm>
@@ -89,10 +88,10 @@
                     </execution> 
                 </executions> 
             </plugin>
-            <!--<plugin>
+            <plugin>
                 <groupId>com.github.github</groupId>
                 <artifactId>site-maven-plugin</artifactId>
-                <version>0.13-SNAPSHOT</version>
+                <version>0.12</version>
                 <configuration>
                     <message>Maven artifacts for ${project.version}</message>
                     <noJekyll>true</noJekyll>
@@ -101,8 +100,8 @@
                     <includes>
                         <include>**/*</include>
                     </includes>
-                    <repositoryName>AMAPVox</repositoryName>
-                    <repositoryOwner>MilWolf</repositoryOwner>
+                    <repositoryName>${repositoryName}</repositoryName>
+                    <repositoryOwner>${repositoryOwner}</repositoryOwner>
                     <server>github</server>
                     <merge>true</merge>
                 </configuration>
@@ -115,7 +114,7 @@
                         <phase>deploy</phase>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
         </plugins>
     </build>
     <dependencyManagement>

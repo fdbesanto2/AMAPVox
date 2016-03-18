@@ -11,11 +11,7 @@ import fr.amap.commons.math.point.Point3D;
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class Vec3D{
-    
-    public double x;
-    public double y;
-    public double z;
+public class Vec3D extends Point3D{
     
     /**
      * Constructs and initialize a new 3d double precision vector filled with zeros

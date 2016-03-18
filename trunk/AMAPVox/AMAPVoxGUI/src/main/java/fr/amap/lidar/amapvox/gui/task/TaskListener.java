@@ -6,6 +6,7 @@
 package fr.amap.lidar.amapvox.gui.task;
 
 import java.util.EventListener;
+import javafx.concurrent.Service;
 
 /**
  *
@@ -13,7 +14,7 @@ import java.util.EventListener;
  */
 public interface TaskListener extends EventListener{
     
-    public void onSucceeded();
+    public void onSucceeded(Service service);
     public void onCancelled();
     public void onFailed(Exception ex);
 }

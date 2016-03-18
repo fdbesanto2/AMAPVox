@@ -1,0 +1,26 @@
+Compte dropbox:
+password : amapvox34
+application amapvox_releases:
+	app key : 	2idw94pryda6m0d
+	app secret : 	rfdfsncrn4gt1c4
+	access token : 	VtwO0B43JYAAAAAAAAAAB0S6TNWEbdD7bXIhqsH5cppLRPPyVoAf4YBuqL7HSmQl
+
+Compte github : 
+username : AMAPVox
+password : amapvox34
+
+Ajoutez l'élément ci-dessous dans le fichier /conf/settings.xml de votre répertoire d'installation maven : 
+  <servers>
+    <server>
+      <id>github</id>
+      <username>AMAPVox</username>
+      <password>amapvox34</password>
+    </server>
+  </servers>
+
+Compte gmail :
+name : AMAP
+mail : amapvox@gmail.com
+password : amapvox34
+birthday : 1/10/2000
+

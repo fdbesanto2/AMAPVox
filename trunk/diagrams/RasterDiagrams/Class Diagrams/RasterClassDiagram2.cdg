@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="RasterClassDiagram2">
+  <ClassDiagramComponents>
+    <Class name="BRaster" package="" visibility="public" isAbstract="true" xPosition="242.0" yPosition="195.0">
+      <Fields>
+        <Field name="bands" type="List&lt;Band&gt;" visibility="protected"/>
+        <Field name="header" type="BHeader" visibility="protected"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="writeImage" returnType="void" visibility="public" isAbstract="true"/>
+        <Method name="writeColorFile" returnType="void" visibility="public" isAbstract="true"/>
+        <Method name="writeStatisticsFile" returnType="void" visibility="public" isAbstract="true"/>
+        <Method name="setPixel" returnType="void" visibility="public" isAbstract="true">
+          <Argument type="int" name="posX"/>
+          <Argument type="int" name="posY"/>
+          <Argument type="int" name="bandID"/>
+          <Argument type="byte[]" name="bytes"/>
+        </Method>
+        <Method name="writeHeader" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="BSQ" package="" visibility="public" xPosition="106.0" yPosition="501.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="BIP" package="" visibility="public" xPosition="367.0" yPosition="501.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="BIL" package="" visibility="public" xPosition="604.0" yPosition="501.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="BHeader" package="" visibility="public" xPosition="6.0" yPosition="195.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Band" package="" visibility="public" xPosition="721.0" yPosition="195.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <HasRelation name="header" source="BRaster" target="BHeader" type="Aggregation" sourceCardinality="0..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="BIL" target="BRaster"/>
+    <IsRelation name="is" source="BSQ" target="BRaster"/>
+    <HasRelation name="bands" source="BRaster" target="Band" type="Aggregation" sourceCardinality="0..1" targetCardinality="1..*" collectionType="List"/>
+    <IsRelation name="is" source="BIP" target="BRaster"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

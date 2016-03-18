@@ -15,25 +15,28 @@ import fr.amap.lidar.amapvox.voxelisation.postproc.ButterflyRemoverCfg;
  *
  * @author calcul
  */
-public class ButterflyRemoverService extends Service<Void>{
+public class ButterflyRemoverService extends Service<File>{
 
-    private final ButterflyRemoverCfg cfg;
+    private final File file;
     
-    public ButterflyRemoverService(ButterflyRemoverCfg cfg){
+    public ButterflyRemoverService(File file){
         
-        this.cfg = cfg;
+        this.file = file;
     }
     
     @Override
-    protected Task<Void> createTask() {
+    protected Task<File> createTask() {
         
-        return new Task<Void>() {
+        return new Task<File>() {
             @Override
-            protected Void call() throws Exception {
+            protected File call() throws Exception {
+                
+                final ButterflyRemoverCfg cfg = new ButterflyRemoverCfg();
+                cfg.readConfiguration(file);
                 
                 ButterflyRemover.clean(cfg.getInputFile(), cfg.getOutputFile());
                 
-                return null;
+                return cfg.getOutputFile();
             }
         };
     }

@@ -44,7 +44,7 @@ public class DirectionalTransmittance {
     private fr.amap.commons.util.vegetation.DirectionalTransmittance direcTrans;
     
     private boolean toricity = false;
-    private final static double EPSILON = 0.01;
+    private final static double EPSILON = 0.001;
     
     private class TLSVoxel {
 
@@ -282,6 +282,8 @@ public class DirectionalTransmittance {
                 transmitted = 0;
             } else {
                 if(Float.isNaN(voxels[i][j][k].padBV)){
+                    //test
+                    //voxels[i][j][k].padBV = 3.536958f;
                     return Double.NaN;
                 }
                 
@@ -301,7 +303,7 @@ public class DirectionalTransmittance {
                 //transmitted *= Math.exp(-0.5 * voxels[i][j][k].padBV * pathLength)/*(default coeff)*/;
             }
             
-            if(transmitted <= EPSILON){
+            if(transmitted <= EPSILON && toricity){
                 break;
             }
             

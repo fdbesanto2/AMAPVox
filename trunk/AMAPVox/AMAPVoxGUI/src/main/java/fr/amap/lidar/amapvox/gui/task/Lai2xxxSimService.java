@@ -6,7 +6,9 @@
 package fr.amap.lidar.amapvox.gui.task;
 
 import fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceCfg;
+import fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceParameters;
 import fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx.Lai2xxxSim;
+import java.io.File;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
@@ -16,11 +18,11 @@ import javafx.concurrent.Task;
  */
 public class Lai2xxxSimService extends Service<Void>{
 
-    private final TransmittanceCfg cfg;
+    private final File file;
     private Lai2xxxSim lai2xxxSim;
     
-    public Lai2xxxSimService(TransmittanceCfg cfg){
-        this.cfg = cfg;
+    public Lai2xxxSimService(File file){
+        this.file = file;
     }
     
     @Override
@@ -28,6 +30,9 @@ public class Lai2xxxSimService extends Service<Void>{
         return new Task() {
             @Override
             protected Object call() throws Exception {
+                
+                TransmittanceCfg cfg = new TransmittanceCfg(new TransmittanceParameters());
+                cfg.readConfiguration(file);
                 
                 lai2xxxSim = new Lai2xxxSim(cfg);
                 

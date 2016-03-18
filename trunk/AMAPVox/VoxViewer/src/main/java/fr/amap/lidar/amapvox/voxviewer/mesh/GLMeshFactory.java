@@ -14,7 +14,7 @@ import fr.amap.commons.math.point.Point3I;
 import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.commons.math.vector.Vec3I;
 import fr.amap.commons.util.ColorGradient;
-import fr.amap.commons.raster.asc.DTMPoint;
+import fr.amap.commons.raster.asc.Point;
 import fr.amap.commons.raster.asc.Face;
 import fr.amap.commons.raster.asc.Raster;
 import fr.amap.lidar.amapvox.voxviewer.loading.texture.Texture;
@@ -740,7 +740,7 @@ public class GLMeshFactory {
     
     public static GLMesh createMeshAndComputeNormalesFromDTM(Raster dtm){
         
-        List<DTMPoint> points = dtm.getPoints();
+        List<Point> points = dtm.getPoints();
         List<Face> faces = dtm.getFaces();
         
         GLMesh mesh = new SimpleGLMesh();
@@ -762,9 +762,9 @@ public class GLMeshFactory {
                 
                 Face face = faces.get(faceIndex);
                 
-                DTMPoint point1 = points.get(face.getPoint1());
-                DTMPoint point2 = points.get(face.getPoint2());
-                DTMPoint point3 = points.get(face.getPoint3());
+                Point point1 = points.get(face.getPoint1());
+                Point point2 = points.get(face.getPoint2());
+                Point point3 = points.get(face.getPoint3());
                 
                 Vec3F vec1 = Vec3F.substract(new Vec3F(point2.x, point2.y, point2.z), new Vec3F(point1.x, point1.y, point1.z));
                 Vec3F vec2 = Vec3F.substract(new Vec3F(point3.x, point3.y, point3.z), new Vec3F(point1.x, point1.y, point1.z));

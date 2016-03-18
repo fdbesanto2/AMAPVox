@@ -49,9 +49,16 @@ public class Updater {
     
     
     //those keys are retrieved in dropbox account
-    private final static String APP_KEY = "yv02kehoorehcli";
-    private final static String APP_SECRET = "i8z195pbw5gfei3";
-    private final static String ACCESS_TOKEN = "PTDN3PzvDt4AAAAAAAAAFyC_4eXTNHpP7XU56ticl1WiKogxDCCMkIdQoRlUloe4";
+    
+    	
+
+        
+    private final static String APP_KEY = "2idw94pryda6m0d";
+    private final static String APP_SECRET = "rfdfsncrn4gt1c4";
+    private final static String ACCESS_TOKEN = "VtwO0B43JYAAAAAAAAAAB0S6TNWEbdD7bXIhqsH5cppLRPPyVoAf4YBuqL7HSmQl";
+    //private final static String APP_KEY = "yv02kehoorehcli";
+    //private final static String APP_SECRET = "i8z195pbw5gfei3";
+    //private final static String ACCESS_TOKEN = "PTDN3PzvDt4AAAAAAAAAFyC_4eXTNHpP7XU56ticl1WiKogxDCCMkIdQoRlUloe4";
 
     private DbxClient client;
     private Map<Date, File> fileList;

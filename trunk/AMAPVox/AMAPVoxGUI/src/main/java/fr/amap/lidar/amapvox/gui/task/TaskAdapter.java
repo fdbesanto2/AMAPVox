@@ -5,6 +5,8 @@
  */
 package fr.amap.lidar.amapvox.gui.task;
 
+import javafx.concurrent.Service;
+
 /**
  *
  * @author calcul
@@ -12,11 +14,12 @@ package fr.amap.lidar.amapvox.gui.task;
 public abstract class TaskAdapter implements TaskListener{
     
     @Override
-    public void onSucceeded(){}
+    public void onSucceeded(Service service){}
     
     @Override
     public void onCancelled(){}
     
     @Override
     public void onFailed(Exception ex){}
+    
 }
