@@ -29,6 +29,7 @@ public class VoxelParameters {
     private float maxPAD = 5;
     private boolean TLS;*/
     private int transmittanceMode = 1;
+    private String pathLengthMode = "A";
     
     //echoes filtering
     private List<PointcloudFilter> pointcloudFilters;
@@ -133,76 +134,6 @@ public class VoxelParameters {
         this.infos.setType(VoxelSpaceInfos.Type.TLS);
         //this.TLS = TLS;
     }
-
-    /*public Point3d getBottomCorner() {
-        return bottomCorner;
-    }
-
-    public void setBottomCorner(Point3d bottomCorner) {
-        this.bottomCorner = bottomCorner;
-    }
-
-    public Point3d getTopCorner() {
-        return topCorner;
-    }
-
-    public void setTopCorner(Point3d topCorner) {
-        this.topCorner = topCorner;
-    }
-
-    public Point3i getSplit() {
-        return split;
-    }*/
-
-    /**
-     * 
-     * @param split Be careful, it is advised to use {@link #setResolution(double) } instead
-     * because anyway you gonna need to change the resolution manually.
-     */
-    /*public void setSplit(Point3i split) {
-        
-        this.split = split;        
-    }
-    
-    public double getResolution() {
-        return resolution;
-    }*/
-
-    /*public void setResolution(double resolution) {
-        
-        this.resolution = resolution;
-        
-        if(bottomCorner != null && topCorner != null){
-            
-            split = new Point3i(
-                    (int) Math.ceil((topCorner.getX() - bottomCorner.getX()) / resolution),
-                    (int) Math.ceil((topCorner.getY() - bottomCorner.getY()) / resolution),
-                    (int) Math.ceil((topCorner.getZ() - bottomCorner.getZ()) / resolution));
-        }
-    }*/
-
-    /**
-     * @return if true, the lidar is a Terrestrial Laser Scanner, if false, an Airborne Laser Scanner
-     */
-    /*public boolean isTLS() {
-        return TLS;
-    }*/
-
-    /**
-     * 
-     * @param TLS if true, the lidar is a Terrestrial Laser Scanner, if false, an Airborne Laser Scanner
-     */
-    /*public void setTLS(boolean TLS) {
-        this.TLS = TLS;
-    }
-
-    public float getMaxPAD() {
-        return maxPAD;
-    }
-
-    public void setMaxPAD(float maxPAD) {
-        this.maxPAD = maxPAD;
-    }*/
 
     public boolean isMergingAfter() {
         return mergingAfter;
@@ -342,4 +273,13 @@ public class VoxelParameters {
     public void setTransmittanceMode(int transmittanceMode) {
         this.transmittanceMode = transmittanceMode;
     }
+
+    public String getPathLengthMode() {
+        return pathLengthMode;
+    }
+
+    public void setPathLengthMode(String pathLengthMode) {
+        this.pathLengthMode = pathLengthMode;
+    }
+    
 }

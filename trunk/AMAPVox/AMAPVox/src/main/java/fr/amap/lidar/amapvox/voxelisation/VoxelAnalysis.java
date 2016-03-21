@@ -237,6 +237,14 @@ public class VoxelAnalysis extends Process implements Cancellable{
         MAX_PAD = parameters.infos.getMaxPAD();
         this.transMode = parameters.getTransmittanceMode();
         
+        
+        String pathLengthModeStr = parameters.getPathLengthMode();
+        if(pathLengthModeStr.equals("A")){
+            pathLengthMode = 1;
+        }else{
+            pathLengthMode = 2;
+        }
+        
         laserSpec = parameters.getLaserSpecification();
         
         if(laserSpec == null){

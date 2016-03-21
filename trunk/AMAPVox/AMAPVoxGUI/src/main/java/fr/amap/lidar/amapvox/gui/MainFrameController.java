@@ -723,6 +723,8 @@ public class MainFrameController implements Initializable {
     private CheckBox checkboxTransmittanceMapToricity;
     @FXML
     private ComboBox<Integer> comboboxTransMode;
+    @FXML
+    private ComboBox<String> comboboxPathLengthMode;
     
     private void initValidationSupport(){
         
@@ -928,6 +930,9 @@ public class MainFrameController implements Initializable {
         
         comboboxTransMode.getItems().setAll(1, 2);
         comboboxTransMode.getSelectionModel().selectFirst();
+        
+        comboboxPathLengthMode.getItems().setAll("A", "B");
+        comboboxPathLengthMode.getSelectionModel().selectFirst();
                 
         helpButtonHemiPhoto.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -5223,6 +5228,7 @@ public class MainFrameController implements Initializable {
 
         voxelParameters.infos.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
         voxelParameters.setTransmittanceMode(comboboxTransMode.getSelectionModel().getSelectedItem());
+        voxelParameters.setPathLengthMode(comboboxPathLengthMode.getSelectionModel().getSelectedItem());
 
         return voxelParameters;
     }
@@ -5543,6 +5549,8 @@ public class MainFrameController implements Initializable {
                     radiobuttonLADHomogeneous.setSelected(ladParameters.getLadEstimationMode() == 0);
                     textFieldTwoBetaAlphaParameter.setText(String.valueOf(ladParameters.getLadBetaFunctionAlphaParameter()));
                     textFieldTwoBetaBetaParameter.setText(String.valueOf(ladParameters.getLadBetaFunctionBetaParameter()));
+                    
+                    comboboxTransMode.getSelectionModel().select(voxelParameters.getTransmittanceMode());
                     
                     if(type.equals("voxelisation-ALS") || type.equals("multi-voxelisation")){
                         

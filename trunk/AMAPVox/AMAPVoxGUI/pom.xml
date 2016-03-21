@@ -84,7 +84,7 @@
                         </goals>
                         <configuration>
                             <executable>${java.home}/bin/java</executable>
-                            <commandlineArgs>-Xmx1g ${debug.parameters} -classpath "${project.build.directory}/lib" -jar "${project.build.directory}/release/${project.build.finalName}.jar" --T-TLS_VOX=1C --execute-cfg='/home/calcul/Documents/Julien/test_task_process/ptg/cfg.xml'</commandlineArgs>
+                            <commandlineArgs>-Xmx1g ${debug.parameters} -classpath "${project.build.directory}/lib" -jar "${project.build.directory}/release/${project.build.finalName}.jar"</commandlineArgs>
                         </configuration>
                     </execution>
                 </executions>  

@@ -152,6 +152,14 @@ public class VoxelAnalysisCfg extends Configuration{
             
             voxelParameters.setTransmittanceMode(Integer.valueOf(transmittanceElement.getAttributeValue("mode")));
         }
+        
+        /***PATH LENGTH MODE***/
+        Element pathLengthElement = processElement.getChild("path-length");
+                    
+        if(pathLengthElement != null){
+            
+            voxelParameters.setPathLengthMode(pathLengthElement.getAttributeValue("mode"));
+        }
 
         Element dtmFilterElement = processElement.getChild("dtm-filter");
 
@@ -439,6 +447,11 @@ public class VoxelAnalysisCfg extends Configuration{
         Element transmittanceElement = new Element("transmittance");
         transmittanceElement.setAttribute(new Attribute("mode",String.valueOf(voxelParameters.getTransmittanceMode())));
         processElement.addContent(transmittanceElement);
+        
+        /***PATH-LENGTH MODE***/
+        Element pathLengthElement = new Element("path-length");
+        pathLengthElement.setAttribute(new Attribute("mode",voxelParameters.getPathLengthMode()));
+        processElement.addContent(pathLengthElement);
 
         /***DTM FILTER***/
 
