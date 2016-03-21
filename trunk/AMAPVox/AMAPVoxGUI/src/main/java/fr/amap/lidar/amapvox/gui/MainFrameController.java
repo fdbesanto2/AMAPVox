@@ -315,6 +315,7 @@ public class MainFrameController implements Initializable {
     private Matrix4d rasterTransfMatrix;
 
     private List<LidarScan> items;
+    private int tlsVoxNbThreads = -1;
     private Rsp rsp;
     private double currentLastPointCloudLayoutY;
     
@@ -4170,7 +4171,7 @@ public class MainFrameController implements Initializable {
         return pointClassificationsToDiscard;
     }
 
-    private TaskElement addFileToTaskList(final File file) {
+    public TaskElement addFileToTaskList(final File file) {
 
         ObservableList<TaskElement> taskElements = listViewTaskList.getItems();
         
@@ -4248,7 +4249,11 @@ public class MainFrameController implements Initializable {
                         element = new TaskElement(file, new ServiceProvider() {
                             @Override
                             public Service provide() {
-                                return new RSPVoxelizationService(file, (int)sliderRSPCoresToUse.getValue());
+                                if(tlsVoxNbThreads == -1){
+                                    return new RSPVoxelizationService(file, (int)sliderRSPCoresToUse.getValue());
+                                }else{
+                                    return new RSPVoxelizationService(file, tlsVoxNbThreads);
+                                }
                             }
                         });
                         element.setTaskIcon(TaskElement.VOXELIZATION_IMG);
@@ -4301,7 +4306,11 @@ public class MainFrameController implements Initializable {
                         element = new TaskElement(file, new ServiceProvider() {
                             @Override
                             public Service provide() {
-                                return new PTGVoxelizationService(file, (int)sliderRSPCoresToUse.getValue());
+                                if(tlsVoxNbThreads == -1){
+                                    return new PTGVoxelizationService(file, (int)sliderRSPCoresToUse.getValue());
+                                }else{
+                                    return new PTGVoxelizationService(file, tlsVoxNbThreads);
+                                }
                             }
                         });
                         
@@ -4329,7 +4338,11 @@ public class MainFrameController implements Initializable {
                         element = new TaskElement(file, new ServiceProvider() {
                             @Override
                             public Service provide() {
-                                return new PTXVoxelizationService(file, (int)sliderRSPCoresToUse.getValue());
+                                if(tlsVoxNbThreads == -1){
+                                    return new PTXVoxelizationService(file, (int)sliderRSPCoresToUse.getValue());
+                                }else{
+                                    return new PTXVoxelizationService(file, tlsVoxNbThreads);
+                                }
                             }
                         });
                         
@@ -4548,29 +4561,21 @@ public class MainFrameController implements Initializable {
         }
     }
     
-    public void executeTaskList(List<File> tasks){
-        
-        queue = new ArrayBlockingQueue<>(tasks.size());
-        queue.addAll(tasks);
-        taskNumber = tasks.size();
-        taskID = 1;
-
-        try {
-            if (!queue.isEmpty()) {
-                executeProcess(queue.take());
-            }
-
-        } catch (InterruptedException ex) {
-            logger.error("Process interrupted", ex);
-        }
+    public void executeTaskListInParallel(List<TaskElement> taskElements, int nbThreads){
+        TaskElementExecutor executor = new TaskElementExecutor(nbThreads, taskElements);
+        executor.execute();
     }
-
-    @FXML
-    private void onActionButtonExecute(ActionEvent event) {
-
+    
+    public void executeTaskListSequentially(List<TaskElement> taskElements){
+        
+        TaskElementExecutor executor = new TaskElementExecutor(1, taskElements);
+        executor.execute();
+    }
+    
+    private void executeTaskList(List<TaskElement> taskElements){
+        
         TaskElementExecutor executor;
         
-        ObservableList<TaskElement> taskElements = listViewTaskList.getSelectionModel().getSelectedItems();
         if(taskElements.size() == 1){
             executor = new TaskElementExecutor(1, taskElements);
             executor.execute();
@@ -4585,18 +4590,28 @@ public class MainFrameController implements Initializable {
             if(result != null){
                 switch(result){
                     case "Sequential execution":
-                        executor = new TaskElementExecutor(1, taskElements);
-                        executor.execute();
+                        executeTaskListSequentially(taskElements);
                         break;
                     case "Parallel execution":
-
-                        executor = new TaskElementExecutor((int)sliderRSPCoresToUse.getValue(), taskElements);
-                        executor.execute();
+                        
+                        if(tlsVoxNbThreads == -1){
+                            executeTaskListInParallel(taskElements, (int)sliderRSPCoresToUse.getValue());
+                        }else{
+                            executeTaskListInParallel(taskElements, tlsVoxNbThreads);
+                        }
+                        
                         break;
                 }
             }
         }
+    }
+
+    @FXML
+    private void onActionButtonExecute(ActionEvent event) {
+
+        ObservableList<TaskElement> taskElements = listViewTaskList.getSelectionModel().getSelectedItems();
         
+        executeTaskList(taskElements);
     }
     
     private void showErrorDialog(final Exception e){
@@ -4620,7 +4635,12 @@ public class MainFrameController implements Initializable {
             final Service<Void> service;
             
             final ProcessTool voxTool = new ProcessTool();
-            voxTool.setCoresNumber((int) sliderRSPCoresToUse.getValue());
+            
+            if(tlsVoxNbThreads == -1){
+                voxTool.setCoresNumber((int) sliderRSPCoresToUse.getValue());
+            }else{
+                voxTool.setCoresNumber(tlsVoxNbThreads);
+            }
             
             final long start_time = System.currentTimeMillis();
                     
@@ -7151,6 +7171,14 @@ public class MainFrameController implements Initializable {
         ChartViewer viewer = new ChartViewer("GTheta", 500, 500, 1);
         viewer.insertChart(ChartViewer.createBasicChart("GTheta ~ Beam direction zenithal angle", dataset, "Beam direction zenithal angle (degrees)", "GTheta"));
         viewer.show();
+    }
+
+    public int getTlsVoxNbThreads() {
+        return tlsVoxNbThreads;
+    }
+
+    public void setTlsVoxNbThreads(int tlsVoxNbThreads) {
+        this.tlsVoxNbThreads = tlsVoxNbThreads;
     }
     
 }
