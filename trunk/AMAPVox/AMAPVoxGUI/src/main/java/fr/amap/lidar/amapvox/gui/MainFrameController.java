@@ -928,7 +928,7 @@ public class MainFrameController implements Initializable {
         
         viewer3DPanelController.setResourceBundle(rb);
         
-        comboboxTransMode.getItems().setAll(1, 2);
+        comboboxTransMode.getItems().setAll(1, 2, 3);
         comboboxTransMode.getSelectionModel().selectFirst();
         
         comboboxPathLengthMode.getItems().setAll("A", "B");
@@ -5551,6 +5551,7 @@ public class MainFrameController implements Initializable {
                     textFieldTwoBetaBetaParameter.setText(String.valueOf(ladParameters.getLadBetaFunctionBetaParameter()));
                     
                     comboboxTransMode.getSelectionModel().select(voxelParameters.getTransmittanceMode());
+                    comboboxPathLengthMode.getSelectionModel().select(voxelParameters.getPathLengthMode());
                     
                     if(type.equals("voxelisation-ALS") || type.equals("multi-voxelisation")){
                         

@@ -141,6 +141,7 @@ public class Voxel{
         public float PadBVTotal;
         //public float _PadBVTotal_V2;
         public double sumSurfMulLength;
+        public double sumSurfMulLengthMulEnt;
         
         public float _passNumber;
         public float _neighboursNumber;

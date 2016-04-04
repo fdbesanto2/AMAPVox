@@ -56,4 +56,5 @@
                 <goal>install</goal>
             </goals>
         </action>
+        
     </actions>

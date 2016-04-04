@@ -697,6 +697,7 @@ public class ProcessTool extends Process implements Cancellable{
         int bvEnteringColumnIndex = -1;
         int bvInterceptedColumnIndex = -1;
         int sumSurfMulLengthColumnIndex = -1;
+        int sumSurfMulLengthMulEntColumnIndex = -1;
         int transmittance_tmpColumnIndex = -1;
         int lMeanTotalColumnIndex = -1;
         int lgTotalColumnIndex = -1;
@@ -770,6 +771,10 @@ public class ProcessTool extends Process implements Cancellable{
                         break;
                     case "sumSurfMulLength":
                         sumSurfMulLengthColumnIndex = i;
+                        toMerge[i] = Mode.SUM;
+                        break;
+                    case "sumSurfMulLengthMulEnt":
+                        sumSurfMulLengthMulEntColumnIndex = i;
                         toMerge[i] = Mode.SUM;
                         break;
                     case "transmittance_tmp":
@@ -917,11 +922,19 @@ public class ProcessTool extends Process implements Cancellable{
         
         for (int i = 0; i < size; i++) {
             
-            if(transMode == 1){
-                resultingFile[i][transmittanceColumnIndex] = voxelAnalysis.computeTransmittance(resultingFile[i][bvEnteringColumnIndex], resultingFile[i][bvInterceptedColumnIndex]);
-                resultingFile[i][transmittanceColumnIndex] =  voxelAnalysis.computeNormTransmittance(resultingFile[i][transmittanceColumnIndex], resultingFile[i][lMeanTotalColumnIndex]);
-            }else{
-                resultingFile[i][transmittanceColumnIndex] =  voxelAnalysis.computeNormTransmittanceMode2(resultingFile[i][transmittance_tmpColumnIndex], resultingFile[i][sumSurfMulLengthColumnIndex], resultingFile[i][lMeanTotalColumnIndex]);
+            switch (transMode) {
+                
+                case 2:
+                    resultingFile[i][transmittanceColumnIndex] =  voxelAnalysis.computeNormTransmittanceMode2(resultingFile[i][transmittance_tmpColumnIndex], resultingFile[i][sumSurfMulLengthColumnIndex], resultingFile[i][lMeanTotalColumnIndex]);
+                    break;
+                case 3:
+                    resultingFile[i][transmittanceColumnIndex] =  voxelAnalysis.computeNormTransmittanceMode3(resultingFile[i][transmittance_tmpColumnIndex], resultingFile[i][sumSurfMulLengthMulEntColumnIndex]);
+                    break;
+                case 1:
+                default:
+                    resultingFile[i][transmittanceColumnIndex] = voxelAnalysis.computeTransmittance(resultingFile[i][bvEnteringColumnIndex], resultingFile[i][bvInterceptedColumnIndex]);
+                    resultingFile[i][transmittanceColumnIndex] =  voxelAnalysis.computeNormTransmittance(resultingFile[i][transmittanceColumnIndex], resultingFile[i][lMeanTotalColumnIndex]);
+                    break;
             }
             
             resultingFile[i][padBVTotalColumnIndex] = voxelAnalysis.computePADFromNormTransmittance(resultingFile[i][transmittanceColumnIndex], resultingFile[i][angleMeanColumnIndex]);

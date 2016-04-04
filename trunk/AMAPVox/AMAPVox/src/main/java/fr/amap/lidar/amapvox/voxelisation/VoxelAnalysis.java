@@ -445,6 +445,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
             double d2 = context.length;
             
             
+            //instantiate on the fly, when the voxel is crossed
             if (voxels[indices.x][indices.y][indices.z] == null) {
                 voxels[indices.x][indices.y][indices.z] = initVoxel(indices.x, indices.y, indices.z);
             }
@@ -473,6 +474,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
              comme étant à l'extérieur du dernier voxel traversé*/
             
             double surfMulLength = 0;
+            double surfMulLengthMulEnt = 0; //CL
             double intercepted = 0;
             double entering = 0;
             double longueur = 0;
@@ -500,6 +502,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
                     
                     surfMulLength = surface * longueur;
                     entering = (Math.round(residualEnergy*10000)/10000.0);
+                    surfMulLengthMulEnt = entering * surfMulLength; //CL
                     vox.bvEntering += (entering * surfMulLength);
 
                     lastVoxelSampled = vox;
@@ -514,7 +517,8 @@ public class VoxelAnalysis extends Process implements Cancellable{
                  */
             } /*
              Poursuite du trajet optique jusqu'à sortie de la bounding box
-             */ else if (d1 >= distanceToHit) {
+             */ 
+            else if (d1 >= distanceToHit) {
 
                 /*
                  la distance actuelle d1 est supérieure à la distance à l'écho
@@ -530,18 +534,19 @@ public class VoxelAnalysis extends Process implements Cancellable{
                         if (vox.ground_distance < parameters.getDtmFilteringParams().getMinDTMDistance()) {
                             groundEnergy[vox.$i][vox.$j].groundEnergyPotential++;
                             shotChanged = false;
-                            context = null;
+                            context = null; // sortie de la boucle 
                         }
 
                     } else {
-                        context = null;
+                        context = null;// sortie de la boucle 
                     }
 
                 }
 
             } /*
              Echo dans le voxel
-             */ else {
+             */ 
+            else {
 
                 /*si plusieurs échos issus du même tir dans le voxel, 
                  on incrémente et le nombre de tirs entrants (nbsampling) 
@@ -574,8 +579,8 @@ public class VoxelAnalysis extends Process implements Cancellable{
                     vox.angleMean += shot.angle;
                     
                     surfMulLength = surface * longueur;
-                    
                     entering = (Math.round(residualEnergy*10000)/10000.0);
+                    surfMulLengthMulEnt = entering * surfMulLength; //CL
                     vox.bvEntering += (entering * surfMulLength);
                     
                     lastVoxelSampled = vox;
@@ -616,10 +621,13 @@ public class VoxelAnalysis extends Process implements Cancellable{
                 if(transMode == 2){
                     transNorm = ((entering - intercepted) / entering) * surfMulLength;
                 }else{ //mode 3
-                    transNorm = Math.pow(((entering - intercepted) / entering), 1/longueur) * surfMulLength;
+                    //transNorm = Math.pow(((entering - intercepted) / entering), 1/longueur) * surfMulLength;
+                    transNorm = Math.pow(((entering - intercepted) / entering), 1/longueur) * surfMulLength * entering; //CL
                 }
                 
                 vox.transmittance_tmp += transNorm;
+                
+                vox.sumSurfMulLengthMulEnt += surfMulLengthMulEnt; //CL
 
                 vox.sumSurfMulLength += surfMulLength;
             }
@@ -661,7 +669,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
         return normalizedTransmittance;
     }
     
-    public float computeNormTransmittanceV2(double transmittance, double _sumSurfMulLength){
+    public float computeNormTransmittanceMode3(double transmittance, double _sumSurfMulLength){
         float normalizedTransmittance = (float) (transmittance / _sumSurfMulLength);
         return normalizedTransmittance;
     }
@@ -726,7 +734,8 @@ public class VoxelAnalysis extends Process implements Cancellable{
                 normalizedTransmittance = computeNormTransmittanceMode2(voxel.transmittance_tmp, voxel.sumSurfMulLength, voxel.lMeanTotal);
                 break;
             case 3:
-                normalizedTransmittance = computeNormTransmittanceV2(voxel.transmittance_tmp, voxel.sumSurfMulLength);
+                //normalizedTransmittance = computeNormTransmittanceV2(voxel.transmittance_tmp, voxel.sumSurfMulLength);
+                normalizedTransmittance = computeNormTransmittanceMode3(voxel.transmittance_tmp, voxel.sumSurfMulLengthMulEnt); //CL
                 break;
                 
             case 1:
