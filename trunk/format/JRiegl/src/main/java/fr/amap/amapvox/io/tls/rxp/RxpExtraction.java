@@ -106,14 +106,23 @@ public class RxpExtraction implements Iterable<Shot>{
         
         RxpExtraction extraction = new RxpExtraction();
         try {
-            extraction.openRxpFile(new File("C:\\Users\\Julien\\Documents\\130917_153258.rxp"), RxpExtraction.REFLECTANCE, RxpExtraction.AMPLITUDE, RxpExtraction.DEVIATION);
+            extraction.openRxpFile(new File("/home/julien/Documents/SINGLESCANS/750213_173552.mon.rxp"), RxpExtraction.REFLECTANCE, RxpExtraction.AMPLITUDE, RxpExtraction.DEVIATION);
             
             Iterator<Shot> iterator = extraction.iterator();
             
-            while(iterator.hasNext()){
+            /*while(iterator.hasNext()){
                 Shot shot = iterator.next();
                 System.out.println(shot.origin.x+" "+shot.origin.y+" "+shot.origin.z);
-            }
+            }*/
+            
+            Shot shot ;
+            do{
+                shot = iterator.next();
+                if(shot != null){
+                    System.out.println(shot.origin.x+" "+shot.origin.y+" "+shot.origin.z);
+                }
+                
+            }while(shot != null);
             
             System.err.println("opened");
         } catch (Exception ex) {
@@ -128,13 +137,11 @@ public class RxpExtraction implements Iterable<Shot>{
         
         Iterator<Shot> it = new Iterator<Shot>() {
                         
-            private Shot shot;
+            private Shot shot = null;
+            private boolean hasNextCalled = false;
             int nbShotsFailed = 0;
-             
-            @Override
-            public boolean hasNext() {
-                
-                shot = null;
+            
+            private Shot nextShot(){
                 
                 if(hasShot(rxpPointer)){
                     
@@ -143,21 +150,36 @@ public class RxpExtraction implements Iterable<Shot>{
                         shot = (fr.amap.amapvox.io.tls.rxp.Shot) o;
                     }else{
                         nbShotsFailed++;
-                        return hasNext();
+                        return nextShot();
                     }
-                    
                                         
-                    return shot != null;
+                    return shot;
                     
                 }else{
-                    return false;
+                    return null;
                 }
+            }
+             
+            @Override
+            public boolean hasNext() {
+                
+                hasNextCalled = true;
+                
+                shot = nextShot();
+                
+                return shot != null;
             }
 
             @Override
             public Shot next() {
                 
-                return shot;
+                if(hasNextCalled){
+                    hasNextCalled = false;
+                    return shot;
+                }else{
+                    return nextShot();
+                }
+                
             }
         };
         
