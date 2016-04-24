@@ -62,7 +62,7 @@ public class ALSVoxCfg extends VoxelAnalysisCfg{
 
                 trajectoryFile.setColumnSeparator(columnSeparator);
                 trajectoryFile.setHeaderIndex(Long.valueOf(headerIndex));
-                trajectoryFile.setHasHeader(Boolean.valueOf(hasHeader));
+                trajectoryFile.setContainsHeader(Boolean.valueOf(hasHeader));
                 trajectoryFile.setNbOfLinesToRead(Long.valueOf(nbOfLinesToRead));
                 trajectoryFile.setNbOfLinesToSkip(Long.valueOf(nbOfLinesToSkip));
 
@@ -142,7 +142,7 @@ public class ALSVoxCfg extends VoxelAnalysisCfg{
         trajectoryFileElement.setAttribute(new Attribute("src",trajectoryFile.getAbsolutePath()));
         trajectoryFileElement.setAttribute(new Attribute("column-separator",trajectoryFile.getColumnSeparator()));
         trajectoryFileElement.setAttribute(new Attribute("header-index",String.valueOf(trajectoryFile.getHeaderIndex())));
-        trajectoryFileElement.setAttribute(new Attribute("has-header", String.valueOf(trajectoryFile.isHasHeader())));
+        trajectoryFileElement.setAttribute(new Attribute("has-header", String.valueOf(trajectoryFile.containsHeader())));
         trajectoryFileElement.setAttribute(new Attribute("nb-of-lines-to-read", String.valueOf(trajectoryFile.getNbOfLinesToRead())));
         trajectoryFileElement.setAttribute(new Attribute("nb-of-lines-to-skip", String.valueOf(trajectoryFile.getNbOfLinesToSkip())));
         

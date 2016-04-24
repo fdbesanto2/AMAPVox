@@ -1731,7 +1731,7 @@
                   </TabPane>
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="175.0" prefWidth="798.0">
+          <AnchorPane minWidth="-Infinity" prefHeight="175.0" prefWidth="798.0">
                <children>
                   <SplitPane dividerPositions="0.5" prefHeight="155.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>

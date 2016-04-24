@@ -1,7 +1,6 @@
 package fr.amap.lidar.amapvox.voxviewer;
 
 import com.jogamp.nativewindow.util.Point;
-import com.jogamp.newt.event.WindowListener;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLException;
 import com.jogamp.opengl.GLProfile;
@@ -15,16 +14,11 @@ import fr.amap.lidar.amapvox.voxviewer.renderer.MinimalWindowAdapter;
 import fr.amap.lidar.amapvox.voxviewer.renderer.JoglListener;
 import fr.amap.lidar.amapvox.voxviewer.renderer.MinimalKeyAdapter;
 import fr.amap.lidar.amapvox.voxviewer.renderer.MinimalMouseAdapter;
-import java.io.File;
-import java.util.List;
 
 public class Viewer3D {
 
-    private File voxelFile;
-    private String attributeToView;
     static double SCREEN_WIDTH;
     static double SCREEN_HEIGHT;
-    private List<String> parameters;
     private final GLRenderFrame renderFrame;
     private final JoglListener joglContext;
     private final FPSAnimator animator;  

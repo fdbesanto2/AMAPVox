@@ -741,7 +741,10 @@ public class MainFrameController implements Initializable {
         voxSpaceValidationSupport.registerValidator(textFieldEnterYMax, false, Validators.fieldDoubleValidator);
         voxSpaceValidationSupport.registerValidator(textFieldEnterZMax, false, Validators.fieldDoubleValidator);
         voxSpaceValidationSupport.registerValidator(textFieldResolution, false, Validators.fieldDoubleValidator);
-        voxSpaceValidationSupport.registerValidator(textfieldDTMPath, false, Validators.fileExistValidator);
+        
+        if(checkboxUseDTMFilter.isSelected()){
+            voxSpaceValidationSupport.registerValidator(textfieldDTMPath, false, Validators.fileExistValidator);
+        }
         
         checkboxUseDTMFilter.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -2314,7 +2317,7 @@ public class MainFrameController implements Initializable {
             if(trajectoryFile != null){
                 trajFile.setColumnAssignment(trajectoryFile.getColumnAssignment());
                 trajFile.setColumnSeparator(trajectoryFile.getColumnSeparator());
-                trajFile.setHasHeader(trajectoryFile.isHasHeader());
+                trajFile.setContainsHeader(trajectoryFile.containsHeader());
                 trajFile.setHeaderIndex(trajectoryFile.getHeaderIndex());
                 trajFile.setNbOfLinesToRead(trajectoryFile.getNbOfLinesToRead());
                 trajFile.setNbOfLinesToSkip(trajectoryFile.getNbOfLinesToSkip());
@@ -3661,7 +3664,7 @@ public class MainFrameController implements Initializable {
         textFileParserFrameController.setColumnAssignmentDefaultSelectedIndex(3, 4);
 
         if(trajectoryFile != null){
-            textFileParserFrameController.setHeaderExtractionEnabled(trajectoryFile.isHasHeader());
+            textFileParserFrameController.setHeaderExtractionEnabled(trajectoryFile.containsHeader());
             textFileParserFrameController.setSeparator(trajectoryFile.getColumnSeparator());
             trajectoryFile.setColumnAssignment(trajectoryFile.getColumnAssignment());
         }else{
@@ -3690,7 +3693,7 @@ public class MainFrameController implements Initializable {
                 trajectoryFile.setColumnAssignment(textFileParserFrameController.getAssignedColumnsItemsMap());
                 trajectoryFile.setNbOfLinesToRead(textFileParserFrameController.getNumberOfLines());
                 trajectoryFile.setNbOfLinesToSkip(textFileParserFrameController.getSkipLinesNumber());
-                trajectoryFile.setHasHeader(textFileParserFrameController.getHeaderIndex() != -1);
+                trajectoryFile.setContainsHeader(textFileParserFrameController.getHeaderIndex() != -1);
                 trajectoryFile.setHeaderIndex(textFileParserFrameController.getHeaderIndex());
 
                 textFieldTrajectoryFileALS.setText(selectedFile.getAbsolutePath());
@@ -5550,7 +5553,7 @@ public class MainFrameController implements Initializable {
                     textFieldTwoBetaAlphaParameter.setText(String.valueOf(ladParameters.getLadBetaFunctionAlphaParameter()));
                     textFieldTwoBetaBetaParameter.setText(String.valueOf(ladParameters.getLadBetaFunctionBetaParameter()));
                     
-                    comboboxTransMode.getSelectionModel().select(voxelParameters.getTransmittanceMode());
+                    comboboxTransMode.getSelectionModel().select(new Integer(voxelParameters.getTransmittanceMode()));
                     comboboxPathLengthMode.getSelectionModel().select(voxelParameters.getPathLengthMode());
                     
                     if(type.equals("voxelisation-ALS") || type.equals("multi-voxelisation")){
@@ -6063,7 +6066,7 @@ public class MainFrameController implements Initializable {
                             file.setColumnAssignment(textFileParserFrameController.getAssignedColumnsItemsMap());
                             file.setNbOfLinesToRead(textFileParserFrameController.getNumberOfLines());
                             file.setNbOfLinesToSkip(textFileParserFrameController.getSkipLinesNumber());
-                            file.setHasHeader(textFileParserFrameController.getHeaderIndex() != -1);
+                            file.setContainsHeader(textFileParserFrameController.getHeaderIndex() != -1);
                             file.setHeaderIndex(textFileParserFrameController.getHeaderIndex());
                             
                             pcfpc.setCSVFile(file);

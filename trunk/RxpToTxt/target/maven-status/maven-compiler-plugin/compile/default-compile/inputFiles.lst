@@ -1,5 +1,5 @@
-/home/calcul/Documents/Julien/AMAPVox/trunk/RxpToTxt/src/main/java/fr/amap/lidar/rxptotxt/MainApp.java
-/home/calcul/Documents/Julien/AMAPVox/trunk/RxpToTxt/src/main/java/fr/amap/lidar/rxptotxt/RxpScanConversion.java
-/home/calcul/Documents/Julien/AMAPVox/trunk/RxpToTxt/src/main/java/fr/amap/lidar/rxptotxt/RspExtractorFrameController.java
-/home/calcul/Documents/Julien/AMAPVox/trunk/RxpToTxt/src/main/java/fr/amap/lidar/rxptotxt/FXMLController.java
-/home/calcul/Documents/Julien/AMAPVox/trunk/RxpToTxt/src/main/java/fr/amap/lidar/rxptotxt/SimpleScan.java
+/home/julien/Documents/AMAPVox/trunk/RxpToTxt/src/main/java/fr/amap/lidar/rxptotxt/RspExtractorFrameController.java
+/home/julien/Documents/AMAPVox/trunk/RxpToTxt/src/main/java/fr/amap/lidar/rxptotxt/MainApp.java
+/home/julien/Documents/AMAPVox/trunk/RxpToTxt/src/main/java/fr/amap/lidar/rxptotxt/FXMLController.java
+/home/julien/Documents/AMAPVox/trunk/RxpToTxt/src/main/java/fr/amap/lidar/rxptotxt/SimpleScan.java
+/home/julien/Documents/AMAPVox/trunk/RxpToTxt/src/main/java/fr/amap/lidar/rxptotxt/RxpScanConversion.java

@@ -7,6 +7,7 @@ package fr.amap.commons.javafx.io;
  */
 
 
+import fr.amap.commons.util.io.file.CSVFile;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,6 +28,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -50,6 +52,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 
 /**
@@ -87,12 +90,21 @@ public class TextFileParserFrameController implements Initializable{
     private String separator = " ";
     private boolean isInit;
     private Stage stage;
+    private File currentViewedFile;
     
-    private ObservableList<String> columnAssignmentValues;
-    private boolean columnAssignmentEnabled;
-    private List<Integer> columnAssignmentselectedIndices;
-    //private HBox columnsHbox;
+    //columns names assignment
+    private boolean columnNameAssignmentEnabled;
+    private ObservableList<String> columnNamesAssignmentValues;
+    private List<Integer> columnNamesAssignmentSelectedIndices;
     private GridPane columnsGridPane;
+    private List<ComboBox> gridPaneRowNames;
+    
+    //columns types assignment
+    private boolean columnTypeAssignmentEnabled;
+    private ObservableList<String> columnTypesAssignmentValues;
+    private List<Integer> columnTypesAssignmentSelectedIndices;
+    private List<ComboBox> gridPaneRowTypes;
+    
     
     public static TextFileParserFrameController getInstance() throws IOException, Exception{
         
@@ -114,6 +126,13 @@ public class TextFileParserFrameController implements Initializable{
     
     public void setStage(Stage stage) {
         this.stage = stage;
+        
+        this.stage.setOnShowing(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                
+            }
+        });
     }
 
     public Stage getStage() {
@@ -216,6 +235,8 @@ public class TextFileParserFrameController implements Initializable{
     }
     
     public void setTextFile(File file) throws FileNotFoundException, IOException{
+        
+        currentViewedFile = file;
         
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
@@ -333,7 +354,8 @@ public class TextFileParserFrameController implements Initializable{
                 
                 //columnsHbox = new HBox();
                 columnsGridPane = new GridPane();
-                
+                gridPaneRowNames = new ArrayList<>();
+                gridPaneRowTypes = new ArrayList<>();
                 
                 tableViewFileContent.getColumns().clear();
 
@@ -363,8 +385,8 @@ public class TextFileParserFrameController implements Initializable{
 
                     tableViewFileContent.getColumns().add(column);
                     
-                    if(columnAssignmentEnabled){
-                        ComboBox comboBox = new ComboBox(columnAssignmentValues);
+                    if(columnNameAssignmentEnabled){
+                        ComboBox comboBox = new ComboBox(columnNamesAssignmentValues);
                         comboBox.setMaxWidth(Double.MAX_VALUE);
                         
                         stage.widthProperty().addListener(new ChangeListener<Number>() {
@@ -384,17 +406,48 @@ public class TextFileParserFrameController implements Initializable{
                             }
                         });
                         
-                        if(columnAssignmentselectedIndices != null && j < columnAssignmentselectedIndices.size()){
-                            comboBox.getSelectionModel().select(columnAssignmentselectedIndices.get(j).intValue());
+                        if(columnNamesAssignmentSelectedIndices != null && j < columnNamesAssignmentSelectedIndices.size()){
+                            comboBox.getSelectionModel().select(columnNamesAssignmentSelectedIndices.get(j).intValue());
                         }                        
 
                         columnsGridPane.add(comboBox, j, 0);
+                        gridPaneRowNames.add(comboBox);
                         //columnsHbox.getChildren().add(comboBox);
                         //HBox.setHgrow(comboBox, Priority.ALWAYS);
                     }
+                    
+                    if(columnTypeAssignmentEnabled){
+                        
+                        ComboBox comboBox = new ComboBox(columnTypesAssignmentValues);
+                        comboBox.setMaxWidth(Double.MAX_VALUE);
+                        
+                        stage.widthProperty().addListener(new ChangeListener<Number>() {
+
+                            @Override
+                            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                                comboBox.setPrefWidth(newValue.doubleValue());
+                            }
+                        });
+                    
+                        column.widthProperty().addListener(new ChangeListener<Number>() {
+
+                            @Override
+                            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                                comboBox.setPrefWidth(newValue.doubleValue());
+                                
+                            }
+                        });
+                        
+                        if(columnTypesAssignmentSelectedIndices != null && j < columnTypesAssignmentSelectedIndices.size()){
+                            comboBox.getSelectionModel().select(columnTypesAssignmentSelectedIndices.get(j).intValue());
+                        }                        
+
+                        columnsGridPane.add(comboBox, j, 1);
+                        gridPaneRowTypes.add(comboBox);
+                    }
                 }
 
-                if(columnAssignmentEnabled){
+                if(columnNameAssignmentEnabled){
                     if(isInit && vboxTableViewAndColumnsTypeWrapper.getChildren().size() <= 1){
                         vboxTableViewAndColumnsTypeWrapper.getChildren().add(0, columnsGridPane);
                         
@@ -416,33 +469,73 @@ public class TextFileParserFrameController implements Initializable{
     
     public void setColumnAssignment(boolean value){
         
-        columnAssignmentEnabled = value;
+        columnNameAssignmentEnabled = value;
     }
     
     public void setColumnAssignmentValues(String... items){
         
-        columnAssignmentEnabled = true;
-        columnAssignmentValues = FXCollections.observableArrayList(items);
-        columnAssignmentselectedIndices = new ArrayList<>(items.length);
+        columnNameAssignmentEnabled = true;
+        columnNamesAssignmentValues = FXCollections.observableArrayList(items);
+        columnNamesAssignmentSelectedIndices = new ArrayList<>(items.length);
         
         for(int i=0;i<items.length;i++){
-            columnAssignmentselectedIndices.add(0);
+            columnNamesAssignmentSelectedIndices.add(0);
         }
     }
     
     public void setColumnAssignmentDefaultSelectedIndex(int columnIndex, int selectedIndex){
         
-        if(columnAssignmentselectedIndices != null){
-            columnAssignmentselectedIndices.set(columnIndex, selectedIndex);
+        if(columnNamesAssignmentSelectedIndices != null){
+            columnNamesAssignmentSelectedIndices.set(columnIndex, selectedIndex);
         }
     }
 
     public List<String> getColumnAssignmentValues() {
-        return columnAssignmentValues;
+        return columnNamesAssignmentValues;
     }
 
     public boolean isColumnAssignmentEnabled() {
-        return columnAssignmentEnabled;
+        return columnNameAssignmentEnabled;
+    }
+
+    public boolean isColumnTypeAssignmentEnabled() {
+        return columnTypeAssignmentEnabled;
+    }
+
+    public void setColumnTypeAssignmentEnabled(boolean columnTypeAssignmentEnabled) {
+        this.columnTypeAssignmentEnabled = columnTypeAssignmentEnabled;
+    }
+
+    public ObservableList<String> getColumnTypesAssignmentValues() {
+        return columnTypesAssignmentValues;
+    }
+    
+    public void setColumnTypesAssignmentValues(Class... items){
+        
+        columnTypeAssignmentEnabled = true;
+        
+        columnTypesAssignmentValues = FXCollections.observableArrayList();
+        for(int i=0;i<items.length;i++){
+            
+            columnTypesAssignmentValues.add(items[i].getTypeName());
+        }
+        
+        columnTypesAssignmentSelectedIndices = new ArrayList<>(items.length);
+        
+        for(int i=0;i<items.length;i++){
+            columnTypesAssignmentSelectedIndices.add(0);
+        }
+    }
+
+    public List<Integer> getColumnTypesAssignmentSelectedIndices() {
+        return columnTypesAssignmentSelectedIndices;
+    }
+    
+    public void setColumnTypesAssignmentDefaultSelectedIndex(int columnIndex, int selectedIndex){
+        
+        if(columnTypesAssignmentSelectedIndices != null){
+            columnTypesAssignmentSelectedIndices.set(columnIndex, selectedIndex);
+        }
     }
     
     public List<Integer> getAssignedColumnsIndices(){
@@ -459,14 +552,29 @@ public class TextFileParserFrameController implements Initializable{
     
     public Map<String, Integer> getAssignedColumnsItemsMap(){
         
-        ObservableList<Node> childs = columnsGridPane.getChildren();
-        
         Map<String, Integer> columnAssignation = new HashMap<>();
         
         int index = 0;
+        for(ComboBox combobox : gridPaneRowNames){
+            columnAssignation.put((String)(combobox.getSelectionModel().getSelectedItem()), index);
+            index++;
+        }
         
-        for(Node child : childs){
-            columnAssignation.put((String)(((ComboBox)child).getSelectionModel().getSelectedItem()), index);
+        return columnAssignation;
+    }
+    
+    public Map<String, Class> getAssignedColumnsTypesMap() throws ClassNotFoundException{
+        
+        Map<String, Class> columnAssignation = new HashMap<>();
+        
+        int index = 0;
+        for(ComboBox combobox : gridPaneRowTypes){
+            String selectedItem = (String) combobox.getSelectionModel().getSelectedItem();
+            Class<?> c = Class.forName(selectedItem);
+            
+            String columnName = (String) gridPaneRowNames.get(index).getSelectionModel().getSelectedItem();
+            
+            columnAssignation.put(columnName, c);
             index++;
         }
         
@@ -504,6 +612,35 @@ public class TextFileParserFrameController implements Initializable{
             return Integer.MAX_VALUE;
         }else{
             return Integer.valueOf(spinnerNumberOfLines.getEditor().getText());
+        }
+    }
+    
+    /**
+     * Get the {@link CSVFile} object linked to this text file parser.
+     * @return The {@link CSVFile} object, null if the current text file is null.
+     */
+    public CSVFile getCSVFile(){
+        
+        if(currentViewedFile != null){
+            
+            CSVFile csvFile = new CSVFile(currentViewedFile);
+            csvFile.setColumnSeparator(getSeparator());
+            
+            csvFile.setColumnAssignment(getAssignedColumnsItemsMap());
+            try {
+                csvFile.setColumnTypes(getAssignedColumnsTypesMap());
+            } catch (ClassNotFoundException ex) {}
+            
+            csvFile.setNbOfLinesToRead(getNumberOfLines());
+            csvFile.setNbOfLinesToSkip(getSkipLinesNumber());
+            
+            int headerIndex = getHeaderIndex();
+            csvFile.setContainsHeader(headerIndex != -1);
+            csvFile.setHeaderIndex(headerIndex);
+            
+            return csvFile;
+        }else{
+            return null;
         }
     }
     

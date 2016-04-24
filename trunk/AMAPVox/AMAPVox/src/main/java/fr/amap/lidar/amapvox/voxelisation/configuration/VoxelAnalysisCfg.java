@@ -198,7 +198,7 @@ public class VoxelAnalysisCfg extends Configuration{
 
                             file.setColumnSeparator(columnSeparator);
                             file.setHeaderIndex(Long.valueOf(headerIndex));
-                            file.setHasHeader(Boolean.valueOf(hasHeader));
+                            file.setContainsHeader(Boolean.valueOf(hasHeader));
                             file.setNbOfLinesToRead(Long.valueOf(nbOfLinesToRead));
                             file.setNbOfLinesToSkip(Long.valueOf(nbOfLinesToSkip));
 
@@ -501,7 +501,7 @@ public class VoxelAnalysisCfg extends Configuration{
                     
                     pointcloudFilterElement.setAttribute(new Attribute("column-separator",filter.getPointcloudFile().getColumnSeparator()));
                     pointcloudFilterElement.setAttribute(new Attribute("header-index",String.valueOf(filter.getPointcloudFile().getHeaderIndex())));
-                    pointcloudFilterElement.setAttribute(new Attribute("has-header", String.valueOf(filter.getPointcloudFile().isHasHeader())));
+                    pointcloudFilterElement.setAttribute(new Attribute("has-header", String.valueOf(filter.getPointcloudFile().containsHeader())));
                     pointcloudFilterElement.setAttribute(new Attribute("nb-of-lines-to-read", String.valueOf(filter.getPointcloudFile().getNbOfLinesToRead())));
                     pointcloudFilterElement.setAttribute(new Attribute("nb-of-lines-to-skip", String.valueOf(filter.getPointcloudFile().getNbOfLinesToSkip())));
 

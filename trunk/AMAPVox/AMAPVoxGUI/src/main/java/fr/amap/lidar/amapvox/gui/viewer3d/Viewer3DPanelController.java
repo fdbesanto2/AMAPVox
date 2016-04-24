@@ -781,7 +781,14 @@ public class Viewer3DPanelController implements Initializable {
                                             for(int i=0;i<voxelSpace.getColumnsNames().length;i++){
 
                                                 lines[i][0] = voxelSpace.getColumnsNames()[i];
-                                                lines[i][1] = String.valueOf(Math.round(selectedVoxel.getAttributs()[i]*1000.0f)/1000.0f);
+                                                
+                                                float attribut = selectedVoxel.getAttributs()[i];
+                                                if(Float.isNaN(attribut)){
+                                                    lines[i][1] = "NaN";
+                                                }else{
+                                                    lines[i][1] = String.valueOf(Math.round(attribut*1000.0f)/1000.0f);
+                                                }
+                                                
                                             }
 
                                             arrangeText(lines);

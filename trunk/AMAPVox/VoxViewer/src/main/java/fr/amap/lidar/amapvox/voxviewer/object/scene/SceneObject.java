@@ -174,6 +174,13 @@ public abstract class SceneObject{
         transfoUniform.setValue(Mat4F.transpose(transformation));
     }
     
+    public void setTransformation(Mat4F transformation){
+        
+        this.transformation = new Mat4F(transformation);
+        
+        transfoUniform.setValue(Mat4F.transpose(transformation));
+    }
+    
     public BoundingBox3D getBoundingBox(){
         
         Vec4F min = Mat4F.multiply(transformation, new Vec4F(

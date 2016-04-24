@@ -556,7 +556,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
                  * Si distanceToHit == d1,on incrémente le compteur d'échos
                  */
                  
-                test = true;
+                
 
                 //si l'écho n'est pas un dernier écho mais au niveau distance ne sort pas du voxel courant, alors la longueur sera surestimé
                 if (lastEcho) {
@@ -572,6 +572,9 @@ public class VoxelAnalysis extends Process implements Cancellable{
                 if(shotID == lastShotId && lastVoxelSampled != null && lastVoxelSampled == vox){
                     //pour n'échantillonner qu'une fois le voxel pour un tir
                 }else{
+                    
+                    test = true;
+                    
                     vox.nbSampling++;
 
                     vox.lgTotal += longueur;

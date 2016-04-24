@@ -37,7 +37,7 @@ public class OctreeFactory {
             
             String line;
             
-            if(file.isHasHeader()){
+            if(file.containsHeader()){
                 reader.readLine();
             }
                 

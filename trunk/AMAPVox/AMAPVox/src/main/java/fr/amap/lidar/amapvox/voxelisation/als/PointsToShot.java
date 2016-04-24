@@ -167,7 +167,7 @@ public class PointsToShot extends Process implements Iterable<Shot>, Cancellable
             int lineNumber = FileManager.getLineNumber(trajectoryFile.getAbsolutePath());
             int count = 0;
             
-            if(trajectoryFile.isHasHeader()){
+            if(trajectoryFile.containsHeader()){
                 reader.readLine();
                 count++;
             }

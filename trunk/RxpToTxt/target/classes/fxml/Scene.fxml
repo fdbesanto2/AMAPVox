@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.image.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="344.0" prefWidth="504.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.40" fx:controller="fr.amap.lidar.rxptotxt.FXMLController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="504.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.lidar.rxptotxt.FXMLController">
    <children>
-      <VBox prefHeight="274.0" prefWidth="504.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutY="-75.0" prefHeight="419.0" prefWidth="504.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ListView fx:id="listViewScans" prefHeight="239.0" prefWidth="494.0" />
-            <HBox spacing="30.0">
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
                <children>
                   <MenuButton mnemonicParsing="false" text="Selection">
                      <items>
@@ -21,12 +25,25 @@
                         <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemUnselectAllScans" text="None" />
                      </items>
                   </MenuButton>
-                  <HBox spacing="5.0">
+                  <HBox alignment="CENTER_LEFT">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#onActionButtonRemoveScanFromListView" text="Remove" />
+                        <CheckBox fx:id="checkboxImportPOPMatrix" mnemonicParsing="false" prefHeight="18.0" prefWidth="149.0" text="Import POP matrix" />
+                        <HBox spacing="5.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#onActionButtonRemoveScanFromListView" prefHeight="26.0" prefWidth="91.0" text="Remove" />
+                              <Button mnemonicParsing="false" onAction="#onActionButtonOpenRspProject" text="Import scans" />
+                           </children>
+                        </HBox>
                      </children>
                   </HBox>
-                  <Button mnemonicParsing="false" onAction="#onActionButtonOpenRspProject" text="Import scans" />
+               </children>
+            </HBox>
+            <HBox spacing="5.0" />
+            <HBox spacing="5.0">
+               <children>
+                  <CheckBox fx:id="checkboxExportReflectance" mnemonicParsing="false" selected="true" text="Export reflectance" />
+                  <CheckBox fx:id="checkboxExportAmplitude" mnemonicParsing="false" selected="true" text="Export amplitude" />
+                  <CheckBox fx:id="checkboxExportDeviation" mnemonicParsing="false" selected="true" text="Export deviation" />
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">

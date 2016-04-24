@@ -20,6 +20,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
@@ -43,6 +45,14 @@ public class FXMLController implements Initializable {
     private ListView<SimpleScan> listViewScans;
     @FXML
     private TextField textFieldOutputDirectory;
+    @FXML
+    private CheckBox checkboxExportReflectance;
+    @FXML
+    private CheckBox checkboxExportAmplitude;
+    @FXML
+    private CheckBox checkboxExportDeviation;
+    @FXML
+    private CheckBox checkboxImportPOPMatrix;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -106,12 +116,20 @@ public class FXMLController implements Initializable {
                         @Override
                         public void handle(WindowEvent event) {
                             
-                            System.out.println("POP matrix imported : "+rsp.getPopMatrix().toString());
                             
                             List<RspExtractorFrameController.Scan> selectedScans = rspExtractorFrameController.getSelectedScans();
                             
+                            Mat4D popMatrix;
+                            if(checkboxImportPOPMatrix.isSelected()){
+                                popMatrix = rsp.getPopMatrix();
+                                System.out.println("POP matrix imported : "+popMatrix.toString());
+                            }else{
+                                popMatrix = Mat4D.identity();
+                                System.out.println("POP matrix disabled, set to identity.");
+                            }
+                            
                             for(RspExtractorFrameController.Scan scan : selectedScans){
-                                listViewScans.getItems().add(new SimpleScan(scan.getFile(), rsp.getPopMatrix(), scan.getSop()));
+                                listViewScans.getItems().add(new SimpleScan(scan.getFile(), popMatrix, scan.getSop()));
                             }
                         }
                     });                    
@@ -148,6 +166,10 @@ public class FXMLController implements Initializable {
     @FXML
     private void onActionButtonLaunchConversion(ActionEvent event) {
         
+        final boolean exportReflectance = checkboxExportReflectance.isSelected();
+        final boolean exportAmplitude = checkboxExportAmplitude.isSelected();
+        final boolean exportDeviation = checkboxExportDeviation.isSelected();
+        
         if(!textFieldOutputDirectory.getText().isEmpty()){
             
             final File directory = new File(textFieldOutputDirectory.getText());
@@ -174,7 +196,7 @@ public class FXMLController implements Initializable {
                                         updateProgress(count, listViewScans.getItems().size());
                                         updateMessage("Convert file "+(count+1)+"/"+listViewScans.getItems().size()+" : "+scan.file.getName());
                                         
-                                        conversion.toTxt(scan, directory);
+                                        conversion.toTxt(scan, directory, exportReflectance, exportAmplitude, exportDeviation);
                                         count++;
                                     }
                                 } catch (IOException ex) {
@@ -190,6 +212,7 @@ public class FXMLController implements Initializable {
                 };
                 
                 ProgressDialog d = new ProgressDialog(s);
+                
                 d.show();
                 
                 s.start();
