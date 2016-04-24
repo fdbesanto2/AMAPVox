@@ -107,7 +107,7 @@ $(OBJECTS) $(LIBS)
 <<
 
 qmake: FORCE
-	@$(QMAKE) -spec win32-msvc2013 "CONFIG+=debug" -o Makefile.Release ..\..\LasZipLibrary.pro
+	@$(QMAKE) -spec win32-msvc2013 -o Makefile.Release ..\..\LasZipLibrary.pro
 
 qmake_all: FORCE
 
