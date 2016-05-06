@@ -18,7 +18,7 @@ import org.apache.commons.math3.util.FastMath;
 public class Shot{
 
     public int nbEchos;
-
+    public double time;
     public Point3d origin;
     public Vector3d direction;
     public double ranges[] = null;
@@ -51,33 +51,37 @@ public class Shot{
         this.direction = shot.direction;
         this.intensities = shot.intensities;
         this.nbEchos = shot.nbEchos;
+        this.time = time;
         this.origin = shot.origin;
         this.ranges = shot.ranges;
         this.reflectances = shot.reflectances;
-    }
-
-    public Shot(int nbEchos,
-            double originX, double originY, double originZ,
-            double directionX, double directionY, double directionZ,
-            double[] ranges) {
-
-        this.origin = new Point3d(originX, originY, originZ);
-        this.nbEchos = nbEchos;
-        this.direction = new Vector3d(directionX, directionY, directionZ);
-        this.ranges = ranges;
     }
     
     public Shot(int nbEchos,
             double originX, double originY, double originZ,
             double directionX, double directionY, double directionZ,
-            double[] ranges, float[] reflectances/*, float[] deviations*/) {
+            double[] ranges) {
 
-        this.origin = new Point3d(originX, originY, originZ);
         this.nbEchos = nbEchos;
+        
+        this.origin = new Point3d(originX, originY, originZ);
         this.direction = new Vector3d(directionX, directionY, directionZ);
+        
         this.ranges = ranges;
-        this.reflectances = reflectances;
-        //this.deviations = deviations;
+    }
+
+    public Shot(int nbEchos, double time,
+            double originX, double originY, double originZ,
+            double directionX, double directionY, double directionZ,
+            double[] ranges) {
+
+        this.nbEchos = nbEchos;
+        this.time = time;
+        
+        this.origin = new Point3d(originX, originY, originZ);
+        this.direction = new Vector3d(directionX, directionY, directionZ);
+        
+        this.ranges = ranges;
     }
     
     public void setReflectances(float[] reflectances){
