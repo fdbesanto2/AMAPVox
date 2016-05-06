@@ -33,6 +33,7 @@ import org.jdom2.Element;
 public class TLSVoxCfg extends VoxelAnalysisCfg{
     
     private List<LidarScan> lidarScans;
+    private boolean enableEmptyShotsFiltering;
     
     @Override
     public void readConfiguration(File inputParametersFile) throws Exception {
@@ -86,6 +87,11 @@ public class TLSVoxCfg extends VoxelAnalysisCfg{
             }
         }
         
+        Element emptyShotFiltering = processElement.getChild("filter-empty-shots");
+        if(emptyShotFiltering != null){
+            this.enableEmptyShotsFiltering = Boolean.valueOf(emptyShotFiltering.getAttributeValue("enable"));
+        }
+        
     }
     
     @Override
@@ -132,7 +138,13 @@ public class TLSVoxCfg extends VoxelAnalysisCfg{
                 }
             }
             processElement.addContent(filesElement);
+            
         }
+        
+        /***EMPTY shots filtering***/
+        Element emptyShotFiltering = new Element("filter-empty-shots");
+        emptyShotFiltering.setAttribute("enable", String.valueOf(enableEmptyShotsFiltering));
+        processElement.addContent(emptyShotFiltering);
         
         writeDocument(outputParametersFile);
     }
@@ -143,5 +155,13 @@ public class TLSVoxCfg extends VoxelAnalysisCfg{
 
     public void setLidarScans(List<LidarScan> matricesAndFiles) {
         this.lidarScans = matricesAndFiles;
-    }    
+    }
+
+    public boolean isEnableEmptyShotsFiltering() {
+        return enableEmptyShotsFiltering;
+    }
+
+    public void setEnableEmptyShotsFiltering(boolean enableEmptyShotsFiltering) {
+        this.enableEmptyShotsFiltering = enableEmptyShotsFiltering;
+    }
 }

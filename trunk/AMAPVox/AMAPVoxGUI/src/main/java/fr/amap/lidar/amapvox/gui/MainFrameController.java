@@ -725,6 +725,12 @@ public class MainFrameController implements Initializable {
     private ComboBox<Integer> comboboxTransMode;
     @FXML
     private ComboBox<String> comboboxPathLengthMode;
+    @FXML
+    private CheckBox checkboxEmptyShotsFilter;
+    @FXML
+    private Button buttonHelpEmptyShotsFilter;
+    @FXML
+    private HelpButtonController buttonHelpEmptyShotsFilterController;
     
     private void initValidationSupport(){
         
@@ -941,6 +947,13 @@ public class MainFrameController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 helpButtonHemiPhotoController.showHelpDialog(resourceBundle.getString("help_hemiphoto"));
+            }
+        });
+        
+        buttonHelpEmptyShotsFilter.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //buttonHelpEmptyShotsFilterController.showHelpDialog(resourceBundle.getString("help_empty_shots_filter"));
             }
         });
         
@@ -1739,6 +1752,12 @@ public class MainFrameController implements Initializable {
                         //disableSopMatrixChoice(true);
                         labelTLSOutputPath.setText("Output file");
                 }
+                
+                if(newValue.intValue() == 0 || newValue.intValue() == 1){
+                    checkboxEmptyShotsFilter.setDisable(false);
+                }else{
+                    checkboxEmptyShotsFilter.setDisable(true);
+                }
             }
         });
 
@@ -1752,11 +1771,13 @@ public class MainFrameController implements Initializable {
                     case 1:
                         disableSopMatrixChoice(false);
                         disablePopMatrixChoice(false);
+                        checkboxEmptyShotsFilter.setDisable(false);
                         break;
 
                     default:
                         disableSopMatrixChoice(true);
                         disablePopMatrixChoice(true);
+                        checkboxEmptyShotsFilter.setDisable(true);
                 }
 
                 switch (newValue.intValue()) {
@@ -2651,7 +2672,9 @@ public class MainFrameController implements Initializable {
 
         cfg.setVoxelParameters(voxelParameters);
 
+        //shot filtering
         cfg.setShotFilters(listviewFilters.getItems());
+        cfg.setEnableEmptyShotsFiltering(checkboxEmptyShotsFilter.isSelected());
 
         if (it == InputType.RSP_PROJECT || it == InputType.PTG_PROJECT || it == InputType.PTX_PROJECT) {
             cfg.setLidarScans(listviewRxpScans.getItems());
@@ -5505,6 +5528,7 @@ public class MainFrameController implements Initializable {
                     }else if(type.equals("voxelisation-TLS")){
                         
                         filteringPaneController.setFilters(((TLSVoxCfg)cfg).getEchoFilters());
+                        checkboxEmptyShotsFilter.setSelected(((TLSVoxCfg)cfg).isEnableEmptyShotsFiltering());
                     }
 
                     textFieldPADMax.setText(String.valueOf(((VoxelAnalysisCfg)cfg).getVoxelParameters().infos.getMaxPAD()));
@@ -6784,6 +6808,12 @@ public class MainFrameController implements Initializable {
                 showErrorDialog(ex);
             }
         }
+    }
+
+    @FXML
+    private void onActionButtonHelpEmptyShotsFilter(ActionEvent event) {
+        
+        
     }
     
     static class ColorRectCell extends ListCell<VoxelFileChart> {

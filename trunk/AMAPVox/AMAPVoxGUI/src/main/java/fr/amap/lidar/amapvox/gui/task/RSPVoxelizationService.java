@@ -118,7 +118,9 @@ public class RSPVoxelizationService extends Service<List<File>>{
 
                         File outputFile = new File(output.getAbsolutePath() + "/" + file.file.getName() + ".vox");
                         
-                        RxpVoxelisation rxpVoxelisation = new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixUtility.convertMatrix4dToMat4D(file.matrix), parameters, dtm, pointcloudFilters, cfg);
+                        RxpVoxelisation rxpVoxelisation = new RxpVoxelisation(file.file, outputFile, vop, pop,
+                                MatrixUtility.convertMatrix4dToMat4D(file.matrix), parameters, dtm, pointcloudFilters, cfg, cfg.isEnableEmptyShotsFiltering());
+                        
                         rxpVoxelisation.addCallableTaskListener(new CallableTaskAdapter() {
                             @Override
                             public void onSucceeded() {

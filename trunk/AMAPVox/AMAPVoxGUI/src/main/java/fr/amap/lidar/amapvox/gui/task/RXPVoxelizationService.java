@@ -84,7 +84,9 @@ public class RXPVoxelizationService extends Service<Void>{
                 
                 updateMessage("Voxelization...");
                 
-                RxpVoxelisation voxelisation = new RxpVoxelisation(input, output, vop, pop, sop, parameters, dtm, pointcloudFilters, cfg);
+                RxpVoxelisation voxelisation = new RxpVoxelisation(input, output, vop, pop, sop, parameters, dtm,
+                        pointcloudFilters, cfg, cfg.isEnableEmptyShotsFiltering());
+                
                 voxelisation.call();
                 
                 return null;

@@ -345,7 +345,7 @@ public class ProcessTool extends Process implements Cancellable{
             for (LidarScan file : lidarScans) {
 
                 File outputFile = new File(output.getAbsolutePath() + "/" + file.file.getName() + ".vox");
-                tasks.put(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixUtility.convertMatrix4dToMat4D(file.matrix), parameters, dtm, pointcloudFilters, cfg));
+                tasks.put(new RxpVoxelisation(file.file, outputFile, vop, pop, MatrixUtility.convertMatrix4dToMat4D(file.matrix), parameters, dtm, pointcloudFilters, cfg, false));
                 files.add(outputFile);
                 count++;
             }
@@ -431,7 +431,7 @@ public class ProcessTool extends Process implements Cancellable{
         if(vop == null){ vop = Mat4D.identity();}
         
         cfg.setEchoFilter(new RxpEchoFilter(cfg.getEchoFilters()));
-        RxpVoxelisation voxelisation = new RxpVoxelisation(input, output, vop, pop, sop, parameters, dtm, pointcloudFilters, cfg);
+        RxpVoxelisation voxelisation = new RxpVoxelisation(input, output, vop, pop, sop, parameters, dtm, pointcloudFilters, cfg, false);
         voxelisation.call();
 
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));

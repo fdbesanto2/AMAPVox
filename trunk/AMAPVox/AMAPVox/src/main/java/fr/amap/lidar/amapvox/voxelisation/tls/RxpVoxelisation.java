@@ -11,6 +11,7 @@ import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.commons.math.vector.Vec4D;
 import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
 import fr.amap.amapvox.io.tls.rxp.Shot;
+import fr.amap.amapvox.io.tls.rxp.ShotFilter;
 import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.raster.multiband.BSQ;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
@@ -34,10 +35,15 @@ import org.apache.log4j.Logger;
  */
 public class RxpVoxelisation extends TLSVoxelisation{
     
-    private final static Logger logger = Logger.getLogger(RxpVoxelisation.class);
+    private final static Logger LOGGER = Logger.getLogger(RxpVoxelisation.class);
     
-    public RxpVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg) {
+    private final boolean enableEmptyShotFiltering;
+    
+    public RxpVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix,
+            VoxelParameters parameters, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg, boolean enableEmptyShotFiltering) {
         super(inputFile, outputFile, vopMatrix, popMatrix, sopMatrix, parameters, terrain, pointcloud, cfg);
+        
+        this.enableEmptyShotFiltering = enableEmptyShotFiltering;
     }
 
     @Override
@@ -46,43 +52,71 @@ public class RxpVoxelisation extends TLSVoxelisation{
         System.out.println(Thread.currentThread().getName());
         
         try {
-            logger.info("rxp extraction is started");
-            
-            long startTime = System.currentTimeMillis();
+            LOGGER.info("rxp extraction is started");
         
             voxelAnalysis.createVoxelSpace();
             RxpExtraction rxpExtraction = new RxpExtraction();
             int result = rxpExtraction.openRxpFile(inputFile, RxpExtraction.REFLECTANCE, RxpExtraction.DEVIATION);
             
             if(result != 0){
-                logger.error("Extraction aborted");
+                LOGGER.error("Extraction aborted");
                 return null;
             }
             
             Iterator<Shot> iterator = rxpExtraction.iterator();
-
-            Shot shot;
-            while(iterator.hasNext()){
+            
+            if(enableEmptyShotFiltering){
                 
-                if (Thread.currentThread().isInterrupted()){
-                    logger.info("Task cancelled");
-                    return null;
+                ShotFilter shotFilter = new ShotFilter(iterator);
+                
+                Iterator<Shot> filterIterator = shotFilter.iterator();
+                
+                Shot shot;
+                while(filterIterator.hasNext()){
+
+                    if (Thread.currentThread().isInterrupted()){
+                        LOGGER.info("Task cancelled");
+                        return null;
+                    }
+
+                    shot = filterIterator.next();
+                    if(shot != null){
+                        Vec4D locVector = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
+
+                        Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
+
+                        shot.setOriginAndDirection(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z));
+
+                        voxelAnalysis.processOneShot(shot);
+                    }
                 }
+                
+                LOGGER.info("Number of shots removed : "+shotFilter.getNbThrownShots());
+                
+            }else{
+                Shot shot;
+                while(iterator.hasNext()){
 
-                shot = iterator.next();
-                if(shot != null){
-                    Vec4D locVector = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
+                    if (Thread.currentThread().isInterrupted()){
+                        LOGGER.info("Task cancelled");
+                        return null;
+                    }
 
-                    Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
+                    shot = iterator.next();
+                    if(shot != null){
+                        Vec4D locVector = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
 
-                    shot.setOriginAndDirection(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z));
-                                        
-                    voxelAnalysis.processOneShot(shot);
+                        Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
+
+                        shot.setOriginAndDirection(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z));
+
+                        voxelAnalysis.processOneShot(shot);
+                    }
+
                 }
-
             }
             
-            logger.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());
+            LOGGER.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());
             
             //logger.info("Shots processed: " + voxelAnalysis.nbShotsTreated);
             //logger.info("voxelisation is finished ( " + TimeCounter.getElapsedStringTimeInSeconds(startTime) + " )");
