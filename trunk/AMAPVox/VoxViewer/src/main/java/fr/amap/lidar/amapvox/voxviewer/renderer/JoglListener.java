@@ -190,7 +190,9 @@ public class JoglListener implements GLEventListener {
         
         justOnce = true;
         
-        animator.resume();
+        if(animator.isPaused()){
+            animator.resume();
+        }
         
     }
     

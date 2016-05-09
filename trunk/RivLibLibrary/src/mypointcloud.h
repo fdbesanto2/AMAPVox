@@ -11,7 +11,7 @@
 #include "serializer.h"
 #include "jni.h"
 #include "puechabonfilter.h"
-#include <stack>
+#include <queue>
 #include "riegl/pointcloud.hpp"
 #include <iostream>
 
@@ -31,7 +31,7 @@ namespace mpc
 
         mypointcloud(serializer& ser, JNIEnv *env);
         virtual ~mypointcloud();
-        stack<jobject*> *shots;
+        queue<jobject*> *shots;
         void setExportReflectance(bool exportReflectance);
         void setExportDeviation(bool exportDeviation);
         void setExportAmplitude(bool exportAmplitude);

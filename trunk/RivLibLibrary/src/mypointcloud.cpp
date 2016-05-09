@@ -12,7 +12,7 @@ using namespace mpc;
 mypointcloud::mypointcloud(serializer& ser, JNIEnv *env) : pointcloud(false), serialize(ser) {
 
     this->env = env;
-    this->shots = new stack<jobject*>();
+    this->shots = new queue<jobject*>();
     exportReflectance = false;
     exportDeviation = false;
     exportAmplitude = false;
@@ -93,8 +93,8 @@ void mypointcloud::on_shot_end() {
     jclass shotClass = env->FindClass("fr/amap/amapvox/io/tls/rxp/Shot");
     if(shotClass){
 
-        jmethodID shotConstructor = env->GetMethodID(shotClass, "<init>", "(IDDDDDD[D)V");
-        *shotTemp = env->NewObject(shotClass, shotConstructor, (jint)nbEchos,
+        jmethodID shotConstructor = env->GetMethodID(shotClass, "<init>", "(IDDDDDDD[D)V");
+        *shotTemp = env->NewObject(shotClass, shotConstructor, (jint)nbEchos, (jdouble)time,
                                    (jdouble)beam_origin[0], (jdouble)beam_origin[1], (jdouble)beam_origin[2],
                                     (jdouble)beam_direction[0], (jdouble)beam_direction[1], (jdouble)beam_direction[2], echos);
 

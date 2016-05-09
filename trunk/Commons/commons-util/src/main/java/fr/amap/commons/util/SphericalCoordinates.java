@@ -86,4 +86,9 @@ public class SphericalCoordinates {
         
         cartesianCoordinates = point;
     }
+    
+    public void toSpherical(double x, double y, double z) {
+        
+        toSpherical(new Vector3d(x, y, z));
+    }
 }

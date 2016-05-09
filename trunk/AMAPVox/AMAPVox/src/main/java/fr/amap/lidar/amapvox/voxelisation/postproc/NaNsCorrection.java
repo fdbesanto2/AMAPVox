@@ -73,7 +73,7 @@ public class NaNsCorrection implements Cancellable{
                         int passID = 1;
 
                         //testloop:
-                        while(currentNbSampling <= parameters.getNaNsCorrectionParams().getNbSamplingThreshold() || currentTransmittance == 0 ){
+                        while(currentNbSampling <= parameters.getNaNsCorrectionParams().getNbSamplingThreshold()/* || currentTransmittance == 0 */){
                             
                                   
                             if(cancelled){
@@ -192,7 +192,7 @@ public class NaNsCorrection implements Cancellable{
                             voxels[x][y][z]._neighboursNumber = neighbours.size();
                             voxels[x][y][z]._passNumber = passID;
                             voxels[x][y][z].PadBVTotal = (float)PADStatistic.getMean();
-                            voxels[x][y][z].nbSampling = (int)currentNbSampling;
+                            //voxels[x][y][z].nbSampling = (int)currentNbSampling;
                             voxels[x][y][z].transmittance = currentTransmittance;
                         }
                     }

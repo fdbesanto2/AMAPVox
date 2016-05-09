@@ -405,7 +405,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
      * @param echoID current echo processed (id)
      */
     private void propagate(Point3d origin, Point3d echo, double beamFraction, double residualEnergy, boolean lastEcho, int shotID, Shot shot, int echoID) {
-
+        
         //get shot line
         LineElement lineElement = new LineSegment(origin, echo);
 
@@ -459,8 +459,11 @@ public class VoxelAnalysis extends Process implements Cancellable{
             double distance = voxelPosition.distance(shot.origin);
             
             //don't continue the propagation if the current sampled voxel is below the ground
-            if(vox.ground_distance < voxelManager.getVoxelSpace().getVoxelSize().z/2.0f){
-                break;
+            if(parameters.getGroundEnergyParams() == null || 
+                            !parameters.getGroundEnergyParams().isCalculateGroundEnergy()){
+                if(vox.ground_distance < voxelManager.getVoxelSpace().getVoxelSize().z/2.0f){
+                    break;
+                }
             }
             
             //surface de la section du faisceau à la distance de la source
@@ -595,6 +598,8 @@ public class VoxelAnalysis extends Process implements Cancellable{
                 /*if ((keepEchoOfShot(shot, echoID))
                         && ((echoDistance >= parameters.minDTMDistance && echoDistance != Float.NaN && parameters.useDTMCorrection()) || !parameters.useDTMCorrection())
                         && keepEcho) {*/
+                
+                    test = true;
 
                     if(!lastEcho){
                         vox._lastEcho = false;
@@ -624,8 +629,13 @@ public class VoxelAnalysis extends Process implements Cancellable{
                 if(transMode == 2){
                     transNorm = ((entering - intercepted) / entering) * surfMulLength;
                 }else{ //mode 3
+                    
                     //transNorm = Math.pow(((entering - intercepted) / entering), 1/longueur) * surfMulLength;
-                    transNorm = Math.pow(((entering - intercepted) / entering), 1/longueur) * surfMulLength * entering; //CL
+                    if(longueur == 0){
+                        transNorm = 0;
+                    }else{
+                        transNorm = Math.pow(((entering - intercepted) / entering), 1/longueur) * surfMulLengthMulEnt;
+                    }
                 }
                 
                 vox.transmittance_tmp += transNorm;

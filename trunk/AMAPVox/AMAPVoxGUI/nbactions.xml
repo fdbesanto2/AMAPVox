@@ -30,7 +30,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.4.0:exec</goal>
             </goals>
             <properties>
-                <debug.parameters>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address}</debug.parameters>
+                <debug.parameters>-Xmx10g -Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address}</debug.parameters>
                 <jpda.listen>true</jpda.listen>
             </properties>
         </action>     
