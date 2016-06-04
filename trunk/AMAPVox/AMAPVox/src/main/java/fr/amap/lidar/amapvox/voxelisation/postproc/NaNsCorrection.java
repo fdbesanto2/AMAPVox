@@ -54,7 +54,7 @@ public class NaNsCorrection implements Cancellable{
         
         for (int x = 0; x < xSplit; x++) {
             for (int y = 0; y < ySplit; y++) {
-                for (int z = 0; z < zSplit; z++) {
+                for (int z = zSplit-1; z >=0 ; z--) {
                     
                     if(cancelled){
                         return;

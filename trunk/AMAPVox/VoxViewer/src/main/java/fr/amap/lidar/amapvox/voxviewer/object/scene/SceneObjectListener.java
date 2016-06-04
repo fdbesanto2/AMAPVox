@@ -5,6 +5,7 @@
  */
 package fr.amap.lidar.amapvox.voxviewer.object.scene;
 
+import fr.amap.commons.math.point.Point3D;
 import fr.amap.commons.math.vector.Vec3F;
 import java.util.EventListener;
 
@@ -14,5 +15,5 @@ import java.util.EventListener;
  */
 public interface SceneObjectListener extends EventListener{
     
-    void clicked(SceneObject sceneObject, MousePicker mousePicker);
+    void clicked(SceneObject sceneObject, MousePicker mousePicker, Point3D intersection);
 }

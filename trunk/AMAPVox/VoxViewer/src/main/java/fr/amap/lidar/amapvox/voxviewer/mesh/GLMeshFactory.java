@@ -135,7 +135,7 @@ public class GLMeshFactory {
         return cube;
     }
     
-    public static GLMesh createPlane(Vec3F startPoint, int width , int height){
+    public static GLMesh createPlane(Vec3F startPoint, float width , float height){
         
         
         
@@ -300,7 +300,7 @@ public class GLMeshFactory {
         return GLMeshFactory.createPlane(startPoint, texture.getWidth(), texture.getHeight());
     }
     
-    public static GLMesh createPlaneFromTexture(Vec3F startPoint, Texture texture, int width, int height){
+    public static GLMesh createPlaneFromTexture(Vec3F startPoint, Texture texture, float width, float height){
                 
         return GLMeshFactory.createPlane(startPoint, width, height);
     }

@@ -5,14 +5,22 @@
  */
 package fr.amap.lidar.amapvox.voxviewer.renderer;
 
+import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.util.FPSAnimator;
 import fr.amap.commons.math.vector.Vec3F;
+import fr.amap.commons.util.ByteConverter;
 import fr.amap.lidar.amapvox.voxviewer.event.EventManager;
+import fr.amap.lidar.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.Scene;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +52,10 @@ public class JoglListener implements GLEventListener {
     private final FPSAnimator animator;
     private boolean isInit;
     private boolean dynamicDraw = false;
+    
+    private int screenshotTexture;
+    private boolean takeScreenShot;
+    private RenderListener renderListener;
     
     public Scene getScene() {
         return scene;
@@ -136,6 +148,20 @@ public class JoglListener implements GLEventListener {
         //gl.glHint(GL3.GL_FRAGMENT_SHADER_DERIVATIVE_HINT, GL3.GL_NICEST);
         
         //drawable.setAutoSwapBufferMode(true);
+//        
+//        screenshotTexture = new Texture();
+//        try {
+//            screenshotTexture.setWidth(width);
+//            screenshotTexture.init(gl);
+//        } catch (Exception ex) {
+//            LOGGER.error("Cannot init screenshot texture.");
+//        }
+
+
+            // Génération d'une texture
+            IntBuffer tmp = IntBuffer.allocate(1);
+            gl.glGenTextures(1, tmp);
+            screenshotTexture = tmp.get(0);
         
     }
 
@@ -164,6 +190,45 @@ public class JoglListener implements GLEventListener {
             eventManager.updateEvents();
         }
         
+        if(takeScreenShot){
+
+            // Binding de la texture pour pouvoir la modifier.
+            gl.glBindTexture(GL.GL_TEXTURE_2D, screenshotTexture);
+
+            // Création de la texture 2D vierge de la taille de votre fenêtre OpenGL
+            gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGB, viewportWidth, viewportHeight, 0, GL.GL_RGB, GL.GL_BYTE, null);
+
+            // Paramètrage de notre texture (étirement et filtrage)
+            gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
+            gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
+            
+            IntBuffer depthrenderbuffer = IntBuffer.allocate(1);
+            gl.glGenRenderbuffers(1, depthrenderbuffer);
+            gl.glBindRenderbuffer(GL.GL_RENDERBUFFER, depthrenderbuffer.get(0));
+            gl.glRenderbufferStorage(GL.GL_RENDERBUFFER, GL.GL_DEPTH_COMPONENT32, viewportWidth, viewportHeight);
+            gl.glFramebufferRenderbuffer(GL.GL_FRAMEBUFFER, GL.GL_DEPTH_ATTACHMENT, GL.GL_RENDERBUFFER, depthrenderbuffer.get(0));
+            
+            // Génération d'un second FBO
+            IntBuffer tmp = IntBuffer.allocate(1);
+            gl.glGenFramebuffers(1, tmp);
+            
+            
+            // On bind le FBO
+            gl.glBindFramebuffer(GL.GL_FRAMEBUFFER, tmp.get(0));
+
+            // Affectation de notre texture au FBO
+            gl.glFramebufferTexture2D(GL.GL_FRAMEBUFFER, GL.GL_COLOR_ATTACHMENT0, GL.GL_TEXTURE_2D, screenshotTexture, 0);
+
+            // Affectation d'un drawbuffer au FBO
+            IntBuffer drawBuffers = IntBuffer.wrap(new int[]{GL.GL_COLOR_ATTACHMENT0});
+            gl.glDrawBuffers(1, drawBuffers);  
+            
+            if(gl.glCheckFramebufferStatus(GL.GL_FRAMEBUFFER) != GL.GL_FRAMEBUFFER_COMPLETE){
+                System.out.println("test");
+            }
+            
+        }
+        
         gl.glViewport(startX, startY, viewportWidth, viewportHeight);
         
         //specify clear values for the color buffers (must be called before glClear)
@@ -180,6 +245,32 @@ public class JoglListener implements GLEventListener {
         if(justOnce && !dynamicDraw){ //draw one single frame
             animator.pause();
             justOnce = false;
+        }
+        
+        if(takeScreenShot){
+            
+            // Binding de la texture pour pouvoir la modifier.
+            gl.glBindTexture(GL.GL_TEXTURE_2D, screenshotTexture);
+            
+            ByteBuffer imgBuffer = Buffers.newDirectByteBuffer(viewportWidth * viewportHeight * 3); 
+            gl.glGetTexImage(GL.GL_TEXTURE_2D, 0, GL.GL_RGB, GL.GL_BYTE, imgBuffer);
+            
+            BufferedImage screenShotImg = new BufferedImage(viewportWidth, viewportHeight, BufferedImage.TYPE_INT_RGB);
+            
+            int[] rgbArray = new int[viewportWidth*viewportHeight*3];
+            int count = 0;
+            while(imgBuffer.hasRemaining()){
+                rgbArray[count] = imgBuffer.get()&0xff;
+                rgbArray[count+1] = imgBuffer.get()&0xff;
+                rgbArray[count+2] = imgBuffer.get()&0xff;
+                count+=3;
+            }
+            
+            screenShotImg.setRGB(0, 0, viewportWidth, viewportHeight, rgbArray, 0, viewportWidth);
+            renderListener.screenshotIsReady(screenShotImg);
+            
+            takeScreenShot = false;
+            gl.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
         }
     }
     
@@ -272,5 +363,10 @@ public class JoglListener implements GLEventListener {
 
     public void setDynamicDraw(boolean dynamicDraw) {
         this.dynamicDraw = dynamicDraw;
+    }
+
+    public void setTakeScreenShot(boolean takeScreenShot, RenderListener listener) {
+        this.takeScreenShot = takeScreenShot;
+        this.renderListener = listener;
     }
 }

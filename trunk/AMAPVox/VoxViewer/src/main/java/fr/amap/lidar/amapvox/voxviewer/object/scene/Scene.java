@@ -362,7 +362,7 @@ public class Scene {
                             object.getBoundingBox());
 
                     if(intersection != null){
-                        object.fireClicked(mousePicker);
+                        object.fireClicked(mousePicker, intersection);
                     }
                 }
                 

@@ -30,7 +30,7 @@ public class SceneObjectFactory {
     
     private final static Logger logger = Logger.getLogger(SceneObjectFactory.class);
     
-    public static SceneObject createTexturedPlane(Vec3F startPoint, int width, int height, Texture texture){
+    public static SceneObject createTexturedPlane(Vec3F startPoint, float width, float height, Texture texture){
         
         SceneObject sceneObject = new SimpleSceneObject(GLMeshFactory.createPlaneFromTexture(startPoint, texture, width, height), true);
         

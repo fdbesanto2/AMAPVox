@@ -134,6 +134,10 @@ public class Texture {
     
     public void update(GL3 gl) throws Exception{
         
+        if(bufferedImage == null){
+            bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        }
+        
         TextureData textureData = AWTTextureIO.newTextureData(gl.getGLProfile(), bufferedImage, false);
         gl.glEnable(GL3.GL_TEXTURE_2D);
         

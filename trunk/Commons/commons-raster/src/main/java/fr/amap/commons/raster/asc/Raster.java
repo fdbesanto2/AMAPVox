@@ -161,6 +161,11 @@ public class Raster {
      */
     public float getInterpolatedHeight(float posX, float posY){
         
+        Vec4D multiply = Mat4D.multiply(inverseTransfMat, new Vec4D(posX, posY, 1, 1));
+        posX = (float) multiply.x;
+        posY = (float) multiply.y;
+        
+        
         return 0; // not implemented
     }
     

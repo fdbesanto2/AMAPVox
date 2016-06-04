@@ -73,12 +73,26 @@ public class PointsToShotIterator implements Iterator<Shot>{
 
                 double max = trajectoryList.get(index).t;
                 double min = trajectoryList.get(index-1).t;
-                double ratio = (lasPoint.t - min) / (max - min);
+                
+                double xValue;
+                double yValue;
+                double zValue;
 
-                //formule interpolation
-                double xValue = trajectoryList.get(indexMin).x + ((trajectoryList.get(indexMax).x - trajectoryList.get(indexMin).x) * ratio);
-                double yValue = trajectoryList.get(indexMin).y + ((trajectoryList.get(indexMax).y - trajectoryList.get(indexMin).y) * ratio);
-                double zValue = trajectoryList.get(indexMin).z + ((trajectoryList.get(indexMax).z - trajectoryList.get(indexMin).z) * ratio);
+                if(max != min){
+                    
+                    double ratio = (lasPoint.t - min) / (max - min);
+
+                    //interpolation
+                    xValue = trajectoryList.get(indexMin).x + ((trajectoryList.get(indexMax).x - trajectoryList.get(indexMin).x) * ratio);
+                    yValue = trajectoryList.get(indexMin).y + ((trajectoryList.get(indexMax).y - trajectoryList.get(indexMin).y) * ratio);
+                    zValue = trajectoryList.get(indexMin).z + ((trajectoryList.get(indexMax).z - trajectoryList.get(indexMin).z) * ratio);
+
+                }else{
+                    xValue = (trajectoryList.get(indexMin).x + trajectoryList.get(indexMax).x)/2.0;
+                    yValue = (trajectoryList.get(indexMin).y + trajectoryList.get(indexMax).y)/2.0;
+                    zValue = (trajectoryList.get(indexMin).z + trajectoryList.get(indexMax).z)/2.0;
+                }
+                
 
                 mix = new LasShot(lasPoint, 0, 0, 0);
 

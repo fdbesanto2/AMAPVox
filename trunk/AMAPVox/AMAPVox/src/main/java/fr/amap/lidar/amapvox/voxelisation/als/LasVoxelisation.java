@@ -46,6 +46,7 @@ public class LasVoxelisation extends Process implements Cancellable{
     private PointsToShot conversion;
     private Raster terrain = null;
     private NaNsCorrection naNsCorrection = null;
+    private VoxelAnalysis voxelAnalysis = null;
 
     public LasVoxelisation() {
         
@@ -105,7 +106,7 @@ public class LasVoxelisation extends Process implements Cancellable{
             } 
         }
         
-        VoxelAnalysis voxelAnalysis = new VoxelAnalysis(terrain, null, cfg);
+        voxelAnalysis = new VoxelAnalysis(terrain, null, cfg);
         voxelAnalysis.init(cfg.getVoxelParameters(), cfg.getOutputFile());
         voxelAnalysis.createVoxelSpace();
         
@@ -209,7 +210,7 @@ public class LasVoxelisation extends Process implements Cancellable{
                 }
             });
 
-            voxelAnalysis.write();
+            //voxelAnalysis.write();
         }
 
         if(cfg.getVoxelParameters().getGroundEnergyParams() != null &&
@@ -235,6 +236,10 @@ public class LasVoxelisation extends Process implements Cancellable{
         
         if(conversion != null){
             conversion.setCancelled(cancelled);
+        }
+        
+        if(voxelAnalysis != null){
+            voxelAnalysis.setCancelled(cancelled);
         }
     }
     

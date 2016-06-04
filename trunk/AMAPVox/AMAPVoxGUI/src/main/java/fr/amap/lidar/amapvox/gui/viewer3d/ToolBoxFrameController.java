@@ -1,4 +1,4 @@
-package fr.amap.lidar.amapvox.gui;
+package fr.amap.lidar.amapvox.gui.viewer3d;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,6 +14,7 @@ import fr.amap.lidar.amapvox.voxviewer.object.camera.TrackballCamera;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.renderer.JoglListener;
 import fr.amap.commons.util.CombinedFilterItem;
+import fr.amap.lidar.amapvox.gui.Util;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.Scene;
 import java.awt.Color;
 import java.lang.reflect.Field;
@@ -166,11 +167,8 @@ public class ToolBoxFrameController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        Class c = ColorGradient.class;
-        Field[] fields = c.getFields();
-        
-        gradientColorNames = new ArrayList<>();
-        gradientColors = new ArrayList<>();
+        comboboxGradient.getItems().addAll(Util.AVAILABLE_GRADIENT_COLOR_NAMES);
+        comboboxGradient.getSelectionModel().select("HEAT");
         
         isHidden = false;
         
@@ -178,26 +176,7 @@ public class ToolBoxFrameController implements Initializable {
         colorpickerLightingAmbientColor.setValue(new javafx.scene.paint.Color(1.0, 1.0, 1.0, 1));
         colorpickerLightingDiffuseColor.setValue(new javafx.scene.paint.Color(1.0, 1.0, 1.0, 1));
         colorpickerLightingSpecularColor.setValue(new javafx.scene.paint.Color(1.0, 1.0, 1.0, 1));
-        
-        //initContent();
-        
-        try {
-            
-            for (Field field : fields) {
-                
-                String type = field.getType().getSimpleName();
-                if (type.equals("Color[]")) {
-                    gradientColorNames.add(field.getName());
-                    gradientColors.add((Color[])field.get(c));
-                }
-            }
-            comboboxGradient.getItems().addAll(gradientColorNames);
-            comboboxGradient.getSelectionModel().select("HEAT");
-            
-        } catch (IllegalArgumentException | IllegalAccessException ex) {
-            logger.error(ex);
-        }
-        
+               
                 
         comboboxGradient.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 
@@ -207,7 +186,7 @@ public class ToolBoxFrameController implements Initializable {
                 String gradient = newValue;
                 Color[] gradientColor = ColorGradient.GRADIENT_RAINBOW;
 
-                for (int i = 0;i<gradientColorNames.size();i++) {
+                for (int i = 0;i<Util.AVAILABLE_GRADIENT_COLORS.size();i++) {
 
                     if(gradientColorNames.get(i).equals(gradient)){
                         gradientColor = gradientColors.get(i);

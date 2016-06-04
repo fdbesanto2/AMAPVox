@@ -1,4 +1,4 @@
-package fr.amap.lidar.amapvox.gui;
+package fr.amap.lidar.amapvox.gui.export;
 /*
 This software is distributed WITHOUT ANY WARRANTY and without even the
 implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -18,6 +18,7 @@ import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.util.MatrixFileParser;
 import fr.amap.commons.util.MatrixUtility;
 import fr.amap.lidar.amapvox.dart.DartWriter;
+import fr.amap.lidar.amapvox.gui.MainFrameController;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;

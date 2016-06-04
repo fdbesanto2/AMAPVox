@@ -16,7 +16,7 @@ import java.util.Iterator;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize
  */
 public class VoxelFileWriter {
     

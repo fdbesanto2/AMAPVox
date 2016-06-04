@@ -845,9 +845,9 @@ public class VoxelSpaceSceneObject extends SceneObject{
         //System.out.println("test");
         //voxelList = ImageEqualisation.scaleHistogramm(voxelList);
         //voxelList = ImageEqualisation.voxelSpaceFormatEqualisation(voxelList);
-        
-        
     }
+    
+    
     
     
     public void updateInstanceColorBuffer(){

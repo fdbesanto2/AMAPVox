@@ -157,11 +157,11 @@ public abstract class SceneObject{
         listeners.remove(SceneObjectListener.class, listener);
     }
     
-    public void fireClicked(MousePicker mousePicker){
+    public void fireClicked(MousePicker mousePicker, Point3D intersection){
         
         for(SceneObjectListener listener : listeners.getListeners(SceneObjectListener.class)){
             
-            listener.clicked(this, mousePicker);
+            listener.clicked(this, mousePicker, intersection);
         }
     }
     

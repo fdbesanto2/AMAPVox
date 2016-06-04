@@ -355,6 +355,8 @@ public abstract class GLMesh {
             vertexBuffer.put(j+2, z+translation.z);
             
         }
+        
+        computeGravityCenter();
     }
     
     public void scale(Vec3F scale){
@@ -370,6 +372,8 @@ public abstract class GLMesh {
             vertexBuffer.put(j+1, y*scale.y);
             vertexBuffer.put(j+2, z*scale.z);
         }
+        
+        computeGravityCenter();
         
     }
     
@@ -387,6 +391,8 @@ public abstract class GLMesh {
             vertexBuffer.put(j+1, result.y);
             vertexBuffer.put(j+2, result.z);
         }
+        
+        computeGravityCenter();
     }
 
     public Statistic getxValues() {

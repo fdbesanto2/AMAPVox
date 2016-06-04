@@ -20,6 +20,8 @@ public abstract class EventManager {
     protected final InputMouseAdapter mouse;
     protected final InputKeyListener keyboard;
     
+    protected float mouseScrollSensitivity = 5.0f;
+    
     public EventManager(InputMouseAdapter inputMouseAdapter, InputKeyListener inputKeyListener) {
         
         this.mouse = inputMouseAdapter;
@@ -37,5 +39,13 @@ public abstract class EventManager {
 
     public InputKeyListener getKeyboard() {
         return keyboard;
+    }
+
+    public float getMouseScrollSensitivity() {
+        return mouseScrollSensitivity;
+    }
+
+    public void setMouseScrollSensitivity(float mouseScrollSensitivity) {
+        this.mouseScrollSensitivity = mouseScrollSensitivity;
     }
 }

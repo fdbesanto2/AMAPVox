@@ -34,6 +34,7 @@ import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
@@ -88,6 +89,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
     private GroundEnergy[][] groundEnergy;
     private VoxelParameters parameters;
+    private VoxelAnalysisCfg cfg;
 
     private boolean isSet = false;
 
@@ -104,6 +106,8 @@ public class VoxelAnalysis extends Process implements Cancellable{
     private List<PointcloudFilter> pointcloudFilters;
     
     private boolean padComputed;
+    
+    private BufferedWriter shotSegmentWriter;
     
     //directional transmittance (GTheta)
     private DirectionalTransmittance direcTransmittance;
@@ -195,6 +199,8 @@ public class VoxelAnalysis extends Process implements Cancellable{
         
         shotFilter = cfg.getShotFilter();
         echoFilter = cfg.getEchoFilter();
+        
+        this.cfg = cfg;
     }
     
     public VoxelAnalysis() {
@@ -269,9 +275,18 @@ public class VoxelAnalysis extends Process implements Cancellable{
         LOGGER.info("Building transmittance functions table");
         direcTransmittance.buildTable(DirectionalTransmittance.DEFAULT_STEP_NUMBER);
         LOGGER.info("Transmittance functions table is built");
+        
+        if(cfg.isExportShotSegment()){
+            try {
+                shotSegmentWriter = new BufferedWriter(new FileWriter(new File(outputFile.getAbsolutePath()+".segments")));
+                shotSegmentWriter.write("i j k norm_transmittance weight\n");
+            } catch (IOException ex) {
+                java.util.logging.Logger.getLogger(VoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
-    public void processOneShot(final Shot shot) {
+    public void processOneShot(final Shot shot) throws IOException {
 
         if (voxelManager == null) {
             LOGGER.error("VoxelManager not initialized, what happened??");
@@ -643,6 +658,15 @@ public class VoxelAnalysis extends Process implements Cancellable{
                 vox.sumSurfMulLengthMulEnt += surfMulLengthMulEnt; //CL
 
                 vox.sumSurfMulLength += surfMulLength;
+                
+                if(cfg.isExportShotSegment()){
+                    double currentNormalizedTrans = transNorm/surfMulLengthMulEnt;
+                    try {
+                        shotSegmentWriter.write(vox.$i+" "+vox.$j+" "+vox.$k+" "+currentNormalizedTrans+" "+surfMulLengthMulEnt+"\n");
+                    } catch (IOException ex) {
+                        java.util.logging.Logger.getLogger(VoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
             }
             
             
@@ -849,6 +873,10 @@ public class VoxelAnalysis extends Process implements Cancellable{
     }
     
     public void write() throws FileNotFoundException, Exception{
+        
+        if(cfg.isExportShotSegment()){
+            shotSegmentWriter.close();
+        }
         
         long start_time = System.currentTimeMillis();
 

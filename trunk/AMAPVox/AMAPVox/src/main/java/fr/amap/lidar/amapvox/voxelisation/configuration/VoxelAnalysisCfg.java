@@ -64,6 +64,8 @@ public class VoxelAnalysisCfg extends Configuration{
     protected ShotFilter shotFilter;
     protected EchoFilter echoFilter;
     
+    protected boolean exportShotSegment;
+    
     protected Element limitsElement;
     protected Element filtersElement;
     protected Element echoFilteringElement;
@@ -386,6 +388,12 @@ public class VoxelAnalysisCfg extends Configuration{
                 voxelParameters.setRasterParams(rasterParameters);
             }
         }
+        
+        Element exportShotSegmentElement = processElement.getChild("export-shot-segment");
+        
+        if(exportShotSegmentElement != null){
+            exportShotSegment = Boolean.valueOf(exportShotSegmentElement.getAttributeValue("enabled"));
+        }
           
     }
 
@@ -634,6 +642,10 @@ public class VoxelAnalysisCfg extends Configuration{
             }
             
         }
+        
+        Element exportShotSegmentElement = new Element("export-shot-segment");
+        exportShotSegmentElement.setAttribute("enabled", String.valueOf(exportShotSegment));
+        processElement.addContent(exportShotSegmentElement);
     }
     
     public InputType getInputType() {
@@ -747,4 +759,13 @@ public class VoxelAnalysisCfg extends Configuration{
     public void setShotFilter(ShotFilter shotFilter) {
         this.shotFilter = shotFilter;
     }
+
+    public boolean isExportShotSegment() {
+        return exportShotSegment;
+    }
+
+    public void setExportShotSegment(boolean exportShotSegment) {
+        this.exportShotSegment = exportShotSegment;
+    }
+    
 }

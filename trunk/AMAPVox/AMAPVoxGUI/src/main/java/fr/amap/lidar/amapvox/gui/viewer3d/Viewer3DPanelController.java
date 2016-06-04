@@ -16,6 +16,7 @@ import fr.amap.commons.math.geometry.BoundingBox2F;
 import fr.amap.commons.math.geometry.BoundingBox3D;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.point.Point2F;
+import fr.amap.commons.math.point.Point3D;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.commons.raster.asc.AsciiGridHelper;
@@ -34,7 +35,6 @@ import fr.amap.lidar.amapvox.gui.PTXProjectExtractor;
 import fr.amap.lidar.amapvox.gui.RiscanProjectExtractor;
 import fr.amap.lidar.amapvox.gui.SceneObjectPropertiesPanelController;
 import fr.amap.lidar.amapvox.gui.SceneObjectWrapper;
-import fr.amap.lidar.amapvox.gui.ToolBoxFrameController;
 import fr.amap.lidar.amapvox.voxelisation.configuration.PTXLidarScan;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
 import fr.amap.lidar.amapvox.voxviewer.Viewer3D;
@@ -587,7 +587,7 @@ public class Viewer3DPanelController implements Initializable {
                                 SceneObjectListener selectionListener = new SceneObjectListener() {
                                         
                                     @Override
-                                    public void clicked(SceneObject sceneObject, MousePicker mousePicker) {
+                                    public void clicked(SceneObject sceneObject, MousePicker mousePicker, Point3D intersection) {
                                         
                                         //if(!sceneObject.isSelected()){
                                             
@@ -735,6 +735,7 @@ public class Viewer3DPanelController implements Initializable {
                                 });
 
                                 voxelSpace.loadVoxels();
+                                float voxelResolution = voxelSpace.data.getVoxelSpaceInfos().getResolution();
                                 
                                 /*
                                  * Voxel information
@@ -757,7 +758,14 @@ public class Viewer3DPanelController implements Initializable {
                                 pickingInfoObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.texturedShader);
                                 pickingInfoObject.setDrawType(GLMesh.DrawType.TRIANGLES);
                                 
-                                SceneObject sceneObjectSelectedVox = new SimpleSceneObject(GLMeshFactory.createBoundingBox(-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f), false);
+                                SceneObject sceneObjectSelectedVox = new SimpleSceneObject(GLMeshFactory.createBoundingBox(
+                                        -voxelResolution/2.0f,
+                                        -voxelResolution/2.0f,
+                                        -voxelResolution/2.0f,
+                                        voxelResolution/2.0f,
+                                        voxelResolution/2.0f,
+                                        voxelResolution/2.0f), false);
+                                
                                 SimpleShader simpleShader = new SimpleShader();
                                 simpleShader.setColor(new Vec3F(1, 0, 0));
                                 sceneObjectSelectedVox.setVisible(false);
@@ -768,7 +776,7 @@ public class Viewer3DPanelController implements Initializable {
                                 
                                 SceneObjectListener listener = new SceneObjectListener() {
                                     @Override
-                                    public void clicked(SceneObject sceneObject, MousePicker mousePicker) {
+                                    public void clicked(SceneObject sceneObject, MousePicker mousePicker, Point3D intersection) {
 
                                         Vec3F camLocation = viewer3D.getScene().getCamera().getLocation();
 
@@ -807,6 +815,10 @@ public class Viewer3DPanelController implements Initializable {
 
                                             sceneObjectSelectedVox.setPosition(new Point3F(voxelPosition.x, voxelPosition.y, voxelPosition.z));
                                             sceneObjectSelectedVox.setVisible(true);
+                                            pickingInfoObject.setVisible(true);
+                                        }else{
+                                            sceneObjectSelectedVox.setVisible(false);
+                                            pickingInfoObject.setVisible(false);
                                         }
                                     }
                                 };

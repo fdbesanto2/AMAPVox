@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import fr.amap.commons.util.Cancellable;
+import java.util.Comparator;
 
 /**
  * This class merge trajectory file with point file (las, laz)
@@ -151,6 +152,9 @@ public class PointsToShot extends Process implements Iterable<Shot>, Cancellable
         double minTime = lasPointList.get(0).t;
         double maxTime = lasPointList.get(lasPointList.size()-1).t;
         
+        minTime -= 0.1; 
+        maxTime += 0.1;
+        
         if(minTime == maxTime){
             //logger.error("ALS file doesn't contains time relative information, minimum and maximum time = "+minTime);
             return;
@@ -209,11 +213,6 @@ public class PointsToShot extends Process implements Iterable<Shot>, Cancellable
                 double time = Double.valueOf(lineSplit[timeIndex]);
 
                 //discard unused values
-
-                //offsets to keep a bounding nearest time
-                minTime -= 0.1; 
-                maxTime += 0.1;
-
                 if(time >= minTime && time <= maxTime){
 
                     Trajectory traj = new Trajectory(Double.valueOf(lineSplit[eastingIndex]), Double.valueOf(lineSplit[northingIndex]),
@@ -225,7 +224,16 @@ public class PointsToShot extends Process implements Iterable<Shot>, Cancellable
                 count++;
             }
             
-            fireProgress("Reading trajectory file", 100, 100);
+            fireProgress("Sorting trajectory file", 99, 100);
+            
+            Collections.sort(trajectoryList, new Comparator<Trajectory>() {
+                @Override
+                public int compare(Trajectory o1, Trajectory o2) {
+                    return Double.compare(o1.t, o2.t);
+                }
+            });
+            
+            fireProgress("Sorting trajectory file finished", 100, 100);
 
         } catch (FileNotFoundException ex) {
             throw ex;

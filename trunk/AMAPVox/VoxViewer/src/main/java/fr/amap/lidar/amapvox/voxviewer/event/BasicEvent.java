@@ -74,7 +74,7 @@ public class BasicEvent extends EventManager{
         
         if(mouse.isWheelRotateUp() || mouse.isWheelRotateDown()){
             
-            joglContext.getScene().getCamera().translate(new Vec3F(0.0f, 0.0f, mouse.getWheelRotationValue()*5.0f));
+            joglContext.getScene().getCamera().translate(new Vec3F(0.0f, 0.0f, mouse.getWheelRotationValue()*mouseScrollSensitivity));
         }
         
         if(keyboard.isKeyDown(KeyEvent.VK_RIGHT)){

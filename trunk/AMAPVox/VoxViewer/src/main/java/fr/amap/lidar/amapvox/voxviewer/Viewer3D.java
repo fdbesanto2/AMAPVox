@@ -14,6 +14,8 @@ import fr.amap.lidar.amapvox.voxviewer.renderer.MinimalWindowAdapter;
 import fr.amap.lidar.amapvox.voxviewer.renderer.JoglListener;
 import fr.amap.lidar.amapvox.voxviewer.renderer.MinimalKeyAdapter;
 import fr.amap.lidar.amapvox.voxviewer.renderer.MinimalMouseAdapter;
+import fr.amap.lidar.amapvox.voxviewer.renderer.RenderListener;
+import java.awt.image.BufferedImage;
 
 public class Viewer3D {
 
@@ -127,8 +129,12 @@ public class Viewer3D {
     
     
     public Point getPosition(){
-        Point locationOnScreen = renderFrame.getLocationOnScreen(null);
-        return new Point(locationOnScreen.getX(), locationOnScreen.getY());
+        try{
+            Point locationOnScreen = renderFrame.getLocationOnScreen(null);
+            return new Point(locationOnScreen.getX(), locationOnScreen.getY());
+        }catch(RuntimeException ex){
+            return new Point(0, 0);
+        }
     }
     
     public void show(){
@@ -168,4 +174,12 @@ public class Viewer3D {
         minimalMouseAdapter.setDynamicDraw(dynamicDraw);
     }
 
+    public EventManager getEventManager() {
+        return basicEvents;
+    }
+
+    public void takeScreenshot(RenderListener listener){
+        joglContext.setTakeScreenShot(true, listener);
+        joglContext.refresh();
+    }
 }
