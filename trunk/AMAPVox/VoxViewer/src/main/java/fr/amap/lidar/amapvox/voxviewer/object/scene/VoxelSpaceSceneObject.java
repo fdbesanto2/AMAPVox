@@ -561,15 +561,18 @@ public class VoxelSpaceSceneObject extends SceneObject{
         return scalarFieldsList;
     }
     
-    public Point3f getVoxelPosition(int i, int j, int k){
-        
-        VoxelSpaceInfos infos = data.getVoxelSpaceInfos();
-        
+    public static Point3f getVoxelPosition(VoxelSpaceInfos infos, int i, int j, int k){
+                
         double posX = infos.getMinCorner().x + (infos.getResolution() / 2.0d) + (i * infos.getResolution());
         double posY = infos.getMinCorner().y + (infos.getResolution() / 2.0d) + (j * infos.getResolution());
         double posZ = infos.getMinCorner().z + (infos.getResolution() / 2.0d) + (k * infos.getResolution());
         
         return new Point3f((float)posX, (float)posY, (float)posZ);
+    }
+    
+    public Point3f getVoxelPosition(int i, int j, int k){
+        
+        return getVoxelPosition(data.getVoxelSpaceInfos(), i, j, k);
     }
     
     public final void loadFromFile(File f) throws IOException, Exception{

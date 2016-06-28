@@ -92,6 +92,11 @@ public class FileManager {
         }
     }
     
+    public static int getLineNumber(File file) throws IOException{
+        
+        return getLineNumber(file.getAbsolutePath());
+    }
+    
     public static int getLineNumber(String path) throws IOException{
         
         int count = 0;

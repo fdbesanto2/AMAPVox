@@ -11,8 +11,7 @@ package fr.amap.lidar.amapvox.voxelisation.configuration.params;
  */
 public class RasterParams {
     
-    public RasterParams() {
-    }
+    
     private boolean generateMultiBandRaster;
     private boolean shortcutVoxelFileWriting;
     private int rasterResolution; //en pixels
@@ -20,6 +19,10 @@ public class RasterParams {
     private float rasterHeightStep;
     private int rasterBandNumber;
 
+    public RasterParams() {
+        generateMultiBandRaster = false;
+    }
+    
     public boolean isGenerateMultiBandRaster() {
         return generateMultiBandRaster;
     }

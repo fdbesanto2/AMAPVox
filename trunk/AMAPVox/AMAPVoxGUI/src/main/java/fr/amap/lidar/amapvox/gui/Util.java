@@ -9,9 +9,12 @@ import fr.amap.commons.util.ColorGradient;
 import fr.amap.commons.util.io.file.FileManager;
 import java.awt.Color;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import org.apache.log4j.Logger;
 
 /**
@@ -44,7 +47,6 @@ public class Util {
             LOGGER.error("Cannot retrieve avaialble color gradients", ex);
         }
     }
-    
  
     public static boolean checkIfVoxelFile(File voxelFile){
         
@@ -64,4 +66,14 @@ public class Util {
         
         return valid;
     }
+    
+    public static FxmlContext loadFxml(String resourcePath) throws IOException{
+        
+        FXMLLoader loader = new FXMLLoader(Util.class.getResource(resourcePath));
+        
+        Parent root = loader.load();
+
+        return new FxmlContext(loader.getController(), root);
+    }
 }
+

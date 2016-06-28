@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +73,27 @@ public abstract class BRaster {
         }
     }
     
+    public void setPixel(int posX, int posY, int bandID, long value) throws Exception{
+        
+        String binaryString = Long.toBinaryString(value);
+        byte[] bval = new BigInteger(binaryString, 2).toByteArray();
+        
+        byte b0 = 0x0, b1 = 0x0, b2 = 0x0, b3 = 0x0;
+        if (bval.length > 0) {
+            b0 = bval[0];
+        }
+        if (bval.length > 1) {
+            b1 = bval[1];
+        }
+        if (bval.length > 2) {
+            b2 = bval[2];
+        }
+        if (bval.length > 3) {
+            b3 = bval[3];
+        }
+        
+        setPixel(posX, posY, bandID, b3, b2, b1, b0);
+    }
     
     
     public void setPixel(int posX, int posY, int bandID, byte... bytes) throws Exception{
@@ -122,7 +144,7 @@ public abstract class BRaster {
         bands.get(bandID).setPixel(posX, posY, bits);
     }
     
-    private void concatenateArrays(boolean[] dest, boolean[]... srcs){
+    private static void concatenateArrays(boolean[] dest, boolean[]... srcs){
         
         int count = 0;
         for(int j=0;j<srcs.length;j++){

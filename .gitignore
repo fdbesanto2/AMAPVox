@@ -59,3 +59,8 @@ log.txt*
 /trunk/AMAPVox/Voxelisation/nbproject/
 /trunk/Commons/commons-math/nbproject/
 /trunk/AMAPVox/AMAPVox/target/
+/trunk/format/format-shot/target/
+/trunk/AMAPVox/old/Simulation/target/
+/trunk/AMAPVox/old/Voxelisation/target/
+/trunk/AMAPVox/old/Chart/target/
+/trunk/AMAPVox/old/JDart/target/

@@ -230,6 +230,8 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.stage.StageStyle;
 import javax.vecmath.Point3f;
+import scripts.DanielScript;
+import scripts.Script;
 
 /**
  * FXML Controller class
@@ -376,6 +378,13 @@ public class MainFrameController implements Initializable {
     private final HashSet<Point3i> voxelsToRemove = new HashSet<>();
     private boolean editingFrameOpened;
     
+    private static String RS_STR_INPUT_TYPE_LAS;
+    private static String RS_STR_INPUT_TYPE_LAZ;
+    private static String RS_STR_INPUT_TYPE_XYZ;
+    private static String RS_STR_INPUT_TYPE_SHOTS;
+    private static String RS_STR_OPEN_IMAGE;
+    private static String RS_STR_INFO;
+    
     @FXML
     private RadioButton radiobuttonLADHomogeneous;
     @FXML
@@ -440,6 +449,8 @@ public class MainFrameController implements Initializable {
     private CheckBox checkboxUsePointcloudFilter;
     @FXML
     private Button buttonAddPointcloudFilter;
+    @FXML
+    private Button buttonOpenTrajectoryFileALS;
     @FXML
     private AnchorPane anchorpanePointCloudFiltering;
     @FXML
@@ -774,6 +785,8 @@ public class MainFrameController implements Initializable {
     private MenuItem menuItemExportObj;
     @FXML
     private CheckBox checkboxWriteShotSegment;
+    @FXML
+    private ComboBox<String> comboboxScript;
     
     private void initValidationSupport(){
         
@@ -970,6 +983,17 @@ public class MainFrameController implements Initializable {
         fileChooserChooseOutputCfgFileButterflyRemover = new FileChooserContext();
         
     }
+    
+    private void initStrings(ResourceBundle rb){
+        
+        RS_STR_INPUT_TYPE_LAS = rb.getString("las_file");
+        RS_STR_INPUT_TYPE_LAZ = rb.getString("laz_file");
+        RS_STR_INPUT_TYPE_XYZ = rb.getString("xyz_file");
+        RS_STR_INPUT_TYPE_SHOTS = rb.getString("shots_file");
+        RS_STR_OPEN_IMAGE = rb.getString("open_image");
+        RS_STR_INFO = rb.getString("info");
+    }
+    
     /**
      * Initializes the controller class.
      */
@@ -979,6 +1003,12 @@ public class MainFrameController implements Initializable {
         this.resourceBundle = rb;
         
         viewer3DPanelController.setResourceBundle(rb);
+        
+        initStrings(rb);
+        
+        comboboxScript.getItems().setAll("Daniel script");
+        
+        
         
         comboboxTransMode.getItems().setAll(1, 2, 3);
         comboboxTransMode.getSelectionModel().selectFirst();
@@ -1047,7 +1077,7 @@ public class MainFrameController implements Initializable {
         
         
         ContextMenu contextMenuProductsList = new ContextMenu();
-        MenuItem openImageItem = new MenuItem("Open image");
+        MenuItem openImageItem = new MenuItem(RS_STR_OPEN_IMAGE);
         openImageItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -1057,7 +1087,7 @@ public class MainFrameController implements Initializable {
             }
         });
         
-        MenuItem menuItemInfo = new MenuItem("Info");
+        MenuItem menuItemInfo = new MenuItem(RS_STR_INFO);
         
         menuItemInfo.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -1346,6 +1376,7 @@ public class MainFrameController implements Initializable {
         fileChooserOpenInputFileALS.setTitle("Open input file");
         fileChooserOpenInputFileALS.getExtensionFilters().addAll(
                 new ExtensionFilter("All Files", "*"),
+                new ExtensionFilter("Shot files", "*.sht"),
                 new ExtensionFilter("Text Files", "*.txt"),
                 new ExtensionFilter("Las Files", "*.las", "*.laz"));
 
@@ -1556,8 +1587,25 @@ public class MainFrameController implements Initializable {
             logger.error("Cannot load fxml file", ex);
         }
 
-        comboboxModeALS.getItems().addAll("Las file", "Laz file", "Points file (unavailable)", "Shots file (unavailable)");
-        comboboxModeTLS.getItems().addAll("Rxp scan", "Rsp project", "PTX","PTG","Points file (unavailable)", "Shots file (unavailable)");
+        comboboxModeALS.getItems().addAll(RS_STR_INPUT_TYPE_LAS, RS_STR_INPUT_TYPE_LAZ, RS_STR_INPUT_TYPE_XYZ, RS_STR_INPUT_TYPE_SHOTS);
+        
+        comboboxModeALS.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                
+                if(newValue.equals(RS_STR_INPUT_TYPE_SHOTS)){
+                    textFieldTrajectoryFileALS.setDisable(true);
+                    buttonOpenTrajectoryFileALS.setDisable(true);
+                    alsVoxValidationSupport.registerValidator(textFieldTrajectoryFileALS, false, Validators.unregisterValidator);
+                }else{
+                    textFieldTrajectoryFileALS.setDisable(false);
+                    buttonOpenTrajectoryFileALS.setDisable(false);
+                    alsVoxValidationSupport.registerValidator(textFieldTrajectoryFileALS, false, Validators.fileExistValidator);
+                }
+            }
+        });
+        
+        comboboxModeTLS.getItems().addAll("Rxp scan", "Rsp project", "PTX","PTG", RS_STR_INPUT_TYPE_XYZ, RS_STR_INPUT_TYPE_SHOTS);
         comboboxWeighting.getItems().addAll("From the echo number", "From a matrix file", "Local recalculation (unavailable)");
         comboboxGroundEnergyOutputFormat.getItems().addAll("txt", "png");
 
@@ -2257,6 +2305,13 @@ public class MainFrameController implements Initializable {
         return true;
     }
     
+    private final String finalStr(String str){
+        
+        final String finalString = str;
+        
+        return finalString;
+    }
+    
     private boolean saveALSVoxelization(File selectedFile){
         
         if(!checkALSVoxelizationParametersValidity()){
@@ -2277,7 +2332,7 @@ public class MainFrameController implements Initializable {
         }
 
         InputType it;
-
+        
         switch (comboboxModeALS.getSelectionModel().getSelectedIndex()) {
             case 0:
                 it = InputType.LAS_FILE;
@@ -2474,7 +2529,7 @@ public class MainFrameController implements Initializable {
 
                         dtmFile = new File(outputPathFile.getAbsolutePath() + File.separator + file.getName() +".asc");
                         try {
-                            AsciiGridHelper.write(dtmFile, dtmSubset);
+                            AsciiGridHelper.write(dtmFile, dtmSubset, false);
                         } catch (IOException ex) {
                             logger.error("Cannot write dtm file", ex);
                         }
@@ -3646,11 +3701,10 @@ public class MainFrameController implements Initializable {
         } else if (lastFCOpenInputFileALS != null) {
 
             fileChooserOpenInputFileALS.setInitialDirectory(lastFCOpenInputFileALS.getParentFile());
-
         }
 
         List<File> selectedFiles = fileChooserOpenInputFileALS.showOpenMultipleDialog(stage);
-        if (selectedFiles != null) {
+        if (selectedFiles != null && selectedFiles.size() > 0) {
             
             StringBuilder sb = new StringBuilder();
             
@@ -3668,6 +3722,21 @@ public class MainFrameController implements Initializable {
                 checkboxMultiFiles.setSelected(true);
             }else{
                 checkboxMultiFiles.setSelected(false);
+                
+                String extension = FileManager.getExtension(selectedFiles.get(0));
+                
+                switch(extension){
+                    case ".las":
+                        comboboxModeALS.getSelectionModel().select(RS_STR_INPUT_TYPE_LAZ);
+                        break;
+                    case ".laz":
+                        comboboxModeALS.getSelectionModel().select(RS_STR_INPUT_TYPE_LAZ);
+                        break;
+                    case ".sht":
+                        comboboxModeALS.getSelectionModel().select(RS_STR_INPUT_TYPE_SHOTS);
+                        break;
+                }
+                
             }
         }
     }
@@ -4654,7 +4723,7 @@ public class MainFrameController implements Initializable {
         executeTaskList(taskElements);
     }
     
-    private void showErrorDialog(final Exception e){
+    public void showErrorDialog(final Exception e){
         
         logger.error("An error occured", e);
         
@@ -5122,7 +5191,7 @@ public class MainFrameController implements Initializable {
 
                 @Override
                 public void changed(ObservableValue<? extends Throwable> observable, Throwable oldValue, Throwable newValue) {
-                    System.out.println("test");
+                    System.out.println(newValue.getMessage());
                 }
             });
 
@@ -5841,9 +5910,6 @@ public class MainFrameController implements Initializable {
     }
 
     private BoundingBox3d calculateAutomaticallyMinAndMax(File file, boolean quick) {
-
-        Matrix4d identityMatrix = new Matrix4d();
-        identityMatrix.setIdentity();
         
         ProcessTool processTool = new ProcessTool();
         final BoundingBox3d boundingBox = processTool.getBoundingBoxOfPoints(file, resultMatrix, false, getListOfClassificationPointToDiscard());
@@ -7466,6 +7532,31 @@ public class MainFrameController implements Initializable {
             showErrorDialog(new Exception("Cannot launch 3d view", ex));
         }
     }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    @FXML
+    private void onActionButtonExecuteScript(ActionEvent event) {
+        
+        Script script = null;
+                
+        if(comboboxScript.getSelectionModel().getSelectedItem().equals("Daniel script")){
+            
+            script = new DanielScript(this);
+        }
+        
+        if(script != null){
+            script.launch();
+        }
+        
+    }
+
+    /*@FXML
+    private void onActionButtonGenerateShotsFile(ActionEvent event) {
+        
+    }*/
     
     static class ColorRectCell extends ListCell<VoxelFileChart> {
 

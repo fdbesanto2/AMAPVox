@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<fx:root fx:id="anchorpanePointCloudFilterParameters" layoutX="9.0" layoutY="49.0" prefHeight="82.0" prefWidth="427.0" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="anchorpanePointCloudFilterParameters" layoutX="9.0" layoutY="49.0" prefHeight="82.0" prefWidth="427.0" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <TextField fx:id="textfieldPointCloudPath" disable="true" layoutX="173.0" layoutY="15.0" prefHeight="25.0" prefWidth="201.0" AnchorPane.leftAnchor="173.0" />
         <Label fx:id="labelPointCloudErrorMarginValue" disable="true" layoutX="173.0" layoutY="55.0" text="Error's margin" AnchorPane.leftAnchor="173.0" />
@@ -19,7 +20,7 @@
            <graphic>
               <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                  <image>
-                    <Image url="@icons/gnome_delete_element.png" />
+                    <Image url="@icons/gnome_list_remove.png" />
                  </image>
               </ImageView>
            </graphic>

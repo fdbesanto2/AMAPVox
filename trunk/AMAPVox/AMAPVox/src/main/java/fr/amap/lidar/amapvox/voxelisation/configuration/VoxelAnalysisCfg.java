@@ -47,10 +47,29 @@ import org.jdom2.Element;
 
 public class VoxelAnalysisCfg extends Configuration{
 
-    protected final static Logger logger = Logger.getLogger(VoxelAnalysisCfg.class);
+    public enum VoxelsFormat{
+        
+        NONE(0),
+        VOXEL(1),
+        RASTER(2);
+        
+        private int format;
+        
+        private VoxelsFormat(int format){
+            this.format = format;
+        }
+
+        public int getFormat() {
+            return format;
+        }
+        
+    }
+    
+    protected final static Logger LOGGER = Logger.getLogger(VoxelAnalysisCfg.class);
     
     protected File inputFile;
     protected File outputFile;
+    protected VoxelsFormat voxelsFormat = VoxelsFormat.VOXEL;
     protected boolean usePopMatrix;
     protected boolean useSopMatrix;
     protected boolean useVopMatrix;
@@ -84,14 +103,25 @@ public class VoxelAnalysisCfg extends Configuration{
             inputType = getInputFileType(inputTypeInteger);
             inputFile = new File(inputFileElement.getAttributeValue("src"));
         }else{
-            logger.warn("Cannot find input_file element");
+            LOGGER.warn("Cannot find input_file element");
         }
         
         Element outputFileElement = processElement.getChild("output_file");
         if(outputFileElement != null){
             outputFile = new File(outputFileElement.getAttributeValue("src"));
+            String formatStr = outputFileElement.getAttributeValue("format");
+            if(formatStr != null){
+                int format = Integer.valueOf(formatStr);
+                if(format == 0){
+                    voxelsFormat = VoxelsFormat.NONE;
+                }else if(format == 1){
+                    voxelsFormat = VoxelsFormat.VOXEL;
+                }else if(format == 2){
+                    voxelsFormat = VoxelsFormat.RASTER;
+                }
+            }
         }else{
-            logger.warn("Cannot find output_file element");
+            LOGGER.warn("Cannot find output_file element");
         }
 
         Element voxelSpaceElement = processElement.getChild("voxelspace");
@@ -216,7 +246,7 @@ public class VoxelAnalysisCfg extends Configuration{
                             file.setColumnAssignment(colMap);
 
                         }catch(Exception ex){
-                            logger.warn("Old file element detected, keep default old read parameters.");
+                            LOGGER.warn("Old file element detected, keep default old read parameters.");
                         }
 
                         boolean keep;
@@ -406,12 +436,13 @@ public class VoxelAnalysisCfg extends Configuration{
             inputFileElement.setAttribute(new Attribute("src",inputFile.getAbsolutePath()));
             processElement.addContent(inputFileElement);
         }else{
-            logger.info("Global input file ignored.");
+            LOGGER.info("Global input file ignored.");
         }
         
 
         Element outputFileElement = new Element("output_file");
         outputFileElement.setAttribute(new Attribute("src",outputFile.getAbsolutePath()));
+        outputFileElement.setAttribute(new Attribute("format", String.valueOf(voxelsFormat.getFormat())));
         processElement.addContent(outputFileElement);
         
         if(voxelParameters != null && voxelParameters.infos.getMinCorner() !=null && voxelParameters.infos.getMaxCorner() != null){
@@ -429,7 +460,7 @@ public class VoxelAnalysisCfg extends Configuration{
             processElement.addContent(voxelSpaceElement);
             
         }else{
-            logger.info("Global bounding-box ignored.");
+            LOGGER.info("Global bounding-box ignored.");
         }
         
         
@@ -670,6 +701,19 @@ public class VoxelAnalysisCfg extends Configuration{
 
     public void setOutputFile(File outputFile) {
         this.outputFile = outputFile;
+    }
+    
+    public void setOutputFile(File outputFile, VoxelsFormat voxelsFormat) {
+        this.outputFile = outputFile;
+        this.voxelsFormat = voxelsFormat;
+    }
+
+    public VoxelsFormat getVoxelsFormat() {
+        return voxelsFormat;
+    }
+
+    public void setVoxelsFormat(VoxelsFormat voxelsFormat) {
+        this.voxelsFormat = voxelsFormat;
     }
 
     public VoxelParameters getVoxelParameters() {

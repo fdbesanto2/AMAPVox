@@ -55,7 +55,7 @@ public class ALSVoxCfg extends VoxelAnalysisCfg{
         String columnAssignment = trajectoryFileElement.getAttributeValue("column-assignment");
 
         if (columnSeparator == null) {
-            logger.warn("Old trajectory file element detected, keep default old read parameters.");
+            LOGGER.warn("Old trajectory file element detected, keep default old read parameters.");
         } else {
 
             try {
@@ -77,7 +77,7 @@ public class ALSVoxCfg extends VoxelAnalysisCfg{
 
                 trajectoryFile.setColumnAssignment(colMap);
             } catch (Exception e) {
-                logger.warn("Old trajectory file element detected, keep default old read parameters.");
+                LOGGER.warn("Old trajectory file element detected, keep default old read parameters.");
             }
         }
         

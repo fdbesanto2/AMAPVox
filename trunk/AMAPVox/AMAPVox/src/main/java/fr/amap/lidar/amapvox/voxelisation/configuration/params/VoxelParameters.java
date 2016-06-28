@@ -9,6 +9,7 @@ import fr.amap.commons.util.vegetation.LADParams;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
+import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis.LaserSpecification;
 import java.io.File;
 import java.util.List;
 import javax.vecmath.Point3d;
@@ -22,12 +23,6 @@ public class VoxelParameters {
         
     //voxel space parameters
     public final VoxelSpaceInfos infos;
-    /*public Point3d bottomCorner;
-    public Point3d topCorner;
-    public Point3i split;
-    public double resolution;
-    private float maxPAD = 5;
-    private boolean TLS;*/
     private int transmittanceMode = 1;
     private String pathLengthMode = "A";
     
@@ -45,7 +40,118 @@ public class VoxelParameters {
     private RasterParams rasterParams;
     private LADParams ladParams;
     
-    private VoxelAnalysis.LaserSpecification laserSpecification = null;    
+    private LaserSpecification laserSpecification = null;    
+    
+    public static class Builder{
+        
+        //voxel space parameters
+        private final VoxelSpaceInfos infos = new VoxelSpaceInfos();
+        private int transmittanceMode = 1;
+        private String pathLengthMode = "A";
+
+        //echoes filtering
+        private List<PointcloudFilter> pointcloudFilters = null;
+        private boolean usePointCloudFilter = false;
+
+        private boolean mergingAfter = false;
+        private File mergedFile = null;
+
+        private NaNsCorrectionParams naNsCorrectionParams = new NaNsCorrectionParams(false);
+        private DTMFilteringParams dtmFilteringParams = new DTMFilteringParams();
+        private EchoesWeightParams echoesWeightParams = new EchoesWeightParams();
+        private GroundEnergyParams groundEnergyParams = new GroundEnergyParams();
+        private RasterParams rasterParams = new RasterParams();
+        private LADParams ladParams = new LADParams();
+
+        private LaserSpecification laserSpecification = LaserSpecification.DEFAULT_ALS;
+
+        /*public Builder(Point3d bottomCorner, Point3d topCorner, Point3i split, VoxelSpaceInfos.Type type) {
+            
+            infos.setMinCorner(bottomCorner);
+            infos.setMaxCorner(topCorner);
+            infos.setSplit(split);
+            infos.setType(type);
+        }*/
+        
+        public Builder(Point3d bottomCorner, Point3d topCorner, float resolution, VoxelSpaceInfos.Type type) {
+            
+            infos.setMinCorner(bottomCorner);
+            infos.setMaxCorner(topCorner);
+            infos.setResolution((double)resolution);
+            infos.setType(type);
+        }
+
+        public Builder echoesWeightParams(EchoesWeightParams echoesWeightParams){
+            
+            this.echoesWeightParams = echoesWeightParams;
+            return this;
+        }
+        
+        public Builder naNsCorrectionParams(NaNsCorrectionParams naNsCorrectionParams){
+            
+            this.naNsCorrectionParams = naNsCorrectionParams;
+            return this;
+        }
+        
+        public Builder groundEnergyParams(GroundEnergyParams groundEnergyParams){
+            
+            this.groundEnergyParams = groundEnergyParams;
+            return this;
+        }
+        
+        public Builder dtmFilteringParams(DTMFilteringParams dtmFilteringParams){
+            
+            this.dtmFilteringParams = dtmFilteringParams;
+            return this;
+        }
+        
+        public Builder rasterParams(RasterParams rasterParams){
+            
+            this.rasterParams = rasterParams;
+            return this;
+        }
+        
+        public Builder ladParams(LADParams ladParams){
+            
+            this.ladParams = ladParams;
+            return this;
+        }
+        
+        public Builder laserSpecification(LaserSpecification laserSpecification){
+            
+            this.laserSpecification = laserSpecification;
+            return this;
+        }
+        
+        public Builder padMAX(float padMAX){
+            
+            this.infos.setMaxPAD(padMAX);
+            return this;
+        }
+        
+        public VoxelParameters build(){
+            
+            return new VoxelParameters(this);
+        }
+    }
+    
+    public VoxelParameters(Builder builder){
+        
+        this.dtmFilteringParams = builder.dtmFilteringParams;
+        this.echoesWeightParams = builder.echoesWeightParams;
+        this.groundEnergyParams = builder.groundEnergyParams;
+        this.infos = builder.infos;
+        this.ladParams = builder.ladParams;
+        this.laserSpecification = builder.laserSpecification;
+        this.mergedFile = builder.mergedFile;
+        this.mergingAfter = builder.mergingAfter;
+        this.naNsCorrectionParams = builder.naNsCorrectionParams;
+        this.pathLengthMode = builder.pathLengthMode;
+        this.pointcloudFilters = builder.pointcloudFilters;
+        this.rasterParams = builder.rasterParams;
+        this.transmittanceMode = builder.transmittanceMode;
+        this.usePointCloudFilter = builder.usePointCloudFilter;
+    }
     
     public VoxelParameters() {
         

@@ -64,7 +64,7 @@ public class Band {
         for (boolean[] bits : data[rowID]) {
                         
             for(boolean bit : bits){
-                
+                                
                 byteOfBoolean[currentNumberOfBits] = bit;
                 
                 currentNumberOfBits++;

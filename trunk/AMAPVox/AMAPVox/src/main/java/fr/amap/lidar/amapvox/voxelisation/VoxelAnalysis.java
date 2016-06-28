@@ -11,8 +11,12 @@ import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelManager.VoxelCrossingCon
 import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelManagerSettings;
 import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelSpace;
 import fr.amap.commons.raster.asc.Raster;
+import fr.amap.commons.raster.multiband.BCommon;
+import fr.amap.commons.raster.multiband.BHeader;
+import fr.amap.commons.raster.multiband.BSQ;
 import fr.amap.commons.util.Cancellable;
 import fr.amap.commons.util.Process;
+import fr.amap.commons.util.Statistic;
 import fr.amap.commons.util.vegetation.DirectionalTransmittance;
 import fr.amap.commons.util.vegetation.LADParams;
 import fr.amap.commons.util.vegetation.LeafAngleDistribution;
@@ -20,6 +24,7 @@ import fr.amap.lidar.amapvox.commons.Voxel;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos.Type;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
+import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg.VoxelsFormat;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightParams;
@@ -33,10 +38,13 @@ import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.logging.Level;
 import javax.imageio.ImageIO;
+import javax.vecmath.Point2d;
 import javax.vecmath.Point3d;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 
 public class VoxelAnalysis extends Process implements Cancellable{
@@ -276,7 +284,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
         direcTransmittance.buildTable(DirectionalTransmittance.DEFAULT_STEP_NUMBER);
         LOGGER.info("Transmittance functions table is built");
         
-        if(cfg.isExportShotSegment()){
+        if(cfg != null && cfg.isExportShotSegment()){
             try {
                 shotSegmentWriter = new BufferedWriter(new FileWriter(new File(outputFile.getAbsolutePath()+".segments")));
                 shotSegmentWriter.write("i j k norm_transmittance weight\n");
@@ -872,7 +880,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
         padComputed = true;
     }
     
-    public void write() throws FileNotFoundException, Exception{
+    public void write(VoxelsFormat format) throws FileNotFoundException, Exception{
         
         if(cfg.isExportShotSegment()){
             shotSegmentWriter.close();
@@ -881,49 +889,155 @@ public class VoxelAnalysis extends Process implements Cancellable{
         long start_time = System.currentTimeMillis();
 
         LOGGER.info("writing file: " + outputFile.getAbsolutePath());
+        
+        if(format == VoxelsFormat.NONE){
+            return;
+        }else if(format == VoxelsFormat.VOXEL){
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
+                writer.write(parameters.infos.headerToString()+"\n");
+                writer.write(Voxel.getHeader(Voxel.class) + "\n");
 
-            writer.write(parameters.infos.headerToString()+"\n");
-            writer.write(Voxel.getHeader(Voxel.class) + "\n");
+                int count = 0;
+                int nbLines = parameters.infos.getSplit().x * parameters.infos.getSplit().y * parameters.infos.getSplit().z;
+
+                for (int i = 0; i < parameters.infos.getSplit().x; i++) {
+                    for (int j = 0; j < parameters.infos.getSplit().y; j++) {
+                        for (int k = 0; k < parameters.infos.getSplit().z; k++) {
+
+                            if(isCancelled()){
+                                return;
+                            }
+
+                            fireProgress("Writing file", count, nbLines);
+
+                            Voxel voxel = voxels[i][j][k];
+
+                            if (!padComputed) {
+                                voxel = computePADFromVoxel(voxel, i, j, k);
+                            }
+
+                            writer.write(voxel.toString() + "\n");
+
+                            count++;
+                        }
+                    }
+                }
+
+                writer.close();
+
+                padComputed = true;
+
+                LOGGER.info("file written ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
+
+            } catch (FileNotFoundException e) {
+                throw e;
+            } catch (Exception e) {
+                throw e;
+            }
+        }else if(format == VoxelsFormat.RASTER){
+
+            float scale = 1.0f;
+            float resolution = parameters.infos.getResolution();
+
+            int rasterXSize = (int) (Math.ceil(parameters.infos.getSplit().x / scale));
+            int rasterYSize = (int) (Math.ceil(parameters.infos.getSplit().y / scale));
+
+            BHeader header = new BHeader(rasterXSize, rasterYSize, 1, BCommon.NumberOfBits.N_BITS_32);
+            header.setUlxmap(parameters.infos.getMinCorner().x + (resolution / 2.0f));
+            header.setUlymap(parameters.infos.getMaxCorner().y - (resolution / 2.0f));
+            header.setXdim((float) parameters.infos.getVoxelSize().x);
+            header.setYdim((float) parameters.infos.getVoxelSize().y);
+
+            BSQ raster = new BSQ(outputFile, header);
+
+            long valMax = 4294967294L;
+            long valNoData = 4294967295L;
             
-            int count = 0;
-            int nbLines = parameters.infos.getSplit().x * parameters.infos.getSplit().y * parameters.infos.getSplit().z;
+            double laiMax = 50000;
+            
+            header.addMetadata("NO_DATA", String.valueOf(valNoData));
+            header.addMetadata("MAX_VAL", String.valueOf(valMax));
+            header.addMetadata("MAX_VEG_M2", String.valueOf(laiMax));
+            
 
             for (int i = 0; i < parameters.infos.getSplit().x; i++) {
-                for (int j = 0; j < parameters.infos.getSplit().y; j++) {
-                    for (int k = 0; k < parameters.infos.getSplit().z; k++) {
-                        
-                        if(isCancelled()){
-                            return;
-                        }
-                        
-                        fireProgress("Writing file", count, nbLines);
+                for (int j = 0 ; j < parameters.infos.getSplit().y; j++) {
+                    
+                    double laiSum = 0;
+                    
+                    for (int k = parameters.infos.getSplit().z - 1; k >= 0; k--) {
 
-                        Voxel voxel = voxels[i][j][k];
-                        
-                        if (!padComputed) {
-                            voxel = computePADFromVoxel(voxel, i, j, k);
+                        Voxel vox = voxels[i][j][k];
+
+                        if (vox != null && vox.ground_distance >= 0 && vox.PadBVTotal > 0 && !Float.isNaN(vox.PadBVTotal)) {
+                            
+                            //calcul de la position de départ
+                            Point3d voxelPosition = getPosition(new Point3i(i, j, k));
+                            
+                            Point3d subVoxelSize = new Point3d(parameters.infos.getVoxelSize().x / parameters.infos.getResolution(),
+                                                                parameters.infos.getVoxelSize().y / parameters.infos.getResolution(),
+                                                                parameters.infos.getVoxelSize().z / parameters.infos.getResolution());
+                            
+                            Point3d startPosition = new Point3d(voxelPosition.x - (parameters.infos.getVoxelSize().x - subVoxelSize.x)/2.0,
+                                                                voxelPosition.y - (parameters.infos.getVoxelSize().y - subVoxelSize.y)/2.0,
+                                                                voxelPosition.z - (parameters.infos.getVoxelSize().z - subVoxelSize.z)/2.0);
+
+                            Point3i nbSubVoxels = new Point3i((int)Math.ceil(parameters.infos.getVoxelSize().x),
+                                                                (int)Math.ceil(parameters.infos.getVoxelSize().y),
+                                                                (int)Math.ceil(parameters.infos.getVoxelSize().z));
+
+                            //parcours des sous-voxels
+                            int nbSubVoxelsAboveGround = 0;
+
+                            for (int i2 = 0; i2 < nbSubVoxels.x; i2++) {
+                                for (int j2 = 0; j2 < nbSubVoxels.y; j2++) {
+                                    for (int k2 = nbSubVoxels.z - 1; k2 >= 0; k2--) {
+
+                                        float groundDistance = getGroundDistance((float)(startPosition.x + (i2 * subVoxelSize.x)),
+                                                                                (float)(startPosition.y + (j2 * subVoxelSize.y)),
+                                                                                (float)(startPosition.z + (k2 * subVoxelSize.z)));
+
+                                        if(groundDistance > 0){
+                                            nbSubVoxelsAboveGround++;
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            float volume = (float) (subVoxelSize.x * subVoxelSize.y * subVoxelSize.z * nbSubVoxelsAboveGround);
+                            double lai = vox.PadBVTotal * volume;
+
+                            laiSum += lai;
                         }
-                        
-                        writer.write(voxel.toString() + "\n");
-                        
-                        count++;
                     }
+                    
+                    long value = (long) ((laiSum / laiMax) * (valMax));
+                    
+                    String binaryString = Long.toBinaryString(value);
+                    byte[] bval = new BigInteger(binaryString, 2).toByteArray();
+                    ArrayUtils.reverse(bval);
+                    byte b0 = 0x0, b1 = 0x0, b2 = 0x0, b3 = 0x0;
+                    if (bval.length > 0) {
+                        b0 = bval[0];
+                    }
+                    if (bval.length > 1) {
+                        b1 = bval[1];
+                    }
+                    if (bval.length > 2) {
+                        b2 = bval[2];
+                    }
+                    if (bval.length > 3) {
+                        b3 = bval[3];
+                    }
+
+                    raster.setPixel(i, parameters.infos.getSplit().y - j - 1, 0, b0, b1, b2, b3);
                 }
             }
 
-            writer.close();
-            
-            padComputed = true;
-
-            LOGGER.info("file written ( " + TimeCounter.getElapsedStringTimeInSeconds(start_time) + " )");
-
-        } catch (FileNotFoundException e) {
-            throw e;
-        } catch (Exception e) {
-            throw e;
-        }
+            raster.writeHeader();
+            raster.writeImage();
+        }        
     }
     
       

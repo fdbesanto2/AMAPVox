@@ -713,7 +713,7 @@ public class Viewer3DPanelController implements Initializable {
                             @Override
                             protected Object call() throws Exception {
 
-                                Viewer3D viewer3D = new Viewer3D((int) (SCREEN_WIDTH / 4.0d), (int) (SCREEN_HEIGHT / 4.0d), (int) (SCREEN_WIDTH / 1.5d), (int) (SCREEN_HEIGHT / 2.0d), voxelFile.toString());
+                                final Viewer3D viewer3D = new Viewer3D((int) (SCREEN_WIDTH / 4.0d), (int) (SCREEN_HEIGHT / 4.0d), (int) (SCREEN_WIDTH / 1.5d), (int) (SCREEN_HEIGHT / 2.0d), voxelFile.toString());
                                 //viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
 
                                 fr.amap.lidar.amapvox.voxviewer.object.scene.Scene scene = viewer3D.getScene();
@@ -723,7 +723,7 @@ public class Viewer3DPanelController implements Initializable {
                                  */
                                 updateMessage("Loading voxel space: " + voxelFile.getAbsolutePath());
 
-                                VoxelSpaceSceneObject voxelSpace = new VoxelSpaceSceneObject(voxelFile);
+                                final VoxelSpaceSceneObject voxelSpace = new VoxelSpaceSceneObject(voxelFile);
                                 voxelSpace.setMousePickable(true);
 
                                 voxelSpace.addVoxelSpaceListener(new VoxelSpaceAdapter() {
@@ -774,6 +774,25 @@ public class Viewer3DPanelController implements Initializable {
                                 
                                 viewer3D.getScene().addSceneObject(sceneObjectSelectedVox);
                                 
+                                final SimpleBooleanProperty spaceKeyDown = new SimpleBooleanProperty(false);
+                                
+                                viewer3D.getRenderFrame().addKeyListener(new KeyAdapter() {
+
+                                    @Override
+                                    public void keyPressed(KeyEvent e) {
+                                        if(e.getKeyCode() == KeyEvent.VK_SPACE){
+                                            spaceKeyDown.set(true);
+                                        }
+                                    }
+                                    
+                                    @Override
+                                    public void keyReleased(KeyEvent e) {
+                                        if(e.getKeyCode() == KeyEvent.VK_SPACE){
+                                            spaceKeyDown.set(false);
+                                        }
+                                    }
+                                });
+                                
                                 SceneObjectListener listener = new SceneObjectListener() {
                                     @Override
                                     public void clicked(SceneObject sceneObject, MousePicker mousePicker, Point3D intersection) {
@@ -816,6 +835,11 @@ public class Viewer3DPanelController implements Initializable {
                                             sceneObjectSelectedVox.setPosition(new Point3F(voxelPosition.x, voxelPosition.y, voxelPosition.z));
                                             sceneObjectSelectedVox.setVisible(true);
                                             pickingInfoObject.setVisible(true);
+                                            
+                                            if(spaceKeyDown.get()){
+                                                viewer3D.getScene().getCamera().setTarget(new Vec3F(voxelPosition.x, voxelPosition.y, voxelPosition.z));
+                                            }
+                                            
                                         }else{
                                             sceneObjectSelectedVox.setVisible(false);
                                             pickingInfoObject.setVisible(false);

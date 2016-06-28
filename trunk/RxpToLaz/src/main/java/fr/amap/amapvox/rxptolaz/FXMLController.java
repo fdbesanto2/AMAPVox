@@ -20,6 +20,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
@@ -43,9 +44,14 @@ public class FXMLController implements Initializable {
     private ListView<SimpleScan> listViewScans;
     @FXML
     private TextField textFieldOutputDirectory;
+    @FXML
+    private ComboBox<String> comboboxLasMode;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        comboboxLasMode.getItems().addAll("LAS", "LAZ");
+        comboboxLasMode.getSelectionModel().selectLast();
         
         listViewScans.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         
@@ -151,6 +157,8 @@ public class FXMLController implements Initializable {
         if(!textFieldOutputDirectory.getText().isEmpty()){
             
             final File directory = new File(textFieldOutputDirectory.getText());
+            String selectedItem = comboboxLasMode.getSelectionModel().getSelectedItem();
+            final boolean laz = selectedItem.equals("LAZ");
         
             if(Files.exists(directory.toPath())){
                 
@@ -174,7 +182,7 @@ public class FXMLController implements Initializable {
                                         updateProgress(count, listViewScans.getItems().size());
                                         updateMessage("Convert file "+(count+1)+"/"+listViewScans.getItems().size()+" : "+scan.file.getName());
                                         
-                                        conversion.toLaz(scan, directory);
+                                        conversion.toLaz(scan, directory, laz);
                                         count++;
                                     }
                                 } catch (IOException ex) {

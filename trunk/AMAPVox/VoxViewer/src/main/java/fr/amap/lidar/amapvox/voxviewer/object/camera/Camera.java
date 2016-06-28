@@ -164,8 +164,6 @@ public abstract class Camera {
     
     public void updateProjMatrix(){
         
-        
-        
         Mat4F oldValue = projectionMatrix;
         
         if(perspective){
@@ -183,6 +181,16 @@ public abstract class Camera {
 
     public boolean isPerspective() {
         return perspective;
+    }
+
+    public void setNearPersp(float nearPersp) {
+        this.nearPersp = nearPersp;
+        updateProjMatrix();
+    }
+
+    public void setFarPersp(float farPersp) {
+        this.farPersp = farPersp;
+        updateProjMatrix();
     }
     
     /**

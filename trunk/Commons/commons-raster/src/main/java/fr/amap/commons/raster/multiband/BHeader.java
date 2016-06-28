@@ -18,6 +18,9 @@ import fr.amap.commons.raster.multiband.BCommon.ByteOrder;
 import fr.amap.commons.raster.multiband.BCommon.Layout;
 import fr.amap.commons.raster.multiband.BCommon.NumberOfBits;
 import fr.amap.commons.raster.multiband.BCommon.PixelType;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 
 
@@ -46,6 +49,7 @@ public class BHeader {
     private int totalrowbytes;
     private int bandgapbytes;
     private int byteNumber;
+    private Map<String, String> metadata = new HashMap<>();
 
     public BHeader(int ncols, int nrows, int nbands, NumberOfBits numberOfBits) {
         
@@ -103,7 +107,7 @@ public class BHeader {
     @Override
     public String toString(){
         
-        return "nrows "+nrows+"\n"+
+        String result = "nrows "+nrows+"\n"+
                "ncols "+ncols+"\n"+
                 "nbands "+nbands+"\n"+
                 "nbits "+nbits.getNumberOfBits()+"\n"+
@@ -118,8 +122,14 @@ public class BHeader {
                 "bandrowbytes "+bandrowbytes+"\n"+
                 "totalrowbytes "+totalrowbytes+"\n"+
                 "bandgapbytes "+bandgapbytes+"\n";
-                
-                
+        
+        Iterator<Map.Entry<String, String>> iterator = metadata.entrySet().iterator();
+        while(iterator.hasNext()){
+            Map.Entry<String, String> next = iterator.next();
+            result += "#"+next.getKey()+" "+next.getValue()+"\n";
+        }
+        
+        return result;
     }
 
     public int getNrows() {
@@ -246,4 +256,11 @@ public class BHeader {
         return byteNumber;
     }
     
+    public void addMetadata(String key, String value){
+        metadata.put(key, value);
+    }
+    
+    public void removeMetadata(String key){
+        metadata.remove(key);
+    }
 }

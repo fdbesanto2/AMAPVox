@@ -30,6 +30,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import fr.amap.commons.util.Cancellable;
 import fr.amap.commons.util.ProcessingAdapter;
+import fr.amap.commons.util.io.file.FileManager;
+import fr.amap.lidar.format.shot.ShotReader;
 
 /**
  *
@@ -110,55 +112,89 @@ public class LasVoxelisation extends Process implements Cancellable{
         voxelAnalysis.init(cfg.getVoxelParameters(), cfg.getOutputFile());
         voxelAnalysis.createVoxelSpace();
         
-        if(update || conversion == null){
+        if(FileManager.getExtension(cfg.getInputFile()).equals(".sht")){
             
-            conversion = new PointsToShot(cfg.getTrajectoryFile(), cfg.getInputFile(), transfMatrix);
+            ShotReader shotReader = new ShotReader(cfg.getInputFile());
             
-            conversion.addProcessingListener(new ProcessingListener() {
+            fireProgress("Voxelisation", 0, 100);
 
-                @Override
-                public void processingStepProgress(String progressMsg, long progress, long max) {
-                    
-                    fireProgress(progressMsg, progress, max);
-                }
+            Iterator<Shot> iterator = shotReader.iterator();
 
-                @Override
-                public void processingFinished(float duration) {
-                    fireFinished(duration);
+            long shotId = 0;
+            long nbShots = shotReader.getShotNumber();
+
+            while(iterator.hasNext()){
+                
+                if(isCancelled()){
+                    return null;
                 }
-            });
-            
-            try {
-                conversion.init();
-            } catch (IOException ex) {
-                logger.error(ex);
-                throw ex;
-            } catch (Exception ex) {
-                logger.error(ex);
-                throw ex;
+                
+                Shot shot = iterator.next();
+
+                fireProgress("Voxelisation...", shotId, nbShots);
+                
+                voxelAnalysis.processOneShot(shot);
+                
+                shotId++;
             }
+            
+            shotReader.close();
+            
+            logger.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());
+            
         }else{
+            if(update || conversion == null){
             
-        }
-                    
-        fireProgress("Voxelisation", 0, 100);
-        
-        PointsToShotIterator iterator = conversion.iterator();
-        
-        Shot shot;
-        
-        while((shot = iterator.next()) != null){
-            
-            if(isCancelled()){
-                return null;
+                conversion = new PointsToShot(cfg.getTrajectoryFile(), cfg.getInputFile(), transfMatrix);
+
+                conversion.addProcessingListener(new ProcessingListener() {
+
+                    @Override
+                    public void processingStepProgress(String progressMsg, long progress, long max) {
+
+                        fireProgress(progressMsg, progress, max);
+                    }
+
+                    @Override
+                    public void processingFinished(float duration) {
+                        fireFinished(duration);
+                    }
+                });
+
+                try {
+                    conversion.init();
+                } catch (IOException ex) {
+                    logger.error(ex);
+                    throw ex;
+                } catch (Exception ex) {
+                    logger.error(ex);
+                    throw ex;
+                }
+            }else{
+
             }
-            
-            fireProgress("Voxelisation...", iterator.getNbPointsProcessed(), iterator.getNbPoints());
-            
-            voxelAnalysis.processOneShot(shot);
+
+            fireProgress("Voxelisation", 0, 100);
+
+            PointsToShotIterator iterator = conversion.iterator();
+
+            Shot shot;
+
+            while((shot = iterator.next()) != null){
+
+                if(isCancelled()){
+                    return null;
+                }
+
+                fireProgress("Voxelisation...", iterator.getNbPointsProcessed(), iterator.getNbPoints());
+
+                voxelAnalysis.processOneShot(shot);
+            }
+
+            logger.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());
         }
         
-        logger.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());
+        
         
         RasterParams rasterParameters = cfg.getVoxelParameters().getRasterParams();
             
@@ -210,7 +246,7 @@ public class LasVoxelisation extends Process implements Cancellable{
                 }
             });
 
-            //voxelAnalysis.write();
+            voxelAnalysis.write(cfg.getVoxelsFormat());
         }
 
         if(cfg.getVoxelParameters().getGroundEnergyParams() != null &&

@@ -18,6 +18,10 @@ mypointcloud::mypointcloud(serializer& ser, JNIEnv *env) : pointcloud(false), se
     exportAmplitude = false;
 }
 
+void mypointcloud::setEnv(JNIEnv *env){
+    this->env = env;
+}
+
 mypointcloud::~mypointcloud() {
     delete shots;
 }

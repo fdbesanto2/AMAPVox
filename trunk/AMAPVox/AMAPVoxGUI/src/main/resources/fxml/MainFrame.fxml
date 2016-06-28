@@ -36,7 +36,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorpaneRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="659.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.lidar.amapvox.gui.MainFrameController">
+<AnchorPane fx:id="anchorpaneRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="708.0" prefWidth="892.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.lidar.amapvox.gui.MainFrameController">
    <children>
       <MenuBar maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="25.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <menus>
@@ -72,28 +72,61 @@
                                                       <content>
                                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                <children>
-                                                                  <Button layoutX="14.0" layoutY="260.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="260.0" />
-                                                                  <Button layoutX="14.0" layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="100.0" />
-                                                                  <Button layoutX="14.0" layoutY="183.0" mnemonicParsing="false" onAction="#onActionButtonOpenTrajectoryFileALS" text="Open" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="183.0" />
-                                                                  <HBox alignment="CENTER_LEFT" layoutX="15.0" layoutY="300.0" spacing="20.0">
+                                                                  <VBox layoutX="13.9619140625" layoutY="14.0" spacing="20.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0">
                                                                      <children>
-                                                                        <CheckBox fx:id="checkboxMultiResAfterMode2" mnemonicParsing="false" text="Correct NaNs" />
-                                                                        <HBox alignment="CENTER_LEFT">
+                                                                        <HBox alignment="CENTER_LEFT" spacing="20.0">
                                                                            <children>
-                                                                              <Label text="Threshold" />
-                                                                              <TextField fx:id="textfieldNbSamplingThresholdMultires" prefHeight="26.0" prefWidth="60.0" text="1" />
+                                                                              <ComboBox fx:id="comboboxModeALS" prefWidth="150.0" promptText="Choose mode..." />
+                                                                              <CheckBox fx:id="checkboxMultiFiles" mnemonicParsing="false" text="Multi-files" />
+                                                                           </children>
+                                                                        </HBox>
+                                                                        <VBox>
+                                                                           <children>
+                                                                              <Label text="Input file(s)" />
+                                                                              <HBox>
+                                                                                 <children>
+                                                                                    <TextField fx:id="textFieldInputFileALS" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
+                                                                                    <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileALS" text="..." />
+                                                                                 </children>
+                                                                              </HBox>
+                                                                           </children>
+                                                                        </VBox>
+                                                                        <VBox>
+                                                                           <children>
+                                                                              <Label text="Trajectory file" />
+                                                                              <HBox>
+                                                                                 <children>
+                                                                                    <TextField fx:id="textFieldTrajectoryFileALS" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
+                                                                                    <Button fx:id="buttonOpenTrajectoryFileALS" mnemonicParsing="false" onAction="#onActionButtonOpenTrajectoryFileALS" text="..." />
+                                                                                 </children>
+                                                                              </HBox>
+                                                                           </children>
+                                                                        </VBox>
+                                                                        <!--<Button mnemonicParsing="false" onAction="#onActionButtonGenerateShotsFile" prefHeight="26.0" prefWidth="146.0" text="Generate shots file" />-->
+                                                                        <VBox>
+                                                                           <children>
+                                                                              <Label text="Output file/path" />
+                                                                              <HBox>
+                                                                                 <children>
+                                                                                    <TextField fx:id="textFieldOutputFileALS" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
+                                                                                    <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileALS" text="..." />
+                                                                                 </children>
+                                                                              </HBox>
+                                                                           </children>
+                                                                        </VBox>
+                                                                        <HBox alignment="CENTER_LEFT" spacing="20.0">
+                                                                           <children>
+                                                                              <CheckBox fx:id="checkboxMultiResAfterMode2" mnemonicParsing="false" text="Correct NaNs" />
+                                                                              <HBox alignment="CENTER_LEFT">
+                                                                                 <children>
+                                                                                    <Label text="Threshold" />
+                                                                                    <TextField fx:id="textfieldNbSamplingThresholdMultires" prefHeight="26.0" prefWidth="60.0" text="1" />
+                                                                                 </children>
+                                                                              </HBox>
                                                                            </children>
                                                                         </HBox>
                                                                      </children>
-                                                                  </HBox>
-                                                                  <ComboBox fx:id="comboboxModeALS" layoutX="14.0" layoutY="14.0" prefWidth="150.0" promptText="Choose mode..." />
-                                                                  <Label layoutX="14.0" layoutY="58.0" text="Input file(s)" />
-                                                                  <TextField fx:id="textFieldInputFileALS" layoutX="14.0" layoutY="73.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
-                                                                  <TextField fx:id="textFieldTrajectoryFileALS" layoutX="14.0" layoutY="155.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
-                                                                  <Label layoutX="14.0" layoutY="138.0" text="Trajectory file" AnchorPane.leftAnchor="14.0" />
-                                                                  <TextField fx:id="textFieldOutputFileALS" layoutX="14.0" layoutY="233.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
-                                                                  <Label layoutX="14.0" layoutY="218.0" text="Output file/path" AnchorPane.leftAnchor="14.0" />
-                                                                  <CheckBox fx:id="checkboxMultiFiles" layoutX="188.0" layoutY="18.0" mnemonicParsing="false" text="Multi-files" />
+                                                                  </VBox>
                                                                   <HBox layoutX="196.0" layoutY="339.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                                                      <children>
                                                                         <Button mnemonicParsing="false" onAction="#onActionButtonExecuteALSVoxelization" text="Execute">
@@ -139,9 +172,17 @@
                                                       <content>
                                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                <children>
-                                                                  <Button layoutX="14.0" layoutY="294.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputPathTLS" text="Open" AnchorPane.topAnchor="296.0" />
-                                                                  <Label fx:id="labelTLSOutputPath" layoutX="14.0" layoutY="254.0" text="Output path" />
-                                                                  <TextField fx:id="textFieldOutputPathTLS" layoutX="14.0" layoutY="269.0" prefHeight="25.0" prefWidth="300.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
+                                                                  <VBox layoutX="14.0" layoutY="254.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0">
+                                                                     <children>
+                                                                        <Label fx:id="labelTLSOutputPath" text="Output path" />
+                                                                        <HBox>
+                                                                           <children>
+                                                                              <TextField fx:id="textFieldOutputPathTLS" prefHeight="25.0" prefWidth="300.0" HBox.hgrow="ALWAYS" />
+                                                                              <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputPathTLS" text="..." />
+                                                                           </children>
+                                                                        </HBox>
+                                                                     </children>
+                                                                  </VBox>
                                                                   <ComboBox fx:id="comboboxModeTLS" layoutX="14.0" layoutY="14.0" prefWidth="150.0" promptText="Choose mode..." />
                                                                   <TextField fx:id="textFieldInputFileTLS" disable="true" editable="false" layoutX="14.0" layoutY="73.0" prefHeight="25.0" prefWidth="280.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="24.0" />
                                                                   <Label layoutX="14.0" layoutY="58.0" text="Input file" />
@@ -190,7 +231,7 @@
                                                                </children></AnchorPane>
                                                       </content>
                                                     </Tab>
-                                                      <Tab text="Post-process">
+                                                      <Tab text="Miscellaneous">
                                                          <content>
                                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                <children>
@@ -206,8 +247,12 @@
                                                                                              <font>
                                                                                                 <Font name="System Bold" size="12.0" />
                                                                                              </font></Label>
-                                                                                          <TextField fx:id="textFieldOutputFileMerging" editable="false" prefHeight="25.0" prefWidth="280.0" />
-                                                                                          <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileMerging" text="Open" />
+                                                                                          <HBox>
+                                                                                             <children>
+                                                                                                <TextField fx:id="textFieldOutputFileMerging" editable="false" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
+                                                                                                <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileMerging" text="..." />
+                                                                                             </children>
+                                                                                          </HBox>
                                                                                        </children>
                                                                                     </VBox>
                                                                                     <HBox layoutX="206.0" layoutY="306.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
@@ -310,8 +355,12 @@
                                                                                              <font>
                                                                                                 <Font name="System Bold" size="12.0" />
                                                                                              </font></Label>
-                                                                                          <TextField fx:id="textFieldInputFileNaNsCorrection" editable="false" prefHeight="25.0" prefWidth="280.0" />
-                                                                                          <Button mnemonicParsing="false" onAction="#onActionButtonOpenInputFileNaNsCorrection" text="Open" />
+                                                                                          <HBox>
+                                                                                             <children>
+                                                                                                <TextField fx:id="textFieldInputFileNaNsCorrection" editable="false" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
+                                                                                                <Button mnemonicParsing="false" onAction="#onActionButtonOpenInputFileNaNsCorrection" text="..." />
+                                                                                             </children>
+                                                                                          </HBox>
                                                                                        </children>
                                                                                     </VBox>
                                                                                     <VBox layoutX="10.0" layoutY="107.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
@@ -320,8 +369,12 @@
                                                                                              <font>
                                                                                                 <Font name="System Bold" size="12.0" />
                                                                                              </font></Label>
-                                                                                          <TextField fx:id="textFieldOutputFileNaNsCorrection" editable="false" prefHeight="25.0" prefWidth="280.0" />
-                                                                                          <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileNaNsCorrection" text="Open" />
+                                                                                          <HBox>
+                                                                                             <children>
+                                                                                                <TextField fx:id="textFieldOutputFileNaNsCorrection" editable="false" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
+                                                                                                <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileNaNsCorrection" text="..." />
+                                                                                             </children>
+                                                                                          </HBox>
                                                                                        </children>
                                                                                     </VBox>
                                                                                     <Button layoutX="234.0" layoutY="306.0" mnemonicParsing="false" onAction="#onActionButtonExecuteNaNsCorrection" text="Execute" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
@@ -347,8 +400,12 @@
                                                                                              <font>
                                                                                                 <Font name="System Bold" size="12.0" />
                                                                                              </font></Label>
-                                                                                          <TextField fx:id="textFieldInputFileButterflyRemover" editable="false" prefHeight="25.0" prefWidth="280.0" />
-                                                                                          <Button mnemonicParsing="false" onAction="#onActionButtonOpenInputFileButterflyRemover" text="Open" />
+                                                                                          <HBox>
+                                                                                             <children>
+                                                                                                <TextField fx:id="textFieldInputFileButterflyRemover" editable="false" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
+                                                                                                <Button mnemonicParsing="false" onAction="#onActionButtonOpenInputFileButterflyRemover" text="..." />
+                                                                                             </children>
+                                                                                          </HBox>
                                                                                        </children>
                                                                                     </VBox>
                                                                                     <VBox layoutX="7.0" layoutY="96.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
@@ -357,8 +414,12 @@
                                                                                              <font>
                                                                                                 <Font name="System Bold" size="12.0" />
                                                                                              </font></Label>
-                                                                                          <TextField fx:id="textFieldOutputFileButterflyRemover" editable="false" prefHeight="25.0" prefWidth="280.0" />
-                                                                                          <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileButterflyRemover" text="Open" />
+                                                                                          <HBox>
+                                                                                             <children>
+                                                                                                <TextField fx:id="textFieldOutputFileButterflyRemover" editable="false" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
+                                                                                                <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileButterflyRemover" text="..." />
+                                                                                             </children>
+                                                                                          </HBox>
                                                                                        </children>
                                                                                     </VBox>
                                                                                     <HBox layoutX="206.0" layoutY="304.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
@@ -419,8 +480,12 @@
                                                                                                       <Font name="System Bold" size="12.0" />
                                                                                                    </font>
                                                                                                 </Label>
-                                                                                                <TextField fx:id="textFieldInputFileAreaExtracting" editable="false" prefHeight="25.0" prefWidth="280.0" />
-                                                                                                <Button mnemonicParsing="false" onAction="#onActionButtonOpenVoxelFileForAreaExtracting" text="Open" />
+                                                                                                <HBox>
+                                                                                                   <children>
+                                                                                                      <TextField fx:id="textFieldInputFileAreaExtracting" editable="false" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
+                                                                                                      <Button mnemonicParsing="false" onAction="#onActionButtonOpenVoxelFileForAreaExtracting" text="..." />
+                                                                                                   </children>
+                                                                                                </HBox>
                                                                                              </children>
                                                                                           </VBox>
                                                                                           <Separator prefWidth="200.0" />
@@ -492,6 +557,37 @@
                                                                            <tooltip>
                                                                               <Tooltip text="Tool to remove isolated voxels" />
                                                                            </tooltip>
+                                                                        </Tab>
+                                                                        <Tab text="Scripts">
+                                                                           <content>
+                                                                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                                                                 <children>
+                                                                                    <VBox AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+                                                                                       <children>
+                                                                                          <Label text="Choose a script">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="12.0" />
+                                                                                             </font>
+                                                                                          </Label>
+                                                                                          <HBox spacing="5.0">
+                                                                                             <children>
+                                                                                                <ComboBox fx:id="comboboxScript" prefHeight="26.0" prefWidth="243.0" HBox.hgrow="ALWAYS" />
+                                                                                                <Button mnemonicParsing="false" onAction="#onActionButtonExecuteScript" text="Execute" HBox.hgrow="ALWAYS">
+                                                                                                   <graphic>
+                                                                                                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                         <image>
+                                                                                                            <Image url="@icons/gnome-run.png" />
+                                                                                                         </image>
+                                                                                                      </ImageView>
+                                                                                                   </graphic>
+                                                                                                </Button>
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                 </children>
+                                                                              </AnchorPane>
+                                                                           </content>
                                                                         </Tab>
                                                                     </tabs>
                                                                   </TabPane>
@@ -632,11 +728,23 @@
                                                                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                                                  <children>
                                                                                     <CheckBox fx:id="checkboxUseDTMFilter" layoutX="14.0" layoutY="23.0" mnemonicParsing="false" onAction="#onActionCheckboxUseDTMFilter" text="DTM filter" AnchorPane.leftAnchor="10.0" />
-                                                                                    <TextField fx:id="textfieldDTMPath" disable="true" layoutX="124.0" layoutY="54.0" prefHeight="25.0" prefWidth="227.0" AnchorPane.leftAnchor="124.0" />
-                                                                                    <Label fx:id="labelDTMPath" disable="true" layoutX="14.0" layoutY="59.0" text="DTM path (.asc)" AnchorPane.leftAnchor="10.0" />
-                                                                                    <Button fx:id="buttonOpenDTMFile" disable="true" layoutX="361.0" layoutY="54.0" mnemonicParsing="false" onAction="#onActionButtonOpenDTMFile" text="Open" AnchorPane.leftAnchor="361.0" />
-                                                                                    <Label fx:id="labelDTMValue" disable="true" layoutX="108.0" layoutY="101.0" text="Offset (distance above ground)" AnchorPane.leftAnchor="108.0" />
-                                                                                    <TextField fx:id="textfieldDTMValue" disable="true" layoutX="324.0" layoutY="96.0" prefHeight="25.0" prefWidth="55.0" text="1" />
+                                                                                    <VBox layoutX="20.399999618530273" layoutY="54.0">
+                                                                                       <children>
+                                                                                          <Label fx:id="labelDTMPath" disable="true" text="DTM path (.asc)" />
+                                                                                          <HBox>
+                                                                                             <children>
+                                                                                                <TextField fx:id="textfieldDTMPath" disable="true" prefHeight="25.0" prefWidth="227.0" />
+                                                                                                <Button fx:id="buttonOpenDTMFile" disable="true" mnemonicParsing="false" onAction="#onActionButtonOpenDTMFile" text="..." />
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <HBox alignment="CENTER_LEFT" layoutX="118.4000015258789" layoutY="96.0">
+                                                                                       <children>
+                                                                                          <Label fx:id="labelDTMValue" disable="true" text="Offset (distance above ground)" />
+                                                                                          <TextField fx:id="textfieldDTMValue" disable="true" prefHeight="25.0" prefWidth="55.0" text="1" />
+                                                                                       </children>
+                                                                                    </HBox>
                                                                                  </children>
                                                                               </AnchorPane>
                                                                            </content>
@@ -878,8 +986,12 @@
                                                                               <CheckBox fx:id="checkboxCalculateGroundEnergy" mnemonicParsing="false" text="Calculate ground energy" />
                                                                               <AnchorPane fx:id="anchorPaneGroundEnergyParameters" disable="true" prefHeight="123.0" prefWidth="415.0">
                                                                                  <children>
-                                                                                    <TextField fx:id="textFieldOutputFileGroundEnergy" layoutY="66.0" prefHeight="25.0" prefWidth="408.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-                                                                                    <Button layoutY="98.0" mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileGroundEnergy" text="Open" AnchorPane.leftAnchor="14.0" />
+                                                                                    <HBox layoutX="14.0" layoutY="66.0">
+                                                                                       <children>
+                                                                                          <TextField fx:id="textFieldOutputFileGroundEnergy" prefHeight="25.0" prefWidth="408.0" />
+                                                                                          <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileGroundEnergy" text="..." />
+                                                                                       </children>
+                                                                                    </HBox>
                                                                                     <Label fx:id="labelOutputFileGroundEnergy" layoutY="51.0" text="Output file" AnchorPane.leftAnchor="14.0" />
                                                                                     <ComboBox fx:id="comboboxGroundEnergyOutputFormat" prefHeight="25.0" prefWidth="144.0" promptText="Choose format" AnchorPane.leftAnchor="14.0" />
                                                                                  </children>
@@ -942,20 +1054,19 @@
                                                    <items>
                                                       <AnchorPane>
                                                          <children>
-                                                            <VBox spacing="20.0">
+                                                            <VBox spacing="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="14.0">
                                                                <children>
                                                                   <VBox>
                                                                      <children>
-                                                                        <Label text="Input">
+                                                                        <Label text="Input (voxel file)">
                                                                            <font>
                                                                               <Font name="System Bold" size="12.0" />
                                                                            </font>
                                                                         </Label>
-                                                                        <Label text="Voxel file" />
                                                                         <HBox>
                                                                            <children>
-                                                                              <TextField fx:id="textfieldVoxelFilePathTransmittance" prefHeight="26.0" prefWidth="306.0" />
-                                                                              <Button fx:id="buttonOpenVoxelFileTransmittance" mnemonicParsing="false" onAction="#onActionButtonOpenVoxelFileTransmittance" text="Open" />
+                                                                              <TextField fx:id="textfieldVoxelFilePathTransmittance" prefHeight="26.0" prefWidth="306.0" HBox.hgrow="ALWAYS" />
+                                                                              <Button fx:id="buttonOpenVoxelFileTransmittance" mnemonicParsing="false" onAction="#onActionButtonOpenVoxelFileTransmittance" text="..." />
                                                                            </children>
                                                                         </HBox>
                                                                      </children>
@@ -979,8 +1090,8 @@
                                                                               </HBox>
                                                                               <HBox fx:id="hboxGenerateTextFile" disable="true">
                                                                                  <children>
-                                                                                    <TextField fx:id="textfieldOutputTextFilePath" prefHeight="26.0" prefWidth="308.0" />
-                                                                                    <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenOutputTextFile" text="Open" />
+                                                                                    <TextField fx:id="textfieldOutputTextFilePath" prefHeight="26.0" prefWidth="308.0" HBox.hgrow="ALWAYS" />
+                                                                                    <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenOutputTextFile" text="..." />
                                                                                  </children>
                                                                               </HBox>
                                                                            </children>
@@ -990,8 +1101,8 @@
                                                                               <CheckBox fx:id="checkboxGenerateBitmapFile" mnemonicParsing="false" selected="true" text="Generate bitmap files" />
                                                                               <HBox fx:id="hboxGenerateBitmapFiles">
                                                                                  <children>
-                                                                                    <TextField fx:id="textfieldOutputBitmapFilePath" prefHeight="26.0" prefWidth="309.0" />
-                                                                                    <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenOutputBitmapFile" text="Open" />
+                                                                                    <TextField fx:id="textfieldOutputBitmapFilePath" prefHeight="26.0" prefWidth="309.0" HBox.hgrow="ALWAYS" />
+                                                                                    <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenOutputBitmapFile" text="..." />
                                                                                  </children>
                                                                               </HBox>
                                                                            </children>
@@ -1211,18 +1322,17 @@
                                              <content>
                                                 <AnchorPane prefHeight="405.0" prefWidth="787.0">
                                                    <children>
-                                                      <VBox layoutX="14.0" layoutY="14.0" spacing="5.0">
+                                                      <VBox layoutX="14.0" layoutY="14.0" prefWidth="358.0" spacing="5.0" AnchorPane.leftAnchor="14.0">
                                                          <children>
-                                                            <Label text="Input">
+                                                            <Label text="Input (voxel file)">
                                                                <font>
                                                                   <Font name="System Bold" size="12.0" />
                                                                </font>
                                                             </Label>
-                                                            <HBox alignment="CENTER" spacing="2.0">
+                                                            <HBox alignment="CENTER">
                                                                <children>
-                                                                  <Label text="Voxel file" />
-                                                                  <TextField fx:id="textfieldVoxelFilePathCanopyAnalyzer" prefHeight="25.0" prefWidth="240.0" />
-                                                                  <Button mnemonicParsing="false" onAction="#onActionButtonOpenVoxelFileCanopyAnalyzer" text="Open" />
+                                                                  <TextField fx:id="textfieldVoxelFilePathCanopyAnalyzer" prefHeight="25.0" prefWidth="240.0" HBox.hgrow="ALWAYS" />
+                                                                  <Button mnemonicParsing="false" onAction="#onActionButtonOpenVoxelFileCanopyAnalyzer" text="..." />
                                                                </children>
                                                             </HBox>
                                                          </children>
@@ -1326,7 +1436,7 @@
                                                             </HBox>
                                                          </children>
                                                       </VBox>
-                                                      <VBox layoutX="14.0" layoutY="94.0" spacing="5.0">
+                                                      <VBox layoutX="14.0" layoutY="94.0" spacing="5.0" AnchorPane.leftAnchor="14.0">
                                                          <children>
                                                             <Label text="Output">
                                                                <font>
@@ -1343,8 +1453,8 @@
                                                                   </HBox>
                                                                   <HBox>
                                                                      <children>
-                                                                        <TextField fx:id="textfieldOutputCanopyAnalyzerTextFile" prefHeight="26.0" prefWidth="291.0" />
-                                                                        <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenOutputCanopyAnalyzerTextFile" text="Open" />
+                                                                        <TextField fx:id="textfieldOutputCanopyAnalyzerTextFile" prefHeight="26.0" prefWidth="291.0" HBox.hgrow="ALWAYS" />
+                                                                        <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenOutputCanopyAnalyzerTextFile" text="..." />
                                                                      </children>
                                                                   </HBox>
                                                                </children>
@@ -1549,7 +1659,7 @@
                                                                   <HBox>
                                                                      <children>
                                                                         <TextField fx:id="textfieldHemiPhotoOutputTextFile" prefHeight="26.0" prefWidth="308.0" />
-                                                                        <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenHemiPhotoOutputTextFile" text="Open" />
+                                                                        <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenHemiPhotoOutputTextFile" text="..." />
                                                                      </children>
                                                                   </HBox>
                                                                </children>
@@ -1569,7 +1679,7 @@
                                                                   <HBox>
                                                                      <children>
                                                                         <TextField fx:id="textfieldHemiPhotoOutputBitmapFile" prefHeight="26.0" prefWidth="309.0" />
-                                                                        <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenHemiPhotoOutputBitmapFile" text="Open" />
+                                                                        <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#onActionButtonOpenHemiPhotoOutputBitmapFile" text="..." />
                                                                      </children>
                                                                   </HBox>
                                                                </children>

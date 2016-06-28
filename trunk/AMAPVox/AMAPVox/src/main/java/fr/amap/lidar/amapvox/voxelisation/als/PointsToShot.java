@@ -44,7 +44,7 @@ public class PointsToShot extends Process implements Iterable<Shot>, Cancellable
     
     private final float RATIO_REFLECTANCE_VEGETATION_SOL = 0.4f;
     
-    private final File alsFile;
+    private final File inputFile;
     private final CSVFile trajectoryFile;
     
     private final Mat4D vopMatrix;
@@ -54,11 +54,11 @@ public class PointsToShot extends Process implements Iterable<Shot>, Cancellable
     
     private boolean cancelled;
     
-    public PointsToShot(CSVFile trajectoryFile, File alsFile, Mat4D vopMatrix){
+    public PointsToShot(CSVFile trajectoryFile, File inputFile, Mat4D vopMatrix){
 
         this.trajectoryFile = trajectoryFile;
         this.vopMatrix = vopMatrix;
-        this.alsFile = alsFile;
+        this.inputFile = inputFile;
     }
 
     public void init() throws FileNotFoundException, IOException, Exception {
@@ -69,12 +69,12 @@ public class PointsToShot extends Process implements Iterable<Shot>, Cancellable
 
         LasHeader header;
 
-        switch(FileManager.getExtension(alsFile)){
+        switch(FileManager.getExtension(inputFile)){
             case ".las":
 
                 LasReader lasReader = new LasReader();
                 try {
-                    lasReader.open(alsFile);
+                    lasReader.open(inputFile);
                 } catch (IOException ex) {
                     throw ex;
                 } catch (Exception ex) {
@@ -113,7 +113,7 @@ public class PointsToShot extends Process implements Iterable<Shot>, Cancellable
 
                 LazExtraction laz = new LazExtraction();
                 try {
-                    laz.openLazFile(alsFile);
+                    laz.openLazFile(inputFile);
                 } catch (Exception ex) {
                     throw ex;
                 }

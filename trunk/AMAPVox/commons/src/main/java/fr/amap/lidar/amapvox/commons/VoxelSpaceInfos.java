@@ -31,7 +31,7 @@ public class VoxelSpaceInfos {
     private Type type; //ALS ou TLS
     private final Point3d voxelSize;
     private float resolution;
-    private float maxPAD;
+    private float maxPAD = 5.0f;
     private LeafAngleDistribution.Type ladType = LeafAngleDistribution.Type.SPHERIC;
     private double[] ladParams;
     private String[] columnNames;
@@ -49,6 +49,18 @@ public class VoxelSpaceInfos {
 
     public VoxelSpaceInfos(){
         this.voxelSize = new Point3d();
+    }
+    
+    public VoxelSpaceInfos(Point3d minCorner, Point3d maxCorner, float resolution) {
+        
+        this.minCorner = minCorner;
+        this.maxCorner = maxCorner;
+        
+        setResolution((double)resolution);
+        
+        this.voxelSize = new Point3d();
+        
+        updateVoxelSize();
     }
     
     public VoxelSpaceInfos(Point3d minCorner, Point3d maxCorner, Point3i split) {
@@ -179,6 +191,14 @@ public class VoxelSpaceInfos {
         return resolution;
     }
 
+    public Point3d getVoxelSize() {
+        
+        if(voxelSize.x == 0 && voxelSize.y == 0 && voxelSize.z == 0){
+            updateVoxelSize();
+        }
+        return voxelSize;
+    }
+    
     public float getMaxPAD() {
         return maxPAD;
     }

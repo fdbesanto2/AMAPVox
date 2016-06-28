@@ -63,7 +63,7 @@ public class RxpScanConversion {
         return (int) (65535 * ((reflectance - min) / (max - min)));
     }
     
-    public void toLaz(SimpleScan scan, File outputDirectory) throws IOException, InterruptedException, UnsupportedOperationException, Exception{
+    public void toLaz(SimpleScan scan, File outputDirectory, boolean laz) throws IOException, InterruptedException, UnsupportedOperationException, Exception{
         
         /***Convert rxp to txt***/
         
@@ -127,7 +127,14 @@ public class RxpScanConversion {
             txtToLasPath = txtToLasPath+".exe";
         }
 
-        File outputLazFile = new File(outputDirectory.getAbsolutePath()+File.separator+scan.file.getName()+".las");
+        File outputLazFile;
+        if(laz){
+            outputLazFile = new File(outputDirectory.getAbsolutePath()+File.separator+scan.file.getName()+".laz");
+        }else{
+            outputLazFile = new File(outputDirectory.getAbsolutePath()+File.separator+scan.file.getName()+".las");
+        }
+        
+        
 
         String[] commandLine = new String[]{txtToLasPath, "-i", outputTxtFile.getAbsolutePath(),
                                                                          "-o", outputLazFile.getAbsolutePath(),

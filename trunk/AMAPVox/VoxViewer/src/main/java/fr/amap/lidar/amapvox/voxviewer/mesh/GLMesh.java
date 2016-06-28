@@ -160,7 +160,6 @@ public abstract class GLMesh {
      * @param buffer buffer to set
      */
     protected void addSubBuffer(GL3 gl, FloatBuffer buffer){
-        
         long bufferSize = buffer.capacity()*FLOAT_SIZE;
         gl.glBufferSubData(GL3.GL_ARRAY_BUFFER, offset, bufferSize, buffer);
         offsets.add(offset);

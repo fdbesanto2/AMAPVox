@@ -29,6 +29,11 @@
         </dependency>
         <dependency>
             <groupId>fr.amap.lidar</groupId>
+            <artifactId>format-shot</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.amap.lidar</groupId>
             <artifactId>format-gridded</artifactId>
             <version>1.0</version>
         </dependency>

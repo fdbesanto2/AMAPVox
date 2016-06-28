@@ -36,6 +36,11 @@ public class Shot{
     public float deviations[];
     public float amplitudes[];
     public double times[];
+    
+    /**
+     * Optional echoes attributes
+     */
+    public double[][] echoesAttributes;
 
     public double angle;
 
@@ -51,7 +56,7 @@ public class Shot{
         this.direction = shot.direction;
         this.intensities = shot.intensities;
         this.nbEchos = shot.nbEchos;
-        this.time = time;
+        this.time = shot.time;
         this.origin = shot.origin;
         this.ranges = shot.ranges;
         this.reflectances = shot.reflectances;

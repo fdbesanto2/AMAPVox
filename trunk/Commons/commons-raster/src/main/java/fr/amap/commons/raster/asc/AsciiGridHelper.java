@@ -71,11 +71,11 @@ public class AsciiGridHelper {
         }
     }
     
-    public static void write(File output, Raster raster) throws IOException{
+    public static void write(File output, Raster raster, boolean invertY) throws IOException{
         write(output, raster.getzArray(),
                 raster.getColNumber(), raster.getRowNumber(), 
                 raster.getxLeftLowerCorner(), raster.getyLeftLowerCorner(),
-                raster.getCellSize());
+                raster.getCellSize(), invertY);
     }
     
     /**
@@ -87,9 +87,10 @@ public class AsciiGridHelper {
      * @param xLeftLowerCorner lower left x corner
      * @param yLeftLowerCorner lower left y corner
      * @param cellSize size of a cell
+     * @param invertY
      * @throws IOException Throws an IOException when output path is invalid or other
      */
-    public static void write(File output, float[][] zArray, int colNumber, int rowNumber, float xLeftLowerCorner, float yLeftLowerCorner, float cellSize) throws IOException{
+    public static void write(File output, float[][] zArray, int colNumber, int rowNumber, float xLeftLowerCorner, float yLeftLowerCorner, float cellSize, boolean invertY) throws IOException{
         
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(output))){
             
@@ -107,10 +108,17 @@ public class AsciiGridHelper {
 
                 for(int i = 0 ; i<colNumber ; i++){
 
-                    if(Float.isNaN(zArray[i][j])){
-                        stringBuilder.append(noDataValue);
+                    int yIndex;
+                    if(invertY){
+                        yIndex = rowNumber - j - 1;
                     }else{
-                        stringBuilder.append(zArray[i][j]);
+                        yIndex = j;
+                    }
+                    
+                    if (Float.isNaN(zArray[i][yIndex])) {
+                        stringBuilder.append(noDataValue);
+                    } else {
+                        stringBuilder.append(zArray[i][yIndex]);
                     }
                     
                     stringBuilder.append(" ");

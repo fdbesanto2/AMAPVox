@@ -20,6 +20,7 @@ public class GroundEnergyParams {
     public static final short FILE_FORMAT_TXT = 0;
 
     public GroundEnergyParams() {
+        calculateGroundEnergy = false;
         groundEnergyFileFormat = FILE_FORMAT_TXT;
     }
 

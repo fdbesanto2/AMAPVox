@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import javax.vecmath.Matrix4d;
+import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -39,6 +40,7 @@ import org.jdom2.output.XMLOutputter;
 
 public abstract class Configuration {
     
+    private final static Logger LOGGER = Logger.getLogger(Configuration.class);
     
     protected ProcessMode processMode;
     protected InputType inputType = InputType.LAS_FILE;
@@ -130,7 +132,7 @@ public abstract class Configuration {
                 throw new Exception("Cannot get Implementation-Build property in manifest file");
             }
         } catch (Exception ex) {
-            throw new Exception("Cannot get manifest file", ex);
+            LOGGER.warn("Cannot get manifest file", ex);
         }
         
         document = new Document(racine);
