@@ -137,8 +137,6 @@ public class Shot{
 
     public void calculateAngle() {
         
-        
-        //attention ! : les angles sont les mêmes que z soit positif ou négatif
         this.angle = FastMath.toDegrees(FastMath.acos(direction.z));
     }
 

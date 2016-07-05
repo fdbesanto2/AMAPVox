@@ -6,21 +6,15 @@
 package fr.amap.lidar.amapvox.voxelisation.als;
 
 import fr.amap.commons.math.matrix.Mat4D;
-import fr.amap.commons.util.Filter;
 import fr.amap.commons.util.Process;
 import fr.amap.commons.util.ProcessingListener;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.commons.raster.asc.AsciiGridHelper;
 import fr.amap.commons.raster.asc.Raster;
-import fr.amap.commons.raster.multiband.BSQ;
 import fr.amap.commons.util.MatrixUtility;
 import fr.amap.lidar.amapvox.voxelisation.SimpleShotFilter;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
 import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
-import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.RasterParams;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
-import fr.amap.lidar.amapvox.voxelisation.postproc.MultiBandRaster;
 import fr.amap.lidar.amapvox.voxelisation.postproc.NaNsCorrection;
 import java.io.File;
 import java.io.IOException;
@@ -193,61 +187,25 @@ public class LasVoxelisation extends Process implements Cancellable{
 
             logger.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());
         }
-        
-        
-        
-        RasterParams rasterParameters = cfg.getVoxelParameters().getRasterParams();
             
-        boolean write = false;
-        
-        if(rasterParameters != null){
+        voxelAnalysis.computePADs();
 
-            if(rasterParameters.isGenerateMultiBandRaster()){
+        if(cfg.getVoxelParameters().getNaNsCorrectionParams().isActivate()){
 
-                fireProgress("Compute multi-band raster", 0, 100);
-                
-                BSQ raster = MultiBandRaster.computeRaster(rasterParameters.getRasterStartingHeight(),
-                                                rasterParameters.getRasterHeightStep(), 
-                                                rasterParameters.getRasterBandNumber(), 
-                                                rasterParameters.getRasterResolution(),
-                                                cfg.getVoxelParameters().infos,
-                                                voxelAnalysis.getVoxels(),
-                                                voxelAnalysis.getDtm());
-                    
-                fireProgress("Write multi-band raster", 0, 100);
-                
-                MultiBandRaster.writeRaster(new File(cfg.getOutputFile().getAbsolutePath()+".bsq"), raster);
+            fireProgress("NA correction", 0, 100);
 
-                if(!rasterParameters.isShortcutVoxelFileWriting()){
-                    write = true;
-                }
-            }
-        }else{
-            
-            write = true;
+            naNsCorrection = new NaNsCorrection();
+            naNsCorrection.correct(cfg.getVoxelParameters(), voxelAnalysis.getVoxels());
         }
-        
-        if(write){
-            
-            voxelAnalysis.computePADs();
-                    
-            if(cfg.getVoxelParameters().getNaNsCorrectionParams().isActivate()){
-                
-                fireProgress("NA correction", 0, 100);
-                
-                naNsCorrection = new NaNsCorrection();
-                naNsCorrection.correct(cfg.getVoxelParameters(), voxelAnalysis.getVoxels());
-            }
-            
-            voxelAnalysis.addProcessingListener(new ProcessingAdapter() {
-                @Override
-                public void processingStepProgress(String progressMsg, long progress, long max) {
-                    fireProgress(progressMsg, progress, max);
-                }
-            });
 
-            voxelAnalysis.write(cfg.getVoxelsFormat());
-        }
+        voxelAnalysis.addProcessingListener(new ProcessingAdapter() {
+            @Override
+            public void processingStepProgress(String progressMsg, long progress, long max) {
+                fireProgress(progressMsg, progress, max);
+            }
+        });
+
+        voxelAnalysis.write(cfg.getVoxelsFormat());
 
         if(cfg.getVoxelParameters().getGroundEnergyParams() != null &&
                 cfg.getVoxelParameters().getGroundEnergyParams().isCalculateGroundEnergy()){

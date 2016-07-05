@@ -3,9 +3,6 @@
  */
 package fr.amap.lidar.amapvox.simulation.transmittance;
 
-import fr.amap.commons.math.matrix.Mat3D;
-import fr.amap.commons.math.rotation.AxisRotation;
-import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.DirectionalTransmittance;
 import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelSpace;
 import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.light.IncidentRadiation;
@@ -18,7 +15,6 @@ import fr.amap.commons.util.Process;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -29,13 +25,10 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.vecmath.Vector3d;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.Calendar;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
 import fr.amap.commons.util.Cancellable;
-import javax.vecmath.Vector3f;
 
 /**
  * @author dauzat

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -16,12 +15,12 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToggleButton?>
@@ -116,7 +115,12 @@
                                                                         </VBox>
                                                                         <HBox alignment="CENTER_LEFT" spacing="20.0">
                                                                            <children>
-                                                                              <CheckBox fx:id="checkboxMultiResAfterMode2" mnemonicParsing="false" text="Correct NaNs" />
+                                                                              <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                                                                 <children>
+                                                                                    <CheckBox fx:id="checkboxMultiResAfterMode2" mnemonicParsing="false" text="Correct NaNs" />
+                                                                                    <fx:include fx:id="helpButtonNaNsCorrection" source="HelpButton.fxml" />
+                                                                                 </children>
+                                                                              </HBox>
                                                                               <HBox alignment="CENTER_LEFT">
                                                                                  <children>
                                                                                     <Label text="Threshold" />
@@ -237,7 +241,7 @@
                                                                <children>
                                                                   <TabPane layoutX="69.0" layoutY="8.0" prefHeight="379.0" prefWidth="338.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                     <tabs>
-                                                                      <Tab text="Vox-merging">
+                                                                      <Tab text="Voxelspace merging">
                                                                            <content>
                                                                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                                                                  <children>
@@ -342,54 +346,6 @@
                                                                               <Tooltip text="Merge a list of voxel files into a single" />
                                                                            </tooltip>
                                                                         </Tab>
-                                                                      <Tab text="NaNs-correction">
-                                                                           <tooltip>
-                                                                              <Tooltip text="Fill non-informed voxels with mean voxel's values in an incremental Moore neighborhood" />
-                                                                           </tooltip>
-                                                                           <content>
-                                                                              <AnchorPane>
-                                                                                 <children>
-                                                                                    <VBox layoutX="10.0" layoutY="22.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
-                                                                                       <children>
-                                                                                          <Label text="Input file">
-                                                                                             <font>
-                                                                                                <Font name="System Bold" size="12.0" />
-                                                                                             </font></Label>
-                                                                                          <HBox>
-                                                                                             <children>
-                                                                                                <TextField fx:id="textFieldInputFileNaNsCorrection" editable="false" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
-                                                                                                <Button mnemonicParsing="false" onAction="#onActionButtonOpenInputFileNaNsCorrection" text="..." />
-                                                                                             </children>
-                                                                                          </HBox>
-                                                                                       </children>
-                                                                                    </VBox>
-                                                                                    <VBox layoutX="10.0" layoutY="107.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
-                                                                                       <children>
-                                                                                          <Label text="Output file">
-                                                                                             <font>
-                                                                                                <Font name="System Bold" size="12.0" />
-                                                                                             </font></Label>
-                                                                                          <HBox>
-                                                                                             <children>
-                                                                                                <TextField fx:id="textFieldOutputFileNaNsCorrection" editable="false" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
-                                                                                                <Button mnemonicParsing="false" onAction="#onActionButtonOpenOutputFileNaNsCorrection" text="..." />
-                                                                                             </children>
-                                                                                          </HBox>
-                                                                                       </children>
-                                                                                    </VBox>
-                                                                                    <Button layoutX="234.0" layoutY="306.0" mnemonicParsing="false" onAction="#onActionButtonExecuteNaNsCorrection" text="Execute" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
-                                                                                       <graphic>
-                                                                                          <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                                             <image>
-                                                                                                <Image url="@icons/gnome-run.png" />
-                                                                                             </image>
-                                                                                          </ImageView>
-                                                                                       </graphic>
-                                                                                    </Button>
-                                                                                 </children>
-                                                                              </AnchorPane>
-                                                                           </content>
-                                                                        </Tab>
                                                                         <Tab text="Butterfly-remover">
                                                                           <content>
                                                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -467,97 +423,6 @@
                                                                               <Tooltip text="Tool to remove isolated voxels" />
                                                                            </tooltip>
                                                                         </Tab>
-                                                                        <Tab text="Voxel space editing">
-                                                                           <content>
-                                                                              <ScrollPane pannable="true" prefHeight="356.0" prefWidth="317.0">
-                                                                                 <content>
-                                                                                    <VBox spacing="15.0">
-                                                                                       <children>
-                                                                                          <VBox>
-                                                                                             <children>
-                                                                                                <Label text="Voxel file">
-                                                                                                   <font>
-                                                                                                      <Font name="System Bold" size="12.0" />
-                                                                                                   </font>
-                                                                                                </Label>
-                                                                                                <HBox>
-                                                                                                   <children>
-                                                                                                      <TextField fx:id="textFieldInputFileAreaExtracting" editable="false" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
-                                                                                                      <Button mnemonicParsing="false" onAction="#onActionButtonOpenVoxelFileForAreaExtracting" text="..." />
-                                                                                                   </children>
-                                                                                                </HBox>
-                                                                                             </children>
-                                                                                          </VBox>
-                                                                                          <Separator prefWidth="200.0" />
-                                                                                          <VBox spacing="5.0">
-                                                                                             <children>
-                                                                                                <HBox spacing="20.0">
-                                                                                                   <children>
-                                                                                                      <HBox alignment="CENTER_LEFT" spacing="7.0">
-                                                                                                         <children>
-                                                                                                            <Label text="I min" />
-                                                                                                            <Spinner fx:id="spinnerEnterIMin" editable="true" prefHeight="26.0" prefWidth="92.0" />
-                                                                                                         </children>
-                                                                                                      </HBox>
-                                                                                                      <HBox alignment="CENTER_LEFT" spacing="4.0">
-                                                                                                         <children>
-                                                                                                            <Label text="I max" />
-                                                                                                            <Spinner fx:id="spinnerEnterIMax" editable="true" prefHeight="26.0" prefWidth="92.0" />
-                                                                                                         </children>
-                                                                                                      </HBox>
-                                                                                                   </children>
-                                                                                                </HBox>
-                                                                                                <HBox spacing="20.0">
-                                                                                                   <children>
-                                                                                                      <HBox alignment="CENTER_LEFT" spacing="7.0">
-                                                                                                         <children>
-                                                                                                            <Label text="J min" />
-                                                                                                            <Spinner fx:id="spinnerEnterJMin" editable="true" prefHeight="26.0" prefWidth="92.0" />
-                                                                                                         </children>
-                                                                                                      </HBox>
-                                                                                                      <HBox alignment="CENTER_LEFT" spacing="4.0">
-                                                                                                         <children>
-                                                                                                            <Label text="J max" />
-                                                                                                            <Spinner fx:id="spinnerEnterJMax" editable="true" prefHeight="26.0" prefWidth="92.0" />
-                                                                                                         </children>
-                                                                                                      </HBox>
-                                                                                                   </children>
-                                                                                                </HBox>
-                                                                                                <HBox spacing="18.0">
-                                                                                                   <children>
-                                                                                                      <HBox alignment="CENTER_LEFT" spacing="2.0">
-                                                                                                         <children>
-                                                                                                            <Label text="K min" />
-                                                                                                            <Spinner fx:id="spinnerEnterKMin" editable="true" prefHeight="26.0" prefWidth="92.0" />
-                                                                                                         </children>
-                                                                                                      </HBox>
-                                                                                                      <HBox alignment="CENTER_LEFT" spacing="2.0">
-                                                                                                         <children>
-                                                                                                            <Label text="K max" />
-                                                                                                            <Spinner fx:id="spinnerEnterKMax" editable="true" prefHeight="26.0" prefWidth="92.0" />
-                                                                                                         </children>
-                                                                                                      </HBox>
-                                                                                                   </children>
-                                                                                                </HBox>
-                                                                                                <Button mnemonicParsing="false" onAction="#onActionButtonAreaExtractingWriteNewFile" text="Crop" />
-                                                                                             </children>
-                                                                                          </VBox>
-                                                                                          <Separator prefWidth="200.0" />
-                                                                                          <Button mnemonicParsing="false" onAction="#onActionButtonInteractiveVoxelEditing" text="Remove voxels (delete key)" />
-                                                                                          <Separator prefWidth="200.0" />
-                                                                                          <Button mnemonicParsing="false" onAction="#onActionButtonFitToContent" text="Fit to content" />
-                                                                                       </children>
-                                                                                       <padding>
-                                                                                          <Insets left="14.0" top="14.0" />
-                                                                                       </padding>
-                                                                                    </VBox>
-                                                                                 </content>
-                                                                              </ScrollPane>
-                                                                           </content>
-                                                                           <tooltip>
-                                                                              <Tooltip text="Tool to remove isolated voxels" />
-                                                                           </tooltip>
-                                                                        </Tab>
                                                                         <Tab text="Scripts">
                                                                            <content>
                                                                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
@@ -613,12 +478,17 @@
                                                                   </AnchorPane>
                                                                   <TextField fx:id="textFieldResolution" layoutX="358.0" layoutY="106.0" prefHeight="25.0" prefWidth="70.0" text="1" />
                                                                   <Label layoutX="254.0" layoutY="111.0" text="Resolution (m)" />
-                                                                  <MenuButton layoutX="17.0" layoutY="114.0" mnemonicParsing="false" text="Automatic">
-                                                                    <items>
-                                                                      <MenuItem mnemonicParsing="false" onAction="#onActionButtonAutomatic" text="Fast" />
-                                                                      <MenuItem mnemonicParsing="false" onAction="#onActionButtonAutomaticDeepSearch" text="Deep search" />
-                                                                    </items>
-                                                                  </MenuButton>
+                                                                  <HBox fx:id="hboxAutomaticBBox" alignment="CENTER_LEFT" layoutX="17.0" layoutY="114.0" spacing="5.0">
+                                                                     <children>
+                                                                        <MenuButton mnemonicParsing="false" text="Automatic">
+                                                                          <items>
+                                                                            <MenuItem mnemonicParsing="false" onAction="#onActionButtonAutomatic" text="Fast" />
+                                                                            <MenuItem mnemonicParsing="false" onAction="#onActionButtonAutomaticDeepSearch" text="Deep search" />
+                                                                          </items>
+                                                                        </MenuButton>
+                                                                        <fx:include fx:id="helpButtonAutoBBox" source="HelpButton.fxml" />
+                                                                     </children>
+                                                                  </HBox>
                                                                </children>
                                                             </AnchorPane>
                                                       </content>
@@ -676,43 +546,47 @@
                                                                         </Button>
                                                                      </children>
                                                                   </GridPane>
-                                                                  <HBox layoutX="14.0" layoutY="171.0" prefHeight="101.0" prefWidth="314.0">
+                                                                  <VBox layoutX="14.0" layoutY="171.0">
                                                                      <children>
-                                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                                        <HBox prefHeight="101.0" prefWidth="314.0">
                                                                            <children>
-                                                                              <TextField fx:id="labelM00" prefHeight="25.0" prefWidth="94.0" promptText="m00" />
-                                                                              <TextField fx:id="labelM10" promptText="m10" />
-                                                                              <TextField fx:id="labelM20" promptText="m20" />
-                                                                              <TextField fx:id="labelM30" promptText="m30" />
+                                                                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                                                                 <children>
+                                                                                    <TextField fx:id="labelM00" prefHeight="25.0" prefWidth="94.0" promptText="m00" />
+                                                                                    <TextField fx:id="labelM10" promptText="m10" />
+                                                                                    <TextField fx:id="labelM20" promptText="m20" />
+                                                                                    <TextField fx:id="labelM30" promptText="m30" />
+                                                                                 </children>
+                                                                              </VBox>
+                                                                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                                                                 <children>
+                                                                                    <TextField fx:id="labelM01" promptText="m01" />
+                                                                                    <TextField fx:id="labelM11" promptText="m11" />
+                                                                                    <TextField fx:id="labelM21" promptText="m21" />
+                                                                                    <TextField fx:id="labelM31" promptText="m31" />
+                                                                                 </children>
+                                                                              </VBox>
+                                                                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                                                                 <children>
+                                                                                    <TextField fx:id="labelM02" promptText="m02" />
+                                                                                    <TextField fx:id="labelM12" promptText="m12" />
+                                                                                    <TextField fx:id="labelM22" promptText="m22" />
+                                                                                    <TextField fx:id="labelM32" promptText="m32" />
+                                                                                 </children>
+                                                                              </VBox>
+                                                                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                                                                 <children>
+                                                                                    <TextField fx:id="labelM03" promptText="m03" />
+                                                                                    <TextField fx:id="labelM13" promptText="m13" />
+                                                                                    <TextField fx:id="labelM23" promptText="m23" />
+                                                                                    <TextField fx:id="labelM33" promptText="m33" />
+                                                                                 </children>
+                                                                              </VBox>
                                                                            </children>
-                                                                        </VBox>
-                                                                        <VBox prefHeight="200.0" prefWidth="100.0">
-                                                                           <children>
-                                                                              <TextField fx:id="labelM01" promptText="m01" />
-                                                                              <TextField fx:id="labelM11" promptText="m11" />
-                                                                              <TextField fx:id="labelM21" promptText="m21" />
-                                                                              <TextField fx:id="labelM31" promptText="m31" />
-                                                                           </children>
-                                                                        </VBox>
-                                                                        <VBox prefHeight="200.0" prefWidth="100.0">
-                                                                           <children>
-                                                                              <TextField fx:id="labelM02" promptText="m02" />
-                                                                              <TextField fx:id="labelM12" promptText="m12" />
-                                                                              <TextField fx:id="labelM22" promptText="m22" />
-                                                                              <TextField fx:id="labelM32" promptText="m32" />
-                                                                           </children>
-                                                                        </VBox>
-                                                                        <VBox prefHeight="200.0" prefWidth="100.0">
-                                                                           <children>
-                                                                              <TextField fx:id="labelM03" promptText="m03" />
-                                                                              <TextField fx:id="labelM13" promptText="m13" />
-                                                                              <TextField fx:id="labelM23" promptText="m23" />
-                                                                              <TextField fx:id="labelM33" promptText="m33" />
-                                                                           </children>
-                                                                        </VBox>
+                                                                        </HBox>
+                                                                        <Button mnemonicParsing="false" onAction="#onActionButtonResetToIdentity" text="Clear transformation" />
                                                                      </children>
-                                                                  </HBox>
-                                                                  <Button layoutX="14.0" layoutY="272.0" mnemonicParsing="false" onAction="#onActionButtonResetToIdentity" text="Reset to identity" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="272.0" />
+                                                                  </VBox>
                                                                </children>
                                                             </AnchorPane>
                                                       </content>
@@ -788,18 +662,7 @@
                                                                                                 <HBox alignment="CENTER_LEFT" spacing="5.0">
                                                                                                    <children>
                                                                                                       <CheckBox fx:id="checkboxEmptyShotsFilter" contentDisplay="RIGHT" disable="true" mnemonicParsing="false" text="False empty shots removal" />
-                                                                                                      <Button fx:id="buttonHelpEmptyShotsFilter" mnemonicParsing="false" onAction="#onActionButtonHelpEmptyShotsFilter" style="-fx-padding: 3; -fx-background-radius: 20;">
-                                                                                                         <graphic>
-                                                                                                            <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                                                               <image>
-                                                                                                                  <Image url="@icons/help.png" />
-                                                                                                               </image>
-                                                                                                               <viewport>
-                                                                                                                  <Rectangle2D />
-                                                                                                               </viewport>
-                                                                                                            </ImageView>
-                                                                                                         </graphic>
-                                                                                                      </Button>
+                                                                                                      <fx:include fx:id="buttonHelpEmptyShotsFilter" source="HelpButton.fxml" />
                                                                                                    </children>
                                                                                                 </HBox>
                                                                                              </children>
@@ -848,9 +711,31 @@
                                                          <content>
                                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                <children>
-                                                                  <ComboBox fx:id="comboboxWeighting" layoutX="14.0" layoutY="55.0" prefHeight="25.0" prefWidth="180.0" promptText="Mode" />
                                                                   <CheckBox fx:id="checkboxEnableWeighting" layoutX="14.0" layoutY="25.0" mnemonicParsing="false" text="Enable weighting" />
-                                                                  <Button fx:id="buttonOpenPonderationFile" layoutX="225.0" layoutY="55.0" mnemonicParsing="false" onAction="#onActionButtonOpenPonderationFile" text="Open file" visible="false" />
+                                                                  <VBox fx:id="vboxWeighting" alignment="CENTER" layoutX="14.0" layoutY="58.0" prefHeight="213.0" prefWidth="348.0" spacing="2.0">
+                                                                     <children>
+                                                                        <Label text="Echo range (1...n)" />
+                                                                        <HBox alignment="CENTER" prefHeight="138.0" prefWidth="348.0">
+                                                                           <children>
+                                                                              <Label style="-fx-rotate: -90;" text="Echoes number (1...n)">
+                                                                                 <HBox.margin>
+                                                                                    <Insets left="-55.0" right="-55.0" />
+                                                                                 </HBox.margin>
+                                                                              </Label>
+                                                                              <TextArea fx:id="textAreaWeighting" prefHeight="144.0" prefWidth="295.0" />
+                                                                           </children>
+                                                                           <VBox.margin>
+                                                                              <Insets />
+                                                                           </VBox.margin>
+                                                                        </HBox>
+                                                                        <MenuButton mnemonicParsing="false" text="Fill">
+                                                                          <items>
+                                                                            <MenuItem mnemonicParsing="false" onAction="#onActionButtonFillALSDefaultWeight" text="ALS default matrix" />
+                                                                            <MenuItem mnemonicParsing="false" onAction="#onActionButtonFillTLSDefaultWeight" text="TLS default matrix" />
+                                                                          </items>
+                                                                        </MenuButton>
+                                                                     </children>
+                                                                  </VBox>
                                                                </children></AnchorPane>
                                                          </content>
                                                       </Tab>
@@ -951,7 +836,7 @@
                                                             </AnchorPane>
                                                          </content>
                                                       </Tab>
-                                                      <Tab text="Transmittance">
+                                                      <!--<Tab text="Transmittance">
                                                          <content>
                                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                <children>
@@ -974,7 +859,7 @@
                                                                </children>
                                                             </AnchorPane>
                                                          </content>
-                                                      </Tab>
+                                                      </Tab>-->
                                                       <Tab text="Other">
                                                          <content>
                                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -994,25 +879,6 @@
                                                                                     </HBox>
                                                                                     <Label fx:id="labelOutputFileGroundEnergy" layoutY="51.0" text="Output file" AnchorPane.leftAnchor="14.0" />
                                                                                     <ComboBox fx:id="comboboxGroundEnergyOutputFormat" prefHeight="25.0" prefWidth="144.0" promptText="Choose format" AnchorPane.leftAnchor="14.0" />
-                                                                                 </children>
-                                                                              </AnchorPane>
-                                                                           </children>
-                                                                        </VBox>
-                                                                        <Separator prefHeight="12.0" prefWidth="401.0" />
-                                                                        <VBox spacing="10.0">
-                                                                           <children>
-                                                                              <CheckBox fx:id="checkboxGenerateMultiBandRaster" mnemonicParsing="false" text="Generate multi-band raster" />
-                                                                              <AnchorPane fx:id="anchorPaneMultiBandRasterParameters" disable="true" prefHeight="130.0" prefWidth="415.0">
-                                                                                 <children>
-                                                                                    <CheckBox fx:id="checkboxDiscardVoxelFileWriting" layoutX="14.0" layoutY="98.0" mnemonicParsing="false" text="Discard voxel file writing (save memory space)" AnchorPane.leftAnchor="14.0" />
-                                                                                    <TextField fx:id="textfieldRasterStartingHeight" layoutX="121.0" layoutY="14.0" prefHeight="26.0" prefWidth="59.0" text="0" />
-                                                                                    <Label layoutX="14.0" layoutY="19.0" text="Starting height" AnchorPane.leftAnchor="14.0" />
-                                                                                    <Label layoutX="14.0" layoutY="57.0" text="Band number" />
-                                                                                    <TextField fx:id="textfieldRasterBandNumber" editable="false" layoutX="121.0" layoutY="52.0" prefHeight="26.0" prefWidth="47.0" text="5" />
-                                                                                    <Label layoutX="212.0" layoutY="57.0" text="Resolution (pixel)" />
-                                                                                    <TextField fx:id="textfieldRasterResolution" layoutX="339.0" layoutY="52.0" prefHeight="26.0" prefWidth="47.0" text="1" />
-                                                                                    <Label layoutX="212.0" layoutY="19.0" text="Step" />
-                                                                                    <TextField fx:id="textfieldRasterHeightStep" layoutX="255.0" layoutY="14.0" prefHeight="26.0" prefWidth="59.0" text="10" />
                                                                                  </children>
                                                                               </AnchorPane>
                                                                            </children>
@@ -1158,11 +1024,11 @@
                                                          <content>
                                                             <VBox>
                                                                <children>
-                                                                  <TitledPane text="Sensor(s)">
+                                                                  <TitledPane prefHeight="276.0" prefWidth="425.0" text="Sensor(s)">
                                                                      <content>
-                                                                        <VBox prefHeight="195.0" prefWidth="369.0" spacing="10.0">
+                                                                        <VBox prefHeight="261.0" prefWidth="423.0" spacing="10.0">
                                                                            <children>
-                                                                              <VBox>
+                                                                              <VBox prefHeight="131.0" prefWidth="403.0">
                                                                                  <children>
                                                                                     <Label text="Sensor(s) positions">
                                                                                        <font>
@@ -1225,7 +1091,7 @@
                                                                                     <Label text="degrees (anticlockwise)" />
                                                                                  </children>
                                                                               </HBox>
-                                                                              <CheckBox fx:id="checkboxTransmittanceMapToricity" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Toricity">
+                                                                              <CheckBox fx:id="checkboxTransmittanceMapToricity" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Repetitive scene">
                                                                                  <font>
                                                                                     <Font name="System Bold" size="12.0" />
                                                                                  </font>
@@ -1756,11 +1622,11 @@
                                              <content>
                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                    <children>
-                                                      <SplitPane dividerPositions="0.5" prefHeight="414.0" prefWidth="765.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                      <SplitPane dividerPositions="0.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                         <items>
                                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                                                <children>
-                                                                  <TabPane fx:id="tabpaneChart" prefHeight="414.0" prefWidth="765.0" tabClosingPolicy="UNAVAILABLE">
+                                                                  <TabPane fx:id="tabpaneChart" prefHeight="414.0" prefWidth="765.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                     <tabs>
                                                                       <Tab text="Profile">
                                                                            <content>
@@ -1794,14 +1660,13 @@
                                                                               </AnchorPane>
                                                                            </content>
                                                                         </Tab>
-                                                                      <Tab text="Two Variable Statistics" />
                                                                     </tabs>
                                                                   </TabPane>
                                                                </children>
                                                             </AnchorPane>
                                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="412.0" prefWidth="343.0">
                                                                <children>
-                                                                  <VBox prefHeight="361.0" prefWidth="377.0" spacing="5.0" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                  <VBox prefHeight="361.0" prefWidth="377.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                      <children>
                                                                         <TitledPane collapsible="false" prefHeight="160.0" prefWidth="334.0" text="Voxels files - comparison">
                                                                            <content>
@@ -1848,11 +1713,6 @@
                                                                               </VBox>
                                                                            </content>
                                                                         </TitledPane>
-                                                                        <TitledPane collapsible="false" prefHeight="102.0" prefWidth="343.0" text="Filtering">
-                                                                           <content>
-                                                                              <AnchorPane prefHeight="200.0" prefWidth="200.0" />
-                                                                           </content>
-                                                                        </TitledPane>
                                                                         <TitledPane collapsible="false" prefHeight="131.0" prefWidth="377.0">
                                                                            <content>
                                                                               <AnchorPane fx:id="anchorpaneQuadrats" disable="true" prefHeight="90.0" prefWidth="375.0">
@@ -1881,7 +1741,7 @@
                                                                                                       <Insets top="4.0" />
                                                                                                    </padding>
                                                                                                 </RadioButton>
-                                                                                                <TextField fx:id="textFieldSplitCountForQuadrats" prefHeight="26.0" prefWidth="71.0" />
+                                                                                                <TextField fx:id="textFieldSplitCountForQuadrats" prefHeight="26.0" prefWidth="71.0" text="1" />
                                                                                              </children>
                                                                                           </HBox>
                                                                                           <HBox spacing="2.0">
@@ -1900,10 +1760,10 @@
                                                                               </AnchorPane>
                                                                            </content>
                                                                            <graphic>
-                                                                              <CheckBox fx:id="checkboxMakeQuadrats" mnemonicParsing="false" text="Quadrats" />
+                                                                              <CheckBox fx:id="checkboxMakeQuadrats" mnemonicParsing="false" text="Plot splitting" />
                                                                            </graphic>
                                                                         </TitledPane>
-                                                                        <HBox>
+                                                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
                                                                            <children>
                                                                               <Label text="Max chart number in a row" />
                                                                               <TextField fx:id="textfieldMaxChartNumberInARow" prefHeight="26.0" prefWidth="45.0" text="6" />
@@ -1919,21 +1779,6 @@
                                                    </children></AnchorPane>
                                              </content>
                                           </Tab>
-                                        <Tab text="2D projection">
-                                          <content>
-                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                          </content>
-                                        </Tab>
-                                          <Tab text="Histogram">
-                                             <content>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                             </content>
-                                          </Tab>
-                                          <Tab text="Vegetation's profile">
-                                             <content>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                             </content>
-                                          </Tab>
                                       </tabs>
                                     </TabPane>
                                  </children></AnchorPane>
@@ -1947,7 +1792,7 @@
                                        <content>
                                           <AnchorPane>
                                              <children>
-                                                <Label layoutX="23.0" layoutY="37.0" text="TLS multi scans - cores" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                                                <Label layoutX="23.0" layoutY="37.0" text="Multi tasks - cores" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                                                 <Slider fx:id="sliderRSPCoresToUse" blockIncrement="1.0" layoutX="23.0" layoutY="60.0" majorTickUnit="1.0" max="4.0" min="1.0" minorTickCount="0" prefHeight="38.0" prefWidth="202.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="4.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
                                              </children>
                                           </AnchorPane>
@@ -2056,13 +1901,6 @@
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <MenuButton fx:id="menuButtonExport" disable="true" layoutX="227.0" layoutY="128.0" mnemonicParsing="false" text="Export" AnchorPane.bottomAnchor="0.0">
-                                      <items>
-                                        <MenuItem fx:id="menuItemExportDart" mnemonicParsing="false" onAction="#onActionMenuItemExportDart" text="Dart (maket.txt)" />
-                                          <MenuItem fx:id="menuItemExportDartPlots" mnemonicParsing="false" onAction="#onActionMenuItemExportDartPlots" text="Dart (plots.xml)" />
-                                          <MenuItem fx:id="menuItemExportObj" mnemonicParsing="false" onAction="#onActionMenuItemExportObj" text="Mesh (*.obj)" />
-                                      </items>
-                                    </MenuButton>
                                  </children>
                               </AnchorPane>
                            </content>

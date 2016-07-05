@@ -88,6 +88,7 @@ public class VoxelFileReader extends AbstractReader implements Iterable<Voxel>{
                         boolean isNextExist = ((currentLine = reader.readLine()) != null);
 
                         if(!isNextExist){
+                            reader.close();
                             wasRead = true;
                         }
 

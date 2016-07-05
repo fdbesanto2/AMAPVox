@@ -9,7 +9,7 @@ import fr.amap.commons.util.vegetation.LADParams;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
-import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis.LaserSpecification;
+import fr.amap.lidar.amapvox.voxelisation.LaserSpecification;
 import java.io.File;
 import java.util.List;
 import javax.vecmath.Point3d;
@@ -37,7 +37,6 @@ public class VoxelParameters {
     private DTMFilteringParams dtmFilteringParams;
     private EchoesWeightParams echoesWeightParams;
     private GroundEnergyParams groundEnergyParams;
-    private RasterParams rasterParams;
     private LADParams ladParams;
     
     private LaserSpecification laserSpecification = null;    
@@ -60,10 +59,9 @@ public class VoxelParameters {
         private DTMFilteringParams dtmFilteringParams = new DTMFilteringParams();
         private EchoesWeightParams echoesWeightParams = new EchoesWeightParams();
         private GroundEnergyParams groundEnergyParams = new GroundEnergyParams();
-        private RasterParams rasterParams = new RasterParams();
         private LADParams ladParams = new LADParams();
 
-        private LaserSpecification laserSpecification = LaserSpecification.DEFAULT_ALS;
+        private LaserSpecification laserSpecification = LaserSpecification.LMS_Q560;
 
         /*public Builder(Point3d bottomCorner, Point3d topCorner, Point3i split, VoxelSpaceInfos.Type type) {
             
@@ -105,12 +103,6 @@ public class VoxelParameters {
             return this;
         }
         
-        public Builder rasterParams(RasterParams rasterParams){
-            
-            this.rasterParams = rasterParams;
-            return this;
-        }
-        
         public Builder ladParams(LADParams ladParams){
             
             this.ladParams = ladParams;
@@ -148,7 +140,6 @@ public class VoxelParameters {
         this.naNsCorrectionParams = builder.naNsCorrectionParams;
         this.pathLengthMode = builder.pathLengthMode;
         this.pointcloudFilters = builder.pointcloudFilters;
-        this.rasterParams = builder.rasterParams;
         this.transmittanceMode = builder.transmittanceMode;
         this.usePointCloudFilter = builder.usePointCloudFilter;
     }
@@ -194,7 +185,7 @@ public class VoxelParameters {
             float maxPAD,
             LADParams ladParams,
             EchoesWeightParams echoesWeightParams,
-            VoxelAnalysis.LaserSpecification laserSpecification,
+            LaserSpecification laserSpecification,
             NaNsCorrectionParams naNsCorrectionParams,
             DTMFilteringParams dtmFilteringParams,
             boolean TLS) {
@@ -219,9 +210,9 @@ public class VoxelParameters {
         
         if(laserSpecification == null){
             if(TLS){
-                laserSpecification = VoxelAnalysis.LaserSpecification.VZ_400;
+                laserSpecification = LaserSpecification.VZ_400;
             }else{
-                laserSpecification = VoxelAnalysis.LaserSpecification.DEFAULT_ALS;
+                laserSpecification = LaserSpecification.LMS_Q560;
             }
         }
         
@@ -273,28 +264,12 @@ public class VoxelParameters {
         this.pointcloudFilters = pointcloudFilters;
     }
 
-    public VoxelAnalysis.LaserSpecification getLaserSpecification() {
+    public LaserSpecification getLaserSpecification() {
         return laserSpecification;
     }
 
-    public void setLaserSpecification(VoxelAnalysis.LaserSpecification laserSpecification) {
+    public void setLaserSpecification(LaserSpecification laserSpecification) {
         this.laserSpecification = laserSpecification;
-    }
-
-    /**
-     * 
-     * @return Multi-band layer PAD raster parameters
-     */
-    public RasterParams getRasterParams() {
-        return rasterParams;
-    }
-
-    /**
-     * 
-     * @param rasterParams Multi-band layer PAD raster parameters
-     */
-    public void setRasterParams(RasterParams rasterParams) {
-        this.rasterParams = rasterParams;
     }
 
     /**

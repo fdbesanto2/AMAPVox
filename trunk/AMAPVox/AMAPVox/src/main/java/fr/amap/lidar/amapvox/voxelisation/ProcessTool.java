@@ -686,7 +686,7 @@ public class ProcessTool extends Process implements Cancellable{
         startTime = System.currentTimeMillis();
         Mode[] toMerge;
         int size;
-        VoxelSpaceInfos voxelSpaceHeader = new VoxelSpaceInfos();
+        VoxelSpaceInfos infos = new VoxelSpaceInfos();
 
         float[][] nbSamplingMultiplyAngleMean;
         float[][] resultingFile;
@@ -709,18 +709,30 @@ public class ProcessTool extends Process implements Cancellable{
         if(cfg.getFiles().size() > 0){
             
             try {
-                voxelSpaceHeader.readFromVoxelFile(cfg.getFiles().get(0));
+                infos.readFromVoxelFile(cfg.getFiles().get(0));
+                LADParams ladParams = new LADParams();
+                ladParams.setLadType(infos.getLadType());
+                
+                if(infos.getLadParams() != null){
+                    ladParams.setLadBetaFunctionAlphaParameter((float)infos.getLadParams()[0]);
+                    ladParams.setLadBetaFunctionBetaParameter((float)infos.getLadParams()[1]);
+                }
+                
+                cfg.getVoxelParameters().setLadParams(ladParams);
+                cfg.getVoxelParameters().setTransmittanceMode(infos.getTransmittanceMode());
+                cfg.getVoxelParameters().setPathLengthMode(infos.getPathLengthMode());
+                
             } catch (Exception ex) {
                 throw ex;
             }
-            size = voxelSpaceHeader.getSplit().x * voxelSpaceHeader.getSplit().y * voxelSpaceHeader.getSplit().z;
-            columnNumber = voxelSpaceHeader.getColumnNamesList().size();
+            size = infos.getSplit().x * infos.getSplit().y * infos.getSplit().z;
+            columnNumber = infos.getColumnNamesList().size();
             resultingFile = new float[size][columnNumber];
             toMerge = new Mode[columnNumber];
             
             for(int i=0;i<toMerge.length;i++){
                 
-                String columnName = voxelSpaceHeader.getColumnNamesList().get(i);
+                String columnName = infos.getColumnNamesList().get(i);
                                 
                 switch(columnName){
                     case "i":
@@ -946,15 +958,15 @@ public class ProcessTool extends Process implements Cancellable{
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(cfg.getOutputFile()))) {
 
             writer.write("VOXEL SPACE" + "\n");
-            writer.write("#min_corner: " + (float) voxelSpaceHeader.getMinCorner().x + " " + (float) voxelSpaceHeader.getMinCorner().y + " " + (float) voxelSpaceHeader.getMinCorner().z + "\n");
-            writer.write("#max_corner: " + (float) voxelSpaceHeader.getMaxCorner().x + " " + (float) voxelSpaceHeader.getMaxCorner().y + " " + (float) voxelSpaceHeader.getMaxCorner().z + "\n");
-            writer.write("#split: " + voxelSpaceHeader.getSplit().x + " " + voxelSpaceHeader.getSplit().y + " " + voxelSpaceHeader.getSplit().z + "\n");
+            writer.write("#min_corner: " + (float) infos.getMinCorner().x + " " + (float) infos.getMinCorner().y + " " + (float) infos.getMinCorner().z + "\n");
+            writer.write("#max_corner: " + (float) infos.getMaxCorner().x + " " + (float) infos.getMaxCorner().y + " " + (float) infos.getMaxCorner().z + "\n");
+            writer.write("#split: " + infos.getSplit().x + " " + infos.getSplit().y + " " + infos.getSplit().z + "\n");
 
-            writer.write("#type: TLS" + " #res: "+voxelSpaceHeader.getResolution()+" "+"#MAX_PAD: "+cfg.getVoxelParameters().infos.getMaxPAD()+"\n");
+            writer.write("#type: TLS" + " #res: "+infos.getResolution()+" "+"#MAX_PAD: "+cfg.getVoxelParameters().infos.getMaxPAD()+"\n");
 
             String header = "";
             
-            for (String columnName : voxelSpaceHeader.getColumnNamesList()) {
+            for (String columnName : infos.getColumnNamesList()) {
                 header += columnName + " ";
             }
             header = header.trim();

@@ -5,7 +5,6 @@
  */
 package fr.amap.lidar.amapvox.voxelisation.tls;
 
-import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.amapvox.jleica.LShot;
 import fr.amap.amapvox.jleica.ptg.PTGScan;
@@ -15,13 +14,9 @@ import fr.amap.commons.math.matrix.Mat3D;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.commons.math.vector.Vec4D;
-import fr.amap.commons.raster.multiband.BSQ;
-import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.RasterParams;
-import fr.amap.lidar.amapvox.voxelisation.postproc.MultiBandRaster;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;

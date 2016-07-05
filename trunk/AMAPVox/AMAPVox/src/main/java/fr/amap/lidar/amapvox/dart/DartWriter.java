@@ -14,12 +14,16 @@ import fr.amap.commons.raster.asc.Point;
 import fr.amap.commons.raster.asc.AsciiGridHelper;
 import fr.amap.commons.raster.asc.Face;
 import fr.amap.commons.raster.asc.Raster;
+import fr.amap.commons.util.io.LittleEndianOutputStream;
 import fr.amap.lidar.amapvox.commons.Voxel;
 import fr.amap.lidar.amapvox.commons.VoxelSpace;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,12 +31,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import org.apache.log4j.Logger;
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class DartWriter {
     
+    private final static Logger LOGGER = Logger.getLogger(DartWriter.class);
     
     private boolean generateTrianglesFile;
     private Mat4D transfMatrix;
@@ -90,59 +96,56 @@ public class DartWriter {
             writer.write(dart.getCellsNumberByLayer()+"\n");
             
             
-            for(int z=0; z<dart.getSceneDimension().z; z++){
-                
-                for(int x=0; x<dart.getSceneDimension().x; x++){
-                //for(int y=dart.getSceneDimension().y-1; y>=0; y--){
-                for(int y=0; y<dart.getSceneDimension().y; y++){
-                    
-                    
-                        
-                        DartCell cell = dart.cells[x][y][z];
-                        
-                        String stringToWrite = "";
-                        
-                        if(cell.getType() != DartCell.CELL_TYPE_EMPTY){
-                            
-                            String turbids ="";
+            for (int z = 0; z < dart.getSceneDimension().z; z++) {
 
-                            for(int i=0;i<cell.getNbTurbids();i++){
-                                
-                                if(cell.getTurbids()[i].LAI == 0){
-                                    turbids+=" "+"0"+" "+cell.getTurbids()[i].leafPhaseFunction+" 0";
-                                }else{
-                                    turbids+=" "+cell.getTurbids()[i].LAI+" "+cell.getTurbids()[i].leafPhaseFunction+" 0";
+                for (int x = 0; x < dart.getSceneDimension().x; x++) {
+                    //for(int y=dart.getSceneDimension().y-1; y>=0; y--){
+                    for (int y = 0; y < dart.getSceneDimension().y; y++) {
+
+                        DartCell cell = dart.cells[x][y][z];
+
+                        String stringToWrite = "";
+
+                        if (cell.getType() != DartCell.CELL_TYPE_EMPTY) {
+
+                            String turbids = "";
+
+                            for (int i = 0; i < cell.getNbTurbids(); i++) {
+
+                                if (cell.getTurbids()[i].LAI == 0) {
+                                    turbids += " " + "0" + " " + cell.getTurbids()[i].leafPhaseFunction + " 0";
+                                } else {
+                                    turbids += " " + cell.getTurbids()[i].LAI + " " + cell.getTurbids()[i].leafPhaseFunction + " 0";
                                 }
-                                
+
                             }
-                            
-                            if(cell.getNbTurbids() == 0){
+
+                            if (cell.getNbTurbids() == 0) {
                                 turbids += " 0";
                             }
 
-                            String figures ="";
+                            String figures = "";
 
-                            for(int i=0;i<cell.getNbFigures();i++){
-                                figures+=" "+cell.getFigureIndex()[i];
+                            for (int i = 0; i < cell.getNbFigures(); i++) {
+                                figures += " " + cell.getFigureIndex()[i];
                             }
-                            
-                            stringToWrite = cell.getType()+" "+cell.getNbFigures()+figures+" "+cell.getNbTurbids()+turbids+" ";
 
-                        }else{
-                            stringToWrite = "0"+" ";
+                            stringToWrite = cell.getType() + " " + cell.getNbFigures() + figures + " " + cell.getNbTurbids() + turbids + " ";
+
+                        } else {
+                            stringToWrite = "0" + " ";
                         }
-                        
+
                         /*
                         if(x == dart.getSceneDimension().x-1){
                             stringToWrite = stringToWrite.trim();
                         }*/
-                        
                         writer.write(stringToWrite);
                     }
-                    
+
                     writer.write("\n");
                 }
-                
+
                 writer.write("\n");
             }
             
@@ -345,7 +348,7 @@ public class DartWriter {
         
         Dart dart = new Dart(
                 new Point3I(infos.getSplit().x, infos.getSplit().y, infos.getSplit().z),
-                new Point3F(infos.getResolution(), infos.getResolution(), infos.getResolution()),
+                new Point3F((float)infos.getVoxelSize().x, (float)infos.getVoxelSize().y, (float)infos.getVoxelSize().z),
                 infos.getSplit().x * infos.getSplit().y);
         
         List<String> attributsNames = new ArrayList<>();
@@ -378,7 +381,7 @@ public class DartWriter {
                 
                 for(Point point : points){
                     
-                    Point3I voxelIndice = data.getIndicesFromPoint(point.x, point.y-1, point.z);
+                    Point3I voxelIndice = data.getIndicesFromPoint(point.x, point.y, point.z);
                     if(voxelIndice != null){
                         
                         if(faces[voxelIndice.x][voxelIndice.y][voxelIndice.z] == null){
@@ -427,7 +430,7 @@ public class DartWriter {
                     dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_EMPTY);
                 }else{
                     dart.cells[indiceX][indiceY][indiceZ].setType(DartCell.CELL_TYPE_OPAQUE_GROUND);
-                    //dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(0);
+                    dart.cells[indiceX][indiceY][indiceZ].setNbTurbids(0);
                 }
                 
                 densite = 0f;
@@ -476,7 +479,7 @@ public class DartWriter {
                 int simpleOrDoubleFace = 0;
                 int typeOfSurface = 2; //ground
                 
-                try(BufferedWriter writer = new BufferedWriter(new FileWriter(trianglesFile))) {
+                try(LittleEndianOutputStream writer = new LittleEndianOutputStream(new BufferedOutputStream(new FileOutputStream(trianglesFile)))) {
                     
                     for(Face face : faceList){
                                                 
@@ -484,22 +487,61 @@ public class DartWriter {
                         Point point2 = pointList.get(face.getPoint2());
                         Point point3 = pointList.get(face.getPoint1());
                         
-                        writer.write(shapeType+" "+(float)(point1.x-infos.getMinCorner().x)+" "+(float)(point1.y-infos.getMinCorner().y)+" "+(float)(point1.z-infos.getMinCorner().z)+" "+
-                                                    (float)(point2.x-infos.getMinCorner().x)+" "+(float)(point2.y-infos.getMinCorner().y)+" "+(float)(point2.z-infos.getMinCorner().z)+" "+
-                                                    (float)(point3.x-infos.getMinCorner().x)+" "+(float)(point3.y-infos.getMinCorner().y)+" "+(float)(point3.z-infos.getMinCorner().z)+" "+
-                                                    scattererType+" "+
-                                                    scattererPropertyIndex+" "+
-                                                    temperaturePropertyIndex+" "+
-                                                    simpleOrDoubleFace+" "+
-                                                    scattererType+" "+
-                                                    scattererPropertyIndex+" "+
-                                                    temperaturePropertyIndex+" "+
-                                                    typeOfSurface+"\n");
+                        writer.writeBoolean(shapeType != 0);
+                        
+                        
+                        writer.writeDouble(point1.x-infos.getMinCorner().x);
+                        writer.writeDouble(point1.y-infos.getMinCorner().y);
+                        writer.writeDouble(point1.z-infos.getMinCorner().z);
+                        
+                        writer.writeDouble(point2.x-infos.getMinCorner().x);
+                        writer.writeDouble(point2.y-infos.getMinCorner().y);
+                        writer.writeDouble(point2.z-infos.getMinCorner().z);
+                        
+                        writer.writeDouble(point3.x-infos.getMinCorner().x);
+                        writer.writeDouble(point3.y-infos.getMinCorner().y);
+                        writer.writeDouble(point3.z-infos.getMinCorner().z);
+                        
+                        writer.writeInt(scattererType);
+                        writer.writeInt(scattererPropertyIndex);
+                        writer.writeInt(temperaturePropertyIndex);
+                        writer.writeBoolean(simpleOrDoubleFace != 0);
+                        writer.writeInt(scattererType);
+                        writer.writeInt(scattererPropertyIndex);
+                        writer.writeInt(temperaturePropertyIndex);
+                        writer.writeInt(typeOfSurface);
                     }
+                    
+                    LOGGER.info(faceList.size()+" faces have been written.");
                     
                 } catch (IOException ex) {
                     throw new IOException("Cannot write triangles file : "+trianglesFile.getAbsolutePath(), ex);
                 }
+                
+//                try(BufferedWriter writer = new BufferedWriter(new FileWriter(trianglesFile))) {
+//                    
+//                    for(Face face : faceList){
+//                                                
+//                        Point point1 = pointList.get(face.getPoint3());
+//                        Point point2 = pointList.get(face.getPoint2());
+//                        Point point3 = pointList.get(face.getPoint1());
+//                        
+//                        writer.write(shapeType+" "+(float)(point1.x-infos.getMinCorner().x)+" "+(float)(point1.y-infos.getMinCorner().y)+" "+(float)(point1.z-infos.getMinCorner().z)+" "+
+//                                                    (float)(point2.x-infos.getMinCorner().x)+" "+(float)(point2.y-infos.getMinCorner().y)+" "+(float)(point2.z-infos.getMinCorner().z)+" "+
+//                                                    (float)(point3.x-infos.getMinCorner().x)+" "+(float)(point3.y-infos.getMinCorner().y)+" "+(float)(point3.z-infos.getMinCorner().z)+" "+
+//                                                    scattererType+" "+
+//                                                    scattererPropertyIndex+" "+
+//                                                    temperaturePropertyIndex+" "+
+//                                                    simpleOrDoubleFace+" "+
+//                                                    scattererType+" "+
+//                                                    scattererPropertyIndex+" "+
+//                                                    temperaturePropertyIndex+" "+
+//                                                    typeOfSurface+"\n");
+//                    }
+//                    
+//                } catch (IOException ex) {
+//                    throw new IOException("Cannot write triangles file : "+trianglesFile.getAbsolutePath(), ex);
+//                }
                 
             }
         }

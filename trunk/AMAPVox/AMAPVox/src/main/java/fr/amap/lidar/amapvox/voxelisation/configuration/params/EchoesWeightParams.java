@@ -9,7 +9,7 @@ import java.io.File;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize
  */
 public class EchoesWeightParams {
     
@@ -19,8 +19,6 @@ public class EchoesWeightParams {
     public static final int WEIGHTING_FILE = 2;
     public static final int WEIGHTING_FRACTIONING = 3;
     private int weightingMode;
-    //TODO, remove this attribut and handle weightingMode matrix import from file via a frame
-    private File weightingFile;
     private float[][] weightingData;
     
     public final static float[][] DEFAULT_ALS_WEIGHTING = new float[][]{
@@ -78,14 +76,5 @@ public class EchoesWeightParams {
 
     public void setWeightingMode(int weighting) {
         this.weightingMode = weighting;
-    }
-
-    public File getWeightingFile() {
-        return weightingFile;
-    }
-
-    public void setWeightingFile(File weightingFile) {
-        this.weightingFile = weightingFile;
-    }
-    
+    }    
 }

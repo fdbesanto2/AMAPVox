@@ -59,7 +59,7 @@ import fr.amap.commons.util.vegetation.LeafAngleDistribution;
 import static fr.amap.commons.util.vegetation.LeafAngleDistribution.Type.TWO_PARAMETER_BETA;
 import static fr.amap.commons.util.vegetation.LeafAngleDistribution.Type.ELLIPSOIDAL;
 import fr.amap.lidar.amapvox.voxelisation.ProcessTool;
-import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis.LaserSpecification;
+import fr.amap.lidar.amapvox.voxelisation.LaserSpecification;
 import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.Input;
 import fr.amap.lidar.amapvox.voxelisation.configuration.MultiResCfg;
@@ -79,7 +79,6 @@ import fr.amap.commons.util.ProcessingListener;
 import fr.amap.commons.util.image.ScaleGradient;
 import fr.amap.commons.util.io.file.CSVFile;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightParams;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.RasterParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.DTMFilteringParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
 import fr.amap.commons.util.vegetation.LADParams;
@@ -226,8 +225,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.Menu;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextArea;
 import javafx.stage.StageStyle;
 import javax.vecmath.Point3f;
 import scripts.DanielScript;
@@ -254,8 +255,17 @@ public class MainFrameController implements Initializable {
     private Stage updaterFrame;
     private Stage attributsImporterFrame;
     private Stage positionImporterFrame;
+    private Stage voxelSpaceCroppingFrame;
     
-    
+    private UpdaterFrameController updaterFrameController;
+    private TransformationFrameController transformationFrameController;
+    private DateChooserFrameController dateChooserFrameController;
+    private ViewCapsSetupFrameController viewCapsSetupFrameController;
+    private AttributsImporterFrameController attributsImporterFrameController;
+    private TextFileParserFrameController textFileParserFrameController;
+    private FilteringPaneComponentController filteringPaneController;
+    private PositionImporterFrameController positionImporterFrameController;
+    private VoxelSpaceCroppingFrameController voxelSpaceCroppingFrameController;
     
     private ValidationSupport voxSpaceValidationSupport;
     private ValidationSupport alsVoxValidationSupport;
@@ -265,20 +275,9 @@ public class MainFrameController implements Initializable {
     private ValidationSupport lai2xxxSimValidationSupport;
     private ValidationSupport hemiPhotoSimValidationSupport;
     
-    private AsciiGridFileExtractorController ascExtractor;
     private RiscanProjectExtractor riscanProjectExtractor;
     private PTXProjectExtractor ptxProjectExtractor;
     private PTGProjectExtractor ptgProjectExtractor;
-    //private RspExtractorFrameController rspExtractorFrameController;
-    private UpdaterFrameController updaterFrameController;
-    private TransformationFrameController transformationFrameController;
-    private DateChooserFrameController dateChooserFrameController;
-    private ViewCapsSetupFrameController viewCapsSetupFrameController;
-    private AttributsImporterFrameController attributsImporterFrameController;
-    private TextFileParserFrameController textFileParserFrameController;
-    //private SceneObjectPropertiesPanelController sceneObjectPropertiesPanelController;
-    private FilteringPaneComponentController filteringPaneController;
-    private PositionImporterFrameController positionImporterFrameController;
     
     private BlockingQueue<File> queue = new ArrayBlockingQueue<>(100);
     private int taskNumber = 0;
@@ -384,6 +383,8 @@ public class MainFrameController implements Initializable {
     private static String RS_STR_INPUT_TYPE_SHOTS;
     private static String RS_STR_OPEN_IMAGE;
     private static String RS_STR_INFO;
+    private static String RS_STR_EDIT;
+    private static String RS_STR_EXPORT;
     
     @FXML
     private RadioButton radiobuttonLADHomogeneous;
@@ -523,8 +524,8 @@ public class MainFrameController implements Initializable {
     private ComboBox<String> comboboxModeTLS;
     @FXML
     private Button buttonOpenPopMatrixFile;
-    @FXML
-    private ComboBox<String> comboboxWeighting;
+    /*@FXML
+    private ComboBox<String> comboboxWeighting;*/
     @FXML
     private ListView<TaskElement> listViewTaskList;
     @FXML
@@ -542,8 +543,6 @@ public class MainFrameController implements Initializable {
     @FXML
     private TabPane tabPaneVoxelisation;
     @FXML
-    private MenuButton menuButtonExport;
-    @FXML
     private TabPane tabPaneMain;
     @FXML
     private TextField textFieldPADMax;
@@ -559,8 +558,6 @@ public class MainFrameController implements Initializable {
     private ListView<Filter> listviewFilters;
     @FXML
     private Label labelTLSOutputPath;
-    @FXML
-    private Button buttonOpenPonderationFile;
     @FXML
     private TextField textFieldOutputFileGroundEnergy;
     @FXML
@@ -589,20 +586,6 @@ public class MainFrameController implements Initializable {
     private CheckBox checkboxGenerateBitmapFile;
     @FXML
     private AnchorPane anchorpaneBoundingBoxParameters;
-    @FXML
-    private CheckBox checkboxGenerateMultiBandRaster;
-    @FXML
-    private CheckBox checkboxDiscardVoxelFileWriting;
-    @FXML
-    private AnchorPane anchorPaneMultiBandRasterParameters;
-    @FXML
-    private TextField textfieldRasterResolution;
-    @FXML
-    private TextField textfieldRasterStartingHeight;
-    @FXML
-    private TextField textfieldRasterHeightStep;
-    @FXML
-    private TextField textfieldRasterBandNumber;
     @FXML
     private Button buttonSetVOPMatrix;
     @FXML
@@ -704,15 +687,7 @@ public class MainFrameController implements Initializable {
     @FXML
     private MenuButton menuButtonAdvisablePADMaxValues;
     @FXML
-    private MenuItem menuItemExportDart;
-    @FXML
-    private MenuItem menuItemExportDartPlots;
-    @FXML
     private ListView<File> listViewProductsFiles;
-    @FXML
-    private TextField textFieldInputFileNaNsCorrection;
-    @FXML
-    private TextField textFieldOutputFileNaNsCorrection;
     @FXML
     private TextField textFieldInputFileButterflyRemover;
     @FXML
@@ -742,6 +717,14 @@ public class MainFrameController implements Initializable {
     @FXML
     private Tab tabHemiFromPAD;
     @FXML
+    private Button helpButtonNaNsCorrection;
+    @FXML
+    private HelpButtonController helpButtonNaNsCorrectionController;
+    @FXML
+    private Button helpButtonAutoBBox;
+    @FXML
+    private HelpButtonController helpButtonAutoBBoxController;
+    @FXML
     private Button helpButtonHemiPhoto;
     @FXML
     private AnchorPane viewer3DPanel;
@@ -757,36 +740,28 @@ public class MainFrameController implements Initializable {
     private TextField textfieldDirectionRotationTransmittanceMap;
     @FXML
     private CheckBox checkboxTransmittanceMapToricity;
-    @FXML
-    private ComboBox<Integer> comboboxTransMode;
-    @FXML
-    private ComboBox<String> comboboxPathLengthMode;
+    /*@FXML
+    private ComboBox<Integer> comboboxTransMode;*/
+    /*@FXML
+    private ComboBox<String> comboboxPathLengthMode;*/
     @FXML
     private CheckBox checkboxEmptyShotsFilter;
     @FXML
     private Button buttonHelpEmptyShotsFilter;
     @FXML
-    private TextField textFieldInputFileAreaExtracting;
+    private HelpButtonController buttonHelpEmptyShotsFilterController;
     @FXML
     private VoxelSpacePanelController voxelSpacePanelVoxelizationController;
-    @FXML
-    private Spinner<Integer> spinnerEnterIMin;
-    @FXML
-    private Spinner<Integer> spinnerEnterIMax;
-    @FXML
-    private Spinner<Integer> spinnerEnterJMin;
-    @FXML
-    private Spinner<Integer> spinnerEnterJMax;
-    @FXML
-    private Spinner<Integer> spinnerEnterKMin;
-    @FXML
-    private Spinner<Integer> spinnerEnterKMax;
-    @FXML
-    private MenuItem menuItemExportObj;
     @FXML
     private CheckBox checkboxWriteShotSegment;
     @FXML
     private ComboBox<String> comboboxScript;
+    @FXML
+    private TextArea textAreaWeighting;
+    @FXML
+    private VBox vboxWeighting;
+    @FXML
+    private HBox hboxAutomaticBBox;
     
     private void initValidationSupport(){
         
@@ -992,6 +967,8 @@ public class MainFrameController implements Initializable {
         RS_STR_INPUT_TYPE_SHOTS = rb.getString("shots_file");
         RS_STR_OPEN_IMAGE = rb.getString("open_image");
         RS_STR_INFO = rb.getString("info");
+        RS_STR_EDIT = rb.getString("edit");
+        RS_STR_EXPORT = rb.getString("export");
     }
     
     /**
@@ -1008,13 +985,43 @@ public class MainFrameController implements Initializable {
         
         comboboxScript.getItems().setAll("Daniel script");
         
+        vboxWeighting.disableProperty().bind(checkboxEnableWeighting.selectedProperty().not());
         
+        checkboxEnableWeighting.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue && textAreaWeighting.getText().isEmpty()){
+                    
+                    int selectedVoxTab = tabPaneVoxelisation.getSelectionModel().getSelectedIndex();
+                    
+                    if(selectedVoxTab == 0){ //ALS
+                        fillWeightingData(EchoesWeightParams.DEFAULT_ALS_WEIGHTING);
+                    }else if(selectedVoxTab == 1){ //TLS
+                        fillWeightingData(EchoesWeightParams.DEFAULT_TLS_WEIGHTING);
+                    }
+                }
+            }
+        });
         
-        comboboxTransMode.getItems().setAll(1, 2, 3);
+        /*comboboxTransMode.getItems().setAll(1, 2, 3);
         comboboxTransMode.getSelectionModel().selectFirst();
         
         comboboxPathLengthMode.getItems().setAll("A", "B");
-        comboboxPathLengthMode.getSelectionModel().selectFirst();
+        comboboxPathLengthMode.getSelectionModel().selectFirst();*/
+        
+        helpButtonNaNsCorrection.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                helpButtonNaNsCorrectionController.showHelpDialog(resourceBundle.getString("help_NaNs_correction"));
+            }
+        });
+        
+        helpButtonAutoBBox.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                helpButtonAutoBBoxController.showHelpDialog(resourceBundle.getString("help_bbox"));
+            }
+        });
                 
         helpButtonHemiPhoto.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -1026,7 +1033,7 @@ public class MainFrameController implements Initializable {
         buttonHelpEmptyShotsFilter.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //buttonHelpEmptyShotsFilterController.showHelpDialog(resourceBundle.getString("help_empty_shots_filter"));
+                buttonHelpEmptyShotsFilterController.showHelpDialog(resourceBundle.getString("help_empty_shots_filter"));
             }
         });
         
@@ -1087,6 +1094,97 @@ public class MainFrameController implements Initializable {
             }
         });
         
+        Menu menuEdit = new Menu(RS_STR_EDIT);
+        
+        MenuItem menuItemEditVoxels = new MenuItem("Remove voxels (delete key)");
+        MenuItem menuItemFitToContent = new MenuItem("Fit to content");
+        MenuItem menuItemCrop = new MenuItem("Crop");
+        
+        menuEdit.getItems().setAll(menuItemEditVoxels, menuItemFitToContent, menuItemCrop);
+        
+        menuItemFitToContent.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                 File selectedItem = listViewProductsFiles.getSelectionModel().getSelectedItem();
+                
+                if(selectedItem != null){
+                    fitVoxelSpaceToContent(selectedItem);
+                }
+            }
+        });
+        
+        menuItemEditVoxels.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                
+                File selectedItem = listViewProductsFiles.getSelectionModel().getSelectedItem();
+                
+                if(selectedItem != null){
+                    editVoxelSpace(selectedItem);
+                }
+            }
+        });
+        
+        menuItemCrop.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                
+                File selectedItem = listViewProductsFiles.getSelectionModel().getSelectedItem();
+                
+                if(selectedItem != null){
+                    try {
+                        voxelSpaceCroppingFrameController.setVoxelFile(selectedItem);
+                        voxelSpaceCroppingFrame.show();
+                    } catch (Exception ex) {
+                        showErrorDialog(ex);
+                    }
+                }
+            }
+        });
+        
+        Menu menuExport = new Menu(RS_STR_EXPORT);
+        MenuItem menuItemExportDartMaket = new MenuItem("Dart (maket.txt)");
+        MenuItem menuItemExportDartPlots = new MenuItem("Dart (plots.xml)");
+        MenuItem menuItemExportMeshObj = new MenuItem("Mesh (*.obj)");
+        
+        menuItemExportDartMaket.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                
+                File selectedItem = listViewProductsFiles.getSelectionModel().getSelectedItem();
+                
+                if(selectedItem != null){
+                    exportDartMaket(selectedItem);
+                }
+            }
+        });
+        
+        menuItemExportDartPlots.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                
+                File selectedItem = listViewProductsFiles.getSelectionModel().getSelectedItem();
+                
+                if(selectedItem != null){
+                    exportDartPlots(selectedItem);
+                }
+            }
+        });
+        
+        menuItemExportMeshObj.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                
+                File selectedItem = listViewProductsFiles.getSelectionModel().getSelectedItem();
+                
+                if(selectedItem != null){
+                    exportMeshObj(selectedItem);
+                }
+            }
+        });
+        
+        menuExport.getItems().setAll(menuItemExportDartMaket, menuItemExportDartPlots, menuItemExportMeshObj);
+        
         MenuItem menuItemInfo = new MenuItem(RS_STR_INFO);
         
         menuItemInfo.setOnAction(new EventHandler<ActionEvent>() {
@@ -1135,7 +1233,7 @@ public class MainFrameController implements Initializable {
                             
                         default:
                             if(VoxelFileReader.isFileAVoxelFile(selectedFile)){
-                                contextMenuProductsList.getItems().setAll(menuItemInfo);
+                                contextMenuProductsList.getItems().setAll(menuItemInfo, menuEdit, menuExport);
                                 contextMenuProductsList.show(listViewProductsFiles, event.getScreenX(), event.getScreenY());
                             }
                     }
@@ -1357,15 +1455,7 @@ public class MainFrameController implements Initializable {
         
         hboxGenerateBitmapFiles.disableProperty().bind(checkboxGenerateBitmapFile.selectedProperty().not());
         hboxGenerateTextFile.disableProperty().bind(checkboxGenerateTextFile.selectedProperty().not());
-        
-        checkboxGenerateMultiBandRaster.selectedProperty().addListener(new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                anchorPaneMultiBandRasterParameters.setDisable(!newValue);
-            }
-        });
-         
+                 
         fileChooserOpenConfiguration = new FileChooser();
         fileChooserOpenConfiguration.setTitle("Choose configuration file");
 
@@ -1528,6 +1618,16 @@ public class MainFrameController implements Initializable {
         } catch (IOException ex) {
             logger.error("Cannot load fxml file", ex);
         }
+        
+        try {
+            voxelSpaceCroppingFrame = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/VoxelSpaceCroppingFrame.fxml"));
+            Parent root = loader.load();
+            voxelSpaceCroppingFrameController = loader.getController();
+            voxelSpaceCroppingFrame.setScene(new Scene(root));
+        } catch (IOException ex) {
+            logger.error("Cannot load fxml file", ex);
+        }
             
         try {
             attributsImporterFrame = new Stage();
@@ -1565,12 +1665,6 @@ public class MainFrameController implements Initializable {
             logger.error("Cannot load fxml file", ex);
         }
         
-        try {
-            ascExtractor = AsciiGridFileExtractorController.getInstance();
-        } catch (Exception ex) {
-            logger.error("Cannot load fxml file", ex);
-        }
-        
         riscanProjectExtractor = new RiscanProjectExtractor();
         ptxProjectExtractor = new PTXProjectExtractor();
         ptgProjectExtractor = new PTGProjectExtractor();
@@ -1587,7 +1681,7 @@ public class MainFrameController implements Initializable {
             logger.error("Cannot load fxml file", ex);
         }
 
-        comboboxModeALS.getItems().addAll(RS_STR_INPUT_TYPE_LAS, RS_STR_INPUT_TYPE_LAZ, RS_STR_INPUT_TYPE_XYZ, RS_STR_INPUT_TYPE_SHOTS);
+        comboboxModeALS.getItems().addAll(RS_STR_INPUT_TYPE_LAS, RS_STR_INPUT_TYPE_LAZ/*, RS_STR_INPUT_TYPE_XYZ, RS_STR_INPUT_TYPE_SHOTS*/);
         
         comboboxModeALS.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -1605,11 +1699,10 @@ public class MainFrameController implements Initializable {
             }
         });
         
-        comboboxModeTLS.getItems().addAll("Rxp scan", "Rsp project", "PTX","PTG", RS_STR_INPUT_TYPE_XYZ, RS_STR_INPUT_TYPE_SHOTS);
-        comboboxWeighting.getItems().addAll("From the echo number", "From a matrix file", "Local recalculation (unavailable)");
-        comboboxGroundEnergyOutputFormat.getItems().addAll("txt", "png");
+        comboboxModeTLS.getItems().setAll("Rxp scan", "Rsp project", "PTX","PTG"/*, RS_STR_INPUT_TYPE_XYZ, RS_STR_INPUT_TYPE_SHOTS*/);
+        comboboxGroundEnergyOutputFormat.getItems().setAll("txt", "png");
 
-        comboboxLaserSpecification.getItems().addAll(LaserSpecification.values());
+        comboboxLaserSpecification.getItems().addAll(LaserSpecification.getPresets());
         
         comboboxLaserSpecification.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<LaserSpecification>() {
             @Override
@@ -1623,17 +1716,12 @@ public class MainFrameController implements Initializable {
             }
         });
         
-        comboboxLaserSpecification.getSelectionModel().select(LaserSpecification.DEFAULT_ALS);
+        comboboxLaserSpecification.getSelectionModel().select(LaserSpecification.LMS_Q560);
         
-        checkboxCustomLaserSpecification.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                comboboxLaserSpecification.setDisable(newValue);
-                textFieldBeamDiameterAtExit.setDisable(!newValue);
-                textFieldBeamDivergence.setDisable(!newValue);
-            }
-        });
-
+        comboboxLaserSpecification.disableProperty().bind(checkboxCustomLaserSpecification.selectedProperty());
+        textFieldBeamDiameterAtExit.disableProperty().bind(checkboxCustomLaserSpecification.selectedProperty().not());
+        textFieldBeamDivergence.disableProperty().bind(checkboxCustomLaserSpecification.selectedProperty().not());
+        
         listViewProductsFiles.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         listViewProductsFiles.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
@@ -1644,9 +1732,6 @@ public class MainFrameController implements Initializable {
 
                 if (size == 1) {
                     viewer3DPanelController.updateCurrentVoxelFile(listViewProductsFiles.getSelectionModel().getSelectedItem());
-                    menuButtonExport.setDisable(false);
-                } else {
-                    menuButtonExport.setDisable(true);
                 }
             }
         });
@@ -1785,9 +1870,6 @@ public class MainFrameController implements Initializable {
             }
         });      
         
-
-        comboboxWeighting.disableProperty().bind(checkboxEnableWeighting.selectedProperty().not());
-
         listviewRxpScans.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<LidarScan>() {
 
             @Override
@@ -1865,7 +1947,7 @@ public class MainFrameController implements Initializable {
                         
                         //anchorPaneEchoFilteringClassifications.setVisible(true);
                         anchorpaneBoundingBoxParameters.setDisable(checkboxMultiFiles.isSelected());
-                        
+                        hboxAutomaticBBox.setDisable(false);
                         break;
                     default:
                         anchorPaneGroundEnergyParameters.setDisable(true);
@@ -1873,23 +1955,7 @@ public class MainFrameController implements Initializable {
                         anchorPaneEchoFiltering.getChildren().set(0, anchorPaneEchoFilteringRxp);
                         //anchorPaneEchoFilteringClassifications.setVisible(false);
                         anchorpaneBoundingBoxParameters.setDisable(false);
-                }
-            }
-        });
-
-        comboboxWeighting.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-
-                switch (newValue.intValue()) {
-
-                    case 1:
-                        buttonOpenPonderationFile.setVisible(true);
-                        break;
-
-                    default:
-                        buttonOpenPonderationFile.setVisible(false);
+                        hboxAutomaticBBox.setDisable(true);
                 }
             }
         });
@@ -2361,8 +2427,8 @@ public class MainFrameController implements Initializable {
         EchoesWeightParams echoesWeightingParams = new EchoesWeightParams();
         
         if (checkboxEnableWeighting.isSelected()) {
-            echoesWeightingParams.setWeightingMode(comboboxWeighting.getSelectionModel().getSelectedIndex() + 1);
-            echoesWeightingParams.setWeightingData(EchoesWeightParams.DEFAULT_ALS_WEIGHTING);
+            echoesWeightingParams.setWeightingMode(EchoesWeightParams.WEIGHTING_ECHOS_NUMBER);
+            echoesWeightingParams.setWeightingData(parseWeightingData());
         } else {
             echoesWeightingParams.setWeightingMode(EchoesWeightParams.WEIGHTING_NONE);
         }
@@ -2390,23 +2456,7 @@ public class MainFrameController implements Initializable {
             }
         }
         
-        voxelParameters.setGroundEnergyParams(groundEnergyParameters);
-
-        if(checkboxGenerateMultiBandRaster.isSelected()){
-            
-            RasterParams rasterParameters = new RasterParams();
-            
-            rasterParameters.setGenerateMultiBandRaster(checkboxGenerateMultiBandRaster.isSelected());
-            rasterParameters.setRasterStartingHeight(Float.valueOf(textfieldRasterStartingHeight.getText()));
-            rasterParameters.setRasterHeightStep(Float.valueOf(textfieldRasterHeightStep.getText()));
-            rasterParameters.setShortcutVoxelFileWriting(checkboxDiscardVoxelFileWriting.isSelected());
-            rasterParameters.setRasterResolution(Integer.valueOf(textfieldRasterResolution.getText()));
-            rasterParameters.setRasterBandNumber(Integer.valueOf(textfieldRasterBandNumber.getText()));
-            
-            voxelParameters.setRasterParams(rasterParameters);
-        }
-        
-        
+        voxelParameters.setGroundEnergyParams(groundEnergyParameters);        
 
         VoxelAnalysisCfg cfg = null;
 
@@ -2681,6 +2731,48 @@ public class MainFrameController implements Initializable {
         return true;
     }
     
+    private float[][] parseWeightingData(){
+        
+        float[][] weightingData = new float[7][7];
+        
+        for(int i = 0;i<7;i++){
+            for(int j = 0;j<7;j++){
+                weightingData[i][j] = Float.NaN;
+            }
+        }
+        
+        String text = textAreaWeighting.getText();
+        String[] lines = text.split("\n");
+        
+        for(int i = 0;i< lines.length;i++){
+            
+            if(lines.length != 7){
+                showErrorDialog(new Exception("Error occured while parsing weighting data, unsufficient number of lines."));
+                return null;
+            }
+            
+            String[] columns = lines[i].split(" ");
+            
+            for(int j = 0;j< columns.length;j++){
+                                
+                if(columns.length == 0){
+                    showErrorDialog(new Exception("Error occured while parsing weighting data, invalid column."));
+                    return null;
+                }
+                
+                try{
+                    weightingData[i][j] = Float.valueOf(columns[j]);
+                }catch(Exception ex){
+                    showErrorDialog(new Exception("Error occured while parsing weighting data, not a number.", ex));
+                    return null;
+                }
+               
+            }
+        }
+        
+        return weightingData;
+    }
+    
     private void saveTLSVoxelization(File selectedFile){
         
         if(!checkTLSVoxelizationParametersValidity()){
@@ -2695,8 +2787,8 @@ public class MainFrameController implements Initializable {
         EchoesWeightParams echoesWeightingParameters = new EchoesWeightParams();
         
         if (checkboxEnableWeighting.isSelected()) {
-            echoesWeightingParameters.setWeightingMode(comboboxWeighting.getSelectionModel().getSelectedIndex() + 1);
-            echoesWeightingParameters.setWeightingData(EchoesWeightParams.DEFAULT_TLS_WEIGHTING);
+            echoesWeightingParameters.setWeightingMode(EchoesWeightParams.WEIGHTING_ECHOS_NUMBER);
+            echoesWeightingParameters.setWeightingData(parseWeightingData());
         } else {
             echoesWeightingParameters.setWeightingMode(EchoesWeightParams.WEIGHTING_NONE);
         }
@@ -2925,17 +3017,6 @@ public class MainFrameController implements Initializable {
         
     }
 
-    @FXML
-    private void onActionButtonOpenInputFileNaNsCorrection(ActionEvent event) {
-    }
-
-    @FXML
-    private void onActionButtonOpenOutputFileNaNsCorrection(ActionEvent event) {
-    }
-
-    @FXML
-    private void onActionButtonExecuteNaNsCorrection(ActionEvent event) {
-    }
 
     @FXML
     private void onActionButtonOpenInputFileButterflyRemover(ActionEvent event) {
@@ -5305,7 +5386,17 @@ public class MainFrameController implements Initializable {
             //voxelParameters.setPointcloudFile(new File(textfieldPointCloudPath.getText()));
         }
         
-        voxelParameters.setLaserSpecification(comboboxLaserSpecification.getSelectionModel().getSelectedItem());
+        if(checkboxCustomLaserSpecification.isSelected()){
+            try{
+                voxelParameters.setLaserSpecification(new LaserSpecification(Double.valueOf(textFieldBeamDiameterAtExit.getText()), Double.valueOf(textFieldBeamDivergence.getText()), "custom"));
+            }catch(Exception ex){
+                showErrorDialog(new Exception("Cannot parse laser specification values !", ex));
+            }
+            
+        }else{
+            voxelParameters.setLaserSpecification(comboboxLaserSpecification.getSelectionModel().getSelectedItem());
+        }
+        
         
         LADParams ladParameters = new LADParams();
         
@@ -5328,11 +5419,23 @@ public class MainFrameController implements Initializable {
             }
         }
         
+        if(comboboxLADChoice.getSelectionModel().getSelectedItem() == ELLIPSOIDAL){
+            try{
+                ladParameters.setLadBetaFunctionAlphaParameter(Float.valueOf(textFieldTwoBetaAlphaParameter.getText()));
+            }catch(Exception ex){
+                Exception e = new Exception("Ellipsoidal function selected but alpha parameter is not valid", ex);
+                logger.error(e.getMessage(), e);
+                showErrorDialog(e);
+            }
+        }
+        
         voxelParameters.setLadParams(ladParameters);
 
         voxelParameters.infos.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
-        voxelParameters.setTransmittanceMode(comboboxTransMode.getSelectionModel().getSelectedItem());
-        voxelParameters.setPathLengthMode(comboboxPathLengthMode.getSelectionModel().getSelectedItem());
+        voxelParameters.setTransmittanceMode(3);
+        voxelParameters.setPathLengthMode("B");
+        /*voxelParameters.setTransmittanceMode(comboboxTransMode.getSelectionModel().getSelectedItem());
+        voxelParameters.setPathLengthMode(comboboxPathLengthMode.getSelectionModel().getSelectedItem());*/
 
         return voxelParameters;
     }
@@ -5530,30 +5633,21 @@ public class MainFrameController implements Initializable {
                                 
                     VoxelParameters voxelParameters = ((VoxelAnalysisCfg)cfg).getVoxelParameters();
                     checkboxWriteShotSegment.setSelected(((VoxelAnalysisCfg)cfg).isExportShotSegment());
-                    
-                    RasterParams rasterParameters = voxelParameters.getRasterParams();
-                    
-                    if(rasterParameters != null){
-                        
-                        if(rasterParameters.isGenerateMultiBandRaster()){
-                            
-                            checkboxGenerateMultiBandRaster.setSelected(true);
-                            
-                            textfieldRasterStartingHeight.setText(String.valueOf(rasterParameters.getRasterStartingHeight()));
-                            textfieldRasterHeightStep.setText(String.valueOf(rasterParameters.getRasterHeightStep()));
-                            textfieldRasterBandNumber.setText(String.valueOf(rasterParameters.getRasterBandNumber()));
-                            textfieldRasterResolution.setText(String.valueOf(rasterParameters.getRasterResolution()));
-                            checkboxDiscardVoxelFileWriting.setSelected(rasterParameters.isShortcutVoxelFileWriting());
-                        
-                        }
-                        
-                    }else{
-                        checkboxGenerateMultiBandRaster.setSelected(false);
-                    }
-                    
+                                        
                     LaserSpecification laserSpecification = voxelParameters.getLaserSpecification();
                     if(laserSpecification != null){
-                        comboboxLaserSpecification.getSelectionModel().select(laserSpecification);
+                        if(laserSpecification.getName().equals("custom")){
+                            checkboxCustomLaserSpecification.setSelected(true);
+                            DecimalFormatSymbols symb = new DecimalFormatSymbols();
+                            symb.setDecimalSeparator('.');
+                            DecimalFormat formatter = new DecimalFormat("#####.######", symb);
+
+                            textFieldBeamDiameterAtExit.setText(formatter.format(laserSpecification.getBeamDiameterAtExit()));
+                            textFieldBeamDivergence.setText(formatter.format(laserSpecification.getBeamDivergence()));
+                        }else{
+                            checkboxCustomLaserSpecification.setSelected(false);
+                            comboboxLaserSpecification.getSelectionModel().select(laserSpecification);
+                        }
                     }
 
                     textFieldResolution.setText(String.valueOf(voxelParameters.infos.getResolution()));
@@ -5643,7 +5737,7 @@ public class MainFrameController implements Initializable {
                         checkboxEnableWeighting.setSelected(false);
                     } else {
                         checkboxEnableWeighting.setSelected(true);
-                        comboboxWeighting.getSelectionModel().select(((VoxelAnalysisCfg)cfg).getVoxelParameters().getEchoesWeightParams().getWeightingMode() - 1);
+                        fillWeightingData(((VoxelAnalysisCfg)cfg).getVoxelParameters().getEchoesWeightParams().getWeightingData());
                     }
                     
                     LADParams ladParameters = voxelParameters.getLadParams();
@@ -5656,8 +5750,8 @@ public class MainFrameController implements Initializable {
                     textFieldTwoBetaAlphaParameter.setText(String.valueOf(ladParameters.getLadBetaFunctionAlphaParameter()));
                     textFieldTwoBetaBetaParameter.setText(String.valueOf(ladParameters.getLadBetaFunctionBetaParameter()));
                     
-                    comboboxTransMode.getSelectionModel().select(new Integer(voxelParameters.getTransmittanceMode()));
-                    comboboxPathLengthMode.getSelectionModel().select(voxelParameters.getPathLengthMode());
+                    /*comboboxTransMode.getSelectionModel().select(new Integer(voxelParameters.getTransmittanceMode()));
+                    comboboxPathLengthMode.getSelectionModel().select(voxelParameters.getPathLengthMode());*/
                     
                     if(type.equals("voxelisation-ALS") || type.equals("multi-voxelisation")){
                         
@@ -5809,16 +5903,13 @@ public class MainFrameController implements Initializable {
         listViewTaskList.getSelectionModel().clearSelection();
 
     }
-
-    @FXML
-    private void onActionMenuItemExportDart(ActionEvent event) {
-
+    
+    private void exportDartMaket(final File voxelFile){
+        
         Stage exportDartFrame = new Stage();
         DartExporterFrameController controller;
         
         Parent root;
-        
-        File voxelFile = listViewProductsFiles.getSelectionModel().getSelectedItem();
         
         if(Util.checkIfVoxelFile(voxelFile)){
             
@@ -5850,6 +5941,7 @@ public class MainFrameController implements Initializable {
             }
         }
     }
+
 
     @FXML
     private void onActionButtonOpenOutputFileMerging(ActionEvent event) {
@@ -5887,26 +5979,6 @@ public class MainFrameController implements Initializable {
     private void onActionButtonRemoveFilter(ActionEvent event) {
         ObservableList<Filter> selectedItems = listviewFilters.getSelectionModel().getSelectedItems();
         listviewFilters.getItems().removeAll(selectedItems);
-    }
-
-    @FXML
-    private void onActionButtonOpenPonderationFile(ActionEvent event) {
-
-        if (lastFCOpenPonderationFile != null) {
-            fileChooserOpenPonderationFile.setInitialDirectory(lastFCOpenPonderationFile.getParentFile());
-        }
-
-        File selectedFile = fileChooserOpenPonderationFile.showOpenDialog(stage);
-
-        if (selectedFile != null) {
-            lastFCOpenPonderationFile = selectedFile;
-
-            try {
-                float[][] ponderationMatrix = MatrixFileParser.getPonderationMatrixFromFile(selectedFile);
-            } catch (IOException ex) {
-                logger.error("Cannot read ponderation matrix file", ex);
-            }
-        }
     }
 
     private BoundingBox3d calculateAutomaticallyMinAndMax(File file, boolean quick) {
@@ -6327,11 +6399,8 @@ public class MainFrameController implements Initializable {
         updaterFrameController.load();
         
     }
-
-    @FXML
-    private void onActionMenuItemExportDartPlots(ActionEvent event) {
-        
-        final File voxelFile = listViewProductsFiles.getSelectionModel().getSelectedItem();
+    
+    private void exportDartPlots(final File voxelFile){
         
         if(Util.checkIfVoxelFile(voxelFile)){
             
@@ -6415,9 +6484,8 @@ public class MainFrameController implements Initializable {
             }
         }
         
-        
-        
     }
+
 
 
     private void onActionButtonOpenTransformationMatrixFile(ActionEvent event) {
@@ -6887,135 +6955,8 @@ public class MainFrameController implements Initializable {
         }
     }
 
-    @FXML
-    private void onActionButtonHelpEmptyShotsFilter(ActionEvent event) {
-        
-        
-    }
-
-    @FXML
-    private void onActionButtonOpenVoxelFileForAreaExtracting(ActionEvent event) {
-        
-        if(fcOpenVoxelFileForAreaExtracting == null){
-            fcOpenVoxelFileForAreaExtracting = new FileChooserContext();
-        }
-        
-        File selectedFile = fcOpenVoxelFileForAreaExtracting.showOpenDialog(stage);
-        
-        if(selectedFile != null){
-            textFieldInputFileAreaExtracting.setText(selectedFile.getAbsolutePath());
-            VoxelFileReader reader;
-            try {
-                reader = new VoxelFileReader(selectedFile);
-                VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
-                
-                spinnerEnterIMin.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, infos.getSplit().x-1, 0, 1));
-                spinnerEnterJMin.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, infos.getSplit().y-1, 0, 1));
-                spinnerEnterKMin.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, infos.getSplit().z-1, 0, 1));
-                
-                spinnerEnterIMax.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, infos.getSplit().x-1, infos.getSplit().x-1, 1));
-                spinnerEnterJMax.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, infos.getSplit().y-1, infos.getSplit().y-1, 1));
-                spinnerEnterKMax.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, infos.getSplit().z-1, infos.getSplit().z-1, 1));
-
-                
-            } catch (Exception ex) {
-                showErrorDialog(ex);
-            }
-        }
-    }
-
-    @FXML
-    private void onActionButtonAreaExtractingWriteNewFile(ActionEvent event) {
-        
-        if(fcSaveVoxelFileForAreaExtracting == null){
-            fcSaveVoxelFileForAreaExtracting = new FileChooserContext();
-            
-            if(fcOpenVoxelFileForAreaExtracting != null){
-                fcSaveVoxelFileForAreaExtracting.fc.setInitialDirectory(fcOpenVoxelFileForAreaExtracting.lastSelectedFile.getParentFile());
-            }
-        }
-        
-        File selectedFile = fcSaveVoxelFileForAreaExtracting.showSaveDialog(stage);
-        
-        if(selectedFile != null){
-            VoxelFileReader reader;
-            BufferedWriter writer = null;
-
-            try {
-                reader = new VoxelFileReader(new File(textFieldInputFileAreaExtracting.getText()), true);
-                VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
-
-                int iMin = Integer.valueOf(spinnerEnterIMin.getEditor().getText());
-                int jMin = Integer.valueOf(spinnerEnterJMin.getEditor().getText());
-                int kMin = Integer.valueOf(spinnerEnterKMin.getEditor().getText());
-
-                int iMax = Integer.valueOf(spinnerEnterIMax.getEditor().getText());
-                int jMax = Integer.valueOf(spinnerEnterJMax.getEditor().getText());
-                int kMax = Integer.valueOf(spinnerEnterKMax.getEditor().getText());
-
-                int iSplit = iMax - iMin + 1;
-                int jSplit = jMax - jMin + 1;
-                int kSplit = kMax - kMin + 1;
-
-                infos.setMinCorner(new Point3d(
-                        infos.getMinCorner().x + iMin * infos.getResolution(),
-                        infos.getMinCorner().y + jMin * infos.getResolution(),
-                        infos.getMinCorner().z + kMin * infos.getResolution()));
-
-                infos.setMaxCorner(new Point3d(
-                        infos.getMaxCorner().x - ((infos.getSplit().x - iMax - 1)*infos.getResolution()),
-                        infos.getMaxCorner().y - ((infos.getSplit().y - jMax - 1)*infos.getResolution()),
-                        infos.getMaxCorner().z - ((infos.getSplit().z - kMax - 1)*infos.getResolution())));
-
-                infos.setSplit(new Point3i(iSplit, jSplit, kSplit));
-
-                writer = new BufferedWriter(new FileWriter(selectedFile));
-
-                writer.write(infos.toString()+"\n");
-
-                Iterator<Voxel> iterator = reader.iterator();
-
-                while(iterator.hasNext()){
-
-                    Voxel voxel = iterator.next();
-
-                    if(voxel.$i >= iMin && voxel.$i <= iMax && 
-                        voxel.$j >= jMin && voxel.$j <= jMax && 
-                        voxel.$k >= kMin && voxel.$k <= kMax){
-
-                        voxel.$i -= iMin;
-                        voxel.$j -= jMin;
-                        voxel.$k -= kMin;
-
-                        writer.write(voxel+"\n");
-                    }
-                }
-
-                writer.close();
-
-                addFileToProductsList(selectedFile);
-
-
-            } catch (Exception ex) {
-                showErrorDialog(ex);
-            }finally{
-                try {
-                    if(writer != null){
-                        writer.close();
-                    }
-
-                } catch (IOException ex) {
-                    showErrorDialog(ex);
-                }
-            }
-        }
-        
-    }
-
-    @FXML
-    private void onActionButtonFitToContent(ActionEvent event) {
-        
-        File voxelFile = new File(textFieldInputFileAreaExtracting.getText());
+    
+    private void fitVoxelSpaceToContent(final File voxelFile){
         
         if(voxelFile.exists() && voxelFile.isFile()){
             try {
@@ -7034,16 +6975,14 @@ public class MainFrameController implements Initializable {
                 
                     VoxelSpace voxelSpace = VoxelSpaceUtil.fitVoxelSpaceToContent(voxelFile);
                     
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile));
-                    
-                    writer.write(voxelSpace.getVoxelSpaceInfos()+"\n");
-                    
-                    for(int i=0;i<voxelSpace.voxels.size();i++){
-                        Voxel voxel = (Voxel)voxelSpace.voxels.get(i);
-                        writer.write(voxel+"\n");
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile))) {
+                        writer.write(voxelSpace.getVoxelSpaceInfos()+"\n");
+                        
+                        for(int i=0;i<voxelSpace.voxels.size();i++){
+                            Voxel voxel = (Voxel)voxelSpace.voxels.get(i);
+                            writer.write(voxel+"\n");
+                        }
                     }
-                    
-                    writer.close();
                     
                     addFileToProductsList(selectedFile);
                 }
@@ -7055,11 +6994,8 @@ public class MainFrameController implements Initializable {
             
         }
     }
-
-    @FXML
-    private void onActionMenuItemExportObj(ActionEvent event) {
-        
-        final File voxelFile = listViewProductsFiles.getSelectionModel().getSelectedItem();
+    
+    private void exportMeshObj(final File voxelFile){
         
         if(Util.checkIfVoxelFile(voxelFile)){
             
@@ -7073,17 +7009,15 @@ public class MainFrameController implements Initializable {
         objExporterController.getStage().show();
     }
 
-    @FXML
-    private void onActionButtonInteractiveVoxelEditing(ActionEvent event) {
-                
+    
+    private void editVoxelSpace(final File voxelFile){
+        
         if(editingFrameOpened){
            return; 
         }
         
         editingFrameOpened = true;
         voxelsToRemove.clear();
-        
-        final File voxelFile = new File(textFieldInputFileAreaExtracting.getText());
         
         final String attributeToView = "PadBVTotal";
 
@@ -7418,7 +7352,7 @@ public class MainFrameController implements Initializable {
                                                             BufferedWriter writer = null;
 
                                                             try {
-                                                                reader = new VoxelFileReader(new File(textFieldInputFileAreaExtracting.getText()), true);
+                                                                reader = new VoxelFileReader(voxelFile, true);
                                                                 VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
 
                                                                 writer = new BufferedWriter(new FileWriter(selectedFile));
@@ -7533,6 +7467,7 @@ public class MainFrameController implements Initializable {
         }
     }
 
+
     public Stage getStage() {
         return stage;
     }
@@ -7551,6 +7486,41 @@ public class MainFrameController implements Initializable {
             script.launch();
         }
         
+    }
+    
+    private void fillWeightingData(float[][] weightingData){
+        
+        String text = "";
+        
+        for(int i = 0;i<weightingData.length;i++){
+            for(int j = 0;j<weightingData.length;j++){
+
+                if(j != 0){
+                    text += " ";
+                }
+                
+                if(!Float.isNaN(weightingData[i][j])){
+                    text += weightingData[i][j];
+                }
+                
+                if(j == weightingData.length - 1 && i != weightingData.length - 1){
+                    text += "\n";
+                }
+            }
+        }
+        
+        textAreaWeighting.setText(text);
+    }
+
+    @FXML
+    private void onActionButtonFillALSDefaultWeight(ActionEvent event) {
+        
+        fillWeightingData(EchoesWeightParams.DEFAULT_ALS_WEIGHTING);
+    }
+
+    @FXML
+    private void onActionButtonFillTLSDefaultWeight(ActionEvent event) {
+        fillWeightingData(EchoesWeightParams.DEFAULT_TLS_WEIGHTING);
     }
 
     /*@FXML

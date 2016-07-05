@@ -22,10 +22,8 @@ import fr.amap.commons.util.vegetation.LADParams;
 import fr.amap.commons.util.vegetation.LeafAngleDistribution.Type;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.EchoFilter;
+import fr.amap.lidar.amapvox.voxelisation.LaserSpecification;
 import fr.amap.lidar.amapvox.voxelisation.ShotFilter;
-import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
-import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis.LaserSpecification;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.RasterParams;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -358,8 +356,9 @@ public class VoxelAnalysisCfg extends Configuration{
             String laserSpecName = laserSpecElement.getAttributeValue("name");
         
             switch(laserSpecName){
+                case "LMS_Q560":
                 case "DEFAULT_ALS":
-                    voxelParameters.setLaserSpecification(LaserSpecification.DEFAULT_ALS);
+                    voxelParameters.setLaserSpecification(LaserSpecification.LMS_Q560);
                     break;
                 case "LEICA_SCANSTATION_C10":
                     voxelParameters.setLaserSpecification(LaserSpecification.LEICA_SCANSTATION_C10);
@@ -369,6 +368,15 @@ public class VoxelAnalysisCfg extends Configuration{
                     break;
                 case "LEICA_SCANSTATION_P30_40":
                     voxelParameters.setLaserSpecification(LaserSpecification.LEICA_SCANSTATION_P30_40);
+                    break;
+                case "custom":
+                    String beamDivergenceStr = laserSpecElement.getAttributeValue("beam-divergence");
+                    String beamDiameterAtExitStr = laserSpecElement.getAttributeValue("beam-diameter-at-exit");
+                    
+                    if(beamDivergenceStr != null && beamDiameterAtExitStr != null){
+                        voxelParameters.setLaserSpecification(new LaserSpecification(Double.valueOf(beamDiameterAtExitStr), Double.valueOf(beamDivergenceStr), "custom"));
+                    }
+                    
                     break;
                 default:
                     voxelParameters.setLaserSpecification(null);
@@ -397,26 +405,6 @@ public class VoxelAnalysisCfg extends Configuration{
             }
             
             voxelParameters.setLadParams(ladParameters);
-        }
-
-        Element generateMultiBandRasterElement = processElement.getChild("multi-band-raster");
-
-        if(generateMultiBandRasterElement != null){
-
-            boolean generateMultiBandRaster = Boolean.valueOf(generateMultiBandRasterElement.getAttributeValue("generate"));
-            
-            if(generateMultiBandRaster){
-                RasterParams rasterParameters = new RasterParams();
-                
-                rasterParameters.setGenerateMultiBandRaster(generateMultiBandRaster);
-                rasterParameters.setShortcutVoxelFileWriting(Boolean.valueOf(generateMultiBandRasterElement.getAttributeValue("discard_voxel_file_writing")));
-                rasterParameters.setRasterStartingHeight(Float.valueOf(generateMultiBandRasterElement.getAttributeValue("starting-height")));
-                rasterParameters.setRasterHeightStep(Float.valueOf(generateMultiBandRasterElement.getAttributeValue("step")));
-                rasterParameters.setRasterBandNumber(Integer.valueOf(generateMultiBandRasterElement.getAttributeValue("band-number")));
-                rasterParameters.setRasterResolution(Integer.valueOf(generateMultiBandRasterElement.getAttributeValue("resolution")));
-                
-                voxelParameters.setRasterParams(rasterParameters);
-            }
         }
         
         Element exportShotSegmentElement = processElement.getChild("export-shot-segment");
@@ -509,7 +497,7 @@ public class VoxelAnalysisCfg extends Configuration{
         /***LASER SPECIFICATION***/
         
         Element laserSpecElement = new Element("laser-specification");        
-        laserSpecElement.setAttribute("name", voxelParameters.getLaserSpecification().name());
+        laserSpecElement.setAttribute("name", voxelParameters.getLaserSpecification().getName());
         laserSpecElement.setAttribute("beam-diameter-at-exit", String.valueOf(voxelParameters.getLaserSpecification().getBeamDiameterAtExit()));
         laserSpecElement.setAttribute("beam-divergence", String.valueOf(voxelParameters.getLaserSpecification().getBeamDivergence()));
         
@@ -646,32 +634,15 @@ public class VoxelAnalysisCfg extends Configuration{
             ladElement.setAttribute("mode", String.valueOf(ladParameters.getLadEstimationMode()));
             ladElement.setAttribute("type", ladParameters.getLadType().toString());
 
-            if(ladParameters.getLadType() == Type.TWO_PARAMETER_BETA){
+            if(ladParameters.getLadType() == Type.TWO_PARAMETER_BETA || ladParameters.getLadType() == Type.ELLIPSOIDAL){
                 ladElement.setAttribute("alpha", String.valueOf(ladParameters.getLadBetaFunctionAlphaParameter()));
-                ladElement.setAttribute("beta", String.valueOf(ladParameters.getLadBetaFunctionBetaParameter()));
+                
+                if(ladParameters.getLadType() == Type.TWO_PARAMETER_BETA){
+                    ladElement.setAttribute("beta", String.valueOf(ladParameters.getLadBetaFunctionBetaParameter()));
+                }
             }
 
             processElement.addContent(ladElement);
-        }
-        
-        
-        if(voxelParameters.getRasterParams() != null){
-                
-            RasterParams rasterParameters = voxelParameters.getRasterParams();
-            
-            if(rasterParameters.isGenerateMultiBandRaster()){
-                Element generateMultiBandRasterElement = new Element("multi-band-raster");
-                generateMultiBandRasterElement.setAttribute("generate", String.valueOf(rasterParameters.isGenerateMultiBandRaster()));
-                generateMultiBandRasterElement.setAttribute("discard_voxel_file_writing", String.valueOf(rasterParameters.isShortcutVoxelFileWriting()));
-
-                generateMultiBandRasterElement.setAttribute("starting-height", String.valueOf(rasterParameters.getRasterStartingHeight()));
-                generateMultiBandRasterElement.setAttribute("step", String.valueOf(rasterParameters.getRasterHeightStep()));
-                generateMultiBandRasterElement.setAttribute("band-number", String.valueOf(rasterParameters.getRasterBandNumber()));
-                generateMultiBandRasterElement.setAttribute("resolution", String.valueOf(rasterParameters.getRasterResolution()));
-
-                processElement.addContent(generateMultiBandRasterElement);
-            }
-            
         }
         
         Element exportShotSegmentElement = new Element("export-shot-segment");

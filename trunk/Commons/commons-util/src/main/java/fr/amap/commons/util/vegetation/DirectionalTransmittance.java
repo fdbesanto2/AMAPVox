@@ -69,13 +69,14 @@ public class DirectionalTransmittance {
             double tmp = (Math.tan(thetaRad)*Math.tan(x));
             
             //patch to avoid acos(1.000000000001), causing psi result equals to NaN
-            if(Math.abs(1-tmp) < 0.01){
+            if(tmp < 1){
                 tmp = 1;
             }
+            
             double psi = Math.acos(1/tmp);
 
             double result = Math.cos(thetaRad) * Math.cos(x) * (1 + (2 / Math.PI) * (Math.tan(psi) - psi));
-
+            
             return result;
         }
         
@@ -117,6 +118,8 @@ public class DirectionalTransmittance {
         }
         
         nbIntervals = serie_angulaire.length-1;
+        
+        serie_angulaire[nbIntervals] = Math.toRadians(90) - 0.00000001; //integration failed on the last interval (patch)
         
         //calcul du tableau de densités ou probabilités
         pdfArray = new double[serie_angulaire.length];
@@ -161,18 +164,17 @@ public class DirectionalTransmittance {
      */
     public double getTransmittanceFromAngle(double theta, boolean degrees){
         
-        
-        if(transmittanceFunctions != null && !isBuildingTable){ //a table was built
-            
-            if(degrees){
-                if(theta > 90){ //get an angle between 0 and 90°
-                    theta = 180 - theta;
-                }
-            }else{
-                if(theta > (Math.PI/2.0)){ //get an angle between 0 and pi/2
-                    theta = Math.PI - theta;
-                }
+        if(degrees){
+            if(theta > 90){ //get an angle between 0 and 90°
+                theta = 180 - theta;
             }
+        }else{
+            if(theta > (Math.PI/2.0)){ //get an angle between 0 and pi/2
+                theta = Math.PI - theta;
+            }
+        }
+
+        if(transmittanceFunctions != null && !isBuildingTable){ //a table was built
             
             int indice = 0;
             if(degrees){
@@ -218,7 +220,7 @@ public class DirectionalTransmittance {
                 TrapezoidIntegrator integrator = new TrapezoidIntegrator();
 
                 double sum = 0;
-                for (int j = 0; j < nbIntervals - 1; j++) {
+                for (int j = 0; j < nbIntervals; j++) {
 
                     double thetaL = (serie_angulaire[j] + serie_angulaire[j + 1]) / 2.0d;
                     double Fi = (pdfArray[j]) / SOM;
@@ -246,21 +248,15 @@ public class DirectionalTransmittance {
     
     public static void main(String[] args) {
         
-        LeafAngleDistribution distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.TWO_PARAMETER_BETA, 1.13, 1.62);
+       
+        LeafAngleDistribution distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.EXTREMOPHILE);
         
-        System.out.println("Thetaf g_sinThetaf");
+        DirectionalTransmittance dirTrans = new DirectionalTransmittance(distribution);
+        //dirTrans.buildTable(180);
         
-        System.out.println("0.001"+" "+distribution.getDensityProbability(Math.toRadians(0.001)));
+        double densityProbability = dirTrans.getTransmittanceFromAngle(Math.toRadians(0), false);
+        double densityProbability2 = dirTrans.getTransmittanceFromAngle(Math.toRadians(180), false);
         
-        for(int i=1;i<=180;i++){
-            
-            double angle = i/2.0;
-            double angleRad = Math.toRadians(angle);
-            double densityProbability = distribution.getDensityProbability(angleRad);
-            
-            
-            System.out.println(angle+" "+densityProbability);
-        }
-        
+        System.out.println("test");
     }
 }

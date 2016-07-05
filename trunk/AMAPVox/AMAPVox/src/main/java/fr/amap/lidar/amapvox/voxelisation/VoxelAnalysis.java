@@ -49,9 +49,9 @@ import org.apache.log4j.Logger;
 
 public class VoxelAnalysis extends Process implements Cancellable{
 
-    public enum LaserSpecification{
+    /*public enum LaserSpecification{
         
-        DEFAULT_ALS(0.0003, 0.0005),
+        LMS_Q560(0.0003, 0.0005),
         VZ_400(0.007, 0.00035),
         LEICA_SCANSTATION_P30_40(0.0035, 0.00023),
         LEICA_SCANSTATION_C10(0.004, 0.0001);
@@ -72,7 +72,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
             return beamDivergence;
         }
         
-    }
+    }*/
     
     private final static Logger LOGGER = Logger.getLogger(VoxelAnalysis.class);
     
@@ -237,6 +237,8 @@ public class VoxelAnalysis extends Process implements Cancellable{
     public void init(VoxelParameters parameters, File outputFile) {
 
         this.parameters = parameters;
+        this.parameters.infos.setTransmittanceMode(parameters.getTransmittanceMode());
+        this.parameters.infos.setPathLengthMode(parameters.getPathLengthMode());
         this.outputFile = outputFile;
         
         if(parameters.getEchoesWeightParams().getWeightingMode() != EchoesWeightParams.WEIGHTING_NONE){
@@ -265,7 +267,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
             if(parameters.infos.getType() == VoxelSpaceInfos.Type.TLS){
                 laserSpec = LaserSpecification.VZ_400;
             }else{
-                laserSpec = LaserSpecification.DEFAULT_ALS;
+                laserSpec = LaserSpecification.LMS_Q560;
             }
         }
         

@@ -36,6 +36,8 @@ public class VoxelSpaceInfos {
     private double[] ladParams;
     private String[] columnNames;
     private List<String> columnNamesList;
+    private int transmittanceMode;
+    private String pathLengthMode;
     
     public enum Type{
         ALS(1),
@@ -48,10 +50,14 @@ public class VoxelSpaceInfos {
     }
 
     public VoxelSpaceInfos(){
+        this.pathLengthMode = "A";
+        this.transmittanceMode = 1;
         this.voxelSize = new Point3d();
     }
     
     public VoxelSpaceInfos(Point3d minCorner, Point3d maxCorner, float resolution) {
+        this.pathLengthMode = "A";
+        this.transmittanceMode = 1;
         
         this.minCorner = minCorner;
         this.maxCorner = maxCorner;
@@ -64,6 +70,8 @@ public class VoxelSpaceInfos {
     }
     
     public VoxelSpaceInfos(Point3d minCorner, Point3d maxCorner, Point3i split) {
+        this.pathLengthMode = "A";
+        this.transmittanceMode = 1;
         this.minCorner = minCorner;
         this.maxCorner = maxCorner;
         this.split = split;
@@ -105,10 +113,24 @@ public class VoxelSpaceInfos {
                 String[] otherValuesArray = otherValuesLine.split(" ");
                 
                 String typeStr = otherValuesArray[1];
-                if(typeStr.equals("ALS")){
-                    type = Type.ALS;
+                
+                if(typeStr.contains("/")){ //workaround for the new parameters
+                    String[] split1 = typeStr.split("/");
+                    if(split1[0].equals("ALS")){
+                        type = Type.ALS;
+                    }else{
+                        type = Type.TLS;
+                    }
+                    
+                    transmittanceMode = Integer.valueOf(split1[1]);
+                    pathLengthMode = split1[2];
+                    
                 }else{
-                    type = Type.TLS;
+                    if(typeStr.equals("ALS")){
+                        type = Type.ALS;
+                    }else{
+                        type = Type.TLS;
+                    }
                 }
                 
                 resolution = Float.valueOf(otherValuesArray[3]);
@@ -268,14 +290,30 @@ public class VoxelSpaceInfos {
     public void setLadParams(double[] ladParams) {
         this.ladParams = ladParams;
     }
+
+    public int getTransmittanceMode() {
+        return transmittanceMode;
+    }
+
+    public String getPathLengthMode() {
+        return pathLengthMode;
+    }
+
+    public void setTransmittanceMode(int transmittanceMode) {
+        this.transmittanceMode = transmittanceMode;
+    }
+
+    public void setPathLengthMode(String pathLengthMode) {
+        this.pathLengthMode = pathLengthMode;
+    }
     
     public String headerToString(){
         
-        String metadata = "#type: "+type+" #res: "+resolution+" #MAX_PAD: "+maxPAD;
+        String metadata = "#type: "+type+"/"+transmittanceMode+"/"+pathLengthMode+" #res: "+resolution+" #MAX_PAD: "+maxPAD;
         
         metadata += " #LAD_TYPE: " + ladType.toString();
             
-        if (ladType == LeafAngleDistribution.Type.TWO_PARAMETER_BETA) {
+        if (ladType == LeafAngleDistribution.Type.TWO_PARAMETER_BETA || ladType == LeafAngleDistribution.Type.ELLIPSOIDAL) {
             
             metadata += "=[";
 
