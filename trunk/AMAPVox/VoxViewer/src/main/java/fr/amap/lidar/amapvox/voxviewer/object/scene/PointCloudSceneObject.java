@@ -5,12 +5,17 @@
  */
 package fr.amap.lidar.amapvox.voxviewer.object.scene;
 
+import com.jogamp.common.nio.Buffers;
+import com.jogamp.opengl.GL3;
 import fr.amap.commons.math.point.Point3D;
 import fr.amap.commons.util.Statistic;
 import fr.amap.commons.structure.octree.Octree;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec3F;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.BillboardPCLShader;
+import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMeshFactory;
+import fr.amap.lidar.amapvox.voxviewer.mesh.InstancedGLMesh;
 import fr.amap.lidar.amapvox.voxviewer.mesh.PointCloudGLMesh;
 import gnu.trove.list.array.TFloatArrayList;
 import java.io.File;
@@ -133,11 +138,86 @@ public class PointCloudSceneObject extends ScalarSceneObject{
         }
     }
     
+    public void setPointSize(int size){
+        
+        if(size == 0){ //view pointcloud as default with 1 pixel size
+            
+        }else{ //draw pointcloud as billboards
+            mesh = new InstancedGLMesh(GLMeshFactory.createPlane(new Vec3F(), size, size), vertexDataList.size()/3);
+            
+            ((InstancedGLMesh)mesh).instancePositionsBuffer = Buffers.newDirectFloatBuffer(vertexDataList.toArray());
+            
+            ScalarField scalarField = scalarFieldsList.get(currentAttribut);
+            ((InstancedGLMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(updateColor(scalarField));
+            ((InstancedGLMesh)mesh).setInstanceNumber(getNumberOfPoints());
+            this.setShader(new BillboardPCLShader());
+            
+            this.resetIds();
+        }
+    }
+    
+    @Override
+    public void initBuffers(GL3 gl){
+        
+        if(mesh instanceof InstancedGLMesh){
+            int maxSize = (mesh.getVertexBuffer().capacity()*GLMesh.FLOAT_SIZE)+(getNumberOfPoints()*3*GLMesh.FLOAT_SIZE)+(getNumberOfPoints()*4*GLMesh.FLOAT_SIZE);
+            mesh.initBuffers(gl, maxSize);
+
+            ((InstancedGLMesh)mesh).setInstanceNumber(getNumberOfPoints());
+        }else{
+            super.initBuffers(gl);
+        }
+    }
+    
+    @Override
+    public void initVao(GL3 gl){
+        
+        if(mesh instanceof InstancedGLMesh){
+            //generate vao
+            int[] tmp2 = new int[1];
+            gl.glGenVertexArrays(1, tmp2, 0);
+            vaoId = tmp2[0];
+
+            gl.glBindVertexArray(vaoId);
+
+                gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, mesh.getVboId());
+
+                    gl.glEnableVertexAttribArray(shader.attributeMap.get("position"));
+                    gl.glVertexAttribPointer(shader.attributeMap.get("position"), 3, GL3.GL_FLOAT, false, 0, 0);
+
+                    gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_position"));
+                    gl.glVertexAttribPointer(shader.attributeMap.get("instance_position"), 3, GL3.GL_FLOAT, false, 0, mesh.getVertexBuffer().capacity()*Buffers.SIZEOF_FLOAT);
+                    gl.glVertexAttribDivisor(shader.attributeMap.get("instance_position"), 1);
+
+                    gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_color"));
+                    gl.glVertexAttribPointer(shader.attributeMap.get("instance_color"), 4, GL3.GL_FLOAT, false, 0, (mesh.getVertexBuffer().capacity()+((InstancedGLMesh)mesh).instancePositionsBuffer.capacity())*Buffers.SIZEOF_FLOAT);
+                    gl.glVertexAttribDivisor(shader.attributeMap.get("instance_color"), 1);
+
+                gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, mesh.getIboId());
+
+                gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, 0);
+
+            gl.glBindVertexArray(0);
+            
+            ((InstancedGLMesh)mesh).instancePositionsBuffer = Buffers.newDirectFloatBuffer(vertexDataList.toArray());
+            
+            ScalarField scalarField = scalarFieldsList.get(currentAttribut);
+            ((InstancedGLMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(updateColor(scalarField));
+            ((InstancedGLMesh)mesh).setInstanceNumber(getNumberOfPoints());
+            
+            this.resetIds();
+            
+        }else{
+            super.initVao(gl);
+        }
+        
+    }
+    
     public void initMesh(){
         
-        this.gravityCenter = new Point3F((float)(xPositionStatistic.getMean()),
+        setGravityCenter(new Point3F((float)(xPositionStatistic.getMean()),
                                     (float)(yPositionStatistic.getMean()),
-                                    (float)(zPositionStatistic.getMean()));
+                                    (float)(zPositionStatistic.getMean())));
         
         Iterator<Map.Entry<String, ScalarField>> iterator = scalarFieldsList.entrySet().iterator();
         

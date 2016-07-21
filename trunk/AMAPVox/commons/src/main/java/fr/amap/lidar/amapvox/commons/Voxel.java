@@ -136,8 +136,8 @@ public class Voxel{
         public double transmittance_tmp;
         //public double _transmittance_v2;
         public float angleMean;
-        public float bvEntering;
-        public float bvIntercepted;
+        public double bvEntering;
+        public double bvIntercepted;
         public float PadBVTotal;
         //public float _PadBVTotal_V2;
         public double sumSurfMulLength;
@@ -147,6 +147,7 @@ public class Voxel{
         public float _neighboursNumber;
         
         public boolean _lastEcho = true;
+        public boolean _valid = true;
         
 
         protected static Set<String> fieldsNames;
@@ -343,7 +344,7 @@ public class Voxel{
 
             } else {
 
-                transmittance = (bvEntering - bvIntercepted) / bvEntering;
+                transmittance = (float) ((bvEntering - bvIntercepted) / bvEntering);
                 transmittance = (float) Math.pow(transmittance, 1 / lMeanTotal);
                 //voxel._transmittance_v2 = (voxel._transBeforeNorm) / voxel._sumSurfaceMultiplyLength ;
 

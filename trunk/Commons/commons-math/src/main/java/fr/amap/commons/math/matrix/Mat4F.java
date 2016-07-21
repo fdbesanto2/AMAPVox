@@ -438,7 +438,7 @@ public class Mat4F {
             right.x, newUp.x, forward.x, 0,
             right.y, newUp.y, forward.y, 0,
             right.z, newUp.z, forward.z, 0,
-            -Vec3F.dot(right, eye), -Vec3F.dot(newUp, eye), -Vec3F.dot(forward, eye), 1
+            /*translation part*/-Vec3F.dot(right, eye), -Vec3F.dot(newUp, eye), -Vec3F.dot(forward, eye)/*translation part*/, 1
         };
         
         

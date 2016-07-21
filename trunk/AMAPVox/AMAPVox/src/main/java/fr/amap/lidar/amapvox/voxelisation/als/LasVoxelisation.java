@@ -103,7 +103,6 @@ public class LasVoxelisation extends Process implements Cancellable{
         }
         
         voxelAnalysis = new VoxelAnalysis(terrain, null, cfg);
-        voxelAnalysis.init(cfg.getVoxelParameters(), cfg.getOutputFile());
         voxelAnalysis.createVoxelSpace();
         
         if(FileManager.getExtension(cfg.getInputFile()).equals(".sht")){
@@ -205,7 +204,7 @@ public class LasVoxelisation extends Process implements Cancellable{
             }
         });
 
-        voxelAnalysis.write(cfg.getVoxelsFormat());
+        voxelAnalysis.write(cfg.getVoxelsFormat(), cfg.getOutputFile());
 
         if(cfg.getVoxelParameters().getGroundEnergyParams() != null &&
                 cfg.getVoxelParameters().getGroundEnergyParams().isCalculateGroundEnergy()){

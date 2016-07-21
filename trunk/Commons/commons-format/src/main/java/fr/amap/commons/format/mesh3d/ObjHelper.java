@@ -388,11 +388,11 @@ public class ObjHelper {
         }
     }
     
-    public static Obj readObj(File objFile, File mtlFile) throws FileNotFoundException, IOException{
-             
+    public static Obj readObj(Reader objReader, Reader mtlReader) throws FileNotFoundException, IOException{
+        
         Obj obj = new Obj();
         
-        try (BufferedReader reader = new BufferedReader(new FileReader(objFile))) {
+        try (BufferedReader reader = new BufferedReader(objReader)) {
             
             List<Point3F> vertices = new ArrayList<>();
             List<Point3F> normals = new ArrayList<>();
@@ -529,13 +529,13 @@ public class ObjHelper {
             throw ex;
         }
         
-        if (mtlFile != null) {
+        if (mtlReader != null) {
             
             
             
             Map<String, Mtl> materials = new HashMap<>();
 
-            try (BufferedReader reader = new BufferedReader(new FileReader(mtlFile))) {
+            try (BufferedReader reader = new BufferedReader(mtlReader)) {
 
                 String line;
                 String materialName = null;
@@ -579,5 +579,14 @@ public class ObjHelper {
         }
         
         return obj;
+    }
+    
+    public static Obj readObj(File objFile, File mtlFile) throws FileNotFoundException, IOException{
+        
+        if(mtlFile == null){
+            return readObj(new FileReader(objFile), null);
+        }else{
+            return readObj(new FileReader(objFile), new FileReader(mtlFile));
+        }
     }
 }

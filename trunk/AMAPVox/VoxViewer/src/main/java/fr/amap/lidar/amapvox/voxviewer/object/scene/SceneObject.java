@@ -36,11 +36,12 @@ public abstract class SceneObject{
     public boolean depthTest = true;
     public Texture texture;
     protected Shader shader;
-    protected Point3F gravityCenter;
+    protected final Point3F gravityCenter;
     protected Mat4F transformation;
     private UniformMat4F transfoUniform = new UniformMat4F("transformation");
     private int id;
     protected boolean colorNeedUpdate = false;
+    private String name = "";
     
     protected boolean mousePickable;
     private boolean selected;
@@ -54,6 +55,7 @@ public abstract class SceneObject{
         //setPosition(new Point3F());
         listeners = new EventListenerList();
         visible = true;
+        gravityCenter = new Point3F();
     }
     
     public SceneObject(GLMesh mesh, boolean isAlphaRequired){
@@ -128,7 +130,9 @@ public abstract class SceneObject{
     }
 
     public void setGravityCenter(Point3F position) {
-        this.gravityCenter = position;
+        this.gravityCenter.x = position.x;
+        this.gravityCenter.y = position.y;
+        this.gravityCenter.z = position.z;
     }
     
     public void setMousePickable(boolean isPickable){
@@ -217,6 +221,14 @@ public abstract class SceneObject{
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
     
     public abstract void initBuffers(GL3 gl);

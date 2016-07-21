@@ -15,8 +15,8 @@ public class AxisShader extends Shader{
         
         super();
         
-        setVertexShaderCode(loadCodeFromInputStream(getStream("shaders/NoTranslationVertexShader.txt")));
-        setFragmentShaderCode(loadCodeFromInputStream(getStream("shaders/NoTranslationFragmentShader.txt")));
+        setVertexShaderCode(loadCodeFromInputStream(getStream("shaders/AxisVertexShader.txt")));
+        setFragmentShaderCode(loadCodeFromInputStream(getStream("shaders/AxisFragmentShader.txt")));
     }
     
 }

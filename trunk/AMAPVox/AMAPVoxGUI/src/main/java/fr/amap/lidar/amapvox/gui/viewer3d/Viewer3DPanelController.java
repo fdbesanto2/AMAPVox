@@ -37,10 +37,15 @@ import fr.amap.lidar.amapvox.gui.SceneObjectPropertiesPanelController;
 import fr.amap.lidar.amapvox.gui.SceneObjectWrapper;
 import fr.amap.lidar.amapvox.voxelisation.configuration.PTXLidarScan;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
+import fr.amap.lidar.amapvox.voxviewer.FXNewtOverlap;
 import fr.amap.lidar.amapvox.voxviewer.Viewer3D;
 import fr.amap.lidar.amapvox.voxviewer.event.BasicEvent;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.AxisShader;
 import fr.amap.lidar.amapvox.voxviewer.loading.shader.ColorShader;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.InstanceLightedShader;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.PhongShader;
 import fr.amap.lidar.amapvox.voxviewer.loading.shader.SimpleShader;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.TextureShader;
 import fr.amap.lidar.amapvox.voxviewer.loading.texture.StringToImage;
 import fr.amap.lidar.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
@@ -61,9 +66,14 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -102,6 +112,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -141,6 +152,7 @@ public class Viewer3DPanelController implements Initializable {
     private RiscanProjectExtractor riscanProjectExtractor;
     private PTXProjectExtractor ptxProjectExtractor;
     private PTGProjectExtractor ptgProjectExtractor;
+    
     
     @FXML
     private CheckBox checkboxRaster1;
@@ -381,32 +393,13 @@ public class Viewer3DPanelController implements Initializable {
         }
         
         return selectedScObjects;
-    }
-    
-    private boolean checkVoxelFile(File voxelFile){
-        
-        boolean valid = true;
-        
-        if(voxelFile != null){
-            String header = FileManager.readHeader(voxelFile.getAbsolutePath());
-            
-            if(header != null && header.equals("VOXEL SPACE")){
-                
-            }else{
-                valid = false;
-            }
-        }else{
-            valid = false;
-        }
-        
-        return valid;
-    }
+    }    
     
     public void updateCurrentVoxelFile(File voxelFile){
         
         this.currentVoxelFile = voxelFile;
 
-        if (!checkVoxelFile(voxelFile)) {
+        if (!VoxelFileReader.isFileAVoxelFile(voxelFile)) {
             return;
         }
         
@@ -715,7 +708,7 @@ public class Viewer3DPanelController implements Initializable {
 
                                 final Viewer3D viewer3D = new Viewer3D((int) (SCREEN_WIDTH / 4.0d), (int) (SCREEN_HEIGHT / 4.0d), (int) (SCREEN_WIDTH / 1.5d), (int) (SCREEN_HEIGHT / 2.0d), voxelFile.toString());
                                 //viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
-
+                                viewer3D.setDynamicDraw(true);
                                 fr.amap.lidar.amapvox.voxviewer.object.scene.Scene scene = viewer3D.getScene();
 
                                 /**
@@ -736,27 +729,6 @@ public class Viewer3DPanelController implements Initializable {
 
                                 voxelSpace.loadVoxels();
                                 float voxelResolution = voxelSpace.data.getVoxelSpaceInfos().getResolution();
-                                
-                                /*
-                                 * Voxel information
-                                 */
-                                StringToImage stringToImage = new StringToImage(1024, 1024);
-                                stringToImage.setAdaptableFontSize(true);
-                                stringToImage.setBackgroundColor(new Color(255, 255, 255, 127));
-                                stringToImage.setTextColor(new Color(0, 0, 0, 255));
-
-
-                                BufferedImage image = new BufferedImage(1024, 1024, BufferedImage.TYPE_INT_ARGB);
-                                
-                                Texture texture = new Texture(image);
-                                
-                                int pickingInfoObjectWidth = viewer3D.getWidth()/5;
-                                int pickingInfoObjectHeight = viewer3D.getHeight()/5;
-                                
-                                SceneObject pickingInfoObject = SceneObjectFactory.createTexturedPlane(new Vec3F(viewer3D.getWidth()-pickingInfoObjectWidth, viewer3D.getHeight()-pickingInfoObjectHeight, 0), pickingInfoObjectWidth, pickingInfoObjectHeight, texture);
-            
-                                pickingInfoObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.texturedShader);
-                                pickingInfoObject.setDrawType(GLMesh.DrawType.TRIANGLES);
                                 
                                 SceneObject sceneObjectSelectedVox = new SimpleSceneObject(GLMeshFactory.createBoundingBox(
                                         -voxelResolution/2.0f,
@@ -793,75 +765,23 @@ public class Viewer3DPanelController implements Initializable {
                                     }
                                 });
                                 
-                                SceneObjectListener listener = new SceneObjectListener() {
-                                    @Override
-                                    public void clicked(SceneObject sceneObject, MousePicker mousePicker, Point3D intersection) {
-
-                                        Vec3F camLocation = viewer3D.getScene().getCamera().getLocation();
-
-                                        VoxelObject selectedVoxel = voxelSpace.doPicking(mousePicker);
-
-                                        if(selectedVoxel != null){
-
-                                            String[][] lines = new String[voxelSpace.getColumnsNames().length][2];
-
-                                            for(int i=0;i<voxelSpace.getColumnsNames().length;i++){
-
-                                                lines[i][0] = voxelSpace.getColumnsNames()[i];
-                                                
-                                                float attribut = selectedVoxel.getAttributs()[i];
-                                                if(Float.isNaN(attribut)){
-                                                    lines[i][1] = "NaN";
-                                                }else{
-                                                    lines[i][1] = String.valueOf(Math.round(attribut*1000.0f)/1000.0f);
-                                                }
-                                                
-                                            }
-
-                                            arrangeText(lines);
-
-                                            String text = "";
-                                            for(int i=0;i<voxelSpace.getColumnsNames().length;i++){
-
-                                                String attribut = lines[i][0]+" "+lines[i][1];
-                                                text += attribut+"\n";
-                                            }
-
-                                            stringToImage.setText(text, 0, 0);
-
-                                            texture.setBufferedImage(stringToImage.buildImage());
-                                            Point3f voxelPosition = voxelSpace.getVoxelPosition(selectedVoxel.$i, selectedVoxel.$j, selectedVoxel.$k);
-
-                                            sceneObjectSelectedVox.setPosition(new Point3F(voxelPosition.x, voxelPosition.y, voxelPosition.z));
-                                            sceneObjectSelectedVox.setVisible(true);
-                                            pickingInfoObject.setVisible(true);
-                                            
-                                            if(spaceKeyDown.get()){
-                                                viewer3D.getScene().getCamera().setTarget(new Vec3F(voxelPosition.x, voxelPosition.y, voxelPosition.z));
-                                            }
-                                            
-                                        }else{
-                                            sceneObjectSelectedVox.setVisible(false);
-                                            pickingInfoObject.setVisible(false);
-                                        }
-                                    }
-                                };
-
-                                voxelSpace.addSceneObjectListener(listener);
+                                
 
                                 voxelSpace.changeCurrentAttribut(attributeToView);
-                                voxelSpace.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.instanceLightedShader);
+                                voxelSpace.setShader(new InstanceLightedShader());
                                 voxelSpace.setDrawType(GLMesh.DrawType.TRIANGLES);
                                 scene.addSceneObject(voxelSpace);
+                                
 
                                 VoxelFileReader reader = new VoxelFileReader(voxelFile);
                                 VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
-                                scene.addSceneObjectAsHud(pickingInfoObject);
             
 
                                 /**
                                  * *DTM**
                                  */
+                                SceneObject dtmSceneObject = null;
+                                
                                 if (drawDTM && dtmFile != null) {
 
                                     updateMessage("Loading DTM");
@@ -883,8 +803,8 @@ public class Viewer3DPanelController implements Initializable {
                                     dtm.buildMesh();
 
                                     GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormalesFromDTM(dtm);
-                                    SceneObject dtmSceneObject = new SimpleSceneObject(dtmMesh, false);
-                                    dtmSceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.phongShader);
+                                    dtmSceneObject = new SimpleSceneObject(dtmMesh, false);
+                                    dtmSceneObject.setShader(new PhongShader());
                                     scene.addSceneObject(dtmSceneObject);
 
                                     updateProgress(100, 100);
@@ -905,8 +825,9 @@ public class Viewer3DPanelController implements Initializable {
                                         (int) (viewer3D.getHeight() / 20),
                                         scaleTexture);
 
-                                scalePlane.setShader(scene.texturedShader);
+                                scalePlane.setShader(new TextureShader());
                                 scalePlane.setDrawType(GLMesh.DrawType.TRIANGLES);
+                                scalePlane.setName("color scale");
                                 scene.addSceneObjectAsHud(scalePlane);
 
                                 GLMesh boundingBoxMesh = GLMeshFactory.createBoundingBox((float) infos.getMinCorner().x,
@@ -937,6 +858,21 @@ public class Viewer3DPanelController implements Initializable {
                                         scaleTexture.setBufferedImage(image);
                                     }
                                 });
+                                
+                                /**
+                                 * Axis
+                                 */
+                                
+                                InputStream axis3ObjStream = Viewer3D.class.getResourceAsStream("/mesh/axis3.obj");
+                                InputStream axis3MtlStream = Viewer3D.class.getResourceAsStream("/mesh/axis3.mtl");
+
+
+                                GLMesh axisMesh = GLMeshFactory.createMeshFromObj(axis3ObjStream, axis3MtlStream);
+                                //axisMesh.translate(new Vec3F(264094, 331552, 235));
+                                axisMesh.scale(new Vec3F(5, 5, 5));
+                                SceneObject axisSceneObject = new SimpleSceneObject(axisMesh);
+                                axisSceneObject.setShader(new AxisShader());
+                                viewer3D.getScene().addSceneObject(axisSceneObject);
 
                                 /**
                                  * *light**
@@ -950,147 +886,97 @@ public class Viewer3DPanelController implements Initializable {
                                 trackballCamera.setPivot(voxelSpace);
                                 trackballCamera.setLocation(new Vec3F(voxelSpace.getGravityCenter().x + voxelSpace.widthX, voxelSpace.getGravityCenter().y + voxelSpace.widthY, voxelSpace.getGravityCenter().z + voxelSpace.widthZ));
                                 viewer3D.getScene().setCamera(trackballCamera);
+                                
+                                final SceneObject dtmSceneObjectFinal = dtmSceneObject;
 
                                 Platform.runLater(new Runnable() {
 
                                     @Override
                                     public void run() {
 
-                                        final Stage toolBarFrameStage = new Stage();
-                                        final FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ToolBoxFrame.fxml"));
+                                        final Stage viewer3DStage = new Stage();
+                                        final FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Viewer3DFrame.fxml"));
 
                                         try {
                                             stage.setAlwaysOnTop(false);
 
                                             Parent root = loader.load();
-                                            toolBarFrameStage.setScene(new Scene(root));
-                                            toolBarFrameStage.initStyle(StageStyle.UNDECORATED);
+                                            Scene scene1 = new Scene(root);
+                                            viewer3DStage.setScene(scene1);
 
-                                            toolBarFrameStage.setAlwaysOnTop(true);
-
-                                            ToolBoxFrameController toolBarFrameController = loader.getController();
-                                            toolBarFrameController.setStage(toolBarFrameStage);
-                                            toolBarFrameStage.setX(viewer3D.getPosition().getX());
-                                            toolBarFrameStage.setY(viewer3D.getPosition().getY());
-                                            toolBarFrameController.setJoglListener(viewer3D.getJoglContext());
-                                            toolBarFrameController.setAttributes(attributeToView, voxelSpace.data.getVoxelSpaceInfos().getColumnNames());
-
-                                            toolBarFrameStage.focusedProperty().addListener(new ChangeListener<Boolean>() {
-
+                                            Viewer3DFrameController viewer3DFrameController = loader.getController();
+                                            viewer3DFrameController.setStage(viewer3DStage);
+                                            viewer3DStage.setX(viewer3D.getPosition().getX());
+                                            viewer3DStage.setY(viewer3D.getPosition().getY());
+                                            viewer3DFrameController.setViewer3D(viewer3D);
+                                            viewer3DFrameController.setAttributes(attributeToView, voxelSpace.data.getVoxelSpaceInfos().getColumnNames());
+                                            
+                                            
+                                            viewer3DFrameController.initContent(voxelSpace);
+                                            
+                                            viewer3DFrameController.addSceneObject(voxelSpace, voxelFile.getName());
+                                            
+                                            if(dtmSceneObjectFinal != null){
+                                                viewer3DFrameController.addSceneObject(dtmSceneObjectFinal, dtmFile.getName());
+                                            }
+                                            
+                                            SceneObjectListener listener = new SceneObjectListener() {
                                                 @Override
-                                                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                                                    if (newValue) {
-                                                        toolBarFrameStage.setAlwaysOnTop(true);
+                                                public void clicked(SceneObject sceneObject, MousePicker mousePicker, Point3D intersection) {
 
-                                                        toolBarFrameStage.setX(viewer3D.getPosition().getX());
-                                                        toolBarFrameStage.setY(viewer3D.getPosition().getY());
-                                                    } else if (!viewer3D.isFocused()) {
-                                                        toolBarFrameStage.setAlwaysOnTop(false);
+                                                    Vec3F camLocation = viewer3D.getScene().getCamera().getLocation();
+
+                                                    VoxelObject selectedVoxel = voxelSpace.doPicking(mousePicker);
+
+                                                    if(selectedVoxel != null){
+
+                                                        LinkedHashMap<String, Double> attributes = new LinkedHashMap<>();
+
+                                                        for(int i=0;i<voxelSpace.getColumnsNames().length;i++){
+
+                                                            float attribut = selectedVoxel.getAttributs()[i];
+
+                                                            attributes.put(voxelSpace.getColumnsNames()[i] , new Double(attribut));
+                                                        }
+                                                        
+                                                        Platform.runLater(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                viewer3DFrameController.setAttributes(attributes);
+                                                            }
+                                                        });
+
+                                                        Point3f voxelPosition = voxelSpace.getVoxelPosition(selectedVoxel.$i, selectedVoxel.$j, selectedVoxel.$k);
+
+                                                        sceneObjectSelectedVox.setPosition(new Point3F(voxelPosition.x, voxelPosition.y, voxelPosition.z));
+                                                        sceneObjectSelectedVox.setVisible(true);
+
+                                                        if(spaceKeyDown.get()){
+                                                            viewer3D.getScene().getCamera().setTarget(new Vec3F(voxelPosition.x, voxelPosition.y, voxelPosition.z));
+                                                        }
+
+                                                    }else{
+                                                        sceneObjectSelectedVox.setVisible(false);
                                                     }
                                                 }
-                                            });
+                                            };
 
-                                            toolBarFrameController.initContent(voxelSpace);
-                                            toolBarFrameStage.setAlwaysOnTop(true);
+                                            voxelSpace.addSceneObjectListener(listener);
 
-                                            toolBarFrameStage.show();
+                                            //viewer3D.getJoglContext().setStartX((int) viewer3DStage.getWidth());
+                                            
+                                            
+                                            FXNewtOverlap.link(viewer3DStage, scene1, viewer3D, viewer3DFrameController.getAnchorPaneGL());
 
-                                            double maxToolBoxHeight = toolBarFrameStage.getHeight();
-                                            viewer3D.getJoglContext().setStartX((int) toolBarFrameStage.getWidth());
-
-                                            viewer3D.getRenderFrame().addWindowListener(new WindowAdapter() {
-
+                                            viewer3DStage.setOnHidden(new EventHandler<WindowEvent>() {
                                                 @Override
-                                                public void windowResized(com.jogamp.newt.event.WindowEvent we) {
-
-                                                    Window window = (Window) we.getSource();
-                                                    final int height = window.getHeight();
-
-                                                    Platform.runLater(new Runnable() {
-
-                                                        @Override
-                                                        public void run() {
-
-                                                            if (height < maxToolBoxHeight) {
-                                                                toolBarFrameStage.setHeight(height);
-                                                            } else {
-                                                                toolBarFrameStage.setHeight(maxToolBoxHeight);
-                                                            }
-
-                                                            toolBarFrameStage.setX(viewer3D.getPosition().getX());
-                                                            toolBarFrameStage.setY(viewer3D.getPosition().getY());
-                                                        }
-                                                    });
-                                                }
-
-                                                @Override
-                                                public void windowMoved(com.jogamp.newt.event.WindowEvent we) {
-
-                                                    Platform.runLater(new Runnable() {
-
-                                                        @Override
-                                                        public void run() {
-                                                            toolBarFrameStage.setX(viewer3D.getPosition().getX());
-                                                            toolBarFrameStage.setY(viewer3D.getPosition().getY());
-                                                        }
-                                                    });
-                                                }
-
-                                                @Override
-                                                public void windowDestroyed(com.jogamp.newt.event.WindowEvent we) {
-
-                                                    Platform.runLater(new Runnable() {
-
-                                                        @Override
-                                                        public void run() {
-                                                            toolBarFrameStage.close();
-                                                        }
-                                                    });
-                                                }
-
-                                                @Override
-                                                public void windowGainedFocus(com.jogamp.newt.event.WindowEvent we) {
-
-                                                    viewer3D.setIsFocused(true);
-
-                                                    Platform.runLater(new Runnable() {
-
-                                                        @Override
-                                                        public void run() {
-
-                                                            if (!toolBarFrameStage.isShowing()) {
-                                                                toolBarFrameStage.toFront();
-                                                            }
-
-                                                            toolBarFrameStage.setIconified(false);
-                                                            toolBarFrameStage.setAlwaysOnTop(true);
-
-                                                            toolBarFrameStage.setX(viewer3D.getPosition().getX());
-                                                            toolBarFrameStage.setY(viewer3D.getPosition().getY());
-                                                        }
-                                                    });
-                                                }
-
-                                                @Override
-                                                public void windowLostFocus(com.jogamp.newt.event.WindowEvent e) {
-
-                                                    viewer3D.setIsFocused(false);
-                                                    Platform.runLater(new Runnable() {
-
-                                                        @Override
-                                                        public void run() {
-                                                            if (!toolBarFrameStage.focusedProperty().get()) {
-                                                                toolBarFrameStage.setIconified(true);
-                                                                toolBarFrameStage.setAlwaysOnTop(false);
-                                                            }
-                                                        }
-                                                    });
+                                                public void handle(WindowEvent event) {
+                                                    viewer3D.close();
                                                 }
                                             });
-
+                                            
                                             viewer3D.show();
-
-                                            toolBarFrameStage.setAlwaysOnTop(true);
+                                            viewer3DStage.show();
 
                                         } catch (IOException e) {
                                             LOGGER.error("Loading ToolBarFrame.fxml failed", e);
@@ -1281,7 +1167,7 @@ public class Viewer3DPanelController implements Initializable {
         
         if(taskImporter == null){
             //handle other cases
-            if (checkVoxelFile(file)) {
+            if (VoxelFileReader.isFileAVoxelFile(file)) {
                 taskImporter = new VoxImportTask(file);
 
             }else{

@@ -46,7 +46,7 @@ public class RasterSceneObject extends ScalarSceneObject{
         initColors(raster);
         computeNormales(raster);
         
-        this.gravityCenter = mesh.getGravityCenter();
+        setGravityCenter(mesh.getGravityCenter());
         
         super.setShader(new PhongShader());
     }

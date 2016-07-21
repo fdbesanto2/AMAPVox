@@ -38,7 +38,7 @@ import fr.amap.commons.util.TimeCounter;
 import fr.amap.commons.structure.pointcloud.PointCloud;
 import fr.amap.amapvox.io.tls.rsp.Rsp;
 import fr.amap.amapvox.io.tls.rsp.RxpScan;
-import fr.amap.lidar.amapvox.dart.DartPlotsXMLWriter;
+import fr.amap.lidar.amapvox.export.dart.DartPlotsXMLWriter;
 import fr.amap.commons.raster.asc.AsciiGridHelper;
 import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.math.geometry.BoundingBox2F;
@@ -58,7 +58,7 @@ import fr.amap.commons.util.vegetation.DirectionalTransmittance;
 import fr.amap.commons.util.vegetation.LeafAngleDistribution;
 import static fr.amap.commons.util.vegetation.LeafAngleDistribution.Type.TWO_PARAMETER_BETA;
 import static fr.amap.commons.util.vegetation.LeafAngleDistribution.Type.ELLIPSOIDAL;
-import fr.amap.lidar.amapvox.voxelisation.ProcessTool;
+import fr.amap.lidar.amapvox.voxelisation.postproc.VoxelFileMerging;
 import fr.amap.lidar.amapvox.voxelisation.LaserSpecification;
 import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.Input;
@@ -203,7 +203,9 @@ import fr.amap.lidar.amapvox.voxelisation.postproc.VoxelSpaceUtil;
 import fr.amap.lidar.amapvox.voxviewer.Viewer3D;
 import fr.amap.lidar.amapvox.voxviewer.event.EventManager;
 import fr.amap.lidar.amapvox.voxviewer.input.InputKeyListener;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.InstanceLightedShader;
 import fr.amap.lidar.amapvox.voxviewer.loading.shader.SimpleShader;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.TextureShader;
 import fr.amap.lidar.amapvox.voxviewer.loading.texture.StringToImage;
 import fr.amap.lidar.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
@@ -218,6 +220,7 @@ import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceAdapter;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -226,8 +229,6 @@ import java.util.Iterator;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Menu;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextArea;
 import javafx.stage.StageStyle;
 import javax.vecmath.Point3f;
@@ -383,6 +384,7 @@ public class MainFrameController implements Initializable {
     private static String RS_STR_INPUT_TYPE_SHOTS;
     private static String RS_STR_OPEN_IMAGE;
     private static String RS_STR_INFO;
+    private static String RS_STR_OPEN_CONTAINING_FOLDER;
     private static String RS_STR_EDIT;
     private static String RS_STR_EXPORT;
     
@@ -968,6 +970,7 @@ public class MainFrameController implements Initializable {
         RS_STR_OPEN_IMAGE = rb.getString("open_image");
         RS_STR_INFO = rb.getString("info");
         RS_STR_EDIT = rb.getString("edit");
+        RS_STR_OPEN_CONTAINING_FOLDER = rb.getString("open_containing_folder");
         RS_STR_EXPORT = rb.getString("export");
     }
     
@@ -1212,6 +1215,30 @@ public class MainFrameController implements Initializable {
             }
         });
         
+        final MenuItem menuItemOpenContainingFolder = new MenuItem(RS_STR_OPEN_CONTAINING_FOLDER);
+        
+        menuItemOpenContainingFolder.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                
+                final File selectedItem = listViewProductsFiles.getSelectionModel().getSelectedItem();
+                
+                if(selectedItem != null){
+                    if(Desktop.isDesktopSupported()){
+                        new Thread(() -> {
+                            try {
+                                Desktop.getDesktop().open(selectedItem.getParentFile());
+                            } catch (IOException ex) {
+                                logger.error("Cannot open directory "+selectedItem);
+                            }
+                        }).start();
+                    }
+                    
+                }
+                
+            }
+        });
+        
         listViewProductsFiles.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
             @Override
             public void handle(ContextMenuEvent event) {
@@ -1221,19 +1248,18 @@ public class MainFrameController implements Initializable {
                     File selectedFile = listViewProductsFiles.getSelectionModel().getSelectedItem();
                     String extension = FileManager.getExtension(selectedFile);
                     
-                    
                     switch(extension){
                         case ".png":
                         case ".bmp":
                         case ".jpg":
-                            contextMenuProductsList.getItems().setAll(openImageItem);
+                            contextMenuProductsList.getItems().setAll(openImageItem, menuItemOpenContainingFolder);
                             contextMenuProductsList.show(listViewProductsFiles, event.getScreenX(), event.getScreenY());
                             break;
                         case ".vox":
                             
                         default:
                             if(VoxelFileReader.isFileAVoxelFile(selectedFile)){
-                                contextMenuProductsList.getItems().setAll(menuItemInfo, menuEdit, menuExport);
+                                contextMenuProductsList.getItems().setAll(menuItemInfo, menuItemOpenContainingFolder, menuEdit, menuExport);
                                 contextMenuProductsList.show(listViewProductsFiles, event.getScreenX(), event.getScreenY());
                             }
                     }
@@ -2369,13 +2395,6 @@ public class MainFrameController implements Initializable {
         }
         
         return true;
-    }
-    
-    private final String finalStr(String str){
-        
-        final String finalString = str;
-        
-        return finalString;
     }
     
     private boolean saveALSVoxelization(File selectedFile){
@@ -4816,518 +4835,6 @@ public class MainFrameController implements Initializable {
         taskElement.startTask();
     }
 
-    private void executeProcess(final File file) {
-                        
-        try {
-            final String type = Configuration.readType(file);
-            
-            ProgressDialog d;
-            final Service<Void> service;
-            
-            final ProcessTool voxTool = new ProcessTool();
-            
-            if(tlsVoxNbThreads == -1){
-                voxTool.setCoresNumber((int) sliderRSPCoresToUse.getValue());
-            }else{
-                voxTool.setCoresNumber(tlsVoxNbThreads);
-            }
-            
-            final long start_time = System.currentTimeMillis();
-                    
-
-            service = new Service<Void>() {
-
-                @Override
-                protected Task<Void> createTask() {
-                    return new Task<Void>() {
-                        @Override
-                        protected Void call() throws InterruptedException, Exception {
-
-                            final String msgTask = "Task " + taskID + "/" + taskNumber + " :" + file.getAbsolutePath();
-                            updateMessage(msgTask);
-
-                            switch (type) {
-                                
-                                case "transmittance":  
-                                    
-                                    try {
-                                        
-                                        TransmittanceCfg cfg = TransmittanceCfg.readCfg(file);
-                                        final TransmittanceSim transSim = new TransmittanceSim();
-                                        transSim.simulationProcess(cfg);
-                                        
-                                        Platform.runLater(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                if(cfg.getParameters().isGenerateBitmapFile()){
-
-                                                    List<File> bitmapFiles = transSim.getOutputBitmapFiles();
-
-                                                    if(bitmapFiles != null){
-
-                                                        for(File file : bitmapFiles){
-                                                            addFileToProductsList(file);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        });
-                                        
-                                        
-                                    } catch (IOException | JDOMException ex) {
-                                        logger.error("Cannot read configuration file", ex);
-                                        showErrorDialog(ex);
-                                    }
-                                    
-                                    break;
-                                case "LAI2000":
-                                case "LAI2200":
-                                    
-                                    try {
-                                        Lai2xxxSim lai2xxxSim = new Lai2xxxSim(TransmittanceCfg.readCfg(file));
-                                        lai2xxxSim.process();
-                                        
-                                    } catch (IOException | JDOMException ex) {
-                                        logger.error("Cannot read configuration file", ex);
-                                        showErrorDialog(ex);
-                                    }
-                                    
-                                break;
-                                    
-                                case "Hemi-Photo":
-                                    try {
-                                        HemiPhotoCfg hemiphotoCfg = HemiPhotoCfg.readCfg(file);
-                                        HemiScanView hemiScanView = new HemiScanView(hemiphotoCfg.getParameters());
-                                        hemiScanView.launchSimulation();
-                                        
-                                        Platform.runLater(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                addFileToProductsList(hemiphotoCfg.getParameters().getOutputBitmapFile());
-                                            }
-                                        });
-                                        
-                                    } catch (IOException | JDOMException ex) {
-                                        logger.error("Cannot read configuration file", ex);
-                                        showErrorDialog(ex);
-                                    }
-                                    
-                                    break;
-
-                                case "merging":
-                                    
-                                    final VoxMergingCfg voxMergingCfg = new VoxMergingCfg();
-                                    
-                                    try {
-                                        voxMergingCfg.readConfiguration(file);
-                                        
-                                        voxTool.mergeVoxelFiles(voxMergingCfg/*voxMergingCfg.getFiles(), voxMergingCfg.getOutputFile(), 0, voxMergingCfg.getVoxelParameters().getMaxPAD()*/);
-
-                                        Platform.runLater(new Runnable() {
-
-                                            @Override
-                                            public void run() {
-                                                addFileToProductsList(voxMergingCfg.getOutputFile());
-                                                setOnSucceeded(null);
-                                            }
-                                        });
-
-                                    } catch (JDOMException ex) {
-                                        logger.error("Cannot parse configuration file");
-                                    } catch (IOException ex) {
-                                        logger.error("Cannot read configuration file");
-                                    }
-                                    
-                                    break;
-
-                                case "voxelisation-ALS":
-
-                                    
-                                    try {
-                                        
-                                        final ALSVoxCfg aLSVoxCfg = new ALSVoxCfg();
-                                        aLSVoxCfg.readConfiguration(file);
-                                        
-                                        voxTool.addProcessingListener(new ProcessingListener() {
-
-                                            @Override
-                                            public void processingStepProgress(String progressMsg, long progress, long max) {
-                                                Platform.runLater(new Runnable() {
-
-                                                    @Override
-                                                    public void run() {
-
-                                                        updateMessage(msgTask + "\n" + progressMsg);
-                                                        updateProgress(progress, max);
-                                                    }
-                                                });
-                                            }
-
-                                            @Override
-                                            public void processingFinished(float duration) {
-
-                                                logger.info("las voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
-                                            }
-                                        });
-
-                                        try{
-                                            voxTool.voxeliseFromAls(aLSVoxCfg);
-
-                                            Platform.runLater(new Runnable() {
-
-                                                @Override
-                                                public void run() {
-
-                                                    addFileToProductsList(aLSVoxCfg.getOutputFile());
-                                                }
-                                            });
-                                            
-                                        }catch(IOException ex){
-                                            logger.error(ex.getMessage(), ex);
-                                            showErrorDialog(ex);
-                                        }catch(Exception ex){
-                                            logger.error(ex.getMessage(), ex);
-                                            showErrorDialog(ex);
-                                        }
-                                        
-                                        
-                                    } catch (Exception ex) {
-                                        logger.error(ex.getLocalizedMessage());
-                                    }
-
-                                    break;
-
-                                case "voxelisation-TLS":
-
-                                    final TLSVoxCfg tLSVoxCfg = new TLSVoxCfg();
-                                    try {
-                                        tLSVoxCfg.readConfiguration(file);
-                                        
-                                        voxTool.addProcessingListener(new ProcessingListener() {
-
-                                            @Override
-                                            public void processingStepProgress(String progressMsg, long progress, long max) {
-                                                Platform.runLater(new Runnable() {
-
-                                                    @Override
-                                                    public void run() {
-
-                                                        updateMessage(msgTask + "\n" + progressMsg);
-                                                    }
-                                                });
-                                            }
-
-                                            @Override
-                                            public void processingFinished(float duration) {
-
-                                                logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
-                                            }
-                                        });
-
-                                        switch (tLSVoxCfg.getInputType()) {
-
-                                            case RSP_PROJECT:
-
-                                                try {
-                                                    final ArrayList<File> outputFiles = voxTool.voxeliseFromRsp(tLSVoxCfg);
-
-                                                    if (tLSVoxCfg.getVoxelParameters().isMergingAfter()) {
-
-                                                        voxTool.addProcessingListener(new ProcessingListener() {
-
-                                                            @Override
-                                                            public void processingStepProgress(String progressMsg, long progress, long max) {
-                                                                Platform.runLater(new Runnable() {
-
-                                                                    @Override
-                                                                    public void run() {
-
-                                                                        updateMessage(msgTask + "\n" + progressMsg);
-                                                                    }
-                                                                });
-                                                            }
-
-                                                            @Override
-                                                            public void processingFinished(float duration) {
-
-                                                                logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
-                                                            }
-                                                        });
-
-                                                        VoxMergingCfg mergingCfg = new VoxMergingCfg(tLSVoxCfg.getVoxelParameters().getMergedFile(), tLSVoxCfg.getVoxelParameters(), outputFiles);
-
-                                                        //if(!voxTool.isCancelled()){
-                                                        voxTool.mergeVoxelFiles(mergingCfg);
-                                                        //}
-
-                                                    }
-
-                                                    Platform.runLater(new Runnable() {
-
-                                                        @Override
-                                                        public void run() {
-
-                                                            if (!voxTool.isCancelled()) {
-                                                                for (File file : outputFiles) {
-                                                                    addFileToProductsList(file);
-                                                                }
-                                                                if (tLSVoxCfg.getVoxelParameters().isMergingAfter()) {
-                                                                    addFileToProductsList(tLSVoxCfg.getVoxelParameters().getMergedFile());
-                                                                }
-                                                            }
-                                                        }
-                                                    });
-
-                                                } catch (Exception e) {
-
-                                                }
-
-                                                break;
-
-                                            case RXP_SCAN:
-
-                                                voxTool.voxeliseFromRxp(tLSVoxCfg);
-
-                                                Platform.runLater(new Runnable() {
-
-                                                    @Override
-                                                    public void run() {
-
-                                                        addFileToProductsList(tLSVoxCfg.getOutputFile());
-                                                    }
-                                                });
-
-                                                break;
-                                                
-                                            case PTG_PROJECT:
-
-                                                final ArrayList<File> outputFiles = voxTool.voxeliseFromPTG(tLSVoxCfg);
-
-                                                if (tLSVoxCfg.getVoxelParameters().isMergingAfter()) {
-
-                                                    voxTool.addProcessingListener(new ProcessingListener() {
-
-                                                            @Override
-                                                            public void processingStepProgress(String progressMsg, long progress, long max) {
-                                                                Platform.runLater(new Runnable() {
-
-                                                                @Override
-                                                                public void run() {
-
-                                                                    updateMessage(msgTask + "\n" + progressMsg);
-                                                                }
-                                                            });
-                                                        }
-
-                                                        @Override
-                                                        public void processingFinished(float duration) {
-
-                                                            logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
-                                                        }
-                                                    });
-
-                                                    VoxMergingCfg mergingCfg = new VoxMergingCfg(tLSVoxCfg.getVoxelParameters().getMergedFile(), tLSVoxCfg.getVoxelParameters(), outputFiles);
-
-                                                    //if(!voxTool.isCancelled()){
-                                                    voxTool.mergeVoxelFiles(mergingCfg);
-                                                    //}
-
-                                                }
-
-                                                Platform.runLater(new Runnable() {
-
-                                                    @Override
-                                                    public void run() {
-
-                                                        if (!voxTool.isCancelled()) {
-                                                            for (File file : outputFiles) {
-                                                                addFileToProductsList(file);
-                                                            }
-                                                            if (tLSVoxCfg.getVoxelParameters().isMergingAfter()) {
-                                                                addFileToProductsList(tLSVoxCfg.getVoxelParameters().getMergedFile());
-                                                            }
-                                                        }
-                                                    }
-                                                });
-                                                break;
-                                                
-                                            case PTX_PROJECT:
-
-                                                final ArrayList<File> outputFiles2 = voxTool.voxeliseFromPTX(tLSVoxCfg);
-
-                                                if (tLSVoxCfg.getVoxelParameters().isMergingAfter()) {
-
-                                                    voxTool.addProcessingListener(new ProcessingListener() {
-
-                                                        @Override
-                                                        public void processingStepProgress(String progressMsg, long progress, long max) {
-                                                            Platform.runLater(new Runnable() {
-
-                                                                @Override
-                                                                public void run() {
-
-                                                                    updateMessage(msgTask + "\n" + progressMsg);
-                                                                }
-                                                            });
-                                                        }
-
-                                                        @Override
-                                                        public void processingFinished(float duration) {
-
-                                                            logger.info("Voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
-                                                        }
-                                                    });
-
-                                                    VoxMergingCfg mergingCfg = new VoxMergingCfg(tLSVoxCfg.getVoxelParameters().getMergedFile(), tLSVoxCfg.getVoxelParameters(), outputFiles2);
-
-                                                    //if(!voxTool.isCancelled()){
-                                                    voxTool.mergeVoxelFiles(mergingCfg);
-                                                    //}
-
-                                                }
-
-                                                Platform.runLater(new Runnable() {
-
-                                                    @Override
-                                                    public void run() {
-
-                                                        if (!voxTool.isCancelled()) {
-                                                            for (File file : outputFiles2) {
-                                                                addFileToProductsList(file);
-                                                            }
-                                                            if (tLSVoxCfg.getVoxelParameters().isMergingAfter()) {
-                                                                addFileToProductsList(tLSVoxCfg.getVoxelParameters().getMergedFile());
-                                                            }
-                                                        }
-                                                    }
-                                                });
-                                                break;
-                                        }
-                                    } catch (Exception ex) {
-                                        logger.error("Cannot load configuration file", ex);
-                                    }
-
-                                    break;
-
-                                case "multi-voxelisation":
-
-                                    MultiVoxCfg multiVoxCfg = new MultiVoxCfg();
-                                    try {
-                                        multiVoxCfg.readConfiguration(file);
-                                        
-                                        voxTool.addProcessingListener(new ProcessingListener() {
-
-                                            @Override
-                                            public void processingStepProgress(String progressMsg, long progress, long max) {
-                                                Platform.runLater(new Runnable() {
-
-                                                    @Override
-                                                    public void run() {
-
-                                                        updateMessage(msgTask + "\n" + progressMsg);
-                                                    }
-                                                });
-
-                                            }
-
-                                            @Override
-                                            public void processingFinished(float duration) {
-
-                                                logger.info("las voxelisation finished in " + TimeCounter.getElapsedStringTimeInSeconds(start_time));
-                                            }
-                                        });
-                                        voxTool.multiVoxelisation(multiVoxCfg);
-
-                                    } catch (Exception ex) {
-                                        logger.error("Cannot load configuration file");
-                                    }
-                                    
-                                    break;
-                            }
-
-                            return null;
-                        }
-                    };
-                }
-            };
-            
-            d = new ProgressDialog(service);
-            d.initModality(Modality.NONE);
-            d.initOwner(stage);
-            d.setResizable(true);
-            d.show();
-            Button buttonCancel = new Button("cancel");
-            d.setGraphic(buttonCancel);
-            
-            buttonCancel.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent event) {
-                    service.cancel();
-                    voxTool.setCancelled(true);
-                }
-            });
-
-            service.exceptionProperty().addListener(new ChangeListener<Throwable>() {
-
-                @Override
-                public void changed(ObservableValue<? extends Throwable> observable, Throwable oldValue, Throwable newValue) {
-                    System.out.println(newValue.getMessage());
-                }
-            });
-
-            service.stateProperty().addListener(new ChangeListener<Worker.State>() {
-
-                @Override
-                public void changed(ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) {
-                    if (newValue == Worker.State.SUCCEEDED) {
-                        if (!queue.isEmpty()) {
-                            try {
-                                taskID++;
-                                executeProcess(queue.take());
-
-                            } catch (InterruptedException ex) {
-                                logger.error("Task processing was interrupted", ex);
-                            }
-                        }
-                    }
-                }
-            });
-
-            service.setOnFailed(new EventHandler<WorkerStateEvent>() {
-
-                @Override
-                public void handle(WorkerStateEvent event) {
-                    logger.error("Service failed : ",service.getException());
-                }
-            });
-
-            service.start();
-            
-
-        } catch (JDOMException | IOException e) {
-            
-            logger.error("An error occured", e);
-            
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setHeaderText("Incorrect file");
-            alert.setContentText("File is corrupted or cannot be read!\n"
-                    + file.getAbsolutePath());
-            alert.show();
-
-            if (!queue.isEmpty()) {
-                try {
-                    taskID++;
-                    executeProcess(queue.take());
-
-                } catch (InterruptedException ex) {
-                    logger.error("Tasks processing was interrupted", ex);
-                }
-            }
-        }        
-
-    }
-
     private VoxelParameters getVoxelParametersFromUI() {
 
         VoxelParameters voxelParameters = new VoxelParameters();
@@ -5983,8 +5490,7 @@ public class MainFrameController implements Initializable {
 
     private BoundingBox3d calculateAutomaticallyMinAndMax(File file, boolean quick) {
         
-        ProcessTool processTool = new ProcessTool();
-        final BoundingBox3d boundingBox = processTool.getBoundingBoxOfPoints(file, resultMatrix, false, getListOfClassificationPointToDiscard());
+        final BoundingBox3d boundingBox = fr.amap.lidar.amapvox.util.Util.getBoundingBoxOfPoints(file, resultMatrix, false, getListOfClassificationPointToDiscard());
 
         return boundingBox;
     }
@@ -6028,8 +5534,7 @@ public class MainFrameController implements Initializable {
                             @Override
                             protected Void call() throws InterruptedException {
 
-                                ProcessTool processTool = new ProcessTool();
-                                final BoundingBox3d boundingBox = processTool.getBoundingBoxOfPoints(new File(textFieldInputFileALS.getText()), resultMatrix, quick, getListOfClassificationPointToDiscard());
+                                final BoundingBox3d boundingBox = fr.amap.lidar.amapvox.util.Util.getBoundingBoxOfPoints(new File(textFieldInputFileALS.getText()), resultMatrix, quick, getListOfClassificationPointToDiscard());
                                 
                                 Point3d minPoint = boundingBox.min;
                                 Point3d maxPoint = boundingBox.max;
@@ -6074,28 +5579,6 @@ public class MainFrameController implements Initializable {
 
         getBoundingBoxOfPoints(true);
     }
-    
-    private void onActionButtonTransformationAutomatic(ActionEvent event) {
-
-        ProcessTool processTool = new ProcessTool();
-        
-        BoundingBox3d boundingBox = processTool.getALSMinAndMax(new File(textFieldInputFileALS.getText()));
-
-        if (boundingBox != null) {
-
-            Point3d min = boundingBox.min;
-            Point3d max = boundingBox.max;
-
-            checkboxUseVopMatrix.setDisable(false);
-
-            vopMatrix = new Matrix4d(1, 0, 0, -min.x,
-                    0, 1, 0, -min.y,
-                    0, 0, 1, -min.z,
-                    0, 0, 0, 1);
-
-            updateResultMatrix();
-        }
-    }
 
     @FXML
     private void onActionButtonResetToIdentity(ActionEvent event) {
@@ -6132,10 +5615,6 @@ public class MainFrameController implements Initializable {
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(MainFrameController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    private void onActionButtonOpenPointCloudFile(ActionEvent event) {
-
     }
 
     @FXML
@@ -6486,78 +5965,6 @@ public class MainFrameController implements Initializable {
         
     }
 
-
-
-    private void onActionButtonOpenTransformationMatrixFile(ActionEvent event) {
-        
-        fileChooserOpenVopMatrixFile.setInitialDirectory(listViewProductsFiles.getSelectionModel().getSelectedItem().getParentFile());
-        
-        File selectedFile = fileChooserOpenVopMatrixFile.showOpenDialog(stage);
-        
-        if(selectedFile != null){
-            
-            Matrix4d mat;
-            try {
-                mat = MatrixFileParser.getMatrixFromFile(selectedFile);
-                if (mat != null) {
-                
-                    rasterTransfMatrix = MatrixFileParser.getMatrixFromFile(selectedFile);
-                    if (rasterTransfMatrix == null) {
-                        rasterTransfMatrix = new Matrix4d();
-                        rasterTransfMatrix.setIdentity();
-                    }
-
-                } else {
-                    showMatrixFormatErrorDialog();
-                }
-                
-            } catch (IOException ex) {
-                logger.error("Cannot read matrix file", ex);
-            }
-            
-        }
-    }
-
-    /*@FXML
-    private void onActionButtonOpenRasterFile(ActionEvent event) {
-        
-        File selectedVoxelFile = listViewProductsFiles.getSelectionModel().getSelectedItem();
-        if(selectedVoxelFile != null){
-            fileChooserOpenDTMFile.setInitialDirectory(selectedVoxelFile.getParentFile());
-        }
-        
-        
-        File selectedFile = fileChooserOpenDTMFile.showOpenDialog(stage);
-        
-        if(selectedFile != null){
-            textfieldRasterFilePath.setText(selectedFile.getAbsolutePath());
-        }
-    }*/
-
-    private void onActionButtonSetTransformationMatrix(ActionEvent event) {
-                
-        transformationFrameController.reset();
-        
-        transformationFrame.setOnHidden(new EventHandler<WindowEvent>() {
-
-            @Override
-            public void handle(WindowEvent event) {
-                
-                if(transformationFrameController.isConfirmed()){
-                    
-                    rasterTransfMatrix = transformationFrameController.getMatrix();
-                
-                    if (rasterTransfMatrix == null) {
-                        rasterTransfMatrix = new Matrix4d();
-                        rasterTransfMatrix.setIdentity();
-                    }
-                }
-                
-            }
-        });
-        
-        transformationFrame.show();
-    }
 
     @FXML
     private void onActionButtonOpenVoxelFileTransmittance(ActionEvent event) {
@@ -7099,7 +6506,7 @@ public class MainFrameController implements Initializable {
 
                             SceneObject pickingInfoObject = SceneObjectFactory.createTexturedPlane(new Vec3F(viewer3D.getWidth() - pickingInfoObjectWidth, viewer3D.getHeight() - pickingInfoObjectHeight, 0), pickingInfoObjectWidth, pickingInfoObjectHeight, texture);
 
-                            pickingInfoObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.texturedShader);
+                            pickingInfoObject.setShader(new TextureShader());
                             pickingInfoObject.setDrawType(GLMesh.DrawType.TRIANGLES);
 
                             SceneObject sceneObjectSelectedVox = new SimpleSceneObject(GLMeshFactory.createBoundingBox(
@@ -7191,7 +6598,7 @@ public class MainFrameController implements Initializable {
                             voxelSpace.addSceneObjectListener(listener);
 
                             voxelSpace.changeCurrentAttribut(attributeToView);
-                            voxelSpace.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.instanceLightedShader);
+                            voxelSpace.setShader(new InstanceLightedShader());
                             voxelSpace.setDrawType(GLMesh.DrawType.TRIANGLES);
                             scene.addSceneObject(voxelSpace);
                             
@@ -7211,7 +6618,7 @@ public class MainFrameController implements Initializable {
                                     (int) (viewer3D.getHeight() / 20),
                                     scaleTexture);
 
-                            scalePlane.setShader(scene.texturedShader);
+                            scalePlane.setShader(new TextureShader());
                             scalePlane.setDrawType(GLMesh.DrawType.TRIANGLES);
                             scene.addSceneObjectAsHud(scalePlane);
 

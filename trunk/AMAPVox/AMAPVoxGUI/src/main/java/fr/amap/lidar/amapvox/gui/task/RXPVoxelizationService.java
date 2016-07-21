@@ -10,8 +10,9 @@ import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.util.MatrixUtility;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
+import fr.amap.lidar.amapvox.util.Util;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
-import fr.amap.lidar.amapvox.voxelisation.ProcessTool;
+import fr.amap.lidar.amapvox.voxelisation.postproc.VoxelFileMerging;
 import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import fr.amap.lidar.amapvox.voxelisation.tls.RxpEchoFilter;
@@ -44,34 +45,33 @@ public class RXPVoxelizationService extends Service<Void>{
                 
                 File output = cfg.getOutputFile();
                 File input = cfg.getInputFile();
-                VoxelParameters parameters = cfg.getVoxelParameters();
                 Mat4D vop = MatrixUtility.convertMatrix4dToMat4D(cfg.getVopMatrix());
                 Mat4D pop = MatrixUtility.convertMatrix4dToMat4D(cfg.getPopMatrix());
                 Mat4D sop = MatrixUtility.convertMatrix4dToMat4D(cfg.getSopMatrix());    
 
-                parameters.infos.setType(VoxelSpaceInfos.Type.TLS);
+                cfg.getVoxelParameters().infos.setType(VoxelSpaceInfos.Type.TLS);
 
                 RxpScan scan = new RxpScan();
                 scan.setFile(input);
 
                 Raster dtm = null;
-                if (parameters.getDtmFilteringParams().useDTMCorrection()) {
+                if (cfg.getVoxelParameters().getDtmFilteringParams().useDTMCorrection()) {
                     
                     updateMessage("Loading dtm...");
                     
-                    dtm = ProcessTool.loadDTM(parameters.getDtmFilteringParams().getDtmFile());
+                    dtm = Util.loadDTM(cfg.getVoxelParameters().getDtmFilteringParams().getDtmFile());
                 }
 
-                List<PointcloudFilter> pointcloudFilters = parameters.getPointcloudFilters();
+                List<PointcloudFilter> pointcloudFilters = cfg.getVoxelParameters().getPointcloudFilters();
 
                 if(pointcloudFilters != null){
 
                     if(vop == null){ vop = Mat4D.identity();}
-                    if(parameters.isUsePointCloudFilter()){
+                    if(cfg.getVoxelParameters().isUsePointCloudFilter()){
                         for(PointcloudFilter filter : pointcloudFilters){
                             
                             updateMessage("Loading point cloud filters...");
-                            filter.setOctree(ProcessTool.loadOctree(filter.getPointcloudFile(), vop));
+                            filter.setOctree(Util.loadOctree(filter.getPointcloudFile(), vop));
                         }
                     }
                 }
@@ -84,7 +84,7 @@ public class RXPVoxelizationService extends Service<Void>{
                 
                 updateMessage("Voxelization...");
                 
-                RxpVoxelisation voxelisation = new RxpVoxelisation(input, output, vop, pop, sop, parameters, dtm,
+                RxpVoxelisation voxelisation = new RxpVoxelisation(input, output, vop, pop, sop, dtm,
                         pointcloudFilters, cfg, cfg.isEnableEmptyShotsFiltering());
                 
                 voxelisation.call();

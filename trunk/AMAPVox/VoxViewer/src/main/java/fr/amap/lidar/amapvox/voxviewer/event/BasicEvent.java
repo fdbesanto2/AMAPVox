@@ -13,6 +13,11 @@ import fr.amap.lidar.amapvox.voxviewer.input.InputKeyListener;
 import fr.amap.lidar.amapvox.voxviewer.input.InputMouseAdapter;
 import fr.amap.lidar.amapvox.voxviewer.input.InputMouseAdapter.Button;
 import fr.amap.lidar.amapvox.voxviewer.renderer.JoglListener;
+import fr.amap.lidar.amapvox.voxviewer.renderer.RenderListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 /**
  * Describes user input behavior

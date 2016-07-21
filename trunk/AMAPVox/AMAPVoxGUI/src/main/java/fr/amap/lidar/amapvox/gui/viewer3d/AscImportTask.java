@@ -15,6 +15,7 @@ import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.gui.AsciiGridFileExtractorController;
 import fr.amap.lidar.amapvox.gui.SceneObjectWrapper;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.PhongShader;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMeshFactory;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.RasterSceneObject;
@@ -129,7 +130,7 @@ public class AscImportTask extends SceneObjectImportTask{
             
 
             RasterSceneObject dtmSceneObject = new RasterSceneObject(dtm);
-            dtmSceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.phongShader);
+            dtmSceneObject.setShader(new PhongShader());
 
             dtmSceneObject.setMousePickable(buildOctree);
             

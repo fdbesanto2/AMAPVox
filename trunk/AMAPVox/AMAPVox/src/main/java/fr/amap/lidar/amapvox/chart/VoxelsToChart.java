@@ -436,8 +436,7 @@ public class VoxelsToChart {
     
     private XYSeries createAttributeProfileSerie(VoxelFileReader reader, String attributName, String key, int indiceMin, int indiceMax, LayerReference reference){
         
-        float resolution = reader.getVoxelSpaceInfos().getResolution();
-        int layersNumber = (int)(reader.getVoxelSpaceInfos().getSplit().z * resolution)*2;
+        int layersNumber = (int)(reader.getVoxelSpaceInfos().getSplit().z+50);
         
         float[] meanValueByLayer = new float[layersNumber];
         int[] valuesNumberByLayer = new int[layersNumber];

@@ -6,6 +6,7 @@
 package fr.amap.lidar.amapvox.gui.viewer3d;
 
 import fr.amap.commons.math.point.Point3F;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.InstanceLightedShader;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceAdapter;
@@ -45,7 +46,7 @@ public class VoxImportTask extends SceneObjectImportTask {
         voxelSpace.loadVoxels();
 
         voxelSpace.changeCurrentAttribut("transmittance");
-        voxelSpace.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.instanceLightedShader);
+        voxelSpace.setShader(new InstanceLightedShader());
         voxelSpace.setDrawType(GLMesh.DrawType.TRIANGLES);
         voxelSpace.setGravityCenter(new Point3F(0, 0, 0));
 

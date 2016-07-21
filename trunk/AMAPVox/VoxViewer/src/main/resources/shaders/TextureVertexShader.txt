@@ -1,6 +1,6 @@
 #version 140
 
-uniform mat4 viewMatrix, projMatrix;
+uniform mat4 viewMatrixOrtho, projMatrixOrtho;
 
 in vec4 position;
 
@@ -10,6 +10,5 @@ out vec2 texCoordinates;
 void main()
 {
     texCoordinates = textureCoordinates;
-
-    gl_Position = projMatrix * viewMatrix  * position;
+    gl_Position = projMatrixOrtho * viewMatrixOrtho * position ;
 }

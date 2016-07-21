@@ -15,7 +15,7 @@ public class TextureShader extends Shader{
         
         super();
         
-        setVertexShaderCode(loadCodeFromInputStream(getStream("shaders/billboardVertexShader.txt")));
+        setVertexShaderCode(loadCodeFromInputStream(getStream("shaders/TextureVertexShader.txt")));
         setFragmentShaderCode(loadCodeFromInputStream(getStream("shaders/TextureFragmentShader.txt")));
     }
 }

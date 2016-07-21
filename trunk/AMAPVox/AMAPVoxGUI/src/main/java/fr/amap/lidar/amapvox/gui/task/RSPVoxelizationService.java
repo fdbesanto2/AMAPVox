@@ -13,8 +13,9 @@ import fr.amap.commons.util.MatrixUtility;
 import fr.amap.commons.util.ProcessingAdapter;
 import fr.amap.commons.util.ProcessingListener;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
+import fr.amap.lidar.amapvox.util.Util;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
-import fr.amap.lidar.amapvox.voxelisation.ProcessTool;
+import fr.amap.lidar.amapvox.voxelisation.postproc.VoxelFileMerging;
 import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxMergingCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
@@ -43,7 +44,7 @@ public class RSPVoxelizationService extends Service<List<File>>{
     private final int coreNumber;
     private ExecutorService exec;
     private final SimpleIntegerProperty nbFileProcessed;
-    private ProcessTool tool;
+    private VoxelFileMerging tool;
     
     public RSPVoxelizationService(File file, int coreNumber){
         this.file = file;
@@ -64,7 +65,6 @@ public class RSPVoxelizationService extends Service<List<File>>{
                 
                 File output = cfg.getOutputFile();
                 File input = cfg.getInputFile();
-                VoxelParameters parameters = cfg.getVoxelParameters();
                 Mat4D vop = MatrixUtility.convertMatrix4dToMat4D(cfg.getVopMatrix());
                 Mat4D pop = MatrixUtility.convertMatrix4dToMat4D(cfg.getPopMatrix());
                 List<LidarScan> lidarScans = cfg.getLidarScans();
@@ -78,28 +78,28 @@ public class RSPVoxelizationService extends Service<List<File>>{
                     throw new Exception("File " + input.getAbsolutePath() + " not reachable");
                 }
 
-                parameters.infos.setType(VoxelSpaceInfos.Type.TLS);
+                cfg.getVoxelParameters().infos.setType(VoxelSpaceInfos.Type.TLS);
 
                 Raster dtm = null;
-                if (parameters.getDtmFilteringParams().useDTMCorrection()) {
+                if (cfg.getVoxelParameters().getDtmFilteringParams().useDTMCorrection()) {
                     
                     updateMessage("Loading dtm...");
                     
-                    dtm = ProcessTool.loadDTM(parameters.getDtmFilteringParams().getDtmFile());
+                    dtm = Util.loadDTM(cfg.getVoxelParameters().getDtmFilteringParams().getDtmFile());
                 }
 
-                List<PointcloudFilter> pointcloudFilters = parameters.getPointcloudFilters();
+                List<PointcloudFilter> pointcloudFilters = cfg.getVoxelParameters().getPointcloudFilters();
 
                 if(pointcloudFilters != null){
 
                     if(vop == null){ vop = Mat4D.identity();}
 
-                    if(parameters.isUsePointCloudFilter()){
+                    if(cfg.getVoxelParameters().isUsePointCloudFilter()){
                         
                         updateMessage("Loading point cloud filters...");
                         
                         for(fr.amap.lidar.amapvox.voxelisation.PointcloudFilter filter : pointcloudFilters){
-                            filter.setOctree(ProcessTool.loadOctree(filter.getPointcloudFile(), vop));
+                            filter.setOctree(Util.loadOctree(filter.getPointcloudFile(), vop));
                         }
                     }
                 }
@@ -119,7 +119,7 @@ public class RSPVoxelizationService extends Service<List<File>>{
                         File outputFile = new File(output.getAbsolutePath() + "/" + file.file.getName() + ".vox");
                         
                         RxpVoxelisation rxpVoxelisation = new RxpVoxelisation(file.file, outputFile, vop, pop,
-                                MatrixUtility.convertMatrix4dToMat4D(file.matrix), parameters, dtm, pointcloudFilters, cfg, cfg.isEnableEmptyShotsFiltering());
+                                MatrixUtility.convertMatrix4dToMat4D(file.matrix), dtm, pointcloudFilters, cfg, cfg.isEnableEmptyShotsFiltering());
                         
                         rxpVoxelisation.addCallableTaskListener(new CallableTaskAdapter() {
                             @Override
@@ -146,7 +146,7 @@ public class RSPVoxelizationService extends Service<List<File>>{
                         
                         VoxMergingCfg mergingCfg = new VoxMergingCfg(cfg.getVoxelParameters().getMergedFile(), cfg.getVoxelParameters(), files);
 
-                        tool = new ProcessTool();
+                        tool = new VoxelFileMerging();
                         
                         tool.addProcessingListener(new ProcessingAdapter() {
                             @Override

@@ -386,8 +386,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
             centerY = (firstVoxelPosition.y + lastVoxelPosition.y)/2.0f;
             centerZ = (firstVoxelPosition.z + lastVoxelPosition.z)/2.0f;
             
-            gravityCenter = new Point3F(centerX, centerY, centerZ);
-            
+            setGravityCenter(new Point3F(centerX, centerY, centerZ));            
         }
         
     }

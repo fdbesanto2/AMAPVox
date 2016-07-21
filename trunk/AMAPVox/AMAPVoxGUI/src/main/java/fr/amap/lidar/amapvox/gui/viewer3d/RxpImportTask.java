@@ -10,6 +10,7 @@ import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.vector.Vec4D;
 import fr.amap.lidar.amapvox.gui.AttributsImporterFrameController;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.ColorShader;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
 import java.io.File;
@@ -155,7 +156,7 @@ public class RxpImportTask extends SceneObjectImportTask{
         updateMessage("Build 3d scene object");
 
         pointCloud.initMesh();
-        pointCloud.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader);
+        pointCloud.setShader(new ColorShader());
 
         updateProgress(100, 100);
         

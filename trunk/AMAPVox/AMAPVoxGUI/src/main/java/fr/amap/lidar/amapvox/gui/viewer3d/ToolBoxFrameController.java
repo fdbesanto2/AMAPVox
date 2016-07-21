@@ -15,6 +15,8 @@ import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.renderer.JoglListener;
 import fr.amap.commons.util.CombinedFilterItem;
 import fr.amap.lidar.amapvox.gui.Util;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.InstanceLightedShader;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.InstanceShader;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.Scene;
 import java.awt.Color;
 import java.lang.reflect.Field;
@@ -56,12 +58,10 @@ import org.apache.log4j.Logger;
  */
 public class ToolBoxFrameController implements Initializable {
     
-    private final static Logger logger = Logger.getLogger(ToolBoxFrameController.class);
+    private final static Logger LOGGER = Logger.getLogger(ToolBoxFrameController.class);
     
     private JoglListener joglContext;
     
-    private ArrayList<String> gradientColorNames;
-    private ArrayList<Color[]> gradientColors;
     
     private Stage stage;
     
@@ -167,6 +167,7 @@ public class ToolBoxFrameController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+        
         comboboxGradient.getItems().addAll(Util.AVAILABLE_GRADIENT_COLOR_NAMES);
         comboboxGradient.getSelectionModel().select("HEAT");
         
@@ -188,9 +189,9 @@ public class ToolBoxFrameController implements Initializable {
 
                 for (int i = 0;i<Util.AVAILABLE_GRADIENT_COLORS.size();i++) {
 
-                    if(gradientColorNames.get(i).equals(gradient)){
-                        gradientColor = gradientColors.get(i);
-                        i = gradientColorNames.size() - 1;
+                    if(Util.AVAILABLE_GRADIENT_COLOR_NAMES.get(i).equals(gradient)){
+                        gradientColor = Util.AVAILABLE_GRADIENT_COLORS.get(i);
+                        i = Util.AVAILABLE_GRADIENT_COLOR_NAMES.size() - 1;
                     }
                 }
 
@@ -261,15 +262,18 @@ public class ToolBoxFrameController implements Initializable {
             }
         });
         
+        final InstanceLightedShader ils = new InstanceLightedShader();
+        final InstanceShader is = new InstanceShader();
+        
         checkboxEnableLighting.selectedProperty().addListener(new ChangeListener<Boolean>() {
 
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 
                 if(newValue){
-                    voxelSpace.setShader(Scene.instanceLightedShader);
+                    voxelSpace.setShader(ils);
                 }else{
-                    voxelSpace.setShader(Scene.instanceShader);
+                    voxelSpace.setShader(is);
                 }
                 
                 joglContext.refresh();
@@ -588,9 +592,9 @@ public class ToolBoxFrameController implements Initializable {
                     joglContext.refresh();
 
                 }catch(NumberFormatException e){
-                    logger.error("Cannot parse string value to float", e);
+                    LOGGER.error("Cannot parse string value to float", e);
                 }catch(Exception e){
-                    logger.error("Unknown exception", e);
+                    LOGGER.error("Unknown exception", e);
                 }
                 
                 return null;
@@ -627,9 +631,9 @@ public class ToolBoxFrameController implements Initializable {
             joglContext.refresh();
             
         }catch(NumberFormatException e){
-            logger.error("Cannot parse string value to float", e);
+            LOGGER.error("Cannot parse string value to float", e);
         }catch(Exception e){
-            logger.error("Unknown exception", e);
+            LOGGER.error("Unknown exception", e);
         }
     }
 

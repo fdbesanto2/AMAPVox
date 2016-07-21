@@ -1,7 +1,12 @@
 package fr.amap.lidar.amapvox.gui;
 
 import fr.amap.lidar.amapvox.gui.task.TaskElement;
+import fr.amap.lidar.amapvox.voxviewer.Viewer3D;
+import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
+import fr.amap.lidar.amapvox.voxviewer.mesh.GLMeshFactory;
 import java.io.File;
+import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -27,7 +32,7 @@ public class MainApp extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        
+                
         ResourceBundle rb = ResourceBundle.getBundle("bundle_help", Locale.ENGLISH, new URLClassLoader(new URL[]{getClass().getResource("/strings/")}));
         
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainFrame.fxml"), rb);

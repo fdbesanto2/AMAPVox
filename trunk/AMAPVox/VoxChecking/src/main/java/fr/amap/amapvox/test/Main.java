@@ -286,12 +286,12 @@ public class Main {
                     isDifferent = true;
                 }
                 
-                if(!areFloatsEquals(voxelRef.bvEntering, voxelToCompare.bvEntering)){
+                if(!areDoubleEquals(voxelRef.bvEntering, voxelToCompare.bvEntering)){
                     if(verbose){System.err.println("bvEntering values are differents at line "+count);}
                     isDifferent = true;
                 }
                 
-                if(!areFloatsEquals(voxelRef.bvIntercepted, voxelToCompare.bvIntercepted)){
+                if(!areDoubleEquals(voxelRef.bvIntercepted, voxelToCompare.bvIntercepted)){
                     if(verbose){System.err.println("bvIntercepted values are differents at line "+count);}
                     isDifferent = true;
                 }

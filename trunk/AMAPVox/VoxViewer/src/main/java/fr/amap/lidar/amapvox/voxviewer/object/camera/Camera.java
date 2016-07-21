@@ -24,7 +24,7 @@ public abstract class Camera {
     protected Mat4F viewMatrix;
     protected float fovy;
     protected float aspect;
-    protected float nearPersp = 1;
+    protected float nearPersp = 10;
     protected float farPersp = 1000;
     protected float nearOrtho = 1;
     protected float farOrtho = 1000;

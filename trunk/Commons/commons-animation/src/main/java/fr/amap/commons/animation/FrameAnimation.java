@@ -81,9 +81,18 @@ public class FrameAnimation extends Animation{
     }
     
     @Override
-    protected Object getValue(String name, int frame, Interpolator interpolator) throws Exception{
+    public Object getValue(String name, int frame, Interpolator interpolator) throws Exception{
         
         int index = getFrameIndex(frame);
         return super.getValue(name, index, interpolator);
     }
+
+    public int getStart() {
+        return start;
+    }
+
+    public int getEnd() {
+        return end;
+    }
+    
 }

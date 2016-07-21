@@ -19,7 +19,7 @@ import fr.amap.lidar.amapvox.gui.FileChooserTextFieldController;
 import fr.amap.lidar.amapvox.gui.FxmlContext;
 import fr.amap.lidar.amapvox.gui.MainFrameController;
 import fr.amap.lidar.amapvox.gui.Util;
-import fr.amap.lidar.amapvox.voxelisation.ProcessTool;
+import fr.amap.lidar.amapvox.voxelisation.postproc.VoxelFileMerging;
 import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.DTMFilteringParams;
@@ -270,7 +270,6 @@ public class DanielScript extends Script{
             }
         }
         
-        ProcessTool processTool = new ProcessTool();
         List<Integer> classToIgnore = new ArrayList<>();
         /*classToIgnore.add(0);
         classToIgnore.add(7);
@@ -281,7 +280,7 @@ public class DanielScript extends Script{
         
         for(File lasFile : lasFiles){
             
-            BoundingBox3d boundingBox = processTool.getBoundingBoxOfPoints(lasFile, transfMatrix, true, classToIgnore);
+            BoundingBox3d boundingBox = fr.amap.lidar.amapvox.util.Util.getBoundingBoxOfPoints(lasFile, transfMatrix, true, classToIgnore);
             
             Raster dtmSubset = dtm.subset(new BoundingBox2F(
                     new Point2F((float) boundingBox.min.x, (float) boundingBox.min.y), 

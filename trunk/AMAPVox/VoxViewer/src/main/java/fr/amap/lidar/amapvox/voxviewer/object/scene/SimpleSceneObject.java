@@ -23,7 +23,6 @@ import java.nio.IntBuffer;
 public class SimpleSceneObject extends SceneObject{
     
     public SimpleSceneObject(){
-        this.gravityCenter = new Point3F();
         super.setDrawType(GLMesh.DrawType.TRIANGLES);
     }
     

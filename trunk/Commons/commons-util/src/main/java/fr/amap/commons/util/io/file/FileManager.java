@@ -195,9 +195,15 @@ public class FileManager {
     
     public static String getExtension(File file){
         
-        String extension = file.getName().substring(file.getName().lastIndexOf("."), file.getName().length());
+        int dotIndex = file.getName().lastIndexOf(".");
         
-        return extension;
+        if(dotIndex == -1){
+            return "";
+        }else{
+            String extension = file.getName().substring(dotIndex, file.getName().length());
+
+            return extension;
+        }
     }
     
     

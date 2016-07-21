@@ -8,13 +8,10 @@ package fr.amap.lidar.amapvox.gui;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
 import java.io.File;
-import javafx.geometry.Pos;
+import javafx.beans.property.BooleanProperty;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -31,18 +28,32 @@ public class SceneObjectWrapper extends VBox{
         private final CheckBox checkbox;
         private final HBox hbox;
         
-        //properties
-        private final String name;
-        private final String path;
+        public final BooleanProperty selectedProperty;
+        
         
         private Mat4D transfMatrix;
         
+        public SceneObjectWrapper(String name, ProgressBar progressBar) {
+            
+            label = new Label(name);
+            this.progressBar = progressBar;
+            this.progressInfo = new Label();
+            checkbox = new CheckBox();
+            checkbox.setSelected(true);
+            hbox = new HBox();
+            hbox.getChildren().add(checkbox);
+            hbox.getChildren().add(label);
+            
+            super.setSpacing(5.0);
+            super.getChildren().add(hbox);
+            super.getChildren().add(new HBox(5, this.progressBar, this.progressInfo));
+            
+            selectedProperty = checkbox.selectedProperty();
+        }
 
         public SceneObjectWrapper(File file, ProgressBar progressBar) {
             
             label = new Label(file.getName());
-            path = file.getAbsolutePath();
-            name = file.getName();
             this.progressBar = progressBar;
             this.progressInfo = new Label();
             checkbox = new CheckBox();
@@ -67,6 +78,8 @@ public class SceneObjectWrapper extends VBox{
             this.getColumnConstraints().addAll(columnConstraints1, columnConstraints2);*/
             
             //this.prefWidthProperty().bind(listviewTreeSceneObjects.widthProperty());
+            
+            selectedProperty = checkbox.selectedProperty();
         }
 
         public Label getLabel() {

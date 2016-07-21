@@ -5,7 +5,7 @@
  */
 package fr.amap.lidar.amapvox.gui.task;
 
-import fr.amap.lidar.amapvox.voxelisation.ProcessTool;
+import fr.amap.lidar.amapvox.voxelisation.postproc.VoxelFileMerging;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxMergingCfg;
 import java.io.File;
 import javafx.concurrent.Service;
@@ -18,7 +18,7 @@ import javafx.concurrent.Task;
 public class VoxFileMergingService extends Service<File>{
 
     private final File file;
-    private ProcessTool processTool;
+    private VoxelFileMerging processTool;
     
     public VoxFileMergingService(File file){
         this.file = file;
@@ -33,7 +33,7 @@ public class VoxFileMergingService extends Service<File>{
                 final VoxMergingCfg cfg = new VoxMergingCfg();
                 cfg.readConfiguration(file);
                     
-                processTool = new ProcessTool();
+                processTool = new VoxelFileMerging();
                 processTool.mergeVoxelFiles(cfg);
                 
                 return cfg.getOutputFile();

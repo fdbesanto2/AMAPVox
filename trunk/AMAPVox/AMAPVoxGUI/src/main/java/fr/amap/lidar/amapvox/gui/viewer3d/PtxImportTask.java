@@ -19,6 +19,7 @@ import fr.amap.commons.util.LidarScan;
 import fr.amap.lidar.amapvox.gui.AttributsImporterFrameController;
 import static fr.amap.lidar.amapvox.gui.viewer3d.SceneObjectImportTask.LOGGER;
 import fr.amap.lidar.amapvox.voxelisation.configuration.PTXLidarScan;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.ColorShader;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
 import java.io.File;
@@ -143,7 +144,7 @@ public class PtxImportTask extends SceneObjectImportTask{
         updateMessage("Build 3d scene object");
         
         pointCloud.initMesh();
-        pointCloud.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader);
+        pointCloud.setShader(new ColorShader());
         
         updateProgress(100, 100);
 

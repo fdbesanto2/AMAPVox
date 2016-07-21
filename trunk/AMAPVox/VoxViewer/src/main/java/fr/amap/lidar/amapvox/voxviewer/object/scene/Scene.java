@@ -67,14 +67,14 @@ public class Scene {
     private int height;
     
     //default shaders
-    public static AxisShader noTranslationShader = new AxisShader();
-    public static Shader instanceLightedShader = new InstanceLightedShader();
-    public static InstanceShader instanceShader = new InstanceShader();
-    public static TextureShader texturedShader = new TextureShader();
-    public static TextureShader labelShader = new TextureShader();
-    public static PhongShader phongShader = new PhongShader();
-    public static SimpleShader simpleShader = new SimpleShader();
-    public static ColorShader colorShader = new ColorShader();
+    public AxisShader noTranslationShader = new AxisShader();
+    public Shader instanceLightedShader = new InstanceLightedShader();
+    public InstanceShader instanceShader = new InstanceShader();
+    public TextureShader texturedShader = new TextureShader();
+    public TextureShader labelShader = new TextureShader();
+    public SimpleShader simpleShader = new SimpleShader();
+    public ColorShader colorShader = new ColorShader();
+    public PhongShader phongShader = new PhongShader();
     
     //global uniforms, can be used inside shaders files
     public UniformMat4F viewMatrixUniform = new UniformMat4F("viewMatrix");
@@ -237,10 +237,19 @@ public class Scene {
         }
         
         for(SceneObject sceneObject : hudList){
-            sceneObject.initBuffers(gl);
-            sceneObject.initVao(gl);
-            sceneObject.setId(objectsList.size()+hudList.size());
             
+            if(sceneObject.getShaderId() != -1 && sceneObject.getMesh() != null){
+                
+                if(sceneObject.getMesh().getVboId() == -1){
+                    sceneObject.initBuffers(gl);
+                }
+                
+                if(sceneObject.getVaoId() == -1){
+                    sceneObject.initVao(gl);
+                }
+                
+                sceneObject.setId(objectsList.size()+hudList.size());
+            }
         }
         
         setLightAmbientValue(getLight().ambient);
@@ -284,7 +293,7 @@ public class Scene {
         }
         
         if(sceneObject.getShader() == null){
-            sceneObject.setShader(Scene.simpleShader);
+            sceneObject.setShader(new SimpleShader());
         }
         
         objectsList.add(sceneObject);
@@ -295,6 +304,33 @@ public class Scene {
         }
     }
     
+    public SceneObject getSceneObject(String name){
+        
+        int i=0;
+        
+        for(SceneObject object : objectsList){
+            
+            if(object.getName().equals(name)){
+                return objectsList.get(i);
+            }
+            
+            i++;
+        }
+        
+        i=0;
+        
+        for(SceneObject object : hudList){
+            
+            if(object.getName().equals(name)){
+                return hudList.get(i);
+            }
+            
+            i++;
+        }
+        
+        return null;
+    }
+    
     public SceneObject getSceneObject(SceneObject sceneObject){
         
         int i=0;
@@ -303,6 +339,17 @@ public class Scene {
             
             if(object.equals(sceneObject)){
                 return objectsList.get(i);
+            }
+            
+            i++;
+        }
+        
+        i=0;
+        
+        for(SceneObject object : hudList){
+            
+            if(object.equals(sceneObject)){
+                return hudList.get(i);
             }
             
             i++;
@@ -373,6 +420,22 @@ public class Scene {
         
         //add possible new shaders
         for(SceneObject object : objectsList){
+            
+            if(object.getShaderId() == -1){
+                Shader shader = object.getShader();
+                shader.init(gl);
+                initUniforms(shader);
+                addShader(shader);
+                notifyShaderDirtyUniforms(shader);
+            }
+            
+            if(object.vaoId == -1){
+                object.initBuffers(gl);
+                object.initVao(gl);
+            }
+        }
+        
+        for(SceneObject object : hudList){
             
             if(object.getShaderId() == -1){
                 Shader shader = object.getShader();

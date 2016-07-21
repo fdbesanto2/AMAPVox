@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -494,11 +495,15 @@ public class GLMeshFactory {
         return mesh;
     }
     
-    public static GLMesh createMeshFromObj(File objFile, File mtlFile) throws FileNotFoundException, IOException{
+    public static GLMesh createMeshFromObj(InputStream objFile, InputStream mtlFile) throws FileNotFoundException, IOException{
         
-        Obj obj = ObjHelper.readObj(objFile, mtlFile);
+        Obj obj = ObjHelper.readObj(new InputStreamReader(objFile), new InputStreamReader(mtlFile));
         
-                
+        return createMeshFromObj(obj);
+    }
+    
+    public static GLMesh createMeshFromObj(Obj obj) throws FileNotFoundException, IOException{
+        
         GLMesh mesh = GLMeshFactory.createMesh(obj.getPoints(), obj.getNormals(), obj.get1DFaces());
        
         
@@ -530,17 +535,17 @@ public class GLMeshFactory {
                 String materialName = materialLinks.get(currentMaterial-1);
                 Mtl mtl = materials.get(materialName);
 
-                colorData[face.x] = mtl.getDiffuseColor().x;
-                colorData[face.x+1] = mtl.getDiffuseColor().x;
-                colorData[face.x+2] = mtl.getDiffuseColor().x;
+                colorData[face.x*3] = mtl.getDiffuseColor().x;
+                colorData[face.x*3+1] = mtl.getDiffuseColor().y;
+                colorData[face.x*3+2] = mtl.getDiffuseColor().z;
 
-                colorData[face.y] = mtl.getDiffuseColor().y;
-                colorData[face.y+1] = mtl.getDiffuseColor().y;
-                colorData[face.y+2] = mtl.getDiffuseColor().y;
+                colorData[face.y*3] = mtl.getDiffuseColor().x;
+                colorData[face.y*3+1] = mtl.getDiffuseColor().y;
+                colorData[face.y*3+2] = mtl.getDiffuseColor().z;
 
-                colorData[face.z] = mtl.getDiffuseColor().z;
-                colorData[face.z+1] = mtl.getDiffuseColor().z;
-                colorData[face.z+2] = mtl.getDiffuseColor().z;
+                colorData[face.z*3] = mtl.getDiffuseColor().x;
+                colorData[face.z*3+1] = mtl.getDiffuseColor().y;
+                colorData[face.z*3+2] = mtl.getDiffuseColor().z;
 
                 faceID++;
 
@@ -554,6 +559,13 @@ public class GLMeshFactory {
         mesh.colorBuffer = Buffers.newDirectFloatBuffer(colorData);
         
         return mesh;
+    }
+    
+    public static GLMesh createMeshFromObj(File objFile, File mtlFile) throws FileNotFoundException, IOException{
+        
+        Obj obj = ObjHelper.readObj(objFile, mtlFile);
+        
+        return createMeshFromObj(obj);
     }
     
     /*public static GLMesh createMeshFromObj(File objFile) throws FileNotFoundException, IOException{

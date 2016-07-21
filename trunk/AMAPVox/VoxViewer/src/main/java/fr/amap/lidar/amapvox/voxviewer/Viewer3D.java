@@ -143,6 +143,11 @@ public class Viewer3D {
         renderFrame.setVisible(true);
     }
     
+    public void close(){
+        animator.stop();
+        renderFrame.setVisible(false);
+    }
+    
     public void setOnTop(){
         renderFrame.setAlwaysOnTop(true);
         renderFrame.setAlwaysOnTop(false);

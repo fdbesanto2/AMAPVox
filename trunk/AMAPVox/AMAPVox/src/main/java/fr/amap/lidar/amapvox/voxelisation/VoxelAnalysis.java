@@ -36,7 +36,9 @@ import javax.vecmath.Point3i;
 import java.awt.Color;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
@@ -85,7 +87,6 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
     private int nbShotsProcessed;
     private int tmpNbShotsProcessed = 0;
-    private File outputFile;
 
     private float[][] weighting;
     private float[][] residualEnergyTable;
@@ -119,6 +120,11 @@ public class VoxelAnalysis extends Process implements Cancellable{
     
     //directional transmittance (GTheta)
     private DirectionalTransmittance direcTransmittance;
+    
+    //tmp
+    /*boolean[][][] valid;
+    BufferedWriter writer;*/
+    
     /**
      *
      */
@@ -209,37 +215,16 @@ public class VoxelAnalysis extends Process implements Cancellable{
         echoFilter = cfg.getEchoFilter();
         
         this.cfg = cfg;
-    }
-    
-    public VoxelAnalysis() {
-
-        nbShotsProcessed = 0;
-        tmpNbShotsProcessed = 0;
-    }
-
-    /**
-     * Get position of the center of a voxel
-     * @param indices
-     * @return
-     */
-    public Point3d getPosition(Point3i indices) {
         
-        Point3d minCorner = parameters.infos.getMinCorner();
-        Point3d voxSize = voxelManager.getVoxelSpace().getVoxelSize();
-        
-        double posX = minCorner.x + (voxSize.x / 2.0d) + (indices.x * voxSize.x);
-        double posY = minCorner.y + (voxSize.y / 2.0d) + (indices.y * voxSize.y);
-        double posZ = minCorner.z + (voxSize.z / 2.0d) + (indices.z * voxSize.z);
-
-        return new Point3d(posX, posY, posZ);
+        init(cfg.getVoxelParameters());
     }
 
-    public void init(VoxelParameters parameters, File outputFile) {
+
+    private void init(VoxelParameters parameters) {
 
         this.parameters = parameters;
         this.parameters.infos.setTransmittanceMode(parameters.getTransmittanceMode());
         this.parameters.infos.setPathLengthMode(parameters.getPathLengthMode());
-        this.outputFile = outputFile;
         
         if(parameters.getEchoesWeightParams().getWeightingMode() != EchoesWeightParams.WEIGHTING_NONE){
             weighting = parameters.getEchoesWeightParams().getWeightingData();
@@ -260,6 +245,10 @@ public class VoxelAnalysis extends Process implements Cancellable{
         }else{
             pathLengthMode = 2;
         }
+        
+        //test
+        /*pathLengthMode = 2;
+        this.transMode = 1;*/
         
         laserSpec = parameters.getLaserSpecification();
         
@@ -288,12 +277,29 @@ public class VoxelAnalysis extends Process implements Cancellable{
         
         if(cfg != null && cfg.isExportShotSegment()){
             try {
-                shotSegmentWriter = new BufferedWriter(new FileWriter(new File(outputFile.getAbsolutePath()+".segments")));
+                shotSegmentWriter = new BufferedWriter(new FileWriter(new File(cfg.getOutputFile().getAbsolutePath()+".segments")));
                 shotSegmentWriter.write("i j k norm_transmittance weight\n");
             } catch (IOException ex) {
                 java.util.logging.Logger.getLogger(VoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    
+    /**
+     * Get position of the center of a voxel
+     * @param indices
+     * @return
+     */
+    public Point3d getPosition(Point3i indices) {
+        
+        Point3d minCorner = parameters.infos.getMinCorner();
+        Point3d voxSize = voxelManager.getVoxelSpace().getVoxelSize();
+        
+        double posX = minCorner.x + (voxSize.x / 2.0d) + (indices.x * voxSize.x);
+        double posY = minCorner.y + (voxSize.y / 2.0d) + (indices.y * voxSize.y);
+        double posZ = minCorner.z + (voxSize.z / 2.0d) + (indices.z * voxSize.z);
+
+        return new Point3d(posX, posY, posZ);
     }
 
     public void processOneShot(final Shot shot) throws IOException {
@@ -537,6 +543,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
                     lastShotId = shotID;
                     
                     test = true;
+                    vox._valid = false;
                 }
                 
                 /*
@@ -593,6 +600,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
                     }else{
                         longueur = (d2 - d1); //test
                     }
+                    vox._valid = false;
                 } else {
                     longueur = (d2 - d1);
                 }
@@ -648,6 +656,14 @@ public class VoxelAnalysis extends Process implements Cancellable{
                 }
             }
             
+            /*if(test && valid[vox.$i][vox.$j][vox.$k]){
+                try {
+                    writer.write(vox.$i+"\t"+vox.$j+"\t"+vox.$k+"\t"+entering+"\t"+intercepted+"\t"+longueur+"\t"+surface+"\n");
+                } catch (IOException ex) {
+                    java.util.logging.Logger.getLogger(VoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }*/
+            
             if(test && (transMode == 2 || transMode == 3)){
                 double transNorm;
                 
@@ -655,7 +671,6 @@ public class VoxelAnalysis extends Process implements Cancellable{
                     transNorm = ((entering - intercepted) / entering) * surfMulLength;
                 }else{ //mode 3
                     
-                    //transNorm = Math.pow(((entering - intercepted) / entering), 1/longueur) * surfMulLength;
                     if(longueur == 0){
                         transNorm = 0;
                     }else{
@@ -693,7 +708,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
         }
     }
     
-    public float computeTransmittance(float bvEntering, float bvIntercepted){
+    public static float computeTransmittance(double bvEntering, double bvIntercepted){
         
         float transmittance;
         
@@ -705,28 +720,28 @@ public class VoxelAnalysis extends Process implements Cancellable{
             transmittance = Float.NaN;
             
         }else {
-            transmittance = (bvEntering - bvIntercepted) / bvEntering;
+            transmittance = (float) ((bvEntering - bvIntercepted) / bvEntering);
         }
         
         return transmittance;
     }
     
-    public float computeNormTransmittanceMode2(double transmittance, double _sumSurfMulLength, double lMeanTotal){
+    public static float computeNormTransmittanceMode2(double transmittance, double _sumSurfMulLength, double lMeanTotal){
         float normalizedTransmittance = (float) Math.pow((transmittance / _sumSurfMulLength), 1 / lMeanTotal);
         return normalizedTransmittance;
     }
     
-    public float computeNormTransmittanceMode3(double transmittance, double _sumSurfMulLength){
+    public static float computeNormTransmittanceMode3(double transmittance, double _sumSurfMulLength){
         float normalizedTransmittance = (float) (transmittance / _sumSurfMulLength);
         return normalizedTransmittance;
     }
     
-    public float computeNormTransmittance(double transmittance, double lMeanTotal){
+    public static float computeNormTransmittance(double transmittance, double lMeanTotal){
         float normalizedTransmittance = (float) Math.pow(transmittance, 1 / lMeanTotal);
         return normalizedTransmittance;
     }
     
-    public float computePADFromNormTransmittance(float transmittance, float angleMean){
+    public static float computePADFromNormTransmittance(float transmittance, float angleMean, float maxPAD, DirectionalTransmittance direcTransmittance){
         
         float pad;
         
@@ -738,7 +753,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
             if (transmittance == 0) {
 
-                pad = MAX_PAD;
+                pad = maxPAD;
 
             }else {
 
@@ -748,8 +763,8 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
                 if (Float.isNaN(pad)) {
                     pad = Float.NaN;
-                } else if (pad > MAX_PAD || Float.isInfinite(pad)) {
-                    pad = MAX_PAD;
+                } else if (pad > maxPAD || Float.isInfinite(pad)) {
+                    pad = maxPAD;
                 }
 
             }
@@ -757,6 +772,11 @@ public class VoxelAnalysis extends Process implements Cancellable{
         }
 
         return pad + 0.0f; //set +0.0f to avoid -0.0f
+    }
+    
+    public float computePADFromNormTransmittance(float transmittance, float angleMean){
+        
+        return computePADFromNormTransmittance(transmittance, angleMean, MAX_PAD, direcTransmittance);
     }
     
     public Voxel computePADFromVoxel(Voxel voxel, int i, int j, int k) {
@@ -882,7 +902,10 @@ public class VoxelAnalysis extends Process implements Cancellable{
         padComputed = true;
     }
     
-    public void write(VoxelsFormat format) throws FileNotFoundException, Exception{
+    public void write(VoxelsFormat format, File outputFile) throws FileNotFoundException, Exception{
+        
+        //tmp
+        //writer.close();
         
         if(cfg.isExportShotSegment()){
             shotSegmentWriter.close();
@@ -920,6 +943,10 @@ public class VoxelAnalysis extends Process implements Cancellable{
                             }
 
                             writer.write(voxel.toString() + "\n");
+                            
+                            /*if(voxel._valid && voxel.nbSampling > 0){
+                                System.out.println(voxel.toString());
+                            }*/
 
                             count++;
                         }
@@ -1130,22 +1157,14 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
             voxels = new Voxel[parameters.infos.getSplit().x][parameters.infos.getSplit().y][parameters.infos.getSplit().z];
 
-            try {
+            if (parameters.getGroundEnergyParams() != null && 
+                    parameters.getGroundEnergyParams().isCalculateGroundEnergy() && parameters.infos.getType() != Type.TLS) {
 
-                if (parameters.getGroundEnergyParams() != null && 
-                        parameters.getGroundEnergyParams().isCalculateGroundEnergy() && parameters.infos.getType() != Type.TLS) {
-                    
-                    for (int i = 0; i < parameters.infos.getSplit().x; i++) {
-                        for (int j = 0; j < parameters.infos.getSplit().y; j++) {
-                            groundEnergy[i][j] = new GroundEnergy();
-                        }
+                for (int i = 0; i < parameters.infos.getSplit().x; i++) {
+                    for (int j = 0; j < parameters.infos.getSplit().y; j++) {
+                        groundEnergy[i][j] = new GroundEnergy();
                     }
                 }
-
-            } catch (OutOfMemoryError ex) {
-                throw new Exception("Unsufficient memory, you need to allocate more, change the Xmx value!", ex);
-            } catch (Exception ex) {
-                throw new Exception("Error during instantiation of voxel space: ", ex);
             }
 
             Scene scene = new Scene();
@@ -1154,6 +1173,27 @@ public class VoxelAnalysis extends Process implements Cancellable{
             voxelManager = new VoxelManager(scene, new VoxelManagerSettings(parameters.infos.getSplit(), VoxelManagerSettings.NON_TORIC_FINITE_BOX_TOPOLOGY));
 
             LOGGER.info(voxelManager.getInformations());
+
+            //tmp, read valid voxels
+        
+            /*valid = new boolean[parameters.infos.getSplit().x][parameters.infos.getSplit().y][parameters.infos.getSplit().z];
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(new File("/home/julien/Documents/pour_greg/indices.txt")));
+
+                String line;
+                while((line = reader.readLine()) != null){
+                    String[] split = line.split(" ");
+                    valid[Integer.valueOf(split[0])][Integer.valueOf(split[1])][Integer.valueOf(split[2])] = true;
+                }
+                
+                reader.close();
+            } catch (FileNotFoundException ex) {
+                java.util.logging.Logger.getLogger(VoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                java.util.logging.Logger.getLogger(VoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            writer = new BufferedWriter(new FileWriter(new File("/home/julien/Documents/pour_greg/segments.txt")));*/
 
         } catch (Exception e) {
             LOGGER.error(e + " " + this.getClass().getName());

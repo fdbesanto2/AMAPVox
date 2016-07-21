@@ -34,8 +34,8 @@ public class PTXVoxelisation extends TLSVoxelisation{
     
     private final PTXScan scan;
     
-    public PTXVoxelisation(PTXScan scan, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg) {
-        super(scan.getFile(), outputFile, vopMatrix, popMatrix, sopMatrix, parameters, terrain, pointcloud, cfg);
+    public PTXVoxelisation(PTXScan scan, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg) {
+        super(scan.getFile(), outputFile, vopMatrix, popMatrix, sopMatrix, terrain, pointcloud, cfg);
         this.scan = scan;
     }
 

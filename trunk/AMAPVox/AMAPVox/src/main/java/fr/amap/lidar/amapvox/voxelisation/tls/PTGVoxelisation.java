@@ -32,8 +32,8 @@ public class PTGVoxelisation extends TLSVoxelisation{
     
     private final static Logger logger = Logger.getLogger(PTGVoxelisation.class);
 
-    public PTGVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg) {
-        super(inputFile, outputFile, vopMatrix, popMatrix, sopMatrix, parameters, terrain, pointcloud, cfg);
+    public PTGVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg) {
+        super(inputFile, outputFile, vopMatrix, popMatrix, sopMatrix, terrain, pointcloud, cfg);
     }
 
     @Override

@@ -14,7 +14,6 @@ import fr.amap.lidar.amapvox.voxviewer.loading.shader.SimpleShader;
 import fr.amap.lidar.amapvox.voxviewer.loading.texture.Texture;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMeshFactory;
-import static fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;

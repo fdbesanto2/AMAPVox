@@ -33,11 +33,12 @@ public abstract class TLSVoxelisation extends CallableTask{
     protected final File outputFile;
     protected final VoxelAnalysisCfg cfg;
     
-    public TLSVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, VoxelParameters parameters, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg){
+    public TLSVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg){
         nbVoxelisationFinished = 0;
         this.inputFile = inputFile;
-        this.parameters = parameters;
+        this.parameters = cfg.getVoxelParameters();
         this.outputFile = outputFile;
+        
         
         if(popMatrix == null){
             popMatrix = Mat4D.identity();
@@ -64,7 +65,6 @@ public abstract class TLSVoxelisation extends CallableTask{
         }
         
         voxelAnalysis = new VoxelAnalysis(terrain, pointcloud, cfg);
-        voxelAnalysis.init(parameters, outputFile);
         
         this.cfg = cfg;
     }
@@ -82,7 +82,7 @@ public abstract class TLSVoxelisation extends CallableTask{
             
         voxelAnalysis.computePADs();
 
-        voxelAnalysis.write(cfg.getVoxelsFormat());
+        voxelAnalysis.write(cfg.getVoxelsFormat(), outputFile);
 
         //VoxelAnalysisData resultData = voxelAnalysis.getResultData();
 

@@ -12,8 +12,9 @@ import fr.amap.commons.util.LidarScan;
 import fr.amap.commons.util.MatrixUtility;
 import fr.amap.commons.util.ProcessingAdapter;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
+import fr.amap.lidar.amapvox.util.Util;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
-import fr.amap.lidar.amapvox.voxelisation.ProcessTool;
+import fr.amap.lidar.amapvox.voxelisation.postproc.VoxelFileMerging;
 import fr.amap.lidar.amapvox.voxelisation.configuration.PTXLidarScan;
 import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxMergingCfg;
@@ -42,7 +43,7 @@ public class PTXVoxelizationService extends Service<List<File>>{
     private ExecutorService exec;
     private final int coreNumber;
     private final SimpleIntegerProperty nbFileProcessed;
-    private ProcessTool tool;
+    private VoxelFileMerging tool;
     
     public PTXVoxelizationService(File file, int coreNumber){
         this.file = file;
@@ -84,7 +85,7 @@ public class PTXVoxelizationService extends Service<List<File>>{
                     
                     updateMessage("Loading dtm...");
                     
-                    dtm = ProcessTool.loadDTM(parameters.getDtmFilteringParams().getDtmFile());
+                    dtm = Util.loadDTM(parameters.getDtmFilteringParams().getDtmFile());
                 }
 
                 List<PointcloudFilter> pointcloudFilters = parameters.getPointcloudFilters();
@@ -98,7 +99,7 @@ public class PTXVoxelizationService extends Service<List<File>>{
                         updateMessage("Loading point cloud filters...");
                         
                         for(fr.amap.lidar.amapvox.voxelisation.PointcloudFilter filter : pointcloudFilters){
-                            filter.setOctree(ProcessTool.loadOctree(filter.getPointcloudFile(), vop));
+                            filter.setOctree(Util.loadOctree(filter.getPointcloudFile(), vop));
                         }
                     }
                 }
@@ -118,7 +119,7 @@ public class PTXVoxelizationService extends Service<List<File>>{
 
                         PTXLidarScan scan = (PTXLidarScan)file;
                         File outputFile = new File(output.getAbsolutePath() + "/" + file.file.getName() +"-scan-"+count+ ".vox");
-                        PTXVoxelisation ptxVoxelization = new PTXVoxelisation(scan.getScan(), outputFile, vop, pop, MatrixUtility.convertMatrix4dToMat4D(file.matrix), parameters, dtm, pointcloudFilters, cfg);
+                        PTXVoxelisation ptxVoxelization = new PTXVoxelisation(scan.getScan(), outputFile, vop, pop, MatrixUtility.convertMatrix4dToMat4D(file.matrix), dtm, pointcloudFilters, cfg);
                         
                         ptxVoxelization.addCallableTaskListener(new CallableTaskAdapter() {
                             @Override
@@ -145,7 +146,7 @@ public class PTXVoxelizationService extends Service<List<File>>{
                         
                         VoxMergingCfg mergingCfg = new VoxMergingCfg(cfg.getVoxelParameters().getMergedFile(), cfg.getVoxelParameters(), files);
 
-                        tool = new ProcessTool();
+                        tool = new VoxelFileMerging();
                         
                         tool.addProcessingListener(new ProcessingAdapter() {
                             @Override

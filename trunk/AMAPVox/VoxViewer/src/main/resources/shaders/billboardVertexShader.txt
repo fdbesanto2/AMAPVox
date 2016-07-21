@@ -1,49 +1,33 @@
 #version 140
 
-uniform mat4 viewMatrixOrtho, projMatrixOrtho;
+uniform mat4 viewMatrix, projMatrix;
+uniform vec3 billboardCenter;
+uniform float billboardSize;
+uniform vec3 color;
 
 in vec4 position;
-
-in vec2 textureCoordinates;
-out vec2 texCoordinates;
+flat out vec3 Color;
  
 void main()
 {
-    texCoordinates = textureCoordinates;
+    Color = color;
 
-    mat4 newModelView = viewMatrixOrtho;
+    mat4 viewMatrixNew = viewMatrix;
 
-    
-    // First column.
-    newModelView[0][0] = 1.0; 
-    newModelView[0][1] = 0.0; 
-    newModelView[0][2] = 0.0; 
-    //newModelView[3][0] = 0.0; 
+    // Column 0:
+    viewMatrixNew[0][0] = 1;
+    viewMatrixNew[0][1] = 0;
+    viewMatrixNew[0][2] = 0;
 
-    // Second column.
-    newModelView[1][0] = 0.0; 
-    newModelView[1][1] = 1.0; 
-    newModelView[1][2] = 0.0;
-    //newModelView[3][1] = 0.0; 
+    // Column 1:
+    viewMatrixNew[1][0] = 0;
+    viewMatrixNew[1][1] = 1;
+    viewMatrixNew[1][2] = 0;
 
-    // Third column.
-    newModelView[2][0] = 0.0; 
-    newModelView[2][1] = 0.0; 
-    newModelView[2][2] = 1.0;
-    //newModelView[3][2] = 0.0;
+    // Column 2:
+    viewMatrixNew[2][0] = 0;
+    viewMatrixNew[2][1] = 0;
+    viewMatrixNew[2][2] = 1;
 
-    // Fourth column.
-    //newModelView[0][3] = 10;
-    //newModelView[1][3] = 0;
-    //newModelView[2][3] = 0;
-
-    
-
-    //vec4 origin = (position+vec4(10, 0, 0,0.0));
-    //gl_Position = projMatrixOrtho * (newModelView * vec4(0, 0, 0, 1)) + vec4(origin.xy, 0, 0);
-    //gl_Position = projMatrixOrtho * position;
-
-   
-
-    gl_Position = projMatrixOrtho * viewMatrixOrtho * position ;
+    gl_Position = projMatrix * viewMatrixNew * position;
 }

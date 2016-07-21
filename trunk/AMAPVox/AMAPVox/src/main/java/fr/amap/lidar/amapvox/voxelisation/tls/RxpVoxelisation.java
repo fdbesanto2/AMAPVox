@@ -33,9 +33,8 @@ public class RxpVoxelisation extends TLSVoxelisation{
     
     private final boolean enableEmptyShotFiltering;
     
-    public RxpVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix,
-            VoxelParameters parameters, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg, boolean enableEmptyShotFiltering) {
-        super(inputFile, outputFile, vopMatrix, popMatrix, sopMatrix, parameters, terrain, pointcloud, cfg);
+    public RxpVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg, boolean enableEmptyShotFiltering) {
+        super(inputFile, outputFile, vopMatrix, popMatrix, sopMatrix, terrain, pointcloud, cfg);
         
         this.enableEmptyShotFiltering = enableEmptyShotFiltering;
     }

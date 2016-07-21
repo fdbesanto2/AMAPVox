@@ -8,6 +8,7 @@ package fr.amap.lidar.amapvox.gui.viewer3d;
 import fr.amap.commons.javafx.io.TextFileParserFrameController;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.util.io.file.FileManager;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.ColorShader;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
 import java.io.BufferedReader;
@@ -184,7 +185,7 @@ public class CsvImportTask extends SceneObjectImportTask{
             updateMessage("Build 3d scene object");
             
             sceneObject.initMesh();
-            sceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader);
+            sceneObject.setShader(new ColorShader());
 
             updateProgress(100, 100);
 

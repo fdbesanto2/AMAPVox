@@ -13,6 +13,7 @@ import fr.amap.commons.math.point.Point3F;
 import fr.amap.lidar.amapvox.gui.AttributsImporterFrameController;
 import fr.amap.lidar.amapvox.gui.LasAttributs;
 import fr.amap.lidar.amapvox.gui.MainFrameController;
+import fr.amap.lidar.amapvox.voxviewer.loading.shader.ColorShader;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.PointCloudSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
 import java.io.File;
@@ -171,7 +172,7 @@ public class LasImportTask extends SceneObjectImportTask{
             updateMessage("Build 3d scene object");
             
             sceneObject.initMesh();
-            sceneObject.setShader(fr.amap.lidar.amapvox.voxviewer.object.scene.Scene.colorShader);
+            sceneObject.setShader(new ColorShader());
             
             updateProgress(pointNumber+1, pointNumber+1);
             
