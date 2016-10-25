@@ -145,7 +145,7 @@ public class Viewer3D {
     
     public void close(){
         animator.stop();
-        renderFrame.setVisible(false);
+        renderFrame.destroy();
     }
     
     public void setOnTop(){

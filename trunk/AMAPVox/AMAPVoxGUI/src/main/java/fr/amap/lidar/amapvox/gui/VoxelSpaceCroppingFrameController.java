@@ -5,6 +5,7 @@
  */
 package fr.amap.lidar.amapvox.gui;
 
+import fr.amap.commons.javafx.io.FileChooserContext;
 import fr.amap.lidar.amapvox.commons.Voxel;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;

@@ -5,6 +5,7 @@
  */
 package fr.amap.lidar.amapvox.gui;
 
+import fr.amap.commons.javafx.io.FileChooserContext;
 import java.io.File;
 import java.net.URL;
 import java.util.List;

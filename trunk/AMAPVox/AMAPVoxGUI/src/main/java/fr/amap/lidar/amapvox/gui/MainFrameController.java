@@ -5,6 +5,7 @@
  */
 package fr.amap.lidar.amapvox.gui;
 
+import fr.amap.commons.javafx.io.FileChooserContext;
 import fr.amap.lidar.amapvox.gui.export.DartExporterFrameController;
 import fr.amap.lidar.amapvox.gui.viewer3d.ToolBoxFrameController;
 import com.jogamp.newt.Window;
@@ -300,11 +301,8 @@ public class MainFrameController implements Initializable {
     private File lastFCOpenPointCloudFile;
     private File lastFCAddTask;
     private File lastFCSaveMergingFile;
-    private File lastFCOpenPonderationFile;
-    private File lastFCOpenPointsPositionFile;
     private File lastFCSaveTransmittanceTextFile;
     private File lastDCSaveTransmittanceBitmapFile;
-    private File lastFCOpenHemiPhotoOutputBitmapFile;
     private File lastFCOpenHemiPhotoOutputTextFile;
     
     private CSVFile trajectoryFile;
@@ -337,6 +335,8 @@ public class MainFrameController implements Initializable {
     private DirectoryChooser directoryChooserSaveTransmittanceBitmapFile;
     private FileChooser fileChooserSaveHemiPhotoOutputTextFile;
     private FileChooserContext fileChooserSaveHemiPhotoOutputBitmapFile;
+    private DirectoryChooser directoryChooserSaveHemiPhotoOutputBitmapFile;
+    private DirectoryChooser directoryChooserSaveHemiPhotoOutputTextFile;
     private FileChooserContext fileChooserOpenCanopyAnalyserInputFile;
     private FileChooserContext fileChooserSaveCanopyAnalyserOutputFile;
     private FileChooserContext fileChooserSaveCanopyAnalyserCfgFile;
@@ -412,12 +412,12 @@ public class MainFrameController implements Initializable {
     private VBox vBoxGenerateBitmapFiles;
     @FXML
     private TextField textfieldVoxelFilePathHemiPhoto;
-    @FXML
+    /*@FXML
     private TextField textfieldSensorPositionX;
     @FXML
     private TextField textfieldSensorPositionY;
     @FXML
-    private TextField textfieldSensorPositionZ;
+    private TextField textfieldSensorPositionZ;*/
     @FXML
     private TextField textfieldPixelNumber;
     @FXML
@@ -764,6 +764,10 @@ public class MainFrameController implements Initializable {
     private VBox vboxWeighting;
     @FXML
     private HBox hboxAutomaticBBox;
+    @FXML
+    private ListView<Point3d> listViewHemiPhotoSensorPositions;
+    @FXML
+    private MenuItem menuItemSelectionNone12;
     
     private void initValidationSupport(){
         
@@ -880,7 +884,7 @@ public class MainFrameController implements Initializable {
         hemiPhotoSimValidationSupport.registerValidator(textfieldPixelNumber, true, Validators.fieldIntegerValidator);
         hemiPhotoSimValidationSupport.registerValidator(textfieldAzimutsNumber, true, Validators.fieldIntegerValidator);
         hemiPhotoSimValidationSupport.registerValidator(textfieldZenithsNumber, true, Validators.fieldIntegerValidator);
-        hemiPhotoSimValidationSupport.registerValidator(textfieldHemiPhotoOutputBitmapFile, true, Validators.fileValidityValidator);
+        /*hemiPhotoSimValidationSupport.registerValidator(textfieldHemiPhotoOutputBitmapFile, true, Validators.fileValidityValidator);
         
         checkboxHemiPhotoGenerateBitmapFile.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -892,7 +896,7 @@ public class MainFrameController implements Initializable {
                     hemiPhotoSimValidationSupport.registerValidator(textfieldHemiPhotoOutputBitmapFile, false, Validators.unregisterValidator);
                 }
             }
-        });
+        });*/
         
         tabHemiFromScans.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -900,9 +904,6 @@ public class MainFrameController implements Initializable {
                 if(newValue){
                     //unregister the validators
                     hemiPhotoSimValidationSupport.registerValidator(textfieldVoxelFilePathHemiPhoto, false, Validators.unregisterValidator);
-                    hemiPhotoSimValidationSupport.registerValidator(textfieldSensorPositionX, false, Validators.unregisterValidator);
-                    hemiPhotoSimValidationSupport.registerValidator(textfieldSensorPositionY, false, Validators.unregisterValidator);
-                    hemiPhotoSimValidationSupport.registerValidator(textfieldSensorPositionZ, false, Validators.unregisterValidator);
                 }
             }
         });
@@ -912,9 +913,6 @@ public class MainFrameController implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if(newValue){
                     hemiPhotoSimValidationSupport.registerValidator(textfieldVoxelFilePathHemiPhoto, true, Validators.fileExistValidator);
-                    hemiPhotoSimValidationSupport.registerValidator(textfieldSensorPositionX, true, Validators.fieldDoubleValidator);
-                    hemiPhotoSimValidationSupport.registerValidator(textfieldSensorPositionY, true, Validators.fieldDoubleValidator);
-                    hemiPhotoSimValidationSupport.registerValidator(textfieldSensorPositionZ, true, Validators.fieldDoubleValidator);
                 }
             }
         });
@@ -1531,6 +1529,12 @@ public class MainFrameController implements Initializable {
         fileChooserSaveHemiPhotoOutputBitmapFile = new FileChooserContext("*.png");
         fileChooserSaveHemiPhotoOutputBitmapFile.fc.setTitle("Save bitmap file");
         
+        directoryChooserSaveHemiPhotoOutputBitmapFile = new DirectoryChooser();
+        directoryChooserSaveHemiPhotoOutputBitmapFile.setTitle("Choose bitmap files output directory");
+        
+        directoryChooserSaveHemiPhotoOutputTextFile = new DirectoryChooser();
+        directoryChooserSaveHemiPhotoOutputTextFile.setTitle("Choose text files output directory");
+        
         fileChooserSaveHemiPhotoOutputTextFile = new FileChooser();
         fileChooserSaveHemiPhotoOutputTextFile.setTitle("Save text file");
 
@@ -2135,7 +2139,7 @@ public class MainFrameController implements Initializable {
     }
 
     @FXML
-    private void onActionMenuItemPositionsCanopyAnalyzerSelectionAll(ActionEvent event) {
+    private void onActionMenuItemPositionsHemiPhotoSelectionAll(ActionEvent event) {
         listViewCanopyAnalyzerSensorPositions.getSelectionModel().selectAll();
     }
 
@@ -2143,11 +2147,27 @@ public class MainFrameController implements Initializable {
     private void onActionMenuItemPositionsCanopyAnalyzerSelectionNone(ActionEvent event) {
         listViewCanopyAnalyzerSensorPositions.getSelectionModel().clearSelection();
     }
+    
+    @FXML
+    private void onActionMenuItemPositionsCanopyAnalyzerSelectionAll(ActionEvent event) {
+        listViewHemiPhotoSensorPositions.getSelectionModel().selectAll();
+    }
+
+    @FXML
+    private void onActionMenuItemPositionsHemiPhotoSelectionNone(ActionEvent event) {
+        listViewHemiPhotoSensorPositions.getSelectionModel().clearSelection();
+    }
 
     @FXML
     private void onActionButtonRemovePositionCanopyAnalyzer(ActionEvent event) {
         ObservableList<?> selectedItems = listViewCanopyAnalyzerSensorPositions.getSelectionModel().getSelectedItems();
         listViewCanopyAnalyzerSensorPositions.getItems().removeAll(selectedItems);
+    }
+    
+    @FXML
+    private void onActionButtonRemovePositionHemiPhoto(ActionEvent event) {
+        ObservableList<?> selectedItems = listViewHemiPhotoSensorPositions.getSelectionModel().getSelectedItems();
+        listViewHemiPhotoSensorPositions.getItems().removeAll(selectedItems);
     }
 
     @FXML
@@ -2166,6 +2186,26 @@ public class MainFrameController implements Initializable {
             @Override
             public void handle(WindowEvent event) {
                 listViewCanopyAnalyzerSensorPositions.getItems().addAll(positionImporterFrameController.getPositions());
+            }
+        });
+    }
+    
+    @FXML
+    private void onActionButtonAddPositionHemiPhoto(ActionEvent event) {
+        
+        if(!textfieldVoxelFilePathHemiPhoto.getText().isEmpty()){
+            File voxelFile = new File(textfieldVoxelFilePathHemiPhoto.getText());
+            if(voxelFile != null && voxelFile.exists()){
+                positionImporterFrameController.setInitialVoxelFile(voxelFile);
+            }
+        }
+        
+        positionImporterFrame.show();
+        positionImporterFrame.setOnHidden(new EventHandler<WindowEvent>() {
+
+            @Override
+            public void handle(WindowEvent event) {
+                listViewHemiPhotoSensorPositions.getItems().addAll(positionImporterFrameController.getPositions());
             }
         });
     }
@@ -2301,16 +2341,22 @@ public class MainFrameController implements Initializable {
                     hemiParameters.setMode(HemiParameters.Mode.PAD);
 
                     hemiParameters.setVoxelFile(new File(textfieldVoxelFilePathHemiPhoto.getText()));
-                    hemiParameters.setSensorPosition(new Point3d(Double.valueOf(textfieldSensorPositionX.getText()),
-                                                                Double.valueOf(textfieldSensorPositionY.getText()),
-                                                                Double.valueOf(textfieldSensorPositionZ.getText())));
+                    hemiParameters.setSensorPositions(listViewHemiPhotoSensorPositions.getItems());
                     break;
             }
 
             hemiParameters.setGenerateBitmapFile(checkboxHemiPhotoGenerateBitmapFile.isSelected());
 
             if(checkboxHemiPhotoGenerateBitmapFile.isSelected()){
-                hemiParameters.setOutputBitmapFile(new File(textfieldHemiPhotoOutputBitmapFile.getText()));
+                
+                File outputBitmapFile = new File(textfieldHemiPhotoOutputBitmapFile.getText());
+                if(selectedMode == 1 && !outputBitmapFile.isDirectory()){
+                    throw new Exception("The selected output bitmap directory is not a directory !");
+                }else if(selectedMode == 0 && outputBitmapFile.isDirectory()){
+                    throw new Exception("The selected output bitmap file is not a file!");
+                }
+                
+                hemiParameters.setOutputBitmapFile(outputBitmapFile);
 
                 int selectedIndex = comboboxHemiPhotoBitmapOutputMode.getSelectionModel().getSelectedIndex();
                 switch(selectedIndex){
@@ -2325,9 +2371,18 @@ public class MainFrameController implements Initializable {
             }
 
             hemiParameters.setGenerateTextFile(checkboxGenerateSectorsTextFileHemiPhoto.isSelected());
+            
 
             if(checkboxGenerateSectorsTextFileHemiPhoto.isSelected()){
-                hemiParameters.setOutputTextFile(new File(textfieldHemiPhotoOutputTextFile.getText()));
+                
+                File outputTextFile = new File(textfieldHemiPhotoOutputTextFile.getText());
+                if(selectedMode == 1 && !outputTextFile.isDirectory()){
+                    throw new Exception("The selected output text directory is not a directory !");
+                }else if(selectedMode == 0 && outputTextFile.isDirectory()){
+                    throw new Exception("The selected output text file is not a file!");
+                }
+                
+                hemiParameters.setOutputTextFile(outputTextFile);
             }
 
             HemiPhotoCfg hemiPhotoCfg = new HemiPhotoCfg(hemiParameters);
@@ -3569,26 +3624,36 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonOpenHemiPhotoOutputTextFile(ActionEvent event) {
         
-        if(lastFCOpenHemiPhotoOutputTextFile != null){
-            fileChooserSaveHemiPhotoOutputTextFile.setInitialDirectory(lastFCOpenHemiPhotoOutputTextFile.getParentFile());
-        }
+        if(tabpaneHemiPhotoMode.getSelectionModel().getSelectedIndex() == 0){
+            File selectedFile = fileChooserSaveHemiPhotoOutputTextFile.showSaveDialog(stage);
         
-        File selectedFile = fileChooserSaveHemiPhotoOutputTextFile.showSaveDialog(stage);
+            if(selectedFile != null){
+                textfieldHemiPhotoOutputTextFile.setText(selectedFile.getAbsolutePath());
+            }
+        }else{
+            File selectedFile = directoryChooserSaveHemiPhotoOutputTextFile.showDialog(stage);
         
-        if(selectedFile != null){
-            lastFCOpenHemiPhotoOutputTextFile = selectedFile;
-            textfieldHemiPhotoOutputTextFile.setText(selectedFile.getAbsolutePath());
+            if(selectedFile != null){
+                textfieldHemiPhotoOutputTextFile.setText(selectedFile.getAbsolutePath());
+            }
         }
     }
 
     @FXML
     private void onActionButtonOpenHemiPhotoOutputBitmapFile(ActionEvent event) {
         
-        File selectedFile = fileChooserSaveHemiPhotoOutputBitmapFile.showSaveDialog(stage);
+        if(tabpaneHemiPhotoMode.getSelectionModel().getSelectedIndex() == 0){
+            File selectedFile = fileChooserSaveHemiPhotoOutputBitmapFile.showSaveDialog(stage);
         
-        if(selectedFile != null){
-            lastFCOpenHemiPhotoOutputBitmapFile = selectedFile;
-            textfieldHemiPhotoOutputBitmapFile.setText(selectedFile.getAbsolutePath());
+            if(selectedFile != null){
+                textfieldHemiPhotoOutputBitmapFile.setText(selectedFile.getAbsolutePath());
+            }
+        }else{
+            File selectedFile = directoryChooserSaveHemiPhotoOutputBitmapFile.showDialog(stage);
+        
+            if(selectedFile != null){
+                textfieldHemiPhotoOutputBitmapFile.setText(selectedFile.getAbsolutePath());
+            }
         }
     }
 
@@ -4939,7 +5004,7 @@ public class MainFrameController implements Initializable {
         voxelParameters.setLadParams(ladParameters);
 
         voxelParameters.infos.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
-        voxelParameters.setTransmittanceMode(3);
+        voxelParameters.setTransmittanceMode(1);
         voxelParameters.setPathLengthMode("B");
         /*voxelParameters.setTransmittanceMode(comboboxTransMode.getSelectionModel().getSelectedItem());
         voxelParameters.setPathLengthMode(comboboxPathLengthMode.getSelectionModel().getSelectedItem());*/
@@ -4999,9 +5064,7 @@ public class MainFrameController implements Initializable {
                             break;
                         case PAD:
                             textfieldVoxelFilePathHemiPhoto.setText(hemiParameters.getVoxelFile().getAbsolutePath());
-                            textfieldSensorPositionX.setText(String.valueOf(hemiParameters.getSensorPosition().x));
-                            textfieldSensorPositionY.setText(String.valueOf(hemiParameters.getSensorPosition().y));
-                            textfieldSensorPositionZ.setText(String.valueOf(hemiParameters.getSensorPosition().z));
+                            listViewHemiPhotoSensorPositions.getItems().setAll(hemiParameters.getSensorPositions());
                             break;
                     }
                     
@@ -6929,7 +6992,6 @@ public class MainFrameController implements Initializable {
     private void onActionButtonFillTLSDefaultWeight(ActionEvent event) {
         fillWeightingData(EchoesWeightParams.DEFAULT_TLS_WEIGHTING);
     }
-
     /*@FXML
     private void onActionButtonGenerateShotsFile(ActionEvent event) {
         

@@ -5,6 +5,7 @@
  */
 package fr.amap.lidar.amapvox.gui;
 
+import fr.amap.commons.javafx.io.FileChooserContext;
 import fr.amap.commons.javafx.matrix.TransformationFrameController;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import java.io.File;

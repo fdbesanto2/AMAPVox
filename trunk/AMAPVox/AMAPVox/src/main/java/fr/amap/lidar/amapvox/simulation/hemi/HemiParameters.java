@@ -57,7 +57,8 @@ public class HemiParameters {
     
     //PAD mode
     private File voxelFile;
-    private Point3d sensorPosition;
+    //private Point3d sensorPosition;
+    private List<Point3d> sensorPositions;
     
     //common parameters
     private int pixelNumber;
@@ -95,12 +96,20 @@ public class HemiParameters {
         this.voxelFile = voxelFile;
     }
 
-    public Point3d getSensorPosition() {
+    /*public Point3d getSensorPosition() {
         return sensorPosition;
     }
 
     public void setSensorPosition(Point3d sensorPosition) {
         this.sensorPosition = sensorPosition;
+    }*/
+
+    public List<Point3d> getSensorPositions() {
+        return sensorPositions;
+    }
+
+    public void setSensorPositions(List<Point3d> sensorPositions) {
+        this.sensorPositions = sensorPositions;
     }
 
     public int getPixelNumber() {

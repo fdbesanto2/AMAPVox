@@ -14,7 +14,7 @@ import fr.amap.lidar.amapvox.voxviewer.object.camera.TrackballCamera;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import fr.amap.lidar.amapvox.voxviewer.renderer.JoglListener;
 import fr.amap.commons.util.CombinedFilterItem;
-import fr.amap.lidar.amapvox.gui.FileChooserContext;
+import fr.amap.commons.javafx.io.FileChooserContext;
 import fr.amap.lidar.amapvox.gui.SceneObjectWrapper;
 import fr.amap.lidar.amapvox.gui.Util;
 import fr.amap.lidar.amapvox.voxviewer.Viewer3D;
@@ -25,12 +25,16 @@ import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
 import fr.amap.lidar.amapvox.voxviewer.renderer.RenderListener;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -66,13 +70,23 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javax.imageio.ImageIO;
+import org.apache.batik.apps.rasterizer.SVGConverter;
 import org.apache.log4j.Logger;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 /**
  * FXML Controller class
@@ -221,6 +235,8 @@ public class Viewer3DFrameController implements Initializable {
     private TextField textfieldCameraFar;
     @FXML
     private TreeView<SceneObjectWrapper> treeviewSceneObjects;
+    @FXML
+    private ImageView imageviewSkyColor;
 
     @FXML
     private void onActionButtonSettings(ActionEvent event) {
@@ -350,10 +366,98 @@ public class Viewer3DFrameController implements Initializable {
         
         isHidden = false;
         
-        colorPickerBackgroundColor.setValue(new javafx.scene.paint.Color(0.8, 0.8, 0.8, 1));
-        colorpickerLightingAmbientColor.setValue(new javafx.scene.paint.Color(1.0, 1.0, 1.0, 1));
-        colorpickerLightingDiffuseColor.setValue(new javafx.scene.paint.Color(1.0, 1.0, 1.0, 1));
-        colorpickerLightingSpecularColor.setValue(new javafx.scene.paint.Color(1.0, 1.0, 1.0, 1));
+        colorPickerBackgroundColor.valueProperty().addListener(new ChangeListener<javafx.scene.paint.Color>() {
+            @Override
+            public void changed(ObservableValue<? extends javafx.scene.paint.Color> observable, javafx.scene.paint.Color oldValue, javafx.scene.paint.Color newValue) {
+                
+                try {
+                    
+                    
+                    //read sgv file
+                    URL resource = Viewer3DFrameController.class.getResource("/fxml/icons/pinceau.svg");
+                    
+                    SAXBuilder sxb = new SAXBuilder();
+                    Document document = sxb.build(resource);
+
+                    final Element root = document.getRootElement();
+
+                    //edit svg file
+                    final List<Element> graphicElements = root.getChildren("g", root.getNamespace());
+                    
+                    String hexColor = null;
+                    
+                    for(Element element : graphicElements){
+                        String attributeValue = element.getAttributeValue("label", Namespace.getNamespace("http://www.inkscape.org/namespaces/inkscape"));
+                        
+                        if(attributeValue != null && attributeValue.equals("ciel")){
+                            final Element ellipse = element.getChild("ellipse", root.getNamespace());
+                            String style = ellipse.getAttributeValue("style");
+                            
+                            int indexOf = style.indexOf("fill:#");
+                            hexColor = Integer.toHexString((int) (newValue.getRed()*255))+
+                                    Integer.toHexString((int) (newValue.getGreen()*255))+
+                                    Integer.toHexString((int) (newValue.getBlue()*255));
+                            
+                            style = style.substring(0, indexOf+6)+hexColor+style.substring(indexOf+12);
+                            
+                            ellipse.setAttribute("style", style);
+                        }else if(attributeValue != null && attributeValue.equals("peinture")){
+                            
+                            final Element path = element.getChild("path", root.getNamespace());
+                            String style = path.getAttributeValue("style");
+                            
+                            int indexOf = style.indexOf("fill:#");
+                            DecimalFormat df = new DecimalFormat("##");
+                            hexColor = Integer.toHexString((int) (newValue.getRed()*255))+
+                                    Integer.toHexString((int) (newValue.getGreen()*255))+
+                                    Integer.toHexString((int) (newValue.getBlue()*255));
+                            
+                            style = style.substring(0, indexOf+6)+hexColor+style.substring(indexOf+12);
+                            
+                            path.setAttribute("style", style);
+                        }
+                        
+                    }
+                    
+                    if(hexColor != null){
+                        
+                        SVGConverter conv = new SVGConverter();
+                        
+                        
+
+                        conv.setWidth(32.0f);
+                        conv.setHeight(32.0f);
+
+                        conv.setMediaType("image/png");
+
+                        File tmpSVGFile = File.createTempFile("skycolor", ".svg");
+                        File tmpPNGFile = File.createTempFile("skycolor", ".png");
+                        
+                        //convert svg to png
+                        conv.setSources(new String[]{tmpSVGFile.toURI().toURL().toString()});
+                        
+                        conv.setDst(tmpPNGFile);
+
+                        XMLOutputter output = new XMLOutputter(Format.getPrettyFormat());
+                        output.output(document, new BufferedOutputStream(new FileOutputStream(tmpSVGFile)));
+
+                        conv.execute();
+
+                        //change sky icon
+                        Image image = new Image(tmpPNGFile.toURI().toURL().toString());
+                        imageviewSkyColor.setImage(image);
+                    }
+                    
+                } catch (Exception ex) {
+                    java.util.logging.Logger.getLogger(Viewer3DFrameController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                if(viewer3D != null){
+                    viewer3D.getJoglContext().setWorldColor(new Vec3F((float)newValue.getRed(), (float)newValue.getGreen(), (float)newValue.getBlue()));
+                    viewer3D.getJoglContext().refresh();
+                }
+            }
+        });
                
                 
         comboboxGradient.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -383,15 +487,11 @@ public class Viewer3DFrameController implements Initializable {
             }
         });
         
-        colorPickerBackgroundColor.valueProperty().addListener(new ChangeListener<javafx.scene.paint.Color>() {
-
-            @Override
-            public void changed(ObservableValue<? extends javafx.scene.paint.Color> observable, javafx.scene.paint.Color oldValue, javafx.scene.paint.Color newValue) {
-                
-                viewer3D.getJoglContext().setWorldColor(new Vec3F((float)newValue.getRed(), (float)newValue.getGreen(), (float)newValue.getBlue()));
-                viewer3D.getJoglContext().refresh();
-            }
-        });
+        colorPickerBackgroundColor.setValue(new javafx.scene.paint.Color(0.8, 0.8, 0.8, 1));
+        colorpickerLightingAmbientColor.setValue(new javafx.scene.paint.Color(1.0, 1.0, 1.0, 1));
+        colorpickerLightingDiffuseColor.setValue(new javafx.scene.paint.Color(1.0, 1.0, 1.0, 1));
+        colorpickerLightingSpecularColor.setValue(new javafx.scene.paint.Color(1.0, 1.0, 1.0, 1));
+        
         
         colorpickerLightingAmbientColor.valueProperty().addListener(new ChangeListener<javafx.scene.paint.Color>() {
 
@@ -605,6 +705,10 @@ public class Viewer3DFrameController implements Initializable {
         
         comboBoxAttributeToShow.getItems().addAll(attributes);
         comboBoxAttributeToShow.getSelectionModel().select(attributeToVisualize);
+    }
+    
+    private void changeColorPickerBackgroundColor(){
+        
     }
     
 

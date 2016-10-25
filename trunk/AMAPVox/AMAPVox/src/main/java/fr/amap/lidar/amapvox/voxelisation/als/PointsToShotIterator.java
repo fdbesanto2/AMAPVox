@@ -21,7 +21,7 @@ import javax.vecmath.Vector3d;
  */
 public class PointsToShotIterator implements Iterator<Shot>{
 
-    private boolean isNewExp = false;
+    private boolean isNewShot = false;
     private boolean wasReturned = false;
     private double oldTime = -1;
     private int oldN = -1;
@@ -125,7 +125,7 @@ public class PointsToShotIterator implements Iterator<Shot>{
             double time = mix.lasPoint.t;
 
             //le temps associé au point à changé donc le tir peut être retourné
-            if (isNewExp && time != oldTime && !wasReturned) {
+            if (isNewShot /*&& time != oldTime*/ && !wasReturned) {
 
                 /**
                  * *vérifie que le nombre d'échos lus correspond bien au nombre
@@ -139,7 +139,7 @@ public class PointsToShotIterator implements Iterator<Shot>{
 
                     //currentLasPointIndex++;
                     count = 0;
-                    isNewExp = false;
+                    isNewShot = false;
                     wasReturned = true;
 
                     if(shot.nbEchos != 0){ //handle the case (file bug) when an echo has a nbEchos equals to 0
@@ -153,10 +153,10 @@ public class PointsToShotIterator implements Iterator<Shot>{
             }
 
             //le point appartient toujours au même tir
-            if (time == oldTime || (!isNewExp && time != oldTime)) {
+            if (time == oldTime || (!isNewShot && time != oldTime)) {
 
                 //le point est associé à un nouveau tir donc on crée ce tir
-                if ((!isNewExp && time != oldTime) || currentEchoFound == currentNbEchos) {
+                if ((!isNewShot && time != oldTime) || currentEchoFound == currentNbEchos) {
 
                     shot= new Shot(mix.lasPoint.n, new Point3d(mix.xloc_s, mix.yloc_s, mix.zloc_s), 
                                                 new Vector3d(mix.x_u, mix.y_u, mix.z_u), 
@@ -168,7 +168,7 @@ public class PointsToShotIterator implements Iterator<Shot>{
 
                     shot.calculateAngle();
 
-                    isNewExp = true;
+                    isNewShot = true;
                 }
 
                 currentEchoFound++;

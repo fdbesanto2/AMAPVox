@@ -5,7 +5,9 @@
  */
 package fr.amap.lidar.amapvox.voxviewer.renderer;
 
+import com.jogamp.nativewindow.NativeWindowFactory;
 import com.jogamp.nativewindow.WindowClosingProtocol;
+import com.jogamp.newt.Display;
 import com.jogamp.newt.NewtFactory;
 import com.jogamp.newt.Window;
 import com.jogamp.newt.opengl.GLWindow;
@@ -27,7 +29,6 @@ public class GLRenderFrame extends GLWindow{
     public GLRenderFrame(GLCapabilities caps, int posX, int posY, int width, int height, String title){
         
         super(NewtFactory.createWindow(caps));
-        
         setTitle("3D viewer - "+title);
         
         //viewer.setVisible(true); 
@@ -39,7 +40,7 @@ public class GLRenderFrame extends GLWindow{
         /*viewer.setPosition((GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getWidth()/2)-320,
                            (GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getHeight()/2)-240);*/
         //viewer.setAlwaysOnTop(true); 
-        setDefaultCloseOperation(WindowClosingProtocol.WindowClosingMode.DISPOSE_ON_CLOSE);
+        super.setDefaultCloseOperation(WindowClosingProtocol.WindowClosingMode.DISPOSE_ON_CLOSE);
     }
     
     public static GLRenderFrame create(GLCapabilities caps, int posX, int posY, int width, int height, String title){

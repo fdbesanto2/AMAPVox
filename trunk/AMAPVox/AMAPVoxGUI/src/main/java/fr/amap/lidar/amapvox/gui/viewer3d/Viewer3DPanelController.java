@@ -28,7 +28,7 @@ import fr.amap.commons.util.image.ScaleGradient;
 import fr.amap.commons.util.io.file.FileManager;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.gui.DialogHelper;
-import fr.amap.lidar.amapvox.gui.FileChooserContext;
+import fr.amap.commons.javafx.io.FileChooserContext;
 import fr.amap.lidar.amapvox.gui.HelpButtonController;
 import fr.amap.lidar.amapvox.gui.PTGProjectExtractor;
 import fr.amap.lidar.amapvox.gui.PTXProjectExtractor;
@@ -863,7 +863,7 @@ public class Viewer3DPanelController implements Initializable {
                                  * Axis
                                  */
                                 
-                                InputStream axis3ObjStream = Viewer3D.class.getResourceAsStream("/mesh/axis3.obj");
+                                /*InputStream axis3ObjStream = Viewer3D.class.getResourceAsStream("/mesh/axis3.obj");
                                 InputStream axis3MtlStream = Viewer3D.class.getResourceAsStream("/mesh/axis3.mtl");
 
 
@@ -872,7 +872,7 @@ public class Viewer3DPanelController implements Initializable {
                                 axisMesh.scale(new Vec3F(5, 5, 5));
                                 SceneObject axisSceneObject = new SimpleSceneObject(axisMesh);
                                 axisSceneObject.setShader(new AxisShader());
-                                viewer3D.getScene().addSceneObject(axisSceneObject);
+                                viewer3D.getScene().addSceneObject(axisSceneObject);*/
 
                                 /**
                                  * *light**

@@ -52,7 +52,6 @@
           <Menu mnemonicParsing="false" text="Help">
             <items>
               <MenuItem mnemonicParsing="false" text="About" />
-                  <MenuItem mnemonicParsing="false" text="About" />
             </items>
           </Menu>
         </menus>
@@ -295,7 +294,7 @@
                                  <graphic>
                                     <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@icons/ccCamera.png" />
+                                          <Image url="@icons/camera.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -331,7 +330,7 @@
                                  <graphic>
                                     <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@icons/draw-cuboid.png" />
+                                          <Image url="@icons/eye2.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -348,9 +347,9 @@
                                     </MenuItem>
                                 </items>
                                  <graphic>
-                                    <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="imageviewSkyColor" fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@icons/sky-icon-2.png" />
+                                          <Image url="@../../../../../../../../../Images/pinceau.svg" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -377,7 +376,7 @@
                                  <graphic>
                                     <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@icons/light-bulb-icon.png" />
+                                          <Image url="@icons/ampoule.svg.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -392,7 +391,7 @@
                                        <graphic>
                                           <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@icons/ccViewZpos.png" />
+                                                <Image url="@icons/viewZpos.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -404,7 +403,7 @@
                                        <graphic>
                                           <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@icons/ccViewYpos.png" />
+                                                <Image url="@icons/viewYpos.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -416,7 +415,7 @@
                                        <graphic>
                                           <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@icons/ccViewXpos.png" />
+                                                <Image url="@icons/viewXpos.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -428,7 +427,7 @@
                                        <graphic>
                                           <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@icons/ccViewYneg.png" />
+                                                <Image url="@icons/viewYneg.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -440,7 +439,7 @@
                                        <graphic>
                                           <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@icons/ccViewXneg.png" />
+                                                <Image url="@icons/viewXneg.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -452,7 +451,7 @@
                                        <graphic>
                                           <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@icons/ccViewZneg.png" />
+                                                <Image url="@icons/viewZneg.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>

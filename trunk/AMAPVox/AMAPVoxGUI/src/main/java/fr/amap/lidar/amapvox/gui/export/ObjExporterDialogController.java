@@ -10,7 +10,7 @@ import fr.amap.commons.util.Statistic;
 import fr.amap.lidar.amapvox.commons.RawVoxel;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.gui.DialogHelper;
-import fr.amap.lidar.amapvox.gui.FileChooserContext;
+import fr.amap.commons.javafx.io.FileChooserContext;
 import fr.amap.lidar.amapvox.gui.Util;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileRawReader;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;

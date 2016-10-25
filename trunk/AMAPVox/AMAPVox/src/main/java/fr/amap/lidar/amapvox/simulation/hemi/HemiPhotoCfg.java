@@ -111,11 +111,35 @@ public class HemiPhotoCfg extends Configuration{
                 parameters.setVoxelFile(new File(inputFileSrc));
             }
             
+            
+            List<Point3d> positions = new ArrayList<>();
+            
             Element sensorPositionElement = processElement.getChild("sensor-position");
             
-            parameters.setSensorPosition(new Point3d(Double.valueOf(sensorPositionElement.getAttributeValue("x")),
-            Double.valueOf(sensorPositionElement.getAttributeValue("y")),
-            Double.valueOf(sensorPositionElement.getAttributeValue("z"))));
+            if(sensorPositionElement != null){ //work around for old config
+                
+                positions.add(new Point3d(Double.valueOf(sensorPositionElement.getAttributeValue("x")),
+                Double.valueOf(sensorPositionElement.getAttributeValue("y")),
+                Double.valueOf(sensorPositionElement.getAttributeValue("z"))));
+                
+                parameters.setSensorPositions(positions);
+                
+            }else{
+                
+                Element sensorPositionsElement = processElement.getChild("sensor-positions");
+                List<Element> children = sensorPositionsElement.getChildren("position");
+                for(Element element : children){
+                    
+                    positions.add(new Point3d(
+                            Double.valueOf(element.getAttributeValue("x")),
+                            Double.valueOf(element.getAttributeValue("y")),
+                            Double.valueOf(element.getAttributeValue("z"))));
+                }
+                
+                parameters.setSensorPositions(positions);
+            }
+            
+            
         }
         
         
@@ -218,11 +242,17 @@ public class HemiPhotoCfg extends Configuration{
             inputFileElement.setAttribute(new Attribute("src",parameters.getVoxelFile().getAbsolutePath()));
             processElement.addContent(inputFileElement);
             
-            Element sensorPositionElement = new Element("sensor-position");
-            sensorPositionElement.setAttribute(new Attribute("x", String.valueOf(parameters.getSensorPosition().x)));
-            sensorPositionElement.setAttribute(new Attribute("y", String.valueOf(parameters.getSensorPosition().y)));
-            sensorPositionElement.setAttribute(new Attribute("z", String.valueOf(parameters.getSensorPosition().z)));
-            processElement.addContent(sensorPositionElement);
+            Element sensorPositionsElement = new Element("sensor-positions");
+            
+            for(Point3d position : parameters.getSensorPositions()){
+                Element positionElement = new Element("position");
+                positionElement.setAttribute("x", String.valueOf(position.x));
+                positionElement.setAttribute("y", String.valueOf(position.y));
+                positionElement.setAttribute("z", String.valueOf(position.z));
+                sensorPositionsElement.addContent(positionElement);
+            }
+            
+            processElement.addContent(sensorPositionsElement);
         }
         
         //common parameters

@@ -33,6 +33,11 @@ import javax.vecmath.Vector3d;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.log4j.Logger;
 import fr.amap.commons.util.Cancellable;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.List;
 
 /**
  * @author dauzat
@@ -78,15 +83,17 @@ public class HemiScanView implements Cancellable{
 
         int nbShots;
         float brightness;
+        float azimut;
+        float zenith;
 
         public Pixel() {
             
             this.nbShots = 0;
-            this.brightness = 0;
+            this.brightness = Float.NaN;
         }
 
         protected void updatePixel(float luminance) {
-            if (nbShots == 0) {
+            if (nbShots == 0 || Float.isNaN(brightness)) {
                 brightness = luminance;
                 nbShots++;
             } else {
@@ -162,7 +169,7 @@ public class HemiScanView implements Cancellable{
         rgbSky = new Point3f(0, 0, 255);
         rgbCan = new Point3f(0, 255, 0);
         
-        initArrays();
+        
     }
     
     private void initArrays(){
@@ -193,6 +200,8 @@ public class HemiScanView implements Cancellable{
         switch(parameters.getMode()){
             case ECHOS:
                 
+                initArrays();
+                
                 for(LidarScan scan : parameters.getRxpScansList()){
                     
                     if(cancelled){
@@ -203,29 +212,30 @@ public class HemiScanView implements Cancellable{
                     setScan(scan.file, parameters.getEchoFilter());
                 }
                 
+                if(parameters.isGenerateBitmapFile()){
+                
+                    if(cancelled){
+                        return;
+                    }
+
+                    switch(parameters.getBitmapMode()){
+                        case PIXEL:
+                            writeHemiPhoto(parameters.getOutputBitmapFile());
+                            break;
+                        case COLOR:
+                            sectorTable(parameters.getOutputBitmapFile());
+                            break;
+                    }
+                }
+                
                 break;
                 
             case PAD:
-                hemiFromPAD(parameters.getVoxelFile(), parameters.getSensorPosition());
+                DirectionalTransmittance dt = new DirectionalTransmittance(parameters.getVoxelFile());
+                hemiFromPAD(dt, parameters.getSensorPositions());
                 break;
             default:
                 return;
-        }
-        
-        if(parameters.isGenerateBitmapFile()){
-                
-            if(cancelled){
-                return;
-            }
-            
-            switch(parameters.getBitmapMode()){
-                case PIXEL:
-                    writeHemiPhoto(parameters.getOutputBitmapFile());
-                    break;
-                case COLOR:
-                    sectorTable(parameters.getOutputBitmapFile());
-                    break;
-            }
         }
         
     }
@@ -307,22 +317,6 @@ public class HemiScanView implements Cancellable{
         }
     }
 
-    /**
-     * @param args
-     * @throws IOException
-     */
-    public static void main(String[] args) throws IOException, Exception {
-
-        HemiParameters parameters = new HemiParameters();
-        parameters.setZenithsNumber(9);
-        parameters.setAzimutsNumber(36);
-        parameters.setPixelNumber(800);
-        
-        HemiScanView hemiScanView = new HemiScanView(parameters);
-        hemiScanView.hemiFromPAD(new File("/home/calcul/Documents/Julien/Test_photos_hemispheriques/tmp/tls_paracou_2013_non_pondere.vox"), new Point3d(0, 80, 29));
-        hemiScanView.writeHemiPhoto(new File("/home/calcul/Documents/Julien/Test_photos_hemispheriques/tmp/hemiFromPAD.png"));
-    }
-
     private void sectorTable(File outputFile) throws IOException {
 
         float radius = nbPixels / 2f;
@@ -366,58 +360,97 @@ public class HemiScanView implements Cancellable{
         writeHemiPhoto(outputFile);
     }
     
-    private void hemiFromPAD(File inputFile, Point3d position) throws Exception{
+    private void hemiFromPAD(DirectionalTransmittance dt, List<Point3d> positions) throws Exception{
         
-        DirectionalTransmittance dt = new DirectionalTransmittance(inputFile);
+        int positionID = 0;
         
-        float center = nbPixels / 2;
+        for(Point3d position : positions){
+            
+            initArrays();
         
-        for (int i = 0; i < nbPixels; i++) {
-            for (int j = 0; j < nbPixels; j++) {
+            float center = nbPixels / 2;
+
+            for (int i = 0; i < nbPixels; i++) {
+                for (int j = 0; j < nbPixels; j++) {
+
+                    if(cancelled){
+                        return;
+                    }
+
+                    float deltaX = i + 0.5f - center;
+                    float deltaY = j + 0.5f - center;
+                    double distToCenter = Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
+
+                    if (distToCenter < center) {
+
+                        double zenithAngle = (distToCenter/center)*Math.PI/2;
+                        double azimuthAngle = 0;
+
+                        if (deltaY != 0) {
+                            azimuthAngle = Math.atan(deltaX / deltaY);
+                            if (deltaY < 0) {
+                                azimuthAngle += Math.PI;
+                            } else if (deltaX < 0) {
+                                azimuthAngle += Math.PI * 2;
+                            }
+                        } else if (deltaX < 0) {
+                            azimuthAngle = Math.PI / 2;
+                        }
+
+                        SphericalCoordinates sc = new SphericalCoordinates(azimuthAngle, zenithAngle);
+                        Vector3f direction = new Vector3f(sc.toCartesian());
+
+                        /*Vector3f direction = new Vector3f(0,0,1);
+                        Transformations transform = new Transformations();
+                        transform.setRotationAroundX(zenithAngle);
+                        transform.setRotationAroundZ(azimuthAngle);
+                        transform.apply(direction);*/
+
+                        /*if(direction.x != rayDirection.x || direction.y != rayDirection.y || direction.z != rayDirection.z){
+                            System.out.println("test");
+                        }*/
+                        pixTab[i][j].azimut = (float) Math.toDegrees(azimuthAngle);
+                        pixTab[i][j].zenith = (float) Math.toDegrees(zenithAngle);
+                        
+                        double transmittance = dt.directionalTransmittance(position, new Vector3d(direction.x, direction.y, direction.z));
+                        if(!Double.isNaN(transmittance)){
+                            pixTab[i][j].updatePixel((float)transmittance);
+                        }                    
+                    }
+                }
+            }
+
+            if(parameters.isGenerateBitmapFile()){
+
+                if(cancelled){
+                    return;
+                }
+
+                File outputFile = new File(parameters.getOutputBitmapFile(), "position_"+positionID+".png");
+                
+                switch(parameters.getBitmapMode()){
+                    case PIXEL:
+                        writeHemiPhoto(outputFile);
+                        break;
+                    case COLOR:
+                        sectorTable(outputFile);
+                        break;
+                }
+            }
+            
+            if(parameters.isGenerateTextFile()){
                 
                 if(cancelled){
                     return;
                 }
-                
-                float deltaX = i + 0.5f - center;
-                float deltaY = j + 0.5f - center;
-                double distToCenter = Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
-                
-                if (distToCenter < center) {
-                    
-                    double zenithAngle = (distToCenter/center)*Math.PI/2;
-                    double azimuthAngle = 0;
-                    
-                    if (deltaY != 0) {
-                        azimuthAngle = Math.atan(deltaX / deltaY);
-                        if (deltaY < 0) {
-                            azimuthAngle += Math.PI;
-                        } else if (deltaX < 0) {
-                            azimuthAngle += Math.PI * 2;
-                        }
-                    } else if (deltaX < 0) {
-                        azimuthAngle = Math.PI / 2;
-                    }
-                    
-                    SphericalCoordinates sc = new SphericalCoordinates(azimuthAngle, zenithAngle);
-                    Vector3f direction = new Vector3f(sc.toCartesian());
-                    
-                    /*Vector3f direction = new Vector3f(0,0,1);
-                    Transformations transform = new Transformations();
-                    transform.setRotationAroundX(zenithAngle);
-                    transform.setRotationAroundZ(azimuthAngle);
-                    transform.apply(direction);*/
-                    
-                    /*if(direction.x != rayDirection.x || direction.y != rayDirection.y || direction.z != rayDirection.z){
-                        System.out.println("test");
-                    }*/
-                    double transmittance = dt.directionalTransmittance(position, new Vector3d(direction.x, direction.y, direction.z));
-                    if(!Double.isNaN(transmittance)){
-                        pixTab[i][j].updatePixel((float)transmittance);
-                    }                    
-                }
+
+                File outputFile = new File(parameters.getOutputTextFile(), "position_"+positionID+".txt");
+                writeHemiPhotoAsText(outputFile);
             }
+            
+            positionID++;
         }
+        
     }
 
 //    private void transform(String line, Transformations tr) {
@@ -458,6 +491,45 @@ public class HemiScanView implements Cancellable{
         if (zenith < Math.PI / 2) {
             updatePixTab(zenith, azimut, range);
             updateSectorTab(zenith, azimut, range);
+        }
+    }
+    
+    public void writeHemiPhotoAsText(File outputFile) throws IOException {
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
+
+            DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+            otherSymbols.setDecimalSeparator('.');
+            otherSymbols.setGroupingSeparator('.');
+
+            DecimalFormat df = new DecimalFormat("#0.000", otherSymbols);
+
+            writer.write("azimut zenith transmittance\n");
+
+            float center = nbPixels / 2;
+
+            for (int x = 0; x < pixTab.length; x++) {
+                for (int y = 0; y < pixTab[x].length; y++) {
+
+                    if (cancelled) {
+                        return;
+                    }
+
+                    float deltaX = x + 0.5f - center;
+                    float deltaY = y + 0.5f - center;
+                    double distToCenter = Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
+
+                    if (distToCenter < center) {
+
+                        if (Float.isNaN(pixTab[x][y].azimut)) {
+                            writer.write(df.format(pixTab[x][y].azimut) + " " + df.format(pixTab[x][y].zenith) + " " + pixTab[x][y].brightness + "\n");
+                        } else {
+                            writer.write(df.format(pixTab[x][y].azimut) + " " + df.format(pixTab[x][y].zenith) + " " + df.format(pixTab[x][y].brightness) + "\n");
+                        }
+                    }
+
+                }
+            }
         }
     }
 

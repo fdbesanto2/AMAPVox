@@ -6,6 +6,8 @@
 package fr.amap.lidar.amapvox.voxviewer.javafx;
 
 import com.jogamp.newt.event.WindowAdapter;
+import com.jogamp.newt.event.WindowListener;
+import com.jogamp.newt.event.WindowUpdateEvent;
 import com.jogamp.newt.opengl.GLWindow;
 import fr.amap.lidar.amapvox.voxviewer.Viewer3D;
 import javafx.beans.value.ChangeListener;
@@ -20,7 +22,7 @@ import javafx.stage.WindowEvent;
  * Set a {@link GLWindow} to overlap a javafx node.
  * @author Julien Heurtebize
  */
-public class FXNewtOverlap {
+public class FXNewtOverlapOld {
     
     public static void link (final Stage stage, final Viewer3D viewer3D, final Node node) {
         
@@ -92,6 +94,11 @@ public class FXNewtOverlap {
             public void windowMoved(com.jogamp.newt.event.WindowEvent e) {
                 gLWindow.setVisible(true);
             }
+            
+            @Override
+            public void windowDestroyed(com.jogamp.newt.event.WindowEvent e) {
+                stage.close();
+            }
         });
         
         stage.widthProperty().addListener(new ChangeListener<Number>() {
@@ -108,9 +115,9 @@ public class FXNewtOverlap {
             }
         });
         
-        stage.onHidingProperty().addListener(new ChangeListener<EventHandler<WindowEvent>>() {
+        stage.addEventFilter(WindowEvent.WINDOW_HIDDEN, new EventHandler<WindowEvent>() {
             @Override
-            public void changed(ObservableValue<? extends EventHandler<WindowEvent>> observable, EventHandler<WindowEvent> oldValue, EventHandler<WindowEvent> newValue) {
+            public void handle(WindowEvent event) {
                 gLWindow.setVisible(false);
             }
         });
