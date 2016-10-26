@@ -65,13 +65,6 @@ public class Viewer3D {
         renderFrame.addWindowListener(new MinimalWindowAdapter(animator));
 
 
-        //basic input adapters for waking up animator if necessary
-        MinimalKeyAdapter minimalKeyAdapter = new MinimalKeyAdapter(animator);
-        renderFrame.addKeyListener(minimalKeyAdapter);
-
-        minimalMouseAdapter = new MinimalMouseAdapter(animator, dynamicDraw);
-        renderFrame.addMouseListener(minimalMouseAdapter);
-
         InputKeyListener inputKeyListener = new InputKeyListener();
         InputMouseAdapter inputMouseAdapter = new InputMouseAdapter();
         
@@ -92,6 +85,13 @@ public class Viewer3D {
         
         basicEvents = new BasicEvent(joglContext, inputMouseAdapter, inputKeyListener);
         addEventListener(basicEvents);
+        
+        //basic input adapters for waking up animator if necessary
+        MinimalKeyAdapter minimalKeyAdapter = new MinimalKeyAdapter(animator);
+        renderFrame.addKeyListener(minimalKeyAdapter);
+
+        minimalMouseAdapter = new MinimalMouseAdapter(animator, dynamicDraw);
+        renderFrame.addMouseListener(minimalMouseAdapter);
     }
     
     public final void addEventListener(EventManager eventManager){

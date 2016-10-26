@@ -22,11 +22,11 @@ public abstract class Camera {
     
     protected Mat4F projectionMatrix;
     protected Mat4F viewMatrix;
-    protected float fovy;
+    protected float fovy = 60.0f;
     protected float aspect;
     protected float nearPersp = 10;
     protected float farPersp = 1000;
-    protected float nearOrtho = 1;
+    protected float nearOrtho = 0.1f;
     protected float farOrtho = 1000;
     protected float left = Float.NaN;
     protected float right = Float.NaN;

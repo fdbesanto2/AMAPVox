@@ -55,7 +55,7 @@ public class BasicEvent extends EventManager{
         if(mouse.isButtonDown(Button.LEFT) && mouse.isDragged()){
             
             if(deltaX != 0 || deltaY != 0){
-                joglContext.getScene().getCamera().rotateFromOrientationV2(new Vec3F(1.0f, 0.0f, 0.0f), deltaX*0.5f, deltaY*0.5f);
+                joglContext.getScene().getCamera().rotateFromOrientationV2(deltaX*0.5f, deltaY*0.5f);
             }
         }
         

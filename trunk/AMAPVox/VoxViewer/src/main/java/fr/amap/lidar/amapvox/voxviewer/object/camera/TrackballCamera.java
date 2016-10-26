@@ -210,26 +210,39 @@ public class TrackballCamera extends Camera{
     private float normalizePhi(float phi){
         
         //lock between 0 excluded and pi exluded
-        
-        while(theta < 0){
-            theta += Math.PI * 2;
+        while(phi < 0){
+            phi += Math.PI * 2;
         }
-        while(theta > (Math.PI * 2)){
-            theta -= (Math.PI  * 2);
+        while(phi > (Math.PI * 2)){
+            phi -= (Math.PI  * 2);
         } 
         
-        return theta;
+        return phi;
     }
         
-    public void rotateFromOrientationV2(Vec3F axis, float offsetX, float offsetY){
+    public void rotateFromOrientationV2(float offsetX, float offsetY){
         
         
         //get current theta and phi
         SphericalCoordinates sc1 = new SphericalCoordinates();
         sc1.toSpherical(new Point3d(location.x - target.x, location.y - target.y, location.z - target.z));
         
+        
         float oldTheta = (float) sc1.getAzimut();
         float oldPhi = (float) sc1.getZenith();
+        
+        if(location.x == target.x && location.y == target.y){
+            
+            SphericalCoordinates sc2 = new SphericalCoordinates();
+            sc2.toSpherical(upVec.x, upVec.y, upVec.z);
+            double azimut1 = sc2.getAzimut();
+            
+            oldTheta = (float) -azimut1;
+            
+            if(upVec.y == -1){
+                offsetY = 0;
+            }
+        }
             
         //theta doit être compris entre 0 et 2pi
         //phi doit être compris entre entre ]0 et pi[
@@ -244,16 +257,15 @@ public class TrackballCamera extends Camera{
         //float thetaStep = (float) ((Math.PI * 2)/360.0f); //1° step
         //float phiStep = (float) ((Math.PI * 2)/360.0f); //1° step
         
+        theta += oldTheta;        
+        phi += oldPhi;
+        
         if(offsetX > 0){
             theta -= thetaStep;
         }else if(offsetX < 0){
             theta += thetaStep;
         }
-        
-        theta += oldTheta;        
-        phi += oldPhi;
-        
-        theta = normalizeTheta(theta);
+        //theta = normalizeTheta(theta);
         
         if(offsetY > 0){
             phi -= phiStep;
@@ -261,11 +273,16 @@ public class TrackballCamera extends Camera{
                 phi += phiStep;
             }
         }else if(offsetY < 0){
-            phi += phiStep;
-            if(phi > Math.PI){
-                phi -= phiStep;
+            
+            if(phi + phiStep < Math.PI){
+                phi += phiStep;
             }
+            /*if(phi > Math.PI){
+                phi -= phiStep + 0.000001;
+            }*/
         }
+        
+        //phi = normalizePhi(phi);
         
         SphericalCoordinates sc = new SphericalCoordinates(theta, phi, radius);
         Point3d cartesian = sc.toCartesian();
@@ -396,36 +413,51 @@ public class TrackballCamera extends Camera{
         if(translation.z !=0.0f){
             
             if(perspective){
-                
-                //copy old location
-                Vec3F oldForwardVector = getForwardVector();
-                Vec3F oldLocation = location;
-                
-                //test translation effect
-                location = Vec3F.add(location, Vec3F.multiply(forwardVec, translation.z));
-                Vec3F newForwardVector = getForwardVector();
-                
-                //if translation is not good, get back to the original location (equivalent to not move)
-                if((newForwardVector.z < 0 && oldForwardVector.z > 0) || (newForwardVector.z > 0 && oldForwardVector.z < 0)){
-                    location = oldLocation;
-                }
                 //target = Vec3F.add(target, Vec3F.multiply(orientation, translation.z)); //use for not reaching the target
                 //setPerspective(70.0f, (1.0f*640)/480, near-translation.z, far-translation.z);
             }else{
                 
-                if((left < -5.0f && right > 5.0f) || translation.z < 0){
+                if((left < -1.0f && right > 1.0f) || translation.z < 0){
                     
-                    float widthCoeff = viewportWidth/1000.0f;
-                    float heightCoeff = viewportHeight/1000.0f;
+                    float widthCoeff = viewportWidth/100.0f;
+                    float heightCoeff = viewportHeight/100.0f;
+                    
+                    float leftCopy = left;
+                    float rightCopy = right;
+                    float topCopy = top;
+                    float bottomCopy = bottom;
                     
                     left = left+translation.z*(widthCoeff);
+                    
                     right = right-translation.z*(widthCoeff);
+                    
                     bottom = bottom+translation.z*(heightCoeff);
+                    
                     top = top-translation.z*(heightCoeff);
+                    
+                    if(left > -1 || right < 1 || bottom > -1 || top < 1){
+                        left = leftCopy;
+                        right = rightCopy;
+                        bottom = bottomCopy;
+                        top = topCopy;
+                    }
                 }
                 
                 
-                updateProjMatrix();
+                //updateProjMatrix();
+            }
+            
+            //copy old location
+            Vec3F oldForwardVector = getForwardVector();
+            Vec3F oldLocation = location;
+
+            //test translation effect
+            location = Vec3F.add(location, Vec3F.multiply(forwardVec, translation.z));
+            Vec3F newForwardVector = getForwardVector();
+
+            //if translation is not good, get back to the original location (equivalent to not move)
+            if((newForwardVector.z < 0 && oldForwardVector.z > 0) || (newForwardVector.z > 0 && oldForwardVector.z < 0)){
+                location = oldLocation;
             }
             
         }
@@ -438,6 +470,9 @@ public class TrackballCamera extends Camera{
         nearPersp = Float.max(nearPersp, 0.01f);
         
         farPersp = distanceToTarget + 500.0f;
+        
+        //nearOrtho = nearPersp;
+        //farOrtho = farPersp;
         
         updateProjMatrix();
     }
@@ -634,6 +669,9 @@ public class TrackballCamera extends Camera{
                                     getPivot().getGravityCenter().z));
         
         updateViewMatrix();
+        
+        upVec = new Vec3F(0, -1, 0);
+        rightVec = new Vec3F(1, 0, 0);
     }
     
     public void setViewToTop(){
@@ -644,6 +682,10 @@ public class TrackballCamera extends Camera{
                                         new Vec3F(getPivot().getGravityCenter().x, 
                                                       getPivot().getGravityCenter().y,
                                                       getPivot().getGravityCenter().z));
+        
+        //rightVec = new Vec3F(0, 0, 1);
+        upVec = new Vec3F(0, 1, 0);
+        rightVec = new Vec3F(1, 0, 0);
         
         updateViewMatrix();
     }

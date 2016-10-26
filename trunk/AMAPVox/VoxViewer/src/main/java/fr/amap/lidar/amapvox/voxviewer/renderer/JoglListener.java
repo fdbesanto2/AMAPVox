@@ -365,7 +365,7 @@ public class JoglListener implements GLEventListener {
 
         if (scene.getCamera().isPerspective()) {
             
-            scene.getCamera().setPerspective(60.0f, (1.0f * this.width - startX) / height, scene.getCamera().getNearPersp(), scene.getCamera().getFarPersp());
+            scene.getCamera().setPerspective(scene.getCamera().getFovy(), (1.0f * this.width - startX) / height, scene.getCamera().getNearPersp(), scene.getCamera().getFarPersp());
         } else {
 
             //scene.getCamera().initOrtho(-1, 1, 1, -1, scene.getCamera().getNearOrtho(), scene.getCamera().getFarOrtho());
