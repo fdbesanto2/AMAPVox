@@ -120,7 +120,9 @@ import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javax.vecmath.Matrix4d;
+import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
+import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
 import org.controlsfx.dialog.ProgressDialog;
 import org.jdom2.JDOMException;
@@ -682,7 +684,7 @@ public class Viewer3DPanelController implements Initializable {
 
             final boolean drawDTM = checkboxRaster.isSelected();
             final File dtmFile = new File(textfieldRasterFilePath.getText());
-            final Mat4D dtmTransfMatrix = MatrixUtility.convertMatrix4dToMat4D(rasterTransfMatrix);
+            final Mat4D dtmVOPMatrix = MatrixUtility.convertMatrix4dToMat4D(rasterTransfMatrix);
             final boolean fitDTMToVoxelSpace = checkboxFitRasterToVoxelSpace.isSelected();
             final int mntFittingMargin = Integer.valueOf(textfieldRasterFittingMargin.getText());
             final boolean transform = checkboxUseTransformationMatrix.isSelected();
@@ -708,7 +710,7 @@ public class Viewer3DPanelController implements Initializable {
 
                                 final Viewer3D viewer3D = new Viewer3D((int) (SCREEN_WIDTH / 4.0d), (int) (SCREEN_HEIGHT / 4.0d), (int) (SCREEN_WIDTH / 1.5d), (int) (SCREEN_HEIGHT / 2.0d), voxelFile.toString());
                                 //viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
-                                viewer3D.setDynamicDraw(true);
+                                viewer3D.setDynamicDraw(false);
                                 fr.amap.lidar.amapvox.voxviewer.object.scene.Scene scene = viewer3D.getScene();
 
                                 /**
@@ -775,7 +777,13 @@ public class Viewer3DPanelController implements Initializable {
 
                                 VoxelFileReader reader = new VoxelFileReader(voxelFile);
                                 VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
-            
+                                
+                                //coordinates offset for float precision view
+                                
+                                Point3d oldMinCorner = new Point3d(infos.getMinCorner());
+                                
+                                infos.getMaxCorner().sub(oldMinCorner);
+                                infos.setMinCorner(new Point3d());
 
                                 /**
                                  * *DTM**
@@ -789,9 +797,15 @@ public class Viewer3DPanelController implements Initializable {
 
                                     Raster dtm = AsciiGridHelper.readFromAscFile(dtmFile);
 
-                                    if (transform && dtmTransfMatrix != null) {
-                                        dtm.setTransformationMatrix(dtmTransfMatrix);
+                                    Matrix4d dtmTransfMatrix = new Matrix4d();
+                                    dtmTransfMatrix.setIdentity();
+                                    dtmTransfMatrix.setTranslation(new Vector3d(-oldMinCorner.x, -oldMinCorner.y, -oldMinCorner.z));
+                                    
+                                    if (transform && dtmVOPMatrix != null) {
+                                        dtmTransfMatrix.mul(MatrixUtility.convertMat4DToMatrix4d(dtmVOPMatrix));
                                     }
+                                    
+                                    dtm.setTransformationMatrix(MatrixUtility.convertMatrix4dToMat4D(dtmTransfMatrix));
 
                                     if (fitDTMToVoxelSpace) {
 
@@ -965,8 +979,8 @@ public class Viewer3DPanelController implements Initializable {
 
                                             //viewer3D.getJoglContext().setStartX((int) viewer3DStage.getWidth());
                                             
-                                            
-                                            FXNewtOverlap.link(viewer3DStage, scene1, viewer3D, viewer3DFrameController.getAnchorPaneGL());
+                                            FXNewtOverlap fxNewtOverlap = new FXNewtOverlap();
+                                            fxNewtOverlap.link(viewer3DStage, scene1, viewer3D, viewer3DFrameController.getAnchorPaneGL());
 
                                             viewer3DStage.setOnHidden(new EventHandler<WindowEvent>() {
                                                 @Override

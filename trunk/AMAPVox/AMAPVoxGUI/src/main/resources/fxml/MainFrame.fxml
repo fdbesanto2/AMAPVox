@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -79,28 +80,51 @@
                                                                               <CheckBox fx:id="checkboxMultiFiles" mnemonicParsing="false" text="Multi-files" />
                                                                            </children>
                                                                         </HBox>
-                                                                        <VBox>
+                                                                        <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                            <children>
-                                                                              <Label text="Input file(s)" />
-                                                                              <HBox>
+                                                                              <VBox HBox.hgrow="ALWAYS">
                                                                                  <children>
-                                                                                    <TextField fx:id="textFieldInputFileALS" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
-                                                                                    <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileALS" text="..." />
+                                                                                    <VBox>
+                                                                                       <children>
+                                                                                          <Label text="Input file(s)" />
+                                                                                          <HBox>
+                                                                                             <children>
+                                                                                                <TextField fx:id="textFieldInputFileALS" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
+                                                                                                <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionButtonOpenInputFileALS" text="..." />
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <VBox>
+                                                                                       <children>
+                                                                                          <Label text="Trajectory file" />
+                                                                                          <HBox fx:id="hboxTrajectoryFile">
+                                                                                             <children>
+                                                                                                <TextField fx:id="textFieldTrajectoryFileALS" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
+                                                                                                <Button fx:id="buttonOpenTrajectoryFileALS" mnemonicParsing="false" onAction="#onActionButtonOpenTrajectoryFileALS" text="..." />
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                       </children>
+                                                                                    </VBox>
                                                                                  </children>
-                                                                              </HBox>
+                                                                              </VBox>
+                                                                              <Button mnemonicParsing="false" onAction="#onActionButtonExportALSLidarShots">
+                                                                                 <graphic>
+                                                                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true">
+                                                                                       <image>
+                                                                                          <Image url="@icons/lidar-shot.png" />
+                                                                                       </image>
+                                                                                       <viewport>
+                                                                                          <Rectangle2D />
+                                                                                       </viewport>
+                                                                                    </ImageView>
+                                                                                 </graphic>
+                                                                                 <tooltip>
+                                                                                    <Tooltip text="Compute lidar shots" />
+                                                                                 </tooltip>
+                                                                              </Button>
                                                                            </children>
-                                                                        </VBox>
-                                                                        <VBox>
-                                                                           <children>
-                                                                              <Label text="Trajectory file" />
-                                                                              <HBox>
-                                                                                 <children>
-                                                                                    <TextField fx:id="textFieldTrajectoryFileALS" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
-                                                                                    <Button fx:id="buttonOpenTrajectoryFileALS" mnemonicParsing="false" onAction="#onActionButtonOpenTrajectoryFileALS" text="..." />
-                                                                                 </children>
-                                                                              </HBox>
-                                                                           </children>
-                                                                        </VBox>
+                                                                        </HBox>
                                                                         <!--<Button mnemonicParsing="false" onAction="#onActionButtonGenerateShotsFile" prefHeight="26.0" prefWidth="146.0" text="Generate shots file" />-->
                                                                         <VBox>
                                                                            <children>

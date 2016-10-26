@@ -25,7 +25,10 @@ import org.apache.log4j.Logger;
 import fr.amap.commons.util.Cancellable;
 import fr.amap.commons.util.ProcessingAdapter;
 import fr.amap.commons.util.io.file.FileManager;
+import fr.amap.lidar.amapvox.commons.Configuration;
 import fr.amap.lidar.format.shot.ShotReader;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 /**
  *
@@ -105,25 +108,55 @@ public class LasVoxelisation extends Process implements Cancellable{
         voxelAnalysis = new VoxelAnalysis(terrain, null, cfg);
         voxelAnalysis.createVoxelSpace();
         
-        if(FileManager.getExtension(cfg.getInputFile()).equals(".sht")){
+        if(cfg.getInputType() == Configuration.InputType.SHOTS_FILE){
             
-            ShotReader shotReader = new ShotReader(cfg.getInputFile());
+            BufferedReader reader = new BufferedReader(new FileReader(cfg.getInputFile()));
             
             fireProgress("Voxelisation", 0, 100);
 
-            Iterator<Shot> iterator = shotReader.iterator();
-
             long shotId = 0;
-            long nbShots = shotReader.getShotNumber();
-
-            while(iterator.hasNext()){
+            long nbShots = FileManager.getLineNumber(cfg.getInputFile());
+            
+            String line;
+            
+            //skip header
+            reader.readLine();
+            
+            while((line = reader.readLine()) != null){
+                String[] split = line.split(" ");
                 
                 if(isCancelled()){
                     return null;
                 }
                 
-                Shot shot = iterator.next();
-
+                double xOrigin = Double.valueOf(split[0]);
+                double yOrigin = Double.valueOf(split[1]);
+                double zOrigin = Double.valueOf(split[2]);
+                
+                double xDirection = Double.valueOf(split[3]);
+                double yDirection = Double.valueOf(split[4]);
+                double zDirection = Double.valueOf(split[5]);
+                
+                int nbEchos = Integer.valueOf(split[6]);
+                
+                double[] ranges = new double[nbEchos];
+                int[] classifications = new int[nbEchos];
+                
+                for (int i = 0; i < ranges.length; i++) {
+                    
+                    if((14+i) > split.length){
+                        throw new Exception("Columns missing inside shot file");
+                    }
+                    
+                    ranges[i] = Double.valueOf(split[7+i]);
+                    classifications[i] = Integer.valueOf(split[14+i]);
+                }
+                
+                Shot shot = new Shot(nbEchos, xOrigin, yOrigin, zOrigin, xDirection, yDirection, zDirection, ranges);
+                shot.classifications = classifications;
+                
+                shot.calculateAngle();
+                
                 fireProgress("Voxelisation...", shotId, nbShots);
                 
                 voxelAnalysis.processOneShot(shot);
@@ -131,7 +164,7 @@ public class LasVoxelisation extends Process implements Cancellable{
                 shotId++;
             }
             
-            shotReader.close();
+            reader.close();
             
             logger.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());
             

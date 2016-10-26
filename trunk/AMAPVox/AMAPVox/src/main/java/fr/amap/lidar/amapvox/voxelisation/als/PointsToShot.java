@@ -33,16 +33,15 @@ import java.util.logging.Logger;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import fr.amap.commons.util.Cancellable;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.Comparator;
 
 /**
  * This class merge trajectory file with point file (las, laz)
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class PointsToShot extends Process implements Iterable<Shot>, Cancellable{
-    
-    
-    private final float RATIO_REFLECTANCE_VEGETATION_SOL = 0.4f;
+public class PointsToShot extends Process implements IterableWithException<Shot>, Cancellable{
     
     private final File inputFile;
     private final CSVFile trajectoryFile;
@@ -258,5 +257,42 @@ public class PointsToShot extends Process implements Iterable<Shot>, Cancellable
     @Override
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
+    }
+    
+    public void write(File outputFile) throws IOException, Exception{
+        
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))){
+            
+            writer.write("xOrigin yOrigin zOrigin xDirection yDirection zDirection nbEchoes r1 r2 r3 r4 r5 r6 r7 c1 c2 c3 c4 c5 c6 c7\n");
+            
+            PointsToShotIterator iterator = iterator();
+            
+            Shot shot;
+            
+            while((shot = iterator.next()) != null){
+                
+                String line = shot.origin.x+" "+shot.origin.y+" "+shot.origin.z+" "+shot.direction.x+" "+shot.direction.y+" "+shot.direction.z+" "+shot.nbEchos;
+                
+                for (int i = 0; i < shot.ranges.length; i++) {
+                    line += " "+ shot.ranges[i];
+                }
+                
+                for (int i = shot.ranges.length; i < 7; i++) {
+                    line += " "+ "NaN";
+                }
+                
+                for (int i = 0; i < shot.classifications.length; i++) {
+                    line += " "+ shot.classifications[i];
+                }
+                
+                for (int i = shot.classifications.length; i < 7; i++) {
+                    line += " "+ "NaN";
+                }
+                
+                line += "\n";
+                
+                writer.write(line);
+            }
+        }
     }
 }

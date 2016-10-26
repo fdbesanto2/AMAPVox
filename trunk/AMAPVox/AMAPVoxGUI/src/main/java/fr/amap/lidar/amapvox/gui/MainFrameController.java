@@ -200,6 +200,8 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import fr.amap.lidar.amapvox.gui.task.ServiceProvider;
+import fr.amap.lidar.amapvox.voxelisation.als.PointsToShot;
+import fr.amap.lidar.amapvox.voxelisation.als.PointsToShotIterator;
 import fr.amap.lidar.amapvox.voxelisation.postproc.VoxelSpaceUtil;
 import fr.amap.lidar.amapvox.voxviewer.Viewer3D;
 import fr.amap.lidar.amapvox.voxviewer.event.EventManager;
@@ -768,6 +770,8 @@ public class MainFrameController implements Initializable {
     private ListView<Point3d> listViewHemiPhotoSensorPositions;
     @FXML
     private MenuItem menuItemSelectionNone12;
+    @FXML
+    private HBox hboxTrajectoryFile;
     
     private void initValidationSupport(){
         
@@ -1711,19 +1715,15 @@ public class MainFrameController implements Initializable {
             logger.error("Cannot load fxml file", ex);
         }
 
-        comboboxModeALS.getItems().addAll(RS_STR_INPUT_TYPE_LAS, RS_STR_INPUT_TYPE_LAZ/*, RS_STR_INPUT_TYPE_XYZ, RS_STR_INPUT_TYPE_SHOTS*/);
+        comboboxModeALS.getItems().addAll(RS_STR_INPUT_TYPE_LAS, RS_STR_INPUT_TYPE_LAZ, /*RS_STR_INPUT_TYPE_XYZ, */RS_STR_INPUT_TYPE_SHOTS);
         
         comboboxModeALS.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 
                 if(newValue.equals(RS_STR_INPUT_TYPE_SHOTS)){
-                    textFieldTrajectoryFileALS.setDisable(true);
-                    buttonOpenTrajectoryFileALS.setDisable(true);
                     alsVoxValidationSupport.registerValidator(textFieldTrajectoryFileALS, false, Validators.unregisterValidator);
                 }else{
-                    textFieldTrajectoryFileALS.setDisable(false);
-                    buttonOpenTrajectoryFileALS.setDisable(false);
                     alsVoxValidationSupport.registerValidator(textFieldTrajectoryFileALS, false, Validators.fileExistValidator);
                 }
             }
@@ -2009,8 +2009,24 @@ public class MainFrameController implements Initializable {
         textfieldOutputTextFilePath.setOnDragOver(DragAndDropHelper.dragOverEvent);
         textfieldOutputBitmapFilePath.setOnDragOver(DragAndDropHelper.dragOverEvent);
 
-        setDragDroppedSingleFileEvent(textFieldInputFileALS);
-        
+        textFieldInputFileALS.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+                if (db.hasFiles() && db.getFiles().size() == 1) {
+                    success = true;
+                    for (File file : db.getFiles()) {
+                        if (file != null) {
+                            textFieldInputFileALS.setText(file.getAbsolutePath());
+                            selectALSInputMode(file);
+                        }
+                    }
+                }
+                event.setDropCompleted(success);
+                event.consume();
+            }
+        });
         textFieldTrajectoryFileALS.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
@@ -2481,10 +2497,10 @@ public class MainFrameController implements Initializable {
                 it = InputType.LAZ_FILE;
                 break;
             case 2:
-                it = InputType.POINTS_FILE;
+                it = InputType.SHOTS_FILE;
                 break;
             case 3:
-                it = InputType.SHOTS_FILE;
+                it = InputType.POINTS_FILE;
                 break;
             default:
                 it = InputType.LAS_FILE;
@@ -2538,17 +2554,22 @@ public class MainFrameController implements Initializable {
 
             cfg = new ALSVoxCfg();
             
-            CSVFile trajFile = new CSVFile(textFieldTrajectoryFileALS.getText());
-            if(trajectoryFile != null){
-                trajFile.setColumnAssignment(trajectoryFile.getColumnAssignment());
-                trajFile.setColumnSeparator(trajectoryFile.getColumnSeparator());
-                trajFile.setContainsHeader(trajectoryFile.containsHeader());
-                trajFile.setHeaderIndex(trajectoryFile.getHeaderIndex());
-                trajFile.setNbOfLinesToRead(trajectoryFile.getNbOfLinesToRead());
-                trajFile.setNbOfLinesToSkip(trajectoryFile.getNbOfLinesToSkip());
+            if(it != SHOTS_FILE){
+                
+                CSVFile trajFile = new CSVFile(textFieldTrajectoryFileALS.getText());
+                if(trajectoryFile != null){
+                    trajFile.setColumnAssignment(trajectoryFile.getColumnAssignment());
+                    trajFile.setColumnSeparator(trajectoryFile.getColumnSeparator());
+                    trajFile.setContainsHeader(trajectoryFile.containsHeader());
+                    trajFile.setHeaderIndex(trajectoryFile.getHeaderIndex());
+                    trajFile.setNbOfLinesToRead(trajectoryFile.getNbOfLinesToRead());
+                    trajFile.setNbOfLinesToSkip(trajectoryFile.getNbOfLinesToSkip());
+                }
+
+                ((ALSVoxCfg)cfg).setTrajectoryFile(trajFile);
             }
             
-            ((ALSVoxCfg)cfg).setTrajectoryFile(trajFile);
+            
             cfg.setVoxelParameters(voxelParameters);
             cfg.setInputType(it);
             cfg.setInputFile(new File(textFieldInputFileALS.getText()));
@@ -3888,21 +3909,28 @@ public class MainFrameController implements Initializable {
             }else{
                 checkboxMultiFiles.setSelected(false);
                 
-                String extension = FileManager.getExtension(selectedFiles.get(0));
-                
-                switch(extension){
-                    case ".las":
-                        comboboxModeALS.getSelectionModel().select(RS_STR_INPUT_TYPE_LAZ);
-                        break;
-                    case ".laz":
-                        comboboxModeALS.getSelectionModel().select(RS_STR_INPUT_TYPE_LAZ);
-                        break;
-                    case ".sht":
-                        comboboxModeALS.getSelectionModel().select(RS_STR_INPUT_TYPE_SHOTS);
-                        break;
-                }
-                
+                selectALSInputMode(selectedFiles.get(0));
             }
+        }
+    }
+    
+    private void selectALSInputMode(File inputFile){
+        
+        String extension = FileManager.getExtension(inputFile);
+                
+        switch(extension){
+            case ".las":
+                comboboxModeALS.getSelectionModel().select(RS_STR_INPUT_TYPE_LAZ);
+                hboxTrajectoryFile.setDisable(false);
+                break;
+            case ".laz":
+                comboboxModeALS.getSelectionModel().select(RS_STR_INPUT_TYPE_LAZ);
+                hboxTrajectoryFile.setDisable(false);
+                break;
+            case ".sht":
+                comboboxModeALS.getSelectionModel().select(RS_STR_INPUT_TYPE_SHOTS);
+                hboxTrajectoryFile.setDisable(true);
+                break;
         }
     }
     
@@ -5326,22 +5354,10 @@ public class MainFrameController implements Initializable {
                     if(type.equals("voxelisation-ALS") || type.equals("multi-voxelisation")){
                         
                         tabPaneVoxelisation.getSelectionModel().select(0);
-                        textFieldTrajectoryFileALS.setText(((ALSVoxCfg)cfg).getTrajectoryFile().getAbsolutePath());
-                        trajectoryFile = ((ALSVoxCfg)cfg).getTrajectoryFile();
-
-                        switch (((ALSVoxCfg)cfg).getInputType()) {
-                            case LAS_FILE:
-                                comboboxModeALS.getSelectionModel().select(0);
-                                break;
-                            case LAZ_FILE:
-                                comboboxModeALS.getSelectionModel().select(1);
-                                break;
-                            case POINTS_FILE:
-                                comboboxModeALS.getSelectionModel().select(2);
-                                break;
-                            case SHOTS_FILE:
-                                comboboxModeALS.getSelectionModel().select(3);
-                                break;
+                        
+                        if(((ALSVoxCfg)cfg).getInputType() != SHOTS_FILE){
+                            textFieldTrajectoryFileALS.setText(((ALSVoxCfg)cfg).getTrajectoryFile().getAbsolutePath());
+                            trajectoryFile = ((ALSVoxCfg)cfg).getTrajectoryFile();
                         }
 
                         GroundEnergyParams groundEnergyParameters = ((ALSVoxCfg)cfg).getVoxelParameters().getGroundEnergyParams();
@@ -5358,6 +5374,8 @@ public class MainFrameController implements Initializable {
                         if(type.equals("voxelisation-ALS")){
                             
                             textFieldInputFileALS.setText(((ALSVoxCfg)cfg).getInputFile().getAbsolutePath());
+                            selectALSInputMode(((ALSVoxCfg)cfg).getInputFile());
+                            
                             textFieldOutputFileALS.setText(((ALSVoxCfg)cfg).getOutputFile().getAbsolutePath());
                             checkboxMultiResAfterMode2.setSelected(((ALSVoxCfg)cfg).getVoxelParameters().getNaNsCorrectionParams().isActivate());
                             textfieldNbSamplingThresholdMultires.setText(String.valueOf(((ALSVoxCfg)cfg).getVoxelParameters().getNaNsCorrectionParams().getNbSamplingThreshold()));
@@ -6996,6 +7014,56 @@ public class MainFrameController implements Initializable {
     private void onActionButtonGenerateShotsFile(ActionEvent event) {
         
     }*/
+
+    @FXML
+    private void onActionButtonExportALSLidarShots(ActionEvent event) {
+        
+        File alsFile = new File(textFieldInputFileALS.getText());
+        
+        if(!alsFile.exists()){
+            showErrorDialog(new Exception("File does not exist."));
+            return;
+        }else if(!alsFile.isFile()){
+            showErrorDialog(new Exception("Input is not a file."));
+            return;
+        }else if(trajectoryFile == null || !trajectoryFile.exists() || !trajectoryFile.isFile()){
+            showErrorDialog(new Exception("Invalid trajectory file."));
+            return;
+        }
+        
+        FileChooser fc = new FileChooser();
+        File selectedFile = fc.showSaveDialog(stage);
+        
+        if(selectedFile == null){
+            return;
+        }
+        
+        while(!selectedFile.getName().endsWith(".sht")){
+            
+            fc.setInitialFileName(selectedFile.getName()+".sht");
+            fc.setInitialDirectory(new File(selectedFile.getParent()));
+            selectedFile = fc.showSaveDialog(stage);
+            
+            if(selectedFile == null){
+                return;
+            }
+        }
+
+        PointsToShot pts = new PointsToShot(trajectoryFile, alsFile, MatrixUtility.convertMatrix4dToMat4D(vopMatrix));
+        
+        try {
+            pts.init();
+        } catch (Exception ex) {
+            showErrorDialog(ex);
+            return;
+        }
+        
+        try {
+            pts.write(selectedFile);
+        } catch (Exception ex) {
+            showErrorDialog(ex);
+        }
+    }
     
     static class ColorRectCell extends ListCell<VoxelFileChart> {
 

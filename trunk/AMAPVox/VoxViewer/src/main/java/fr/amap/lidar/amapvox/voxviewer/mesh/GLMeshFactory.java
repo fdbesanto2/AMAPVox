@@ -495,7 +495,7 @@ public class GLMeshFactory {
         return mesh;
     }
     
-    public static GLMesh createMeshFromObj(InputStream objFile, InputStream mtlFile) throws FileNotFoundException, IOException{
+    public static GLMesh createMeshFromObj(InputStream objFile, InputStream mtlFile) throws FileNotFoundException, IOException, Exception{
         
         Obj obj = ObjHelper.readObj(new InputStreamReader(objFile), new InputStreamReader(mtlFile));
         
@@ -561,7 +561,7 @@ public class GLMeshFactory {
         return mesh;
     }
     
-    public static GLMesh createMeshFromObj(File objFile, File mtlFile) throws FileNotFoundException, IOException{
+    public static GLMesh createMeshFromObj(File objFile, File mtlFile) throws FileNotFoundException, IOException, Exception{
         
         Obj obj = ObjHelper.readObj(objFile, mtlFile);
         

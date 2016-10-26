@@ -72,8 +72,8 @@ public abstract class Configuration {
         
         LAS_FILE(0),
         LAZ_FILE(1),
-        POINTS_FILE(2),
-        SHOTS_FILE(3),
+        SHOTS_FILE(2),
+        POINTS_FILE(3),
         RXP_SCAN(4),
         RSP_PROJECT(5),
         VOXEL_FILE(6),
@@ -198,9 +198,9 @@ public abstract class Configuration {
             case 1:
                 return InputType.LAZ_FILE;
             case 2:
-                return InputType.POINTS_FILE;
+                return InputType.SHOTS_FILE;
             case 3:
-                return InputType.LAS_FILE;
+                return InputType.POINTS_FILE;
             case 4:
                 return InputType.RXP_SCAN;
             case 5:

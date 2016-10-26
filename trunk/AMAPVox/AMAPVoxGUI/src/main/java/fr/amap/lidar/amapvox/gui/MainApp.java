@@ -12,12 +12,14 @@ import java.util.ResourceBundle;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,6 +131,13 @@ public class MainApp extends Application {
                             new Image("/icons/icon_64x64.png"));
 
             controller.setStage(stage);
+            
+            stage.addEventFilter(WindowEvent.WINDOW_HIDDEN, new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    System.exit(0);
+                }
+            });
 
             stage.show();
         }

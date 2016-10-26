@@ -10,7 +10,6 @@ import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.vector.Vec4D;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
@@ -19,7 +18,7 @@ import javax.vecmath.Vector3d;
  *
  * @author calcul
  */
-public class PointsToShotIterator implements Iterator<Shot>{
+public class PointsToShotIterator implements IteratorWithException<Shot>{
 
     private boolean isNewShot = false;
     private boolean wasReturned = false;
@@ -33,7 +32,7 @@ public class PointsToShotIterator implements Iterator<Shot>{
     private int currentNbEchos = 0;
     private int currentEchoFound = 0;
     
-    private final float RATIO_REFLECTANCE_VEGETATION_SOL = 0.4f;
+    private final static float RATIO_REFLECTANCE_VEGETATION_SOL = 0.4f;
     
     private final List<Trajectory> trajectoryList;
     private final List<LasPoint> lasPointList;
@@ -51,7 +50,7 @@ public class PointsToShotIterator implements Iterator<Shot>{
     }
 
     @Override
-    public Shot next() {
+    public Shot next() throws Exception {
         //parcours les points las jusqu'à retrouver un tir avec tous ses échos
         for (int i=currentLasPointIndex;i<lasPointList.size(); i++) {
 
@@ -125,7 +124,7 @@ public class PointsToShotIterator implements Iterator<Shot>{
             double time = mix.lasPoint.t;
 
             //le temps associé au point à changé donc le tir peut être retourné
-            if (isNewShot /*&& time != oldTime*/ && !wasReturned) {
+            if (isNewShot  /*&& time != oldTime*/ && !wasReturned) {
 
                 /**
                  * *vérifie que le nombre d'échos lus correspond bien au nombre
@@ -150,6 +149,10 @@ public class PointsToShotIterator implements Iterator<Shot>{
                 //count = 0;
                 //isNewExp = false;
 
+            }
+            
+            if(time == oldTime && currentNbEchos != mix.lasPoint.n && mix.lasPoint.n > 1){
+                throw new Exception("Shot cannot be retrieved because the als file contains different shots with the same gps time.");
             }
 
             //le point appartient toujours au même tir

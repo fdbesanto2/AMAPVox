@@ -375,6 +375,8 @@ public class TrackballCamera extends Camera{
     @Override
     public void translate(Vec3F translation) {
         
+        float copyDistanceToTarget = getDistanceToTarget();
+        
         forwardVec = getForwardVector();
         
         forwardVec = Vec3F.normalize(forwardVec);
@@ -429,6 +431,15 @@ public class TrackballCamera extends Camera{
         }
         
         updateViewMatrix();
+        
+        float distanceToTarget = getDistanceToTarget();
+        
+        nearPersp = distanceToTarget - 500.0f;
+        nearPersp = Float.max(nearPersp, 0.01f);
+        
+        farPersp = distanceToTarget + 500.0f;
+        
+        updateProjMatrix();
     }
 
     public void translateV2(Vec3F translation){
@@ -684,6 +695,10 @@ public class TrackballCamera extends Camera{
     
     public Vec3F getForwardVector(){
         return Vec3F.substract(target, location);
+    }
+    
+    public float getDistanceToTarget(){
+        return Vec3F.length(Vec3F.substract(target, location));
     }
     
     public Vec3F getUpVector(){

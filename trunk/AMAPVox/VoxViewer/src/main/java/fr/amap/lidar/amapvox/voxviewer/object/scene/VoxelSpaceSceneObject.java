@@ -251,6 +251,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
         
         if(mousePickable){
             VoxelSpaceInfos infos = data.getVoxelSpaceInfos();
+            
             fr.amap.lidar.amapvox.jeeb.raytracing.voxel.Scene scene = new fr.amap.lidar.amapvox.jeeb.raytracing.voxel.Scene();
             scene.setBoundingBox(new BoundingBox3d(infos.getMinCorner(), infos.getMaxCorner()));
             voxelManager = new VoxelManager(scene,  new VoxelManagerSettings(infos.getSplit(), VoxelManagerSettings.NON_TORIC_FINITE_BOX_TOPOLOGY));
@@ -422,6 +423,12 @@ public class VoxelSpaceSceneObject extends SceneObject{
             VoxelFileRawReader reader = new VoxelFileRawReader(f, false);
             
             VoxelSpaceInfos infos = reader.getVoxelSpaceInfos();
+            
+            //coordinates offset for float precision view
+            Point3d newMaxCorner = new Point3d(infos.getMaxCorner());
+            newMaxCorner.sub(infos.getMinCorner());
+            infos.setMaxCorner(newMaxCorner);
+            infos.setMinCorner(new Point3d());
             
             data = new VoxelSpaceData(infos);
             initAttributs(infos.getColumnNames());

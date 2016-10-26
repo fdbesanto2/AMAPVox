@@ -6,18 +6,12 @@
 package fr.amap.lidar.amapvox.voxviewer.event;
 
 import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.opengl.util.FPSAnimator;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.lidar.amapvox.voxviewer.input.InputKeyListener;
 import fr.amap.lidar.amapvox.voxviewer.input.InputMouseAdapter;
 import fr.amap.lidar.amapvox.voxviewer.input.InputMouseAdapter.Button;
 import fr.amap.lidar.amapvox.voxviewer.renderer.JoglListener;
-import fr.amap.lidar.amapvox.voxviewer.renderer.RenderListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
 /**
  * Describes user input behavior
@@ -79,7 +73,8 @@ public class BasicEvent extends EventManager{
         
         if(mouse.isWheelRotateUp() || mouse.isWheelRotateDown()){
             
-            joglContext.getScene().getCamera().translate(new Vec3F(0.0f, 0.0f, mouse.getWheelRotationValue()*mouseScrollSensitivity));
+            float distanceToTarget = joglContext.getScene().getCamera().getDistanceToTarget();
+            joglContext.getScene().getCamera().translate(new Vec3F(0.0f, 0.0f, (distanceToTarget/5.0f)*mouse.getWheelRotationValue()/**mouseScrollSensitivity*/));
         }
         
         if(keyboard.isKeyDown(KeyEvent.VK_RIGHT)){
