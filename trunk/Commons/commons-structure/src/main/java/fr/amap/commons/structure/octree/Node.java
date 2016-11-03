@@ -30,15 +30,22 @@ public class Node {
         
     private boolean leaf;
     private Node[] childs;
+    private int depth;
+    private int id;
+    private String label;
     private int[] elements;
     private int elementNumber;
     private Point3D minPoint;
     private Point3D maxPoint;
     
-    public Node(Point3D minPoint, Point3D maxPoint){
+    public Node(Point3D minPoint, Point3D maxPoint, int depth){
         
         this.minPoint = minPoint;
         this.maxPoint = maxPoint;
+        this.depth = depth;
+        
+        id = 0;
+        label = "0";
         
         init();
     }
@@ -47,9 +54,13 @@ public class Node {
         
         if(parent != null && indice >= 0 && indice <= 7){
             
+            depth = parent.getDepth() + 1;
+            label = parent.getLabel()+"_"+indice;
+            id = parent.getId() +1 + indice;
+            
             init();
             
-            short[] decToBin = decToBin(indice);
+            short[] decToBin = decToBin(indice); //TODO : stores in static variables
             
             short indiceX = decToBin[0];
             short indiceY = decToBin[1];
@@ -108,6 +119,8 @@ public class Node {
             elementNumber = 0;
         }
         
+        /*TODO : insert element must return the index of the node in which the element has been inserted*/
+        
         
         if(childs == null && elements !=null){
             
@@ -118,7 +131,7 @@ public class Node {
             }else{ //la condition est vraie quand le nombre maximum de points dans le noeud a été atteint
                 
                 // on crée les enfants
-                subdivide();
+                subdivide(octree);
                 
                 //on replace tous les points du noeud dans ses enfants
                 for(int i = 0 ; i< elementNumber;i++){
@@ -195,12 +208,13 @@ public class Node {
         return null;
     }
     
-    private void subdivide() throws Exception{
+    private void subdivide(Octree octree) throws Exception{
         
         childs = new Node[8];
         
         for(short i=0;i<8;i++){
             childs[i] = new Node(this, i);
+            octree.getNodes().add(childs[i]);
         }
         
         leaf = false;
@@ -217,7 +231,7 @@ public class Node {
         return dec;
     }
     
-    private short[] decToBin(short decimal){
+    private static short[] decToBin(short decimal){
         
         short[] result = new short[3];
         short tmp = decimal;
@@ -250,5 +264,16 @@ public class Node {
     public Point3D getMaxPoint() {
         return maxPoint;
     }
-    
+
+    public int getDepth() {
+        return depth;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public int getId() {
+        return id;
+    }
 }

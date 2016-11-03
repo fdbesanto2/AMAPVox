@@ -8,7 +8,6 @@ package fr.amap.commons.util.io;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import org.apache.commons.lang3.ArrayUtils;
 
 /**
  *
@@ -46,40 +45,40 @@ public class LittleEndianUtility {
     
     public static int toInt(byte b1, byte b2, byte b3, byte b4) {
 
-        byte[] bytes = new byte[]{b1, b2, b3, b4};
-        ArrayUtils.reverse(bytes);
+        byte[] bytes = new byte[]{b4, b3, b2, b1};
         int d = ByteBuffer.wrap(bytes).getInt();
         return d;
     }
     
     public static long tolong(byte[] bytes) {
 
-        ArrayUtils.reverse(bytes);
-        long d = ByteBuffer.wrap(bytes).getLong();
+        byte[] newArray = new byte[bytes.length];
+        
+        for(int i = 0;i<newArray.length;i++){
+            newArray[i] = bytes[bytes.length - i - 1];
+        }
+        
+        long d = ByteBuffer.wrap(newArray).getLong();
         return d;
     }
 
     public static double toDouble(byte byte1, byte byte2, byte byte3, byte byte4, byte byte5, byte byte6, byte byte7, byte byte8) {
 
-        byte[] bytes = new byte[]{byte1, byte2, byte3, byte4, byte5, byte6, byte7, byte8};
-        //int[] integers = new int[]{byte1&0xff, byte2&0xff, byte3&0xff, byte4&0xff, byte5&0xff, byte6&0xff, byte7&0xff, byte8&0xff};
-        ArrayUtils.reverse(bytes);
+        byte[] bytes = new byte[]{byte8, byte7, byte6, byte5, byte4, byte3, byte2, byte1};
         double d = ByteBuffer.wrap(bytes).getDouble() + 0.0;
         return d;
     }
     
     public static float toFloat(byte byte1, byte byte2, byte byte3, byte byte4) {
 
-        byte[] bytes = new byte[]{byte1, byte2, byte3, byte4};        
-        ArrayUtils.reverse(bytes);
+        byte[] bytes = new byte[]{byte4, byte3, byte2, byte1};
         float value = ByteBuffer.wrap(bytes).getFloat()+ 0.0f;
         return value;
     }
 
     public static BigInteger toBigInteger(byte byte1, byte byte2, byte byte3, byte byte4, byte byte5, byte byte6, byte byte7, byte byte8) {
 
-        byte[] bytes = new byte[]{byte1, byte2, byte3, byte4, byte5, byte6, byte7, byte8};
-        ArrayUtils.reverse(bytes);
+        byte[] bytes = new byte[]{byte8, byte7, byte6, byte5, byte4, byte3, byte2, byte1};
         BigInteger bi = new BigInteger(bytes);
         return bi;
     }

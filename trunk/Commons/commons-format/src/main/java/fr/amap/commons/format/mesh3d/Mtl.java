@@ -13,7 +13,7 @@ import fr.amap.commons.math.vector.Vec3F;
  */
 public class Mtl {
     
-    private String name;
+    private final String name;
     
     private final Vec3F diffuseColor;
     private final Vec3F ambientColor;

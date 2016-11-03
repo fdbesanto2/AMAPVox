@@ -9,7 +9,6 @@ import fr.amap.commons.math.point.Point2F;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.point.Point3I;
 import fr.amap.commons.math.vector.Vec3F;
-import fr.amap.commons.math.vector.Vec3I;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -36,6 +37,12 @@ public class ObjHelper {
         public int vertexIndex;
         public int texCoordIndex;
         public int normalIndex;
+    }
+    
+    public static void main(String[] args) throws IOException, Exception {
+        
+        Obj obj = ObjHelper.readObj(new File("/home/julien/Bureau/tmp3/cube6.obj"));
+        System.out.println("test");
     }
     
     private static class Face{
@@ -112,7 +119,7 @@ public class ObjHelper {
         }
     }
     
-    public static Obj readObj(Reader objReader) throws FileNotFoundException, IOException{
+    public static Obj readObj(Reader objReader) throws FileNotFoundException, IOException, Exception{
         
         try (BufferedReader reader = new BufferedReader(objReader)) {
             
@@ -195,7 +202,7 @@ public class ObjHelper {
                         }
                         
                     }else{
-                        //ignore face
+                        throw new Exception("Faces are not triangles !");
                     }
                     
                     faceIndex++;
@@ -388,7 +395,7 @@ public class ObjHelper {
         }
     }
     
-    public static Obj readObj(Reader objReader, Reader mtlReader) throws FileNotFoundException, IOException{
+    public static Obj readObj(Reader objReader, Reader mtlReader) throws FileNotFoundException, IOException, Exception{
         
         Obj obj = new Obj();
         
@@ -413,7 +420,11 @@ public class ObjHelper {
             
             while ((line = reader.readLine()) != null) {
 
-                if (line.startsWith("v ")) {
+                if(line.startsWith("#")){
+                    
+                    obj.getComments().add(line);
+                    
+                }else if (line.startsWith("v ")) {
 
                     if(!hasVertexLine){
                         hasVertexLine = true;
@@ -472,7 +483,7 @@ public class ObjHelper {
                         }
                         
                     }else{
-                        //ignore face
+                        throw new Exception("Faces are not triangles !");
                     }
                     
                     faceIndex++;
@@ -486,6 +497,10 @@ public class ObjHelper {
                     String[] split = line.split(" ");
                     materialLinks.put(materialOffsets.size(), split[1]);
                     materialOffsets.add(faceIndex);
+                    
+                }else if (line.startsWith("g ")) {
+                    obj.getGroups().put(line.substring(2), faces.size());
+                    hasFaceLine = false;
                 }
             }
             
@@ -581,10 +596,23 @@ public class ObjHelper {
         return obj;
     }
     
-    public static Obj readObj(File objFile, File mtlFile) throws FileNotFoundException, IOException{
+    public static Obj readObj(File objFile) throws FileNotFoundException, IOException, Exception{
+        
+        return readObj(objFile, null);
+    }
+            
+    
+    public static Obj readObj(File objFile, File mtlFile) throws FileNotFoundException, IOException, Exception{
         
         if(mtlFile == null){
-            return readObj(new FileReader(objFile), null);
+            
+            File newMtlFile = new File(objFile.getParent(), objFile.getName().substring(0, objFile.getName().length()-4)+".mtl");
+            if(newMtlFile.exists()){
+                return readObj(new FileReader(objFile), new FileReader(newMtlFile));
+            }else{
+                return readObj(new FileReader(objFile), null);
+            }
+            
         }else{
             return readObj(new FileReader(objFile), new FileReader(mtlFile));
         }

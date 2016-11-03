@@ -29,13 +29,13 @@ import java.util.List;
 
 public class Octree {
     
-    
     private Point3D[] points;
     private Point3D minPoint;
     private Point3D maxPoint;
     private int depth;
     private Node root;
     private List<Node> leafs;
+    private ArrayList<Node> nodes;
     
     private final int maximumPoints;
     
@@ -52,7 +52,9 @@ public class Octree {
         
         if(points != null){
             
-            root = new Node(minPoint, maxPoint);
+            nodes = new ArrayList<>();
+            root = new Node(minPoint, maxPoint, 0);
+            nodes.add(root);
             
             for(int i=0;i<points.length;i++){
                 
@@ -60,6 +62,8 @@ public class Octree {
                     root.insertElement(this, i);
                 }
             }
+            
+            nodes.trimToSize();
             
         }else{
             throw new Exception("Attempt to build octree but points array is null");
@@ -468,5 +472,8 @@ public class Octree {
     public void setMaxPoint(Point3D maxPoint) {
         this.maxPoint = maxPoint;
     }
-    
+
+    public List<Node> getNodes() {
+        return nodes;
+    }
 }

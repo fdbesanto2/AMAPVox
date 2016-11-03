@@ -66,3 +66,6 @@ log.txt*
 /trunk/AMAPVox/old/JDart/target/
 /trunk/Commons/commons-animation/target/
 /trunk/AMAPVox/AMAPVox/nbproject/
+/trunk/FormatsConverter/nbproject/private/
+/trunk/LidarFormatConverter/target/
+/trunk/mavenproject1/target/

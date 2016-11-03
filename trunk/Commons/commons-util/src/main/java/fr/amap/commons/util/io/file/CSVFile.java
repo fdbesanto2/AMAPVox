@@ -26,7 +26,7 @@ public class CSVFile extends File{
     private Map<String, Integer> columnAssignment;
     private Map<String, Class> columnTypesAssignment;
     private Map<String, CSVColumn> csvColumns;
-    
+        
     public CSVFile(File file) {
         
         super(file.getAbsolutePath());

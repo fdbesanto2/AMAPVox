@@ -7,7 +7,6 @@ package fr.amap.commons.util;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * @see <a href= "http://jessicarbrown.com/resources/unsignedtojava.html">http://jessicarbrown.com/resources/unsignedtojava.html</a>
@@ -58,8 +57,7 @@ public class ByteConverter {
 
     public static double toDouble(byte byte1, byte byte2, byte byte3, byte byte4, byte byte5, byte byte6, byte byte7, byte byte8) {
 
-        byte[] bytes = new byte[]{byte1, byte2, byte3, byte4, byte5, byte6, byte7, byte8};
-        ArrayUtils.reverse(bytes);
+        byte[] bytes = new byte[]{byte8, byte7, byte6, byte5, byte4, byte3, byte2, byte1};
         double d = ByteBuffer.wrap(bytes).getDouble() + 0.0;
         return d;
     }

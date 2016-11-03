@@ -8,6 +8,7 @@ package fr.amap.commons.format.mesh3d;
 import fr.amap.commons.math.point.Point2F;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.point.Point3I;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ import java.util.Map;
  * @author calcul
  */
 public class Obj {
+    
+    private final List<String> comments;
     
     private Point3F[] points;
     private Point3I[] faces;
@@ -29,6 +32,12 @@ public class Obj {
     private int[] materialOffsets;
     private Map<String, Mtl> materials;
     private Map<Integer, String> materialLinks;
+    private final Map<String, Integer> groups;
+
+    public Obj() {
+        comments = new ArrayList<>();
+        groups = new HashMap<>();
+    }
 
     public Point3F[] getPoints() {
         return points;
@@ -114,5 +123,13 @@ public class Obj {
     public void setMaterialLinks(Map<Integer, String> materialLinks) {
         this.materialLinks = materialLinks;
     }
-    
+
+    public List<String> getComments() {
+        return comments;
+    }
+
+    public Map<String, Integer> getGroups() {
+        return groups;
+    }
+        
 }

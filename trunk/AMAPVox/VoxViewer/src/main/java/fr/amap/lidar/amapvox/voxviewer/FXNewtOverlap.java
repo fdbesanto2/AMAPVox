@@ -7,6 +7,7 @@ package fr.amap.lidar.amapvox.voxviewer;
 
 import com.jogamp.newt.event.MouseAdapter;
 import com.jogamp.newt.event.WindowAdapter;
+import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.opengl.GLWindow;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -325,13 +326,22 @@ public class FXNewtOverlap {
             }*/
             
             @Override
-            public void windowDestroyed(com.jogamp.newt.event.WindowEvent e) {
+            public void windowDestroyNotify(WindowEvent e){
+                
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        stage.close();
+                        if(stage.isShowing()){
+                            stage.close();
+                        }
+                       
                     }
                 });
+            }
+            
+            @Override
+            public void windowDestroyed(com.jogamp.newt.event.WindowEvent e) {
+                
             }
         });
         

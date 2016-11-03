@@ -21,6 +21,11 @@
     
     <dependencies>
         <dependency>
+            <groupId>fr.amap.commons</groupId>
+            <artifactId>commons-util</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>fr.amap.lidar</groupId>
             <artifactId>format-riegl</artifactId>
             <version>1.0</version>
@@ -29,11 +34,6 @@
             <groupId>org.controlsfx</groupId>
             <artifactId>controlsfx</artifactId>
             <version>8.40.10</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.amap.commons</groupId>
-            <artifactId>commons-util</artifactId>
-            <version>1.0</version>
         </dependency>
     </dependencies>
 

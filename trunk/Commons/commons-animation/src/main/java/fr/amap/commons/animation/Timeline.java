@@ -224,4 +224,8 @@ public class Timeline extends Animation{
     public DateTime getEndTime() {
         return endTime;
     }
+
+    public double getTimeStep() {
+        return timeStep;
+    }
 }
