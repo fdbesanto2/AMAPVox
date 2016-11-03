@@ -598,7 +598,7 @@ public class VoxelsToChart {
                         layerIndex = (int) (voxel.ground_distance/resolution);
                     }
                 
-                    if(layerIndex > 0 & layerIndex < padMeanByLayer.length){
+                    if(layerIndex >= 0 & layerIndex < padMeanByLayer.length){
 
                         padMeanByLayer[layerIndex] += pad;
                         valuesNumberByLayer[layerIndex]++;
@@ -624,7 +624,7 @@ public class VoxelsToChart {
             
             padMeanByLayer[i] = padMeanByLayer[i] / valuesNumberByLayer[i];
             
-            if(i <= maxHeight){
+            if(i <= maxHeight && i > 0){ //don't show the first layer because it's biased
                 serie.add(padMeanByLayer[i], i*resolution);
             }
             
