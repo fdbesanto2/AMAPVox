@@ -5,11 +5,11 @@
  */
 package fr.amap.lidar.amapvox.gui;
 
-import fr.amap.commons.util.LidarScan;
-import fr.amap.commons.util.MatrixUtility;
+import fr.amap.lidar.amapvox.commons.LidarScan;
+import fr.amap.commons.math.util.MatrixUtility;
 import fr.amap.amapvox.io.tls.rsp.Scans;
-import fr.amap.amapvox.jleica.ptx.PTXReader;
-import fr.amap.amapvox.jleica.ptx.PTXScan;
+import fr.amap.lidar.format.jleica.ptx.PTXReader;
+import fr.amap.lidar.format.jleica.ptx.PTXScan;
 import fr.amap.lidar.amapvox.voxelisation.configuration.PTXLidarScan;
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.control.CheckBoxTreeItem;
 import javafx.scene.control.cell.CheckBoxTreeCell;
+import javax.vecmath.Matrix4d;
 
 /**
  *
@@ -43,7 +44,7 @@ public class PTXProjectExtractor extends LidarProjectExtractor{
         for(PTXScan scan : singlesScans){
             
             CheckBoxTreeItem<LidarScan> item = new CheckBoxTreeItem<>(
-                    new PTXLidarScan(scan.getFile(), MatrixUtility.convertMat4DToMatrix4d(scan.getHeader().getTransfMatrix()), scan, count));
+                    new PTXLidarScan(scan.getFile(), new Matrix4d(scan.getHeader().getTransfMatrix()), scan, count));
             
             item.setSelected(true);
             item.setExpanded(true);

@@ -5,7 +5,7 @@
  */
 package fr.amap.lidar.amapvox.jeeb.raytracing.voxel;
 
-import fr.amap.commons.util.vegetation.LeafAngleDistribution;
+import fr.amap.lidar.amapvox.commons.LeafAngleDistribution;
 import fr.amap.lidar.amapvox.jeeb.raytracing.util.BoundingBox3d;
 import fr.amap.lidar.amapvox.commons.Voxel;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
@@ -41,7 +41,7 @@ public class DirectionalTransmittance {
     private TLSVoxel voxels[][][];
     private float mnt[][];
     
-    private fr.amap.commons.util.vegetation.DirectionalTransmittance direcTrans;
+    private fr.amap.lidar.amapvox.commons.DirectionalTransmittance direcTrans;
     
     private boolean toricity = false;
     private final static double EPSILON = 0.001;
@@ -72,7 +72,7 @@ public class DirectionalTransmittance {
         
         logger.info(infos.toString()+"\n");
         
-        direcTrans = new fr.amap.commons.util.vegetation.DirectionalTransmittance(new LeafAngleDistribution(infos.getLadType(), infos.getLadParams()));
+        direcTrans = new fr.amap.lidar.amapvox.commons.DirectionalTransmittance(new LeafAngleDistribution(infos.getLadType(), infos.getLadParams()));
         direcTrans.buildTable(180);
         
         voxSpace = new VoxelSpace(new BoundingBox3d(min, max), splitting, 0);

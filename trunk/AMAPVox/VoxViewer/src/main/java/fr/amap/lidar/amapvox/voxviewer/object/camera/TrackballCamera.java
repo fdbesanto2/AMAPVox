@@ -7,7 +7,7 @@ package fr.amap.lidar.amapvox.voxviewer.object.camera;
 
 import fr.amap.commons.math.matrix.Mat4F;
 import fr.amap.commons.math.vector.Vec3F;
-import fr.amap.commons.util.SphericalCoordinates;
+import fr.amap.commons.math.util.SphericalCoordinates;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.MousePicker;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
 import javax.swing.event.EventListenerList;

@@ -18,8 +18,8 @@ import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import fr.amap.lidar.amapvox.commons.Configuration;
 import fr.amap.commons.util.Filter;
 import fr.amap.commons.util.io.file.CSVFile;
-import fr.amap.commons.util.vegetation.LADParams;
-import fr.amap.commons.util.vegetation.LeafAngleDistribution.Type;
+import fr.amap.lidar.amapvox.commons.LADParams;
+import fr.amap.lidar.amapvox.commons.LeafAngleDistribution.Type;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.EchoFilter;
 import fr.amap.lidar.amapvox.voxelisation.LaserSpecification;
@@ -199,6 +199,14 @@ public class VoxelAnalysisCfg extends Configuration{
             if(useDTM){
                 voxelParameters.getDtmFilteringParams().setDtmFile(new File(dtmFilterElement.getAttributeValue("src")));
                 voxelParameters.getDtmFilteringParams().setMinDTMDistance(Float.valueOf(dtmFilterElement.getAttributeValue("height-min")));
+                
+                String useVopAttribute = dtmFilterElement.getAttributeValue("use-vop");
+                
+                if(useVopAttribute != null){ 
+                    voxelParameters.getDtmFilteringParams().setUseVOPMatrix(Boolean.valueOf(useVopAttribute));
+                }else{ //old configuration file
+                    voxelParameters.getDtmFilteringParams().setUseVOPMatrix(true);
+                }
             }                        
         }
 
@@ -490,6 +498,7 @@ public class VoxelAnalysisCfg extends Configuration{
             }
 
             dtmFilterElement.setAttribute(new Attribute("height-min",String.valueOf(voxelParameters.getDtmFilteringParams().getMinDTMDistance())));
+            dtmFilterElement.setAttribute(new Attribute("use-vop",String.valueOf(voxelParameters.getDtmFilteringParams().isUseVOPMatrix())));
         }
 
         processElement.addContent(dtmFilterElement);

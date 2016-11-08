@@ -3,9 +3,9 @@
  */
 package fr.amap.lidar.amapvox.simulation.hemi;
 
-import fr.amap.commons.util.LidarScan;
-import fr.amap.commons.util.MatrixUtility;
-import fr.amap.commons.util.SphericalCoordinates;
+import fr.amap.lidar.amapvox.commons.LidarScan;
+import fr.amap.commons.math.util.MatrixUtility;
+import fr.amap.commons.math.util.SphericalCoordinates;
 import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.DirectionalTransmittance;
@@ -291,7 +291,7 @@ public class HemiScanView implements Cancellable{
                 boolean keepShot = true;
                 
                 if(shot.nbEchos > 0 && filter != null){
-                    keepShot = filter.doFiltering(shot, shot.nbEchos-1);
+                    //keepShot = filter.doFiltering(shot, shot.nbEchos-1);
                 }
                 
                 if(keepShot){

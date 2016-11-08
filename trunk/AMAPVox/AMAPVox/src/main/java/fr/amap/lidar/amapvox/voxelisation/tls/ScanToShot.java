@@ -5,8 +5,8 @@
  */
 package fr.amap.lidar.amapvox.voxelisation.tls;
 
-import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.commons.math.matrix.Mat4D;
+import fr.amap.lidar.amapvox.voxelisation.Shot;
 import org.apache.log4j.Logger;
 
 /**

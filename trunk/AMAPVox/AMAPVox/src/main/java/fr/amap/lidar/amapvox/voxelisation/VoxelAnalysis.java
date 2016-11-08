@@ -1,7 +1,6 @@
 package fr.amap.lidar.amapvox.voxelisation;
 
 import fr.amap.commons.util.TimeCounter;
-import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.lidar.amapvox.jeeb.raytracing.geometry.LineElement;
 import fr.amap.lidar.amapvox.jeeb.raytracing.geometry.LineSegment;
 import fr.amap.lidar.amapvox.jeeb.raytracing.util.BoundingBox3d;
@@ -9,17 +8,15 @@ import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.Scene;
 import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelManager;
 import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelManager.VoxelCrossingContext;
 import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelManagerSettings;
-import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelSpace;
 import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.raster.multiband.BCommon;
 import fr.amap.commons.raster.multiband.BHeader;
 import fr.amap.commons.raster.multiband.BSQ;
 import fr.amap.commons.util.Cancellable;
 import fr.amap.commons.util.Process;
-import fr.amap.commons.util.Statistic;
-import fr.amap.commons.util.vegetation.DirectionalTransmittance;
-import fr.amap.commons.util.vegetation.LADParams;
-import fr.amap.commons.util.vegetation.LeafAngleDistribution;
+import fr.amap.lidar.amapvox.commons.DirectionalTransmittance;
+import fr.amap.lidar.amapvox.commons.LADParams;
+import fr.amap.lidar.amapvox.commons.LeafAngleDistribution;
 import fr.amap.lidar.amapvox.commons.Voxel;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos.Type;
@@ -36,15 +33,12 @@ import javax.vecmath.Point3i;
 import java.awt.Color;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.logging.Level;
 import javax.imageio.ImageIO;
-import javax.vecmath.Point2d;
 import javax.vecmath.Point3d;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
@@ -319,7 +313,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
             shot.direction.normalize();
             Point3d origin = new Point3d(shot.origin);
 
-            if (shot.nbEchos == 0) {
+            if (shot.getEchoesNumber() == 0) {
 
                 LineSegment seg = new LineSegment(shot.origin, shot.direction, 999999);
                 Point3d echo = new Point3d(seg.getEnd());
@@ -336,11 +330,11 @@ public class VoxelAnalysis extends Process implements Cancellable{
                 float lastEchoBeamFraction = 0;
                 int firstEchoOfVoxel = 0;
 
-                for (int i = 0; i < shot.nbEchos; i++) {
+                for (int i = 0; i < shot.getEchoesNumber(); i++) {
 
                     Point3d nextEcho = null;
 
-                    if (i < shot.nbEchos - 1) {
+                    if (i < shot.getEchoesNumber() - 1) {
                         nextEcho = new Point3d(getEchoLocation(shot, i + 1));
                     }
 
@@ -357,7 +351,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
                         /*ne rien faire dans ce cas
                          le beamFraction est incrémenté et l'opération se fera sur l'écho suivant*/
-                        lastEchoBeamFraction += weighting[shot.nbEchos - 1][i];
+                        lastEchoBeamFraction += weighting[shot.getEchoesNumber() - 1][i];
 
                         if(!wasMultiple){
                             firstEchoOfVoxel = i;
@@ -366,12 +360,12 @@ public class VoxelAnalysis extends Process implements Cancellable{
                     } else {
 
                         if (parameters.getEchoesWeightParams().getWeightingMode() != EchoesWeightParams.WEIGHTING_NONE) {
-                            beamFraction = weighting[shot.nbEchos - 1][i] + lastEchoBeamFraction;
+                            beamFraction = weighting[shot.getEchoesNumber() - 1][i] + lastEchoBeamFraction;
 
                             if(wasMultiple){
-                                residualEnergy = residualEnergyTable[shot.nbEchos - 1][firstEchoOfVoxel];
+                                residualEnergy = residualEnergyTable[shot.getEchoesNumber() - 1][firstEchoOfVoxel];
                             }else{
-                                residualEnergy = residualEnergyTable[shot.nbEchos - 1][i];
+                                residualEnergy = residualEnergyTable[shot.getEchoesNumber() - 1][i];
                             }
 
                         }else{
@@ -383,7 +377,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
                         boolean lastEcho;
 
-                        lastEcho = i == shot.nbEchos - 1;
+                        lastEcho = i == shot.getEchoesNumber() - 1;
 
                         // propagate
                         propagate(origin, echo, beamFraction, residualEnergy, lastEcho, nbShotsProcessed, shot, i);
@@ -529,7 +523,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
                 
                     vox.nbSampling++;
 
-                    vox.angleMean += shot.angle;
+                    vox.angleMean += shot.getAngle();
                     
                     //double volume = longueur * ONE_THIRD_OF_PI * ((r*r)+(R*R)+(r*R));
                     //vox.bvEntering += volume * (Math.round(residualEnergy*10000)/10000.0);
@@ -615,7 +609,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
                     vox.lgTotal += longueur;
 
-                    vox.angleMean += shot.angle;
+                    vox.angleMean += shot.getAngle();
                     
                     surfMulLength = surface * longueur;
                     entering = (Math.round(residualEnergy*10000)/10000.0);
@@ -701,11 +695,11 @@ public class VoxelAnalysis extends Process implements Cancellable{
     
     private boolean keepEchoOfShot(Shot shot, int echoID){
         
-        if(echoFilter !=null){
-            return echoFilter.doFiltering(shot, echoID);
-        }else{
+        if(shot.getMask() == null){
             return true;
         }
+        
+        return shot.getMask()[echoID];
     }
     
     public static float computeTransmittance(double bvEntering, double bvIntercepted){

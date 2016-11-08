@@ -5,8 +5,8 @@
  */
 package fr.amap.lidar.amapvox.gui;
 
-import fr.amap.commons.util.LidarScan;
-import fr.amap.commons.util.MatrixUtility;
+import fr.amap.lidar.amapvox.commons.LidarScan;
+import fr.amap.commons.math.util.MatrixUtility;
 import fr.amap.amapvox.io.tls.rsp.Rsp;
 import fr.amap.commons.javafx.NodeGestures;
 import fr.amap.commons.javafx.PannableCanvas;

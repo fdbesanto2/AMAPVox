@@ -15,8 +15,8 @@ For further information, please contact Gregoire Vincent.
 
 
 import fr.amap.commons.math.matrix.Mat4D;
-import fr.amap.commons.util.MatrixFileParser;
-import fr.amap.commons.util.MatrixUtility;
+import fr.amap.commons.math.util.MatrixFileParser;
+import fr.amap.commons.math.util.MatrixUtility;
 import fr.amap.lidar.amapvox.export.dart.DartWriter;
 import fr.amap.lidar.amapvox.gui.MainFrameController;
 import java.io.File;

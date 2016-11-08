@@ -6,7 +6,6 @@
 package fr.amap.lidar.amapvox.voxelisation;
 
 import fr.amap.commons.util.Filter;
-import fr.amap.amapvox.io.tls.rxp.Shot;
 import java.util.List;
 
 /**
@@ -33,32 +32,32 @@ public class SimpleShotFilter implements ShotFilter{
                         switch (f.getCondition()) {
 
                             case Filter.EQUAL:
-                                if (shot.angle != f.getValue()) {
+                                if (shot.getAngle() != f.getValue()) {
                                     return false;
                                 }
                                 break;
                             case Filter.GREATER_THAN:
-                                if (shot.angle <= f.getValue()) {
+                                if (shot.getAngle() <= f.getValue()) {
                                     return false;
                                 }
                                 break;
                             case Filter.GREATER_THAN_OR_EQUAL:
-                                if (shot.angle < f.getValue()) {
+                                if (shot.getAngle() < f.getValue()) {
                                     return false;
                                 }
                                 break;
                             case Filter.LESS_THAN:
-                                if (shot.angle >= f.getValue()) {
+                                if (shot.getAngle() >= f.getValue()) {
                                     return false;
                                 }
                                 break;
                             case Filter.LESS_THAN_OR_EQUAL:
-                                if (shot.angle > f.getValue()) {
+                                if (shot.getAngle() > f.getValue()) {
                                     return false;
                                 }
                                 break;
                             case Filter.NOT_EQUAL:
-                                if (shot.angle == f.getValue()) {
+                                if (shot.getAngle() == f.getValue()) {
                                     return false;
                                 }
                                 break;

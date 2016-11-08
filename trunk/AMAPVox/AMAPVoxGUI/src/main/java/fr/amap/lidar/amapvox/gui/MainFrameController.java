@@ -28,12 +28,12 @@ import static fr.amap.lidar.amapvox.commons.Configuration.InputType.SHOTS_FILE;
 import fr.amap.commons.util.io.file.FileManager;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.point.Point2F;
-import fr.amap.commons.util.BoundingBox3d;
+import fr.amap.commons.math.util.BoundingBox3d;
 import fr.amap.commons.util.Filter;
-import fr.amap.commons.util.LidarScan;
-import fr.amap.commons.util.MatrixFileParser;
-import fr.amap.commons.util.MatrixUtility;
-import fr.amap.commons.util.SphericalCoordinates;
+import fr.amap.lidar.amapvox.commons.LidarScan;
+import fr.amap.commons.math.util.MatrixFileParser;
+import fr.amap.commons.math.util.MatrixUtility;
+import fr.amap.commons.math.util.SphericalCoordinates;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.commons.util.TimeCounter;
 import fr.amap.commons.structure.pointcloud.PointCloud;
@@ -55,10 +55,10 @@ import fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx.LAI2200;
 import fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx.LAI2xxx;
 import fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx.Lai2xxxSim;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
-import fr.amap.commons.util.vegetation.DirectionalTransmittance;
-import fr.amap.commons.util.vegetation.LeafAngleDistribution;
-import static fr.amap.commons.util.vegetation.LeafAngleDistribution.Type.TWO_PARAMETER_BETA;
-import static fr.amap.commons.util.vegetation.LeafAngleDistribution.Type.ELLIPSOIDAL;
+import fr.amap.lidar.amapvox.commons.DirectionalTransmittance;
+import fr.amap.lidar.amapvox.commons.LeafAngleDistribution;
+import static fr.amap.lidar.amapvox.commons.LeafAngleDistribution.Type.TWO_PARAMETER_BETA;
+import static fr.amap.lidar.amapvox.commons.LeafAngleDistribution.Type.ELLIPSOIDAL;
 import fr.amap.lidar.amapvox.voxelisation.postproc.VoxelFileMerging;
 import fr.amap.lidar.amapvox.voxelisation.LaserSpecification;
 import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
@@ -82,7 +82,7 @@ import fr.amap.commons.util.io.file.CSVFile;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.DTMFilteringParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
-import fr.amap.commons.util.vegetation.LADParams;
+import fr.amap.lidar.amapvox.commons.LADParams;
 import fr.amap.lidar.amapvox.commons.Voxel;
 import fr.amap.lidar.amapvox.commons.VoxelSpace;
 import fr.amap.lidar.amapvox.gui.export.ObjExporterDialogController;
@@ -772,6 +772,8 @@ public class MainFrameController implements Initializable {
     private MenuItem menuItemSelectionNone12;
     @FXML
     private HBox hboxTrajectoryFile;
+    @FXML
+    private CheckBox checkboxApplyVOPMatrix;
     
     private void initValidationSupport(){
         
@@ -1840,12 +1842,14 @@ public class MainFrameController implements Initializable {
                     buttonOpenDTMFile.setDisable(false);
                     textfieldDTMPath.setDisable(false);
                     textfieldDTMValue.setDisable(false);
+                    checkboxApplyVOPMatrix.setDisable(false);
                     labelDTMValue.setDisable(false);
                     labelDTMPath.setDisable(false);
                 } else {
                     buttonOpenDTMFile.setDisable(true);
                     textfieldDTMPath.setDisable(true);
                     textfieldDTMValue.setDisable(true);
+                    checkboxApplyVOPMatrix.setDisable(true);
                     labelDTMValue.setDisable(true);
                     labelDTMPath.setDisable(true);
                 }
@@ -4134,7 +4138,7 @@ public class MainFrameController implements Initializable {
                                 items.add(scan);
                             }
 
-                            popMatrix = MatrixUtility.convertMat4DToMatrix4d(rsp.getPopMatrix());
+                            popMatrix = new Matrix4d(rsp.getPopMatrix());
                             updateResultMatrix();
 
                             listviewRxpScans.getItems().setAll(items);
@@ -4306,7 +4310,7 @@ public class MainFrameController implements Initializable {
                             if (scanFile != null && Files.exists(scanFile.toPath())) {
                                 RxpScan rxpScan = tempRsp.getRxpScanByName(scanFile.getName());
                                 if (rxpScan != null) {
-                                    sopMatrix = MatrixUtility.convertMat4DToMatrix4d(rxpScan.getSopMatrix());
+                                    sopMatrix = new Matrix4d(rxpScan.getSopMatrix());
                                 } else {
                                     Alert alert = new Alert(AlertType.ERROR);
                                     alert.setTitle("Error");
@@ -4371,7 +4375,7 @@ public class MainFrameController implements Initializable {
                         Rsp tempRsp = new Rsp();
                         tempRsp.read(selectedFile);
                         
-                        mat = MatrixUtility.convertMat4DToMatrix4d(tempRsp.getPopMatrix());
+                        mat = new Matrix4d(tempRsp.getPopMatrix());
 
                         //scan unique
                         if (comboboxModeTLS.getSelectionModel().getSelectedIndex() == 0) {
@@ -4381,7 +4385,7 @@ public class MainFrameController implements Initializable {
                             if (Files.exists(scanFile.toPath())) {
                                 RxpScan rxpScan = tempRsp.getRxpScanByName(scanFile.getName());
                                 if (rxpScan != null) {
-                                    sopMatrix = MatrixUtility.convertMat4DToMatrix4d(rxpScan.getSopMatrix());
+                                    sopMatrix = new Matrix4d(rxpScan.getSopMatrix());
                                 }
                             }
                         }
@@ -4955,6 +4959,7 @@ public class MainFrameController implements Initializable {
         if (checkboxUseDTMFilter.isSelected()) {
             dtmFilteringParams.setMinDTMDistance(Float.valueOf(textfieldDTMValue.getText()));
             dtmFilteringParams.setDtmFile(new File(textfieldDTMPath.getText()));
+            dtmFilteringParams.setUseVOPMatrix(checkboxApplyVOPMatrix.isSelected());
         }
         
         voxelParameters.setDtmFilteringParams(dtmFilteringParams);
@@ -5260,9 +5265,8 @@ public class MainFrameController implements Initializable {
                     if (tmpFile != null) {
                         textfieldDTMPath.setText(tmpFile.getAbsolutePath());
                         textfieldDTMValue.setText(String.valueOf(dtmFilteringParams.getMinDTMDistance()));
-                    }
-                    
-                    
+                        checkboxApplyVOPMatrix.setSelected(dtmFilteringParams.isUseVOPMatrix());
+                    }                    
 
                     checkboxUsePointcloudFilter.setSelected(voxelParameters.isUsePointCloudFilter());
                     List<PointcloudFilter> pointcloudFilters = voxelParameters.getPointcloudFilters();

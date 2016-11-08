@@ -5,8 +5,7 @@
  */
 package fr.amap.lidar.amapvox.voxelisation;
 
-import fr.amap.amapvox.io.tls.rxp.Shot;
-import fr.amap.commons.util.vegetation.LADParams;
+import fr.amap.lidar.amapvox.commons.LADParams;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightParams;
@@ -50,11 +49,11 @@ public class VoxelAnalysisTest {
         voxAnalysis.createVoxelSpace();
         
         try {
-            voxAnalysis.processOneShot(new Shot(2, new Point3d(0, 0, 5), new Vector3d(0, 0, -1), new double[]{3.6, 4.7}));
-            voxAnalysis.processOneShot(new Shot(1, new Point3d(0, 0, 5), new Vector3d(0, 0, -1), new double[]{10}));
+            voxAnalysis.processOneShot(new Shot(new Point3d(0, 0, 5), new Vector3d(0, 0, -1), new double[]{3.6, 4.7}));
+            voxAnalysis.processOneShot(new Shot(new Point3d(0, 0, 5), new Vector3d(0, 0, -1), new double[]{10}));
             
             voxAnalysis.computePADs();
-            voxAnalysis.write(VoxelAnalysisCfg.VoxelsFormat.VOXEL, new File("/home/julien/Documents/test_resolutions/2B_1m.vox"));
+            //voxAnalysis.write(VoxelAnalysisCfg.VoxelsFormat.VOXEL, new File("/home/julien/Documents/test_resolutions/2B_1m.vox"));
         
         } catch (IOException ex) {
             Logger.getLogger(VoxelAnalysisTest.class.getName()).log(Level.SEVERE, null, ex);

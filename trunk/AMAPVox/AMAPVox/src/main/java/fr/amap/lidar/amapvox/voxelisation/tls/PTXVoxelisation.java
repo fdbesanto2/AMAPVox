@@ -5,10 +5,9 @@
  */
 package fr.amap.lidar.amapvox.voxelisation.tls;
 
-import fr.amap.amapvox.io.tls.rxp.Shot;
-import fr.amap.amapvox.jleica.LPointShotExtractor;
-import fr.amap.amapvox.jleica.LShot;
-import fr.amap.amapvox.jleica.ptx.PTXScan;
+import fr.amap.lidar.format.jleica.LPointShotExtractor;
+import fr.amap.lidar.format.jleica.LShot;
+import fr.amap.lidar.format.jleica.ptx.PTXScan;
 import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.math.matrix.Mat3D;
 import fr.amap.commons.math.matrix.Mat4D;
@@ -16,7 +15,6 @@ import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.commons.math.vector.Vec4D;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
@@ -53,7 +51,7 @@ public class PTXVoxelisation extends TLSVoxelisation{
             
             Iterator<LShot> iterator = pTXShots.iterator();
 
-            Shot shot;
+            LShot shot;
             while(iterator.hasNext()){
                 
                 if (Thread.currentThread().isInterrupted()){
@@ -66,10 +64,8 @@ public class PTXVoxelisation extends TLSVoxelisation{
                     Vec4D locVector = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
 
                     Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
-
-                    shot.setOriginAndDirection(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z));
                                         
-                    voxelAnalysis.processOneShot(shot);
+                    voxelAnalysis.processOneShot(new fr.amap.lidar.amapvox.voxelisation.Shot(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z), shot.ranges));
                 }
 
             }

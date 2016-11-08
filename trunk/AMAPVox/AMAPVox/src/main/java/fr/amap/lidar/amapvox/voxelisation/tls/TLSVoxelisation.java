@@ -56,7 +56,7 @@ public abstract class TLSVoxelisation extends CallableTask{
             transfMatrix.mat[8],transfMatrix.mat[9],transfMatrix.mat[10]
         };
         
-        if(terrain != null){
+        if(terrain != null && cfg.getVoxelParameters().getDtmFilteringParams().isUseVOPMatrix()){
             terrain.setTransformationMatrix(vopMatrix);
         }
         

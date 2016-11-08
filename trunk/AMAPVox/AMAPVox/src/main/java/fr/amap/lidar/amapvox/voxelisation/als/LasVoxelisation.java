@@ -8,10 +8,9 @@ package fr.amap.lidar.amapvox.voxelisation.als;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.util.Process;
 import fr.amap.commons.util.ProcessingListener;
-import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.commons.raster.asc.AsciiGridHelper;
 import fr.amap.commons.raster.asc.Raster;
-import fr.amap.commons.util.MatrixUtility;
+import fr.amap.commons.math.util.MatrixUtility;
 import fr.amap.lidar.amapvox.voxelisation.SimpleShotFilter;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
 import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
@@ -19,16 +18,17 @@ import fr.amap.lidar.amapvox.voxelisation.postproc.NaNsCorrection;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import org.apache.log4j.Logger;
 import fr.amap.commons.util.Cancellable;
 import fr.amap.commons.util.ProcessingAdapter;
 import fr.amap.commons.util.io.file.FileManager;
 import fr.amap.lidar.amapvox.commons.Configuration;
-import fr.amap.lidar.format.shot.ShotReader;
+import fr.amap.lidar.amapvox.voxelisation.Shot;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 
 /**
  *
@@ -82,7 +82,6 @@ public class LasVoxelisation extends Process implements Cancellable{
             this.classifiedPointsToDiscard.add(2);
         }
         
-        cfg.setEchoFilter(new LasEchoFilter(cfg.getEchoFilters(), classifiedPointsToDiscard));
         cfg.setShotFilter(new SimpleShotFilter(cfg.getShotFilters()));
         
         Mat4D transfMatrix = MatrixUtility.convertMatrix4dToMat4D(cfg.getVopMatrix());
@@ -98,7 +97,11 @@ public class LasVoxelisation extends Process implements Cancellable{
 
                 try {
                     terrain = AsciiGridHelper.readFromAscFile(cfg.getVoxelParameters().getDtmFilteringParams().getDtmFile());
-                    terrain.setTransformationMatrix(transfMatrix);
+                    
+                    if(cfg.getVoxelParameters().getDtmFilteringParams().isUseVOPMatrix()){
+                        terrain.setTransformationMatrix(transfMatrix);
+                    }
+                    
                 } catch (Exception ex) {
                     throw ex;
                 }
@@ -152,14 +155,13 @@ public class LasVoxelisation extends Process implements Cancellable{
                     classifications[i] = Integer.valueOf(split[14+i]);
                 }
                 
-                Shot shot = new Shot(nbEchos, xOrigin, yOrigin, zOrigin, xDirection, yDirection, zDirection, ranges);
+                AlsShot shot = new AlsShot(new Point3d(xOrigin, yOrigin, zOrigin), new Vector3d(xDirection, yDirection, zDirection), ranges);
                 shot.classifications = classifications;
-                
-                shot.calculateAngle();
+                shot.setMask(getMask(shot));
                 
                 fireProgress("Voxelisation...", shotId, nbShots);
                 
-                voxelAnalysis.processOneShot(shot);
+                voxelAnalysis.processOneShot(new fr.amap.lidar.amapvox.voxelisation.Shot(shot.origin, shot.direction, shot.ranges));
                 
                 shotId++;
             }
@@ -204,7 +206,7 @@ public class LasVoxelisation extends Process implements Cancellable{
 
             PointsToShotIterator iterator = conversion.iterator();
 
-            Shot shot;
+            AlsShot shot;
 
             while((shot = iterator.next()) != null){
 
@@ -214,6 +216,7 @@ public class LasVoxelisation extends Process implements Cancellable{
 
                 fireProgress("Voxelisation...", iterator.getNbPointsProcessed(), iterator.getNbPoints());
 
+                shot.setMask(getMask(shot));
                 voxelAnalysis.processOneShot(shot);
             }
 
@@ -266,6 +269,26 @@ public class LasVoxelisation extends Process implements Cancellable{
         
         if(voxelAnalysis != null){
             voxelAnalysis.setCancelled(cancelled);
+        }
+    }
+    
+    private boolean[] getMask(AlsShot shot){
+        
+        boolean[] mask = new boolean[shot.getEchoesNumber()];
+        
+        for(int i = 0 ; i < mask.length ; i++){
+            mask[i] = doFiltering(shot, i);
+        }
+        
+        return mask;
+    }
+    
+    private boolean doFiltering(AlsShot shot, int echoID) {
+        
+        if(shot.classifications != null && !classifiedPointsToDiscard.contains(shot.classifications[echoID])/*shot.classifications[echoID] != 2*/){
+            return true;
+        }else{
+            return false;
         }
     }
     

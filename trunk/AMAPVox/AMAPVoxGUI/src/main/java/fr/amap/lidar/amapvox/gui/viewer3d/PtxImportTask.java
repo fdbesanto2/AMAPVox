@@ -5,17 +5,18 @@
  */
 package fr.amap.lidar.amapvox.gui.viewer3d;
 
-import fr.amap.amapvox.jleica.LDoublePoint;
-import fr.amap.amapvox.jleica.LFloatPoint;
-import fr.amap.amapvox.jleica.LPoint;
-import fr.amap.amapvox.jleica.ptg.PTGHeader;
-import fr.amap.amapvox.jleica.ptg.PTGReader;
-import fr.amap.amapvox.jleica.ptg.PTGScan;
-import fr.amap.amapvox.jleica.ptx.PTXHeader;
-import fr.amap.amapvox.jleica.ptx.PTXScan;
+import fr.amap.lidar.format.jleica.LDoublePoint;
+import fr.amap.lidar.format.jleica.LFloatPoint;
+import fr.amap.lidar.format.jleica.LPoint;
+import fr.amap.lidar.format.jleica.ptg.PTGHeader;
+import fr.amap.lidar.format.jleica.ptg.PTGReader;
+import fr.amap.lidar.format.jleica.ptg.PTGScan;
+import fr.amap.lidar.format.jleica.ptx.PTXHeader;
+import fr.amap.lidar.format.jleica.ptx.PTXScan;
 import fr.amap.commons.math.matrix.Mat4D;
+import fr.amap.commons.math.util.MatrixUtility;
 import fr.amap.commons.math.vector.Vec4D;
-import fr.amap.commons.util.LidarScan;
+import fr.amap.lidar.amapvox.commons.LidarScan;
 import fr.amap.lidar.amapvox.gui.AttributsImporterFrameController;
 import static fr.amap.lidar.amapvox.gui.viewer3d.SceneObjectImportTask.LOGGER;
 import fr.amap.lidar.amapvox.voxelisation.configuration.PTXLidarScan;
@@ -105,7 +106,7 @@ public class PtxImportTask extends SceneObjectImportTask{
             PTXScan ptxScan = scan.getScan();
             PTXHeader ptxHeader = ptxScan.getHeader();
             
-            Mat4D transfMatrix = ptxHeader.getTransfMatrix();
+            Mat4D transfMatrix = MatrixUtility.convertMatrix4dToMat4D(ptxHeader.getTransfMatrix());
             
             Iterator<LPoint> iterator = ptxScan.iterator();
             

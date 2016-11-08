@@ -10,7 +10,7 @@ import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.point.Point2F;
 import fr.amap.commons.raster.asc.AsciiGridHelper;
 import fr.amap.commons.raster.asc.Raster;
-import fr.amap.commons.util.MatrixUtility;
+import fr.amap.commons.math.util.MatrixUtility;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.gui.AsciiGridFileExtractorController;
 import fr.amap.lidar.amapvox.gui.SceneObjectWrapper;

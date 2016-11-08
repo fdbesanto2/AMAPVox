@@ -5,8 +5,6 @@
  */
 package fr.amap.lidar.amapvox.voxelisation;
 
-import fr.amap.amapvox.io.tls.rxp.Shot;
-
 /**
  *
  * @author calcul

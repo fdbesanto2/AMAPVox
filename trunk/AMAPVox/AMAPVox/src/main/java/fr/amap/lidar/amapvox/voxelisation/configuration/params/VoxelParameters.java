@@ -5,7 +5,7 @@
  */
 package fr.amap.lidar.amapvox.voxelisation.configuration.params;
 
-import fr.amap.commons.util.vegetation.LADParams;
+import fr.amap.lidar.amapvox.commons.LADParams;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;

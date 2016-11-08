@@ -8,7 +8,7 @@ package fr.amap.lidar.amapvox.gui.task;
 import fr.amap.amapvox.io.tls.rsp.RxpScan;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.raster.asc.Raster;
-import fr.amap.commons.util.MatrixUtility;
+import fr.amap.commons.math.util.MatrixUtility;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.util.Util;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;

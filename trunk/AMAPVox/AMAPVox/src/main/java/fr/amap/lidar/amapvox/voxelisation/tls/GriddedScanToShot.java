@@ -5,11 +5,11 @@
  */
 package fr.amap.lidar.amapvox.voxelisation.tls;
 
-import fr.amap.amapvox.io.tls.rxp.Shot;
-import fr.amap.amapvox.jleica.GriddedPointScan;
-import fr.amap.amapvox.jleica.LPointShotExtractor;
-import fr.amap.amapvox.jleica.LShot;
+import fr.amap.lidar.format.jleica.GriddedPointScan;
+import fr.amap.lidar.format.jleica.LPointShotExtractor;
+import fr.amap.lidar.format.jleica.LShot;
 import fr.amap.commons.math.matrix.Mat4D;
+import fr.amap.lidar.amapvox.voxelisation.Shot;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,7 +47,8 @@ public class GriddedScanToShot extends ScanToShot{
 
                 @Override
                 public Shot next() {
-                    return iterator.next();
+                    LShot lShot = iterator.next();
+                    return new Shot(lShot.origin, lShot.direction, lShot.ranges);
                 }
             };
 

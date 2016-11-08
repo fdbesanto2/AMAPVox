@@ -6,8 +6,8 @@
 package fr.amap.lidar.amapvox.voxelisation.tls;
 
 import fr.amap.commons.util.Filter;
-import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.lidar.amapvox.voxelisation.EchoFilter;
+import fr.amap.lidar.amapvox.voxelisation.Shot;
 import java.util.List;
 
 /**
@@ -26,7 +26,7 @@ public class RxpEchoFilter implements EchoFilter{
     @Override
     public boolean doFiltering(Shot shot, int echoID) {
         
-        if(echoFilters != null){
+        /*if(echoFilters != null){
             
             for(Filter filter : echoFilters){
                 
@@ -51,10 +51,8 @@ public class RxpEchoFilter implements EchoFilter{
                 }
             }
             
-        }
+        }*/
         
         return true;
     }
-
-    
 }

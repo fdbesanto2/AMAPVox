@@ -16,10 +16,12 @@ public class DTMFilteringParams {
     private boolean activate;
     private File dtmFile;
     private float minDTMDistance = 1;
+    private boolean useVOPMatrix;
 
     public DTMFilteringParams() {
         this.activate = false;
         this.minDTMDistance = 1;
+        useVOPMatrix = true;
     }
     
     public DTMFilteringParams(File dtmFile, float minDTMDistance) {
@@ -27,6 +29,7 @@ public class DTMFilteringParams {
         this.activate = true;
         this.dtmFile = dtmFile;
         this.minDTMDistance = minDTMDistance;
+        useVOPMatrix = true;
     }
 
     public void setActivate(boolean activate) {
@@ -51,6 +54,14 @@ public class DTMFilteringParams {
 
     public void setMinDTMDistance(float minDTMDistance) {
         this.minDTMDistance = minDTMDistance;
+    }
+
+    public boolean isUseVOPMatrix() {
+        return useVOPMatrix;
+    }
+
+    public void setUseVOPMatrix(boolean useVOPMatrix) {
+        this.useVOPMatrix = useVOPMatrix;
     }
     
 }

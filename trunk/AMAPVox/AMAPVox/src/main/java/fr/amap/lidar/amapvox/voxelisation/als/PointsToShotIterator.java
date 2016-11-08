@@ -6,9 +6,9 @@
 package fr.amap.lidar.amapvox.voxelisation.als;
 
 import fr.amap.amapvox.als.LasPoint;
-import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.vector.Vec4D;
+import fr.amap.lidar.amapvox.voxelisation.Shot;
 import java.util.ArrayList;
 import java.util.List;
 import javax.vecmath.Point3d;
@@ -18,13 +18,13 @@ import javax.vecmath.Vector3d;
  *
  * @author calcul
  */
-public class PointsToShotIterator implements IteratorWithException<Shot>{
+public class PointsToShotIterator implements IteratorWithException<fr.amap.lidar.amapvox.voxelisation.als.AlsShot>{
 
     private boolean isNewShot = false;
     private boolean wasReturned = false;
     private double oldTime = -1;
     private int oldN = -1;
-    private Shot shot = null;
+    private AlsShot shot = null;
     private int count = 0;
     private int currentLasPointIndex = 0;
     private int index = 0;
@@ -50,7 +50,7 @@ public class PointsToShotIterator implements IteratorWithException<Shot>{
     }
 
     @Override
-    public Shot next() throws Exception {
+    public AlsShot next() throws Exception {
         //parcours les points las jusqu'à retrouver un tir avec tous ses échos
         for (int i=currentLasPointIndex;i<lasPointList.size(); i++) {
 
@@ -141,7 +141,8 @@ public class PointsToShotIterator implements IteratorWithException<Shot>{
                     isNewShot = false;
                     wasReturned = true;
 
-                    if(shot.nbEchos != 0){ //handle the case (file bug) when an echo has a nbEchos equals to 0
+                    if(shot.getEchoesNumber() != 0){ //handle the case (file bug) when an echo has a nbEchos equals to 0
+                        
                         return shot;
                     }
                 //}
@@ -161,15 +162,13 @@ public class PointsToShotIterator implements IteratorWithException<Shot>{
                 //le point est associé à un nouveau tir donc on crée ce tir
                 if ((!isNewShot && time != oldTime) || currentEchoFound == currentNbEchos) {
 
-                    shot= new Shot(mix.lasPoint.n, new Point3d(mix.xloc_s, mix.yloc_s, mix.zloc_s), 
+                    shot = new AlsShot(new Point3d(mix.xloc_s, mix.yloc_s, mix.zloc_s), 
                                                 new Vector3d(mix.x_u, mix.y_u, mix.z_u), 
                                                 new double[mix.lasPoint.n], new int[mix.lasPoint.n], new float[mix.lasPoint.n]);
                     shot.time = time;
                     
                     currentNbEchos = mix.lasPoint.n;
                     currentEchoFound = 0;
-
-                    shot.calculateAngle();
 
                     isNewShot = true;
                 }

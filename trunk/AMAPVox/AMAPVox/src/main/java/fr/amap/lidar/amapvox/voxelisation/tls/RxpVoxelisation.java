@@ -77,10 +77,7 @@ public class RxpVoxelisation extends TLSVoxelisation{
                         Vec4D locVector = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
 
                         Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
-
-                        shot.setOriginAndDirection(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z));
-
-                        voxelAnalysis.processOneShot(shot);
+                        voxelAnalysis.processOneShot(new fr.amap.lidar.amapvox.voxelisation.Shot(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z), shot.ranges));
                     }
                 }
                 
@@ -101,9 +98,7 @@ public class RxpVoxelisation extends TLSVoxelisation{
 
                         Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
 
-                        shot.setOriginAndDirection(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z));
-
-                        voxelAnalysis.processOneShot(shot);
+                        voxelAnalysis.processOneShot(new fr.amap.lidar.amapvox.voxelisation.Shot(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z), shot.ranges));
                     }
 
                 }

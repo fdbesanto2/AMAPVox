@@ -6,9 +6,9 @@
 package fr.amap.lidar.amapvox.voxelisation.tls;
 
 import fr.amap.amapvox.io.tls.rxp.Shot;
-import fr.amap.amapvox.jleica.LShot;
-import fr.amap.amapvox.jleica.ptg.PTGScan;
-import fr.amap.amapvox.jleica.LPointShotExtractor;
+import fr.amap.lidar.format.jleica.LShot;
+import fr.amap.lidar.format.jleica.ptg.PTGScan;
+import fr.amap.lidar.format.jleica.LPointShotExtractor;
 import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.math.matrix.Mat3D;
 import fr.amap.commons.math.matrix.Mat4D;
@@ -53,7 +53,7 @@ public class PTGVoxelisation extends TLSVoxelisation{
             
             Iterator<LShot> iterator = pTGShots.iterator();
 
-            Shot shot;
+            LShot shot;
             while(iterator.hasNext()){
                 
                 if (Thread.currentThread().isInterrupted()){
@@ -67,9 +67,7 @@ public class PTGVoxelisation extends TLSVoxelisation{
 
                     Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
 
-                    shot.setOriginAndDirection(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z));
-                                        
-                    voxelAnalysis.processOneShot(shot);
+                    voxelAnalysis.processOneShot(new fr.amap.lidar.amapvox.voxelisation.Shot(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z), shot.ranges));
                 }
 
             }

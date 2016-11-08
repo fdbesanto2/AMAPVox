@@ -7,16 +7,12 @@ package fr.amap.lidar.amapvox.voxelisation.als;
 
 import fr.amap.amapvox.als.LasHeader;
 import fr.amap.amapvox.als.LasPoint;
-import fr.amap.amapvox.als.las.Las;
 import fr.amap.amapvox.als.las.LasReader;
 import fr.amap.amapvox.als.las.PointDataRecordFormat;
-import fr.amap.amapvox.als.las.QLineExtrabytes;
 import fr.amap.amapvox.als.laz.LazExtraction;
 import fr.amap.commons.util.io.file.FileManager;
 import fr.amap.commons.math.matrix.Mat4D;
-import fr.amap.commons.math.vector.Vec4D;
 import fr.amap.commons.util.Process;
-import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.commons.util.io.file.CSVFile;
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,14 +21,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import fr.amap.commons.util.Cancellable;
+import fr.amap.lidar.amapvox.voxelisation.Shot;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.Comparator;
@@ -41,7 +34,7 @@ import java.util.Comparator;
  * This class merge trajectory file with point file (las, laz)
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-public class PointsToShot extends Process implements IterableWithException<Shot>, Cancellable{
+public class PointsToShot extends Process implements IterableWithException<AlsShot>, Cancellable{
     
     private final File inputFile;
     private final CSVFile trajectoryFile;
@@ -267,11 +260,11 @@ public class PointsToShot extends Process implements IterableWithException<Shot>
             
             PointsToShotIterator iterator = iterator();
             
-            Shot shot;
+            AlsShot shot;
             
             while((shot = iterator.next()) != null){
                 
-                String line = shot.origin.x+" "+shot.origin.y+" "+shot.origin.z+" "+shot.direction.x+" "+shot.direction.y+" "+shot.direction.z+" "+shot.nbEchos;
+                String line = shot.origin.x+" "+shot.origin.y+" "+shot.origin.z+" "+shot.direction.x+" "+shot.direction.y+" "+shot.direction.z+" "+shot.getEchoesNumber();
                 
                 for (int i = 0; i < shot.ranges.length; i++) {
                     line += " "+ shot.ranges[i];

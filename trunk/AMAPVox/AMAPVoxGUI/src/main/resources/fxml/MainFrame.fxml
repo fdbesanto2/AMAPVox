@@ -637,12 +637,17 @@
                                                                                           </HBox>
                                                                                        </children>
                                                                                     </VBox>
-                                                                                    <HBox alignment="CENTER_LEFT" layoutX="118.4000015258789" layoutY="96.0">
+                                                                                    <VBox layoutX="118.4000015258789" layoutY="96.0" spacing="10.0">
                                                                                        <children>
-                                                                                          <Label fx:id="labelDTMValue" disable="true" text="Offset (distance above ground)" />
-                                                                                          <TextField fx:id="textfieldDTMValue" disable="true" prefHeight="25.0" prefWidth="55.0" text="1" />
+                                                                                          <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                                                                             <children>
+                                                                                                <Label fx:id="labelDTMValue" disable="true" text="Offset (distance above ground)" />
+                                                                                                <TextField fx:id="textfieldDTMValue" disable="true" prefHeight="25.0" prefWidth="55.0" text="1" />
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                          <CheckBox fx:id="checkboxApplyVOPMatrix" disable="true" mnemonicParsing="false" selected="true" text="Apply VOP matrix" />
                                                                                        </children>
-                                                                                    </HBox>
+                                                                                    </VBox>
                                                                                  </children>
                                                                               </AnchorPane>
                                                                            </content>
