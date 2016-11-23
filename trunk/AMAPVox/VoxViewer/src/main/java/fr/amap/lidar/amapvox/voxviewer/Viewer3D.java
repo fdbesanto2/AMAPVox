@@ -15,7 +15,6 @@ import fr.amap.lidar.amapvox.voxviewer.renderer.JoglListener;
 import fr.amap.lidar.amapvox.voxviewer.renderer.MinimalKeyAdapter;
 import fr.amap.lidar.amapvox.voxviewer.renderer.MinimalMouseAdapter;
 import fr.amap.lidar.amapvox.voxviewer.renderer.RenderListener;
-import java.awt.image.BufferedImage;
 
 public class Viewer3D {
 
@@ -144,8 +143,11 @@ public class Viewer3D {
     }
     
     public void close(){
-        animator.stop();
-        renderFrame.destroy();
+        
+        if(renderFrame.isVisible()){
+            renderFrame.setVisible(false);
+            renderFrame.destroy();
+        }
     }
     
     public void setOnTop(){

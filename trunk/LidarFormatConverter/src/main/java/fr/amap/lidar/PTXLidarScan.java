@@ -5,8 +5,7 @@
  */
 package fr.amap.lidar;
 
-import fr.amap.commons.util.LidarScan;
-import fr.amap.amapvox.jleica.ptx.PTXScan;
+import fr.amap.lidar.format.jleica.ptx.PTXScan;
 import java.io.File;
 import javax.vecmath.Matrix4d;
 

@@ -4,7 +4,7 @@
 
     <groupId>fr.amap.lidar</groupId>
     <artifactId>LidarFormatConverter</artifactId>
-    <version>1.0</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
     <name>LidarFormatConverter</name>
@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>fr.amap.commons</groupId>
-            <artifactId>commons-util</artifactId>
+            <artifactId>commons-math</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>

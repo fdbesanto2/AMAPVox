@@ -1,4 +1,4 @@
 /**
- * Utility classes that not belong to other packages.
+ * Utility classes.
  */
 package fr.amap.commons.util;

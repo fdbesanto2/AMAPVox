@@ -1,11 +1,23 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2016 UMR AMAP (botAnique et Modélisation de l'Architecture des Plantes et des végétations.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301  USA
  */
 package fr.amap.amapvox.io.tls.rsp;
 
-import fr.amap.commons.math.matrix.Mat4D;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.apache.commons.io.FilenameUtils;
+import javax.vecmath.Matrix4d;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -29,14 +41,15 @@ public class Rsp {
     
     private String projectName;
     private ArrayList<Scans> rxpList;
-    private Mat4D popMatrix;
+    private Matrix4d popMatrix;
     
     private Document document;
     private SAXBuilder sxb;
     private Element root;
     
     public Rsp(){
-        popMatrix = Mat4D.identity();
+        popMatrix = new Matrix4d();
+        popMatrix.setIdentity();
     }
     
     public RxpScan getRxpScanByName(String name){
@@ -53,7 +66,7 @@ public class Rsp {
         return null;
     }
     
-    public Mat4D getPopMatrix() {
+    public Matrix4d getPopMatrix() {
         return popMatrix;
     }
 
@@ -65,12 +78,12 @@ public class Rsp {
         return rxpList;
     }
     
-    private Mat4D extractMat4D(String matString){
+    private Matrix4d extractMat4D(String matString){
         
         String[] matSplit = matString.split(" ");
-        Mat4D matrix = new Mat4D();
+        Matrix4d matrix = new Matrix4d();
         
-        matrix.mat = new double[16];
+        double[] mat = new double[16];
                 
         int index = 0;
         for(int i=0;i<matSplit.length;i++){
@@ -78,10 +91,12 @@ public class Rsp {
             matSplit[i] = matSplit[i].trim();
             if(!matSplit[i].isEmpty() && index < 16){
                 Double matxyx = Double.valueOf(matSplit[i]);
-                matrix.mat[index] = matxyx;
+                mat[index] = matxyx;
                 index++;
             }
         }
+        
+        matrix.set(mat);
         
         return matrix;
     }
@@ -125,7 +140,7 @@ public class Rsp {
                         List<Element> scans = singlescans.getChildren("scan");
 
                         Element sop = child.getChild("sop");
-                        Mat4D sopMatrix = extractMat4D(sop.getChildText("matrix"));
+                        Matrix4d sopMatrix = extractMat4D(sop.getChildText("matrix"));
                         rxp.setSopMatrix(sopMatrix);
 
                         int compteur = 0;
@@ -136,7 +151,7 @@ public class Rsp {
                             scan.setFileName(sc.getChildText("file"));
                             String rspFilePathOnly = rspFile.getAbsolutePath().substring(0,rspFile.getAbsolutePath().lastIndexOf(File.separator));
 
-                            scan.setAbsolutePath(FilenameUtils.separatorsToSystem(rspFilePathOnly+"\\"+folderScanPositions+"\\"+rxp.getFold()+"\\"+singlescansFold+"\\")+scan.getFileName());
+                            scan.setAbsolutePath(rspFilePathOnly+File.separator+folderScanPositions+File.separator+rxp.getFold()+File.separator+singlescansFold+File.separator+scan.getFileName());
                             scanList.put(scanCount, scan);
 
                             if(scan.getName().contains(".mon")){

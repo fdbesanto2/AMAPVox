@@ -14,6 +14,7 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.util.FPSAnimator;
 import fr.amap.commons.math.vector.Vec3F;
+import fr.amap.commons.math.vector.Vec3I;
 import fr.amap.commons.util.ByteConverter;
 import fr.amap.lidar.amapvox.voxviewer.event.EventManager;
 import fr.amap.lidar.amapvox.voxviewer.loading.texture.Texture;
@@ -74,6 +75,10 @@ public class JoglListener implements GLEventListener {
 
     public void setWorldColor(Vec3F worldColor) {
         this.worldColor = worldColor;
+    }
+    
+    public void setWorldColor(Vec3I worldColor) {
+        this.worldColor = new Vec3F(worldColor.x/255.0f, worldColor.y/255.0f, worldColor.z/255.0f);
     }
 
     public List<EventManager> getEventListeners() {

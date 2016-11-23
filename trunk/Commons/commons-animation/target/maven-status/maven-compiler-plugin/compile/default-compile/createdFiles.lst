@@ -1,0 +1,14 @@
+fr/amap/commons/animation/Timeline.class
+fr/amap/commons/animation/Property.class
+fr/amap/commons/animation/TimelineAdapter.class
+fr/amap/commons/animation/Timeline$1.class
+fr/amap/commons/animation/Animation.class
+fr/amap/commons/animation/Event.class
+fr/amap/commons/animation/FrameAnimation.class
+fr/amap/commons/animation/Interpolable.class
+fr/amap/commons/animation/KeyValue.class
+fr/amap/commons/animation/Point3dProperty.class
+fr/amap/commons/animation/KeyValuePosition.class
+fr/amap/commons/animation/TimelineListener.class
+fr/amap/commons/animation/DoubleProperty.class
+fr/amap/commons/animation/KeyFrame.class

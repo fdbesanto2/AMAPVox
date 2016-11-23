@@ -207,6 +207,7 @@ public class FXNewtOverlap {
                         System.out.println("stage unfocused");
                     }
                     if(newValue.booleanValue() != oldValue.booleanValue()){
+                        cl.changed(null, null, null);
                         gLWindow.setAlwaysOnTop(true);
                         gLWindow.setAlwaysOnTop(false);
                     }
@@ -328,9 +329,12 @@ public class FXNewtOverlap {
             @Override
             public void windowDestroyNotify(WindowEvent e){
                 
+                viewer3D.close();
+                
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
+                        
                         if(stage.isShowing()){
                             stage.close();
                         }

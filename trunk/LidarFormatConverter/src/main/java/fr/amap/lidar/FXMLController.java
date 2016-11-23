@@ -1,31 +1,22 @@
 package fr.amap.lidar;
 
 import fr.amap.amapvox.io.tls.rsp.Rsp;
-import fr.amap.amapvox.jleica.ptg.PTGReader;
 import fr.amap.commons.math.matrix.Mat4D;
-import fr.amap.commons.util.LidarScan;
-import fr.amap.commons.util.MatrixUtility;
+import fr.amap.commons.math.util.MatrixUtility;
 import fr.amap.commons.util.io.file.FileManager;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
@@ -83,7 +74,7 @@ public class FXMLController implements Initializable {
                 new FileChooser.ExtensionFilter("All files", "*"),
                 new FileChooser.ExtensionFilter("Riegl Riscan project", "*.rsp"),
                 new FileChooser.ExtensionFilter("Riegl scan", "*.rxp"),
-                new FileChooser.ExtensionFilter("Leica scan", /*"*.ptx",*/ "*.ptg"));
+                new FileChooser.ExtensionFilter("Leica/Faro scan", "*.ptx", "*.ptg"));
 
         outputDirectoryChooser = new DirectoryChooser();
 
@@ -133,7 +124,7 @@ public class FXMLController implements Initializable {
 
                                 Mat4D popMatrix;
                                 if (checkboxImportPOPMatrix.isSelected()) {
-                                    popMatrix = rsp.getPopMatrix();
+                                    popMatrix = MatrixUtility.convertMatrix4dToMat4D(rsp.getPopMatrix());
                                     System.out.println("POP matrix imported : " + popMatrix.toString());
                                 } else {
                                     popMatrix = Mat4D.identity();
@@ -263,7 +254,7 @@ public class FXMLController implements Initializable {
 
                                 RxpScanConversion rxpConverter = new RxpScanConversion();
                                 PtgScanConversion ptgConverter = new PtgScanConversion();
-                                //PtxScanConversion ptxConverter = new PtxScanConversion();
+                                PtxScanConversion ptxConverter = new PtxScanConversion();
                                 
                                 System.out.println("Starting conversion");
 
@@ -283,7 +274,7 @@ public class FXMLController implements Initializable {
                                                     break;
                                                 case ".PTX":
                                                 case ".ptx":
-                                                    //ptxConverter.toTxt(scan, directory, exportRGB, exportIntensity);
+                                                    ptxConverter.toTxt(scan, directory, exportRGB, exportIntensity);
                                                     break;
                                                 case ".PTG":
                                                 case ".ptg":

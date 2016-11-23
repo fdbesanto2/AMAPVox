@@ -164,6 +164,13 @@ public class BoundingBox3d implements Serializable {
 		getMax().add(new Vector3d(x, y, z));
 		getMin().add(new Vector3d(x, y, z));
 	}
+        
+        public boolean contains(Point3d point3d){
+            
+            return (point3d.x >= min.x && point3d.x <= max.x && 
+                    point3d.y >= min.y && point3d.y <= max.y && 
+                    point3d.z >= min.z && point3d.z <= max.z );
+        }
 
 	/**
 	 * method that show in the console the minimum and the maximum bounding box

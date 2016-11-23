@@ -1,0 +1,12 @@
+/home/julien/Documents/AMAPVox/trunk/AMAPVox/commons/src/main/java/fr/amap/lidar/amapvox/commons/Voxel.java
+/home/julien/Documents/AMAPVox/trunk/AMAPVox/commons/src/main/java/fr/amap/lidar/amapvox/commons/ExtendedALSVoxel.java
+/home/julien/Documents/AMAPVox/trunk/AMAPVox/commons/src/main/java/fr/amap/lidar/amapvox/commons/VoxTool.java
+/home/julien/Documents/AMAPVox/trunk/AMAPVox/commons/src/main/java/fr/amap/lidar/amapvox/commons/VoxelSpaceInfos.java
+/home/julien/Documents/AMAPVox/trunk/AMAPVox/commons/src/main/java/fr/amap/lidar/amapvox/commons/VoxelSpace.java
+/home/julien/Documents/AMAPVox/trunk/AMAPVox/commons/src/main/java/fr/amap/lidar/amapvox/commons/LADParams.java
+/home/julien/Documents/AMAPVox/trunk/AMAPVox/commons/src/main/java/fr/amap/lidar/amapvox/commons/DirectionalTransmittance.java
+/home/julien/Documents/AMAPVox/trunk/AMAPVox/commons/src/main/java/fr/amap/lidar/amapvox/commons/Configuration.java
+/home/julien/Documents/AMAPVox/trunk/AMAPVox/commons/src/main/java/fr/amap/lidar/amapvox/commons/LeafAngleDistribution.java
+/home/julien/Documents/AMAPVox/trunk/AMAPVox/commons/src/main/java/fr/amap/lidar/amapvox/commons/ALSVoxel.java
+/home/julien/Documents/AMAPVox/trunk/AMAPVox/commons/src/main/java/fr/amap/lidar/amapvox/commons/RawVoxel.java
+/home/julien/Documents/AMAPVox/trunk/AMAPVox/commons/src/main/java/fr/amap/lidar/amapvox/commons/LidarScan.java

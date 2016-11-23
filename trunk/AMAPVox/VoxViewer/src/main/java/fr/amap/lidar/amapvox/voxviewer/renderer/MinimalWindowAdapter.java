@@ -33,6 +33,8 @@ public class MinimalWindowAdapter extends WindowAdapter{
     @Override
     public void windowDestroyed(WindowEvent we) {
         
-        animator.stop();
+        if(animator.isAnimating()){
+            animator.stop();
+        }
     }
 }

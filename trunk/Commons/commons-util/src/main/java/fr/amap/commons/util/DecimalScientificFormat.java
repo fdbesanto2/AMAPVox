@@ -14,12 +14,12 @@ import java.text.FieldPosition;
  */
     
 public class DecimalScientificFormat extends DecimalFormat {
-    private static final DecimalFormat df = new DecimalFormat("#0.00##");
-    private static final DecimalFormat sf = new DecimalFormat("0.###E0");
+    private static final DecimalFormat DF = new DecimalFormat("#0.00##");
+    private static final DecimalFormat SF = new DecimalFormat("0.###E0");
 
     @Override
     public StringBuffer format(double number, StringBuffer result, FieldPosition fieldPosition) {
-        String decimalFormat = df.format(number);
-        return (0.0001 != number && df.format(0.0001).equals(decimalFormat)) ? sf.format(number, result, fieldPosition) : result.append(decimalFormat);
+        String decimalFormat = DF.format(number);
+        return (0.0001 != number && DF.format(0.0001).equals(decimalFormat)) ? SF.format(number, result, fieldPosition) : result.append(decimalFormat);
     }
 }

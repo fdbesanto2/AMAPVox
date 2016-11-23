@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="338.0" prefWidth="504.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.lidar.amapvox.gui.export.DartExporterFrameController">
+   <children>
+      <CheckBox fx:id="checkboxGenerateTrianglesFile" layoutX="20.0" layoutY="96.0" mnemonicParsing="false" text="Generate triangle file (triangles.txt)" AnchorPane.leftAnchor="20.0" />
+      <AnchorPane fx:id="anchorpaneTrianglesGeneration" disable="true" layoutX="20.0" layoutY="134.0" prefHeight="160.0" prefWidth="458.0">
+         <children>
+            <TextField fx:id="textfieldTrianglesFilePath" layoutX="0.0380859375" layoutY="15.0" prefHeight="25.0" prefWidth="264.0" AnchorPane.leftAnchor="20.0" />
+            <TextField fx:id="textfieldDTMFilePath" layoutX="0.0380859375" layoutY="74.0" prefHeight="25.0" prefWidth="264.0" AnchorPane.leftAnchor="20.0" />
+            <Label layoutX="0.0380859375" layoutY="59.0" text="DTM file path" AnchorPane.leftAnchor="20.0" />
+            <Label layoutX="0.0380859375" text="Triangles file path" AnchorPane.leftAnchor="20.0" />
+            <Button fx:id="buttonOpenDTMFile" layoutX="287.0" layoutY="74.0" mnemonicParsing="false" onAction="#onActionButtonOpenDTMFile" text="Open" AnchorPane.leftAnchor="287.0" />
+            <Button fx:id="buttonOpenTriangleFile" layoutX="287.0" layoutY="15.0" mnemonicParsing="false" onAction="#onActionButtonOpenTriangleFile" text="Open" AnchorPane.leftAnchor="287.0" />
+            <Label alignment="BOTTOM_CENTER" layoutX="340.0" layoutY="120.0" prefHeight="18.0" prefWidth="16.0" text="or" AnchorPane.leftAnchor="335.0" AnchorPane.topAnchor="117.0" />
+            <Button fx:id="buttonEnterReferencePointsVop" disable="true" layoutX="162.0" layoutY="118.0" mnemonicParsing="false" onAction="#onActionButtonEnterReferencePointsVop" prefHeight="22.0" prefWidth="164.0" text="Enter reference points" AnchorPane.leftAnchor="160.0" AnchorPane.topAnchor="117.0" />
+            <CheckBox fx:id="checkboxUseVopMatrix" layoutX="31.0" layoutY="117.0" mnemonicParsing="false" onAction="#onActionCheckboxUseVopMatrix" prefHeight="24.0" prefWidth="126.0" text="Use VOP matrix" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="117.0">
+               <tooltip>
+                  <Tooltip text="Voxel Orientation and Position matrix" />
+               </tooltip>
+            </CheckBox>
+            <Button fx:id="buttonOpenVopMatrixFile" disable="true" layoutX="365.0" layoutY="118.0" mnemonicParsing="false" onAction="#onActionButtonOpenVopMatrixFile" text="Open file" AnchorPane.leftAnchor="360.0" AnchorPane.topAnchor="117.0">
+               <tooltip>
+                  <Tooltip text="Matrix file allowed" />
+               </tooltip>
+            </Button>
+         </children>
+      </AnchorPane>
+      <Button fx:id="buttonExportMaket" layoutX="398.0" layoutY="299.0" mnemonicParsing="false" onAction="#onActionButtonExportMaket" text="Export" />
+      <TextField fx:id="textfieldMaketFilePath" layoutX="20.0" layoutY="50.0" prefHeight="25.0" prefWidth="264.0" AnchorPane.leftAnchor="20.0" />
+      <Button fx:id="buttonOpenMaketFile" layoutX="286.0" layoutY="50.0" mnemonicParsing="false" onAction="#onActionButtonOpenMaketFile" text="Open" AnchorPane.leftAnchor="286.0" />
+      <Label layoutX="20.0" layoutY="35.0" text="Maket file path (maket.txt)" AnchorPane.leftAnchor="20.0" />
+   </children>
+</AnchorPane>

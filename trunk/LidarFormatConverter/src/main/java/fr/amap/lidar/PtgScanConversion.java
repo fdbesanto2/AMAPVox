@@ -5,14 +5,14 @@
  */
 package fr.amap.lidar;
 
-import fr.amap.amapvox.jleica.LPointShotExtractor;
-import fr.amap.amapvox.jleica.LShot;
-import fr.amap.amapvox.jleica.ptg.PTGScan;
 import fr.amap.commons.math.matrix.Mat3D;
 import fr.amap.commons.math.matrix.Mat4D;
+import fr.amap.commons.math.util.SphericalCoordinates;
 import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.commons.math.vector.Vec4D;
-import fr.amap.commons.util.SphericalCoordinates;
+import fr.amap.lidar.format.jleica.LPointShotExtractor;
+import fr.amap.lidar.format.jleica.LShot;
+import fr.amap.lidar.format.jleica.ptg.PTGScan;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -90,16 +90,16 @@ public class PtgScanConversion {
                 Vec4D origin = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
                 Vec3D direction = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
                 
-                for(int i=0;i<shot.nbEchos;i++){
+                for(int i=0;i<shot.ranges.length;i++){
                     
                     double x = origin.x + direction.x * shot.ranges[i];
                     double y = origin.y + direction.y * shot.ranges[i];
                     double z = origin.z + direction.z * shot.ranges[i];
                     
                     if(exportIntensity){
-                        writer.write(x+" "+y+" "+z+" "+(i+1)+" "+shot.nbEchos+" "+shot.point.intensity+"\n");
+                        writer.write(x+" "+y+" "+z+" "+(i+1)+" "+shot.ranges.length+" "+shot.point.intensity+"\n");
                     }else{
-                        writer.write(x+" "+y+" "+z+" "+(i+1)+" "+shot.nbEchos+"\n");
+                        writer.write(x+" "+y+" "+z+" "+(i+1)+" "+shot.ranges.length+"\n");
                     }
                     
                 }
@@ -190,7 +190,7 @@ public class PtgScanConversion {
             otherSymbols.setGroupingSeparator('.'); 
             DecimalFormat strictFormat = new DecimalFormat("###.##", otherSymbols);
             
-            String header = "shotID x y z directionX directionY directionZ distance nbEchos rangEcho";
+            String header = "directionX directionY directionZ x y z empty";
             
             if(exportIntensity){
                 header += " intensity";
@@ -224,28 +224,40 @@ public class PtgScanConversion {
                 SphericalCoordinates sc = new SphericalCoordinates();
                 sc.toSpherical(new Vector3d(direction.x, direction.y, direction.z));
                 
-                for(int i=0;i<shot.nbEchos;i++){
-                    
-                    double x = origin.x + direction.x * shot.ranges[i];
-                    double y = origin.y + direction.y * shot.ranges[i];
-                    double z = origin.z + direction.z * shot.ranges[i];
-                    
-                    String echo = shotID + " " + x + " " + y + " " + z + " " + direction.x + " " + direction.y+ " " + direction.z + " " + shot.ranges[i]+" "+shot.nbEchos+" "+i;
-                    
-                    if(exportIntensity){
-                        echo += " " + strictFormat.format(shot.point.intensity);
-                    }
-                    
-                    if(exportRGB){
-                        echo += " " + strictFormat.format(shot.point.red);
-                        echo += " " + strictFormat.format(shot.point.green);
-                        echo += " " + strictFormat.format(shot.point.blue);
-                    }
-                    
-                    echo += "\n";
-                    
-                    writer.write(echo);
+                short empty = 1;
+                
+                if(shot.ranges.length > 0){
+                    empty = 0;
                 }
+                
+                double x = origin.x + direction.x * 100;
+                double y = origin.y + direction.y * 100;
+                double z = origin.z + direction.z * 100;
+                    
+                writer.write(direction.x+" "+direction.y+" "+direction.z+" "+x+" "+y+" "+z+" "+empty+"\n");
+                
+//                for(int i=0;i<shot.ranges.length;i++){
+//                    
+//                    double x = origin.x + direction.x * shot.ranges[i];
+//                    double y = origin.y + direction.y * shot.ranges[i];
+//                    double z = origin.z + direction.z * shot.ranges[i];
+//                    
+//                    String echo = shotID + " " + x + " " + y + " " + z + " " + direction.x + " " + direction.y+ " " + direction.z + " " + shot.ranges[i]+" "+shot.ranges.length+" "+i;
+//                    
+//                    if(exportIntensity){
+//                        echo += " " + strictFormat.format(shot.point.intensity);
+//                    }
+//                    
+//                    if(exportRGB){
+//                        echo += " " + strictFormat.format(shot.point.red);
+//                        echo += " " + strictFormat.format(shot.point.green);
+//                        echo += " " + strictFormat.format(shot.point.blue);
+//                    }
+//                    
+//                    echo += "\n";
+//                    
+//                    writer.write(echo);
+//                }
                 
                 shotID++;
             }

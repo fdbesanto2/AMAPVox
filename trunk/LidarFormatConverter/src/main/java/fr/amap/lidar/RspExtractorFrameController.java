@@ -5,7 +5,6 @@
  */
 package fr.amap.lidar;
 
-import fr.amap.commons.util.LidarScan;
 import fr.amap.amapvox.io.tls.rsp.Rsp;
 import java.net.URL;
 import java.util.ArrayList;

@@ -59619,3 +59619,419 @@ java.io.FileNotFoundException: /home/julien/Téléchargements/samples/cfg_new2.x
 2016-11-08 19:04:42 INFO  - Shots processed: 144511
 2016-11-08 19:04:42 INFO  - writing file: /home/julien/Téléchargements/samples/voxels_new.vox
 2016-11-08 19:04:48 INFO  - file written ( 5.0 s )
+2016-11-09 09:33:05 INFO  - Building transmittance functions table
+2016-11-09 09:33:05 INFO  - Transmittance functions table is built
+2016-11-09 09:33:05 INFO  - allocate!!!!!!!!
+2016-11-09 09:33:05 INFO  - Voxel space informations:
+			Corner Inf	:	(-24.55240817129379, -19.084862548392266, 9.31)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(46, 287, 60)
+			Toricity 	:	false
+
+2016-11-09 09:33:24 INFO  - Shots processed: 144511
+2016-11-09 09:33:24 INFO  - Maximum neighborhood range : 19
+2016-11-09 09:33:55 INFO  - Maximum neighborhood range : 20
+2016-11-09 09:33:55 INFO  - Maximum neighborhood range : 21
+2016-11-09 09:33:55 INFO  - Maximum neighborhood range : 22
+2016-11-09 09:33:57 INFO  - Maximum neighborhood range : 23
+2016-11-09 09:34:01 INFO  - Maximum neighborhood range : 24
+2016-11-09 09:34:05 INFO  - Maximum neighborhood range : 25
+2016-11-09 09:34:12 INFO  - Maximum neighborhood range : 26
+2016-11-09 09:34:17 INFO  - Maximum neighborhood range : 27
+2016-11-09 09:34:18 INFO  - Maximum neighborhood range : 28
+2016-11-09 09:34:21 INFO  - Maximum neighborhood range : 29
+2016-11-09 09:34:21 INFO  - Maximum neighborhood range : 30
+2016-11-09 09:34:22 INFO  - Maximum neighborhood range : 31
+2016-11-09 09:34:23 INFO  - Maximum neighborhood range : 32
+2016-11-09 09:34:23 INFO  - Maximum neighborhood range : 33
+2016-11-09 09:34:23 INFO  - Time : 59396 ms
+2016-11-09 09:34:23 INFO  - writing file: /home/julien/Téléchargements/samples/voxels_new.vox
+2016-11-09 09:34:30 INFO  - file written ( 6.0 s )
+2016-11-22 21:07:23 INFO  - Building transmittance functions table
+2016-11-22 21:07:23 INFO  - Transmittance functions table is built
+2016-11-22 21:07:23 INFO  - allocate!!!!!!!!
+2016-11-22 21:07:23 INFO  - Voxel space informations:
+			Corner Inf	:	(0.0, -19.084862548392266, 9.31)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(22, 287, 60)
+			Toricity 	:	false
+
+2016-11-22 21:07:30 INFO  - Shots processed: 144511
+2016-11-22 21:07:30 INFO  - writing file: /home/julien/Téléchargements/samples/voxels_new.vox
+2016-11-22 21:07:33 INFO  - file written ( 2.0 s )
+2016-11-22 21:09:34 INFO  - Building transmittance functions table
+2016-11-22 21:09:34 INFO  - Transmittance functions table is built
+2016-11-22 21:09:34 INFO  - ptx extraction is started
+2016-11-22 21:09:34 INFO  - allocate!!!!!!!!
+2016-11-22 21:09:34 INFO  - Voxel space informations:
+			Corner Inf	:	(0.0, -19.084862548392266, 9.31)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(22, 287, 60)
+			Toricity 	:	false
+
+2016-11-22 21:10:27 INFO  - Shots processed: 1000000
+2016-11-22 21:10:30 INFO  - Shots processed: 2000000
+2016-11-22 21:10:32 INFO  - Shots processed: 3000000
+2016-11-22 21:10:34 INFO  - Shots processed: 4000000
+2016-11-22 21:10:36 INFO  - Shots processed: 5000000
+2016-11-22 21:10:38 INFO  - Shots processed: 6000000
+2016-11-22 21:10:40 INFO  - Shots processed: 7000000
+2016-11-22 21:10:42 INFO  - Shots processed: 8000000
+2016-11-22 21:10:44 INFO  - Shots processed: 9000000
+2016-11-22 21:10:46 INFO  - Shots processed: 10000000
+2016-11-22 21:10:48 INFO  - Shots processed: 11000000
+2016-11-22 21:10:50 INFO  - Shots processed: 12000000
+2016-11-22 21:10:53 INFO  - Shots processed: 13000000
+2016-11-22 21:10:55 INFO  - Shots processed: 14000000
+2016-11-22 21:10:57 INFO  - Shots processed: 15000000
+2016-11-22 21:10:59 INFO  - Shots processed: 16000000
+2016-11-22 21:11:01 INFO  - Shots processed: 17000000
+2016-11-22 21:11:03 INFO  - Shots processed: 18000000
+2016-11-22 21:11:05 INFO  - Shots processed: 19000000
+2016-11-22 21:11:07 INFO  - Shots processed: 20000000
+2016-11-22 21:11:09 INFO  - Shots processed: 21000000
+2016-11-22 21:11:12 INFO  - Shots processed: 22000000
+2016-11-22 21:11:14 INFO  - Shots processed: 23000000
+2016-11-22 21:11:17 INFO  - Shots processed: 24000000
+2016-11-22 21:11:19 INFO  - Shots processed: 25000000
+2016-11-22 21:11:21 INFO  - Shots processed: 26000000
+2016-11-22 21:11:23 INFO  - Shots processed: 27000000
+2016-11-22 21:11:25 INFO  - Shots processed: 27729800
+2016-11-22 21:11:25 INFO  - writing file: /home/julien/Bureau/rond_point_faro_scan0.ptx-scan-0.vox
+2016-11-22 21:11:27 INFO  - file written ( 1.0 s )
+2016-11-22 21:11:27 INFO  - Merging in progress, file 1 : 1
+2016-11-22 21:11:27 INFO  - Compute angleMean
+2016-11-22 21:11:27 INFO  - Compute lMeanTotal
+2016-11-22 21:11:27 INFO  - Compute transmittance and PAD
+2016-11-22 21:11:27 INFO  - Building transmittance functions table
+2016-11-22 21:11:27 INFO  - Transmittance functions table is built
+2016-11-22 21:11:28 INFO  - writing output file: /home/julien/Bureau/merged.vox
+2016-11-22 21:11:28 INFO  - file written ( 0.0 s )
+2016-11-22 21:12:18 INFO  - Building transmittance functions table
+2016-11-22 21:12:18 INFO  - Transmittance functions table is built
+2016-11-22 21:12:18 INFO  - ptx extraction is started
+2016-11-22 21:12:18 INFO  - allocate!!!!!!!!
+2016-11-22 21:12:18 INFO  - Voxel space informations:
+			Corner Inf	:	(-0.5, -19.084862548392266, 9.31)
+			Corner Sup	:	(21.122678914049175, 267.6702998696128, 68.98)
+			Dimensions	:	(22, 287, 60)
+			Toricity 	:	false
+
+2016-11-22 21:13:14 INFO  - Shots processed: 1000000
+2016-11-22 21:13:17 INFO  - Shots processed: 2000000
+2016-11-22 21:13:20 INFO  - Shots processed: 3000000
+2016-11-22 21:13:23 INFO  - Shots processed: 4000000
+2016-11-22 21:13:27 INFO  - Shots processed: 5000000
+2016-11-22 21:13:30 INFO  - Shots processed: 6000000
+2016-11-22 21:13:33 INFO  - Shots processed: 7000000
+2016-11-22 21:13:35 INFO  - Shots processed: 8000000
+2016-11-22 21:13:38 INFO  - Shots processed: 9000000
+2016-11-22 21:13:41 INFO  - Shots processed: 10000000
+2016-11-22 21:13:44 INFO  - Shots processed: 11000000
+2016-11-22 21:13:48 INFO  - Shots processed: 12000000
+2016-11-22 21:13:51 INFO  - Shots processed: 13000000
+2016-11-22 21:13:55 INFO  - Shots processed: 14000000
+2016-11-22 21:13:58 INFO  - Shots processed: 15000000
+2016-11-22 21:14:01 INFO  - Shots processed: 16000000
+2016-11-22 21:14:04 INFO  - Shots processed: 17000000
+2016-11-22 21:14:07 INFO  - Shots processed: 18000000
+2016-11-22 21:14:09 INFO  - Shots processed: 19000000
+2016-11-22 21:14:12 INFO  - Shots processed: 20000000
+2016-11-22 21:14:15 INFO  - Shots processed: 21000000
+2016-11-22 21:14:18 INFO  - Shots processed: 22000000
+2016-11-22 21:14:21 INFO  - Shots processed: 23000000
+2016-11-22 21:14:24 INFO  - Shots processed: 24000000
+2016-11-22 21:14:27 INFO  - Shots processed: 25000000
+2016-11-22 21:14:30 INFO  - Shots processed: 26000000
+2016-11-22 21:14:33 INFO  - Shots processed: 27000000
+2016-11-22 21:14:34 INFO  - Shots processed: 27729800
+2016-11-22 21:14:35 INFO  - writing file: /home/julien/Bureau/rond_point_faro_scan0.ptx-scan-0.vox
+2016-11-22 21:14:36 INFO  - file written ( 1.0 s )
+2016-11-22 21:14:37 INFO  - Merging in progress, file 1 : 1
+2016-11-22 21:14:38 INFO  - Compute angleMean
+2016-11-22 21:14:38 INFO  - Compute lMeanTotal
+2016-11-22 21:14:38 INFO  - Compute transmittance and PAD
+2016-11-22 21:14:38 INFO  - Building transmittance functions table
+2016-11-22 21:14:38 INFO  - Transmittance functions table is built
+2016-11-22 21:14:38 INFO  - writing output file: /home/julien/Bureau/merged2.vox
+2016-11-22 21:14:39 INFO  - file written ( 1.0 s )
+2016-11-22 21:16:59 INFO  - Building transmittance functions table
+2016-11-22 21:16:59 INFO  - Transmittance functions table is built
+2016-11-22 21:16:59 INFO  - ptx extraction is started
+2016-11-22 21:16:59 INFO  - allocate!!!!!!!!
+2016-11-22 21:16:59 INFO  - Voxel space informations:
+			Corner Inf	:	(-5.0, -5.0, -5.0)
+			Corner Sup	:	(5.0, 5.0, 10.0)
+			Dimensions	:	(10, 10, 15)
+			Toricity 	:	false
+
+2016-11-22 21:18:02 INFO  - Shots processed: 1000000
+2016-11-22 21:18:06 INFO  - Shots processed: 2000000
+2016-11-22 21:18:11 INFO  - Shots processed: 3000000
+2016-11-22 21:18:16 INFO  - Shots processed: 4000000
+2016-11-22 21:18:21 INFO  - Shots processed: 5000000
+2016-11-22 21:18:25 INFO  - Shots processed: 6000000
+2016-11-22 21:18:29 INFO  - Shots processed: 7000000
+2016-11-22 21:18:34 INFO  - Shots processed: 8000000
+2016-11-22 21:18:39 INFO  - Shots processed: 9000000
+2016-11-22 21:18:44 INFO  - Shots processed: 10000000
+2016-11-22 21:18:49 INFO  - Shots processed: 11000000
+2016-11-22 21:18:54 INFO  - Shots processed: 12000000
+2016-11-22 21:18:59 INFO  - Shots processed: 13000000
+2016-11-22 21:19:03 INFO  - Shots processed: 14000000
+2016-11-22 21:19:08 INFO  - Shots processed: 15000000
+2016-11-22 21:19:13 INFO  - Shots processed: 16000000
+2016-11-22 21:19:18 INFO  - Shots processed: 17000000
+2016-11-22 21:19:23 INFO  - Shots processed: 18000000
+2016-11-22 21:19:28 INFO  - Shots processed: 19000000
+2016-11-22 21:19:33 INFO  - Shots processed: 20000000
+2016-11-22 21:19:37 INFO  - Shots processed: 21000000
+2016-11-22 21:19:41 INFO  - Shots processed: 22000000
+2016-11-22 21:19:45 INFO  - Shots processed: 23000000
+2016-11-22 21:19:50 INFO  - Shots processed: 24000000
+2016-11-22 21:19:55 INFO  - Shots processed: 25000000
+2016-11-22 21:20:00 INFO  - Shots processed: 26000000
+2016-11-22 21:20:04 INFO  - Shots processed: 27000000
+2016-11-22 21:20:07 INFO  - Shots processed: 27729800
+2016-11-22 21:20:07 INFO  - writing file: /home/julien/Bureau/rond_point_faro_scan0.ptx-scan-0.vox
+2016-11-22 21:20:07 INFO  - file written ( 0.0 s )
+2016-11-22 21:20:07 INFO  - Merging in progress, file 1 : 1
+2016-11-22 21:20:07 INFO  - Compute angleMean
+2016-11-22 21:20:07 INFO  - Compute lMeanTotal
+2016-11-22 21:20:07 INFO  - Compute transmittance and PAD
+2016-11-22 21:20:07 INFO  - Building transmittance functions table
+2016-11-22 21:20:07 INFO  - Transmittance functions table is built
+2016-11-22 21:20:07 INFO  - writing output file: /home/julien/Bureau/merged3.vox
+2016-11-22 21:20:07 INFO  - file written ( 0.0 s )
+2016-11-22 21:22:50 INFO  - Building transmittance functions table
+2016-11-22 21:22:50 INFO  - Transmittance functions table is built
+2016-11-22 21:22:50 INFO  - ptx extraction is started
+2016-11-22 21:22:50 INFO  - allocate!!!!!!!!
+2016-11-22 21:22:50 INFO  - Voxel space informations:
+			Corner Inf	:	(0.0, -5.0, -5.0)
+			Corner Sup	:	(5.0, 5.0, 10.0)
+			Dimensions	:	(5, 10, 15)
+			Toricity 	:	false
+
+2016-11-22 21:23:46 INFO  - Shots processed: 1000000
+2016-11-22 21:23:52 INFO  - Shots processed: 2000000
+2016-11-22 21:23:55 INFO  - Shots processed: 3000000
+2016-11-22 21:23:57 INFO  - Shots processed: 4000000
+2016-11-22 21:23:59 INFO  - Shots processed: 5000000
+2016-11-22 21:24:02 INFO  - Shots processed: 6000000
+2016-11-22 21:24:04 INFO  - Shots processed: 7000000
+2016-11-22 21:24:06 INFO  - Shots processed: 8000000
+2016-11-22 21:24:09 INFO  - Shots processed: 9000000
+2016-11-22 21:24:11 INFO  - Shots processed: 10000000
+2016-11-22 21:24:13 INFO  - Shots processed: 11000000
+2016-11-22 21:24:16 INFO  - Shots processed: 12000000
+2016-11-22 21:24:19 INFO  - Shots processed: 13000000
+2016-11-22 21:24:21 INFO  - Shots processed: 14000000
+2016-11-22 21:24:23 INFO  - Shots processed: 15000000
+2016-11-22 21:24:25 INFO  - Shots processed: 16000000
+2016-11-22 21:24:28 INFO  - Shots processed: 17000000
+2016-11-22 21:24:30 INFO  - Shots processed: 18000000
+2016-11-22 21:24:33 INFO  - Shots processed: 19000000
+2016-11-22 21:24:36 INFO  - Shots processed: 20000000
+2016-11-22 21:24:38 INFO  - Shots processed: 21000000
+2016-11-22 21:24:40 INFO  - Shots processed: 22000000
+2016-11-22 21:24:43 INFO  - Shots processed: 23000000
+2016-11-22 21:24:45 INFO  - Shots processed: 24000000
+2016-11-22 21:24:48 INFO  - Shots processed: 25000000
+2016-11-22 21:24:50 INFO  - Shots processed: 26000000
+2016-11-22 21:24:52 INFO  - Shots processed: 27000000
+2016-11-22 21:24:54 INFO  - Shots processed: 27729800
+2016-11-22 21:24:54 INFO  - writing file: /home/julien/Bureau/rond_point_faro_scan0.ptx-scan-0.vox
+2016-11-22 21:24:54 INFO  - file written ( 0.0 s )
+2016-11-22 21:24:54 INFO  - Merging in progress, file 1 : 1
+2016-11-22 21:24:54 INFO  - Compute angleMean
+2016-11-22 21:24:54 INFO  - Compute lMeanTotal
+2016-11-22 21:24:54 INFO  - Compute transmittance and PAD
+2016-11-22 21:24:54 INFO  - Building transmittance functions table
+2016-11-22 21:24:54 INFO  - Transmittance functions table is built
+2016-11-22 21:24:54 INFO  - writing output file: /home/julien/Bureau/merged4.vox
+2016-11-22 21:24:54 INFO  - file written ( 0.0 s )
+2016-11-22 21:26:10 INFO  - Building transmittance functions table
+2016-11-22 21:26:10 INFO  - Transmittance functions table is built
+2016-11-22 21:26:10 INFO  - ptx extraction is started
+2016-11-22 21:26:10 INFO  - allocate!!!!!!!!
+2016-11-22 21:26:10 INFO  - Voxel space informations:
+			Corner Inf	:	(0.1, -5.0, -5.0)
+			Corner Sup	:	(5.0, 5.0, 10.0)
+			Dimensions	:	(5, 10, 15)
+			Toricity 	:	false
+
+2016-11-22 21:27:08 INFO  - Shots processed: 1000000
+2016-11-22 21:27:13 INFO  - Shots processed: 2000000
+2016-11-22 21:27:18 INFO  - Shots processed: 3000000
+2016-11-22 21:27:24 INFO  - Shots processed: 4000000
+2016-11-22 21:27:34 INFO  - Shots processed: 5000000
+2016-11-22 21:27:38 INFO  - Shots processed: 6000000
+2016-11-22 21:27:42 INFO  - Shots processed: 7000000
+2016-11-22 21:27:45 INFO  - Shots processed: 8000000
+2016-11-22 21:27:47 INFO  - Shots processed: 9000000
+2016-11-22 21:27:50 INFO  - Shots processed: 10000000
+2016-11-22 21:27:52 INFO  - Shots processed: 11000000
+2016-11-22 21:27:54 INFO  - Shots processed: 12000000
+2016-11-22 21:27:56 INFO  - Shots processed: 13000000
+2016-11-22 21:27:59 INFO  - Shots processed: 14000000
+2016-11-22 21:28:01 INFO  - Shots processed: 15000000
+2016-11-22 21:28:03 INFO  - Shots processed: 16000000
+2016-11-22 21:28:06 INFO  - Shots processed: 17000000
+2016-11-22 21:28:08 INFO  - Shots processed: 18000000
+2016-11-22 21:28:11 INFO  - Shots processed: 19000000
+2016-11-22 21:28:13 INFO  - Shots processed: 20000000
+2016-11-22 21:28:16 INFO  - Shots processed: 21000000
+2016-11-22 21:28:20 INFO  - Shots processed: 22000000
+2016-11-22 21:28:25 INFO  - Shots processed: 23000000
+2016-11-22 21:28:30 INFO  - Shots processed: 24000000
+2016-11-22 21:28:35 INFO  - Shots processed: 25000000
+2016-11-22 21:28:39 INFO  - Shots processed: 26000000
+2016-11-22 21:28:43 INFO  - Shots processed: 27000000
+2016-11-22 21:28:46 INFO  - Shots processed: 27729800
+2016-11-22 21:28:46 INFO  - writing file: /home/julien/Bureau/rond_point_faro_scan0.ptx-scan-0.vox
+2016-11-22 21:28:46 INFO  - file written ( 0.0 s )
+2016-11-22 21:28:46 INFO  - Merging in progress, file 1 : 1
+2016-11-22 21:28:46 INFO  - Compute angleMean
+2016-11-22 21:28:46 INFO  - Compute lMeanTotal
+2016-11-22 21:28:46 INFO  - Compute transmittance and PAD
+2016-11-22 21:28:46 INFO  - Building transmittance functions table
+2016-11-22 21:28:46 INFO  - Transmittance functions table is built
+2016-11-22 21:28:46 INFO  - writing output file: /home/julien/Bureau/merged5.vox
+2016-11-22 21:28:46 INFO  - file written ( 0.0 s )
+2016-11-22 21:34:58 INFO  - Building transmittance functions table
+2016-11-22 21:34:58 INFO  - Transmittance functions table is built
+2016-11-22 21:34:58 INFO  - ptx extraction is started
+2016-11-22 21:34:58 INFO  - allocate!!!!!!!!
+2016-11-22 21:34:58 INFO  - Voxel space informations:
+			Corner Inf	:	(0.0, -5.0, -5.0)
+			Corner Sup	:	(5.0, 5.0, 10.0)
+			Dimensions	:	(5, 10, 15)
+			Toricity 	:	false
+
+2016-11-22 22:01:36 INFO  - Shots processed: 1000000
+2016-11-22 22:01:39 INFO  - Shots processed: 2000000
+2016-11-22 22:01:41 INFO  - Shots processed: 3000000
+2016-11-22 22:01:44 INFO  - Shots processed: 4000000
+2016-11-22 22:01:46 INFO  - Shots processed: 5000000
+2016-11-22 22:01:49 INFO  - Shots processed: 6000000
+2016-11-22 22:01:56 INFO  - Shots processed: 7000000
+2016-11-22 22:01:58 INFO  - Shots processed: 8000000
+2016-11-22 22:02:00 INFO  - Shots processed: 9000000
+2016-11-22 22:02:03 INFO  - Shots processed: 10000000
+2016-11-22 22:02:05 INFO  - Shots processed: 11000000
+2016-11-22 22:02:07 INFO  - Shots processed: 12000000
+2016-11-22 22:02:09 INFO  - Shots processed: 13000000
+2016-11-22 22:02:11 INFO  - Shots processed: 14000000
+2016-11-22 22:02:14 INFO  - Shots processed: 15000000
+2016-11-22 22:02:16 INFO  - Shots processed: 16000000
+2016-11-22 22:02:18 INFO  - Shots processed: 17000000
+2016-11-22 22:02:20 INFO  - Shots processed: 18000000
+2016-11-22 22:02:22 INFO  - Shots processed: 19000000
+2016-11-22 22:02:25 INFO  - Shots processed: 20000000
+2016-11-22 22:02:27 INFO  - Shots processed: 21000000
+2016-11-22 22:02:29 INFO  - Shots processed: 22000000
+2016-11-22 22:02:31 INFO  - Shots processed: 23000000
+2016-11-22 22:02:33 INFO  - Shots processed: 24000000
+2016-11-22 22:02:35 INFO  - Shots processed: 25000000
+2016-11-22 22:02:37 INFO  - Shots processed: 26000000
+2016-11-22 22:02:39 INFO  - Shots processed: 27000000
+2016-11-22 22:02:41 INFO  - Shots processed: 27729800
+2016-11-22 22:02:41 INFO  - writing file: /home/julien/Bureau/rond_point_faro_scan0.ptx-scan-0.vox
+2016-11-22 22:02:41 INFO  - file written ( 0.0 s )
+2016-11-22 22:02:41 INFO  - Merging in progress, file 1 : 1
+2016-11-22 22:02:41 INFO  - Compute angleMean
+2016-11-22 22:02:41 INFO  - Compute lMeanTotal
+2016-11-22 22:02:41 INFO  - Compute transmittance and PAD
+2016-11-22 22:02:41 INFO  - Building transmittance functions table
+2016-11-22 22:02:41 INFO  - Transmittance functions table is built
+2016-11-22 22:02:41 INFO  - writing output file: /home/julien/Bureau/merged4.vox
+2016-11-22 22:02:41 INFO  - file written ( 0.0 s )
+2016-11-22 23:03:59 INFO  - Building transmittance functions table
+2016-11-22 23:03:59 INFO  - Transmittance functions table is built
+2016-11-22 23:03:59 INFO  - ptx extraction is started
+2016-11-22 23:03:59 INFO  - allocate!!!!!!!!
+2016-11-22 23:03:59 INFO  - Voxel space informations:
+			Corner Inf	:	(0.0, -5.0, -5.0)
+			Corner Sup	:	(5.0, 5.0, 10.0)
+			Dimensions	:	(5, 10, 15)
+			Toricity 	:	false
+
+2016-11-22 23:58:57 INFO  - Building transmittance functions table
+2016-11-22 23:58:58 INFO  - Transmittance functions table is built
+2016-11-22 23:58:58 INFO  - ptx extraction is started
+2016-11-22 23:58:58 INFO  - allocate!!!!!!!!
+2016-11-22 23:58:58 INFO  - Voxel space informations:
+			Corner Inf	:	(0.0, -5.0, -5.0)
+			Corner Sup	:	(5.0, 5.0, 10.0)
+			Dimensions	:	(5, 10, 15)
+			Toricity 	:	false
+
+2016-11-23 00:02:55 INFO  - Building transmittance functions table
+2016-11-23 00:02:55 INFO  - Transmittance functions table is built
+2016-11-23 00:02:55 INFO  - ptx extraction is started
+2016-11-23 00:02:55 INFO  - allocate!!!!!!!!
+2016-11-23 00:02:55 INFO  - Voxel space informations:
+			Corner Inf	:	(0.0, -5.0, -5.0)
+			Corner Sup	:	(5.0, 5.0, 10.0)
+			Dimensions	:	(5, 10, 15)
+			Toricity 	:	false
+
+2016-11-23 00:18:20 INFO  - Building transmittance functions table
+2016-11-23 00:18:20 INFO  - Transmittance functions table is built
+2016-11-23 00:18:20 INFO  - ptx extraction is started
+2016-11-23 00:18:20 INFO  - allocate!!!!!!!!
+2016-11-23 00:18:20 INFO  - Voxel space informations:
+			Corner Inf	:	(0.0, -5.0, -5.0)
+			Corner Sup	:	(5.0, 5.0, 10.0)
+			Dimensions	:	(5, 10, 15)
+			Toricity 	:	false
+
+2016-11-23 00:30:58 INFO  - Building transmittance functions table
+2016-11-23 00:30:59 INFO  - Transmittance functions table is built
+2016-11-23 00:30:59 INFO  - ptx extraction is started
+2016-11-23 00:30:59 INFO  - allocate!!!!!!!!
+2016-11-23 00:30:59 INFO  - Voxel space informations:
+			Corner Inf	:	(0.0, -5.0, -5.0)
+			Corner Sup	:	(5.0, 5.0, 10.0)
+			Dimensions	:	(5, 10, 15)
+			Toricity 	:	false
+
+2016-11-23 00:34:06 INFO  - Shots processed: 1000000
+2016-11-23 00:34:10 INFO  - Shots processed: 2000000
+2016-11-23 00:34:15 INFO  - Shots processed: 3000000
+2016-11-23 00:34:20 INFO  - Shots processed: 4000000
+2016-11-23 00:34:26 INFO  - Shots processed: 5000000
+2016-11-23 00:34:31 INFO  - Shots processed: 6000000
+2016-11-23 00:34:36 INFO  - Shots processed: 7000000
+2016-11-23 00:34:39 INFO  - Shots processed: 8000000
+2016-11-23 00:34:42 INFO  - Shots processed: 9000000
+2016-11-23 00:34:46 INFO  - Shots processed: 10000000
+2016-11-23 00:34:49 INFO  - Shots processed: 11000000
+2016-11-23 00:34:52 INFO  - Shots processed: 12000000
+2016-11-23 00:34:55 INFO  - Shots processed: 13000000
+2016-11-23 00:34:58 INFO  - Shots processed: 14000000
+2016-11-23 00:35:02 INFO  - Shots processed: 15000000
+2016-11-23 00:35:05 INFO  - Shots processed: 16000000
+2016-11-23 00:35:08 INFO  - Shots processed: 17000000
+2016-11-23 00:35:11 INFO  - Shots processed: 18000000
+2016-11-23 00:35:15 INFO  - Shots processed: 19000000
+2016-11-23 00:35:18 INFO  - Shots processed: 20000000
+2016-11-23 00:35:22 INFO  - Shots processed: 21000000
+2016-11-23 00:35:26 INFO  - Shots processed: 22000000
+2016-11-23 00:35:31 INFO  - Shots processed: 23000000
+2016-11-23 00:35:36 INFO  - Shots processed: 24000000
+2016-11-23 00:35:42 INFO  - Shots processed: 25000000
+2016-11-23 00:35:47 INFO  - Shots processed: 26000000
+2016-11-23 00:35:52 INFO  - Shots processed: 27000000
+2016-11-23 00:35:55 INFO  - Shots processed: 27729800
+2016-11-23 00:35:55 INFO  - writing file: /home/julien/Bureau/rond_point_faro_scan0.ptx-scan-0.vox
+2016-11-23 00:35:55 INFO  - file written ( 0.0 s )
+2016-11-23 00:35:55 INFO  - Merging in progress, file 1 : 1
+2016-11-23 00:35:55 INFO  - Compute angleMean
+2016-11-23 00:35:55 INFO  - Compute lMeanTotal
+2016-11-23 00:35:55 INFO  - Compute transmittance and PAD
+2016-11-23 00:35:55 INFO  - Building transmittance functions table
+2016-11-23 00:35:55 INFO  - Transmittance functions table is built
+2016-11-23 00:35:55 INFO  - writing output file: /home/julien/Bureau/merged4.vox
+2016-11-23 00:35:55 INFO  - file written ( 0.0 s )

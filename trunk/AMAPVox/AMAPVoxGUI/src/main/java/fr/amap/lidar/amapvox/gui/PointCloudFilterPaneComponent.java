@@ -24,6 +24,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 /**
@@ -32,7 +33,10 @@ import javafx.scene.layout.Pane;
  */
 
 
-public class PointCloudFilterPaneComponent extends AnchorPane{
+public class PointCloudFilterPaneComponent extends HBox{
+    
+    @FXML 
+    private HBox hBoxRoot;
     
     @FXML 
     private TextField textfieldPointCloudPath;
@@ -55,13 +59,9 @@ public class PointCloudFilterPaneComponent extends AnchorPane{
     @FXML 
     private Button buttonRemovePointCloudFilter;
     
-    private Pane root;
-    
     private CSVFile csvFile;
     
-    public PointCloudFilterPaneComponent(Pane root){
-        
-        this.root = root;
+    public PointCloudFilterPaneComponent(){
         
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PointcloudFilter.fxml"));
@@ -106,10 +106,6 @@ public class PointCloudFilterPaneComponent extends AnchorPane{
 
     public ComboBox getComboboxPointCloudFilteringType() {
         return comboboxPointCloudFilteringType;
-    }
-
-    public Pane getRoot() {
-        return root;
     }
 
     public Button getButtonRemovePointCloudFilter() {

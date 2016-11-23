@@ -985,10 +985,7 @@ public class Viewer3DPanelController implements Initializable {
                                             viewer3DStage.setOnHidden(new EventHandler<WindowEvent>() {
                                                 @Override
                                                 public void handle(WindowEvent event) {
-                                                    if(viewer3D.getRenderFrame().isVisible()){
-                                                        viewer3D.close();
-                                                    }
-                                                   
+                                                    viewer3D.close();
                                                 }
                                             });
                                             

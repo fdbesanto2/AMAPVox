@@ -9,7 +9,6 @@
     
     <modules>
         <module>JLas</module>
-        <module>JRiegl</module>
         <module>JLeica</module>
         <module>format-shot</module>
     </modules>

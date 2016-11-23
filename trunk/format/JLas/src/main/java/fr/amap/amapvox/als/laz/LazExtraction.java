@@ -1,7 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2016 UMR AMAP (botAnique et Modélisation de l'Architecture des Plantes et des végétations.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301  USA
  */
 package fr.amap.amapvox.als.laz;
 
@@ -11,7 +24,6 @@ import fr.amap.commons.util.NativeLoader;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
-import org.apache.log4j.Logger;
 
 /**
  * This class is devoted to read a LASzip file (*.laz), it allows to get the header, <br>
@@ -23,8 +35,6 @@ import org.apache.log4j.Logger;
 public class LazExtraction implements Iterable<LasPoint>{
     
     private final static String NATIVE_LIBRARY_NAME = "LasZipLibrary";
-    
-    private final static Logger logger = Logger.getLogger(LazExtraction.class);
     
     private native void afficherBonjour();
     private native long instantiateLasZip();
@@ -50,7 +60,7 @@ public class LazExtraction implements Iterable<LasPoint>{
         try {
             loader.loadLibrary(NATIVE_LIBRARY_NAME, LazExtraction.class);
         } catch (IOException ex) {
-            logger.error("Cannot load "+NATIVE_LIBRARY_NAME+" library", ex);
+            System.err.println("Cannot load "+NATIVE_LIBRARY_NAME+" library, cause : " + ex.getMessage());
         }
         
     }
@@ -76,7 +86,6 @@ public class LazExtraction implements Iterable<LasPoint>{
             case -1:
                 throw new IOException("Laz file "+file.getAbsolutePath()+" cannot be open");
             case 0:
-                logger.info("Laz file "+file.getAbsolutePath()+" is opened");
                 break;
 
             default:
@@ -100,7 +109,6 @@ public class LazExtraction implements Iterable<LasPoint>{
      */
     public void close(){
         deleteLasZip(lasZipPointer);
-        logger.info("Laz file is closed");
     }
 
     /**
@@ -111,6 +119,11 @@ public class LazExtraction implements Iterable<LasPoint>{
         return header;
     }
 
+    /**
+     * Iterates through the points of the las file. 
+     * Points are not kept in memory.
+     * @return 
+     */
     @Override
     public Iterator<LasPoint> iterator() {
         

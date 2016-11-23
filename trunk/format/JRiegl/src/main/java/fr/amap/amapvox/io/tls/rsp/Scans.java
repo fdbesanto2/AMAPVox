@@ -1,15 +1,28 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2016 UMR AMAP (botAnique et Modélisation de l'Architecture des Plantes et des végétations.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301  USA
  */
 package fr.amap.amapvox.io.tls.rsp;
 
-import fr.amap.commons.math.matrix.Mat4D;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.vecmath.Matrix4d;
 
 /**
  *
@@ -21,13 +34,14 @@ public class Scans {
     private File rxpLiteFile;
     private File rxpFullFile;
     private String fold;
-    private Mat4D sopMatrix;
+    private Matrix4d sopMatrix;
     private RxpScan scanLite;
     private RxpScan scanFull;
     
     
     public Scans(){
-        sopMatrix = Mat4D.identity();
+        sopMatrix = new Matrix4d();
+        sopMatrix.setIdentity();
     }
 
     public RxpScan getScanLite() {
@@ -61,7 +75,7 @@ public class Scans {
     }
     
     
-    public void setSopMatrix(Mat4D sopMatrix) {
+    public void setSopMatrix(Matrix4d sopMatrix) {
         this.sopMatrix = sopMatrix;
     }
     
@@ -81,7 +95,7 @@ public class Scans {
         return fold;
     }
 
-    public Mat4D getSopMatrix() {
+    public Matrix4d getSopMatrix() {
         return sopMatrix;
     }
 

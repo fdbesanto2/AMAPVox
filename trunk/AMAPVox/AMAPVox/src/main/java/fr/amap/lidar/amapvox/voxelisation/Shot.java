@@ -36,7 +36,7 @@ public class Shot {
     
     private void calculateAngle() {
         
-        this.angle = Math.toDegrees(Math.acos(direction.z));
+        this.angle = Math.toDegrees(Math.acos(Math.abs(direction.z)));
     }
 
     public double getAngle() {

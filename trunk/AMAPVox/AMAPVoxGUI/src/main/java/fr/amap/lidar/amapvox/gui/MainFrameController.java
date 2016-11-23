@@ -224,6 +224,7 @@ import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceAdapter;
 import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Paint;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -231,6 +232,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Menu;
 import javafx.scene.control.TextArea;
 import javafx.stage.StageStyle;
@@ -361,7 +363,6 @@ public class MainFrameController implements Initializable {
     private List<LidarScan> items;
     private int tlsVoxNbThreads = -1;
     private Rsp rsp;
-    private double currentLastPointCloudLayoutY;
     
     static double SCREEN_WIDTH;
     static double SCREEN_HEIGHT;
@@ -456,8 +457,6 @@ public class MainFrameController implements Initializable {
     private Button buttonAddPointcloudFilter;
     @FXML
     private Button buttonOpenTrajectoryFileALS;
-    @FXML
-    private AnchorPane anchorpanePointCloudFiltering;
     @FXML
     private TableView<SimulationPeriod> tableViewSimulationPeriods;
     @FXML
@@ -722,7 +721,6 @@ public class MainFrameController implements Initializable {
     private Tab tabHemiFromPAD;
     @FXML
     private Button helpButtonNaNsCorrection;
-    @FXML
     private HelpButtonController helpButtonNaNsCorrectionController;
     @FXML
     private Button helpButtonAutoBBox;
@@ -774,6 +772,12 @@ public class MainFrameController implements Initializable {
     private HBox hboxTrajectoryFile;
     @FXML
     private CheckBox checkboxApplyVOPMatrix;
+    @FXML
+    private VBox vBoxPointCloudFiltering;
+    @FXML
+    private HBox hBoxPointCloudFiltering;
+    @FXML
+    private ColorPicker colorPickerSeries;
     
     private void initValidationSupport(){
         
@@ -989,6 +993,16 @@ public class MainFrameController implements Initializable {
         viewer3DPanelController.setResourceBundle(rb);
         
         initStrings(rb);
+        
+        colorPickerSeries.valueProperty().addListener(new ChangeListener<javafx.scene.paint.Color>() {
+            @Override
+            public void changed(ObservableValue<? extends javafx.scene.paint.Color> observable, javafx.scene.paint.Color oldValue, javafx.scene.paint.Color newValue) {
+                if(listViewVoxelsFilesChart.getSelectionModel().getSelectedItems().size() == 1){
+                    listViewVoxelsFilesChart.getSelectionModel().getSelectedItem().getSeriesParameters().setColor(new Color(
+                            (float)newValue.getRed(), (float)newValue.getGreen(), (float)newValue.getBlue(), 1.0f));
+                }
+            }
+        });
         
         comboboxScript.getItems().setAll("Daniel script");
         
@@ -1370,8 +1384,23 @@ public class MainFrameController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 
-                if(newValue.intValue() >= 0){
-                    textfieldLabelVoxelFileChart.setText(listViewVoxelsFilesChart.getItems().get(newValue.intValue()).label);
+                if(listViewVoxelsFilesChart.getSelectionModel().getSelectedItems().size() > 1){
+                    colorPickerSeries.setDisable(true);
+                }else if(listViewVoxelsFilesChart.getSelectionModel().getSelectedItems().size() == 1){
+                    
+                    VoxelFileChart selectedItem = listViewVoxelsFilesChart.getSelectionModel().getSelectedItem();
+                    Color selectedItemColor = selectedItem.getSeriesParameters().getColor();
+                    
+                    colorPickerSeries.setDisable(false);
+                    colorPickerSeries.setValue(new javafx.scene.paint.Color(
+                            selectedItemColor.getRed()/255.0,
+                            selectedItemColor.getGreen()/255.0,
+                            selectedItemColor.getBlue()/255.0,
+                            1.0));
+                    
+                    if(newValue.intValue() >= 0){
+                        textfieldLabelVoxelFileChart.setText(listViewVoxelsFilesChart.getItems().get(newValue.intValue()).label);
+                    }
                 }
             }
         });
@@ -2124,8 +2153,6 @@ public class MainFrameController implements Initializable {
             }
         });
 
-
-        currentLastPointCloudLayoutY = 50;
         addPointcloudFilterComponent();
 
         checkboxUsePointcloudFilter.selectedProperty().addListener(new ChangeListener<Boolean>() {
@@ -2133,7 +2160,9 @@ public class MainFrameController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 
-                ObservableList<Node> list = anchorpanePointCloudFiltering.getChildren();
+                hBoxPointCloudFiltering.setDisable(!newValue);
+                
+                ObservableList<Node> list = vBoxPointCloudFiltering.getChildren();
                 for (Node n : list) {
                     if (n instanceof PointCloudFilterPaneComponent) {
 
@@ -4969,7 +4998,7 @@ public class MainFrameController implements Initializable {
 
             List<PointcloudFilter> pointcloudFilters = new ArrayList<>();
 
-            ObservableList<Node> childrenUnmodifiable = anchorpanePointCloudFiltering.getChildrenUnmodifiable();
+            ObservableList<Node> childrenUnmodifiable = vBoxPointCloudFiltering.getChildrenUnmodifiable();
             for (Node n : childrenUnmodifiable) {
                 if (n instanceof PointCloudFilterPaneComponent) {
                     PointCloudFilterPaneComponent pane = (PointCloudFilterPaneComponent) n;
@@ -5714,47 +5743,14 @@ public class MainFrameController implements Initializable {
 
     private PointCloudFilterPaneComponent addPointcloudFilterComponent() {
 
-        final PointCloudFilterPaneComponent pcfpc = new PointCloudFilterPaneComponent(anchorpanePointCloudFiltering);
+        final PointCloudFilterPaneComponent pcfpc = new PointCloudFilterPaneComponent();
 
         pcfpc.getButtonRemovePointCloudFilter().setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
 
-                int index = anchorpanePointCloudFiltering.getChildren().indexOf(pcfpc);
-
-                anchorpanePointCloudFiltering.getChildren().remove(index);
-
-                ObservableList<Node> list = anchorpanePointCloudFiltering.getChildren();
-
-                int count = 0;
-                int count2 = 0;
-                boolean offsetModified = false;
-
-                for (Node n : list) {
-                    if (n instanceof AnchorPane) {
-
-                        count++;
-
-                        AnchorPane p = (AnchorPane) n;
-                        if ((count + count2) >= index) {
-
-                            if ((count + count2) > index) {
-                                double offset = p.getLayoutY() - 70;
-                                p.setLayoutY(offset);
-                            }
-
-                            if (!offsetModified) {
-                                currentLastPointCloudLayoutY -= 70;
-                                offsetModified = true;
-                            }
-
-                        }
-
-                    } else {
-                        count2++;
-                    }
-                }
+                vBoxPointCloudFiltering.getChildren().remove(pcfpc);
             }
         });
 
@@ -5818,32 +5814,14 @@ public class MainFrameController implements Initializable {
 
         pcfpc.disableContent(!checkboxUsePointcloudFilter.isSelected());
 
-        pcfpc.relocate(pcfpc.getLayoutX(), currentLastPointCloudLayoutY);
-        currentLastPointCloudLayoutY += 70;
-
-        anchorpanePointCloudFiltering.getChildren().add(pcfpc);
+        vBoxPointCloudFiltering.getChildren().add(pcfpc);
 
         return pcfpc;
     }
 
     private void clearPointcloudFiltersPane() {
 
-        ObservableList<Node> children = anchorpanePointCloudFiltering.getChildren();
-
-        List<PointCloudFilterPaneComponent> tempList = new ArrayList<>();
-
-        for (Node n : children) {
-            if (n instanceof PointCloudFilterPaneComponent) {
-
-                PointCloudFilterPaneComponent comp = (PointCloudFilterPaneComponent) n;
-                tempList.add(comp);
-            }
-        }
-
-        children.removeAll(tempList);
-
-        currentLastPointCloudLayoutY = 50;
-
+        vBoxPointCloudFiltering.getChildren().clear();
     }
 
     @FXML
@@ -5854,7 +5832,7 @@ public class MainFrameController implements Initializable {
         
         final Mat4D transfMatrix = vopMatrixTmp;
         
-        ObservableList<Node> children = anchorpanePointCloudFiltering.getChildren();
+        ObservableList<Node> children = vBoxPointCloudFiltering.getChildren();
 
         final List<PointCloudFilterPaneComponent> tempList = new ArrayList<>();
 
@@ -6273,7 +6251,10 @@ public class MainFrameController implements Initializable {
             lastFCOpenVoxelFile = selectedFiles.get(0);
             
             for(File file : selectedFiles){
-                listViewVoxelsFilesChart.getItems().add(new VoxelFileChart(file, file.getName()));
+                VoxelFileChart voxelFileChart = new VoxelFileChart(file, file.getName());
+                Color color = (Color)VoxelsToChart.DEFAULT_RENDERER.lookupSeriesPaint(listViewVoxelsFilesChart.getItems().size());
+                voxelFileChart.getSeriesParameters().setColor(color);
+                listViewVoxelsFilesChart.getItems().add(voxelFileChart);
             }
             
             if(selectedFiles.size() > 0){
@@ -6291,12 +6272,16 @@ public class MainFrameController implements Initializable {
         
         int tabIndex = tabpaneChart.getSelectionModel().getSelectedIndex();
         
-        if(tabIndex == 0){
-            chartWindowTitle = "Profile chart";
-        }else if(tabIndex == 1){
-            chartWindowTitle = "Two variables statistics chart";
-        }else{
-            chartWindowTitle = "Chart";
+        switch (tabIndex) {
+            case 0:
+                chartWindowTitle = "Profile chart";
+                break;
+            case 1:
+                chartWindowTitle = "Two variables statistics chart";
+                break;
+            default:
+                chartWindowTitle = "Chart";
+                break;
         }
         
         int maxChartNumberInARow;
@@ -6316,6 +6301,7 @@ public class MainFrameController implements Initializable {
         listViewVoxelsFilesChart.getItems().toArray(voxelFileChartArray);
         
         VoxelsToChart voxelsToChart = new VoxelsToChart(voxelFileChartArray);
+        Color seriesPaint = (Color) VoxelsToChart.DEFAULT_RENDERER.lookupSeriesPaint(0);
         
         final int chartWidth = 200;
         
@@ -6380,7 +6366,7 @@ public class MainFrameController implements Initializable {
         }
         
         JFreeChart[] charts = null;
-
+        
         if (radiobuttonPreDefinedProfile.isSelected()) { 
 
             if (comboboxPreDefinedProfile.getSelectionModel().getSelectedIndex() == 0) { //vegetation profile

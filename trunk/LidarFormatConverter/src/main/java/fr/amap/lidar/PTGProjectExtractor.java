@@ -5,11 +5,9 @@
  */
 package fr.amap.lidar;
 
-import fr.amap.commons.util.LidarScan;
-import fr.amap.commons.util.MatrixUtility;
-import fr.amap.amapvox.io.tls.rsp.RxpScan;
-import fr.amap.amapvox.jleica.ptg.PTGReader;
-import fr.amap.amapvox.jleica.ptg.PTGScan;
+import fr.amap.commons.math.util.MatrixUtility;
+import fr.amap.lidar.format.jleica.ptg.PTGReader;
+import fr.amap.lidar.format.jleica.ptg.PTGScan;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -44,7 +42,7 @@ public class PTGProjectExtractor extends LidarProjectExtractor{
             scan.openScanFile(f);
             
             CheckBoxTreeItem<LidarScan> item = new CheckBoxTreeItem<>(
-                    new LidarScan(scan.getFile(), MatrixUtility.convertMat4DToMatrix4d(scan.getHeader().getTransfMatrix()), scan.getFile().getName()));
+                    new LidarScan(scan.getFile(), scan.getHeader().getTransfMatrix(), scan.getFile().getName()));
             
             item.setSelected(true);
             item.setExpanded(true);

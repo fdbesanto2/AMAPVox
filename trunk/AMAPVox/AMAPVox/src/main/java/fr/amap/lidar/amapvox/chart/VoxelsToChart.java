@@ -39,7 +39,7 @@ import org.jfree.ui.HorizontalAlignment;
  */
 public class VoxelsToChart {
     
-    private final static Logger logger = Logger.getLogger(VoxelsToChart.class);
+    private final static Logger LOGGER = Logger.getLogger(VoxelsToChart.class);
     
     private class QuadratInfo{
         
@@ -52,7 +52,10 @@ public class VoxelsToChart {
         }
         
     }
+    
     private final VoxelFileChart[] voxelFiles;
+    public final static XYLineAndShapeRenderer DEFAULT_RENDERER = (XYLineAndShapeRenderer) ((XYPlot)ChartFactory.createXYLineChart(
+            "",  "", "", null, PlotOrientation.VERTICAL, true, true, false).getPlot()).getRenderer();
     
     //quadrats
     private boolean makeQuadrats;
@@ -102,7 +105,7 @@ public class VoxelsToChart {
             try {
                 voxelFileChart.reader = new VoxelFileReader(voxelFileChart.file, true);
             } catch (Exception ex) {
-                logger.error(ex);
+                LOGGER.error(ex);
             }
         }
     }
@@ -387,25 +390,18 @@ public class VoxelsToChart {
         if (r instanceof XYLineAndShapeRenderer) {
             XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) r;
             renderer.setBaseShapesVisible(true);
-            renderer.setSeriesPaint(0, renderer.lookupSeriesPaint(0));
-            renderer.setSeriesPaint(1, renderer.lookupSeriesPaint(1));
-            renderer.setSeriesPaint(2, renderer.lookupSeriesPaint(2));
-            renderer.setSeriesPaint(3, new Color(255, 171, 87));
-            renderer.setSeriesPaint(4, new Color(255, 87, 171));
-            renderer.setSeriesPaint(5, new Color(0, 219, 110));
             
             Ellipse2D.Float shape = new Ellipse2D.Float(-2.5f, -2.5f, 5.0f, 5.0f);
 
             for (int i = 0; i < voxelFiles.length; i++) {
                 renderer.setSeriesShape(i, shape);
-                Paint seriesPaint = renderer.lookupSeriesPaint(i);
-                
-                renderer.setLegendTextPaint(i, seriesPaint);
+                renderer.setSeriesPaint(i, voxelFiles[i].getSeriesParameters().getColor());
+                renderer.setLegendTextPaint(i, voxelFiles[i].getSeriesParameters().getColor());
             }
         }
 
         return chart;
-    }    
+    }
     
     private boolean doQuadratFiltering(Voxel voxel, int indiceMin, int indiceMax){
         
@@ -471,7 +467,7 @@ public class VoxelsToChart {
             try {
                 value = voxel.getFieldValue(Voxel.class, attributName, voxel);
             } catch (SecurityException | NoSuchFieldException | IllegalAccessException ex) {
-                logger.error(ex);
+                LOGGER.error(ex);
                 return null;
             }
             

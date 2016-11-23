@@ -1,23 +1,26 @@
-
 /*
-This software is distributed WITHOUT ANY WARRANTY and without even the
-implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-This program is open-source LGPL 3 (see copying.txt).
-Authors:
-    Gregoire Vincent    gregoire.vincent@ird.fr
-    Julien Heurtebize   julienhtbe@gmail.com
-    Jean Dauzat         jean.dauzat@cirad.fr
-    Rémi Cresson        cresson.r@gmail.com
-
-For further information, please contact Gregoire Vincent.
+ * Copyright (C) 2016 UMR AMAP (botAnique et Modélisation de l'Architecture des Plantes et des végétations.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301  USA
  */
-
 package fr.amap.amapvox.als;
 
 /**
  * Represents the structure of a las file header version 1.2
- * @author calcul
+ * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 
 

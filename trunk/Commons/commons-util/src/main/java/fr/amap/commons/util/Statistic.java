@@ -5,8 +5,6 @@
  */
 package fr.amap.commons.util;
 
-import java.math.BigDecimal;
-
 /**
  *
  * @author calcul

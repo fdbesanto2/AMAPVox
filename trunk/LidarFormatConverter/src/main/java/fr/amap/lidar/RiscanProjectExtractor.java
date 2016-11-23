@@ -5,8 +5,6 @@
  */
 package fr.amap.lidar;
 
-import fr.amap.commons.util.LidarScan;
-import fr.amap.commons.util.MatrixUtility;
 import fr.amap.amapvox.io.tls.rsp.Rsp;
 import fr.amap.amapvox.io.tls.rsp.Scans;
 import java.util.ArrayList;
@@ -80,15 +78,19 @@ public class RiscanProjectExtractor extends LidarProjectExtractor{
                     new LidarScan(null, null, scans.getName()));
             
             CheckBoxTreeItem<LidarScan> checkBoxTreeItemFull = new CheckBoxTreeItem<>(
-                    new LidarScan(scans.getScanFull().getFile(), MatrixUtility.convertMat4DToMatrix4d(scans.getScanFull().getSopMatrix()), scans.getScanFull().getName()));
+                    new LidarScan(scans.getScanFull().getFile(), scans.getScanFull().getSopMatrix(), scans.getScanFull().getName()));
             
-            CheckBoxTreeItem<LidarScan> checkBoxTreeItemLite = new CheckBoxTreeItem<>(
-                    new LidarScan(scans.getScanLite().getFile(), MatrixUtility.convertMat4DToMatrix4d(scans.getScanLite().getSopMatrix()), scans.getScanLite().getName()));
+            if(scans.getScanLite() != null){
+                
+                CheckBoxTreeItem<LidarScan> checkBoxTreeItemLite = new CheckBoxTreeItem<>(
+                    new LidarScan(scans.getScanLite().getFile(), scans.getScanLite().getSopMatrix(), scans.getScanLite().getName()));
+                
+                item.getChildren().add(checkBoxTreeItemLite);
+            }
             
             checkBoxTreeItemFull.setSelected(true);
             
             item.getChildren().add(checkBoxTreeItemFull);
-            item.getChildren().add(checkBoxTreeItemLite);
             
             item.setExpanded(true);
             
