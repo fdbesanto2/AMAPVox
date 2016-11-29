@@ -155,10 +155,16 @@ public class RxpImportTask extends SceneObjectImportTask{
         
         updateMessage("Build 3d scene object");
 
+        pointCloud.setDrawEveryNPoints(100);
         pointCloud.initMesh();
         pointCloud.setShader(new ColorShader());
 
-        updateProgress(100, 100);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                updateProgress(100, 100);
+            }
+        });
         
         return pointCloud;
     }

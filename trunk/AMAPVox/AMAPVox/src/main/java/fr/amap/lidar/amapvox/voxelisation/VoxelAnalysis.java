@@ -45,31 +45,6 @@ import org.apache.log4j.Logger;
 
 public class VoxelAnalysis extends Process implements Cancellable{
 
-    /*public enum LaserSpecification{
-        
-        LMS_Q560(0.0003, 0.0005),
-        VZ_400(0.007, 0.00035),
-        LEICA_SCANSTATION_P30_40(0.0035, 0.00023),
-        LEICA_SCANSTATION_C10(0.004, 0.0001);
-    
-        private final double beamDiameterAtExit;
-        private final double beamDivergence;
-    
-        private LaserSpecification(double beamDiameterAtExit, double beamDivergence){
-            this.beamDiameterAtExit = beamDiameterAtExit;
-            this.beamDivergence = beamDivergence;
-        }
-
-        public double getBeamDiameterAtExit() {
-            return beamDiameterAtExit;
-        }
-
-        public double getBeamDivergence() {
-            return beamDivergence;
-        }
-        
-    }*/
-    
     private final static Logger LOGGER = Logger.getLogger(VoxelAnalysis.class);
     
     private boolean cancelled;
@@ -115,9 +90,6 @@ public class VoxelAnalysis extends Process implements Cancellable{
     //directional transmittance (GTheta)
     private DirectionalTransmittance direcTransmittance;
     
-    //tmp
-    /*boolean[][][] valid;
-    BufferedWriter writer;*/
     
     /**
      *
@@ -381,7 +353,8 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
                         // propagate
                         propagate(origin, echo, beamFraction, residualEnergy, lastEcho, nbShotsProcessed, shot, i);
-
+                        
+                        
                         origin = new Point3d(echo);
                     }
                 }
@@ -427,9 +400,9 @@ public class VoxelAnalysis extends Process implements Cancellable{
      * @param lastEcho is current echo the last or not
      * @param shotID current shot (id)
      * @param shot current shot processed
-     * @param echoID current echo processed (id)
+     * @param echoRank current echo processed (rank)
      */
-    private void propagate(Point3d origin, Point3d echo, double beamFraction, double residualEnergy, boolean lastEcho, int shotID, Shot shot, int echoID) {
+    private void propagate(Point3d origin, Point3d echo, double beamFraction, double residualEnergy, boolean lastEcho, int shotID, Shot shot, int echoRank) {
         
         //get shot line
         LineElement lineElement = new LineSegment(origin, echo);
@@ -450,7 +423,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
             }
         }
         
-        keepEcho = keepEchoOfShot(shot, echoID) &&
+        keepEcho = keepEchoOfShot(shot, echoRank) &&
                 (echoDistance >= parameters.getDtmFilteringParams().getMinDTMDistance() &&
                 !Float.isNaN(echoDistance) && parameters.getDtmFilteringParams().useDTMCorrection()) ||
                 !parameters.getDtmFilteringParams().useDTMCorrection() &&
@@ -508,7 +481,6 @@ public class VoxelAnalysis extends Process implements Cancellable{
             double longueur = 0;
             
             boolean test = false;
-                
              /*
              * Si d2 < distanceToHit le voxel est traversé sans interceptions
              */
@@ -574,7 +546,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
             } /*
              Echo dans le voxel
-             */ 
+             */
             else {
 
                 /*si plusieurs échos issus du même tir dans le voxel, 
@@ -621,11 +593,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
                 }
                 
                 if (keepEcho){
-
-                /*if ((keepEchoOfShot(shot, echoID))
-                        && ((echoDistance >= parameters.minDTMDistance && echoDistance != Float.NaN && parameters.useDTMCorrection()) || !parameters.useDTMCorrection())
-                        && keepEcho) {*/
-                
+                    
                     test = true;
 
                     if(!lastEcho){
@@ -649,14 +617,6 @@ public class VoxelAnalysis extends Process implements Cancellable{
                     }
                 }
             }
-            
-            /*if(test && valid[vox.$i][vox.$j][vox.$k]){
-                try {
-                    writer.write(vox.$i+"\t"+vox.$j+"\t"+vox.$k+"\t"+entering+"\t"+intercepted+"\t"+longueur+"\t"+surface+"\n");
-                } catch (IOException ex) {
-                    java.util.logging.Logger.getLogger(VoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }*/
             
             if(test && (transMode == 2 || transMode == 3)){
                 double transNorm;
@@ -810,76 +770,6 @@ public class VoxelAnalysis extends Process implements Cancellable{
         
         return voxel;
     }
-
-//    public Voxel computePADFromVoxel(Voxel voxel, int i, int j, int k) {
-//
-//        if (voxel == null) {
-//
-//            voxel = initVoxel(i, j, k);
-//        }
-//
-//        float pad1;
-//
-//        voxel.angleMean = voxel.angleMean / voxel.nbSampling;
-//
-//        if (voxel.nbSampling >= voxel.nbEchos) {
-//
-//            voxel.lMeanTotal = voxel.lgTotal / (voxel.nbSampling);
-//
-//        }
-//
-//        /**
-//         * *PADBV**
-//         */
-//        if (voxel.nbSampling == 0) {
-//
-//            pad1 = Float.NaN;
-//            voxel.transmittance = Float.NaN;
-//            
-//        }else if(voxel.bvIntercepted > voxel.bvEntering){
-//            
-//            LOGGER.error("Voxel : " + voxel.$i + " " + voxel.$j + " " + voxel.$k + " -> bvInterceptes > bvEntering, NaN assigné, difference: " + (voxel.bvEntering - voxel.bvIntercepted));
-//
-//            pad1 = Float.NaN;
-//            voxel.transmittance = Float.NaN;
-//            
-//        }else {
-//            
-//            voxel.transmittance = (voxel.bvEntering - voxel.bvIntercepted) / voxel.bvEntering;
-//            voxel.transmittance = (float) Math.pow(voxel.transmittance, 1 / voxel.lMeanTotal);
-//
-//            if (/*voxel.nbSampling > 1 && */voxel.transmittance == 0) { // nbSampling == nbEchos
-//
-//                pad1 = MAX_PAD;
-//
-//            }/* else if (voxel.nbSampling == 1 && voxel.transmittance == 0 ) { // nbSampling == nbEchos
-//
-//                pad = Float.NaN;
-//
-//            } */else {
-//
-//                float coefficientGTheta = (float) direcTransmittance.getTransmittanceFromAngle(voxel.angleMean, true);
-//
-//                if(coefficientGTheta == 0){
-//                    LOGGER.error("Voxel : " + voxel.$i + " " + voxel.$j + " " + voxel.$k + " -> coefficient GTheta nul, angle = "+voxel.angleMean);
-//                }
-//                
-//                pad1 = (float) (Math.log(voxel.transmittance) / (-coefficientGTheta));
-//
-//                if (Float.isNaN(pad1)) {
-//                    pad1 = Float.NaN;
-//                } else if (pad1 > MAX_PAD || Float.isInfinite(pad1)) {
-//                    pad1 = MAX_PAD;
-//                }
-//
-//            }
-//
-//        }
-//
-//        voxel.PadBVTotal = pad1 + 0.0f; //set +0.0f to avoid -0.0f
-//
-//        return voxel;
-//    }
     
     public void computePADs(){
         
@@ -1140,20 +1030,16 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
         try {
             
-            if (parameters.getGroundEnergyParams() != null && 
-                    parameters.getGroundEnergyParams().isCalculateGroundEnergy()) {
-                
-                groundEnergy = new GroundEnergy[parameters.infos.getSplit().x][parameters.infos.getSplit().y];
-            }
-            
-            // allocate voxels
-            LOGGER.info("allocate!!!!!!!!");
-
             voxels = new Voxel[parameters.infos.getSplit().x][parameters.infos.getSplit().y][parameters.infos.getSplit().z];
 
             if (parameters.getGroundEnergyParams() != null && 
                     parameters.getGroundEnergyParams().isCalculateGroundEnergy() && parameters.infos.getType() != Type.TLS) {
 
+                // allocate
+                LOGGER.info("allocate!!!!!!!!");
+                
+                groundEnergy = new GroundEnergy[parameters.infos.getSplit().x][parameters.infos.getSplit().y];
+            
                 for (int i = 0; i < parameters.infos.getSplit().x; i++) {
                     for (int j = 0; j < parameters.infos.getSplit().y; j++) {
                         groundEnergy[i][j] = new GroundEnergy();
@@ -1167,27 +1053,6 @@ public class VoxelAnalysis extends Process implements Cancellable{
             voxelManager = new VoxelManager(scene, new VoxelManagerSettings(parameters.infos.getSplit(), VoxelManagerSettings.NON_TORIC_FINITE_BOX_TOPOLOGY));
 
             LOGGER.info(voxelManager.getInformations());
-
-            //tmp, read valid voxels
-        
-            /*valid = new boolean[parameters.infos.getSplit().x][parameters.infos.getSplit().y][parameters.infos.getSplit().z];
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader(new File("/home/julien/Documents/pour_greg/indices.txt")));
-
-                String line;
-                while((line = reader.readLine()) != null){
-                    String[] split = line.split(" ");
-                    valid[Integer.valueOf(split[0])][Integer.valueOf(split[1])][Integer.valueOf(split[2])] = true;
-                }
-                
-                reader.close();
-            } catch (FileNotFoundException ex) {
-                java.util.logging.Logger.getLogger(VoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                java.util.logging.Logger.getLogger(VoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            writer = new BufferedWriter(new FileWriter(new File("/home/julien/Documents/pour_greg/segments.txt")));*/
 
         } catch (Exception e) {
             LOGGER.error(e + " " + this.getClass().getName());

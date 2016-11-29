@@ -14,15 +14,15 @@ import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.lidar.amapvox.voxviewer.loading.shader.BillboardPCLShader;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
+import static fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh.FLOAT_SIZE;
 import fr.amap.lidar.amapvox.voxviewer.mesh.GLMeshFactory;
 import fr.amap.lidar.amapvox.voxviewer.mesh.InstancedGLMesh;
 import fr.amap.lidar.amapvox.voxviewer.mesh.PointCloudGLMesh;
 import gnu.trove.list.array.TFloatArrayList;
-import java.io.File;
-import java.util.HashMap;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.Iterator;
 import java.util.Map;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -37,51 +37,46 @@ public class PointCloudSceneObject extends ScalarSceneObject{
     private final Statistic yPositionStatistic;
     private final Statistic zPositionStatistic;
     
-    private final TFloatArrayList vertexDataList;
-    private final TFloatArrayList lodVertexDataList;
+    private TFloatArrayList vertexDataList;
     
     private Octree octree;
     
-    /*
-     * TODO : implement LOD
-     * just load inside the list a point for each 100 points loaded
-     * Switch point cloud draw to LOD when user interacts with the scene (camera translation, zoom)
-     */
-    //LOD
-    private boolean generateLOD;
-    private float percentageLOD;
-    
-    //keep one point for x points
-    private int onePointOf = 10;
-    
-    private int nbPointsAdded = 0;
+    private int pointNumber;
+    private FloatBuffer vertices;
+    private int drawEveryNPoints = -1;
+    private int stride = 0;
     
     public PointCloudSceneObject(){
         
         //this.generateLOD = true;
-        
         vertexDataList = new TFloatArrayList();
-        lodVertexDataList = new TFloatArrayList();
         
         xPositionStatistic = new Statistic();
         yPositionStatistic = new Statistic();
         zPositionStatistic = new Statistic();
     }
     
+//    public PointCloudSceneObject(int numberOfPoints){
+//        
+//        //this.generateLOD = true;
+//        vertices = FloatBuffer.allocate(numberOfPoints*3 + 6000 /*add for safety*/);
+//        //vertexDataList = new TFloatArrayList();
+//        
+//        xPositionStatistic = new Statistic();
+//        yPositionStatistic = new Statistic();
+//        zPositionStatistic = new Statistic();
+//    }
+    
     public void addPoint(float x, float y, float z){
         
-        if(nbPointsAdded == onePointOf && generateLOD){
-            lodVertexDataList.add(x);
-            lodVertexDataList.add(y);
-            lodVertexDataList.add(z);
-            nbPointsAdded = 0;
-        }else{
-            vertexDataList.add(x);
-            vertexDataList.add(y);
-            vertexDataList.add(z);
-        }
+        /*vertices.put(x);
+        vertices.put(y);
+        vertices.put(z);*/
+        pointNumber++;
         
-        nbPointsAdded++;
+        vertexDataList.add(x);
+        vertexDataList.add(y);
+        vertexDataList.add(z);
         
         xPositionStatistic.addValue(x);
         yPositionStatistic.addValue(y);
@@ -124,20 +119,6 @@ public class PointCloudSceneObject extends ScalarSceneObject{
         scalarFieldsList.get(index).addValue(value);
     }
     
-    public void switchToLOD(){
-        
-        if(generateLOD){
-            ((PointCloudGLMesh)mesh).vertexCount = lodVertexDataList.size()/3;
-        }
-    }
-    
-    public void switchToMaxDetail(){
-        
-        if(generateLOD){
-            ((PointCloudGLMesh)mesh).vertexCount = (lodVertexDataList.size()+vertexDataList.size())/3;
-        }
-    }
-    
     public void setPointSize(int size){
         
         if(size == 0){ //view pointcloud as default with 1 pixel size
@@ -172,43 +153,38 @@ public class PointCloudSceneObject extends ScalarSceneObject{
     @Override
     public void initVao(GL3 gl){
         
-        if(mesh instanceof InstancedGLMesh){
+        if (mesh != null) {
             //generate vao
-            int[] tmp2 = new int[1];
-            gl.glGenVertexArrays(1, tmp2, 0);
-            vaoId = tmp2[0];
+            IntBuffer tmp = IntBuffer.allocate(1);
+            gl.glGenVertexArrays(1, tmp);
+            vaoId = tmp.get(0);
 
             gl.glBindVertexArray(vaoId);
 
-                gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, mesh.getVboId());
+            gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, mesh.getVboId());
 
-                    gl.glEnableVertexAttribArray(shader.attributeMap.get("position"));
-                    gl.glVertexAttribPointer(shader.attributeMap.get("position"), 3, GL3.GL_FLOAT, false, 0, 0);
+            gl.glEnableVertexAttribArray(shader.attributeMap.get("position"));
+            gl.glVertexAttribPointer(shader.attributeMap.get("position"), mesh.dimensions, GL3.GL_FLOAT, false, stride, 0);
 
-                    gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_position"));
-                    gl.glVertexAttribPointer(shader.attributeMap.get("instance_position"), 3, GL3.GL_FLOAT, false, 0, mesh.getVertexBuffer().capacity()*Buffers.SIZEOF_FLOAT);
-                    gl.glVertexAttribDivisor(shader.attributeMap.get("instance_position"), 1);
+            if (mesh.colorBuffer != null) {
+                try {
+                    gl.glEnableVertexAttribArray(shader.attributeMap.get("color"));
+                    gl.glVertexAttribPointer(shader.attributeMap.get("color"), mesh.dimensions, GL3.GL_FLOAT, false, stride, mesh.getVertexBuffer().capacity() * FLOAT_SIZE);
 
-                    gl.glEnableVertexAttribArray(shader.attributeMap.get("instance_color"));
-                    gl.glVertexAttribPointer(shader.attributeMap.get("instance_color"), 4, GL3.GL_FLOAT, false, 0, (mesh.getVertexBuffer().capacity()+((InstancedGLMesh)mesh).instancePositionsBuffer.capacity())*Buffers.SIZEOF_FLOAT);
-                    gl.glVertexAttribDivisor(shader.attributeMap.get("instance_color"), 1);
+                } catch (Exception e) {
+                }
+                try {
+                    gl.glEnableVertexAttribArray(shader.attributeMap.get("normal"));
+                    gl.glVertexAttribPointer(shader.attributeMap.get("normal"), mesh.dimensions, GL3.GL_FLOAT, false, stride, mesh.getVertexBuffer().capacity() * FLOAT_SIZE + mesh.normalBuffer.capacity() * FLOAT_SIZE);
+                } catch (Exception e) {
+                }
+            }
 
-                gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, mesh.getIboId());
+            gl.glBindBuffer(GL3.GL_ELEMENT_ARRAY_BUFFER, mesh.getIboId());
 
-                gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, 0);
+            gl.glBindBuffer(GL3.GL_ARRAY_BUFFER, 0);
 
             gl.glBindVertexArray(0);
-            
-            ((InstancedGLMesh)mesh).instancePositionsBuffer = Buffers.newDirectFloatBuffer(vertexDataList.toArray());
-            
-            ScalarField scalarField = scalarFieldsList.get(currentAttribut);
-            ((InstancedGLMesh)mesh).instanceColorsBuffer = Buffers.newDirectFloatBuffer(updateColor(scalarField));
-            ((InstancedGLMesh)mesh).setInstanceNumber(getNumberOfPoints());
-            
-            this.resetIds();
-            
-        }else{
-            super.initVao(gl);
         }
         
     }
@@ -230,19 +206,20 @@ public class PointCloudSceneObject extends ScalarSceneObject{
         
         
         float[] points = vertexDataList.toArray();
-        
-        if(generateLOD){
-            float[] lodPoints = lodVertexDataList.toArray();
-            points = ArrayUtils.addAll(lodPoints, points);
-        }
+        vertexDataList = null;
         
         mesh = GLMeshFactory.createPointCloud(points, updateColor(scalarField));
+        /*mesh = new PointCloudGLMesh();
+        vertices.compact();
+        mesh.setVertexBuffer(vertices);
+        mesh.vertexCount = pointNumber;
+        mesh.colorBuffer = Buffers.newDirectFloatBuffer(updateColor(scalarField));*/
         
         currentAttribut = scalarField.getName();
         
         if(mousePickable){
             octree = new Octree(50);
-            octree.setPoints(points);
+            //octree.setPoints(points);
             try {
                 octree.build();
             } catch (Exception ex) {
@@ -288,25 +265,12 @@ public class PointCloudSceneObject extends ScalarSceneObject{
         return octree;
     }
 
-    public boolean isGenerateLOD() {
-        return generateLOD;
+    public void setDrawEveryNPoints(int drawEveryNPoints) {
+        this.drawEveryNPoints = drawEveryNPoints;
+        stride = 3 * GLMesh.FLOAT_SIZE * drawEveryNPoints;
     }
 
-    public void setGenerateLOD(boolean generateLOD) {
-        this.generateLOD = generateLOD;
-    }
-
-    public float getPercentageLOD() {
-        return percentageLOD;
-    }
-
-    public void setPercentageLOD(float percentageLOD) {
-        
-        this.percentageLOD = percentageLOD;
-        
-        percentageLOD = Float.min(percentageLOD, 100);
-        percentageLOD = Float.max(percentageLOD, 0);
-        
-        onePointOf = (int) (100/percentageLOD);
+    public int getDrawEveryNPoints() {
+        return drawEveryNPoints;
     }
 }

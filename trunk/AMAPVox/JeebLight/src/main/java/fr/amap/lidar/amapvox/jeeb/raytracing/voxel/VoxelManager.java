@@ -222,21 +222,21 @@ public class VoxelManager {
         normal.y += 0.0;
         normal.z += 0.0;
 
-        if (normal.x == -1.0) {
+        if (normal.x < 0) {
             end.x = boundingBox.min.x + MARGIN;
-        } else if (normal.x == 1.0) {
+        } else if (normal.x > 0) {
             end.x = boundingBox.max.x - MARGIN;
         }
 
-        if (normal.y == -1.0) {
+        if (normal.y < 0) {
             end.y = boundingBox.min.y + MARGIN;
-        } else if (normal.y == 1.0) {
+        } else if (normal.y > 0) {
             end.y = boundingBox.max.y - MARGIN;
         }
 
-        if (normal.z == -1.0) {
+        if (normal.z < 0) {
             end.z = boundingBox.min.z + MARGIN;
-        } else if (normal.z == 1.0) {
+        } else if (normal.z > 0) {
             end.z = boundingBox.max.z - MARGIN;
         }
 
@@ -379,9 +379,37 @@ public class VoxelManager {
 
         return new Intersection(tmin, new Vector3d());
     }
+    
+    public static void main(String[] args) {
+        
+        VoxelManager vm = new VoxelManager(new Scene(new BoundingBox3d(new Point3d(2, 2, 2), new Point3d(4, 4, 4))), new VoxelManagerSettings(new Point3i(4, 4, 4), VoxelManagerSettings.NON_TORIC_FINITE_BOX_TOPOLOGY));
+        
+        LineSegment lineSegment = new LineSegment(new Point3d(0, 0, 0), new Point3d(2, 2, 3.9999));
+        lineSegment.setLength(99999999);
+        
+        VoxelCrossingContext firstVoxelV2 = vm.getFirstVoxelV2(lineSegment);
+        
+        System.out.println("test");
+        //vm.getFirstVoxelV2(new LineSegment(new Point3d(0, 0, 0), new Vector3d(0, ), 99999));
+        
+        
+    }
 
     public VoxelCrossingContext getFirstVoxelV2(LineElement lineElement) {
 
+        /**TODO**/
+        /* travail de simplification à faire:
+        
+            -si le système intersection rayon/liste de triangles est conservé
+                car les normales des triangles devraient être définis à la main
+            
+            -sinon :
+                -le test d'intersection du rayon avec la boite englobante ne doit plus passer
+        par un test d'intersection des 12 triangles composant celle ci mais utiliser 
+        une méthode plus simple (style AABB/ray intersection)
+            
+        */
+        
         Point3d intersectionPointV2 = new Point3d();
 
         if (voxelSpace.getBoundingBox().contains(lineElement.getOrigin())) {
