@@ -7,11 +7,8 @@ package fr.amap.lidar.amapvox.chart;
 
 import fr.amap.lidar.amapvox.commons.Voxel;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
-import java.awt.Color;
 import java.awt.Font;
-import java.awt.Paint;
 import java.awt.geom.Ellipse2D;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;

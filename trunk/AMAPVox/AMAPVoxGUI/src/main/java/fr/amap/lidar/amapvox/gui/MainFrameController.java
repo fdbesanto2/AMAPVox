@@ -5,6 +5,7 @@
  */
 package fr.amap.lidar.amapvox.gui;
 
+import fr.amap.lidar.amapvox.gui.update.UpdaterFrameController;
 import fr.amap.commons.javafx.io.FileChooserContext;
 import fr.amap.lidar.amapvox.gui.export.DartExporterFrameController;
 import fr.amap.lidar.amapvox.gui.viewer3d.ToolBoxFrameController;
@@ -1711,7 +1712,7 @@ public class MainFrameController implements Initializable {
         updaterFrame = new Stage();
         
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UpdaterFrame.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/update/UpdaterFrame.fxml"));
             Parent root = loader.load();
             updaterFrameController = loader.getController();
             updaterFrame.setScene(new Scene(root));

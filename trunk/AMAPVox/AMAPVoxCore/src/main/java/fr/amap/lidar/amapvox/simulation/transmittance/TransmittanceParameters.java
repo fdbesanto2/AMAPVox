@@ -22,7 +22,7 @@ import javax.vecmath.Point3f;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize
  */
 
 

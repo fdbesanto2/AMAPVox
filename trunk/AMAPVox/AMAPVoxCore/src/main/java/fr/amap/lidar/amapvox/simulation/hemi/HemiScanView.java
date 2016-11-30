@@ -8,7 +8,7 @@ import fr.amap.commons.math.util.MatrixUtility;
 import fr.amap.commons.math.util.SphericalCoordinates;
 import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
 import fr.amap.amapvox.io.tls.rxp.Shot;
-import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.DirectionalTransmittance;
+import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.voxel.DirectionalTransmittance;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -45,10 +45,10 @@ import java.util.List;
  */
 public class HemiScanView implements Cancellable{
 
-    private final static Logger logger = Logger.getLogger(HemiScanView.class);
+    private final static Logger LOGGER = Logger.getLogger(HemiScanView.class);
     
-    private float skyLuminance = 1f;
-    private float canopyLuminance = 0.1f;
+    private final static float SKY_LUMINANCE = 1f;
+    private final static float CANOPY_LUMINANCE = 0.1f;
     private Point3f rgbSky;
     private Point3f rgbCan;
 
@@ -246,7 +246,7 @@ public class HemiScanView implements Cancellable{
         rotationFromTransf = getRotationFromMatrix(transformation);
     }
     
-    public Mat3D getRotationFromMatrix(Mat4D matrix){
+    public final Mat3D getRotationFromMatrix(Mat4D matrix){
         
         Mat3D rotation = new Mat3D();
         
@@ -302,14 +302,14 @@ public class HemiScanView implements Cancellable{
                     totalShots++;
                     
                     if(count == 1000000){
-                        logger.info("Shots processed : "+totalShots);
+                        LOGGER.info("Shots processed : "+totalShots);
                         count = 0;
                     }
                 }
                 
             }
             
-            logger.info("Total shots processed : "+totalShots);
+            LOGGER.info("Total shots processed : "+totalShots);
             
             extraction.close();
         } catch (Exception ex) {
@@ -343,11 +343,11 @@ public class HemiScanView implements Cancellable{
 
                     if (sectorTable[sx][sy].nbShots > minSampling) {
                         if (random) {
-                            float gf = (sectorTable[sx][sy].brightness - canopyLuminance) / (skyLuminance - canopyLuminance);
+                            float gf = (sectorTable[sx][sy].brightness - CANOPY_LUMINANCE) / (SKY_LUMINANCE - CANOPY_LUMINANCE);
                             if (Math.random() > gf) {
-                                pixTab[x][y].brightness = canopyLuminance;
+                                pixTab[x][y].brightness = CANOPY_LUMINANCE;
                             } else {
-                                pixTab[x][y].brightness = skyLuminance;
+                                pixTab[x][y].brightness = SKY_LUMINANCE;
                             }
                         } else {
                             pixTab[x][y].brightness = sectorTable[sx][sy].brightness;
@@ -556,7 +556,7 @@ public class HemiScanView implements Cancellable{
             for (int y = 0; y < pixTab[x].length; y++) {
                 int yn = pixTab.length - 1 - y; // North in Y+
                 if (pixTab[x][y].brightness > 0) {
-                    float gf = (pixTab[x][y].brightness - canopyLuminance) / (skyLuminance - canopyLuminance);
+                    float gf = (pixTab[x][y].brightness - CANOPY_LUMINANCE) / (SKY_LUMINANCE - CANOPY_LUMINANCE);
                     Point3f rgbr = new Point3f(rgbCan);
                     rgbr.scale(1 - gf);
                     Point3f rgbb = new Point3f(rgbSky);
@@ -646,9 +646,9 @@ public class HemiScanView implements Cancellable{
         indexY = Math.min(indexY, nbPixels - 1);
 
         if (distance < 0) {
-            pixTab[indexX][indexY].updatePixel(skyLuminance);
+            pixTab[indexX][indexY].updatePixel(SKY_LUMINANCE);
         } else {
-            pixTab[indexX][indexY].updatePixel(canopyLuminance);
+            pixTab[indexX][indexY].updatePixel(CANOPY_LUMINANCE);
         }
     }
     
@@ -701,9 +701,9 @@ public class HemiScanView implements Cancellable{
         int indexAz = (int) ((azimuth * nbAzimuts) / (Math.PI * 2));
 
         if (distance < 0) {
-            sectorTable[indexZn][indexAz].updateSector(skyLuminance);
+            sectorTable[indexZn][indexAz].updateSector(SKY_LUMINANCE);
         } else {
-            sectorTable[indexZn][indexAz].updateSector(canopyLuminance);
+            sectorTable[indexZn][indexAz].updateSector(CANOPY_LUMINANCE);
         }
     }
 

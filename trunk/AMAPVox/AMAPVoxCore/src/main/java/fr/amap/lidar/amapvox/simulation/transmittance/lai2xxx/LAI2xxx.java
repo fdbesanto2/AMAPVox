@@ -15,9 +15,9 @@ For further information, please contact Gregoire Vincent.
 package fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx;
 
 import fr.amap.commons.math.util.SphericalCoordinates;
-import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.light.IncidentRadiation;
-import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.light.SolarRadiation;
-import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.util.Time;
+import fr.amap.lidar.amapvox.jeeb.archimed.mmr.IncidentRadiation;
+import fr.amap.lidar.amapvox.jeeb.archimed.mmr.SolarRadiation;
+import fr.amap.lidar.amapvox.jeeb.util.Time;
 import fr.amap.lidar.amapvox.simulation.transmittance.SimulationPeriod;
 import java.io.BufferedWriter;
 import java.io.File;

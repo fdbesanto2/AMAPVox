@@ -21,7 +21,7 @@ import org.apache.commons.math3.analysis.integration.TrapezoidIntegrator;
  */
 public class DirectionalTransmittance {
     
-    private LeafAngleDistribution distribution;
+    private final LeafAngleDistribution distribution;
     private double[] pdfArray; //probability density function array
     private int nbIntervals;
     private double[] serie_angulaire;

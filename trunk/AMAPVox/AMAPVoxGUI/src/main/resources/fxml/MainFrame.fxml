@@ -1720,7 +1720,7 @@
                                       <tabs>
                                         <Tab text="3D view">
                                             <content>
-                                                <fx:include fx:id="viewer3DPanel" source="Viewer3DPanel.fxml" />
+                                                <fx:include fx:id="viewer3DPanel" source="viewer3d/Viewer3DPanel.fxml" />
                                             </content>
                                         </Tab>
                                         

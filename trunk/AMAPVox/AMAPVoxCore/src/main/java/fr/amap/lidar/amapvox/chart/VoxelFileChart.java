@@ -6,7 +6,6 @@
 package fr.amap.lidar.amapvox.chart;
 
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
-import java.awt.Color;
 import java.io.File;
 
 /**

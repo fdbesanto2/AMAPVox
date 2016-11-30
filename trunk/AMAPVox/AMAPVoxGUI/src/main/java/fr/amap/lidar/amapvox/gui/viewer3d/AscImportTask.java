@@ -13,7 +13,6 @@ import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.math.util.MatrixUtility;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.gui.AsciiGridFileExtractorController;
-import fr.amap.lidar.amapvox.gui.SceneObjectWrapper;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
 import fr.amap.viewer3d.loading.shader.PhongShader;
 import fr.amap.viewer3d.object.scene.SceneObject;

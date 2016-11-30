@@ -1,13 +1,13 @@
 package fr.amap.lidar.amapvox.voxelisation;
 
 import fr.amap.commons.util.TimeCounter;
-import fr.amap.lidar.amapvox.jeeb.raytracing.geometry.LineElement;
-import fr.amap.lidar.amapvox.jeeb.raytracing.geometry.LineSegment;
-import fr.amap.lidar.amapvox.jeeb.raytracing.util.BoundingBox3d;
-import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.Scene;
-import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelManager;
-import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelManager.VoxelCrossingContext;
-import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelManagerSettings;
+import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.geometry.LineElement;
+import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.geometry.LineSegment;
+import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.util.BoundingBox3d;
+import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.voxel.Scene;
+import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.voxel.VoxelManager;
+import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.voxel.VoxelManager.VoxelCrossingContext;
+import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.voxel.VoxelManagerSettings;
 import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.raster.multiband.BCommon;
 import fr.amap.commons.raster.multiband.BHeader;

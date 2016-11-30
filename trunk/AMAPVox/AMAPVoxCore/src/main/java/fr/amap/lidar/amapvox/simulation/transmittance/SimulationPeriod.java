@@ -19,7 +19,7 @@ import fr.amap.lidar.amapvox.simulation.transmittance.util.Period;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize
  */
 
 

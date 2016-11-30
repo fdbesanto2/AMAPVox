@@ -37,8 +37,6 @@ import fr.amap.lidar.amapvox.gui.HelpButtonController;
 import fr.amap.lidar.amapvox.gui.PTGProjectExtractor;
 import fr.amap.lidar.amapvox.gui.PTXProjectExtractor;
 import fr.amap.lidar.amapvox.gui.RiscanProjectExtractor;
-import fr.amap.lidar.amapvox.gui.SceneObjectPropertiesPanelController;
-import fr.amap.lidar.amapvox.gui.SceneObjectWrapper;
 import fr.amap.lidar.amapvox.voxelisation.configuration.PTXLidarScan;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
 import fr.amap.viewer3d.FXNewtOverlap;
@@ -215,7 +213,7 @@ public class Viewer3DPanelController implements Initializable {
         fileChooserOpenMatrixFile = new FileChooserContext();
         
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SceneObjectPropertiesPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/viewer3d/SceneObjectPropertiesPanel.fxml"));
             AnchorPane sceneObjectPropertiesPane = loader.load();
             sceneObjectPropertiesPanelController = loader.getController();
             scrollPaneSceneObjectProperties.setContent(sceneObjectPropertiesPane);

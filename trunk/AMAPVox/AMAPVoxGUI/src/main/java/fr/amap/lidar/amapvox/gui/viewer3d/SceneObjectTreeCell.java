@@ -5,7 +5,6 @@
  */
 package fr.amap.lidar.amapvox.gui.viewer3d;
 
-import fr.amap.lidar.amapvox.gui.SceneObjectWrapper;
 import javafx.scene.control.TreeCell;
 
 /**

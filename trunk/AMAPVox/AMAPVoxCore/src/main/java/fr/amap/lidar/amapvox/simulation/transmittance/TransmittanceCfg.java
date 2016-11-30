@@ -35,7 +35,7 @@ import org.jdom2.JDOMException;
 
 /**
  *
- * @author calcul
+ * @author Julien Heurtebize
  */
 
 

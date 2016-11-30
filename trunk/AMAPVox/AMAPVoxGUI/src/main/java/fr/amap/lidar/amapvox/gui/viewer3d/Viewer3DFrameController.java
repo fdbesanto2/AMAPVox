@@ -14,7 +14,6 @@ import fr.amap.viewer3d.object.camera.TrackballCamera;
 import fr.amap.viewer3d.renderer.JoglListener;
 import fr.amap.commons.util.CombinedFilterItem;
 import fr.amap.commons.javafx.io.FileChooserContext;
-import fr.amap.lidar.amapvox.gui.SceneObjectWrapper;
 import fr.amap.lidar.amapvox.gui.Util;
 import fr.amap.viewer3d.SimpleViewer;
 import fr.amap.viewer3d.loading.shader.InstanceLightedShader;

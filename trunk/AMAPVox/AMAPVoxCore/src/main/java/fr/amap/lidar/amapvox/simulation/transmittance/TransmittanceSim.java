@@ -3,13 +3,13 @@
  */
 package fr.amap.lidar.amapvox.simulation.transmittance;
 
-import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.DirectionalTransmittance;
-import fr.amap.lidar.amapvox.jeeb.raytracing.voxel.VoxelSpace;
-import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.light.IncidentRadiation;
-import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.light.SolarRadiation;
-import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.light.Turtle;
-import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.util.Colouring;
-import fr.amap.lidar.amapvox.jeeb.workspace.sunrapp.util.Time;
+import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.voxel.DirectionalTransmittance;
+import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.voxel.VoxelSpace;
+import fr.amap.lidar.amapvox.jeeb.archimed.mmr.IncidentRadiation;
+import fr.amap.lidar.amapvox.jeeb.archimed.mmr.SolarRadiation;
+import fr.amap.lidar.amapvox.jeeb.archimed.mmr.Turtle;
+import fr.amap.lidar.amapvox.jeeb.util.Colouring;
+import fr.amap.lidar.amapvox.jeeb.util.Time;
 import fr.amap.lidar.amapvox.simulation.transmittance.util.Period;
 import fr.amap.commons.util.Process;
 import java.awt.Color;

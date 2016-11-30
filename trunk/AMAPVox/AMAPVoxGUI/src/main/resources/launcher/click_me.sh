@@ -5,4 +5,4 @@ offset=2097152
 maxMemory=$(($freeMemory - $offset))
 echo Java max heap size fixed to ${maxMemory}k
 cd ${0%/*}
-java -jar -Xmx${maxMemory}k AMAPVoxGUI-1.0-r$BUILD_NUMBER$.jar
+java -jar -Xmx${maxMemory}k AMAPVoxGUI-$VERSION$-r$BUILD_NUMBER$.jar
