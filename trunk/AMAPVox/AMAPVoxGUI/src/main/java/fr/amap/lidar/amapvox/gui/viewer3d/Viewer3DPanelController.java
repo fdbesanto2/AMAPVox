@@ -6,6 +6,7 @@ package fr.amap.lidar.amapvox.gui.viewer3d;
  * and open the template in the editor.
  */
 
+import com.jogamp.common.nio.Buffers;
 import com.jogamp.newt.Window;
 import com.jogamp.newt.event.KeyAdapter;
 import com.jogamp.newt.event.KeyEvent;
@@ -29,6 +30,9 @@ import fr.amap.commons.util.io.file.FileManager;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.gui.DialogHelper;
 import fr.amap.commons.javafx.io.FileChooserContext;
+import fr.amap.commons.raster.asc.Face;
+import fr.amap.commons.raster.asc.Point;
+import fr.amap.commons.util.ColorGradient;
 import fr.amap.lidar.amapvox.gui.HelpButtonController;
 import fr.amap.lidar.amapvox.gui.PTGProjectExtractor;
 import fr.amap.lidar.amapvox.gui.PTXProjectExtractor;
@@ -37,29 +41,26 @@ import fr.amap.lidar.amapvox.gui.SceneObjectPropertiesPanelController;
 import fr.amap.lidar.amapvox.gui.SceneObjectWrapper;
 import fr.amap.lidar.amapvox.voxelisation.configuration.PTXLidarScan;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
-import fr.amap.lidar.amapvox.voxviewer.FXNewtOverlap;
-import fr.amap.lidar.amapvox.voxviewer.Viewer3D;
-import fr.amap.lidar.amapvox.voxviewer.event.BasicEvent;
-import fr.amap.lidar.amapvox.voxviewer.loading.shader.AxisShader;
-import fr.amap.lidar.amapvox.voxviewer.loading.shader.ColorShader;
-import fr.amap.lidar.amapvox.voxviewer.loading.shader.InstanceLightedShader;
-import fr.amap.lidar.amapvox.voxviewer.loading.shader.PhongShader;
-import fr.amap.lidar.amapvox.voxviewer.loading.shader.SimpleShader;
-import fr.amap.lidar.amapvox.voxviewer.loading.shader.TextureShader;
-import fr.amap.lidar.amapvox.voxviewer.loading.texture.StringToImage;
-import fr.amap.lidar.amapvox.voxviewer.loading.texture.Texture;
-import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
-import fr.amap.lidar.amapvox.voxviewer.mesh.GLMeshFactory;
-import fr.amap.lidar.amapvox.voxviewer.object.camera.TrackballCamera;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.MousePicker;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.RasterSceneObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObjectFactory;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObjectListener;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.SimpleSceneObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceAdapter;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
+import fr.amap.viewer3d.FXNewtOverlap;
+import fr.amap.viewer3d.SimpleViewer;
+import fr.amap.viewer3d.event.BasicEvent;
+import fr.amap.viewer3d.loading.shader.AxisShader;
+import fr.amap.viewer3d.loading.shader.ColorShader;
+import fr.amap.viewer3d.loading.shader.InstanceLightedShader;
+import fr.amap.viewer3d.loading.shader.PhongShader;
+import fr.amap.viewer3d.loading.shader.SimpleShader;
+import fr.amap.viewer3d.loading.shader.TextureShader;
+import fr.amap.viewer3d.loading.texture.StringToImage;
+import fr.amap.viewer3d.loading.texture.Texture;
+import fr.amap.viewer3d.mesh.GLMesh;
+import fr.amap.viewer3d.mesh.GLMeshFactory;
+import fr.amap.viewer3d.mesh.SimpleGLMesh;
+import fr.amap.viewer3d.object.camera.TrackballCamera;
+import fr.amap.viewer3d.object.scene.MousePicker;
+import fr.amap.viewer3d.object.scene.SceneObject;
+import fr.amap.viewer3d.object.scene.SceneObjectFactory;
+import fr.amap.viewer3d.object.scene.SceneObjectListener;
+import fr.amap.viewer3d.object.scene.SimpleSceneObject;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
@@ -543,7 +544,7 @@ public class Viewer3DPanelController implements Initializable {
                             @Override
                             protected Object call() throws Exception {
 
-                                Viewer3D viewer3D = new Viewer3D((int) (SCREEN_WIDTH / 4.0d), (int) (SCREEN_HEIGHT / 4.0d), (int) (SCREEN_WIDTH / 1.5d), (int) (SCREEN_HEIGHT / 2.0d), "3d view");
+                                SimpleViewer viewer3D = new SimpleViewer((int) (SCREEN_WIDTH / 4.0d), (int) (SCREEN_HEIGHT / 4.0d), (int) (SCREEN_WIDTH / 1.5d), (int) (SCREEN_HEIGHT / 2.0d), "3d view");
                                 viewer3D.setDynamicDraw(true);
                                 //viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
                                 
@@ -708,10 +709,10 @@ public class Viewer3DPanelController implements Initializable {
                             @Override
                             protected Object call() throws Exception {
 
-                                final Viewer3D viewer3D = new Viewer3D((int) (SCREEN_WIDTH / 4.0d), (int) (SCREEN_HEIGHT / 4.0d), (int) (SCREEN_WIDTH / 1.5d), (int) (SCREEN_HEIGHT / 2.0d), voxelFile.toString());
+                                final SimpleViewer viewer3D = new SimpleViewer((int) (SCREEN_WIDTH / 4.0d), (int) (SCREEN_HEIGHT / 4.0d), (int) (SCREEN_WIDTH / 1.5d), (int) (SCREEN_HEIGHT / 2.0d), voxelFile.toString());
                                 //viewer3D.attachEventManager(new BasicEvent(viewer3D.getAnimator(), viewer3D.getJoglContext()));
                                 viewer3D.setDynamicDraw(false);
-                                fr.amap.lidar.amapvox.voxviewer.object.scene.Scene scene = viewer3D.getScene();
+                                fr.amap.viewer3d.object.scene.Scene scene = viewer3D.getScene();
 
                                 /**
                                  * *VOXEL SPACE**
@@ -816,7 +817,7 @@ public class Viewer3DPanelController implements Initializable {
                                     updateMessage("Converting raster to mesh");
                                     dtm.buildMesh();
 
-                                    GLMesh dtmMesh = GLMeshFactory.createMeshAndComputeNormalesFromDTM(dtm);
+                                    GLMesh dtmMesh = createMeshAndComputeNormalesFromDTM(dtm);
                                     dtmSceneObject = new SimpleSceneObject(dtmMesh, false);
                                     dtmSceneObject.setShader(new PhongShader());
                                     scene.addSceneObject(dtmSceneObject);
@@ -877,8 +878,8 @@ public class Viewer3DPanelController implements Initializable {
                                  * Axis
                                  */
                                 
-                                /*InputStream axis3ObjStream = Viewer3D.class.getResourceAsStream("/mesh/axis3.obj");
-                                InputStream axis3MtlStream = Viewer3D.class.getResourceAsStream("/mesh/axis3.mtl");
+                                /*InputStream axis3ObjStream = SimpleViewer.class.getResourceAsStream("/mesh/axis3.obj");
+                                InputStream axis3MtlStream = SimpleViewer.class.getResourceAsStream("/mesh/axis3.mtl");
 
 
                                 GLMesh axisMesh = GLMeshFactory.createMeshFromObj(axis3ObjStream, axis3MtlStream);
@@ -1015,6 +1016,79 @@ public class Viewer3DPanelController implements Initializable {
                 LOGGER.error("Cannot launch 3d view", ex);
             }
         }
+    }
+    
+    public static GLMesh createMeshAndComputeNormalesFromDTM(Raster dtm){
+        
+        List<Point> points = dtm.getPoints();
+        List<Face> faces = dtm.getFaces();
+        
+        GLMesh mesh = new SimpleGLMesh();
+        
+        float[] vertexData = new float[points.size()*3];
+        for(int i=0,j=0 ; i<points.size(); i++, j+=3){
+            
+            vertexData[j] = points.get(i).x;
+            vertexData[j+1] = points.get(i).y;
+            vertexData[j+2] = points.get(i).z;
+        }
+        
+        float[] normalData = new float[points.size()*3];
+        for(int i=0,j=0 ; i<points.size(); i++, j+=3){
+            
+            Vec3F meanNormale = new Vec3F(0, 0, 0);
+            
+            for(Integer faceIndex : points.get(i).faces){
+                
+                Face face = faces.get(faceIndex);
+                
+                Point point1 = points.get(face.getPoint1());
+                Point point2 = points.get(face.getPoint2());
+                Point point3 = points.get(face.getPoint3());
+                
+                Vec3F vec1 = Vec3F.substract(new Vec3F(point2.x, point2.y, point2.z), new Vec3F(point1.x, point1.y, point1.z));
+                Vec3F vec2 = Vec3F.substract(new Vec3F(point3.x, point3.y, point3.z), new Vec3F(point1.x, point1.y, point1.z));
+                
+                meanNormale = Vec3F.add(meanNormale, Vec3F.normalize(Vec3F.cross(vec2, vec1)));
+                
+            }
+            
+            meanNormale = Vec3F.normalize(meanNormale);
+            
+            normalData[j] = meanNormale.x;
+            normalData[j+1] = meanNormale.y;
+            normalData[j+2] = meanNormale.z;
+        }
+        
+        int indexData[] = new int[faces.size()*3];
+        for(int i=0, j=0 ; i<faces.size(); i++, j+=3){
+            
+            indexData[j] = faces.get(i).getPoint1();
+            indexData[j+1] = faces.get(i).getPoint2();
+            indexData[j+2] = faces.get(i).getPoint3();
+        }
+        
+        mesh.setVertexBuffer(Buffers.newDirectFloatBuffer(vertexData));
+        mesh.indexBuffer = Buffers.newDirectIntBuffer(indexData);
+        mesh.normalBuffer = Buffers.newDirectFloatBuffer(normalData);
+        mesh.vertexCount = indexData.length;
+        
+        ColorGradient gradient = new ColorGradient(dtm.getzMin(), dtm.getzMax());
+        gradient.setGradientColor(ColorGradient.GRADIENT_RAINBOW3);
+        
+        float colorData[] = new float[points.size()*3];
+        for(int i=0, j=0;i<points.size();i++,j+=3){
+            
+            Color color = gradient.getColor(points.get(i).z);
+            colorData[j] = color.getRed()/255.0f;
+            colorData[j+1] = color.getGreen()/255.0f;
+            colorData[j+2] =  color.getBlue()/255.0f;
+            
+        }
+        
+        mesh.colorBuffer = Buffers.newDirectFloatBuffer(colorData);
+        
+        return mesh;
     }
 
     @FXML

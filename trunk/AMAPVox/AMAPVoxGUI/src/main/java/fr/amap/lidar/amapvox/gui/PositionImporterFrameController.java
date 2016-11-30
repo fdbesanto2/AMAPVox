@@ -9,7 +9,7 @@ import fr.amap.commons.javafx.io.FileChooserContext;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.PointCloudSceneObject;
+import fr.amap.viewer3d.object.scene.PointCloudSceneObject;
 import fr.amap.commons.javafx.io.TextFileParserFrameController;
 import fr.amap.lidar.amapvox.commons.Voxel;
 import java.io.BufferedReader;

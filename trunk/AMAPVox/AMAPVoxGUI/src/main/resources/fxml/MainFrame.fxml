@@ -872,8 +872,38 @@
                                                                         </Label>
                                                                      </children>
                                                                   </HBox>
-                                                                  <Button layoutX="43.0" layoutY="177.0" mnemonicParsing="false" onAction="#onActionButtonDisplayPdf" text="Display PDF" />
-                                                                  <Button layoutX="43.0" layoutY="215.0" mnemonicParsing="false" onAction="#onActionButtonDisplayGTheta" text="Display GTheta" />
+                                                                  <GridPane hgap="5.0" layoutX="43.0" layoutY="177.0" vgap="5.0">
+                                                                     <columnConstraints>
+                                                                        <ColumnConstraints hgrow="SOMETIMES" />
+                                                                        <ColumnConstraints hgrow="SOMETIMES" />
+                                                                     </columnConstraints>
+                                                                     <rowConstraints>
+                                                                        <RowConstraints vgrow="SOMETIMES" />
+                                                                        <RowConstraints vgrow="SOMETIMES" />
+                                                                     </rowConstraints>
+                                                                     <children>
+                                                                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onActionButtonDisplayPdf" text="Display PDF" />
+                                                                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onActionButtonDisplayGTheta" text="Display GTheta" GridPane.rowIndex="1" />
+                                                                        <Button mnemonicParsing="false" onAction="#onActionButtonSavePdf" GridPane.columnIndex="1">
+                                                                           <graphic>
+                                                                              <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@icons/save.png" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                           </graphic>
+                                                                        </Button>
+                                                                        <Button mnemonicParsing="false" onAction="#onActionButtonSaveGTheta" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                                           <graphic>
+                                                                              <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@icons/save.png" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                           </graphic>
+                                                                        </Button>
+                                                                     </children>
+                                                                  </GridPane>
                                                                </children>
                                                             </AnchorPane>
                                                          </content>

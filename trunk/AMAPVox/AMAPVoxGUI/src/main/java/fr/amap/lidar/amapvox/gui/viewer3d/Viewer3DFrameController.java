@@ -10,19 +10,18 @@ import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.commons.util.ColorGradient;
 import fr.amap.commons.util.CombinedFilter;
 import fr.amap.commons.util.Filter;
-import fr.amap.lidar.amapvox.voxviewer.object.camera.TrackballCamera;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
-import fr.amap.lidar.amapvox.voxviewer.renderer.JoglListener;
+import fr.amap.viewer3d.object.camera.TrackballCamera;
+import fr.amap.viewer3d.renderer.JoglListener;
 import fr.amap.commons.util.CombinedFilterItem;
 import fr.amap.commons.javafx.io.FileChooserContext;
 import fr.amap.lidar.amapvox.gui.SceneObjectWrapper;
 import fr.amap.lidar.amapvox.gui.Util;
-import fr.amap.lidar.amapvox.voxviewer.Viewer3D;
-import fr.amap.lidar.amapvox.voxviewer.loading.shader.InstanceLightedShader;
-import fr.amap.lidar.amapvox.voxviewer.loading.shader.InstanceShader;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.Scene;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
-import fr.amap.lidar.amapvox.voxviewer.renderer.RenderListener;
+import fr.amap.viewer3d.SimpleViewer;
+import fr.amap.viewer3d.loading.shader.InstanceLightedShader;
+import fr.amap.viewer3d.loading.shader.InstanceShader;
+import fr.amap.viewer3d.object.scene.Scene;
+import fr.amap.viewer3d.object.scene.SceneObject;
+import fr.amap.viewer3d.renderer.RenderListener;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
@@ -97,7 +96,7 @@ public class Viewer3DFrameController implements Initializable {
     
     private final static Logger LOGGER = Logger.getLogger(Viewer3DFrameController.class);
     
-    private Viewer3D viewer3D;
+    private SimpleViewer viewer3D;
     private final FileChooserContext fcScreenshot = new FileChooserContext();
     
     private TreeItem<SceneObjectWrapper> root;
@@ -693,7 +692,7 @@ public class Viewer3DFrameController implements Initializable {
         });
     }
     
-    public void setViewer3D(Viewer3D viewer3D){
+    public void setViewer3D(SimpleViewer viewer3D){
         this.viewer3D = viewer3D;
     }
     

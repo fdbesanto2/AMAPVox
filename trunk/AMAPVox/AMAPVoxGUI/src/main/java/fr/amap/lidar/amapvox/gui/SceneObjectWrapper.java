@@ -6,7 +6,7 @@
 package fr.amap.lidar.amapvox.gui;
 
 import fr.amap.commons.math.matrix.Mat4D;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
+import fr.amap.viewer3d.object.scene.SceneObject;
 import java.io.File;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.control.CheckBox;

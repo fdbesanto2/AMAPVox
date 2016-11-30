@@ -15,20 +15,14 @@ import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.gui.AsciiGridFileExtractorController;
 import fr.amap.lidar.amapvox.gui.SceneObjectWrapper;
 import fr.amap.lidar.amapvox.voxreader.VoxelFileReader;
-import fr.amap.lidar.amapvox.voxviewer.loading.shader.PhongShader;
-import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
-import fr.amap.lidar.amapvox.voxviewer.mesh.GLMeshFactory;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.RasterSceneObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
+import fr.amap.viewer3d.loading.shader.PhongShader;
+import fr.amap.viewer3d.object.scene.SceneObject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javax.vecmath.Matrix4d;
 
 /**
  *

@@ -19,8 +19,6 @@ import fr.amap.lidar.amapvox.chart.VoxelsToChart;
 import fr.amap.lidar.amapvox.chart.VoxelsToChart.QuadratAxis;
 import fr.amap.lidar.amapvox.commons.Configuration;
 import fr.amap.lidar.amapvox.commons.Configuration.InputType;
-import static fr.amap.lidar.amapvox.commons.Configuration.InputType.LAS_FILE;
-import static fr.amap.lidar.amapvox.commons.Configuration.InputType.LAZ_FILE;
 import static fr.amap.lidar.amapvox.commons.Configuration.InputType.POINTS_FILE;
 import static fr.amap.lidar.amapvox.commons.Configuration.InputType.RSP_PROJECT;
 import static fr.amap.lidar.amapvox.commons.Configuration.InputType.RXP_SCAN;
@@ -35,7 +33,6 @@ import fr.amap.commons.math.util.MatrixFileParser;
 import fr.amap.commons.math.util.MatrixUtility;
 import fr.amap.commons.math.util.SphericalCoordinates;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
-import fr.amap.commons.util.TimeCounter;
 import fr.amap.commons.structure.pointcloud.PointCloud;
 import fr.amap.amapvox.io.tls.rsp.Rsp;
 import fr.amap.amapvox.io.tls.rsp.RxpScan;
@@ -46,20 +43,16 @@ import fr.amap.commons.math.geometry.BoundingBox2F;
 import fr.amap.commons.math.geometry.BoundingBox3F;
 import fr.amap.lidar.amapvox.simulation.hemi.HemiParameters;
 import fr.amap.lidar.amapvox.simulation.hemi.HemiPhotoCfg;
-import fr.amap.lidar.amapvox.simulation.hemi.HemiScanView;
-import fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceSim;
 import fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceParameters;
 import fr.amap.lidar.amapvox.simulation.transmittance.SimulationPeriod;
 import fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceCfg;
 import fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx.LAI2200;
 import fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx.LAI2xxx;
-import fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx.Lai2xxxSim;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.commons.DirectionalTransmittance;
 import fr.amap.lidar.amapvox.commons.LeafAngleDistribution;
 import static fr.amap.lidar.amapvox.commons.LeafAngleDistribution.Type.TWO_PARAMETER_BETA;
 import static fr.amap.lidar.amapvox.commons.LeafAngleDistribution.Type.ELLIPSOIDAL;
-import fr.amap.lidar.amapvox.voxelisation.postproc.VoxelFileMerging;
 import fr.amap.lidar.amapvox.voxelisation.LaserSpecification;
 import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.Input;
@@ -76,7 +69,6 @@ import fr.amap.commons.javafx.matrix.TransformationFrameController;
 import fr.amap.commons.math.point.Point3D;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec3F;
-import fr.amap.commons.util.ProcessingListener;
 import fr.amap.commons.util.image.ScaleGradient;
 import fr.amap.commons.util.io.file.CSVFile;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightParams;
@@ -129,8 +121,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -201,30 +191,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import fr.amap.lidar.amapvox.gui.task.ServiceProvider;
 import fr.amap.lidar.amapvox.voxelisation.als.PointsToShot;
-import fr.amap.lidar.amapvox.voxelisation.als.PointsToShotIterator;
 import fr.amap.lidar.amapvox.voxelisation.postproc.VoxelSpaceUtil;
-import fr.amap.lidar.amapvox.voxviewer.Viewer3D;
-import fr.amap.lidar.amapvox.voxviewer.event.EventManager;
-import fr.amap.lidar.amapvox.voxviewer.input.InputKeyListener;
-import fr.amap.lidar.amapvox.voxviewer.loading.shader.InstanceLightedShader;
-import fr.amap.lidar.amapvox.voxviewer.loading.shader.SimpleShader;
-import fr.amap.lidar.amapvox.voxviewer.loading.shader.TextureShader;
-import fr.amap.lidar.amapvox.voxviewer.loading.texture.StringToImage;
-import fr.amap.lidar.amapvox.voxviewer.loading.texture.Texture;
-import fr.amap.lidar.amapvox.voxviewer.mesh.GLMesh;
-import fr.amap.lidar.amapvox.voxviewer.mesh.GLMeshFactory;
-import fr.amap.lidar.amapvox.voxviewer.object.camera.TrackballCamera;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.MousePicker;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObjectFactory;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObjectListener;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.SimpleSceneObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceAdapter;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
+import fr.amap.viewer3d.SimpleViewer;
+import fr.amap.viewer3d.event.EventManager;
+import fr.amap.viewer3d.input.InputKeyListener;
+import fr.amap.viewer3d.loading.shader.InstanceLightedShader;
+import fr.amap.viewer3d.loading.shader.SimpleShader;
+import fr.amap.viewer3d.loading.shader.TextureShader;
+import fr.amap.viewer3d.loading.texture.StringToImage;
+import fr.amap.viewer3d.loading.texture.Texture;
+import fr.amap.viewer3d.mesh.GLMesh;
+import fr.amap.viewer3d.mesh.GLMeshFactory;
+import fr.amap.viewer3d.object.camera.TrackballCamera;
+import fr.amap.viewer3d.object.scene.MousePicker;
+import fr.amap.viewer3d.object.scene.SceneObject;
+import fr.amap.viewer3d.object.scene.SceneObjectFactory;
+import fr.amap.viewer3d.object.scene.SceneObjectListener;
+import fr.amap.viewer3d.object.scene.SimpleSceneObject;
+import fr.amap.lidar.amapvox.gui.viewer3d.VoxelObject;
+import fr.amap.lidar.amapvox.gui.viewer3d.VoxelSpaceAdapter;
+import fr.amap.lidar.amapvox.gui.viewer3d.VoxelSpaceSceneObject;
 import java.awt.Color;
 import java.awt.Desktop;
-import java.awt.Paint;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -237,6 +225,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.TextArea;
 import javafx.stage.StageStyle;
 import javax.vecmath.Point3f;
+import org.jfree.data.xy.XYDataItem;
 import scripts.DanielScript;
 import scripts.Script;
 
@@ -721,6 +710,7 @@ public class MainFrameController implements Initializable {
     private Tab tabHemiFromPAD;
     @FXML
     private Button helpButtonNaNsCorrection;
+    @FXML
     private HelpButtonController helpButtonNaNsCorrectionController;
     @FXML
     private Button helpButtonAutoBBox;
@@ -3546,8 +3536,7 @@ public class MainFrameController implements Initializable {
         
     }
     
-    @FXML
-    private void onActionButtonDisplayPdf(ActionEvent event) {
+    private XYSeries generatePDFSerie(){
         
         LeafAngleDistribution distribution = getLeafAngleDistribution();
         
@@ -3561,16 +3550,21 @@ public class MainFrameController implements Initializable {
             serie.add(angleInDegrees, pdf);
         }
         
-        XYSeriesCollection dataset = new XYSeriesCollection(serie);
+        return serie;
+    }
+    
+    @FXML
+    private void onActionButtonDisplayPdf(ActionEvent event) {
+        
+        XYSeriesCollection dataset = new XYSeriesCollection(generatePDFSerie());
             
         ChartViewer viewer = new ChartViewer("PDF function", 500, 500, 1);
         viewer.insertChart(ChartViewer.createBasicChart("PDF ~ angles", dataset, "Angle (degrees)", "PDF"));
         viewer.show();
         
     }
-
-    @FXML
-    private void onActionButtonDisplayGTheta(ActionEvent event) {
+    
+    private XYSeries generateGThetaSerie(){
         
         LeafAngleDistribution distribution = getLeafAngleDistribution();
         
@@ -3586,13 +3580,17 @@ public class MainFrameController implements Initializable {
             serie.add(angleInDegrees, GTheta);
         }
         
-        XYSeriesCollection dataset = new XYSeriesCollection(serie);
+        return serie;
+    }
+
+    @FXML
+    private void onActionButtonDisplayGTheta(ActionEvent event) {
+        
+        XYSeriesCollection dataset = new XYSeriesCollection(generateGThetaSerie());
             
         ChartViewer viewer = new ChartViewer("GTheta", 500, 500, 1);
         viewer.insertChart(ChartViewer.createBasicChart("GTheta ~ inclinaison angle", dataset, "Angle (degrees)", "GTheta"));
         viewer.show();
-        
-        
     }
 
     @FXML
@@ -6520,9 +6518,9 @@ public class MainFrameController implements Initializable {
                         @Override
                         protected Object call() throws Exception {
 
-                            Viewer3D viewer3D = new Viewer3D((int) (SCREEN_WIDTH / 4.0d), (int) (SCREEN_HEIGHT / 4.0d), (int) (SCREEN_WIDTH / 1.5d), (int) (SCREEN_HEIGHT / 2.0d), voxelFile.toString());
+                            SimpleViewer viewer3D = new SimpleViewer((int) (SCREEN_WIDTH / 4.0d), (int) (SCREEN_HEIGHT / 4.0d), (int) (SCREEN_WIDTH / 1.5d), (int) (SCREEN_HEIGHT / 2.0d), voxelFile.toString());
 
-                            fr.amap.lidar.amapvox.voxviewer.object.scene.Scene scene = viewer3D.getScene();
+                            fr.amap.viewer3d.object.scene.Scene scene = viewer3D.getScene();
 
                             /**
                              * *VOXEL SPACE**
@@ -7052,6 +7050,60 @@ public class MainFrameController implements Initializable {
             pts.write(selectedFile);
         } catch (Exception ex) {
             showErrorDialog(ex);
+        }
+    }
+
+    @FXML
+    private void onActionButtonSavePdf(ActionEvent event) {
+        
+        FileChooser fc = new FileChooser();
+        
+        File selectedFile = fc.showSaveDialog(stage);
+        
+        if(selectedFile != null){
+            
+            XYSeries serie = generatePDFSerie();
+            
+            try(BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile))){
+                
+                writer.write("Angle(degrees) pdf\n");
+                
+                for(Object o : serie.getItems()){
+                    writer.write(((XYDataItem)o).getX()+" "+((XYDataItem)o).getY()+"\n");
+                }
+                
+            } catch (IOException ex) {
+                showErrorDialog(ex);
+            }
+            
+        }
+        
+        
+    }
+
+    @FXML
+    private void onActionButtonSaveGTheta(ActionEvent event) {
+        
+        FileChooser fc = new FileChooser();
+        
+        File selectedFile = fc.showSaveDialog(stage);
+        
+        if(selectedFile != null){
+            
+            XYSeries serie = generateGThetaSerie();
+            
+            try(BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile))){
+                
+                writer.write("Angle(degrees) gtheta\n");
+                
+                for(Object o : serie.getItems()){
+                    writer.write(((XYDataItem)o).getX()+" "+((XYDataItem)o).getY()+"\n");
+                }
+                
+            } catch (IOException ex) {
+                showErrorDialog(ex);
+            }
+            
         }
     }
     

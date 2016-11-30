@@ -2,15 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>fr.amap.lidar.amapvox</groupId>
-        <artifactId>amapvox</artifactId>
-        <version>1.0</version>
-    </parent>
-    <artifactId>amapvox-voxviewer</artifactId>
+    <groupId>fr.amap.threed</groupId>
+    <artifactId>threed-viewer</artifactId>
+    <version>1.0</version>
+    
     <packaging>jar</packaging>
 
-    <name>VoxViewer</name>
+    <name>SimpleViewer</name>
 
     <build>
         <plugins>
@@ -52,60 +50,15 @@
             <version>3.5</version>
         </dependency>
         <dependency>
-            <groupId>org.jdom</groupId>
-            <artifactId>jdom2</artifactId>
-            <version>2.0.6</version>
-        </dependency>
-        <dependency>
-            <groupId>sax</groupId>
-            <artifactId>sax</artifactId>
-            <version>2.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.amap.commons</groupId>
-            <artifactId>commons-raster</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.objecthunter</groupId>
-            <artifactId>exp4j</artifactId>
-            <version>0.4.5</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.controlsfx</groupId>
-            <artifactId>controlsfx</artifactId>
-            <version>8.20.8</version>
+            <version>1.2.17</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.10</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>fr.amap.lidar.amapvox</groupId>
-            <artifactId>amapvox-voxreader</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.amap.lidar</groupId>
-            <artifactId>format-las</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.amap.lidar</groupId>
-            <artifactId>format-riegl</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.amap.lidar.amapvox</groupId>
-            <artifactId>amapvox-jeeblight</artifactId>
-            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>fr.amap.commons</groupId>

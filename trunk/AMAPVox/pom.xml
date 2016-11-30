@@ -7,21 +7,11 @@
     <packaging>pom</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <github.global.server>github</github.global.server>
-        <repositoryName>amapvox</repositoryName>
-        <repositoryOwner>AMAPVox</repositoryOwner>
-        <github.site.userName>AMAPVox</github.site.userName>
-        <github.global.userName>AMAP</github.global.userName>
     </properties>
     
     <modules>
-        <module>VoxViewer</module>
         <module>AMAPVoxGUI</module>
-        <module>JeebLight</module>
-        <module>VoxReader</module>
-        <module>VoxWriter</module>
-        <module>commons</module>
-        <module>AMAPVox</module>
+        <module>AMAPVoxCore</module>
     </modules>  
     
     <scm>

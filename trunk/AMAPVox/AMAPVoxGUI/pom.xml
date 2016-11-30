@@ -248,8 +248,8 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>fr.amap.lidar.amapvox</groupId>
-            <artifactId>amapvox-voxviewer</artifactId>
+            <groupId>fr.amap.threed</groupId>
+            <artifactId>threed-viewer</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
@@ -291,6 +291,11 @@
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>batik-codec</artifactId>
             <version>1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>net.objecthunter</groupId>
+            <artifactId>exp4j</artifactId>
+            <version>0.4.7</version>
         </dependency>
 
     </dependencies>

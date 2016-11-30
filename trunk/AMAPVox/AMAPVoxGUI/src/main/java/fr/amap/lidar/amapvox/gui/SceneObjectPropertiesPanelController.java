@@ -7,11 +7,11 @@ package fr.amap.lidar.amapvox.gui;
 
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.util.ColorGradient;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.PointCloudSceneObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.ScalarField;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.ScalarSceneObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.SceneObject;
-import fr.amap.lidar.amapvox.voxviewer.object.scene.VoxelSpaceSceneObject;
+import fr.amap.viewer3d.object.scene.PointCloudSceneObject;
+import fr.amap.viewer3d.object.scene.ScalarField;
+import fr.amap.viewer3d.object.scene.ScalarSceneObject;
+import fr.amap.viewer3d.object.scene.SceneObject;
+import fr.amap.lidar.amapvox.gui.viewer3d.VoxelSpaceSceneObject;
 import java.awt.Color;
 import java.lang.reflect.Field;
 import java.net.URL;
