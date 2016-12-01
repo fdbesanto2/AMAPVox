@@ -52,7 +52,7 @@
                                                          <graphic>
                                                             <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
-                                                                  <Image url="@icons/Interaction_Transformation.png" />
+                                                                  <Image url="@../icons/Interaction_Transformation.png" />
                                                                </image>
                                                             </ImageView>
                                                          </graphic>
@@ -97,7 +97,7 @@
                                              <graphic>
                                                 <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@icons/gnome_list_remove.png" />
+                                                      <Image url="@../icons/gnome_list_remove.png" />
                                                    </image>
                                                 </ImageView>
                                              </graphic>
@@ -106,7 +106,7 @@
                                              <graphic>
                                                 <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
-                                                      <Image url="@icons/gnome_list_add.png" />
+                                                      <Image url="@../icons/gnome_list_add.png" />
                                                    </image>
                                                 </ImageView>
                                              </graphic>

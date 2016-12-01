@@ -505,3 +505,15 @@ Caused by: java.lang.ClassNotFoundException: fr.amap.lidar.amapvox.gui.SceneObje
 2016-12-01 17:47:17 INFO  - Extracting: lib/fop-0.94.jar
 2016-12-01 17:47:17 INFO  - Extracting: changes_log.txt
 2016-12-01 17:47:17 INFO  - Removing archive file: /home/julien/Documents/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/target/release/AMAPVoxGUI-1.0-r191fa6b6.zip
+2016-12-01 18:17:38 ERROR - Error during toolbar init
+java.lang.IllegalStateException: Location is not set.
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2434)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:2409)
+	at fr.amap.lidar.amapvox.gui.viewer3d.Viewer3DPanelController$15$1$4.run(Viewer3DPanelController.java:916)
+	at com.sun.javafx.application.PlatformImpl.lambda$null$173(PlatformImpl.java:295)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.application.PlatformImpl.lambda$runLater$174(PlatformImpl.java:294)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$49(GtkApplication.java:139)
+	at java.lang.Thread.run(Thread.java:745)

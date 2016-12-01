@@ -6,9 +6,6 @@ package fr.amap.lidar.amapvox.gui.update;
  * and open the template in the editor.
  */
 
-import com.dropbox.core.DbxException;
-import fr.amap.lidar.amapvox.gui.update.Updater;
-import java.io.File;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -18,9 +15,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.ResourceBundle;
-import java.util.TimeZone;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -31,9 +26,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -172,32 +165,27 @@ public class UpdaterFrameController implements Initializable {
                     @Override
                     protected Object call() throws Exception {
                         
-                        try {
-                            Map<Date, ProgramDetail> fileList = updater.getFileList();
-                            List<ProgramDetail> programs = new ArrayList<>();
+                        Map<Date, ProgramDetail> fileList = updater.getFileList();
+                        List<ProgramDetail> programs = new ArrayList<>();
 
-                            Iterator<Map.Entry<Date, ProgramDetail>> iterator = fileList.entrySet().iterator();
-                            while(iterator.hasNext()){
-                                Map.Entry<Date, ProgramDetail> program = iterator.next();
-                                programs.add(program.getValue());
-                            }
-
-                            Collections.reverse(programs);
-
-                            
-                            Platform.runLater(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    tableView.getItems().clear();
-                                    tableView.getItems().addAll(programs);
-                                    tableView.getSelectionModel().selectFirst();
-                                }
-                            });
-
-                        } catch (DbxException ex) {
-                            logger.error(ex);
+                        Iterator<Map.Entry<Date, ProgramDetail>> iterator = fileList.entrySet().iterator();
+                        while(iterator.hasNext()){
+                            Map.Entry<Date, ProgramDetail> program = iterator.next();
+                            programs.add(program.getValue());
                         }
+
+                        Collections.reverse(programs);
+
+
+                        Platform.runLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                tableView.getItems().clear();
+                                tableView.getItems().addAll(programs);
+                                tableView.getSelectionModel().selectFirst();
+                            }
+                        });
                         
                         return null;
                     }

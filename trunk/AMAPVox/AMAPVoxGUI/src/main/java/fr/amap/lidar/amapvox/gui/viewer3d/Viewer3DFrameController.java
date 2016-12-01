@@ -651,6 +651,7 @@ public class Viewer3DFrameController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 viewer3D.getScene().getSceneObject("color scale").setVisible(newValue);
+                viewer3D.getJoglContext().refresh();
             }
         });
         

@@ -97,7 +97,7 @@
                                                                      <graphic>
                                                                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" style="-fx-rotate: 30;">
                                                                            <image>
-                                                                              <Image url="@icons/configure.png" />
+                                                                              <Image url="@../icons/configure.png" />
                                                                            </image>
                                                                         </ImageView>
                                                                      </graphic>
@@ -255,7 +255,7 @@
                                                                <graphic>
                                                                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                                                      <image>
-                                                                        <Image url="@icons/Interaction_Transformation.png" />
+                                                                        <Image url="@../icons/Interaction_Transformation.png" />
                                                                      </image>
                                                                   </ImageView>
                                                                </graphic>
@@ -282,7 +282,7 @@
                                  <graphic>
                                     <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@icons/ccSettings.png" />
+                                          <Image url="@../icons/ccSettings.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -294,7 +294,7 @@
                                  <graphic>
                                     <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@icons/camera.png" />
+                                          <Image url="@../icons/camera.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -330,7 +330,7 @@
                                  <graphic>
                                     <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@icons/eye2.png" />
+                                          <Image url="@../icons/eye2.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -376,7 +376,7 @@
                                  <graphic>
                                     <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@icons/ampoule.svg.png" />
+                                          <Image url="@../icons/ampoule.svg.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -391,7 +391,7 @@
                                        <graphic>
                                           <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@icons/viewZpos.png" />
+                                                <Image url="@../icons/viewZpos.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -403,7 +403,7 @@
                                        <graphic>
                                           <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@icons/viewYpos.png" />
+                                                <Image url="@../icons/viewYpos.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -415,7 +415,7 @@
                                        <graphic>
                                           <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@icons/viewXpos.png" />
+                                                <Image url="@../icons/viewXpos.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -427,7 +427,7 @@
                                        <graphic>
                                           <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@icons/viewYneg.png" />
+                                                <Image url="@../icons/viewYneg.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -439,7 +439,7 @@
                                        <graphic>
                                           <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@icons/viewXneg.png" />
+                                                <Image url="@../icons/viewXneg.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -451,7 +451,7 @@
                                        <graphic>
                                           <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@icons/viewZneg.png" />
+                                                <Image url="@../icons/viewZneg.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>

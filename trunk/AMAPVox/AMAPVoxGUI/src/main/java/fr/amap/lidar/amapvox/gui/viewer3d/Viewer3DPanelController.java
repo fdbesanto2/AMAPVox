@@ -908,7 +908,7 @@ public class Viewer3DPanelController implements Initializable {
                                     public void run() {
 
                                         final Stage viewer3DStage = new Stage();
-                                        final FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Viewer3DFrame.fxml"));
+                                        final FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/viewer3d/Viewer3DFrame.fxml"));
 
                                         try {
                                             stage.setAlwaysOnTop(false);

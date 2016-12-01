@@ -13,8 +13,6 @@
  */
 package fr.amap.lidar.amapvox.gui.update;
 
-import com.dropbox.core.DbxException;
-import com.dropbox.core.v2.DbxClientV2;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -24,7 +22,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -151,7 +148,7 @@ public class Updater {
         }
     }
 
-    public Map<Date, ProgramDetail> getFileList() throws DbxException{
+    public Map<Date, ProgramDetail> getFileList(){
         
         updateFileList();
         
