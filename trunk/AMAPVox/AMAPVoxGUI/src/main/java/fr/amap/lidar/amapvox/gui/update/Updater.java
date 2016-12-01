@@ -13,31 +13,42 @@
  */
 package fr.amap.lidar.amapvox.gui.update;
 
-import com.dropbox.core.DbxAppInfo;
-import com.dropbox.core.DbxClient;
-import com.dropbox.core.DbxEntry;
 import com.dropbox.core.DbxException;
-import com.dropbox.core.DbxRequestConfig;
-import com.dropbox.core.DbxWebAuthNoRedirect;
+import com.dropbox.core.v2.DbxClientV2;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import org.apache.log4j.Logger;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  *
@@ -45,80 +56,109 @@ import org.apache.log4j.Logger;
  */
 public class Updater {
 
-    private final static Logger logger = Logger.getLogger(Updater.class);
+    private final static Logger LOGGER = Logger.getLogger(Updater.class);
     
-    
-    //those keys are retrieved in dropbox account
-    
-    	
-
+    private Map<Date, ProgramDetail> fileList;
+    private List<URL> changeLogs;
         
-    private final static String APP_KEY = "2idw94pryda6m0d";
-    private final static String APP_SECRET = "rfdfsncrn4gt1c4";
-    private final static String ACCESS_TOKEN = "VtwO0B43JYAAAAAAAAAAB0S6TNWEbdD7bXIhqsH5cppLRPPyVoAf4YBuqL7HSmQl";
-    //private final static String APP_KEY = "yv02kehoorehcli";
-    //private final static String APP_SECRET = "i8z195pbw5gfei3";
-    //private final static String ACCESS_TOKEN = "PTDN3PzvDt4AAAAAAAAAFyC_4eXTNHpP7XU56ticl1WiKogxDCCMkIdQoRlUloe4";
-
-    private DbxClient client;
-    private Map<Date, File> fileList;
-    
-    public void connect() throws DbxException{
-        
-        DbxAppInfo appInfo = new DbxAppInfo(APP_KEY, APP_SECRET);
-            
-        DbxRequestConfig config = new DbxRequestConfig("AMAPVox User",
-                Locale.getDefault().toString());
-        DbxWebAuthNoRedirect webAuth = new DbxWebAuthNoRedirect(config, appInfo);
-
-        webAuth.start();
-
-        client = new DbxClient(config, ACCESS_TOKEN);
-
-        logger.info("Linked account: " + client.getAccountInfo().displayName);
-    }
-    
-    public void updateFileList() throws DbxException{
-        
-        DbxEntry.WithChildren listing = client.getMetadataWithChildren("/");
+    public void updateFileList() {
         
         fileList = new TreeMap<>();
+        changeLogs = new ArrayList<>();
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy KK:mm aa");
+                
+        Document doc;
+        try {
+            doc = Jsoup.connect("http://amap-dev.cirad.fr/projects/voxelidar/files").get();
+            Element listFilesElement = doc.getElementsByClass("list files").get(0);
             
-        for (DbxEntry child : listing.children) {
-            if(child.isFile()){
-                DbxEntry.File f = child.asFile();
-                if(f.name.contains(".zip")){
-                    fileList.put(f.lastModified, new File(f.path));
+            Elements elements = listFilesElement.getElementsByTag("tbody").get(0).getElementsByTag("tr");
+            
+            for(int i = 0;i<elements.size();i++){
+                
+                Element element = elements.get(i);
+                Element fileNameElement = element.getElementsByClass("filename").get(0);
+                Element aElement = fileNameElement.getElementsByTag("a").get(0);
+                String name = aElement.ownText();
+                
+                String link = "http://amap-dev.cirad.fr"+aElement.attr("href");
+                
+                Date creationDate = sdf.parse(element.getElementsByClass("created_on").get(0).ownText());
+                
+                if(name.endsWith(".zip")){
+                    fileList.put(creationDate, new ProgramDetail(creationDate, new URL(link), ""));
+                }else if(name.endsWith(".changes")){
+                    changeLogs.add(new URL(link));
+                }
+            }
+            
+        } catch (IOException | ParseException ex) {
+            LOGGER.error(ex);
+        }
+        
+        Iterator<Entry<Date, ProgramDetail>> iterator = fileList.entrySet().iterator();
+        
+        while(iterator.hasNext()){
+            Entry<Date, ProgramDetail> entry = iterator.next();
+            
+            String fileName = getFilenameFromURL(entry.getValue().getUrl());
+            String fileNameWithoutExt = fileName.substring(0, fileName.length()-4);
+            
+            for(URL changeLog : changeLogs){
+                if(getFilenameFromURL(changeLog).equals(fileNameWithoutExt+".changes")){
+                    
+                    try {
+                        //download change log
+                        File tempFile = File.createTempFile("amapvox_", "_changelog");
+                        
+                        downloadFile(changeLog, tempFile);
+                        
+                        StringBuilder builder;
+                        try (BufferedReader reader = new BufferedReader(new FileReader(tempFile))) {
+                            String line;
+                            builder = new StringBuilder();
+                            while((line = reader.readLine()) != null){
+                                builder.append(line).append("\n");
+                            }
+                        }
+                        
+                        entry.getValue().setChangeLog(builder.toString());
+                       
+                    } catch (IOException ex) {
+                        LOGGER.error(ex);
+                    }
                 }
             }
         }
     }
-
-    public Map<Date, File> getFileList() throws DbxException{
+    
+    public static String getFilenameFromURL(URL url){
+        String path = url.getPath();
+        return url.getPath().substring(path.lastIndexOf("/")+1);
+    }
+    
+    private void downloadFile(URL url, File outputFile){
         
-        if(fileList == null){
-            updateFileList();
+        try {
+            ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+            FileOutputStream fos = new FileOutputStream(outputFile);
+            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+        } catch (MalformedURLException ex) {
+            java.util.logging.Logger.getLogger(Updater.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(Updater.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public Map<Date, ProgramDetail> getFileList() throws DbxException{
+        
+        updateFileList();
         
         return fileList;
     }
     
-    public File getLastFile() throws DbxException{
-        
-        if(fileList == null){
-            updateFileList();
-        }
-        
-        File lastFile = null;
-
-        for(Entry entry: fileList.entrySet()){
-            lastFile = (File) entry.getValue();
-        }
-        
-        return lastFile;
-    }
-    
-    public void update(File file){
+    public void update(URL url){
         
         try {
                     
@@ -127,24 +167,21 @@ public class Updater {
             try {
                 myURI = myURL.toURI();
             }catch (URISyntaxException e1){
-                logger.error("Cannot get current jar file directory", e1);
+                LOGGER.error("Cannot get current jar file directory", e1);
                 return;
             }
 
             File workingDirectoryFile = new File(Paths.get(myURI).toFile().toString());
             File workingDirectory = new File(workingDirectoryFile.getParent());
             //String workingDirectory = Paths.get(".").toAbsolutePath().normalize().toString();
-            File tempZipFile = new File(workingDirectory+"/"+file.getName());
-            logger.info("Saving archive file: " + tempZipFile.getAbsolutePath());
-            try (FileOutputStream outputStream = new FileOutputStream(tempZipFile)) {
-                String filePath = file.getPath().replaceAll("\\\\", "/");
-                client.getFile(filePath, null, outputStream);
-            }catch(Exception e){
-                logger.error("Cannot get file on server", e);
-                return;
-            }
+            
+            File tempZipFile = new File(workingDirectory+"/"+getFilenameFromURL(url));
+            
+            LOGGER.info("Saving archive file: " + tempZipFile.getAbsolutePath());
+            
+            downloadFile(url, tempZipFile);
 
-            logger.info("Extracting archive");
+            LOGGER.info("Extracting archive");
             Charset charset = Charset.forName("ISO-8859-1");
 
             ZipInputStream  zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(tempZipFile)), charset);
@@ -157,7 +194,7 @@ public class Updater {
                 File entryFile = new File(workingDirectory+"/"+entry.getName());
 
                 if(!entry.isDirectory()){
-                    logger.info("Extracting: " + entry);
+                    LOGGER.info("Extracting: " + entry);
                     int count;
                     byte data[] = new byte[BUFFER];
                     // write the files to the disk
@@ -173,9 +210,9 @@ public class Updater {
 
 
                     }catch(IOException ex){
-                        logger.error("Cannot write file : "+entryFile.getAbsolutePath(), ex);
+                        LOGGER.error("Cannot write file : "+entryFile.getAbsolutePath(), ex);
                     }catch(Exception ex){
-                        logger.error("Cannot write file : "+entryFile.getAbsolutePath(), ex);
+                        LOGGER.error("Cannot write file : "+entryFile.getAbsolutePath(), ex);
                     }finally{
                         if(dest != null){
                             dest.close();
@@ -191,17 +228,17 @@ public class Updater {
             zis.close();
 
             try{
-                logger.info("Removing archive file: " + tempZipFile.getAbsolutePath());
+                LOGGER.info("Removing archive file: " + tempZipFile.getAbsolutePath());
                 tempZipFile.delete();
             }catch(SecurityException ex){
-                logger.warn("Saving archive file: " + tempZipFile.getAbsolutePath(), ex);
+                LOGGER.warn("Saving archive file: " + tempZipFile.getAbsolutePath(), ex);
             }
         }catch (FileNotFoundException ex) {
-            logger.error(ex);
+            LOGGER.error(ex);
         } catch (IOException ex) {
-            logger.error(ex);
+            LOGGER.error(ex);
         }catch(Exception ex){
-            logger.error(ex);
+            LOGGER.error(ex);
         }
 
         

@@ -22,6 +22,9 @@ import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -30,6 +33,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.util.Callback;
 import org.apache.log4j.Logger;
 import org.controlsfx.dialog.ProgressDialog;
 
@@ -42,7 +50,13 @@ public class UpdaterFrameController implements Initializable {
     @FXML
     private Button buttonRefresh;
     @FXML
-    private ListView<ProgramDetail> listviewProgramVersions;
+    private TableView<ProgramDetail> tableView;
+    @FXML
+    private TableColumn<ProgramDetail, String> tableColumnName;
+    @FXML
+    private TableColumn<ProgramDetail, String> tableColumnDateOfUpload;
+    @FXML
+    private TextArea textAreaChangeLog;
 
     @FXML
     private void onActionButtonRefresh(ActionEvent event) {
@@ -53,13 +67,11 @@ public class UpdaterFrameController implements Initializable {
     @FXML
     private void onActionButtonUpdateToSelectedVersion(ActionEvent event) {
         
-        
-        ProgramDetail selectedItem = listviewProgramVersions.getSelectionModel().getSelectedItem();
-        updateToVersion(selectedItem.file);
-        
+        ProgramDetail selectedItem = tableView.getSelectionModel().getSelectedItem();
+        updateToVersion(selectedItem.getUrl());
     }
     
-    private void updateToVersion(File file){
+    private void updateToVersion(URL url){
         
         Service s = new Service() {
 
@@ -72,7 +84,7 @@ public class UpdaterFrameController implements Initializable {
                     protected Object call() throws Exception {
                         
                         try {
-                            updater.update(file);
+                            updater.update(url);
 
                         } catch (Exception ex) {
                             logger.error(ex);
@@ -94,53 +106,9 @@ public class UpdaterFrameController implements Initializable {
     @FXML
     private void onActionButtonUpdateToLast(ActionEvent event) {
         
-        try {
-            Map<Date, File> fileList = updater.getFileList();
-            File lastFile = null;
-
-            for(Entry entry: fileList.entrySet()){
-                lastFile = (File) entry.getValue();
-            }
-            
-            updateToVersion(lastFile);
-            
-        } catch (DbxException ex) {
-            logger.error(ex);
-        }
-    }
-    
-    private class ProgramDetail{
-        
-        private final Calendar date;
-        private final File file;
-        private final NumberFormat numberFormat;
-
-        public ProgramDetail(Date date, File file) {
-            this.date = Calendar.getInstance();
-            this.date.setTime(date);
-            this.file = file;
-            
-            numberFormat = NumberFormat.getInstance();
-            numberFormat.setMinimumIntegerDigits(2);
-        }     
-
-        public Calendar getDate() {
-            return date;
-        }
-
-        public File getFile() {
-            return file;
-        }
-        @Override
-        public String toString(){
-            
-            return file.getName()+ "\t\t" +
-                    numberFormat.format(date.get(Calendar.DAY_OF_MONTH)) + "/" + 
-                    numberFormat.format(date.get(Calendar.MONTH)+1) + "/" + 
-                    date.get(Calendar.YEAR) + " " +
-                    numberFormat.format(date.get(Calendar.HOUR_OF_DAY)) + ":" +
-                    numberFormat.format(date.get(Calendar.MINUTE)) + ":" +
-                    numberFormat.format(date.get(Calendar.SECOND));
+        if(tableView.getItems().size() > 0){
+            URL url = tableView.getItems().get(0).getUrl();
+            updateToVersion(url);
         }
     }
     
@@ -153,7 +121,38 @@ public class UpdaterFrameController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        listviewProgramVersions.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        tableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        tableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ProgramDetail>() {
+            @Override
+            public void changed(ObservableValue<? extends ProgramDetail> observable, ProgramDetail oldValue, ProgramDetail newValue) {
+                if(newValue != null){
+                    textAreaChangeLog.setText(newValue.getChangeLog());
+                }
+            }
+        });
+        
+        tableColumnName.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ProgramDetail, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ProgramDetail, String> param) {
+                return new SimpleStringProperty(Updater.getFilenameFromURL(param.getValue().getUrl()));
+            }
+        });
+        
+        tableColumnDateOfUpload.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ProgramDetail, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ProgramDetail, String> param) {
+                
+                NumberFormat numberFormat = ProgramDetail.NUMBER_FORMAT;
+                Calendar date = param.getValue().getDate();
+                
+                return new SimpleStringProperty(numberFormat.format(date.get(Calendar.DAY_OF_MONTH)) + "/" + 
+                    numberFormat.format(date.get(Calendar.MONTH)+1) + "/" + 
+                    date.get(Calendar.YEAR) + " " +
+                    numberFormat.format(date.get(Calendar.HOUR_OF_DAY)) + ":" +
+                    numberFormat.format(date.get(Calendar.MINUTE)) + ":" +
+                    numberFormat.format(date.get(Calendar.SECOND)));
+            }
+        });
     }  
 
     
@@ -174,14 +173,13 @@ public class UpdaterFrameController implements Initializable {
                     protected Object call() throws Exception {
                         
                         try {
-                            updater.connect();
-                            Map<Date, File> fileList = updater.getFileList();
+                            Map<Date, ProgramDetail> fileList = updater.getFileList();
                             List<ProgramDetail> programs = new ArrayList<>();
 
-                            Iterator<Map.Entry<Date, File>> iterator = fileList.entrySet().iterator();
+                            Iterator<Map.Entry<Date, ProgramDetail>> iterator = fileList.entrySet().iterator();
                             while(iterator.hasNext()){
-                                Map.Entry<Date, File> program = iterator.next();
-                                programs.add(new ProgramDetail(program.getKey(), program.getValue()));
+                                Map.Entry<Date, ProgramDetail> program = iterator.next();
+                                programs.add(program.getValue());
                             }
 
                             Collections.reverse(programs);
@@ -191,9 +189,9 @@ public class UpdaterFrameController implements Initializable {
 
                                 @Override
                                 public void run() {
-                                    listviewProgramVersions.getItems().clear();
-                                    listviewProgramVersions.getItems().addAll(programs);
-                                    listviewProgramVersions.getSelectionModel().selectFirst();
+                                    tableView.getItems().clear();
+                                    tableView.getItems().addAll(programs);
+                                    tableView.getSelectionModel().selectFirst();
                                 }
                             });
 
