@@ -264,7 +264,7 @@
         <dependency>
             <groupId>fr.amap.threed</groupId>
             <artifactId>threed-viewer</artifactId>
-            <version>1.0</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>fr.amap.lidar</groupId>

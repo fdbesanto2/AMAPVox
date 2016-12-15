@@ -22,10 +22,11 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static javafx.application.Application.launch;
 
 public class MainApp extends Application {
 
-    final static Logger logger = LoggerFactory.getLogger(MainApp.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(MainApp.class);
     
     @Override
     public void start(Stage stage) throws Exception {

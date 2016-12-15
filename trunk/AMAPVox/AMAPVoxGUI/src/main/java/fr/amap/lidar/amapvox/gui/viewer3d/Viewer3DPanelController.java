@@ -84,6 +84,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -764,9 +765,7 @@ public class Viewer3DPanelController implements Initializable {
                                             spaceKeyDown.set(false);
                                         }
                                     }
-                                });
-                                
-                                
+                                });                                
 
                                 voxelSpace.changeCurrentAttribut(attributeToView);
                                 voxelSpace.setShader(new InstanceLightedShader());
@@ -981,10 +980,11 @@ public class Viewer3DPanelController implements Initializable {
                                             FXNewtOverlap fxNewtOverlap = new FXNewtOverlap();
                                             fxNewtOverlap.link(viewer3DStage, scene1, viewer3D, viewer3DFrameController.getAnchorPaneGL());
 
-                                            viewer3DStage.setOnHidden(new EventHandler<WindowEvent>() {
+                                            viewer3DStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                                                 @Override
                                                 public void handle(WindowEvent event) {
                                                     viewer3D.close();
+                                                    event.consume();
                                                 }
                                             });
                                             
