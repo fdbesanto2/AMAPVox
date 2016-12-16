@@ -17,12 +17,12 @@
         <dependency>
             <groupId>fr.amap.commons</groupId>
             <artifactId>commons-util</artifactId>
-            <version>1.0</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>fr.amap.commons</groupId>
             <artifactId>commons-math</artifactId>
-            <version>1.0</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>

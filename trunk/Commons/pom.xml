@@ -33,6 +33,27 @@
         </repository>
     </distributionManagement>
     
+    
+    <repositories>
+        <repository>
+            <id>default</id>
+            <url>http://repo.maven.apache.org/maven2/</url>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>amap-maven-central</id>
+            <name>libs-release</name>
+            <url>${artifactory-url}/libs-release-local</url>
+        </repository>
+        <repository>
+            <id>amap-maven-snapshots</id>
+            <name>libs-snapshot</name>
+            <url>${artifactory-url}/libs-snapshot-local</url>
+        </repository>
+    </repositories>
+    
     <dependencyManagement>
         <dependencies>
             <dependency>
