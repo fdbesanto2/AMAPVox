@@ -2166,6 +2166,8 @@ public class MainFrameController implements Initializable {
 
             }
         });
+        
+        //displayGThetaAllDistributions();
     }
     
     @FXML
@@ -7211,7 +7213,7 @@ public class MainFrameController implements Initializable {
             serie2.add(angleInDegrees, pdf);
         }
         
-        dataset.addSeries(serie2);
+        //dataset.addSeries(serie2);
         
         //erectophile
         distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.ERECTOPHILE);
@@ -7253,7 +7255,7 @@ public class MainFrameController implements Initializable {
             serie5.add(angleInDegrees, pdf);
         }
         
-        dataset.addSeries(serie5);
+        //dataset.addSeries(serie5);
         
         //vertical
         distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.VERTICAL);
@@ -7267,7 +7269,7 @@ public class MainFrameController implements Initializable {
             serie6.add(angleInDegrees, pdf);
         }
         
-        dataset.addSeries(serie6);
+        //dataset.addSeries(serie6);
         
         //plagiophile
         distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.PLAGIOPHILE);
@@ -7364,7 +7366,7 @@ public class MainFrameController implements Initializable {
             serie.add(angleInDegrees, GTheta);
         }
         
-        dataset.addSeries(serie);
+        //dataset.addSeries(serie);
         
         //erectophile
         distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.ERECTOPHILE);
@@ -7415,7 +7417,7 @@ public class MainFrameController implements Initializable {
             serie.add(angleInDegrees, GTheta);
         }
         
-        dataset.addSeries(serie);
+        //dataset.addSeries(serie);
         
         //vertical
         distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.VERTICAL);
@@ -7432,7 +7434,7 @@ public class MainFrameController implements Initializable {
             serie.add(angleInDegrees, GTheta);
         }
         
-        dataset.addSeries(serie);
+        //dataset.addSeries(serie);
         
         //plagiophile
         distribution = new LeafAngleDistribution(LeafAngleDistribution.Type.PLAGIOPHILE);

@@ -1,6 +1,8 @@
 Formule transmittance mode 3B :
 Tr_{norm} = \frac{\sum_{i}^{n} \frac{PFOut_i}{PFEnt_i}^\frac{1}{l_i} \cdot S_i \cdot l_i \cdot PFEnt_i}{\sum_{i}^{n} S_i \cdot l_i \cdot PFEnt_i}
 
+Formule transmittance normalisé mode 1B:
+Tr_{norm} = \left({\frac{ \sum_{i}^{n} \left({PFOut_i  \cdot S_i \cdot l_i}\right)}{ \sum_{i}^{n} \left({PFEnt_i \cdot S_i \cdot l_i}\right)}}\right)^{\frac {1}{lMean_i}}
 
 \left({\frac{ \sum_{i}^{n} \left({out_i  \cdot l_i}\right)}{ \sum_{i}^{n} \left({in_i \cdot l_i}\right)}}\right)^{\frac {1}{lMean_i}}
 
