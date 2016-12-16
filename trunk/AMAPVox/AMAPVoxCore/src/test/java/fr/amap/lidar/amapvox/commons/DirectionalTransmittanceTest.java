@@ -48,64 +48,64 @@ public class DirectionalTransmittanceTest {
     }
 
     /**
-     * Test of buildTable method, of class DirectionalTransmittance.
+     * Test of buildTable method, of class GTheta.
      */
     @Test
     public void testBuildTable() {
     }
 
     /**
-     * Test of getTransmittanceFromAngle method, of class DirectionalTransmittance.
+     * Test of getGThetaFromAngle method, of class GTheta.
      */
     @Test
     public void testGetTransmittanceFromAngle() throws URISyntaxException, FileNotFoundException, IOException {
         
         //read directions file
-        File directionsFile = new File(DirectionalTransmittance.class.getResource("/directions.txt").toURI());
+        File directionsFile = new File(GTheta.class.getResource("/directions.txt").toURI());
         
         double[] directions = getValues(directionsFile);
         
         //read lad files
-        double[] erectoValues = getValues(new File(DirectionalTransmittance.class.getResource("/gtheta_dart_erectophile.txt").toURI()));
-        double[] planoValues = getValues(new File(DirectionalTransmittance.class.getResource("/gtheta_dart_planophile.txt").toURI()));
-        double[] extremoValues = getValues(new File(DirectionalTransmittance.class.getResource("/gtheta_dart_extremophile.txt").toURI()));
-        double[] plagioValues = getValues(new File(DirectionalTransmittance.class.getResource("/gtheta_dart_plagiophile.txt").toURI()));
-        double[] twoBetaValues = getValues(new File(DirectionalTransmittance.class.getResource("/gtheta_dart_two_beta_1.13_1.62.txt").toURI()));
+        double[] erectoValues = getValues(new File(GTheta.class.getResource("/gtheta_dart_erectophile.txt").toURI()));
+        double[] planoValues = getValues(new File(GTheta.class.getResource("/gtheta_dart_planophile.txt").toURI()));
+        double[] extremoValues = getValues(new File(GTheta.class.getResource("/gtheta_dart_extremophile.txt").toURI()));
+        double[] plagioValues = getValues(new File(GTheta.class.getResource("/gtheta_dart_plagiophile.txt").toURI()));
+        double[] twoBetaValues = getValues(new File(GTheta.class.getResource("/gtheta_dart_two_beta_1.13_1.62.txt").toURI()));
         
         double delta = 0.05;
         
-        DirectionalTransmittance erecto = new DirectionalTransmittance(
+        GTheta erecto = new GTheta(
                 new LeafAngleDistribution(LeafAngleDistribution.Type.ERECTOPHILE));
         
-        DirectionalTransmittance plano = new DirectionalTransmittance(
+        GTheta plano = new GTheta(
                 new LeafAngleDistribution(LeafAngleDistribution.Type.PLANOPHILE));
         
-        DirectionalTransmittance extremo = new DirectionalTransmittance(
+        GTheta extremo = new GTheta(
                 new LeafAngleDistribution(LeafAngleDistribution.Type.EXTREMOPHILE));
         
-        DirectionalTransmittance plagio = new DirectionalTransmittance(
+        GTheta plagio = new GTheta(
                 new LeafAngleDistribution(LeafAngleDistribution.Type.PLAGIOPHILE));
         
-        DirectionalTransmittance twoBeta = new DirectionalTransmittance(
+        GTheta twoBeta = new GTheta(
                 new LeafAngleDistribution(LeafAngleDistribution.Type.TWO_PARAMETER_BETA, 1.13, 1.62));
                 
         for(int i=0;i<directions.length;i++){
             
             double direction = directions[i];
             
-            double erectoValue = erecto.getTransmittanceFromAngle(direction, true);
+            double erectoValue = erecto.getGThetaFromAngle(direction, true);
             assertEquals(erectoValues[i], erectoValue, delta);
             
-            double planoValue = plano.getTransmittanceFromAngle(direction, true);
+            double planoValue = plano.getGThetaFromAngle(direction, true);
             assertEquals(planoValues[i], planoValue, delta);
             
-            double extremoValue = extremo.getTransmittanceFromAngle(direction, true);
+            double extremoValue = extremo.getGThetaFromAngle(direction, true);
             assertEquals(extremoValues[i], extremoValue, delta);
             
-            double plagioValue = plagio.getTransmittanceFromAngle(direction, true);
+            double plagioValue = plagio.getGThetaFromAngle(direction, true);
             assertEquals(plagioValues[i], plagioValue, delta);
             
-            double twoBetaValue = twoBeta.getTransmittanceFromAngle(direction, true);
+            double twoBetaValue = twoBeta.getGThetaFromAngle(direction, true);
             assertEquals(twoBetaValues[i], twoBetaValue, delta);
         }
         

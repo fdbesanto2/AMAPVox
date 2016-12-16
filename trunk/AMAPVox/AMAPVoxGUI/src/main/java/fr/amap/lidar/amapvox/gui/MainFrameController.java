@@ -50,7 +50,7 @@ import fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceCfg;
 import fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx.LAI2200;
 import fr.amap.lidar.amapvox.simulation.transmittance.lai2xxx.LAI2xxx;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
-import fr.amap.lidar.amapvox.commons.DirectionalTransmittance;
+import fr.amap.lidar.amapvox.commons.GTheta;
 import fr.amap.lidar.amapvox.commons.LeafAngleDistribution;
 import static fr.amap.lidar.amapvox.commons.LeafAngleDistribution.Type.TWO_PARAMETER_BETA;
 import static fr.amap.lidar.amapvox.commons.LeafAngleDistribution.Type.ELLIPSOIDAL;
@@ -3571,13 +3571,13 @@ public class MainFrameController implements Initializable {
         
         XYSeries serie = new XYSeries(distribution.getType(), false);
         
-        DirectionalTransmittance m = new DirectionalTransmittance(distribution);
+        GTheta m = new GTheta(distribution);
         m.buildTable(180);
         
         for(int i = 0 ; i < 180 ; i++){
             
             double angleInDegrees = i/2.0;
-            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            double GTheta = m.getGThetaFromAngle(angleInDegrees, true);
             serie.add(angleInDegrees, GTheta);
         }
         
@@ -7339,13 +7339,13 @@ public class MainFrameController implements Initializable {
         
         XYSeries serie = new XYSeries(distribution.getType(), false);
         
-        DirectionalTransmittance m = new DirectionalTransmittance(distribution);
+        GTheta m = new GTheta(distribution);
         m.buildTable(180);
         
         for(int i = 0 ; i < 180 ; i++){
             
             double angleInDegrees = i/2.0;
-            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            double GTheta = m.getGThetaFromAngle(angleInDegrees, true);
             serie.add(angleInDegrees, GTheta);
         }
         
@@ -7354,13 +7354,13 @@ public class MainFrameController implements Initializable {
         
         serie = new XYSeries(distribution.getType(), false);
         
-        m = new DirectionalTransmittance(distribution);
+        m = new GTheta(distribution);
         m.buildTable(180);
         
         for(int i = 0 ; i < 180 ; i++){
             
             double angleInDegrees = i/2.0;
-            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            double GTheta = m.getGThetaFromAngle(angleInDegrees, true);
             serie.add(angleInDegrees, GTheta);
         }
         
@@ -7371,13 +7371,13 @@ public class MainFrameController implements Initializable {
         
         serie = new XYSeries(distribution.getType(), false);
         
-        m = new DirectionalTransmittance(distribution);
+        m = new GTheta(distribution);
         m.buildTable(180);
         
         for(int i = 0 ; i < 180 ; i++){
             
             double angleInDegrees = i/2.0;
-            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            double GTheta = m.getGThetaFromAngle(angleInDegrees, true);
             serie.add(angleInDegrees, GTheta);
         }
         
@@ -7388,13 +7388,13 @@ public class MainFrameController implements Initializable {
         
         serie = new XYSeries(distribution.getType(), false);
         
-        m = new DirectionalTransmittance(distribution);
+        m = new GTheta(distribution);
         m.buildTable(180);
         
         for(int i = 0 ; i < 180 ; i++){
             
             double angleInDegrees = i/2.0;
-            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            double GTheta = m.getGThetaFromAngle(angleInDegrees, true);
             serie.add(angleInDegrees, GTheta);
         }
         
@@ -7405,13 +7405,13 @@ public class MainFrameController implements Initializable {
         
         serie = new XYSeries(distribution.getType(), false);
         
-        m = new DirectionalTransmittance(distribution);
+        m = new GTheta(distribution);
         m.buildTable(180);
         
         for(int i = 0 ; i < 180 ; i++){
             
             double angleInDegrees = i/2.0;
-            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            double GTheta = m.getGThetaFromAngle(angleInDegrees, true);
             serie.add(angleInDegrees, GTheta);
         }
         
@@ -7422,13 +7422,13 @@ public class MainFrameController implements Initializable {
         
         serie = new XYSeries(distribution.getType(), false);
         
-        m = new DirectionalTransmittance(distribution);
+        m = new GTheta(distribution);
         m.buildTable(180);
         
         for(int i = 0 ; i < 180 ; i++){
             
             double angleInDegrees = i/2.0;
-            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            double GTheta = m.getGThetaFromAngle(angleInDegrees, true);
             serie.add(angleInDegrees, GTheta);
         }
         
@@ -7439,13 +7439,13 @@ public class MainFrameController implements Initializable {
         
         serie = new XYSeries(distribution.getType(), false);
         
-        m = new DirectionalTransmittance(distribution);
+        m = new GTheta(distribution);
         m.buildTable(180);
         
         for(int i = 0 ; i < 180 ; i++){
             
             double angleInDegrees = i/2.0;
-            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            double GTheta = m.getGThetaFromAngle(angleInDegrees, true);
             serie.add(angleInDegrees, GTheta);
         }
         
@@ -7456,13 +7456,13 @@ public class MainFrameController implements Initializable {
         
         serie = new XYSeries(distribution.getType(), false);
         
-        m = new DirectionalTransmittance(distribution);
+        m = new GTheta(distribution);
         m.buildTable(180);
         
         for(int i = 0 ; i < 180 ; i++){
             
             double angleInDegrees = i/2.0;
-            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            double GTheta = m.getGThetaFromAngle(angleInDegrees, true);
             serie.add(angleInDegrees, GTheta);
         }
         
@@ -7473,13 +7473,13 @@ public class MainFrameController implements Initializable {
         
         serie = new XYSeries(distribution.getType(), false);
         
-        m = new DirectionalTransmittance(distribution);
+        m = new GTheta(distribution);
         m.buildTable(180);
         
         for(int i = 0 ; i < 180 ; i++){
             
             double angleInDegrees = i/2.0;
-            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            double GTheta = m.getGThetaFromAngle(angleInDegrees, true);
             serie.add(angleInDegrees, GTheta);
         }
         
@@ -7490,13 +7490,13 @@ public class MainFrameController implements Initializable {
         
         serie = new XYSeries(distribution.getType(), false);
         
-        m = new DirectionalTransmittance(distribution);
+        m = new GTheta(distribution);
         m.buildTable(180);
         
         for(int i = 0 ; i < 180 ; i++){
             
             double angleInDegrees = i/2.0;
-            double GTheta = m.getTransmittanceFromAngle(angleInDegrees, true);
+            double GTheta = m.getGThetaFromAngle(angleInDegrees, true);
             serie.add(angleInDegrees, GTheta);
         }
         

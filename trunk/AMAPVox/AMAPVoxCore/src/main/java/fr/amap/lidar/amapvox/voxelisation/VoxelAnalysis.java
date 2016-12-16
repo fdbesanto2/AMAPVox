@@ -14,7 +14,7 @@ import fr.amap.commons.raster.multiband.BHeader;
 import fr.amap.commons.raster.multiband.BSQ;
 import fr.amap.commons.util.Cancellable;
 import fr.amap.commons.util.Process;
-import fr.amap.lidar.amapvox.commons.DirectionalTransmittance;
+import fr.amap.lidar.amapvox.commons.GTheta;
 import fr.amap.lidar.amapvox.commons.LADParams;
 import fr.amap.lidar.amapvox.commons.LeafAngleDistribution;
 import fr.amap.lidar.amapvox.commons.Voxel;
@@ -88,7 +88,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
     private BufferedWriter shotSegmentWriter;
     
     //directional transmittance (GTheta)
-    private DirectionalTransmittance direcTransmittance;
+    private GTheta direcTransmittance;
     
     
     /**
@@ -235,10 +235,10 @@ public class VoxelAnalysis extends Process implements Cancellable{
                                                                         ladParameters.getLadBetaFunctionAlphaParameter(),
                                                                         ladParameters.getLadBetaFunctionBetaParameter());
         
-        direcTransmittance = new DirectionalTransmittance(distribution);
+        direcTransmittance = new GTheta(distribution);
         
         LOGGER.info("Building transmittance functions table");
-        direcTransmittance.buildTable(DirectionalTransmittance.DEFAULT_STEP_NUMBER);
+        direcTransmittance.buildTable(GTheta.DEFAULT_STEP_NUMBER);
         LOGGER.info("Transmittance functions table is built");
         
         if(cfg != null && cfg.isExportShotSegment()){
@@ -695,7 +695,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
         return normalizedTransmittance;
     }
     
-    public static float computePADFromNormTransmittance(float transmittance, float angleMean, float maxPAD, DirectionalTransmittance direcTransmittance){
+    public static float computePADFromNormTransmittance(float transmittance, float angleMean, float maxPAD, GTheta direcTransmittance){
         
         float pad;
         
@@ -711,7 +711,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
             }else {
 
-                float coefficientGTheta = (float) direcTransmittance.getTransmittanceFromAngle(angleMean, true);
+                float coefficientGTheta = (float) direcTransmittance.getGThetaFromAngle(angleMean, true);
                 
                 pad = (float) (Math.log(transmittance) / (-coefficientGTheta));
 

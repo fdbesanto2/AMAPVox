@@ -11,7 +11,7 @@ import static fr.amap.commons.util.DataSet.Mode.SUM;
 import fr.amap.commons.util.TimeCounter;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.commons.util.Process;
-import fr.amap.lidar.amapvox.commons.DirectionalTransmittance;
+import fr.amap.lidar.amapvox.commons.GTheta;
 import fr.amap.lidar.amapvox.commons.LADParams;
 import fr.amap.lidar.amapvox.commons.LeafAngleDistribution;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxMergingCfg;
@@ -295,10 +295,10 @@ public class VoxelFileMerging extends Process implements Cancellable{
                 ladParameters.getLadBetaFunctionAlphaParameter(),
                 ladParameters.getLadBetaFunctionBetaParameter());
         
-        DirectionalTransmittance direcTransmittance = new DirectionalTransmittance(distribution);
+        GTheta direcTransmittance = new GTheta(distribution);
         
         LOGGER.info("Building transmittance functions table");
-        direcTransmittance.buildTable(DirectionalTransmittance.DEFAULT_STEP_NUMBER);
+        direcTransmittance.buildTable(GTheta.DEFAULT_STEP_NUMBER);
         LOGGER.info("Transmittance functions table is built");
         
         int transMode = cfg.getVoxelParameters().getTransmittanceMode();

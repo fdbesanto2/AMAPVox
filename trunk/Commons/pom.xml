@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.amap.commons</groupId>
     <artifactId>commons</artifactId>
-    <version>1.0</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
     <modules>
         <module>commons-util</module>
@@ -16,23 +16,22 @@
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <artifactory-url>http://manosque.cirad.fr:8081/artifactory</artifactory-url>
     </properties>
     
     
     <distributionManagement>
         <snapshotRepository>
-            <id>snapshots</id>
+            <id>amap-maven-snapshots</id>
             <name>libs-snapshot</name>
             <url>${artifactory-url}/libs-snapshot-local</url>
         </snapshotRepository>
         <repository>
-            <id>central</id>
+            <id>amap-maven-central</id>
             <name>libs-release</name>
             <url>${artifactory-url}/libs-release-local</url>
         </repository>
     </distributionManagement>
-    
-    <repositories></repositories>
     
     <dependencyManagement>
         <dependencies>

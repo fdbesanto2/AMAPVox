@@ -170,6 +170,7 @@ public class LeafAngleDistribution {
         
         switch(type){
             
+            //warning : in wang paper there is an inversion between planophile, and erectophile
             case PLANOPHILE:
                 density = (2.0/Math.PI) * (1+Math.cos(2 * angle));
                 break;
@@ -221,8 +222,11 @@ public class LeafAngleDistribution {
             case TWO_PARAMETER_BETA:
                 
                 //angle = Math.PI/2.0 - angle;
-                double te = angle / (Math.PI / 2.0);
-                density = distribution.density(te);
+                double te = 2 * angle / Math.PI;
+                te = Double.max(te, 1E-09);
+                te = Double.min(te, 1 - 1E-09);
+                
+                density = distribution.density(te) / (Math.PI / 2.0);
         
                 break;
         }

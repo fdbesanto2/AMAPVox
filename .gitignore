@@ -1,3 +1,13 @@
 <<<<<<< HEAD
 =======
 /target/
+/trunk/Commons/commons-animation/target/
+/trunk/Commons/commons-util/target/
+/trunk/Commons/commons-math/target/
+/trunk/Commons/commons-javafx/target/
+/trunk/Commons/commons-format/target/
+/trunk/Commons/commons-raster/target/
+/trunk/Commons/commons-structure/target/
+/trunk/AMAPVox/AMAPVoxCore/nbproject/
+/trunk/AMAPVox/AMAPVoxCore/target/
+/trunk/AMAPVox/AMAPVoxGUI/target/

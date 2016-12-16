@@ -41,7 +41,7 @@ public class DirectionalTransmittance {
     private TLSVoxel voxels[][][];
     private float mnt[][];
     
-    private fr.amap.lidar.amapvox.commons.DirectionalTransmittance direcTrans;
+    private fr.amap.lidar.amapvox.commons.GTheta direcTrans;
     
     private boolean toricity = false;
     private final static double EPSILON = 0.001;
@@ -72,7 +72,7 @@ public class DirectionalTransmittance {
         
         logger.info(infos.toString()+"\n");
         
-        direcTrans = new fr.amap.lidar.amapvox.commons.DirectionalTransmittance(new LeafAngleDistribution(infos.getLadType(), infos.getLadParams()));
+        direcTrans = new fr.amap.lidar.amapvox.commons.GTheta(new LeafAngleDistribution(infos.getLadType(), infos.getLadParams()));
         direcTrans.buildTable(180);
         
         voxSpace = new VoxelSpace(new BoundingBox3d(min, max), splitting, 0);
@@ -287,7 +287,7 @@ public class DirectionalTransmittance {
                     return Double.NaN;
                 }
                 
-                float coefficientGTheta = (float) direcTrans.getTransmittanceFromAngle(directionAngle, true);
+                float coefficientGTheta = (float) direcTrans.getGThetaFromAngle(directionAngle, true);
                 
                 //input transmittance
                 //double transmittedBefore = transmitted;

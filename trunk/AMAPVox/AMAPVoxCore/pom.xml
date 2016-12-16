@@ -11,6 +11,30 @@
     
     <name>AMAPVoxCore</name>
     
+    <properties>
+        <artifactory-url>http://manosque.cirad.fr:8081/artifactory</artifactory-url>
+    </properties>
+    
+    <repositories>
+        <repository>
+            <id>default</id>
+            <url>http://repo.maven.apache.org/maven2/</url>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>amap-maven-central</id>
+            <name>libs-release</name>
+            <url>${artifactory-url}/libs-release-local</url>
+        </repository>
+        <repository>
+            <id>amap-maven-snapshots</id>
+            <name>libs-snapshot</name>
+            <url>${artifactory-url}/libs-snapshot-local</url>
+        </repository>
+    </repositories>
+    
     <dependencies>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -20,32 +44,27 @@
         <dependency>
             <groupId>fr.amap.lidar</groupId>
             <artifactId>format-riegl</artifactId>
-            <version>1.0</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>fr.amap.lidar</groupId>
             <artifactId>format-las</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.amap.lidar</groupId>
-            <artifactId>format-shot</artifactId>
-            <version>1.0</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>fr.amap.lidar</groupId>
             <artifactId>format-gridded</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>fr.amap.commons</groupId>
             <artifactId>commons-structure</artifactId>
-            <version>1.0</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>fr.amap.commons</groupId>
             <artifactId>commons-raster</artifactId>
-            <version>1.0</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
