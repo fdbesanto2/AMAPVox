@@ -59,6 +59,8 @@ public class FXMLController implements Initializable {
     private CheckBox checkboxExportRGB;
     @FXML
     private ComboBox<String> outputFormat;
+    @FXML
+    private CheckBox checkboxExportTime;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -234,6 +236,7 @@ public class FXMLController implements Initializable {
         final boolean exportReflectance = checkboxExportReflectance.isSelected();
         final boolean exportAmplitude = checkboxExportAmplitude.isSelected();
         final boolean exportDeviation = checkboxExportDeviation.isSelected();
+        final boolean exportTime = checkboxExportTime.isSelected();
         final boolean exportIntensity = checkboxExportIntensity.isSelected();
         final boolean exportRGB = checkboxExportRGB.isSelected();
 
@@ -270,7 +273,7 @@ public class FXMLController implements Initializable {
                                         case "txt":
                                             switch (extension) {
                                                 case ".rxp":
-                                                    rxpConverter.toTxt(scan, directory, exportReflectance, exportAmplitude, exportDeviation);
+                                                    rxpConverter.toTxt(scan, directory, exportReflectance, exportAmplitude, exportDeviation, exportTime);
                                                     break;
                                                 case ".PTX":
                                                 case ".ptx":

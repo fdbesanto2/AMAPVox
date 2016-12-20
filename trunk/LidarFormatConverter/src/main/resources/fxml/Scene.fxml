@@ -53,6 +53,7 @@
                                     <CheckBox fx:id="checkboxExportReflectance" mnemonicParsing="false" selected="true" text="Reflectance" />
                                     <CheckBox fx:id="checkboxExportAmplitude" mnemonicParsing="false" selected="true" text="Amplitude" />
                                     <CheckBox fx:id="checkboxExportDeviation" mnemonicParsing="false" selected="true" text="Deviation" />
+                                    <CheckBox fx:id="checkboxExportTime" mnemonicParsing="false" selected="true" text="Time" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0">

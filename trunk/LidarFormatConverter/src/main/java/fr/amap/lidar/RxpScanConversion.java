@@ -172,7 +172,7 @@ public class RxpScanConversion {
     }
     
     public void toTxt(SimpleScan scan, File outputDirectory,
-            boolean exportReflectance, boolean exportAmplitude, boolean exportDeviation) throws IOException, Exception{
+            boolean exportReflectance, boolean exportAmplitude, boolean exportDeviation, boolean exportTime) throws IOException, Exception{
         
         /***Convert rxp to txt***/
 
@@ -182,7 +182,7 @@ public class RxpScanConversion {
             
             RxpExtraction extraction = new RxpExtraction();
             
-            extraction.openRxpFile(scan.file, RxpExtraction.AMPLITUDE, RxpExtraction.DEVIATION, RxpExtraction.REFLECTANCE);
+            extraction.openRxpFile(scan.file, RxpExtraction.AMPLITUDE, RxpExtraction.DEVIATION, RxpExtraction.REFLECTANCE, RxpExtraction.TIME);
             
             Iterator<Shot> iterator = extraction.iterator();
             
@@ -216,6 +216,10 @@ public class RxpScanConversion {
 
             if(exportDeviation){
                 header += " deviation";
+            }
+            
+            if(exportTime){
+                header += " time";
             }
             
             header += "\n";
@@ -252,6 +256,10 @@ public class RxpScanConversion {
                     
                     if(exportDeviation){
                         echo += " " + strictFormat.format(shot.deviations[i]);
+                    }
+                    
+                    if(exportTime){
+                        echo += " " + shot.times[i];
                     }
                     
                     echo += "\n";

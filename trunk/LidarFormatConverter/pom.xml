@@ -4,7 +4,7 @@
 
     <groupId>fr.amap.lidar</groupId>
     <artifactId>LidarFormatConverter</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
 
     <name>LidarFormatConverter</name>
@@ -23,12 +23,12 @@
         <dependency>
             <groupId>fr.amap.lidar</groupId>
             <artifactId>format-riegl</artifactId>
-            <version>1.0</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>fr.amap.lidar</groupId>
             <artifactId>format-gridded</artifactId>
-            <version>1.0</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>fr.amap.commons</groupId>
             <artifactId>commons-math</artifactId>
-            <version>1.0</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.controlsfx</groupId>
