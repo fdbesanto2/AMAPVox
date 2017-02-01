@@ -5,6 +5,7 @@
  */
 package fr.amap.lidar.amapvox.voxelisation;
 
+import fr.amap.lidar.amapvox.shot.Shot;
 import fr.amap.lidar.amapvox.commons.LADParams;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;

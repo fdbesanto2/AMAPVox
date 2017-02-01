@@ -9,7 +9,7 @@ import fr.amap.lidar.format.jleica.GriddedPointScan;
 import fr.amap.lidar.format.jleica.LPointShotExtractor;
 import fr.amap.lidar.format.jleica.LShot;
 import fr.amap.commons.math.matrix.Mat4D;
-import fr.amap.lidar.amapvox.voxelisation.Shot;
+import fr.amap.lidar.amapvox.shot.Shot;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;

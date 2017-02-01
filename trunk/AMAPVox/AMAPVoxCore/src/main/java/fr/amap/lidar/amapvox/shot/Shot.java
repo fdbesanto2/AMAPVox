@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.amap.lidar.amapvox.voxelisation;
+package fr.amap.lidar.amapvox.shot;
 
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
@@ -24,6 +24,29 @@ public class Shot {
         this.origin = origin;
         this.direction = direction;
         this.ranges = ranges;
+    }
+    
+    /**
+     * Copy constructor
+     * @param shot the shot to copy
+     */
+    public Shot(Shot shot) {
+        this.origin = new Point3d(shot.origin);
+        this.direction = new Vector3d(shot.direction);
+        this.angle = shot.angle;
+        
+        if(shot.ranges != null){
+            this.ranges = new double[shot.ranges.length];
+
+            System.arraycopy(shot.ranges, 0, this.ranges, 0, shot.ranges.length);
+        }
+        
+        if(shot.mask != null){
+            this.mask = new boolean[shot.mask.length];
+
+            System.arraycopy(shot.mask, 0, this.mask, 0, shot.mask.length);
+        }
+        
     }
     
     public void setMask(boolean[] mask){
@@ -50,5 +73,22 @@ public class Shot {
 
     public boolean[] getMask() {
         return mask;
+    }
+    
+    public boolean isEmpty(){
+        
+        if(ranges == null){
+            return true;
+        }else{
+            return ranges.length == 0;
+        }
+    }
+    
+    public double getFirstRange(){
+        if(isEmpty()){
+            return Double.NaN;
+        }else{
+            return ranges[0];
+        }
     }
 }

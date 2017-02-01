@@ -1,5 +1,6 @@
 package fr.amap.lidar.amapvox.voxelisation;
 
+import fr.amap.lidar.amapvox.shot.Shot;
 import fr.amap.commons.util.TimeCounter;
 import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.geometry.LineElement;
 import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.geometry.LineSegment;

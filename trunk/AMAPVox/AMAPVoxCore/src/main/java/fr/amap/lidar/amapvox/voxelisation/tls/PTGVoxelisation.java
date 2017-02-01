@@ -67,7 +67,7 @@ public class PTGVoxelisation extends TLSVoxelisation{
 
                     Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
 
-                    voxelAnalysis.processOneShot(new fr.amap.lidar.amapvox.voxelisation.Shot(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z), shot.ranges));
+                    voxelAnalysis.processOneShot(new fr.amap.lidar.amapvox.shot.Shot(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z), shot.ranges));
                 }
 
             }

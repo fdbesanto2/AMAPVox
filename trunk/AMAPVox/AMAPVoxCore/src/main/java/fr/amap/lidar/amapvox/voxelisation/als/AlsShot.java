@@ -5,7 +5,7 @@
  */
 package fr.amap.lidar.amapvox.voxelisation.als;
 
-import fr.amap.lidar.amapvox.voxelisation.Shot;
+import fr.amap.lidar.amapvox.shot.Shot;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 

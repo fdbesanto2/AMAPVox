@@ -24,7 +24,7 @@ import fr.amap.commons.util.Cancellable;
 import fr.amap.commons.util.ProcessingAdapter;
 import fr.amap.commons.util.io.file.FileManager;
 import fr.amap.lidar.amapvox.commons.Configuration;
-import fr.amap.lidar.amapvox.voxelisation.Shot;
+import fr.amap.lidar.amapvox.shot.Shot;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import javax.vecmath.Point3d;
@@ -161,7 +161,7 @@ public class LasVoxelisation extends Process implements Cancellable{
                 
                 fireProgress("Voxelisation...", shotId, nbShots);
                 
-                voxelAnalysis.processOneShot(new fr.amap.lidar.amapvox.voxelisation.Shot(shot.origin, shot.direction, shot.ranges));
+                voxelAnalysis.processOneShot(new fr.amap.lidar.amapvox.shot.Shot(shot.origin, shot.direction, shot.ranges));
                 
                 shotId++;
             }
