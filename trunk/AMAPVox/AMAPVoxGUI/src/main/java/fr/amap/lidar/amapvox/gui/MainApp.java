@@ -30,7 +30,7 @@ public class MainApp extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-                        
+                
         ResourceBundle rb = ResourceBundle.getBundle("bundle_help", Locale.ENGLISH, new URLClassLoader(new URL[]{getClass().getResource("/strings/")}));
         
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainFrame.fxml"), rb);
