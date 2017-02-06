@@ -274,9 +274,9 @@ public class TransmittanceCfg extends Configuration{
     }
 
     @Override
-    public void writeConfiguration(File outputParametersFile) throws Exception {
+    public void writeConfiguration(File outputParametersFile, String buildVersion) throws Exception {
         
-        createCommonData();
+        createCommonData(buildVersion);
         
         switch(parameters.getMode()){
             case TRANSMITTANCE:

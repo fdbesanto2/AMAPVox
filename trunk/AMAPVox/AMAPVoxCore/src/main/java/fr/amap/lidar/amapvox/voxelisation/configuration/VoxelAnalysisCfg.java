@@ -424,7 +424,7 @@ public class VoxelAnalysisCfg extends Configuration{
     }
 
     @Override
-    public void writeConfiguration(File outputParametersFile) throws Exception{
+    public void writeConfiguration(File outputParametersFile, String buildVersion) throws Exception{
         
         if(inputFile != null){
             Element inputFileElement = new Element("input_file");

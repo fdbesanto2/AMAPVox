@@ -203,9 +203,9 @@ public class HemiPhotoCfg extends Configuration{
     }
 
     @Override
-    public void writeConfiguration(File outputParametersFile) throws Exception {
+    public void writeConfiguration(File outputParametersFile, String buildVersion) throws Exception {
         
-        createCommonData();
+        createCommonData(buildVersion);
         
         processElement.setAttribute(new Attribute("mode","Hemi-Photo"));
         

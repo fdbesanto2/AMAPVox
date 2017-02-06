@@ -17,6 +17,7 @@ import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.gui.EditableListViewController;
 import fr.amap.lidar.amapvox.gui.FileChooserTextFieldController;
 import fr.amap.lidar.amapvox.gui.FxmlContext;
+import fr.amap.lidar.amapvox.gui.Global;
 import fr.amap.lidar.amapvox.gui.MainFrameController;
 import fr.amap.lidar.amapvox.gui.Util;
 import fr.amap.lidar.amapvox.voxelisation.postproc.VoxelFileMerging;
@@ -313,7 +314,7 @@ public class DanielScript extends Script{
             cfg.setVoxelParameters(voxelParameters);
             File cfgFile = new File(outputDirectory, lasFile.getName()+".cfg.xml");
             
-            cfg.writeConfiguration(cfgFile);
+            cfg.writeConfiguration(cfgFile, Global.buildVersion);
             
             cfgFiles.add(cfgFile);
         }

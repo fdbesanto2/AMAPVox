@@ -2355,7 +2355,7 @@ public class MainFrameController implements Initializable {
 
         TransmittanceCfg cfg = new TransmittanceCfg(transmParameters);
         try {
-            cfg.writeConfiguration(file);
+            cfg.writeConfiguration(file, Global.buildVersion);
             
         } catch (Exception ex) {
             throw ex;
@@ -2428,7 +2428,7 @@ public class MainFrameController implements Initializable {
             }
 
             HemiPhotoCfg hemiPhotoCfg = new HemiPhotoCfg(hemiParameters);
-            hemiPhotoCfg.writeConfiguration(file);
+            hemiPhotoCfg.writeConfiguration(file, Global.buildVersion);
         }
     }
 
@@ -2739,7 +2739,7 @@ public class MainFrameController implements Initializable {
             cfg.setShotFilters(listviewFilters.getItems());
 
             try {
-                cfg.writeConfiguration(selectedFile);
+                cfg.writeConfiguration(selectedFile, Global.buildVersion);
                 return true;
             } catch (Exception ex) {
                 logger.error("Cannot write configuration file", ex);
@@ -2977,7 +2977,7 @@ public class MainFrameController implements Initializable {
         cfg.setEchoFilters(filteringPaneController.getFilterList());
 
         try {
-            cfg.writeConfiguration(selectedFile);
+            cfg.writeConfiguration(selectedFile, Global.buildVersion);
         } catch (Exception ex) {
             logger.error("Cannot write configuration file");
         }
@@ -3043,7 +3043,7 @@ public class MainFrameController implements Initializable {
                 voxParameters, listViewVoxMergingVoxelFiles.getItems());
 
         try {
-            cfg.writeConfiguration(selectedFile);
+            cfg.writeConfiguration(selectedFile, Global.buildVersion);
             addFileToTaskList(selectedFile);
         } catch (Exception ex) {
             logger.error("Cannot write configuration file", ex);
@@ -3187,7 +3187,7 @@ public class MainFrameController implements Initializable {
         cfg.setOutputFile(new File(textFieldOutputFileButterflyRemover.getText()));
         
         try {
-            cfg.writeConfiguration(file);
+            cfg.writeConfiguration(file, Global.buildVersion);
         } catch (Exception ex) {
             throw new Exception("Cannot write configuration file", ex);
         }
@@ -6153,7 +6153,7 @@ public class MainFrameController implements Initializable {
         
         
         try {
-            cfg.writeConfiguration(file);
+            cfg.writeConfiguration(file, Global.buildVersion);
             addFileToTaskList(file);
         } catch (Exception ex) {
             throw new Exception("Cannot write configuration file", ex);

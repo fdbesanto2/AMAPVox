@@ -167,11 +167,11 @@ public class MultiVoxCfg extends ALSVoxCfg{
     }
     
     @Override
-    public void writeConfiguration(File outputParametersFile) throws Exception {
+    public void writeConfiguration(File outputParametersFile, String buildVersion) throws Exception {
         
-        createCommonData();
+        createCommonData(buildVersion);
         
-        super.writeConfiguration(outputParametersFile);
+        super.writeConfiguration(outputParametersFile, buildVersion);
         
         processElement.setAttribute(new Attribute("mode","multi-voxelisation"));
         processElement.setAttribute(new Attribute("type","ALS"));

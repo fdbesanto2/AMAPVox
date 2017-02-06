@@ -88,7 +88,7 @@ public abstract class Configuration {
     }
     
     public abstract void readConfiguration(File inputParametersFile) throws Exception;
-    public abstract void writeConfiguration(File outputParametersFile) throws Exception;
+    public abstract void writeConfiguration(File outputParametersFile, String buildVersion) throws Exception;
     
     public static String readType(File inputParametersFile) throws JDOMException, IOException{
         
@@ -112,27 +112,15 @@ public abstract class Configuration {
         }
     }
     
-    protected void createCommonData() throws Exception{
+    protected void createCommonData(String buildVersion) throws Exception{
         
         racine = new Element("configuration");
         racine.setAttribute("creation-date", new Date().toString());
         
-        try {
-            Class clazz = Configuration.class;
-            String className = clazz.getSimpleName() + ".class";
-            String classPath = clazz.getResource(className).toString();
-            String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
-            Manifest manifest = new Manifest(new URL(manifestPath).openStream());
-            Attributes attributes= manifest.getMainAttributes();
-            String buildVersion = attributes.getValue("Implementation-Build");
-            
-            if(buildVersion != null){
-                racine.setAttribute("build-version", buildVersion);
-            }else{
-                throw new Exception("Cannot get Implementation-Build property in manifest file");
-            }
-        } catch (Exception ex) {
-            LOGGER.warn("Cannot get manifest file", ex);
+        if(buildVersion != null){
+            racine.setAttribute("build-version", buildVersion);
+        }else{
+            throw new Exception("Cannot get Implementation-Build property in manifest file");
         }
         
         document = new Document(racine);
