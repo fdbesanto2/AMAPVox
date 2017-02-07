@@ -280,7 +280,7 @@
         </dependency>
         <dependency>
             <groupId>fr.amap.commons</groupId>
-            <artifactId>commons-structure</artifactId>
+            <artifactId>commons-spds</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>

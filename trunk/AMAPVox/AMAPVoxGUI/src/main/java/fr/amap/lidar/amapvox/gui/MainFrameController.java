@@ -217,6 +217,8 @@ import java.awt.Desktop;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.util.HashSet;
 import java.util.Iterator;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -3328,7 +3330,7 @@ public class MainFrameController implements Initializable {
      private void showImage(File file){
         
         try {
-            ImageView iv = new ImageView(new Image(Files.newInputStream(file.toPath())));
+            ImageView iv = new ImageView(new Image(file.toURI().toURL().toString()));
             iv.setPreserveRatio(true);
             Stage stage = new Stage();
             

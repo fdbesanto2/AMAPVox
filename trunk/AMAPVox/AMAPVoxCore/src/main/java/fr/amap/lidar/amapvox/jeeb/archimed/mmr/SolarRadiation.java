@@ -151,12 +151,14 @@ public class SolarRadiation {
             float duration = timeStep;
 
             for (float h = hd1; h < hd2; h += timeStep) {
+                
                 duration = Math.min(timeStep, hd2 - h);
                 float hd = h + (duration / 2);
                 sun.position(latitudeRadian, doy, hd);
                 float globalMJ = clearness
                         * SolarRadiation.extraTerrestrialHourly(latitudeRadian,
                                 doy, h, h + duration);
+                
                 if ((globalMJ > 0) && (duration > 0)) {
                     IncidentRadiation radi = new IncidentRadiation(ir.getSize());
                     radi.global = globalMJ * 1000000 / (duration * 3600);
@@ -311,6 +313,7 @@ public class SolarRadiation {
 
     public static void globalCumulateMJ(IncidentRadiation ir1,
             IncidentRadiation ir2, float durationHd) {
+        
         // transform Watt s-1 m-2 to MJ m-2 (note: Watt= Joule s-1)
         float factor = durationHd * 3600 / 1000000;
         ir1.global += factor * ir2.global;
