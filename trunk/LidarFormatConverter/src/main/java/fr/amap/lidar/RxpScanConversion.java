@@ -12,6 +12,10 @@ import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.util.SphericalCoordinates;
 import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.commons.math.vector.Vec4D;
+import fr.amap.lidar.format.shot.Column;
+import fr.amap.lidar.format.shot.Echo;
+import fr.amap.lidar.format.shot.ShotFileContext;
+import fr.amap.lidar.format.shot.ShotWriter;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -66,6 +70,107 @@ public class RxpScanConversion {
         float max = 50;
         
         return (int) (65535 * ((reflectance - min) / (max - min)));
+    }
+    
+    public void toShots(SimpleScan scan, File outputDirectory,  boolean exportReflectance, boolean exportAmplitude, boolean exportDeviation, boolean exportTime) throws IOException, InterruptedException, UnsupportedOperationException, Exception{
+        
+        /***Convert rxp to txt***/
+        
+        Mat4D transfMatrix = Mat4D.multiply(scan.sopMatrix, scan.popMatrix);
+        
+        Mat3D rotation = new Mat3D();
+        rotation.mat = new double[]{
+            transfMatrix.mat[0],transfMatrix.mat[1],transfMatrix.mat[2],
+            transfMatrix.mat[4],transfMatrix.mat[5],transfMatrix.mat[6],
+            transfMatrix.mat[8],transfMatrix.mat[9],transfMatrix.mat[10]
+        };
+
+        File outputTxtFile = new File(outputDirectory.getAbsolutePath()+File.separator+scan.file.getName()+".txt");
+        
+        int nbExtraAttributes = 0;
+        if(exportReflectance){nbExtraAttributes++;}
+        if(exportDeviation){nbExtraAttributes++;}
+        if(exportAmplitude){nbExtraAttributes++;}
+        if(exportTime){nbExtraAttributes++;}
+        
+        Column[] extraColumns = new Column[nbExtraAttributes];
+        int index = 0;
+        if(exportReflectance){
+            extraColumns[index] = new Column("reflectance", Column.Type.FLOAT);
+            index++;
+        }
+        if(exportDeviation){
+            extraColumns[index] = new Column("deviation", Column.Type.FLOAT);
+            index++;
+        }
+        if(exportAmplitude){
+            extraColumns[index] = new Column("amplitude", Column.Type.FLOAT);
+            index++;
+        }
+        if(exportTime){
+            extraColumns[index] = new Column("time", Column.Type.DOUBLE);
+            index++;
+        }
+        
+        ShotFileContext context = new ShotFileContext(extraColumns);
+                
+        ShotWriter writer = new ShotWriter(context, outputTxtFile);
+
+        RxpExtraction extraction = new RxpExtraction();
+
+        extraction.openRxpFile(scan.file, RxpExtraction.REFLECTANCE, RxpExtraction.AMPLITUDE, RxpExtraction.DEVIATION, RxpExtraction.TIME);
+
+        Iterator<Shot> iterator = extraction.iterator();
+
+        int shotID = 0;
+        
+        while(iterator.hasNext()){
+
+            Shot shot = iterator.next();
+            
+            Vec4D origin = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
+            Vec3D direction = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
+
+            if(shot.nbEchos == 0){
+                writer.write(new fr.amap.lidar.format.shot.Shot(shotID, origin.x, origin.y, origin.z, direction.x, direction.y, direction.z));
+            }else{
+                
+                Echo[] echoes = new Echo[shot.nbEchos];
+                Object[] extra = new Object[nbExtraAttributes];
+                
+                for(int i=0;i<shot.nbEchos;i++){
+                    
+                    index = 0;
+                    if(exportReflectance){
+                        extra[index] = shot.reflectances[i];
+                        index++;
+                    }
+                    if(exportDeviation){
+                        extra[index] = shot.deviations[i];
+                        index++;
+                    }
+                    if(exportAmplitude){
+                        extra[index] = shot.amplitudes[i];
+                        index++;
+                    }
+                    if(exportTime){
+                        extra[index] = shot.times[i];
+                        index++;
+                    }
+                
+                    echoes[i] = new Echo(shot.ranges[i], extra);
+                }
+                
+                writer.write(new fr.amap.lidar.format.shot.Shot(shotID, origin.x, origin.y, origin.z, direction.x, direction.y, direction.z, echoes));
+            }
+            
+            
+            shotID++;
+
+        }
+
+        extraction.close();
+        writer.close();
     }
     
     public void toLaz(SimpleScan scan, File outputDirectory, boolean laz, boolean exportIntensity) throws IOException, InterruptedException, UnsupportedOperationException, Exception{

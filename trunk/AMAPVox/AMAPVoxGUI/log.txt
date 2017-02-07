@@ -517,3 +517,3699 @@ java.lang.IllegalStateException: Location is not set.
 	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
 	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$49(GtkApplication.java:139)
 	at java.lang.Thread.run(Thread.java:745)
+2017-02-03 13:48:08 INFO  - allocate MNT
+2017-02-03 13:48:08 ERROR - java.lang.ArrayIndexOutOfBoundsException: 34
+2017-02-03 13:49:16 INFO  - allocate MNT
+2017-02-03 13:49:53 WARN  - Cannot get manifest file
+java.lang.Exception: Cannot get Implementation-Build property in manifest file
+	at fr.amap.lidar.amapvox.commons.Configuration.createCommonData(Configuration.java:132)
+	at fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceCfg.writeConfiguration(TransmittanceCfg.java:279)
+	at fr.amap.lidar.amapvox.gui.MainFrameController.saveTransmittanceLightMapSim(MainFrameController.java:6156)
+	at fr.amap.lidar.amapvox.gui.MainFrameController.executeTransmittanceLightMapSim(MainFrameController.java:6175)
+	at fr.amap.lidar.amapvox.gui.MainFrameController.onActionButtonExecuteTransmittanceMapSimulation(MainFrameController.java:3243)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sun.reflect.misc.Trampoline.invoke(MethodUtil.java:71)
+	at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sun.reflect.misc.MethodUtil.invoke(MethodUtil.java:275)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1769)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1657)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Node.fireEvent(Node.java:8413)
+	at javafx.scene.control.Button.fire(Button.java:185)
+	at com.sun.javafx.scene.control.behavior.ButtonBehavior.mouseReleased(ButtonBehavior.java:182)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:96)
+	at com.sun.javafx.scene.control.skin.BehaviorSkinBase$1.handle(BehaviorSkinBase.java:89)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:218)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:3757)
+	at javafx.scene.Scene$MouseHandler.access$1500(Scene.java:3485)
+	at javafx.scene.Scene.impl_processMouseEvent(Scene.java:1762)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2494)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:380)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:294)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$354(GlassViewEventHandler.java:416)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:389)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:415)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:555)
+	at com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$49(GtkApplication.java:139)
+	at java.lang.Thread.run(Thread.java:745)
+2017-02-03 13:49:54 INFO  - temporary file created : /tmp/cfg_temp9133006020762182108.xml
+2017-02-03 13:49:54 ERROR - An error occured
+java.lang.Exception: java.io.IOException: Cannot load resource file misc/directions
+	at fr.amap.lidar.amapvox.gui.task.TaskElement$2.handle(TaskElement.java:264)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.concurrent.EventHelper.fireEvent(EventHelper.java:219)
+	at javafx.concurrent.Service.fireEvent(Service.java:853)
+	at javafx.concurrent.Service.lambda$new$490(Service.java:538)
+	at com.sun.javafx.binding.ExpressionHelper$SingleChange.fireValueChangedEvent(ExpressionHelper.java:182)
+	at com.sun.javafx.binding.ExpressionHelper.fireValueChangedEvent(ExpressionHelper.java:81)
+	at javafx.beans.property.ObjectPropertyBase.fireValueChangedEvent(ObjectPropertyBase.java:105)
+	at javafx.beans.property.ObjectPropertyBase.markInvalid(ObjectPropertyBase.java:112)
+	at javafx.beans.property.ObjectPropertyBase.access$000(ObjectPropertyBase.java:51)
+	at javafx.beans.property.ObjectPropertyBase$Listener.invalidated(ObjectPropertyBase.java:233)
+	at com.sun.javafx.binding.ExpressionHelper$SingleInvalidation.fireValueChangedEvent(ExpressionHelper.java:137)
+	at com.sun.javafx.binding.ExpressionHelper.fireValueChangedEvent(ExpressionHelper.java:81)
+	at javafx.beans.property.ObjectPropertyBase.fireValueChangedEvent(ObjectPropertyBase.java:105)
+	at javafx.beans.property.ObjectPropertyBase.markInvalid(ObjectPropertyBase.java:112)
+	at javafx.beans.property.ObjectPropertyBase.set(ObjectPropertyBase.java:146)
+	at javafx.concurrent.Task.setState(Task.java:696)
+	at javafx.concurrent.Task$TaskCallable.lambda$call$501(Task.java:1453)
+	at com.sun.javafx.application.PlatformImpl.lambda$null$173(PlatformImpl.java:295)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.application.PlatformImpl.lambda$runLater$174(PlatformImpl.java:294)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$49(GtkApplication.java:139)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.io.IOException: Cannot load resource file misc/directions
+	at fr.amap.lidar.amapvox.jeeb.archimed.mmr.Turtle.<init>(Turtle.java:40)
+	at fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceSim.init(TransmittanceSim.java:102)
+	at fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceSim.simulationProcess(TransmittanceSim.java:82)
+	at fr.amap.lidar.amapvox.gui.task.TransmittanceSimService$1.call(TransmittanceSimService.java:51)
+	at fr.amap.lidar.amapvox.gui.task.TransmittanceSimService$1.call(TransmittanceSimService.java:33)
+	at javafx.concurrent.Task$TaskCallable.call(Task.java:1423)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javafx.concurrent.Service.lambda$null$492(Service.java:725)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javafx.concurrent.Service.lambda$executeTask$493(Service.java:724)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	... 1 more
+2017-02-03 13:50:35 WARN  - Cannot get manifest file
+java.lang.Exception: Cannot get Implementation-Build property in manifest file
+	at fr.amap.lidar.amapvox.commons.Configuration.createCommonData(Configuration.java:132)
+	at fr.amap.lidar.amapvox.simulation.transmittance.TransmittanceCfg.writeConfiguration(TransmittanceCfg.java:279)
+	at fr.amap.lidar.amapvox.gui.MainFrameController.saveTransmittanceLightMapSim(MainFrameController.java:6156)
+	at fr.amap.lidar.amapvox.gui.MainFrameController.onActionButtonSaveTransmittanceMapSimulation(MainFrameController.java:3256)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sun.reflect.misc.Trampoline.invoke(MethodUtil.java:71)
+	at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sun.reflect.misc.MethodUtil.invoke(MethodUtil.java:275)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1769)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1657)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.control.MenuItem.fire(MenuItem.java:462)
+	at com.sun.javafx.scene.control.skin.ContextMenuContent$MenuItemContainer.doSelect(ContextMenuContent.java:1405)
+	at com.sun.javafx.scene.control.skin.ContextMenuContent$MenuItemContainer.lambda$createChildren$343(ContextMenuContent.java:1358)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:218)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:3757)
+	at javafx.scene.Scene$MouseHandler.access$1500(Scene.java:3485)
+	at javafx.scene.Scene.impl_processMouseEvent(Scene.java:1762)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2494)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:380)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:294)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$354(GlassViewEventHandler.java:416)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:389)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:415)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:555)
+	at com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$49(GtkApplication.java:139)
+	at java.lang.Thread.run(Thread.java:745)
+2017-02-03 13:51:20 INFO  - Turtle built with 46 directions
+2017-02-03 13:51:20 INFO  - ===== /home/julien/Documents/tests_amapvox/ALS_80x80_3B_Corr1.vox =====
+2017-02-03 13:51:20 INFO  - VOXEL SPACE
+#min_corner: -5.0 -5.0 18.0
+#max_corner: 75.0 75.0 65.0
+#split: 80 80 47
+#type: ALS #res: 1.0 #MAX_PAD: 3.536958 #LAD_TYPE: Spherical
+i j k PadBVTotal angleMean bvEntering bvIntercepted ground_distance lMeanTotal lgTotal nbEchos nbSampling sumSurfMulLength sumSurfMulLengthMulEnt transmittance transmittance_tmp
+
+2017-02-03 13:51:20 INFO  - allocate Voxels
+2017-02-03 13:51:20 INFO  - allocate MNT
+2017-02-03 13:51:23 INFO  - nb positions= 6561
+2017-02-03 13:51:23 INFO  - Computation of transmittance
+2017-02-03 13:51:25 INFO  - 1000/6561
+2017-02-03 13:51:26 INFO  - 2000/6561
+2017-02-03 13:51:27 INFO  - 3000/6561
+2017-02-03 13:51:28 INFO  - 4000/6561
+2017-02-03 13:51:29 INFO  - 5000/6561
+2017-02-03 13:51:30 INFO  - 6000/6561
+2017-02-03 13:51:30 INFO  - Writing file /home/julien/Bureau/tmp/01-02-17_0001_01-03-17_2359_0.5.bmp
+2017-02-03 13:51:30 INFO  - File /home/julien/Bureau/tmp/01-02-17_0001_01-03-17_2359_0.5.bmp written
+2017-02-06 09:18:12 WARN  - Cannot get manifest file
+java.lang.Exception: Cannot get Implementation-Build property in manifest file
+	at fr.amap.lidar.amapvox.commons.Configuration.createCommonData(Configuration.java:132)
+	at fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg.writeConfiguration(TLSVoxCfg.java:100)
+	at fr.amap.lidar.amapvox.gui.MainFrameController.saveTLSVoxelization(MainFrameController.java:2980)
+	at fr.amap.lidar.amapvox.gui.MainFrameController.onActionButtonSaveTLSVoxelization(MainFrameController.java:2994)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sun.reflect.misc.Trampoline.invoke(MethodUtil.java:71)
+	at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sun.reflect.misc.MethodUtil.invoke(MethodUtil.java:275)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1769)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1657)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.control.MenuItem.fire(MenuItem.java:462)
+	at com.sun.javafx.scene.control.skin.ContextMenuContent$MenuItemContainer.doSelect(ContextMenuContent.java:1405)
+	at com.sun.javafx.scene.control.skin.ContextMenuContent$MenuItemContainer.lambda$createChildren$343(ContextMenuContent.java:1358)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:218)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:3757)
+	at javafx.scene.Scene$MouseHandler.access$1500(Scene.java:3485)
+	at javafx.scene.Scene.impl_processMouseEvent(Scene.java:1762)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2494)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:380)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:294)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$354(GlassViewEventHandler.java:416)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:389)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:415)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:555)
+	at com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$49(GtkApplication.java:139)
+	at java.lang.Thread.run(Thread.java:745)
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - Building transmittance functions table
+2017-02-06 09:18:15 INFO  - Transmittance functions table is built
+2017-02-06 09:18:15 INFO  - rxp extraction is started
+2017-02-06 09:18:15 INFO  - rxp extraction is started
+2017-02-06 09:18:15 INFO  - rxp extraction is started
+2017-02-06 09:18:15 INFO  - rxp extraction is started
+2017-02-06 09:18:15 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:15 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:15 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:15 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:20 INFO  - Shots processed: 102784
+2017-02-06 09:18:20 INFO  - Shots processed: 101777
+2017-02-06 09:18:20 INFO  - Shots processed: 106520
+2017-02-06 09:18:20 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_171442.mon.rxp.vox
+2017-02-06 09:18:20 INFO  - Shots processed: 101725
+2017-02-06 09:18:20 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_174021.mon.rxp.vox
+2017-02-06 09:18:20 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_172959.mon.rxp.vox
+2017-02-06 09:18:20 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_172246.mon.rxp.vox
+2017-02-06 09:18:29 INFO  - file written ( 8.0 s )
+2017-02-06 09:18:29 INFO  - rxp extraction is started
+2017-02-06 09:18:29 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:29 INFO  - file written ( 8.0 s )
+2017-02-06 09:18:29 INFO  - rxp extraction is started
+2017-02-06 09:18:29 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:29 INFO  - file written ( 8.0 s )
+2017-02-06 09:18:29 INFO  - rxp extraction is started
+2017-02-06 09:18:29 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:29 INFO  - file written ( 8.0 s )
+2017-02-06 09:18:29 INFO  - rxp extraction is started
+2017-02-06 09:18:29 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:31 INFO  - Shots processed: 103589
+2017-02-06 09:18:31 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_175219.mon.rxp.vox
+2017-02-06 09:18:31 INFO  - Shots processed: 103830
+2017-02-06 09:18:31 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_175855.mon.rxp.vox
+2017-02-06 09:18:31 INFO  - Shots processed: 106195
+2017-02-06 09:18:31 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_181318.mon.rxp.vox
+2017-02-06 09:18:31 INFO  - Shots processed: 106241
+2017-02-06 09:18:32 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_182037.mon.rxp.vox
+2017-02-06 09:18:36 INFO  - file written ( 5.0 s )
+2017-02-06 09:18:36 INFO  - rxp extraction is started
+2017-02-06 09:18:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:36 INFO  - file written ( 5.0 s )
+2017-02-06 09:18:36 INFO  - rxp extraction is started
+2017-02-06 09:18:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:36 INFO  - file written ( 4.0 s )
+2017-02-06 09:18:36 INFO  - rxp extraction is started
+2017-02-06 09:18:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:37 INFO  - file written ( 5.0 s )
+2017-02-06 09:18:37 INFO  - rxp extraction is started
+2017-02-06 09:18:37 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:38 INFO  - Shots processed: 101853
+2017-02-06 09:18:38 INFO  - Shots processed: 102466
+2017-02-06 09:18:38 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_184242.mon.rxp.vox
+2017-02-06 09:18:38 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_183617.mon.rxp.vox
+2017-02-06 09:18:38 INFO  - Shots processed: 102725
+2017-02-06 09:18:39 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_172007.mon.rxp.vox
+2017-02-06 09:18:39 INFO  - Shots processed: 101865
+2017-02-06 09:18:39 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_172710.mon.rxp.vox
+2017-02-06 09:18:44 INFO  - file written ( 5.0 s )
+2017-02-06 09:18:44 INFO  - rxp extraction is started
+2017-02-06 09:18:44 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:44 INFO  - file written ( 5.0 s )
+2017-02-06 09:18:44 INFO  - rxp extraction is started
+2017-02-06 09:18:44 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:44 INFO  - file written ( 5.0 s )
+2017-02-06 09:18:44 INFO  - rxp extraction is started
+2017-02-06 09:18:44 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:44 INFO  - file written ( 6.0 s )
+2017-02-06 09:18:44 INFO  - rxp extraction is started
+2017-02-06 09:18:44 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:46 INFO  - Shots processed: 105547
+2017-02-06 09:18:46 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_173954.mon.rxp.vox
+2017-02-06 09:18:46 INFO  - Shots processed: 101809
+2017-02-06 09:18:46 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_174633.mon.rxp.vox
+2017-02-06 09:18:46 INFO  - Shots processed: 102489
+2017-02-06 09:18:46 INFO  - Shots processed: 102532
+2017-02-06 09:18:46 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_180004.mon.rxp.vox
+2017-02-06 09:18:46 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_180631.mon.rxp.vox
+2017-02-06 09:18:50 INFO  - file written ( 4.0 s )
+2017-02-06 09:18:50 INFO  - rxp extraction is started
+2017-02-06 09:18:50 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:50 INFO  - file written ( 4.0 s )
+2017-02-06 09:18:50 INFO  - rxp extraction is started
+2017-02-06 09:18:50 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:51 INFO  - file written ( 4.0 s )
+2017-02-06 09:18:51 INFO  - rxp extraction is started
+2017-02-06 09:18:51 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:51 INFO  - file written ( 4.0 s )
+2017-02-06 09:18:51 INFO  - rxp extraction is started
+2017-02-06 09:18:51 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:52 INFO  - Shots processed: 102545
+2017-02-06 09:18:52 INFO  - Shots processed: 102665
+2017-02-06 09:18:52 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_182922.mon.rxp.vox
+2017-02-06 09:18:52 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_182138.mon.rxp.vox
+2017-02-06 09:18:53 INFO  - Shots processed: 103888
+2017-02-06 09:18:53 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_185135.mon.rxp.vox
+2017-02-06 09:18:53 INFO  - Shots processed: 104138
+2017-02-06 09:18:53 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_184434.mon.rxp.vox
+2017-02-06 09:18:57 INFO  - file written ( 4.0 s )
+2017-02-06 09:18:57 INFO  - rxp extraction is started
+2017-02-06 09:18:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:57 INFO  - file written ( 4.0 s )
+2017-02-06 09:18:57 INFO  - rxp extraction is started
+2017-02-06 09:18:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:57 INFO  - file written ( 4.0 s )
+2017-02-06 09:18:57 INFO  - rxp extraction is started
+2017-02-06 09:18:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:57 INFO  - file written ( 4.0 s )
+2017-02-06 09:18:57 INFO  - rxp extraction is started
+2017-02-06 09:18:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:18:59 INFO  - Shots processed: 107042
+2017-02-06 09:18:59 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_172050.mon.rxp.vox
+2017-02-06 09:18:59 INFO  - Shots processed: 107882
+2017-02-06 09:18:59 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_171244.mon.rxp.vox
+2017-02-06 09:19:00 INFO  - Shots processed: 103464
+2017-02-06 09:19:00 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_174327.mon.rxp.vox
+2017-02-06 09:19:00 INFO  - Shots processed: 104080
+2017-02-06 09:19:00 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_173552.mon.rxp.vox
+2017-02-06 09:19:04 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:04 INFO  - rxp extraction is started
+2017-02-06 09:19:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:04 INFO  - file written ( 5.0 s )
+2017-02-06 09:19:04 INFO  - rxp extraction is started
+2017-02-06 09:19:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:04 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:04 INFO  - rxp extraction is started
+2017-02-06 09:19:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:04 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:04 INFO  - rxp extraction is started
+2017-02-06 09:19:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:06 INFO  - Shots processed: 128227
+2017-02-06 09:19:06 INFO  - Shots processed: 116007
+2017-02-06 09:19:06 INFO  - Shots processed: 104532
+2017-02-06 09:19:06 INFO  - Shots processed: 102567
+2017-02-06 09:19:06 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/801220_013101.mon.rxp.vox
+2017-02-06 09:19:06 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/801220_011714.mon.rxp.vox
+2017-02-06 09:19:06 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/801220_010757.mon.rxp.vox
+2017-02-06 09:19:06 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/801220_013734.mon.rxp.vox
+2017-02-06 09:19:10 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:10 INFO  - rxp extraction is started
+2017-02-06 09:19:10 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:10 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:10 INFO  - rxp extraction is started
+2017-02-06 09:19:10 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:10 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:10 INFO  - rxp extraction is started
+2017-02-06 09:19:10 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:10 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:10 INFO  - rxp extraction is started
+2017-02-06 09:19:10 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:12 INFO  - Shots processed: 104099
+2017-02-06 09:19:12 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/801220_015404.mon.rxp.vox
+2017-02-06 09:19:12 INFO  - Shots processed: 104308
+2017-02-06 09:19:12 INFO  - Shots processed: 102066
+2017-02-06 09:19:12 INFO  - Shots processed: 102171
+2017-02-06 09:19:12 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/801220_020040.mon.rxp.vox
+2017-02-06 09:19:12 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_171822.mon.rxp.vox
+2017-02-06 09:19:12 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_171204.mon.rxp.vox
+2017-02-06 09:19:17 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:17 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:20 INFO  - rxp extraction is started
+2017-02-06 09:19:17 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:17 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:20 INFO  - rxp extraction is started
+2017-02-06 09:19:20 INFO  - rxp extraction is started
+2017-02-06 09:19:20 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:20 INFO  - rxp extraction is started
+2017-02-06 09:19:20 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:20 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:20 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:22 INFO  - Shots processed: 103402
+2017-02-06 09:19:22 INFO  - Shots processed: 103811
+2017-02-06 09:19:22 INFO  - Shots processed: 103409
+2017-02-06 09:19:22 INFO  - Shots processed: 103721
+2017-02-06 09:19:23 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_171350.mon.rxp.vox
+2017-02-06 09:19:23 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_172133.mon.rxp.vox
+2017-02-06 09:19:23 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_174308.mon.rxp.vox
+2017-02-06 09:19:23 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_173632.mon.rxp.vox
+2017-02-06 09:19:27 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:27 INFO  - rxp extraction is started
+2017-02-06 09:19:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:27 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:27 INFO  - rxp extraction is started
+2017-02-06 09:19:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:27 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:27 INFO  - rxp extraction is started
+2017-02-06 09:19:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:27 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:27 INFO  - rxp extraction is started
+2017-02-06 09:19:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:29 INFO  - Shots processed: 103271
+2017-02-06 09:19:29 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_180612.mon.rxp.vox
+2017-02-06 09:19:29 INFO  - Shots processed: 105658
+2017-02-06 09:19:29 INFO  - Shots processed: 103507
+2017-02-06 09:19:29 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_175819.mon.rxp.vox
+2017-02-06 09:19:29 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_180921.mon.rxp.vox
+2017-02-06 09:19:29 INFO  - Shots processed: 105321
+2017-02-06 09:19:29 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_175922.mon.rxp.vox
+2017-02-06 09:19:33 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:33 INFO  - rxp extraction is started
+2017-02-06 09:19:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:33 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:33 INFO  - rxp extraction is started
+2017-02-06 09:19:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:33 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:33 INFO  - rxp extraction is started
+2017-02-06 09:19:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:34 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:34 INFO  - rxp extraction is started
+2017-02-06 09:19:34 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:35 INFO  - Shots processed: 107351
+2017-02-06 09:19:35 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_182636.mon.rxp.vox
+2017-02-06 09:19:35 INFO  - Shots processed: 107033
+2017-02-06 09:19:35 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_183327.mon.rxp.vox
+2017-02-06 09:19:35 INFO  - Shots processed: 114502
+2017-02-06 09:19:35 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_185222.mon.rxp.vox
+2017-02-06 09:19:35 INFO  - Shots processed: 112643
+2017-02-06 09:19:36 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_185929.mon.rxp.vox
+2017-02-06 09:19:39 INFO  - file written ( 3.0 s )
+2017-02-06 09:19:39 INFO  - rxp extraction is started
+2017-02-06 09:19:39 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:39 INFO  - file written ( 3.0 s )
+2017-02-06 09:19:39 INFO  - rxp extraction is started
+2017-02-06 09:19:39 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:39 INFO  - file written ( 3.0 s )
+2017-02-06 09:19:39 INFO  - rxp extraction is started
+2017-02-06 09:19:39 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:39 INFO  - file written ( 3.0 s )
+2017-02-06 09:19:39 INFO  - rxp extraction is started
+2017-02-06 09:19:39 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:41 INFO  - Shots processed: 103110
+2017-02-06 09:19:41 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750113_101027.mon.rxp.vox
+2017-02-06 09:19:41 INFO  - Shots processed: 105854
+2017-02-06 09:19:41 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750113_100155.mon.rxp.vox
+2017-02-06 09:19:41 INFO  - Shots processed: 102610
+2017-02-06 09:19:41 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750113_103235.mon.rxp.vox
+2017-02-06 09:19:41 INFO  - Shots processed: 108464
+2017-02-06 09:19:42 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750113_102506.mon.rxp.vox
+2017-02-06 09:19:46 INFO  - file written ( 5.0 s )
+2017-02-06 09:19:46 INFO  - rxp extraction is started
+2017-02-06 09:19:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:46 INFO  - file written ( 5.0 s )
+2017-02-06 09:19:46 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:46 INFO  - file written ( 4.0 s )
+2017-02-06 09:19:47 INFO  - rxp extraction is started
+2017-02-06 09:19:47 INFO  - rxp extraction is started
+2017-02-06 09:19:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:47 INFO  - rxp extraction is started
+2017-02-06 09:19:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:47 INFO  - Shots processed: 105279
+2017-02-06 09:19:47 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750113_095908.mon.rxp.vox
+2017-02-06 09:19:48 INFO  - Shots processed: 102562
+2017-02-06 09:19:48 INFO  - Shots processed: 102705
+2017-02-06 09:19:48 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750113_100710.mon.rxp.vox
+2017-02-06 09:19:48 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_172706.mon.rxp.vox
+2017-02-06 09:19:48 INFO  - Shots processed: 101788
+2017-02-06 09:19:49 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_171157.mon.rxp.vox
+2017-02-06 09:19:54 INFO  - file written ( 7.0 s )
+2017-02-06 09:19:55 INFO  - file written ( 6.0 s )
+2017-02-06 09:19:57 INFO  - rxp extraction is started
+2017-02-06 09:19:55 INFO  - file written ( 6.0 s )
+2017-02-06 09:19:55 INFO  - file written ( 6.0 s )
+2017-02-06 09:19:57 INFO  - rxp extraction is started
+2017-02-06 09:19:57 INFO  - rxp extraction is started
+2017-02-06 09:19:57 INFO  - rxp extraction is started
+2017-02-06 09:19:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:19:59 INFO  - Shots processed: 101479
+2017-02-06 09:19:59 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_173342.mon.rxp.vox
+2017-02-06 09:19:59 INFO  - Shots processed: 102160
+2017-02-06 09:19:59 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_175532.mon.rxp.vox
+2017-02-06 09:19:59 INFO  - Shots processed: 110709
+2017-02-06 09:19:59 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_174737.mon.rxp.vox
+2017-02-06 09:19:59 INFO  - Shots processed: 117856
+2017-02-06 09:19:59 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_181006.mon.rxp.vox
+2017-02-06 09:20:03 INFO  - file written ( 3.0 s )
+2017-02-06 09:20:03 INFO  - rxp extraction is started
+2017-02-06 09:20:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:03 INFO  - file written ( 3.0 s )
+2017-02-06 09:20:03 INFO  - rxp extraction is started
+2017-02-06 09:20:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:03 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:03 INFO  - rxp extraction is started
+2017-02-06 09:20:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:03 INFO  - file written ( 3.0 s )
+2017-02-06 09:20:03 INFO  - rxp extraction is started
+2017-02-06 09:20:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:05 INFO  - Shots processed: 117054
+2017-02-06 09:20:05 INFO  - Shots processed: 108459
+2017-02-06 09:20:05 INFO  - Shots processed: 110508
+2017-02-06 09:20:05 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_172341.mon.rxp.vox
+2017-02-06 09:20:05 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_174856.mon.rxp.vox
+2017-02-06 09:20:05 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_174032.mon.rxp.vox
+2017-02-06 09:20:05 INFO  - Shots processed: 110276
+2017-02-06 09:20:05 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_180401.mon.rxp.vox
+2017-02-06 09:20:09 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:09 INFO  - rxp extraction is started
+2017-02-06 09:20:09 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:10 INFO  - file written ( 5.0 s )
+2017-02-06 09:20:10 INFO  - rxp extraction is started
+2017-02-06 09:20:10 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:10 INFO  - file written ( 5.0 s )
+2017-02-06 09:20:10 INFO  - rxp extraction is started
+2017-02-06 09:20:10 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:10 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:10 INFO  - rxp extraction is started
+2017-02-06 09:20:10 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:11 INFO  - Shots processed: 107339
+2017-02-06 09:20:11 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_181148.mon.rxp.vox
+2017-02-06 09:20:11 INFO  - Shots processed: 105348
+2017-02-06 09:20:11 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_182442.mon.rxp.vox
+2017-02-06 09:20:12 INFO  - Shots processed: 103370
+2017-02-06 09:20:12 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_183235.mon.rxp.vox
+2017-02-06 09:20:12 INFO  - Shots processed: 111989
+2017-02-06 09:20:12 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_184720.mon.rxp.vox
+2017-02-06 09:20:16 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:16 INFO  - rxp extraction is started
+2017-02-06 09:20:16 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:16 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:16 INFO  - rxp extraction is started
+2017-02-06 09:20:16 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:16 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:16 INFO  - rxp extraction is started
+2017-02-06 09:20:16 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:16 INFO  - file written ( 3.0 s )
+2017-02-06 09:20:16 INFO  - rxp extraction is started
+2017-02-06 09:20:16 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:17 INFO  - Shots processed: 103501
+2017-02-06 09:20:17 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_185617.mon.rxp.vox
+2017-02-06 09:20:17 INFO  - Shots processed: 104727
+2017-02-06 09:20:17 INFO  - Shots processed: 102738
+2017-02-06 09:20:17 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750113_100015.mon.rxp.vox
+2017-02-06 09:20:18 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750113_100829.mon.rxp.vox
+2017-02-06 09:20:18 INFO  - Shots processed: 109467
+2017-02-06 09:20:18 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750113_102050.mon.rxp.vox
+2017-02-06 09:20:22 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:22 INFO  - rxp extraction is started
+2017-02-06 09:20:22 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:22 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:22 INFO  - rxp extraction is started
+2017-02-06 09:20:22 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:22 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:22 INFO  - rxp extraction is started
+2017-02-06 09:20:22 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:22 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:22 INFO  - rxp extraction is started
+2017-02-06 09:20:22 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:23 INFO  - Shots processed: 109020
+2017-02-06 09:20:23 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750113_102926.mon.rxp.vox
+2017-02-06 09:20:24 INFO  - Shots processed: 101202
+2017-02-06 09:20:24 INFO  - Shots processed: 101857
+2017-02-06 09:20:24 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750113_104318.mon.rxp.vox
+2017-02-06 09:20:24 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750113_105300.mon.rxp.vox
+2017-02-06 09:20:28 INFO  - Shots processed: 102982
+2017-02-06 09:20:28 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750113_112334.mon.rxp.vox
+2017-02-06 09:20:32 INFO  - file written ( 8.0 s )
+2017-02-06 09:20:32 INFO  - rxp extraction is started
+2017-02-06 09:20:32 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:32 INFO  - file written ( 8.0 s )
+2017-02-06 09:20:32 INFO  - rxp extraction is started
+2017-02-06 09:20:32 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:32 INFO  - file written ( 8.0 s )
+2017-02-06 09:20:32 INFO  - rxp extraction is started
+2017-02-06 09:20:32 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:32 INFO  - file written ( 3.0 s )
+2017-02-06 09:20:32 INFO  - rxp extraction is started
+2017-02-06 09:20:32 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:33 INFO  - Shots processed: 102083
+2017-02-06 09:20:33 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750113_113028.mon.rxp.vox
+2017-02-06 09:20:34 INFO  - Shots processed: 104909
+2017-02-06 09:20:34 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850420_030709.mon.rxp.vox
+2017-02-06 09:20:34 INFO  - Shots processed: 103513
+2017-02-06 09:20:34 INFO  - Shots processed: 105593
+2017-02-06 09:20:34 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850420_031456.mon.rxp.vox
+2017-02-06 09:20:34 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850420_032805.mon.rxp.vox
+2017-02-06 09:20:37 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:37 INFO  - rxp extraction is started
+2017-02-06 09:20:37 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:38 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:38 INFO  - rxp extraction is started
+2017-02-06 09:20:38 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:38 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:38 INFO  - rxp extraction is started
+2017-02-06 09:20:38 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:39 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:39 INFO  - rxp extraction is started
+2017-02-06 09:20:39 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:39 INFO  - Shots processed: 104573
+2017-02-06 09:20:39 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850420_033514.mon.rxp.vox
+2017-02-06 09:20:40 INFO  - Shots processed: 108871
+2017-02-06 09:20:41 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850420_034818.mon.rxp.vox
+2017-02-06 09:20:41 INFO  - Shots processed: 105238
+2017-02-06 09:20:41 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_095741.mon.rxp.vox
+2017-02-06 09:20:41 INFO  - Shots processed: 109092
+2017-02-06 09:20:41 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850420_035548.mon.rxp.vox
+2017-02-06 09:20:44 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:44 INFO  - rxp extraction is started
+2017-02-06 09:20:44 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:45 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:45 INFO  - rxp extraction is started
+2017-02-06 09:20:45 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:46 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:46 INFO  - rxp extraction is started
+2017-02-06 09:20:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:46 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:46 INFO  - rxp extraction is started
+2017-02-06 09:20:46 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:46 INFO  - Shots processed: 117672
+2017-02-06 09:20:46 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_101753.mon.rxp.vox
+2017-02-06 09:20:47 INFO  - Shots processed: 104610
+2017-02-06 09:20:47 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_103202.mon.rxp.vox
+2017-02-06 09:20:48 INFO  - Shots processed: 114875
+2017-02-06 09:20:48 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_110107.mon.rxp.vox
+2017-02-06 09:20:48 INFO  - Shots processed: 115495
+2017-02-06 09:20:48 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_104245.mon.rxp.vox
+2017-02-06 09:20:50 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:50 INFO  - rxp extraction is started
+2017-02-06 09:20:50 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:51 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:51 INFO  - rxp extraction is started
+2017-02-06 09:20:51 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:51 INFO  - Shots processed: 108060
+2017-02-06 09:20:51 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_111300.mon.rxp.vox
+2017-02-06 09:20:52 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:52 INFO  - rxp extraction is started
+2017-02-06 09:20:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:52 INFO  - file written ( 4.0 s )
+2017-02-06 09:20:52 INFO  - rxp extraction is started
+2017-02-06 09:20:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:53 INFO  - Shots processed: 114480
+2017-02-06 09:20:53 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_112017.mon.rxp.vox
+2017-02-06 09:20:54 INFO  - Shots processed: 101999
+2017-02-06 09:20:54 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_175257.mon.rxp.vox
+2017-02-06 09:20:54 INFO  - Shots processed: 114356
+2017-02-06 09:20:54 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_180047.mon.rxp.vox
+2017-02-06 09:20:55 INFO  - file written ( 3.0 s )
+2017-02-06 09:20:55 INFO  - rxp extraction is started
+2017-02-06 09:20:55 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:57 INFO  - Shots processed: 105953
+2017-02-06 09:20:57 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_181428.mon.rxp.vox
+2017-02-06 09:20:57 INFO  - file written ( 3.0 s )
+2017-02-06 09:20:57 INFO  - rxp extraction is started
+2017-02-06 09:20:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:58 INFO  - file written ( 3.0 s )
+2017-02-06 09:20:58 INFO  - rxp extraction is started
+2017-02-06 09:20:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:58 INFO  - file written ( 3.0 s )
+2017-02-06 09:20:58 INFO  - rxp extraction is started
+2017-02-06 09:20:59 INFO  - file written ( 2.0 s )
+2017-02-06 09:21:02 INFO  - rxp extraction is started
+2017-02-06 09:21:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:20:59 INFO  - Shots processed: 105138
+2017-02-06 09:20:59 INFO  - Shots processed: 115936
+2017-02-06 09:21:02 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_183404.mon.rxp.vox
+2017-02-06 09:21:02 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_182219.mon.rxp.vox
+2017-02-06 09:21:04 INFO  - Shots processed: 111659
+2017-02-06 09:21:04 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_171241.mon.rxp.vox
+2017-02-06 09:21:04 INFO  - Shots processed: 116273
+2017-02-06 09:21:04 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_184100.mon.rxp.vox
+2017-02-06 09:21:06 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:06 INFO  - rxp extraction is started
+2017-02-06 09:21:06 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:06 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:06 INFO  - rxp extraction is started
+2017-02-06 09:21:06 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:08 INFO  - Shots processed: 108445
+2017-02-06 09:21:08 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_173730.mon.rxp.vox
+2017-02-06 09:21:08 INFO  - Shots processed: 118745
+2017-02-06 09:21:08 INFO  - file written ( 4.0 s )
+2017-02-06 09:21:08 INFO  - rxp extraction is started
+2017-02-06 09:21:08 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:08 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:08 INFO  - rxp extraction is started
+2017-02-06 09:21:08 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:08 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_172107.mon.rxp.vox
+2017-02-06 09:21:09 INFO  - Shots processed: 122369
+2017-02-06 09:21:10 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_180319.mon.rxp.vox
+2017-02-06 09:21:10 INFO  - Shots processed: 121969
+2017-02-06 09:21:10 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_174611.mon.rxp.vox
+2017-02-06 09:21:12 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:12 INFO  - rxp extraction is started
+2017-02-06 09:21:12 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:12 INFO  - file written ( 4.0 s )
+2017-02-06 09:21:12 INFO  - rxp extraction is started
+2017-02-06 09:21:12 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:13 INFO  - Shots processed: 103755
+2017-02-06 09:21:13 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_180110.mon.rxp.vox
+2017-02-06 09:21:13 INFO  - Shots processed: 148201
+2017-02-06 09:21:13 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:13 INFO  - rxp extraction is started
+2017-02-06 09:21:13 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:14 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_181210.mon.rxp.vox
+2017-02-06 09:21:14 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:14 INFO  - rxp extraction is started
+2017-02-06 09:21:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:15 INFO  - Shots processed: 116750
+2017-02-06 09:21:15 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_180843.mon.rxp.vox
+2017-02-06 09:21:15 INFO  - Shots processed: 105587
+2017-02-06 09:21:15 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_182009.mon.rxp.vox
+2017-02-06 09:21:17 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:17 INFO  - rxp extraction is started
+2017-02-06 09:21:17 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:17 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:17 INFO  - rxp extraction is started
+2017-02-06 09:21:17 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:19 INFO  - Shots processed: 104080
+2017-02-06 09:21:19 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_191113.mon.rxp.vox
+2017-02-06 09:21:19 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:19 INFO  - rxp extraction is started
+2017-02-06 09:21:19 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:19 INFO  - Shots processed: 120450
+2017-02-06 09:21:19 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_182856.mon.rxp.vox
+2017-02-06 09:21:19 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:19 INFO  - rxp extraction is started
+2017-02-06 09:21:19 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:20 INFO  - Shots processed: 102959
+2017-02-06 09:21:20 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_192051.mon.rxp.vox
+2017-02-06 09:21:20 INFO  - Shots processed: 108446
+2017-02-06 09:21:20 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_193406.mon.rxp.vox
+2017-02-06 09:21:23 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:23 INFO  - rxp extraction is started
+2017-02-06 09:21:23 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:23 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:23 INFO  - rxp extraction is started
+2017-02-06 09:21:23 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:24 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:24 INFO  - rxp extraction is started
+2017-02-06 09:21:24 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:24 INFO  - Shots processed: 110186
+2017-02-06 09:21:24 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:24 INFO  - rxp extraction is started
+2017-02-06 09:21:24 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:24 INFO  - Shots processed: 119624
+2017-02-06 09:21:24 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_171525.mon.rxp.vox
+2017-02-06 09:21:24 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_194237.mon.rxp.vox
+2017-02-06 09:21:25 INFO  - Shots processed: 116264
+2017-02-06 09:21:26 INFO  - Shots processed: 107192
+2017-02-06 09:21:26 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_172548.mon.rxp.vox
+2017-02-06 09:21:26 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_174512.mon.rxp.vox
+2017-02-06 09:21:28 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:28 INFO  - rxp extraction is started
+2017-02-06 09:21:28 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:28 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:28 INFO  - rxp extraction is started
+2017-02-06 09:21:28 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:29 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:29 INFO  - rxp extraction is started
+2017-02-06 09:21:29 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:29 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:29 INFO  - rxp extraction is started
+2017-02-06 09:21:29 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:29 INFO  - Shots processed: 114752
+2017-02-06 09:21:30 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_175316.mon.rxp.vox
+2017-02-06 09:21:30 INFO  - Shots processed: 130225
+2017-02-06 09:21:30 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_180312.mon.rxp.vox
+2017-02-06 09:21:31 INFO  - Shots processed: 103763
+2017-02-06 09:21:32 INFO  - file written ( 2.0 s )
+2017-02-06 09:21:32 INFO  - file written ( 2.0 s )
+2017-02-06 09:21:33 INFO  - rxp extraction is started
+2017-02-06 09:21:31 INFO  - Shots processed: 104247
+2017-02-06 09:21:33 INFO  - rxp extraction is started
+2017-02-06 09:21:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:33 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_175641.mon.rxp.vox
+2017-02-06 09:21:33 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_181244.mon.rxp.vox
+2017-02-06 09:21:34 INFO  - Shots processed: 104921
+2017-02-06 09:21:34 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_173504.mon.rxp.vox
+2017-02-06 09:21:35 INFO  - Shots processed: 128966
+2017-02-06 09:21:35 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_182005.mon.rxp.vox
+2017-02-06 09:21:36 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:36 INFO  - rxp extraction is started
+2017-02-06 09:21:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:36 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:36 INFO  - rxp extraction is started
+2017-02-06 09:21:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:38 INFO  - Shots processed: 105282
+2017-02-06 09:21:38 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_172503.mon.rxp.vox
+2017-02-06 09:21:38 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:38 INFO  - rxp extraction is started
+2017-02-06 09:21:38 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:38 INFO  - Shots processed: 130916
+2017-02-06 09:21:38 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_174224.mon.rxp.vox
+2017-02-06 09:21:38 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:38 INFO  - rxp extraction is started
+2017-02-06 09:21:38 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:40 INFO  - Shots processed: 103547
+2017-02-06 09:21:40 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_191151.mon.rxp.vox
+2017-02-06 09:21:40 INFO  - Shots processed: 133071
+2017-02-06 09:21:40 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_185741.mon.rxp.vox
+2017-02-06 09:21:42 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:42 INFO  - rxp extraction is started
+2017-02-06 09:21:42 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:42 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:42 INFO  - rxp extraction is started
+2017-02-06 09:21:42 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:43 INFO  - Shots processed: 106722
+2017-02-06 09:21:43 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_185024.mon.rxp.vox
+2017-02-06 09:21:43 INFO  - Shots processed: 129607
+2017-02-06 09:21:43 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:43 INFO  - rxp extraction is started
+2017-02-06 09:21:43 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:43 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_191842.mon.rxp.vox
+2017-02-06 09:21:44 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:44 INFO  - rxp extraction is started
+2017-02-06 09:21:44 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:45 INFO  - Shots processed: 102059
+2017-02-06 09:21:45 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_183332.mon.rxp.vox
+2017-02-06 09:21:45 INFO  - Shots processed: 128293
+2017-02-06 09:21:46 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_183952.mon.rxp.vox
+2017-02-06 09:21:47 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:47 INFO  - rxp extraction is started
+2017-02-06 09:21:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:47 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:47 INFO  - rxp extraction is started
+2017-02-06 09:21:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:48 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:48 INFO  - rxp extraction is started
+2017-02-06 09:21:48 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:48 INFO  - Shots processed: 106190
+2017-02-06 09:21:48 INFO  - Shots processed: 129693
+2017-02-06 09:21:48 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_180722.mon.rxp.vox
+2017-02-06 09:21:48 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_182521.mon.rxp.vox
+2017-02-06 09:21:49 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:49 INFO  - rxp extraction is started
+2017-02-06 09:21:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:50 INFO  - Shots processed: 104063
+2017-02-06 09:21:50 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_180006.mon.rxp.vox
+2017-02-06 09:21:50 INFO  - Shots processed: 108434
+2017-02-06 09:21:51 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_171356.mon.rxp.vox
+2017-02-06 09:21:53 INFO  - file written ( 4.0 s )
+2017-02-06 09:21:53 INFO  - rxp extraction is started
+2017-02-06 09:21:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:53 INFO  - file written ( 4.0 s )
+2017-02-06 09:21:53 INFO  - rxp extraction is started
+2017-02-06 09:21:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:54 INFO  - file written ( 4.0 s )
+2017-02-06 09:21:54 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:54 INFO  - Shots processed: 107821
+2017-02-06 09:21:54 INFO  - Shots processed: 132157
+2017-02-06 09:21:55 INFO  - rxp extraction is started
+2017-02-06 09:21:55 INFO  - rxp extraction is started
+2017-02-06 09:21:55 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:55 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:55 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/750213_183253.mon.rxp.vox
+2017-02-06 09:21:55 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_172457.mon.rxp.vox
+2017-02-06 09:21:56 INFO  - Shots processed: 104852
+2017-02-06 09:21:56 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_174233.mon.rxp.vox
+2017-02-06 09:21:56 INFO  - Shots processed: 129394
+2017-02-06 09:21:56 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_173139.mon.rxp.vox
+2017-02-06 09:21:58 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:58 INFO  - rxp extraction is started
+2017-02-06 09:21:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:21:58 INFO  - file written ( 3.0 s )
+2017-02-06 09:21:58 INFO  - rxp extraction is started
+2017-02-06 09:21:58 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:22:00 INFO  - Shots processed: 105127
+2017-02-06 09:22:00 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_180402.mon.rxp.vox
+2017-02-06 09:22:00 INFO  - file written ( 3.0 s )
+2017-02-06 09:22:04 INFO  - rxp extraction is started
+2017-02-06 09:22:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:22:00 INFO  - file written ( 3.0 s )
+2017-02-06 09:22:00 INFO  - Shots processed: 129099
+2017-02-06 09:22:04 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_174916.mon.rxp.vox
+2017-02-06 09:22:05 INFO  - Shots processed: 127059
+2017-02-06 09:22:05 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/850215_181258.mon.rxp.vox
+2017-02-06 09:22:07 INFO  - file written ( 6.0 s )
+2017-02-06 09:22:07 INFO  - file written ( 2.0 s )
+2017-02-06 09:22:07 INFO  - file written ( 2.0 s )
+2017-02-06 09:22:07 INFO  - Merging in progress, file 1 : 134
+2017-02-06 09:22:09 INFO  - Merging in progress, file 2 : 134
+2017-02-06 09:22:10 INFO  - Merging in progress, file 3 : 134
+2017-02-06 09:22:11 INFO  - Merging in progress, file 4 : 134
+2017-02-06 09:22:12 INFO  - Merging in progress, file 5 : 134
+2017-02-06 09:22:13 INFO  - Merging in progress, file 6 : 134
+2017-02-06 09:22:14 INFO  - Merging in progress, file 7 : 134
+2017-02-06 09:24:37 WARN  - Cannot get manifest file
+java.lang.Exception: Cannot get Implementation-Build property in manifest file
+	at fr.amap.lidar.amapvox.commons.Configuration.createCommonData(Configuration.java:132)
+	at fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg.writeConfiguration(TLSVoxCfg.java:100)
+	at fr.amap.lidar.amapvox.gui.MainFrameController.saveTLSVoxelization(MainFrameController.java:2980)
+	at fr.amap.lidar.amapvox.gui.MainFrameController.onActionButtonSaveTLSVoxelization(MainFrameController.java:2994)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sun.reflect.misc.Trampoline.invoke(MethodUtil.java:71)
+	at sun.reflect.GeneratedMethodAccessor1.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at sun.reflect.misc.MethodUtil.invoke(MethodUtil.java:275)
+	at javafx.fxml.FXMLLoader$MethodHandler.invoke(FXMLLoader.java:1769)
+	at javafx.fxml.FXMLLoader$ControllerMethodEventHandler.handle(FXMLLoader.java:1657)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:49)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.control.MenuItem.fire(MenuItem.java:462)
+	at com.sun.javafx.scene.control.skin.ContextMenuContent$MenuItemContainer.doSelect(ContextMenuContent.java:1405)
+	at com.sun.javafx.scene.control.skin.ContextMenuContent$MenuItemContainer.lambda$createChildren$343(ContextMenuContent.java:1358)
+	at com.sun.javafx.event.CompositeEventHandler$NormalEventHandlerRecord.handleBubblingEvent(CompositeEventHandler.java:218)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:80)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:56)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at javafx.scene.Scene$MouseHandler.process(Scene.java:3757)
+	at javafx.scene.Scene$MouseHandler.access$1500(Scene.java:3485)
+	at javafx.scene.Scene.impl_processMouseEvent(Scene.java:1762)
+	at javafx.scene.Scene$ScenePeerListener.mouseEvent(Scene.java:2494)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:380)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler$MouseEventNotification.run(GlassViewEventHandler.java:294)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.lambda$handleMouseEvent$354(GlassViewEventHandler.java:416)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:389)
+	at com.sun.javafx.tk.quantum.GlassViewEventHandler.handleMouseEvent(GlassViewEventHandler.java:415)
+	at com.sun.glass.ui.View.handleMouseEvent(View.java:555)
+	at com.sun.glass.ui.View.notifyMouse(View.java:937)
+	at com.sun.glass.ui.gtk.GtkApplication._runLoop(Native Method)
+	at com.sun.glass.ui.gtk.GtkApplication.lambda$null$49(GtkApplication.java:139)
+	at java.lang.Thread.run(Thread.java:745)
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - Building transmittance functions table
+2017-02-06 09:24:41 INFO  - Transmittance functions table is built
+2017-02-06 09:24:41 INFO  - rxp extraction is started
+2017-02-06 09:24:41 INFO  - rxp extraction is started
+2017-02-06 09:24:41 INFO  - rxp extraction is started
+2017-02-06 09:24:41 INFO  - rxp extraction is started
+2017-02-06 09:24:41 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:24:41 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:24:41 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:24:41 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:24:44 INFO  - Shots processed: 102784
+2017-02-06 09:24:45 INFO  - Shots processed: 101777
+2017-02-06 09:24:45 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_171442.mon.rxp.vox
+2017-02-06 09:24:45 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_174021.mon.rxp.vox
+2017-02-06 09:24:46 INFO  - Shots processed: 101725
+2017-02-06 09:24:46 INFO  - Shots processed: 106520
+2017-02-06 09:24:46 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_172246.mon.rxp.vox
+2017-02-06 09:24:46 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_172959.mon.rxp.vox
+2017-02-06 09:24:53 INFO  - file written ( 7.0 s )
+2017-02-06 09:24:53 INFO  - rxp extraction is started
+2017-02-06 09:24:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:24:53 INFO  - file written ( 8.0 s )
+2017-02-06 09:24:53 INFO  - rxp extraction is started
+2017-02-06 09:24:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:24:53 INFO  - file written ( 6.0 s )
+2017-02-06 09:24:53 INFO  - rxp extraction is started
+2017-02-06 09:24:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:24:53 INFO  - file written ( 7.0 s )
+2017-02-06 09:24:53 INFO  - rxp extraction is started
+2017-02-06 09:24:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:24:54 INFO  - Shots processed: 103589
+2017-02-06 09:24:54 INFO  - Shots processed: 106241
+2017-02-06 09:24:55 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_182037.mon.rxp.vox
+2017-02-06 09:24:55 INFO  - Shots processed: 103830
+2017-02-06 09:24:55 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_175219.mon.rxp.vox
+2017-02-06 09:24:55 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_175855.mon.rxp.vox
+2017-02-06 09:24:55 INFO  - Shots processed: 106195
+2017-02-06 09:24:55 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_181318.mon.rxp.vox
+2017-02-06 09:24:59 INFO  - file written ( 4.0 s )
+2017-02-06 09:24:59 INFO  - rxp extraction is started
+2017-02-06 09:24:59 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:24:59 INFO  - file written ( 4.0 s )
+2017-02-06 09:24:59 INFO  - rxp extraction is started
+2017-02-06 09:24:59 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:00 INFO  - file written ( 5.0 s )
+2017-02-06 09:25:00 INFO  - rxp extraction is started
+2017-02-06 09:25:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:00 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:00 INFO  - rxp extraction is started
+2017-02-06 09:25:00 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:01 INFO  - Shots processed: 101853
+2017-02-06 09:25:01 INFO  - Shots processed: 102466
+2017-02-06 09:25:01 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_184242.mon.rxp.vox
+2017-02-06 09:25:01 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_183617.mon.rxp.vox
+2017-02-06 09:25:02 INFO  - Shots processed: 102725
+2017-02-06 09:25:02 INFO  - Shots processed: 101865
+2017-02-06 09:25:02 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_172007.mon.rxp.vox
+2017-02-06 09:25:02 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_172710.mon.rxp.vox
+2017-02-06 09:25:07 INFO  - file written ( 5.0 s )
+2017-02-06 09:25:07 INFO  - rxp extraction is started
+2017-02-06 09:25:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:07 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:07 INFO  - rxp extraction is started
+2017-02-06 09:25:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:07 INFO  - file written ( 5.0 s )
+2017-02-06 09:25:07 INFO  - rxp extraction is started
+2017-02-06 09:25:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:07 INFO  - file written ( 5.0 s )
+2017-02-06 09:25:07 INFO  - rxp extraction is started
+2017-02-06 09:25:07 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:08 INFO  - Shots processed: 101809
+2017-02-06 09:25:08 INFO  - Shots processed: 102532
+2017-02-06 09:25:08 INFO  - Shots processed: 102489
+2017-02-06 09:25:08 INFO  - Shots processed: 105547
+2017-02-06 09:25:08 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_174633.mon.rxp.vox
+2017-02-06 09:25:08 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_180631.mon.rxp.vox
+2017-02-06 09:25:08 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_180004.mon.rxp.vox
+2017-02-06 09:25:09 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_173954.mon.rxp.vox
+2017-02-06 09:25:12 INFO  - file written ( 3.0 s )
+2017-02-06 09:25:12 INFO  - file written ( 3.0 s )
+2017-02-06 09:25:15 INFO  - rxp extraction is started
+2017-02-06 09:25:15 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:12 INFO  - file written ( 3.0 s )
+2017-02-06 09:25:12 INFO  - file written ( 3.0 s )
+2017-02-06 09:25:15 INFO  - rxp extraction is started
+2017-02-06 09:25:15 INFO  - rxp extraction is started
+2017-02-06 09:25:15 INFO  - rxp extraction is started
+2017-02-06 09:25:15 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:15 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:15 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:17 INFO  - Shots processed: 102545
+2017-02-06 09:25:17 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_182922.mon.rxp.vox
+2017-02-06 09:25:17 INFO  - Shots processed: 104138
+2017-02-06 09:25:17 INFO  - Shots processed: 102665
+2017-02-06 09:25:17 INFO  - Shots processed: 103888
+2017-02-06 09:25:17 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_182138.mon.rxp.vox
+2017-02-06 09:25:17 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_184434.mon.rxp.vox
+2017-02-06 09:25:17 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_185135.mon.rxp.vox
+2017-02-06 09:25:21 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:21 INFO  - rxp extraction is started
+2017-02-06 09:25:21 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:21 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:21 INFO  - rxp extraction is started
+2017-02-06 09:25:21 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:21 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:21 INFO  - rxp extraction is started
+2017-02-06 09:25:21 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:21 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:21 INFO  - rxp extraction is started
+2017-02-06 09:25:21 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:23 INFO  - Shots processed: 107882
+2017-02-06 09:25:23 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_171244.mon.rxp.vox
+2017-02-06 09:25:23 INFO  - Shots processed: 107042
+2017-02-06 09:25:23 INFO  - Shots processed: 103464
+2017-02-06 09:25:23 INFO  - Shots processed: 104080
+2017-02-06 09:25:23 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_172050.mon.rxp.vox
+2017-02-06 09:25:23 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_173552.mon.rxp.vox
+2017-02-06 09:25:23 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_174327.mon.rxp.vox
+2017-02-06 09:25:28 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:28 INFO  - rxp extraction is started
+2017-02-06 09:25:28 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:28 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:28 INFO  - rxp extraction is started
+2017-02-06 09:25:28 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:28 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:28 INFO  - rxp extraction is started
+2017-02-06 09:25:28 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:28 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:28 INFO  - rxp extraction is started
+2017-02-06 09:25:28 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:30 INFO  - Shots processed: 104532
+2017-02-06 09:25:30 INFO  - Shots processed: 102567
+2017-02-06 09:25:30 INFO  - Shots processed: 116007
+2017-02-06 09:25:30 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/801220_013101.mon.rxp.vox
+2017-02-06 09:25:30 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/801220_013734.mon.rxp.vox
+2017-02-06 09:25:30 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/801220_011714.mon.rxp.vox
+2017-02-06 09:25:30 INFO  - Shots processed: 128227
+2017-02-06 09:25:30 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/801220_010757.mon.rxp.vox
+2017-02-06 09:25:34 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:34 INFO  - rxp extraction is started
+2017-02-06 09:25:34 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:34 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:34 INFO  - rxp extraction is started
+2017-02-06 09:25:34 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:34 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:34 INFO  - rxp extraction is started
+2017-02-06 09:25:34 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:34 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:34 INFO  - rxp extraction is started
+2017-02-06 09:25:34 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:36 INFO  - Shots processed: 104308
+2017-02-06 09:25:36 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/801220_020040.mon.rxp.vox
+2017-02-06 09:25:36 INFO  - Shots processed: 104099
+2017-02-06 09:25:36 INFO  - Shots processed: 102171
+2017-02-06 09:25:36 INFO  - Shots processed: 102066
+2017-02-06 09:25:36 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/801220_015404.mon.rxp.vox
+2017-02-06 09:25:36 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_171204.mon.rxp.vox
+2017-02-06 09:25:36 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_171822.mon.rxp.vox
+2017-02-06 09:25:40 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:40 INFO  - rxp extraction is started
+2017-02-06 09:25:40 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:40 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:40 INFO  - rxp extraction is started
+2017-02-06 09:25:40 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:40 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:40 INFO  - rxp extraction is started
+2017-02-06 09:25:40 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:40 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:40 INFO  - rxp extraction is started
+2017-02-06 09:25:40 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:42 INFO  - Shots processed: 103402
+2017-02-06 09:25:42 INFO  - Shots processed: 103811
+2017-02-06 09:25:42 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_172133.mon.rxp.vox
+2017-02-06 09:25:42 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_171350.mon.rxp.vox
+2017-02-06 09:25:42 INFO  - Shots processed: 103409
+2017-02-06 09:25:42 INFO  - Shots processed: 103721
+2017-02-06 09:25:42 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_173632.mon.rxp.vox
+2017-02-06 09:25:42 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_174308.mon.rxp.vox
+2017-02-06 09:25:47 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:47 INFO  - rxp extraction is started
+2017-02-06 09:25:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:47 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:47 INFO  - rxp extraction is started
+2017-02-06 09:25:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:47 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:47 INFO  - rxp extraction is started
+2017-02-06 09:25:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:47 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:47 INFO  - rxp extraction is started
+2017-02-06 09:25:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:48 INFO  - Shots processed: 103271
+2017-02-06 09:25:49 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_180612.mon.rxp.vox
+2017-02-06 09:25:49 INFO  - Shots processed: 105658
+2017-02-06 09:25:49 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_175819.mon.rxp.vox
+2017-02-06 09:25:49 INFO  - Shots processed: 103507
+2017-02-06 09:25:49 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_180921.mon.rxp.vox
+2017-02-06 09:25:49 INFO  - Shots processed: 105321
+2017-02-06 09:25:49 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_175922.mon.rxp.vox
+2017-02-06 09:25:53 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:53 INFO  - rxp extraction is started
+2017-02-06 09:25:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:53 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:53 INFO  - rxp extraction is started
+2017-02-06 09:25:53 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:54 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:54 INFO  - rxp extraction is started
+2017-02-06 09:25:55 INFO  - Shots processed: 107033
+2017-02-06 09:25:55 INFO  - Shots processed: 107351
+2017-02-06 09:25:59 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:54 INFO  - file written ( 4.0 s )
+2017-02-06 09:25:59 INFO  - rxp extraction is started
+2017-02-06 09:25:59 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:25:59 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_183327.mon.rxp.vox
+2017-02-06 09:25:59 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_182636.mon.rxp.vox
+2017-02-06 09:26:01 INFO  - Shots processed: 112643
+2017-02-06 09:26:01 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_185929.mon.rxp.vox
+2017-02-06 09:26:01 INFO  - Shots processed: 114502
+2017-02-06 09:26:01 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_185222.mon.rxp.vox
+2017-02-06 09:26:03 INFO  - file written ( 3.0 s )
+2017-02-06 09:26:03 INFO  - rxp extraction is started
+2017-02-06 09:26:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:03 INFO  - file written ( 3.0 s )
+2017-02-06 09:26:03 INFO  - rxp extraction is started
+2017-02-06 09:26:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:05 INFO  - Shots processed: 105854
+2017-02-06 09:26:05 INFO  - Shots processed: 103110
+2017-02-06 09:26:05 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750113_100155.mon.rxp.vox
+2017-02-06 09:26:05 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750113_101027.mon.rxp.vox
+2017-02-06 09:26:06 INFO  - file written ( 5.0 s )
+2017-02-06 09:26:06 INFO  - rxp extraction is started
+2017-02-06 09:26:06 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:06 INFO  - file written ( 5.0 s )
+2017-02-06 09:26:06 INFO  - rxp extraction is started
+2017-02-06 09:26:06 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:08 INFO  - Shots processed: 108464
+2017-02-06 09:26:08 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750113_102506.mon.rxp.vox
+2017-02-06 09:26:08 INFO  - Shots processed: 102610
+2017-02-06 09:26:08 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750113_103235.mon.rxp.vox
+2017-02-06 09:26:10 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:10 INFO  - rxp extraction is started
+2017-02-06 09:26:10 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:10 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:10 INFO  - rxp extraction is started
+2017-02-06 09:26:10 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:11 INFO  - Shots processed: 105279
+2017-02-06 09:26:11 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750113_095908.mon.rxp.vox
+2017-02-06 09:26:11 INFO  - Shots processed: 102562
+2017-02-06 09:26:11 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750113_100710.mon.rxp.vox
+2017-02-06 09:26:12 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:12 INFO  - rxp extraction is started
+2017-02-06 09:26:12 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:12 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:12 INFO  - rxp extraction is started
+2017-02-06 09:26:12 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:13 INFO  - Shots processed: 101788
+2017-02-06 09:26:13 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_171157.mon.rxp.vox
+2017-02-06 09:26:13 INFO  - Shots processed: 102705
+2017-02-06 09:26:14 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_172706.mon.rxp.vox
+2017-02-06 09:26:15 INFO  - file written ( 3.0 s )
+2017-02-06 09:26:15 INFO  - rxp extraction is started
+2017-02-06 09:26:15 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:15 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:15 INFO  - rxp extraction is started
+2017-02-06 09:26:15 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:17 INFO  - Shots processed: 101479
+2017-02-06 09:26:17 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_173342.mon.rxp.vox
+2017-02-06 09:26:17 INFO  - Shots processed: 110709
+2017-02-06 09:26:17 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_174737.mon.rxp.vox
+2017-02-06 09:26:17 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:17 INFO  - rxp extraction is started
+2017-02-06 09:26:17 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:18 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:18 INFO  - rxp extraction is started
+2017-02-06 09:26:18 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:19 INFO  - Shots processed: 102160
+2017-02-06 09:26:19 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_175532.mon.rxp.vox
+2017-02-06 09:26:20 INFO  - Shots processed: 117856
+2017-02-06 09:26:20 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_181006.mon.rxp.vox
+2017-02-06 09:26:21 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:21 INFO  - rxp extraction is started
+2017-02-06 09:26:21 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:21 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:21 INFO  - rxp extraction is started
+2017-02-06 09:26:21 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:23 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:23 INFO  - rxp extraction is started
+2017-02-06 09:26:23 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:23 INFO  - Shots processed: 117054
+2017-02-06 09:26:23 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_172341.mon.rxp.vox
+2017-02-06 09:26:23 INFO  - Shots processed: 110508
+2017-02-06 09:26:23 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_174032.mon.rxp.vox
+2017-02-06 09:26:24 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:24 INFO  - rxp extraction is started
+2017-02-06 09:26:24 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:24 INFO  - Shots processed: 108459
+2017-02-06 09:26:24 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_174856.mon.rxp.vox
+2017-02-06 09:26:26 INFO  - Shots processed: 110276
+2017-02-06 09:26:26 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_180401.mon.rxp.vox
+2017-02-06 09:26:28 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:28 INFO  - rxp extraction is started
+2017-02-06 09:26:28 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:28 INFO  - file written ( 5.0 s )
+2017-02-06 09:26:28 INFO  - rxp extraction is started
+2017-02-06 09:26:28 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:29 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:29 INFO  - rxp extraction is started
+2017-02-06 09:26:29 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:30 INFO  - Shots processed: 107339
+2017-02-06 09:26:30 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_181148.mon.rxp.vox
+2017-02-06 09:26:30 INFO  - Shots processed: 105348
+2017-02-06 09:26:30 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_182442.mon.rxp.vox
+2017-02-06 09:26:31 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:31 INFO  - rxp extraction is started
+2017-02-06 09:26:31 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:31 INFO  - Shots processed: 103370
+2017-02-06 09:26:31 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_183235.mon.rxp.vox
+2017-02-06 09:26:33 INFO  - Shots processed: 111989
+2017-02-06 09:26:33 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_184720.mon.rxp.vox
+2017-02-06 09:26:34 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:34 INFO  - rxp extraction is started
+2017-02-06 09:26:36 INFO  - file written ( 2.0 s )
+2017-02-06 09:26:36 INFO  - rxp extraction is started
+2017-02-06 09:26:35 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:36 INFO  - rxp extraction is started
+2017-02-06 09:26:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:35 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:36 INFO  - rxp extraction is started
+2017-02-06 09:26:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:36 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:38 INFO  - Shots processed: 102738
+2017-02-06 09:26:38 INFO  - Shots processed: 103501
+2017-02-06 09:26:38 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750113_100829.mon.rxp.vox
+2017-02-06 09:26:38 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_185617.mon.rxp.vox
+2017-02-06 09:26:38 INFO  - Shots processed: 104727
+2017-02-06 09:26:38 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750113_100015.mon.rxp.vox
+2017-02-06 09:26:38 INFO  - Shots processed: 109467
+2017-02-06 09:26:38 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750113_102050.mon.rxp.vox
+2017-02-06 09:26:43 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:43 INFO  - rxp extraction is started
+2017-02-06 09:26:43 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:43 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:43 INFO  - rxp extraction is started
+2017-02-06 09:26:43 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:43 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:43 INFO  - rxp extraction is started
+2017-02-06 09:26:43 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:43 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:43 INFO  - rxp extraction is started
+2017-02-06 09:26:43 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:44 INFO  - Shots processed: 101202
+2017-02-06 09:26:44 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750113_104318.mon.rxp.vox
+2017-02-06 09:26:44 INFO  - Shots processed: 109020
+2017-02-06 09:26:44 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750113_102926.mon.rxp.vox
+2017-02-06 09:26:44 INFO  - Shots processed: 101857
+2017-02-06 09:26:45 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750113_105300.mon.rxp.vox
+2017-02-06 09:26:45 INFO  - Shots processed: 102982
+2017-02-06 09:26:45 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750113_112334.mon.rxp.vox
+2017-02-06 09:26:49 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:49 INFO  - rxp extraction is started
+2017-02-06 09:26:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:49 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:49 INFO  - rxp extraction is started
+2017-02-06 09:26:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:49 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:49 INFO  - rxp extraction is started
+2017-02-06 09:26:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:49 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:49 INFO  - rxp extraction is started
+2017-02-06 09:26:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:51 INFO  - Shots processed: 102083
+2017-02-06 09:26:51 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750113_113028.mon.rxp.vox
+2017-02-06 09:26:51 INFO  - Shots processed: 104909
+2017-02-06 09:26:51 INFO  - Shots processed: 103513
+2017-02-06 09:26:51 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850420_030709.mon.rxp.vox
+2017-02-06 09:26:51 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850420_031456.mon.rxp.vox
+2017-02-06 09:26:51 INFO  - Shots processed: 105593
+2017-02-06 09:26:51 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850420_032805.mon.rxp.vox
+2017-02-06 09:26:56 INFO  - file written ( 4.0 s )
+2017-02-06 09:26:56 INFO  - rxp extraction is started
+2017-02-06 09:26:56 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:56 INFO  - file written ( 5.0 s )
+2017-02-06 09:26:56 INFO  - rxp extraction is started
+2017-02-06 09:26:56 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:56 INFO  - file written ( 5.0 s )
+2017-02-06 09:26:56 INFO  - rxp extraction is started
+2017-02-06 09:26:56 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:57 INFO  - file written ( 5.0 s )
+2017-02-06 09:26:57 INFO  - rxp extraction is started
+2017-02-06 09:26:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:26:57 INFO  - Shots processed: 104573
+2017-02-06 09:26:58 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850420_033514.mon.rxp.vox
+2017-02-06 09:26:58 INFO  - Shots processed: 108871
+2017-02-06 09:26:58 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850420_034818.mon.rxp.vox
+2017-02-06 09:26:59 INFO  - Shots processed: 105238
+2017-02-06 09:26:59 INFO  - Shots processed: 109092
+2017-02-06 09:26:59 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_095741.mon.rxp.vox
+2017-02-06 09:26:59 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850420_035548.mon.rxp.vox
+2017-02-06 09:27:02 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:02 INFO  - rxp extraction is started
+2017-02-06 09:27:02 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:03 INFO  - file written ( 5.0 s )
+2017-02-06 09:27:03 INFO  - rxp extraction is started
+2017-02-06 09:27:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:04 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:04 INFO  - rxp extraction is started
+2017-02-06 09:27:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:04 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:04 INFO  - rxp extraction is started
+2017-02-06 09:27:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:04 INFO  - Shots processed: 117672
+2017-02-06 09:27:04 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_101753.mon.rxp.vox
+2017-02-06 09:27:05 INFO  - Shots processed: 104610
+2017-02-06 09:27:05 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_103202.mon.rxp.vox
+2017-02-06 09:27:06 INFO  - Shots processed: 115495
+2017-02-06 09:27:06 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_104245.mon.rxp.vox
+2017-02-06 09:27:06 INFO  - Shots processed: 114875
+2017-02-06 09:27:06 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_110107.mon.rxp.vox
+2017-02-06 09:27:09 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:09 INFO  - rxp extraction is started
+2017-02-06 09:27:09 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:10 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:13 INFO  - rxp extraction is started
+2017-02-06 09:27:13 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:13 INFO  - Shots processed: 108060
+2017-02-06 09:27:13 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_111300.mon.rxp.vox
+2017-02-06 09:27:14 INFO  - file written ( 7.0 s )
+2017-02-06 09:27:14 INFO  - rxp extraction is started
+2017-02-06 09:27:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:14 INFO  - file written ( 7.0 s )
+2017-02-06 09:27:14 INFO  - rxp extraction is started
+2017-02-06 09:27:14 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:15 INFO  - Shots processed: 114480
+2017-02-06 09:27:15 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_112017.mon.rxp.vox
+2017-02-06 09:27:15 INFO  - Shots processed: 101999
+2017-02-06 09:27:15 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_175257.mon.rxp.vox
+2017-02-06 09:27:15 INFO  - Shots processed: 114356
+2017-02-06 09:27:15 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_180047.mon.rxp.vox
+2017-02-06 09:27:17 INFO  - file written ( 3.0 s )
+2017-02-06 09:27:17 INFO  - rxp extraction is started
+2017-02-06 09:27:17 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:19 INFO  - Shots processed: 105953
+2017-02-06 09:27:19 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_181428.mon.rxp.vox
+2017-02-06 09:27:20 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:20 INFO  - rxp extraction is started
+2017-02-06 09:27:20 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:20 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:20 INFO  - rxp extraction is started
+2017-02-06 09:27:20 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:20 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:20 INFO  - rxp extraction is started
+2017-02-06 09:27:20 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:21 INFO  - Shots processed: 115936
+2017-02-06 09:27:22 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_182219.mon.rxp.vox
+2017-02-06 09:27:22 INFO  - Shots processed: 105138
+2017-02-06 09:27:22 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_183404.mon.rxp.vox
+2017-02-06 09:27:22 INFO  - Shots processed: 116273
+2017-02-06 09:27:22 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_184100.mon.rxp.vox
+2017-02-06 09:27:23 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:23 INFO  - rxp extraction is started
+2017-02-06 09:27:23 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:24 INFO  - Shots processed: 111659
+2017-02-06 09:27:24 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_171241.mon.rxp.vox
+2017-02-06 09:27:26 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:26 INFO  - rxp extraction is started
+2017-02-06 09:27:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:26 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:26 INFO  - rxp extraction is started
+2017-02-06 09:27:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:26 INFO  - file written ( 3.0 s )
+2017-02-06 09:27:26 INFO  - rxp extraction is started
+2017-02-06 09:27:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:28 INFO  - Shots processed: 118745
+2017-02-06 09:27:28 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_172107.mon.rxp.vox
+2017-02-06 09:27:28 INFO  - file written ( 3.0 s )
+2017-02-06 09:27:28 INFO  - rxp extraction is started
+2017-02-06 09:27:28 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:28 INFO  - Shots processed: 108445
+2017-02-06 09:27:28 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_173730.mon.rxp.vox
+2017-02-06 09:27:28 INFO  - Shots processed: 121969
+2017-02-06 09:27:28 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_174611.mon.rxp.vox
+2017-02-06 09:27:30 INFO  - Shots processed: 122369
+2017-02-06 09:27:30 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_180319.mon.rxp.vox
+2017-02-06 09:27:32 INFO  - file written ( 3.0 s )
+2017-02-06 09:27:32 INFO  - rxp extraction is started
+2017-02-06 09:27:32 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:32 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:32 INFO  - rxp extraction is started
+2017-02-06 09:27:32 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:33 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:33 INFO  - rxp extraction is started
+2017-02-06 09:27:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:33 INFO  - file written ( 3.0 s )
+2017-02-06 09:27:33 INFO  - rxp extraction is started
+2017-02-06 09:27:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:34 INFO  - Shots processed: 148201
+2017-02-06 09:27:34 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_181210.mon.rxp.vox
+2017-02-06 09:27:34 INFO  - Shots processed: 103755
+2017-02-06 09:27:34 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_180110.mon.rxp.vox
+2017-02-06 09:27:34 INFO  - Shots processed: 116750
+2017-02-06 09:27:34 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_180843.mon.rxp.vox
+2017-02-06 09:27:35 INFO  - Shots processed: 105587
+2017-02-06 09:27:35 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_182009.mon.rxp.vox
+2017-02-06 09:27:38 INFO  - file written ( 3.0 s )
+2017-02-06 09:27:38 INFO  - rxp extraction is started
+2017-02-06 09:27:38 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:38 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:39 INFO  - Shots processed: 120450
+2017-02-06 09:27:39 INFO  - file written ( 3.0 s )
+2017-02-06 09:27:38 INFO  - file written ( 3.0 s )
+2017-02-06 09:27:44 INFO  - rxp extraction is started
+2017-02-06 09:27:44 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:44 INFO  - rxp extraction is started
+2017-02-06 09:27:44 INFO  - rxp extraction is started
+2017-02-06 09:27:44 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:44 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:44 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_182856.mon.rxp.vox
+2017-02-06 09:27:45 INFO  - Shots processed: 102959
+2017-02-06 09:27:45 INFO  - Shots processed: 104080
+2017-02-06 09:27:45 INFO  - Shots processed: 108446
+2017-02-06 09:27:45 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_191113.mon.rxp.vox
+2017-02-06 09:27:45 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_192051.mon.rxp.vox
+2017-02-06 09:27:45 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_193406.mon.rxp.vox
+2017-02-06 09:27:47 INFO  - file written ( 3.0 s )
+2017-02-06 09:27:47 INFO  - rxp extraction is started
+2017-02-06 09:27:47 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:48 INFO  - Shots processed: 119624
+2017-02-06 09:27:48 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_194237.mon.rxp.vox
+2017-02-06 09:27:49 INFO  - file written ( 3.0 s )
+2017-02-06 09:27:49 INFO  - rxp extraction is started
+2017-02-06 09:27:49 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:50 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:50 INFO  - rxp extraction is started
+2017-02-06 09:27:50 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:50 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:50 INFO  - rxp extraction is started
+2017-02-06 09:27:50 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:51 INFO  - Shots processed: 110186
+2017-02-06 09:27:52 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_171525.mon.rxp.vox
+2017-02-06 09:27:52 INFO  - Shots processed: 116264
+2017-02-06 09:27:52 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_172548.mon.rxp.vox
+2017-02-06 09:27:52 INFO  - Shots processed: 107192
+2017-02-06 09:27:52 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_174512.mon.rxp.vox
+2017-02-06 09:27:52 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:52 INFO  - rxp extraction is started
+2017-02-06 09:27:52 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:55 INFO  - Shots processed: 114752
+2017-02-06 09:27:55 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_175316.mon.rxp.vox
+2017-02-06 09:27:57 INFO  - file written ( 5.0 s )
+2017-02-06 09:27:57 INFO  - rxp extraction is started
+2017-02-06 09:27:57 INFO  - file written ( 5.0 s )
+2017-02-06 09:27:57 INFO  - rxp extraction is started
+2017-02-06 09:27:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:57 INFO  - file written ( 5.0 s )
+2017-02-06 09:27:57 INFO  - rxp extraction is started
+2017-02-06 09:27:57 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:58 INFO  - Shots processed: 103763
+2017-02-06 09:27:59 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_181244.mon.rxp.vox
+2017-02-06 09:27:59 INFO  - Shots processed: 130225
+2017-02-06 09:27:59 INFO  - file written ( 4.0 s )
+2017-02-06 09:27:59 INFO  - rxp extraction is started
+2017-02-06 09:27:59 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:27:59 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_180312.mon.rxp.vox
+2017-02-06 09:27:59 INFO  - Shots processed: 104247
+2017-02-06 09:27:59 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_175641.mon.rxp.vox
+2017-02-06 09:28:00 INFO  - Shots processed: 128966
+2017-02-06 09:28:00 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_182005.mon.rxp.vox
+2017-02-06 09:28:03 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:03 INFO  - rxp extraction is started
+2017-02-06 09:28:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:03 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:03 INFO  - rxp extraction is started
+2017-02-06 09:28:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:03 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:03 INFO  - rxp extraction is started
+2017-02-06 09:28:03 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:04 INFO  - file written ( 3.0 s )
+2017-02-06 09:28:04 INFO  - rxp extraction is started
+2017-02-06 09:28:04 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:04 INFO  - Shots processed: 104921
+2017-02-06 09:28:04 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_173504.mon.rxp.vox
+2017-02-06 09:28:05 INFO  - Shots processed: 105282
+2017-02-06 09:28:05 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_172503.mon.rxp.vox
+2017-02-06 09:28:06 INFO  - Shots processed: 130916
+2017-02-06 09:28:06 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_174224.mon.rxp.vox
+2017-02-06 09:28:06 INFO  - Shots processed: 133071
+2017-02-06 09:28:06 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_185741.mon.rxp.vox
+2017-02-06 09:28:09 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:09 INFO  - rxp extraction is started
+2017-02-06 09:28:09 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:09 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:09 INFO  - rxp extraction is started
+2017-02-06 09:28:09 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:10 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:10 INFO  - rxp extraction is started
+2017-02-06 09:28:10 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:11 INFO  - Shots processed: 103547
+2017-02-06 09:28:11 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:11 INFO  - rxp extraction is started
+2017-02-06 09:28:11 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:11 INFO  - Shots processed: 106722
+2017-02-06 09:28:11 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_191151.mon.rxp.vox
+2017-02-06 09:28:11 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_185024.mon.rxp.vox
+2017-02-06 09:28:12 INFO  - Shots processed: 129607
+2017-02-06 09:28:12 INFO  - Shots processed: 102059
+2017-02-06 09:28:12 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_191842.mon.rxp.vox
+2017-02-06 09:28:12 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_183332.mon.rxp.vox
+2017-02-06 09:28:15 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:20 INFO  - rxp extraction is started
+2017-02-06 09:28:20 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:16 INFO  - file written ( 3.0 s )
+2017-02-06 09:28:16 INFO  - file written ( 3.0 s )
+2017-02-06 09:28:15 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:20 INFO  - rxp extraction is started
+2017-02-06 09:28:20 INFO  - rxp extraction is started
+2017-02-06 09:28:20 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:20 INFO  - rxp extraction is started
+2017-02-06 09:28:20 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:20 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:22 INFO  - Shots processed: 104063
+2017-02-06 09:28:22 INFO  - Shots processed: 128293
+2017-02-06 09:28:22 INFO  - Shots processed: 129693
+2017-02-06 09:28:22 INFO  - Shots processed: 106190
+2017-02-06 09:28:22 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_180006.mon.rxp.vox
+2017-02-06 09:28:22 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_183952.mon.rxp.vox
+2017-02-06 09:28:22 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_182521.mon.rxp.vox
+2017-02-06 09:28:22 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_180722.mon.rxp.vox
+2017-02-06 09:28:26 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:26 INFO  - rxp extraction is started
+2017-02-06 09:28:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:26 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:26 INFO  - rxp extraction is started
+2017-02-06 09:28:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:26 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:26 INFO  - rxp extraction is started
+2017-02-06 09:28:26 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:27 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:27 INFO  - rxp extraction is started
+2017-02-06 09:28:27 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:28 INFO  - Shots processed: 108434
+2017-02-06 09:28:28 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_171356.mon.rxp.vox
+2017-02-06 09:28:28 INFO  - Shots processed: 107821
+2017-02-06 09:28:28 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_172457.mon.rxp.vox
+2017-02-06 09:28:28 INFO  - Shots processed: 132157
+2017-02-06 09:28:28 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/750213_183253.mon.rxp.vox
+2017-02-06 09:28:28 INFO  - Shots processed: 129394
+2017-02-06 09:28:28 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_173139.mon.rxp.vox
+2017-02-06 09:28:33 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:33 INFO  - rxp extraction is started
+2017-02-06 09:28:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:33 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:33 INFO  - rxp extraction is started
+2017-02-06 09:28:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:33 INFO  - file written ( 5.0 s )
+2017-02-06 09:28:33 INFO  - rxp extraction is started
+2017-02-06 09:28:33 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:33 INFO  - rxp extraction is started
+2017-02-06 09:28:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:33 INFO  - Voxel space informations:
+			Corner Inf	:	(-50.0, -50.0, -10.0)
+			Corner Sup	:	(50.0, 50.0, 40.0)
+			Dimensions	:	(100, 100, 50)
+			Toricity 	:	false
+
+2017-02-06 09:28:34 INFO  - Shots processed: 104852
+2017-02-06 09:28:34 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_174233.mon.rxp.vox
+2017-02-06 09:28:35 INFO  - Shots processed: 105127
+2017-02-06 09:28:35 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_180402.mon.rxp.vox
+2017-02-06 09:28:35 INFO  - Shots processed: 127059
+2017-02-06 09:28:35 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_181258.mon.rxp.vox
+2017-02-06 09:28:35 INFO  - Shots processed: 129099
+2017-02-06 09:28:35 INFO  - writing file: /media/julien/données/temp/paracou_2014_voxels/tmp/850215_174916.mon.rxp.vox
+2017-02-06 09:28:39 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:40 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:40 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:40 INFO  - file written ( 4.0 s )
+2017-02-06 09:28:40 INFO  - Merging in progress, file 1 : 134
+2017-02-06 09:28:43 INFO  - Merging in progress, file 2 : 134
+2017-02-06 09:28:44 INFO  - Merging in progress, file 3 : 134
+2017-02-06 09:28:45 INFO  - Merging in progress, file 4 : 134
+2017-02-06 09:28:46 INFO  - Merging in progress, file 5 : 134
+2017-02-06 09:28:48 INFO  - Merging in progress, file 6 : 134
+2017-02-06 09:28:49 INFO  - Merging in progress, file 7 : 134
+2017-02-06 09:28:50 INFO  - Merging in progress, file 8 : 134
+2017-02-06 09:28:51 INFO  - Merging in progress, file 9 : 134
+2017-02-06 09:28:52 INFO  - Merging in progress, file 10 : 134
+2017-02-06 09:28:53 INFO  - Merging in progress, file 11 : 134
+2017-02-06 09:28:54 INFO  - Merging in progress, file 12 : 134
+2017-02-06 09:28:55 INFO  - Merging in progress, file 13 : 134
+2017-02-06 09:29:02 INFO  - Merging in progress, file 14 : 134
+2017-02-06 09:29:03 INFO  - Merging in progress, file 15 : 134
+2017-02-06 09:29:04 INFO  - Merging in progress, file 16 : 134
+2017-02-06 09:29:05 INFO  - Merging in progress, file 17 : 134
+2017-02-06 09:29:06 INFO  - Merging in progress, file 18 : 134
+2017-02-06 09:29:07 INFO  - Merging in progress, file 19 : 134
+2017-02-06 09:29:08 INFO  - Merging in progress, file 20 : 134
+2017-02-06 09:29:09 INFO  - Merging in progress, file 21 : 134
+2017-02-06 09:29:10 INFO  - Merging in progress, file 22 : 134
+2017-02-06 09:29:11 INFO  - Merging in progress, file 23 : 134
+2017-02-06 09:29:12 INFO  - Merging in progress, file 24 : 134
+2017-02-06 09:29:14 INFO  - Merging in progress, file 25 : 134
+2017-02-06 09:29:15 INFO  - Merging in progress, file 26 : 134
+2017-02-06 09:29:16 INFO  - Merging in progress, file 27 : 134
+2017-02-06 09:29:17 INFO  - Merging in progress, file 28 : 134
+2017-02-06 09:29:18 INFO  - Merging in progress, file 29 : 134
+2017-02-06 09:29:19 INFO  - Merging in progress, file 30 : 134
+2017-02-06 09:29:20 INFO  - Merging in progress, file 31 : 134
+2017-02-06 09:29:21 INFO  - Merging in progress, file 32 : 134
+2017-02-06 09:29:22 INFO  - Merging in progress, file 33 : 134
+2017-02-06 09:29:24 INFO  - Merging in progress, file 34 : 134
+2017-02-06 09:29:25 INFO  - Merging in progress, file 35 : 134
+2017-02-06 09:29:26 INFO  - Merging in progress, file 36 : 134
+2017-02-06 09:29:27 INFO  - Merging in progress, file 37 : 134
+2017-02-06 09:29:28 INFO  - Merging in progress, file 38 : 134
+2017-02-06 09:29:29 INFO  - Merging in progress, file 39 : 134
+2017-02-06 09:29:30 INFO  - Merging in progress, file 40 : 134
+2017-02-06 09:29:31 INFO  - Merging in progress, file 41 : 134
+2017-02-06 09:29:32 INFO  - Merging in progress, file 42 : 134
+2017-02-06 09:29:33 INFO  - Merging in progress, file 43 : 134
+2017-02-06 09:29:34 INFO  - Merging in progress, file 44 : 134
+2017-02-06 09:29:35 INFO  - Merging in progress, file 45 : 134
+2017-02-06 09:29:36 INFO  - Merging in progress, file 46 : 134
+2017-02-06 09:29:37 INFO  - Merging in progress, file 47 : 134
+2017-02-06 09:29:38 INFO  - Merging in progress, file 48 : 134
+2017-02-06 09:29:39 INFO  - Merging in progress, file 49 : 134
+2017-02-06 09:29:40 INFO  - Merging in progress, file 50 : 134
+2017-02-06 09:29:41 INFO  - Merging in progress, file 51 : 134
+2017-02-06 09:29:42 INFO  - Merging in progress, file 52 : 134
+2017-02-06 09:29:43 INFO  - Merging in progress, file 53 : 134
+2017-02-06 09:29:44 INFO  - Merging in progress, file 54 : 134
+2017-02-06 09:29:45 INFO  - Merging in progress, file 55 : 134
+2017-02-06 09:29:46 INFO  - Merging in progress, file 56 : 134
+2017-02-06 09:29:47 INFO  - Merging in progress, file 57 : 134
+2017-02-06 09:29:48 INFO  - Merging in progress, file 58 : 134
+2017-02-06 09:29:49 INFO  - Merging in progress, file 59 : 134
+2017-02-06 09:29:51 INFO  - Merging in progress, file 60 : 134
+2017-02-06 09:29:52 INFO  - Merging in progress, file 61 : 134
+2017-02-06 09:29:53 INFO  - Merging in progress, file 62 : 134
+2017-02-06 09:29:54 INFO  - Merging in progress, file 63 : 134
+2017-02-06 09:29:55 INFO  - Merging in progress, file 64 : 134
+2017-02-06 09:29:56 INFO  - Merging in progress, file 65 : 134
+2017-02-06 09:29:57 INFO  - Merging in progress, file 66 : 134
+2017-02-06 09:29:58 INFO  - Merging in progress, file 67 : 134
+2017-02-06 09:29:59 INFO  - Merging in progress, file 68 : 134
+2017-02-06 09:30:01 INFO  - Merging in progress, file 69 : 134
+2017-02-06 09:30:02 INFO  - Merging in progress, file 70 : 134
+2017-02-06 09:30:03 INFO  - Merging in progress, file 71 : 134
+2017-02-06 09:30:04 INFO  - Merging in progress, file 72 : 134
+2017-02-06 09:30:05 INFO  - Merging in progress, file 73 : 134
+2017-02-06 09:30:07 INFO  - Merging in progress, file 74 : 134
+2017-02-06 09:30:08 INFO  - Merging in progress, file 75 : 134
+2017-02-06 09:30:09 INFO  - Merging in progress, file 76 : 134
+2017-02-06 09:30:11 INFO  - Merging in progress, file 77 : 134
+2017-02-06 09:30:12 INFO  - Merging in progress, file 78 : 134
+2017-02-06 09:30:13 INFO  - Merging in progress, file 79 : 134
+2017-02-06 09:30:14 INFO  - Merging in progress, file 80 : 134
+2017-02-06 09:30:15 INFO  - Merging in progress, file 81 : 134
+2017-02-06 09:30:18 INFO  - Merging in progress, file 82 : 134
+2017-02-06 09:30:19 INFO  - Merging in progress, file 83 : 134
+2017-02-06 09:30:20 INFO  - Merging in progress, file 84 : 134
+2017-02-06 09:30:21 INFO  - Merging in progress, file 85 : 134
+2017-02-06 09:30:22 INFO  - Merging in progress, file 86 : 134
+2017-02-06 09:30:23 INFO  - Merging in progress, file 87 : 134
+2017-02-06 09:30:25 INFO  - Merging in progress, file 88 : 134
+2017-02-06 09:30:26 INFO  - Merging in progress, file 89 : 134
+2017-02-06 09:30:27 INFO  - Merging in progress, file 90 : 134
+2017-02-06 09:30:28 INFO  - Merging in progress, file 91 : 134
+2017-02-06 09:30:30 INFO  - Merging in progress, file 92 : 134
+2017-02-06 09:30:31 INFO  - Merging in progress, file 93 : 134
+2017-02-06 09:30:32 INFO  - Merging in progress, file 94 : 134
+2017-02-06 09:30:34 INFO  - Merging in progress, file 95 : 134
+2017-02-06 09:30:38 INFO  - Merging in progress, file 96 : 134
+2017-02-06 09:30:39 INFO  - Merging in progress, file 97 : 134
+2017-02-06 09:30:41 INFO  - Merging in progress, file 98 : 134
+2017-02-06 09:30:42 INFO  - Merging in progress, file 99 : 134
+2017-02-06 09:30:43 INFO  - Merging in progress, file 100 : 134
+2017-02-06 09:30:44 INFO  - Merging in progress, file 101 : 134
+2017-02-06 09:30:45 INFO  - Merging in progress, file 102 : 134
+2017-02-06 09:30:46 INFO  - Merging in progress, file 103 : 134
+2017-02-06 09:30:47 INFO  - Merging in progress, file 104 : 134
+2017-02-06 09:30:48 INFO  - Merging in progress, file 105 : 134
+2017-02-06 09:30:49 INFO  - Merging in progress, file 106 : 134
+2017-02-06 09:30:49 INFO  - Merging in progress, file 107 : 134
+2017-02-06 09:30:50 INFO  - Merging in progress, file 108 : 134
+2017-02-06 09:30:52 INFO  - Merging in progress, file 109 : 134
+2017-02-06 09:30:53 INFO  - Merging in progress, file 110 : 134
+2017-02-06 09:30:54 INFO  - Merging in progress, file 111 : 134
+2017-02-06 09:30:55 INFO  - Merging in progress, file 112 : 134
+2017-02-06 09:30:56 INFO  - Merging in progress, file 113 : 134
+2017-02-06 09:30:57 INFO  - Merging in progress, file 114 : 134
+2017-02-06 09:30:58 INFO  - Merging in progress, file 115 : 134
+2017-02-06 09:30:59 INFO  - Merging in progress, file 116 : 134
+2017-02-06 09:31:00 INFO  - Merging in progress, file 117 : 134
+2017-02-06 09:31:01 INFO  - Merging in progress, file 118 : 134
+2017-02-06 09:31:02 INFO  - Merging in progress, file 119 : 134
+2017-02-06 09:31:03 INFO  - Merging in progress, file 120 : 134
+2017-02-06 09:31:04 INFO  - Merging in progress, file 121 : 134
+2017-02-06 09:31:05 INFO  - Merging in progress, file 122 : 134
+2017-02-06 09:31:06 INFO  - Merging in progress, file 123 : 134
+2017-02-06 09:31:07 INFO  - Merging in progress, file 124 : 134
+2017-02-06 09:31:08 INFO  - Merging in progress, file 125 : 134
+2017-02-06 09:31:09 INFO  - Merging in progress, file 126 : 134
+2017-02-06 09:31:10 INFO  - Merging in progress, file 127 : 134
+2017-02-06 09:31:11 INFO  - Merging in progress, file 128 : 134
+2017-02-06 09:31:12 INFO  - Merging in progress, file 129 : 134
+2017-02-06 09:31:13 INFO  - Merging in progress, file 130 : 134
+2017-02-06 09:31:14 INFO  - Merging in progress, file 131 : 134
+2017-02-06 09:31:16 INFO  - Merging in progress, file 132 : 134
+2017-02-06 09:31:17 INFO  - Merging in progress, file 133 : 134
+2017-02-06 09:31:18 INFO  - Merging in progress, file 134 : 134
+2017-02-06 09:31:19 INFO  - Compute angleMean
+2017-02-06 09:31:20 INFO  - Compute lMeanTotal
+2017-02-06 09:31:20 INFO  - Compute transmittance and PAD
+2017-02-06 09:31:20 INFO  - Building transmittance functions table
+2017-02-06 09:31:20 INFO  - Transmittance functions table is built
+2017-02-06 09:31:20 INFO  - writing output file: /media/julien/données/temp/paracou_2014_voxels/tmp/merged.vox
+2017-02-06 09:31:22 INFO  - file written ( 1.0 s )
+2017-02-06 09:47:09 INFO  - The detected jar file path is /home/julien/Documents/AMAPVox/trunk/AMAPVox/AMAPVoxGUI/target/release/AMAPVoxGUI-1.0.1-rf5b4f797.jar
