@@ -49,6 +49,7 @@ public class TransmittanceSim extends Process implements Cancellable{
     private List<File> outputBitmapFiles;
 
     private List<Point3d> positions;
+    private List<IncidentRadiation> solRad;
     
     private TransmittanceParameters parameters;
     private TransmittanceCfg cfg;
@@ -118,7 +119,7 @@ public class TransmittanceSim extends Process implements Cancellable{
 
         getSensorPositions();
 
-        List<IncidentRadiation> solRad = new ArrayList<>();
+        solRad = new ArrayList<>();
         
         List<SimulationPeriod> simulationPeriods = parameters.getSimulationPeriods();
         
@@ -277,14 +278,15 @@ public class TransmittanceSim extends Process implements Cancellable{
 
             String header = "position X\tposition Y\tposition Z\t";
             String periodsInfos = "";
-            String periodsInfosHeader = "period ID\tstart\tend\tclearness";
+            String periodsInfosHeader = "period ID\tstart\tend\tclearness\tglobalMJ\tdirectMJ\tdiffuseMJ";
 
             int count = 1;
             for(SimulationPeriod period : parameters.getSimulationPeriods()){
 
                 String periodName = "Period "+count;
                 header += periodName+"\t";
-                periodsInfos += periodName+"\t"+Period.getDate(period.getPeriod().startDate)+"\t"+Period.getDate(period.getPeriod().endDate)+"\t"+period.getClearnessCoefficient()+"\n";
+                periodsInfos += periodName+"\t"+Period.getDate(period.getPeriod().startDate)+"\t"+Period.getDate(period.getPeriod().endDate)+"\t"+period.getClearnessCoefficient()
+                        +"\t"+solRad.get(count-1).global+"\t"+solRad.get(count-1).direct+"\t"+solRad.get(count-1).diffuse+"\n";
 
                 count++;
             }
