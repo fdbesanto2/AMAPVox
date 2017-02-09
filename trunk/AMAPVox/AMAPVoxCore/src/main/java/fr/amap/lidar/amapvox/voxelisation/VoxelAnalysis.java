@@ -414,8 +414,8 @@ public class VoxelAnalysis extends Process implements Cancellable{
         double distanceToHit = lineElement.getLength();
 
         //calculate ground distance
-        float echoDistance = getGroundDistance((float) echo.x, (float) echo.y, (float) echo.z);
-        boolean keepEcho, keepEchoPointCloudFiltering = true;
+        
+        boolean keepEcho = true, keepEchoPointCloudFiltering = true;
         
         //echo filtering
         if(pointcloudFilters != null){
@@ -424,11 +424,29 @@ public class VoxelAnalysis extends Process implements Cancellable{
             }
         }
         
-        keepEcho = keepEchoOfShot(shot, echoRank) &&
-                (echoDistance >= parameters.getDtmFilteringParams().getMinDTMDistance() &&
-                !Float.isNaN(echoDistance) && parameters.getDtmFilteringParams().useDTMCorrection()) ||
-                !parameters.getDtmFilteringParams().useDTMCorrection() &&
-                keepEchoPointCloudFiltering;
+        if(!keepEchoOfShot(shot, echoRank)){ //mask
+            keepEcho = false;
+        }
+        
+        if(keepEcho && parameters.getDtmFilteringParams().useDTMCorrection()){ //DTM
+            
+            float echoDistance = getGroundDistance((float) echo.x, (float) echo.y, (float) echo.z);
+            
+            if(echoDistance < parameters.getDtmFilteringParams().getMinDTMDistance() || Float.isNaN(echoDistance)){
+                keepEcho = false;
+            }
+        }
+        
+        if(keepEcho && !keepEchoPointCloudFiltering){ //point cloud filtering
+            keepEcho = false;
+        }
+        
+//        keepEcho = keepEchoOfShot(shot, echoRank) && // mask
+//                ((parameters.getDtmFilteringParams().useDTMCorrection() && //DTM
+//                echoDistance >= parameters.getDtmFilteringParams().getMinDTMDistance() &&
+//                !Float.isNaN(echoDistance)) ||
+//                !parameters.getDtmFilteringParams().useDTMCorrection()) &&
+//                keepEchoPointCloudFiltering;
 
         while ((context != null) && (context.indices != null)) {
 
