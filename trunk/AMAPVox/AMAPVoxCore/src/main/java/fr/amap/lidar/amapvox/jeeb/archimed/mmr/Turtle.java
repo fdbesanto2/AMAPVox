@@ -3,6 +3,7 @@ package fr.amap.lidar.amapvox.jeeb.archimed.mmr;
 import fr.amap.commons.math.matrix.Mat3D;
 import fr.amap.commons.math.rotation.AxisRotation;
 import fr.amap.commons.math.vector.Vec3D;
+import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.geometry.Transformations;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import javax.vecmath.Vector2f;
+import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 import org.apache.log4j.Logger;
 
@@ -62,14 +64,14 @@ public class Turtle {
             
             if(rotation != 0){
             
-                AxisRotation axisRotation = new AxisRotation(0, 0, 1, rotation);
-                Mat3D rotationMatrix = axisRotation.getRotationMatrix();
-
+                Transformations transform = new Transformations();
+                transform.setRotationAroundZ(rotation);
+                
                 for(int i=0;i<directions.length;i++){
 
                     Vector3f direction = directions[i];
-                    Vec3D uVector = Mat3D.multiply(rotationMatrix, new Vec3D(direction.x, direction.y, direction.z));
-                    directions[i] = new Vector3f((float)uVector.x, (float)uVector.y, (float)uVector.z);
+                    transform.apply(new Vector3d(direction));
+                    directions[i] = direction;
                 }
             }
             
