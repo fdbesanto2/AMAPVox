@@ -123,10 +123,10 @@ public class SolarRadiation {
         }
     }
 
-    public static IncidentRadiation globalTurtleIntegrate(Turtle turtle, float latitudeRadian, float clearness, Time time1, Time time2) {
+    public static IncidentRadiation globalTurtleIntegrate(Turtle t, float latitudeRadian, float clearness, Time time1, Time time2) {
 
-        IncidentRadiation ir = new IncidentRadiation(turtle.directions.length);
-        ir.setDirections(turtle.directions);
+        IncidentRadiation ir = new IncidentRadiation(t.directions.length);
+        ir.setDirections(t.directions);
         
         Sun sun = new Sun();
 
@@ -163,7 +163,7 @@ public class SolarRadiation {
                     IncidentRadiation radi = new IncidentRadiation(ir.getSize());
                     radi.global = globalMJ * 1000000 / (duration * 3600);
                     globalPartitioningHourly(radi, clearness, sun.elevation);
-                    globalInTurtle(radi, sun, turtle);
+                    globalInTurtle(radi, sun, t);
                     globalCumulateMJ(ir, radi, duration);
                 }
             }
