@@ -62,18 +62,18 @@ public class Turtle {
                 }
             }
             
-            if(rotation != 0){
-            
-                Transformations transform = new Transformations();
-                transform.setRotationAroundZ(rotation);
-                
-                for(int i=0;i<directions.length;i++){
-
-                    Vector3f direction = directions[i];
-                    transform.apply(new Vector3d(direction));
-                    directions[i] = direction;
-                }
-            }
+//            if(rotation != 0){
+//            
+//                Transformations transform = new Transformations();
+//                transform.setRotationAroundZ(rotation);
+//                
+//                for(int i=0;i<directions.length;i++){
+//
+//                    Vector3f direction = directions[i];
+//                    transform.apply(new Vector3d(direction));
+//                    directions[i] = direction;
+//                }
+//            }
             
             int nbSectors = nbDirections;
             
