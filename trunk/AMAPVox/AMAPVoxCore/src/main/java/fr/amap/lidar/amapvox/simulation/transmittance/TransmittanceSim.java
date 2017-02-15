@@ -29,6 +29,7 @@ import java.util.Calendar;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
 import fr.amap.commons.util.Cancellable;
+import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.geometry.Transformations;
 
 /**
  * @author dauzat
@@ -151,6 +152,11 @@ public class TransmittanceSim extends Process implements Cancellable{
 
         IncidentRadiation ir = solRad.get(0);
         
+        float rotation = parameters.getDirectionsRotation();
+        Transformations tr = new Transformations();
+        // Note: "rotation" is negate because the convention of "Transformations" is clockwise
+        tr.setRotationAroundZ(Math.toRadians(-rotation));
+        
         int count = 0;
         
         for (Point3d position : positions) {
@@ -164,6 +170,7 @@ public class TransmittanceSim extends Process implements Cancellable{
                 }
                 
                 Vector3d dir = new Vector3d(ir.directions[t]);
+                tr.apply(dir);
                 dir.normalize();
 
                 transmitted = direcTransmittance.directionalTransmittance(position, dir);
