@@ -1,9 +1,6 @@
 package fr.amap.lidar.amapvox.jeeb.archimed.mmr;
 
 import fr.amap.lidar.amapvox.jeeb.util.Time;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A utility class for computing the components of solar radiation.
