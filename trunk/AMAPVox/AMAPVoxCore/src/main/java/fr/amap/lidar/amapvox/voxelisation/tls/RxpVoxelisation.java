@@ -11,7 +11,7 @@ import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.commons.math.vector.Vec4D;
 import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
 import fr.amap.amapvox.io.tls.rxp.Shot;
-import fr.amap.amapvox.io.tls.rxp.ShotFilter;
+import fr.amap.lidar.amapvox.shot.filters.ShotFilter;
 import fr.amap.commons.raster.asc.Raster;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
