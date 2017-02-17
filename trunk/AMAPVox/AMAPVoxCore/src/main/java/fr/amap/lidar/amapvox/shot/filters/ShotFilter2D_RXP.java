@@ -21,9 +21,9 @@ import java.util.List;
  *
  * @author claudia
  */
-public class ShotFilter2D implements Iterable<Shot> {
+public class ShotFilter2D_RXP implements Iterable<Shot> {
 
-    private final static boolean DEBUG = false;
+    private final static boolean DEBUG = true;
 
     private final Iterator<Shot> shotsIterator;
 
@@ -33,18 +33,22 @@ public class ShotFilter2D implements Iterable<Shot> {
     private final int filteringWindowLength;
     private final int columnShotsListWidth;  // nombre de colonnes de la fenêtre glissante (tableau de tirs pour avoir le voisinage en 2D)
     private final double minRange; // meters
+    
+    private static int nbOfInitialShots = 0;
 
-    private final static double DIFF_ANGLE = Math.toDegrees(Math.PI / 8);
+    //private final static double DIFF_ANGLE = Math.toDegrees(Math.PI / 8);
+    private final static double DIFF_ANGLE = 4.0;
     private List<List<Shot>> shotsColumnsList = new ArrayList();
 
     private Shot prevShot = null;
+    private Shot firstNextColumnShot = null;
 
 
     /**
      *
      * @param shotIterator
      */
-    public ShotFilter2D(Iterator<Shot> shotIterator) {
+    public ShotFilter2D_RXP(Iterator<Shot> shotIterator) {
 
         this(shotIterator, DEFAULT_FILTERING_WINDOW_LENGTH, DEFAULT_MIN_RANGE);
     }
@@ -56,7 +60,7 @@ public class ShotFilter2D implements Iterable<Shot> {
      * squared window
      * @param minRange minimum distance (m) of reliable echoes detection
      */
-    public ShotFilter2D(Iterator<Shot> shotIterator, int filteringWindowLength, double minRange) {
+    public ShotFilter2D_RXP(Iterator<Shot> shotIterator, int filteringWindowLength, double minRange) {
 
         this.filteringWindowLength = filteringWindowLength;
         this.minRange = minRange;
@@ -68,7 +72,7 @@ public class ShotFilter2D implements Iterable<Shot> {
 
     @Override
     public Iterator<Shot> iterator() {
-
+        
         initShotsColumnsList();
 
         return new Iterator<Shot>() {
@@ -79,54 +83,71 @@ public class ShotFilter2D implements Iterable<Shot> {
             
             private int currentCol;
             private int currentRow;
-
-            //!!!!!à incrémenter quelque part
-            private int nbOfAnalyzedCols = 0;  /// number of analyzed columns
+            private int currentShotNb = 0;  
+            
             private int nbOfSuppressedCols = 0; // number of suppressed columns from shotsArray
 
             private void updateShotColumnsList() {
 
                 boolean chOfCol = false;
                 List<Shot> shotsColumn = new ArrayList();
-
-                // supprimer col 0 de la liste de colonnes de tirs, et décaler les autres colonnes
-                // uniquement si le dernier tir n'a pas encore été atteint
-                // et si le nombre de colonnes analysées et > fenetre de filtrage
-                if (!this.lastShotReached && (this.nbOfAnalyzedCols > filteringWindowLength)) {
-                    this.nbOfSuppressedCols++;
-
-                    int nbOfColsInShotsColumnsList = shotsColumnsList.size();
-
-                    for (int i = 1; i < nbOfColsInShotsColumnsList; i++) {
-                        List<Shot> currCol = (List) shotsColumnsList.get(i);
-                        shotsColumnsList.set(i - 1, currCol);
-                    }
+                int nbOfColsInShotsColumnsList = 0;
+                
+                if(firstNextColumnShot != null && !this.lastShotReached){
+                    shotsColumn.add(firstNextColumnShot);
                 }
-
+                    
                 while ((chOfCol == false) && (shotsIterator.hasNext())) { // build columnShotsList
-
+                    
                     Shot currentShot = shotsIterator.next();
+                    nbOfInitialShots ++;
+                    
                     chOfCol = changeOfCol(prevShot, currentShot);
                     prevShot = copyShot(currentShot);
 
                     if (!chOfCol) {
                         shotsColumn.add(currentShot);
                     }
+                    else{
+                        firstNextColumnShot = copyShot(currentShot);
+                    }
                 }
                 if (!shotsIterator.hasNext()) {
                     this.lastShotReached = true;
                 }
+                
+                // shift columns of shots to preserve shotsColumnsList size
+                // only if the last shot has not been yet reached
+                // and if the nomber of analyze columns is greater that filtering window half-size
+                if (!this.lastShotReached && (this.currentCol > filteringWindowLength)) {
+                    this.nbOfSuppressedCols++;
 
+                    nbOfColsInShotsColumnsList = shotsColumnsList.size();
+
+                    for (int i = 1; i < nbOfColsInShotsColumnsList; i++) {
+                        List<Shot> currCol = (List) shotsColumnsList.get(i);
+                        shotsColumnsList.set(i - 1, currCol);
+                    }
+                }
+                
                 // add shotsColumn to shotsColumnsList
+                // if it is not empty and if the number of analyzed columns is not greater than filterWindow half-size yet 
+                // or if the last shot has been reached
                 if (!shotsColumn.isEmpty()) {
-                    shotsColumnsList.add(shotsColumn);
+                    if(this.currentCol <= filteringWindowLength || this.lastShotReached){
+                        shotsColumnsList.add(shotsColumn);
+                    }
+                    else{
+                        shotsColumnsList.set(nbOfColsInShotsColumnsList - 1, shotsColumn);
+                    }
+                    //shotsColumnsList.add(shotsColumn);
                 }
             }
 
             public boolean isTrueEmptyShot(int colNb, int lineNb) { // true except if we find a non empty neighbour shot having range0 < minRange
                 boolean isTrueEmptyShot = true;
 
-                for (int i = colNb - filteringWindowLength; i <= colNb + filteringWindowLength; i++) {
+                for (int i = (colNb - this.nbOfSuppressedCols) - filteringWindowLength; i <= (colNb - this.nbOfSuppressedCols) + filteringWindowLength; i++) {
                     for (int j = lineNb - filteringWindowLength; j <= lineNb + filteringWindowLength; j++) {
                         if (i >= 0 && i < shotsColumnsList.size()) {
                             List<Shot> currCol = shotsColumnsList.get(i);
@@ -148,42 +169,38 @@ public class ShotFilter2D implements Iterable<Shot> {
             
             private Shot getNextShot(){
                 
-                int shotNb = 0;
-
-                int colNb = 0; // column beeing analyzed
-
-                if (DEBUG && (colNb % 100) == 0) {
-                    System.out.println("Analysing colNb:" + colNb);
+                if (DEBUG && (currentCol % 100) == 0) {
+                    System.out.println("Analysing colNb:" + currentCol);
                 }
 
-                if (DEBUG && (shotNb % 100) == 0) {
-                    System.out.println("Analysing shotNb:" + shotNb);
-                }
+//                if (DEBUG && (currentShotNb % 100) == 0) {
+//                    System.out.println("Analysing shotNb:" + currentShotNb);
+//                }
 
-                if(currentCol >= shotsColumnsList.size()){
+                if( (currentCol - this.nbOfSuppressedCols) >= shotsColumnsList.size()){
                     return null;
                 }
                 
-                List<Shot> currShotsColumn = shotsColumnsList.get(currentCol);
+                List<Shot> currShotsColumn = shotsColumnsList.get(currentCol - this.nbOfSuppressedCols);
                 int colSize = currShotsColumn.size();
                 
 
-                shotNb++;
+                currentShotNb++;
 
                 Shot currentShot = currShotsColumn.get(currentRow);
 
-                currentRow++;
-
-                if(currentRow == colSize){
-                    currentRow = 0;
-                    colNb++;
-                    this.updateShotColumnsList();
-                    currentCol++;
-                }
-
+                
                 if (currentShot.isEmpty()) {  // presumably empty shot
 
                     boolean isTrueEmptyShot = this.isTrueEmptyShot(currentCol, currentRow);
+                    
+                    currentRow++; // a line forward
+                    if(currentRow == colSize){ // new column
+                        currentRow = 0;
+                        this.updateShotColumnsList();
+                        currentCol++;
+                    }
+
                     if (isTrueEmptyShot) {
                         return currentShot;
                     } else { // false EmptyShot
@@ -191,13 +208,18 @@ public class ShotFilter2D implements Iterable<Shot> {
                         //do nothing: shot is lost
                     }
                 } else {// non empty shot
+                    
+                    currentRow++; // a line forward
+                    if(currentRow == colSize){ // new column
+                        currentRow = 0;
+                        this.updateShotColumnsList();
+                        currentCol++;
+                    }
+
+                    
                     return currentShot;
                 }
-
-                //Change of Col
-                //System.out.println("\n analyze shots: changement de colonne pour shotNb: " + shotNb);
                 
-                //nbOfAnalyzedCols++; //to uncomment
             }
 
             @Override
@@ -266,6 +288,8 @@ public class ShotFilter2D implements Iterable<Shot> {
             while (chOfCol == false && shotsIterator.hasNext()) {
                 //System.out.println("shotNb in createShotsArrayInt= " + shotNb);
                 currentShot = shotsIterator.next();
+                nbOfInitialShots++;
+                
                 chOfCol = changeOfCol(prevShot, currentShot);
 
                 if (chOfCol) {
@@ -292,20 +316,18 @@ public class ShotFilter2D implements Iterable<Shot> {
     
     public static void main(String[] args) throws Exception {
         
-        //RxpExtraction rxpReader = new RxpExtraction();
-        //rxpReader.openRxpFile(new File("/media/forestview01/partageLidar/ClaudiaLavalley/CorrectionTirsSansRetour/DATAPochette/700101_010249.rxp"), RxpExtraction.REFLECTANCE, RxpExtraction.DEVIATION);
+        //RXP READER:
+        RxpExtraction rxpReader = new RxpExtraction();
+        rxpReader.openRxpFile(new File("/home/claudia/DATA/testsPochette/InputFiles/700101_010355.rxp"), RxpExtraction.AMPLITUDE, RxpExtraction.REFLECTANCE);
+        //rxpReader.openRxpFile(new File("/home/claudia/DATA/testsCouloir/161004_094941.rxp"), RxpExtraction.AMPLITUDE, RxpExtraction.REFLECTANCE);
         
-        //Iterator<fr.amap.amapvox.io.tls.rxp.Shot> iterator = rxpReader.iterator();
+        Iterator<fr.amap.amapvox.io.tls.rxp.Shot> iterator = rxpReader.iterator();        
+        RxpShotIteratorConverter converter = new RxpShotIteratorConverter(iterator);       
         
-        //RxpShotIteratorConverter converter = new RxpShotIteratorConverter(iterator);
+        ShotFilter2D_RXP filter = new ShotFilter2D_RXP(converter.iterator());
         
-        ShotReader shotReader = new ShotReader(new File("/media/forestview01/partageLidar/ClaudiaLavalley/CorrectionTirsSansRetour/DATAPochette/700101_010249_Pochette60cm.rxp.txt"));
-        
-        TxtShotIteratorConverter converter = new TxtShotIteratorConverter(shotReader.iterator());
-        
-        ShotFilter2D filter = new ShotFilter2D(converter.iterator());
-        
-        BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/home/julien/Bureau/tmp/test_algo_faux_tirs/700101_010249_Pochette60cm.txt")));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/home/claudia/DATA/testsPochette/OutputFiles/700101_010355_Filter2DAMAPVoxRXPnew.txt")));
+        //BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/home/claudia/DATA/testsCouloir/161004_094941_Filter2DAMAPVoxRXP.txt")));
         
         Iterator<fr.amap.lidar.amapvox.shot.Shot> filterIterator = filter.iterator();
         
@@ -320,8 +342,13 @@ public class ShotFilter2D implements Iterable<Shot> {
             count++;
         }
         
+        if(DEBUG){
+            System.out.println("nb Of initial RXPShots=" + nbOfInitialShots);
+            System.out.println("nb Of remaining RXPShots=" + count);
+        }
+        
         writer.close();
-        //rxpReader.close();
+        rxpReader.close();
     }
 
 }
