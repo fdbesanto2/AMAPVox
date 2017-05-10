@@ -92,9 +92,6 @@ public class RxpScanConversion {
         if(exportDeviation){nbExtraAttributes++;}
         if(exportAmplitude){nbExtraAttributes++;}
         if(exportTime){nbExtraAttributes++;}
-        if (exportXYZ) {
-            nbExtraAttributes += 3;
-        }
         
         Column[] extraColumns = new Column[nbExtraAttributes];
         int index = 0;
@@ -114,18 +111,6 @@ public class RxpScanConversion {
             extraColumns[index] = new Column("time", Column.Type.DOUBLE);
             index++;
         }
-        if(exportXYZ){
-            extraColumns[index] = new Column("x", Column.Type.DOUBLE);
-            index++;
-
-            extraColumns[index] = new Column("y", Column.Type.DOUBLE);
-            index++;
-
-            extraColumns[index] = new Column("z", Column.Type.DOUBLE);
-            index++;
-        }
-        
-        
         
         ShotFileContext context = new ShotFileContext(extraColumns);
                 
@@ -152,13 +137,9 @@ public class RxpScanConversion {
                 
                 Echo[] echoes = new Echo[shot.nbEchos];
                 
-                if(exportXYZ){
-                    nbExtraAttributes +=3 ;
-                }
-                
-                Object[] extra = new Object[nbExtraAttributes];
-                
                 for(int i=0;i<shot.nbEchos;i++){
+                    
+                    Object[] extra = new Object[nbExtraAttributes];
                     
                     index = 0;
                     if(exportReflectance){
@@ -177,20 +158,8 @@ public class RxpScanConversion {
                         extra[index] = shot.times[i];
                         index++;
                     }
-                    
-                    if (exportXYZ) {
-                        extra[index] = origin.x + direction.x * shot.ranges[i];
-                        index++;
-
-                        extra[index] = origin.y + direction.y * shot.ranges[i];
-                        index++;
-
-                        extra[index] = origin.z + direction.z * shot.ranges[i];
-                        index++;
-                    }
                 
                     echoes[i] = new Echo(shot.ranges[i], extra);
-                    
                 }
                 
                 writer.write(new fr.amap.lidar.format.shot.Shot(shotID, origin.x, origin.y, origin.z, direction.x, direction.y, direction.z, echoes));

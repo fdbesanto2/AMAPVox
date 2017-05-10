@@ -64,6 +64,7 @@ public class RxpVoxelisation extends TLSVoxelisation{
                 
                 Iterator<Shot> filterIterator = shotFilter.iterator();
                 
+                
                 Shot shot;
                 while(filterIterator.hasNext()){
 
