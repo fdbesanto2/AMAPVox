@@ -10,6 +10,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -61,6 +63,8 @@ public class FXMLController implements Initializable {
     private ComboBox<String> outputFormat;
     @FXML
     private CheckBox checkboxExportTime;
+    @FXML
+    private CheckBox checkboxExportXYZ;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -231,14 +235,13 @@ public class FXMLController implements Initializable {
     private void onActionButtonLaunchConversion(ActionEvent event) {
 
         final String outputFormatStr = outputFormat.getSelectionModel().getSelectedItem();
-        
-        
         final boolean exportReflectance = checkboxExportReflectance.isSelected();
         final boolean exportAmplitude = checkboxExportAmplitude.isSelected();
         final boolean exportDeviation = checkboxExportDeviation.isSelected();
         final boolean exportTime = checkboxExportTime.isSelected();
         final boolean exportIntensity = checkboxExportIntensity.isSelected();
         final boolean exportRGB = checkboxExportRGB.isSelected();
+        final boolean exportXYZ = checkboxExportXYZ.isSelected();
 
         if (!textFieldOutputDirectory.getText().isEmpty()) {
 
@@ -329,8 +332,7 @@ public class FXMLController implements Initializable {
                                         case "shots+echoes":
                                             switch (extension) {
                                                 case ".rxp":
-                                                    rxpConverter.toShots(scan, directory, exportReflectance, exportDeviation, exportAmplitude, exportTime);
-                                                    break;
+                                                    rxpConverter.toShots(scan, directory, exportReflectance, exportDeviation, exportAmplitude, exportTime, exportXYZ);                                                    break;
                                                 default:
                                                     break;
                                             }
