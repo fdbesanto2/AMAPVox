@@ -81,9 +81,27 @@
       </plugin>
     </plugins>
   </build>
+  <repositories>
+    <repository>
+      <id>default</id>
+      <url>http://repo.maven.apache.org/maven2/</url>
+    </repository>
+    <repository>
+      <snapshots />
+      <id>amap-maven-central</id>
+      <name>libs-release</name>
+      <url>${artifactory-url}/libs-release-local</url>
+    </repository>
+    <repository>
+      <id>amap-maven-snapshots</id>
+      <name>libs-snapshot</name>
+      <url>${artifactory-url}/libs-snapshot-local</url>
+    </repository>
+  </repositories>
   <properties>
     <mainClass>fr.amap.lidar.MainApp</mainClass>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <artifactory-url>http://manosque.cirad.fr:8081/artifactory</artifactory-url>
   </properties>
 </project>
 
