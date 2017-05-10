@@ -136,9 +136,10 @@ public class RxpScanConversion {
             }else{
                 
                 Echo[] echoes = new Echo[shot.nbEchos];
-                Object[] extra = new Object[nbExtraAttributes];
                 
                 for(int i=0;i<shot.nbEchos;i++){
+                    
+                    Object[] extra = new Object[nbExtraAttributes];
                     
                     index = 0;
                     if(exportReflectance){
