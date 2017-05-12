@@ -24,6 +24,7 @@ import fr.amap.commons.util.Cancellable;
 import fr.amap.commons.util.ProcessingAdapter;
 import fr.amap.commons.util.io.file.FileManager;
 import fr.amap.lidar.amapvox.commons.Configuration;
+import fr.amap.lidar.amapvox.commons.Voxel;
 import fr.amap.lidar.amapvox.shot.Shot;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -222,9 +223,17 @@ public class LasVoxelisation extends Process implements Cancellable{
 
             logger.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());
         }
-            
+        
+//        Voxel[][][] voxels = voxelAnalysis.getVoxels();
+//        
+        
+        //appel code R via JRI
+        
+        //récupération résultat R
+        
         voxelAnalysis.computePADs();
 
+        //à désactiver par défaut car ce traitement ne sera plus nécessaire après correction dans R
         if(cfg.getVoxelParameters().getNaNsCorrectionParams().isActivate()){
 
             fireProgress("NA correction", 0, 100);
