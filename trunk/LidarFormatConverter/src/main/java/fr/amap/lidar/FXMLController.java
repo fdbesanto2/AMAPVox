@@ -69,7 +69,7 @@ public class FXMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        outputFormat.getItems().setAll("txt", "las", "laz", "shots+echoes");
+        outputFormat.getItems().setAll("txt", "las", "laz", "shots+echoes","shots+echoes+shotTimeStamp");
 
         outputFormat.getSelectionModel().selectFirst();
 
@@ -333,6 +333,15 @@ public class FXMLController implements Initializable {
                                             switch (extension) {
                                                 case ".rxp":
                                                     rxpConverter.toShots(scan, directory, exportReflectance, exportDeviation, exportAmplitude, exportTime, exportXYZ);
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                            break;
+                                        case "shots+echoes+shotTimeStamp":
+                                            switch (extension) {
+                                                case ".rxp":
+                                                    rxpConverter.toShots2(scan, directory, exportReflectance, exportDeviation, exportAmplitude, exportTime, exportXYZ);
                                                     break;
                                                 default:
                                                     break;

@@ -20,7 +20,7 @@ public class MainApp extends Application {
         
         Scene scene = new Scene(root);
         
-        stage.setTitle("RxpToTxt");
+        stage.setTitle("LiDAR Converter");
         stage.setScene(scene);
         stage.show();
     }

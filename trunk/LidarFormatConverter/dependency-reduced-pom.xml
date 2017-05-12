@@ -4,7 +4,7 @@
   <groupId>fr.amap.lidar</groupId>
   <artifactId>LidarFormatConverter</artifactId>
   <name>LidarFormatConverter</name>
-  <version>1.0.7</version>
+  <version>1.0.8</version>
   <organization>
     <name>Your Organisation</name>
   </organization>
