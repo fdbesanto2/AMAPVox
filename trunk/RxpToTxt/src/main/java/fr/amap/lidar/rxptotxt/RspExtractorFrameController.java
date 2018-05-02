@@ -129,7 +129,7 @@ public class RspExtractorFrameController implements Initializable {
             
             Scans scans1 = rxpList.get(i1);
             
-            Mat4D sopMatrix1 = scans1.getSopMatrix();
+            Mat4D sopMatrix1 = new Mat4D(scans1.getSopMatrix());
             double x1 = sopMatrix1.mat[3];
             double y1 = sopMatrix1.mat[7];
             double z1 = sopMatrix1.mat[11];
@@ -163,10 +163,10 @@ public class RspExtractorFrameController implements Initializable {
                     new Scan(scans.getName(), null, null));
             
             CheckBoxTreeItem<Scan> checkBoxTreeItemFull = new CheckBoxTreeItem<>(
-                    new Scan(scans.getScanFull().getName(), scans.getScanFull().getFile(), scans.getScanFull().getSopMatrix()));
+                    new Scan(scans.getScanFull().getName(), scans.getScanFull().getFile(), new Mat4D(scans.getScanFull().getSopMatrix())));
             
             CheckBoxTreeItem<Scan> checkBoxTreeItemLite = new CheckBoxTreeItem<>(new Scan(
-                    scans.getScanLite().getName(), scans.getScanLite().getFile(), scans.getScanLite().getSopMatrix()));
+                    scans.getScanLite().getName(), scans.getScanLite().getFile(), new Mat4D(scans.getScanLite().getSopMatrix())));
             
             checkBoxTreeItemFull.setSelected(true);
             

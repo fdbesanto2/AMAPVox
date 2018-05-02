@@ -122,7 +122,7 @@ public class FXMLController implements Initializable {
                             
                             Mat4D popMatrix;
                             if(checkboxImportPOPMatrix.isSelected()){
-                                popMatrix = rsp.getPopMatrix();
+                                popMatrix = new Mat4D(rsp.getPopMatrix());
                                 System.out.println("POP matrix imported : "+popMatrix.toString());
                             }else{
                                 popMatrix = Mat4D.identity();

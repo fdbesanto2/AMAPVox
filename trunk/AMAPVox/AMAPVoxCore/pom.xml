@@ -4,7 +4,7 @@
     <parent>
         <groupId>fr.amap.lidar.amapvox</groupId>
         <artifactId>amapvox</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>amapvox-core</artifactId>
     <packaging>jar</packaging>
@@ -44,32 +44,32 @@
         <dependency>
             <groupId>fr.amap.lidar</groupId>
             <artifactId>format-riegl</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>fr.amap.lidar</groupId>
             <artifactId>format-las</artifactId>
-            <version>1.0.0</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>fr.amap.lidar</groupId>
             <artifactId>format-gridded</artifactId>
-            <version>1.0.0</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>fr.amap.lidar</groupId>
             <artifactId>format-shot</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>fr.amap.commons</groupId>
             <artifactId>commons-spds</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>fr.amap.commons</groupId>
             <artifactId>commons-raster</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>

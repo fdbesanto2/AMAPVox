@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.amap.amapvox</groupId>
     <artifactId>PTGInfo</artifactId>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -12,9 +12,9 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>fr.amap.amapvox</groupId>
-            <artifactId>JLeica</artifactId>
-            <version>1.0</version>
+            <groupId>fr.amap.lidar</groupId>
+            <artifactId>format-gridded</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

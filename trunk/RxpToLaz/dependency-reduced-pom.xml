@@ -4,7 +4,7 @@
   <groupId>fr.amap.amapvox</groupId>
   <artifactId>RxpToLaz</artifactId>
   <name>RxpToLaz</name>
-  <version>1.0</version>
+  <version>1.0-SNAPSHOT</version>
   <organization>
     <name>Your Organisation</name>
   </organization>

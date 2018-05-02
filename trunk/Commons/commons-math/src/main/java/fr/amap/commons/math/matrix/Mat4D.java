@@ -8,6 +8,7 @@ package fr.amap.commons.math.matrix;
 import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.commons.math.vector.Vec4D;
 import static java.lang.Double.NaN;
+import javax.vecmath.Matrix4d;
 
 /**
  * A double precision 4x4 matrix
@@ -47,7 +48,7 @@ public class Mat4D {
      */
     public Mat4D(Mat4D source){
         
-        mat = new double[9];
+        mat = new double[16];
         
         mat[0] = source.mat[0];
         mat[1] = source.mat[1];
@@ -65,6 +66,22 @@ public class Mat4D {
         mat[13] = source.mat[13];
         mat[14] = source.mat[14];
         mat[15] = source.mat[15];
+    }
+    
+    /**
+     * Constructs and initialize a new 4x4 double precision matrix with an existing matrix
+     * @param source the matrix to copy
+     */
+    public Mat4D(Matrix4d source){
+        
+        mat = new double[16];
+        int index = 0;
+        for (int ligne = 0; ligne < 4; ligne++) {
+            for (int colonne = 0; colonne < 4; colonne++) {
+                mat[index] = source.getElement(ligne, colonne);
+                index++;
+            }
+        }
     }
     
     /**

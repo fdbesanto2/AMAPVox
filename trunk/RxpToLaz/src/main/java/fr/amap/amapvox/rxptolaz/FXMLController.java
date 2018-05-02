@@ -117,7 +117,7 @@ public class FXMLController implements Initializable {
                             List<RspExtractorFrameController.Scan> selectedScans = rspExtractorFrameController.getSelectedScans();
                             
                             for(RspExtractorFrameController.Scan scan : selectedScans){
-                                listViewScans.getItems().add(new SimpleScan(scan.getFile(), rsp.getPopMatrix(), scan.getSop()));
+                                listViewScans.getItems().add(new SimpleScan(scan.getFile(), new Mat4D(rsp.getPopMatrix()), scan.getSop()));
                             }
                         }
                     });                    

@@ -5,8 +5,8 @@
  */
 package fr.amap.amapvox.ptginfo;
 
-import fr.amap.amapvox.jleica.ptg.PTGReader;
-import fr.amap.amapvox.jleica.ptg.PTGScan;
+import fr.amap.lidar.format.jleica.ptg.PTGReader;
+import fr.amap.lidar.format.jleica.ptg.PTGScan;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;

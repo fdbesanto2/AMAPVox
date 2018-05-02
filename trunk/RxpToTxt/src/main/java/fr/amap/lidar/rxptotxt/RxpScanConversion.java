@@ -11,7 +11,7 @@ import fr.amap.commons.math.matrix.Mat3D;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.commons.math.vector.Vec4D;
-import fr.amap.commons.util.SphericalCoordinates;
+import fr.amap.commons.math.util.SphericalCoordinates;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
