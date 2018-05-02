@@ -1,0 +1,10 @@
+<<<<<<< HEAD
+=======
+/mvn-repo/
+/target/
+hs_err_pid*.log
+log.txt*
+/target/
+/native/RivLibLibrary/target/
+/native/target/
+/nbproject/
