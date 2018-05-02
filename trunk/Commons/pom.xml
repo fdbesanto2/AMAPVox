@@ -10,6 +10,7 @@
         <module>commons-math</module>
         <module>commons-javafx</module>
         <module>commons-raster</module>
+        <module>commons-spds</module>
         <module>commons-structure</module>
         <module>commons-format</module>
         <module>commons-animation</module>
