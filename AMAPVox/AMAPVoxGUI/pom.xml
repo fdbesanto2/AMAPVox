@@ -38,15 +38,14 @@
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
-                            
                             <excludeScope>system</excludeScope>
                             <excludeGroupIds>junit,org.mockito,org.hamcrest</excludeGroupIds>
                             <outputDirectory>${project.build.directory}/release/lib</outputDirectory>
-                            
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -65,7 +64,6 @@
                     </archive>
                     <finalName>${project.name}-${project.version}-r${buildNumber}</finalName>
                     <useDefaultManifestFile>false</useDefaultManifestFile>
-                    
                 </configuration>
             </plugin>
             
@@ -81,7 +79,7 @@
                         </goals>
                         <configuration>
                             <executable>${java.home}/bin/java</executable>
-                            <commandlineArgs>${debug.parameters} -classpath "${project.build.directory}/lib" -jar "${project.build.directory}/release/${project.build.finalName}.jar"</commandlineArgs>
+                            <commandlineArgs>-classpath "${project.build.directory}/lib" -jar "${project.build.directory}/release/${project.build.finalName}.jar"</commandlineArgs>
                         </configuration>
                     </execution>
                 </executions>  
@@ -213,10 +211,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <format>{0,date,yyyyMMddHHmm}</format>
-                    <items>
-                        <item>timestamp</item>
-                    </items>
+                    <shortRevisionLength>8</shortRevisionLength>
                 </configuration>
             </plugin>
         </plugins>
@@ -328,6 +323,5 @@
             <artifactId>exp4j</artifactId>
             <version>0.4.7</version>
         </dependency>
-
     </dependencies>
 </project>
