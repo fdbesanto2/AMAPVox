@@ -13,13 +13,13 @@
     <modules>
         <module>AMAPVoxGUI</module>
         <module>AMAPVoxCore</module>
+        <module>Dependencies/Commons</module>
+        <module>Dependencies/JLas</module>
+        <module>Dependencies/JRiegl</module>
+        <module>Dependencies/JGridScan</module>
+        <module>Dependencies/LidarShotTxtFormat</module>
+        <module>DependenciesThreedViewer</module>
     </modules>  
-    
-    <scm>
-        <connection>scm:git:http://amap-dev.cirad.fr/git/voxelidar.git</connection>
-        <url>http://amap-dev.cirad.fr/git/voxelidar.git</url>
-        <developerConnection>scm:git:http://amap-dev.cirad.fr/git/voxelidar.git</developerConnection>
-    </scm>
     
     <build>
         <plugins>
