@@ -5,7 +5,7 @@
     <artifactId>format-riegl</artifactId>
     <version>1.0.2-SNAPSHOT</version>
     
-    <name>JRiegl</name>
+    <name>format-riegl</name>
     
     <packaging>jar</packaging>
     <properties>

@@ -8,7 +8,7 @@
     
     <packaging>jar</packaging>
 
-    <name>SimpleViewer</name>
+    <name>threed-viewer</name>
 
     <build>
         <plugins>

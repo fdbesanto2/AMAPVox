@@ -18,8 +18,15 @@
         <module>Dependencies/JRiegl</module>
         <module>Dependencies/JGridScan</module>
         <module>Dependencies/LidarShotTxtFormat</module>
-        <module>DependenciesThreedViewer</module>
+        <module>Dependencies/ThreedViewer</module>
     </modules>  
+    
+    <scm>
+        <connection>scm:git:https://github.com/AMAP-dev/AMAPVox.git</connection>
+        <developerConnection>scm:git:https://github.com/AMAP-dev/AMAPVox.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>http://amap-dev.cirad.fr/projects/voxelidar</url>
+    </scm>
     
     <build>
         <plugins>
