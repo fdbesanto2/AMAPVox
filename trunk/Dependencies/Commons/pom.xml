@@ -13,7 +13,7 @@
         <module>commons-spds</module>
         <module>commons-structure</module>
         <module>commons-format</module>
-        <module>commons-animation</module>
+<!--    <module>commons-animation</module> PhV 20180503 dependencies not used  -->
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
