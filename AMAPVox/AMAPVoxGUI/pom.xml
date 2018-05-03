@@ -23,6 +23,7 @@
             ${project.name}-${project.version}-r${buildNumber}
         </finalName>
         <plugins>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -113,7 +114,7 @@
                 <version>2.7</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
+                        <id>copy-launcher</id>
                         <phase>validate</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -124,13 +125,35 @@
                                 <resource>
                                     <directory>${basedir}/src/main/resources/launcher/</directory>
                                     <filtering>true</filtering>
+                                    <includes>
+                                        <include>AMAPVox.sh</include>
+                                        <include>AMAPVox.bat</include>
+                                    </includes>
                                 </resource>
+                            </resources>              
+                        </configuration>            
+                    </execution>
+                    <execution>
+                        <id>copy-doc</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/release/doc/</outputDirectory>
+                            <resources>          
                                 <resource>
-                                    <directory>../../</directory>
+                                    <directory>../Userguide</directory>
                                     <filtering>false</filtering>
                                     <includes>
-                                        <include>**/AMAPVox user's manual.pdf</include>
-                                        <include>**/changes_log.txt</include>
+                                        <include>*.pdf</include>
+                                    </includes>
+                                </resource>
+                                <resource>
+                                    <directory>../</directory>
+                                    <filtering>false</filtering>
+                                    <includes>
+                                        <include>readme.txt</include>
                                     </includes>
                                 </resource>
                             </resources>              
@@ -170,8 +193,8 @@
                 <configuration>
                     <basedir>${basedir}/target/release/</basedir>
                     <includes>
-                        <include>click_me.sh</include>
-                        <include>click_me.bat</include>
+                        <include>AMAPVox.sh</include>
+                        <include>AMAPVox.bat</include>
                     </includes>
                     <regex>false</regex>
                     <outputDir>/</outputDir>
@@ -186,7 +209,7 @@
                     <descriptor>src/assembly/zip.xml</descriptor>
                     <finalName>${project.name}-${project.version}-r${buildNumber}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
-                    <outputDirectory>${basedir}/target/release/</outputDirectory>
+                    <outputDirectory>${basedir}/target/</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
