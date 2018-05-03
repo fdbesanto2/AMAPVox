@@ -6,12 +6,10 @@
 package fr.amap.lidar.amapvox.voxelisation;
 
 import fr.amap.lidar.amapvox.shot.Shot;
-import fr.amap.lidar.amapvox.commons.LADParams;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

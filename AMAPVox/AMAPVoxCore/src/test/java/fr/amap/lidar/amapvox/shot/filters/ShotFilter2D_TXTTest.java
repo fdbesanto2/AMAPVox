@@ -5,19 +5,12 @@
  */
 package fr.amap.lidar.amapvox.shot.filters;
 
-import fr.amap.lidar.amapvox.shot.Shot;
 import fr.amap.lidar.amapvox.shot.converters.TxtShotIteratorConverter;
 import fr.amap.lidar.format.shot.ShotReader;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.Iterator;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -35,8 +28,8 @@ public class ShotFilter2D_TXTTest {
     public void testShotFilter2D() throws Exception{
 
         
-        File inputFile = new File(ShotFilter2D_TXTTest.class.getResource("/shots_files/Pochette70cm_UnitTest.txt").getFile());
-        File referenceFile = new File(ShotFilter2D_TXTTest.class.getResource("/shots_files/Pochette70cm_UnitTest_Filter2DAMAPVoxTXT.txt").getFile());
+        File inputFile = new File(ShotFilter2D_TXTTest.class.getResource("/shots_files/Pochette70cm_UnitTest.txt").toURI());
+        File referenceFile = new File(ShotFilter2D_TXTTest.class.getResource("/shots_files/Pochette70cm_UnitTest_Filter2DAMAPVoxTXT.txt").toURI());
         
         ShotReader shotReader = new ShotReader(inputFile);
 
