@@ -5,7 +5,7 @@
     <parent>
         <groupId>fr.amap.lidar.amapvox</groupId>
         <artifactId>amapvox</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.2</version>
     </parent>
     <artifactId>amapvox-gui</artifactId>
     <packaging>jar</packaging>
@@ -284,7 +284,7 @@
         <dependency>
             <groupId>fr.amap.lidar.amapvox</groupId>
             <artifactId>amapvox-core</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0.2</version>
         </dependency>
         <dependency>
             <groupId>fr.amap.lidar</groupId>
