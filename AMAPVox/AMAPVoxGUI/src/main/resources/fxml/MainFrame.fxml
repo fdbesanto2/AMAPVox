@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Accordion?>
@@ -753,8 +759,8 @@
                                                          <content>
                                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                <children>
-                                                                  <CheckBox fx:id="checkboxEnableWeighting" layoutX="14.0" layoutY="25.0" mnemonicParsing="false" text="Enable weighting" />
-                                                                  <VBox fx:id="vboxWeighting" alignment="CENTER" layoutX="14.0" layoutY="58.0" prefHeight="213.0" prefWidth="348.0" spacing="2.0">
+                                                                  <CheckBox fx:id="checkboxWeightingByRank" layoutX="14.0" layoutY="25.0" mnemonicParsing="false" text="Echo weighting by rank" />
+                                                                  <VBox fx:id="vboxWeightingByRank" alignment="CENTER" layoutX="14.0" layoutY="58.0" prefHeight="213.0" prefWidth="348.0" spacing="2.0">
                                                                      <children>
                                                                         <Label text="Echo range (1...n)" />
                                                                         <HBox alignment="CENTER" prefHeight="138.0" prefWidth="348.0">
@@ -777,6 +783,21 @@
                                                                           </items>
                                                                         </MenuButton>
                                                                      </children>
+                                                                  </VBox>
+                                                                  <CheckBox fx:id="checkboxWeightingByFile" disable="true" layoutX="14.0" layoutY="270.0" mnemonicParsing="false" text="Echo weighting from CSV file (not yet available)" />
+                                                                  <VBox fx:id="vboxWeightingByFile" layoutX="14.0" layoutY="300.0" spacing="2.0">
+                                                                     <children>
+                                                                        <Label text="Weighting CSV file" />
+                                                                        <HBox fx:id="hboxWeightingFile">
+                                                                           <children>
+                                                                              <TextField fx:id="textFieldWeightingFile" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
+                                                                              <Button fx:id="buttonOpenWeightingFile" mnemonicParsing="false" text="..." />
+                                                                           </children>
+                                                                        </HBox>
+                                                                     </children>
+                                                                     <padding>
+                                                                        <Insets left="25.0" />
+                                                                     </padding>
                                                                   </VBox>
                                                                </children></AnchorPane>
                                                          </content>

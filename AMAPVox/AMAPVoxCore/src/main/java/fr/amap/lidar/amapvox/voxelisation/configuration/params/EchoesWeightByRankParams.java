@@ -5,22 +5,18 @@
  */
 package fr.amap.lidar.amapvox.voxelisation.configuration.params;
 
-import java.io.File;
-
 /**
  *
  * @author Julien Heurtebize
  */
-public class EchoesWeightParams {
-    
-    //echoes weightingMode
-    public static final int WEIGHTING_NONE = 0;
-    public static final int WEIGHTING_ECHOS_NUMBER = 1;
-    public static final int WEIGHTING_FILE = 2;
-    public static final int WEIGHTING_FRACTIONING = 3;
-    private int weightingMode;
-    private float[][] weightingData;
-    
+public class EchoesWeightByRankParams {
+
+    /**
+     * Weighting matrix as a 2d array, first number of shot's echoes then echo
+     * rank
+     */
+    private final float[][] weightingData;
+
     public final static float[][] DEFAULT_ALS_WEIGHTING = new float[][]{
         {1.00f, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
         {0.62f, 0.38f, Float.NaN, Float.NaN, Float.NaN, Float.NaN, Float.NaN},
@@ -39,42 +35,16 @@ public class EchoesWeightParams {
         {1 / 6.0f, 1 / 6.0f, 1 / 6.0f, 1 / 6.0f, 1 / 6.0f, 1 / 6.0f, Float.NaN},
         {1 / 7.0f, 1 / 7.0f, 1 / 7.0f, 1 / 7.0f, 1 / 7.0f, 1 / 7.0f, 1 / 7.0f}};
 
-    public EchoesWeightParams() {
-        weightingMode = WEIGHTING_NONE;
+    public EchoesWeightByRankParams(float[][] weightingData) {
+        this.weightingData = weightingData;
     }
 
-    public static EchoesWeightParams getEchosWeightingByRank(float[][] weightingData){
-        
-        EchoesWeightParams params = new EchoesWeightParams();
-        params.setWeightingMode(WEIGHTING_ECHOS_NUMBER);
-        params.setWeightingData(weightingData);
-        
-        return params;
-    }
-    
     /**
      *
-     * @return Weighting matrix as a 2d array,
-     * first by number of shot's echoes then echo rank
+     * @return Weighting matrix as a 2d array, first by number of shot's echoes
+     * then echo rank
      */
     public float[][] getWeightingData() {
         return weightingData;
     }
-
-    /**
-     *
-     * @param weightingData Weighting matrix as a 2d array,
-     * first number of shot's echoes then echo rank
-     */
-    public void setWeightingData(float[][] weightingData) {
-        this.weightingData = weightingData;
-    }
-
-    public int getWeightingMode() {
-        return weightingMode;
-    }
-
-    public void setWeightingMode(int weighting) {
-        this.weightingMode = weighting;
-    }    
 }

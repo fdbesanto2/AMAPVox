@@ -8,7 +8,6 @@ package fr.amap.lidar.amapvox.voxelisation.configuration.params;
 import fr.amap.lidar.amapvox.commons.LADParams;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
-import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
 import fr.amap.lidar.amapvox.voxelisation.LaserSpecification;
 import java.io.File;
 import java.util.List;
@@ -35,7 +34,7 @@ public class VoxelParameters {
     
     private NaNsCorrectionParams naNsCorrectionParams;
     private DTMFilteringParams dtmFilteringParams;
-    private EchoesWeightParams echoesWeightParams;
+    private EchoesWeightByRankParams echoesWeightByRankParams;
     private GroundEnergyParams groundEnergyParams;
     private LADParams ladParams;
     
@@ -57,7 +56,7 @@ public class VoxelParameters {
 
         private NaNsCorrectionParams naNsCorrectionParams = new NaNsCorrectionParams(false);
         private DTMFilteringParams dtmFilteringParams = new DTMFilteringParams();
-        private EchoesWeightParams echoesWeightParams = new EchoesWeightParams();
+        private EchoesWeightByRankParams echoesWeightByRankParams;
         private GroundEnergyParams groundEnergyParams = new GroundEnergyParams();
         private LADParams ladParams = new LADParams();
 
@@ -79,9 +78,9 @@ public class VoxelParameters {
             infos.setType(type);
         }
 
-        public Builder echoesWeightParams(EchoesWeightParams echoesWeightParams){
+        public Builder echoesWeightByRankParams(EchoesWeightByRankParams echoesWeightByRankParams){
             
-            this.echoesWeightParams = echoesWeightParams;
+            this.echoesWeightByRankParams = echoesWeightByRankParams;
             return this;
         }
         
@@ -130,7 +129,7 @@ public class VoxelParameters {
     public VoxelParameters(Builder builder){
         
         this.dtmFilteringParams = builder.dtmFilteringParams;
-        this.echoesWeightParams = builder.echoesWeightParams;
+        this.echoesWeightByRankParams = builder.echoesWeightByRankParams;
         this.groundEnergyParams = builder.groundEnergyParams;
         this.infos = builder.infos;
         this.ladParams = builder.ladParams;
@@ -149,7 +148,7 @@ public class VoxelParameters {
         infos = new VoxelSpaceInfos();
         infos.setType(VoxelSpaceInfos.Type.ALS);
         ladParams = new LADParams();
-        echoesWeightParams = new EchoesWeightParams();
+        //echoesWeightByRankParams = new EchoesWeightByRankParams();
         dtmFilteringParams = new DTMFilteringParams();
         naNsCorrectionParams = new NaNsCorrectionParams(false);
     }
@@ -162,7 +161,7 @@ public class VoxelParameters {
         infos = new VoxelSpaceInfos(bottomCorner, topCorner, split);
         
         ladParams = new LADParams();
-        echoesWeightParams = new EchoesWeightParams();
+        //echoesWeightByRankParams = new EchoesWeightByRankParams();
         dtmFilteringParams = new DTMFilteringParams();
         naNsCorrectionParams = new NaNsCorrectionParams(false);
     }
@@ -175,7 +174,7 @@ public class VoxelParameters {
      * @param resolution voxel size (depends of splitting)
      * @param maxPAD Maximum Plant Area Density
      * @param ladParams Leaf Angle Distribution parameters
-     * @param echoesWeightParams Shot's Echoes weighting parameters
+     * @param echoesWeightByRankParams Shot's Echoes weighting parameters
      * @param laserSpecification Lidar equipment specification
      * @param naNsCorrectionParams Parameters for the correction of non sampled voxels 
      * @param dtmFilteringParams DTM filtering parameters
@@ -184,7 +183,7 @@ public class VoxelParameters {
     public VoxelParameters(Point3d bottomCorner, Point3d topCorner, Point3i split, float resolution,
             float maxPAD,
             LADParams ladParams,
-            EchoesWeightParams echoesWeightParams,
+            EchoesWeightByRankParams echoesWeightByRankParams,
             LaserSpecification laserSpecification,
             NaNsCorrectionParams naNsCorrectionParams,
             DTMFilteringParams dtmFilteringParams,
@@ -203,10 +202,7 @@ public class VoxelParameters {
 
         this.ladParams = ladParams;
         
-        if (echoesWeightParams == null) {
-            echoesWeightParams = new EchoesWeightParams();
-        }
-        this.echoesWeightParams = echoesWeightParams;
+        this.echoesWeightByRankParams = echoesWeightByRankParams;
         
         if(laserSpecification == null){
             if(TLS){
@@ -311,16 +307,16 @@ public class VoxelParameters {
      * 
      * @return Echoes weigting parameters
      */
-    public EchoesWeightParams getEchoesWeightParams() {
-        return echoesWeightParams;
+    public EchoesWeightByRankParams getEchoesWeightByRankParams() {
+        return echoesWeightByRankParams;
     }
 
     /**
      * 
-     * @param echoesWeightParams Echoes weigting parameters
+     * @param echoesWeightByRankParams Echoes weigting parameters
      */
-    public void setEchoesWeightParams(EchoesWeightParams echoesWeightParams) {
-        this.echoesWeightParams = echoesWeightParams;
+    public void setEchoesWeightByRankParams(EchoesWeightByRankParams echoesWeightByRankParams) {
+        this.echoesWeightByRankParams = echoesWeightByRankParams;
     }
 
     /**

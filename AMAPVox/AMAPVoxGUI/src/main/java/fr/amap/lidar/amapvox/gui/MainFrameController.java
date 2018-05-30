@@ -72,7 +72,7 @@ import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.commons.util.image.ScaleGradient;
 import fr.amap.commons.util.io.file.CSVFile;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByRankParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.DTMFilteringParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
 import fr.amap.lidar.amapvox.commons.LADParams;
@@ -217,8 +217,6 @@ import java.awt.Desktop;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.util.HashSet;
 import java.util.Iterator;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -530,7 +528,9 @@ public class MainFrameController implements Initializable {
     @FXML
     private Button buttonLoadSelectedTask;
     @FXML
-    private CheckBox checkboxEnableWeighting;
+    private CheckBox checkboxWeightingByRank;
+    @FXML
+    private CheckBox checkboxWeightingByFile;
     @FXML
     private CheckBox checkBoxUseDefaultSopMatrix;
     @FXML
@@ -754,7 +754,9 @@ public class MainFrameController implements Initializable {
     @FXML
     private TextArea textAreaWeighting;
     @FXML
-    private VBox vboxWeighting;
+    private VBox vboxWeightingByRank;
+    @FXML
+    private VBox vboxWeightingByFile;
     @FXML
     private HBox hboxAutomaticBBox;
     @FXML
@@ -999,9 +1001,10 @@ public class MainFrameController implements Initializable {
         
         comboboxScript.getItems().setAll("Daniel script");
         
-        vboxWeighting.disableProperty().bind(checkboxEnableWeighting.selectedProperty().not());
+        vboxWeightingByRank.disableProperty().bind(checkboxWeightingByRank.selectedProperty().not());
+        vboxWeightingByFile.disableProperty().bind(checkboxWeightingByFile.selectedProperty().not());
         
-        checkboxEnableWeighting.selectedProperty().addListener(new ChangeListener<Boolean>() {
+        checkboxWeightingByRank.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if(newValue && textAreaWeighting.getText().isEmpty()){
@@ -1009,9 +1012,9 @@ public class MainFrameController implements Initializable {
                     int selectedVoxTab = tabPaneVoxelisation.getSelectionModel().getSelectedIndex();
                     
                     if(selectedVoxTab == 0){ //ALS
-                        fillWeightingData(EchoesWeightParams.DEFAULT_ALS_WEIGHTING);
+                        fillWeightingData(EchoesWeightByRankParams.DEFAULT_ALS_WEIGHTING);
                     }else if(selectedVoxTab == 1){ //TLS
-                        fillWeightingData(EchoesWeightParams.DEFAULT_TLS_WEIGHTING);
+                        fillWeightingData(EchoesWeightByRankParams.DEFAULT_TLS_WEIGHTING);
                     }
                 }
             }
@@ -2542,16 +2545,9 @@ public class MainFrameController implements Initializable {
 
         voxelParameters.infos.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
 
-        EchoesWeightParams echoesWeightingParams = new EchoesWeightParams();
-        
-        if (checkboxEnableWeighting.isSelected()) {
-            echoesWeightingParams.setWeightingMode(EchoesWeightParams.WEIGHTING_ECHOS_NUMBER);
-            echoesWeightingParams.setWeightingData(parseWeightingData());
-        } else {
-            echoesWeightingParams.setWeightingMode(EchoesWeightParams.WEIGHTING_NONE);
+        if (checkboxWeightingByRank.isSelected()) {
+            voxelParameters.setEchoesWeightByRankParams(new EchoesWeightByRankParams(parseWeightingData()));
         }
-        
-        voxelParameters.setEchoesWeightParams(echoesWeightingParams);
 
         GroundEnergyParams groundEnergyParameters = new GroundEnergyParams();
         
@@ -2907,16 +2903,9 @@ public class MainFrameController implements Initializable {
         voxelParameters.setMergingAfter(checkboxMergeAfter.isSelected());
         voxelParameters.setMergedFile(new File(textFieldOutputPathTLS.getText(), textFieldMergedFileName.getText()));
 
-        EchoesWeightParams echoesWeightingParameters = new EchoesWeightParams();
-        
-        if (checkboxEnableWeighting.isSelected()) {
-            echoesWeightingParameters.setWeightingMode(EchoesWeightParams.WEIGHTING_ECHOS_NUMBER);
-            echoesWeightingParameters.setWeightingData(parseWeightingData());
-        } else {
-            echoesWeightingParameters.setWeightingMode(EchoesWeightParams.WEIGHTING_NONE);
+         if (checkboxWeightingByRank.isSelected()) {
+            voxelParameters.setEchoesWeightByRankParams(new EchoesWeightByRankParams(parseWeightingData()));
         }
-        
-        voxelParameters.setEchoesWeightParams(echoesWeightingParameters);
 
         InputType it;
 
@@ -5367,11 +5356,11 @@ public class MainFrameController implements Initializable {
                         listviewFilters.getItems().addAll(filters);
                     }
 
-                    if (((VoxelAnalysisCfg)cfg).getVoxelParameters().getEchoesWeightParams().getWeightingMode() == EchoesWeightParams.WEIGHTING_NONE) {
-                        checkboxEnableWeighting.setSelected(false);
+                    if (null == ((VoxelAnalysisCfg)cfg).getVoxelParameters().getEchoesWeightByRankParams()) {
+                        checkboxWeightingByRank.setSelected(false);
                     } else {
-                        checkboxEnableWeighting.setSelected(true);
-                        fillWeightingData(((VoxelAnalysisCfg)cfg).getVoxelParameters().getEchoesWeightParams().getWeightingData());
+                        checkboxWeightingByRank.setSelected(true);
+                        fillWeightingData(((VoxelAnalysisCfg)cfg).getVoxelParameters().getEchoesWeightByRankParams().getWeightingData());
                     }
                     
                     LADParams ladParameters = voxelParameters.getLadParams();
@@ -6996,12 +6985,12 @@ public class MainFrameController implements Initializable {
     @FXML
     private void onActionButtonFillALSDefaultWeight(ActionEvent event) {
         
-        fillWeightingData(EchoesWeightParams.DEFAULT_ALS_WEIGHTING);
+        fillWeightingData(EchoesWeightByRankParams.DEFAULT_ALS_WEIGHTING);
     }
 
     @FXML
     private void onActionButtonFillTLSDefaultWeight(ActionEvent event) {
-        fillWeightingData(EchoesWeightParams.DEFAULT_TLS_WEIGHTING);
+        fillWeightingData(EchoesWeightByRankParams.DEFAULT_TLS_WEIGHTING);
     }
     /*@FXML
     private void onActionButtonGenerateShotsFile(ActionEvent event) {

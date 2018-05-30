@@ -25,7 +25,7 @@ import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg.VoxelsFormat;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByRankParams;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -58,7 +58,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
     private int nbShotsProcessed;
     private int tmpNbShotsProcessed = 0;
 
-    private float[][] weighting;
+    private float[][] weightTable;
     private float[][] residualEnergyTable;
     
     private final boolean volumeWeighting = true;
@@ -115,37 +115,37 @@ public class VoxelAnalysis extends Process implements Cancellable{
     
     private void generateResidualEnergyTable(){
         
-        residualEnergyTable = new float[weighting.length][weighting[0].length];
+        residualEnergyTable = new float[weightTable.length][weightTable[0].length];
         
-        for(int i=0;i<weighting.length;i++){
+        for(int i=0;i<weightTable.length;i++){
             
             float startEnergy = 1;
             
             for(int j=0;j<i+1;j++){
                 residualEnergyTable[i][j] = startEnergy;
-                startEnergy -= weighting[i][j];
+                startEnergy -= weightTable[i][j];
             }
         }
     }
     
     private void generateNoPonderationTables(){
         
-        weighting = new float[7][7];
+        weightTable = new float[7][7];
         
-        for(int i=0;i<weighting.length;i++){
+        for(int i=0;i<weightTable.length;i++){
                         
             for(int j=0;j<i+1;j++){
-                weighting[i][j] = 1;
+                weightTable[i][j] = 1;
             }
             
             for(int j=i+1;j<7;j++){
-                weighting[i][j] = Float.NaN;
+                weightTable[i][j] = Float.NaN;
             }
         }
         
         residualEnergyTable = new float[7][7];
         
-        for(int i=0;i<weighting.length;i++){
+        for(int i=0;i<weightTable.length;i++){
                         
             for(int j=0;j<i+1;j++){
                 residualEnergyTable[i][j] = 1;
@@ -193,12 +193,11 @@ public class VoxelAnalysis extends Process implements Cancellable{
         this.parameters.infos.setTransmittanceMode(parameters.getTransmittanceMode());
         this.parameters.infos.setPathLengthMode(parameters.getPathLengthMode());
         
-        if(parameters.getEchoesWeightParams().getWeightingMode() != EchoesWeightParams.WEIGHTING_NONE){
-            weighting = parameters.getEchoesWeightParams().getWeightingData();
+        if(null != parameters.getEchoesWeightByRankParams()) {
+            weightTable = parameters.getEchoesWeightByRankParams().getWeightingData();
             generateResidualEnergyTable();
         }else{
-            
-            //pas de pondération
+            // no energy ponderation by rank
             generateNoPonderationTables();
         }
         
@@ -324,7 +323,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
                         /*ne rien faire dans ce cas
                          le beamFraction est incrémenté et l'opération se fera sur l'écho suivant*/
-                        lastEchoBeamFraction += weighting[shot.getEchoesNumber() - 1][i];
+                        lastEchoBeamFraction += weightTable[shot.getEchoesNumber() - 1][i];
 
                         if(!wasMultiple){
                             firstEchoOfVoxel = i;
@@ -332,8 +331,8 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
                     } else {
 
-                        if (parameters.getEchoesWeightParams().getWeightingMode() != EchoesWeightParams.WEIGHTING_NONE) {
-                            beamFraction = weighting[shot.getEchoesNumber() - 1][i] + lastEchoBeamFraction;
+                        if (null != weightTable) {
+                            beamFraction = weightTable[shot.getEchoesNumber() - 1][i] + lastEchoBeamFraction;
 
                             if(wasMultiple){
                                 residualEnergy = residualEnergyTable[shot.getEchoesNumber() - 1][firstEchoOfVoxel];
@@ -484,7 +483,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
             }
             
             //surface de la section du faisceau à la distance de la source
-            if (parameters.getEchoesWeightParams().getWeightingMode() != EchoesWeightParams.WEIGHTING_NONE && volumeWeighting) {
+            if ((null != weightTable) && volumeWeighting) {
                 surface = Math.pow((Math.tan(laserSpec.getBeamDivergence() / 2.0) * distance) + laserSpec.getBeamDiameterAtExit(), 2) * Math.PI;
             } else {
                 surface = 1;

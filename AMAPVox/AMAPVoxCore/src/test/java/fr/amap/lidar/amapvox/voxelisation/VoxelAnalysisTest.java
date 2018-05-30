@@ -8,7 +8,7 @@ package fr.amap.lidar.amapvox.voxelisation;
 import fr.amap.lidar.amapvox.shot.Shot;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByRankParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -34,10 +34,8 @@ public class VoxelAnalysisTest {
         
         VoxelAnalysisCfg cfg = new VoxelAnalysisCfg();
         
-        EchoesWeightParams echoesWeightParams = new EchoesWeightParams();
-        echoesWeightParams.setWeightingData(EchoesWeightParams.DEFAULT_ALS_WEIGHTING);
-        echoesWeightParams.setWeightingMode(EchoesWeightParams.WEIGHTING_ECHOS_NUMBER);
-        VoxelParameters params = new VoxelParameters.Builder(new Point3d(-2.5, -2.5, -2.5), new Point3d(2.5, 2.5, 2.5), 1.0f, VoxelSpaceInfos.Type.ALS).echoesWeightParams(echoesWeightParams).laserSpecification(LaserSpecification.LMS_Q560).padMAX(10.0f).build();
+        EchoesWeightByRankParams echoesWeightParams = new EchoesWeightByRankParams(EchoesWeightByRankParams.DEFAULT_ALS_WEIGHTING);
+        VoxelParameters params = new VoxelParameters.Builder(new Point3d(-2.5, -2.5, -2.5), new Point3d(2.5, 2.5, 2.5), 1.0f, VoxelSpaceInfos.Type.ALS).echoesWeightByRankParams(echoesWeightParams).laserSpecification(LaserSpecification.LMS_Q560).padMAX(10.0f).build();
         
         params.setTransmittanceMode(2);
         params.setPathLengthMode("B");

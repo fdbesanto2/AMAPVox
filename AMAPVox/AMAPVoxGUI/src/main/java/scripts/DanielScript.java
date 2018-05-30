@@ -24,7 +24,7 @@ import fr.amap.lidar.amapvox.voxelisation.postproc.VoxelFileMerging;
 import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.DTMFilteringParams;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByRankParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import java.io.File;
 import java.io.IOException;
@@ -298,16 +298,14 @@ public class DanielScript extends Script{
             cfg.setInputFile(lasFile);
             cfg.setOutputFile(new File(outputDirectory, lasFile.getName()+".vox"), VoxelAnalysisCfg.VoxelsFormat.RASTER);
             cfg.setTrajectoryFile(trajectoryFile);
-            EchoesWeightParams echoesWeightParams = new EchoesWeightParams();
-            echoesWeightParams.setWeightingMode(EchoesWeightParams.WEIGHTING_ECHOS_NUMBER);
-            echoesWeightParams.setWeightingData(EchoesWeightParams.DEFAULT_ALS_WEIGHTING);
+            EchoesWeightByRankParams echoesWeightParams = new EchoesWeightByRankParams(EchoesWeightByRankParams.DEFAULT_ALS_WEIGHTING);
             
 
             VoxelParameters voxelParameters = new VoxelParameters.Builder(
                     boundingBox.min, boundingBox.max, resolution, VoxelSpaceInfos.Type.ALS)
                     .ladParams(new LADParams())
                     .dtmFilteringParams(new DTMFilteringParams(subsetDTMFile, 1.0f))
-                    .echoesWeightParams(echoesWeightParams)
+                    .echoesWeightByRankParams(echoesWeightParams)
                     .padMAX(5.0f)
                     .build();
 

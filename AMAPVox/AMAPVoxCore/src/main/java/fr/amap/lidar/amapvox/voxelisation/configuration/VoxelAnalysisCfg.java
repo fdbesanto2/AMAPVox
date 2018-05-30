@@ -24,6 +24,7 @@ import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.EchoFilter;
 import fr.amap.lidar.amapvox.voxelisation.LaserSpecification;
 import fr.amap.lidar.amapvox.voxelisation.ShotFilter;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByRankParams;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -153,9 +154,7 @@ public class VoxelAnalysisCfg extends Configuration{
                     
         if(ponderationElement != null){
 
-            voxelParameters.getEchoesWeightParams().setWeightingMode(Integer.valueOf(ponderationElement.getAttributeValue("mode")));
-
-            if(voxelParameters.getEchoesWeightParams().getWeightingMode() > 0){
+            if (Boolean.valueOf(ponderationElement.getAttributeValue("byrank"))) {
                 Element matrixElement = ponderationElement.getChild("matrix");
                 int rowNumber = 7;
                 int colNumber = 7;
@@ -170,8 +169,9 @@ public class VoxelAnalysisCfg extends Configuration{
                         count++;
                     }
                 }
-
-                voxelParameters.getEchoesWeightParams().setWeightingData(weightingData);
+                voxelParameters.setEchoesWeightByRankParams(new EchoesWeightByRankParams(weightingData));
+            } else {
+                voxelParameters.setEchoesWeightByRankParams(null);
             }
         }
         
@@ -462,11 +462,10 @@ public class VoxelAnalysisCfg extends Configuration{
         
         /***PONDERATION***/
         Element ponderationElement = new Element("ponderation");
-        ponderationElement.setAttribute(new Attribute("mode",String.valueOf(voxelParameters.getEchoesWeightParams().getWeightingMode())));
-
-        if(voxelParameters.getEchoesWeightParams().getWeightingMode() > 0){
-            StringBuilder weightingDataString = new StringBuilder();
-            float[][] weightingData = voxelParameters.getEchoesWeightParams().getWeightingData();
+        ponderationElement.setAttribute(new Attribute("byrank",String.valueOf(null != voxelParameters.getEchoesWeightByRankParams())));
+        if (null != voxelParameters.getEchoesWeightByRankParams()) {
+             StringBuilder weightingDataString = new StringBuilder();
+            float[][] weightingData = voxelParameters.getEchoesWeightByRankParams().getWeightingData();
             for(int i=0;i<weightingData.length;i++){
                 for(int j=0;j<weightingData[0].length;j++){
                     weightingDataString.append(weightingData[i][j]).append(" ");
@@ -474,8 +473,8 @@ public class VoxelAnalysisCfg extends Configuration{
             }
             Element matrixElement = createMatrixElement("ponderation", weightingDataString.toString().trim());
             ponderationElement.addContent(matrixElement);
-        }
-
+        }      
+        
         processElement.addContent(ponderationElement);
         
         /***TRANSMITTANCE MODE***/
