@@ -23,9 +23,9 @@ import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos.Type;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg.VoxelsFormat;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams.EchoesWeight;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByRankParams;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -37,6 +37,7 @@ import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import javax.imageio.ImageIO;
@@ -44,10 +45,10 @@ import javax.vecmath.Point3d;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 
-public class VoxelAnalysis extends Process implements Cancellable{
+public class VoxelAnalysis extends Process implements Cancellable {
 
     private final static Logger LOGGER = Logger.getLogger(VoxelAnalysis.class);
-    
+
     private boolean cancelled;
 
     private Voxel voxels[][][];
@@ -56,42 +57,42 @@ public class VoxelAnalysis extends Process implements Cancellable{
     private float MAX_PAD = 3;
 
     private int nbShotsProcessed;
-    private int tmpNbShotsProcessed = 0;
 
     private float[][] weightTable;
+    private Iterator<EchoesWeight> weightIterator;
+    private EchoesWeight echoesWeight;
     private float[][] residualEnergyTable;
-    
+
     private final boolean volumeWeighting = true;
-    
+
     private int pathLengthMode = 1; //1 = mode A, 2 = mode B
     private int transMode = 1;
 
     private GroundEnergy[][] groundEnergy;
     private VoxelParameters parameters;
-    private VoxelAnalysisCfg cfg;
+    private final VoxelAnalysisCfg cfg;
 
     private boolean isSet = false;
 
-    private Raster dtm;
+    private final Raster dtm;
 
     private boolean shotChanged = false;
     private Voxel lastVoxelSampled;
     private int lastShotId;
-    
+
     private LaserSpecification laserSpec;
-    
+
     private ShotFilter shotFilter;
     private EchoFilter echoFilter;
     private List<PointcloudFilter> pointcloudFilters;
-    
+
     private boolean padComputed;
-    
+
     private BufferedWriter shotSegmentWriter;
-    
+
     //directional transmittance (GTheta)
     private GTheta direcTransmittance;
-    
-    
+
     /**
      *
      */
@@ -103,7 +104,6 @@ public class VoxelAnalysis extends Process implements Cancellable{
          En correction, il faudrait faire un pré-calcul pour déterminer la taille de la 
         bounding-box pour inclure les tirs correspondants.
         Donc créer deux espaces voxels en l'occurence.*/
-        
         public int groundEnergyPotential;
         public float groundEnergyActual;
 
@@ -112,46 +112,46 @@ public class VoxelAnalysis extends Process implements Cancellable{
             groundEnergyActual = 0;
         }
     }
-    
-    private void generateResidualEnergyTable(){
-        
+
+    private void generateResidualEnergyTable() {
+
         residualEnergyTable = new float[weightTable.length][weightTable[0].length];
-        
-        for(int i=0;i<weightTable.length;i++){
-            
+
+        for (int i = 0; i < weightTable.length; i++) {
+
             float startEnergy = 1;
-            
-            for(int j=0;j<i+1;j++){
+
+            for (int j = 0; j < i + 1; j++) {
                 residualEnergyTable[i][j] = startEnergy;
                 startEnergy -= weightTable[i][j];
             }
         }
     }
-    
-    private void generateNoPonderationTables(){
-        
+
+    private void generateNoPonderationTables() {
+
         weightTable = new float[7][7];
-        
-        for(int i=0;i<weightTable.length;i++){
-                        
-            for(int j=0;j<i+1;j++){
+
+        for (int i = 0; i < weightTable.length; i++) {
+
+            for (int j = 0; j < i + 1; j++) {
                 weightTable[i][j] = 1;
             }
-            
-            for(int j=i+1;j<7;j++){
+
+            for (int j = i + 1; j < 7; j++) {
                 weightTable[i][j] = Float.NaN;
             }
         }
-        
+
         residualEnergyTable = new float[7][7];
-        
-        for(int i=0;i<weightTable.length;i++){
-                        
-            for(int j=0;j<i+1;j++){
+
+        for (int i = 0; i < weightTable.length; i++) {
+
+            for (int j = 0; j < i + 1; j++) {
                 residualEnergyTable[i][j] = 1;
             }
-            
-            for(int j=i+1;j<7;j++){
+
+            for (int j = i + 1; j < 7; j++) {
                 residualEnergyTable[i][j] = Float.NaN;
             }
         }
@@ -163,104 +163,110 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
         if (dtm != null && parameters.getDtmFilteringParams().useDTMCorrection()) {
             distance = z - (float) (dtm.getSimpleHeight(x, y));
-        }else{
+        } else {
             distance = z;
         }
 
         return distance;
     }
-            
+
     public VoxelAnalysis(Raster terrain, List<PointcloudFilter> pointcloudFilters, VoxelAnalysisCfg cfg) {
 
         nbShotsProcessed = 0;
-        tmpNbShotsProcessed = 0;
         this.dtm = terrain;
         this.pointcloudFilters = pointcloudFilters;
-        
-        
+
         shotFilter = cfg.getShotFilter();
         echoFilter = cfg.getEchoFilter();
-        
+
         this.cfg = cfg;
-        
+
         init(cfg.getVoxelParameters());
     }
-
 
     private void init(VoxelParameters parameters) {
 
         this.parameters = parameters;
         this.parameters.infos.setTransmittanceMode(parameters.getTransmittanceMode());
         this.parameters.infos.setPathLengthMode(parameters.getPathLengthMode());
-        
-        if(null != parameters.getEchoesWeightByRankParams()) {
+
+        if (null != parameters.getEchoesWeightByRankParams()) {
             weightTable = parameters.getEchoesWeightByRankParams().getWeightingData();
             generateResidualEnergyTable();
-        }else{
+        } else {
             // no energy ponderation by rank
             generateNoPonderationTables();
         }
-        
+
+        if (null != parameters.getEchoesWeightByFileParams()) {
+            LOGGER.info("Open echoes weight file " + parameters.getEchoesWeightByFileParams().getFile());
+            try {
+                weightIterator = parameters.getEchoesWeightByFileParams().iterator();
+                echoesWeight = weightIterator.next();
+            } catch (IOException ex) {
+                LOGGER.error("Error while opening echoes weight from file", ex);
+            }
+        }
+
         MAX_PAD = parameters.infos.getMaxPAD();
         this.transMode = parameters.getTransmittanceMode();
-        
-        
+
         String pathLengthModeStr = parameters.getPathLengthMode();
-        if(pathLengthModeStr.equals("A")){
+        if (pathLengthModeStr.equals("A")) {
             pathLengthMode = 1;
-        }else{
+        } else {
             pathLengthMode = 2;
         }
-        
+
         //test
         /*pathLengthMode = 2;
         this.transMode = 1;*/
-        
         laserSpec = parameters.getLaserSpecification();
-        
-        if(laserSpec == null){
-            if(parameters.infos.getType() == VoxelSpaceInfos.Type.TLS){
+
+        if (laserSpec == null) {
+            if (parameters.infos.getType() == VoxelSpaceInfos.Type.TLS) {
                 laserSpec = LaserSpecification.VZ_400;
-            }else{
+            } else {
                 laserSpec = LaserSpecification.LMS_Q560;
             }
         }
-        
+
         LADParams ladParameters = parameters.getLadParams();
-        if(ladParameters == null){
+        if (ladParameters == null) {
             ladParameters = new LADParams();
         }
 
-        LeafAngleDistribution distribution = new LeafAngleDistribution(ladParameters.getLadType(), 
-                                                                        ladParameters.getLadBetaFunctionAlphaParameter(),
-                                                                        ladParameters.getLadBetaFunctionBetaParameter());
-        
+        LeafAngleDistribution distribution = new LeafAngleDistribution(ladParameters.getLadType(),
+                ladParameters.getLadBetaFunctionAlphaParameter(),
+                ladParameters.getLadBetaFunctionBetaParameter());
+
         direcTransmittance = new GTheta(distribution);
-        
+
         LOGGER.info("Building transmittance functions table");
         direcTransmittance.buildTable(GTheta.DEFAULT_STEP_NUMBER);
         LOGGER.info("Transmittance functions table is built");
-        
-        if(cfg != null && cfg.isExportShotSegment()){
+
+        if (cfg != null && cfg.isExportShotSegment()) {
             try {
-                shotSegmentWriter = new BufferedWriter(new FileWriter(new File(cfg.getOutputFile().getAbsolutePath()+".segments")));
+                shotSegmentWriter = new BufferedWriter(new FileWriter(new File(cfg.getOutputFile().getAbsolutePath() + ".segments")));
                 shotSegmentWriter.write("i j k norm_transmittance weight\n");
             } catch (IOException ex) {
                 java.util.logging.Logger.getLogger(VoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
-    
+
     /**
      * Get position of the center of a voxel
+     *
      * @param indices
      * @return
      */
     public Point3d getPosition(Point3i indices) {
-        
+
         Point3d minCorner = parameters.infos.getMinCorner();
         Point3d voxSize = voxelManager.getVoxelSpace().getVoxelSize();
-        
+
         double posX = minCorner.x + (voxSize.x / 2.0d) + (indices.x * voxSize.x);
         double posY = minCorner.y + (voxSize.y / 2.0d) + (indices.y * voxSize.y);
         double posZ = minCorner.z + (voxSize.z / 2.0d) + (indices.z * voxSize.z);
@@ -268,18 +274,17 @@ public class VoxelAnalysis extends Process implements Cancellable{
         return new Point3d(posX, posY, posZ);
     }
 
-    public void processOneShot(final Shot shot) throws IOException {
+    public void processOneShot(final Shot shot, int shotID) throws IOException {
 
         if (voxelManager == null) {
             LOGGER.error("VoxelManager not initialized, what happened??");
             return;
         }
-        
-        if((shotFilter != null && shotFilter.doFiltering(shot)) || shotFilter == null ){
-            
-            if(tmpNbShotsProcessed == 1000000){
+
+        if ((shotFilter != null && shotFilter.doFiltering(shot)) || shotFilter == null) {
+
+            if ((nbShotsProcessed % 1000000) == 0) {
                 LOGGER.info("Shots processed: " + nbShotsProcessed);
-                tmpNbShotsProcessed = 0;
             }
 
             shot.direction.normalize();
@@ -293,14 +298,18 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
             } else {
 
-                double beamFraction = 1;
-
                 shotChanged = true;
                 isSet = false;
 
                 double residualEnergy;
                 float lastEchoBeamFraction = 0;
                 int firstEchoOfVoxel = 0;
+
+                if (null != echoesWeight) {
+                    while (null != echoesWeight && echoesWeight.shotID < shotID) {
+                        echoesWeight = weightIterator.next();
+                    }
+                }
 
                 for (int i = 0; i < shot.getEchoesNumber(); i++) {
 
@@ -315,55 +324,49 @@ public class VoxelAnalysis extends Process implements Cancellable{
                     /*vérifie que le dernier écho n'était pas un écho "multiple",
                     c'est à dire le premier écho du tir dans le voxel*/
                     boolean wasMultiple = false;
-                    if(lastEchoBeamFraction != 0){
+                    if (lastEchoBeamFraction != 0) {
                         wasMultiple = true;
                     }
 
-                    if (echosAreInsideSameVoxel(echo, nextEcho)) {
+                    double weight = 1;
+                    if (null != weightTable) {
+                        weight *= weightTable[shot.getEchoesNumber() - 1][i];
+                    }
+                    if (null != echoesWeight && echoesWeight.shotID == shotID) {
+                        double correction = (i < echoesWeight.weights.length)
+                                ? echoesWeight.weights[i]
+                                : 1.d;
+                        double wbc = weight;
+                        weight *= correction;
+                        //LOGGER.debug("ShotID " + shotID + " echo " + i + " - weight " + wbc + " * " + correction +  " = " + weight);
+                    }
 
+                    if (echosAreInsideSameVoxel(echo, nextEcho)) {
                         /*ne rien faire dans ce cas
                          le beamFraction est incrémenté et l'opération se fera sur l'écho suivant*/
-                        lastEchoBeamFraction += weightTable[shot.getEchoesNumber() - 1][i];
-
-                        if(!wasMultiple){
+                        lastEchoBeamFraction += weight;
+                        if (!wasMultiple) {
                             firstEchoOfVoxel = i;
                         }
-
                     } else {
-
-                        if (null != weightTable) {
-                            beamFraction = weightTable[shot.getEchoesNumber() - 1][i] + lastEchoBeamFraction;
-
-                            if(wasMultiple){
-                                residualEnergy = residualEnergyTable[shot.getEchoesNumber() - 1][firstEchoOfVoxel];
-                            }else{
-                                residualEnergy = residualEnergyTable[shot.getEchoesNumber() - 1][i];
-                            }
-
-                        }else{
-                            beamFraction = 1;
-                            residualEnergy = 1;
-                        }
-
+                        double beamFraction = weight + lastEchoBeamFraction;
+                        residualEnergy = wasMultiple
+                                ? residualEnergyTable[shot.getEchoesNumber() - 1][firstEchoOfVoxel]
+                                : residualEnergyTable[shot.getEchoesNumber() - 1][i];
                         lastEchoBeamFraction = 0;
 
-                        boolean lastEcho;
-
-                        lastEcho = i == shot.getEchoesNumber() - 1;
-
+                        boolean lastEcho = (i == shot.getEchoesNumber() - 1);
                         // propagate
                         propagate(origin, echo, beamFraction, residualEnergy, lastEcho, nbShotsProcessed, shot, i);
-                        
-                        
+
                         origin = new Point3d(echo);
                     }
                 }
             }
 
             nbShotsProcessed++;
-            tmpNbShotsProcessed++;
         }
-        
+
     }
 
     private Point3d getEchoLocation(Shot shot, int indice) {
@@ -403,7 +406,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
      * @param echoRank current echo processed (rank)
      */
     private void propagate(Point3d origin, Point3d echo, double beamFraction, double residualEnergy, boolean lastEcho, int shotID, Shot shot, int echoRank) {
-        
+
         //get shot line
         LineElement lineElement = new LineSegment(origin, echo);
 
@@ -413,40 +416,38 @@ public class VoxelAnalysis extends Process implements Cancellable{
         double distanceToHit = lineElement.getLength();
 
         //calculate ground distance
-        
         boolean keepEcho = true, keepEchoPointCloudFiltering = true;
-        
+
         //echo filtering
-        if(pointcloudFilters != null){
-            for(PointcloudFilter filter : pointcloudFilters){
+        if (pointcloudFilters != null) {
+            for (PointcloudFilter filter : pointcloudFilters) {
                 keepEchoPointCloudFiltering = keepEchoPointCloudFiltering && filter.doFiltering(echo);
             }
         }
-        
-        if(!keepEchoOfShot(shot, echoRank)){ //mask
+
+        if (!keepEchoOfShot(shot, echoRank)) { //mask
             keepEcho = false;
         }
-        
-        if(keepEcho && parameters.getDtmFilteringParams().useDTMCorrection()){ //DTM
-            
+
+        if (keepEcho && parameters.getDtmFilteringParams().useDTMCorrection()) { //DTM
+
             float echoDistance = getGroundDistance((float) echo.x, (float) echo.y, (float) echo.z);
-            
-            if(echoDistance < parameters.getDtmFilteringParams().getMinDTMDistance() || Float.isNaN(echoDistance)){
+
+            if (echoDistance < parameters.getDtmFilteringParams().getMinDTMDistance() || Float.isNaN(echoDistance)) {
                 keepEcho = false;
             }
         }
-        
-        if(keepEcho && !keepEchoPointCloudFiltering){ //point cloud filtering
+
+        if (keepEcho && !keepEchoPointCloudFiltering) { //point cloud filtering
             keepEcho = false;
         }
-        
+
 //        keepEcho = keepEchoOfShot(shot, echoRank) && // mask
 //                ((parameters.getDtmFilteringParams().useDTMCorrection() && //DTM
 //                echoDistance >= parameters.getDtmFilteringParams().getMinDTMDistance() &&
 //                !Float.isNaN(echoDistance)) ||
 //                !parameters.getDtmFilteringParams().useDTMCorrection()) &&
 //                keepEchoPointCloudFiltering;
-
         while ((context != null) && (context.indices != null)) {
 
             //distance from the last origin to the point in which the ray enter the voxel
@@ -459,85 +460,81 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
             //distance from the last origin to the point in which the ray exit the voxel
             double d2 = context.length;
-            
-            
+
             //instantiate on the fly, when the voxel is crossed
             if (voxels[indices.x][indices.y][indices.z] == null) {
                 voxels[indices.x][indices.y][indices.z] = initVoxel(indices.x, indices.y, indices.z);
             }
 
             Voxel vox = voxels[indices.x][indices.y][indices.z];
-            
+
             double surface;
 
             //recalculé pour éviter le stockage de trois doubles (24 octets) par voxel.
             Point3d voxelPosition = getPosition(new Point3i(indices.x, indices.y, indices.z));
             double distance = voxelPosition.distance(shot.origin);
-            
+
             //don't continue the propagation if the current sampled voxel is below the ground
-            if(parameters.getGroundEnergyParams() == null || 
-                            !parameters.getGroundEnergyParams().isCalculateGroundEnergy()){
-                if(vox.ground_distance < voxelManager.getVoxelSpace().getVoxelSize().z/2.0f){
+            if (parameters.getGroundEnergyParams() == null
+                    || !parameters.getGroundEnergyParams().isCalculateGroundEnergy()) {
+                if (vox.ground_distance < voxelManager.getVoxelSpace().getVoxelSize().z / 2.0f) {
                     break;
                 }
             }
-            
+
             //surface de la section du faisceau à la distance de la source
             if ((null != weightTable) && volumeWeighting) {
                 surface = Math.pow((Math.tan(laserSpec.getBeamDivergence() / 2.0) * distance) + laserSpec.getBeamDiameterAtExit(), 2) * Math.PI;
             } else {
                 surface = 1;
             }
-            
+
             /*Si un écho est positionné sur une face du voxel alors il est considéré
              comme étant à l'extérieur du dernier voxel traversé*/
-            
             double surfMulLength = 0;
             double surfMulLengthMulEnt = 0; //CL
             double intercepted = 0;
             double entering = 0;
             double longueur = 0;
-            
+
             boolean test = false;
-             /*
+            /*
              * Si d2 < distanceToHit le voxel est traversé sans interceptions
              */
             if (d2 < distanceToHit) {
 
-                if(shotID == lastShotId && lastVoxelSampled != null && lastVoxelSampled == vox){
+                if (shotID == lastShotId && lastVoxelSampled != null && lastVoxelSampled == vox) {
                     //pour n'échantillonner qu'une fois le voxel pour un tir
-                }else{
+                } else {
                     longueur = d2 - d1;
-                    
+
                     vox.lgTotal += longueur;
-                
+
                     vox.nbSampling++;
 
                     vox.angleMean += shot.getAngle();
-                    
+
                     //double volume = longueur * ONE_THIRD_OF_PI * ((r*r)+(R*R)+(r*R));
                     //vox.bvEntering += volume * (Math.round(residualEnergy*10000)/10000.0);
-                    
                     surfMulLength = surface * longueur;
-                    entering = (Math.round(residualEnergy*10000)/10000.0);
+                    entering = (Math.round(residualEnergy * 10000) / 10000.0);
                     surfMulLengthMulEnt = entering * surfMulLength; //CL
                     vox.bvEntering += (entering * surfMulLength);
 
                     lastVoxelSampled = vox;
                     lastShotId = shotID;
-                    
+
                     test = true;
                     vox._valid = false;
                 }
-                
+
                 /*
                  Si l'écho est sur la face sortante du voxel, 
                  on n'incrémente pas le compteur d'échos
                  */
             } /*
              Poursuite du trajet optique jusqu'à sortie de la bounding box
-             */ 
-            else if (d1 >= distanceToHit) {
+             */ else if (d1 >= distanceToHit) {
 
                 /*
                  la distance actuelle d1 est supérieure à la distance à l'écho
@@ -546,9 +543,9 @@ public class VoxelAnalysis extends Process implements Cancellable{
                 //on peut chercher ici la distance jusqu'au prochain voxel "sol"
                 if (shotChanged) {
 
-                    if (parameters.getGroundEnergyParams() != null && 
-                            parameters.getGroundEnergyParams().isCalculateGroundEnergy() &&
-                            parameters.infos.getType() != VoxelSpaceInfos.Type.TLS) {
+                    if (parameters.getGroundEnergyParams() != null
+                            && parameters.getGroundEnergyParams().isCalculateGroundEnergy()
+                            && parameters.infos.getType() != VoxelSpaceInfos.Type.TLS) {
 
                         if (vox.ground_distance < parameters.getDtmFilteringParams().getMinDTMDistance()) {
                             groundEnergy[vox.$i][vox.$j].groundEnergyPotential++;
@@ -564,200 +561,188 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
             } /*
              Echo dans le voxel
-             */
-            else {
+             */ else {
 
                 /*si plusieurs échos issus du même tir dans le voxel, 
                  on incrémente et le nombre de tirs entrants (nbsampling) 
                  et le nombre d'interception (interceptions) 
                  et la longueur parcourue(lgInterception)*/
-                /*
+ /*
                  * Si distanceToHit == d1,on incrémente le compteur d'échos
                  */
-                 
-                
-
                 //si l'écho n'est pas un dernier écho mais au niveau distance ne sort pas du voxel courant, alors la longueur sera surestimé
                 if (lastEcho) {
-                    if(pathLengthMode == 1){
+                    if (pathLengthMode == 1) {
                         longueur = (distanceToHit - d1);
-                    }else{
+                    } else {
                         longueur = (d2 - d1); //test
                     }
                     vox._valid = false;
                 } else {
                     longueur = (d2 - d1);
                 }
-                    
-                if(shotID == lastShotId && lastVoxelSampled != null && lastVoxelSampled == vox){
+
+                if (shotID == lastShotId && lastVoxelSampled != null && lastVoxelSampled == vox) {
                     //pour n'échantillonner qu'une fois le voxel pour un tir
-                }else{
-                    
+                } else {
+
                     test = true;
-                    
+
                     vox.nbSampling++;
 
                     vox.lgTotal += longueur;
 
                     vox.angleMean += shot.getAngle();
-                    
+
                     surfMulLength = surface * longueur;
-                    entering = (Math.round(residualEnergy*10000)/10000.0);
+                    entering = (Math.round(residualEnergy * 10000) / 10000.0);
                     surfMulLengthMulEnt = entering * surfMulLength; //CL
                     vox.bvEntering += (entering * surfMulLength);
-                    
+
                     lastVoxelSampled = vox;
                     lastShotId = shotID;
                 }
-                
-                if (keepEcho){
-                    
+
+                if (keepEcho) {
+
                     test = true;
 
-                    if(!lastEcho){
+                    if (!lastEcho) {
                         vox._lastEcho = false;
                     }
                     vox.nbEchos++;
 
                     surfMulLength = surface * longueur;
-                    intercepted = (Math.round(beamFraction*10000)/10000.0);
+                    intercepted = (Math.round(beamFraction * 10000) / 10000.0);
                     vox.bvIntercepted += (intercepted * surfMulLength);
 
-                } else {
+                } else if (parameters.getGroundEnergyParams() != null
+                        && parameters.getGroundEnergyParams().isCalculateGroundEnergy()
+                        && parameters.infos.getType() != VoxelSpaceInfos.Type.TLS && !isSet) {
+                    groundEnergy[vox.$i][vox.$j].groundEnergyActual += residualEnergy;
+                    groundEnergy[vox.$i][vox.$j].groundEnergyPotential++;
 
-                    if (parameters.getGroundEnergyParams() != null && 
-                            parameters.getGroundEnergyParams().isCalculateGroundEnergy() &&
-                            parameters.infos.getType() != VoxelSpaceInfos.Type.TLS && !isSet) {
-                        groundEnergy[vox.$i][vox.$j].groundEnergyActual += residualEnergy;
-                        groundEnergy[vox.$i][vox.$j].groundEnergyPotential++;
-
-                        isSet = true;
-                    }
+                    isSet = true;
                 }
             }
-            
-            if(test && (transMode == 2 || transMode == 3)){
+
+            if (test && (transMode == 2 || transMode == 3)) {
                 double transNorm;
-                
-                if(transMode == 2){
+
+                if (transMode == 2) {
                     transNorm = ((entering - intercepted) / entering) * surfMulLength;
-                }else{ //mode 3
-                    
-                    if(longueur == 0){
+                } else //mode 3
+                {
+                    if (longueur == 0) {
                         transNorm = 0;
-                    }else{
-                        transNorm = Math.pow(((entering - intercepted) / entering), 1/longueur) * surfMulLengthMulEnt;
+                    } else {
+                        transNorm = Math.pow(((entering - intercepted) / entering), 1 / longueur) * surfMulLengthMulEnt;
                     }
                 }
-                
+
                 vox.transmittance_tmp += transNorm;
-                
+
                 vox.sumSurfMulLengthMulEnt += surfMulLengthMulEnt; //CL
 
                 vox.sumSurfMulLength += surfMulLength;
-                
-                if(cfg.isExportShotSegment()){
-                    double currentNormalizedTrans = transNorm/surfMulLengthMulEnt;
+
+                if (cfg.isExportShotSegment()) {
+                    double currentNormalizedTrans = transNorm / surfMulLengthMulEnt;
                     try {
-                        shotSegmentWriter.write(vox.$i+" "+vox.$j+" "+vox.$k+" "+currentNormalizedTrans+" "+surfMulLengthMulEnt+"\n");
+                        shotSegmentWriter.write(vox.$i + " " + vox.$j + " " + vox.$k + " " + currentNormalizedTrans + " " + surfMulLengthMulEnt + "\n");
                     } catch (IOException ex) {
                         java.util.logging.Logger.getLogger(VoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
-            
-            
+
         }
 
     }
-    
-    private boolean keepEchoOfShot(Shot shot, int echoID){
-        
-        if(shot.getMask() == null){
+
+    private boolean keepEchoOfShot(Shot shot, int echoID) {
+
+        if (shot.getMask() == null) {
             return true;
         }
-        
+
         return shot.getMask()[echoID];
     }
-    
-    public static float computeTransmittance(double bvEntering, double bvIntercepted){
-        
+
+    public static float computeTransmittance(double bvEntering, double bvIntercepted) {
+
         float transmittance;
-        
+
         if (bvEntering == 0) {
 
             transmittance = Float.NaN;
-            
-        }else if(bvIntercepted > bvEntering){
+
+        } else if (bvIntercepted > bvEntering) {
             transmittance = Float.NaN;
-            
-        }else {
+
+        } else {
             transmittance = (float) ((bvEntering - bvIntercepted) / bvEntering);
         }
-        
+
         return transmittance;
     }
-    
-    public static float computeNormTransmittanceMode2(double transmittance, double _sumSurfMulLength, double lMeanTotal){
+
+    public static float computeNormTransmittanceMode2(double transmittance, double _sumSurfMulLength, double lMeanTotal) {
         float normalizedTransmittance = (float) Math.pow((transmittance / _sumSurfMulLength), 1 / lMeanTotal);
         return normalizedTransmittance;
     }
-    
-    public static float computeNormTransmittanceMode3(double transmittance, double _sumSurfMulLength){
+
+    public static float computeNormTransmittanceMode3(double transmittance, double _sumSurfMulLength) {
         float normalizedTransmittance = (float) (transmittance / _sumSurfMulLength);
         return normalizedTransmittance;
     }
-    
-    public static float computeNormTransmittance(double transmittance, double lMeanTotal){
+
+    public static float computeNormTransmittance(double transmittance, double lMeanTotal) {
         float normalizedTransmittance = (float) Math.pow(transmittance, 1 / lMeanTotal);
         return normalizedTransmittance;
     }
-    
-    public static float computePADFromNormTransmittance(float transmittance, float angleMean, float maxPAD, GTheta direcTransmittance){
-        
+
+    public static float computePADFromNormTransmittance(float transmittance, float angleMean, float maxPAD, GTheta direcTransmittance) {
+
         float pad;
-        
+
         if (Float.isNaN(transmittance)) {
 
             pad = Float.NaN;
-            
-        }else {
 
-            if (transmittance == 0) {
+        } else if (transmittance == 0) {
 
+            pad = maxPAD;
+
+        } else {
+
+            float coefficientGTheta = (float) direcTransmittance.getGThetaFromAngle(angleMean, true);
+
+            pad = (float) (Math.log(transmittance) / (-coefficientGTheta));
+
+            if (Float.isNaN(pad)) {
+                pad = Float.NaN;
+            } else if (pad > maxPAD || Float.isInfinite(pad)) {
                 pad = maxPAD;
-
-            }else {
-
-                float coefficientGTheta = (float) direcTransmittance.getGThetaFromAngle(angleMean, true);
-                
-                pad = (float) (Math.log(transmittance) / (-coefficientGTheta));
-
-                if (Float.isNaN(pad)) {
-                    pad = Float.NaN;
-                } else if (pad > maxPAD || Float.isInfinite(pad)) {
-                    pad = maxPAD;
-                }
-
             }
 
         }
 
         return pad + 0.0f; //set +0.0f to avoid -0.0f
     }
-    
-    public float computePADFromNormTransmittance(float transmittance, float angleMean){
-        
+
+    public float computePADFromNormTransmittance(float transmittance, float angleMean) {
+
         return computePADFromNormTransmittance(transmittance, angleMean, MAX_PAD, direcTransmittance);
     }
-    
+
     public Voxel computePADFromVoxel(Voxel voxel, int i, int j, int k) {
-        
+
         if (voxel == null) {
 
             voxel = initVoxel(i, j, k);
         }
-        
+
         voxel.angleMean = voxel.angleMean / voxel.nbSampling;
 
         if (voxel.nbSampling >= voxel.nbEchos) {
@@ -765,10 +750,10 @@ public class VoxelAnalysis extends Process implements Cancellable{
             voxel.lMeanTotal = voxel.lgTotal / (voxel.nbSampling);
 
         }
-        
+
         float normalizedTransmittance;
-        
-        switch(transMode){
+
+        switch (transMode) {
             case 2:
                 normalizedTransmittance = computeNormTransmittanceMode2(voxel.transmittance_tmp, voxel.sumSurfMulLength, voxel.lMeanTotal);
                 break;
@@ -776,21 +761,21 @@ public class VoxelAnalysis extends Process implements Cancellable{
                 //normalizedTransmittance = computeNormTransmittanceV2(voxel.transmittance_tmp, voxel.sumSurfMulLength);
                 normalizedTransmittance = computeNormTransmittanceMode3(voxel.transmittance_tmp, voxel.sumSurfMulLengthMulEnt); //CL
                 break;
-                
+
             case 1:
             default:
                 float transmittance = computeTransmittance(voxel.bvEntering, voxel.bvIntercepted);
                 normalizedTransmittance = computeNormTransmittance(transmittance, voxel.lMeanTotal);
         }
-        
+
         voxel.transmittance = normalizedTransmittance;
         voxel.PadBVTotal = computePADFromNormTransmittance(normalizedTransmittance, voxel.angleMean);
-        
+
         return voxel;
     }
-    
-    public void computePADs(){
-        
+
+    public void computePADs() {
+
         for (int i = 0; i < parameters.infos.getSplit().x; i++) {
             for (int j = 0; j < parameters.infos.getSplit().y; j++) {
                 for (int k = 0; k < parameters.infos.getSplit().z; k++) {
@@ -800,29 +785,28 @@ public class VoxelAnalysis extends Process implements Cancellable{
                 }
             }
         }
-        
+
         padComputed = true;
     }
-    
-    public void write(VoxelsFormat format, File outputFile) throws FileNotFoundException, Exception{
-        
+
+    public void write(VoxelsFormat format, File outputFile) throws FileNotFoundException, Exception {
+
         //tmp
         //writer.close();
-        
-        if(cfg.isExportShotSegment()){
+        if (cfg.isExportShotSegment()) {
             shotSegmentWriter.close();
         }
-        
+
         long start_time = System.currentTimeMillis();
 
         LOGGER.info("writing file: " + outputFile.getAbsolutePath());
-        
-        if(format == VoxelsFormat.NONE){
+
+        if (format == VoxelsFormat.NONE) {
             return;
-        }else if(format == VoxelsFormat.VOXEL){
+        } else if (format == VoxelsFormat.VOXEL) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
 
-                writer.write(parameters.infos.headerToString()+"\n");
+                writer.write(parameters.infos.headerToString() + "\n");
                 writer.write(Voxel.getHeader(Voxel.class) + "\n");
 
                 int count = 0;
@@ -832,7 +816,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
                     for (int j = 0; j < parameters.infos.getSplit().y; j++) {
                         for (int k = 0; k < parameters.infos.getSplit().z; k++) {
 
-                            if(isCancelled()){
+                            if (isCancelled()) {
                                 return;
                             }
 
@@ -845,11 +829,10 @@ public class VoxelAnalysis extends Process implements Cancellable{
                             }
 
                             writer.write(voxel.toString() + "\n");
-                            
+
                             /*if(voxel._valid && voxel.nbSampling > 0){
                                 System.out.println(voxel.toString());
                             }*/
-
                             count++;
                         }
                     }
@@ -866,7 +849,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
             } catch (Exception e) {
                 throw e;
             }
-        }else if(format == VoxelsFormat.RASTER){
+        } else if (format == VoxelsFormat.RASTER) {
 
             float scale = 1.0f;
             float resolution = parameters.infos.getResolution();
@@ -884,39 +867,38 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
             long valMax = 4294967294L;
             long valNoData = 4294967295L;
-            
+
             double laiMax = 50000;
-            
+
             header.addMetadata("NO_DATA", String.valueOf(valNoData));
             header.addMetadata("MAX_VAL", String.valueOf(valMax));
             header.addMetadata("MAX_VEG_M2", String.valueOf(laiMax));
-            
 
             for (int i = 0; i < parameters.infos.getSplit().x; i++) {
-                for (int j = 0 ; j < parameters.infos.getSplit().y; j++) {
-                    
+                for (int j = 0; j < parameters.infos.getSplit().y; j++) {
+
                     double laiSum = 0;
-                    
+
                     for (int k = parameters.infos.getSplit().z - 1; k >= 0; k--) {
 
                         Voxel vox = voxels[i][j][k];
 
                         if (vox != null && vox.ground_distance >= 0 && vox.PadBVTotal > 0 && !Float.isNaN(vox.PadBVTotal)) {
-                            
+
                             //calcul de la position de départ
                             Point3d voxelPosition = getPosition(new Point3i(i, j, k));
-                            
-                            Point3d subVoxelSize = new Point3d(parameters.infos.getVoxelSize().x / parameters.infos.getResolution(),
-                                                                parameters.infos.getVoxelSize().y / parameters.infos.getResolution(),
-                                                                parameters.infos.getVoxelSize().z / parameters.infos.getResolution());
-                            
-                            Point3d startPosition = new Point3d(voxelPosition.x - (parameters.infos.getVoxelSize().x - subVoxelSize.x)/2.0,
-                                                                voxelPosition.y - (parameters.infos.getVoxelSize().y - subVoxelSize.y)/2.0,
-                                                                voxelPosition.z - (parameters.infos.getVoxelSize().z - subVoxelSize.z)/2.0);
 
-                            Point3i nbSubVoxels = new Point3i((int)Math.ceil(parameters.infos.getVoxelSize().x),
-                                                                (int)Math.ceil(parameters.infos.getVoxelSize().y),
-                                                                (int)Math.ceil(parameters.infos.getVoxelSize().z));
+                            Point3d subVoxelSize = new Point3d(parameters.infos.getVoxelSize().x / parameters.infos.getResolution(),
+                                    parameters.infos.getVoxelSize().y / parameters.infos.getResolution(),
+                                    parameters.infos.getVoxelSize().z / parameters.infos.getResolution());
+
+                            Point3d startPosition = new Point3d(voxelPosition.x - (parameters.infos.getVoxelSize().x - subVoxelSize.x) / 2.0,
+                                    voxelPosition.y - (parameters.infos.getVoxelSize().y - subVoxelSize.y) / 2.0,
+                                    voxelPosition.z - (parameters.infos.getVoxelSize().z - subVoxelSize.z) / 2.0);
+
+                            Point3i nbSubVoxels = new Point3i((int) Math.ceil(parameters.infos.getVoxelSize().x),
+                                    (int) Math.ceil(parameters.infos.getVoxelSize().y),
+                                    (int) Math.ceil(parameters.infos.getVoxelSize().z));
 
                             //parcours des sous-voxels
                             int nbSubVoxelsAboveGround = 0;
@@ -925,26 +907,26 @@ public class VoxelAnalysis extends Process implements Cancellable{
                                 for (int j2 = 0; j2 < nbSubVoxels.y; j2++) {
                                     for (int k2 = nbSubVoxels.z - 1; k2 >= 0; k2--) {
 
-                                        float groundDistance = getGroundDistance((float)(startPosition.x + (i2 * subVoxelSize.x)),
-                                                                                (float)(startPosition.y + (j2 * subVoxelSize.y)),
-                                                                                (float)(startPosition.z + (k2 * subVoxelSize.z)));
+                                        float groundDistance = getGroundDistance((float) (startPosition.x + (i2 * subVoxelSize.x)),
+                                                (float) (startPosition.y + (j2 * subVoxelSize.y)),
+                                                (float) (startPosition.z + (k2 * subVoxelSize.z)));
 
-                                        if(groundDistance > 0){
+                                        if (groundDistance > 0) {
                                             nbSubVoxelsAboveGround++;
                                         }
                                     }
                                 }
                             }
-                            
+
                             float volume = (float) (subVoxelSize.x * subVoxelSize.y * subVoxelSize.z * nbSubVoxelsAboveGround);
                             double lai = vox.PadBVTotal * volume;
 
                             laiSum += lai;
                         }
                     }
-                    
+
                     long value = (long) ((laiSum / laiMax) * (valMax));
-                    
+
                     String binaryString = Long.toBinaryString(value);
                     byte[] bval = new BigInteger(binaryString, 2).toByteArray();
                     ArrayUtils.reverse(bval);
@@ -968,13 +950,11 @@ public class VoxelAnalysis extends Process implements Cancellable{
 
             raster.writeHeader();
             raster.writeImage();
-        }        
+        }
     }
-    
-      
-    
-    public static void cleanIsolatedVoxels(File voxelFile, int nbEchosThreshold, int neighboursRange){
-        
+
+    public static void cleanIsolatedVoxels(File voxelFile, int nbEchosThreshold, int neighboursRange) {
+
         //VoxelFileReader 
     }
 
@@ -1047,17 +1027,17 @@ public class VoxelAnalysis extends Process implements Cancellable{
     public void createVoxelSpace() {
 
         try {
-            
+
             voxels = new Voxel[parameters.infos.getSplit().x][parameters.infos.getSplit().y][parameters.infos.getSplit().z];
 
-            if (parameters.getGroundEnergyParams() != null && 
-                    parameters.getGroundEnergyParams().isCalculateGroundEnergy() && parameters.infos.getType() != Type.TLS) {
+            if (parameters.getGroundEnergyParams() != null
+                    && parameters.getGroundEnergyParams().isCalculateGroundEnergy() && parameters.infos.getType() != Type.TLS) {
 
                 // allocate
                 LOGGER.info("allocate!!!!!!!!");
-                
+
                 groundEnergy = new GroundEnergy[parameters.infos.getSplit().x][parameters.infos.getSplit().y];
-            
+
                 for (int i = 0; i < parameters.infos.getSplit().x; i++) {
                     for (int j = 0; j < parameters.infos.getSplit().y; j++) {
                         groundEnergy[i][j] = new GroundEnergy();
@@ -1139,7 +1119,7 @@ public class VoxelAnalysis extends Process implements Cancellable{
     public Raster getDtm() {
         return dtm;
     }
-    
+
     @Override
     public boolean isCancelled() {
         return cancelled;

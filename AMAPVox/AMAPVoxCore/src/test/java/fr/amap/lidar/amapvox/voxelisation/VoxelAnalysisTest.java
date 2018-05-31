@@ -46,8 +46,8 @@ public class VoxelAnalysisTest {
         voxAnalysis.createVoxelSpace();
         
         try {
-            voxAnalysis.processOneShot(new Shot(new Point3d(0, 0, 5), new Vector3d(0, 0, -1), new double[]{3.6, 4.7}));
-            voxAnalysis.processOneShot(new Shot(new Point3d(0, 0, 5), new Vector3d(0, 0, -1), new double[]{10}));
+            voxAnalysis.processOneShot(new Shot(new Point3d(0, 0, 5), new Vector3d(0, 0, -1), new double[]{3.6, 4.7}), 0);
+            voxAnalysis.processOneShot(new Shot(new Point3d(0, 0, 5), new Vector3d(0, 0, -1), new double[]{10}), 0);
             
             voxAnalysis.computePADs();
             //voxAnalysis.write(VoxelAnalysisCfg.VoxelsFormat.VOXEL, new File("/home/julien/Documents/test_resolutions/2B_1m.vox"));

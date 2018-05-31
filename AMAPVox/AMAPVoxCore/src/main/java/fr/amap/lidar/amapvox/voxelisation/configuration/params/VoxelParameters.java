@@ -35,6 +35,7 @@ public class VoxelParameters {
     private NaNsCorrectionParams naNsCorrectionParams;
     private DTMFilteringParams dtmFilteringParams;
     private EchoesWeightByRankParams echoesWeightByRankParams;
+    private EchoesWeightByFileParams  echoesWeightByFileParams;
     private GroundEnergyParams groundEnergyParams;
     private LADParams ladParams;
     
@@ -317,6 +318,22 @@ public class VoxelParameters {
      */
     public void setEchoesWeightByRankParams(EchoesWeightByRankParams echoesWeightByRankParams) {
         this.echoesWeightByRankParams = echoesWeightByRankParams;
+    }
+    
+    /**
+     * 
+     * @return Echoes weigting parameters
+     */
+    public EchoesWeightByFileParams getEchoesWeightByFileParams() {
+        return echoesWeightByFileParams;
+    }
+
+    /**
+     * 
+     * @param echoesWeightByFileParams Echoes weigting parameters
+     */
+    public void setEchoesWeightByFileParams(EchoesWeightByFileParams echoesWeightByFileParams) {
+        this.echoesWeightByFileParams = echoesWeightByFileParams;
     }
 
     /**

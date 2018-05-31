@@ -162,7 +162,7 @@ public class LasVoxelisation extends Process implements Cancellable{
                 
                 fireProgress("Voxelisation...", shotId, nbShots);
                 
-                voxelAnalysis.processOneShot(new fr.amap.lidar.amapvox.shot.Shot(shot.origin, shot.direction, shot.ranges));
+                voxelAnalysis.processOneShot(new fr.amap.lidar.amapvox.shot.Shot(shot.origin, shot.direction, shot.ranges), (int) shotId);
                 
                 shotId++;
             }
@@ -215,10 +215,11 @@ public class LasVoxelisation extends Process implements Cancellable{
                     return null;
                 }
 
-                fireProgress("Voxelisation...", iterator.getNbPointsProcessed(), iterator.getNbPoints());
+                int shotIndex = iterator.getNbPointsProcessed();
+                fireProgress("Voxelisation...", shotIndex, iterator.getNbPoints());
 
                 shot.setMask(getMask(shot));
-                voxelAnalysis.processOneShot(shot);
+                voxelAnalysis.processOneShot(shot, shotIndex);
             }
 
             logger.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());

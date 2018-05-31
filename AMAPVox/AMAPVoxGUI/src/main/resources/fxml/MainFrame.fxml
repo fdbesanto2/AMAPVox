@@ -43,7 +43,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorpaneRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="708.0" prefWidth="892.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.lidar.amapvox.gui.MainFrameController">
+<AnchorPane fx:id="anchorpaneRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="708.0" prefWidth="892.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.lidar.amapvox.gui.MainFrameController">
    <children>
       <MenuBar maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="25.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <menus>
@@ -69,7 +69,7 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <SplitPane fx:id="splitPaneVoxelization" dividerPositions="0.4296482412060301" layoutX="63.0" layoutY="52.0" prefHeight="367.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <SplitPane fx:id="splitPaneVoxelization" dividerPositions="0.46959459459459457" layoutX="63.0" layoutY="52.0" prefHeight="367.0" prefWidth="798.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <items>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                              <children>
@@ -760,7 +760,7 @@
                                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                                <children>
                                                                   <CheckBox fx:id="checkboxWeightingByRank" layoutX="14.0" layoutY="25.0" mnemonicParsing="false" text="Echo weighting by rank" />
-                                                                  <VBox fx:id="vboxWeightingByRank" alignment="CENTER" layoutX="14.0" layoutY="58.0" prefHeight="213.0" prefWidth="348.0" spacing="2.0">
+                                                                  <VBox fx:id="vboxWeightingByRank" alignment="CENTER" layoutX="14.0" layoutY="58.0" prefHeight="213.0" prefWidth="440.0" spacing="2.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0" HBox.hgrow="ALWAYS">
                                                                      <children>
                                                                         <Label text="Echo range (1...n)" />
                                                                         <HBox alignment="CENTER" prefHeight="138.0" prefWidth="348.0">
@@ -770,7 +770,7 @@
                                                                                     <Insets left="-55.0" right="-55.0" />
                                                                                  </HBox.margin>
                                                                               </Label>
-                                                                              <TextArea fx:id="textAreaWeighting" prefHeight="144.0" prefWidth="295.0" />
+                                                                              <TextArea fx:id="textAreaWeighting" prefHeight="144.0" prefWidth="295.0" HBox.hgrow="ALWAYS" />
                                                                            </children>
                                                                            <VBox.margin>
                                                                               <Insets />
@@ -784,14 +784,14 @@
                                                                         </MenuButton>
                                                                      </children>
                                                                   </VBox>
-                                                                  <CheckBox fx:id="checkboxWeightingByFile" disable="true" layoutX="14.0" layoutY="270.0" mnemonicParsing="false" text="Echo weighting from CSV file (not yet available)" />
-                                                                  <VBox fx:id="vboxWeightingByFile" layoutX="14.0" layoutY="300.0" spacing="2.0">
+                                                                  <CheckBox fx:id="checkboxWeightingByFile" layoutX="14.0" layoutY="270.0" mnemonicParsing="false" text="Echo weighting from CSV file" />
+                                                                  <VBox fx:id="vboxWeightingByFile" layoutX="14.0" layoutY="300.0" prefHeight="42.0" prefWidth="440.0" spacing="2.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0">
                                                                      <children>
                                                                         <Label text="Weighting CSV file" />
                                                                         <HBox fx:id="hboxWeightingFile">
                                                                            <children>
                                                                               <TextField fx:id="textFieldWeightingFile" prefHeight="25.0" prefWidth="280.0" HBox.hgrow="ALWAYS" />
-                                                                              <Button fx:id="buttonOpenWeightingFile" mnemonicParsing="false" text="..." />
+                                                                              <Button fx:id="buttonOpenWeightingFile" mnemonicParsing="false" onAction="#onActionButtonOpenWeightingFile" text="..." />
                                                                            </children>
                                                                         </HBox>
                                                                      </children>

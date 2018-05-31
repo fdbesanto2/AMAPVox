@@ -212,6 +212,7 @@ import fr.amap.viewer3d.object.scene.SimpleSceneObject;
 import fr.amap.lidar.amapvox.gui.viewer3d.VoxelObject;
 import fr.amap.lidar.amapvox.gui.viewer3d.VoxelSpaceAdapter;
 import fr.amap.lidar.amapvox.gui.viewer3d.VoxelSpaceSceneObject;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.image.BufferedImage;
@@ -531,6 +532,8 @@ public class MainFrameController implements Initializable {
     private CheckBox checkboxWeightingByRank;
     @FXML
     private CheckBox checkboxWeightingByFile;
+    @FXML
+    private TextField textFieldWeightingFile;
     @FXML
     private CheckBox checkBoxUseDefaultSopMatrix;
     @FXML
@@ -2548,6 +2551,10 @@ public class MainFrameController implements Initializable {
         if (checkboxWeightingByRank.isSelected()) {
             voxelParameters.setEchoesWeightByRankParams(new EchoesWeightByRankParams(parseWeightingData()));
         }
+        
+        if (checkboxWeightingByFile.isSelected()) {
+            voxelParameters.setEchoesWeightByFileParams(new EchoesWeightByFileParams(new File(textFieldWeightingFile.getText())));
+        }
 
         GroundEnergyParams groundEnergyParameters = new GroundEnergyParams();
         
@@ -2903,8 +2910,12 @@ public class MainFrameController implements Initializable {
         voxelParameters.setMergingAfter(checkboxMergeAfter.isSelected());
         voxelParameters.setMergedFile(new File(textFieldOutputPathTLS.getText(), textFieldMergedFileName.getText()));
 
-         if (checkboxWeightingByRank.isSelected()) {
+        if (checkboxWeightingByRank.isSelected()) {
             voxelParameters.setEchoesWeightByRankParams(new EchoesWeightByRankParams(parseWeightingData()));
+        }
+        
+        if (checkboxWeightingByFile.isSelected()) {
+            voxelParameters.setEchoesWeightByFileParams(new EchoesWeightByFileParams(new File(textFieldWeightingFile.getText())));
         }
 
         InputType it;
@@ -4259,6 +4270,16 @@ public class MainFrameController implements Initializable {
         }
     }
     
+    @FXML
+    private void onActionButtonOpenWeightingFile(ActionEvent event) {
+
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Open echoes weight CSV file");
+        File selectedFile = chooser.showOpenDialog(stage);
+        if (null != selectedFile) {
+            textFieldWeightingFile.setText(selectedFile.getAbsolutePath());
+        }
+    }
     
 
 
@@ -5361,6 +5382,14 @@ public class MainFrameController implements Initializable {
                     } else {
                         checkboxWeightingByRank.setSelected(true);
                         fillWeightingData(((VoxelAnalysisCfg)cfg).getVoxelParameters().getEchoesWeightByRankParams().getWeightingData());
+                    }
+                    
+                    if (null == ((VoxelAnalysisCfg)cfg).getVoxelParameters().getEchoesWeightByFileParams()) {
+                        checkboxWeightingByFile.setSelected(false);
+                        textFieldWeightingFile.setText("");
+                    } else {
+                        checkboxWeightingByFile.setSelected(true);
+                        textFieldWeightingFile.setText(((VoxelAnalysisCfg)cfg).getVoxelParameters().getEchoesWeightByFileParams().getFile().getAbsolutePath());
                     }
                     
                     LADParams ladParameters = voxelParameters.getLadParams();

@@ -24,6 +24,7 @@ import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.EchoFilter;
 import fr.amap.lidar.amapvox.voxelisation.LaserSpecification;
 import fr.amap.lidar.amapvox.voxelisation.ShotFilter;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByRankParams;
 import java.io.File;
 import java.util.ArrayList;
@@ -154,6 +155,7 @@ public class VoxelAnalysisCfg extends Configuration{
                     
         if(ponderationElement != null){
 
+            // ponderation by rank
             if (Boolean.valueOf(ponderationElement.getAttributeValue("byrank"))) {
                 Element matrixElement = ponderationElement.getChild("matrix");
                 int rowNumber = 7;
@@ -172,6 +174,15 @@ public class VoxelAnalysisCfg extends Configuration{
                 voxelParameters.setEchoesWeightByRankParams(new EchoesWeightByRankParams(weightingData));
             } else {
                 voxelParameters.setEchoesWeightByRankParams(null);
+            }
+            
+            // ponderation from external CSV file
+            if (Boolean.valueOf(ponderationElement.getAttributeValue("byfile"))) {
+                Element weightFileElement = ponderationElement.getChild("weight_file");
+                File weightFile = new File(weightFileElement.getAttributeValue("src"));
+                voxelParameters.setEchoesWeightByFileParams(new EchoesWeightByFileParams(weightFile));
+            } else {
+                voxelParameters.setEchoesWeightByFileParams(null);
             }
         }
         
@@ -462,7 +473,8 @@ public class VoxelAnalysisCfg extends Configuration{
         
         /***PONDERATION***/
         Element ponderationElement = new Element("ponderation");
-        ponderationElement.setAttribute(new Attribute("byrank",String.valueOf(null != voxelParameters.getEchoesWeightByRankParams())));
+        // by rank
+        ponderationElement.setAttribute(new Attribute("byrank", String.valueOf(null != voxelParameters.getEchoesWeightByRankParams())));
         if (null != voxelParameters.getEchoesWeightByRankParams()) {
              StringBuilder weightingDataString = new StringBuilder();
             float[][] weightingData = voxelParameters.getEchoesWeightByRankParams().getWeightingData();
@@ -473,7 +485,14 @@ public class VoxelAnalysisCfg extends Configuration{
             }
             Element matrixElement = createMatrixElement("ponderation", weightingDataString.toString().trim());
             ponderationElement.addContent(matrixElement);
-        }      
+        } 
+        // by file
+        ponderationElement.setAttribute(new Attribute("byfile", String.valueOf(null != voxelParameters.getEchoesWeightByFileParams())));
+        if (null != voxelParameters.getEchoesWeightByFileParams()) {
+            Element weightFileElement = new Element("weight_file");
+            weightFileElement.setAttribute("src", voxelParameters.getEchoesWeightByFileParams().getFile().getAbsolutePath());
+            ponderationElement.addContent(weightFileElement);
+        }
         
         processElement.addContent(ponderationElement);
         
