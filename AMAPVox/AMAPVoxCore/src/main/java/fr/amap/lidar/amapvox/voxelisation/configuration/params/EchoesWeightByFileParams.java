@@ -58,13 +58,7 @@ public class EchoesWeightByFileParams {
                 try {
                     if ((line = reader.readLine()) != null) {
                         String[] shotLine = line.split(sep);
-                        int shotId = Integer.valueOf(shotLine[0]);
-                        int nEchoWeights = shotLine.length - 1;
-                        double[] echoWeights = new double[nEchoWeights];
-                        for (int i = 0; i < nEchoWeights; i++) {
-                            echoWeights[i] = Double.valueOf(shotLine[i + 1]);
-                        }
-                        return new EchoesWeight(shotId, echoWeights);
+                        return new EchoesWeight(Integer.valueOf(shotLine[0]), Double.valueOf(shotLine[1]));
                     } else {
                         reader.close();
                     }
@@ -90,11 +84,11 @@ public class EchoesWeightByFileParams {
     public class EchoesWeight {
 
         public final int shotID;
-        public final double[] weights;
+        public final double weight;
 
-        public EchoesWeight(int shotID, double[] weights) {
+        public EchoesWeight(int shotID, double weight) {
             this.shotID = shotID;
-            this.weights = weights;
+            this.weight = weight;
         }
     }
 

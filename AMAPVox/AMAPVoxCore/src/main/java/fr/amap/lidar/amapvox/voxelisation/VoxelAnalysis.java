@@ -159,15 +159,9 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
     private float getGroundDistance(float x, float y, float z) {
 
-        float distance = 0;
-
-        if (dtm != null && parameters.getDtmFilteringParams().useDTMCorrection()) {
-            distance = z - (float) (dtm.getSimpleHeight(x, y));
-        } else {
-            distance = z;
-        }
-
-        return distance;
+        return (dtm != null && parameters.getDtmFilteringParams().useDTMCorrection()) 
+                ? z - (float) (dtm.getSimpleHeight(x, y))
+                : z;
     }
 
     public VoxelAnalysis(Raster terrain, List<PointcloudFilter> pointcloudFilters, VoxelAnalysisCfg cfg) {
@@ -333,12 +327,8 @@ public class VoxelAnalysis extends Process implements Cancellable {
                         weight *= weightTable[shot.getEchoesNumber() - 1][i];
                     }
                     if (null != echoesWeight && echoesWeight.shotID == shotID) {
-                        double correction = (i < echoesWeight.weights.length)
-                                ? echoesWeight.weights[i]
-                                : 1.d;
-                        double wbc = weight;
-                        weight *= correction;
-                        //LOGGER.debug("ShotID " + shotID + " echo " + i + " - weight " + wbc + " * " + correction +  " = " + weight);
+                        //LOGGER.info("ShotID " + shotID + " echo " + i + " - weight " + weight + " * " + echoesWeight.weight +  " = " + (weight * echoesWeight.weight));
+                        weight *= echoesWeight.weight;
                     }
 
                     if (echosAreInsideSameVoxel(echo, nextEcho)) {
