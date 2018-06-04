@@ -107,8 +107,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
@@ -276,9 +274,6 @@ public class MainFrameController implements Initializable {
     private PTXProjectExtractor ptxProjectExtractor;
     private PTGProjectExtractor ptgProjectExtractor;
     
-    private BlockingQueue<File> queue = new ArrayBlockingQueue<>(100);
-    private int taskNumber = 0;
-    private int taskID = 1;
     private boolean removeWarnings = false;
 
     private CalculateMatrixFrameController calculateMatrixFrameController;
@@ -359,7 +354,7 @@ public class MainFrameController implements Initializable {
     static double SCREEN_HEIGHT;
 
     private final static String MATRIX_FORMAT_ERROR_MSG = "Matrix file has to look like this: \n\n\t1.0 0.0 0.0 0.0\n\t0.0 1.0 0.0 0.0\n\t0.0 0.0 1.0 0.0\n\t0.0 0.0 0.0 1.0\n";
-    private static PseudoClass loadedPseudoClass = PseudoClass.getPseudoClass("loaded");
+    private static final PseudoClass loadedPseudoClass = PseudoClass.getPseudoClass("loaded");
     
     private ListView<CheckBox> listviewClassifications;
     
@@ -367,8 +362,19 @@ public class MainFrameController implements Initializable {
     private AnchorPane anchorPaneEchoFilteringClassifications;
     
     //echo filtering for rxp files
+    @FXML
+    private VBox vboxEchoFilteringRxp;
     private AnchorPane anchorPaneEchoFilteringRxp;
     
+    @FXML
+    private VBox vboxPaneEchoFiltering;
+    @FXML
+    private TextField textFieldEchoFilterByShotID;
+    @FXML
+    private Button buttonOpenEchoFilterByShotID;
+    @FXML
+    private CheckBox checkboxEchoFilterByShotID;
+        
     private final HashSet<Point3i> voxelsToRemove = new HashSet<>();
     private boolean editingFrameOpened;
     
@@ -1668,6 +1674,7 @@ public class MainFrameController implements Initializable {
             anchorPaneEchoFilteringRxp = loader.load();
             filteringPaneController = loader.getController();
             filteringPaneController.setFiltersNames("Reflectance", "Amplitude", "Deviation");
+            vboxEchoFilteringRxp.getChildren().add(anchorPaneEchoFilteringRxp);
         } catch (IOException ex) {
             logger.error("Cannot load fxml file", ex);
         }
@@ -2004,18 +2011,22 @@ public class MainFrameController implements Initializable {
                             checkboxCalculateGroundEnergy.setDisable(false);
                             
                         }
-                        
-                        anchorPaneEchoFiltering.getChildren().set(0, anchorPaneEchoFilteringClassifications);
-                        
-                        //anchorPaneEchoFilteringClassifications.setVisible(true);
+
+                        anchorPaneEchoFilteringClassifications.setVisible(true);
+                        anchorPaneEchoFilteringClassifications.setManaged(true);
+                        vboxEchoFilteringRxp.setVisible(false);
+                        vboxEchoFilteringRxp.setManaged(false);
                         anchorpaneBoundingBoxParameters.setDisable(checkboxMultiFiles.isSelected());
                         hboxAutomaticBBox.setDisable(false);
                         break;
                     default:
                         anchorPaneGroundEnergyParameters.setDisable(true);
                         checkboxCalculateGroundEnergy.setDisable(true);
-                        anchorPaneEchoFiltering.getChildren().set(0, anchorPaneEchoFilteringRxp);
-                        //anchorPaneEchoFilteringClassifications.setVisible(false);
+                        anchorPaneEchoFilteringClassifications.setVisible(false);
+                        anchorPaneEchoFilteringClassifications.setManaged(false);
+                        vboxEchoFilteringRxp.setVisible(true);
+                        vboxEchoFilteringRxp.setManaged(true);
+                        //filteringPaneController.setFiltersNames("Reflectance", "Amplitude", "Deviation");
                         anchorpaneBoundingBoxParameters.setDisable(false);
                         hboxAutomaticBBox.setDisable(true);
                 }
@@ -2175,7 +2186,19 @@ public class MainFrameController implements Initializable {
             }
         });
         
+        // lousy trick to make sure that we go through the change tab function
+        // and customize option display since initialisation
+        tabPaneVoxelisation.getSelectionModel().selectLast();
+        tabPaneVoxelisation.getSelectionModel().selectFirst();
+        
         //displayGThetaAllDistributions();
+    }
+    
+    @FXML
+    private void onActionCheckboxEchoFilterByShotID(ActionEvent event) {
+        
+        textFieldEchoFilterByShotID.setEditable(checkboxEchoFilterByShotID.isSelected());
+        buttonOpenEchoFilterByShotID.setDisable(!checkboxEchoFilterByShotID.isSelected());
     }
     
     @FXML
@@ -3534,10 +3557,10 @@ public class MainFrameController implements Initializable {
         
         listviewClassifications.setPrefSize(269, 134);
         
-        anchorPaneEchoFilteringClassifications.getChildren().add(new VBox(new Label("Classifications"), listviewClassifications));
+        anchorPaneEchoFilteringClassifications.getChildren().add(new VBox(7, new Label("By echo class"), listviewClassifications));
         anchorPaneEchoFilteringClassifications.setLayoutX(14);
         anchorPaneEchoFilteringClassifications.setLayoutY(14);
-        anchorPaneEchoFiltering.getChildren().add(anchorPaneEchoFilteringClassifications);
+        vboxPaneEchoFiltering.getChildren().add(anchorPaneEchoFilteringClassifications);
         
     }
     
