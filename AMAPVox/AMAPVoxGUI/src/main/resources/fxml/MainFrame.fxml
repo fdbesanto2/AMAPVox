@@ -749,14 +749,20 @@
                                                                                <AnchorPane fx:id="anchorPaneEchoFiltering">
                                                                                    <children>
                                                                                        <VBox fx:id="vboxPaneEchoFiltering" spacing="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" AnchorPane.bottomAnchor="14.0">
-                                                                                           <CheckBox fx:id="checkboxEchoFilterByShotID" disable="true" mnemonicParsing="false" onAction="#onActionCheckboxEchoFilterByShotID" text="By shot index and echo rank (not implemented yet)" />
+                                                                                           <CheckBox fx:id="checkboxEchoFilterByShotID" mnemonicParsing="false" text="By shot index and echo rank" />
                                                                                            <VBox fx:id="vboxEchoFilterByShotID" spacing="7.0" >
                                                                                                <children>
                                                                                                    <Label text="Echo filtering CSV file" />
                                                                                                    <HBox>
                                                                                                        <children>
                                                                                                            <TextField fx:id="textFieldEchoFilterByShotID" editable="false" HBox.hgrow="ALWAYS" />
-                                                                                                           <Button fx:id="buttonOpenEchoFilterByShotID" disable="true" mnemonicParsing="false" text="..." />
+                                                                                                           <Button fx:id="buttonOpenEchoFilterByShotID" disable="true" mnemonicParsing="false" onAction="#onActionButtonOpenEchoFilteringFile" text="..." />
+                                                                                                       </children>
+                                                                                                   </HBox>
+                                                                                                   <HBox spacing="7.0">
+                                                                                                       <children>
+                                                                                                           <Label text="Filter behaviour: discard or retain echoes ?" />
+                                                                                                           <ComboBox fx:id="comboboxEchoFiltering" />
                                                                                                        </children>
                                                                                                    </HBox>
                                                                                                </children>

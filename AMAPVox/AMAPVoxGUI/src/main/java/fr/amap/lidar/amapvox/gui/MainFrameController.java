@@ -374,6 +374,8 @@ public class MainFrameController implements Initializable {
     private Button buttonOpenEchoFilterByShotID;
     @FXML
     private CheckBox checkboxEchoFilterByShotID;
+    @FXML
+    private ComboBox comboboxEchoFiltering;
         
     private final HashSet<Point3i> voxelsToRemove = new HashSet<>();
     private boolean editingFrameOpened;
@@ -1679,6 +1681,12 @@ public class MainFrameController implements Initializable {
             logger.error("Cannot load fxml file", ex);
         }
         
+        textFieldEchoFilterByShotID.editableProperty().bind(checkboxEchoFilterByShotID.selectedProperty());
+        buttonOpenEchoFilterByShotID.disableProperty().bind(checkboxEchoFilterByShotID.selectedProperty().not());
+        comboboxEchoFiltering.getItems().setAll("Discard", "Retain");
+        comboboxEchoFiltering.getSelectionModel().selectFirst();
+        comboboxEchoFiltering.disableProperty().bind(checkboxEchoFilterByShotID.selectedProperty().not());
+        
         try {
             positionImporterFrame = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PositionImporterFrame.fxml"));
@@ -2192,13 +2200,6 @@ public class MainFrameController implements Initializable {
         tabPaneVoxelisation.getSelectionModel().selectFirst();
         
         //displayGThetaAllDistributions();
-    }
-    
-    @FXML
-    private void onActionCheckboxEchoFilterByShotID(ActionEvent event) {
-        
-        textFieldEchoFilterByShotID.setEditable(checkboxEchoFilterByShotID.isSelected());
-        buttonOpenEchoFilterByShotID.setDisable(!checkboxEchoFilterByShotID.isSelected());
     }
     
     @FXML
@@ -4301,6 +4302,17 @@ public class MainFrameController implements Initializable {
         File selectedFile = chooser.showOpenDialog(stage);
         if (null != selectedFile) {
             textFieldWeightingFile.setText(selectedFile.getAbsolutePath());
+        }
+    }
+    
+    @FXML
+    private void onActionButtonOpenEchoFilteringFile(ActionEvent event) {
+
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Open echo filtering by shot index and echo rank CSV file");
+        File selectedFile = chooser.showOpenDialog(stage);
+        if (null != selectedFile) {
+            textFieldEchoFilterByShotID.setText(selectedFile.getAbsolutePath());
         }
     }
     
