@@ -210,6 +210,7 @@ import fr.amap.viewer3d.object.scene.SimpleSceneObject;
 import fr.amap.lidar.amapvox.gui.viewer3d.VoxelObject;
 import fr.amap.lidar.amapvox.gui.viewer3d.VoxelSpaceAdapter;
 import fr.amap.lidar.amapvox.gui.viewer3d.VoxelSpaceSceneObject;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoFilterByFileParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams;
 import java.awt.Color;
 import java.awt.Desktop;
@@ -2941,6 +2942,10 @@ public class MainFrameController implements Initializable {
         if (checkboxWeightingByFile.isSelected()) {
             voxelParameters.setEchoesWeightByFileParams(new EchoesWeightByFileParams(new File(textFieldWeightingFile.getText())));
         }
+        
+        if (checkboxEchoFilterByShotID.isSelected()) {
+            voxelParameters.setEchoFilterByFileParams(new EchoFilterByFileParams(textFieldEchoFilterByShotID.getText(), (String) comboboxEchoFiltering.getSelectionModel().getSelectedItem()));
+        }
 
         InputType it;
 
@@ -5369,6 +5374,18 @@ public class MainFrameController implements Initializable {
                     checkboxUsePopMatrix.setSelected(((VoxelAnalysisCfg)cfg).isUsePopMatrix());
                     checkboxUseSopMatrix.setSelected(((VoxelAnalysisCfg)cfg).isUseSopMatrix());
                     checkboxUseVopMatrix.setSelected(((VoxelAnalysisCfg)cfg).isUseVopMatrix());
+                    
+                    // 
+                    if (null != ((VoxelAnalysisCfg) cfg).getVoxelParameters().getEchoFilterByFileParams()) {
+                        checkboxEchoFilterByShotID.setSelected(true);
+                        EchoFilterByFileParams params = ((VoxelAnalysisCfg) cfg).getVoxelParameters().getEchoFilterByFileParams();
+                        textFieldEchoFilterByShotID.setText(params.getFile().getAbsolutePath());
+                        if (params.discardEchoes()) {
+                            comboboxEchoFiltering.getSelectionModel().selectFirst();
+                        } else {
+                            comboboxEchoFiltering.getSelectionModel().selectLast();
+                        }
+                    }
                     
                     if(type.equals("voxelisation-ALS") || type.equals("multi-voxelisation")){
                         

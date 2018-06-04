@@ -24,6 +24,7 @@ import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.EchoFilter;
 import fr.amap.lidar.amapvox.voxelisation.LaserSpecification;
 import fr.amap.lidar.amapvox.voxelisation.ShotFilter;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoFilterByFileParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByRankParams;
 import java.io.File;
@@ -357,12 +358,16 @@ public class VoxelAnalysisCfg extends Configuration{
 
                 if(childrensFilter != null){
                     for(Element e : childrensFilter){
-
-                        String variable = e.getAttributeValue("variable");
-                        String inequality = e.getAttributeValue("inequality");
-                        String value = e.getAttributeValue("value");
-
-                        echoFilters.add(new Filter(variable, Float.valueOf(value), Filter.getConditionFromString(inequality)));
+                        if (null != e.getAttribute("variable")) {
+                            String variable = e.getAttributeValue("variable");
+                            String inequality = e.getAttributeValue("inequality");
+                            String value = e.getAttributeValue("value");
+                            echoFilters.add(new Filter(variable, Float.valueOf(value), Filter.getConditionFromString(inequality)));
+                        } else if (null != e.getAttribute("src")) {
+                            String src = e.getAttributeValue("src");
+                            String behavior = e.getAttributeValue("behavior");
+                            voxelParameters.setEchoFilterByFileParams(new EchoFilterByFileParams(src, behavior));
+                        }
                     }
                 }
             }
@@ -636,18 +641,27 @@ public class VoxelAnalysisCfg extends Configuration{
             filtersElement.addContent(shotFilterElement);
         }
         
-        if(echoFilters != null && !echoFilters.isEmpty()){
-
-            Element echoFilterElement = new Element("echo-filters");
-
-            for(Filter f : echoFilters){
+        Element echoFilterElement = new Element("echo-filters");
+        
+        if (echoFilters != null && !echoFilters.isEmpty()) {
+            for (Filter f : echoFilters) {
                 Element filterElement = new Element("filter");
                 filterElement.setAttribute("variable", f.getVariable());
                 filterElement.setAttribute("inequality", f.getConditionString());
                 filterElement.setAttribute("value", String.valueOf(f.getValue()));
                 echoFilterElement.addContent(filterElement);
             }
+        }
 
+        if (null != voxelParameters.getEchoFilterByFileParams()) {
+            EchoFilterByFileParams filter = voxelParameters.getEchoFilterByFileParams();
+            Element filterElement = new Element("filter");
+            filterElement.setAttribute("src", filter.getFile().getAbsolutePath());
+            filterElement.setAttribute("behavior", filter.discardEchoes() ? "discard" : "retain");
+            echoFilterElement.addContent(filterElement);
+        }
+        
+        if (echoFilterElement.getContentSize() > 0) {
             filtersElement.addContent(echoFilterElement);
         }
         
