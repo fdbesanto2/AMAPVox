@@ -18,24 +18,24 @@ import org.apache.log4j.Logger;
  * @author pverley
  */
 public class EchoFilterByFileParams {
-    
+
     private final File file;
     private final boolean discard;
     private final static Logger LOGGER = Logger.getLogger(EchoFilterByFileParams.class);
-    
+
     public EchoFilterByFileParams(String file, String behavior) {
         this.file = new File(file);
         discard = behavior.equalsIgnoreCase("discard");
     }
-    
+
     public File getFile() {
         return file;
     }
-    
+
     public boolean discardEchoes() {
         return discard;
     }
-    
+
     public Iterator<Echoes> iterator() throws IOException {
 
         BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -65,12 +65,12 @@ public class EchoFilterByFileParams {
                 try {
                     if ((line = reader.readLine()) != null) {
                         String[] shotLine = line.split(sep);
-                        return new Echoes(Integer.valueOf(shotLine[0]), toBoolean(Arrays.copyOfRange(shotLine, 1, shotLine.length)));
+                        return new Echoes(Integer.valueOf(shotLine[0]), toBoolean(Arrays.copyOfRange(shotLine, 1, shotLine.length), !discard));
                     } else {
                         reader.close();
                     }
                 } catch (IOException | NumberFormatException ex) {
-                    LOGGER.warn(ex);
+                    LOGGER.warn("Echo filter by shot index and echo rank " + ex.toString(), ex);
                 }
                 return null;
             }
@@ -87,11 +87,17 @@ public class EchoFilterByFileParams {
             }
         };
     }
-    
-    private boolean[] toBoolean(String[] str) {
+
+    /**
+     * Converts string array of integers into boolean array.
+     * reverse arguments returns the negation of the boolean array
+     */
+    private boolean[] toBoolean(String[] str, boolean reverse) {
         boolean[] bln = new boolean[str.length];
         for (int i = 0; i < bln.length; i++) {
-            bln[i] = (Integer.valueOf(str[i]) == 1);
+            bln[i] = reverse
+                    ? (Integer.valueOf(str[i]) != 1)
+                    : (Integer.valueOf(str[i]) == 1);
         }
         return bln;
     }
@@ -106,5 +112,5 @@ public class EchoFilterByFileParams {
             this.discarded = retained;
         }
     }
-    
+
 }

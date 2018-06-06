@@ -63,7 +63,7 @@ public class EchoesWeightByFileParams {
                         reader.close();
                     }
                 } catch (IOException | NumberFormatException ex) {
-                    LOGGER.warn(ex);
+                    LOGGER.warn("Echo weight correction by shot index "+ ex);
                 }
                 return null;
             }
