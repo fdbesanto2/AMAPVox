@@ -5,12 +5,12 @@
  */
 package fr.amap.lidar.amapvox.voxelisation.configuration.params;
 
+import fr.amap.commons.util.IteratorWithException;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Iterator;
-import org.apache.log4j.Logger;
 
 /**
  *
@@ -18,78 +18,90 @@ import org.apache.log4j.Logger;
  */
 public class EchoesWeightByFileParams {
 
-    private final File weightFile;
-    private final static Logger LOGGER = Logger.getLogger(EchoesWeightByFileParams.class);
+    private final File file;
 
-    public EchoesWeightByFileParams(File weightFile) {
-        this.weightFile = weightFile;
+    public EchoesWeightByFileParams(File file) {
+        this.file = file;
     }
-    
+
     public File getFile() {
-        return weightFile;
+        return file;
     }
 
-    public Iterator<EchoesWeight> iterator() throws IOException {
+    public IteratorWithException<EchoesWeight> iterator() throws Exception {
 
-        BufferedReader reader = new BufferedReader(new FileReader(weightFile));
-        //skip header
-        reader.readLine();
+        IteratorWE it = new IteratorWE();
+        it.init();
+        return it;
+    }
 
-        return new Iterator<EchoesWeight>() {
+    private class IteratorWE implements IteratorWithException<EchoesWeight> {
 
-            boolean hasNextCalled;
-            EchoesWeight currentShot;
-            String sep = "\t";
+        private boolean hasNextCalled;
+        private EchoesWeight currentShot;
+        private final String sep = "\t";
+        private int l = 1;
+        private BufferedReader reader;
 
-            @Override
-            public boolean hasNext() {
+        void init() throws Exception {
+            try {
+                reader = new BufferedReader(new FileReader(file));
+                //skip header
+                reader.readLine();
+            } catch (Exception ex) {
+                throw new Exception("Error reading echo weight file " + file.getName(), ex);
+            }
+        }
 
-                if (!hasNextCalled) {
-                    hasNextCalled = true;
-                    currentShot = getNextShot();
-                }
+        @Override
+        public boolean hasNext() throws Exception {
 
-                return currentShot != null;
+            if (!hasNextCalled) {
+                hasNextCalled = true;
+                currentShot = getNextShot();
             }
 
-            private EchoesWeight getNextShot() {
+            return currentShot != null;
+        }
 
-                String line;
-                try {
-                    if ((line = reader.readLine()) != null) {
-                        String[] shotLine = line.split(sep);
-                        return new EchoesWeight(Integer.valueOf(shotLine[0]), Double.valueOf(shotLine[1]));
-                    } else {
-                        reader.close();
-                    }
-                } catch (IOException | NumberFormatException ex) {
-                    LOGGER.warn("Echo weight correction by shot index "+ ex);
-                }
-                return null;
-            }
+        private EchoesWeight getNextShot() throws Exception {
 
-            @Override
-            public EchoesWeight next() {
-
-                if (hasNextCalled) {
-                    hasNextCalled = false;
-                    return currentShot;
+            String line;
+            try {
+                if ((line = reader.readLine()) != null) {
+                    l++;
+                    String[] shotLine = line.split(sep);
+                    return new EchoesWeight(Integer.valueOf(shotLine[0]), Double.valueOf(shotLine[1]));
                 } else {
-                    return getNextShot();
+                    reader.close();
                 }
+            } catch (IOException | NumberFormatException ex) {
+                throw new Exception("Error reading echo weight file " + file.getName() + " at line " + l, ex);
             }
-        };
-    }
+            return null;
+        }
 
-    public class EchoesWeight {
+        @Override
+        public EchoesWeight next() throws Exception {
 
-        public final int shotID;
-        public final double weight;
-
-        public EchoesWeight(int shotID, double weight) {
-            this.shotID = shotID;
-            this.weight = weight;
+            if (hasNextCalled) {
+                hasNextCalled = false;
+                return currentShot;
+            } else {
+                return getNextShot();
+            }
         }
     }
+
+public class EchoesWeight {
+
+    public final int shotID;
+    public final double weight;
+
+    public EchoesWeight(int shotID, double weight) {
+        this.shotID = shotID;
+        this.weight = weight;
+    }
+}
 
 }

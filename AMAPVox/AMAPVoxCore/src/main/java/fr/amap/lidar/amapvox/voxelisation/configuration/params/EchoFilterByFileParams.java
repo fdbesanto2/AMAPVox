@@ -5,13 +5,12 @@
  */
 package fr.amap.lidar.amapvox.voxelisation.configuration.params;
 
+import fr.amap.commons.util.IteratorWithException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Iterator;
-import org.apache.log4j.Logger;
 
 /**
  *
@@ -21,7 +20,6 @@ public class EchoFilterByFileParams {
 
     private final File file;
     private final boolean discard;
-    private final static Logger LOGGER = Logger.getLogger(EchoFilterByFileParams.class);
 
     public EchoFilterByFileParams(String file, String behavior) {
         this.file = new File(file);
@@ -36,61 +34,16 @@ public class EchoFilterByFileParams {
         return discard;
     }
 
-    public Iterator<Echoes> iterator() throws IOException {
+    public IteratorWithException<Echoes> iterator() throws Exception {
 
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        //skip header
-        reader.readLine();
-
-        return new Iterator<Echoes>() {
-
-            boolean hasNextCalled;
-            Echoes currentShot;
-            String sep = "\t";
-
-            @Override
-            public boolean hasNext() {
-
-                if (!hasNextCalled) {
-                    hasNextCalled = true;
-                    currentShot = getNextShot();
-                }
-
-                return currentShot != null;
-            }
-
-            private Echoes getNextShot() {
-
-                String line;
-                try {
-                    if ((line = reader.readLine()) != null) {
-                        String[] shotLine = line.split(sep);
-                        return new Echoes(Integer.valueOf(shotLine[0]), toBoolean(Arrays.copyOfRange(shotLine, 1, shotLine.length), !discard));
-                    } else {
-                        reader.close();
-                    }
-                } catch (IOException | NumberFormatException ex) {
-                    LOGGER.warn("Echo filter by shot index and echo rank " + ex.toString(), ex);
-                }
-                return null;
-            }
-
-            @Override
-            public Echoes next() {
-
-                if (hasNextCalled) {
-                    hasNextCalled = false;
-                    return currentShot;
-                } else {
-                    return getNextShot();
-                }
-            }
-        };
+        IteratorWE it = new IteratorWE();
+        it.init();
+        return it;
     }
 
     /**
-     * Converts string array of integers into boolean array.
-     * reverse arguments returns the negation of the boolean array
+     * Converts string array of integers into boolean array. reverse arguments
+     * returns the negation of the boolean array
      */
     private boolean[] toBoolean(String[] str, boolean reverse) {
         boolean[] bln = new boolean[str.length];
@@ -100,6 +53,64 @@ public class EchoFilterByFileParams {
                     : (Integer.valueOf(str[i]) == 1);
         }
         return bln;
+    }
+
+    private class IteratorWE implements IteratorWithException<Echoes> {
+
+        private boolean hasNextCalled;
+        private Echoes currentShot;
+        private final String sep = "\t";
+        private int l = 1;
+        private BufferedReader reader;
+        
+        void init() throws Exception {
+            try {
+                reader = new BufferedReader(new FileReader(file));
+                //skip header
+                reader.readLine();
+            } catch (IOException ex) {
+                throw new Exception("Error reading echo filter file " + file.getName(), ex);
+            }
+        }
+
+        @Override
+        public boolean hasNext() throws Exception {
+
+            if (!hasNextCalled) {
+                hasNextCalled = true;
+                currentShot = getNextShot();
+            }
+
+            return currentShot != null;
+        }
+
+        private Echoes getNextShot() throws Exception {
+
+            String line;
+            try {
+                if ((line = reader.readLine()) != null) {
+                    l++;
+                    String[] shotLine = line.split(sep);
+                    return new Echoes(Integer.valueOf(shotLine[0]), toBoolean(Arrays.copyOfRange(shotLine, 1, shotLine.length), !discard));
+                } else {
+                    reader.close();
+                }
+            } catch (IOException | NumberFormatException ex) {
+                throw new Exception("Error reading echo filter file " + file.getName() + " at line " + l, ex);
+            }
+            return null;
+        }
+
+        @Override
+        public Echoes next() throws Exception {
+
+            if (hasNextCalled) {
+                hasNextCalled = false;
+                return currentShot;
+            } else {
+                return getNextShot();
+            }
+        }
     }
 
     public class Echoes {
