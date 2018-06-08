@@ -28,9 +28,10 @@ public class VoxelAnalysisTest {
 
     /**
      * Test of getPosition method, of class VoxelAnalysis.
+     * @throws java.lang.Exception
      */
     @Test
-    public void testResolution() {
+    public void testResolution() throws Exception {
         
         VoxelAnalysisCfg cfg = new VoxelAnalysisCfg();
         

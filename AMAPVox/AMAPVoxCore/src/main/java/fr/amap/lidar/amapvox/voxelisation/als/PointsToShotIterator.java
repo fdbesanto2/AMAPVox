@@ -8,7 +8,7 @@ package fr.amap.lidar.amapvox.voxelisation.als;
 import fr.amap.amapvox.als.LasPoint;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.vector.Vec4D;
-import fr.amap.lidar.amapvox.shot.Shot;
+import fr.amap.commons.util.IteratorWithException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.vecmath.Point3d;
@@ -18,7 +18,7 @@ import javax.vecmath.Vector3d;
  *
  * @author calcul
  */
-public class PointsToShotIterator implements IteratorWithException<fr.amap.lidar.amapvox.voxelisation.als.AlsShot>{
+public class PointsToShotIterator implements IteratorWithException<AlsShot>{
 
     private boolean isNewShot = true;
     private boolean wasReturned = false;

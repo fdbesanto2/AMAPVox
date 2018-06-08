@@ -5,7 +5,6 @@
  */
 package fr.amap.lidar.amapvox.voxelisation.tls;
 
-import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.lidar.format.jleica.LShot;
 import fr.amap.lidar.format.jleica.ptg.PTGScan;
 import fr.amap.lidar.format.jleica.LPointShotExtractor;
@@ -16,7 +15,6 @@ import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.commons.math.vector.Vec4D;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
@@ -32,7 +30,7 @@ public class PTGVoxelisation extends TLSVoxelisation{
     
     private final static Logger logger = Logger.getLogger(PTGVoxelisation.class);
 
-    public PTGVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg) {
+    public PTGVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg) throws Exception {
         super(inputFile, outputFile, vopMatrix, popMatrix, sopMatrix, terrain, pointcloud, cfg);
     }
 

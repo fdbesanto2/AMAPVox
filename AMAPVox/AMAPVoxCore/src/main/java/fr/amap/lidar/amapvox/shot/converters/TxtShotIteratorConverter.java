@@ -7,10 +7,8 @@ package fr.amap.lidar.amapvox.shot.converters;
 
 import fr.amap.lidar.amapvox.shot.Shot;
 import fr.amap.lidar.format.shot.Echo;
-import fr.amap.lidar.format.shot.IteratorWithException;
+import fr.amap.commons.util.IteratorWithException;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 

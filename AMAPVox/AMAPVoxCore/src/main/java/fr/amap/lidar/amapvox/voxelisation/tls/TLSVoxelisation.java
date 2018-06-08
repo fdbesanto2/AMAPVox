@@ -33,7 +33,7 @@ public abstract class TLSVoxelisation extends CallableTask{
     protected final File outputFile;
     protected final VoxelAnalysisCfg cfg;
     
-    public TLSVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg){
+    public TLSVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg) throws Exception{
         nbVoxelisationFinished = 0;
         this.inputFile = inputFile;
         this.parameters = cfg.getVoxelParameters();

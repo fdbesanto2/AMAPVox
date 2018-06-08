@@ -14,6 +14,7 @@ import fr.amap.commons.raster.multiband.BCommon;
 import fr.amap.commons.raster.multiband.BHeader;
 import fr.amap.commons.raster.multiband.BSQ;
 import fr.amap.commons.util.Cancellable;
+import fr.amap.commons.util.IteratorWithException;
 import fr.amap.commons.util.Process;
 import fr.amap.lidar.amapvox.commons.GTheta;
 import fr.amap.lidar.amapvox.commons.LADParams;
@@ -38,7 +39,6 @@ import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import javax.imageio.ImageIO;
@@ -60,11 +60,11 @@ public class VoxelAnalysis extends Process implements Cancellable {
     private int nbShotsProcessed;
 
     private float[][] weightTable;
-    private Iterator<EchoesWeight> weightIterator;
+    private IteratorWithException<EchoesWeight> weightIterator;
     private EchoesWeight echoesWeight;
     private float[][] residualEnergyTable;
 
-    private Iterator<Echoes> echoFilterIterator;
+    private IteratorWithException<Echoes> echoFilterIterator;
     private Echoes echoes;
 
     private final boolean volumeWeighting = true;
@@ -168,7 +168,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
                 : z;
     }
 
-    public VoxelAnalysis(Raster terrain, List<PointcloudFilter> pointcloudFilters, VoxelAnalysisCfg cfg) {
+    public VoxelAnalysis(Raster terrain, List<PointcloudFilter> pointcloudFilters, VoxelAnalysisCfg cfg) throws Exception {
 
         nbShotsProcessed = 0;
         this.dtm = terrain;
@@ -182,7 +182,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
         init(cfg.getVoxelParameters());
     }
 
-    private void init(VoxelParameters parameters) {
+    private void init(VoxelParameters parameters) throws Exception {
 
         this.parameters = parameters;
         this.parameters.infos.setTransmittanceMode(parameters.getTransmittanceMode());
@@ -198,22 +198,14 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
         if (null != parameters.getEchoesWeightByFileParams()) {
             LOGGER.info("Open echoes weight file " + parameters.getEchoesWeightByFileParams().getFile());
-            try {
-                weightIterator = parameters.getEchoesWeightByFileParams().iterator();
-                echoesWeight = weightIterator.next();
-            } catch (IOException ex) {
-                LOGGER.error("Error while opening echoes weight from file", ex);
-            }
+            weightIterator = parameters.getEchoesWeightByFileParams().iterator();
+            echoesWeight = weightIterator.next();
         }
 
         if (null != parameters.getEchoFilterByFileParams()) {
             LOGGER.info("Open echoes filtering file " + parameters.getEchoFilterByFileParams().getFile());
-            try {
-                echoFilterIterator = parameters.getEchoFilterByFileParams().iterator();
-                echoes = echoFilterIterator.next();
-            } catch (IOException ex) {
-                LOGGER.error("Error while opening echoes filter from file", ex);
-            }
+            echoFilterIterator = parameters.getEchoFilterByFileParams().iterator();
+            echoes = echoFilterIterator.next();
         }
 
         MAX_PAD = parameters.infos.getMaxPAD();
@@ -282,7 +274,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
         return new Point3d(posX, posY, posZ);
     }
 
-    public void processOneShot(final Shot shot, int shotID) throws IOException {
+    public void processOneShot(final Shot shot, int shotID) throws Exception {
 
         if (voxelManager == null) {
             LOGGER.error("VoxelManager not initialized, what happened??");
@@ -654,11 +646,13 @@ public class VoxelAnalysis extends Process implements Cancellable {
                 if (transMode == 2) {
                     transNorm = ((entering - intercepted) / entering) * surfMulLength;
                 } else //mode 3
-                 if (longueur == 0) {
+                {
+                    if (longueur == 0) {
                         transNorm = 0;
                     } else {
                         transNorm = Math.pow(((entering - intercepted) / entering), 1 / longueur) * surfMulLengthMulEnt;
                     }
+                }
 
                 vox.transmittance_tmp += transNorm;
 

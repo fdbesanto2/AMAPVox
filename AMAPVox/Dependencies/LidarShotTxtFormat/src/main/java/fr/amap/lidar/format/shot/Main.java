@@ -5,6 +5,7 @@
  */
 package fr.amap.lidar.format.shot;
 
+import fr.amap.commons.util.IteratorWithException;
 import java.io.File;
 
 /**

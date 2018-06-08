@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import javax.vecmath.Vector3d;
 import fr.amap.commons.util.Cancellable;
-import fr.amap.lidar.amapvox.shot.Shot;
+import fr.amap.commons.util.IterableWithException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.Comparator;

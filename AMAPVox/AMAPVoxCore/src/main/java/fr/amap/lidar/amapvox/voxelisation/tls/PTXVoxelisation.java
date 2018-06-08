@@ -16,6 +16,7 @@ import fr.amap.commons.math.vector.Vec4D;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import javax.vecmath.Point3d;
@@ -32,7 +33,7 @@ public class PTXVoxelisation extends TLSVoxelisation{
     
     private final PTXScan scan;
     
-    public PTXVoxelisation(PTXScan scan, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg) {
+    public PTXVoxelisation(PTXScan scan, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg) throws Exception {
         super(scan.getFile(), outputFile, vopMatrix, popMatrix, sopMatrix, terrain, pointcloud, cfg);
         this.scan = scan;
     }

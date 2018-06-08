@@ -5,6 +5,8 @@
  */
 package fr.amap.lidar.format.shot;
 
+import fr.amap.commons.util.IterableWithException;
+import fr.amap.commons.util.IteratorWithException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;

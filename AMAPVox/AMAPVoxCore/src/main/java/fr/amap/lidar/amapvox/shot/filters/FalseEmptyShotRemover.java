@@ -26,7 +26,7 @@ import java.util.Stack;
  *
  * @author Claudia Lavalley
  */
-public class ShotFilter implements Iterable<Shot>{
+public class FalseEmptyShotRemover implements Iterable<Shot>{
     
     private final Iterator<Shot> shotIterator;
     private final static double MIN_RANGE = 1.0; //1 meter
@@ -34,7 +34,7 @@ public class ShotFilter implements Iterable<Shot>{
     private final static double ANGLE_DIFF = Math.toDegrees(Math.PI/8);
     private int nbThrownShots = 0; // total number of thrown shots
     
-    public ShotFilter(Iterator<Shot> shotIterator){
+    public FalseEmptyShotRemover(Iterator<Shot> shotIterator){
         
         this.shotIterator = shotIterator;
     }
