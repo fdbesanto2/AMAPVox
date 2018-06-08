@@ -16,5 +16,5 @@ public interface TaskListener extends EventListener{
     
     public void onSucceeded(Service service);
     public void onCancelled();
-    public void onFailed(Exception ex);
+    public void onFailed(Throwable ex);
 }

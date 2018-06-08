@@ -817,12 +817,27 @@ public class MainFrameController implements Initializable {
             }
         });
         
+        checkboxEchoFilterByShotID.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if(newValue){
+                    voxSpaceValidationSupport.registerValidator(textFieldEchoFilterByShotID, false, Validators.fileExistValidator);
+                }else{
+                    voxSpaceValidationSupport.registerValidator(textFieldEchoFilterByShotID, false, Validators.unregisterValidator);
+                }
+        });
+        
+        checkboxWeightingByFile.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if(newValue){
+                    voxSpaceValidationSupport.registerValidator(textFieldWeightingFile, false, Validators.fileExistValidator);
+                }else{
+                    voxSpaceValidationSupport.registerValidator(textFieldWeightingFile, false, Validators.unregisterValidator);
+                }
+        });
+        
         alsVoxValidationSupport.registerValidator(textFieldInputFileALS, false, Validators.fileExistValidator);
         alsVoxValidationSupport.registerValidator(textFieldTrajectoryFileALS, false, Validators.fileExistValidator);
         alsVoxValidationSupport.registerValidator(textFieldOutputFileALS, false, Validators.fileValidityValidator);
         
         tlsVoxValidationSupport.registerValidator(textFieldInputFileTLS, false, Validators.fileExistValidator);
-        
         tlsVoxValidationSupport.registerValidator(textFieldOutputPathTLS, false, Validators.directoryValidator);
         
         comboboxModeTLS.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
@@ -4924,7 +4939,7 @@ public class MainFrameController implements Initializable {
             element.addTaskListener(new TaskAdapter() {
 
                 @Override
-                public void onFailed(Exception ex) {
+                public void onFailed(Throwable ex) {
                     showErrorDialog(ex);
                 }
             });
@@ -5002,7 +5017,7 @@ public class MainFrameController implements Initializable {
         executeTaskList(taskElements);
     }
     
-    public void showErrorDialog(final Exception e){
+    public void showErrorDialog(final Throwable e){
         
         logger.error("An error occured", e);
         

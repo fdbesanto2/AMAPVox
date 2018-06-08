@@ -20,6 +20,6 @@ public abstract class TaskAdapter implements TaskListener{
     public void onCancelled(){}
     
     @Override
-    public void onFailed(Exception ex){}
+    public void onFailed(Throwable ex){}
     
 }

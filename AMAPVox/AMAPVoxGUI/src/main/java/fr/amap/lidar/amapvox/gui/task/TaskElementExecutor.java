@@ -58,7 +58,7 @@ public class TaskElementExecutor {
                     }
 
                     @Override
-                    public void onFailed(Exception ex) {
+                    public void onFailed(Throwable ex) {
                         numberOfCurrentTaskRunning.set(numberOfCurrentTaskRunning.getValue()-1);
                         executeNextTask();
                     }

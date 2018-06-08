@@ -261,7 +261,7 @@ public class TaskElement extends GridPane{
                 taskMessage.setTextFill(new Color(1, 0, 0, 1));
                 taskMessage.setText("Error!");
                 
-                fireFailed(new Exception(service.getException()));
+                fireFailed(service.getException());
                 service = null;
             }
         });
@@ -375,7 +375,7 @@ public class TaskElement extends GridPane{
         initService();
     }
     
-    private void fireFailed(Exception ex){
+    private void fireFailed(Throwable ex){
         for(TaskListener listener : listeners.getListeners(TaskListener.class)){
             listener.onFailed(ex);
         }
