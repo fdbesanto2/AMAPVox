@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
-package fr.amap.lidar.amapvox.shot.filters;
+package fr.amap.lidar.amapvox.voxelisation.tls;
 
 import fr.amap.amapvox.io.tls.rxp.Shot;
 import java.util.Iterator;
