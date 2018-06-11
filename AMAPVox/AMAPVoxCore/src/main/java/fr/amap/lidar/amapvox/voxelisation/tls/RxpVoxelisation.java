@@ -11,13 +11,8 @@ import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.commons.math.vector.Vec4D;
 import fr.amap.amapvox.io.tls.rxp.RxpExtraction;
 import fr.amap.amapvox.io.tls.rxp.Shot;
-import fr.amap.lidar.amapvox.shot.filters.FalseEmptyShotRemover;
-import fr.amap.commons.raster.asc.Raster;
-import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
-import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
-import java.io.File;
+import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
 import java.util.Iterator;
-import java.util.List;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
@@ -32,10 +27,9 @@ public class RxpVoxelisation extends TLSVoxelisation {
 
     private final boolean enableEmptyShotFiltering;
 
-    public RxpVoxelisation(File inputFile, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg, boolean enableEmptyShotFiltering) throws Exception {
-        super(inputFile, outputFile, vopMatrix, popMatrix, sopMatrix, terrain, pointcloud, cfg);
-
-        this.enableEmptyShotFiltering = enableEmptyShotFiltering;
+    public RxpVoxelisation(TLSVoxCfg cfg) throws Exception {
+        super(cfg);
+        this.enableEmptyShotFiltering = cfg.isEnableEmptyShotsFiltering();
     }
 
     @Override

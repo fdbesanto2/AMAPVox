@@ -5,30 +5,19 @@
  */
 package fr.amap.lidar.amapvox.gui.task;
 
-import fr.amap.commons.math.matrix.Mat4D;
-import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.util.CallableTaskAdapter;
 import fr.amap.lidar.amapvox.commons.LidarScan;
-import fr.amap.commons.math.util.MatrixUtility;
 import fr.amap.commons.util.ProcessingAdapter;
-import fr.amap.commons.util.ProcessingListener;
-import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
-import fr.amap.lidar.amapvox.util.Util;
-import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.postproc.VoxelFileMerging;
 import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxMergingCfg;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
-import fr.amap.lidar.amapvox.voxelisation.tls.RxpEchoFilter;
 import fr.amap.lidar.amapvox.voxelisation.tls.RxpVoxelisation;
 import java.io.File;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.concurrent.Service;
@@ -60,67 +49,27 @@ public class RSPVoxelizationService extends Service<List<File>>{
             @Override
             protected List<File> call() throws Exception {
                 
-                final TLSVoxCfg cfg = new TLSVoxCfg();
-                cfg.readConfiguration(file);
-                
-                File output = cfg.getOutputFile();
-                File input = cfg.getInputFile();
-                Mat4D vop = MatrixUtility.convertMatrix4dToMat4D(cfg.getVopMatrix());
-                Mat4D pop = MatrixUtility.convertMatrix4dToMat4D(cfg.getPopMatrix());
-                List<LidarScan> lidarScans = cfg.getLidarScans();
-                cfg.setEchoFilter(new RxpEchoFilter(cfg.getEchoFilters()));
-
-                if (!Files.isReadable(output.toPath())) {
-                    throw new Exception("File " + output.getAbsolutePath() + " not reachable");
-                }
-
-                if (!Files.isReadable(input.toPath())) {
-                    throw new Exception("File " + input.getAbsolutePath() + " not reachable");
-                }
-
-                cfg.getVoxelParameters().infos.setType(VoxelSpaceInfos.Type.TLS);
-
-                Raster dtm = null;
-                if (cfg.getVoxelParameters().getDtmFilteringParams().useDTMCorrection()) {
-                    
-                    updateMessage("Loading dtm...");
-                    
-                    dtm = Util.loadDTM(cfg.getVoxelParameters().getDtmFilteringParams().getDtmFile());
-                }
-
-                List<PointcloudFilter> pointcloudFilters = cfg.getVoxelParameters().getPointcloudFilters();
-
-                if(pointcloudFilters != null){
-
-                    if(vop == null){ vop = Mat4D.identity();}
-
-                    if(cfg.getVoxelParameters().isUsePointCloudFilter()){
-                        
-                        updateMessage("Loading point cloud filters...");
-                        
-                        for(fr.amap.lidar.amapvox.voxelisation.PointcloudFilter filter : pointcloudFilters){
-                            filter.setOctree(Util.loadOctree(filter.getPointcloudFile(), vop));
-                        }
-                    }
-                }
+                TLSVoxCfg mainCfg = new TLSVoxCfg();
+                mainCfg.readConfiguration(file);
+                List<LidarScan> lidarScans = mainCfg.getLidarScans();
 
                 ArrayList<File> files = new ArrayList<>();
                 exec = Executors.newFixedThreadPool(coreNumber);
-                
                 nbFileProcessed.set(0);
-                
-                final int nbFilesToWrite = cfg.getVoxelParameters().isMergingAfter() ? lidarScans.size()+1 : lidarScans.size();
-
+                int nbFilesToWrite = mainCfg.getVoxelParameters().isMergingAfter() ? lidarScans.size()+1 : lidarScans.size();
                 try {
-                    final LinkedBlockingQueue<Callable<RxpVoxelisation>>  tasks = new LinkedBlockingQueue<>();
-
-                    for (LidarScan file : lidarScans) {
-
-                        File outputFile = new File(output.getAbsolutePath() + "/" + file.file.getName() + ".vox");
+                    LinkedBlockingQueue<Callable<RxpVoxelisation>>  tasks = new LinkedBlockingQueue<>();
+                    for (LidarScan scan : lidarScans) {
                         
-                        RxpVoxelisation rxpVoxelisation = new RxpVoxelisation(file.file, outputFile, vop, pop,
-                                MatrixUtility.convertMatrix4dToMat4D(file.matrix), dtm, pointcloudFilters, cfg, cfg.isEnableEmptyShotsFiltering());
+                        TLSVoxCfg cfg = new TLSVoxCfg();
+                        cfg.readConfiguration(file);
+                        cfg.setInputFile(scan.file);
+                        File outputFile = new File(mainCfg.getOutputFile().getAbsolutePath() + "/" + scan.file.getName() + ".vox");
+                        cfg.setOutputFile(outputFile);
+                        cfg.setSopMatrix(scan.matrix);
                         
+                        RxpVoxelisation rxpVoxelisation = new RxpVoxelisation(cfg);
+                        rxpVoxelisation.init();
                         rxpVoxelisation.addCallableTaskListener(new CallableTaskAdapter() {
                             @Override
                             public void onSucceeded() {
@@ -128,13 +77,10 @@ public class RSPVoxelizationService extends Service<List<File>>{
                                 updateProgress(nbFileProcessed.intValue(), nbFilesToWrite);
                             }
                         });
-                        
-                        
                         tasks.put(rxpVoxelisation);
                         files.add(outputFile);
                     }
 
-                    
                     updateMessage("Voxelization...");
                     
                     exec.invokeAll(tasks);
@@ -142,9 +88,9 @@ public class RSPVoxelizationService extends Service<List<File>>{
                     //wait for all Callable to finish
                     exec.shutdown();
                     
-                    if (cfg.getVoxelParameters().isMergingAfter()) {
+                    if (mainCfg.getVoxelParameters().isMergingAfter()) {
                         
-                        VoxMergingCfg mergingCfg = new VoxMergingCfg(cfg.getVoxelParameters().getMergedFile(), cfg.getVoxelParameters(), files);
+                        VoxMergingCfg mergingCfg = new VoxMergingCfg(mainCfg.getVoxelParameters().getMergedFile(), mainCfg.getVoxelParameters(), files);
 
                         tool = new VoxelFileMerging();
                         
@@ -157,12 +103,8 @@ public class RSPVoxelizationService extends Service<List<File>>{
                         });
                         
                         tool.mergeVoxelFiles(mergingCfg);
-
-                        files.add(cfg.getVoxelParameters().getMergedFile());
+                        files.add(mainCfg.getVoxelParameters().getMergedFile());
                     }
-
-                    
-
                 }catch (InterruptedException | NullPointerException ex){
                     this.cancel();
                     throw ex;

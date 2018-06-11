@@ -5,24 +5,15 @@
  */
 package fr.amap.lidar.amapvox.gui.task;
 
-import fr.amap.commons.math.matrix.Mat4D;
-import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.util.CallableTaskAdapter;
 import fr.amap.lidar.amapvox.commons.LidarScan;
-import fr.amap.commons.math.util.MatrixUtility;
 import fr.amap.commons.util.ProcessingAdapter;
-import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
-import fr.amap.lidar.amapvox.util.Util;
-import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.postproc.VoxelFileMerging;
 import fr.amap.lidar.amapvox.voxelisation.configuration.PTXLidarScan;
 import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxMergingCfg;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import fr.amap.lidar.amapvox.voxelisation.tls.PTXVoxelisation;
-import fr.amap.lidar.amapvox.voxelisation.tls.RxpEchoFilter;
 import java.io.File;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -57,70 +48,28 @@ public class PTXVoxelizationService extends Service<List<File>>{
             @Override
             protected List<File> call() throws Exception {
                 
-                final TLSVoxCfg cfg = new TLSVoxCfg();
-                cfg.readConfiguration(file);
-                
-                File output = cfg.getOutputFile();
-                File input = cfg.getInputFile();
-
-                VoxelParameters parameters = cfg.getVoxelParameters();
-                Mat4D vop = MatrixUtility.convertMatrix4dToMat4D(cfg.getVopMatrix());
-                Mat4D pop = MatrixUtility.convertMatrix4dToMat4D(cfg.getPopMatrix());
-
-                List<LidarScan> lidarScans = cfg.getLidarScans();
-                cfg.setEchoFilter(new RxpEchoFilter(cfg.getEchoFilters()));
-
-                if (!Files.isReadable(output.toPath())) {
-                    throw new Exception("File " + output.getAbsolutePath() + " not reachable");
-                }
-
-                if (!Files.isReadable(input.toPath())) {
-                    throw new Exception("File " + input.getAbsolutePath() + " not reachable");
-                }
-
-                parameters.infos.setType(VoxelSpaceInfos.Type.TLS);
-
-                Raster dtm = null;
-                if (parameters.getDtmFilteringParams().useDTMCorrection()) {
-                    
-                    updateMessage("Loading dtm...");
-                    
-                    dtm = Util.loadDTM(parameters.getDtmFilteringParams().getDtmFile());
-                }
-
-                List<PointcloudFilter> pointcloudFilters = parameters.getPointcloudFilters();
-
-                if(pointcloudFilters != null){
-
-                    if(vop == null){ vop = Mat4D.identity();}
-
-                    if(parameters.isUsePointCloudFilter()){
-                        
-                        updateMessage("Loading point cloud filters...");
-                        
-                        for(fr.amap.lidar.amapvox.voxelisation.PointcloudFilter filter : pointcloudFilters){
-                            filter.setOctree(Util.loadOctree(filter.getPointcloudFile(), vop));
-                        }
-                    }
-                }
-
+                TLSVoxCfg mainCfg = new TLSVoxCfg();
+                mainCfg.readConfiguration(file);
+                List<LidarScan> lidarScans = mainCfg.getLidarScans();
                 ArrayList<File> files = new ArrayList<>();
                 exec = Executors.newFixedThreadPool(coreNumber);
-                
                 nbFileProcessed.set(0);
-                
-                final int nbFilesToWrite = cfg.getVoxelParameters().isMergingAfter() ? lidarScans.size()+1 : lidarScans.size();
-
+                int nbFilesToWrite = mainCfg.getVoxelParameters().isMergingAfter() ? lidarScans.size()+1 : lidarScans.size();
                 try {
                     LinkedBlockingQueue<Callable<PTXVoxelisation>>  tasks = new LinkedBlockingQueue<>();
 
                     int count = 0;
-                    for (LidarScan file : lidarScans) {
-
-                        PTXLidarScan scan = (PTXLidarScan)file;
-                        File outputFile = new File(output.getAbsolutePath() + "/" + file.file.getName() +"-scan-"+count+ ".vox");
-                        PTXVoxelisation ptxVoxelization = new PTXVoxelisation(scan.getScan(), outputFile, vop, pop, MatrixUtility.convertMatrix4dToMat4D(file.matrix), dtm, pointcloudFilters, cfg);
+                    for (LidarScan scan : lidarScans) {
                         
+                        TLSVoxCfg cfg = new TLSVoxCfg();
+                        cfg.readConfiguration(file);
+                        PTXLidarScan ptxScan = (PTXLidarScan)scan;
+                        cfg.setInputFile(scan.file);
+                        File outputFile = new File(mainCfg.getOutputFile().getAbsolutePath() + "/" + scan.file.getName() +"-scan-"+count+ ".vox");
+                        cfg.setOutputFile(outputFile);
+                        
+                        PTXVoxelisation ptxVoxelization = new PTXVoxelisation(ptxScan.getScan(), cfg);
+                        ptxVoxelization.init();
                         ptxVoxelization.addCallableTaskListener(new CallableTaskAdapter() {
                             @Override
                             public void onSucceeded() {
@@ -140,11 +89,11 @@ public class PTXVoxelizationService extends Service<List<File>>{
 
                     exec.shutdown();
                     
-                    if (cfg.getVoxelParameters().isMergingAfter()) {
+                    if (mainCfg.getVoxelParameters().isMergingAfter()) {
                         
                         updateMessage("Merging voxel files...");
                         
-                        VoxMergingCfg mergingCfg = new VoxMergingCfg(cfg.getVoxelParameters().getMergedFile(), cfg.getVoxelParameters(), files);
+                        VoxMergingCfg mergingCfg = new VoxMergingCfg(mainCfg.getVoxelParameters().getMergedFile(), mainCfg.getVoxelParameters(), files);
 
                         tool = new VoxelFileMerging();
                         
@@ -158,7 +107,7 @@ public class PTXVoxelizationService extends Service<List<File>>{
                         
                         tool.mergeVoxelFiles(mergingCfg);
 
-                        files.add(cfg.getVoxelParameters().getMergedFile());
+                        files.add(mainCfg.getVoxelParameters().getMergedFile());
                     }
 
 

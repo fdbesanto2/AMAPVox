@@ -8,17 +8,12 @@ package fr.amap.lidar.amapvox.voxelisation.tls;
 import fr.amap.lidar.format.jleica.LPointShotExtractor;
 import fr.amap.lidar.format.jleica.LShot;
 import fr.amap.lidar.format.jleica.ptx.PTXScan;
-import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.math.matrix.Mat3D;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.commons.math.vector.Vec4D;
-import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
-import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
-import java.io.File;
-import java.io.IOException;
+import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
 import java.util.Iterator;
-import java.util.List;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
@@ -29,12 +24,12 @@ import org.apache.log4j.Logger;
  */
 public class PTXVoxelisation extends TLSVoxelisation{
 
-    private final static Logger logger = Logger.getLogger(PTXVoxelisation.class);
+    private final static Logger LOGGER = Logger.getLogger(PTXVoxelisation.class);
     
     private final PTXScan scan;
     
-    public PTXVoxelisation(PTXScan scan, File outputFile, Mat4D vopMatrix, Mat4D popMatrix, Mat4D sopMatrix, Raster terrain, List<PointcloudFilter> pointcloud, VoxelAnalysisCfg cfg) throws Exception {
-        super(scan.getFile(), outputFile, vopMatrix, popMatrix, sopMatrix, terrain, pointcloud, cfg);
+    public PTXVoxelisation(PTXScan scan, TLSVoxCfg cfg) throws Exception {
+        super(cfg);
         this.scan = scan;
     }
 
@@ -42,7 +37,7 @@ public class PTXVoxelisation extends TLSVoxelisation{
     public Object call() throws Exception {
         
         try {
-            logger.info("ptx extraction is started");
+            LOGGER.info("ptx extraction is started");
             
             long startTime = System.currentTimeMillis();
         
@@ -57,7 +52,7 @@ public class PTXVoxelisation extends TLSVoxelisation{
             while(iterator.hasNext()){
                 
                 if (Thread.currentThread().isInterrupted()){
-                    logger.info("Task cancelled");
+                    LOGGER.info("Task cancelled");
                     return null;
                 }
 
@@ -72,7 +67,7 @@ public class PTXVoxelisation extends TLSVoxelisation{
 
             }
             
-            logger.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());
+            LOGGER.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());
             
             super.postProcess();
             
@@ -116,10 +111,10 @@ public class PTXVoxelisation extends TLSVoxelisation{
             //return resultData;
         
         }catch(OutOfMemoryError ex){
-            logger.error("Unsufficient memory, you need to allocate more to the JVM, change the Xmx value!",ex);
+            LOGGER.error("Unsufficient memory, you need to allocate more to the JVM, change the Xmx value!",ex);
             throw ex;
         }catch(Exception ex){
-            logger.error("Unknow exception in thread : "+Thread.currentThread().getName()+", retrying",ex);
+            LOGGER.error("Unknow exception in thread : "+Thread.currentThread().getName()+", retrying",ex);
             throw ex;
         }
         
