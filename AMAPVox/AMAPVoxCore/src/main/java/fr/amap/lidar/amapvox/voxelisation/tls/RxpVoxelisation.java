@@ -35,7 +35,7 @@ public class RxpVoxelisation extends TLSVoxelisation {
     @Override
     public Object call() throws Exception {
 
-        System.out.println(Thread.currentThread().getName());
+        //System.out.println(Thread.currentThread().getName());
 
         try {
             LOGGER.info("rxp extraction is started");

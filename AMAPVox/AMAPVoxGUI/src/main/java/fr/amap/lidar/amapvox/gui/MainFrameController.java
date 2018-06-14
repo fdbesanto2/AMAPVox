@@ -2593,7 +2593,7 @@ public class MainFrameController implements Initializable {
         }
         
         if (checkboxWeightingByFile.isSelected()) {
-            voxelParameters.setEchoesWeightByFileParams(new EchoesWeightByFileParams(new File(textFieldWeightingFile.getText())));
+            voxelParameters.setEchoesWeightByFileParams(new EchoesWeightByFileParams(textFieldWeightingFile.getText()));
         }
 
         GroundEnergyParams groundEnergyParameters = new GroundEnergyParams();
@@ -2955,11 +2955,12 @@ public class MainFrameController implements Initializable {
         }
         
         if (checkboxWeightingByFile.isSelected()) {
-            voxelParameters.setEchoesWeightByFileParams(new EchoesWeightByFileParams(new File(textFieldWeightingFile.getText())));
+            voxelParameters.setEchoesWeightByFileParams(new EchoesWeightByFileParams(textFieldWeightingFile.getText()));
         }
         
         if (checkboxEchoFilterByShotID.isSelected()) {
-            voxelParameters.setEchoFilterByFileParams(new EchoFilterByFileParams(textFieldEchoFilterByShotID.getText(), (String) comboboxEchoFiltering.getSelectionModel().getSelectedItem()));
+            voxelParameters.setEchoFilterByFileParams(new EchoFilterByFileParams(textFieldEchoFilterByShotID.getText(),
+                    ((String) comboboxEchoFiltering.getSelectionModel().getSelectedItem()).equalsIgnoreCase("discard")));
         }
 
         InputType it;

@@ -21,9 +21,9 @@ public class EchoFilterByFileParams {
     private final File file;
     private final boolean discard;
 
-    public EchoFilterByFileParams(String file, String behavior) {
+    public EchoFilterByFileParams(String file, boolean discard) {
         this.file = new File(file);
-        discard = behavior.equalsIgnoreCase("discard");
+        this.discard = discard;
     }
 
     public File getFile() {

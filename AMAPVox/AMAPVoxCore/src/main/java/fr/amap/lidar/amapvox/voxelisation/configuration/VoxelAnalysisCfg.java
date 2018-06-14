@@ -54,7 +54,7 @@ public class VoxelAnalysisCfg extends Configuration{
         VOXEL(1),
         RASTER(2);
         
-        private int format;
+        private final int format;
         
         private VoxelsFormat(int format){
             this.format = format;
@@ -113,12 +113,16 @@ public class VoxelAnalysisCfg extends Configuration{
             String formatStr = outputFileElement.getAttributeValue("format");
             if(formatStr != null){
                 int format = Integer.valueOf(formatStr);
-                if(format == 0){
-                    voxelsFormat = VoxelsFormat.NONE;
-                }else if(format == 1){
-                    voxelsFormat = VoxelsFormat.VOXEL;
-                }else if(format == 2){
-                    voxelsFormat = VoxelsFormat.RASTER;
+                switch (format) {
+                    case 0:
+                        voxelsFormat = VoxelsFormat.NONE;
+                        break;
+                    case 1:
+                        voxelsFormat = VoxelsFormat.VOXEL;
+                        break;
+                    case 2:
+                        voxelsFormat = VoxelsFormat.RASTER;
+                        break;
                 }
             }
         }else{
@@ -180,7 +184,7 @@ public class VoxelAnalysisCfg extends Configuration{
             // ponderation from external CSV file
             if (Boolean.valueOf(ponderationElement.getAttributeValue("byfile"))) {
                 Element weightFileElement = ponderationElement.getChild("weight_file");
-                File weightFile = new File(weightFileElement.getAttributeValue("src"));
+                String weightFile = weightFileElement.getAttributeValue("src");
                 voxelParameters.setEchoesWeightByFileParams(new EchoesWeightByFileParams(weightFile));
             } else {
                 voxelParameters.setEchoesWeightByFileParams(null);
@@ -269,11 +273,7 @@ public class VoxelAnalysisCfg extends Configuration{
 
                         boolean keep;
                         String operationType = e.getAttributeValue("operation-type");
-                        if(operationType.equals("Keep")){
-                            keep = true;
-                        }else{
-                            keep = false;
-                        }
+                        keep = operationType.equals("Keep");
                         pointcloudFilters.add(new PointcloudFilter(file, Float.valueOf(e.getAttributeValue("error-margin")), keep));
                     }
 
@@ -365,8 +365,8 @@ public class VoxelAnalysisCfg extends Configuration{
                             echoFilters.add(new Filter(variable, Float.valueOf(value), Filter.getConditionFromString(inequality)));
                         } else if (null != e.getAttribute("src")) {
                             String src = e.getAttributeValue("src");
-                            String behavior = e.getAttributeValue("behavior");
-                            voxelParameters.setEchoFilterByFileParams(new EchoFilterByFileParams(src, behavior));
+                            boolean discard = e.getAttributeValue("behavior").equalsIgnoreCase("discard");
+                            voxelParameters.setEchoFilterByFileParams(new EchoFilterByFileParams(src, discard));
                         }
                     }
                 }

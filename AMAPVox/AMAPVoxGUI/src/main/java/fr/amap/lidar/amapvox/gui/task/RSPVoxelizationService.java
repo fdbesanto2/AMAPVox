@@ -11,9 +11,16 @@ import fr.amap.commons.util.ProcessingAdapter;
 import fr.amap.lidar.amapvox.voxelisation.postproc.VoxelFileMerging;
 import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxMergingCfg;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoFilterByFileParams;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams;
 import fr.amap.lidar.amapvox.voxelisation.tls.RxpVoxelisation;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -22,20 +29,22 @@ import java.util.concurrent.LinkedBlockingQueue;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author calcul
  */
-public class RSPVoxelizationService extends Service<List<File>>{
+public class RSPVoxelizationService extends Service<List<File>> {
 
     private final File file;
     private final int coreNumber;
     private ExecutorService exec;
     private final SimpleIntegerProperty nbFileProcessed;
     private VoxelFileMerging tool;
-    
-    public RSPVoxelizationService(File file, int coreNumber){
+    private final static Logger LOGGER = Logger.getLogger(RSPVoxelizationService.class);
+
+    public RSPVoxelizationService(File file, int coreNumber) {
         this.file = file;
         this.coreNumber = coreNumber;
         nbFileProcessed = new SimpleIntegerProperty(0);
@@ -43,37 +52,74 @@ public class RSPVoxelizationService extends Service<List<File>>{
 
     @Override
     protected Task<List<File>> createTask() {
-        
+
         Task task = new Task<List<File>>() {
-                        
+
             @Override
             protected List<File> call() throws Exception {
-                
+
                 TLSVoxCfg mainCfg = new TLSVoxCfg();
                 mainCfg.readConfiguration(file);
                 List<LidarScan> lidarScans = mainCfg.getLidarScans();
 
+                // echo weight by file
+                HashMap<String, String> echoWeightMap = null;
+                if (null != mainCfg.getVoxelParameters().getEchoesWeightByFileParams()) {
+                    echoWeightMap = readCSV(mainCfg.getVoxelParameters().getEchoesWeightByFileParams().getFile());
+                }
+
+                // echo filter by file
+                HashMap<String, String> echoFilterMap = null;
+                if (null != mainCfg.getVoxelParameters().getEchoFilterByFileParams()) {
+                    echoFilterMap = readCSV(mainCfg.getVoxelParameters().getEchoFilterByFileParams().getFile());
+                }
+
                 ArrayList<File> files = new ArrayList<>();
                 exec = Executors.newFixedThreadPool(coreNumber);
                 nbFileProcessed.set(0);
-                int nbFilesToWrite = mainCfg.getVoxelParameters().isMergingAfter() ? lidarScans.size()+1 : lidarScans.size();
+                int nbFilesToWrite = mainCfg.getVoxelParameters().isMergingAfter() ? lidarScans.size() + 1 : lidarScans.size();
                 try {
-                    LinkedBlockingQueue<Callable<RxpVoxelisation>>  tasks = new LinkedBlockingQueue<>();
+                    LinkedBlockingQueue<Callable<RxpVoxelisation>> tasks = new LinkedBlockingQueue();
                     for (LidarScan scan : lidarScans) {
-                        
+
                         TLSVoxCfg cfg = new TLSVoxCfg();
                         cfg.readConfiguration(file);
                         cfg.setInputFile(scan.file);
                         File outputFile = new File(mainCfg.getOutputFile().getAbsolutePath() + "/" + scan.file.getName() + ".vox");
                         cfg.setOutputFile(outputFile);
                         cfg.setSopMatrix(scan.matrix);
-                        
+                        if (null != echoWeightMap) {
+                            String key;
+                            String rxp = scan.file.getName();
+                            if (null != (key = findKey(echoWeightMap, rxp))) {
+                                cfg.getVoxelParameters().setEchoesWeightByFileParams(new EchoesWeightByFileParams(echoWeightMap.get(key)));
+                                //LOGGER.debug("Echo weight file " + cfg.getVoxelParameters().getEchoesWeightByFileParams().getFile());
+                            } else {
+                                cfg.getVoxelParameters().setEchoesWeightByFileParams(null);
+                                LOGGER.warn("Could not find any echo weight file associated to RXP scan " + rxp + " in parameter file " + mainCfg.getVoxelParameters().getEchoesWeightByFileParams().getFile().getName());
+                            }
+                        }
+                        if (null != echoFilterMap) {
+                            String key;
+                            String rxp = scan.file.getName();
+                            if (null != (key = findKey(echoFilterMap, rxp))) {
+                                EchoFilterByFileParams echoFilterParams = new EchoFilterByFileParams(
+                                        echoFilterMap.get(key),
+                                        mainCfg.getVoxelParameters().getEchoFilterByFileParams().discardEchoes());
+                                cfg.getVoxelParameters().setEchoFilterByFileParams(echoFilterParams);
+                                //LOGGER.debug("Echo filer file " + cfg.getVoxelParameters().getEchoFilterByFileParams().getFile());
+                            } else {
+                                cfg.getVoxelParameters().setEchoFilterByFileParams(null);
+                                LOGGER.warn("Could not find any echo filter file associated to RXP scan " + rxp + " in parameter file " + mainCfg.getVoxelParameters().getEchoFilterByFileParams().getFile().getName());
+                            }
+                        }
+
                         RxpVoxelisation rxpVoxelisation = new RxpVoxelisation(cfg);
                         rxpVoxelisation.init();
                         rxpVoxelisation.addCallableTaskListener(new CallableTaskAdapter() {
                             @Override
                             public void onSucceeded() {
-                                nbFileProcessed.set(nbFileProcessed.getValue()+1);
+                                nbFileProcessed.set(nbFileProcessed.getValue() + 1);
                                 updateProgress(nbFileProcessed.intValue(), nbFilesToWrite);
                             }
                         });
@@ -82,18 +128,18 @@ public class RSPVoxelizationService extends Service<List<File>>{
                     }
 
                     updateMessage("Voxelization...");
-                    
+
                     exec.invokeAll(tasks);
 
                     //wait for all Callable to finish
                     exec.shutdown();
-                    
+
                     if (mainCfg.getVoxelParameters().isMergingAfter()) {
-                        
+
                         VoxMergingCfg mergingCfg = new VoxMergingCfg(mainCfg.getVoxelParameters().getMergedFile(), mainCfg.getVoxelParameters(), files);
 
                         tool = new VoxelFileMerging();
-                        
+
                         tool.addProcessingListener(new ProcessingAdapter() {
                             @Override
                             public void processingStepProgress(String progressMsg, long progress, long max) {
@@ -101,30 +147,61 @@ public class RSPVoxelizationService extends Service<List<File>>{
                                 updateProgress(progress, max);
                             }
                         });
-                        
+
                         tool.mergeVoxelFiles(mergingCfg);
                         files.add(mainCfg.getVoxelParameters().getMergedFile());
                     }
-                }catch (InterruptedException | NullPointerException ex){
+                } catch (InterruptedException | NullPointerException ex) {
                     this.cancel();
                     throw ex;
                 }
 
                 return files;
             }
-            
+
             @Override
             protected void cancelled() {
                 super.cancelled();
-                
-                if(tool != null){
+
+                if (tool != null) {
                     tool.setCancelled(true);
                 }
-                
+
             }
         };
-        
+
         return task;
     }
-    
+
+    private String findKey(HashMap<String, String> map, String rxp) {
+
+        for (String key : map.keySet()) {
+            System.out.println(rxp + " " + key + " startsWith? " + rxp.startsWith(key));
+            if (rxp.startsWith(key)) {
+                return key;
+            }
+        }
+        return null;
+    }
+
+    private HashMap<String, String> readCSV(File file) throws FileNotFoundException, IOException {
+
+        HashMap<String, String> map = new HashMap();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            // skip header
+            reader.readLine();
+            String line;
+            while (null != (line = reader.readLine()) && !line.trim().isEmpty()) {
+                String[] split = line.split("\t");
+                if (2 != split.length) {
+                    throw new IOException("Invalid line " + line + " in file " + file.getName() + ". Expect RXP_NAME \t CSV_FILE");
+                }
+                // expected split[0] = RXP_NAME split[1] CSV_FILE
+                String csv = new File(file.toURI().resolve(split[1])).getCanonicalPath();
+                map.put(split[0], csv);
+            }
+        }
+        return map;
+    }
+
 }

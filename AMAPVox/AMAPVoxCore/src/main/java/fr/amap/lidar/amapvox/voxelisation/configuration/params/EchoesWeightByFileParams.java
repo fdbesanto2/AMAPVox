@@ -8,7 +8,6 @@ package fr.amap.lidar.amapvox.voxelisation.configuration.params;
 import fr.amap.commons.util.IteratorWithException;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -20,8 +19,8 @@ public class EchoesWeightByFileParams {
 
     private final File file;
 
-    public EchoesWeightByFileParams(File file) {
-        this.file = file;
+    public EchoesWeightByFileParams(String file) {
+        this.file = new File(file);
     }
 
     public File getFile() {
