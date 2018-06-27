@@ -368,9 +368,11 @@ public class VoxelAnalysis extends Process implements Cancellable {
                     if (null != weightTable) {
                         weight *= weightTable[shot.getEchoesNumber() - 1][i];
                     }
+                    double corr = 1.d;
                     if (null != echoesWeight && echoesWeight.shotID == shotID) {
                         //LOGGER.info("ShotID " + shotID + " echo " + i + " - weight " + weight + " * " + echoesWeight.weight +  " = " + (weight * echoesWeight.weight));
                         weight *= echoesWeight.weight;
+                        corr = echoesWeight.weight;
                     }
 
                     if (echosAreInsideSameVoxel(echo, nextEcho)) {
@@ -385,6 +387,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
                         residualEnergy = wasMultiple
                                 ? residualEnergyTable[shot.getEchoesNumber() - 1][firstEchoOfVoxel]
                                 : residualEnergyTable[shot.getEchoesNumber() - 1][i];
+                        residualEnergy *= corr;
                         lastEchoBeamFraction = 0;
 
                         boolean lastEcho = (i == shot.getEchoesNumber() - 1);
