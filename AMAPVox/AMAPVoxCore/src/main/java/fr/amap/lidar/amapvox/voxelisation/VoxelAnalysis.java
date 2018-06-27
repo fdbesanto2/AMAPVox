@@ -274,17 +274,46 @@ public class VoxelAnalysis extends Process implements Cancellable {
         return new Point3d(posX, posY, posZ);
     }
 
+    private boolean keepEcho(int shotID, Shot shot, int echoRank, Point3d echo) throws Exception {
+
+        boolean keep = true;
+
+        // echo filtering CSV file
+        if (keep && echoRank >= 0 && null != echoes) {
+            while (null != echoes && echoes.shotID < shotID) {
+                echoes = echoFilterIterator.next();
+            }
+            if (null != echoes && echoes.shotID == shotID) {
+                keep &= !echoes.discarded[echoRank];
+            }
+        }
+        
+        // point cloud filters
+        if (keep && pointcloudFilters != null) {
+            for (PointcloudFilter filter : pointcloudFilters) {
+                keep = keep && filter.doFiltering(echo);
+            }
+        }
+        
+        // shot mask
+        if (keep && echoRank >= 0 && shot.getMask() != null) {
+            keep &= shot.getMask()[echoRank];
+        }
+
+        // DTM filtering
+        if (keep && parameters.getDtmFilteringParams().useDTMCorrection()) {
+            float echoDistance = getGroundDistance((float) echo.x, (float) echo.y, (float) echo.z);
+            keep &= Float.isNaN(echoDistance) && (echoDistance >= parameters.getDtmFilteringParams().getMinDTMDistance());
+        }
+
+        return keep;
+    }
+
     public void processOneShot(final Shot shot, int shotID) throws Exception {
 
         if (voxelManager == null) {
             LOGGER.error("VoxelManager not initialized, what happened??");
             return;
-        }
-
-        if (null != echoes) {
-            while (null != echoes && echoes.shotID < shotID) {
-                echoes = echoFilterIterator.next();
-            }
         }
 
         if ((shotFilter != null && shotFilter.doFiltering(shot)) || shotFilter == null) {
@@ -300,7 +329,8 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
                 LineSegment seg = new LineSegment(shot.origin, shot.direction, 999999);
                 Point3d echo = new Point3d(seg.getEnd());
-                propagate(origin, echo, 1, 1, false, nbShotsProcessed, shot, -1);
+                boolean keep = keepEcho(shotID, shot, -1, echo);
+                propagate(origin, echo, 1, 1, false, nbShotsProcessed, shot, keep);
 
             } else {
 
@@ -317,19 +347,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
                     }
                 }
 
-                if (null != echoes) {
-                    while (null != echoes && echoes.shotID < shotID) {
-                        echoes = echoFilterIterator.next();
-                    }
-                }
-
                 for (int i = 0; i < shot.getEchoesNumber(); i++) {
-
-                    // echo discarded
-                    if ((echoes != null) && (echoes.shotID == shotID) && echoes.discarded[i]) {
-                        //LOGGER.info("  ShotID " + shotID + " echo " + i + " discarded");
-                        continue;
-                    }
 
                     Point3d nextEcho = null;
 
@@ -370,8 +388,9 @@ public class VoxelAnalysis extends Process implements Cancellable {
                         lastEchoBeamFraction = 0;
 
                         boolean lastEcho = (i == shot.getEchoesNumber() - 1);
+                        boolean keep = keepEcho(shotID, shot, i, echo);
                         // propagate
-                        propagate(origin, echo, beamFraction, residualEnergy, lastEcho, nbShotsProcessed, shot, i);
+                        propagate(origin, echo, beamFraction, residualEnergy, lastEcho, nbShotsProcessed, shot, keep);
 
                         origin = new Point3d(echo);
                     }
@@ -419,7 +438,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
      * @param shot current shot processed
      * @param echoRank current echo processed (rank)
      */
-    private void propagate(Point3d origin, Point3d echo, double beamFraction, double residualEnergy, boolean lastEcho, int shotID, Shot shot, int echoRank) {
+    private void propagate(Point3d origin, Point3d echo, double beamFraction, double residualEnergy, boolean lastEcho, int shotID, Shot shot, boolean keepEcho) {
 
         //get shot line
         LineElement lineElement = new LineSegment(origin, echo);
@@ -429,39 +448,6 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
         double distanceToHit = lineElement.getLength();
 
-        //calculate ground distance
-        boolean keepEcho = true, keepEchoPointCloudFiltering = true;
-
-        //echo filtering
-        if (pointcloudFilters != null) {
-            for (PointcloudFilter filter : pointcloudFilters) {
-                keepEchoPointCloudFiltering = keepEchoPointCloudFiltering && filter.doFiltering(echo);
-            }
-        }
-
-        if (!keepEchoOfShot(shot, echoRank)) { //mask
-            keepEcho = false;
-        }
-
-        if (keepEcho && parameters.getDtmFilteringParams().useDTMCorrection()) { //DTM
-
-            float echoDistance = getGroundDistance((float) echo.x, (float) echo.y, (float) echo.z);
-
-            if (echoDistance < parameters.getDtmFilteringParams().getMinDTMDistance() || Float.isNaN(echoDistance)) {
-                keepEcho = false;
-            }
-        }
-
-        if (keepEcho && !keepEchoPointCloudFiltering) { //point cloud filtering
-            keepEcho = false;
-        }
-
-//        keepEcho = keepEchoOfShot(shot, echoRank) && // mask
-//                ((parameters.getDtmFilteringParams().useDTMCorrection() && //DTM
-//                echoDistance >= parameters.getDtmFilteringParams().getMinDTMDistance() &&
-//                !Float.isNaN(echoDistance)) ||
-//                !parameters.getDtmFilteringParams().useDTMCorrection()) &&
-//                keepEchoPointCloudFiltering;
         while ((context != null) && (context.indices != null)) {
 
             //distance from the last origin to the point in which the ray enter the voxel
@@ -646,13 +632,11 @@ public class VoxelAnalysis extends Process implements Cancellable {
                 if (transMode == 2) {
                     transNorm = ((entering - intercepted) / entering) * surfMulLength;
                 } else //mode 3
-                {
-                    if (longueur == 0) {
+                 if (longueur == 0) {
                         transNorm = 0;
                     } else {
                         transNorm = Math.pow(((entering - intercepted) / entering), 1 / longueur) * surfMulLengthMulEnt;
                     }
-                }
 
                 vox.transmittance_tmp += transNorm;
 
@@ -672,15 +656,6 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
         }
 
-    }
-
-    private boolean keepEchoOfShot(Shot shot, int echoID) {
-
-        if (shot.getMask() == null) {
-            return true;
-        }
-
-        return shot.getMask()[echoID];
     }
 
     public static float computeTransmittance(double bvEntering, double bvIntercepted) {
