@@ -59,10 +59,10 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
     private int nbShotsProcessed;
 
-    private float[][] weightTable;
+    private double[][] weightTable;
     private IteratorWithException<EchoesWeight> weightIterator;
     private EchoesWeight echoesWeight;
-    private float[][] residualEnergyTable;
+    private double[][] residualEnergyTable;
 
     private IteratorWithException<Echoes> echoFilterIterator;
     private Echoes echoes;
@@ -76,7 +76,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
     private VoxelParameters parameters;
     private final VoxelAnalysisCfg cfg;
 
-    private boolean isSet = false;
+    private boolean groundEnergySet = false;
 
     private final Raster dtm;
 
@@ -119,11 +119,11 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
     private void generateResidualEnergyTable() {
 
-        residualEnergyTable = new float[weightTable.length][weightTable[0].length];
+        residualEnergyTable = new double[weightTable.length][weightTable[0].length];
 
         for (int i = 0; i < weightTable.length; i++) {
 
-            float startEnergy = 1;
+            double startEnergy = 1.d;
 
             for (int j = 0; j < i + 1; j++) {
                 residualEnergyTable[i][j] = startEnergy;
@@ -132,31 +132,29 @@ public class VoxelAnalysis extends Process implements Cancellable {
         }
     }
 
+    private double computeResidualEnergy(int nEcho, int iEcho, double weightCorr) {
+
+        double cumWeight = 0.d;
+        for (int rank = 0; rank < iEcho; rank++) {
+            cumWeight += weightCorr * weightTable[nEcho - 1][rank];
+        }
+
+        return 1.d - cumWeight;
+    }
+
     private void generateNoPonderationTables() {
 
-        weightTable = new float[7][7];
-
+        weightTable = new double[7][7];
         for (int i = 0; i < weightTable.length; i++) {
-
-            for (int j = 0; j < i + 1; j++) {
-                weightTable[i][j] = 1;
-            }
-
-            for (int j = i + 1; j < 7; j++) {
-                weightTable[i][j] = Float.NaN;
+            for (int j = 0; j < weightTable[i].length; j++) {
+                weightTable[i][j] = j < (i + 1) ? 1.d : Double.NaN;
             }
         }
 
-        residualEnergyTable = new float[7][7];
-
-        for (int i = 0; i < weightTable.length; i++) {
-
-            for (int j = 0; j < i + 1; j++) {
-                residualEnergyTable[i][j] = 1;
-            }
-
-            for (int j = i + 1; j < 7; j++) {
-                residualEnergyTable[i][j] = Float.NaN;
+        residualEnergyTable = new double[7][7];
+        for (int i = 0; i < residualEnergyTable.length; i++) {
+            for (int j = 0; j < residualEnergyTable[i].length; j++) {
+                residualEnergyTable[i][j] = j < (i + 1) ? 1.d : Double.NaN;
             }
         }
     }
@@ -274,7 +272,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
         return new Point3d(posX, posY, posZ);
     }
 
-    private boolean keepEcho(int shotID, Shot shot, int echoRank, Point3d echo) throws Exception {
+    private boolean retainEcho(int shotID, Shot shot, int echoRank, Point3d echo) throws Exception {
 
         boolean keep = true;
 
@@ -287,14 +285,14 @@ public class VoxelAnalysis extends Process implements Cancellable {
                 keep &= !echoes.discarded[echoRank];
             }
         }
-        
+
         // point cloud filters
         if (keep && pointcloudFilters != null) {
             for (PointcloudFilter filter : pointcloudFilters) {
                 keep = keep && filter.doFiltering(echo);
             }
         }
-        
+
         // shot mask
         if (keep && echoRank >= 0 && shot.getMask() != null) {
             keep &= shot.getMask()[echoRank];
@@ -325,84 +323,83 @@ public class VoxelAnalysis extends Process implements Cancellable {
             shot.direction.normalize();
             Point3d origin = new Point3d(shot.origin);
 
-            if (shot.getEchoesNumber() == 0) {
+            shotChanged = true;
+            groundEnergySet = false;
 
+            if (shot.getEchoesNumber() == 0) {
+                // empty shot
                 LineSegment seg = new LineSegment(shot.origin, shot.direction, 999999);
                 Point3d echo = new Point3d(seg.getEnd());
-                boolean keep = keepEcho(shotID, shot, -1, echo);
-                propagate(origin, echo, 1, 1, false, nbShotsProcessed, shot, keep);
-
+                boolean keep = retainEcho(shotID, shot, -1, echo);
+                double beamFraction = 1.d, residualEnergy = 1.d;
+                propagate(origin, echo, beamFraction, residualEnergy, false, nbShotsProcessed, shot, keep);
             } else {
-
-                shotChanged = true;
-                isSet = false;
-
-                double residualEnergy;
-                float lastEchoBeamFraction = 0;
-                int firstEchoOfVoxel = 0;
-
+                // shot with at least one echo.
+                // look for specific weight attenuation (EchoesWeightByFileParams.java)
+                double weightCorr = 1.d;
                 if (null != echoesWeight) {
                     while (null != echoesWeight && echoesWeight.shotID < shotID) {
                         echoesWeight = weightIterator.next();
                     }
-                }
-
-                for (int i = 0; i < shot.getEchoesNumber(); i++) {
-
-                    Point3d nextEcho = null;
-
-                    if (i < shot.getEchoesNumber() - 1) {
-                        nextEcho = new Point3d(getEchoLocation(shot, i + 1));
-                    }
-
-                    Point3d echo = getEchoLocation(shot, i);
-
-                    /*vérifie que le dernier écho n'était pas un écho "multiple",
-                    c'est à dire le premier écho du tir dans le voxel*/
-                    boolean wasMultiple = false;
-                    if (lastEchoBeamFraction != 0) {
-                        wasMultiple = true;
-                    }
-
-                    double weight = 1;
-                    if (null != weightTable) {
-                        weight *= weightTable[shot.getEchoesNumber() - 1][i];
-                    }
-                    double corr = 1.d;
+                    // beam fraction pondered by weight from CSV file
                     if (null != echoesWeight && echoesWeight.shotID == shotID) {
-                        //LOGGER.info("ShotID " + shotID + " echo " + i + " - weight " + weight + " * " + echoesWeight.weight +  " = " + (weight * echoesWeight.weight));
-                        weight *= echoesWeight.weight;
-                        corr = echoesWeight.weight;
-                    }
-
-                    if (echosAreInsideSameVoxel(echo, nextEcho)) {
-                        /*ne rien faire dans ce cas
-                         le beamFraction est incrémenté et l'opération se fera sur l'écho suivant*/
-                        lastEchoBeamFraction += weight;
-                        if (!wasMultiple) {
-                            firstEchoOfVoxel = i;
-                        }
-                    } else {
-                        double beamFraction = weight + lastEchoBeamFraction;
-                        residualEnergy = wasMultiple
-                                ? residualEnergyTable[shot.getEchoesNumber() - 1][firstEchoOfVoxel]
-                                : residualEnergyTable[shot.getEchoesNumber() - 1][i];
-                        residualEnergy *= corr;
-                        lastEchoBeamFraction = 0;
-
-                        boolean lastEcho = (i == shot.getEchoesNumber() - 1);
-                        boolean keep = keepEcho(shotID, shot, i, echo);
-                        // propagate
-                        propagate(origin, echo, beamFraction, residualEnergy, lastEcho, nbShotsProcessed, shot, keep);
-
-                        origin = new Point3d(echo);
+                        weightCorr = echoesWeight.weight;
                     }
                 }
-            }
 
+                double beamFractionPreviousEchoes = 0.d;
+                int rankFirstEchoOfVoxel = 0;
+                // loop over echoes
+                for (int rank = 0; rank < shot.getEchoesNumber(); rank++) {
+                    // current echo
+                    Point3d echo = getEchoLocation(shot, rank);
+                    // next echo
+                    Point3d nextEcho = (rank < shot.getEchoesNumber() - 1)
+                            ? new Point3d(getEchoLocation(shot, rank + 1))
+                            : null;
+                    
+                    // check whether current echo is the first echo of the shot in corresponding voxel
+                    if (beamFractionPreviousEchoes == 0.d) {
+                        rankFirstEchoOfVoxel = rank;
+                    }
+                    
+                    // compute beam fraction of current echo
+                    double beamFractionCurrentEcho = 1;
+                    // beam fraction pondered by weight table
+                    if (null != weightTable) {
+                        beamFractionCurrentEcho *= weightTable[shot.getEchoesNumber() - 1][rank];
+                    }
+                    // beam fraction pondered by weight from CSV file
+                    beamFractionCurrentEcho *= weightCorr;
+                    
+                    if (isInsideSameVoxel(echo, nextEcho)) {
+                        // current echo and next echo are in same voxel
+                        // increment beam fraction of previous echo and move to next echo
+                        // propagation will be done at next echo with cumulated energy
+                        beamFractionPreviousEchoes += beamFractionCurrentEcho;
+                    } else {
+                        // handle current echo and previous echoes that are in the same voxel
+                        double beamFraction = beamFractionCurrentEcho + beamFractionPreviousEchoes;
+                        // residual energy must be re-evaluated if custom attenuation factor provided
+                        double residualEnergy = (weightCorr != 1)
+                                ? computeResidualEnergy(shot.getEchoesNumber(), rankFirstEchoOfVoxel, weightCorr)
+                                : residualEnergyTable[shot.getEchoesNumber() - 1][rankFirstEchoOfVoxel];
+                        // whether current echo is last echo of the shot
+                        boolean lastEcho = (rank == shot.getEchoesNumber() - 1);
+                        // whether current echo should be retained or discarded (echo filters)
+                        boolean retain = retainEcho(shotID, shot, rank, echo);
+                        // propagate echo
+                        propagate(origin, echo, beamFraction, residualEnergy, lastEcho, nbShotsProcessed, shot, retain);
+                        // current echo set as origin of next echo
+                        origin = new Point3d(echo);
+                        // reset beam fraction previous echoes
+                        beamFractionPreviousEchoes = 0.d;
+                    }
+                } // end loop over echoes
+            }
+            // increment number of shots processed
             nbShotsProcessed++;
         }
-
     }
 
     private Point3d getEchoLocation(Shot shot, int indice) {
@@ -418,7 +415,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
         return realIndices.equals(searchedIndices);
     }
 
-    private boolean echosAreInsideSameVoxel(Point3d echo1, Point3d echo2) {
+    private boolean isInsideSameVoxel(Point3d echo1, Point3d echo2) {
 
         if (echo1 == null || echo2 == null) {
             return false;
@@ -621,11 +618,11 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
                 } else if (parameters.getGroundEnergyParams() != null
                         && parameters.getGroundEnergyParams().isCalculateGroundEnergy()
-                        && parameters.infos.getType() != VoxelSpaceInfos.Type.TLS && !isSet) {
+                        && parameters.infos.getType() != VoxelSpaceInfos.Type.TLS && !groundEnergySet) {
                     groundEnergy[vox.$i][vox.$j].groundEnergyActual += residualEnergy;
                     groundEnergy[vox.$i][vox.$j].groundEnergyPotential++;
 
-                    isSet = true;
+                    groundEnergySet = true;
                 }
             }
 

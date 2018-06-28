@@ -2897,13 +2897,13 @@ public class MainFrameController implements Initializable {
         return true;
     }
     
-    private float[][] parseWeightingData(){
+    private double[][] parseWeightingData(){
         
-        float[][] weightingData = new float[7][7];
+        double[][] weightingData = new double[7][7];
         
         for(int i = 0;i<7;i++){
             for(int j = 0;j<7;j++){
-                weightingData[i][j] = Float.NaN;
+                weightingData[i][j] = Double.NaN;
             }
         }
         
@@ -7055,7 +7055,7 @@ public class MainFrameController implements Initializable {
         
     }
     
-    private void fillWeightingData(float[][] weightingData){
+    private void fillWeightingData(double[][] weightingData){
         
         String text = "";
         
@@ -7066,8 +7066,8 @@ public class MainFrameController implements Initializable {
                     text += " ";
                 }
                 
-                if(!Float.isNaN(weightingData[i][j])){
-                    text += weightingData[i][j];
+                if(!Double.isNaN(weightingData[i][j])){
+                    text += Float.toString((float) weightingData[i][j]);
                 }
                 
                 if(j == weightingData.length - 1 && i != weightingData.length - 1){

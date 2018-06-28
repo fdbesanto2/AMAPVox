@@ -167,12 +167,12 @@ public class VoxelAnalysisCfg extends Configuration{
                 int colNumber = 7;
                 String data = matrixElement.getText();
                 String[] datas = data.split(" ");
-                float[][] weightingData = new float[rowNumber][colNumber];
+                double[][] weightingData = new double[rowNumber][colNumber];
 
                 int count = 0;
                 for(int i=0;i<weightingData.length;i++){
                     for(int j=0;j<weightingData[0].length;j++){
-                        weightingData[i][j] = Float.valueOf(datas[count]);
+                        weightingData[i][j] = Double.valueOf(datas[count]);
                         count++;
                     }
                 }
@@ -482,10 +482,10 @@ public class VoxelAnalysisCfg extends Configuration{
         ponderationElement.setAttribute(new Attribute("byrank", String.valueOf(null != voxelParameters.getEchoesWeightByRankParams())));
         if (null != voxelParameters.getEchoesWeightByRankParams()) {
              StringBuilder weightingDataString = new StringBuilder();
-            float[][] weightingData = voxelParameters.getEchoesWeightByRankParams().getWeightingData();
+            double[][] weightingData = voxelParameters.getEchoesWeightByRankParams().getWeightingData();
             for(int i=0;i<weightingData.length;i++){
                 for(int j=0;j<weightingData[0].length;j++){
-                    weightingDataString.append(weightingData[i][j]).append(" ");
+                    weightingDataString.append((float)weightingData[i][j]).append(" ");
                 }
             }
             Element matrixElement = createMatrixElement("ponderation", weightingDataString.toString().trim());
