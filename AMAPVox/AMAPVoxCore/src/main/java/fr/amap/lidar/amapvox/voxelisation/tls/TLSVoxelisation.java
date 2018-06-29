@@ -19,7 +19,6 @@ import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import org.apache.log4j.Logger;
 
@@ -27,7 +26,7 @@ import org.apache.log4j.Logger;
  *
  * @author calcul
  */
-public abstract class TLSVoxelisation extends CallableTask{
+public abstract class TLSVoxelisation extends CallableTask<File> {
     
     private final static Logger LOGGER = Logger.getLogger(TLSVoxelisation.class);
 

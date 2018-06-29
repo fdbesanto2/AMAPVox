@@ -16,10 +16,9 @@ import fr.amap.lidar.amapvox.voxelisation.tls.PTXVoxelisation;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Future;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -56,8 +55,7 @@ public class PTXVoxelizationService extends Service<List<File>>{
                 nbFileProcessed.set(0);
                 int nbFilesToWrite = mainCfg.getVoxelParameters().isMergingAfter() ? lidarScans.size()+1 : lidarScans.size();
                 try {
-                    LinkedBlockingQueue<Callable<PTXVoxelisation>>  tasks = new LinkedBlockingQueue<>();
-
+                    List<PTXVoxelisation>  tasks = new ArrayList();
                     int count = 0;
                     for (LidarScan scan : lidarScans) {
                         
@@ -78,16 +76,17 @@ public class PTXVoxelizationService extends Service<List<File>>{
                             }
                         });
                         
-                        tasks.put(ptxVoxelization);
+                        tasks.add(ptxVoxelization);
                         files.add(outputFile);
                         count++;
                     }
 
+                    // wait for every scan voxelisation to finish
                     updateMessage("Voxelization...");
-                    
-                    exec.invokeAll(tasks);
-
-                    exec.shutdown();
+                    List<Future<File>> results = exec.invokeAll(tasks);
+                    for (Future<File> result : results) {
+                        files.add(result.get());
+                    }
                     
                     if (mainCfg.getVoxelParameters().isMergingAfter()) {
                         

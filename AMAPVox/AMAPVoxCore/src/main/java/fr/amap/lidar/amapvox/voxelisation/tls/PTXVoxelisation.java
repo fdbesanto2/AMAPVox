@@ -13,6 +13,7 @@ import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.commons.math.vector.Vec4D;
 import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
+import java.io.File;
 import java.util.Iterator;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
@@ -34,7 +35,7 @@ public class PTXVoxelisation extends TLSVoxelisation{
     }
 
     @Override
-    public Object call() throws Exception {
+    public File call() throws Exception {
         
         try {
             LOGGER.info("ptx extraction is started");
@@ -118,7 +119,7 @@ public class PTXVoxelisation extends TLSVoxelisation{
             throw ex;
         }
         
-        return null;
+        return outputFile;
     }
     
 }

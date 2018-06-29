@@ -22,10 +22,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Future;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -74,12 +73,12 @@ public class RSPVoxelizationService extends Service<List<File>> {
                     echoFilterMap = readCSV(mainCfg.getVoxelParameters().getEchoFilterByFileParams().getFile());
                 }
 
-                ArrayList<File> files = new ArrayList<>();
-                exec = Executors.newFixedThreadPool(coreNumber);
+                ArrayList<File> files = new ArrayList();
+                exec = Executors.newFixedThreadPool(Math.min(coreNumber, lidarScans.size()));
                 nbFileProcessed.set(0);
                 int nbFilesToWrite = mainCfg.getVoxelParameters().isMergingAfter() ? lidarScans.size() + 1 : lidarScans.size();
                 try {
-                    LinkedBlockingQueue<Callable<RxpVoxelisation>> tasks = new LinkedBlockingQueue();
+                    List<RxpVoxelisation> tasks = new ArrayList();
                     for (LidarScan scan : lidarScans) {
 
                         TLSVoxCfg cfg = new TLSVoxCfg();
@@ -123,16 +122,15 @@ public class RSPVoxelizationService extends Service<List<File>> {
                                 updateProgress(nbFileProcessed.intValue(), nbFilesToWrite);
                             }
                         });
-                        tasks.put(rxpVoxelisation);
-                        files.add(outputFile);
+                        tasks.add(rxpVoxelisation);
                     }
 
+                    // wait for every scan voxelisation to finish
                     updateMessage("Voxelization...");
-
-                    exec.invokeAll(tasks);
-
-                    //wait for all Callable to finish
-                    exec.shutdown();
+                    List<Future<File>> results = exec.invokeAll(tasks);
+                    for (Future<File> result : results) {
+                        files.add(result.get());
+                    }
 
                     if (mainCfg.getVoxelParameters().isMergingAfter()) {
 

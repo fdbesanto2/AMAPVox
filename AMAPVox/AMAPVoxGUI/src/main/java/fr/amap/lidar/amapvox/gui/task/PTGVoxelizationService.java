@@ -15,10 +15,9 @@ import fr.amap.lidar.amapvox.voxelisation.tls.PTGVoxelisation;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Future;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -58,8 +57,7 @@ public class PTGVoxelizationService extends Service<List<File>>{
                 final int nbFilesToWrite = mainCfg.getVoxelParameters().isMergingAfter() ? lidarScans.size()+1 : lidarScans.size();
 
                 try {
-                    LinkedBlockingQueue<Callable<PTGVoxelisation>>  tasks = new LinkedBlockingQueue<>();
-
+                    List<PTGVoxelisation>  tasks = new ArrayList();
                     for (LidarScan scan : lidarScans) {
                         
                         TLSVoxCfg cfg = new TLSVoxCfg();
@@ -78,16 +76,16 @@ public class PTGVoxelizationService extends Service<List<File>>{
                                 updateProgress(nbFileProcessed.intValue(), nbFilesToWrite);
                             }
                         });
-                        tasks.put(ptgVoxelisation);
+                        tasks.add(ptgVoxelisation);
                         files.add(outputFile);
                     }
 
+                    // wait for every scan voxelisation to finish
                     updateMessage("Voxelization...");
-                    
-                    exec.invokeAll(tasks);
-
-                    exec.shutdown();
-                    
+                    List<Future<File>> results = exec.invokeAll(tasks);
+                    for (Future<File> result : results) {
+                        files.add(result.get());
+                    }                    
                     
                     if (mainCfg.getVoxelParameters().isMergingAfter()) {
                         
