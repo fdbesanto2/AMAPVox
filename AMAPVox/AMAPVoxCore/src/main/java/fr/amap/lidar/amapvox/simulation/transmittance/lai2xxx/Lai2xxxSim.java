@@ -155,7 +155,7 @@ public class Lai2xxxSim implements Cancellable{
             //conversion de la liste de voxels en tableau 3d
             while (iterator.hasNext()) {
                 Voxel voxel = iterator.next();
-                voxels[voxel.$i][voxel.$j][voxel.$k] = voxel;
+                voxels[voxel.i][voxel.j][voxel.k] = voxel;
             }
             //initialisation de la scène
             Scene scene = new Scene();
@@ -271,7 +271,7 @@ public class Lai2xxxSim implements Cancellable{
 
 
                         if(context != null && context.indices == null){
-                            if(voxel.$k == infos.getSplit().z -1){
+                            if(voxel.k == infos.getSplit().z -1){
                                 wasOutside = false;
                             }else{
                                 wasOutside = true;

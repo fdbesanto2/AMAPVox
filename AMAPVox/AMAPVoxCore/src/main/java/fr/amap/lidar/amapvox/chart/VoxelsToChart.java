@@ -406,17 +406,17 @@ public class VoxelsToChart {
             
             switch(axis){
                 case X_AXIS:
-                    if(voxel.$i < indiceMin || voxel.$i > indiceMax){
+                    if(voxel.i < indiceMin || voxel.i > indiceMax){
                         return true;
                     }
                     break;
                 case Y_AXIS: 
-                    if(voxel.$j < indiceMin || voxel.$j > indiceMax){
+                    if(voxel.j < indiceMin || voxel.j > indiceMax){
                         return true;
                     }
                     break;
                 case Z_AXIS:
-                    if(voxel.$k < indiceMin || voxel.$k > indiceMax){
+                    if(voxel.k < indiceMin || voxel.k > indiceMax){
                         return true;
                     }
                     break;
@@ -447,8 +447,8 @@ public class VoxelsToChart {
 
                 if (voxel.nbSampling > 0 && voxel.nbEchos > 0) {
 
-                    if(voxel.$k > canopeeArray[voxel.$i][voxel.$j]){
-                        canopeeArray[voxel.$i][voxel.$j] = voxel.$k;
+                    if(voxel.k > canopeeArray[voxel.i][voxel.j]){
+                        canopeeArray[voxel.i][voxel.j] = voxel.k;
                     }
                 }
             }
@@ -475,7 +475,7 @@ public class VoxelsToChart {
                     int layerIndex;
                     
                     if(reference == LayerReference.FROM_BELOW_CANOPEE){
-                        layerIndex = canopeeArray[voxel.$i][voxel.$j] - voxel.$k;
+                        layerIndex = canopeeArray[voxel.i][voxel.j] - voxel.k;
                     }else{
                         layerIndex = (int)voxel.ground_distance;
                     }
@@ -537,8 +537,8 @@ public class VoxelsToChart {
 
                 if (voxel.nbSampling > 0 && voxel.nbEchos > 0) {
 
-                    if(voxel.$k > canopeeArray[voxel.$i][voxel.$j]){
-                        canopeeArray[voxel.$i][voxel.$j] = voxel.$k;
+                    if(voxel.k > canopeeArray[voxel.i][voxel.j]){
+                        canopeeArray[voxel.i][voxel.j] = voxel.k;
                     }
                 }
             }
@@ -558,8 +558,8 @@ public class VoxelsToChart {
 
                 if (voxel.ground_distance > 0) {
 
-                    if(voxel.$k < groundArray[voxel.$i][voxel.$j]){
-                        groundArray[voxel.$i][voxel.$j] = voxel.$k;
+                    if(voxel.k < groundArray[voxel.i][voxel.j]){
+                        groundArray[voxel.i][voxel.j] = voxel.k;
                     }
                 }
             }
@@ -585,7 +585,7 @@ public class VoxelsToChart {
                     int layerIndex;
                     
                     if(reference == LayerReference.FROM_BELOW_CANOPEE){
-                        layerIndex = canopeeArray[voxel.$i][voxel.$j] - (int)((voxel.$k)/resolution);
+                        layerIndex = canopeeArray[voxel.i][voxel.j] - (int)((voxel.k)/resolution);
                     }else{
                         //layerIndex = (int)((voxel.$k)/resolution) - groundArray[voxel.$i][voxel.$j];
                         layerIndex = (int) (voxel.ground_distance/resolution);

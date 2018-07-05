@@ -47,7 +47,7 @@ public class ButterflyRemover {
         while(iterator.hasNext()){
             Voxel voxel = iterator.next();
 
-            voxels[voxel.$i][voxel.$j][voxel.$k] = voxel;                
+            voxels[voxel.i][voxel.j][voxel.k] = voxel;                
         }
         
         Voxel[][][] voxelSpaceCleaned = clean(voxels);

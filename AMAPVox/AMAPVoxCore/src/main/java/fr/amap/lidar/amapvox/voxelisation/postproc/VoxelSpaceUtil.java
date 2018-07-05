@@ -220,13 +220,13 @@ public class VoxelSpaceUtil {
             
             Voxel voxel = (Voxel) voxelSpace.voxels.get(i);
             
-            if(voxel.$i >= iMin && voxel.$i <= iMax && 
-                    voxel.$j >= jMin && voxel.$j <= jMax && 
-                    voxel.$k >= kMin && voxel.$k <= kMax){
+            if(voxel.i >= iMin && voxel.i <= iMax && 
+                    voxel.j >= jMin && voxel.j <= jMax && 
+                    voxel.k >= kMin && voxel.k <= kMax){
 
-                    voxel.$i -= iMin;
-                    voxel.$j -= jMin;
-                    voxel.$k -= kMin;
+                    voxel.i -= iMin;
+                    voxel.j -= jMin;
+                    voxel.k -= kMin;
                     
                     vs.voxels.add(voxel);
             }

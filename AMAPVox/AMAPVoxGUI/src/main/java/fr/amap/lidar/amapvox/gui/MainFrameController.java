@@ -6932,7 +6932,7 @@ public class MainFrameController implements Initializable {
 
                                                                     Voxel voxel = iterator.next();
 
-                                                                    if(voxelsToRemove.contains(new Point3i(voxel.$i, voxel.$j, voxel.$k))){
+                                                                    if(voxelsToRemove.contains(new Point3i(voxel.i, voxel.j, voxel.k))){
                                                                         voxel.PadBVTotal = 0;
                                                                         voxel.nbEchos = 0;
                                                                         voxel.transmittance = 1;

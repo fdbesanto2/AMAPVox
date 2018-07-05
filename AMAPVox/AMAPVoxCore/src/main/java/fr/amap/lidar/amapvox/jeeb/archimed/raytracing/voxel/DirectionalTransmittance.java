@@ -87,14 +87,14 @@ public class DirectionalTransmittance {
             Voxel voxel = iterator.next();
             
             if(voxel != null){
-                if (voxel.$k == 0) {
-                    mnt[voxel.$i][voxel.$j] = (float) (/*min.z - */voxel.ground_distance);
+                if (voxel.k == 0) {
+                    mnt[voxel.i][voxel.j] = (float) (/*min.z - */voxel.ground_distance);
                 }
 
                 /*if (Float.isNaN(voxel.PadBVTotal)) {
                     voxels[voxel.$i][voxel.$j][voxel.$k].padBV = 0;
                 } else {*/
-                    voxels[voxel.$i][voxel.$j][voxel.$k].padBV = voxel.PadBVTotal;
+                    voxels[voxel.i][voxel.j][voxel.k].padBV = voxel.PadBVTotal;
                 //}
             }else{
                 logger.warn("Voxel null");

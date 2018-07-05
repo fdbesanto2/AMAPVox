@@ -311,7 +311,7 @@ public class PositionImporterFrameController implements Initializable {
         Iterator<Voxel> iterator = reader.iterator();
         while(iterator.hasNext()){
             Voxel voxel = iterator.next();
-            voxels[voxel.$i][voxel.$j][voxel.$k] = voxel;
+            voxels[voxel.i][voxel.j][voxel.k] = voxel;
         }
         
         for(int i=0;i<infos.getSplit().x;i++){

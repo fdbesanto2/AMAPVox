@@ -409,9 +409,9 @@ public class DartWriter {
                 throw new Exception("could not find attribut PadBflTotal or PadBVTotal", e);
             }
             densite *= infos.getVoxelSize().z;
-            int indiceX = voxel.$i;
-            int indiceY = voxel.$j;
-            int indiceZ = voxel.$k;
+            int indiceX = voxel.i;
+            int indiceY = voxel.j;
+            int indiceZ = voxel.k;
             dart.cells[indiceX][indiceY][indiceZ] = new DartCell();
             int nbFigures = 0;
             if(faces != null){
