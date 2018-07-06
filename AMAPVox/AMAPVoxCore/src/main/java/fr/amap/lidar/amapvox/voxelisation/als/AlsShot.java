@@ -19,12 +19,12 @@ public class AlsShot extends Shot{
     public int classifications[];
     public double time;
     
-    public AlsShot(Point3d origin, Vector3d direction, double[] ranges) {
-        super(origin, direction, ranges);
+    public AlsShot(int index, Point3d origin, Vector3d direction, double[] ranges) {
+        super(index, origin, direction, ranges);
     }
     
-    public AlsShot(Point3d origin, Vector3d direction, double[] ranges, int[] classifications, float[] intensities) {
-        super(origin, direction, ranges);
+    public AlsShot(int index, Point3d origin, Vector3d direction, double[] ranges, int[] classifications, float[] intensities) {
+        super(index, origin, direction, ranges);
         this.classifications = classifications;
         this.intensities = intensities;
     }

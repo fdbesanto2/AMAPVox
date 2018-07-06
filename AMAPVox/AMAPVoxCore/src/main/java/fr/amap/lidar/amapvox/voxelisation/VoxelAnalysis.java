@@ -62,7 +62,8 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
     private float MAX_PAD = 3;
 
-    private int nbShotsProcessed;
+    private int nShotsProcessed;
+    private int nShotsDiscarded;
 
     private double[][] weightTable;
     private IteratorWithException<EchoesWeight> weightIterator;
@@ -173,7 +174,8 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
     public VoxelAnalysis(Raster terrain, List<PointcloudFilter> pointcloudFilters, VoxelAnalysisCfg cfg) throws Exception {
 
-        nbShotsProcessed = 0;
+        nShotsProcessed = 0;
+        nShotsDiscarded = 0;
         this.dtm = terrain;
         this.pointcloudFilters = pointcloudFilters;
 
@@ -277,12 +279,13 @@ public class VoxelAnalysis extends Process implements Cancellable {
         return new Point3d(posX, posY, posZ);
     }
 
-    private boolean retainEcho(int shotID, Shot shot, int echoRank, Point3d echo) throws Exception {
+    private boolean retainEcho(Shot shot, int echoRank, Point3d echo) throws Exception {
 
         boolean keep = true;
 
         // echo filtering CSV file
         if (keep && echoRank >= 0 && null != echoes) {
+            int shotID = shot.index;
             while (null != echoes && echoes.shotID < shotID) {
                 echoes = echoFilterIterator.next();
             }
@@ -322,18 +325,18 @@ public class VoxelAnalysis extends Process implements Cancellable {
         return true;
     }
 
-    public void processOneShot(final Shot shot, int shotID) throws Exception {
+    public void processOneShot(final Shot shot) throws Exception {
 
         if (voxelManager == null) {
             LOGGER.error("VoxelManager not initialized, what happened??");
             return;
         }
 
-        if (retainShot(shot)) {
+        if ((nShotsProcessed % 1000000) == 0) {
+            LOGGER.info("Progress: shot index " + nShotsProcessed + " (processed " + (nShotsProcessed - nShotsDiscarded) + " discarded " + nShotsDiscarded + ")");
+        }
 
-            if ((nbShotsProcessed % 1000000) == 0) {
-                LOGGER.info("Shots processed: " + nbShotsProcessed);
-            }
+        if (retainShot(shot)) {
 
             shot.direction.normalize();
             Point3d origin = new Point3d(shot.origin);
@@ -345,14 +348,15 @@ public class VoxelAnalysis extends Process implements Cancellable {
                 // empty shot
                 LineSegment seg = new LineSegment(shot.origin, shot.direction, 999999);
                 Point3d echo = new Point3d(seg.getEnd());
-                boolean keep = retainEcho(shotID, shot, -1, echo);
+                boolean keep = retainEcho(shot, -1, echo);
                 double beamFraction = 1.d, residualEnergy = 1.d;
-                propagate(origin, echo, beamFraction, residualEnergy, false, nbShotsProcessed, shot, keep);
+                propagate(origin, echo, beamFraction, residualEnergy, false, nShotsProcessed, shot, keep);
             } else {
                 // shot with at least one echo.
                 // look for specific weight attenuation (EchoesWeightByFileParams.java)
                 double weightCorr = 1.d;
                 if (null != echoesWeight) {
+                    int shotID = shot.index;
                     while (null != echoesWeight && echoesWeight.shotID < shotID) {
                         echoesWeight = weightIterator.next();
                     }
@@ -402,9 +406,9 @@ public class VoxelAnalysis extends Process implements Cancellable {
                         // whether current echo is last echo of the shot
                         boolean lastEcho = (rank == shot.getEchoesNumber() - 1);
                         // whether current echo should be retained or discarded (echo filters)
-                        boolean retain = retainEcho(shotID, shot, rank, echo);
+                        boolean retain = retainEcho(shot, rank, echo);
                         // propagate echo
-                        propagate(origin, echo, beamFraction, residualEnergy, lastEcho, nbShotsProcessed, shot, retain);
+                        propagate(origin, echo, beamFraction, residualEnergy, lastEcho, nShotsProcessed, shot, retain);
                         // current echo set as origin of next echo
                         origin = new Point3d(echo);
                         // reset beam fraction previous echoes
@@ -412,9 +416,11 @@ public class VoxelAnalysis extends Process implements Cancellable {
                     }
                 } // end loop over echoes
             }
-            // increment number of shots processed
-            nbShotsProcessed++;
+        } else {
+            nShotsDiscarded++;
         }
+        // increment number of shots processed
+        nShotsProcessed++;
     }
 
     private Point3d getEchoLocation(Shot shot, int indice) {
@@ -1124,7 +1130,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
     }
 
     public int getNbShotsProcessed() {
-        return nbShotsProcessed;
+        return nShotsProcessed;
     }
 
     public Voxel[][][] getVoxels() {

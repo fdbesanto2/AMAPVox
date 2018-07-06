@@ -189,14 +189,7 @@ public class PointsToShotIterator implements IteratorWithException<AlsShot>{
             if(!wasReturned){
 
                 LasPoint lasPoint = lasPointList.get(i);
-
-
                 double targetTime = lasPoint.t;
-                
-                if(targetTime == 309385.650774){
-                    System.out.println("test");
-                }
-
                 index = searchNearestMaxV2(targetTime, trajectoryList, index);
                 if(index < 0){
                     //logger.error("Trajectory file is invalid, out of bounds exception.");
@@ -297,10 +290,11 @@ public class PointsToShotIterator implements IteratorWithException<AlsShot>{
 
                 //le point est associé à un nouveau tir donc on crée ce tir
                 if ((!isNewShot && time != oldTime) || currentEchoFound == currentNbEchos) {
-
-                    shot = new AlsShot(new Point3d(mix.xloc_s, mix.yloc_s, mix.zloc_s), 
-                                                new Vector3d(mix.x_u, mix.y_u, mix.z_u), 
-                                                new double[mix.lasPoint.n], new int[mix.lasPoint.n], new float[mix.lasPoint.n]);
+                    // phv 20180706: not checked yet whether shot index should be currentLasPointIndex or currentLasPointIndex + 1
+                    shot = new AlsShot(currentLasPointIndex,
+                            new Point3d(mix.xloc_s, mix.yloc_s, mix.zloc_s),
+                            new Vector3d(mix.x_u, mix.y_u, mix.z_u),
+                            new double[mix.lasPoint.n], new int[mix.lasPoint.n], new float[mix.lasPoint.n]);
                     shot.time = time;
                     
                     currentNbEchos = mix.lasPoint.n;

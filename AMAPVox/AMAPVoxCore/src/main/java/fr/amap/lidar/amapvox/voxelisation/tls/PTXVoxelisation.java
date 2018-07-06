@@ -23,12 +23,12 @@ import org.apache.log4j.Logger;
  *
  * @author Julien Heurtebize
  */
-public class PTXVoxelisation extends TLSVoxelisation{
+public class PTXVoxelisation extends TLSVoxelisation {
 
     private final static Logger LOGGER = Logger.getLogger(PTXVoxelisation.class);
-    
+
     private final PTXScan scan;
-    
+
     public PTXVoxelisation(PTXScan scan, TLSVoxCfg cfg) throws Exception {
         super(cfg);
         this.scan = scan;
@@ -36,42 +36,35 @@ public class PTXVoxelisation extends TLSVoxelisation{
 
     @Override
     public File call() throws Exception {
-        
+
         try {
             LOGGER.info("ptx extraction is started");
-            
-            long startTime = System.currentTimeMillis();
-        
+
             voxelAnalysis.createVoxelSpace();
-            
+
             LPointShotExtractor pTXShots = new LPointShotExtractor(scan);
-            
             Iterator<LShot> iterator = pTXShots.iterator();
 
-            LShot shot;
             int index = 0;
-            while(iterator.hasNext()){
-                
-                if (Thread.currentThread().isInterrupted()){
+            while (iterator.hasNext()) {
+
+                if (Thread.currentThread().isInterrupted()) {
                     LOGGER.info("Task cancelled");
                     return null;
                 }
 
-                shot = iterator.next();
-                if(shot != null){
+                LShot shot = iterator.next();
+                if (shot != null) {
                     Vec4D locVector = Mat4D.multiply(transfMatrix, new Vec4D(shot.origin.x, shot.origin.y, shot.origin.z, 1.0d));
-
                     Vec3D uVector = Mat3D.multiply(rotation, new Vec3D(shot.direction.x, shot.direction.y, shot.direction.z));
-                                        
-                    voxelAnalysis.processOneShot(new fr.amap.lidar.amapvox.shot.Shot(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z), shot.ranges), index++);
+                    voxelAnalysis.processOneShot(new fr.amap.lidar.amapvox.shot.Shot(index++, new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z), shot.ranges));
                 }
 
             }
-            
-            LOGGER.info("Shots processed: "+voxelAnalysis.getNbShotsProcessed());
-            
-            super.postProcess();
-            
+
+            LOGGER.info("Shots processed: " + voxelAnalysis.getNbShotsProcessed());
+            postProcess();
+
             /*RasterParams rasterParameters = parameters.getRasterParams();
             
             boolean write = false;
@@ -108,18 +101,16 @@ public class PTXVoxelisation extends TLSVoxelisation{
             
             //permet de signaler au garbage collector que cet élément peut être supprimé
             voxelAnalysis = null;*/
-            
             //return resultData;
-        
-        }catch(OutOfMemoryError ex){
-            LOGGER.error("Unsufficient memory, you need to allocate more to the JVM, change the Xmx value!",ex);
+        } catch (OutOfMemoryError ex) {
+            LOGGER.error("Unsufficient memory, you need to allocate more to the JVM, change the Xmx value!", ex);
             throw ex;
-        }catch(Exception ex){
-            LOGGER.error("Unknow exception in thread : "+Thread.currentThread().getName()+", retrying",ex);
+        } catch (Exception ex) {
+            LOGGER.error("Unknow exception in thread : " + Thread.currentThread().getName() + ", retrying", ex);
             throw ex;
         }
-        
+
         return outputFile;
     }
-    
+
 }

@@ -15,9 +15,11 @@ import java.util.Iterator;
 public class RxpShotIteratorConverter implements Iterable<Shot>{
 
     private final Iterator<fr.amap.amapvox.io.tls.rxp.Shot> inputIterator;
+    private int index;
     
     public RxpShotIteratorConverter(Iterator<fr.amap.amapvox.io.tls.rxp.Shot> inputIterator) {
         this.inputIterator = inputIterator;
+        this.index = 0;
     }
 
     @Override
@@ -33,7 +35,7 @@ public class RxpShotIteratorConverter implements Iterable<Shot>{
             public Shot next() {
                 fr.amap.amapvox.io.tls.rxp.Shot inputShot = inputIterator.next();
                 if(inputShot != null){
-                    return new Shot(inputShot.origin, inputShot.direction, inputShot.ranges);
+                    return new Shot(index++, inputShot.origin, inputShot.direction, inputShot.ranges);
                 }else{
                     return null;
                 }

@@ -14,13 +14,15 @@ import javax.vecmath.Vector3d;
  */
 public class Shot {
     
+    public final int index;
     public Point3d origin;
     public Vector3d direction;
     public double ranges[];
     private boolean[] mask;
     private double angle = Double.NaN;
 
-    public Shot(Point3d origin, Vector3d direction, double ranges[]) {
+    public Shot(int index, Point3d origin, Vector3d direction, double ranges[]) {
+        this.index = index;
         this.origin = origin;
         this.direction = direction;
         this.ranges = ranges;
@@ -31,6 +33,7 @@ public class Shot {
      * @param shot the shot to copy
      */
     public Shot(Shot shot) {
+        this.index = shot.index;
         this.origin = new Point3d(shot.origin);
         this.direction = new Vector3d(shot.direction);
         this.angle = shot.angle;

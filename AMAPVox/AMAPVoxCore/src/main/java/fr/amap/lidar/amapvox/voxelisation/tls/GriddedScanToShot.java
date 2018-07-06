@@ -21,12 +21,13 @@ import java.util.logging.Logger;
 public class GriddedScanToShot extends ScanToShot{
 
     private final GriddedPointScan scan;
+    private int index;
     
     public GriddedScanToShot(Mat4D transfMatrix, GriddedPointScan scan) {
         
         super(transfMatrix);
-        
         this.scan = scan;
+        this.index = 0;
     }
 
     @Override
@@ -48,7 +49,7 @@ public class GriddedScanToShot extends ScanToShot{
                 @Override
                 public Shot next() {
                     LShot lShot = iterator.next();
-                    return new Shot(lShot.origin, lShot.direction, lShot.ranges);
+                    return new Shot(index++, lShot.origin, lShot.direction, lShot.ranges);
                 }
             };
 

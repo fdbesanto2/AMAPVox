@@ -23,6 +23,7 @@ import fr.amap.commons.util.Cancellable;
 import fr.amap.commons.util.ProcessingAdapter;
 import fr.amap.commons.util.io.file.FileManager;
 import fr.amap.lidar.amapvox.commons.Configuration;
+import fr.amap.lidar.amapvox.shot.Shot;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import javax.vecmath.Point3d;
@@ -114,7 +115,7 @@ public class LasVoxelisation extends Process implements Cancellable {
             try (BufferedReader reader = new BufferedReader(new FileReader(cfg.getInputFile()))) {
                 fireProgress("Voxelisation", 0, 100);
 
-                long shotId = 0;
+                int shotId = 0;
                 long nbShots = FileManager.getLineNumber(cfg.getInputFile());
 
                 String line;
@@ -152,13 +153,13 @@ public class LasVoxelisation extends Process implements Cancellable {
                         classifications[i] = Integer.valueOf(split[14 + i]);
                     }
 
-                    AlsShot shot = new AlsShot(new Point3d(xOrigin, yOrigin, zOrigin), new Vector3d(xDirection, yDirection, zDirection), ranges);
+                    AlsShot shot = new AlsShot(shotId, new Point3d(xOrigin, yOrigin, zOrigin), new Vector3d(xDirection, yDirection, zDirection), ranges);
                     shot.classifications = classifications;
                     shot.setMask(getMask(shot));
 
                     fireProgress("Voxelisation...", shotId, nbShots);
 
-                    voxelAnalysis.processOneShot(new fr.amap.lidar.amapvox.shot.Shot(shot.origin, shot.direction, shot.ranges), (int) shotId);
+                    voxelAnalysis.processOneShot(new Shot(shotId, shot.origin, shot.direction, shot.ranges));
 
                     shotId++;
                 }
@@ -214,7 +215,7 @@ public class LasVoxelisation extends Process implements Cancellable {
                 fireProgress("Voxelisation...", shotIndex, iterator.getNbPoints());
 
                 shot.setMask(getMask(shot));
-                voxelAnalysis.processOneShot(shot, shotIndex);
+                voxelAnalysis.processOneShot(shot);
             }
 
             LOGGER.info("Shots processed: " + voxelAnalysis.getNbShotsProcessed());
@@ -287,11 +288,7 @@ public class LasVoxelisation extends Process implements Cancellable {
 
     private boolean doFiltering(AlsShot shot, int echoID) {
 
-        if (shot.classifications != null && !classifiedPointsToDiscard.contains(shot.classifications[echoID])/*shot.classifications[echoID] != 2*/) {
-            return true;
-        } else {
-            return false;
-        }
+        return shot.classifications != null && !classifiedPointsToDiscard.contains(shot.classifications[echoID]);
     }
 
 }

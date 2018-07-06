@@ -19,9 +19,11 @@ import javax.vecmath.Vector3d;
 public class TxtShotIteratorConverter implements Iterable<Shot>{
 
     private final IteratorWithException<fr.amap.lidar.format.shot.Shot> inputIterator;
+    private int index;
     
     public TxtShotIteratorConverter(IteratorWithException<fr.amap.lidar.format.shot.Shot> inputIterator) {
         this.inputIterator = inputIterator;
+        this.index = 0;
     }
 
     @Override
@@ -58,7 +60,7 @@ public class TxtShotIteratorConverter implements Iterable<Shot>{
                         }
                     }
                     
-                    return new Shot(new Point3d(inputShot.getXOrigin(), inputShot.getYOrigin(), inputShot.getZOrigin()),
+                    return new Shot(index++, new Point3d(inputShot.getXOrigin(), inputShot.getYOrigin(), inputShot.getZOrigin()),
                             new Vector3d(inputShot.getXDirection(), inputShot.getYDirection(), inputShot.getZDirection()), ranges);
                 }else{
                     return null;
