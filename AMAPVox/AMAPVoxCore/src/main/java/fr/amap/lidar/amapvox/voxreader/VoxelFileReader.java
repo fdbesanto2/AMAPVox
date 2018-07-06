@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
  */
 public class VoxelFileReader extends AbstractReader implements Iterable<Voxel>{
 
-    private final static Logger logger = Logger.getLogger(VoxelFileReader.class);
+    private final static Logger LOGGER = Logger.getLogger(VoxelFileReader.class);
     
     public VoxelFileReader(File voxelFile, boolean keepInMemory) throws Exception{
         
@@ -70,9 +70,9 @@ public class VoxelFileReader extends AbstractReader implements Iterable<Voxel>{
                 }
 
             } catch (FileNotFoundException ex) {
-                logger.error("Cannot find file", ex);
+                LOGGER.error("Cannot find file", ex);
             } catch (IOException ex) {
-                logger.error("Cannot read file", ex);
+                LOGGER.error("Cannot read file", ex);
             }
         }
         
@@ -122,7 +122,7 @@ public class VoxelFileReader extends AbstractReader implements Iterable<Voxel>{
                     voxel = parseVoxelFileLine(currentLine);
                     
                     if(voxel == null){
-                        logger.error("Error parsing line: "+(currentVoxelIndex+7));
+                        LOGGER.error("Error parsing line: "+(currentVoxelIndex+7));
                     }else{
                         if(keepInMemory){
                             voxelSpace.voxels.add(voxel);
@@ -157,7 +157,7 @@ public class VoxelFileReader extends AbstractReader implements Iterable<Voxel>{
                 mapAttrs[i] = value;
             }
 
-            Voxel vox = new Voxel(indice.x, indice.y, indice.z, Voxel.class);
+            Voxel vox = new Voxel(indice.x, indice.y, indice.z);
 
             for(int i=3;i<mapAttrs.length;i++){
                 try {

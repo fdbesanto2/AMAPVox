@@ -137,7 +137,6 @@ public class NaNsCorrection implements Cancellable{
                             }
                             
                             Statistic nbSamplingStat = new Statistic();
-                            float meanTransmittance = 0;
                             
                             float sumBVEntering = 0;
                             float sumBVIntercepted = 0;
@@ -157,7 +156,7 @@ public class NaNsCorrection implements Cancellable{
                                     nbSamplingStat.addValue(neighbour.nbSampling);
                                 }
                                 
-                                meanTransmittance = (float) Math.pow((sumBVEntering-sumBVIntercepted)/sumBVEntering, nbSamplingStat.getSum()/sumLgTotal);
+                                float meanTransmittance = (float) Math.pow((sumBVEntering-sumBVIntercepted)/sumBVEntering, nbSamplingStat.getSum()/sumLgTotal);
                                                                 
                                 currentNbSampling = (float) nbSamplingStat.getMean();
                                 currentTransmittance = meanTransmittance;
@@ -189,8 +188,8 @@ public class NaNsCorrection implements Cancellable{
                                 PADStatistic.addValue(neighbour.PadBVTotal);
                             }
                             
-                            voxels[x][y][z]._neighboursNumber = neighbours.size();
-                            voxels[x][y][z]._passNumber = passID;
+                            voxels[x][y][z].neighboursNumber = neighbours.size();
+                            voxels[x][y][z].passNumber = passID;
                             voxels[x][y][z].PadBVTotal = (float)PADStatistic.getMean();
                             //voxels[x][y][z].nbSampling = (int)currentNbSampling;
                             voxels[x][y][z].transmittance = currentTransmittance;

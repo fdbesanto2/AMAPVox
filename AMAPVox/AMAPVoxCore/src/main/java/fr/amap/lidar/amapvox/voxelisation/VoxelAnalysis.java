@@ -529,7 +529,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
                     lastShotId = shotID;
                     
                     test = true;
-                    vox._valid = false;
+                    vox.valid = false;
                 }
 
                 /*
@@ -581,7 +581,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
                     } else {
                         longueur = (d2 - d1); //test
                     }
-                    vox._valid = false;
+                    vox.valid = false;
                 } else {
                     longueur = (d2 - d1);
                 }
@@ -612,7 +612,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
                     test = true;
                     
                     if (!lastEcho) {
-                        vox._lastEcho = false;
+                        vox.lastEcho = false;
                     }
                     vox.nbEchos++;
                     

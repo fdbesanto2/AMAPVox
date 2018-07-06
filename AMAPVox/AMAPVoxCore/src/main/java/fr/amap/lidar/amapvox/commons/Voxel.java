@@ -35,63 +35,18 @@ public class Voxel {
     public int nbSampling;
 
     /**
-     * Nombre de fois où un rayon à échantillonné le voxel
-     */
-    //public int nbOutgoing = 0;
-    /**
      * Nombre d'échos dans le voxel
      */
     public int nbEchos;
 
-    /**
-     * Longueurs cumulées des trajets optiques dans le voxel dans le cas où il
-     * n'y a pas eu d'interceptions dans le voxel
-     */
-    //public double lgNoInterception = 0;
     /**
      * Longueurs cumulées des trajets optiques dans le voxel Lorqu'il y a
      * interception dans le voxel vaut: distance du point d'entrée au point
      * d'interception Lorsqu'il y n'y a pas d'interception dans le voxel vaut:
      * distance du point d'entré au point de sortie
      */
-    //public double lgOutgoing = 0;
     public float lgTotal;
 
-    /**
-     * PAD beam fraction, calcul du PAD selon la formule: transmittance =
-     * (bfEntering - bfIntercepted) / vox.bfEntering; PAD = log(transmittance) /
-     * (-0.5 * lMean2);
-     *
-     */
-    //public double PadBF = 0;
-    /**
-     * PAD beam section, calcul du PAD selon la formule: transmittance =
-     * (bsEntering - bsIntercepted) / vox.bsEntering; PAD = log(transmittance) /
-     * (-0.5 * lMean2);
-     *
-     */
-    /**
-     * Beam fraction Entering, fraction de faisceau entrante Nombre de fois où
-     * un rayon a échantillonné le voxel, contrairement à nbSampling, peut etre
-     * pondéré
-     */
-    //public double bfEntering = 0;
-    /**
-     * Beam fraction Intercepted, fraction de faisceau interceptée Nombre
-     * d'échos dans le voxel, contrairement à nbEchos peut être pondéré
-     */
-    //public double bfIntercepted = 0;
-    /**
-     * Beam Section Entering, section de faisceau entrant, est calculé par
-     * rapport à la surface selon la formule: tan(laserBeamDivergence / 2) *
-     * distance * Math.PI;
-     *
-     */
-    //public float bsEntering = 0;
-    /**
-     * Beam Section Intercepted, section de faisceau intercepté
-     */
-    //public float bsIntercepted = 0;
     /**
      * Distance du voxel par rapport au sol
      */
@@ -99,40 +54,28 @@ public class Voxel {
 
     /**
      * Position du voxel dans l'espace Note: un attribut de voxel commençant par
-     * underscore _ signifie que l'attribut ne doit pas être exporté
      */
-    public Point3d _position;
-
-    public double _sum_li;
-    //public double bvOutgoing = 0;
-    //public double bvEntering = 0;
-    //public double bvIntercepted = 0;
+    public Point3d position;
 
     /**
      * Longueur moyenne du trajet optique dans le voxel En ALS est égal à:
      * pathLength / (nbSampling) En TLS est égal à: lgTraversant / (nbSampling -
      * nbEchos)
      */
-    //public double lMeanOutgoing = 0;
     public double lMeanTotal;
-    //public double LMean_NoInterception = 0;
-    //public double _transBeforeNorm;
+
     public float transmittance;
     public double transmittance_tmp;
-    //public double _transmittance_v2;
     public float angleMean;
     public double bvEntering;
     public double bvIntercepted;
     public float PadBVTotal;
-    //public float _PadBVTotal_V2;
     public double sumSurfMulLength;
     public double sumSurfMulLengthMulEnt;
-
-    public float _passNumber;
-    public float _neighboursNumber;
-
-    public boolean _lastEcho = true;
-    public boolean _valid = true;
+    public float passNumber;
+    public float neighboursNumber;
+    public boolean lastEcho = true;
+    public boolean valid = true;
 
     /**
      *
@@ -147,43 +90,25 @@ public class Voxel {
         this.k = k;
     }
 
-    public Voxel(int i, int j, int k, Class c) {
+    public void setFieldValue(Class< ? extends Voxel> c, String fieldName, Object object, Object value)
+            throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 
-        this.i = i;
-        this.j = j;
-        this.k = k;
-    }
+        Field f = c.getField(fieldName);
+        Class<?> type = f.getType();
+        float v;
 
-    public void setPosition(Point3d position) {
-        this._position = new Point3d(position);
-    }
-
-    public void setDist(float dist) {
-        this.ground_distance = dist;
-    }
-
-    public void setFieldValue(Class< ? extends Voxel> c, String fieldName, Object object, Object value) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-        try {
-            Field f = c.getField(fieldName);
-            Class<?> type = f.getType();
-            float v;
-
-            switch (type.getName()) {
-                case "double":
-                    v = (float) value;
-                    f.setDouble(object, (double) v);
-                    break;
-                case "float":
-                    f.setFloat(object, (float) value);
-                    break;
-                case "int":
-                    v = (float) value;
-                    f.setInt(object, (int) v);
-                    break;
-            }
-
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
-            throw ex;
+        switch (type.getName()) {
+            case "double":
+                v = (float) value;
+                f.setDouble(object, (double) v);
+                break;
+            case "float":
+                f.setFloat(object, (float) value);
+                break;
+            case "int":
+                v = (float) value;
+                f.setInt(object, (int) v);
+                break;
         }
     }
 
@@ -191,77 +116,5 @@ public class Voxel {
             throws SecurityException, NoSuchFieldException, IllegalAccessException {
 
         return c.getField(fieldName).getDouble(o);
-    }
-
-    public float calculatePAD(float maxPAD) {
-
-        float pad1/*, pad2*/;
-
-        angleMean = angleMean / nbSampling;
-
-        if (nbSampling >= nbEchos) {
-
-            lMeanTotal = lgTotal / (nbSampling);
-
-        }
-
-        /**
-         * *PADBV**
-         */
-        if (bvEntering <= 0) {
-
-            pad1 = Float.NaN;
-            //pad2 = pad1;
-            transmittance = Float.NaN;
-            //voxel._transmittance_v2 = Float.NaN;
-
-        } else if (bvIntercepted > bvEntering) {
-
-            pad1 = Float.NaN;
-            //pad2 = pad1;
-            transmittance = Float.NaN;
-            //voxel._transmittance_v2 = Float.NaN;
-
-        } else {
-
-            transmittance = (float) ((bvEntering - bvIntercepted) / bvEntering);
-            transmittance = (float) Math.pow(transmittance, 1 / lMeanTotal);
-            //voxel._transmittance_v2 = (voxel._transBeforeNorm) / voxel._sumSurfaceMultiplyLength ;
-
-            if (nbSampling > 1 && transmittance == 0 && nbSampling == nbEchos) {
-
-                pad1 = maxPAD;
-                //pad2 = pad1;
-
-            } else if (nbSampling <= 2 && transmittance == 0 && nbSampling == nbEchos) {
-
-                pad1 = Float.NaN;
-                //pad2 = pad1;
-
-            } else {
-
-                pad1 = (float) (Math.log(transmittance) / (-0.5f));
-                //pad1 = (float) (Math.log(voxel.transmittance) / (-0.5 * voxel.lMeanTotal));
-                //pad2 = (float) (Math.log(voxel._transmittance_v2) / (-0.5 * voxel.lMeanTotal));
-
-                if (Float.isNaN(pad1)) {
-                    pad1 = Float.NaN;
-                } else if (pad1 > maxPAD || Float.isInfinite(pad1)) {
-                    pad1 = maxPAD;
-                }
-                /*
-                     if (Float.isNaN(pad2)) {
-                     pad2 = Float.NaN;
-                     } else if (pad2 > MAX_PAD || Float.isInfinite(pad2)) {
-                     pad2 = MAX_PAD;
-                     }*/
-
-            }
-
-        }
-
-        PadBVTotal = pad1 + 0.0f; //set +0.0f to avoid -0.0f
-
-        return PadBVTotal;
     }
 }
