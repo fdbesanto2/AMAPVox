@@ -28,7 +28,7 @@ import fr.amap.commons.util.io.file.FileManager;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.point.Point2F;
 import fr.amap.commons.math.util.BoundingBox3d;
-import fr.amap.commons.util.Filter;
+import fr.amap.commons.util.filter.FloatFilter;
 import fr.amap.lidar.amapvox.commons.LidarScan;
 import fr.amap.commons.math.util.MatrixFileParser;
 import fr.amap.commons.math.util.MatrixUtility;
@@ -70,6 +70,7 @@ import fr.amap.commons.javafx.matrix.TransformationFrameController;
 import fr.amap.commons.math.point.Point3D;
 import fr.amap.commons.math.point.Point3F;
 import fr.amap.commons.math.vector.Vec3F;
+import fr.amap.commons.util.filter.Filter;
 import fr.amap.commons.util.image.ScaleGradient;
 import fr.amap.commons.util.io.file.CSVFile;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByRankParams;
@@ -210,6 +211,8 @@ import fr.amap.viewer3d.object.scene.SimpleSceneObject;
 import fr.amap.lidar.amapvox.gui.viewer3d.VoxelObject;
 import fr.amap.lidar.amapvox.gui.viewer3d.VoxelSpaceAdapter;
 import fr.amap.lidar.amapvox.gui.viewer3d.VoxelSpaceSceneObject;
+import fr.amap.lidar.amapvox.shot.Shot;
+import fr.amap.lidar.amapvox.voxelisation.ShotAttributeFilter;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoFilterByFileParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams;
 import java.awt.Color;
@@ -562,7 +565,7 @@ public class MainFrameController implements Initializable {
     @FXML
     private TextField textFieldOutputFileMerging;
     @FXML
-    private ListView<Filter> listviewFilters;
+    private ListView<FloatFilter> listviewFilters;
     @FXML
     private Label labelTLSOutputPath;
     @FXML
@@ -2781,7 +2784,11 @@ public class MainFrameController implements Initializable {
             cfg.setVoxelParameters(voxelParameters);
 
             ((ALSVoxCfg)cfg).setClassifiedPointsToDiscard(getListOfClassificationPointToDiscard());
-            cfg.setShotFilters(listviewFilters.getItems());
+            List<Filter<Shot>> shotFilters = new ArrayList();
+            for (FloatFilter filter : listviewFilters.getItems()) {
+                shotFilters.add(new ShotAttributeFilter(filter));
+            }
+            cfg.setShotFilters(shotFilters);
 
             try {
                 cfg.writeConfiguration(selectedFile, Global.buildVersion);
@@ -3014,7 +3021,11 @@ public class MainFrameController implements Initializable {
         cfg.setVoxelParameters(voxelParameters);
 
         //shot filtering
-        cfg.setShotFilters(listviewFilters.getItems());
+        List<Filter<Shot>> shotFilters = new ArrayList();
+        for (FloatFilter filter : listviewFilters.getItems()) {
+            shotFilters.add(new ShotAttributeFilter(filter));
+        }
+        cfg.setShotFilters(shotFilters);
         cfg.setEnableEmptyShotsFiltering(checkboxEmptyShotsFilter.isSelected());
 
         if (it == InputType.RSP_PROJECT || it == InputType.PTG_PROJECT || it == InputType.PTX_PROJECT) {
@@ -5439,10 +5450,13 @@ public class MainFrameController implements Initializable {
 
                     updateResultMatrix();
 
-                    List<Filter> filters = ((VoxelAnalysisCfg)cfg).getShotFilters();
+                    List<Filter<Shot>> filters = ((VoxelAnalysisCfg)cfg).getShotFilters();
                     if (filters != null) {
                         listviewFilters.getItems().clear();
-                        listviewFilters.getItems().addAll(filters);
+                        for (Filter filter : filters) {
+                            ShotAttributeFilter f = (ShotAttributeFilter) filter;
+                            listviewFilters.getItems().add(f.getFilter());
+                        }
                     }
 
                     if (null == ((VoxelAnalysisCfg)cfg).getVoxelParameters().getEchoesWeightByRankParams()) {
@@ -5687,7 +5701,7 @@ public class MainFrameController implements Initializable {
 
     @FXML
     private void onActionButtonRemoveFilter(ActionEvent event) {
-        ObservableList<Filter> selectedItems = listviewFilters.getSelectionModel().getSelectedItems();
+        ObservableList<FloatFilter> selectedItems = listviewFilters.getSelectionModel().getSelectedItems();
         listviewFilters.getItems().removeAll(selectedItems);
     }
 

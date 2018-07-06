@@ -12,57 +12,51 @@ Authors:
 
 For further information, please contact Gregoire Vincent.
  */
+package fr.amap.commons.util.filter;
 
-package fr.amap.commons.util;
-
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
+public class StackedFloatFilters implements Filter<Float> {
 
+    public List<CombinedFloatFilter> filters;
 
-public class CombinedFilters {
-    
-    public Set<CombinedFilter> filters;
-    
-    public CombinedFilters(){
-        filters = new HashSet<>();
+    public StackedFloatFilters() {
+        filters = new ArrayList();
     }
-    
-    public void addFilter(CombinedFilter filter) {
+
+    public void addFilter(CombinedFloatFilter filter) {
         filters.add(filter);
     }
-    
-    public void setFilters(Set<CombinedFilter> newFilters){
-        
-        if(newFilters != null){
-            filters.clear();
 
-            for(CombinedFilter f : newFilters){
-                filters.add(f);
-            }
+    public void setFilters(Set<CombinedFloatFilter> newFilters) {
+
+        if (newFilters != null) {
+            filters.clear();
+            filters.addAll(filters);
         }
-        
     }
-    
+
     /**
      * Do filtering
+     *
      * @param value
      * @return true if the value is filtered, false otherwise
      */
-    public boolean doFilter(float value){
-        
-        for(CombinedFilter filter : filters){
-            
-            if(filter.doFilter(value)){
+    @Override
+    public boolean accept(Float value) {
+
+        for (CombinedFloatFilter filter : filters) {
+            if (filter.accept(value)) {
                 return true;
             }
         }
-        
         return false;
     }
-    
+
 }

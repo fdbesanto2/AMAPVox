@@ -15,10 +15,10 @@ import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.commons.math.geometry.BoundingBox3F;
 import fr.amap.commons.math.point.Point3D;
 import fr.amap.commons.util.ColorGradient;
-import fr.amap.commons.util.CombinedFilter;
-import fr.amap.commons.util.CombinedFilterItem;
-import fr.amap.commons.util.CombinedFilters;
-import fr.amap.commons.util.Filter;
+import fr.amap.commons.util.filter.CombinedFloatFilter;
+import fr.amap.commons.util.filter.CombinedFilterItem;
+import fr.amap.commons.util.filter.StackedFloatFilters;
+import fr.amap.commons.util.filter.FloatFilter;
 import fr.amap.commons.util.StandardDeviation;
 import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.geometry.LineSegment;
 import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.util.BoundingBox3d;
@@ -156,7 +156,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
     public VoxelSpaceData data;
     
     //private Set<Filter> filteredValues;
-    private CombinedFilters combinedFilters;
+    private StackedFloatFilters combinedFilters;
     private List<CombinedFilterItem> filters;
     private boolean displayValues;
     
@@ -179,13 +179,13 @@ public class VoxelSpaceSceneObject extends SceneObject{
         //filteredValues = new TreeSet<>();
         //filteredValues.add(new Filter("x", Float.NaN, Filter.EQUAL));
         //filteredValues.add(new Filter("x", 0.0f, Filter.EQUAL));
-        combinedFilters = new CombinedFilters();
-        combinedFilters.addFilter(new CombinedFilter(new Filter("x", Float.NaN, Filter.EQUAL), null, CombinedFilter.AND));
-        combinedFilters.addFilter(new CombinedFilter(new Filter("x", 0.0f, Filter.EQUAL), null, CombinedFilter.AND));
+        combinedFilters = new StackedFloatFilters();
+        combinedFilters.addFilter(new CombinedFloatFilter(new FloatFilter("x", Float.NaN, FloatFilter.EQUAL), null, CombinedFloatFilter.AND));
+        combinedFilters.addFilter(new CombinedFloatFilter(new FloatFilter("x", 0.0f, FloatFilter.EQUAL), null, CombinedFloatFilter.AND));
         
         filters = new ArrayList<>();
-        CombinedFilter combFilter1 = new CombinedFilter(new Filter("x", 0.0f, Filter.EQUAL),  null, CombinedFilter.AND);
-        CombinedFilter combFilter2 = new CombinedFilter(new Filter("x", Float.NaN, Filter.EQUAL),  null, CombinedFilter.AND);
+        CombinedFloatFilter combFilter1 = new CombinedFloatFilter(new FloatFilter("x", 0.0f, FloatFilter.EQUAL),  null, CombinedFloatFilter.AND);
+        CombinedFloatFilter combFilter2 = new CombinedFloatFilter(new FloatFilter("x", Float.NaN, FloatFilter.EQUAL),  null, CombinedFloatFilter.AND);
         
         filters.add(new CombinedFilterItem("PadBVTotal", false, 
                         combFilter1.getFilter1(), combFilter1.getFilter2(), combFilter1.getType()));
@@ -326,8 +326,8 @@ public class VoxelSpaceSceneObject extends SceneObject{
         updateValue();
     }
     
-    public void setFilterValues(Set<CombinedFilter> values, boolean display){
-        combinedFilters = new CombinedFilters();
+    public void setFilterValues(Set<CombinedFloatFilter> values, boolean display){
+        combinedFilters = new StackedFloatFilters();
         combinedFilters.setFilters(values);
         this.displayValues = display;
     }
@@ -767,7 +767,7 @@ public class VoxelSpaceSceneObject extends SceneObject{
             for(CombinedFilterItem filter : filters){
                 
                 //true if the field value fit the condition, false otherwise
-                boolean doFilter = filter.doFilter(getAttribut(filter.getScalarField(), voxel));
+                boolean doFilter = filter.accept(getAttribut(filter.getScalarField(), voxel));
                 
                 if(filter.isDisplay()){
                     

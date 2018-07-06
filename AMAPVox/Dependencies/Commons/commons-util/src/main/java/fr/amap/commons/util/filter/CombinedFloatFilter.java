@@ -13,9 +13,7 @@ Authors:
 For further information, please contact Gregoire Vincent.
  */
 
-package fr.amap.commons.util;
-
-import java.util.ArrayList;
+package fr.amap.commons.util.filter;
 
 /**
  *
@@ -23,50 +21,44 @@ import java.util.ArrayList;
  */
 
 
-public class CombinedFilter{
+public class CombinedFloatFilter implements Filter<Float> {
     
     public final static int AND = 0;
     public final static int OR = 1;
     
-    protected Filter filter1;
-    protected Filter filter2;
-    protected int type;
+    protected final FloatFilter filter1;
+    protected final FloatFilter filter2;
+    private final int type;
     
-    public CombinedFilter(Filter filter1, Filter filter2, int type){
+    public CombinedFloatFilter(FloatFilter filter1, FloatFilter filter2, int type){
         
         this.filter1 = filter1;
         this.filter2 = filter2;
         this.type = type;
     }
 
-    public boolean doFilter(float attribut) {
+    @Override
+    public boolean accept(Float attribut) {
         
         if(filter2 == null){
-            return filter1.doFilter(attribut);
+            return filter1.accept(attribut);
         }
         
         switch(type){
-            
-            case CombinedFilter.AND:
-                
-                return filter1.doFilter(attribut) && filter2.doFilter(attribut);
-                
-            case CombinedFilter.OR:
-                
-                return filter1.doFilter(attribut) || filter2.doFilter(attribut);
-                
+            case CombinedFloatFilter.AND:
+                return filter1.accept(attribut) && filter2.accept(attribut);
+            case CombinedFloatFilter.OR:
+                return filter1.accept(attribut) || filter2.accept(attribut);
             default:
-                return false;
-                
+                return false;  
         }
-        
     }
 
-    public Filter getFilter1() {
+    public FloatFilter getFilter1() {
         return filter1;
     }
 
-    public Filter getFilter2() {
+    public FloatFilter getFilter2() {
         return filter2;
     }
 

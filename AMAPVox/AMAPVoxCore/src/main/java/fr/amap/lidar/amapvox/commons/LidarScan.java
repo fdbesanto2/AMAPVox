@@ -6,7 +6,7 @@
 package fr.amap.lidar.amapvox.commons;
 
 import fr.amap.commons.math.matrix.Mat4D;
-import fr.amap.commons.util.Filter;
+import fr.amap.commons.util.filter.FloatFilter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class LidarScan{
     
     public File file;
     public Matrix4d matrix;
-    public List<Filter> filters;
+    public List<FloatFilter> filters;
     public String name;
 
     public LidarScan(File file, Matrix4d matrix, String name) {

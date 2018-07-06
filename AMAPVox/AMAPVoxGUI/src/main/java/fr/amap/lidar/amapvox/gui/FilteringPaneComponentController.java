@@ -5,7 +5,7 @@
  */
 package fr.amap.lidar.amapvox.gui;
 
-import fr.amap.commons.util.Filter;
+import fr.amap.commons.util.filter.FloatFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -34,7 +34,7 @@ public class FilteringPaneComponentController implements Initializable {
     private FilterFrameController filterFrameController;
     private Stage filterFrame;
     @FXML
-    private ListView<Filter> listviewFilters;
+    private ListView<FloatFilter> listviewFilters;
     
     /**
      * Initializes the controller class.
@@ -57,7 +57,7 @@ public class FilteringPaneComponentController implements Initializable {
         filterFrameController.setFilters(items);
     }
     
-    public void setFilters(List<Filter> filters){
+    public void setFilters(List<FloatFilter> filters){
         listviewFilters.getItems().setAll(filters);
     }
 
@@ -80,11 +80,11 @@ public class FilteringPaneComponentController implements Initializable {
 
     @FXML
     private void onActionButtonRemoveFilter(ActionEvent event) {
-        ObservableList<Filter> selectedItems = listviewFilters.getSelectionModel().getSelectedItems();
+        ObservableList<FloatFilter> selectedItems = listviewFilters.getSelectionModel().getSelectedItems();
         listviewFilters.getItems().removeAll(selectedItems);
     }
     
-    public List<Filter> getFilterList(){
+    public List<FloatFilter> getFilterList(){
         return listviewFilters.getItems();
     }
     

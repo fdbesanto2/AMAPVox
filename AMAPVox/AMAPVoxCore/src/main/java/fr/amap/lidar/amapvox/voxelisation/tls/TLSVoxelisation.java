@@ -13,7 +13,7 @@ import fr.amap.commons.util.CallableTask;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.util.Util;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
-import fr.amap.lidar.amapvox.voxelisation.SimpleShotFilter;
+import fr.amap.lidar.amapvox.voxelisation.ShotAttributeFilter;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
 import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
@@ -78,11 +78,6 @@ public abstract class TLSVoxelisation extends CallableTask<File> {
             if (terrain != null && cfg.getVoxelParameters().getDtmFilteringParams().isUseVOPMatrix()) {
                 terrain.setTransformationMatrix(vop);
             }
-        }
-        
-        // shot filters
-        if(cfg.getShotFilter() == null){
-            cfg.setShotFilter(new SimpleShotFilter(cfg.getShotFilters()));
         }
         
         // echo filters

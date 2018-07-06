@@ -5,7 +5,7 @@
  */
 package fr.amap.lidar.amapvox.voxelisation.tls;
 
-import fr.amap.commons.util.Filter;
+import fr.amap.commons.util.filter.FloatFilter;
 import fr.amap.lidar.amapvox.voxelisation.EchoFilter;
 import fr.amap.lidar.amapvox.shot.Shot;
 import java.util.List;
@@ -16,9 +16,9 @@ import java.util.List;
  */
 public class RxpEchoFilter implements EchoFilter{
     
-    private final List<Filter> echoFilters;
+    private final List<FloatFilter> echoFilters;
 
-    public RxpEchoFilter(List<Filter> echoFilters) {
+    public RxpEchoFilter(List<FloatFilter> echoFilters) {
 
         this.echoFilters = echoFilters;
     }

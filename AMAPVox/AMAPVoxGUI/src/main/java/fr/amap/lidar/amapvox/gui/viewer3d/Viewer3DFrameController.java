@@ -8,11 +8,11 @@ package fr.amap.lidar.amapvox.gui.viewer3d;
 
 import fr.amap.commons.math.vector.Vec3F;
 import fr.amap.commons.util.ColorGradient;
-import fr.amap.commons.util.CombinedFilter;
-import fr.amap.commons.util.Filter;
+import fr.amap.commons.util.filter.CombinedFloatFilter;
+import fr.amap.commons.util.filter.FloatFilter;
 import fr.amap.viewer3d.object.camera.TrackballCamera;
 import fr.amap.viewer3d.renderer.JoglListener;
-import fr.amap.commons.util.CombinedFilterItem;
+import fr.amap.commons.util.filter.CombinedFilterItem;
 import fr.amap.commons.javafx.io.FileChooserContext;
 import fr.amap.lidar.amapvox.gui.Util;
 import fr.amap.viewer3d.SimpleViewer;
@@ -659,8 +659,8 @@ public class Viewer3DFrameController implements Initializable {
         radiobuttonDisplay.setToggleGroup(group);
         radiobuttonDontDisplay.setToggleGroup(group);
         
-        CombinedFilter combFilter1 = new CombinedFilter(new Filter("x", 0.0f, Filter.EQUAL),  null, CombinedFilter.AND);
-        CombinedFilter combFilter2 = new CombinedFilter(new Filter("x", Float.NaN, Filter.EQUAL),  null, CombinedFilter.AND);
+        CombinedFloatFilter combFilter1 = new CombinedFloatFilter(new FloatFilter("x", 0.0f, FloatFilter.EQUAL),  null, CombinedFloatFilter.AND);
+        CombinedFloatFilter combFilter2 = new CombinedFloatFilter(new FloatFilter("x", Float.NaN, FloatFilter.EQUAL),  null, CombinedFloatFilter.AND);
         
         listviewFilters.getItems().add(new CombinedFilterItem("PadBVTotal", false, 
                         combFilter1.getFilter1(), combFilter1.getFilter2(), combFilter1.getType()));
@@ -851,7 +851,7 @@ public class Viewer3DFrameController implements Initializable {
             
             final String[] valuesArray = textfieldFilteringRange.getText().replace(" ", "").split(",");
             
-            Set<CombinedFilter> filterValues = new HashSet<>();
+            Set<CombinedFloatFilter> filterValues = new HashSet<>();
             
             for(int i=0;i<valuesArray.length;i++){
                 try{
@@ -869,43 +869,43 @@ public class Viewer3DFrameController implements Initializable {
                             int firstInequalityID;
                             switch(firstInequality){
                                 case ']':
-                                    firstInequalityID = Filter.GREATER_THAN;
+                                    firstInequalityID = FloatFilter.GREATER_THAN;
                                     break;
                                 case '[':
-                                    firstInequalityID = Filter.GREATER_THAN_OR_EQUAL;
+                                    firstInequalityID = FloatFilter.GREATER_THAN_OR_EQUAL;
                                     break;
                                 default:
-                                    firstInequalityID = Filter.GREATER_THAN_OR_EQUAL;
+                                    firstInequalityID = FloatFilter.GREATER_THAN_OR_EQUAL;
                             }
 
                             int secondInequalityID;
                             switch(secondInequality){
                                 case ']':
-                                    secondInequalityID = Filter.LESS_THAN_OR_EQUAL;
+                                    secondInequalityID = FloatFilter.LESS_THAN_OR_EQUAL;
                                     break;
                                 case '[':
-                                    secondInequalityID = Filter.LESS_THAN;
+                                    secondInequalityID = FloatFilter.LESS_THAN;
                                     break;
                                 default:
-                                    secondInequalityID = Filter.LESS_THAN_OR_EQUAL;
+                                    secondInequalityID = FloatFilter.LESS_THAN_OR_EQUAL;
                             }
 
 
-                            filterValues.add(new CombinedFilter(
-                                    new Filter("x", firstValue, firstInequalityID), 
-                                    new Filter("x", secondValue, secondInequalityID), CombinedFilter.AND));
+                            filterValues.add(new CombinedFloatFilter(
+                                    new FloatFilter("x", firstValue, firstInequalityID), 
+                                    new FloatFilter("x", secondValue, secondInequalityID), CombinedFloatFilter.AND));
                         }
 
                     }else{
-                        filterValues.add(new CombinedFilter(
-                                    new Filter("x", Float.valueOf(valuesArray[i]), Filter.EQUAL), 
-                                    null, CombinedFilter.AND));
+                        filterValues.add(new CombinedFloatFilter(
+                                    new FloatFilter("x", Float.valueOf(valuesArray[i]), FloatFilter.EQUAL), 
+                                    null, CombinedFloatFilter.AND));
                     }
 
                 }catch(Exception e){}
             }
             
-            for(CombinedFilter combinedFilter : filterValues){
+            for(CombinedFloatFilter combinedFilter : filterValues){
                 
                 ObservableList<CombinedFilterItem> items = listviewFilters.getItems();
                 

@@ -3,22 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.amap.commons.util;
+package fr.amap.commons.util.filter;
 
-import fr.amap.commons.util.CombinedFilter;
-import static fr.amap.commons.util.CombinedFilter.AND;
-import fr.amap.commons.util.Filter;
+import static fr.amap.commons.util.filter.CombinedFloatFilter.AND;
 
 /**
  *
  * @author calcul
  */
-public class CombinedFilterItem extends CombinedFilter {
+public class CombinedFilterItem extends CombinedFloatFilter {
 
     private final boolean display;
     private final String scalarField;
 
-    public CombinedFilterItem(String scalarField, boolean display, Filter filter1, Filter filter2, int type) {
+    public CombinedFilterItem(String scalarField, boolean display, FloatFilter filter1, FloatFilter filter2, int type) {
         super(filter1, filter2, type);
 
         this.display = display;
@@ -44,7 +42,7 @@ public class CombinedFilterItem extends CombinedFilter {
 
     public static void main(String[] args) {
 
-        CombinedFilterItem item = new CombinedFilterItem("pad", true, new Filter("x", 5, Filter.EQUAL), null, AND);
+        CombinedFilterItem item = new CombinedFilterItem("pad", true, new FloatFilter("x", 5, FloatFilter.EQUAL), null, AND);
 
         System.out.println(item.toString());
     }

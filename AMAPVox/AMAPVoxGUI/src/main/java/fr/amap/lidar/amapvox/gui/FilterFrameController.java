@@ -6,7 +6,7 @@ package fr.amap.lidar.amapvox.gui;
  * and open the template in the editor.
  */
 
-import fr.amap.commons.util.Filter;
+import fr.amap.commons.util.filter.FloatFilter;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -56,13 +56,13 @@ public class FilterFrameController implements Initializable {
         comboboxVariable.getItems().setAll(items);
     }
     
-    public Filter getFilter(){
+    public FloatFilter getFilter(){
         
         if(textfieldValue.getText().isEmpty() || comboboxVariable.getSelectionModel().getSelectedIndex() < 0){
             return null;
         }
             
-        Filter filter = new Filter(comboboxVariable.getSelectionModel().getSelectedItem(),
+        FloatFilter filter = new FloatFilter(comboboxVariable.getSelectionModel().getSelectedItem(),
             Float.valueOf(textfieldValue.getText()), comboboxInequality.getSelectionModel().getSelectedIndex());
         
         
