@@ -25,6 +25,7 @@ import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.EchoFilter;
 import fr.amap.lidar.amapvox.voxelisation.LaserSpecification;
 import fr.amap.lidar.amapvox.voxelisation.ShotAttributeFilter;
+import fr.amap.lidar.amapvox.voxelisation.ShotDecimationFilter;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoFilterByFileParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByRankParams;
@@ -338,12 +339,18 @@ public class VoxelAnalysisCfg extends Configuration {
 
                 if (childrensFilter != null) {
                     for (Element e : childrensFilter) {
-
-                        String variable = e.getAttributeValue("variable");
-                        String inequality = e.getAttributeValue("inequality");
-                        String value = e.getAttributeValue("value");
-
-                        shotFilters.add(new ShotAttributeFilter(new FloatFilter(variable, Float.valueOf(value), FloatFilter.getConditionFromString(inequality))));
+                        if (null != e.getAttribute("variable")) {
+                            // shot attribute filter
+                            String variable = e.getAttributeValue("variable");
+                            String inequality = e.getAttributeValue("inequality");
+                            String value = e.getAttributeValue("value");
+                            shotFilters.add(new ShotAttributeFilter(new FloatFilter(variable, Float.valueOf(value), FloatFilter.getConditionFromString(inequality))));
+                        } else if (null != e.getAttribute("decimation-factor")) {
+                            // shot decimation
+                            int decimationFactor = Integer.valueOf(e.getAttributeValue("decimation-factor"));
+                            int offset = Integer.valueOf(e.getAttributeValue("offset"));
+                            shotFilters.add(new ShotDecimationFilter(decimationFactor, offset));
+                        }
                     }
                 }
             }
@@ -640,6 +647,10 @@ public class VoxelAnalysisCfg extends Configuration {
                     filterElement.setAttribute("variable", f.getVariable());
                     filterElement.setAttribute("inequality", f.getConditionString());
                     filterElement.setAttribute("value", String.valueOf(f.getValue()));
+                } else if (filter instanceof ShotDecimationFilter) {
+                    ShotDecimationFilter f = (ShotDecimationFilter) filter;
+                    filterElement.setAttribute("decimation-factor", String.valueOf(f.getDecimationFactor()));
+                    filterElement.setAttribute("offset", String.valueOf(f.getOffset()));
                 }
                 shotFilterElement.addContent(filterElement);
             }

@@ -19,7 +19,7 @@ public class ShotDecimationFilter implements Filter<Shot> {
     private final int offset;
     private final int decimationFactor;
 
-    public ShotDecimationFilter(int offset, int decimationFactor) {
+    public ShotDecimationFilter(int decimationFactor, int offset) {
         this.offset = offset;
         this.decimationFactor = decimationFactor;
     }
@@ -32,5 +32,13 @@ public class ShotDecimationFilter implements Filter<Shot> {
     public boolean accept(Shot shot) {
         int indexRel = (shot.index - offset);
         return (indexRel >= 0) && (indexRel % decimationFactor == 0);
+    }
+    
+    public int getDecimationFactor() {
+        return decimationFactor;
+    }
+    
+    public int getOffset() {
+        return offset;
     }
 }

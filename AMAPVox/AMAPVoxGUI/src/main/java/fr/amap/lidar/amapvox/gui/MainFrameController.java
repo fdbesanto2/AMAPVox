@@ -213,6 +213,7 @@ import fr.amap.lidar.amapvox.gui.viewer3d.VoxelSpaceAdapter;
 import fr.amap.lidar.amapvox.gui.viewer3d.VoxelSpaceSceneObject;
 import fr.amap.lidar.amapvox.shot.Shot;
 import fr.amap.lidar.amapvox.voxelisation.ShotAttributeFilter;
+import fr.amap.lidar.amapvox.voxelisation.ShotDecimationFilter;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoFilterByFileParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams;
 import java.awt.Color;
@@ -796,6 +797,10 @@ public class MainFrameController implements Initializable {
     private Button buttonHelpShotDecimation;
     @FXML
     private HelpButtonController buttonHelpShotDecimationController;
+    @FXML
+    private TextField textfieldDecimationFactor;
+    @FXML
+    private TextField textfieldDecimationOffset;
     @FXML
     private CheckBox checkboxShotAttributeFilter;
     @FXML
@@ -2235,6 +2240,7 @@ public class MainFrameController implements Initializable {
             buttonHelpShotDecimationController.showHelpDialog(resourceBundle.getString("help_shot_decimation"));
         });
         
+        
         // Shot attribute filter
         vBoxShotAttributeFilter.disableProperty().bind(checkboxShotAttributeFilter.selectedProperty().not());
          buttonHelpShotAttributeFilter.setOnAction((ActionEvent event) -> {
@@ -2813,8 +2819,14 @@ public class MainFrameController implements Initializable {
 
             ((ALSVoxCfg)cfg).setClassifiedPointsToDiscard(getListOfClassificationPointToDiscard());
             List<Filter<Shot>> shotFilters = new ArrayList();
-            for (FloatFilter filter : listviewFilters.getItems()) {
-                shotFilters.add(new ShotAttributeFilter(filter));
+            if (checkboxShotAttributeFilter.isSelected()) {
+                for (FloatFilter filter : listviewFilters.getItems()) {
+                    shotFilters.add(new ShotAttributeFilter(filter));
+                }
+            }
+            // shot decimation
+            if (checkboxShotDecimation.isSelected()) {
+                shotFilters.add(new ShotDecimationFilter(Integer.valueOf(textfieldDecimationFactor.getText()), Integer.valueOf(textfieldDecimationOffset.getText())));
             }
             cfg.setShotFilters(shotFilters);
 
@@ -3048,12 +3060,20 @@ public class MainFrameController implements Initializable {
 
         cfg.setVoxelParameters(voxelParameters);
 
-        //shot filtering
+        // shot filtering by attribute
         List<Filter<Shot>> shotFilters = new ArrayList();
-        for (FloatFilter filter : listviewFilters.getItems()) {
-            shotFilters.add(new ShotAttributeFilter(filter));
+        if (checkboxShotAttributeFilter.isSelected()) {
+            for (FloatFilter filter : listviewFilters.getItems()) {
+                shotFilters.add(new ShotAttributeFilter(filter));
+            }
         }
+        // shot decimation
+        if (checkboxShotDecimation.isSelected()) {
+            shotFilters.add(new ShotDecimationFilter(Integer.valueOf(textfieldDecimationFactor.getText()), Integer.valueOf(textfieldDecimationOffset.getText())));
+        }
+        // add filters
         cfg.setShotFilters(shotFilters);
+        // false empty shot filter
         cfg.setEnableEmptyShotsFiltering(checkboxEmptyShotsFilter.isSelected());
 
         if (it == InputType.RSP_PROJECT || it == InputType.PTG_PROJECT || it == InputType.PTX_PROJECT) {
@@ -5481,9 +5501,21 @@ public class MainFrameController implements Initializable {
                     List<Filter<Shot>> filters = ((VoxelAnalysisCfg)cfg).getShotFilters();
                     if (filters != null) {
                         listviewFilters.getItems().clear();
+                        checkboxShotAttributeFilter.setSelected(false);
+                        checkboxShotDecimation.setSelected(false);
                         for (Filter filter : filters) {
-                            ShotAttributeFilter f = (ShotAttributeFilter) filter;
-                            listviewFilters.getItems().add(f.getFilter());
+                            if (filter instanceof ShotAttributeFilter) {
+                                ShotAttributeFilter f = (ShotAttributeFilter) filter;
+                                listviewFilters.getItems().add(f.getFilter());
+                            } else if (filter instanceof ShotDecimationFilter) {
+                                ShotDecimationFilter f = (ShotDecimationFilter) filter;
+                                checkboxShotDecimation.setSelected(true);
+                                textfieldDecimationFactor.setText(String.valueOf(f.getDecimationFactor()));
+                                textfieldDecimationOffset.setText(String.valueOf(f.getOffset()));
+                            }
+                        }
+                        if (listviewFilters.getItems().size() > 0) {
+                            checkboxShotAttributeFilter.setSelected(true);
                         }
                     }
 
