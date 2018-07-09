@@ -20,7 +20,7 @@
 
     <build>
         <finalName>
-            ${project.name}-${project.version}-r${buildNumber}
+            ${project.name}-${project.version}-${buildNumber}
         </finalName>
         <plugins>
             
@@ -63,7 +63,7 @@
                             <Implementation-Build>${buildNumber}</Implementation-Build>
                         </manifestEntries>
                     </archive>
-                    <finalName>${project.name}-${project.version}-r${buildNumber}</finalName>
+                    <finalName>${project.name}-${project.version}-${buildNumber}</finalName>
                     <useDefaultManifestFile>false</useDefaultManifestFile>
                 </configuration>
             </plugin>
@@ -207,7 +207,7 @@
                 <version>2.6</version>
                 <configuration>
                     <descriptor>src/assembly/zip.xml</descriptor>
-                    <finalName>${project.name}-${project.version}-r${buildNumber}</finalName>
+                    <finalName>${project.name}-${project.version}-${buildNumber}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <outputDirectory>${basedir}/target/</outputDirectory>
                 </configuration>

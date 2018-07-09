@@ -1,0 +1,55 @@
+### AMAPVox 1.0.3 up to commit acb4c1ca133fa7d02c75756008e28b220dc8b3cc
+Philipe Verley, 2018-07-10 (philippe dot verley at ird.fr)
+
+# Shot decimation
+Added new shot decimation option for the voxelisation (both ALS and TLS)
+Downsample any scan by an integer factor M, the decimation factor, that is, keep only every Mth shot, starting from shot index I, the offset (zero by default). Replicating voxelisations with different offset prevents from downsampling biais.
+
+### AMAPVox 1.0.2  up to commit 2cb699c176b4ae9b4aba70feab5d73ac6fa240fa 
+
+# Echo filtering by shot index and echo rank
+Added new echo filering option for the voxelisation.
+
+For single RXP scans:
+AMAPVoxGUI > Voxelisation tab > Filters > Echo > By shot index and echo rank
+The user can provide a CSV file (tab separator) with the following format
+shotID	rnk1	rnk2	rnk3	etc.
+156230	1	0	0
+184500	0
+etc.
+shotID must be an integer
+Each line lists every echo and tag them with either a zero or a one.
+The user sets the behavior of the filter, either "Discard" or "Retain"
+In "Discard" mode 1 == discarded echo and 0 == retained echo
+In "Retain" mode 1 == retained echo and 0 == discarded echo
+Shots that are not listed in the CSV file are handled as usual.
+
+For RSP projects: refert to section echo filtering and echo energy attenuation for RSP projects lower down.
+
+# Echo energy attenuation from CSV file
+Added new echo attenuation method from CSV file for the voxelisation.
+
+For single RXP scans:
+AMAPVoxGUI > Voxelisation tab > Weighting > Echo weighting from CSV file
+The user can provide a CSV file (tab separator) with the following format
+shotID	weight
+156230	0.5
+173400	2.0
+shotID must be an integer
+The weighting factor is applied to every echo of a given shot.
+This option can be enabled concurently to the "Echo weighting by rank". Both weighting options are multiplicative.
+Shots not listed in the CSV file are given an attenuation factor of one (no attenuation) for this option. But the final attenuation depends on whether the "weighting by rank" option is enabled.
+
+For RSP projects: refert to following section echo filtering and echo energy attenuation for RSP projects.
+
+# Echo filtering and echo energy attenuation for RSP projects
+Both options work for RSP projects. The CSV files have a different format though:
+RXP_ID	CSV_File
+850215_182429   850215_182429_weighting.csv
+750213_181051   750213_181051_weighting.csv
+750209_181255   750209_181255_weighting.csv
+etc.
+RXP_ID is a String, the unique file prefix of a RXP scan
+CSV_FILE is the path of the echo filtering or echo weighting CSV file. Their is no naming convention for CSV_FILE. The CSV_FILE path is either absolute or relative to the CSV file.
+
+#EOF
