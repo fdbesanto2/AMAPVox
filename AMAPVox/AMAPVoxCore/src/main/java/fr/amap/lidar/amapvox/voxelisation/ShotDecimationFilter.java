@@ -17,11 +17,11 @@ import fr.amap.lidar.amapvox.shot.Shot;
 public class ShotDecimationFilter implements Filter<Shot> {
 
     private final int offset;
-    private final int frequency;
+    private final int decimationFactor;
 
-    public ShotDecimationFilter(int offset, int frequency) {
+    public ShotDecimationFilter(int offset, int decimationFactor) {
         this.offset = offset;
-        this.frequency = frequency;
+        this.decimationFactor = decimationFactor;
     }
     
     public ShotDecimationFilter(int frequency) {
@@ -30,7 +30,7 @@ public class ShotDecimationFilter implements Filter<Shot> {
 
     @Override
     public boolean accept(Shot shot) {
-        //System.out.println(shot.index + " " + ((shot.index - offset) % frequency) + " " + ((shot.index - offset) % frequency == 0));
-        return (shot.index - offset) % frequency == 0;
+        int indexRel = (shot.index - offset);
+        return (indexRel >= 0) && (indexRel % decimationFactor == 0);
     }
 }

@@ -665,37 +665,58 @@
                                                                                  <content>
                                                                                     <AnchorPane prefHeight="278.0" prefWidth="427.0">
                                                                                        <children>
-                                                                                          <VBox layoutX="7.0" layoutY="19.0" spacing="30.0">
+                                                                                          <VBox layoutX="7.0" layoutY="19.0" spacing="15.0">
                                                                                              <children>
-                                                                                                <VBox>
-                                                                                                   <children>
-                                                                                                      <Label text="Attribut filtering" />
-                                                                                                      <ListView fx:id="listviewFilters" prefHeight="123.0" prefWidth="343.0" />
-                                                                                                      <HBox spacing="5.0">
-                                                                                                         <children>
-                                                                                                            <Button mnemonicParsing="false" onAction="#onActionButtonAddFilter" text="Add filter">
-                                                                                                               <graphic>
-                                                                                                                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                                                                     <image>
-                                                                                                                        <Image url="@icons/gnome_list_add.png" />
-                                                                                                                     </image>
-                                                                                                                  </ImageView>
-                                                                                                               </graphic>
-                                                                                                            </Button>
-                                                                                                            <Button mnemonicParsing="false" onAction="#onActionButtonRemoveFilter" prefHeight="25.0" prefWidth="128.0" text="Remove filter">
-                                                                                                               <graphic>
-                                                                                                                  <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                                                                                     <image>
-                                                                                                                        <Image url="@icons/gnome_list_remove.png" />
-                                                                                                                     </image>
-                                                                                                                  </ImageView>
-                                                                                                               </graphic>
-                                                                                                            </Button>
-                                                                                                         </children>
-                                                                                                      </HBox>
-                                                                                                   </children>
-                                                                                                </VBox>
-                                                                                                <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                                                                                 <HBox spacing="10.0">
+                                                                                                     <CheckBox fx:id="checkboxShotDecimation" contentDisplay="RIGHT" mnemonicParsing="false" text="Shot decimation" />
+                                                                                                     <fx:include fx:id="buttonHelpShotDecimation" source="HelpButton.fxml" />
+                                                                                                 </HBox>
+                                                                                                 <HBox fx:id="hBoxShotDecimation" spacing="10.0" alignment="CENTER_LEFT">
+                                                                                                     <children>
+                                                                                                         <Label text="Decimation factor" />
+                                                                                                         <TextField fx:id="textfieldDecimationFactor" prefHeight="26.0" prefWidth="60.0" text="10" />
+                                                                                                         <Label text="Offset" />
+                                                                                                         <TextField fx:id="textfieldDecimationOffset" prefHeight="26.0" prefWidth="60.0" text="0" />
+                                                                                                     </children>
+                                                                                                     <padding>
+                                                                                                         <Insets left="25.0" />
+                                                                                                     </padding>   
+                                                                                                 </HBox>
+                                                                                                 <HBox spacing="10.0">
+                                                                                                     <CheckBox fx:id="checkboxShotAttributeFilter" contentDisplay="RIGHT" mnemonicParsing="false" text="Attribute filtering" />
+                                                                                                     <fx:include fx:id="buttonHelpShotAttributeFilter" source="HelpButton.fxml" />
+                                                                                                 </HBox>
+                                                                                                 <VBox fx:id="vBoxShotAttributeFilter" spacing="10.0">
+                                                                                                     <children>
+                                                                                                         <ListView fx:id="listviewFilters" prefHeight="123.0" prefWidth="343.0" />
+                                                                                                         <HBox spacing="5.0">
+                                                                                                             <children>
+                                                                                                                 <Button mnemonicParsing="false" onAction="#onActionButtonAddFilter" text="Add filter">
+                                                                                                                     <graphic>
+                                                                                                                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                                             <image>
+                                                                                                                                 <Image url="@icons/gnome_list_add.png" />
+                                                                                                                             </image>
+                                                                                                                         </ImageView>
+                                                                                                                     </graphic>
+                                                                                                                 </Button>
+                                                                                                                 <Button mnemonicParsing="false" onAction="#onActionButtonRemoveFilter" text="Remove filter">
+                                                                                                                     <graphic>
+                                                                                                                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                                                                                             <image>
+                                                                                                                                 <Image url="@icons/gnome_list_remove.png" />
+                                                                                                                             </image>
+                                                                                                                         </ImageView>
+                                                                                                                     </graphic>
+                                                                                                                 </Button>
+                                                                                                             </children>
+                                                                                                         </HBox>
+                                                                                                     </children>
+                                                                                                     <padding>
+                                                                                                         <Insets left="25.0" />
+                                                                                                     </padding>   
+                                                                                                 </VBox>
+                                                                                                <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                                                                    <children>
                                                                                                       <CheckBox fx:id="checkboxEmptyShotsFilter" contentDisplay="RIGHT" disable="true" mnemonicParsing="false" text="False empty shots removal" />
                                                                                                       <fx:include fx:id="buttonHelpEmptyShotsFilter" source="HelpButton.fxml" />

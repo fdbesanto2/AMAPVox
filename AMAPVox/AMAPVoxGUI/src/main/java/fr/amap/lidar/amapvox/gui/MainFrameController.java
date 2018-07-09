@@ -788,6 +788,22 @@ public class MainFrameController implements Initializable {
     private HBox hBoxPointCloudFiltering;
     @FXML
     private ColorPicker colorPickerSeries;
+    @FXML
+    private HBox hBoxShotDecimation;
+    @FXML
+    private CheckBox checkboxShotDecimation;
+    @FXML
+    private Button buttonHelpShotDecimation;
+    @FXML
+    private HelpButtonController buttonHelpShotDecimationController;
+    @FXML
+    private CheckBox checkboxShotAttributeFilter;
+    @FXML
+    private VBox vBoxShotAttributeFilter;
+    @FXML
+    private Button buttonHelpShotAttributeFilter;
+    @FXML
+    private HelpButtonController buttonHelpShotAttributeFilterController;
     
     private void initValidationSupport(){
         
@@ -2213,6 +2229,18 @@ public class MainFrameController implements Initializable {
             }
         });
         
+        // Shot decimation filter
+        hBoxShotDecimation.disableProperty().bind(checkboxShotDecimation.selectedProperty().not());
+        buttonHelpShotDecimation.setOnAction((ActionEvent event) -> {
+            buttonHelpShotDecimationController.showHelpDialog(resourceBundle.getString("help_shot_decimation"));
+        });
+        
+        // Shot attribute filter
+        vBoxShotAttributeFilter.disableProperty().bind(checkboxShotAttributeFilter.selectedProperty().not());
+         buttonHelpShotAttributeFilter.setOnAction((ActionEvent event) -> {
+             buttonHelpShotAttributeFilterController.showHelpDialog(resourceBundle.getString("help_shot_attribute_filter"));
+        });
+         
         // lousy trick to make sure that we go through the change tab function
         // and customize option display since initialisation
         tabPaneVoxelisation.getSelectionModel().selectLast();
