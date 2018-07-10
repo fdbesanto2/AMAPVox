@@ -93,7 +93,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
     private LaserSpecification laserSpec;
 
     private final List<Filter<Shot>> shotFilters;
-    private final EchoFilter echoFilter;
+    private final List<Filter<Shot.Echo>> echoFilters;
     private List<PointcloudFilter> pointcloudFilters;
 
     private boolean padComputed;
@@ -180,7 +180,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
         this.pointcloudFilters = pointcloudFilters;
 
         shotFilters = cfg.getShotFilters();
-        echoFilter = cfg.getEchoFilter();
+        echoFilters = cfg.getEchoFilters();
 
         this.cfg = cfg;
 
@@ -279,36 +279,37 @@ public class VoxelAnalysis extends Process implements Cancellable {
         return new Point3d(posX, posY, posZ);
     }
 
-    private boolean retainEcho(Shot shot, int echoRank, Point3d echo) throws Exception {
+    private boolean retainEcho(Shot.Echo echo) throws Exception {
 
         boolean keep = true;
 
         // echo filtering CSV file
-        if (keep && echoRank >= 0 && null != echoes) {
-            int shotID = shot.index;
+        if (keep && echo.rank >= 0 && null != echoes) {
+            int shotID = echo.shot.index;
             while (null != echoes && echoes.shotID < shotID) {
                 echoes = echoFilterIterator.next();
             }
             if (null != echoes && echoes.shotID == shotID) {
-                keep &= !echoes.discarded[echoRank];
+                keep &= !echoes.discarded[echo.rank];
             }
         }
 
         // point cloud filters
         if (keep && pointcloudFilters != null) {
             for (PointcloudFilter filter : pointcloudFilters) {
-                keep = keep && filter.doFiltering(echo);
+                keep = keep && filter.doFiltering(echo.location);
             }
         }
 
-        // shot mask
-        if (keep && echoRank >= 0 && shot.getMask() != null) {
-            keep &= shot.getMask()[echoRank];
+        if (keep && echo.rank >= 0 && echoFilters != null) {
+            for (Filter filter : echoFilters) {
+                keep = keep && filter.accept(echo);
+            }
         }
 
         // DTM filtering
         if (keep && parameters.getDtmFilteringParams().useDTMCorrection()) {
-            float echoDistance = getGroundDistance((float) echo.x, (float) echo.y, (float) echo.z);
+            float echoDistance = getGroundDistance((float) echo.location.x, (float) echo.location.y, (float) echo.location.z);
             keep &= Float.isNaN(echoDistance) && (echoDistance >= parameters.getDtmFilteringParams().getMinDTMDistance());
         }
 
@@ -346,11 +347,9 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
             if (shot.getEchoesNumber() == 0) {
                 // empty shot
-                LineSegment seg = new LineSegment(shot.origin, shot.direction, 999999);
-                Point3d echo = new Point3d(seg.getEnd());
-                boolean keep = retainEcho(shot, -1, echo);
+                boolean keep = retainEcho(shot.echoes[0]);
                 double beamFraction = 1.d, residualEnergy = 1.d;
-                propagate(origin, echo, beamFraction, residualEnergy, false, nShotsProcessed, shot, keep);
+                propagate(origin, shot.echoes[0].location, beamFraction, residualEnergy, false, nShotsProcessed, shot, keep);
             } else {
                 // shot with at least one echo.
                 // look for specific weight attenuation (EchoesWeightByFileParams.java)
@@ -369,24 +368,22 @@ public class VoxelAnalysis extends Process implements Cancellable {
                 double beamFractionPreviousEchoes = 0.d;
                 int rankFirstEchoOfVoxel = 0;
                 // loop over echoes
-                for (int rank = 0; rank < shot.getEchoesNumber(); rank++) {
-                    // current echo
-                    Point3d echo = getEchoLocation(shot, rank);
+                for (Shot.Echo echo : shot.echoes) {
                     // next echo
-                    Point3d nextEcho = (rank < shot.getEchoesNumber() - 1)
-                            ? new Point3d(getEchoLocation(shot, rank + 1))
+                    Shot.Echo nextEcho = (echo.rank < shot.getEchoesNumber() - 1)
+                            ? shot.echoes[echo.rank + 1]
                             : null;
 
                     // check whether current echo is the first echo of the shot in corresponding voxel
                     if (beamFractionPreviousEchoes == 0.d) {
-                        rankFirstEchoOfVoxel = rank;
+                        rankFirstEchoOfVoxel = echo.rank;
                     }
 
                     // compute beam fraction of current echo
                     double beamFractionCurrentEcho = 1;
                     // beam fraction pondered by weight table
                     if (null != weightTable) {
-                        beamFractionCurrentEcho *= weightTable[shot.getEchoesNumber() - 1][rank];
+                        beamFractionCurrentEcho *= weightTable[shot.getEchoesNumber() - 1][echo.rank];
                     }
                     // beam fraction pondered by weight from CSV file
                     beamFractionCurrentEcho *= weightCorr;
@@ -404,13 +401,13 @@ public class VoxelAnalysis extends Process implements Cancellable {
                                 ? computeResidualEnergy(shot.getEchoesNumber(), rankFirstEchoOfVoxel, weightCorr)
                                 : residualEnergyTable[shot.getEchoesNumber() - 1][rankFirstEchoOfVoxel];
                         // whether current echo is last echo of the shot
-                        boolean lastEcho = (rank == shot.getEchoesNumber() - 1);
+                        boolean lastEcho = (echo.rank == shot.getEchoesNumber() - 1);
                         // whether current echo should be retained or discarded (echo filters)
-                        boolean retain = retainEcho(shot, rank, echo);
+                        boolean retain = retainEcho(echo);
                         // propagate echo
-                        propagate(origin, echo, beamFraction, residualEnergy, lastEcho, nShotsProcessed, shot, retain);
+                        propagate(origin, echo.location, beamFraction, residualEnergy, lastEcho, nShotsProcessed, shot, retain);
                         // current echo set as origin of next echo
-                        origin = new Point3d(echo);
+                        origin = new Point3d(echo.location);
                         // reset beam fraction previous echoes
                         beamFractionPreviousEchoes = 0.d;
                     }
@@ -423,12 +420,6 @@ public class VoxelAnalysis extends Process implements Cancellable {
         nShotsProcessed++;
     }
 
-    private Point3d getEchoLocation(Shot shot, int indice) {
-
-        LineSegment seg = new LineSegment(shot.origin, shot.direction, shot.ranges[indice]);
-        return seg.getEnd();
-    }
-
     private boolean isEchoInsideVoxel(Point3d point, Point3i searchedIndices) {
 
         Point3i realIndices = voxelManager.getVoxelIndicesFromPoint(point);
@@ -436,14 +427,14 @@ public class VoxelAnalysis extends Process implements Cancellable {
         return realIndices.equals(searchedIndices);
     }
 
-    private boolean isInsideSameVoxel(Point3d echo1, Point3d echo2) {
+    private boolean isInsideSameVoxel(Shot.Echo echo1, Shot.Echo echo2) {
 
         if (echo1 == null || echo2 == null) {
             return false;
         }
 
-        Point3i indices1 = voxelManager.getVoxelIndicesFromPoint(echo1);
-        Point3i indices2 = voxelManager.getVoxelIndicesFromPoint(echo2);
+        Point3i indices1 = voxelManager.getVoxelIndicesFromPoint(echo1.location);
+        Point3i indices2 = voxelManager.getVoxelIndicesFromPoint(echo2.location);
 
         return indices1 != null && indices2 != null && indices1.equals(indices2);
     }

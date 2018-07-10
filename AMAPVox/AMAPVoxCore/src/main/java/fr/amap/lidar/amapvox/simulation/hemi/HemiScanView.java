@@ -23,7 +23,6 @@ import fr.amap.commons.math.matrix.Mat3D;
 import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.math.vector.Vec3D;
 import fr.amap.commons.math.vector.Vec4D;
-import fr.amap.lidar.amapvox.voxelisation.EchoFilter;
 import java.io.File;
 import java.util.Iterator;
 import javax.imageio.ImageIO;
@@ -209,7 +208,7 @@ public class HemiScanView implements Cancellable{
                     }
                 
                     setTransformation(MatrixUtility.convertMatrix4dToMat4D(scan.matrix));
-                    setScan(scan.file, parameters.getEchoFilter());
+                    setScan(scan.file);
                 }
                 
                 if(parameters.isGenerateBitmapFile()){
@@ -234,8 +233,6 @@ public class HemiScanView implements Cancellable{
                 DirectionalTransmittance dt = new DirectionalTransmittance(parameters.getVoxelFile());
                 hemiFromPAD(dt, parameters.getSensorPositions());
                 break;
-            default:
-                return;
         }
         
     }
@@ -260,11 +257,7 @@ public class HemiScanView implements Cancellable{
     }
     
     public void setScan(File scan) throws Exception{
-        setScan(scan, null);
-    }
     
-    public void setScan(File scan, EchoFilter filter) throws Exception{
-        
         int count = 0;
         int totalShots = 0;
             
@@ -288,25 +281,14 @@ public class HemiScanView implements Cancellable{
 
                 shot.setOriginAndDirection(new Point3d(locVector.x, locVector.y, locVector.z), new Vector3d(uVector.x, uVector.y, uVector.z));
                 
-                boolean keepShot = true;
-                
-                if(shot.nbEchos > 0 && filter != null){
-                    //keepShot = filter.doFiltering(shot, shot.nbEchos-1);
+                transform(shot);
+
+                count++;
+                totalShots++;
+                if (count == 1000000) {
+                    LOGGER.info("Shots processed : " + totalShots);
+                    count = 0;
                 }
-                
-                if(keepShot){
-                    
-                    transform(shot);
-                
-                    count++;
-                    totalShots++;
-                    
-                    if(count == 1000000){
-                        LOGGER.info("Shots processed : "+totalShots);
-                        count = 0;
-                    }
-                }
-                
             }
             
             LOGGER.info("Total shots processed : "+totalShots);

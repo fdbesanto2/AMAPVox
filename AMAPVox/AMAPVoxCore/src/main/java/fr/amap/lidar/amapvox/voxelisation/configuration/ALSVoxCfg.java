@@ -14,7 +14,9 @@ For further information, please contact Gregoire Vincent.
 
 package fr.amap.lidar.amapvox.voxelisation.configuration;
 
+import fr.amap.commons.util.filter.Filter;
 import fr.amap.commons.util.io.file.CSVFile;
+import fr.amap.lidar.amapvox.voxelisation.als.ClassifiedPointFilter;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
 import java.io.File;
 import java.util.ArrayList;
@@ -22,7 +24,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.jdom2.Attribute;
 import org.jdom2.Element;
 
@@ -35,8 +36,6 @@ import org.jdom2.Element;
 public class ALSVoxCfg extends VoxelAnalysisCfg{
 
     private CSVFile trajectoryFile;
-    private List<Integer> classifiedPointsToDiscard;
-    
     
     @Override
     public void readConfiguration(File inputParametersFile) throws Exception {
@@ -102,27 +101,24 @@ public class ALSVoxCfg extends VoxelAnalysisCfg{
             voxelParameters.setGroundEnergyParams(groundEnergyParameters);
         }
         
-        classifiedPointsToDiscard = new ArrayList<>();
-
+        // echo classification filter
         Element pointFiltersElement = filtersElement.getChild("point-filters");
         if(pointFiltersElement != null){
-
             String classifications = pointFiltersElement.getAttributeValue("classifications");
-
             if(classifications !=null && !classifications.isEmpty()){
-
+                List<Integer> classifiedPointsToDiscard = new ArrayList();
                 String[] classificationsArray = classifications.split(" ");
-
                 for(String s : classificationsArray){
                     classifiedPointsToDiscard.add(Integer.valueOf(s));
                 }
+                echoFilters.add(new ClassifiedPointFilter(classifiedPointsToDiscard));
             }
         }
         
+        // correct NaNs values        
         Element correctNaNsElement = processElement.getChild("correct-NaNs");
         if(correctNaNsElement != null){
             voxelParameters.getNaNsCorrectionParams().setActivate(Boolean.valueOf(correctNaNsElement.getAttributeValue("enabled")));
-            
             try{
                 voxelParameters.getNaNsCorrectionParams().setNbSamplingThreshold(Float.valueOf(correctNaNsElement.getAttributeValue("threshold")));
             }catch(Exception e){ 
@@ -184,23 +180,19 @@ public class ALSVoxCfg extends VoxelAnalysisCfg{
             processElement.addContent(groundEnergyElement);
         }
         
-        
-        if(classifiedPointsToDiscard != null){
-            
-            Element pointsFilterElement = new Element("point-filters");
-
-            String classifiedPointsToDiscardString = "";
-            for(Integer i : classifiedPointsToDiscard){
-                classifiedPointsToDiscardString += i+" ";
+        // look for classification point filter 
+        for (Filter filter : getEchoFilters()) {
+            if (filter instanceof ClassifiedPointFilter) {
+                Element pointsFilterElement = new Element("point-filters");
+                String classifiedPointsToDiscardString = "";
+                List<Integer> classifiedPointsToDiscard = ((ClassifiedPointFilter) filter).getClasses();
+                for (Integer i : classifiedPointsToDiscard) {
+                    classifiedPointsToDiscardString += i + " ";
+                }
+                pointsFilterElement.setAttribute("classifications", classifiedPointsToDiscardString.trim());
+                filtersElement.addContent(pointsFilterElement);
             }
-
-            pointsFilterElement.setAttribute("classifications", classifiedPointsToDiscardString);
-
-            //pointsFilterElement.addContent(new Element("low-point-filter").setAttribute("enabled", String.valueOf(removeLowPoint)));
-            filtersElement.addContent(pointsFilterElement);
         }
-        
-        
         
         Element correctNaNsElement = new Element("correct-NaNs");
         correctNaNsElement.setAttribute("enabled", String.valueOf(voxelParameters.getNaNsCorrectionParams().isActivate()));
@@ -218,14 +210,4 @@ public class ALSVoxCfg extends VoxelAnalysisCfg{
     public void setTrajectoryFile(CSVFile trajectoryFile) {
         this.trajectoryFile = trajectoryFile;
     }
-    
-    public List<Integer> getClassifiedPointsToDiscard() {
-        return classifiedPointsToDiscard;
-    }
-
-    public void setClassifiedPointsToDiscard(List<Integer> classifiedPointsToDiscard) {
-        this.classifiedPointsToDiscard = classifiedPointsToDiscard;
-    }
-
-    
 }

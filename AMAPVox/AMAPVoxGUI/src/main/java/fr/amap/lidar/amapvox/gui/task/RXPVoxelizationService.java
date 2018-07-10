@@ -5,9 +5,7 @@
  */
 package fr.amap.lidar.amapvox.gui.task;
 
-import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
-import fr.amap.lidar.amapvox.voxelisation.tls.RxpEchoFilter;
 import fr.amap.lidar.amapvox.voxelisation.tls.RxpVoxelisation;
 import java.io.File;
 import javafx.concurrent.Service;

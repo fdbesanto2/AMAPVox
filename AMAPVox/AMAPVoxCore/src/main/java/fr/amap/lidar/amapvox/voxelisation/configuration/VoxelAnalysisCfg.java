@@ -21,8 +21,8 @@ import fr.amap.commons.util.io.file.CSVFile;
 import fr.amap.lidar.amapvox.commons.LADParams;
 import fr.amap.lidar.amapvox.commons.LeafAngleDistribution.Type;
 import fr.amap.lidar.amapvox.shot.Shot;
+import fr.amap.lidar.amapvox.voxelisation.EchoAttributeFilter;
 import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
-import fr.amap.lidar.amapvox.voxelisation.EchoFilter;
 import fr.amap.lidar.amapvox.voxelisation.LaserSpecification;
 import fr.amap.lidar.amapvox.voxelisation.ShotAttributeFilter;
 import fr.amap.lidar.amapvox.voxelisation.ShotDecimationFilter;
@@ -79,15 +79,18 @@ public class VoxelAnalysisCfg extends Configuration {
     protected Matrix4d vopMatrix;
     protected VoxelParameters voxelParameters;
     protected List<Filter<Shot>> shotFilters;
-    protected List<FloatFilter> echoFilters;
-
-    protected EchoFilter echoFilter;
+    protected List<Filter<Shot.Echo>> echoFilters;
 
     protected boolean exportShotSegment;
 
     protected Element limitsElement;
     protected Element filtersElement;
     protected Element echoFilteringElement;
+    
+    public VoxelAnalysisCfg() {
+        shotFilters = new ArrayList();
+        echoFilters = new ArrayList();
+    }
 
     @Override
     public void readConfiguration(File inputParametersFile) throws Exception {
@@ -326,8 +329,8 @@ public class VoxelAnalysisCfg extends Configuration {
         }
 
         filtersElement = processElement.getChild("filters");
-        shotFilters = new ArrayList<>();
-        echoFilters = new ArrayList<>();
+        shotFilters.clear();
+        echoFilters.clear();
 
         if (filtersElement != null) {
 
@@ -367,7 +370,7 @@ public class VoxelAnalysisCfg extends Configuration {
                             String variable = e.getAttributeValue("variable");
                             String inequality = e.getAttributeValue("inequality");
                             String value = e.getAttributeValue("value");
-                            echoFilters.add(new FloatFilter(variable, Float.valueOf(value), FloatFilter.getConditionFromString(inequality)));
+                            echoFilters.add(new EchoAttributeFilter(new FloatFilter(variable, Float.valueOf(value), FloatFilter.getConditionFromString(inequality))));
                         } else if (null != e.getAttribute("src")) {
                             String src = e.getAttributeValue("src");
                             boolean discard = e.getAttributeValue("behavior").equalsIgnoreCase("discard");
@@ -592,10 +595,6 @@ public class VoxelAnalysisCfg extends Configuration {
 
         processElement.addContent(pointcloudFiltersElement);
 
-        if (echoFilters != null) {
-
-        }
-
         /**
          * *TRANSFORMATION**
          */
@@ -661,11 +660,14 @@ public class VoxelAnalysisCfg extends Configuration {
         Element echoFilterElement = new Element("echo-filters");
 
         if (echoFilters != null && !echoFilters.isEmpty()) {
-            for (FloatFilter f : echoFilters) {
+            for (Filter filter : echoFilters) {
                 Element filterElement = new Element("filter");
-                filterElement.setAttribute("variable", f.getVariable());
-                filterElement.setAttribute("inequality", f.getConditionString());
-                filterElement.setAttribute("value", String.valueOf(f.getValue()));
+                if (filter instanceof EchoAttributeFilter) {
+                    FloatFilter f = ((EchoAttributeFilter) filter).getFilter();
+                    filterElement.setAttribute("variable", f.getVariable());
+                    filterElement.setAttribute("inequality", f.getConditionString());
+                    filterElement.setAttribute("value", String.valueOf(f.getValue()));
+                }
                 echoFilterElement.addContent(filterElement);
             }
         }
@@ -805,24 +807,16 @@ public class VoxelAnalysisCfg extends Configuration {
         return shotFilters;
     }
 
-    public void setEchoFilters(List<FloatFilter> filters) {
-        this.echoFilters = filters;
+    public void addEchoFilter(Filter<Shot.Echo> filter) {
+        this.echoFilters.add(filter);
     }
 
     public void setShotFilters(List<Filter<Shot>> shotFilters) {
         this.shotFilters = shotFilters;
     }
 
-    public List<FloatFilter> getEchoFilters() {
+    public List<Filter<Shot.Echo>> getEchoFilters() {
         return echoFilters;
-    }
-
-    public EchoFilter getEchoFilter() {
-        return echoFilter;
-    }
-
-    public void setEchoFilter(EchoFilter echoFilter) {
-        this.echoFilter = echoFilter;
     }
 
     public boolean isExportShotSegment() {

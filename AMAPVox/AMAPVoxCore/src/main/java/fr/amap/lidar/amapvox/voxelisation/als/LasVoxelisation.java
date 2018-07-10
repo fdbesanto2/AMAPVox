@@ -16,8 +16,6 @@ import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.postproc.NaNsCorrection;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.log4j.Logger;
 import fr.amap.commons.util.Cancellable;
 import fr.amap.commons.util.ProcessingAdapter;
@@ -39,7 +37,6 @@ public class LasVoxelisation extends Process implements Cancellable {
 
     private final static Logger LOGGER = Logger.getLogger(LasVoxelisation.class);
 
-    private List<Integer> classifiedPointsToDiscard;
     private static boolean update;
     private PointsToShot conversion;
     private Raster terrain = null;
@@ -72,16 +69,6 @@ public class LasVoxelisation extends Process implements Cancellable {
     public File process(ALSVoxCfg cfg) throws Exception {
 
         setCancelled(false);
-
-        if (cfg.getClassifiedPointsToDiscard() == null) {
-            this.classifiedPointsToDiscard = new ArrayList<>();
-        } else {
-            this.classifiedPointsToDiscard = cfg.getClassifiedPointsToDiscard();
-        }
-
-        if (!this.classifiedPointsToDiscard.contains(2)) { //work around for old cfg file version
-            this.classifiedPointsToDiscard.add(2);
-        }
 
         Mat4D transfMatrix = MatrixUtility.convertMatrix4dToMat4D(cfg.getVopMatrix());
         if (transfMatrix == null) {
@@ -155,12 +142,9 @@ public class LasVoxelisation extends Process implements Cancellable {
 
                     AlsShot shot = new AlsShot(shotId, new Point3d(xOrigin, yOrigin, zOrigin), new Vector3d(xDirection, yDirection, zDirection), ranges);
                     shot.classifications = classifications;
-                    shot.setMask(getMask(shot));
 
                     fireProgress("Voxelisation...", shotId, nbShots);
-
                     voxelAnalysis.processOneShot(new Shot(shotId, shot.origin, shot.direction, shot.ranges));
-
                     shotId++;
                 }
             }
@@ -213,8 +197,6 @@ public class LasVoxelisation extends Process implements Cancellable {
 
                 int shotIndex = iterator.getNbPointsProcessed();
                 fireProgress("Voxelisation...", shotIndex, iterator.getNbPoints());
-
-                shot.setMask(getMask(shot));
                 voxelAnalysis.processOneShot(shot);
             }
 
@@ -274,21 +256,4 @@ public class LasVoxelisation extends Process implements Cancellable {
             voxelAnalysis.setCancelled(cancelled);
         }
     }
-
-    private boolean[] getMask(AlsShot shot) {
-
-        boolean[] mask = new boolean[shot.getEchoesNumber()];
-
-        for (int i = 0; i < mask.length; i++) {
-            mask[i] = doFiltering(shot, i);
-        }
-
-        return mask;
-    }
-
-    private boolean doFiltering(AlsShot shot, int echoID) {
-
-        return shot.classifications != null && !classifiedPointsToDiscard.contains(shot.classifications[echoID]);
-    }
-
 }

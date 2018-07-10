@@ -212,8 +212,10 @@ import fr.amap.lidar.amapvox.gui.viewer3d.VoxelObject;
 import fr.amap.lidar.amapvox.gui.viewer3d.VoxelSpaceAdapter;
 import fr.amap.lidar.amapvox.gui.viewer3d.VoxelSpaceSceneObject;
 import fr.amap.lidar.amapvox.shot.Shot;
+import fr.amap.lidar.amapvox.voxelisation.EchoAttributeFilter;
 import fr.amap.lidar.amapvox.voxelisation.ShotAttributeFilter;
 import fr.amap.lidar.amapvox.voxelisation.ShotDecimationFilter;
+import fr.amap.lidar.amapvox.voxelisation.als.ClassifiedPointFilter;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoFilterByFileParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams;
 import java.awt.Color;
@@ -2817,8 +2819,11 @@ public class MainFrameController implements Initializable {
 
             cfg.setVoxelParameters(voxelParameters);
 
-            ((ALSVoxCfg)cfg).setClassifiedPointsToDiscard(getListOfClassificationPointToDiscard());
+            // echo classification filter
+            cfg.addEchoFilter(new ClassifiedPointFilter(getListOfClassificationPointToDiscard()));
+            
             List<Filter<Shot>> shotFilters = new ArrayList();
+            // shot attribute filter
             if (checkboxShotAttributeFilter.isSelected()) {
                 for (FloatFilter filter : listviewFilters.getItems()) {
                     shotFilters.add(new ShotAttributeFilter(filter));
@@ -3080,7 +3085,10 @@ public class MainFrameController implements Initializable {
             cfg.setLidarScans(listviewRxpScans.getItems());
         }
 
-        cfg.setEchoFilters(filteringPaneController.getFilterList());
+        // echo filtering by attribute
+        for (FloatFilter filter : filteringPaneController.getFilterList()) {
+            cfg.addEchoFilter(new EchoAttributeFilter(filter));
+        }
 
         try {
             cfg.writeConfiguration(selectedFile, Global.buildVersion);
@@ -5462,17 +5470,23 @@ public class MainFrameController implements Initializable {
                         }
                     }
                     
-                    if(type.equals("voxelisation-ALS") || type.equals("multi-voxelisation")){
-                        
-                        List<Integer> classifiedPointsToDiscard = ((ALSVoxCfg)cfg).getClassifiedPointsToDiscard();
-
-                        for (Integer i : classifiedPointsToDiscard) {
-                            listviewClassifications.getItems().get(i).setSelected(false);
+                    // echo filters
+                    List<Filter<Shot.Echo>> filters = ((VoxelAnalysisCfg) cfg).getEchoFilters();
+                    for (Filter filter : filters) {
+                        if (filter instanceof EchoAttributeFilter) {
+                            EchoAttributeFilter f = (EchoAttributeFilter) filter;
+                            filteringPaneController.getFilterList().add(f.getFilter());
+                        } else if (filter instanceof ClassifiedPointFilter) {
+                            List<Integer> classifiedPointsToDiscard = ((ClassifiedPointFilter) filter).getClasses();
+                            for (Integer i : classifiedPointsToDiscard) {
+                                listviewClassifications.getItems().get(i).setSelected(false);
+                            }
                         }
-                    }else if(type.equals("voxelisation-TLS")){
-                        
-                        filteringPaneController.setFilters(((TLSVoxCfg)cfg).getEchoFilters());
-                        checkboxEmptyShotsFilter.setSelected(((TLSVoxCfg)cfg).isEnableEmptyShotsFiltering());
+                    }
+                    
+                    if (type.equals("voxelisation-TLS")) {
+                        // false empty shot filter 
+                        checkboxEmptyShotsFilter.setSelected(((TLSVoxCfg) cfg).isEnableEmptyShotsFiltering());
                     }
 
                     textFieldPADMax.setText(String.valueOf(((VoxelAnalysisCfg)cfg).getVoxelParameters().infos.getMaxPAD()));
@@ -5498,12 +5512,12 @@ public class MainFrameController implements Initializable {
 
                     updateResultMatrix();
 
-                    List<Filter<Shot>> filters = ((VoxelAnalysisCfg)cfg).getShotFilters();
-                    if (filters != null) {
+                    List<Filter<Shot>> shotFilters = ((VoxelAnalysisCfg) cfg).getShotFilters();
+                    if (shotFilters != null) {
                         listviewFilters.getItems().clear();
                         checkboxShotAttributeFilter.setSelected(false);
                         checkboxShotDecimation.setSelected(false);
-                        for (Filter filter : filters) {
+                        for (Filter filter : shotFilters) {
                             if (filter instanceof ShotAttributeFilter) {
                                 ShotAttributeFilter f = (ShotAttributeFilter) filter;
                                 listviewFilters.getItems().add(f.getFilter());
