@@ -12,7 +12,7 @@ import fr.amap.commons.math.util.MatrixUtility;
 import fr.amap.commons.util.CallableTask;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.util.Util;
-import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
+import fr.amap.lidar.amapvox.shot.filter.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
 import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;

@@ -12,45 +12,47 @@ Authors:
 
 For further information, please contact Gregoire Vincent.
  */
-
 package fr.amap.commons.util.filter;
 
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
-
-
 public class CombinedFloatFilter implements Filter<Float> {
-    
+
     public final static int AND = 0;
     public final static int OR = 1;
-    
+
     protected final FloatFilter filter1;
     protected final FloatFilter filter2;
     private final int type;
-    
-    public CombinedFloatFilter(FloatFilter filter1, FloatFilter filter2, int type){
-        
+
+    public CombinedFloatFilter(FloatFilter filter1, FloatFilter filter2, int type) {
+
         this.filter1 = filter1;
         this.filter2 = filter2;
         this.type = type;
     }
 
     @Override
+    public void init() {
+        // nothing to do
+    }
+
+    @Override
     public boolean accept(Float attribut) {
-        
-        if(filter2 == null){
+
+        if (filter2 == null) {
             return filter1.accept(attribut);
         }
-        
-        switch(type){
+
+        switch (type) {
             case CombinedFloatFilter.AND:
                 return filter1.accept(attribut) && filter2.accept(attribut);
             case CombinedFloatFilter.OR:
                 return filter1.accept(attribut) || filter2.accept(attribut);
             default:
-                return false;  
+                return false;
         }
     }
 

@@ -42,6 +42,11 @@ public class StackedFloatFilters implements Filter<Float> {
         }
     }
 
+    @Override
+    public void init() {
+        // nothing to do
+    }
+
     /**
      * Do filtering
      *

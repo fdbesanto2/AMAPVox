@@ -33,7 +33,7 @@ import fr.amap.lidar.amapvox.commons.LidarScan;
 import fr.amap.commons.math.util.MatrixFileParser;
 import fr.amap.commons.math.util.MatrixUtility;
 import fr.amap.commons.math.util.SphericalCoordinates;
-import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
+import fr.amap.lidar.amapvox.shot.filter.PointcloudFilter;
 import fr.amap.commons.structure.pointcloud.PointCloud;
 import fr.amap.amapvox.io.tls.rsp.Rsp;
 import fr.amap.amapvox.io.tls.rsp.RxpScan;
@@ -212,11 +212,11 @@ import fr.amap.lidar.amapvox.gui.viewer3d.VoxelObject;
 import fr.amap.lidar.amapvox.gui.viewer3d.VoxelSpaceAdapter;
 import fr.amap.lidar.amapvox.gui.viewer3d.VoxelSpaceSceneObject;
 import fr.amap.lidar.amapvox.shot.Shot;
-import fr.amap.lidar.amapvox.voxelisation.EchoAttributeFilter;
-import fr.amap.lidar.amapvox.voxelisation.ShotAttributeFilter;
-import fr.amap.lidar.amapvox.voxelisation.ShotDecimationFilter;
-import fr.amap.lidar.amapvox.voxelisation.als.ClassifiedPointFilter;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoFilterByFileParams;
+import fr.amap.lidar.amapvox.shot.filter.EchoRankFilter;
+import fr.amap.lidar.amapvox.shot.filter.EchoAttributeFilter;
+import fr.amap.lidar.amapvox.shot.filter.ShotAttributeFilter;
+import fr.amap.lidar.amapvox.shot.filter.ShotDecimationFilter;
+import fr.amap.lidar.amapvox.shot.filter.ClassifiedPointFilter;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams;
 import java.awt.Color;
 import java.awt.Desktop;
@@ -382,7 +382,7 @@ public class MainFrameController implements Initializable {
     @FXML
     private CheckBox checkboxEchoFilterByShotID;
     @FXML
-    private ComboBox comboboxEchoFiltering;
+    private ComboBox<EchoRankFilter.Behavior> comboboxEchoFiltering;
         
     private final HashSet<Point3i> voxelsToRemove = new HashSet<>();
     private boolean editingFrameOpened;
@@ -1725,8 +1725,8 @@ public class MainFrameController implements Initializable {
         
         textFieldEchoFilterByShotID.editableProperty().bind(checkboxEchoFilterByShotID.selectedProperty());
         buttonOpenEchoFilterByShotID.disableProperty().bind(checkboxEchoFilterByShotID.selectedProperty().not());
-        comboboxEchoFiltering.getItems().setAll("Discard", "Retain");
-        comboboxEchoFiltering.getSelectionModel().selectFirst();
+        comboboxEchoFiltering.getItems().setAll(EchoRankFilter.Behavior.values());
+        comboboxEchoFiltering.getSelectionModel().select(EchoRankFilter.Behavior.DISCARD);
         comboboxEchoFiltering.disableProperty().bind(checkboxEchoFilterByShotID.selectedProperty().not());
         
         try {
@@ -3009,11 +3009,6 @@ public class MainFrameController implements Initializable {
         if (checkboxWeightingByFile.isSelected()) {
             voxelParameters.setEchoesWeightByFileParams(new EchoesWeightByFileParams(textFieldWeightingFile.getText()));
         }
-        
-        if (checkboxEchoFilterByShotID.isSelected()) {
-            voxelParameters.setEchoFilterByFileParams(new EchoFilterByFileParams(textFieldEchoFilterByShotID.getText(),
-                    ((String) comboboxEchoFiltering.getSelectionModel().getSelectedItem()).equalsIgnoreCase("discard")));
-        }
 
         InputType it;
 
@@ -3088,6 +3083,12 @@ public class MainFrameController implements Initializable {
         // echo filtering by attribute
         for (FloatFilter filter : filteringPaneController.getFilterList()) {
             cfg.addEchoFilter(new EchoAttributeFilter(filter));
+        }
+        
+        // echo filtering by rank
+        if (checkboxEchoFilterByShotID.isSelected()) {
+            cfg.addEchoFilter(new EchoRankFilter(textFieldEchoFilterByShotID.getText(),
+                    comboboxEchoFiltering.getSelectionModel().getSelectedItem()));
         }
 
         try {
@@ -5458,24 +5459,17 @@ public class MainFrameController implements Initializable {
                     checkboxUseSopMatrix.setSelected(((VoxelAnalysisCfg)cfg).isUseSopMatrix());
                     checkboxUseVopMatrix.setSelected(((VoxelAnalysisCfg)cfg).isUseVopMatrix());
                     
-                    // 
-                    if (null != ((VoxelAnalysisCfg) cfg).getVoxelParameters().getEchoFilterByFileParams()) {
-                        checkboxEchoFilterByShotID.setSelected(true);
-                        EchoFilterByFileParams params = ((VoxelAnalysisCfg) cfg).getVoxelParameters().getEchoFilterByFileParams();
-                        textFieldEchoFilterByShotID.setText(params.getFile().getAbsolutePath());
-                        if (params.discardEchoes()) {
-                            comboboxEchoFiltering.getSelectionModel().selectFirst();
-                        } else {
-                            comboboxEchoFiltering.getSelectionModel().selectLast();
-                        }
-                    }
-                    
                     // echo filters
                     List<Filter<Shot.Echo>> filters = ((VoxelAnalysisCfg) cfg).getEchoFilters();
                     for (Filter filter : filters) {
                         if (filter instanceof EchoAttributeFilter) {
                             EchoAttributeFilter f = (EchoAttributeFilter) filter;
                             filteringPaneController.getFilterList().add(f.getFilter());
+                        } else if (filter instanceof EchoRankFilter) {
+                            checkboxEchoFilterByShotID.setSelected(true);
+                            EchoRankFilter f = (EchoRankFilter) filter;
+                            textFieldEchoFilterByShotID.setText(f.getFile().getAbsolutePath());
+                            comboboxEchoFiltering.getSelectionModel().select(f.behavior());
                         } else if (filter instanceof ClassifiedPointFilter) {
                             List<Integer> classifiedPointsToDiscard = ((ClassifiedPointFilter) filter).getClasses();
                             for (Integer i : classifiedPointsToDiscard) {

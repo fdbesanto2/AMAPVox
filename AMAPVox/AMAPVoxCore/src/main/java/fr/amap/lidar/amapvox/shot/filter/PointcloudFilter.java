@@ -12,7 +12,7 @@ Authors:
 For further information, please contact Gregoire Vincent.
  */
 
-package fr.amap.lidar.amapvox.voxelisation;
+package fr.amap.lidar.amapvox.shot.filter;
 
 import fr.amap.commons.structure.octree.Octree;
 import fr.amap.commons.math.point.Point3D;

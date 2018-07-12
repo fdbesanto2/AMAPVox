@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.amap.lidar.amapvox.voxelisation;
+package fr.amap.lidar.amapvox.shot.filter;
 
 import fr.amap.commons.util.filter.Filter;
 import fr.amap.lidar.amapvox.shot.Shot;
@@ -24,8 +24,13 @@ public class ShotDecimationFilter implements Filter<Shot> {
         this.decimationFactor = decimationFactor;
     }
     
-    public ShotDecimationFilter(int frequency) {
-        this(0, frequency);
+    public ShotDecimationFilter(int decimationFactor) {
+        this(0, decimationFactor);
+    }
+    
+    @Override
+    public void init() {
+        // nothing to do
     }
 
     @Override

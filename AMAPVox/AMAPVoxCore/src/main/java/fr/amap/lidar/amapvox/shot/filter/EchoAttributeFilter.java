@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.amap.lidar.amapvox.voxelisation;
+package fr.amap.lidar.amapvox.shot.filter;
 
 import fr.amap.commons.util.filter.Filter;
 import fr.amap.commons.util.filter.FloatFilter;
@@ -25,6 +25,11 @@ public class EchoAttributeFilter implements Filter<Shot.Echo> {
 
     public FloatFilter getFilter() {
         return filter;
+    }
+    
+    @Override
+    public void init() {
+        // nothing to do
     }
 
     @Override

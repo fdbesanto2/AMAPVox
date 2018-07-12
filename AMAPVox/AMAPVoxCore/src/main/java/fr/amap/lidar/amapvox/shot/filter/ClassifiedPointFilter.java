@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.amap.lidar.amapvox.voxelisation.als;
+package fr.amap.lidar.amapvox.shot.filter;
 
 import fr.amap.commons.util.filter.Filter;
+import fr.amap.lidar.amapvox.voxelisation.als.AlsShot;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,11 @@ public class ClassifiedPointFilter implements Filter<AlsShot.Echo> {
     
     public List<Integer> getClasses() {
         return classifiedPointsToDiscard;
+    }
+    
+    @Override
+    public void init() {
+        // nothing to do
     }
     
     @Override

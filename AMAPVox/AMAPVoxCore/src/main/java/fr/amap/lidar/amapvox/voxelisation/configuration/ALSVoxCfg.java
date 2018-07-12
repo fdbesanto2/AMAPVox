@@ -16,7 +16,7 @@ package fr.amap.lidar.amapvox.voxelisation.configuration;
 
 import fr.amap.commons.util.filter.Filter;
 import fr.amap.commons.util.io.file.CSVFile;
-import fr.amap.lidar.amapvox.voxelisation.als.ClassifiedPointFilter;
+import fr.amap.lidar.amapvox.shot.filter.ClassifiedPointFilter;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
 import java.io.File;
 import java.util.ArrayList;

@@ -21,12 +21,12 @@ import fr.amap.commons.util.io.file.CSVFile;
 import fr.amap.lidar.amapvox.commons.LADParams;
 import fr.amap.lidar.amapvox.commons.LeafAngleDistribution.Type;
 import fr.amap.lidar.amapvox.shot.Shot;
-import fr.amap.lidar.amapvox.voxelisation.EchoAttributeFilter;
-import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
+import fr.amap.lidar.amapvox.shot.filter.EchoAttributeFilter;
+import fr.amap.lidar.amapvox.shot.filter.EchoRankFilter;
+import fr.amap.lidar.amapvox.shot.filter.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.LaserSpecification;
-import fr.amap.lidar.amapvox.voxelisation.ShotAttributeFilter;
-import fr.amap.lidar.amapvox.voxelisation.ShotDecimationFilter;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoFilterByFileParams;
+import fr.amap.lidar.amapvox.shot.filter.ShotAttributeFilter;
+import fr.amap.lidar.amapvox.shot.filter.ShotDecimationFilter;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByRankParams;
 import java.io.File;
@@ -373,8 +373,8 @@ public class VoxelAnalysisCfg extends Configuration {
                             echoFilters.add(new EchoAttributeFilter(new FloatFilter(variable, Float.valueOf(value), FloatFilter.getConditionFromString(inequality))));
                         } else if (null != e.getAttribute("src")) {
                             String src = e.getAttributeValue("src");
-                            boolean discard = e.getAttributeValue("behavior").equalsIgnoreCase("discard");
-                            voxelParameters.setEchoFilterByFileParams(new EchoFilterByFileParams(src, discard));
+                            String behavior = e.getAttributeValue("behavior").toUpperCase();
+                            echoFilters.add(new EchoRankFilter(src, EchoRankFilter.Behavior.valueOf(behavior)));
                         }
                     }
                 }
@@ -667,17 +667,13 @@ public class VoxelAnalysisCfg extends Configuration {
                     filterElement.setAttribute("variable", f.getVariable());
                     filterElement.setAttribute("inequality", f.getConditionString());
                     filterElement.setAttribute("value", String.valueOf(f.getValue()));
+                } else if (filter instanceof EchoRankFilter) {
+                    EchoRankFilter f = (EchoRankFilter) filter;
+                    filterElement.setAttribute("src", f.getFile().getAbsolutePath());
+                    filterElement.setAttribute("behavior", f.behavior().toString());
                 }
                 echoFilterElement.addContent(filterElement);
             }
-        }
-
-        if (null != voxelParameters.getEchoFilterByFileParams()) {
-            EchoFilterByFileParams filter = voxelParameters.getEchoFilterByFileParams();
-            Element filterElement = new Element("filter");
-            filterElement.setAttribute("src", filter.getFile().getAbsolutePath());
-            filterElement.setAttribute("behavior", filter.discardEchoes() ? "discard" : "retain");
-            echoFilterElement.addContent(filterElement);
         }
 
         if (echoFilterElement.getContentSize() > 0) {

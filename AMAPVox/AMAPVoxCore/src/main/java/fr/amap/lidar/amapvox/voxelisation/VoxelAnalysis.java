@@ -1,5 +1,6 @@
 package fr.amap.lidar.amapvox.voxelisation;
 
+import fr.amap.lidar.amapvox.shot.filter.PointcloudFilter;
 import fr.amap.lidar.amapvox.shot.Shot;
 import fr.amap.commons.util.TimeCounter;
 import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.geometry.LineElement;
@@ -25,7 +26,6 @@ import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos.Type;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg.VoxelsFormat;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoFilterByFileParams.Echoes;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams.EchoesWeight;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
@@ -69,9 +69,6 @@ public class VoxelAnalysis extends Process implements Cancellable {
     private IteratorWithException<EchoesWeight> weightIterator;
     private EchoesWeight echoesWeight;
     private double[][] residualEnergyTable;
-
-    private IteratorWithException<Echoes> echoFilterIterator;
-    private Echoes echoes;
 
     private final boolean volumeWeighting = true;
 
@@ -207,12 +204,6 @@ public class VoxelAnalysis extends Process implements Cancellable {
             echoesWeight = weightIterator.next();
         }
 
-        if (null != parameters.getEchoFilterByFileParams()) {
-            LOGGER.info("Open echoes filtering file " + parameters.getEchoFilterByFileParams().getFile());
-            echoFilterIterator = parameters.getEchoFilterByFileParams().iterator();
-            echoes = echoFilterIterator.next();
-        }
-
         MAX_PAD = parameters.infos.getMaxPAD();
         this.transMode = parameters.getTransmittanceMode();
 
@@ -281,48 +272,42 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
     private boolean retainEcho(Shot.Echo echo) throws Exception {
 
-        boolean keep = true;
-
-        // echo filtering CSV file
-        if (keep && echo.rank >= 0 && null != echoes) {
-            int shotID = echo.shot.index;
-            while (null != echoes && echoes.shotID < shotID) {
-                echoes = echoFilterIterator.next();
-            }
-            if (null != echoes && echoes.shotID == shotID) {
-                keep &= !echoes.discarded[echo.rank];
+        if (echo.rank >= 0 && echoFilters != null) {
+            for (Filter filter : echoFilters) {
+                if (!filter.accept(echo)) {
+                    return false;
+                }
             }
         }
 
         // point cloud filters
-        if (keep && pointcloudFilters != null) {
+        if (pointcloudFilters != null) {
             for (PointcloudFilter filter : pointcloudFilters) {
-                keep = keep && filter.doFiltering(echo.location);
-            }
-        }
-
-        if (keep && echo.rank >= 0 && echoFilters != null) {
-            for (Filter filter : echoFilters) {
-                keep = keep && filter.accept(echo);
+                if (!filter.doFiltering(echo.location)) {
+                    return false;
+                }
             }
         }
 
         // DTM filtering
-        if (keep && parameters.getDtmFilteringParams().useDTMCorrection()) {
+        if (parameters.getDtmFilteringParams().useDTMCorrection()) {
             float echoDistance = getGroundDistance((float) echo.location.x, (float) echo.location.y, (float) echo.location.z);
-            keep &= Float.isNaN(echoDistance) && (echoDistance >= parameters.getDtmFilteringParams().getMinDTMDistance());
+            return Float.isNaN(echoDistance) && (echoDistance >= parameters.getDtmFilteringParams().getMinDTMDistance());
         }
 
-        return keep;
+        // echo retained by every filter
+        return true;
     }
 
-    private boolean retainShot(Shot shot) {
+    private boolean retainShot(Shot shot) throws Exception {
 
         for (Filter<Shot> filter : shotFilters) {
+            // as soon as a filter discard the shot returns false 
             if (!filter.accept(shot)) {
                 return false;
             }
         }
+        // all filters retain the shot
         return true;
     }
 
@@ -644,13 +629,11 @@ public class VoxelAnalysis extends Process implements Cancellable {
                 if (transMode == 2) {
                     transNorm = ((entering - intercepted) / entering) * surfMulLength;
                 } else //mode 3
-                {
-                    if (longueur == 0) {
+                 if (longueur == 0) {
                         transNorm = 0;
                     } else {
                         transNorm = Math.pow(((entering - intercepted) / entering), 1 / longueur) * surfMulLengthMulEnt;
                     }
-                }
 
                 vox.transmittance_tmp += transNorm;
 

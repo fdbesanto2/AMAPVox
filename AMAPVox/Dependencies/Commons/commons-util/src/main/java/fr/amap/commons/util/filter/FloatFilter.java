@@ -91,6 +91,11 @@ public class FloatFilter implements Filter<Float> {
     }
 
     @Override
+    public void init() {
+        // nothing to do
+    }
+
+    @Override
     public boolean accept(Float value) {
 
         int comp = Float.compare(value, this.value);

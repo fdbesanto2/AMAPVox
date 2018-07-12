@@ -12,6 +12,8 @@ package fr.amap.commons.util.filter;
  */
 public interface Filter<T> {
     
-    public boolean accept(T object);
+    public void init() throws Exception;
+    
+    public boolean accept(T object) throws Exception;
     
 }

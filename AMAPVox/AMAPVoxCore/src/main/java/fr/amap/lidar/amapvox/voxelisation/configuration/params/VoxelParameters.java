@@ -7,7 +7,7 @@ package fr.amap.lidar.amapvox.voxelisation.configuration.params;
 
 import fr.amap.lidar.amapvox.commons.LADParams;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
-import fr.amap.lidar.amapvox.voxelisation.PointcloudFilter;
+import fr.amap.lidar.amapvox.shot.filter.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.LaserSpecification;
 import java.io.File;
 import java.util.List;
@@ -36,7 +36,6 @@ public class VoxelParameters {
     private DTMFilteringParams dtmFilteringParams;
     private EchoesWeightByRankParams echoesWeightByRankParams;
     private EchoesWeightByFileParams  echoesWeightByFileParams;
-    private EchoFilterByFileParams echoFilterByFileParams;
     private GroundEnergyParams groundEnergyParams;
     private LADParams ladParams;
     
@@ -335,22 +334,6 @@ public class VoxelParameters {
      */
     public void setEchoesWeightByFileParams(EchoesWeightByFileParams echoesWeightByFileParams) {
         this.echoesWeightByFileParams = echoesWeightByFileParams;
-    }
-    
-    /**
-     * 
-     * @return Echoes weigting parameters
-     */
-    public EchoFilterByFileParams getEchoFilterByFileParams() {
-        return echoFilterByFileParams;
-    }
-
-    /**
-     * 
-     * @param echoesWeightByFileParams Echoes weigting parameters
-     */
-    public void setEchoFilterByFileParams(EchoFilterByFileParams echoesWeightByFileParams) {
-        this.echoFilterByFileParams = echoesWeightByFileParams;
     }
 
     /**

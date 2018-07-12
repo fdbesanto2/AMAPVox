@@ -8,10 +8,11 @@ package fr.amap.lidar.amapvox.gui.task;
 import fr.amap.commons.util.CallableTaskAdapter;
 import fr.amap.lidar.amapvox.commons.LidarScan;
 import fr.amap.commons.util.ProcessingAdapter;
+import fr.amap.commons.util.filter.Filter;
+import fr.amap.lidar.amapvox.shot.filter.EchoRankFilter;
 import fr.amap.lidar.amapvox.voxelisation.postproc.VoxelFileMerging;
 import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxMergingCfg;
-import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoFilterByFileParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams;
 import fr.amap.lidar.amapvox.voxelisation.tls.RxpVoxelisation;
 import java.io.BufferedReader;
@@ -69,8 +70,15 @@ public class RSPVoxelizationService extends Service<List<File>> {
 
                 // echo filter by file
                 HashMap<String, String> echoFilterMap = null;
-                if (null != mainCfg.getVoxelParameters().getEchoFilterByFileParams()) {
-                    echoFilterMap = readCSV(mainCfg.getVoxelParameters().getEchoFilterByFileParams().getFile());
+                EchoRankFilter.Behavior behavior = EchoRankFilter.Behavior.DISCARD;
+                EchoRankFilter echoRankFilter = null;
+                for (Filter filter : mainCfg.getEchoFilters()) {
+                    if (filter instanceof EchoRankFilter) {
+                        echoRankFilter = (EchoRankFilter) filter;
+                        echoFilterMap = readCSV(echoRankFilter.getFile());
+                        behavior = echoRankFilter.behavior();
+                        break;
+                    }
                 }
 
                 ArrayList<File> files = new ArrayList();
@@ -87,6 +95,7 @@ public class RSPVoxelizationService extends Service<List<File>> {
                         File outputFile = new File(mainCfg.getOutputFile().getAbsolutePath() + "/" + scan.file.getName() + ".vox");
                         cfg.setOutputFile(outputFile);
                         cfg.setSopMatrix(scan.matrix);
+                        
                         if (null != echoWeightMap) {
                             String key;
                             String rxp = scan.file.getName();
@@ -98,18 +107,19 @@ public class RSPVoxelizationService extends Service<List<File>> {
                                 LOGGER.warn("Could not find any echo weight file associated to RXP scan " + rxp + " in parameter file " + mainCfg.getVoxelParameters().getEchoesWeightByFileParams().getFile().getName());
                             }
                         }
-                        if (null != echoFilterMap) {
+
+                        if (null != echoFilterMap && null != echoRankFilter) {
                             String key;
                             String rxp = scan.file.getName();
                             if (null != (key = findKey(echoFilterMap, rxp))) {
-                                EchoFilterByFileParams echoFilterParams = new EchoFilterByFileParams(
+                                EchoRankFilter filter = new EchoRankFilter(
                                         echoFilterMap.get(key),
-                                        mainCfg.getVoxelParameters().getEchoFilterByFileParams().discardEchoes());
-                                cfg.getVoxelParameters().setEchoFilterByFileParams(echoFilterParams);
-                                //LOGGER.debug("Echo filer file " + cfg.getVoxelParameters().getEchoFilterByFileParams().getFile());
+                                        behavior);
+                                cfg.addEchoFilter(filter);
+                                LOGGER.debug("Echo filer file " + filter.getFile());
+                                cfg.getEchoFilters().remove(echoRankFilter);
                             } else {
-                                cfg.getVoxelParameters().setEchoFilterByFileParams(null);
-                                LOGGER.warn("Could not find any echo filter file associated to RXP scan " + rxp + " in parameter file " + mainCfg.getVoxelParameters().getEchoFilterByFileParams().getFile().getName());
+                                LOGGER.warn("Could not find any echo filter file associated to RXP scan " + rxp + " in parameter file " + echoRankFilter.getFile());
                             }
                         }
 
@@ -174,7 +184,7 @@ public class RSPVoxelizationService extends Service<List<File>> {
     private String findKey(HashMap<String, String> map, String rxp) {
 
         for (String key : map.keySet()) {
-            System.out.println(rxp + " " + key + " startsWith? " + rxp.startsWith(key));
+            //System.out.println(rxp + " " + key + " startsWith? " + rxp.startsWith(key));
             if (rxp.startsWith(key)) {
                 return key;
             }
