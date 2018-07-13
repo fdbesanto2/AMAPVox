@@ -79,18 +79,7 @@ public abstract class TLSVoxelisation extends CallableTask<File> {
             }
         }
         
-        // point cloud filters
-        List<PointcloudFilter> pointcloudFilters = cfg.getVoxelParameters().getPointcloudFilters();
-        if (pointcloudFilters != null) {
-            if (cfg.getVoxelParameters().isUsePointCloudFilter()) {
-                LOGGER.info("Loading point cloud filters...");
-                for (PointcloudFilter filter : pointcloudFilters) {
-                    filter.setOctree(Util.loadOctree(filter.getPointcloudFile(), vop));
-                }
-            }
-        }
-        
-        voxelAnalysis = new VoxelAnalysis(terrain, pointcloudFilters, cfg);
+        voxelAnalysis = new VoxelAnalysis(terrain, cfg);
     }
     
     public int getNbVoxelisationFinished() {

@@ -2834,6 +2834,26 @@ public class MainFrameController implements Initializable {
                 shotFilters.add(new ShotDecimationFilter(Integer.valueOf(textfieldDecimationFactor.getText()), Integer.valueOf(textfieldDecimationOffset.getText())));
             }
             cfg.setShotFilters(shotFilters);
+            
+            // pointcloud filter
+            if (checkboxUsePointcloudFilter.isSelected()) {
+                ObservableList<Node> childrenUnmodifiable = vBoxPointCloudFiltering.getChildrenUnmodifiable();
+                for (Node n : childrenUnmodifiable) {
+                    if (n instanceof PointCloudFilterPaneComponent) {
+                        PointCloudFilterPaneComponent pane = (PointCloudFilterPaneComponent) n;
+                        Filter.Behavior behavior = pane.getComboboxPointCloudFilteringType().getSelectionModel().getSelectedIndex() == 0
+                                ? Filter.Behavior.RETAIN
+                                : Filter.Behavior.DISCARD;
+                        Mat4D vop = (null != vopMatrix)
+                                ? MatrixUtility.convertMatrix4dToMat4D(vopMatrix)
+                                : Mat4D.identity();
+                        cfg.addEchoFilter(new PointcloudFilter(pane.getCsvFile(),
+                                Float.valueOf(pane.getTextfieldPointCloudErrorMargin().getText()),
+                                behavior,
+                                vop));
+                    }
+                }
+            }
 
             try {
                 cfg.writeConfiguration(selectedFile, Global.buildVersion);
@@ -3089,6 +3109,26 @@ public class MainFrameController implements Initializable {
         if (checkboxEchoFilterByShotID.isSelected()) {
             cfg.addEchoFilter(new EchoRankFilter(textFieldEchoFilterByShotID.getText(),
                     comboboxEchoFiltering.getSelectionModel().getSelectedItem()));
+        }
+        
+        // pointcloud filter
+        if (checkboxUsePointcloudFilter.isSelected()) {
+            ObservableList<Node> childrenUnmodifiable = vBoxPointCloudFiltering.getChildrenUnmodifiable();
+            for (Node n : childrenUnmodifiable) {
+                if (n instanceof PointCloudFilterPaneComponent) {
+                    PointCloudFilterPaneComponent pane = (PointCloudFilterPaneComponent) n;
+                    Filter.Behavior behavior = pane.getComboboxPointCloudFilteringType().getSelectionModel().getSelectedIndex() == 0 
+                                ? Filter.Behavior.RETAIN
+                                : Filter.Behavior.DISCARD;
+                    Mat4D vop = (null != vopMatrix)
+                            ? MatrixUtility.convertMatrix4dToMat4D(vopMatrix)
+                            : Mat4D.identity();
+                    cfg.addEchoFilter(new PointcloudFilter(pane.getCsvFile(),
+                            Float.valueOf(pane.getTextfieldPointCloudErrorMargin().getText()),
+                            behavior,
+                            vop));
+                }
+            }
         }
 
         try {
@@ -5129,33 +5169,6 @@ public class MainFrameController implements Initializable {
         }
         
         voxelParameters.setDtmFilteringParams(dtmFilteringParams);
-
-        voxelParameters.setUsePointCloudFilter(checkboxUsePointcloudFilter.isSelected());
-        if (checkboxUsePointcloudFilter.isSelected()) {
-
-            List<PointcloudFilter> pointcloudFilters = new ArrayList<>();
-
-            ObservableList<Node> childrenUnmodifiable = vBoxPointCloudFiltering.getChildrenUnmodifiable();
-            for (Node n : childrenUnmodifiable) {
-                if (n instanceof PointCloudFilterPaneComponent) {
-                    PointCloudFilterPaneComponent pane = (PointCloudFilterPaneComponent) n;
-
-                    boolean keep;
-
-                    int index = pane.getComboboxPointCloudFilteringType().getSelectionModel().getSelectedIndex();
-                    keep = index == 0;
-
-                    pointcloudFilters.add(new PointcloudFilter(pane.getCsvFile(),
-                            Float.valueOf(pane.getTextfieldPointCloudErrorMargin().getText()),
-                            keep));
-                }
-            }
-
-            voxelParameters.setPointcloudFilters(pointcloudFilters);
-            
-            //voxelParameters.setPointcloudErrorMargin(Float.valueOf(textfieldPointCloudErrorMargin.getText()));
-            //voxelParameters.setPointcloudFile(new File(textfieldPointCloudPath.getText()));
-        }
         
         if(checkboxCustomLaserSpecification.isSelected()){
             try{
@@ -5434,32 +5447,12 @@ public class MainFrameController implements Initializable {
                         checkboxApplyVOPMatrix.setSelected(dtmFilteringParams.isUseVOPMatrix());
                     }                    
 
-                    checkboxUsePointcloudFilter.setSelected(voxelParameters.isUsePointCloudFilter());
-                    List<PointcloudFilter> pointcloudFilters = voxelParameters.getPointcloudFilters();
-                    if (pointcloudFilters != null) {
-
-                        clearPointcloudFiltersPane();
-
-                        for (PointcloudFilter filter : pointcloudFilters) {
-                            PointCloudFilterPaneComponent pane = addPointcloudFilterComponent();
-                            pane.setCSVFile(filter.getPointcloudFile());
-                            pane.getTextfieldPointCloudErrorMargin().setText(String.valueOf(filter.getPointcloudErrorMargin()));
-
-                            int index;
-                            if (filter.isKeep()) {
-                                index = 0;
-                            } else {
-                                index = 1;
-                            }
-                            pane.getComboboxPointCloudFilteringType().getSelectionModel().select(index);
-                        }
-                    }
-
                     checkboxUsePopMatrix.setSelected(((VoxelAnalysisCfg)cfg).isUsePopMatrix());
                     checkboxUseSopMatrix.setSelected(((VoxelAnalysisCfg)cfg).isUseSopMatrix());
                     checkboxUseVopMatrix.setSelected(((VoxelAnalysisCfg)cfg).isUseVopMatrix());
                     
                     // echo filters
+                    clearPointcloudFiltersPane();
                     List<Filter<Shot.Echo>> filters = ((VoxelAnalysisCfg) cfg).getEchoFilters();
                     for (Filter filter : filters) {
                         if (filter instanceof EchoAttributeFilter) {
@@ -5475,6 +5468,14 @@ public class MainFrameController implements Initializable {
                             for (Integer i : classifiedPointsToDiscard) {
                                 listviewClassifications.getItems().get(i).setSelected(false);
                             }
+                        } else if (filter instanceof PointcloudFilter) {
+                            checkboxUsePointcloudFilter.setSelected(true);
+                            PointcloudFilter f = (PointcloudFilter) filter;
+                            PointCloudFilterPaneComponent pane = addPointcloudFilterComponent();
+                            pane.setCSVFile(f.getPointcloudFile());
+                            pane.getTextfieldPointCloudErrorMargin().setText(String.valueOf(f.getPointcloudErrorMargin()));
+                            int index = f.behavior().equals(Filter.Behavior.RETAIN) ? 0 : 1;
+                            pane.getComboboxPointCloudFilteringType().getSelectionModel().select(index);
                         }
                     }
                     

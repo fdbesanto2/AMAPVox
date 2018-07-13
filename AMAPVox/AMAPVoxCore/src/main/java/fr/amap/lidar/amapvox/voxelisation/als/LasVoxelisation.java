@@ -94,7 +94,7 @@ public class LasVoxelisation extends Process implements Cancellable {
             }
         }
 
-        voxelAnalysis = new VoxelAnalysis(terrain, null, cfg);
+        voxelAnalysis = new VoxelAnalysis(terrain, cfg);
         voxelAnalysis.createVoxelSpace();
 
         if (cfg.getInputType() == Configuration.InputType.SHOTS_FILE) {

@@ -7,10 +7,8 @@ package fr.amap.lidar.amapvox.voxelisation.configuration.params;
 
 import fr.amap.lidar.amapvox.commons.LADParams;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
-import fr.amap.lidar.amapvox.shot.filter.PointcloudFilter;
 import fr.amap.lidar.amapvox.voxelisation.LaserSpecification;
 import java.io.File;
-import java.util.List;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3i;
 
@@ -24,10 +22,6 @@ public class VoxelParameters {
     public final VoxelSpaceInfos infos;
     private int transmittanceMode = 1;
     private String pathLengthMode = "A";
-    
-    //echoes filtering
-    private List<PointcloudFilter> pointcloudFilters;
-    private boolean usePointCloudFilter;
     
     private boolean mergingAfter;
     private File mergedFile;
@@ -47,10 +41,6 @@ public class VoxelParameters {
         private final VoxelSpaceInfos infos = new VoxelSpaceInfos();
         private int transmittanceMode = 1;
         private String pathLengthMode = "A";
-
-        //echoes filtering
-        private List<PointcloudFilter> pointcloudFilters = null;
-        private boolean usePointCloudFilter = false;
 
         private boolean mergingAfter = false;
         private File mergedFile = null;
@@ -139,9 +129,7 @@ public class VoxelParameters {
         this.mergingAfter = builder.mergingAfter;
         this.naNsCorrectionParams = builder.naNsCorrectionParams;
         this.pathLengthMode = builder.pathLengthMode;
-        this.pointcloudFilters = builder.pointcloudFilters;
         this.transmittanceMode = builder.transmittanceMode;
-        this.usePointCloudFilter = builder.usePointCloudFilter;
     }
     
     public VoxelParameters() {
@@ -243,22 +231,6 @@ public class VoxelParameters {
 
     public void setMergedFile(File mergedFile) {
         this.mergedFile = mergedFile;
-    }
-
-    public boolean isUsePointCloudFilter() {
-        return usePointCloudFilter;
-    }
-
-    public void setUsePointCloudFilter(boolean usePointCloudFilter) {
-        this.usePointCloudFilter = usePointCloudFilter;
-    }
-
-    public List<PointcloudFilter> getPointcloudFilters() {
-        return pointcloudFilters;
-    }
-
-    public void setPointcloudFilters(List<PointcloudFilter> pointcloudFilters) {
-        this.pointcloudFilters = pointcloudFilters;
     }
 
     public LaserSpecification getLaserSpecification() {

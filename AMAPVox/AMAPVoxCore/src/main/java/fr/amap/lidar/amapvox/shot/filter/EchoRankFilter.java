@@ -153,15 +153,4 @@ public class EchoRankFilter implements Filter<Shot.Echo> {
             this.retained = retained;
         }
     }
-
-    public enum Behavior {
-        RETAIN,
-        DISCARD;
-
-        @Override
-        public String toString() {
-            return name().toLowerCase();
-        }
-    }
-
 }

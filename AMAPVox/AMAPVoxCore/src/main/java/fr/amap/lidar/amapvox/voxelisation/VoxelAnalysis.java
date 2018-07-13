@@ -1,6 +1,5 @@
 package fr.amap.lidar.amapvox.voxelisation;
 
-import fr.amap.lidar.amapvox.shot.filter.PointcloudFilter;
 import fr.amap.lidar.amapvox.shot.Shot;
 import fr.amap.commons.util.TimeCounter;
 import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.geometry.LineElement;
@@ -91,7 +90,6 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
     private final List<Filter<Shot>> shotFilters;
     private final List<Filter<Shot.Echo>> echoFilters;
-    private List<PointcloudFilter> pointcloudFilters;
 
     private boolean padComputed;
 
@@ -169,15 +167,20 @@ public class VoxelAnalysis extends Process implements Cancellable {
                 : z;
     }
 
-    public VoxelAnalysis(Raster terrain, List<PointcloudFilter> pointcloudFilters, VoxelAnalysisCfg cfg) throws Exception {
+    public VoxelAnalysis(Raster terrain, VoxelAnalysisCfg cfg) throws Exception {
 
         nShotsProcessed = 0;
         nShotsDiscarded = 0;
         this.dtm = terrain;
-        this.pointcloudFilters = pointcloudFilters;
 
         shotFilters = cfg.getShotFilters();
+        for (Filter filter : shotFilters) {
+            filter.init();
+        }
         echoFilters = cfg.getEchoFilters();
+        for (Filter filter : echoFilters) {
+            filter.init();
+        }
 
         this.cfg = cfg;
 
@@ -275,15 +278,6 @@ public class VoxelAnalysis extends Process implements Cancellable {
         if (echo.rank >= 0 && echoFilters != null) {
             for (Filter filter : echoFilters) {
                 if (!filter.accept(echo)) {
-                    return false;
-                }
-            }
-        }
-
-        // point cloud filters
-        if (pointcloudFilters != null) {
-            for (PointcloudFilter filter : pointcloudFilters) {
-                if (!filter.doFiltering(echo.location)) {
                     return false;
                 }
             }
@@ -1109,14 +1103,6 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
     public Voxel[][][] getVoxels() {
         return voxels;
-    }
-
-    public List<PointcloudFilter> getPointcloudFilters() {
-        return pointcloudFilters;
-    }
-
-    public void setPointcloudFilters(List<PointcloudFilter> pointcloudFilters) {
-        this.pointcloudFilters = pointcloudFilters;
     }
 
     public Raster getDtm() {

@@ -42,7 +42,7 @@ public class VoxelAnalysisTest {
         params.setPathLengthMode("B");
         cfg.setVoxelParameters(params);
         
-        VoxelAnalysis voxAnalysis = new VoxelAnalysis(null, null, cfg);
+        VoxelAnalysis voxAnalysis = new VoxelAnalysis(null, cfg);
         
         voxAnalysis.createVoxelSpace();
         

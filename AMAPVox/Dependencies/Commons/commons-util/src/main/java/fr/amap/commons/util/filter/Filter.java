@@ -12,8 +12,18 @@ package fr.amap.commons.util.filter;
  */
 public interface Filter<T> {
     
+    
     public void init() throws Exception;
     
     public boolean accept(T object) throws Exception;
     
+    public enum Behavior {
+        RETAIN,
+        DISCARD;
+
+        @Override
+        public String toString() {
+            return name().toLowerCase();
+        }
+    }
 }

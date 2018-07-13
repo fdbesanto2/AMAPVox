@@ -11,78 +11,67 @@ Authors:
 
 For further information, please contact Gregoire Vincent.
  */
-
 package fr.amap.lidar.amapvox.shot.filter;
 
+import fr.amap.commons.math.matrix.Mat4D;
 import fr.amap.commons.structure.octree.Octree;
 import fr.amap.commons.math.point.Point3D;
-import fr.amap.commons.math.point.Point3F;
+import fr.amap.commons.util.filter.Filter;
 import fr.amap.commons.util.io.file.CSVFile;
-import java.io.File;
-import javax.vecmath.Point3d;
+import fr.amap.lidar.amapvox.shot.Shot;
+import fr.amap.lidar.amapvox.util.Util;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
+public class PointcloudFilter implements Filter<Shot.Echo> {
 
-
-public class PointcloudFilter {
-    
-    private CSVFile pointcloudFile;
-    private float pointcloudErrorMargin;
-    private boolean keep;
+    private final CSVFile pointcloudFile;
+    private final float pointcloudErrorMargin;
+    private final Behavior behavior;
+    private final boolean retain;
+    private final Mat4D vop;
     private Octree octree;
+    //
+     private final static Logger LOGGER = Logger.getLogger(PointcloudFilter.class);
 
-
-    public PointcloudFilter(CSVFile pointcloudFile, float pointcloudErrorMargin, boolean keep) {
+    public PointcloudFilter(CSVFile pointcloudFile, float pointcloudErrorMargin, Behavior behavior, Mat4D vop) {
         this.pointcloudFile = pointcloudFile;
         this.pointcloudErrorMargin = pointcloudErrorMargin;
-        this.keep = keep;
+        this.behavior = behavior;
+        retain = behavior.equals(Behavior.RETAIN);
+        this.vop = vop;
     }
 
     public CSVFile getPointcloudFile() {
         return pointcloudFile;
     }
 
-    public void setPointcloudFile(CSVFile pointcloudFile) {
-        this.pointcloudFile = pointcloudFile;
-    }
-
     public float getPointcloudErrorMargin() {
         return pointcloudErrorMargin;
     }
 
-    public void setPointcloudErrorMargin(float pointcloudErrorMargin) {
-        this.pointcloudErrorMargin = pointcloudErrorMargin;
+    public Behavior behavior() {
+        return behavior;
     }
 
-    public boolean isKeep() {
-        return keep;
+    @Override
+    public void init() throws Exception {
+        LOGGER.info("Loading point cloud filter " + pointcloudFile.getAbsolutePath());
+        octree = Util.loadOctree(pointcloudFile, vop);
     }
 
-    public void setKeep(boolean keep) {
-        this.keep = keep;
-    }
+    @Override
+    public boolean accept(Shot.Echo echo) throws Exception {
 
-    public Octree getOctree() {
-        return octree;
-    }
+        Point3D location = new Point3D(
+                echo.location.x,
+                echo.location.y,
+                echo.location.z);
 
-    public void setOctree(Octree octree) {
-        this.octree = octree;
-    }
-    
-    public boolean doFiltering(Point3d point){
-        
-        boolean test;
-
-        test = octree.isPointBelongsToPointcloud(new Point3D(point.x, point.y, point.z), pointcloudErrorMargin, Octree.INCREMENTAL_SEARCH);
-        
-        if(keep){
-            return test;
-        }else{
-            return !test;
-        }
+        boolean inside = octree.isPointBelongsToPointcloud(location, pointcloudErrorMargin, Octree.INCREMENTAL_SEARCH);
+        return retain ? inside : !inside;
     }
 }

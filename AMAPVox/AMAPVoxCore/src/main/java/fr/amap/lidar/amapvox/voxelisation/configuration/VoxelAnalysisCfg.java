@@ -13,6 +13,8 @@ For further information, please contact Gregoire Vincent.
  */
 package fr.amap.lidar.amapvox.voxelisation.configuration;
 
+import fr.amap.commons.math.matrix.Mat4D;
+import fr.amap.commons.math.util.MatrixUtility;
 import fr.amap.commons.util.filter.Filter;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
 import fr.amap.lidar.amapvox.commons.Configuration;
@@ -96,7 +98,8 @@ public class VoxelAnalysisCfg extends Configuration {
     public void readConfiguration(File inputParametersFile) throws Exception {
 
         initDocument(inputParametersFile);
-
+        shotFilters.clear();
+        echoFilters.clear();
         voxelParameters = new VoxelParameters();
 
         Element inputFileElement = processElement.getChild("input_file");
@@ -236,13 +239,10 @@ public class VoxelAnalysisCfg extends Configuration {
 
         if (pointcloudFiltersElement != null) {
             boolean usePointCloudFilter = Boolean.valueOf(pointcloudFiltersElement.getAttributeValue("enabled"));
-            voxelParameters.setUsePointCloudFilter(usePointCloudFilter);
             if (usePointCloudFilter) {
-
                 List<Element> childrens = pointcloudFiltersElement.getChildren("pointcloud-filter");
-
                 if (childrens != null) {
-                    List<PointcloudFilter> pointcloudFilters = new ArrayList<>();
+                    List<PointcloudFilter> pointcloudFilters = new ArrayList();
                     for (Element e : childrens) {
 
                         CSVFile file = new CSVFile(e.getAttributeValue("src"));
@@ -276,14 +276,16 @@ public class VoxelAnalysisCfg extends Configuration {
                             LOGGER.warn("Old file element detected, keep default old read parameters.");
                         }
 
-                        boolean keep;
                         String operationType = e.getAttributeValue("operation-type");
-                        keep = operationType.equals("Keep");
-                        pointcloudFilters.add(new PointcloudFilter(file, Float.valueOf(e.getAttributeValue("error-margin")), keep));
+                        Filter.Behavior behavior = operationType.equals("Keep")
+                                ? Filter.Behavior.RETAIN : Filter.Behavior.DISCARD;
+                        Mat4D vop = null != getVopMatrix()
+                                ? MatrixUtility.convertMatrix4dToMat4D(getVopMatrix())
+                                : Mat4D.identity();
+                        echoFilters.add(new PointcloudFilter(file,
+                                Float.valueOf(e.getAttributeValue("error-margin")), 
+                                behavior, vop));
                     }
-
-                    voxelParameters.setPointcloudFilters(pointcloudFilters);
-
                 }
             }
         }
@@ -329,8 +331,6 @@ public class VoxelAnalysisCfg extends Configuration {
         }
 
         filtersElement = processElement.getChild("filters");
-        shotFilters.clear();
-        echoFilters.clear();
 
         if (filtersElement != null) {
 
@@ -547,54 +547,6 @@ public class VoxelAnalysisCfg extends Configuration {
 
         processElement.addContent(laserSpecElement);
 
-        Element pointcloudFiltersElement = new Element("pointcloud-filters");
-        pointcloudFiltersElement.setAttribute(new Attribute("enabled", String.valueOf(voxelParameters.isUsePointCloudFilter())));
-
-        if (voxelParameters.isUsePointCloudFilter()) {
-
-            List<PointcloudFilter> pointcloudFilters = voxelParameters.getPointcloudFilters();
-
-            if (pointcloudFilters != null) {
-
-                for (PointcloudFilter filter : pointcloudFilters) {
-                    Element pointcloudFilterElement = new Element("pointcloud-filter");
-                    pointcloudFilterElement.setAttribute(new Attribute("src", filter.getPointcloudFile().getAbsolutePath()));
-                    pointcloudFilterElement.setAttribute(new Attribute("error-margin", String.valueOf(filter.getPointcloudErrorMargin())));
-
-                    String operationType;
-                    if (filter.isKeep()) {
-                        operationType = "Keep";
-                    } else {
-                        operationType = "Discard";
-                    }
-
-                    pointcloudFilterElement.setAttribute(new Attribute("operation-type", operationType));
-
-                    pointcloudFilterElement.setAttribute(new Attribute("column-separator", filter.getPointcloudFile().getColumnSeparator()));
-                    pointcloudFilterElement.setAttribute(new Attribute("header-index", String.valueOf(filter.getPointcloudFile().getHeaderIndex())));
-                    pointcloudFilterElement.setAttribute(new Attribute("has-header", String.valueOf(filter.getPointcloudFile().containsHeader())));
-                    pointcloudFilterElement.setAttribute(new Attribute("nb-of-lines-to-read", String.valueOf(filter.getPointcloudFile().getNbOfLinesToRead())));
-                    pointcloudFilterElement.setAttribute(new Attribute("nb-of-lines-to-skip", String.valueOf(filter.getPointcloudFile().getNbOfLinesToSkip())));
-
-                    Map<String, Integer> columnAssignment = filter.getPointcloudFile().getColumnAssignment();
-                    Iterator<Map.Entry<String, Integer>> iterator = columnAssignment.entrySet().iterator();
-                    String colAssignment = new String();
-
-                    while (iterator.hasNext()) {
-                        Map.Entry<String, Integer> entry = iterator.next();
-                        colAssignment += entry.getKey() + "=" + entry.getValue() + ",";
-                    }
-
-                    pointcloudFilterElement.setAttribute(new Attribute("column-assignment", colAssignment));
-
-                    pointcloudFiltersElement.addContent(pointcloudFilterElement);
-                }
-            }
-
-        }
-
-        processElement.addContent(pointcloudFiltersElement);
-
         /**
          * *TRANSFORMATION**
          */
@@ -658,6 +610,7 @@ public class VoxelAnalysisCfg extends Configuration {
         }
 
         Element echoFilterElement = new Element("echo-filters");
+        Element pointcloudFiltersElement = new Element("pointcloud-filters");
 
         if (echoFilters != null && !echoFilters.isEmpty()) {
             for (Filter filter : echoFilters) {
@@ -671,6 +624,38 @@ public class VoxelAnalysisCfg extends Configuration {
                     EchoRankFilter f = (EchoRankFilter) filter;
                     filterElement.setAttribute("src", f.getFile().getAbsolutePath());
                     filterElement.setAttribute("behavior", f.behavior().toString());
+                } else if (filter instanceof PointcloudFilter) {
+                    PointcloudFilter f = (PointcloudFilter) filter;
+                    Element pointcloudFilterElement = new Element("pointcloud-filter");
+                    pointcloudFilterElement.setAttribute(new Attribute("src", f.getPointcloudFile().getAbsolutePath()));
+                    pointcloudFilterElement.setAttribute(new Attribute("error-margin", String.valueOf(f.getPointcloudErrorMargin())));
+                    String operationType = null;
+                    switch (f.behavior()) {
+                        case RETAIN:
+                            operationType = "Keep";
+                            break;
+                        case DISCARD:
+                            operationType = "Discard";
+                            break;
+                    }
+                    pointcloudFilterElement.setAttribute(new Attribute("operation-type", operationType));
+                    pointcloudFilterElement.setAttribute(new Attribute("column-separator", f.getPointcloudFile().getColumnSeparator()));
+                    pointcloudFilterElement.setAttribute(new Attribute("header-index", String.valueOf(f.getPointcloudFile().getHeaderIndex())));
+                    pointcloudFilterElement.setAttribute(new Attribute("has-header", String.valueOf(f.getPointcloudFile().containsHeader())));
+                    pointcloudFilterElement.setAttribute(new Attribute("nb-of-lines-to-read", String.valueOf(f.getPointcloudFile().getNbOfLinesToRead())));
+                    pointcloudFilterElement.setAttribute(new Attribute("nb-of-lines-to-skip", String.valueOf(f.getPointcloudFile().getNbOfLinesToSkip())));
+
+                    Map<String, Integer> columnAssignment = f.getPointcloudFile().getColumnAssignment();
+                    Iterator<Map.Entry<String, Integer>> iterator = columnAssignment.entrySet().iterator();
+                    String colAssignment = new String();
+
+                    while (iterator.hasNext()) {
+                        Map.Entry<String, Integer> entry = iterator.next();
+                        colAssignment += entry.getKey() + "=" + entry.getValue() + ",";
+                    }
+                    pointcloudFilterElement.setAttribute(new Attribute("column-assignment", colAssignment));
+                    pointcloudFiltersElement.addContent(pointcloudFilterElement);
+                    continue;
                 }
                 echoFilterElement.addContent(filterElement);
             }
@@ -679,8 +664,10 @@ public class VoxelAnalysisCfg extends Configuration {
         if (echoFilterElement.getContentSize() > 0) {
             filtersElement.addContent(echoFilterElement);
         }
-
         processElement.addContent(filtersElement);
+        
+        pointcloudFiltersElement.setAttribute(new Attribute("enabled", String.valueOf(pointcloudFiltersElement.getContentSize() > 0)));
+        processElement.addContent(pointcloudFiltersElement);
 
         LADParams ladParameters = voxelParameters.getLadParams();
 

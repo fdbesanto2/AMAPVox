@@ -14,6 +14,7 @@ import fr.amap.amapvox.io.tls.rxp.Shot;
 import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
 import java.io.File;
 import java.util.Iterator;
+import java.util.logging.Level;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import org.apache.log4j.Logger;
@@ -70,7 +71,7 @@ public class RxpVoxelisation extends TLSVoxelisation {
         LOGGER.info("Shots processed: " + voxelAnalysis.getNbShotsProcessed());
         //LOGGER.info("Shots processed: " + voxelAnalysis.nbShotsTreated);
         //LOGGER.info("voxelisation is finished ( " + TimeCounter.getElapsedStringTimeInSeconds(startTime) + " )");
-        
+
         // close rxp reader
         rxpExtraction.close();
         // run TLSVoxelisation#postProcess
@@ -117,5 +118,18 @@ public class RxpVoxelisation extends TLSVoxelisation {
         //logger.error("Unknow exception in RXPVoxelisation.class in thread : "+Thread.currentThread().getName()+", retrying",ex);
         //this.call();
         return outputFile;
+    }
+
+    public static void main(String... args) {
+        try {
+            TLSVoxCfg cfg = new TLSVoxCfg();
+            cfg.readConfiguration(new File("/home/pverley/Downloads/cfg.xml"));
+            // voxelisation
+            RxpVoxelisation voxelisation = new RxpVoxelisation(cfg);
+            voxelisation.init();
+            voxelisation.call();
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(RxpVoxelisation.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
