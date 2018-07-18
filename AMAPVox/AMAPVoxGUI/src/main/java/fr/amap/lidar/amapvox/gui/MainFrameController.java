@@ -227,8 +227,6 @@ import javafx.scene.control.TextArea;
 import javafx.stage.StageStyle;
 import javax.vecmath.Point3f;
 import org.jfree.data.xy.XYDataItem;
-import scripts.DanielScript;
-import scripts.Script;
 
 /**
  * FXML Controller class
@@ -705,8 +703,6 @@ public class MainFrameController implements Initializable {
     @FXML
     private CheckBox checkboxWriteShotSegment;
     @FXML
-    private ComboBox<String> comboboxScript;
-    @FXML
     private TextArea textAreaWeighting;
     @FXML
     private VBox vboxWeightingByRank;
@@ -942,8 +938,6 @@ public class MainFrameController implements Initializable {
 
         this.resourceBundle = rb;
 
-        viewer3DPanelController.setResourceBundle(rb);
-
         initStrings(rb);
 
         colorPickerSeries.valueProperty().addListener((ObservableValue<? extends javafx.scene.paint.Color> observable, javafx.scene.paint.Color oldValue, javafx.scene.paint.Color newValue) -> {
@@ -952,8 +946,6 @@ public class MainFrameController implements Initializable {
                         (float) newValue.getRed(), (float) newValue.getGreen(), (float) newValue.getBlue(), 1.0f));
             }
         });
-
-        comboboxScript.getItems().setAll("Daniel script");
 
         vboxWeightingByRank.disableProperty().bind(checkboxWeightingByRank.selectedProperty().not());
         vboxWeightingByFile.disableProperty().bind(checkboxWeightingByFile.selectedProperty().not());
@@ -1619,14 +1611,6 @@ public class MainFrameController implements Initializable {
         textFieldBeamDivergence.disableProperty().bind(checkboxCustomLaserSpecification.selectedProperty().not());
 
         listViewProductsFiles.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-        listViewProductsFiles.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
-            int size = listViewProductsFiles.getSelectionModel().getSelectedIndices().size();
-
-            if (size == 1) {
-                viewer3DPanelController.updateCurrentVoxelFile(listViewProductsFiles.getSelectionModel().getSelectedItem());
-            }
-        });
 
         listViewTaskList.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             int size = listViewTaskList.getSelectionModel().getSelectedIndices().size();
@@ -6484,22 +6468,6 @@ public class MainFrameController implements Initializable {
 
     public Stage getStage() {
         return stage;
-    }
-
-    @FXML
-    private void onActionButtonExecuteScript(ActionEvent event) {
-
-        Script script = null;
-
-        if (comboboxScript.getSelectionModel().getSelectedItem().equals("Daniel script")) {
-
-            script = new DanielScript(this);
-        }
-
-        if (script != null) {
-            script.launch();
-        }
-
     }
 
     private void fillWeightingData(double[][] weightingData) {

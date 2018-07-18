@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
@@ -17,121 +22,75 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane id="AnchorPane" prefHeight="548.0" prefWidth="769.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.lidar.amapvox.gui.viewer3d.Viewer3DPanelController">
-   <children>
-      <SplitPane dividerPositions="0.65" layoutX="-14.0" prefHeight="539.0" prefWidth="776.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <items>
-            <ScrollPane fitToHeight="true" fitToWidth="true">
-               <content>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <RadioButton fx:id="radioButtonMode1" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Mode 1" AnchorPane.leftAnchor="14.0" />
-                        <VBox fx:id="vboxMode1" layoutX="23.0" layoutY="41.0" prefHeight="143.0" prefWidth="452.0" spacing="10.0" AnchorPane.leftAnchor="30.0">
-                           <children>
-                              <HBox alignment="CENTER_LEFT" spacing="15.0">
-                                 <children>
-                                    <CheckBox fx:id="checkboxRaster1" disable="true" mnemonicParsing="false" selected="true" text="Voxels" />
-                                    <Label text="Attribute to view" />
-                                    <ComboBox fx:id="comboboxAttributeToView" prefWidth="150.0" />
-                                 </children>
-                              </HBox>
-                              <HBox spacing="10.0">
-                                 <children>
-                                    <CheckBox fx:id="checkboxRaster" mnemonicParsing="false" text="Raster" />
-                                    <AnchorPane fx:id="anchorPaneRasterParameters" disable="true" prefHeight="135.0" prefWidth="375.0">
-                                       <children>
-                                          <TextField fx:id="textfieldRasterFilePath" layoutX="6.0" prefHeight="25.0" prefWidth="316.0" AnchorPane.leftAnchor="0.0" />
-                                          <Button layoutX="322.0" mnemonicParsing="false" onAction="#onActionButtonOpenRasterFile" text="Open" />
-                                          <CheckBox fx:id="checkboxUseTransformationMatrix" layoutX="63.0" layoutY="31.0" mnemonicParsing="false" onAction="#onActionCheckboxUseTransformationMatrix" prefHeight="30.0" prefWidth="184.0" AnchorPane.leftAnchor="0.0">
-                                             <graphic>
-                                                <HBox alignment="CENTER" spacing="10.0">
-                                                   <children>
-                                                      <Label text="Transformation" />
-                                                      <Button fx:id="buttonSetTransformationMatrix" disable="true" mnemonicParsing="false" onAction="#onActionButtonSetTransformationMatrix">
-                                                         <graphic>
-                                                            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                                               <image>
-                                                                  <Image url="@../icons/Interaction_Transformation.png" />
-                                                               </image>
-                                                            </ImageView>
-                                                         </graphic>
-                                                      </Button>
-                                                   </children>
-                                                </HBox>
-                                             </graphic>
-                                          </CheckBox>
-                                          <CheckBox fx:id="checkboxFitRasterToVoxelSpace" layoutX="11.0" layoutY="72.0" mnemonicParsing="false" selected="true" text="Fit to voxel space" AnchorPane.leftAnchor="0.0" />
-                                          <Label layoutX="166.0" layoutY="74.0" text="Margin (cell number)" />
-                                          <TextField fx:id="textfieldRasterFittingMargin" layoutX="309.0" layoutY="69.0" prefHeight="25.0" prefWidth="60.0" text="0" />
-                                       </children>
-                                    </AnchorPane>
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="206.0" AnchorPane.leftAnchor="14.0">
-                           <children>
-                              <RadioButton fx:id="radioButtonMode2" mnemonicParsing="false" text="Mode 2 (experimental)" />
-                              <fx:include fx:id="helpButton3DViewer" source="../HelpButton.fxml" />
-                           </children>
+<AnchorPane id="AnchorPane" prefHeight="548.0" prefWidth="769.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.amap.lidar.amapvox.gui.viewer3d.Viewer3DPanelController">
+    <children>
+        <VBox spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30">
+            <children>
+                <Label text="Voxel file" />
+                <VBox spacing="10.0">
+                    <children>
+                        <HBox>
+                            <children>
+                                <TextField fx:id="textFieldVoxelFile" prefHeight="25.0" prefWidth="350" editable="false" />
+                                <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionButtonOpenVoxelFile" text="..." />
+                            </children>
                         </HBox>
-                        <VBox fx:id="vboxMode2" disable="true" layoutX="10.0" layoutY="241.0" minHeight="-Infinity" prefHeight="247.0" prefWidth="438.0" AnchorPane.bottomAnchor="58.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="241.0">
-                           <children>
-                              <ScrollPane fitToHeight="true" fitToWidth="true">
-                                 <content>
-                                    <TreeView fx:id="treeViewSceneObjects" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="431.0" />
-                                 </content>
-                              </ScrollPane>
-                              <HBox maxWidth="1.7976931348623157E308" spacing="30.0">
-                                 <children>
-                                    <MenuButton mnemonicParsing="false" text="Selection">
-                                       <items>
-                                          <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemSelectAllSceneObjects" text="All" />
-                                          <MenuItem mnemonicParsing="false" onAction="#onActionMenuItemUnselectAllSceneObjects" text="None" />
-                                       </items>
-                                    </MenuButton>
-                                    <HBox spacing="5.0">
-                                       <children>
-                                          <Button mnemonicParsing="false" onAction="#onActionButtonRemoveSceneObject">
-                                             <graphic>
-                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../icons/gnome_list_remove.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                          </Button>
-                                          <Button mnemonicParsing="false" onAction="#onActionButtonAddSceneObject">
-                                             <graphic>
-                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../icons/gnome_list_add.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                          </Button>
-                                       </children>
+                        <HBox fx:id="hboxAttributeToView" alignment="CENTER_LEFT" spacing="10.0" disable="true">
+                            <children>
+                                <Label text="Attribute to view" />
+                                <ComboBox fx:id="comboboxAttributeToView" prefHeight="25.0" prefWidth="150.0" />
+                            </children>
+                        </HBox>
+                    </children>
+                    <padding>
+                        <Insets left="25.0" />
+                    </padding>
+                </VBox> 
+                <Label text="Raster file" />
+                <VBox spacing="10.0">
+                    <children>
+                        <HBox fx:id="hboxRasterFile" disable="true">
+                            <children>
+                                <TextField fx:id="textfieldRasterFilePath" prefHeight="25.0" prefWidth="350.0" editable="false" />
+                                <Button mnemonicParsing="false" onAction="#onActionButtonOpenRasterFile" text="..." />
+                            </children>
+                        </HBox>
+                        <VBox fx:id="vboxRasterProperties" spacing="10.0" disable="true">
+                            <CheckBox fx:id="checkboxUseTransformationMatrix" mnemonicParsing="false" prefHeight="30.0" prefWidth="280.0">
+                                <graphic>
+                                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                        <children>
+                                            <Label text="Transformation" />
+                                            <Button fx:id="buttonSetTransformationMatrix" disable="true" mnemonicParsing="false" onAction="#onActionButtonSetTransformationMatrix">
+                                                <graphic>
+                                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                        <image>
+                                                            <Image url="@../icons/Interaction_Transformation.png" />
+                                                        </image>
+                                                    </ImageView>
+                                                </graphic>
+                                            </Button>
+                                        </children>
                                     </HBox>
-                                 </children>
-                              </HBox>
-                           </children>
+                                </graphic>
+                            </CheckBox>
+                            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                <children>
+                                    <CheckBox fx:id="checkboxFitRasterToVoxelSpace" mnemonicParsing="false" selected="true" text="Fit to voxel space" />
+                                    <Label text="Margin (cell number)" />
+                                    <TextField fx:id="textfieldRasterFittingMargin" prefHeight="25.0" prefWidth="60.0" text="0" />
+                                </children>
+                            </HBox>
                         </VBox>
-                        <Button fx:id="buttonOpen3DView" layoutX="207.0" layoutY="373.0" mnemonicParsing="false" onAction="#onActionButtonVizualize" text="Open display window" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-                     </children>
-                  </AnchorPane>
-               </content>
-            </ScrollPane>
-            <AnchorPane prefHeight="359.0" prefWidth="271.0">
-               <children>
-                  <TitledPane fx:id="titledPaneSceneObjectProperties" collapsible="false" prefHeight="366.0" prefWidth="139.0" text="Properties" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <content>
-                        <ScrollPane fx:id="scrollPaneSceneObjectProperties" fitToHeight="true" fitToWidth="true" />
-                     </content>
-                  </TitledPane>
-               </children>
-            </AnchorPane>
-         </items>
-      </SplitPane>
-   </children>
+                    </children>
+                    <padding>
+                        <Insets left="25.0" />
+                    </padding>
+                </VBox>
+                <Button fx:id="buttonOpen3DView" disable="true" mnemonicParsing="false" onAction="#onActionButtonVizualize" text="Open 3D viewer" />
+            </children>
+        </VBox>
+    </children>
 </AnchorPane>

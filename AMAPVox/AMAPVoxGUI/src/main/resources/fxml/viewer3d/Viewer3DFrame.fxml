@@ -15,7 +15,6 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -137,8 +136,8 @@
                                                                <children>
                                                                   <Label text="Minimum" />
                                                                   <Label text="Maximum" GridPane.columnIndex="1" />
-                                                                  <Spinner fx:id="textFieldMinValue" editable="true" GridPane.rowIndex="1" />
-                                                                  <Spinner fx:id="textFieldMaxValue" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                                  <TextField fx:id="textFieldMinValue" editable="true" GridPane.rowIndex="1" />
+                                                                  <TextField fx:id="textFieldMaxValue" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                                </children>
                                                             </GridPane>
                                                             <HBox spacing="5.0">
