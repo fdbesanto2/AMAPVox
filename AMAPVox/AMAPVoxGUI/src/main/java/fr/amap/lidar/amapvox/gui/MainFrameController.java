@@ -256,7 +256,6 @@ public class MainFrameController implements Initializable {
     private ViewCapsSetupFrameController viewCapsSetupFrameController;
     private AttributsImporterFrameController attributsImporterFrameController;
     private TextFileParserFrameController textFileParserFrameController;
-    private FilteringPaneComponentController filteringPaneController;
     private PositionImporterFrameController positionImporterFrameController;
     private VoxelSpaceCroppingFrameController voxelSpaceCroppingFrameController;
 
@@ -350,18 +349,20 @@ public class MainFrameController implements Initializable {
     private final static String MATRIX_FORMAT_ERROR_MSG = "Matrix file has to look like this: \n\n\t1.0 0.0 0.0 0.0\n\t0.0 1.0 0.0 0.0\n\t0.0 0.0 1.0 0.0\n\t0.0 0.0 0.0 1.0\n";
     private static final PseudoClass PSEUDO_CLASS = PseudoClass.getPseudoClass("loaded");
 
+    // echo filter by class for als
+    @FXML
+    private VBox vboxEchoFilterByClass;
+    @FXML
     private ListView<CheckBox> listviewClassifications;
-
-    //echo filtering for las, laz files
-    private AnchorPane anchorPaneEchoFilteringClassifications;
-
-    //echo filtering for rxp files
     @FXML
-    private VBox vboxEchoFilteringRxp;
-    private AnchorPane anchorPaneEchoFilteringRxp;
+    private CheckBox checkboxEchoFilterByClass;
 
+    // echo filter by attribute for rxp
     @FXML
-    private VBox vboxPaneEchoFiltering;
+    private VBox vboxEchoFilterByAttribute;
+    @FXML
+    private FilteringPaneComponentController anchorPaneEchoFilteringRxpController;
+
     @FXML
     private TextField textFieldEchoFilterByShotID;
     @FXML
@@ -370,6 +371,8 @@ public class MainFrameController implements Initializable {
     private CheckBox checkboxEchoFilterByShotID;
     @FXML
     private ComboBox<EchoRankFilter.Behavior> comboboxEchoFiltering;
+    @FXML
+    private CheckBox checkboxEchoFilterByAttributes;
 
     private final HashSet<Point3i> voxelsToRemove = new HashSet<>();
     private boolean editingFrameOpened;
@@ -524,6 +527,8 @@ public class MainFrameController implements Initializable {
     private CheckBox checkBoxUseDefaultPopMatrix;
     @FXML
     private TabPane tabPaneVoxelisation;
+    @FXML
+    private Tab tabALSVoxelisation;
     @FXML
     private TabPane tabPaneMain;
     @FXML
@@ -777,7 +782,7 @@ public class MainFrameController implements Initializable {
                 voxSpaceValidationSupport.registerValidator(textFieldEchoFilterByShotID, false, Validators.unregisterValidator);
             }
         });
-
+        
         checkboxWeightingByFile.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             if (newValue) {
                 voxSpaceValidationSupport.registerValidator(textFieldWeightingFile, false, Validators.fileExistValidator);
@@ -1490,16 +1495,13 @@ public class MainFrameController implements Initializable {
         } catch (IOException ex) {
             logger.error("Cannot load fxml file", ex);
         }
+        
+        checkboxEchoFilterByClass.disableProperty().bind(tabALSVoxelisation.selectedProperty().not());
+        vboxEchoFilterByClass.disableProperty().bind(checkboxEchoFilterByClass.selectedProperty().not());
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/FilteringPaneComponent.fxml"));
-            anchorPaneEchoFilteringRxp = loader.load();
-            filteringPaneController = loader.getController();
-            filteringPaneController.setFiltersNames("Reflectance", "Amplitude", "Deviation");
-            vboxEchoFilteringRxp.getChildren().add(anchorPaneEchoFilteringRxp);
-        } catch (IOException ex) {
-            logger.error("Cannot load fxml file", ex);
-        }
+        checkboxEchoFilterByAttributes.disableProperty().bind(tabALSVoxelisation.selectedProperty());
+        anchorPaneEchoFilteringRxpController.setFiltersNames("Reflectance", "Amplitude", "Deviation");
+        vboxEchoFilterByAttribute.disableProperty().bind(checkboxEchoFilterByAttributes.selectedProperty().not());
 
         textFieldEchoFilterByShotID.editableProperty().bind(checkboxEchoFilterByShotID.selectedProperty());
         buttonOpenEchoFilterByShotID.disableProperty().bind(checkboxEchoFilterByShotID.selectedProperty().not());
@@ -1772,27 +1774,16 @@ public class MainFrameController implements Initializable {
             switch (newValue.intValue()) {
                 case 0:
                     checkboxCalculateGroundEnergy.setDisable(false);
-
                     if (checkboxCalculateGroundEnergy.isSelected()) {
                         anchorPaneGroundEnergyParameters.setDisable(true);
                         checkboxCalculateGroundEnergy.setDisable(false);
-
                     }
-
-                    anchorPaneEchoFilteringClassifications.setVisible(true);
-                    anchorPaneEchoFilteringClassifications.setManaged(true);
-                    vboxEchoFilteringRxp.setVisible(false);
-                    vboxEchoFilteringRxp.setManaged(false);
                     anchorpaneBoundingBoxParameters.setDisable(checkboxMultiFiles.isSelected());
                     hboxAutomaticBBox.setDisable(false);
                     break;
                 default:
                     anchorPaneGroundEnergyParameters.setDisable(true);
                     checkboxCalculateGroundEnergy.setDisable(true);
-                    anchorPaneEchoFilteringClassifications.setVisible(false);
-                    anchorPaneEchoFilteringClassifications.setManaged(false);
-                    vboxEchoFilteringRxp.setVisible(true);
-                    vboxEchoFilteringRxp.setManaged(true);
                     //filteringPaneController.setFiltersNames("Reflectance", "Amplitude", "Deviation");
                     anchorpaneBoundingBoxParameters.setDisable(false);
                     hboxAutomaticBBox.setDisable(true);
@@ -2770,7 +2761,7 @@ public class MainFrameController implements Initializable {
         }
 
         // echo filtering by attribute
-        for (FloatFilter filter : filteringPaneController.getFilterList()) {
+        for (FloatFilter filter : anchorPaneEchoFilteringRxpController.getFilterList()) {
             cfg.addEchoFilter(new EchoAttributeFilter(filter));
         }
 
@@ -3301,9 +3292,6 @@ public class MainFrameController implements Initializable {
 //    }
     private void initEchoFiltering() {
 
-        anchorPaneEchoFilteringClassifications = new AnchorPane();
-        listviewClassifications = new ListView<>();
-
         listviewClassifications.getItems().addAll(
                 createSelectedCheckbox(Classification.CREATED_NEVER_CLASSIFIED.getValue() + " - "
                         + Classification.CREATED_NEVER_CLASSIFIED.getDescription()),
@@ -3332,14 +3320,6 @@ public class MainFrameController implements Initializable {
                         + Classification.RESERVED_11.getDescription()),
                 createSelectedCheckbox(Classification.OVERLAP_POINTS.getValue() + " - "
                         + Classification.OVERLAP_POINTS.getDescription()));
-
-        listviewClassifications.setPrefSize(269, 134);
-
-        anchorPaneEchoFilteringClassifications.getChildren().add(new VBox(7, new Label("By echo class"), listviewClassifications));
-        anchorPaneEchoFilteringClassifications.setLayoutX(14);
-        anchorPaneEchoFilteringClassifications.setLayoutY(14);
-        vboxPaneEchoFiltering.getChildren().add(anchorPaneEchoFilteringClassifications);
-
     }
 
     private XYSeries generatePDFSerie() {
@@ -4964,7 +4944,7 @@ public class MainFrameController implements Initializable {
                         for (Filter filter : filters) {
                             if (filter instanceof EchoAttributeFilter) {
                                 EchoAttributeFilter f = (EchoAttributeFilter) filter;
-                                filteringPaneController.getFilterList().add(f.getFilter());
+                                anchorPaneEchoFilteringRxpController.getFilterList().add(f.getFilter());
                             } else if (filter instanceof EchoRankFilter) {
                                 checkboxEchoFilterByShotID.setSelected(true);
                                 EchoRankFilter f = (EchoRankFilter) filter;
