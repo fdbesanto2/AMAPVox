@@ -475,7 +475,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
             //surface de la section du faisceau à la distance de la source
             if ((null != weightTable) && volumeWeighting) {
-                surface = Math.pow((Math.tan(laserSpec.getBeamDivergence() / 2.0) * distance) + laserSpec.getBeamDiameterAtExit(), 2) * Math.PI;
+                surface = Math.pow((Math.tan(0.5d * laserSpec.getBeamDivergence()) * distance) + 0.5d * laserSpec.getBeamDiameterAtExit(), 2) * Math.PI;
             } else {
                 surface = 1;
             }
