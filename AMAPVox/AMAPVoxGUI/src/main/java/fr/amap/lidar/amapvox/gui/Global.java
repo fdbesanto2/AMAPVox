@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -19,32 +18,27 @@ import org.apache.log4j.Logger;
  */
 public class Global {
     
+    public static String buildVersion = "1.0.3";
     
-    public final static File JAR_FILE = new File(Global.class.getProtectionDomain().getCodeSource().getLocation().getFile());
-    public static Manifest manifest;
-    public static String buildVersion;
+//    private final static File JAR_FILE = new File(Global.class.getProtectionDomain().getCodeSource().getLocation().getFile());
+//    private static Manifest manifest;
     
-    static{
-        
-        Logger logger = Logger.getLogger(Global.class);
-        logger.info("The detected jar file path is "+JAR_FILE.getAbsolutePath());
-            
-        try
-        {
-            
-            Class clazz = Global.class;
-            String className = clazz.getSimpleName() + ".class";
-            String classPath = clazz.getResource(className).toString();
-            String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
-            manifest = new Manifest(new URL(manifestPath).openStream());
-            Attributes attributes= manifest.getMainAttributes();
-            buildVersion = attributes.getValue("Implementation-Build");            
-            
-            manifest = new Manifest(new URL(manifestPath).openStream());
-            
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(Global.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-   
+//    static{
+//        
+//        Logger logger = Logger.getLogger(Global.class);
+//        logger.info("The detected jar file path is "+JAR_FILE.getAbsolutePath());
+//            
+//        try
+//        {
+//            Class clazz = Global.class;
+//            String className = clazz.getSimpleName() + ".class";
+//            String classPath = clazz.getResource(className).toString();
+//            String manifestPath = classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF";
+//            manifest = new Manifest(new URL(manifestPath).openStream());
+//            Attributes attributes= manifest.getMainAttributes();
+//            buildVersion = attributes.getValue("Implementation-Build");            
+//        } catch (IOException ex) {
+//            logger.error(null, ex);
+//        }
+//    }
 }
