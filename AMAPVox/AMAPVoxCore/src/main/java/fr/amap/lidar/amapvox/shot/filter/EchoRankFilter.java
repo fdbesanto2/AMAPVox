@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 import org.apache.log4j.Logger;
 
 /**
@@ -31,6 +32,24 @@ public class EchoRankFilter implements Filter<Shot.Echo> {
     public EchoRankFilter(String file, Behavior behavior) {
         this.file = new File(file);
         this.behavior = behavior;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+
+        if (null != o && o instanceof EchoRankFilter) {
+            EchoRankFilter f = (EchoRankFilter) o;
+            return file.equals(f.getFile()) && behavior.equals(f.behavior);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.file);
+        hash = 79 * hash + Objects.hashCode(this.behavior);
+        return hash;
     }
 
     @Override

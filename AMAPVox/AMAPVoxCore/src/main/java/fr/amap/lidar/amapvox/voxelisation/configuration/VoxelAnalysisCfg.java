@@ -242,11 +242,8 @@ public class VoxelAnalysisCfg extends Configuration {
             if (usePointCloudFilter) {
                 List<Element> childrens = pointcloudFiltersElement.getChildren("pointcloud-filter");
                 if (childrens != null) {
-                    List<PointcloudFilter> pointcloudFilters = new ArrayList();
                     for (Element e : childrens) {
-
                         CSVFile file = new CSVFile(e.getAttributeValue("src"));
-
                         try {
                             String columnSeparator = e.getAttributeValue("column-separator");
                             String headerIndex = e.getAttributeValue("header-index");
@@ -792,6 +789,10 @@ public class VoxelAnalysisCfg extends Configuration {
 
     public void addEchoFilter(Filter<Shot.Echo> filter) {
         this.echoFilters.add(filter);
+    }
+    
+     public boolean removeEchoFilter(Filter<Shot.Echo> filter) {
+        return this.echoFilters.remove(filter);
     }
 
     public void setShotFilters(List<Filter<Shot>> shotFilters) {

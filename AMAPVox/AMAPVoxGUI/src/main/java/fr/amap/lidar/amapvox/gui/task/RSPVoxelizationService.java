@@ -116,8 +116,8 @@ public class RSPVoxelizationService extends Service<List<File>> {
                                         echoFilterMap.get(key),
                                         behavior);
                                 cfg.addEchoFilter(filter);
-                                LOGGER.debug("Echo filer file " + filter.getFile());
-                                cfg.getEchoFilters().remove(echoRankFilter);
+                                LOGGER.debug("Echo filter file " + filter.getFile());
+                                cfg.removeEchoFilter(echoRankFilter);
                             } else {
                                 LOGGER.warn("Could not find any echo filter file associated to RXP scan " + rxp + " in parameter file " + echoRankFilter.getFile());
                             }
