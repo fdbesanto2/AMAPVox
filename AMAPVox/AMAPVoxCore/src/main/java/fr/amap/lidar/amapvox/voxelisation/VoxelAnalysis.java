@@ -323,6 +323,9 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
             shotChanged = true;
             groundEnergySet = false;
+            
+            // vegetation free shot propagation (as if no vegetation in the scene)
+            freePropagation(shot);
 
             if (shot.getEchoesNumber() == 0) {
                 // empty shot
@@ -416,6 +419,52 @@ public class VoxelAnalysis extends Process implements Cancellable {
         Point3i indices2 = voxelManager.getVoxelIndicesFromPoint(echo2.location);
 
         return indices1 != null && indices2 != null && indices1.equals(indices2);
+    }
+
+    /**
+     * Propagate the given {@code shot} in the voxel space disregarding the 
+     * vegetation in order to estimate a potential beam volume.
+     * 
+     * @param shot
+     */
+    private void freePropagation(Shot shot) {
+
+        LineElement line = new LineSegment(shot.origin, shot.direction, 999999);
+
+        //get the first voxel cross by the line
+        VoxelCrossingContext context = voxelManager.getFirstVoxelV2(line);
+
+        if (null != context) {
+            do {
+                // current voxel
+                Point3i indices = context.indices;
+
+                // average beam surface within voxel
+                // distance from origin to voxel center
+                Point3d voxelPosition = getPosition(new Point3i(indices.x, indices.y, indices.z));
+                double distance = voxelPosition.distance(shot.origin);
+                // beam surface at voxel center
+                double surface = Math.pow((Math.tan(0.5d * laserSpec.getBeamDivergence()) * distance) + 0.5d * laserSpec.getBeamDiameterAtExit(), 2) * Math.PI;
+
+                // ray length within voxel
+                // distance from shot origin to shot interception point with current voxel
+                double d1 = context.length;
+                // get next voxel
+                context = voxelManager.CrossVoxel(line, indices);
+                //distance from shot origin to shot interception point with next voxel
+                double d2 = context.length;
+                double rayLength = d2 - d1;
+
+                // instantiate voxel on the fly when first crossed
+                if (voxels[indices.x][indices.y][indices.z] == null) {
+                    voxels[indices.x][indices.y][indices.z] = initVoxel(indices.x, indices.y, indices.z);
+                }
+
+                Voxel vox = voxels[indices.x][indices.y][indices.z];
+                voxels[indices.x][indices.y][indices.z].bvPotential += surface * rayLength;
+                
+            } while (context.indices != null);
+        }
     }
 
     /**
@@ -623,11 +672,13 @@ public class VoxelAnalysis extends Process implements Cancellable {
                 if (transMode == 2) {
                     transNorm = ((entering - intercepted) / entering) * surfMulLength;
                 } else //mode 3
-                 if (longueur == 0) {
+                {
+                    if (longueur == 0) {
                         transNorm = 0;
                     } else {
                         transNorm = Math.pow(((entering - intercepted) / entering), 1 / longueur) * surfMulLengthMulEnt;
                     }
+                }
 
                 vox.transmittance_tmp += transNorm;
 
@@ -797,6 +848,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
                 outputFields.add("sumSurfMulLengthMulEnt");
                 outputFields.add("transmittance_tmp");
             }
+            outputFields.add("bvPotential");
 
             StringBuilder header = new StringBuilder();
             for (String field : outputFields) {

@@ -69,6 +69,7 @@ public class Voxel {
     public float angleMean;
     public double bvEntering;
     public double bvIntercepted;
+    public double bvPotential;
     public float PadBVTotal;
     public double sumSurfMulLength;
     public double sumSurfMulLengthMulEnt;
