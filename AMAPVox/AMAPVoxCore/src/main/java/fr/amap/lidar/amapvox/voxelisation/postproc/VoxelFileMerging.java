@@ -78,6 +78,7 @@ public class VoxelFileMerging extends Process implements Cancellable{
         int nbEchosColumnIndex = -1;
         int nbSamplingColumnIndex = -1;
         int transmittanceColumnIndex = -1;
+        int bvPotentialColumnIndex = -1;
         
         
         if(cfg.getFiles().size() > 0){
@@ -167,7 +168,10 @@ public class VoxelFileMerging extends Process implements Cancellable{
                         transmittance_tmpColumnIndex = i;
                         toMerge[i] = Mode.SUM;
                         break;
-
+                    case "bvPotential":
+                        bvPotentialColumnIndex = i;
+                        toMerge[i] = Mode.SUM;
+                        break;
                     default:
                         toMerge[i] = Mode.DISCARD;
                 }
