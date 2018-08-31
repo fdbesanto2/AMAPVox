@@ -323,7 +323,7 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
             shotChanged = true;
             groundEnergySet = false;
-            
+
             // vegetation free shot propagation (as if no vegetation in the scene)
             freePropagation(shot);
 
@@ -422,16 +422,16 @@ public class VoxelAnalysis extends Process implements Cancellable {
     }
 
     /**
-     * Propagate the given {@code shot} in the voxel space disregarding the 
+     * Propagate the given {@code shot} in the voxel space disregarding the
      * vegetation in order to estimate a potential beam volume.
-     * 
+     *
      * @param shot
      */
     private void freePropagation(Shot shot) {
 
         LineElement line = new LineSegment(shot.origin, shot.direction, 999999);
 
-        //get the first voxel cross by the line
+        // first voxel crossed by the shot
         VoxelCrossingContext context = voxelManager.getFirstVoxelV2(line);
 
         if (null != context) {
@@ -448,21 +448,21 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
                 // ray length within voxel
                 // distance from shot origin to shot interception point with current voxel
-                double d1 = context.length;
+                double dIn = context.length;
                 // get next voxel
                 context = voxelManager.CrossVoxel(line, indices);
-                //distance from shot origin to shot interception point with next voxel
-                double d2 = context.length;
-                double rayLength = d2 - d1;
+                // distance from shot origin to shot interception point with next voxel
+                double dOut = context.length;
+                double rayLength = dOut - dIn;
 
-                // instantiate voxel on the fly when first crossed
+                // instantiate voxel on the fly when first encountered
                 if (voxels[indices.x][indices.y][indices.z] == null) {
                     voxels[indices.x][indices.y][indices.z] = initVoxel(indices.x, indices.y, indices.z);
                 }
 
-                Voxel vox = voxels[indices.x][indices.y][indices.z];
-                voxels[indices.x][indices.y][indices.z].bvPotential += surface * rayLength;
-                
+                // increment potential beam volume
+                voxels[indices.x][indices.y][indices.z].bvPotential += (surface * rayLength);
+
             } while (context.indices != null);
         }
     }
@@ -480,41 +480,35 @@ public class VoxelAnalysis extends Process implements Cancellable {
      */
     private void propagate(Point3d origin, Point3d echo, double beamFraction, double residualEnergy, boolean lastEcho, int shotID, Shot shot, boolean keepEcho) {
 
-        //get shot line
+        // get shot line
         LineElement lineElement = new LineSegment(origin, echo);
 
-        //get the first voxel cross by the line
+        // first voxel crossed by the segment
         VoxelCrossingContext context = voxelManager.getFirstVoxelV2(lineElement);
 
-        double distanceToHit = lineElement.getLength();
+        // distance from origin to echo
+        double distOriginEcho = lineElement.getLength();
 
         while ((context != null) && (context.indices != null)) {
 
-            //distance from the last origin to the point in which the ray enter the voxel
-            double d1 = context.length;
-
-            //current voxel
+            // index current voxel
             Point3i indices = context.indices;
 
+            // distance from origin to shot interception point with current voxel
+            double distOriginCurrentVoxel = context.length;
+            // get next voxel
             context = voxelManager.CrossVoxel(lineElement, context.indices);
+            // distance from origin to shot interception point with next voxel
+            double distOriginNextVoxel = context.length;
 
-            //distance from the last origin to the point in which the ray exit the voxel
-            double d2 = context.length;
-
-            //instantiate on the fly, when the voxel is crossed
+            // ensure current voxel is instantiated
             if (voxels[indices.x][indices.y][indices.z] == null) {
                 voxels[indices.x][indices.y][indices.z] = initVoxel(indices.x, indices.y, indices.z);
             }
-
+            // current vox in local variable
             Voxel vox = voxels[indices.x][indices.y][indices.z];
 
-            double surface;
-
-            //recalculé pour éviter le stockage de trois doubles (24 octets) par voxel.
-            Point3d voxelPosition = getPosition(new Point3i(indices.x, indices.y, indices.z));
-            double distance = voxelPosition.distance(shot.origin);
-
-            //don't continue the propagation if the current sampled voxel is below the ground
+            // stop propagation if current voxel is below the ground
             if (parameters.getGroundEnergyParams() == null
                     || !parameters.getGroundEnergyParams().isCalculateGroundEnergy()) {
                 if (vox.ground_distance < voxelManager.getVoxelSpace().getVoxelSize().z / 2.0f) {
@@ -522,139 +516,113 @@ public class VoxelAnalysis extends Process implements Cancellable {
                 }
             }
 
-            //surface de la section du faisceau à la distance de la source
-            if ((null != weightTable) && volumeWeighting) {
-                surface = Math.pow((Math.tan(0.5d * laserSpec.getBeamDivergence()) * distance) + 0.5d * laserSpec.getBeamDiameterAtExit(), 2) * Math.PI;
-            } else {
-                surface = 1;
-            }
+            // distance from shot origin to current voxel center
+            Point3d voxelPosition = getPosition(new Point3i(indices.x, indices.y, indices.z));
+            double distance = voxelPosition.distance(shot.origin);
 
-            /*Si un écho est positionné sur une face du voxel alors il est considéré
-             comme étant à l'extérieur du dernier voxel traversé*/
-            double surfMulLength = 0;
-            double surfMulLengthMulEnt = 0; //CL
-            double intercepted = 0;
-            double entering = 0;
-            double longueur = 0;
+            // beam surface in current voxel
+            double surface = ((null != weightTable) && volumeWeighting)
+                    ? Math.pow((Math.tan(0.5d * laserSpec.getBeamDivergence()) * distance) + 0.5d * laserSpec.getBeamDiameterAtExit(), 2) * Math.PI
+                    : 1.d;
 
-            boolean test = false;
-            /*
-             * Si d2 < distanceToHit le voxel est traversé sans interceptions
-             */
-            if (d2 < distanceToHit) {
+            double beamVolume = 0;
+            double beamVolumeIn = 0;
+            double beamFractionOut = 0;
+            double beamFractionIn = 0;
+            double rayLength = 0;
+
+            // Assumption: when echo falls right on a voxel face, AMAPVox
+            // considers it belongs to next voxel
+            if (distOriginNextVoxel < distOriginEcho) {
+                // CASE 1 distance to echo is greater than distance to next echo
+                // hence current voxel is crossed without any interception
 
                 if (shotID == lastShotId && lastVoxelSampled != null && lastVoxelSampled == vox) {
-                    //pour n'échantillonner qu'une fois le voxel pour un tir
+                    // the voxel has already been crossed by this shot at 
+                    // previous call of the propagate function.
                 } else {
-                    longueur = d2 - d1;
-
-                    vox.lgTotal += longueur;
-
+                    // ray length in this case is the distance between 
+                    // entering point of current voxel and entering point of
+                    // next voxel
+                    rayLength = distOriginNextVoxel - distOriginCurrentVoxel;
+                    // increment total optical length in current voxel
+                    vox.lgTotal += rayLength;
+                    // increment number of shots going through current voxel
                     vox.nbSampling++;
-
+                    // increment mean angle in current voxel
                     vox.angleMean += shot.getAngle();
-
-                    //double volume = longueur * ONE_THIRD_OF_PI * ((r*r)+(R*R)+(r*R));
-                    //vox.bvEntering += volume * (Math.round(residualEnergy*10000)/10000.0);
-                    surfMulLength = surface * longueur;
-                    entering = (Math.round(residualEnergy * 10000) / 10000.0);
-                    surfMulLengthMulEnt = entering * surfMulLength; //CL
-                    vox.bvEntering += (entering * surfMulLength);
+                    // unintercepted beam volume
+                    beamVolume = surface * rayLength;
+                    // fraction of the beam entering current voxel (rounded to 5 digits)
+                    beamFractionIn = (Math.round(residualEnergy * 10000) / 10000.0);
+                    // beam volume in current voxel
+                    beamVolumeIn = beamFractionIn * beamVolume;
+                    // increment total beam volume in current voxel
+                    vox.bvEntering += beamVolumeIn;
 
                     lastVoxelSampled = vox;
                     lastShotId = shotID;
-
-                    test = true;
-                    vox.valid = false;
                 }
+                
+            } else if (distOriginCurrentVoxel >= distOriginEcho) {
+                // CASE 2 distance to current voxel is greater than distance
+                // to echo, hence echo has already been found and handled 
+                // at previous iteration of the while loop
 
-                /*
-                 Si l'écho est sur la face sortante du voxel, 
-                 on n'incrémente pas le compteur d'échos
-                 */
-            } /*
-             Poursuite du trajet optique jusqu'à sortie de la bounding box
-             */ else if (d1 >= distanceToHit) {
-
-                /*
-                 la distance actuelle d1 est supérieure à la distance à l'écho
-                 ce qui veut dire que l'écho a déjà été trouvé
-                 */
-                //on peut chercher ici la distance jusqu'au prochain voxel "sol"
                 if (shotChanged) {
 
+                    // for ALS voxelisation check whether current shot reaches the ground
                     if (parameters.getGroundEnergyParams() != null
                             && parameters.getGroundEnergyParams().isCalculateGroundEnergy()
                             && parameters.infos.getType() != VoxelSpaceInfos.Type.TLS) {
 
                         if (vox.ground_distance < parameters.getDtmFilteringParams().getMinDTMDistance()) {
+                            // current voxel is close enough to the ground to assume that the shot will hit it
                             groundEnergy[vox.i][vox.j].groundEnergyPotential++;
                             shotChanged = false;
-                            context = null; // sortie de la boucle 
+                            // leave the while loop over the voxels
+                            context = null;
                         }
-
                     } else {
-                        context = null;// sortie de la boucle 
+                        // TLS voxelisation or ALS but ground energy calculation disabled
+                        // leave the while loop over the voxels
+                        context = null;
                     }
-
                 }
+                
+            } else {
+                // CASE 3 distOriginCurrentVoxel < distOriginEcho <= distOriginNextVoxel
+                // echo is in the current voxel
 
-            } /*
-             Echo dans le voxel
-             */ else {
-
-                /*si plusieurs échos issus du même tir dans le voxel, 
-                 on incrémente et le nombre de tirs entrants (nbsampling) 
-                 et le nombre d'interception (interceptions) 
-                 et la longueur parcourue(lgInterception)*/
- /*
-                 * Si distanceToHit == d1,on incrémente le compteur d'échos
-                 */
-                //si l'écho n'est pas un dernier écho mais au niveau distance ne sort pas du voxel courant, alors la longueur sera surestimé
-                if (lastEcho) {
-                    if (pathLengthMode == 1) {
-                        longueur = (distanceToHit - d1);
-                    } else {
-                        longueur = (d2 - d1); //test
-                    }
-                    vox.valid = false;
-                } else {
-                    longueur = (d2 - d1);
-                }
+                // rayLength is approximated to full optical path inside current voxel
+                // hence overestimated, unless it is last echo and ray length
+                // estimation mode is set to 1
+                rayLength = (lastEcho && pathLengthMode == 1)
+                        ? distOriginEcho - distOriginCurrentVoxel
+                        : distOriginNextVoxel - distOriginCurrentVoxel;
 
                 if (shotID == lastShotId && lastVoxelSampled != null && lastVoxelSampled == vox) {
-                    //pour n'échantillonner qu'une fois le voxel pour un tir
+                    // pour n'échantillonner qu'une fois le voxel pour un tir
+                    // phv 20180831: do not understand how we can reach this statement
                 } else {
 
-                    test = true;
-
                     vox.nbSampling++;
-
-                    vox.lgTotal += longueur;
-
+                    vox.lgTotal += rayLength;
                     vox.angleMean += shot.getAngle();
-
-                    surfMulLength = surface * longueur;
-                    entering = (Math.round(residualEnergy * 10000) / 10000.0);
-                    surfMulLengthMulEnt = entering * surfMulLength; //CL
-                    vox.bvEntering += (entering * surfMulLength);
-
+                    beamVolume = surface * rayLength;
+                    beamFractionIn = (Math.round(residualEnergy * 10000) / 10000.0);
+                    beamVolumeIn = beamFractionIn * beamVolume;
+                    vox.bvEntering += beamVolumeIn;
                     lastVoxelSampled = vox;
                     lastShotId = shotID;
                 }
 
                 if (keepEcho) {
 
-                    test = true;
-
-                    if (!lastEcho) {
-                        vox.lastEcho = false;
-                    }
                     vox.nbEchos++;
-
-                    surfMulLength = surface * longueur;
-                    intercepted = (Math.round(beamFraction * 10000) / 10000.0);
-                    vox.bvIntercepted += (intercepted * surfMulLength);
+                    beamFractionOut = (Math.round(beamFraction * 10000) / 10000.0);
+                    beamVolume = surface * rayLength;
+                    vox.bvIntercepted += (beamFractionOut * beamVolume);
 
                 } else if (parameters.getGroundEnergyParams() != null
                         && parameters.getGroundEnergyParams().isCalculateGroundEnergy()
@@ -666,38 +634,32 @@ public class VoxelAnalysis extends Process implements Cancellable {
                 }
             }
 
-            if (test && (transMode == 2 || transMode == 3)) {
-                double transNorm;
-
-                if (transMode == 2) {
-                    transNorm = ((entering - intercepted) / entering) * surfMulLength;
-                } else //mode 3
-                {
-                    if (longueur == 0) {
-                        transNorm = 0;
-                    } else {
-                        transNorm = Math.pow(((entering - intercepted) / entering), 1 / longueur) * surfMulLengthMulEnt;
-                    }
+            // additional calculation for transmittance mode 2 and 3
+            if (transMode > 1) {
+                double transNorm = 0.d;
+                switch (transMode) {
+                    case 2:
+                        transNorm = ((beamFractionIn - beamFractionOut) / beamFractionIn) * beamVolume;
+                        break;
+                    case 3:
+                        if (rayLength > 0) {
+                            transNorm = Math.pow(((beamFractionIn - beamFractionOut) / beamFractionIn), 1 / rayLength) * beamVolumeIn;
+                        }
+                        break;
                 }
-
                 vox.transmittance_tmp += transNorm;
-
-                vox.sumSurfMulLengthMulEnt += surfMulLengthMulEnt; //CL
-
-                vox.sumSurfMulLength += surfMulLength;
-
+                vox.cumulatedBeamVolumIn += beamVolumeIn;
+                vox.cumulatedBeamVolume += beamVolume;
                 if (cfg.isExportShotSegment()) {
-                    double currentNormalizedTrans = transNorm / surfMulLengthMulEnt;
+                    double currentNormalizedTrans = transNorm / beamVolumeIn;
                     try {
-                        shotSegmentWriter.write(vox.i + " " + vox.j + " " + vox.k + " " + currentNormalizedTrans + " " + surfMulLengthMulEnt + "\n");
+                        shotSegmentWriter.write(vox.i + " " + vox.j + " " + vox.k + " " + currentNormalizedTrans + " " + beamVolumeIn + "\n");
                     } catch (IOException ex) {
-                        java.util.logging.Logger.getLogger(VoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
+                        LOGGER.error("Error exporting shot segment " + shotID + " for transmittance mode " + transMode, ex);
                     }
                 }
             }
-
         }
-
     }
 
     public static float computeTransmittance(double bvEntering, double bvIntercepted) {
@@ -786,11 +748,11 @@ public class VoxelAnalysis extends Process implements Cancellable {
 
         switch (transMode) {
             case 2:
-                normalizedTransmittance = computeNormTransmittanceMode2(voxel.transmittance_tmp, voxel.sumSurfMulLength, voxel.lMeanTotal);
+                normalizedTransmittance = computeNormTransmittanceMode2(voxel.transmittance_tmp, voxel.cumulatedBeamVolume, voxel.lMeanTotal);
                 break;
             case 3:
                 //normalizedTransmittance = computeNormTransmittanceV2(voxel.transmittance_tmp, voxel.sumSurfMulLength);
-                normalizedTransmittance = computeNormTransmittanceMode3(voxel.transmittance_tmp, voxel.sumSurfMulLengthMulEnt); //CL
+                normalizedTransmittance = computeNormTransmittanceMode3(voxel.transmittance_tmp, voxel.cumulatedBeamVolumIn); //CL
                 break;
 
             case 1:

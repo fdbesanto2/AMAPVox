@@ -71,12 +71,10 @@ public class Voxel {
     public double bvIntercepted;
     public double bvPotential;
     public float PadBVTotal;
-    public double sumSurfMulLength;
-    public double sumSurfMulLengthMulEnt;
+    public double cumulatedBeamVolume;
+    public double cumulatedBeamVolumIn;
     public float passNumber;
     public float neighboursNumber;
-    public boolean lastEcho = true;
-    public boolean valid = true;
 
     /**
      *

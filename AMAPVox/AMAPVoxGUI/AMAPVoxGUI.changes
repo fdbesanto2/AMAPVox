@@ -1,8 +1,9 @@
-### AMAPVox 1.0.3 up to commit 33e26dfdaff529fd5f44fbe6d604e38ad6637e9d
-Philipe Verley, 2018-07-27 (philippe dot verley at ird.fr)
+### AMAPVox 1.0.3 up to commit 6efa07391b5dbdd930a5ec296070f44ae76859d4
+Philipe Verley, 2018-08-10 (philippe dot verley at ird.fr)
 
 # Voxelisation algorithm 
 Fixed a bug that overestimated the beam surface in the voxels.
+Added new output variable bvPotential that estimates the potential beam volume in every voxel disregarding any interception of the shots by the vegetation.
 
 # Shot decimation
 Added new shot decimation option for the voxelisation (both ALS and TLS)
