@@ -29,6 +29,11 @@ public class RxpVoxelisation extends TLSVoxelisation {
 
     private final boolean enableEmptyShotFiltering;
 
+    public RxpVoxelisation(TLSVoxCfg cfg, Class voxelAnalysisClass) throws Exception {
+        super(cfg, voxelAnalysisClass);
+        this.enableEmptyShotFiltering = cfg.isEnableEmptyShotsFiltering();
+    }
+    
     public RxpVoxelisation(TLSVoxCfg cfg) throws Exception {
         super(cfg);
         this.enableEmptyShotFiltering = cfg.isEnableEmptyShotsFiltering();
