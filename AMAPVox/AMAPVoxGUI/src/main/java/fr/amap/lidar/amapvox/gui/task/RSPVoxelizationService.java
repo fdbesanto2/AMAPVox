@@ -43,6 +43,11 @@ public class RSPVoxelizationService extends Service<List<File>> {
     private final SimpleIntegerProperty nbFileProcessed;
     private VoxelFileMerging tool;
     private final static Logger LOGGER = Logger.getLogger(RSPVoxelizationService.class);
+    // voxelisation classes
+    private final static Class[] VOXEL_ANALYSES = new Class[]{
+        fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis.class,
+        fr.amap.lidar.amapvox.voxelisation.SimpleVoxelAnalysis.class
+    };
 
     public RSPVoxelizationService(File file, int coreNumber) {
         this.file = file;
@@ -82,9 +87,9 @@ public class RSPVoxelizationService extends Service<List<File>> {
                 }
 
                 ArrayList<File> files = new ArrayList();
-                exec = Executors.newFixedThreadPool(Math.min(coreNumber, lidarScans.size()));
+                exec = Executors.newFixedThreadPool(Math.min(coreNumber, lidarScans.size() * VOXEL_ANALYSES.length));
                 nbFileProcessed.set(0);
-                int nbFilesToWrite = mainCfg.getVoxelParameters().isMergingAfter() ? lidarScans.size() + 1 : lidarScans.size();
+                int nbFilesToWrite = (mainCfg.getVoxelParameters().isMergingAfter() ? lidarScans.size() + 1 : lidarScans.size()) * VOXEL_ANALYSES.length;
                 try {
                     List<RxpVoxelisation> tasks = new ArrayList();
                     for (LidarScan scan : lidarScans) {
@@ -95,7 +100,7 @@ public class RSPVoxelizationService extends Service<List<File>> {
                         File outputFile = new File(mainCfg.getOutputFile().getAbsolutePath() + "/" + scan.file.getName() + ".vox");
                         cfg.setOutputFile(outputFile);
                         cfg.setSopMatrix(scan.matrix);
-                        
+
                         if (null != echoWeightMap) {
                             String key;
                             String rxp = scan.file.getName();
@@ -123,16 +128,18 @@ public class RSPVoxelizationService extends Service<List<File>> {
                             }
                         }
 
-                        RxpVoxelisation rxpVoxelisation = new RxpVoxelisation(cfg);
-                        rxpVoxelisation.init();
-                        rxpVoxelisation.addCallableTaskListener(new CallableTaskAdapter() {
-                            @Override
-                            public void onSucceeded() {
-                                nbFileProcessed.set(nbFileProcessed.getValue() + 1);
-                                updateProgress(nbFileProcessed.intValue(), nbFilesToWrite);
-                            }
-                        });
-                        tasks.add(rxpVoxelisation);
+                        for (Class vaClass : VOXEL_ANALYSES) {
+                            RxpVoxelisation rxpVoxelisation = new RxpVoxelisation(cfg, vaClass);
+                            rxpVoxelisation.init();
+                            rxpVoxelisation.addCallableTaskListener(new CallableTaskAdapter() {
+                                @Override
+                                public void onSucceeded() {
+                                    nbFileProcessed.set(nbFileProcessed.getValue() + 1);
+                                    updateProgress(nbFileProcessed.intValue(), nbFilesToWrite);
+                                }
+                            });
+                            tasks.add(rxpVoxelisation);
+                        }
                     }
 
                     // wait for every scan voxelisation to finish
@@ -144,20 +151,35 @@ public class RSPVoxelizationService extends Service<List<File>> {
 
                     if (mainCfg.getVoxelParameters().isMergingAfter()) {
 
-                        VoxMergingCfg mergingCfg = new VoxMergingCfg(mainCfg.getVoxelParameters().getMergedFile(), mainCfg.getVoxelParameters(), files);
-
-                        tool = new VoxelFileMerging();
-
-                        tool.addProcessingListener(new ProcessingAdapter() {
-                            @Override
-                            public void processingStepProgress(String progressMsg, long progress, long max) {
-                                updateMessage(progressMsg);
-                                updateProgress(progress, max);
+                        // dispatch output files by voxel analysis algorithm
+                        HashMap<Class, List<File>> filesMap = new HashMap();
+                        for (Class vaClass : VOXEL_ANALYSES) {
+                            filesMap.put(vaClass, new ArrayList());
+                            for (File file : files) {
+                                if (file.toString().endsWith("-" + vaClass.getSimpleName())) {
+                                    filesMap.get(vaClass).add(file);
+                                }
                             }
-                        });
+                        }
 
-                        tool.mergeVoxelFiles(mergingCfg);
-                        files.add(mainCfg.getVoxelParameters().getMergedFile());
+                        for (Class vaClass : VOXEL_ANALYSES) {
+                            List<File> vaFiles = filesMap.get(vaClass);
+                            File mfile = new File(mainCfg.getVoxelParameters().getMergedFile() + "-" + vaClass.getSimpleName());
+                            VoxMergingCfg mergingCfg = new VoxMergingCfg(mfile, mainCfg.getVoxelParameters(), vaFiles);
+
+                            tool = new VoxelFileMerging();
+
+                            tool.addProcessingListener(new ProcessingAdapter() {
+                                @Override
+                                public void processingStepProgress(String progressMsg, long progress, long max) {
+                                    updateMessage(progressMsg);
+                                    updateProgress(progress, max);
+                                }
+                            });
+
+                            tool.mergeVoxelFiles(mergingCfg);
+                            files.add(mfile);
+                        }
                     }
                 } catch (InterruptedException | NullPointerException ex) {
                     this.cancel();

@@ -47,7 +47,7 @@ public abstract class TLSVoxelisation extends CallableTask<File> {
         this.parameters = cfg.getVoxelParameters();
         parameters.infos.setType(VoxelSpaceInfos.Type.TLS);
         this.outputFile = outputSuffix
-                ? new File(cfg.getOutputFile().getAbsoluteFile() + voxelAnalysisClass.getSimpleName())
+                ? new File(cfg.getOutputFile().getAbsoluteFile() + "-" + voxelAnalysisClass.getSimpleName())
                 : cfg.getOutputFile();
 
         this.voxelAnalysisClass = voxelAnalysisClass;
