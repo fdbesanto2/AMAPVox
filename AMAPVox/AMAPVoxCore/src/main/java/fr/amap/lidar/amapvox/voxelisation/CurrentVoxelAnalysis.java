@@ -15,13 +15,18 @@ import java.io.IOException;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
 
-public class VoxelAnalysis extends AbstractVoxelAnalysis {
+public class CurrentVoxelAnalysis extends AbstractVoxelAnalysis {
 
-    public VoxelAnalysis(Raster terrain, VoxelAnalysisCfg cfg) throws Exception {
+    public CurrentVoxelAnalysis(Raster terrain, VoxelAnalysisCfg cfg, boolean beamSectionEnabled) throws Exception {
         super(terrain, cfg);
+        this.beamSectionEnabled = beamSectionEnabled;
+    }
+    
+    public CurrentVoxelAnalysis(Raster terrain, VoxelAnalysisCfg cfg) throws Exception {
+        this(terrain, cfg, true);
     }
 
-    private final static Logger LOGGER = Logger.getLogger(VoxelAnalysis.class);
+    private final static Logger LOGGER = Logger.getLogger(CurrentVoxelAnalysis.class);
 
     private boolean groundEnergySet = false;
 
@@ -33,6 +38,8 @@ public class VoxelAnalysis extends AbstractVoxelAnalysis {
     
     private final int transMode = 1;
     private final int pathLengthMode = 1; //1 = mode A, 2 = mode B
+    
+    private final boolean beamSectionEnabled;
 
     @Override
     public void processOneShot(Shot shot) throws Exception {
@@ -186,7 +193,7 @@ public class VoxelAnalysis extends AbstractVoxelAnalysis {
             double distance = voxelPosition.distance(shot.origin);
 
             // beam surface in current voxel
-            double surface = ((null != weightTable) && volumeWeighting)
+            double beamSurface = beamSectionEnabled
                     ? Math.pow((Math.tan(0.5d * laserSpec.getBeamDivergence()) * distance) + 0.5d * laserSpec.getBeamDiameterAtExit(), 2) * Math.PI
                     : 1.d;
 
@@ -217,7 +224,7 @@ public class VoxelAnalysis extends AbstractVoxelAnalysis {
                     // increment mean angle in current voxel
                     vox.angleMean += shot.getAngle();
                     // unintercepted beam volume
-                    beamVolume = surface * rayLength;
+                    beamVolume = beamSurface * rayLength;
                     // fraction of the beam entering current voxel (rounded to 5 digits)
                     beamFractionIn = (Math.round(residualEnergy * 10000) / 10000.0);
                     // beam volume in current voxel
@@ -274,7 +281,7 @@ public class VoxelAnalysis extends AbstractVoxelAnalysis {
                     vox.nbSampling++;
                     vox.lgTotal += rayLength;
                     vox.angleMean += shot.getAngle();
-                    beamVolume = surface * rayLength;
+                    beamVolume = beamSurface * rayLength;
                     beamFractionIn = (Math.round(residualEnergy * 10000) / 10000.0);
                     beamVolumeIn = beamFractionIn * beamVolume;
                     vox.bvEntering += beamVolumeIn;
@@ -286,7 +293,7 @@ public class VoxelAnalysis extends AbstractVoxelAnalysis {
 
                     vox.nbEchos++;
                     beamFractionOut = (Math.round(beamFraction * 10000) / 10000.0);
-                    beamVolume = surface * rayLength;
+                    beamVolume = beamSurface * rayLength;
                     vox.bvIntercepted += (beamFractionOut * beamVolume);
 
                 } else if (parameters.getGroundEnergyParams() != null

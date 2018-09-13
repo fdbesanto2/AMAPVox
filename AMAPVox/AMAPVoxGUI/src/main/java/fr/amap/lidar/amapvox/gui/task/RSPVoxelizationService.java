@@ -45,8 +45,10 @@ public class RSPVoxelizationService extends Service<List<File>> {
     private final static Logger LOGGER = Logger.getLogger(RSPVoxelizationService.class);
     // voxelisation classes
     private final static Class[] VOXEL_ANALYSES = new Class[]{
-        fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis.class,
-        fr.amap.lidar.amapvox.voxelisation.NewVoxelAnalysis.class
+        fr.amap.lidar.amapvox.voxelisation.CurrentVoxelAnalysis.class,
+        fr.amap.lidar.amapvox.voxelisation.WOSectionCurrentVoxelAnalysis.class,
+        fr.amap.lidar.amapvox.voxelisation.NewVoxelAnalysis.class,
+        fr.amap.lidar.amapvox.voxelisation.WOSectionNewVoxelAnalysis.class
     };
 
     public RSPVoxelizationService(File file, int coreNumber) {

@@ -23,12 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import org.apache.log4j.Logger;
 import fr.amap.commons.util.Cancellable;
-import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
 
-/**
- *
- * @author Julien Heurtebize (julienhtbe@gmail.com)
- */
 
 
 public class VoxelFileMerging extends Process implements Cancellable{

@@ -11,7 +11,7 @@ import fr.amap.commons.util.ProcessingListener;
 import fr.amap.commons.raster.asc.AsciiGridHelper;
 import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.math.util.MatrixUtility;
-import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
+import fr.amap.lidar.amapvox.voxelisation.CurrentVoxelAnalysis;
 import fr.amap.lidar.amapvox.voxelisation.configuration.ALSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.postproc.NaNsCorrection;
 import java.io.File;
@@ -41,7 +41,7 @@ public class LasVoxelisation extends Process implements Cancellable {
     private PointsToShot conversion;
     private Raster terrain = null;
     private NaNsCorrection naNsCorrection = null;
-    private VoxelAnalysis voxelAnalysis = null;
+    private CurrentVoxelAnalysis voxelAnalysis = null;
 
     public LasVoxelisation() {
 
@@ -94,7 +94,7 @@ public class LasVoxelisation extends Process implements Cancellable {
             }
         }
 
-        voxelAnalysis = new VoxelAnalysis(terrain, cfg);
+        voxelAnalysis = new CurrentVoxelAnalysis(terrain, cfg);
         voxelAnalysis.createVoxelSpace();
 
         if (cfg.getInputType() == Configuration.InputType.SHOTS_FILE) {

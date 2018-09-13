@@ -246,7 +246,7 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
                 shotSegmentWriter = new BufferedWriter(new FileWriter(new File(cfg.getOutputFile().getAbsolutePath() + ".segments")));
                 shotSegmentWriter.write("i j k norm_transmittance weight\n");
             } catch (IOException ex) {
-                java.util.logging.Logger.getLogger(VoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(CurrentVoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

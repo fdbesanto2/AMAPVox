@@ -15,11 +15,16 @@ import org.apache.log4j.Logger;
 
 public class NewVoxelAnalysis extends AbstractVoxelAnalysis {
 
-    public NewVoxelAnalysis(Raster terrain, VoxelAnalysisCfg cfg) throws Exception {
+    public NewVoxelAnalysis(Raster terrain, VoxelAnalysisCfg cfg, boolean beamSectionEnabled) throws Exception {
         super(terrain, cfg);
+        this.beamSectionEnabled = beamSectionEnabled;
+    }
+    
+    public NewVoxelAnalysis(Raster terrain, VoxelAnalysisCfg cfg) throws Exception {
+        this(terrain, cfg, true);
     }
 
-    private final static Logger LOGGER = Logger.getLogger(VoxelAnalysis.class);
+    private final static Logger LOGGER = Logger.getLogger(CurrentVoxelAnalysis.class);
 
     private boolean groundEnergySet = false;
 
@@ -28,6 +33,8 @@ public class NewVoxelAnalysis extends AbstractVoxelAnalysis {
     private int lastShotId;
 
     private final int pathLengthMode = 1; //1 = mode A, 2 = mode B
+    
+    private final boolean beamSectionEnabled;
 
     @Override
     public void processOneShot(Shot shot) throws Exception {
@@ -181,15 +188,9 @@ public class NewVoxelAnalysis extends AbstractVoxelAnalysis {
             double distance = voxelPosition.distance(shot.origin);
 
             // beam surface in current voxel
-            double surface = ((null != weightTable) && volumeWeighting)
+            double beamSurface = beamSectionEnabled
                     ? Math.pow((Math.tan(0.5d * laserSpec.getBeamDivergence()) * distance) + 0.5d * laserSpec.getBeamDiameterAtExit(), 2) * Math.PI
                     : 1.d;
-
-            double beamVolume;
-            double beamVolumeIn;
-            double beamFractionIntercepted;
-            double beamFractionIn;
-            double rayLength;
 
             // Assumption: when echo falls right on a voxel face, AMAPVox
             // considers it belongs to next voxel
@@ -204,22 +205,16 @@ public class NewVoxelAnalysis extends AbstractVoxelAnalysis {
                     // ray length in this case is the distance between 
                     // entering point of current voxel and entering point of
                     // next voxel
-                    rayLength = distOriginNextVoxel - distOriginCurrentVoxel;
+                    double rayLength = distOriginNextVoxel - distOriginCurrentVoxel;
                     // increment total optical length in current voxel
                     vox.lgTotal += rayLength;
                     // increment number of shots going through current voxel
                     vox.nbSampling++;
                     // increment mean angle in current voxel
                     vox.angleMean += shot.getAngle();
-                    // unintercepted beam volume
-                    beamVolume = surface * rayLength;
-                    // fraction of the beam entering current voxel (rounded to 5 digits)
-                    beamFractionIn = (Math.round(residualEnergy * 10000) / 10000.0);
-                    // beam volume in current voxel
-                    beamVolumeIn = beamFractionIn * beamVolume;
-                    // increment total beam volume in current voxel
-                    vox.bvEntering += beamVolumeIn;
-                    vox.bsEntering += beamFractionIn * surface;
+                    // increment total beam fraction in current voxel
+                    vox.bvEntering += residualEnergy * beamSurface * rayLength;
+                    vox.bsEntering += residualEnergy * beamSurface;
 
                     lastVoxelSampled = vox;
                     lastShotId = shotID;
@@ -258,7 +253,7 @@ public class NewVoxelAnalysis extends AbstractVoxelAnalysis {
                 // rayLength is approximated to full optical path inside current voxel
                 // hence overestimated, unless it is last echo and ray length
                 // estimation mode is set to 1
-                rayLength = (lastEcho && pathLengthMode == 1)
+                double rayLength = (lastEcho && pathLengthMode == 1)
                         ? distOriginEcho - distOriginCurrentVoxel
                         : distOriginNextVoxel - distOriginCurrentVoxel;
 
@@ -270,11 +265,8 @@ public class NewVoxelAnalysis extends AbstractVoxelAnalysis {
                     vox.nbSampling++;
                     vox.lgTotal += rayLength;
                     vox.angleMean += shot.getAngle();
-                    beamVolume = surface * rayLength;
-                    beamFractionIn = (Math.round(residualEnergy * 10000) / 10000.0);
-                    beamVolumeIn = beamFractionIn * beamVolume;
-                    vox.bvEntering += beamVolumeIn;
-                    vox.bsEntering += beamFractionIn * surface;
+                    vox.bvEntering += residualEnergy * beamSurface * rayLength;
+                    vox.bsEntering += residualEnergy * beamSurface;
                     lastVoxelSampled = vox;
                     lastShotId = shotID;
                 }
@@ -282,10 +274,10 @@ public class NewVoxelAnalysis extends AbstractVoxelAnalysis {
                 if (keepEcho) {
 
                     vox.nbEchos++;
-                    beamFractionIntercepted = (Math.round(beamFraction * 10000) / 10000.0);
+                    //beamFractionIntercepted = (Math.round(beamFraction * 10000) / 10000.0);
                     //beamVolume = surface * rayLength;
-                    //vox.bvIntercepted += (beamFractionOut * beamVolume);
-                    vox.bsIntercepted += beamFractionIntercepted * surface;
+                    //vox.bvIntercepted += (beamFraction * beamVolume);
+                    vox.bsIntercepted += beamFraction * beamSurface;
 
                 } else if (parameters.getGroundEnergyParams() != null
                         && parameters.getGroundEnergyParams().isCalculateGroundEnergy()
