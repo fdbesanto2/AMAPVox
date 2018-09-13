@@ -56,6 +56,8 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
     
     abstract public void processOneShot(Shot shot) throws Exception;
     
+    abstract public double computeTransmittance(Voxel voxel);
+    
     // variable declaration
     
     private final static Logger LOGGER = Logger.getLogger(AbstractVoxelAnalysis.class);
@@ -76,8 +78,8 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
 
     final boolean volumeWeighting = true;
 
-    int pathLengthMode = 1; //1 = mode A, 2 = mode B
-    int transMode = 1;
+    
+    
 
     GroundEnergy[][] groundEnergy;
     VoxelParameters parameters;
@@ -98,6 +100,27 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
 
     //directional transmittance (GTheta)
     private GTheta direcTransmittance;
+    
+     public AbstractVoxelAnalysis(Raster terrain, VoxelAnalysisCfg cfg) throws Exception {
+
+        this.dtm = terrain;
+
+        shotFilters = cfg.getShotFilters();
+        for (Filter filter : shotFilters) {
+            filter.init();
+        }
+        echoFilters = cfg.getEchoFilters();
+        for (Filter filter : echoFilters) {
+            filter.init();
+        }
+
+        this.cfg = cfg;
+        
+        nShotsProcessed = 0;
+        nShotsDiscarded = 0;
+
+        init(cfg.getVoxelParameters());
+    }
 
     /**
      *
@@ -168,27 +191,6 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
                 : z;
     }
 
-    public AbstractVoxelAnalysis(Raster terrain, VoxelAnalysisCfg cfg) throws Exception {
-
-        this.dtm = terrain;
-
-        shotFilters = cfg.getShotFilters();
-        for (Filter filter : shotFilters) {
-            filter.init();
-        }
-        echoFilters = cfg.getEchoFilters();
-        for (Filter filter : echoFilters) {
-            filter.init();
-        }
-
-        this.cfg = cfg;
-        
-        nShotsProcessed = 0;
-        nShotsDiscarded = 0;
-
-        init(cfg.getVoxelParameters());
-    }
-
     private void init(VoxelParameters parameters) throws Exception {
 
         this.parameters = parameters;
@@ -210,14 +212,6 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
         }
 
         MAX_PAD = parameters.infos.getMaxPAD();
-        this.transMode = parameters.getTransmittanceMode();
-
-        String pathLengthModeStr = parameters.getPathLengthMode();
-        if (pathLengthModeStr.equals("A")) {
-            pathLengthMode = 1;
-        } else {
-            pathLengthMode = 2;
-        }
 
         //test
         /*pathLengthMode = 2;
@@ -365,74 +359,33 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
         }
     }
 
-    public static float computeTransmittance(double bvEntering, double bvIntercepted) {
+    private double computePADFromNormTransmittance(double transmittance, double angleMean, double maxPAD, GTheta direcTransmittance) {
 
-        float transmittance;
+        double pad;
 
-        if (bvEntering == 0) {
-
-            transmittance = Float.NaN;
-
-        } else if (bvIntercepted > bvEntering) {
-            transmittance = Float.NaN;
-
-        } else {
-            transmittance = (float) ((bvEntering - bvIntercepted) / bvEntering);
-        }
-
-        return transmittance;
-    }
-
-    public static float computeNormTransmittanceMode2(double transmittance, double _sumSurfMulLength, double lMeanTotal) {
-        float normalizedTransmittance = (float) Math.pow((transmittance / _sumSurfMulLength), 1 / lMeanTotal);
-        return normalizedTransmittance;
-    }
-
-    public static float computeNormTransmittanceMode3(double transmittance, double _sumSurfMulLength) {
-        float normalizedTransmittance = (float) (transmittance / _sumSurfMulLength);
-        return normalizedTransmittance;
-    }
-
-    public static float computeNormTransmittance(double transmittance, double lMeanTotal) {
-        float normalizedTransmittance = (float) Math.pow(transmittance, 1 / lMeanTotal);
-        return normalizedTransmittance;
-    }
-
-    public static float computePADFromNormTransmittance(float transmittance, float angleMean, float maxPAD, GTheta direcTransmittance) {
-
-        float pad;
-
-        if (Float.isNaN(transmittance)) {
-
-            pad = Float.NaN;
-
+        if (Double.isNaN(transmittance)) {
+            pad = Double.NaN;
         } else if (transmittance == 0) {
-
             pad = maxPAD;
-
         } else {
-
-            float coefficientGTheta = (float) direcTransmittance.getGThetaFromAngle(angleMean, true);
-
-            pad = (float) (Math.log(transmittance) / (-coefficientGTheta));
-
-            if (Float.isNaN(pad)) {
-                pad = Float.NaN;
-            } else if (pad > maxPAD || Float.isInfinite(pad)) {
+            double coefficientGTheta = direcTransmittance.getGThetaFromAngle(angleMean, true);
+            pad = Math.log(transmittance) / (-coefficientGTheta);
+            if (Double.isNaN(pad)) {
+                pad = Double.NaN;
+            } else if (pad > maxPAD || Double.isInfinite(pad)) {
                 pad = maxPAD;
             }
-
         }
 
-        return pad + 0.0f; //set +0.0f to avoid -0.0f
+        return pad + 0.0d; //set +0.0f to avoid -0.0f
     }
 
-    public float computePADFromNormTransmittance(float transmittance, float angleMean) {
+    private double computePADFromNormTransmittance(double transmittance, double angleMean) {
 
         return computePADFromNormTransmittance(transmittance, angleMean, MAX_PAD, direcTransmittance);
     }
 
-    public Voxel computePADFromVoxel(Voxel voxel, int i, int j, int k) {
+    private Voxel computePADFromVoxel(Voxel voxel, int i, int j, int k) {
 
         if (voxel == null) {
 
@@ -447,25 +400,9 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
 
         }
 
-        float normalizedTransmittance;
-
-        switch (transMode) {
-            case 2:
-                normalizedTransmittance = computeNormTransmittanceMode2(voxel.transmittance_tmp, voxel.cumulatedBeamVolume, voxel.lMeanTotal);
-                break;
-            case 3:
-                //normalizedTransmittance = computeNormTransmittanceV2(voxel.transmittance_tmp, voxel.sumSurfMulLength);
-                normalizedTransmittance = computeNormTransmittanceMode3(voxel.transmittance_tmp, voxel.cumulatedBeamVolumIn); //CL
-                break;
-
-            case 1:
-            default:
-                float transmittance = computeTransmittance(voxel.bvEntering, voxel.bvIntercepted);
-                normalizedTransmittance = computeNormTransmittance(transmittance, voxel.lMeanTotal);
-        }
-
-        voxel.transmittance = normalizedTransmittance;
-        voxel.PadBVTotal = computePADFromNormTransmittance(normalizedTransmittance, voxel.angleMean);
+        double normalizedTransmittance = computeTransmittance(voxel);
+        voxel.transmittance = (float) normalizedTransmittance;
+        voxel.PadBVTotal = (float) computePADFromNormTransmittance(normalizedTransmittance, voxel.angleMean);
 
         return voxel;
     }
@@ -506,13 +443,6 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
             outputFields.add("nbEchos");
             outputFields.add("nbSampling");
             outputFields.add("transmittance");
-            if (transMode == 2) {
-                outputFields.add("sumSurfMulLength");
-                outputFields.add("transmittance_tmp");
-            } else if (transMode == 3) {
-                outputFields.add("sumSurfMulLengthMulEnt");
-                outputFields.add("transmittance_tmp");
-            }
             outputFields.add("bvPotential");
 
             StringBuilder header = new StringBuilder();
@@ -596,7 +526,7 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
 
                     Voxel vox = voxels[i][j][k];
 
-                    if (vox != null && vox.ground_distance >= 0 && vox.PadBVTotal > 0 && !Float.isNaN(vox.PadBVTotal)) {
+                    if (vox != null && vox.ground_distance >= 0 && vox.PadBVTotal > 0 && !Double.isNaN(vox.PadBVTotal)) {
 
                         //calcul de la position de départ
                         Point3d voxelPosition = getPosition(new Point3i(i, j, k));

@@ -94,7 +94,7 @@ public class DirectionalTransmittance {
                 /*if (Float.isNaN(voxel.PadBVTotal)) {
                     voxels[voxel.$i][voxel.$j][voxel.$k].padBV = 0;
                 } else {*/
-                    voxels[voxel.i][voxel.j][voxel.k].padBV = voxel.PadBVTotal;
+                    voxels[voxel.i][voxel.j][voxel.k].padBV = (float) voxel.PadBVTotal;
                 //}
             }else{
                 logger.warn("Voxel null");

@@ -74,7 +74,7 @@ public class MultiBandRaster {
                                         padMean[indiceI][indiceJ][layer] = new Statistic();
                                     }
 
-                                    if (!Float.isNaN(vox.PadBVTotal)) {
+                                    if (!Double.isNaN(vox.PadBVTotal)) {
                                         padMean[indiceI][indiceJ][layer].addValue(vox.PadBVTotal);
                                     }
                                 }

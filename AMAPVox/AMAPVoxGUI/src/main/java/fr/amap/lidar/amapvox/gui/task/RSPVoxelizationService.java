@@ -46,7 +46,7 @@ public class RSPVoxelizationService extends Service<List<File>> {
     // voxelisation classes
     private final static Class[] VOXEL_ANALYSES = new Class[]{
         fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis.class,
-        fr.amap.lidar.amapvox.voxelisation.SimpleVoxelAnalysis.class
+        fr.amap.lidar.amapvox.voxelisation.NewVoxelAnalysis.class
     };
 
     public RSPVoxelizationService(File file, int coreNumber) {

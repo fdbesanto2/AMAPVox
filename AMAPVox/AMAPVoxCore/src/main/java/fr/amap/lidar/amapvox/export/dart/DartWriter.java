@@ -404,7 +404,7 @@ public class DartWriter {
             
             float densite;
             try{
-                densite = voxel.PadBVTotal;
+                densite = (float) voxel.PadBVTotal;
             }catch(Exception e){ 
                 throw new Exception("could not find attribut PadBflTotal or PadBVTotal", e);
             }

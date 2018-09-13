@@ -65,7 +65,7 @@ public class NaNsCorrection implements Cancellable{
                     if(voxel.ground_distance >= (parameters.infos.getResolution() / 2.0f)){
                         
                         float currentNbSampling = voxel.nbSampling;
-                        float currentTransmittance = voxel.transmittance;
+                        float currentTransmittance = (float) voxel.transmittance;
 
                         List<Voxel> neighbours = new ArrayList<>();
                         int nbRemovedNeighbors = 0;
@@ -120,7 +120,7 @@ public class NaNsCorrection implements Cancellable{
                                                         
                                                         /*les voxels de transmittance nulle sont traités comme étant non échantillonné,
                                                         tous les voisins sont considérés indépendamment de l'échantillonnage*/
-                                                        if(!Float.isNaN(neighbour.transmittance)){
+                                                        if(!Double.isNaN(neighbour.transmittance)){
                                                             neighbours.add(neighbour);
                                                         }
                                                         

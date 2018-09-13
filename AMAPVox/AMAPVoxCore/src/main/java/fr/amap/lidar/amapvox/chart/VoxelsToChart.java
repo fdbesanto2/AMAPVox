@@ -572,7 +572,7 @@ public class VoxelsToChart {
             Voxel voxel = iterator.next();
             
             //float pad = voxel.calculatePAD(maxPAD);
-            float pad = voxel.PadBVTotal;
+            float pad = (float) voxel.PadBVTotal;
             
             if(pad > maxPAD){
                 pad = maxPAD;

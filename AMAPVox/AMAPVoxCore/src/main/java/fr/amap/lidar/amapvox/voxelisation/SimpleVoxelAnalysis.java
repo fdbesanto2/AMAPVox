@@ -234,4 +234,9 @@ public class SimpleVoxelAnalysis extends AbstractVoxelAnalysis {
         // by default not close to ground
         return false;
     }
+    
+    @Override
+    public double computeTransmittance(Voxel voxel) {
+        return Double.NaN;
+    }
 }

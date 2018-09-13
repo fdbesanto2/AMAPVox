@@ -30,6 +30,9 @@ public class VoxelAnalysis extends AbstractVoxelAnalysis {
     private int lastShotId;
 
     private BufferedWriter shotSegmentWriter;
+    
+    private final int transMode = 1;
+    private final int pathLengthMode = 1; //1 = mode A, 2 = mode B
 
     @Override
     public void processOneShot(Shot shot) throws Exception {
@@ -322,5 +325,59 @@ public class VoxelAnalysis extends AbstractVoxelAnalysis {
                 }
             }
         }
+    }
+    
+    @Override
+    public double computeTransmittance(Voxel voxel) {
+        
+        double normalizedTransmittance;
+        switch (transMode) {
+            case 2:
+                normalizedTransmittance = computeNormTransmittanceMode2(voxel.transmittance_tmp, voxel.cumulatedBeamVolume, voxel.lMeanTotal);
+                break;
+            case 3:
+                //normalizedTransmittance = computeNormTransmittanceV2(voxel.transmittance_tmp, voxel.sumSurfMulLength);
+                normalizedTransmittance = computeNormTransmittanceMode3(voxel.transmittance_tmp, voxel.cumulatedBeamVolumIn); //CL
+                break;
+
+            case 1:
+            default:
+                double transmittance = computeTransmittance(voxel.bvEntering, voxel.bvIntercepted);
+                normalizedTransmittance = computeNormTransmittance(transmittance, voxel.lMeanTotal);
+        }
+        return normalizedTransmittance;
+    }
+    
+    private double computeTransmittance(double bvEntering, double bvIntercepted) {
+
+        double transmittance;
+
+        if (bvEntering == 0) {
+
+            transmittance = Float.NaN;
+
+        } else if (bvIntercepted > bvEntering) {
+            transmittance = Float.NaN;
+
+        } else {
+            transmittance = (bvEntering - bvIntercepted) / bvEntering;
+        }
+
+        return transmittance;
+    }
+
+    private double computeNormTransmittanceMode2(double transmittance, double sumSurfMulLength, double lMeanTotal) {
+        double normalizedTransmittance = Math.pow((transmittance / sumSurfMulLength), 1 / lMeanTotal);
+        return normalizedTransmittance;
+    }
+
+    private double computeNormTransmittanceMode3(double transmittance, double sumSurfMulLength) {
+        double normalizedTransmittance = transmittance / sumSurfMulLength;
+        return normalizedTransmittance;
+    }
+
+    private double computeNormTransmittance(double transmittance, double lMeanTotal) {
+        double normalizedTransmittance = Math.pow(transmittance, 1 / lMeanTotal);
+        return normalizedTransmittance;
     }
 }

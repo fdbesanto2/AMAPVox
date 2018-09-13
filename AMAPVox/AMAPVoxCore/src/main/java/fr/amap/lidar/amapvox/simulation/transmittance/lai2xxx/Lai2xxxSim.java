@@ -259,7 +259,7 @@ public class Lai2xxxSim implements Cancellable{
                             break;
                         }
 
-                        if(Float.isNaN(voxel.PadBVTotal)){
+                        if(Double.isNaN(voxel.PadBVTotal)){
                             gotOneNaN = true;
                             break;
                         }

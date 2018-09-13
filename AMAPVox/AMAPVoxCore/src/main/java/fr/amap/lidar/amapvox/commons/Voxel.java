@@ -64,13 +64,15 @@ public class Voxel {
      */
     public double lMeanTotal;
 
-    public float transmittance;
+    public double transmittance;
     public double transmittance_tmp;
-    public float angleMean;
+    public double angleMean;
     public double bvEntering;
+    public double bsEntering;
     public double bvIntercepted;
+    public double bsIntercepted;
     public double bvPotential;
-    public float PadBVTotal;
+    public double PadBVTotal;
     public double cumulatedBeamVolume;
     public double cumulatedBeamVolumIn;
     public float passNumber;
