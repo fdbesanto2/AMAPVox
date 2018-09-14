@@ -38,11 +38,12 @@ public class VoxelAnalysisTest {
         EchoesWeightByRankParams echoesWeightParams = new EchoesWeightByRankParams(EchoesWeightByRankParams.DEFAULT_ALS_WEIGHTING);
         VoxelParameters params = new VoxelParameters.Builder(new Point3d(-2.5, -2.5, -2.5), new Point3d(2.5, 2.5, 2.5), 1.0f, VoxelSpaceInfos.Type.ALS).echoesWeightByRankParams(echoesWeightParams).laserSpecification(LaserSpecification.LMS_Q560).padMAX(10.0f).build();
         
-        params.setTransmittanceMode(2);
-        params.setPathLengthMode("B");
+        params.setBeamSectionConstant(false);
+        params.setLastRayTruncated(false);
+        params.setRayPonderationEnabled(true);
         cfg.setVoxelParameters(params);
         
-        CurrentVoxelAnalysis voxAnalysis = new CurrentVoxelAnalysis(null, cfg);
+        VoxelAnalysis voxAnalysis = new VoxelAnalysis(null, cfg);
         
         voxAnalysis.createVoxelSpace();
         

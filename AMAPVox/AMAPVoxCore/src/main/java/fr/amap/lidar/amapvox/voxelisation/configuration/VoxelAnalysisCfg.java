@@ -202,18 +202,10 @@ public class VoxelAnalysisCfg extends Configuration {
         Element transmittanceElement = processElement.getChild("transmittance");
 
         if (transmittanceElement != null) {
-
-            voxelParameters.setTransmittanceMode(Integer.valueOf(transmittanceElement.getAttributeValue("mode")));
-        }
-
-        /**
-         * *PATH LENGTH MODE**
-         */
-        Element pathLengthElement = processElement.getChild("path-length");
-
-        if (pathLengthElement != null) {
-
-            voxelParameters.setPathLengthMode(pathLengthElement.getAttributeValue("mode"));
+            voxelParameters.setBeamSectionConstant(Boolean.valueOf(transmittanceElement.getAttributeValue("constantBeamSection")));
+            voxelParameters.setLastRayTruncated(Boolean.valueOf(transmittanceElement.getAttributeValue("lastRayTruncated")));
+            voxelParameters.setRayPonderationEnabled(Boolean.valueOf(transmittanceElement.getAttributeValue("rayPonderationEnabled")));
+            
         }
 
         Element dtmFilterElement = processElement.getChild("dtm-filter");
@@ -508,15 +500,10 @@ public class VoxelAnalysisCfg extends Configuration {
          * *TRANSMITTANCE MODE**
          */
         Element transmittanceElement = new Element("transmittance");
-        transmittanceElement.setAttribute(new Attribute("mode", String.valueOf(voxelParameters.getTransmittanceMode())));
+        transmittanceElement.setAttribute(new Attribute("constantBeamSection", String.valueOf(voxelParameters.isBeamSectionConstant())));
+        transmittanceElement.setAttribute(new Attribute("lastRayTruncated", String.valueOf(voxelParameters.isLastRayTruncated())));
+        transmittanceElement.setAttribute(new Attribute("rayPonderationEnabled", String.valueOf(voxelParameters.isRayPonderationEnabled())));
         processElement.addContent(transmittanceElement);
-
-        /**
-         * *PATH-LENGTH MODE**
-         */
-        Element pathLengthElement = new Element("path-length");
-        pathLengthElement.setAttribute(new Attribute("mode", voxelParameters.getPathLengthMode()));
-        processElement.addContent(pathLengthElement);
 
         /**
          * *DTM FILTER**

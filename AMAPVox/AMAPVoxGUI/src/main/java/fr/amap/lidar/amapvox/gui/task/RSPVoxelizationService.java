@@ -43,13 +43,6 @@ public class RSPVoxelizationService extends Service<List<File>> {
     private final SimpleIntegerProperty nbFileProcessed;
     private VoxelFileMerging tool;
     private final static Logger LOGGER = Logger.getLogger(RSPVoxelizationService.class);
-    // voxelisation classes
-    private final static Class[] VOXEL_ANALYSES = new Class[]{
-        fr.amap.lidar.amapvox.voxelisation.CurrentVoxelAnalysis.class,
-        fr.amap.lidar.amapvox.voxelisation.WOSectionCurrentVoxelAnalysis.class,
-        fr.amap.lidar.amapvox.voxelisation.NewVoxelAnalysis.class,
-        fr.amap.lidar.amapvox.voxelisation.WOSectionNewVoxelAnalysis.class
-    };
 
     public RSPVoxelizationService(File file, int coreNumber) {
         this.file = file;
@@ -89,9 +82,9 @@ public class RSPVoxelizationService extends Service<List<File>> {
                 }
 
                 ArrayList<File> files = new ArrayList();
-                exec = Executors.newFixedThreadPool(Math.min(coreNumber, lidarScans.size() * VOXEL_ANALYSES.length));
+                exec = Executors.newFixedThreadPool(Math.min(coreNumber, lidarScans.size()));
                 nbFileProcessed.set(0);
-                int nbFilesToWrite = (mainCfg.getVoxelParameters().isMergingAfter() ? lidarScans.size() + 1 : lidarScans.size()) * VOXEL_ANALYSES.length;
+                int nbFilesToWrite = (mainCfg.getVoxelParameters().isMergingAfter() ? lidarScans.size() + 1 : lidarScans.size());
                 try {
                     List<RxpVoxelisation> tasks = new ArrayList();
                     for (LidarScan scan : lidarScans) {
@@ -130,18 +123,16 @@ public class RSPVoxelizationService extends Service<List<File>> {
                             }
                         }
 
-                        for (Class vaClass : VOXEL_ANALYSES) {
-                            RxpVoxelisation rxpVoxelisation = new RxpVoxelisation(cfg, vaClass);
-                            rxpVoxelisation.init();
-                            rxpVoxelisation.addCallableTaskListener(new CallableTaskAdapter() {
-                                @Override
-                                public void onSucceeded() {
-                                    nbFileProcessed.set(nbFileProcessed.getValue() + 1);
-                                    updateProgress(nbFileProcessed.intValue(), nbFilesToWrite);
-                                }
-                            });
-                            tasks.add(rxpVoxelisation);
-                        }
+                        RxpVoxelisation rxpVoxelisation = new RxpVoxelisation(cfg);
+                        rxpVoxelisation.init();
+                        rxpVoxelisation.addCallableTaskListener(new CallableTaskAdapter() {
+                            @Override
+                            public void onSucceeded() {
+                                nbFileProcessed.set(nbFileProcessed.getValue() + 1);
+                                updateProgress(nbFileProcessed.intValue(), nbFilesToWrite);
+                            }
+                        });
+                        tasks.add(rxpVoxelisation);
                     }
 
                     // wait for every scan voxelisation to finish
@@ -153,35 +144,18 @@ public class RSPVoxelizationService extends Service<List<File>> {
 
                     if (mainCfg.getVoxelParameters().isMergingAfter()) {
 
-                        // dispatch output files by voxel analysis algorithm
-                        HashMap<Class, List<File>> filesMap = new HashMap();
-                        for (Class vaClass : VOXEL_ANALYSES) {
-                            filesMap.put(vaClass, new ArrayList());
-                            for (File file : files) {
-                                if (file.toString().endsWith("-" + vaClass.getSimpleName())) {
-                                    filesMap.get(vaClass).add(file);
-                                }
+                        File mfile = mainCfg.getVoxelParameters().getMergedFile();
+                        VoxMergingCfg mergingCfg = new VoxMergingCfg(mfile, mainCfg.getVoxelParameters(), files);
+                        tool = new VoxelFileMerging();
+                        tool.addProcessingListener(new ProcessingAdapter() {
+                            @Override
+                            public void processingStepProgress(String progressMsg, long progress, long max) {
+                                updateMessage(progressMsg);
+                                updateProgress(progress, max);
                             }
-                        }
-
-                        for (Class vaClass : VOXEL_ANALYSES) {
-                            List<File> vaFiles = filesMap.get(vaClass);
-                            File mfile = new File(mainCfg.getVoxelParameters().getMergedFile() + "-" + vaClass.getSimpleName());
-                            VoxMergingCfg mergingCfg = new VoxMergingCfg(mfile, mainCfg.getVoxelParameters(), vaFiles);
-
-                            tool = new VoxelFileMerging();
-
-                            tool.addProcessingListener(new ProcessingAdapter() {
-                                @Override
-                                public void processingStepProgress(String progressMsg, long progress, long max) {
-                                    updateMessage(progressMsg);
-                                    updateProgress(progress, max);
-                                }
-                            });
-
-                            tool.mergeVoxelFiles(mergingCfg);
-                            files.add(mfile);
-                        }
+                        });
+                        tool.mergeVoxelFiles(mergingCfg);
+                        files.add(mfile);
                     }
                 } catch (InterruptedException | NullPointerException ex) {
                     this.cancel();

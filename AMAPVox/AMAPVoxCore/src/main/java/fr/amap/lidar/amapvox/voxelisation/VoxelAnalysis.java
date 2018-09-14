@@ -8,38 +8,23 @@ import fr.amap.commons.raster.asc.Raster;
 import fr.amap.lidar.amapvox.commons.Voxel;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
-import java.io.BufferedWriter;
 import javax.vecmath.Point3i;
 
-import java.io.IOException;
 import javax.vecmath.Point3d;
 import org.apache.log4j.Logger;
 
-public class CurrentVoxelAnalysis extends AbstractVoxelAnalysis {
+public class VoxelAnalysis extends AbstractVoxelAnalysis {
 
-    public CurrentVoxelAnalysis(Raster terrain, VoxelAnalysisCfg cfg, boolean beamSectionEnabled) throws Exception {
+    public VoxelAnalysis(Raster terrain, VoxelAnalysisCfg cfg) throws Exception {
         super(terrain, cfg);
-        this.beamSectionEnabled = beamSectionEnabled;
-    }
-    
-    public CurrentVoxelAnalysis(Raster terrain, VoxelAnalysisCfg cfg) throws Exception {
-        this(terrain, cfg, true);
     }
 
-    private final static Logger LOGGER = Logger.getLogger(CurrentVoxelAnalysis.class);
+    private final static Logger LOGGER = Logger.getLogger(VoxelAnalysis.class);
 
     private boolean groundEnergySet = false;
-
     private boolean shotChanged = false;
     private Voxel lastVoxelSampled;
     private int lastShotId;
-
-    private BufferedWriter shotSegmentWriter;
-    
-    private final int transMode = 1;
-    private final int pathLengthMode = 1; //1 = mode A, 2 = mode B
-    
-    private final boolean beamSectionEnabled;
 
     @Override
     public void processOneShot(Shot shot) throws Exception {
@@ -193,15 +178,9 @@ public class CurrentVoxelAnalysis extends AbstractVoxelAnalysis {
             double distance = voxelPosition.distance(shot.origin);
 
             // beam surface in current voxel
-            double beamSurface = beamSectionEnabled
-                    ? Math.pow((Math.tan(0.5d * laserSpec.getBeamDivergence()) * distance) + 0.5d * laserSpec.getBeamDiameterAtExit(), 2) * Math.PI
-                    : 1.d;
-
-            double beamVolume = 0;
-            double beamVolumeIn = 0;
-            double beamFractionOut = 0;
-            double beamFractionIn = 0;
-            double rayLength = 0;
+            double beamSurface = constantBeamSection
+                    ? 1.d
+                    : Math.pow((Math.tan(0.5d * laserSpec.getBeamDivergence()) * distance) + 0.5d * laserSpec.getBeamDiameterAtExit(), 2) * Math.PI;
 
             // Assumption: when echo falls right on a voxel face, AMAPVox
             // considers it belongs to next voxel
@@ -216,22 +195,17 @@ public class CurrentVoxelAnalysis extends AbstractVoxelAnalysis {
                     // ray length in this case is the distance between 
                     // entering point of current voxel and entering point of
                     // next voxel
-                    rayLength = distOriginNextVoxel - distOriginCurrentVoxel;
+                    double rayLength = distOriginNextVoxel - distOriginCurrentVoxel;
                     // increment total optical length in current voxel
                     vox.lgTotal += rayLength;
                     // increment number of shots going through current voxel
                     vox.nbSampling++;
                     // increment mean angle in current voxel
                     vox.angleMean += shot.getAngle();
-                    // unintercepted beam volume
-                    beamVolume = beamSurface * rayLength;
-                    // fraction of the beam entering current voxel (rounded to 5 digits)
-                    beamFractionIn = (Math.round(residualEnergy * 10000) / 10000.0);
-                    // beam volume in current voxel
-                    beamVolumeIn = beamFractionIn * beamVolume;
-                    // increment total beam volume in current voxel
-                    vox.bvEntering += beamVolumeIn;
-
+                    // increment total beam fraction in current voxel
+                    vox.bvEntering += rayPonderationEnabled
+                            ? residualEnergy * beamSurface * rayLength
+                            : residualEnergy * beamSurface;
                     lastVoxelSampled = vox;
                     lastShotId = shotID;
                 }
@@ -266,10 +240,10 @@ public class CurrentVoxelAnalysis extends AbstractVoxelAnalysis {
                 // CASE 3 distOriginCurrentVoxel < distOriginEcho <= distOriginNextVoxel
                 // echo is in the current voxel
 
-                // rayLength is approximated to full optical path inside current voxel
-                // hence overestimated, unless it is last echo and ray length
-                // estimation mode is set to 1
-                rayLength = (lastEcho && pathLengthMode == 1)
+                // for last echo: whether ray length should be truncated as
+                // distance from voxel entering point to echo or virtually
+                // extended until voxel exiting point
+                double rayLength = (lastEcho && lastRayTruncated)
                         ? distOriginEcho - distOriginCurrentVoxel
                         : distOriginNextVoxel - distOriginCurrentVoxel;
 
@@ -281,10 +255,10 @@ public class CurrentVoxelAnalysis extends AbstractVoxelAnalysis {
                     vox.nbSampling++;
                     vox.lgTotal += rayLength;
                     vox.angleMean += shot.getAngle();
-                    beamVolume = beamSurface * rayLength;
-                    beamFractionIn = (Math.round(residualEnergy * 10000) / 10000.0);
-                    beamVolumeIn = beamFractionIn * beamVolume;
-                    vox.bvEntering += beamVolumeIn;
+                    // increment total beam fraction in current voxel
+                    vox.bvEntering += rayPonderationEnabled
+                            ? residualEnergy * beamSurface * rayLength
+                            : residualEnergy * beamSurface;
                     lastVoxelSampled = vox;
                     lastShotId = shotID;
                 }
@@ -292,99 +266,18 @@ public class CurrentVoxelAnalysis extends AbstractVoxelAnalysis {
                 if (keepEcho) {
 
                     vox.nbEchos++;
-                    beamFractionOut = (Math.round(beamFraction * 10000) / 10000.0);
-                    beamVolume = beamSurface * rayLength;
-                    vox.bvIntercepted += (beamFractionOut * beamVolume);
+                    vox.bvIntercepted += rayPonderationEnabled
+                            ? beamFraction * beamSurface * rayLength
+                            : beamFraction * beamSurface;
 
                 } else if (parameters.getGroundEnergyParams() != null
                         && parameters.getGroundEnergyParams().isCalculateGroundEnergy()
                         && parameters.infos.getType() != VoxelSpaceInfos.Type.TLS && !groundEnergySet) {
                     groundEnergy[vox.i][vox.j].groundEnergyActual += residualEnergy;
                     groundEnergy[vox.i][vox.j].groundEnergyPotential++;
-
                     groundEnergySet = true;
                 }
             }
-
-            // additional calculation for transmittance mode 2 and 3
-            if (transMode > 1) {
-                double transNorm = 0.d;
-                switch (transMode) {
-                    case 2:
-                        transNorm = ((beamFractionIn - beamFractionOut) / beamFractionIn) * beamVolume;
-                        break;
-                    case 3:
-                        if (rayLength > 0) {
-                            transNorm = Math.pow(((beamFractionIn - beamFractionOut) / beamFractionIn), 1 / rayLength) * beamVolumeIn;
-                        }
-                        break;
-                }
-                vox.transmittance_tmp += transNorm;
-                vox.cumulatedBeamVolumIn += beamVolumeIn;
-                vox.cumulatedBeamVolume += beamVolume;
-                if (cfg.isExportShotSegment()) {
-                    double currentNormalizedTrans = transNorm / beamVolumeIn;
-                    try {
-                        shotSegmentWriter.write(vox.i + " " + vox.j + " " + vox.k + " " + currentNormalizedTrans + " " + beamVolumeIn + "\n");
-                    } catch (IOException ex) {
-                        LOGGER.error("Error exporting shot segment " + shotID + " for transmittance mode " + transMode, ex);
-                    }
-                }
-            }
         }
-    }
-    
-    @Override
-    public double computeTransmittance(Voxel voxel) {
-        
-        double normalizedTransmittance;
-        switch (transMode) {
-            case 2:
-                normalizedTransmittance = computeNormTransmittanceMode2(voxel.transmittance_tmp, voxel.cumulatedBeamVolume, voxel.lMeanTotal);
-                break;
-            case 3:
-                //normalizedTransmittance = computeNormTransmittanceV2(voxel.transmittance_tmp, voxel.sumSurfMulLength);
-                normalizedTransmittance = computeNormTransmittanceMode3(voxel.transmittance_tmp, voxel.cumulatedBeamVolumIn); //CL
-                break;
-
-            case 1:
-            default:
-                double transmittance = computeTransmittance(voxel.bvEntering, voxel.bvIntercepted);
-                normalizedTransmittance = computeNormTransmittance(transmittance, voxel.lMeanTotal);
-        }
-        return normalizedTransmittance;
-    }
-    
-    private double computeTransmittance(double bvEntering, double bvIntercepted) {
-
-        double transmittance;
-
-        if (bvEntering == 0) {
-
-            transmittance = Float.NaN;
-
-        } else if (bvIntercepted > bvEntering) {
-            transmittance = Float.NaN;
-
-        } else {
-            transmittance = (bvEntering - bvIntercepted) / bvEntering;
-        }
-
-        return transmittance;
-    }
-
-    private double computeNormTransmittanceMode2(double transmittance, double sumSurfMulLength, double lMeanTotal) {
-        double normalizedTransmittance = Math.pow((transmittance / sumSurfMulLength), 1 / lMeanTotal);
-        return normalizedTransmittance;
-    }
-
-    private double computeNormTransmittanceMode3(double transmittance, double sumSurfMulLength) {
-        double normalizedTransmittance = transmittance / sumSurfMulLength;
-        return normalizedTransmittance;
-    }
-
-    private double computeNormTransmittance(double transmittance, double lMeanTotal) {
-        double normalizedTransmittance = Math.pow(transmittance, 1 / lMeanTotal);
-        return normalizedTransmittance;
     }
 }

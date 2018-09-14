@@ -14,33 +14,40 @@ import javax.vecmath.Point3i;
 
 /**
  * This class defines the parameters of the voxelization process.
+ *
  * @author Julien Heurtebize (julienhtbe@gmail.com)
  */
 public class VoxelParameters {
-        
+
     //voxel space parameters
     public final VoxelSpaceInfos infos;
-    private int transmittanceMode = 1;
-    private String pathLengthMode = "A";
-    
+
+    // voxelisation algorithm parameters
+    private boolean constantBeamSection = false;
+    private boolean lastRayTruncated = false;
+    private boolean rayPonderationEnabled = true;
+
     private boolean mergingAfter;
     private File mergedFile;
-    
+
     private NaNsCorrectionParams naNsCorrectionParams;
     private DTMFilteringParams dtmFilteringParams;
     private EchoesWeightByRankParams echoesWeightByRankParams;
-    private EchoesWeightByFileParams  echoesWeightByFileParams;
+    private EchoesWeightByFileParams echoesWeightByFileParams;
     private GroundEnergyParams groundEnergyParams;
     private LADParams ladParams;
-    
-    private LaserSpecification laserSpecification = null;    
-    
-    public static class Builder{
-        
+
+    private LaserSpecification laserSpecification = null;
+
+    public static class Builder {
+
         //voxel space parameters
         private final VoxelSpaceInfos infos = new VoxelSpaceInfos();
-        private int transmittanceMode = 1;
-        private String pathLengthMode = "A";
+
+        // voxelisation algorithm parameters
+        private final boolean constantBeamSection = false;
+        private final boolean lastRayTruncated = false;
+        private final boolean rayPonderationEnabled = true;
 
         private boolean mergingAfter = false;
         private File mergedFile = null;
@@ -60,65 +67,64 @@ public class VoxelParameters {
             infos.setSplit(split);
             infos.setType(type);
         }*/
-        
         public Builder(Point3d bottomCorner, Point3d topCorner, float resolution, VoxelSpaceInfos.Type type) {
-            
+
             infos.setMinCorner(bottomCorner);
             infos.setMaxCorner(topCorner);
-            infos.setResolution((double)resolution);
+            infos.setResolution((double) resolution);
             infos.setType(type);
         }
 
-        public Builder echoesWeightByRankParams(EchoesWeightByRankParams echoesWeightByRankParams){
-            
+        public Builder echoesWeightByRankParams(EchoesWeightByRankParams echoesWeightByRankParams) {
+
             this.echoesWeightByRankParams = echoesWeightByRankParams;
             return this;
         }
-        
-        public Builder naNsCorrectionParams(NaNsCorrectionParams naNsCorrectionParams){
-            
+
+        public Builder naNsCorrectionParams(NaNsCorrectionParams naNsCorrectionParams) {
+
             this.naNsCorrectionParams = naNsCorrectionParams;
             return this;
         }
-        
-        public Builder groundEnergyParams(GroundEnergyParams groundEnergyParams){
-            
+
+        public Builder groundEnergyParams(GroundEnergyParams groundEnergyParams) {
+
             this.groundEnergyParams = groundEnergyParams;
             return this;
         }
-        
-        public Builder dtmFilteringParams(DTMFilteringParams dtmFilteringParams){
-            
+
+        public Builder dtmFilteringParams(DTMFilteringParams dtmFilteringParams) {
+
             this.dtmFilteringParams = dtmFilteringParams;
             return this;
         }
-        
-        public Builder ladParams(LADParams ladParams){
-            
+
+        public Builder ladParams(LADParams ladParams) {
+
             this.ladParams = ladParams;
             return this;
         }
-        
-        public Builder laserSpecification(LaserSpecification laserSpecification){
-            
+
+        public Builder laserSpecification(LaserSpecification laserSpecification) {
+
             this.laserSpecification = laserSpecification;
             return this;
         }
-        
-        public Builder padMAX(float padMAX){
-            
+
+        public Builder padMAX(float padMAX) {
+
             this.infos.setMaxPAD(padMAX);
             return this;
         }
-        
-        public VoxelParameters build(){
-            
+
+        public VoxelParameters build() {
+
             return new VoxelParameters(this);
         }
     }
-    
-    public VoxelParameters(Builder builder){
-        
+
+    public VoxelParameters(Builder builder) {
+
         this.dtmFilteringParams = builder.dtmFilteringParams;
         this.echoesWeightByRankParams = builder.echoesWeightByRankParams;
         this.groundEnergyParams = builder.groundEnergyParams;
@@ -128,12 +134,13 @@ public class VoxelParameters {
         this.mergedFile = builder.mergedFile;
         this.mergingAfter = builder.mergingAfter;
         this.naNsCorrectionParams = builder.naNsCorrectionParams;
-        this.pathLengthMode = builder.pathLengthMode;
-        this.transmittanceMode = builder.transmittanceMode;
+        this.constantBeamSection = builder.constantBeamSection;
+        this.lastRayTruncated = builder.lastRayTruncated;
+        this.rayPonderationEnabled = builder.rayPonderationEnabled;
     }
-    
+
     public VoxelParameters() {
-        
+
         infos = new VoxelSpaceInfos();
         infos.setType(VoxelSpaceInfos.Type.ALS);
         ladParams = new LADParams();
@@ -141,20 +148,20 @@ public class VoxelParameters {
         dtmFilteringParams = new DTMFilteringParams();
         naNsCorrectionParams = new NaNsCorrectionParams(false);
     }
-    
+
     public VoxelParameters(Point3d bottomCorner, Point3d topCorner, Point3i split) {
-        
+
         /*this.bottomCorner = bottomCorner;
         this.topCorner = topCorner;
         this.split = split;*/
         infos = new VoxelSpaceInfos(bottomCorner, topCorner, split);
-        
+
         ladParams = new LADParams();
         //echoesWeightByRankParams = new EchoesWeightByRankParams();
         dtmFilteringParams = new DTMFilteringParams();
         naNsCorrectionParams = new NaNsCorrectionParams(false);
     }
-    
+
     /**
      *
      * @param bottomCorner bottom left corner of the bounding box
@@ -165,9 +172,11 @@ public class VoxelParameters {
      * @param ladParams Leaf Angle Distribution parameters
      * @param echoesWeightByRankParams Shot's Echoes weighting parameters
      * @param laserSpecification Lidar equipment specification
-     * @param naNsCorrectionParams Parameters for the correction of non sampled voxels 
+     * @param naNsCorrectionParams Parameters for the correction of non sampled
+     * voxels
      * @param dtmFilteringParams DTM filtering parameters
-     * @param TLS if true, the lidar is a Terrestrial Laser Scanner, if false, an Airborne Laser Scanner
+     * @param TLS if true, the lidar is a Terrestrial Laser Scanner, if false,
+     * an Airborne Laser Scanner
      */
     public VoxelParameters(Point3d bottomCorner, Point3d topCorner, Point3i split, float resolution,
             float maxPAD,
@@ -181,38 +190,38 @@ public class VoxelParameters {
         infos = new VoxelSpaceInfos(bottomCorner, topCorner, split);
         infos.setResolution(resolution);
         infos.setMaxPAD(maxPAD);
-        
-        infos.setType(TLS ? VoxelSpaceInfos.Type.TLS:VoxelSpaceInfos.Type.ALS);
-        
+
+        infos.setType(TLS ? VoxelSpaceInfos.Type.TLS : VoxelSpaceInfos.Type.ALS);
+
         //check all parameters, if null set to default
         if (ladParams == null) {
             ladParams = new LADParams();
         }
 
         this.ladParams = ladParams;
-        
+
         this.echoesWeightByRankParams = echoesWeightByRankParams;
-        
-        if(laserSpecification == null){
-            if(TLS){
+
+        if (laserSpecification == null) {
+            if (TLS) {
                 laserSpecification = LaserSpecification.VZ_400;
-            }else{
+            } else {
                 laserSpecification = LaserSpecification.LMS_Q560;
             }
         }
-        
+
         this.laserSpecification = laserSpecification;
-        
-        if(naNsCorrectionParams == null){
+
+        if (naNsCorrectionParams == null) {
             naNsCorrectionParams = new NaNsCorrectionParams(false);
         }
         this.naNsCorrectionParams = naNsCorrectionParams;
-        
-        if(dtmFilteringParams == null){
+
+        if (dtmFilteringParams == null) {
             dtmFilteringParams = new DTMFilteringParams();
         }
         this.dtmFilteringParams = dtmFilteringParams;
-        
+
         this.infos.setType(VoxelSpaceInfos.Type.TLS);
         //this.TLS = TLS;
     }
@@ -242,7 +251,7 @@ public class VoxelParameters {
     }
 
     /**
-     * 
+     *
      * @return Leaf Angle Distribution parameters
      */
     public LADParams getLadParams() {
@@ -250,18 +259,18 @@ public class VoxelParameters {
     }
 
     /**
-     * 
+     *
      * @param ladParams Leaf Angle Distribution parameters
      */
     public void setLadParams(LADParams ladParams) {
         this.ladParams = ladParams;
-        
+
         infos.setLadType(ladParams.getLadType());
         infos.setLadParams(new double[]{ladParams.getLadBetaFunctionAlphaParameter(), ladParams.getLadBetaFunctionBetaParameter()});
     }
 
     /**
-     * 
+     *
      * @return Ground-energy map generation parameters (ALS only)
      */
     public GroundEnergyParams getGroundEnergyParams() {
@@ -269,15 +278,16 @@ public class VoxelParameters {
     }
 
     /**
-     * 
-     * @param groundEnergyParams Ground-energy map generation parameters (ALS only)
+     *
+     * @param groundEnergyParams Ground-energy map generation parameters (ALS
+     * only)
      */
     public void setGroundEnergyParams(GroundEnergyParams groundEnergyParams) {
         this.groundEnergyParams = groundEnergyParams;
-    }   
+    }
 
     /**
-     * 
+     *
      * @return Echoes weigting parameters
      */
     public EchoesWeightByRankParams getEchoesWeightByRankParams() {
@@ -285,15 +295,15 @@ public class VoxelParameters {
     }
 
     /**
-     * 
+     *
      * @param echoesWeightByRankParams Echoes weigting parameters
      */
     public void setEchoesWeightByRankParams(EchoesWeightByRankParams echoesWeightByRankParams) {
         this.echoesWeightByRankParams = echoesWeightByRankParams;
     }
-    
+
     /**
-     * 
+     *
      * @return Echoes weigting parameters
      */
     public EchoesWeightByFileParams getEchoesWeightByFileParams() {
@@ -301,7 +311,7 @@ public class VoxelParameters {
     }
 
     /**
-     * 
+     *
      * @param echoesWeightByFileParams Echoes weigting parameters
      */
     public void setEchoesWeightByFileParams(EchoesWeightByFileParams echoesWeightByFileParams) {
@@ -309,7 +319,7 @@ public class VoxelParameters {
     }
 
     /**
-     * 
+     *
      * @return The dtm filtering parameter
      */
     public DTMFilteringParams getDtmFilteringParams() {
@@ -317,7 +327,7 @@ public class VoxelParameters {
     }
 
     /**
-     * 
+     *
      * @param dtmFilteringParams A dtm filtering parameter
      */
     public void setDtmFilteringParams(DTMFilteringParams dtmFilteringParams) {
@@ -332,20 +342,27 @@ public class VoxelParameters {
         this.naNsCorrectionParams = naNsCorrectionParams;
     }
 
-    public int getTransmittanceMode() {
-        return transmittanceMode;
+    public boolean isBeamSectionConstant() {
+        return constantBeamSection;
     }
 
-    public void setTransmittanceMode(int transmittanceMode) {
-        this.transmittanceMode = transmittanceMode;
+    public void setBeamSectionConstant(boolean constant) {
+        this.constantBeamSection = constant;
     }
 
-    public String getPathLengthMode() {
-        return pathLengthMode;
+    public boolean isLastRayTruncated() {
+        return lastRayTruncated;
     }
 
-    public void setPathLengthMode(String pathLengthMode) {
-        this.pathLengthMode = pathLengthMode;
+    public void setLastRayTruncated(boolean truncated) {
+        this.lastRayTruncated = truncated;
     }
-    
+
+    public boolean isRayPonderationEnabled() {
+        return rayPonderationEnabled;
+    }
+
+    public void setRayPonderationEnabled(boolean enabled) {
+        this.rayPonderationEnabled = enabled;
+    }
 }

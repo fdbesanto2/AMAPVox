@@ -799,30 +799,21 @@
                                                                                 </AnchorPane>
                                                                             </content>
                                                                         </Tab>
-                                                                        <!--<Tab text="Transmittance">
+                                                                        <Tab text="Transmittance">
                                                                            <content>
-                                                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                                              <AnchorPane>
                                                                                  <children>
-                                                                                    <VBox layoutX="13.9619140625" layoutY="14.0">
+                                                                                    <VBox spacing="15.0" AnchorPane.topAnchor="25.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0">
                                                                                        <children>
-                                                                                          <HBox alignment="CENTER_LEFT" spacing="5.0">
-                                                                                             <children>
-                                                                                                <Label text="Transmittance mode" />
-                                                                                                <ComboBox fx:id="comboboxTransMode" prefHeight="26.0" prefWidth="89.0" />
-                                                                                             </children>
-                                                                                          </HBox>
-                                                                                          <HBox alignment="CENTER_LEFT" spacing="5.0">
-                                                                                             <children>
-                                                                                                <Label text="Path length mode (experimental)" />
-                                                                                                <ComboBox fx:id="comboboxPathLengthMode" prefHeight="26.0" prefWidth="89.0" />
-                                                                                             </children>
-                                                                                          </HBox>
+                                                                                          <CheckBox fx:id="checkboxConstantBeamSection" mnemonicParsing="false" text="Constant beam section ?" />
+                                                                                          <CheckBox fx:id="checkboxLastRayTruncated" mnemonicParsing="false" text="Last ray truncated ?" />
+                                                                                          <CheckBox fx:id="checkboxRayPonderationEnabled" mnemonicParsing="false" text="Ray ponderation enabled ?" />
                                                                                        </children>
                                                                                     </VBox>
                                                                                  </children>
                                                                               </AnchorPane>
                                                                            </content>
-                                                                        </Tab>-->
+                                                                        </Tab>
                                                                         <Tab text="Other">
                                                                             <content>
                                                                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">

@@ -13,8 +13,7 @@ import fr.amap.commons.util.CallableTask;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.util.Util;
 import fr.amap.lidar.amapvox.voxelisation.AbstractVoxelAnalysis;
-import fr.amap.lidar.amapvox.voxelisation.SimpleVoxelAnalysis;
-import fr.amap.lidar.amapvox.voxelisation.CurrentVoxelAnalysis;
+import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
 import fr.amap.lidar.amapvox.voxelisation.configuration.TLSVoxCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
@@ -59,7 +58,7 @@ public abstract class TLSVoxelisation extends CallableTask<File> {
     }
 
     public TLSVoxelisation(TLSVoxCfg cfg) {
-        this(cfg, CurrentVoxelAnalysis.class, false);
+        this(cfg, VoxelAnalysis.class, false);
     }
 
     public void init() throws Exception {

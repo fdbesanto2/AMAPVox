@@ -56,8 +56,6 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
     
     abstract public void processOneShot(Shot shot) throws Exception;
     
-    abstract public double computeTransmittance(Voxel voxel);
-    
     // variable declaration
     
     private final static Logger LOGGER = Logger.getLogger(AbstractVoxelAnalysis.class);
@@ -78,9 +76,10 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
 
     final boolean volumeWeighting = true;
 
+    boolean constantBeamSection;
+    boolean lastRayTruncated;
+    boolean rayPonderationEnabled;
     
-    
-
     GroundEnergy[][] groundEnergy;
     VoxelParameters parameters;
     final VoxelAnalysisCfg cfg;
@@ -194,8 +193,13 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
     private void init(VoxelParameters parameters) throws Exception {
 
         this.parameters = parameters;
-        this.parameters.infos.setTransmittanceMode(parameters.getTransmittanceMode());
-        this.parameters.infos.setPathLengthMode(parameters.getPathLengthMode());
+        
+        this.rayPonderationEnabled = parameters.isRayPonderationEnabled();
+        this.lastRayTruncated = parameters.isLastRayTruncated();
+        this.constantBeamSection = parameters.isBeamSectionConstant();
+        this.parameters.infos.setBeamSectionConstant(parameters.isBeamSectionConstant());
+        this.parameters.infos.setLastRayTruncated(parameters.isLastRayTruncated());
+        this.parameters.infos.setRayPonderationEnabled(parameters.isRayPonderationEnabled());
 
         if (null != parameters.getEchoesWeightByRankParams()) {
             weightTable = parameters.getEchoesWeightByRankParams().getWeightingData();
@@ -213,11 +217,7 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
 
         MAX_PAD = parameters.infos.getMaxPAD();
 
-        //test
-        /*pathLengthMode = 2;
-        this.transMode = 1;*/
         laserSpec = parameters.getLaserSpecification();
-
         if (laserSpec == null) {
             if (parameters.infos.getType() == VoxelSpaceInfos.Type.TLS) {
                 laserSpec = LaserSpecification.VZ_400;
@@ -246,7 +246,7 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
                 shotSegmentWriter = new BufferedWriter(new FileWriter(new File(cfg.getOutputFile().getAbsolutePath() + ".segments")));
                 shotSegmentWriter.write("i j k norm_transmittance weight\n");
             } catch (IOException ex) {
-                java.util.logging.Logger.getLogger(CurrentVoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(VoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -358,8 +358,15 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
             } while (context.indices != null);
         }
     }
+    
+    public static double computeTransmittance(double bfEntering, double bfIntercepted, double lMeanTotal) {
+        
+        return (bfEntering == 0) || (bfIntercepted > bfEntering)
+                ? Double.NaN
+                : Math.pow((bfEntering - bfIntercepted) / bfEntering, 1 / lMeanTotal);
+    }
 
-    private double computePADFromNormTransmittance(double transmittance, double angleMean, double maxPAD, GTheta direcTransmittance) {
+    public static double computePADFromNormTransmittance(double transmittance, double angleMean, double maxPAD, GTheta direcTransmittance) {
 
         double pad;
 
@@ -388,19 +395,16 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
     private Voxel computePADFromVoxel(Voxel voxel, int i, int j, int k) {
 
         if (voxel == null) {
-
             voxel = initVoxel(i, j, k);
         }
 
         voxel.angleMean = voxel.angleMean / voxel.nbSampling;
 
         if (voxel.nbSampling >= voxel.nbEchos) {
-
             voxel.lMeanTotal = voxel.lgTotal / (voxel.nbSampling);
-
         }
 
-        double normalizedTransmittance = computeTransmittance(voxel);
+        double normalizedTransmittance = computeTransmittance(voxel.bvEntering, voxel.bvIntercepted, voxel.lMeanTotal);
         voxel.transmittance = (float) normalizedTransmittance;
         voxel.PadBVTotal = (float) computePADFromNormTransmittance(normalizedTransmittance, voxel.angleMean);
 

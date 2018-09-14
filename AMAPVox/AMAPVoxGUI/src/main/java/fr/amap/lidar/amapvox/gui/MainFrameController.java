@@ -747,6 +747,13 @@ public class MainFrameController implements Initializable {
     private Button buttonHelpShotAttributeFilter;
     @FXML
     private HelpButtonController buttonHelpShotAttributeFilterController;
+    @FXML 
+    private CheckBox checkboxConstantBeamSection;
+    @FXML 
+    private CheckBox checkboxLastRayTruncated;
+    @FXML 
+    private CheckBox checkboxRayPonderationEnabled;
+    
 
     private void initValidationSupport() {
 
@@ -968,11 +975,10 @@ public class MainFrameController implements Initializable {
             }
         });
 
-        /*comboboxTransMode.getItems().setAll(1, 2, 3);
-        comboboxTransMode.getSelectionModel().selectFirst();
+        checkboxConstantBeamSection.setSelected(false);
+        checkboxLastRayTruncated.setSelected(false);
+        checkboxRayPonderationEnabled.setSelected(true);
         
-        comboboxPathLengthMode.getItems().setAll("A", "B");
-        comboboxPathLengthMode.getSelectionModel().selectFirst();*/
         helpButtonNaNsCorrection.setOnAction((ActionEvent event) -> {
             helpButtonNaNsCorrectionController.showHelpDialog(resourceBundle.getString("help_NaNs_correction"));
         });
@@ -4721,10 +4727,10 @@ public class MainFrameController implements Initializable {
         voxelParameters.setLadParams(ladParameters);
 
         voxelParameters.infos.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
-        voxelParameters.setTransmittanceMode(1);
-        voxelParameters.setPathLengthMode("B");
-        /*voxelParameters.setTransmittanceMode(comboboxTransMode.getSelectionModel().getSelectedItem());
-        voxelParameters.setPathLengthMode(comboboxPathLengthMode.getSelectionModel().getSelectedItem());*/
+        // default voxelisation algorithm parameters
+        voxelParameters.setBeamSectionConstant(checkboxConstantBeamSection.isSelected());
+        voxelParameters.setLastRayTruncated(checkboxLastRayTruncated.isSelected());
+        voxelParameters.setRayPonderationEnabled(checkboxRayPonderationEnabled.isSelected());
 
         return voxelParameters;
     }
@@ -5027,8 +5033,9 @@ public class MainFrameController implements Initializable {
                         radiobuttonLADHomogeneous.setSelected(ladParameters.getLadEstimationMode() == 0);
                         textFieldTwoBetaAlphaParameter.setText(String.valueOf(ladParameters.getLadBetaFunctionAlphaParameter()));
                         textFieldTwoBetaBetaParameter.setText(String.valueOf(ladParameters.getLadBetaFunctionBetaParameter()));
-                        /*comboboxTransMode.getSelectionModel().select(new Integer(voxelParameters.getTransmittanceMode()));
-                            comboboxPathLengthMode.getSelectionModel().select(voxelParameters.getPathLengthMode());*/
+                        checkboxConstantBeamSection.setSelected(voxelParameters.isBeamSectionConstant());
+                        checkboxLastRayTruncated.setSelected(voxelParameters.isLastRayTruncated());
+                        checkboxRayPonderationEnabled.setSelected(voxelParameters.isRayPonderationEnabled());
 
                         if (type.equals("voxelisation-ALS") || type.equals("multi-voxelisation")) {
 

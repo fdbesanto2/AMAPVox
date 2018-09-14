@@ -23,6 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import org.apache.log4j.Logger;
 import fr.amap.commons.util.Cancellable;
+import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
 
 
 
@@ -89,8 +90,9 @@ public class VoxelFileMerging extends Process implements Cancellable{
                 }
                 
                 cfg.getVoxelParameters().setLadParams(ladParams);
-                cfg.getVoxelParameters().setTransmittanceMode(infos.getTransmittanceMode());
-                cfg.getVoxelParameters().setPathLengthMode(infos.getPathLengthMode());
+                cfg.getVoxelParameters().setBeamSectionConstant(infos.isBeamSectionConstant());
+                cfg.getVoxelParameters().setLastRayTruncated(infos.isLastRayTruncated());
+                cfg.getVoxelParameters().setRayPonderationEnabled(infos.isRayPonderationEnabled());
                 
             } catch (Exception ex) {
                 throw ex;
@@ -301,14 +303,8 @@ public class VoxelFileMerging extends Process implements Cancellable{
         LOGGER.info("Transmittance functions table is built");
         
         for (int i = 0; i < size; i++) {
-
-//              double transmittance = VoxelAnalysis.computeTransmittance(resultingFile[i][bvEnteringColumnIndex], resultingFile[i][bvInterceptedColumnIndex]);
-//              resultingFile[i][transmittanceColumnIndex] = VoxelAnalysis.computeNormTransmittance(transmittance, resultingFile[i][lMeanTotalColumnIndex]);
-//              resultingFile[i][padBVTotalColumnIndex] = VoxelAnalysis.computePADFromNormTransmittance(resultingFile[i][transmittanceColumnIndex], resultingFile[i][angleMeanColumnIndex], cfg.getVoxelParameters().infos.getMaxPAD(), direcTransmittance);
-                // PhV 20180913: temporarily set transmittance and padBV to NaN
-                // transmittance from merged scans will be handled soon
-                resultingFile[i][transmittanceColumnIndex] = Float.NaN;
-                resultingFile[i][padBVTotalColumnIndex] = Float.NaN;
+              resultingFile[i][transmittanceColumnIndex] = (float) VoxelAnalysis.computeTransmittance(resultingFile[i][bvEnteringColumnIndex], resultingFile[i][bvInterceptedColumnIndex], resultingFile[i][lMeanTotalColumnIndex]);
+              resultingFile[i][padBVTotalColumnIndex] = (float) VoxelAnalysis.computePADFromNormTransmittance(resultingFile[i][transmittanceColumnIndex], resultingFile[i][angleMeanColumnIndex], cfg.getVoxelParameters().infos.getMaxPAD(), direcTransmittance);
         }
         
         LOGGER.info("writing output file: " + cfg.getOutputFile().getAbsolutePath());
@@ -358,8 +354,6 @@ public class VoxelFileMerging extends Process implements Cancellable{
             LOGGER.error(ex);
         }
         
-        
-
         fireFinished(TimeCounter.getElapsedTimeInSeconds(startTime));
     }
 

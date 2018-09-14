@@ -68,9 +68,7 @@ public class Voxel {
     public double transmittance_tmp;
     public double angleMean;
     public double bvEntering;
-    public double bsEntering;
     public double bvIntercepted;
-    public double bsIntercepted;
     public double bvPotential;
     public double PadBVTotal;
     public double cumulatedBeamVolume;

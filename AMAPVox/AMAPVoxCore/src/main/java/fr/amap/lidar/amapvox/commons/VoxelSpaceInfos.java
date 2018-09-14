@@ -35,8 +35,10 @@ public class VoxelSpaceInfos {
     private double[] ladParams;
     private String[] columnNames;
     private List<String> columnNamesList;
-    private int transmittanceMode;
-    private String pathLengthMode;
+    // voxelisation algorithm parameters
+    private boolean constantBeamSection;
+    private boolean lastRayTruncated;
+    private boolean rayPonderationEnabled;
     
     public enum Type{
         ALS(1),
@@ -49,14 +51,16 @@ public class VoxelSpaceInfos {
     }
 
     public VoxelSpaceInfos(){
-        this.pathLengthMode = "A";
-        this.transmittanceMode = 1;
+        this.constantBeamSection = false;
+        this.rayPonderationEnabled = true;
+        this.lastRayTruncated = false;
         this.voxelSize = new Point3d();
     }
     
     public VoxelSpaceInfos(Point3d minCorner, Point3d maxCorner, float resolution) {
-        this.pathLengthMode = "A";
-        this.transmittanceMode = 1;
+        this.constantBeamSection = false;
+        this.rayPonderationEnabled = true;
+        this.lastRayTruncated = false;
         
         this.minCorner = minCorner;
         this.maxCorner = maxCorner;
@@ -69,8 +73,9 @@ public class VoxelSpaceInfos {
     }
     
     public VoxelSpaceInfos(Point3d minCorner, Point3d maxCorner, Point3i split) {
-        this.pathLengthMode = "A";
-        this.transmittanceMode = 1;
+        this.constantBeamSection = false;
+        this.rayPonderationEnabled = true;
+        this.lastRayTruncated = false;
         this.minCorner = minCorner;
         this.maxCorner = maxCorner;
         this.split = split;
@@ -121,8 +126,9 @@ public class VoxelSpaceInfos {
                         type = Type.TLS;
                     }
                     
-                    transmittanceMode = Integer.valueOf(split1[1]);
-                    pathLengthMode = split1[2];
+                    constantBeamSection = Boolean.valueOf(split1[1]);
+                    lastRayTruncated = Boolean.valueOf(split1[2]);;
+                    rayPonderationEnabled = Boolean.valueOf(split1[3]);
                     
                 }else{
                     if(typeStr.equals("ALS")){
@@ -290,25 +296,33 @@ public class VoxelSpaceInfos {
         this.ladParams = ladParams;
     }
 
-    public int getTransmittanceMode() {
-        return transmittanceMode;
+   public boolean isBeamSectionConstant() {
+        return constantBeamSection;
     }
 
-    public String getPathLengthMode() {
-        return pathLengthMode;
+    public void setBeamSectionConstant(boolean constant) {
+        this.constantBeamSection = constant;
     }
 
-    public void setTransmittanceMode(int transmittanceMode) {
-        this.transmittanceMode = transmittanceMode;
+    public boolean isLastRayTruncated() {
+        return lastRayTruncated;
     }
 
-    public void setPathLengthMode(String pathLengthMode) {
-        this.pathLengthMode = pathLengthMode;
+    public void setLastRayTruncated(boolean truncated) {
+        this.lastRayTruncated = truncated;
+    }
+
+    public boolean isRayPonderationEnabled() {
+        return rayPonderationEnabled;
+    }
+
+    public void setRayPonderationEnabled(boolean enabled) {
+        this.rayPonderationEnabled = enabled;
     }
     
     public String headerToString(){
         
-        String metadata = "#type: "+type+"/"+transmittanceMode+"/"+pathLengthMode+" #res: "+resolution+" #MAX_PAD: "+maxPAD;
+        String metadata = "#type: "+type+"/"+constantBeamSection+"/"+lastRayTruncated+"/" + rayPonderationEnabled +" #res: "+resolution+" #MAX_PAD: "+maxPAD;
         
         metadata += " #LAD_TYPE: " + ladType.toString();
             
