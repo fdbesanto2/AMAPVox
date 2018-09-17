@@ -1,7 +1,8 @@
-### AMAPVox 1.0.3 up to commit 6efa07391b5dbdd930a5ec296070f44ae76859d4
-Philipe Verley, 2018-08-10 (philippe dot verley at ird.fr)
+### AMAPVox 1.0.3 up to commit e70a8a985bca515ed54035ab5b7f2d685f37bdf7
+Philipe Verley, 2018-09-14 (philippe dot verley at ird.fr)
 
-# Voxelisation algorithm 
+# Voxelisation algorithm
+Added new voxelisation options "constant beam section", "last ray truncated" and "ray ponderation enabled" for working around transmittance estimation.
 Fixed a bug that overestimated the beam surface in the voxels.
 Added new output variable bvPotential that estimates the potential beam volume in every voxel disregarding any interception of the shots by the vegetation.
 

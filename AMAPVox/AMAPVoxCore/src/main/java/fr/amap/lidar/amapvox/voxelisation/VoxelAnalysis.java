@@ -123,6 +123,52 @@ public class VoxelAnalysis extends AbstractVoxelAnalysis {
         // increment number of shots processed
         nShotsProcessed++;
     }
+    
+    /**
+     * Propagate the given {@code shot} in the voxel space disregarding the
+     * vegetation in order to estimate a potential beam volume.
+     *
+     * @param shot
+     */
+    private void freePropagation(Shot shot) {
+
+        LineElement line = new LineSegment(shot.origin, shot.direction, 999999);
+
+        // first voxel crossed by the shot
+        VoxelCrossingContext context = voxelManager.getFirstVoxelV2(line);
+
+        if (null != context) {
+            do {
+                // current voxel
+                Point3i indices = context.indices;
+
+                // average beam surface within voxel
+                // distance from origin to voxel center
+                Point3d voxelPosition = getPosition(new Point3i(indices.x, indices.y, indices.z));
+                double distance = voxelPosition.distance(shot.origin);
+                // beam surface at voxel center
+                double surface = Math.pow((Math.tan(0.5d * laserSpec.getBeamDivergence()) * distance) + 0.5d * laserSpec.getBeamDiameterAtExit(), 2) * Math.PI;
+
+                // ray length within voxel
+                // distance from shot origin to shot interception point with current voxel
+                double dIn = context.length;
+                // get next voxel
+                context = voxelManager.CrossVoxel(line, indices);
+                // distance from shot origin to shot interception point with next voxel
+                double dOut = context.length;
+                double rayLength = dOut - dIn;
+
+                // instantiate voxel on the fly when first encountered
+                if (voxels[indices.x][indices.y][indices.z] == null) {
+                    voxels[indices.x][indices.y][indices.z] = initVoxel(indices.x, indices.y, indices.z);
+                }
+
+                // increment potential beam volume
+                voxels[indices.x][indices.y][indices.z].bvPotential += (surface * rayLength);
+
+            } while (context.indices != null);
+        }
+    }
 
     /**
      *

@@ -2,12 +2,9 @@ package fr.amap.lidar.amapvox.voxelisation;
 
 import fr.amap.lidar.amapvox.shot.Shot;
 import fr.amap.commons.util.TimeCounter;
-import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.geometry.LineElement;
-import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.geometry.LineSegment;
 import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.util.BoundingBox3d;
 import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.voxel.Scene;
 import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.voxel.VoxelManager;
-import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.voxel.VoxelManager.VoxelCrossingContext;
 import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.voxel.VoxelManagerSettings;
 import fr.amap.commons.raster.asc.Raster;
 import fr.amap.commons.raster.multiband.BCommon;
@@ -22,7 +19,6 @@ import fr.amap.lidar.amapvox.commons.LADParams;
 import fr.amap.lidar.amapvox.commons.LeafAngleDistribution;
 import fr.amap.lidar.amapvox.commons.Voxel;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
-import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos.Type;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg.VoxelsFormat;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams.EchoesWeight;
@@ -44,7 +40,6 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.vecmath.Point3d;
 import org.apache.commons.lang3.ArrayUtils;
@@ -53,37 +48,33 @@ import org.apache.log4j.Logger;
 public abstract class AbstractVoxelAnalysis extends Process implements Cancellable {
 
     // abstract function
-    
     abstract public void processOneShot(Shot shot) throws Exception;
-    
+
     // variable declaration
-    
     private final static Logger LOGGER = Logger.getLogger(AbstractVoxelAnalysis.class);
 
     private boolean cancelled;
-    
+
     int nShotsProcessed;
     int nShotsDiscarded;
 
     Voxel voxels[][][];
     VoxelManager voxelManager;
 
-    private float MAX_PAD = 3;
+    private float MAX_PAD;
 
     double[][] weightTable;
     IteratorWithException<EchoesWeight> weightIterator;
     double[][] residualEnergyTable;
 
-    final boolean volumeWeighting = true;
-
     boolean constantBeamSection;
     boolean lastRayTruncated;
     boolean rayPonderationEnabled;
-    
-    GroundEnergy[][] groundEnergy;
-    VoxelParameters parameters;
-    final VoxelAnalysisCfg cfg;
 
+    boolean groundEnergyEnabled;
+    GroundEnergy[][] groundEnergy;
+    
+    VoxelParameters parameters;
     final Raster dtm;
 
     EchoesWeight echoesWeight;
@@ -95,30 +86,25 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
 
     private boolean padComputed;
 
-    private BufferedWriter shotSegmentWriter;
-
     //directional transmittance (GTheta)
     private GTheta direcTransmittance;
-    
-     public AbstractVoxelAnalysis(Raster terrain, VoxelAnalysisCfg cfg) throws Exception {
 
+    public AbstractVoxelAnalysis(Raster terrain, VoxelAnalysisCfg cfg) throws Exception {
+
+        // digital terrain model
         this.dtm = terrain;
-
-        shotFilters = cfg.getShotFilters();
-        for (Filter filter : shotFilters) {
-            filter.init();
-        }
-        echoFilters = cfg.getEchoFilters();
-        for (Filter filter : echoFilters) {
-            filter.init();
-        }
-
-        this.cfg = cfg;
         
-        nShotsProcessed = 0;
-        nShotsDiscarded = 0;
+        // voxelisation parameters
+        this.parameters = cfg.getVoxelParameters();
 
-        init(cfg.getVoxelParameters());
+        // shot filters
+        this.shotFilters = cfg.getShotFilters();
+        
+        // echo filters
+        this.echoFilters = cfg.getEchoFilters();
+        
+        // initialise voxelisation process
+        init();
     }
 
     /**
@@ -190,16 +176,27 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
                 : z;
     }
 
-    private void init(VoxelParameters parameters) throws Exception {
-
-        this.parameters = parameters;
+    private void init() throws Exception {
         
-        this.rayPonderationEnabled = parameters.isRayPonderationEnabled();
-        this.lastRayTruncated = parameters.isLastRayTruncated();
-        this.constantBeamSection = parameters.isBeamSectionConstant();
-        this.parameters.infos.setBeamSectionConstant(parameters.isBeamSectionConstant());
-        this.parameters.infos.setLastRayTruncated(parameters.isLastRayTruncated());
-        this.parameters.infos.setRayPonderationEnabled(parameters.isRayPonderationEnabled());
+        nShotsProcessed = 0;
+        nShotsDiscarded = 0;
+        
+        // initialise shot filters
+        for (Filter filter : shotFilters) {
+            filter.init();
+        }
+        
+        // initialise echo filters
+        for (Filter filter : echoFilters) {
+            filter.init();
+        }
+
+        rayPonderationEnabled = parameters.isRayPonderationEnabled();
+        lastRayTruncated = parameters.isLastRayTruncated();
+        constantBeamSection = parameters.isBeamSectionConstant();
+        parameters.infos.setBeamSectionConstant(parameters.isBeamSectionConstant());
+        parameters.infos.setLastRayTruncated(parameters.isLastRayTruncated());
+        parameters.infos.setRayPonderationEnabled(parameters.isRayPonderationEnabled());
 
         if (null != parameters.getEchoesWeightByRankParams()) {
             weightTable = parameters.getEchoesWeightByRankParams().getWeightingData();
@@ -241,14 +238,9 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
         direcTransmittance.buildTable(GTheta.DEFAULT_STEP_NUMBER);
         LOGGER.info("Transmittance functions table is built");
 
-        if (cfg != null && cfg.isExportShotSegment()) {
-            try {
-                shotSegmentWriter = new BufferedWriter(new FileWriter(new File(cfg.getOutputFile().getAbsolutePath() + ".segments")));
-                shotSegmentWriter.write("i j k norm_transmittance weight\n");
-            } catch (IOException ex) {
-                java.util.logging.Logger.getLogger(VoxelAnalysis.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        groundEnergyEnabled = parameters.getGroundEnergyParams() != null
+                && parameters.getGroundEnergyParams().isCalculateGroundEnergy()
+                && parameters.infos.getType() != VoxelSpaceInfos.Type.TLS;
     }
 
     /**
@@ -257,7 +249,7 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
      * @param indices
      * @return
      */
-    public Point3d getPosition(Point3i indices) {
+    Point3d getPosition(Point3i indices) {
 
         Point3d minCorner = parameters.infos.getMinCorner();
         Point3d voxSize = voxelManager.getVoxelSpace().getVoxelSize();
@@ -313,54 +305,8 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
         return indices1 != null && indices2 != null && indices1.equals(indices2);
     }
 
-    /**
-     * Propagate the given {@code shot} in the voxel space disregarding the
-     * vegetation in order to estimate a potential beam volume.
-     *
-     * @param shot
-     */
-    void freePropagation(Shot shot) {
-
-        LineElement line = new LineSegment(shot.origin, shot.direction, 999999);
-
-        // first voxel crossed by the shot
-        VoxelCrossingContext context = voxelManager.getFirstVoxelV2(line);
-
-        if (null != context) {
-            do {
-                // current voxel
-                Point3i indices = context.indices;
-
-                // average beam surface within voxel
-                // distance from origin to voxel center
-                Point3d voxelPosition = getPosition(new Point3i(indices.x, indices.y, indices.z));
-                double distance = voxelPosition.distance(shot.origin);
-                // beam surface at voxel center
-                double surface = Math.pow((Math.tan(0.5d * laserSpec.getBeamDivergence()) * distance) + 0.5d * laserSpec.getBeamDiameterAtExit(), 2) * Math.PI;
-
-                // ray length within voxel
-                // distance from shot origin to shot interception point with current voxel
-                double dIn = context.length;
-                // get next voxel
-                context = voxelManager.CrossVoxel(line, indices);
-                // distance from shot origin to shot interception point with next voxel
-                double dOut = context.length;
-                double rayLength = dOut - dIn;
-
-                // instantiate voxel on the fly when first encountered
-                if (voxels[indices.x][indices.y][indices.z] == null) {
-                    voxels[indices.x][indices.y][indices.z] = initVoxel(indices.x, indices.y, indices.z);
-                }
-
-                // increment potential beam volume
-                voxels[indices.x][indices.y][indices.z].bvPotential += (surface * rayLength);
-
-            } while (context.indices != null);
-        }
-    }
-    
     public static double computeTransmittance(double bfEntering, double bfIntercepted, double lMeanTotal) {
-        
+
         return (bfEntering == 0) || (bfIntercepted > bfEntering)
                 ? Double.NaN
                 : Math.pow((bfEntering - bfIntercepted) / bfEntering, 1 / lMeanTotal);
@@ -601,12 +547,6 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
 
     public void write(VoxelsFormat format, File outputFile) throws FileNotFoundException, Exception {
 
-        //tmp
-        //writer.close();
-        if (cfg.isExportShotSegment()) {
-            shotSegmentWriter.close();
-        }
-
         LOGGER.info("writing file: " + outputFile.getAbsolutePath());
 
         if (null != format) {
@@ -694,14 +634,10 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
 
             voxels = new Voxel[parameters.infos.getSplit().x][parameters.infos.getSplit().y][parameters.infos.getSplit().z];
 
-            if (parameters.getGroundEnergyParams() != null
-                    && parameters.getGroundEnergyParams().isCalculateGroundEnergy() && parameters.infos.getType() != Type.TLS) {
-
+            if (groundEnergyEnabled) {
                 // allocate
-                LOGGER.info("allocate!!!!!!!!");
-
+                //LOGGER.info("allocate!!!!!!!!");
                 groundEnergy = new GroundEnergy[parameters.infos.getSplit().x][parameters.infos.getSplit().y];
-
                 for (int i = 0; i < parameters.infos.getSplit().x; i++) {
                     for (int j = 0; j < parameters.infos.getSplit().y; j++) {
                         groundEnergy[i][j] = new GroundEnergy();
@@ -754,10 +690,6 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
 
     public Voxel[][][] getVoxels() {
         return voxels;
-    }
-
-    public Raster getDtm() {
-        return dtm;
     }
 
     @Override
