@@ -99,6 +99,20 @@ public class Shot {
             return ranges[0];
         }
     }
+    
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        str.append("Shot ").append(index).append(", ").append(getEchoesNumber()).append(" echoes");
+        str.append("\n").append("  origin ").append(origin).append(" direction ").append(direction);
+        if (getEchoesNumber() > 0) {
+            str.append("\n  ");
+            for (int k = 0; k < getEchoesNumber(); k++) {
+                str.append("Echo ").append(k).append( " ").append((float) ranges[k]).append("m ");
+            }
+        }
+        return str.toString();
+    }
 
     public class Echo {
 

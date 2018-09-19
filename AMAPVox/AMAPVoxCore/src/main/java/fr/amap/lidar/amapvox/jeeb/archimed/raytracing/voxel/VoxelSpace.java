@@ -96,6 +96,18 @@ public class VoxelSpace {
 
         return new Point3i((int) Math.floor(x), (int) Math.floor(y), 0);
     }
+    
+    /**
+     * Returns whether a voxel is on edge of the voxel space.
+     * @param indices, index of the voxel.
+     * @return true if the voxel is on edge of the voxel space.
+     */
+    public boolean isOnEdge(Point3i indices) {
+        return indices.x == 0 || indices.y == 0 || indices.z == 0
+                || indices.x == splitting.x - 1
+                || indices.y == splitting.y - 1
+                || indices.z == splitting.z - 1;
+    }
 
     /**
      * @param point 3d point
