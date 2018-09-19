@@ -48,8 +48,7 @@ public class SimpleVoxelAnalysis extends AbstractVoxelAnalysis {
 
     private boolean propagation(Shot shot, EchoesContext echoesContext) throws Exception {
 
-        // normalize shot direction and create shot line
-        shot.direction.normalize();
+        // create shot line
         LineElement shotLine = new LineSegment(shot.origin, shot.direction, 999999);
 
         // first voxel crossed by the shot

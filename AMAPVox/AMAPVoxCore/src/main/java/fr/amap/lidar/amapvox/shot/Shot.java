@@ -21,14 +21,15 @@ public class Shot {
     public double ranges[];
     private double angle = Double.NaN;
     public Echo[] echoes;
+    private final double NORM_2D = Math.sqrt(2.d / 3.d);
 
     public Shot(int index, Point3d origin, Vector3d direction, double ranges[]) {
-        
+
         this.index = index;
         this.origin = origin;
         this.direction = direction;
         this.ranges = ranges;
-        initEchoes();
+        init();
     }
 
     /**
@@ -37,7 +38,7 @@ public class Shot {
      * @param shot the shot to copy
      */
     public Shot(Shot shot) {
-        
+
         this.index = shot.index;
         this.origin = new Point3d(shot.origin);
         this.direction = new Vector3d(shot.direction);
@@ -46,10 +47,12 @@ public class Shot {
             this.ranges = new double[shot.ranges.length];
             System.arraycopy(shot.ranges, 0, this.ranges, 0, shot.ranges.length);
         }
-        initEchoes();
+        init();
     }
 
-    private void initEchoes() {
+    private void init() {
+
+        direction.normalize();
 
         echoes = new Echo[Math.max(getEchoesNumber(), 1)];
 
@@ -69,9 +72,19 @@ public class Shot {
         return ranges == null ? 0 : ranges.length;
     }
 
+    /**
+     * Zenithal angle in degrees. Angle between zenith (origin at the ground)
+     * and shot direction.
+     */
     private void calculateAngle() {
 
-        this.angle = Math.toDegrees(Math.acos(Math.abs(direction.z)));
+        // calculation in any vertical 2D plane
+        // cos(angle) = adjacent side / hypotenuse
+        // cos(angle) = dir.z / norm2D
+        // norm2D^2 = dir.x^2 + dir.z^2 for instance
+        // cos(angle) = dir.z / sqrt(dir.x*dir.x + dir.z*dir.z)
+        double norm2d = Math.sqrt(direction.x * direction.x + direction.z * direction.z);
+        this.angle = Math.toDegrees(Math.acos(Math.abs(direction.z) / norm2d));
     }
 
     public double getAngle() {
@@ -80,6 +93,7 @@ public class Shot {
             calculateAngle();
         }
 
+        
         return angle;
     }
 
@@ -99,7 +113,7 @@ public class Shot {
             return ranges[0];
         }
     }
-    
+
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
@@ -108,7 +122,7 @@ public class Shot {
         if (getEchoesNumber() > 0) {
             str.append("\n  ");
             for (int k = 0; k < getEchoesNumber(); k++) {
-                str.append("Echo ").append(k).append( " ").append((float) ranges[k]).append("m ");
+                str.append("Echo ").append(k).append(" ").append((float) ranges[k]).append("m ");
             }
         }
         return str.toString();
