@@ -57,6 +57,8 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
 
     int nShotsProcessed;
     int nShotsDiscarded;
+    int nShots;
+    int nShotsOut;
 
     Voxel voxels[][][];
     VoxelManager voxelManager;

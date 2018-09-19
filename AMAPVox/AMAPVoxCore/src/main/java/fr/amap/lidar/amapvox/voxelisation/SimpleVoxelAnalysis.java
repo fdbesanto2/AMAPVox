@@ -28,21 +28,25 @@ public class SimpleVoxelAnalysis extends AbstractVoxelAnalysis {
             return;
         }
 
-        if ((nShotsProcessed % 1000000) == 0) {
-            LOGGER.info("Progress: shot index " + nShotsProcessed + " (processed " + (nShotsProcessed - nShotsDiscarded) + " discarded " + nShotsDiscarded + ")");
+        if ((nShots % 1000000) == 0) {
+            LOGGER.info("[voxelisation] shot " + nShots + " (processed " + nShotsProcessed + ", discarded " + nShotsDiscarded + ", out " + nShotsOut + ")");
         }
 
         if (retainShot(shot)) {
             // shot propagation
-            propagation(shot, extractEchoesContext(shot));
+            if (propagation(shot, extractEchoesContext(shot))) {
+                // increment number of shots processed
+                nShotsProcessed++;
+            } else {
+                nShotsOut++;
+            }
         } else {
             nShotsDiscarded++;
         }
-        // increment number of shots processed
-        nShotsProcessed++;
+        nShots++;
     }
 
-    private void propagation(Shot shot, EchoesContext echoesContext) throws Exception {
+    private boolean propagation(Shot shot, EchoesContext echoesContext) throws Exception {
 
         // normalize shot direction and create shot line
         shot.direction.normalize();
@@ -58,9 +62,10 @@ public class SimpleVoxelAnalysis extends AbstractVoxelAnalysis {
             int rank = 0;
             Shot.Echo echo = echoesContext.nEchoes > 0 ? shot.echoes[rank] : null;
             // loop over the voxels crossed by the shot
+            Point3i indices;
             do {
                 // initialise current voxel and put it in local variable
-                Point3i indices = voxelCrossing.indices;
+                indices = voxelCrossing.indices;
                 // instantiate voxel on the fly when first encountered
                 if (voxels[indices.x][indices.y][indices.z] == null) {
                     voxels[indices.x][indices.y][indices.z] = initVoxel(indices.x, indices.y, indices.z);
@@ -153,7 +158,11 @@ public class SimpleVoxelAnalysis extends AbstractVoxelAnalysis {
                 // decrement beamFractionIn for next voxel
                 beamFractionIn -= bfIntercepted;
             } while (beamFractionIn > 0.d && voxelCrossing.indices != null);
+            // shot went through the voxel space
+            return true;
         }
+        // shot did not go through the voxel space
+        return false;
     }
 
     private boolean isEchoInsideVoxel(Point3d echo, Point3i indexVoxel) {
