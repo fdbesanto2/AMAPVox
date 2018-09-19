@@ -60,19 +60,13 @@ public class VoxelParameters {
 
         private LaserSpecification laserSpecification = LaserSpecification.LMS_Q560;
 
-        /*public Builder(Point3d bottomCorner, Point3d topCorner, Point3i split, VoxelSpaceInfos.Type type) {
-            
-            infos.setMinCorner(bottomCorner);
-            infos.setMaxCorner(topCorner);
-            infos.setSplit(split);
-            infos.setType(type);
-        }*/
-        public Builder(Point3d bottomCorner, Point3d topCorner, float resolution, VoxelSpaceInfos.Type type) {
+        public Builder voxelSpace(Point3d bottomCorner, Point3d topCorner, float resolution, VoxelSpaceInfos.Type type) {
 
-            infos.setMinCorner(bottomCorner);
-            infos.setMaxCorner(topCorner);
-            infos.setResolution((double) resolution);
-            infos.setType(type);
+            this.infos.setMinCorner(bottomCorner);
+            this.infos.setMaxCorner(topCorner);
+            this.infos.setResolution((double) resolution);
+            this.infos.setType(type);
+            return this;
         }
 
         public Builder echoesWeightByRankParams(EchoesWeightByRankParams echoesWeightByRankParams) {

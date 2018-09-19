@@ -301,8 +301,8 @@ public class DanielScript extends Script{
             EchoesWeightByRankParams echoesWeightParams = new EchoesWeightByRankParams(EchoesWeightByRankParams.DEFAULT_ALS_WEIGHTING);
             
 
-            VoxelParameters voxelParameters = new VoxelParameters.Builder(
-                    boundingBox.min, boundingBox.max, resolution, VoxelSpaceInfos.Type.ALS)
+            VoxelParameters voxelParameters = new VoxelParameters.Builder()
+                    .voxelSpace(boundingBox.min, boundingBox.max, resolution, VoxelSpaceInfos.Type.ALS)
                     .ladParams(new LADParams())
                     .dtmFilteringParams(new DTMFilteringParams(subsetDTMFile, 1.0f))
                     .echoesWeightByRankParams(echoesWeightParams)
