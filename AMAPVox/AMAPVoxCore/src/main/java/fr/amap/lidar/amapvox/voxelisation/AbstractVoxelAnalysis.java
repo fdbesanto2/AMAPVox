@@ -35,9 +35,9 @@ import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.math.MathContext;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
@@ -405,7 +405,8 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
             writer.write(header.toString().trim() + "\n");
 
             // voxels
-            MathContext mc = new MathContext(9);
+            DecimalFormat df = new DecimalFormat("#.#######");
+            df.setRoundingMode(RoundingMode.HALF_UP);
             int count = 0;
             int nbLines = parameters.infos.getSplit().x * parameters.infos.getSplit().y * parameters.infos.getSplit().z;
             for (int i = 0; i < parameters.infos.getSplit().x; i++) {
@@ -430,8 +431,8 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
                                 switch (field.getType().getName()) {
                                     case "double":
                                     case "float":
-                                        BigDecimal bd = new BigDecimal(field.getDouble(voxel), mc);
-                                        voxelSB.append(bd.doubleValue());
+                                        double value = field.getDouble(voxel);
+                                        voxelSB.append(Double.isNaN(value) ? value : df.format(value));
                                         break;
                                     case "int":
                                         voxelSB.append(field.getInt(voxel));

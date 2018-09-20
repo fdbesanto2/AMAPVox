@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 public class SimpleVoxelAnalysis extends AbstractVoxelAnalysis {
 
     private final static Logger LOGGER = Logger.getLogger(SimpleVoxelAnalysis.class);
+    private final double EPSILON = 1e-5;
 
     public SimpleVoxelAnalysis(Raster terrain, VoxelAnalysisCfg cfg) throws Exception {
         super(terrain, cfg);
@@ -156,7 +157,7 @@ public class SimpleVoxelAnalysis extends AbstractVoxelAnalysis {
 
                 // decrement beamFractionIn for next voxel
                 beamFractionIn -= bfIntercepted;
-            } while (beamFractionIn > 0.d && voxelCrossing.indices != null);
+            } while (beamFractionIn > EPSILON && voxelCrossing.indices != null);
             // shot went through the voxel space
             return true;
         }

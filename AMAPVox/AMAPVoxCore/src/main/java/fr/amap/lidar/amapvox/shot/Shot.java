@@ -21,7 +21,6 @@ public class Shot {
     public double ranges[];
     private double angle = Double.NaN;
     public Echo[] echoes;
-    private final double NORM_2D = Math.sqrt(2.d / 3.d);
 
     public Shot(int index, Point3d origin, Vector3d direction, double ranges[]) {
 
