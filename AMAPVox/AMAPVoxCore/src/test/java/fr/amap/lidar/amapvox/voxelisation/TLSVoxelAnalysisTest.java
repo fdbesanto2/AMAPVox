@@ -21,7 +21,7 @@ import org.junit.Test;
 
 /**
  * Test voxelisation algorithm for TLS shots.
- * 
+ *
  * @author Philippe Verley (philippe.verley@ird.fr)
  */
 public class TLSVoxelAnalysisTest {
@@ -32,9 +32,16 @@ public class TLSVoxelAnalysisTest {
     // math context for comparing double numbers with reasonable precision
     private final MathContext MC = new MathContext(7);
 
+    /**
+     * Shots without echo. Basic tests: sampling variable and entering beam
+     * fraction are one along shot path, specific shot angles, intercepted beam
+     * fraction and number of echoes are zero everywhere,
+     *
+     * @throws Exception
+     */
     @Test
     public void testUninterceptedShot() throws Exception {
-        
+
         VoxelAnalysisCfg cfg = new VoxelAnalysisCfg();
         // voxel parameters
         VoxelParameters params = new VoxelParameters.Builder()
@@ -54,9 +61,9 @@ public class TLSVoxelAnalysisTest {
         voxAnalysis.createVoxelSpace();
 
         List<Shot> shots = new ArrayList();
-        // shot without echo going from origin to sky
+        // shot without echo following z-axis
         shots.add(new Shot(0, new Point3d(0.5, 0.5, 0.5), new Vector3d(0, 0, 1), null));
-        // shot without echo going from origin + 1 to max corner
+        // oblique shot without echo following (1, 1, 1) elementary vector
         shots.add(new Shot(1, new Point3d(1.5, 1.5, 1.5), new Vector3d(1, 1, 1), null));
 
         // process shots
@@ -88,7 +95,7 @@ public class TLSVoxelAnalysisTest {
         assert (voxel.lgTotal == (float) (Math.sqrt(3.d) / 2.d));
         for (int n = 2; n < 5; n++) {
             voxel = voxAnalysis.voxels[n][n][n];
-            assert (voxel.lgTotal == (float) (Math.sqrt(3.d)));
+            assert (equal(voxel.lgTotal, Math.sqrt(3.d)));
             assert (voxel.angleMean == 45);
         }
 
@@ -105,9 +112,16 @@ public class TLSVoxelAnalysisTest {
         }
     }
 
+    /**
+     * Shots with multiple echoes. Echoes in separate voxels. Echoes in separate
+     * voxels, last one outside voxel space. Echoes in same voxels. Echoes on
+     * voxel edges.
+     *
+     * @throws Exception
+     */
     @Test
     public void testShotWithEchoes() throws Exception {
-        
+
         VoxelAnalysisCfg cfg = new VoxelAnalysisCfg();
         // voxel parameters
         VoxelParameters params = new VoxelParameters.Builder()
@@ -128,7 +142,7 @@ public class TLSVoxelAnalysisTest {
         voxAnalysis.createVoxelSpace();
 
         List<Shot> shots = new ArrayList();
-        // shot without 2 echoes inside voxel sapce going along z-axis
+        // shot without 2 echoes inside voxel space going along z-axis
         shots.add(new Shot(0, new Point3d(0.5, 0.5, 0.5), new Vector3d(0, 0, 1), new double[]{1.d, 3.d}));
         // shot without 3 echoes, last one outside voxel sapce going along y-axis
         shots.add(new Shot(1, new Point3d(1.5, 0.5, 0.5), new Vector3d(0, 1, 0), new double[]{2.d, 3.d, 6.d}));
@@ -216,17 +230,23 @@ public class TLSVoxelAnalysisTest {
         assert (equal(voxel.bvEntering, 0));
     }
 
+    /**
+     * Echo weighting inflated (beam fraction reaches zero before last echo).
+     * Shot path interrupted prematurely.
+     *
+     * @throws Exception
+     */
     @Test
     public void testShotWithOverWeightedEchoes() throws Exception {
 
         EchoesWeightByRankParams overweight = new EchoesWeightByRankParams(new double[][]{
-            {1.00d, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
-            {1.00d, 1.00d, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
-            {0.50d, 0.50d, 0.50d, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
-            {1 / 3.0d, 1 / 3.0d, 1 / 3.0d, 1 / 3.0d, Double.NaN, Double.NaN, Double.NaN},
+            {1.d, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+            {1.d, 1.d, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+            {0.5d, 0.5d, 0.5d, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+            {1 / 3.d, 1 / 3.d, 1 / 3.d, 1 / 3.d, Double.NaN, Double.NaN, Double.NaN},
             {0.25d, 0.25d, 0.25d, 0.25d, 0.25d, Double.NaN, Double.NaN},
-            {0.20d, 0.20d, 0.20d, 0.20d, 0.20d, 0.20d, Double.NaN},
-            {1 / 6.0d, 1 / 6.0d, 1 / 6.0d, 1 / 6.0d, 1 / 6.0d, 1 / 6.0d, 1 / 6.0d}});
+            {0.2d, 0.2d, 0.2d, 0.2d, 0.2d, 0.2d, Double.NaN},
+            {1 / 6.d, 1 / 6.d, 1 / 6.d, 1 / 6.d, 1 / 6.d, 1 / 6.d, 1 / 6.d}});
 
         VoxelAnalysisCfg cfg = new VoxelAnalysisCfg();
         // voxel parameters
@@ -274,17 +294,23 @@ public class TLSVoxelAnalysisTest {
         }
     }
 
+    /**
+     * Echo weighting attenuated (beam fraction does not reach zero). Shot path
+     * extended beyond last echo.
+     *
+     * @throws Exception
+     */
     @Test
     public void testShotWithUnderWeightedEchoes() throws Exception {
 
         EchoesWeightByRankParams underweight = new EchoesWeightByRankParams(new double[][]{
-            {0.50d, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
-            {1 / 3.0d, 1 / 3.0d, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+            {0.5d, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
+            {1 / 3.d, 1 / 3.d, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
             {0.25d, 0.25d, 0.25d, Double.NaN, Double.NaN, Double.NaN, Double.NaN},
-            {0.20d, 0.20d, 0.20d, 0.20d, Double.NaN, Double.NaN, Double.NaN},
-            {1 / 6.0d, 1 / 6.0d, 1 / 6.0d, 1 / 6.0d, 1 / 6.0d, Double.NaN, Double.NaN},
-            {1 / 7.0d, 1 / 7.0d, 1 / 7.0d, 1 / 7.0d, 1 / 7.0d, 1 / 7.0d, Double.NaN},
-            {1 / 8.0d, 1 / 8.0d, 1 / 8.0d, 1 / 8.0d, 1 / 8.0d, 1 / 8.0d, 1 / 8.0d}});
+            {0.2d, 0.2d, 0.2d, 0.2d, Double.NaN, Double.NaN, Double.NaN},
+            {1 / 6.d, 1 / 6.d, 1 / 6.d, 1 / 6.d, 1 / 6.d, Double.NaN, Double.NaN},
+            {1 / 7.d, 1 / 7.d, 1 / 7.d, 1 / 7.d, 1 / 7.d, 1 / 7.d, Double.NaN},
+            {1 / 8.d, 1 / 8.d, 1 / 8.d, 1 / 8.d, 1 / 8.d, 1 / 8.d, 1 / 8.d}});
 
         VoxelAnalysisCfg cfg = new VoxelAnalysisCfg();
         // voxel parameters
