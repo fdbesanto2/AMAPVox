@@ -81,9 +81,9 @@ public class Shot {
         // calculation in any vertical 2D plane
         // cos(angle) = adjacent side / hypotenuse
         // cos(angle) = dir.z / norm2D
-        // norm2D^2 = dir.x^2 + dir.z^2 for instance
+        // norm2D^2 = dir.x^2 + dir.z^2 or dir.y^2 + dir.z^2 for instance
         // cos(angle) = dir.z / sqrt(dir.x*dir.x + dir.z*dir.z)
-        double norm2d = Math.sqrt(direction.x * direction.x + direction.z * direction.z);
+        double norm2d = Math.sqrt(Math.max(direction.x * direction.x, direction.y * direction.y) + direction.z * direction.z);
         this.angle = Math.toDegrees(Math.acos(Math.abs(direction.z) / norm2d));
     }
 
