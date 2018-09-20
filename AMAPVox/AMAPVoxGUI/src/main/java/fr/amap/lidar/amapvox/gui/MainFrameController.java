@@ -5016,7 +5016,7 @@ public class MainFrameController implements Initializable {
                             checkboxWeightingByRank.setSelected(false);
                         } else {
                             checkboxWeightingByRank.setSelected(true);
-                            fillWeightingData(((VoxelAnalysisCfg) cfg).getVoxelParameters().getEchoesWeightByRankParams().getWeightingData());
+                            fillWeightingData(((VoxelAnalysisCfg) cfg).getVoxelParameters().getEchoesWeightByRankParams());
                         }
                         if (null == ((VoxelAnalysisCfg) cfg).getVoxelParameters().getEchoesWeightByFileParams()) {
                             checkboxWeightingByFile.setSelected(false);
@@ -6457,8 +6457,9 @@ public class MainFrameController implements Initializable {
         return stage;
     }
 
-    private void fillWeightingData(double[][] weightingData) {
+    private void fillWeightingData(EchoesWeightByRankParams weightingParam) {
 
+        double[][] weightingData = weightingParam.getWeightingData();
         String text = "";
 
         for (int i = 0; i < weightingData.length; i++) {

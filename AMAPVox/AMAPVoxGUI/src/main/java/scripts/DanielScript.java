@@ -298,14 +298,12 @@ public class DanielScript extends Script{
             cfg.setInputFile(lasFile);
             cfg.setOutputFile(new File(outputDirectory, lasFile.getName()+".vox"), VoxelAnalysisCfg.VoxelsFormat.RASTER);
             cfg.setTrajectoryFile(trajectoryFile);
-            EchoesWeightByRankParams echoesWeightParams = new EchoesWeightByRankParams(EchoesWeightByRankParams.DEFAULT_ALS_WEIGHTING);
-            
 
             VoxelParameters voxelParameters = new VoxelParameters.Builder()
                     .voxelSpace(boundingBox.min, boundingBox.max, resolution, VoxelSpaceInfos.Type.ALS)
                     .ladParams(new LADParams())
                     .dtmFilteringParams(new DTMFilteringParams(subsetDTMFile, 1.0f))
-                    .echoesWeightByRankParams(echoesWeightParams)
+                    .echoesWeightByRankParams(EchoesWeightByRankParams.DEFAULT_ALS_WEIGHTING)
                     .padMAX(5.0f)
                     .build();
 

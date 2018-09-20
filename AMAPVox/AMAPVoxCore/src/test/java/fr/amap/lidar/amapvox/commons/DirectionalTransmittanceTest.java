@@ -50,7 +50,6 @@ public class DirectionalTransmittanceTest {
     /**
      * Test of buildTable method, of class GTheta.
      */
-    @Test
     public void testBuildTable() {
     }
 
