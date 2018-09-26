@@ -37,7 +37,6 @@ public class VoxelSpaceInfos {
     private List<String> columnNamesList;
     // voxelisation algorithm parameters
     private boolean constantBeamSection;
-    private boolean lastRayTruncated;
     private boolean rayPonderationEnabled;
     
     public enum Type{
@@ -53,14 +52,12 @@ public class VoxelSpaceInfos {
     public VoxelSpaceInfos(){
         this.constantBeamSection = false;
         this.rayPonderationEnabled = true;
-        this.lastRayTruncated = false;
         this.voxelSize = new Point3d();
     }
     
     public VoxelSpaceInfos(Point3d minCorner, Point3d maxCorner, float resolution) {
         this.constantBeamSection = false;
         this.rayPonderationEnabled = true;
-        this.lastRayTruncated = false;
         
         this.minCorner = minCorner;
         this.maxCorner = maxCorner;
@@ -75,7 +72,6 @@ public class VoxelSpaceInfos {
     public VoxelSpaceInfos(Point3d minCorner, Point3d maxCorner, Point3i split) {
         this.constantBeamSection = false;
         this.rayPonderationEnabled = true;
-        this.lastRayTruncated = false;
         this.minCorner = minCorner;
         this.maxCorner = maxCorner;
         this.split = split;
@@ -127,8 +123,7 @@ public class VoxelSpaceInfos {
                     }
                     
                     constantBeamSection = Boolean.valueOf(split1[1]);
-                    lastRayTruncated = Boolean.valueOf(split1[2]);;
-                    rayPonderationEnabled = Boolean.valueOf(split1[3]);
+                    rayPonderationEnabled = Boolean.valueOf(split1[2]);
                     
                 }else{
                     if(typeStr.equals("ALS")){
@@ -304,14 +299,6 @@ public class VoxelSpaceInfos {
         this.constantBeamSection = constant;
     }
 
-    public boolean isLastRayTruncated() {
-        return lastRayTruncated;
-    }
-
-    public void setLastRayTruncated(boolean truncated) {
-        this.lastRayTruncated = truncated;
-    }
-
     public boolean isRayPonderationEnabled() {
         return rayPonderationEnabled;
     }
@@ -322,7 +309,7 @@ public class VoxelSpaceInfos {
     
     public String headerToString(){
         
-        String metadata = "#type: "+type+"/"+constantBeamSection+"/"+lastRayTruncated+"/" + rayPonderationEnabled +" #res: "+resolution+" #MAX_PAD: "+maxPAD;
+        String metadata = "#type: "+type+"/"+constantBeamSection+"/" + rayPonderationEnabled +" #res: "+resolution+" #MAX_PAD: "+maxPAD;
         
         metadata += " #LAD_TYPE: " + ladType.toString();
             

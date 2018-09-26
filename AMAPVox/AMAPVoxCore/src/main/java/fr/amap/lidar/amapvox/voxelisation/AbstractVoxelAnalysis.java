@@ -21,6 +21,7 @@ import fr.amap.lidar.amapvox.commons.Voxel;
 import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg.VoxelsFormat;
+import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.EchoesWeightByFileParams.EchoesWeight;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.GroundEnergyParams;
 import fr.amap.lidar.amapvox.voxelisation.configuration.params.VoxelParameters;
@@ -66,11 +67,10 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
     private float MAX_PAD;
 
     double[][] weightTable;
-    IteratorWithException<EchoesWeight> weightIterator;
+    EchoesWeightByFileParams echoWeightCorrection;
     double[][] residualEnergyTable;
 
     boolean constantBeamSection;
-    boolean lastRayTruncated;
     boolean rayPonderationEnabled;
 
     boolean groundEnergyEnabled;
@@ -78,8 +78,6 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
     
     VoxelParameters parameters;
     final Raster dtm;
-
-    EchoesWeight echoesWeight;
 
     LaserSpecification laserSpec;
 
@@ -194,10 +192,8 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
         }
 
         rayPonderationEnabled = parameters.isRayPonderationEnabled();
-        lastRayTruncated = parameters.isLastRayTruncated();
         constantBeamSection = parameters.isBeamSectionConstant();
         parameters.infos.setBeamSectionConstant(parameters.isBeamSectionConstant());
-        parameters.infos.setLastRayTruncated(parameters.isLastRayTruncated());
         parameters.infos.setRayPonderationEnabled(parameters.isRayPonderationEnabled());
 
         if (null != parameters.getEchoesWeightByRankParams()) {
@@ -210,8 +206,8 @@ public abstract class AbstractVoxelAnalysis extends Process implements Cancellab
 
         if (null != parameters.getEchoesWeightByFileParams()) {
             LOGGER.info("Open echoes weight file " + parameters.getEchoesWeightByFileParams().getFile());
-            weightIterator = parameters.getEchoesWeightByFileParams().iterator();
-            echoesWeight = weightIterator.next();
+            echoWeightCorrection = parameters.getEchoesWeightByFileParams();
+            echoWeightCorrection.init();
         }
 
         MAX_PAD = parameters.infos.getMaxPAD();

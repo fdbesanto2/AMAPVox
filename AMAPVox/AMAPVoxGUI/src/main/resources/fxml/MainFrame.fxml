@@ -806,7 +806,6 @@
                                                                                     <VBox spacing="15.0" AnchorPane.topAnchor="25.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="13.0">
                                                                                        <children>
                                                                                           <CheckBox fx:id="checkboxConstantBeamSection" mnemonicParsing="false" text="Constant beam section ?" />
-                                                                                          <CheckBox fx:id="checkboxLastRayTruncated" mnemonicParsing="false" text="Last ray truncated ?" />
                                                                                           <CheckBox fx:id="checkboxRayPonderationEnabled" mnemonicParsing="false" text="Ray ponderation enabled ?" />
                                                                                        </children>
                                                                                     </VBox>

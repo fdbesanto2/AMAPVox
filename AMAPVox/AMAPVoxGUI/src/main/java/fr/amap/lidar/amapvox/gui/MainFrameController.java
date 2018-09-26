@@ -750,8 +750,6 @@ public class MainFrameController implements Initializable {
     @FXML 
     private CheckBox checkboxConstantBeamSection;
     @FXML 
-    private CheckBox checkboxLastRayTruncated;
-    @FXML 
     private CheckBox checkboxRayPonderationEnabled;
     
 
@@ -976,7 +974,6 @@ public class MainFrameController implements Initializable {
         });
 
         checkboxConstantBeamSection.setSelected(false);
-        checkboxLastRayTruncated.setSelected(false);
         checkboxRayPonderationEnabled.setSelected(true);
         
         helpButtonNaNsCorrection.setOnAction((ActionEvent event) -> {
@@ -4729,7 +4726,6 @@ public class MainFrameController implements Initializable {
         voxelParameters.infos.setMaxPAD(Float.valueOf(textFieldPADMax.getText()));
         // default voxelisation algorithm parameters
         voxelParameters.setBeamSectionConstant(checkboxConstantBeamSection.isSelected());
-        voxelParameters.setLastRayTruncated(checkboxLastRayTruncated.isSelected());
         voxelParameters.setRayPonderationEnabled(checkboxRayPonderationEnabled.isSelected());
 
         return voxelParameters;
@@ -5034,7 +5030,6 @@ public class MainFrameController implements Initializable {
                         textFieldTwoBetaAlphaParameter.setText(String.valueOf(ladParameters.getLadBetaFunctionAlphaParameter()));
                         textFieldTwoBetaBetaParameter.setText(String.valueOf(ladParameters.getLadBetaFunctionBetaParameter()));
                         checkboxConstantBeamSection.setSelected(voxelParameters.isBeamSectionConstant());
-                        checkboxLastRayTruncated.setSelected(voxelParameters.isLastRayTruncated());
                         checkboxRayPonderationEnabled.setSelected(voxelParameters.isRayPonderationEnabled());
 
                         if (type.equals("voxelisation-ALS") || type.equals("multi-voxelisation")) {

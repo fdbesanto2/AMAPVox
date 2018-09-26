@@ -203,7 +203,6 @@ public class VoxelAnalysisCfg extends Configuration {
 
         if (transmittanceElement != null) {
             voxelParameters.setBeamSectionConstant(Boolean.valueOf(transmittanceElement.getAttributeValue("constantBeamSection")));
-            voxelParameters.setLastRayTruncated(Boolean.valueOf(transmittanceElement.getAttributeValue("lastRayTruncated")));
             voxelParameters.setRayPonderationEnabled(Boolean.valueOf(transmittanceElement.getAttributeValue("rayPonderationEnabled")));
             
         }
@@ -501,7 +500,6 @@ public class VoxelAnalysisCfg extends Configuration {
          */
         Element transmittanceElement = new Element("transmittance");
         transmittanceElement.setAttribute(new Attribute("constantBeamSection", String.valueOf(voxelParameters.isBeamSectionConstant())));
-        transmittanceElement.setAttribute(new Attribute("lastRayTruncated", String.valueOf(voxelParameters.isLastRayTruncated())));
         transmittanceElement.setAttribute(new Attribute("rayPonderationEnabled", String.valueOf(voxelParameters.isRayPonderationEnabled())));
         processElement.addContent(transmittanceElement);
 

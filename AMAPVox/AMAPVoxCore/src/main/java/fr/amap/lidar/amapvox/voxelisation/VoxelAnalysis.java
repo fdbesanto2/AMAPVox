@@ -1,12 +1,11 @@
 package fr.amap.lidar.amapvox.voxelisation;
 
+import fr.amap.commons.raster.asc.Raster;
 import fr.amap.lidar.amapvox.shot.Shot;
 import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.geometry.LineElement;
 import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.geometry.LineSegment;
 import fr.amap.lidar.amapvox.jeeb.archimed.raytracing.voxel.VoxelManager.VoxelCrossingContext;
-import fr.amap.commons.raster.asc.Raster;
 import fr.amap.lidar.amapvox.commons.Voxel;
-import fr.amap.lidar.amapvox.commons.VoxelSpaceInfos;
 import fr.amap.lidar.amapvox.voxelisation.configuration.VoxelAnalysisCfg;
 import javax.vecmath.Point3i;
 
@@ -15,16 +14,12 @@ import org.apache.log4j.Logger;
 
 public class VoxelAnalysis extends AbstractVoxelAnalysis {
 
+    private final static Logger LOGGER = Logger.getLogger(VoxelAnalysis.class);
+    private final double EPSILON = 1e-5;
+
     public VoxelAnalysis(Raster terrain, VoxelAnalysisCfg cfg) throws Exception {
         super(terrain, cfg);
     }
-
-    private final static Logger LOGGER = Logger.getLogger(VoxelAnalysis.class);
-
-    private boolean groundEnergySet = false;
-    private boolean shotChanged = false;
-    private Voxel lastVoxelSampled;
-    private int lastShotId;
 
     @Override
     public void processOneShot(Shot shot) throws Exception {
@@ -34,296 +29,231 @@ public class VoxelAnalysis extends AbstractVoxelAnalysis {
             return;
         }
 
-        if ((nShotsProcessed % 1000000) == 0) {
-            LOGGER.info("Progress: shot index " + nShotsProcessed + " (processed " + (nShotsProcessed - nShotsDiscarded) + " discarded " + nShotsDiscarded + ")");
+        if ((nShots % 1000000) == 0) {
+            LOGGER.info("[voxelisation] shot " + nShots + " (processed " + nShotsProcessed + ", discarded " + nShotsDiscarded + ", out " + nShotsOut + ")");
         }
 
         if (retainShot(shot)) {
-
-            shot.direction.normalize();
-            Point3d origin = new Point3d(shot.origin);
-
-            shotChanged = true;
-            groundEnergySet = false;
-
-            // vegetation free shot propagation (as if no vegetation in the scene)
-            freePropagation(shot);
-
-            if (shot.getEchoesNumber() == 0) {
-                // empty shot
-                boolean keep = retainEcho(shot.echoes[0]);
-                double beamFraction = 1.d, residualEnergy = 1.d;
-                propagate(origin, shot.echoes[0].location, beamFraction, residualEnergy, false, nShotsProcessed, shot, keep);
+            // shot propagation
+            if (propagation(shot, extractEchoesContext(shot))) {
+                // increment number of shots processed
+                nShotsProcessed++;
             } else {
-                // shot with at least one echo.
-                // look for specific weight attenuation (EchoesWeightByFileParams.java)
-                double weightCorr = 1.d;
-                if (null != echoesWeight) {
-                    int shotID = shot.index;
-                    while (null != echoesWeight && echoesWeight.shotID < shotID) {
-                        echoesWeight = weightIterator.next();
-                    }
-                    // beam fraction pondered by weight from CSV file
-                    if (null != echoesWeight && echoesWeight.shotID == shotID) {
-                        weightCorr = echoesWeight.weight;
-                    }
-                }
-
-                double beamFractionPreviousEchoes = 0.d;
-                int rankFirstEchoOfVoxel = 0;
-                // loop over echoes
-                for (Shot.Echo echo : shot.echoes) {
-                    // next echo
-                    Shot.Echo nextEcho = (echo.rank < shot.getEchoesNumber() - 1)
-                            ? shot.echoes[echo.rank + 1]
-                            : null;
-
-                    // check whether current echo is the first echo of the shot in corresponding voxel
-                    if (beamFractionPreviousEchoes == 0.d) {
-                        rankFirstEchoOfVoxel = echo.rank;
-                    }
-
-                    // compute beam fraction of current echo
-                    double beamFractionCurrentEcho = 1;
-                    // beam fraction pondered by weight table
-                    if (null != weightTable) {
-                        beamFractionCurrentEcho *= weightTable[shot.getEchoesNumber() - 1][echo.rank];
-                    }
-                    // beam fraction pondered by weight from CSV file
-                    beamFractionCurrentEcho *= weightCorr;
-
-                    if (isInsideSameVoxel(echo, nextEcho)) {
-                        // current echo and next echo are in same voxel
-                        // increment beam fraction of previous echo and move to next echo
-                        // propagation will be done at next echo with cumulated energy
-                        beamFractionPreviousEchoes += beamFractionCurrentEcho;
-                    } else {
-                        // handle current echo and previous echoes that are in the same voxel
-                        double beamFraction = beamFractionCurrentEcho + beamFractionPreviousEchoes;
-                        // residual energy must be re-evaluated if custom attenuation factor provided
-                        double residualEnergy = (weightCorr != 1)
-                                ? computeResidualEnergy(shot.getEchoesNumber(), rankFirstEchoOfVoxel, weightCorr)
-                                : residualEnergyTable[shot.getEchoesNumber() - 1][rankFirstEchoOfVoxel];
-                        // whether current echo is last echo of the shot
-                        boolean lastEcho = (echo.rank == shot.getEchoesNumber() - 1);
-                        // whether current echo should be retained or discarded (echo filters)
-                        boolean retain = retainEcho(echo);
-                        // propagate echo
-                        propagate(origin, echo.location, beamFraction, residualEnergy, lastEcho, nShotsProcessed, shot, retain);
-                        // current echo set as origin of next echo
-                        origin = new Point3d(echo.location);
-                        // reset beam fraction previous echoes
-                        beamFractionPreviousEchoes = 0.d;
-                    }
-                } // end loop over echoes
+                nShotsOut++;
             }
         } else {
             nShotsDiscarded++;
         }
-        // increment number of shots processed
-        nShotsProcessed++;
+        nShots++;
     }
-    
-    /**
-     * Propagate the given {@code shot} in the voxel space disregarding the
-     * vegetation in order to estimate a potential beam volume.
-     *
-     * @param shot
-     */
-    private void freePropagation(Shot shot) {
 
-        LineElement line = new LineSegment(shot.origin, shot.direction, 999999);
+    private boolean propagation(Shot shot, EchoesContext echoesContext) throws Exception {
+
+        // create shot line
+        LineElement shotLine = new LineSegment(shot.origin, shot.direction, 999999);
 
         // first voxel crossed by the shot
-        VoxelCrossingContext context = voxelManager.getFirstVoxelV2(line);
+        VoxelCrossingContext voxelCrossing = voxelManager.getFirstVoxelV2(shotLine);
 
-        if (null != context) {
+        if (null != voxelCrossing) {
+            // initialise entering beam fraction (100%)
+            double beamFractionIn = 1.d;
+            // load first echo
+            int rank = 0;
+            Shot.Echo echo = echoesContext.nEchoes > 0 ? shot.echoes[rank] : null;
+            // loop over the voxels crossed by the shot
+            Point3i indices;
             do {
-                // current voxel
-                Point3i indices = context.indices;
-
-                // average beam surface within voxel
-                // distance from origin to voxel center
-                Point3d voxelPosition = getPosition(new Point3i(indices.x, indices.y, indices.z));
-                double distance = voxelPosition.distance(shot.origin);
-                // beam surface at voxel center
-                double surface = Math.pow((Math.tan(0.5d * laserSpec.getBeamDivergence()) * distance) + 0.5d * laserSpec.getBeamDiameterAtExit(), 2) * Math.PI;
-
-                // ray length within voxel
-                // distance from shot origin to shot interception point with current voxel
-                double dIn = context.length;
-                // get next voxel
-                context = voxelManager.CrossVoxel(line, indices);
-                // distance from shot origin to shot interception point with next voxel
-                double dOut = context.length;
-                double rayLength = dOut - dIn;
-
+                // initialise current voxel and put it in local variable
+                indices = voxelCrossing.indices;
                 // instantiate voxel on the fly when first encountered
                 if (voxels[indices.x][indices.y][indices.z] == null) {
                     voxels[indices.x][indices.y][indices.z] = initVoxel(indices.x, indices.y, indices.z);
                 }
+                Voxel voxel = voxels[indices.x][indices.y][indices.z];
+
+                // stop propagation if current voxel is below the ground
+                if (!groundEnergyEnabled && belowGround(voxel)) {
+                    break;
+                }
+
+                // compute beam surface at voxel centre
+                double beamSurface = constantBeamSection
+                        ? 1.d
+                        : beamSection(shot, voxel, laserSpec);
+
+                // ray length within voxel
+                // distance from shot origin to shot interception point with current voxel
+                double dIn = voxelCrossing.length;
+                // get next voxel
+                voxelCrossing = voxelManager.CrossVoxel(shotLine, indices);
+                // distance from shot origin to shot interception point with next voxel
+                double dOut = voxelCrossing.length;
+                double rayLength = dOut - dIn;
 
                 // increment potential beam volume
-                voxels[indices.x][indices.y][indices.z].bvPotential += (surface * rayLength);
+                voxel.bvPotential += (beamSurface * rayLength);
 
-            } while (context.indices != null);
+                // reset intercepted beam fraction in current voxel
+                double bfIntercepted = 0.d;
+
+                // case 1: echo not null and falls inside current voxel
+                if (null != echo && isEchoInsideVoxel(echo.location, indices)) {
+                    // while loop over echoes in same voxel
+                    while (null != echo && isEchoInsideVoxel(echo.location, indices)) {
+
+                        // intercepted beam fraction
+                        double bfInterceptedEcho = rayPonderationEnabled
+                                ? echoesContext.bfIntercepted[rank] * beamSurface * rayLength
+                                : echoesContext.bfIntercepted[rank] * beamSurface;
+                        bfIntercepted += echoesContext.bfIntercepted[rank];
+
+                        if (echoesContext.retained[rank]) {
+                            // echo inside current voxel & retained
+                            if (!echoesContext.sameVoxelAsPreviousEcho[rank]) {
+                                // first echo inside current voxel & retained
+                                // increment some voxel state variables for first retained echo only
+                                // increment entering beam fraction in current voxel
+                                voxel.bvEntering += rayPonderationEnabled
+                                        ? beamFractionIn * beamSurface * rayLength
+                                        : beamFractionIn * beamSurface;
+                                // increment total optical length in current voxel
+                                voxel.lgTotal += rayLength;
+                                // increment number of shots crossing current voxel
+                                voxel.nbSampling++;
+                                // increment mean angle in current voxel
+                                voxel.angleMean += shot.getAngle();
+                                // increment intercepted beam fraction inside voxel
+                            }
+                            // increment other voxel state variables for every retained echo
+                            // increment intercepted beam fraction  in current voxel
+                            voxel.bvIntercepted += bfInterceptedEcho;
+                            // increment number of echoes in current voxel
+                            voxel.nbEchos++;
+                        }
+                        // next echo 
+                        rank++;
+                        echo = rank < echoesContext.nEchoes ? shot.echoes[rank] : null;
+                    }
+                } else {
+                    // case 2: echo is null or does not fall inside current voxel
+                    // increment entering beam fraction in current voxel
+                    voxel.bvEntering += rayPonderationEnabled
+                            ? beamFractionIn * beamSurface * rayLength
+                            : beamFractionIn * beamSurface;
+                    // increment total optical length in current voxel
+                    voxel.lgTotal += rayLength;
+                    // increment number of shots crossing current voxel
+                    voxel.nbSampling++;
+                    // increment mean angle in current voxel
+                    voxel.angleMean += shot.getAngle();
+                }
+
+                // increment ground energy
+                if (groundEnergyEnabled && closeToGround(voxel)) {
+                    groundEnergy[voxel.i][voxel.j].groundEnergyPotential++;
+                    groundEnergy[voxel.i][voxel.j].groundEnergyActual += beamFractionIn;
+                }
+
+                // decrement beamFractionIn for next voxel
+                beamFractionIn -= bfIntercepted;
+            } while (beamFractionIn > EPSILON && voxelCrossing.indices != null);
+            // shot went through the voxel space
+            return true;
         }
+        // shot did not go through the voxel space
+        return false;
+    }
+
+    private boolean isEchoInsideVoxel(Point3d echo, Point3i indexVoxel) {
+
+        Point3i indexEcho = voxelManager.getVoxelIndicesFromPoint(echo);
+
+        return (null != indexEcho) && (indexEcho.equals(indexVoxel));
+    }
+
+    private double beamAttenuation(int rankEcho, int nEcho, double weightCorr) {
+
+        // compute beam fraction of current echo
+        double beamFractionCurrentEcho = 1;
+        // beam fraction pondered by weight table
+        if (null != weightTable && (nEcho > 0)) {
+            beamFractionCurrentEcho *= weightTable[nEcho - 1][rankEcho];
+        }
+        // beam fraction pondered by weight from CSV file
+        beamFractionCurrentEcho *= weightCorr;
+        return beamFractionCurrentEcho;
     }
 
     /**
+     * Compute the average beam section of the shot in given voxel by estimating
+     * it at voxel centre.
      *
-     * @param origin current origin (origin start from the last echo)
-     * @param echo current echo (position in voxel space)
-     * @param beamFraction current beam fraction of laser shot
-     * @param residualEnergy residual energy of laser beam
-     * @param lastEcho is current echo the last or not
-     * @param shotID current shot (id)
-     * @param shot current shot processed
-     * @param echoRank current echo processed (rank)
+     * @param shot, a shot with a define origin
+     * @param voxel
+     * @param spec, laser specification (beam divergence and diameter at exit)
+     * @return the beam section calculated at voxel centre.
      */
-    private void propagate(Point3d origin, Point3d echo, double beamFraction, double residualEnergy, boolean lastEcho, int shotID, Shot shot, boolean keepEcho) {
+    private double beamSection(Shot shot, Voxel voxel, LaserSpecification spec) {
 
-        // get shot line
-        LineElement lineElement = new LineSegment(origin, echo);
+        // distance from shot origin to current voxel center
+        Point3d voxelPosition = getPosition(new Point3i(voxel.i, voxel.j, voxel.k));
+        double distance = voxelPosition.distance(shot.origin);
 
-        // first voxel crossed by the segment
-        VoxelCrossingContext context = voxelManager.getFirstVoxelV2(lineElement);
+        // beam surface in current voxel
+        return Math.pow((Math.tan(0.5d * spec.getBeamDivergence()) * distance) + 0.5d * spec.getBeamDiameterAtExit(), 2) * Math.PI;
+    }
 
-        // distance from origin to echo
-        double distOriginEcho = lineElement.getLength();
+    /**
+     * check whether current voxel centre vertical coordinate is below the
+     * ground
+     */
+    private boolean belowGround(Voxel voxel) {
+        return (voxel.ground_distance < voxelManager.getVoxelSpace().getVoxelSize().z / 2.0f);
+    }
 
-        while ((context != null) && (context.indices != null)) {
+    private boolean closeToGround(Voxel voxel) {
+        return (voxel.ground_distance < parameters.getDtmFilteringParams().getMinDTMDistance());
+    }
 
-            // index current voxel
-            Point3i indices = context.indices;
+    private EchoesContext extractEchoesContext(Shot shot) throws Exception {
 
-            // distance from origin to shot interception point with current voxel
-            double distOriginCurrentVoxel = context.length;
-            // get next voxel
-            context = voxelManager.CrossVoxel(lineElement, context.indices);
-            // distance from origin to shot interception point with next voxel
-            double distOriginNextVoxel = context.length;
+        EchoesContext context = new EchoesContext(shot.getEchoesNumber());
 
-            // ensure current voxel is instantiated
-            if (voxels[indices.x][indices.y][indices.z] == null) {
-                voxels[indices.x][indices.y][indices.z] = initVoxel(indices.x, indices.y, indices.z);
-            }
-            // current vox in local variable
-            Voxel vox = voxels[indices.x][indices.y][indices.z];
-
-            // stop propagation if current voxel is below the ground
-            if (parameters.getGroundEnergyParams() == null
-                    || !parameters.getGroundEnergyParams().isCalculateGroundEnergy()) {
-                if (vox.ground_distance < voxelManager.getVoxelSpace().getVoxelSize().z / 2.0f) {
-                    break;
-                }
+        if (context.nEchoes > 0) {
+            for (int k = 0; k < context.nEchoes; k++) {
+                context.retained[k] = retainEcho(shot.echoes[k]);
             }
 
-            // distance from shot origin to current voxel center
-            Point3d voxelPosition = getPosition(new Point3i(indices.x, indices.y, indices.z));
-            double distance = voxelPosition.distance(shot.origin);
-
-            // beam surface in current voxel
-            double beamSurface = constantBeamSection
-                    ? 1.d
-                    : Math.pow((Math.tan(0.5d * laserSpec.getBeamDivergence()) * distance) + 0.5d * laserSpec.getBeamDiameterAtExit(), 2) * Math.PI;
-
-            // Assumption: when echo falls right on a voxel face, AMAPVox
-            // considers it belongs to next voxel
-            if (distOriginNextVoxel < distOriginEcho) {
-                // CASE 1 distance to echo is greater than distance to next echo
-                // hence current voxel is crossed without any interception
-
-                if (shotID == lastShotId && lastVoxelSampled != null && lastVoxelSampled == vox) {
-                    // the voxel has already been crossed by this shot at 
-                    // previous call of the propagate function.
-                } else {
-                    // ray length in this case is the distance between 
-                    // entering point of current voxel and entering point of
-                    // next voxel
-                    double rayLength = distOriginNextVoxel - distOriginCurrentVoxel;
-                    // increment total optical length in current voxel
-                    vox.lgTotal += rayLength;
-                    // increment number of shots going through current voxel
-                    vox.nbSampling++;
-                    // increment mean angle in current voxel
-                    vox.angleMean += shot.getAngle();
-                    // increment total beam fraction in current voxel
-                    vox.bvEntering += rayPonderationEnabled
-                            ? residualEnergy * beamSurface * rayLength
-                            : residualEnergy * beamSurface;
-                    lastVoxelSampled = vox;
-                    lastShotId = shotID;
-                }
-
-            } else if (distOriginCurrentVoxel >= distOriginEcho) {
-                // CASE 2 distance to current voxel is greater than distance
-                // to echo, hence echo has already been found and handled 
-                // at previous iteration of the while loop
-
-                if (shotChanged) {
-
-                    // for ALS voxelisation check whether current shot reaches the ground
-                    if (parameters.getGroundEnergyParams() != null
-                            && parameters.getGroundEnergyParams().isCalculateGroundEnergy()
-                            && parameters.infos.getType() != VoxelSpaceInfos.Type.TLS) {
-
-                        if (vox.ground_distance < parameters.getDtmFilteringParams().getMinDTMDistance()) {
-                            // current voxel is close enough to the ground to assume that the shot will hit it
-                            groundEnergy[vox.i][vox.j].groundEnergyPotential++;
-                            shotChanged = false;
-                            // leave the while loop over the voxels
-                            context = null;
-                        }
-                    } else {
-                        // TLS voxelisation or ALS but ground energy calculation disabled
-                        // leave the while loop over the voxels
-                        context = null;
-                    }
-                }
-
-            } else {
-                // CASE 3 distOriginCurrentVoxel < distOriginEcho <= distOriginNextVoxel
-                // echo is in the current voxel
-
-                // for last echo: whether ray length should be truncated as
-                // distance from voxel entering point to echo or virtually
-                // extended until voxel exiting point
-                double rayLength = (lastEcho && lastRayTruncated)
-                        ? distOriginEcho - distOriginCurrentVoxel
-                        : distOriginNextVoxel - distOriginCurrentVoxel;
-
-                if (shotID == lastShotId && lastVoxelSampled != null && lastVoxelSampled == vox) {
-                    // pour n'échantillonner qu'une fois le voxel pour un tir
-                    // phv 20180831: do not understand how we can reach this statement
-                } else {
-
-                    vox.nbSampling++;
-                    vox.lgTotal += rayLength;
-                    vox.angleMean += shot.getAngle();
-                    // increment total beam fraction in current voxel
-                    vox.bvEntering += rayPonderationEnabled
-                            ? residualEnergy * beamSurface * rayLength
-                            : residualEnergy * beamSurface;
-                    lastVoxelSampled = vox;
-                    lastShotId = shotID;
-                }
-
-                if (keepEcho) {
-
-                    vox.nbEchos++;
-                    vox.bvIntercepted += rayPonderationEnabled
-                            ? beamFraction * beamSurface * rayLength
-                            : beamFraction * beamSurface;
-
-                } else if (parameters.getGroundEnergyParams() != null
-                        && parameters.getGroundEnergyParams().isCalculateGroundEnergy()
-                        && parameters.infos.getType() != VoxelSpaceInfos.Type.TLS && !groundEnergySet) {
-                    groundEnergy[vox.i][vox.j].groundEnergyActual += residualEnergy;
-                    groundEnergy[vox.i][vox.j].groundEnergyPotential++;
-                    groundEnergySet = true;
-                }
+            // find echoes in same voxel
+            for (int k = 1; k < context.nEchoes; k++) {
+                context.sameVoxelAsPreviousEcho[k] = isInsideSameVoxel(shot.echoes[k - 1], shot.echoes[k]);
             }
+
+            // specific weight attenuation (EchoesWeightByFileParams.java) for this shot
+            double weightCorr = (null != echoWeightCorrection)
+                    ? echoWeightCorrection.getWeightCorrection(shot.index)
+                    : 1.d;
+            for (int k = 0; k < context.nEchoes; k++) {
+                context.bfIntercepted[k] = beamAttenuation(k, context.nEchoes, weightCorr);
+            }
+        }
+
+        return context;
+    }
+
+    private class EchoesContext {
+
+        private final int nEchoes;
+        private final boolean retained[];
+        private final double[] bfIntercepted;
+        private final boolean[] sameVoxelAsPreviousEcho;
+
+        EchoesContext(int nEchoes) {
+            this.nEchoes = nEchoes;
+            this.retained = new boolean[nEchoes];
+            this.bfIntercepted = new double[nEchoes];
+            this.sameVoxelAsPreviousEcho = new boolean[nEchoes];
         }
     }
 }

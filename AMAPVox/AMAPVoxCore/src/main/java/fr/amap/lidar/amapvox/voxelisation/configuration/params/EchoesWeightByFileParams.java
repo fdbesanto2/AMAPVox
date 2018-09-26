@@ -18,6 +18,8 @@ import java.io.IOException;
 public class EchoesWeightByFileParams {
 
     private final File file;
+    private IteratorWE it;
+    private EchoesWeight weight;
 
     public EchoesWeightByFileParams(String file) {
         this.file = new File(file);
@@ -25,6 +27,12 @@ public class EchoesWeightByFileParams {
 
     public File getFile() {
         return file;
+    }
+
+    public void init() throws Exception {
+        it = new IteratorWE();
+        it.init();
+        weight = it.next();
     }
 
     public IteratorWithException<EchoesWeight> iterator() throws Exception {
@@ -92,15 +100,31 @@ public class EchoesWeightByFileParams {
         }
     }
 
-public class EchoesWeight {
+    public double getWeightCorrection(int shotID) throws Exception {
 
-    public final int shotID;
-    public final double weight;
-
-    public EchoesWeight(int shotID, double weight) {
-        this.shotID = shotID;
-        this.weight = weight;
+        // correction factor set to one by default (no correction)
+        double weightCorr = 1.d;
+        // match shot ID
+        while (null != weight && weight.shotID < shotID) {
+            weight = it.next();
+        }
+       // if shot ID matched, get weight correction factor
+        if (null != weight && weight.shotID == shotID) {
+            weightCorr = weight.weight;
+        }
+        // return weight correction factor
+        return weightCorr;
     }
-}
+
+    public class EchoesWeight {
+
+        public final int shotID;
+        public final double weight;
+
+        public EchoesWeight(int shotID, double weight) {
+            this.shotID = shotID;
+            this.weight = weight;
+        }
+    }
 
 }

@@ -23,7 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import org.apache.log4j.Logger;
 import fr.amap.commons.util.Cancellable;
-import fr.amap.lidar.amapvox.voxelisation.VoxelAnalysis;
+import fr.amap.lidar.amapvox.voxelisation.OldVoxelAnalysis;
 
 
 
@@ -91,7 +91,6 @@ public class VoxelFileMerging extends Process implements Cancellable{
                 
                 cfg.getVoxelParameters().setLadParams(ladParams);
                 cfg.getVoxelParameters().setBeamSectionConstant(infos.isBeamSectionConstant());
-                cfg.getVoxelParameters().setLastRayTruncated(infos.isLastRayTruncated());
                 cfg.getVoxelParameters().setRayPonderationEnabled(infos.isRayPonderationEnabled());
                 
             } catch (Exception ex) {
@@ -303,8 +302,8 @@ public class VoxelFileMerging extends Process implements Cancellable{
         LOGGER.info("Transmittance functions table is built");
         
         for (int i = 0; i < size; i++) {
-              resultingFile[i][transmittanceColumnIndex] = (float) VoxelAnalysis.computeTransmittance(resultingFile[i][bvEnteringColumnIndex], resultingFile[i][bvInterceptedColumnIndex], resultingFile[i][lMeanTotalColumnIndex]);
-              resultingFile[i][padBVTotalColumnIndex] = (float) VoxelAnalysis.computePADFromNormTransmittance(resultingFile[i][transmittanceColumnIndex], resultingFile[i][angleMeanColumnIndex], cfg.getVoxelParameters().infos.getMaxPAD(), direcTransmittance);
+              resultingFile[i][transmittanceColumnIndex] = (float) OldVoxelAnalysis.computeTransmittance(resultingFile[i][bvEnteringColumnIndex], resultingFile[i][bvInterceptedColumnIndex], resultingFile[i][lMeanTotalColumnIndex]);
+              resultingFile[i][padBVTotalColumnIndex] = (float) OldVoxelAnalysis.computePADFromNormTransmittance(resultingFile[i][transmittanceColumnIndex], resultingFile[i][angleMeanColumnIndex], cfg.getVoxelParameters().infos.getMaxPAD(), direcTransmittance);
         }
         
         LOGGER.info("writing output file: " + cfg.getOutputFile().getAbsolutePath());

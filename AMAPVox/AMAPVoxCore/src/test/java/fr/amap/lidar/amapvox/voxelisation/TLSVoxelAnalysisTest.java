@@ -51,13 +51,12 @@ public class TLSVoxelAnalysisTest {
 
         // voxelisation parameters
         params.setBeamSectionConstant(true);
-        params.setLastRayTruncated(false);
         params.setRayPonderationEnabled(false);
         // set voxel parameters to voxel analysis configuration
         cfg.setVoxelParameters(params);
 
         // create new voxel analysis
-        AbstractVoxelAnalysis voxAnalysis = new SimpleVoxelAnalysis(null, cfg);
+        AbstractVoxelAnalysis voxAnalysis = new VoxelAnalysis(null, cfg);
         voxAnalysis.createVoxelSpace();
 
         List<Shot> shots = new ArrayList();
@@ -132,13 +131,12 @@ public class TLSVoxelAnalysisTest {
 
         // voxelisation parameters
         params.setBeamSectionConstant(true);
-        params.setLastRayTruncated(false);
         params.setRayPonderationEnabled(false);
         // set voxel parameters to voxel analysis configuration
         cfg.setVoxelParameters(params);
 
         // create new voxel analysis
-        AbstractVoxelAnalysis voxAnalysis = new SimpleVoxelAnalysis(null, cfg);
+        AbstractVoxelAnalysis voxAnalysis = new VoxelAnalysis(null, cfg);
         voxAnalysis.createVoxelSpace();
 
         List<Shot> shots = new ArrayList();
@@ -257,13 +255,12 @@ public class TLSVoxelAnalysisTest {
                 .padMAX(10.0f).build();
         // voxelisation parameters
         params.setBeamSectionConstant(true);
-        params.setLastRayTruncated(false);
         params.setRayPonderationEnabled(false);
         // set voxel parameters to voxel analysis configuration
         cfg.setVoxelParameters(params);
 
         // create new voxel analysis
-        AbstractVoxelAnalysis voxAnalysis = new SimpleVoxelAnalysis(null, cfg);
+        AbstractVoxelAnalysis voxAnalysis = new VoxelAnalysis(null, cfg);
         voxAnalysis.createVoxelSpace();
 
         // one shot goinp up z-axis with 2 echoes
@@ -321,13 +318,12 @@ public class TLSVoxelAnalysisTest {
                 .padMAX(10.0f).build();
         // voxelisation parameters
         params.setBeamSectionConstant(true);
-        params.setLastRayTruncated(false);
         params.setRayPonderationEnabled(false);
         // set voxel parameters to voxel analysis configuration
         cfg.setVoxelParameters(params);
 
         // create new voxel analysis
-        AbstractVoxelAnalysis voxAnalysis = new SimpleVoxelAnalysis(null, cfg);
+        AbstractVoxelAnalysis voxAnalysis = new VoxelAnalysis(null, cfg);
         voxAnalysis.createVoxelSpace();
 
         // one shot goinp up z-axis with 2 echoes

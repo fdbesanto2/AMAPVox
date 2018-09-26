@@ -24,7 +24,6 @@ public class VoxelParameters {
 
     // voxelisation algorithm parameters
     private boolean constantBeamSection = false;
-    private boolean lastRayTruncated = false;
     private boolean rayPonderationEnabled = true;
 
     private boolean mergingAfter;
@@ -46,7 +45,6 @@ public class VoxelParameters {
 
         // voxelisation algorithm parameters
         private final boolean constantBeamSection = false;
-        private final boolean lastRayTruncated = false;
         private final boolean rayPonderationEnabled = true;
 
         private boolean mergingAfter = false;
@@ -129,7 +127,6 @@ public class VoxelParameters {
         this.mergingAfter = builder.mergingAfter;
         this.naNsCorrectionParams = builder.naNsCorrectionParams;
         this.constantBeamSection = builder.constantBeamSection;
-        this.lastRayTruncated = builder.lastRayTruncated;
         this.rayPonderationEnabled = builder.rayPonderationEnabled;
     }
 
@@ -343,15 +340,7 @@ public class VoxelParameters {
     public void setBeamSectionConstant(boolean constant) {
         this.constantBeamSection = constant;
     }
-
-    public boolean isLastRayTruncated() {
-        return lastRayTruncated;
-    }
-
-    public void setLastRayTruncated(boolean truncated) {
-        this.lastRayTruncated = truncated;
-    }
-
+    
     public boolean isRayPonderationEnabled() {
         return rayPonderationEnabled;
     }
